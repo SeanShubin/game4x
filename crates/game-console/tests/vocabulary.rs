@@ -216,23 +216,25 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
     // whose tables stopped parsing would admit nothing and this would report every word,
     // which is loud - but a release whose tables parsed *empty* would be the silent one, and
     // that is the direction guarded here.
-    // Seventeen since the saturating rewrite made `fertility` a kind.
+    // Eighteen since `P-399` made `readiness` one - it was a yes-or-no trait, and the token
+    // model makes it a thing a thing holds.
     assert_eq!(
         kinds.len(),
-        17,
-        "seventeen kinds; the release lists {kinds:?}"
+        18,
+        "eighteen kinds; the release lists {kinds:?}"
     );
     assert_eq!(
         families.len(),
         4,
         "four families; the release lists {families:?}"
     );
-    // Twenty-one since `spent` arrived - what stops a citizen bearing twice in one ending,
-    // which is the job `grow`'s expression used to do.
+    // **Twenty since `P-399`, which took two out and put one in.** `ready` and `spent` were
+    // both yes-or-no traits of a thing; readiness is a kind now, and what a reader needs of
+    // one is `for`, naming the action it is for.
     assert_eq!(
         traits.len(),
-        21,
-        "twenty-one traits; the release lists {:?}",
+        20,
+        "twenty traits; the release lists {:?}",
         traits.keys().collect::<Vec<_>>()
     );
     let closed = traits
@@ -246,10 +248,15 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
     // remembered number, which is the only way the two counts are independent. `control` is
     // the next candidate and describes rather than naming: *held by a player, or unclaimed*
     // names one value and describes the other.
-    // `spent` is the ninth, *yes or no*, and it arrived with the saturating rewrite.
+    // **Seven since `P-399`.** `ready` and `spent` both named a closed set and both are gone;
+    // `for` names one - *`move`, `labor`, `work` or `bearing`* - but its values are backticked,
+    // and the rule above admits alternatives joined by *or* only where each is a bare word. So
+    // it is read as admitting a number, which is wrong about `for` and is the parser's reach
+    // rather than the release's: reported rather than widened, which is what `C-37` records
+    // this check getting wrong in the other direction.
     assert_eq!(
-        closed, 9,
-        "nine traits name a closed set - `kind`, `resource`, `biome`, `ready`, `surplus`, `unpaid`, `phase`, `movable` and `spent`; {closed} do"
+        closed, 7,
+        "seven traits name a closed set - `kind`, `resource`, `biome`, `surplus`, `unpaid`, `phase` and `movable`; {closed} do"
     );
 
     let session = played();

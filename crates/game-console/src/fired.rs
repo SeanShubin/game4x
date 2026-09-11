@@ -47,6 +47,11 @@ use game_model::{StructureKind, Transition, UnitKind};
 /// with `grow`, `age` with `spoil` - and a wrong placement would have gone unnoticed. The
 /// release states the whole order now, so the order is quoted rather than inferred.
 ///
+/// **Nine since `P-399` deleted `renew`.** The token model took the whole fertile-and-spent
+/// pair out: a citizen holds a readiness `for bearing`, `bear` spends it, and `refresh` puts
+/// it back with every other token - so the rule that turned a spent citizen fertile again has
+/// nothing left to do, and the rule that puts readiness back does its work.
+///
 /// **Ten, because the saturating rewrite split the three that varied.** `grow` is gone: it
 /// consumed *the lesser of the surplus food and the citizens here*, which is a quantity read
 /// from the state, and `P-373` says such a rule is written as a smaller one that fires as many
@@ -56,8 +61,8 @@ use game_model::{StructureKind, Transition, UnitKind};
 /// `tests/fired.rs` holds the set against the release's own *Recipes* table, read at test
 /// time, so a world recipe added or renamed fails here rather than quietly dropping out of
 /// the artifact.
-pub const ENDING_A_TURN: [&str; 10] = [
-    "upkeep", "bear", "breed", "renew", "perish", "age", "spoil", "stow", "discard", "refresh",
+pub const ENDING_A_TURN: [&str; 9] = [
+    "upkeep", "bear", "breed", "perish", "age", "spoil", "stow", "discard", "refresh",
 ];
 
 /// What one command fired, if it fired anything.

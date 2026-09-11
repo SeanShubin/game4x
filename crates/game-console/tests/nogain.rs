@@ -72,82 +72,93 @@ fn a_weighting_exists_and_no_rule_gains_under_it() {
     }
 }
 
-/// The readiness economy is visible, which is the whole reason the places are not kinds.
+/// The readiness economy is visible, and the actions do not pool.
 ///
-/// **`S-93`'s third point, checked rather than trusted.** At kind granularity `refresh` takes
-/// a thing and makes a thing and nets to zero, and so does `work` - the code lane found the
-/// second of those in the drawing, which is what corrected the item. If the places here
-/// collapsed to kinds, both rules would net nothing and the check would pass while saying
-/// nothing at all.
+/// **`S-93`'s third point, and `P-399` changed what it takes to satisfy it.** While readiness
+/// was a trait, the danger was a weighting over kinds reporting the whole economy as doing
+/// nothing - `refresh` took a thing and made a thing. It is a kind now, so the danger moved:
+/// the places must separate one action's tokens from another's, because `P-399` declares that
+/// *two recipes naming the same action draw on the same tokens* and two naming different
+/// actions never compete. One `readiness` place would say the opposite.
 #[test]
-fn readiness_is_a_place_and_the_rules_that_move_it_are_not_silent() {
+fn readiness_is_spent_by_acting_and_the_actions_do_not_pool() {
     let document = release();
     let rules = nogain::rules(&document);
 
-    let ready = |kind: &str| Place {
-        kind: kind.to_string(),
-        state: "ready".to_string(),
+    let token = |action: &str| Place {
+        kind: "readiness".to_string(),
+        state: format!("for `{action}`"),
     };
 
-    // `work` spends an extractor's readiness and makes material. At kind granularity it takes
-    // an extractor and makes an extractor: nothing.
+    // Every action declared is spent by something and made by `refresh`.
+    let actions = nogain::actions(&document);
+    assert_eq!(
+        actions,
+        ["move", "labor", "work", "bearing"],
+        "the `for` trait's declared values are what `refresh` grounds against"
+    );
+
+    let mut checked = 0;
+    for action in &actions {
+        let spent: Vec<&str> = rules
+            .iter()
+            .filter(|rule| rule.delta.get(&token(action)).copied().unwrap_or(0) < 0)
+            .map(|rule| rule.name.as_str())
+            .collect();
+        assert!(
+            !spent.is_empty(),
+            "nothing spends a readiness `for {action}`, so the action is declared and never              costs anything"
+        );
+
+        let made = rules
+            .iter()
+            .find(|rule| rule.name == format!("refresh ({action})"))
+            .unwrap_or_else(|| panic!("`refresh` does not ground to `{action}`"));
+        assert_eq!(made.delta.get(&token(action)), Some(&1));
+        assert_eq!(
+            made.draws_from(),
+            ["time"],
+            "`refresh ({action})` makes a readiness out of nothing, where `P-388` says it              draws one out of time"
+        );
+        checked += 1;
+    }
+    assert_eq!(
+        checked,
+        actions.len(),
+        "every action, and the count with it"
+    );
+    assert!(
+        !actions.is_empty(),
+        "no actions at all, so nothing above ran"
+    );
+
+    // **The tokens are separate places, which is the half a single `readiness` place loses.**
+    // `work` must not be payable with a readiness for moving.
     let work = rules
         .iter()
         .find(|rule| rule.name.starts_with("work ("))
         .expect("`work` is spelled out per density");
-    assert_eq!(
-        work.delta.get(&ready("extractor")),
-        Some(&-1),
-        "`work` does not spend an extractor's readiness, so the drawing's blindness has been \
-         inherited: {:?}",
-        work.delta
-    );
+    assert_eq!(work.delta.get(&token("work")), Some(&-1));
     assert!(
-        !work.delta.contains_key(&Place {
-            kind: "extractor".to_string(),
+        work.delta.get(&token("move")).is_none(),
+        "`work` spends a readiness for moving, so the actions have been pooled"
+    );
+
+    // **A qualified thing is two places and a token is one**, which is the distinction that
+    // took a run to find: `perish` takes a citizen out of the unpaid pool *and* out of the
+    // citizens, where counting only the pool had it remove nobody.
+    let perish = rules
+        .iter()
+        .find(|rule| rule.name == "perish")
+        .expect("`perish` is a rule");
+    assert_eq!(
+        perish.delta.get(&Place {
+            kind: "citizen".to_string(),
             state: String::new()
         }),
-        "`work` changes how many extractors there are, and it should change only what one of \
-         them has left to give"
-    );
-
-    // `refresh` puts readiness back, and draws it out of time to do so.
-    let refresh = rules
-        .iter()
-        .find(|rule| rule.name == "refresh (extractor)")
-        .expect("`refresh` is ground to the kinds that ready");
-    assert_eq!(refresh.delta.get(&ready("extractor")), Some(&1));
-    assert_eq!(
-        refresh.draws_from(),
-        ["time"],
-        "`refresh` makes readiness out of nothing, where `P-388` says it draws one out of time"
-    );
-
-    // **`renew` is the same shape and nothing said so until the rule was applied.** The
-    // release calls fertility *renewed each turn*; that makes it a readiness extractor too,
-    // which falls out of `P-388` rather than being decided here.
-    let renew = rules
-        .iter()
-        .find(|rule| rule.name == "renew")
-        .expect("`renew` is a rule");
-    assert_eq!(
-        renew.draws_from(),
-        ["time"],
-        "`renew` refills a capacity and draws on nothing to do it"
-    );
-
-    // **And a rule that makes a new thing does not draw on time for the capacity it comes
-    // with.** Without that distinction every rule that makes anything would read as a draw,
-    // because a thing arrives ready.
-    let breed = rules
-        .iter()
-        .find(|rule| rule.name == "breed")
-        .expect("`breed` is a rule");
-    assert!(
-        breed.draws_from().is_empty(),
-        "`breed` draws on {:?}; a new citizen's readiness came with the citizen, which was \
-         paid for in fertility and food",
-        breed.draws_from()
+        Some(&-1),
+        "`perish` leaves the citizens unchanged, so it removes nobody: {:?}",
+        perish.delta
     );
 }
 
@@ -211,7 +222,10 @@ fn every_block_becomes_at_least_one_rule() {
     let document = release();
     let rules = nogain::rules(&document);
 
-    // `refresh` names the family `thing`; the release closes readiness to four kinds.
+    // **`refresh` grounds per action now, not per kind that readies.** `P-399` turned the
+    // question round: it was *which things can be refreshed*, read from the *Readies* column,
+    // and it is *which actions are there*, read from the `for` trait's declared values. One
+    // rule per action, because tokens for different actions never compete.
     let refreshed: Vec<&str> = rules
         .iter()
         .filter(|rule| rule.name.starts_with("refresh ("))
@@ -219,13 +233,13 @@ fn every_block_becomes_at_least_one_rule() {
         .collect();
     assert_eq!(
         refreshed.len(),
-        nogain::readies(&document).len(),
-        "`refresh` ground to {refreshed:?}, and the release's *Readies* column names {:?}",
-        nogain::readies(&document)
+        nogain::actions(&document).len(),
+        "`refresh` ground to {refreshed:?}, and the `for` trait declares {:?}",
+        nogain::actions(&document)
     );
     assert!(
         !refreshed.is_empty(),
-        "nothing readies, so the comparison above is between two empty lists"
+        "no actions at all, so the comparison above is between two empty lists"
     );
 
     // `age` and `spoil` name `thing` too, and `keeps` is declared of food alone - so grounding
@@ -245,7 +259,6 @@ fn every_block_becomes_at_least_one_rule() {
         "upkeep",
         "bear",
         "breed",
-        "renew",
         "refresh",
     ] {
         assert!(

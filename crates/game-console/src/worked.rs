@@ -317,13 +317,17 @@ pub fn examples() -> Vec<Example> {
         // `bear`, `breed` and `renew` are the rule it became; the two capacity clamps became
         // `stow` and `discard`. `P-379` states the order they fire in.
         //
+        // **Nine since `P-399` deleted `renew`.** Readiness is a kind, so a citizen's capacity
+        // to bear is a token `refresh` puts back with every other - and the rule that turned a
+        // spent citizen fertile again has nothing left to do.
+        //
         // **Two territories, because growing and perishing cannot both happen in one.** Both
         // are decided from the same food: breeding needs food left after upkeep and perishing
         // needs upkeep to have gone unpaid, and one territory's food cannot be both. Upkeep is
         // per territory, so a planet can do both in one ending and a territory cannot.
         Example {
             also: &[
-                "bear", "breed", "renew", "perish", "age", "spoil", "stow", "discard", "refresh",
+                "bear", "breed", "perish", "age", "spoil", "stow", "discard", "refresh",
             ],
             recipe: "upkeep",
             command: "{end-turn}",

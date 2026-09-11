@@ -20,9 +20,27 @@
 //! places would report the readiness economy as doing nothing at all. That is a green run
 //! about the wrong question, which is this repository's recurring failure.
 //!
-//! **So the places here are `(kind, state)`**, and readiness is a state. Two readings of one
-//! table at two granularities, and the finer one is this. Found in the drawing rather than
-//! predicted - `S-93` was corrected by it.
+//! **So the places here are `(kind, state)`**, finer than the drawing's. Two readings of one
+//! table at two granularities. Found in the drawing rather than predicted - `S-93` was
+//! corrected by it.
+//!
+//! # What `P-399` took away from this file
+//!
+//! **Readiness was a yes-or-no trait and is a kind.** While it was a trait, this file had to
+//! decide things the release did not say: which traits were capacities, which of their two
+//! values meant full, which kinds had which, and what a row naming no trait meant. Two of
+//! those readings were wrong before they were right - counting what was spent rather than what
+//! was left made `create labor` look like pure gain - and none of them belonged here.
+//!
+//! **A token is a thing, and a thing needs no special case.** A `readiness for work` is taken
+//! and made exactly as a metal is. The hand-written capacity list is gone, the actions are the
+//! `for` trait's declared values, and the maximum is containment. `S-98` predicted this
+//! dissolving rather than being answered, and that is what happened.
+//!
+//! **One distinction survives and is worth naming.** A readiness *is* the thing a rule takes.
+//! `whose upkeep is unpaid` *describes* a citizen - it is derived, and a citizen that perishes
+//! leaves both the unpaid pool and the citizens. So a token is one place and a qualified thing
+//! is two.
 //!
 //! # The three sources
 //!
@@ -48,8 +66,9 @@ use std::collections::BTreeMap;
 /// Somewhere a thing of one kind, in one state, can be.
 ///
 /// **A kind alone is not enough**, which is the finding that keeps this check from being
-/// vacuous. `citizen` and `citizen, spent` are different places: `bear` moves one to the other
-/// and a weighting blind to the difference sees `bear` doing nothing.
+/// vacuous. A `readiness for work` and a `readiness for move` are different places - `P-399`:
+/// *two recipes naming the same action draw on the same tokens*, and two naming different
+/// actions never compete. A weighting blind to the difference would pool them.
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub struct Place {
     pub kind: String,
@@ -74,6 +93,13 @@ impl Place {
 
 /// The three `spec/invariants.md` names, spelled as it spells them.
 pub const SOURCES: [&str; 3] = ["the planet", "the star", "time"];
+
+/// What a thing spends to act - `P-399`, and the kind that replaced a trait.
+///
+/// **Naming it is the one thing here that is not read from the release**, and it is a name
+/// rather than a rule: which kind carries the token economy. Everything about it - which
+/// actions there are, what bounds it, which rules spend it - is read.
+pub const READINESS: &str = "readiness";
 
 /// One rule, ground to constants and to single kinds, and what it does to each place.
 #[derive(Clone, Debug)]
@@ -512,7 +538,6 @@ pub fn rules(document: &str) -> Vec<Rule> {
     let rows = crate::recipes::body_under(document, "## Recipes");
     let readies = readies(document);
     let keeps = keeps(document);
-    let capable = capable(document);
 
     // Gathered by block, the way the table states them: the name is on the first row only.
     let mut blocks: Vec<(String, Vec<Vec<String>>)> = Vec::new();
@@ -537,7 +562,7 @@ pub fn rules(document: &str) -> Vec<Rule> {
 
     let mut out = Vec::new();
     for (name, lines) in &blocks {
-        for (suffix, ground) in groundings(document, name, lines, &readies, &keeps, &capable) {
+        for (suffix, ground) in groundings(document, name, lines, &readies, &keeps) {
             let mut delta: BTreeMap<Place, i64> = BTreeMap::new();
             for (place, change) in ground {
                 *delta.entry(place).or_insert(0) += change;
@@ -547,40 +572,28 @@ pub fn rules(document: &str) -> Vec<Rule> {
             // dropping the rule here would hide it from a reader looking for one.
             delta.retain(|_, change| *change != 0);
 
-            // **A rule that refills a capacity without making the thing draws on time** -
-            // `P-388`: *anything that exhausts is a readiness extractor for a turn ... it
-            // draws one readiness out of time*.
+            // **A rule that makes readiness draws it out of time** - `P-388`: *anything that
+            // exhausts is a readiness extractor for a turn ... it draws one readiness out of
+            // time*. `refresh` is the only rule that makes any.
             //
-            // **Without the second half this catches every rule that makes anything.** A new
-            // citizen arrives ready and fertile, so `breed` and `deploy ark` raise a capacity
-            // place too - and their capacity came with the thing, which was paid for. What
-            // marks a draw is raising the capacity of things that were **already there**: the
-            // count of the kind does not move and its capacity does.
-            let refills: Vec<Place> = delta
+            // **This used to be four times as long and it was reasoning the release now does
+            // for us.** Readiness was a yes-or-no trait, so the check had to decide which
+            // traits were capacities, which value meant full, and whether a rule raising one
+            // was refilling an existing thing or making a new thing that arrived full.
+            // `P-399` made readiness a kind: it is made, it is taken, and a place that goes
+            // up has to come from somewhere like any other.
+            let made: i64 = delta
                 .iter()
-                .filter(|(place, change)| {
-                    **change > 0 && CAPACITIES.iter().any(|(held, _)| place.state == *held)
-                })
-                .map(|(place, _)| place.clone())
-                .filter(|place| {
-                    let kind = Place {
-                        kind: place.kind.clone(),
-                        state: String::new(),
-                    };
-                    delta.get(&kind).copied().unwrap_or(0) <= 0
-                })
-                .collect();
-            if !refills.is_empty() {
-                let drawn: i64 = refills
-                    .iter()
-                    .map(|place| delta.get(place).copied().unwrap_or(0))
-                    .sum();
+                .filter(|(place, change)| place.kind == READINESS && **change > 0)
+                .map(|(_, change)| *change)
+                .sum();
+            if made > 0 {
                 *delta
                     .entry(Place {
                         kind: "time".to_string(),
                         state: String::new(),
                     })
-                    .or_insert(0) -= drawn;
+                    .or_insert(0) -= made;
             }
             out.push(Rule {
                 name: format!("{name}{suffix}"),
@@ -598,9 +611,42 @@ fn groundings(
     lines: &[Vec<String>],
     readies: &[String],
     keeps: &[String],
-    capable: &std::collections::BTreeSet<(String, String)>,
 ) -> Vec<(String, Vec<(Place, i64)>)> {
-    // **The density cases first**, because a block with one is `work` and its other rows are
+    // **A row naming every action at once is spelled out per action** - `refresh`, whose one
+    // row makes *1 readiness for each action, in whatever declares room*. The actions are the
+    // `for` trait's declared values, so this grounds against the release rather than a list.
+    //
+    // **Four rules and not one, because the tokens do not pool.** `P-399`: two recipes naming
+    // the same action draw on the same tokens, and two naming different actions never compete.
+    // One rule making a readiness-in-general would say the opposite.
+    if let Some(at) = lines.iter().position(|row| {
+        row.get(5)
+            .map(|traits| traits.trim().starts_with("for each action"))
+            .unwrap_or(false)
+    }) {
+        let actions = actions(document);
+        assert!(
+            !actions.is_empty(),
+            "`{name}` makes a readiness for each action and the `for` trait declares none, so \
+             this would ground it to nothing and drop the only rule that makes any"
+        );
+        return actions
+            .into_iter()
+            .map(|action| {
+                let mut changes = Vec::new();
+                for (which, row) in lines.iter().enumerate() {
+                    let mut row = row.clone();
+                    if which == at {
+                        row[5] = format!("for `{action}`");
+                    }
+                    changes.extend(changed(&row, None, None));
+                }
+                (format!(" ({action})"), changes)
+            })
+            .collect();
+    }
+
+    // **The density cases next**, because a block with one is `work` and its other rows are
     // the same in every case.
     let per_density = lines.iter().any(|row| {
         row.get(3)
@@ -613,7 +659,7 @@ fn groundings(
             .map(|(resource, density)| {
                 let mut changes = Vec::new();
                 for row in lines {
-                    changes.extend(changed(row, Some((&resource, density)), None, capable));
+                    changes.extend(changed(row, Some((&resource, density)), None));
                 }
                 // **The planet is what the material came from.** `work` draws it out of the
                 // ground and is spent doing so - the extractor it took is not ready afterwards
@@ -680,7 +726,7 @@ fn groundings(
             .map(|member| {
                 let mut changes = Vec::new();
                 for row in lines {
-                    changes.extend(changed(row, None, Some(&member), capable));
+                    changes.extend(changed(row, None, Some(&member)));
                 }
                 // The draw on time is added in `rules`, once the whole delta is known: it
                 // depends on whether the kind's own count moved, which one row cannot say.
@@ -691,7 +737,7 @@ fn groundings(
 
     let mut changes = Vec::new();
     for row in lines {
-        changes.extend(changed(row, None, None, capable));
+        changes.extend(changed(row, None, None));
     }
     vec![(String::new(), changes)]
 }
@@ -720,7 +766,6 @@ fn changed(
     row: &[String],
     density: Option<(&str, u32)>,
     member: Option<&str>,
-    capable: &std::collections::BTreeSet<(String, String)>,
 ) -> Vec<(Place, i64)> {
     let role = row.get(2).map(String::as_str).unwrap_or_default().trim();
     let sign: i64 = match role {
@@ -755,21 +800,38 @@ fn changed(
         _ => kind,
     };
 
-    // **Two places, not one: the kind, and the state it is in.**
+    // **One place: the kind and the state the row names.**
     //
-    // The first version made `(kind, state)` a single place and it did not compose. A citizen
-    // has two independent states - readiness and fertility - so `citizen, ready` and
-    // `citizen, fertile` were different places with no relation, and a row naming neither
-    // made a *third*. A built extractor landed in plain `extractor`, which `work` could not
-    // take because `work` takes `extractor, ready`: the readiness economy was disconnected
-    // from the thing that builds into it, and the check would have been solving a game where
-    // a new extractor can never be worked.
+    // **This was fifty lines of capacity bookkeeping until `P-399`.** Readiness was a
+    // yes-or-no trait, so a place had to be a kind *and* a set of capacity flags: which traits
+    // were capacities, which value meant full, which kinds had which, and what a row naming no
+    // trait meant. Two of those decisions were wrong before they were right, and all of them
+    // were this file reasoning about a shape the release did not have.
     //
-    // **A state is *yes or no*, so the place is how many are in the `yes`.** The release's
-    // Traits table says exactly that of `ready` and of `spent`. So a thing is counted once
-    // under its kind, and once more under each state it is in - and a rule that moves a thing
-    // between states leaves the kind alone and moves the state place, which is what `work`,
-    // `bear`, `renew` and `refresh` all do. No product of axes is needed and none is invented.
+    // **The token model made readiness a thing, and a thing needs no special case.** A
+    // `readiness for work` is taken and made like a metal is. So the place is the kind, and
+    // the trait cell where it names a state rather than an identity.
+    // **A readiness is one place and a qualified citizen is two, and the difference is
+    // whether the trait names a thing or describes one.**
+    //
+    // A `readiness for work` **is** the thing: `P-399` made it a kind, and a rule that takes
+    // one takes a whole thing, so the place is the token and there is no citizen-sized place
+    // beside it.
+    //
+    // `whose upkeep is unpaid` **describes** a citizen. It is derived - *its upkeep was not
+    // met* - and a citizen that perishes leaves both the unpaid pool and the citizens. Counting
+    // only the pool would have `perish` remove nobody, which is how it read for one run of this
+    // file before the distinction was drawn.
+    let said = traits.trim();
+    if kind == READINESS {
+        return vec![(
+            Place {
+                kind,
+                state: said.to_string(),
+            },
+            sign * amount,
+        )];
+    }
     let mut out = vec![(
         Place {
             kind: kind.clone(),
@@ -777,33 +839,6 @@ fn changed(
         },
         sign * amount,
     )];
-
-    let said = traits.trim();
-    // **A capacity place moves when the row says the thing has that capacity**, which is
-    // either by naming it or by naming nothing: a thing made and not described is at rest, and
-    // at rest is where a capacity is full. `Thing::is_ready` in the model reads an absent
-    // trait the same way.
-    for (held, spent) in CAPACITIES {
-        if said == spent {
-            continue;
-        }
-        if !said.is_empty() && said != held && !COUNTERS.contains(&said) {
-            continue;
-        }
-        // Only for a kind the release gives that capacity to. Deciding it per row instead
-        // would give a metal a readiness the moment some rule mentioned one without a trait.
-        if !capable.contains(&(kind.clone(), held.to_string())) {
-            continue;
-        }
-        out.push((
-            Place {
-                kind: kind.clone(),
-                state: held.to_string(),
-            },
-            sign * amount,
-        ));
-    }
-
     if COUNTERS.contains(&said) {
         out.push((
             Place {
@@ -816,34 +851,33 @@ fn changed(
     out
 }
 
-/// Which kinds hold which capacity, read from the release before any rule is ground.
+/// The actions a readiness can be for, read from the `for` trait's declared values.
 ///
-/// **Two sources, because the release states the two capacities in two places.** Readiness is
-/// the *Readies* column of *Units and structures*, and the release closes the set itself -
-/// *Nothing outside this table readies*. Fertility is not a column, so it is read from the
-/// rules: a kind some rule names as `fertile` or `spent` is a kind that has it.
+/// **`P-399` put them in the Traits table** - *`for`, of a readiness, values `move`, `labor`,
+/// `work` or `bearing`* - so `refresh`'s one row, which makes a readiness *for each action*,
+/// grounds to one rule per action without this file naming any of them.
 ///
-/// **Decided here rather than row by row**, because a row naming a kind and no trait would
-/// otherwise hand that kind every capacity in the list - a metal with a readiness, from a rule
-/// that merely failed to describe it.
-pub fn capable(document: &str) -> std::collections::BTreeSet<(String, String)> {
-    let mut out = std::collections::BTreeSet::new();
-    for kind in readies(document) {
-        out.insert((kind, "ready".to_string()));
-    }
-    for row in crate::recipes::body_under(document, "## Recipes") {
-        let kind = crate::recipes::plain(row.get(4).map(String::as_str).unwrap_or_default());
-        let said = crate::recipes::plain(row.get(5).map(String::as_str).unwrap_or_default());
-        if kind.is_empty() || kind == "thing" {
+/// **This replaces a hand-written list and that is the point.** The check used to declare
+/// which traits were capacities and which kinds had them, because readiness was a trait and
+/// nothing in the release said. It is a kind now, its actions are declared values, and its
+/// maximum is containment - so all three are read.
+pub fn actions(document: &str) -> Vec<String> {
+    for row in crate::recipes::body_under(document, "## Traits") {
+        if crate::recipes::plain(row.first().map(String::as_str).unwrap_or_default()) != "for" {
             continue;
         }
-        for (held, spent) in CAPACITIES {
-            if said == held || said == spent {
-                out.insert((kind.clone(), held.to_string()));
-            }
-        }
+        return row
+            .get(2)
+            .map(|values| {
+                values
+                    .split(&[',', ' '][..])
+                    .map(|word| word.trim().trim_matches('`').to_string())
+                    .filter(|word| !word.is_empty() && word != "or")
+                    .collect()
+            })
+            .unwrap_or_default();
     }
-    out
+    Vec::new()
 }
 
 /// A capacity to act, and the state a thing is in once it has been spent.

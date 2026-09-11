@@ -30,13 +30,13 @@ fn every_recipe_is_either_drawn_or_named_as_not_drawn() {
     // blocks: `discard` metal and `discard` labor take different things and are different
     // transitions.
     assert_eq!(
-        net.recipes, 24,
-        "the release states twenty-four blocks of recipe rows and the parse found {}",
+        net.recipes, 23,
+        "the release states twenty-three blocks of recipe rows and the parse found {}",
         net.recipes
     );
     assert_eq!(
-        net.names, 20,
-        "those blocks are stated under twenty distinct names and the parse found {}",
+        net.names, 19,
+        "those blocks are stated under nineteen distinct names and the parse found {}",
         net.names
     );
     // **The deduplication has to remove something**, or a version that stopped deduplicating
@@ -57,14 +57,13 @@ fn every_recipe_is_either_drawn_or_named_as_not_drawn() {
         net.recipes
     );
 
-    // **Nothing is excluded, and that is new.** `work` was the last block that could not be
-    // an arc; `P-376` says a rule that makes a territory's density is one rule with a number
-    // per case *which whatever reads it may spell out*, so it is drawn as its cases.
-    assert!(
-        net.excluded.is_empty(),
-        "{} block(s) are excluded again: {:?}",
-        net.excluded.len(),
-        net.excluded.iter().map(|one| &one.name).collect::<Vec<_>>()
+    // **One block is excluded and it is `move`** - `P-399` gave it a `put` row, and the
+    // release's column description names four roles without that one, so what a `put` does as
+    // an arc is undeclared. `C-88`. `work` is still drawn, spelled out per density.
+    assert_eq!(
+        net.excluded.iter().map(|one| &one.name).collect::<Vec<_>>(),
+        [&"move".to_string()],
+        "the excluded blocks are not the one expected"
     );
 
     // **An empty exclusion list means something only because the unfolding is doing work.**
@@ -142,12 +141,19 @@ fn the_density_rule_is_spelled_out_against_the_planet_it_describes() {
         "the table says these have a quantity that is not a number: {expected:?}"
     );
 
-    // **And it is drawn, not dropped.** Nothing is excluded now, so the exclusion list is
-    // empty for a reason rather than by a parse failing.
+    // **`work` is drawn, and `move` is the one thing left out** - for a different reason,
+    // which is why they are asserted apart. `P-399` gave `move` a `put` row and the release's
+    // column description still names four roles, so what a `put` does as an arc is undeclared.
+    // `C-88`. Guessing it would draw a game nobody specified.
+    assert_eq!(
+        net.excluded.iter().map(|one| &one.name).collect::<Vec<_>>(),
+        [&"move".to_string()],
+        "the excluded blocks are not the one expected"
+    );
     assert!(
-        net.excluded.is_empty(),
-        "`work` is excluded again rather than spelled out: {:?}",
-        net.excluded.iter().map(|one| &one.name).collect::<Vec<_>>()
+        net.excluded[0].because.contains("put"),
+        "`move` is excluded and the reason does not name the role that caused it: {}",
+        net.excluded[0].because
     );
 
     // **The cases are the planet's, read here from *Territory resources* a second time.** A
@@ -254,17 +260,21 @@ fn what_the_exclusions_cost_is_visible_rather_than_implied() {
         );
     }
 
-    // **The exclusion costs nothing because there is no exclusion, and those are different
-    // statements.** `docs/process.md`: a zero means something only against a population that
-    // is not also zero. So this asserts the emptiness of the *population* rather than
-    // reporting a green zero about the cost - a version where the parse collapsed and every
-    // block vanished would satisfy a cost-is-empty check just as well.
+    // **What leaving `move` out costs, measured against its own rows rather than guessed.**
+    // `place` and `unit` are the two families it names, and nothing drawn names either -
+    // `move` is the only rule that takes a unit anywhere. So the drawing has no unit moving in
+    // it, and the page has to say so rather than leave a reader to notice.
     let cost = game_console::petri::what_exclusion_costs(&net, &document);
+    assert_eq!(
+        cost,
+        ["place".to_string(), "unit".to_string()],
+        "what excluding {:?} costs the drawing is {cost:?}",
+        net.excluded.iter().map(|one| &one.name).collect::<Vec<_>>()
+    );
     assert!(
-        cost.is_empty() && net.excluded.is_empty(),
-        "{} block(s) excluded, costing {cost:?} - the page's account of what is missing has \
-         to come back with them",
-        net.excluded.len()
+        !net.excluded.is_empty(),
+        "nothing is excluded, so the cost above was counted against an empty population and \
+         means nothing"
     );
 
     // **`resource` is no longer a place, and that is the unfolding rather than a loss.**
@@ -310,13 +320,19 @@ fn what_the_exclusions_cost_is_visible_rather_than_implied() {
         "the page does not separate what the exclusion costs from what no recipe names, and \
          a reader will read the second as the first"
     );
-    // **The page says the diagram is complete, and says it only while it is.** The sentence
-    // is written under `net.excluded.is_empty()`, so a block falling out of the drawing takes
-    // the claim with it rather than leaving a reassurance nobody re-checked.
+    // **The page said the diagram was complete and it no longer does, which is the sentence
+    // working.** It is written under `net.excluded.is_empty()`, so `move` falling out took the
+    // claim with it rather than leaving a reassurance nobody re-checked. Asserted in the
+    // direction that fails if the claim comes back while something is still missing.
     assert!(
-        page.contains("Nothing is left out"),
-        "nothing is excluded and the page does not say so, which leaves a reader counting \
-         transitions against blocks and finding more"
+        !page.contains("Nothing is left out"),
+        "the page says nothing is left out while `{}` is",
+        net.excluded[0].name
+    );
+    assert!(
+        page.contains(&net.excluded[0].name),
+        "`{}` is excluded and the page does not name it",
+        net.excluded[0].name
     );
     assert!(
         page.contains("became") && page.contains("transitions"),

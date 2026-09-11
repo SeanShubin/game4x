@@ -459,6 +459,31 @@ pub fn net(document: &str) -> Net {
         // **The whole recipe, or none of it.** An arc without a weight cannot be drawn, and
         // drawing a recipe's other rows without it would show a transition that takes less
         // than it does.
+        // **A role the release does not declare is refused rather than drawn** - `C-88`.
+        // `P-399` gave `move` a `put` row: the unit is neither taken nor made, it goes
+        // somewhere else. The *Recipes* column description still names four roles and this is
+        // a fifth, so what a `put` does as an arc is not written down anywhere.
+        //
+        // **It is close to obvious and that is not enough.** The arithmetic differs: a `put`
+        // read as a move contributes nothing to the net, and one read as a produce contributes
+        // a whole unit. Guessing would draw a game nobody specified, which is the mistake this
+        // file has already made once with `limit`.
+        if let Some(row) = lines
+            .iter()
+            .find(|row| row.get(2).map(String::as_str) == Some("put"))
+        {
+            excluded.push(Excluded {
+                name: label.clone(),
+                because: format!(
+                    "it has a `put` row - `{}` in `{}` - and the release's *Recipes* column \
+                     description names only `require`, `limit`, `consume` and `produce`, so \
+                     what a `put` does as an arc is undeclared",
+                    row.get(4).cloned().unwrap_or_default(),
+                    row.get(6).cloned().unwrap_or_default()
+                ),
+            });
+            continue;
+        }
         if let Some(row) = lines.iter().find(|row| number(row).is_none()) {
             excluded.push(Excluded {
                 name: label.clone(),

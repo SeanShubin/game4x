@@ -76,14 +76,14 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
     declared.dedup();
     assert_eq!(
         blocks.len(),
-        24,
-        "the release states twenty-four blocks of recipe rows; it has {} ({blocks:?})",
+        23,
+        "the release states twenty-three blocks of recipe rows; it has {} ({blocks:?})",
         blocks.len()
     );
     assert_eq!(
         declared.len(),
-        20,
-        "those blocks are stated under twenty names; there are {} ({declared:?})",
+        19,
+        "those blocks are stated under nineteen names; there are {} ({declared:?})",
         declared.len()
     );
     assert!(
@@ -123,9 +123,10 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
     // **Nine, and it was five.** The world's six became ten in the saturating rewrite, and
     // one `{end-turn}` is still the only command that fires any of them - so the one example
     // carries nine recipes besides its own.
+    // **Eight since `P-399` deleted `renew`**, so one `{end-turn}` carries the world's nine.
     assert_eq!(
-        shared, 9,
-        "one example carries nine recipes besides its own, which is the world's ten"
+        shared, 8,
+        "one example carries eight recipes besides its own, which is the world's nine"
     );
 }
 
