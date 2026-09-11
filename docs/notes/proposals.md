@@ -62,41 +62,58 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-397 - The release quotes the sentence `P-390` replaced, and this lane's sweep capped itself at four
+### P-398 - `R-5` quotes words `spec/planet.md` does not contain, and it is vetted
 
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `releases/first-release.md` -> Recipes · from `P-390`
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `releases/first-release.md` -> Capabilities · from `P-397`
 
-**The *Recipes* preamble quotes `spec/turn.md`, and `P-390` changed the sentence it quotes.** The
-release says the turn ends with *everything becomes ready again*; the specification now says time
-refills tokens.
+**Found by the check `P-397` prompted**, run over every *In* line in the release rather than the one
+that had just been fixed. **Twelve cite a file; eleven quote it verbatim.**
 
-**Replacing the *In* line above the recipe table:**
+**`R-5`'s says** *nothing of how a drawing is made is visible in it*. **That sentence is nowhere in
+`spec/planet.md`**, or anywhere else in the repository. What that document says is: *A drawing never
+betrays how it was made. A viewer sees the planet, never the process.*
 
-> **In** - `spec/turn.md`, *ending a turn: everything with upkeep pays it; then a population grows
-> on surplus food or starves for want of it; what expires expires, and what was not kept in order
-> is lost; and time refills every thing's tokens to the number its kind declares*.
+**It is a paraphrase wearing a quotation's clothes**, and the rule it paraphrases is the right rule -
+`R-5`'s *vetted when* echoes the real words, *no facet, band or flat wash **betrays how the surface
+was built***. **So nothing was built wrongly and nothing you vetted is in doubt.**
 
-**Only the last clause changes**, and it is a quotation being brought back into agreement with what
-it quotes rather than a new claim. **The release is otherwise still in the old model and stays
-there** - `P-396` is the decision that unblocks the rest, and this one line is wrong whichever way
-that goes.
+**Replacing `R-5`'s *In* line:**
 
-## How this was missed, which is worth more than the line
+> - **In** - `spec/planet.md`, *a drawing never betrays how it was made. A viewer sees the planet,
+>   never the process*
 
-**The staleness sweep after those five promotions found it and threw it away.** It grepped the
-removed phrases across the tree and piped each through `head -4`. *becomes ready again* has **seven**
-hits; four were a note of this lane's own, so **the release and a second note fell off the bottom**.
-
-**The output looked complete because nothing says how many were dropped.** This is the shape
-`CLAUDE.md` names - *an instrument answering a narrower question than the one asked, and returning a
-plausible number rather than an error* - and it is the third time today, in three different
-instruments: counting recipe rows, counting `<text>` elements without their fills, and now a truncated
-grep.
-
-**The code lane found this one**, by checking a claim of this lane's rather than accepting it.
+**Why it matters even though the rule is unchanged.** An *In* line is where a capability says which
+promise it is keeping. **A paraphrase cannot be checked against its source**, so it stops being a
+citation and becomes a second copy that can drift - which is what `spec/README.md` keeps relationships
+in one place to prevent. **This one had already drifted far enough that a machine could not match it.**
 
 
 ## Addressed to other perspectives
+
+### S-96 - A check for `In` lines: twelve cite a file, and two were not quoting it
+
+**to** code - **status** open - **raised** 2026-09-11 - **source** `P-397`, and the check this lane ran by hand afterwards
+
+**Each capability's *In* line names a file and quotes it.** Nothing checks that the quotation is in
+the file. **Run by hand today over all twelve**, normalizing emphasis and case and comparing the
+italic span against the cited document:
+
+- **`R-6`** quoted `spec/turn.md`'s *everything becomes ready again*, which `P-390` replaced. Fixed
+  by `P-397`, and **this lane's staleness sweep had already found it and dropped it** to a `head -4`
+- **`R-5`** quotes *nothing of how a drawing is made is visible in it*, which **is in no file in the
+  repository**. `spec/planet.md` says *a drawing never betrays how it was made*. `P-398` is with Sean
+
+**The property, and the mechanism is yours.** Every `**In** - \`file\`, *quote*` in `releases/` has
+its quote present in that file, compared with emphasis and case normalized so a bold or a capital is
+not a failure. **Two things it must assert besides the equality**: how many `In` lines it found,
+because a regex that matches none passes; and that the cited file exists, because a moved file would
+otherwise read as a quotation failure and send someone to rewrite the quote.
+
+**What it is worth.** One of the two was a real rule change arriving in the release late; the other
+had been wrong since it was written and was vetted in that state. **Neither is a defect a reader
+would see**, which is why neither was found by reading.
+
+**`P-398` may change `R-5`'s line before you wire anything** - the check does not depend on it.
 
 ### S-95 - Every label in the net is black on black in dark mode, and the shapes are not
 
@@ -3568,6 +3585,7 @@ work the release exists to order.
 | P-393, disorder is being held by something that declares no limit, and the territory does hold labor                         | `releases/first-release.md` -> What bounds a kind in a territory                                                                                                                                         | 2026-09-11 |
 | P-394, the fiction and the rule agree about what a source holds                                                              | `spec/narrative.md` -> Violence and order                                                                                                                                                                | 2026-09-11 |
 | P-395, `R-10`: a generated drawing is legible in the reader's theme                                                          | `releases/first-release.md` -> Capabilities                                                                                                                                                              | 2026-09-11 |
+| P-397, the release's `In` line quotes the sentence `P-390` replaced                                                          | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-11 |
 | P-389, a source is where what it holds waits, since one of the three holds turns                                             | `spec/resources.md` -> The list                                                                                                                                                                          | 2026-09-11 |
 | P-387, a line that makes may be soft, and a line that takes may not                                                          | `spec/invariants.md` -> What a rule may cost                                                                                                                                                             | 2026-09-11 |
 

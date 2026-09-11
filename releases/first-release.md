@@ -198,8 +198,8 @@ A blank is not a zero. It says the row has no such number, and a quantity read f
 nothing.
 
 **In** - `spec/turn.md`, *ending a turn: everything with upkeep pays it; then a population grows
-on surplus food or starves for want of it; what expires expires, and what was not kept in order
-is lost; and everything becomes ready again*.
+on surplus food or starves for want of it; what expires expires, and what was not kept in order is
+lost; and time refills every thing's tokens to the number its kind declares*.
 
 The player's recipes fire when the player chooses them. The world's fire when the turn ends, in
 that order: `upkeep`, then `bear`, `breed` and `renew`, then `perish`, then `age`, then `spoil`,

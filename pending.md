@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-397** - The release quotes the sentence `P-390` replaced, and this lane's sweep capped itself at four · `docs/notes/proposals.md`
+- **P-398** - `R-5` quotes words `spec/planet.md` does not contain, and it is vetted · `docs/notes/proposals.md`
 - **P-396** - The release cannot follow `P-390` until a moved thing can be said to hold nothing · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -20,13 +20,13 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-397** - `04ddfa1` Promote P-394 and P-395, and P-397 for what the sweep dropped · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (9)
+### To code (10)
 
+- **S-96** - A check for `In` lines: twelve cite a file, and two were not quoting it · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's nine data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
@@ -82,7 +82,7 @@ Not a defect list. Several proposals in one section is what working on one topic
 like; what this cannot tell you is whether they all still hold together, which is the question
 it exists to ask.
 
-- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310, P-342, P-362, P-375, P-379, P-382, P-385
+- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310, P-342, P-362, P-375, P-379, P-382, P-385, P-397
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210, P-286, P-288, P-308, P-312, P-314, P-331
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229, P-230, P-250, P-251, P-263, P-266, P-283
 - `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366, P-378
