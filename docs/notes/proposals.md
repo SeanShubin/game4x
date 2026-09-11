@@ -62,6 +62,66 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-401 - What I am pushing out, and why looking at it is not approving it
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** text · **asks** approval · **into** `docs/process.md`, a new section after *How I know the application is right*
+
+**Sean, 2026-09-11**: *I am looking at but not approving the artifacts such as `play.4x`, so I
+wouldn't call it a "review". I am using it to move towards an actual release because I don't want to
+formally review something without a concrete implementation. This is not a project with paying
+customers so I am not ensuring the product is correct before it is deployed, I am deploying it so
+that I can verify correctness on something concrete.*
+
+**The documents say the opposite in three places**, which is why this is worth a section rather than
+a word. `docs/process.md`: *the input and the expected are what I **review by hand for
+correctness***, and *there is a main scenario ... **that is what I vet***. `spec/scenarios.md`: *it
+is the foundation, and it is **vetted by hand***. And `scenario/expected/play.4x` asks you to write
+**`REVIEWED by Sean`** and says *that edit is the review, and it is the only record of one*.
+
+**Into `docs/process.md`, as a section of its own:**
+
+> ## What I am pushing out
+>
+> **This is not a commercial product and has no paying customers**, so I am not ensuring it is
+> correct before it is deployed. **I deploy it so that I can verify correctness on something
+> concrete**, which is the opposite order, and it is deliberate. What is out there is closer to a
+> staging area, or a prototype, than to a product.
+>
+> **So looking at an artifact is not approving it.** I look at the scenario and its expected data to
+> decide what to do next, not to certify that it is right. Certifying is a separate act, it comes
+> later, and it may never come for something I decide to throw away instead.
+>
+> **What is strict is control, not assurance.** Production code is mine and every idea in the
+> specification is mine; nothing about deploying early loosens that. **The two are independent
+> axes**, and reading one from the other is the mistake this section exists to prevent.
+
+## What follows, and it is not in this proposal
+
+**Three lines will be wrong the moment this lands**, and each is a separate small proposal rather
+than something bundled here, because you may want different words in each:
+
+| Where                       | What it says now                                                       |
+| --------------------------- | ---------------------------------------------------------------------- |
+| `docs/process.md`           | *the input and the expected are what I review by hand for correctness* |
+| `spec/scenarios.md`         | *the foundation, and it is vetted by hand*                             |
+| `scenario/expected/play.4x` | *`REVIEWED by Sean` ... that edit is the review*                       |
+
+**One of the three may need no change at all.** `docs/process.md` already carries the weaker idea in
+your own words - **absent expected data means I accept what it does now** - which is exactly
+*looking rather than certifying*, and the sentence three lines above it is what disagrees with it.
+**So this may be one document contradicting itself rather than a concept it lacks.**
+
+## The one thing this leaves open, and it is yours
+
+**Whether `vetted` still means what `releases/README.md` says it means.** That file gates the whole
+release on it: *when every capability in a release is vetted*, the file is deleted. **If deployment
+now comes first, `vetted` is no longer a gate on shipping** - it is a certification that happens on
+something already out there.
+
+**This lane has not touched that**, because changing what `vetted` gates would change what a release
+*is*, and it is a bigger question than the one you asked. **Say the word and it becomes the next
+proposal.**
+
 ### P-400 - The firing order still names `renew`, which `P-399` deleted
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `releases/first-release.md` -> Recipes · from `P-399`

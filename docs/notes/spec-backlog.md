@@ -8,6 +8,28 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-11, I am deploying in order to verify, not verifying in order to deploy
+
+*I am looking at but not approving the artifacts such as play.4x, so I wouldn't call it a "review".
+I am using it to move towards an actual release because I don't want to formally review something
+without a concrete implementation. This is not a project with paying customers so I am not ensuring
+the product is correct before it is deployed, I am deploying it so that I can verify correctness on
+something concrete. This may need a change in terminology, as what I am pushing out there can be
+thought of as a staging area or even a prototype. However I do have some production like qualities,
+like maintaining executive control, so I get that it is fuzzy. I am very strict that "production
+code" is controlled by me, but on the other hand I am not as strict about what I push out as I would
+be with a commercial product.*
+
+**Two axes the documents treat as one.** Control is strict and assurance before deployment is
+deliberately loose. **Reading one from the other is the error**, and three lines currently invite it:
+`docs/process.md`'s *review by hand for correctness* and *that is what I vet*, `spec/scenarios.md`'s
+*vetted by hand*, and `play.4x`'s *REVIEWED by Sean*.
+
+**`docs/process.md` already carries the weaker idea in his own words** - *absent expected data means
+I accept what it does now* - three lines below the sentence that contradicts it.
+
+`P-401` carries the statement. This row stays until it lands.
+
 ## Said 2026-09-11, more than one resource will come from time
 
 *I think we are going to need multiple resources from time, so multiple things that can exhaust.
