@@ -24,10 +24,26 @@ fn release() -> String {
 fn every_recipe_is_either_drawn_or_named_as_not_drawn() {
     let net = net(&release());
 
+    // **Two numbers, because the release states some recipes more than once.** `P-373` makes
+    // a rule whose subject is a family a rule for each of them, so `stow` is stated twice and
+    // `discard` four times - twenty-four blocks of rows under twenty names. A net draws the
+    // blocks: `discard` metal and `discard` labor take different things and are different
+    // transitions.
     assert_eq!(
-        net.recipes, 16,
-        "the release declares sixteen recipes and the parse found {}",
+        net.recipes, 24,
+        "the release states twenty-four blocks of recipe rows and the parse found {}",
         net.recipes
+    );
+    assert_eq!(
+        net.names, 20,
+        "those blocks are stated under twenty distinct names and the parse found {}",
+        net.names
+    );
+    // **The deduplication has to remove something**, or a version that stopped deduplicating
+    // would pass both assertions above the day the release stops repeating a name.
+    assert!(
+        net.names < net.recipes,
+        "no name is stated twice, so the two counts are checking one thing rather than two"
     );
     assert_eq!(
         net.transitions.len() + net.excluded.len(),
@@ -100,10 +116,14 @@ fn exclusion_is_decided_by_the_quantity_and_nothing_else() {
         "the net excludes {actual:?} and the table says the ones with an expression are \
          {expected:?}"
     );
+    // **One, and it used to be four.** The saturating rewrite took the other three out:
+    // `grow` is gone entirely - `P-379` - and the two capacity clamps became `stow` and
+    // `discard`, which carry a constant weight. `work` is the last row in the release whose
+    // quantity is read from the state, *`$where`'s density for that resource*.
     assert_eq!(
         expected.len(),
-        4,
-        "four recipes have a quantity that is not a number, and these are {expected:?}"
+        1,
+        "one recipe has a quantity that is not a number, and these are {expected:?}"
     );
 }
 
@@ -126,28 +146,54 @@ fn what_the_exclusions_cost_is_visible_rather_than_implied() {
             .collect::<Vec<_>>()
     );
 
-    // `food` is the case. It is a kind of the release, and every recipe that moves it -
-    // `work`, `upkeep`, `grow` - has a state-dependent amount, so the drawn net never names
-    // it. The page has to say so, and this is what says the page has to.
+    // **`food` is drawn now, and it was the whole of this test's point until `S-88`.** Every
+    // recipe that moved it - `work`, `upkeep`, `grow` - once had a state-dependent amount, so
+    // all three were excluded and the drawing had no food anywhere. `grow` is gone since
+    // `P-379` and `upkeep` carries a constant weight. **Asserted in the direction that would
+    // fail if the rewrite were undone**, rather than deleted: the claim the page used to make
+    // is false and a reader has to be able to see when it stops being.
     let names: Vec<String> = net.places.iter().map(|place| place.label()).collect();
-    assert!(
-        !names.contains(&"food".to_string()),
-        "food appears as a place, so the sentence on the page explaining that it cannot is \
-         now false and should be removed"
+    for kind in ["food", "metal", "energy"] {
+        assert!(
+            names.contains(&kind.to_string()),
+            "`{kind}` is not drawn, so some recipe that moves it has acquired a \
+             state-dependent amount and the page's account of what is missing is now short"
+        );
+    }
+
+    // **What the exclusion costs, asked against the excluded rows rather than the kinds.**
+    // `work` produces a `resource`, which is a family - so a check reading the *Kinds* table
+    // would find nothing missing and report a cost of zero. That is the narrow-predicate
+    // failure, and a zero would have looked like good news.
+    let cost = game_console::petri::what_exclusion_costs(&net, &document);
+    assert_eq!(
+        cost,
+        vec!["resource".to_string()],
+        "what the {} excluded recipe(s) cost the drawing is {cost:?}",
+        net.excluded.len()
     );
     assert!(
-        names.contains(&"metal".to_string()),
-        "metal does appear, which is what makes food's absence a fact about the exclusions \
-         rather than about resources"
+        !net.excluded.is_empty(),
+        "nothing is excluded, so the cost above was counted against an empty population and \
+         means nothing"
     );
 
     // **And the page says so, which is the half a test alone does not achieve.** This
     // assertion existed before the page did: the accounting reported places with no arcs,
     // which is always empty, so the finding lived in this file and nowhere a reader goes.
+    //
+    // **What is never drawn is now a different fact and the page must not tell the old
+    // story.** These four are absent because no recipe names them, which would be true of a
+    // drawing with nothing left out at all - so the page has to say that rather than blame
+    // the exclusion, and this asserts it does.
     let never = game_console::petri::kinds_never_drawn(&net, &document);
-    assert!(
-        never.contains(&"food".to_string()),
-        "food is drawn somewhere now, so the page's sentence about it is false: {never:?}"
+    assert_eq!(
+        never,
+        ["orbit", "deposit", "adjacency", "game"]
+            .map(String::from)
+            .to_vec(),
+        "a different set of kinds is never drawn, and the page's explanation of why is \
+         written for these four: {never:?}"
     );
 
     let page = game_console::petri_page::markdown(&document);
@@ -156,8 +202,13 @@ fn what_the_exclusions_cost_is_visible_rather_than_implied() {
         "the page never says anything is not drawn"
     );
     assert!(
+        page.contains("not the exclusion's doing"),
+        "the page does not separate what the exclusion costs from what no recipe names, and \
+         a reader will read the second as the first"
+    );
+    assert!(
         page.contains("would conclude the game has none"),
-        "the page does not tell a reader that food is missing from the drawing"
+        "the page does not tell a reader what the exclusion costs them"
     );
     for kind in &never {
         assert!(
@@ -332,10 +383,14 @@ fn every_bound_the_release_states_is_classified() {
         }
     }
 
+    // Twelve since `P-380` gave `fertility` its own row - *the citizens that make it, one
+    // each per turn*, which is `labor`'s word for word. It was eleven, and the number is
+    // written rather than counted from the same table the loop above counts, because a test
+    // comparing a count with itself agrees with any release at all.
     assert_eq!(
         rows.len(),
-        11,
-        "the release bounds eleven kinds and this found {}: {rows:?}",
+        12,
+        "the release bounds twelve kinds and this found {}: {rows:?}",
         rows.len()
     );
 

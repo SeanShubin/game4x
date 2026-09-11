@@ -10,7 +10,7 @@
 //! the checks operate on, a changed weight is one changed cell where in the SVG it moves every
 //! coordinate after it, and github.com renders it with no deploy at all.
 
-use crate::petri::{Net, by_role, kinds_never_drawn, matrix, net};
+use crate::petri::{Net, by_role, kinds_never_drawn, matrix, net, what_exclusion_costs};
 use crate::petri_draw::{excluded_table, places_table, recipe_svg, svg};
 
 /// A markdown table, already padded.
@@ -66,31 +66,75 @@ fn table(rows: &[Vec<String>]) -> String {
 fn accounting(net: &Net, document: &str) -> String {
     let mut out = String::new();
     out.push_str(&format!(
-        "The release declares **{} recipes**. **{} are drawn** and **{} are not**, because a \
-         Petri net arc carries a constant weight and those recipes have amounts that depend on \
-         the state when they fire.\n\n",
+        "The release states **{} blocks of recipe rows** under **{} names**. **{} are drawn** \
+         and **{} are not**, because a Petri net arc carries a constant weight and those \
+         recipes have amounts that depend on the state when they fire.\n\n",
         net.recipes,
+        net.names,
         net.transitions.len(),
         net.excluded.len()
     ));
+    if net.names < net.recipes {
+        out.push_str(&format!(
+            "**The two numbers differ because a rule whose subject is a family is a rule for \
+             each of them** - `P-373`. `stow` and `discard` are each stated once per kind, and \
+             in a net they really are separate transitions: `discard` metal takes metal and \
+             `discard` labor takes labor. So {} blocks are drawn as {} nodes, and a repeated \
+             name is labelled with the kind it acts on so that two of them are never one node \
+             on the page.\n\n",
+            net.recipes, net.recipes
+        ));
+    }
     out.push_str(
         "**That is the whole of what is missing, and it is counted rather than mentioned.** A \
          diagram that quietly left them out would be a picture of a game that is not this one, \
          and nothing on the page would say so.\n\n",
     );
 
-    // **What the exclusions cost, which is more than four rows.** A page reporting places
-    // with no arcs would always report nothing, because the net only makes a place when an
-    // arc needs one. What is worth saying is which *kinds* the release declares that the
-    // drawn net never mentions at all.
+    // **What the exclusion costs, and what is missing for another reason entirely.** These
+    // were one paragraph until `S-88`, and the saturating rewrite is what separated them:
+    // `food` used to be absent because every recipe that moved it was excluded, and it is
+    // drawn now. What is left absent is absent because no recipe names it, which would be
+    // just as true of a net with nothing left out.
+    let cost = what_exclusion_costs(net, document);
+    if !net.excluded.is_empty() {
+        out.push_str(&format!(
+            "**What that costs the drawing is measured rather than assumed.** Asked against \
+             the rows of the {} rather than against the list of kinds, because what a left-out \
+             recipe costs is only whatever it was the sole way into: {}\n\n",
+            if net.excluded.len() == 1 {
+                "one recipe left out".to_string()
+            } else {
+                format!("{} recipes left out", net.excluded.len())
+            },
+            if cost.is_empty() {
+                "**nothing**. Every place they touch is reached by some other recipe, so the \
+                 drawing is short of those transitions and of no part of the state."
+                    .to_string()
+            } else {
+                format!(
+                    "**{}**, which nothing drawn names. A reader looking at the picture for \
+                     {} would conclude the game has none.",
+                    cost.iter()
+                        .map(|kind| format!("`{kind}`"))
+                        .collect::<Vec<_>>()
+                        .join(", "),
+                    cost.first().map(String::as_str).unwrap_or_default()
+                )
+            }
+        ));
+    }
+
+    // A page reporting places with no arcs would always report nothing, because the net only
+    // makes a place when an arc needs one. What is worth saying is which *kinds* the release
+    // declares that the drawn net never mentions at all - and, since `S-88`, why.
     let never = kinds_never_drawn(net, document);
     if !never.is_empty() {
         out.push_str(&format!(
-            "**It costs more than four rows.** {} the release declares {} nowhere in the \
-             drawn net: {}. **They are not absent from the game - they are absent from what \
-             can be drawn of it**, and `food` is the one that matters: every recipe that \
-             moves it is one of the four above, so a reader looking at the picture for food \
-             would conclude the game has none.\n\n",
+            "**{} the release declares {} nowhere in the drawn net**: {}. **This is not the \
+             exclusion's doing** - no recipe names any of them, so they would be missing from \
+             a drawing with nothing left out. They are where things are and how places relate, \
+             rather than things a recipe moves.\n\n",
             if never.len() == 1 {
                 "One kind".to_string()
             } else {
