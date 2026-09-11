@@ -173,10 +173,16 @@ fn node(out: &mut String, entry: &Entry, depth: usize) {
 
 /// The `used/total` line for a container, and only where a total is declared.
 ///
-/// **A capacity of zero is left off rather than printed as `0/0`.** `spec/logistics.md`: *a
-/// kind that declares no capacity contains nothing, and never can* - so a territory with no
-/// metal is not a container of metal that happens to be empty, and printing it as one would
-/// say the opposite of what the rule says.
+/// **A capacity of zero is left off rather than printed as `0/0`.** `spec/logistics.md`: a kind
+/// that declares **no capacity** *holds nothing of that sort and never can* - so a territory
+/// with no metal is not a container of metal that happens to be empty, and printing it as one
+/// would say the opposite of what the rule says.
+///
+/// **`P-391` split that rule into three cases and the claim above survives the first.** A kind
+/// now declares no capacity, a limit, or **no limit** - and the third is the one this has to
+/// keep out of: something holding any number has *no room to record because nothing can be
+/// short of it*, so a `used/total` line for it would print a total the specification says does
+/// not exist. That is the same mistake as `0/0` from the other end.
 ///
 /// **What is full is marked.** The reason a summary carries these at all is that a collapsed
 /// container which cannot say whether it is full defeats collapsing it.
@@ -437,7 +443,8 @@ mod tests {
             .filter(|kind| !may_contain(*kind))
             .collect();
         // Thirteen since `fertility` arrived, which holds nothing: it is transient, always
-        // in disorder, and a kind that declares no capacity contains nothing and never can.
+        // in disorder, and a kind declaring no capacity holds nothing of that sort and never
+        // can - `P-391`'s first of three cases.
         assert_eq!(
             cannot.len(),
             13,
@@ -464,8 +471,8 @@ mod tests {
 
     /// A capacity of zero is left off rather than drawn as `0/0`.
     ///
-    /// `spec/logistics.md`: *a kind that declares no capacity contains nothing, and never
-    /// can* - so drawing it as an empty container says the opposite of the rule.
+    /// `spec/logistics.md`: a kind declaring **no capacity** *holds nothing of that sort and
+    /// never can* - so drawing it as an empty container says the opposite of the rule.
     #[test]
     fn a_kind_a_territory_cannot_hold_is_not_drawn_as_an_empty_container() {
         let game = every_relationship();

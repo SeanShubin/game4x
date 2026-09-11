@@ -299,13 +299,23 @@ pub fn trait_name(name: Trait) -> &'static str {
 ///
 /// `spec/logistics.md` draws the line and says why it matters:
 ///
-/// > **A kind that declares no capacity contains nothing, and never can.** A kind that
-/// > declares capacity may contain, and may happen to be empty - so a thing holding nothing
-/// > today is not thereby a thing that never could
+/// > **A kind declares one of three things about what it may hold.** It may declare **no
+/// > capacity**, and then it holds nothing of that sort and never can. It may declare a
+/// > **limit**, and then it holds up to that many and may happen to be empty - so a thing
+/// > holding nothing today is not thereby a thing that never could. Or it may declare **no
+/// > limit**, and then it holds any number, and there is no room to record because nothing can
+/// > be short of it
 ///
 /// **So this is a fact about the kind and not a count of what is there.** A reader who
 /// cannot tell *empty* from *never* is being shown the opposite of the rule, and the only
 /// place the difference can come from is here.
+///
+/// **`P-391` made it three cases where it was two, and this function still answers two.** It
+/// says whether a kind may hold anything at all, which separates *no capacity* from the other
+/// two and is all any caller here asks. **The third case is the one to watch**: a kind
+/// declaring *no limit* holds any number and has no room to record, so anything printing a
+/// `used/total` for one would be printing a total the specification says does not exist.
+/// `crates/game-console/src/tree.rs` is where that would show.
 ///
 /// Three kinds, from `releases/first-release.md` -> *Where things are*, which gives this
 /// release exactly three sorts of capacity: **a territory**, for the kinds it has total

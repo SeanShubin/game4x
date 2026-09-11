@@ -263,6 +263,11 @@ pub enum Trait {
     /// in one ending; `renew` clears it, once per turn, which is the release's *everything
     /// becomes ready again* applied to bearing rather than to acting.
     ///
+    /// **That phrase is the release's and no longer the specification's.** `P-390` replaced it
+    /// in `spec/turn.md` with time refilling each thing's tokens, and the release has not
+    /// followed yet - so the quotation above is accurate today and is quoting the document
+    /// that is behind. It goes when the release catches up, along with `renew` itself.
+    ///
     /// **Absent means fertile, following [`Trait::Ready`]'s precedent**, so a citizen made
     /// this turn needs no trait to be able to bear and the default state writes nothing into
     /// the data file.
