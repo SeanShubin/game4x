@@ -62,6 +62,64 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-390 - What a thing can do is something it holds, and an action is named
+
+**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, four times, the last when Sean chose a named action · **kind** recovered · **shape** text · **asks** approval · **into** `spec/turn.md` -> Order of operations
+
+**Sean, 2026-09-11**, choosing the named action over the recipe's own name: *for now, a citizen has 1
+ready token and 1 fertile token, but in the future I can imagine having more than one token, and can
+imagine intending to declare fungibility by using the same name in two recipes.* **Declared
+fungibility is what the name buys**, and it is in the words below.
+
+**Two bullets, in the order they appear in that section.**
+
+**Replacing the bullet beginning *Producing happens in any order*:**
+
+> - Producing happens in any order. **What a thing can do is something it holds**: an **action** is
+>   named, and a thing holds a declared number of tokens for each action it can take. A recipe names
+>   the action it spends, and firing it spends one. **Two recipes naming the same action draw on the
+>   same tokens**, which is how it is said that a thing must choose between them; two recipes naming
+>   different actions never compete. A thing created during a turn begins holding its tokens and may
+>   act at once. **When nothing holds a token there is nothing left to do**
+
+**Replacing the bullet beginning *Ending a turn*:**
+
+> - Ending a turn: everything with upkeep pays it; then a population grows on surplus food or
+>   starves for want of it; **what expires expires, and what was not kept in order is lost**; and
+>   **time refills every thing's tokens to the number it declares**
+
+**The second changes five words at the end and nothing else** - *everything becomes ready again*
+becomes the refill, because *ready* stops being a state a thing is in.
+
+## Why this needs no machinery
+
+**A token named for an action is a kind carrying a trait**, which is `extractor` carrying `resource`
+a second time. **The per-action maximum is containment**, which `spec/logistics.md` already allows
+*per kind carrying a particular value of a trait*. **And the refill is drawing on time**, which is
+`P-388`. Nothing here is invented; the three pieces already exist and this says they are one thing.
+
+## One word already means something near this
+
+**`action` is in `spec/` three times and means *a thing taken*** - `spec/interface.md`, *an action
+that would waste part of what it costs says so before it is taken*; `spec/invariants.md`, *no action
+has an intermediate step that is always taken*. **Here it names a category of such things**, which is
+the ordinary type-and-instance use of one English word and is how you said it - *once per kind of
+action*.
+
+**If you want them separated, the phrase is *kind of action* and it changes here rather than on the
+way in.** This lane judged the overload tolerable and is saying so rather than deciding it quietly,
+because `capacity` is the case where the same judgement went the other way.
+
+## What this makes stale, filed the moment it lands
+
+**The release states the old model in fourteen places** - twelve recipe rows carrying `ready`,
+`not ready`, `fertile` or `spent`, and two rows in *Traits*. **`renew` stops existing** and `refresh`
+becomes one rule. **That is a release proposal and it follows this one**, because a release never
+invents a rule and this is the rule it would need.
+
+**The gate goes red when the release follows, not when this lands.** `spec/turn.md` is prose no check
+reads; the *Recipes* table is what the code generates from.
+
 ### P-389 - `spec/resources.md` says a source holds matter, and one of the three holds turns
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/resources.md` -> The list · from `P-388`
