@@ -237,6 +237,68 @@ mechanic.**
 `end-of-turn losses` stays one of the five recipes `P-368` names as defects. **This makes the rule
 uniform; it does not make it constant-weight.**
 
+## Addressed to other perspectives
+
+### S-87 - A Petri net view of the rules, in the reports
+
+**to** code - **status** open - **raised** 2026-09-10 - **source** Sean, asking for a full Petri net
+diagram in the reports, browsable from GitHub after a deploy
+
+**What he asked for**, 2026-09-10: *lets get a full petri net diagram into the reports, so that I can
+browse it from github after a deploy.*
+
+**The data already exists in your crate.** `crates/game-console/src/recipes.rs` parses the release's
+Recipes table to build `reports/recipes.md`. **A Petri net is that same parse read differently**: a
+**place** is a declared (container, kind) pair, a **transition** is a recipe, and an **arc** is a row
+with its Qty as the weight.
+
+**The size, so you know what you are drawing.** The research lens has built this matrix already, in
+`tools/research/formulas/check.py`, and reports **19 declared (container, kind) pairs** - check 8,
+19 of 19 reachable - and **18 transitions**. Small enough to read on one page.
+
+**Transitions are grounded by parameter, not by territory.** The lens's matrix has `move[ark]` and
+`move[pioneer]` as two, and `work[food]`, `work[metal]`, `work[energy]` as three. **Do the same.** The
+per-territory expansion - twelve copies and thirty adjacencies both ways - is a few hundred nodes and
+is not the view anyone wants.
+
+## The one requirement that is not about drawing
+
+**What cannot be drawn must be shown as excluded, never silently omitted.** Five recipes have
+state-dependent amounts and therefore no constant arc weight: `end-of-turn losses`, `grow`, `perish`,
+`refuel`, `upkeep`. **A diagram that quietly leaves them out is a picture of a game that is not this
+one**, and a reader has no way to tell.
+
+That is this repository's recurring failure in a new place - **an instrument answering a narrower
+question than the one asked and returning something plausible**. `CLAUDE.md` carries it and there are
+five recorded instances. **Name them on the page**: how many recipes there are, how many are drawn,
+and which are not, with the reason.
+
+## Constraints from `R-9`, which is yours and is vetted
+
+- **No page needs JavaScript to be read**, so nothing rendered client-side
+- **Every generated view has a diffable sibling**, as `graph.html` has `graph.txt`
+
+**Two renderings are worth considering and this lane does not choose.**
+
+- **The incidence matrix** - places down, transitions across, weights in the cells. Trivial to
+  generate, needs no layout, and is **exactly what the checks operate on**
+- **A node-link drawing** - circles for places, bars for transitions. Nicer to look at, and it needs
+  a layout algorithm, which is a dependency decision that is yours
+
+**A `.svg` renders on github.com directly**, which may be the cheapest way to satisfy *browse it from
+GitHub*; an `.html` page with that SVG inline satisfies the deployment without a script.
+
+## What this is not
+
+**Not a check.** It is a view; the checks that use this matrix are the research lens's and stay there.
+**If the picture and the checks ever disagree that is worth knowing** - two derivations of one thing
+is `Q-8`'s shape - but nothing here asks you to build it.
+
+**And it will be wrong the moment the five are fixed**, which is coming: `P-368` names them as defects
+and the saturating rewrites take them out one at a time. **Generating it rather than drawing it is
+what makes that safe.**
+
+
 ### S-86 - Three cleanups the eight promotions leave behind
 
 **to** spec - **status** open - **raised** 2026-09-10 - **source** promoting `P-356` and `P-360`
