@@ -62,20 +62,36 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-368 - A rule's amounts are constants, and why that is worth its cost is not yet stated
+### P-368 - Nothing comes back round with more, and what a rule may cost
 
-**to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/invariants.md`, a new section before *Open questions*, then `spec/invariants.md` -> Open questions
+**to** sean · **status** open · **raised** 2026-09-10 · **rewritten** 2026-09-10, because Sean
+articulated the end the first version left open · **kind** recovered · **shape** text · **asks** approval · **into** `spec/invariants.md`, two new sections after *The game is data*
 
-**Your intent of 2026-09-10**, recorded where it can influence a decision rather than in a note
-nobody has to read: *the intent is to keep the game state representable as a petri net … I think this
-is doable if I start while the game is small, and will be impossible without a complete redesign if I
-put it off for later.*
+**Your words of 2026-09-10**, which turned this from a means with no stated purpose into a purpose
+with a means under it: *I essentially want to be able to guarantee an analog to the second law of
+thermodynamics in this fictional physics … I can never cycle through a list of recipes and end up
+with more than what I started with, although I can end up with less.*
 
-**Two destinations, so two quotations, in the order the destinations are named.**
+**Two sections, in the order they go in.**
 
-**A new section, placed after *The game is data*:**
+> ## Nothing comes back round with more
+>
+> - **There is a weighting of the kinds, and under it no sequence of rules ends holding more than it
+>   began with.** It may end with less - that is disorder, and disorder is meant. What it may never
+>   do is come round to where it started with a gain
+> - **The weighting is where it is said what counts.** A kind weighed at nothing may be made freely;
+>   a kind that is weighed may not be made from nothing
+> - **A source is named, and a named source is not a gain.** A star's energy and a planet's material
+>   are endless. What is finite is the gathering - bounded by the finite things that do it, in a
+>   finite number of turns - so an endless well behind a bounded pump takes nothing away from the
+>   rule above. **Outside what is named this way, nothing increases**
+> - **Whether this holds is decided mechanically, from the rules alone**, and stays so however many
+>   rules there are. **The game is meant to become complicated by simple things interacting**, and an
+>   invariant only a careful reader could confirm would not survive that
 
 > ## What a rule may cost
+>
+> These are what make the rule above checkable rather than merely believed.
 >
 > - A rule's amounts are constants. **What one firing takes and makes does not depend on how much of
 >   anything is present**
@@ -84,60 +100,49 @@ put it off for later.*
 > - A rule whose subject is a family of kinds is a rule for each of them. **A family is not a thing a
 >   rule can take one of**
 
-**Into *Open questions*:**
+## Why the first section is exactly what you described
 
-> - **What keeping amounts constant is for has not been written down.** It keeps the rules
->   analysable: whether a resource is conserved, and whether a loop can run away, are both questions
->   about a table of constants, and a varying amount takes a rule out of that table. **But
->   analysability is a means.** The end it serves is understood well enough to recognise when it is
->   violated and not well enough to state, and until it is stated the rules above are kept because
->   they have been useful rather than because their purpose is written.
+**Your second law has a precise form, and it is one this repository already computes.** A weighting
+under which every rule is non-increasing is what makes *no cycle gains* true of every sequence at
+once - because a sequence's effect is the sum of its rules' effects, and a sum of non-positive
+numbers is non-positive. **So the property holds for all sequences without anyone enumerating
+them**, which is the whole of why it can be checked quickly.
 
-## Why your phrasing is sharpened, and it is not a quibble
+**The research lens's two checks are the two halves of it.** Check 1 looks for the weighting; check 2
+looks for a cycle that gains, and reports the firing ratio as a witness when it finds one. **They are
+already run and already poisoned**, so this section is not a new instrument - it is the statement of
+what the instruments have been for.
 
-**You asked to keep the game state representable as a Petri net. The state already is one.**
-`spec/console.md` says *what a thing contains is a map from a description to a quantity*, which is a
-marking exactly. **What breaks the net is a rule whose amounts depend on the marking** - so the
-constraint belongs on how a rule may be written, and nothing about the state or the dump has to
-change. **That is a smaller thing to hold to than it sounded.**
+**Your allowance for endless sources is the third bullet and it is already implemented.** Check 1
+reads *declared sources, excluded: work*; check 2b re-runs the same question with the sources removed,
+which is the version that would catch a second well nobody declared.
 
-## What it costs today, measured
+## Two things this deliberately says and one it does not
 
-`tools/research/formulas/check.py`, run this morning:
+**It says a weighted total rather than a count**, because citizens increase and that is the point of
+the game. The weighting is where *what must not be created* is written down, and today a citizen is
+weighed at nothing while metal is weighed by its Binding. **Without that sentence the rule would
+forbid population growth**, which is not what you said.
 
-- **Check 1** - is there a weighting under which metal never changes - **13 recipes analysed, 5
-  skipped for state-dependent amounts**: `end-of-turn losses`, `grow`, `perish`, `refuel`, `upkeep`
-- **Check 2** - can any loop run away - **18 transitions in the matrix, 3 skipped**
+**It says *in a finite number of turns*** rather than leaving the gathering merely bounded, which is
+your phrasing and is the part that makes an endless star safe.
 
-**So five of eighteen recipes are invisible to the conservation check today**, and this rule names
-them as defects rather than leaving them unremarked.
+**It does not say what a glitch costs or what happens when one is found.** That is a process
+question, and `docs/process.md` is where it would live.
 
-**Every one of the five has a way back, and none needs a new construct.** Four are minima, and a
-minimum is what you get by firing a constant-weight rule until one side runs out - your own resource
-X is the worked case, and it matches `population_after` over all 2400 citizen-and-food pairs with no
-disagreement. The fifth is `perish`, which is skipped because its effect *depends on which thing* -
-**a family in the selector**, which the third bullet covers.
+## What it makes true of the release today, measured
 
-## The third bullet is the finding, and it was not obvious
+`tools/research/formulas/check.py`: **check 1 analyses 13 recipes and skips 5**, and **check 2 has 18
+transitions and skips 3** - every one for a state-dependent amount. So the second section names five
+existing recipes as defects rather than leaving them unremarked, and **all five have a way back with
+no new construct**: four are minima, which is what a constant-weight rule fired to saturation
+produces, and the fifth is `perish`, which is a family in a selector.
 
-**Two holes have been tracked separately and they are one hole.** State-dependent amounts is `S-86`;
-a selector naming a family is the research lens's heaviest assumption, 12 of 80 encoded lines, and
-the gap `P-366` did not reach. **Grounding a family to its kinds is what makes a constant column
-exist at all** - so it is not a convenience for a checker, it is the same requirement seen from the
-other side. The working is in
-[the note](2026-09-10-constant-amounts.md).
-
-## What this proposal is careful not to do
-
-**It does not state the end.** You said you can recognise a violation and cannot yet articulate what
-is violated, and **a rule invented to fill that gap would be this lane guessing at your design**. The
-open question says so in your terms instead, so that a later answer replaces something honest rather
-than something wrong.
-
-**It does not make the change.** Resource X, and the four saturating rewrites, are release edits and
-are drafted separately - this is the invariant that would justify them, and it comes first because
-without it each one is a matter of taste.
-
+**Your resource X is the worked case.** Two constant-weight rules - each citizen makes one X, and a
+birth costs one X and one food - reproduce `population_after` over all 2400 citizen-and-food pairs
+with no disagreement, and the doubling cap stops being a clause because only `C` of X ever exist. The
+working is in [the note](2026-09-10-constant-amounts.md). **It is a release edit and is drafted
+separately**, because this is the invariant that justifies it.
 
 ### P-367 - What nature takes back, and from which units
 
