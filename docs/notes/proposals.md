@@ -62,6 +62,59 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-408 - What a thing can do is something it carries, not something it holds
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/turn.md` -> Order of operations · from `P-405`
+
+**Sean, 2026-09-11**, on the two forms the dump could take: *I really think
+`{citizen bearing:1 labor:1} -> 6` is correct, so I want to find another way to get all the benefits
+of the petri net.*
+
+**There is no other way needed, because the net never had readiness as a thing.**
+`reports/nogain.md` classifies its own places, and it calls **`readiness, for bearing` a state a
+thing is in** - the same category it gives **`food, keeps at least 1`**, which is a value of a
+**numeric trait that has never been a kind**. Its arcs run the same for both:
+
+`create labor` nets `+1 labor · -1 readiness, for labor`, and `age (food)` nets
+`+1 food, keeps one less · -1 food, keeps at least 1`.
+
+**So the places come from states, and a trait value is a state.** `P-399` making readiness a kind
+did no work for the net, and cost the map form its ability to tell two citizens apart.
+
+**Replacing the two bullets beginning *Producing happens in any order* and *Ending a turn*:**
+
+> - Producing happens in any order. **What a thing can do is something it carries**: an **action** is
+>   named, and each kind declares how many of each action a thing of it may take in a turn. A recipe
+>   names the action it spends, and firing it spends one. **Two recipes naming the same action draw
+>   on the same count**, which is how it is said that a thing must choose between them; two recipes
+>   naming different actions never compete. A thing created during a turn begins with its full count
+>   and may act at once. **When nothing has an action left there is nothing left to do**
+> - Ending a turn: everything with upkeep pays it; then a population grows on surplus food or
+>   starves for want of it; **what expires expires, and what was not kept in order is lost**; and
+>   **time restores every thing's actions to the number its kind declares**
+
+**Six phrases change and nothing else**, all of them the word *token* or *hold*:
+
+| Approved                                                                         | Offered                                                      |
+| -------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| something it **holds**                                                           | something it **carries**                                     |
+| how many **tokens of readiness a thing of it holds for** each action it can take | how many **of each action a thing of it may take in a turn** |
+| draw on the same **tokens**                                                      | draw on the same **count**                                   |
+| begins **holding its tokens**                                                    | begins **with its full count**                               |
+| when nothing **holds a token**                                                   | when nothing **has an action left**                          |
+| time **refills** every thing's **tokens**                                        | time **restores** every thing's **actions**                  |
+
+**Everything you approved this morning survives.** An action is named; a recipe names the one it
+spends; **two recipes naming the same action compete and two naming different ones never do**, which
+is the fungibility you asked for by name; and a created thing arrives able to act. **What goes is the
+claim that the thing is held**, which is what took readiness out of the description.
+
+**`P-396` and `put` are untouched.** A rule naming one thing and saying what changes about it is what
+`move` needs whatever readiness is, and it is what a recipe spending an action will use.
+
+**The release follows this and does not precede it**, so its four sections are a separate proposal
+filed after you take this one.
+
 ### P-406 - The third version of this sentence today, and the first one written from the purpose rather than the case
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `CLAUDE.md` -> Promotion · from the code lane counting what `P-404` actually fixed
