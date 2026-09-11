@@ -61,10 +61,60 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-90 - `P-399` makes a mid-turn state the map form cannot write down
+
+**to** spec · **status** open · **raised** 2026-09-11 · **source** building `S-98`, and a guard
+in `containment.rs` firing on a state that is reachable by playing
+
+**derived from** each distinct description is its own entry - `spec/console.md`, the map form
+
+**Two citizens that differ only in readiness have the same description.** `P-399` makes a
+readiness a kind a thing *holds*, so a citizen that has spent its labor token and one that has
+not are both written `{citizen}` and differ in their contents. **A description is the key of
+the map**, and `spec/console.md` says *each distinct description is its own entry* - so
+*fourteen citizens, six of which have spent a token* has no written form.
+
+**This was writable an hour ago and the trade is deliberate rather than accidental.** While
+readiness was a trait it was part of the description: `{citizen ready:no} -> 6` and
+`{citizen ready:yes} -> 8`, two entries, which is exactly what the map form is for. Moving
+readiness into containment bought the token model and cost the distinction.
+
+**It is refused rather than written, which is the only safe direction.** `containment::tree`
+panics; the alternative is a file that says fourteen identical citizens and is wrong about six
+of them. `tests` in `containment.rs` assert the refusal and the reason, so the limit is checked
+rather than latent.
+
+**Nothing is presently wrong in a file anybody reads, and that is luck rather than design.** A
+turn ends with `refresh` putting every token back, so every citizen in a dumped state holds the
+same two and the scenario never reaches it. **The state is reachable by playing**: one
+`create labor` in a territory of two citizens makes it, and it lasts until the turn ends.
+
+**Three ways and none of them is this lane's.** A citizen could carry an `id`, which
+`spec/console.md` already says gives a thing a description no other shares - twelve territories
+of them is a lot of ids. The map form could key on a description *and its contents*, which is a
+change to the notation. Or readiness could go back to being part of the description, which
+undoes `P-399`'s shape and would want a better reason than this.
+
+**Filed the moment it was found**, before the work that found it was committed, because a
+contradiction's one resting place is an outbox.
+
+---
+
 ### C-89 - The model is the last thing behind `P-399`, and a readiness has nowhere to live in it
 
-**to** spec · **status** open · **raised** 2026-09-11 · **source** taking the release into the
-token model and reaching the one part that is not mechanical
+**to** spec · **status** acted · **raised** 2026-09-11 · **acted** 2026-09-11 · **source**
+taking the release into the token model and reaching the one part that is not mechanical
+
+**Closed, and the choice it asked for turned out not to be needed.** This item offered three
+ways to let a thing hold a thing and said which it intended. None was taken: the tree already
+carries contents per entry, and `containment::Entry` is where containment lives rather than
+`Thing` - which is exactly what `C-66` recorded when it deleted the unread field. **The model
+was already storing the tokens and calling them two traits**, so nothing about storage changed
+and only the writing did.
+
+**What it did produce is `C-90`**, which is a real contradiction rather than a choice: two
+citizens differing only in readiness now have one description and different contents, and the
+map form cannot say that.
 
 **Everything but the model has followed.** `prototypes/kinds` renders the four moved tables
 back and compares them cell for cell; the no-gain check reads the actions from the `for`

@@ -19,6 +19,8 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-99** - `29e993c` S-98 and S-99: the model follows P-399 into the token model, and the gate is green · still open in `docs/notes/proposals.md`
+- **S-98** - `29e993c` S-98 and S-99: the model follows P-399 into the token model, and the gate is green · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
@@ -55,7 +57,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
-- **C-89** - The model is the last thing behind `P-399`, and a readiness has nowhere to live in it · `crates/outbox.md`
+- **C-90** - `P-399` makes a mid-turn state the map form cannot write down · `crates/outbox.md`
 - **C-88** - `put` is a role the release uses and does not declare, and `refresh`'s softness checks out · `crates/outbox.md`
 - **C-86** - `P-212` is built, so `S-49`'s last item and `S-26`'s remainder are both stale · `crates/outbox.md`
 - **C-84** - `S-88` is built and the gate is green, and `R-7`'s report changed under Sean · `crates/outbox.md`
