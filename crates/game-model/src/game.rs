@@ -2,7 +2,7 @@
 
 use crate::identity::{Resource, StructureKind, TerritoryId, UnitId, UnitKind};
 use crate::rejection::Rejection;
-use crate::territory::{Deposit, Garrison, Territory, population_after};
+use crate::territory::{Deposit, Garrison, Territory};
 use crate::thing::Kind;
 use crate::transition::Transition;
 use crate::unit::{Location, Unit};
@@ -949,10 +949,14 @@ impl Game {
         // artifact could show, which is what made a starved pioneer unreadable in the first
         // place; that whole class of invisible state is now closed.
 
-        // Then a population grows on surplus food, or starves for want of it.
-        let food = self.territories[id.index()].store(Resource::Food);
-        let citizens = self.territories[id.index()].citizens();
-        self.territories[id.index()].set_count(Kind::Citizen, population_after(citizens, food));
+        // Then a population grows on surplus food, or starves for want of it - `upkeep`,
+        // `bear`, `breed`, `renew` and `perish`, fired one at a time in `P-379`'s order.
+        //
+        // **It was one call to `population_after` and is five recipes**, which is `P-373`'s
+        // saturating rewrite: `grow` read its quantity from the state and these five do not.
+        // The closed form is still there and is the second derivation now -
+        // `tests/population_two_ways.rs` compares the two at every pair in a range.
+        self.territories[id.index()].settle_population();
 
         // What expires expires and what is over the bound is lost; metal and energy carry.
         // Nothing transforms here: founding happens when a unit arrives, so by the time a

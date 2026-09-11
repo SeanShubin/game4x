@@ -436,10 +436,12 @@ mod tests {
             .into_iter()
             .filter(|kind| !may_contain(*kind))
             .collect();
+        // Thirteen since `fertility` arrived, which holds nothing: it is transient, always
+        // in disorder, and a kind that declares no capacity contains nothing and never can.
         assert_eq!(
             cannot.len(),
-            12,
-            "four of the sixteen kinds may contain; {} may not",
+            13,
+            "four of the seventeen kinds may contain; {} may not",
             cannot.len()
         );
 

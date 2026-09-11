@@ -288,8 +288,9 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | adjacency | 30      |
 | orbit     | 12      |
 | deposit   | 34      |
+| fertility | 0       |
 
-14 row(s)
+15 row(s)
 
 # Turn 2
 
@@ -572,8 +573,9 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | adjacency | 30      |
 | orbit     | 12      |
 | deposit   | 34      |
+| fertility | 0       |
 
-14 row(s)
+15 row(s)
 
 # Turn 3
 
@@ -856,8 +858,9 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | adjacency | 30      |
 | orbit     | 12      |
 | deposit   | 34      |
+| fertility | 0       |
 
-14 row(s)
+15 row(s)
 
 # Turn 4
 
@@ -1153,8 +1156,9 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | adjacency | 30      |
 | orbit     | 12      |
 | deposit   | 34      |
+| fertility | 0       |
 
-14 row(s)
+15 row(s)
 
 # Turn 5
 
@@ -1455,8 +1459,9 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | adjacency | 30      |
 | orbit     | 12      |
 | deposit   | 34      |
+| fertility | 0       |
 
-14 row(s)
+15 row(s)
 
 # Turn 6
 
@@ -1758,8 +1763,9 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | adjacency | 30      |
 | orbit     | 12      |
 | deposit   | 34      |
+| fertility | 0       |
 
-14 row(s)
+15 row(s)
 
 # Turn 7
 
@@ -2067,8 +2073,9 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | adjacency | 30      |
 | orbit     | 12      |
 | deposit   | 34      |
+| fertility | 0       |
 
-14 row(s)
+15 row(s)
 
 # Turn 8
 
@@ -2369,8 +2376,9 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | adjacency | 30      |
 | orbit     | 12      |
 | deposit   | 34      |
+| fertility | 0       |
 
-14 row(s)
+15 row(s)
 
 # Turn 9
 
@@ -2679,8 +2687,9 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | adjacency | 30      |
 | orbit     | 12      |
 | deposit   | 34      |
+| fertility | 0       |
 
-14 row(s)
+15 row(s)
 
 # Turn 10
 
@@ -2969,6 +2978,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | adjacency | 30      |
 | orbit     | 12      |
 | deposit   | 34      |
+| fertility | 0       |
 
-14 row(s)
+15 row(s)
 

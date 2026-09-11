@@ -291,6 +291,7 @@ pub fn trait_name(name: Trait) -> &'static str {
         Trait::TotalCapacity => "total-capacity",
         Trait::From => "from",
         Trait::To => "to",
+        Trait::Spent => "spent",
     }
 }
 

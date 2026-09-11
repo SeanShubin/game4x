@@ -181,11 +181,20 @@ impl Territory {
     /// Labor is not a resource and is not carried either: it is bounded by *the citizens
     /// that make it, one each per turn*, so labor left at the end of a turn was made by a
     /// citizen who is about to be refreshed and would otherwise be counted twice.
+    ///
+    /// **`P-381` names what those two have in common and `P-380` gave the second one its
+    /// row.** A raw material is in one of three states: its source, disorder, or a container.
+    /// `labor` and `fertility` are **transient** - neither has a source and nothing holds
+    /// either, so both are always in disorder and neither survives the turn's end. **The
+    /// `fertility` line is `C-83`**: without it a territory that starved to nobody kept the
+    /// fertility its last citizens made and repopulated from stock the moment food arrived,
+    /// which `spec/population.md` forbids and a test here is named for.
     pub fn end_of_turn_losses(&mut self) {
         self.held.retain(|thing| {
             // Food keeps for one turn, so what is here at the end was made this turn and
-            // expires now.
-            thing.kind != Kind::Food && thing.kind != Kind::Labor
+            // expires now. The other two are transient - `P-381` - and `discard` is the
+            // recipe that takes all three.
+            thing.kind != Kind::Food && thing.kind != Kind::Labor && thing.kind != Kind::Fertility
         });
         for resource in [Resource::Metal, Resource::Energy] {
             let kind = Kind::from_resource(resource);
@@ -194,6 +203,71 @@ impl Territory {
                 self.remove(kind, over);
             }
         }
+    }
+
+    /// A population settles on the food it has, one recipe at a time.
+    ///
+    /// **`P-373`'s saturating rewrite, and what `grow` became.** `grow` consumed *the lesser
+    /// of the surplus food and the citizens here*, which is a quantity read from the state -
+    /// the thing `P-368` names as a defect. The rule is written instead as five smaller ones,
+    /// each with a constant quantity, each firing as many times as it can, in the order
+    /// `P-379` states: `upkeep`, then `bear`, `breed` and `renew`, then `perish`.
+    ///
+    /// **Each block below is one recipe, spelled as the release spells it.** A reader deriving
+    /// the dump by hand can follow this against the *Recipes* table row for row, which is what
+    /// `R-7` asks of the report and this is the half that makes the report honest.
+    ///
+    /// # Unpaid is counted, not stored
+    ///
+    /// The release calls `unpaid` **derived** - *its upkeep was not met* - so nothing here
+    /// writes it onto a citizen. It is the number of citizens `upkeep` could not feed, carried
+    /// from that block to `perish`.
+    ///
+    /// **Which citizens perish does not matter, and that is a fact rather than a convenience.**
+    /// `upkeep` leaves food over only when every citizen ate, so a territory with an unpaid
+    /// citizen has nothing left for `breed` - the two can never both happen in one ending.
+    /// By the time `perish` runs, `renew` has made every citizen fertile again, so any two
+    /// citizens here are the same thing and removing *some* `n` of them is removing *the* `n`.
+    pub fn settle_population(&mut self) {
+        // **upkeep** - `require 1 citizen`, `consume 1 food`. Fires once per citizen while
+        // there is food, and the citizens it could not reach are the unpaid ones.
+        let citizens = self.citizens();
+        let fed = citizens.min(self.store(Resource::Food));
+        self.take(Resource::Food, fed);
+        let unpaid = citizens - fed;
+
+        // **bear** - `consume 1 citizen fertile`, `produce 1 citizen spent`, `produce 1
+        // fertility`. Every citizen that has not borne this turn does, and is spent for it.
+        let mut bore = 0;
+        for thing in &mut self.held {
+            if thing.kind == Kind::Citizen && !thing.is(Trait::Spent) {
+                thing.set(Trait::Spent, 1);
+                bore += 1;
+            }
+        }
+        self.put(Kind::Fertility, bore);
+
+        // **breed** - `consume 1 fertility`, `consume 1 food`, `produce 1 citizen`. Fires
+        // while both last, which is what bounds the increase by the food; the `spent` trait
+        // above is what bounds it by the citizens.
+        let born = self
+            .count_of(Kind::Fertility)
+            .min(self.store(Resource::Food));
+        self.remove(Kind::Fertility, born);
+        self.take(Resource::Food, born);
+        self.put(Kind::Citizen, born);
+
+        // **renew** - `consume 1 citizen spent`, `produce 1 citizen fertile`. Once per turn,
+        // so nothing can bear twice in one ending and everything can bear in the next.
+        for thing in &mut self.held {
+            if thing.kind == Kind::Citizen {
+                thing.clear(Trait::Spent);
+            }
+        }
+
+        // **perish** - `consume 1 citizen whose upkeep is unpaid`. After `renew`, per
+        // `P-379`, which is why the order is stated rather than read off four moments.
+        self.remove(Kind::Citizen, unpaid);
     }
 
     /// The garrison holding this ground, if there is one.
@@ -748,6 +822,12 @@ impl Territory {
 /// `spec/population.md`: fewer food than citizens and each unfed citizen starves; equal
 /// and nothing changes; more and one citizen is generated for each citizen with extra
 /// food, so it at most doubles.
+///
+/// **This is the second derivation now, not the first.** [`Territory::settle_population`]
+/// fires the release's five recipes one at a time and is what the game runs; this closed form
+/// is kept because two derivations that must agree are worth more than either alone -
+/// `tests/population_two_ways.rs` compares them at every pair in a range and asserts how many
+/// pairs there were.
 pub fn population_after(citizens: u32, food: u32) -> u32 {
     if food < citizens {
         food

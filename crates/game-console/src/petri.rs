@@ -42,9 +42,9 @@
 //! not this one.**
 //!
 //! **It was four such recipes and it is one.** The saturating rewrite took the others out:
-//! `grow` consumed *the lesser of the surplus food and the citizens here* and is gone entirely
-//! - `P-379` - and the two capacity clamps became `stow` and `discard`, which carry constant
-//! weights. `work` is the last one.
+//! `grow` consumed *the lesser of the surplus food and the citizens here* and is gone
+//! entirely - `P-379` - and the two capacity clamps became `stow` and `discard`, which carry
+//! constant weights. `work` is the last one.
 //!
 //! So every recipe is accounted for on the page: how many there are, how many are drawn, and
 //! which are not with the reason. `S-87` asks for exactly this, and names it as this

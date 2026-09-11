@@ -216,20 +216,23 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
     // whose tables stopped parsing would admit nothing and this would report every word,
     // which is loud - but a release whose tables parsed *empty* would be the silent one, and
     // that is the direction guarded here.
+    // Seventeen since the saturating rewrite made `fertility` a kind.
     assert_eq!(
         kinds.len(),
-        16,
-        "sixteen kinds; the release lists {kinds:?}"
+        17,
+        "seventeen kinds; the release lists {kinds:?}"
     );
     assert_eq!(
         families.len(),
         4,
         "four families; the release lists {families:?}"
     );
+    // Twenty-one since `spent` arrived - what stops a citizen bearing twice in one ending,
+    // which is the job `grow`'s expression used to do.
     assert_eq!(
         traits.len(),
-        20,
-        "twenty traits; the release lists {:?}",
+        21,
+        "twenty-one traits; the release lists {:?}",
         traits.keys().collect::<Vec<_>>()
     );
     let closed = traits
@@ -243,9 +246,10 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
     // remembered number, which is the only way the two counts are independent. `control` is
     // the next candidate and describes rather than naming: *held by a player, or unclaimed*
     // names one value and describes the other.
+    // `spent` is the ninth, *yes or no*, and it arrived with the saturating rewrite.
     assert_eq!(
-        closed, 8,
-        "eight traits name a closed set - `kind`, `resource`, `biome`, `ready`, `surplus`, `unpaid`, `phase` and `movable`; {closed} do"
+        closed, 9,
+        "nine traits name a closed set - `kind`, `resource`, `biome`, `ready`, `surplus`, `unpaid`, `phase`, `movable` and `spent`; {closed} do"
     );
 
     let session = played();

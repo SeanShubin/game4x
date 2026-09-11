@@ -89,6 +89,19 @@ pub enum Kind {
     /// answered**: the release declares it now, so the root of the tree is a kind like any
     /// other rather than a string this file happens to spell the same way.
     Game,
+    /// **A citizen's capacity to raise one more, spent by raising one and renewed each turn.**
+    ///
+    /// The saturating rewrite's own kind. `grow` consumed *the lesser of the surplus food and
+    /// the citizens here*, which is a quantity read from the state; `P-373` says such a rule
+    /// is written as a smaller one that fires as many times as it can, and `bear`, `breed` and
+    /// `renew` are that rule. Fertility is what they pass between them.
+    ///
+    /// **It is transient**, which the release says of exactly this and `labor`: neither has a
+    /// source and nothing holds either, so both are always in disorder and neither survives
+    /// the turn's end. `discard` is what takes it - `P-380`, and without that row a territory
+    /// that starved to nobody banked fertility and repopulated from stock the moment food
+    /// arrived, which is `C-83`.
+    Fertility,
 }
 
 impl Kind {
@@ -110,11 +123,12 @@ impl Kind {
             Kind::Deposit => "deposit",
             Kind::Adjacency => "adjacency",
             Kind::Game => "game",
+            Kind::Fertility => "fertility",
         }
     }
 
     /// Every kind, so that a reader can name one that is nowhere.
-    pub const ALL: [Kind; 16] = [
+    pub const ALL: [Kind; 17] = [
         Kind::Citizen,
         Kind::Garrison,
         Kind::Extractor,
@@ -131,6 +145,7 @@ impl Kind {
         Kind::Deposit,
         Kind::Adjacency,
         Kind::Game,
+        Kind::Fertility,
     ];
 
     /// The kind a unit of this resource is.
@@ -240,6 +255,18 @@ pub enum Trait {
     /// direction, and it needs a number here rather than a rename later. So this is a count,
     /// read through [`Thing::is_ready`], and every caller asks that rather than the value.
     Ready,
+    /// Whether a citizen has already borne this turn. Absent means fertile.
+    ///
+    /// **This is what bounds the increase at the number of citizens** - the job `grow`'s
+    /// expression used to do with *the lesser of the surplus food and the citizens here*.
+    /// `bear` takes a fertile citizen and leaves a spent one, so a citizen cannot bear twice
+    /// in one ending; `renew` clears it, once per turn, which is the release's *everything
+    /// becomes ready again* applied to bearing rather than to acting.
+    ///
+    /// **Absent means fertile, following [`Trait::Ready`]'s precedent**, so a citizen made
+    /// this turn needs no trait to be able to bear and the default state writes nothing into
+    /// the data file.
+    Spent,
 }
 
 /// A thing: its kind and its own traits.

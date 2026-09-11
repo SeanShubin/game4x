@@ -86,9 +86,14 @@ pub fn recipes(document: &str) -> String {
                 // **Said, because one firing under six headings is a fact about the game.**
                 // A reader meeting the same before and after under `spoil` and under `age`
                 // should be told they are one ending rather than left to notice.
+                // **Counted rather than written.** This said *six recipes* while listing
+                // nine, because the world's six became ten in the saturating rewrite and the
+                // sentence was a constant beside a computed list. A number next to the thing
+                // it counts has to come from it.
                 out.push_str(&format!(
-                    "**One ending, six recipes.** This same firing is the example for {} as \
+                    "**One ending, {} recipes.** This same firing is the example for {} as \
                      well - no command fires one of the world's alone.\n\n",
+                    shared.len() + 1,
                     shared.join(", ")
                 ));
             }

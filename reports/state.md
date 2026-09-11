@@ -267,6 +267,7 @@ is in it, because the names are what this is for.
 | adjacency | 30      |
 | orbit     | 12      |
 | deposit   | 34      |
+| fertility | 0       |
 
-14 row(s)
+15 row(s)
 

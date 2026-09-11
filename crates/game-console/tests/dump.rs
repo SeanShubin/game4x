@@ -561,8 +561,8 @@ fn every_kind_is_named_and_only_two_namings_depend_on_the_scenario() {
 
     assert_eq!(
         Kind::ALL.len(),
-        16,
-        "sixteen kinds: `store` from `P-260`, `deposit` from `P-322`, `adjacency` from `P-334` and `game` from `P-351`; the model has {}",
+        17,
+        "seventeen kinds: `store` from `P-260`, `deposit` from `P-322`, `adjacency` from `P-334`, `game` from `P-351` and `fertility` from the saturating rewrite; the model has {}",
         Kind::ALL.len()
     );
 

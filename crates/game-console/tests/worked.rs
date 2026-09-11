@@ -62,12 +62,34 @@ fn declared(document: &str) -> Vec<String> {
 /// which is what a named exception is for: `C-61`.
 #[test]
 fn every_recipe_the_release_declares_has_a_worked_example() {
-    let declared = declared(&release());
+    let blocks = declared(&release());
+    // **An example belongs to a recipe, and a recipe is a name.** The release states `stow`
+    // twice and `discard` four times, once per kind, because `P-373` makes a rule whose
+    // subject is a family a rule for each of them - twenty-four blocks under twenty names.
+    // Asking for an example per *block* would be asking `discard` to be shown four times to
+    // say one thing.
+    //
+    // `dedup` removes only neighbours, which is what the release states - a repeated name's
+    // blocks sit together. A version that separated them would fail the count below rather
+    // than pass quietly, so the order is checked rather than assumed.
+    let mut declared = blocks.clone();
+    declared.dedup();
+    assert_eq!(
+        blocks.len(),
+        24,
+        "the release states twenty-four blocks of recipe rows; it has {} ({blocks:?})",
+        blocks.len()
+    );
     assert_eq!(
         declared.len(),
-        16,
-        "sixteen recipes were declared when this was written; the release has {} ({declared:?})",
+        20,
+        "those blocks are stated under twenty names; there are {} ({declared:?})",
         declared.len()
+    );
+    assert!(
+        declared.len() < blocks.len(),
+        "no name is stated twice, so the deduplication above is doing nothing and the two \
+         counts are one check"
     );
 
     let covered: BTreeSet<&str> = worked::examples()
@@ -84,9 +106,9 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
         "these recipes are declared and have no worked example: {missing:?}"
     );
 
-    // **Every recipe, and one example carries six of them.** `P-332`: the world's are shown
+    // **Every recipe, and one example carries ten of them.** `P-332`: the world's are shown
     // once, together, on `{end-turn}`. So the two counts differ and the difference is the
-    // point - eleven examples for sixteen recipes.
+    // point - twelve examples for twenty recipes.
     assert_eq!(
         covered.len(),
         declared.len(),
@@ -98,9 +120,12 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
         .iter()
         .map(|example| example.also.len())
         .sum();
+    // **Nine, and it was five.** The world's six became ten in the saturating rewrite, and
+    // one `{end-turn}` is still the only command that fires any of them - so the one example
+    // carries nine recipes besides its own.
     assert_eq!(
-        shared, 5,
-        "one example carries five recipes besides its own, which is the world's six"
+        shared, 9,
+        "one example carries nine recipes besides its own, which is the world's ten"
     );
 }
 

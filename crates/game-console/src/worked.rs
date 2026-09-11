@@ -313,31 +313,35 @@ pub fn examples() -> Vec<Example> {
         },
         // **The world's, shown once on one `{end-turn}`** - `R-7`, as `P-332` settled it.
         //
-        // **Two territories, because `grow` and `perish` cannot both fire in one.** Both are
-        // decided from the same food: growing needs a surplus after upkeep and perishing
-        // needs upkeep to have gone unpaid, and one territory's food cannot be both. Upkeep
-        // is per territory, so a planet can do both in one ending and a territory cannot.
+        // **Ten now rather than six**, which is the saturating rewrite: `grow` is gone, and
+        // `bear`, `breed` and `renew` are the rule it became; the two capacity clamps became
+        // `stow` and `discard`. `P-379` states the order they fire in.
         //
-        // **`age` is not here and cannot be** - `C-61`. The release gives food a `keeps` and
-        // has `age` turn one into a food that keeps one less; the model has no such trait and
-        // discards all food at every ending, so no state makes `age` do anything.
+        // **Two territories, because growing and perishing cannot both happen in one.** Both
+        // are decided from the same food: breeding needs food left after upkeep and perishing
+        // needs upkeep to have gone unpaid, and one territory's food cannot be both. Upkeep is
+        // per territory, so a planet can do both in one ending and a territory cannot.
         Example {
-            also: &["grow", "perish", "age", "spoil", "refresh"],
+            also: &[
+                "bear", "breed", "renew", "perish", "age", "spoil", "stow", "discard", "refresh",
+            ],
             recipe: "upkeep",
             command: "{end-turn}",
             case: Some(
-                "five of the world's six in one ending, in the release's order, and \
-                 the way `grow` turns out when **the surplus is the lesser**. \
-                 Territory 1 has three food for two citizens, so both eat and the one \
-                 left over grows one more - one, because a surplus of one is less than \
-                 two citizens. Territory 2 has none, so its citizen goes unpaid and \
-                 perishes. What food is left is discarded and the worked extractor is \
-                 ready again. **The pioneer in territory 2 is untouched**, because \
-                 nothing but a citizen eats - `P-339`. This note used to say it starved \
-                 and that the file could not show it, which was true of an older rule and \
-                 of a `usable` trait the release never declared; `P-367` removed the last \
-                 thing that set that trait, so there is no state a unit can be in now that \
-                 an artifact cannot show. `C-62`",
+                "the world's ten in one ending, in the release's order, and the way the \
+                 population settles when **the food is the lesser**. Territory 1 has three \
+                 food for two citizens: `upkeep` feeds both, `bear` turns each of them spent \
+                 and leaves two fertility, and `breed` fires **once** rather than twice - \
+                 there is one food left and each new citizen costs one. `renew` makes both \
+                 parents fertile again. Territory 2 has no food, so its citizen goes unpaid, \
+                 `breed` cannot fire there at all, and `perish` takes it. What food is left \
+                 expires, the fertility nobody bred with is discarded, and the worked \
+                 extractor is ready again. **The pioneer in territory 2 is untouched**, \
+                 because nothing but a citizen eats - `P-339`. This note used to say it \
+                 starved and that the file could not show it, which was true of an older rule \
+                 and of a `usable` trait the release never declared; `P-367` removed the last \
+                 thing that set that trait, so there is no state a unit can be in now that an \
+                 artifact cannot show. `C-62`",
             ),
             before: || {
                 let mut game = founded(&[(Resource::Food, 3, 4)], &[(Kind::Citizen, 2)]);
@@ -373,29 +377,38 @@ pub fn examples() -> Vec<Example> {
                 game
             },
         },
-        // **`grow`'s other outcome - `S-79`, and `R-7`'s own clause.** *A recipe whose
-        // quantity is an expression shows one example for each way the expression turns out*,
-        // and `grow`'s quantity is **the lesser of the surplus food and the citizens here**.
-        // The ending above is the way where the surplus is the lesser; this is the way where
-        // the citizens are.
+        // **The other way the population settles, and it is `breed`'s bound rather than an
+        // expression's.** This was `grow`'s second case: `R-7` asks for one example per way
+        // an expression turns out, and `grow` consumed *the lesser of the surplus food and
+        // the citizens here*. **The expression is gone and the two outcomes are not** - what
+        // used to be one word bounding two things is now two recipes bounding one each, and
+        // each deserves showing.
+        //
+        // The ending above is the way where the food runs out first. This is the way where
+        // the citizens do: `bear` can only turn each citizen spent once, so however much food
+        // is left, `breed` has no more fertility to spend.
         //
         // **`also` is empty deliberately.** This firing is an `{end-turn}` like any other and
         // the world's other recipes act in it, but they are shown once together above -
-        // `P-332` - and listing them here would give five recipes a second example to answer
-        // a question only `grow` asks.
+        // `P-332` - and listing them here would give nine recipes a second example to answer
+        // a question only `breed` asks.
         //
         // The model's own tests name these two: *two spare feed two new*, and *plenty still
         // only doubles*.
         Example {
             also: &[],
-            recipe: "grow",
+            recipe: "breed",
             command: "{end-turn}",
             case: Some(
-                "the way `grow` turns out when **the citizens are the lesser**. Two \
-                 citizens eat two of the eight food, leaving a surplus of six - but two \
-                 citizens can only make two more, so the quantity is two and not six. \
-                 That is the doubling the release's expression bounds: a population grows \
-                 by at most itself, however much food there is",
+                "the way the population settles when **the citizens are the lesser**. Two \
+                 citizens eat two of the eight food, leaving six - but `bear` made only two \
+                 fertility, one per citizen, so `breed` fires **twice** and stops, with four \
+                 food it has no fertility left to spend. That is the doubling the old `grow` \
+                 expression bounded in a word and the `spent` trait bounds in a rule: a \
+                 population grows by at most itself, however much food there is. **The four \
+                 it did not spend are gone from the state after**, and that is `age` and \
+                 `spoil` rather than `breed` - food keeps for one turn, so what a territory \
+                 is still holding when the turn ends expires with it",
             ),
             before: || {
                 let mut game = founded(&[(Resource::Food, 3, 4)], &[(Kind::Citizen, 2)]);

@@ -327,6 +327,19 @@ pub fn tables(game: &Game) -> Vec<Table> {
             .sum::<u32>()
             .to_string(),
     ]);
+    // **`fertility`, which will read zero at every turn boundary and is named anyway.**
+    // `bear` makes it, `breed` spends it and `discard` sweeps whatever is left, all inside
+    // one ending - so no committed state can hold one, and counting it is not a way of
+    // finding out whether it exists.
+    //
+    // **A kind's presence is not a fact about one run**, which `orbit` above records having
+    // learnt the expensive way: the word vanished from the dump when a scenario stopped
+    // putting anything up there, and a reader looking for it found nothing. This is that
+    // lesson applied before it costs anything rather than after.
+    kinds.push(vec![
+        "fertility".into(),
+        total(&|t| t.count_of(game_model::thing::Kind::Fertility)).to_string(),
+    ]);
 
     vec![
         summary, territory, node, store, garrison, extractor, structure, labor, unit, adjacency,

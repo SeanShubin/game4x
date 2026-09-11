@@ -10,7 +10,7 @@ is the right shape for a table and the wrong one for answering *what does this r
 the state after - in the notation `scenario/expected/play.4x` uses, holding only what that
 recipe touched. Every one is a real command run against a real state: `R-7`.
 
-16 recipes, 60 lines between them, 12 worked examples.
+24 recipes, 73 lines between them, 12 worked examples.
 
 ## deploy ark
 
@@ -394,14 +394,14 @@ After:
 
 Run by the **world**.
 
-- **require** 1 thing, with upkeep
-- **consume** food — the thing's upkeep
+- **require** 1 citizen
+- **consume** 1 food
 
 ### An example
 
-**One ending, six recipes.** This same firing is the example for grow, perish, age, spoil, refresh as well - no command fires one of the world's alone.
+**One ending, 10 recipes.** This same firing is the example for bear, breed, renew, perish, age, spoil, stow, discard, refresh as well - no command fires one of the world's alone.
 
-five of the world's six in one ending, in the release's order, and the way `grow` turns out when **the surplus is the lesser**. Territory 1 has three food for two citizens, so both eat and the one left over grows one more - one, because a surplus of one is less than two citizens. Territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
+the world's ten in one ending, in the release's order, and the way the population settles when **the food is the lesser**. Territory 1 has three food for two citizens: `upkeep` feeds both, `bear` turns each of them spent and leaves two fertility, and `breed` fires **once** rather than twice - there is one food left and each new citizen costs one. `renew` makes both parents fertile again. Territory 2 has no food, so its citizen goes unpaid, `breed` cannot fire there at all, and `perish` takes it. What food is left expires, the fertility nobody bred with is discarded, and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
 
 Before:
 
@@ -437,18 +437,67 @@ After:
     {pioneer fuel:2 id:1 ready:yes} -> 1
 ```
 
-## grow
+## bear
 
 Run by the **world**.
 
-- **consume** food — the lesser of the surplus food and the citizens here, surplus
-- **produce** citizen — the lesser of the surplus food and the citizens here
+- **consume** 1 citizen, fertile
+- **produce** 1 citizen, spent
+- **produce** 1 fertility
 
 ### An example
 
-**One ending, six recipes.** This same firing is the example for upkeep, perish, age, spoil, refresh as well - no command fires one of the world's alone.
+**One ending, 10 recipes.** This same firing is the example for upkeep, breed, renew, perish, age, spoil, stow, discard, refresh as well - no command fires one of the world's alone.
 
-five of the world's six in one ending, in the release's order, and the way `grow` turns out when **the surplus is the lesser**. Territory 1 has three food for two citizens, so both eat and the one left over grows one more - one, because a surplus of one is less than two citizens. Territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
+the world's ten in one ending, in the release's order, and the way the population settles when **the food is the lesser**. Territory 1 has three food for two citizens: `upkeep` feeds both, `bear` turns each of them spent and leaves two fertility, and `breed` fires **once** rather than twice - there is one food left and each new citizen costs one. `renew` makes both parents fertile again. Territory 2 has no food, so its citizen goes unpaid, `breed` cannot fire there at all, and `perish` takes it. What food is left expires, the fertility nobody bred with is discarded, and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
+
+Before:
+
+```
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -> 1
+    {citizen ready:yes} -> 2
+    {deposit density:4 resource:food total-capacity:3} -> 1
+    {extractor ready:no resource:food} -> 1
+    {food} -> 3
+    {garrison force:0} -> 1
+    {store resource:food} -> 1
+  {territory biome:grassland id:2 nature:0} -> 1
+    {citizen ready:yes} -> 1
+    {garrison force:0} -> 1
+    {pioneer fuel:2 id:1 ready:yes} -> 1
+```
+
+`{end-turn}`
+
+After:
+
+```
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -> 1
+    {citizen ready:yes} -> 3
+    {deposit density:4 resource:food total-capacity:3} -> 1
+    {extractor ready:yes resource:food} -> 1
+    {garrison force:0} -> 1
+    {store resource:food} -> 1
+  {territory biome:grassland id:2 nature:0} -> 1
+    {garrison force:0} -> 1
+    {pioneer fuel:2 id:1 ready:yes} -> 1
+```
+
+## breed
+
+Run by the **world**.
+
+- **consume** 1 fertility
+- **consume** 1 food
+- **produce** 1 citizen
+
+### An example
+
+**One ending, 10 recipes.** This same firing is the example for upkeep, bear, renew, perish, age, spoil, stow, discard, refresh as well - no command fires one of the world's alone.
+
+the world's ten in one ending, in the release's order, and the way the population settles when **the food is the lesser**. Territory 1 has three food for two citizens: `upkeep` feeds both, `bear` turns each of them spent and leaves two fertility, and `breed` fires **once** rather than twice - there is one food left and each new citizen costs one. `renew` makes both parents fertile again. Territory 2 has no food, so its citizen goes unpaid, `breed` cannot fire there at all, and `perish` takes it. What food is left expires, the fertility nobody bred with is discarded, and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
 
 Before:
 
@@ -486,7 +535,7 @@ After:
 
 ### An example
 
-the way `grow` turns out when **the citizens are the lesser**. Two citizens eat two of the eight food, leaving a surplus of six - but two citizens can only make two more, so the quantity is two and not six. That is the doubling the release's expression bounds: a population grows by at most itself, however much food there is.
+the way the population settles when **the citizens are the lesser**. Two citizens eat two of the eight food, leaving six - but `bear` made only two fertility, one per citizen, so `breed` fires **twice** and stops, with four food it has no fertility left to spend. That is the doubling the old `grow` expression bounded in a word and the `spent` trait bounds in a rule: a population grows by at most itself, however much food there is. **The four it did not spend are gone from the state after**, and that is `age` and `spoil` rather than `breed` - food keeps for one turn, so what a territory is still holding when the turn ends expires with it.
 
 Before:
 
@@ -513,18 +562,64 @@ After:
     {store resource:food} -> 1
 ```
 
+## renew
+
+Run by the **world**.
+
+- **consume** 1 citizen, spent
+- **produce** 1 citizen, fertile
+
+### An example
+
+**One ending, 10 recipes.** This same firing is the example for upkeep, bear, breed, perish, age, spoil, stow, discard, refresh as well - no command fires one of the world's alone.
+
+the world's ten in one ending, in the release's order, and the way the population settles when **the food is the lesser**. Territory 1 has three food for two citizens: `upkeep` feeds both, `bear` turns each of them spent and leaves two fertility, and `breed` fires **once** rather than twice - there is one food left and each new citizen costs one. `renew` makes both parents fertile again. Territory 2 has no food, so its citizen goes unpaid, `breed` cannot fire there at all, and `perish` takes it. What food is left expires, the fertility nobody bred with is discarded, and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
+
+Before:
+
+```
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -> 1
+    {citizen ready:yes} -> 2
+    {deposit density:4 resource:food total-capacity:3} -> 1
+    {extractor ready:no resource:food} -> 1
+    {food} -> 3
+    {garrison force:0} -> 1
+    {store resource:food} -> 1
+  {territory biome:grassland id:2 nature:0} -> 1
+    {citizen ready:yes} -> 1
+    {garrison force:0} -> 1
+    {pioneer fuel:2 id:1 ready:yes} -> 1
+```
+
+`{end-turn}`
+
+After:
+
+```
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -> 1
+    {citizen ready:yes} -> 3
+    {deposit density:4 resource:food total-capacity:3} -> 1
+    {extractor ready:yes resource:food} -> 1
+    {garrison force:0} -> 1
+    {store resource:food} -> 1
+  {territory biome:grassland id:2 nature:0} -> 1
+    {garrison force:0} -> 1
+    {pioneer fuel:2 id:1 ready:yes} -> 1
+```
+
 ## perish
 
 Run by the **world**.
 
-- **consume** 1 thing, whose upkeep is unpaid
-- **produce** metal — the thing's metal
+- **consume** 1 citizen, whose upkeep is unpaid
 
 ### An example
 
-**One ending, six recipes.** This same firing is the example for upkeep, grow, age, spoil, refresh as well - no command fires one of the world's alone.
+**One ending, 10 recipes.** This same firing is the example for upkeep, bear, breed, renew, age, spoil, stow, discard, refresh as well - no command fires one of the world's alone.
 
-five of the world's six in one ending, in the release's order, and the way `grow` turns out when **the surplus is the lesser**. Territory 1 has three food for two citizens, so both eat and the one left over grows one more - one, because a surplus of one is less than two citizens. Territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
+the world's ten in one ending, in the release's order, and the way the population settles when **the food is the lesser**. Territory 1 has three food for two citizens: `upkeep` feeds both, `bear` turns each of them spent and leaves two fertility, and `breed` fires **once** rather than twice - there is one food left and each new citizen costs one. `renew` makes both parents fertile again. Territory 2 has no food, so its citizen goes unpaid, `breed` cannot fire there at all, and `perish` takes it. What food is left expires, the fertility nobody bred with is discarded, and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
 
 Before:
 
@@ -569,9 +664,9 @@ Run by the **world**.
 
 ### An example
 
-**One ending, six recipes.** This same firing is the example for upkeep, grow, perish, spoil, refresh as well - no command fires one of the world's alone.
+**One ending, 10 recipes.** This same firing is the example for upkeep, bear, breed, renew, perish, spoil, stow, discard, refresh as well - no command fires one of the world's alone.
 
-five of the world's six in one ending, in the release's order, and the way `grow` turns out when **the surplus is the lesser**. Territory 1 has three food for two citizens, so both eat and the one left over grows one more - one, because a surplus of one is less than two citizens. Territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
+the world's ten in one ending, in the release's order, and the way the population settles when **the food is the lesser**. Territory 1 has three food for two citizens: `upkeep` feeds both, `bear` turns each of them spent and leaves two fertility, and `breed` fires **once** rather than twice - there is one food left and each new citizen costs one. `renew` makes both parents fertile again. Territory 2 has no food, so its citizen goes unpaid, `breed` cannot fire there at all, and `perish` takes it. What food is left expires, the fertility nobody bred with is discarded, and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
 
 Before:
 
@@ -615,9 +710,287 @@ Run by the **world**.
 
 ### An example
 
-**One ending, six recipes.** This same firing is the example for upkeep, grow, perish, age, refresh as well - no command fires one of the world's alone.
+**One ending, 10 recipes.** This same firing is the example for upkeep, bear, breed, renew, perish, age, stow, discard, refresh as well - no command fires one of the world's alone.
 
-five of the world's six in one ending, in the release's order, and the way `grow` turns out when **the surplus is the lesser**. Territory 1 has three food for two citizens, so both eat and the one left over grows one more - one, because a surplus of one is less than two citizens. Territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
+the world's ten in one ending, in the release's order, and the way the population settles when **the food is the lesser**. Territory 1 has three food for two citizens: `upkeep` feeds both, `bear` turns each of them spent and leaves two fertility, and `breed` fires **once** rather than twice - there is one food left and each new citizen costs one. `renew` makes both parents fertile again. Territory 2 has no food, so its citizen goes unpaid, `breed` cannot fire there at all, and `perish` takes it. What food is left expires, the fertility nobody bred with is discarded, and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
+
+Before:
+
+```
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -> 1
+    {citizen ready:yes} -> 2
+    {deposit density:4 resource:food total-capacity:3} -> 1
+    {extractor ready:no resource:food} -> 1
+    {food} -> 3
+    {garrison force:0} -> 1
+    {store resource:food} -> 1
+  {territory biome:grassland id:2 nature:0} -> 1
+    {citizen ready:yes} -> 1
+    {garrison force:0} -> 1
+    {pioneer fuel:2 id:1 ready:yes} -> 1
+```
+
+`{end-turn}`
+
+After:
+
+```
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -> 1
+    {citizen ready:yes} -> 3
+    {deposit density:4 resource:food total-capacity:3} -> 1
+    {extractor ready:yes resource:food} -> 1
+    {garrison force:0} -> 1
+    {store resource:food} -> 1
+  {territory biome:grassland id:2 nature:0} -> 1
+    {garrison force:0} -> 1
+    {pioneer fuel:2 id:1 ready:yes} -> 1
+```
+
+## stow
+
+Run by the **world**.
+
+- **consume** 1 metal
+- **produce** 1 metal, in a store for metal
+
+### An example
+
+**One ending, 10 recipes.** This same firing is the example for upkeep, bear, breed, renew, perish, age, spoil, discard, refresh as well - no command fires one of the world's alone.
+
+the world's ten in one ending, in the release's order, and the way the population settles when **the food is the lesser**. Territory 1 has three food for two citizens: `upkeep` feeds both, `bear` turns each of them spent and leaves two fertility, and `breed` fires **once** rather than twice - there is one food left and each new citizen costs one. `renew` makes both parents fertile again. Territory 2 has no food, so its citizen goes unpaid, `breed` cannot fire there at all, and `perish` takes it. What food is left expires, the fertility nobody bred with is discarded, and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
+
+Before:
+
+```
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -> 1
+    {citizen ready:yes} -> 2
+    {deposit density:4 resource:food total-capacity:3} -> 1
+    {extractor ready:no resource:food} -> 1
+    {food} -> 3
+    {garrison force:0} -> 1
+    {store resource:food} -> 1
+  {territory biome:grassland id:2 nature:0} -> 1
+    {citizen ready:yes} -> 1
+    {garrison force:0} -> 1
+    {pioneer fuel:2 id:1 ready:yes} -> 1
+```
+
+`{end-turn}`
+
+After:
+
+```
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -> 1
+    {citizen ready:yes} -> 3
+    {deposit density:4 resource:food total-capacity:3} -> 1
+    {extractor ready:yes resource:food} -> 1
+    {garrison force:0} -> 1
+    {store resource:food} -> 1
+  {territory biome:grassland id:2 nature:0} -> 1
+    {garrison force:0} -> 1
+    {pioneer fuel:2 id:1 ready:yes} -> 1
+```
+
+## stow
+
+Run by the **world**.
+
+- **consume** 1 energy
+- **produce** 1 energy, in a store for energy
+
+### An example
+
+**One ending, 10 recipes.** This same firing is the example for upkeep, bear, breed, renew, perish, age, spoil, discard, refresh as well - no command fires one of the world's alone.
+
+the world's ten in one ending, in the release's order, and the way the population settles when **the food is the lesser**. Territory 1 has three food for two citizens: `upkeep` feeds both, `bear` turns each of them spent and leaves two fertility, and `breed` fires **once** rather than twice - there is one food left and each new citizen costs one. `renew` makes both parents fertile again. Territory 2 has no food, so its citizen goes unpaid, `breed` cannot fire there at all, and `perish` takes it. What food is left expires, the fertility nobody bred with is discarded, and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
+
+Before:
+
+```
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -> 1
+    {citizen ready:yes} -> 2
+    {deposit density:4 resource:food total-capacity:3} -> 1
+    {extractor ready:no resource:food} -> 1
+    {food} -> 3
+    {garrison force:0} -> 1
+    {store resource:food} -> 1
+  {territory biome:grassland id:2 nature:0} -> 1
+    {citizen ready:yes} -> 1
+    {garrison force:0} -> 1
+    {pioneer fuel:2 id:1 ready:yes} -> 1
+```
+
+`{end-turn}`
+
+After:
+
+```
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -> 1
+    {citizen ready:yes} -> 3
+    {deposit density:4 resource:food total-capacity:3} -> 1
+    {extractor ready:yes resource:food} -> 1
+    {garrison force:0} -> 1
+    {store resource:food} -> 1
+  {territory biome:grassland id:2 nature:0} -> 1
+    {garrison force:0} -> 1
+    {pioneer fuel:2 id:1 ready:yes} -> 1
+```
+
+## discard
+
+Run by the **world**.
+
+- **consume** 1 metal
+
+### An example
+
+**One ending, 10 recipes.** This same firing is the example for upkeep, bear, breed, renew, perish, age, spoil, stow, refresh as well - no command fires one of the world's alone.
+
+the world's ten in one ending, in the release's order, and the way the population settles when **the food is the lesser**. Territory 1 has three food for two citizens: `upkeep` feeds both, `bear` turns each of them spent and leaves two fertility, and `breed` fires **once** rather than twice - there is one food left and each new citizen costs one. `renew` makes both parents fertile again. Territory 2 has no food, so its citizen goes unpaid, `breed` cannot fire there at all, and `perish` takes it. What food is left expires, the fertility nobody bred with is discarded, and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
+
+Before:
+
+```
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -> 1
+    {citizen ready:yes} -> 2
+    {deposit density:4 resource:food total-capacity:3} -> 1
+    {extractor ready:no resource:food} -> 1
+    {food} -> 3
+    {garrison force:0} -> 1
+    {store resource:food} -> 1
+  {territory biome:grassland id:2 nature:0} -> 1
+    {citizen ready:yes} -> 1
+    {garrison force:0} -> 1
+    {pioneer fuel:2 id:1 ready:yes} -> 1
+```
+
+`{end-turn}`
+
+After:
+
+```
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -> 1
+    {citizen ready:yes} -> 3
+    {deposit density:4 resource:food total-capacity:3} -> 1
+    {extractor ready:yes resource:food} -> 1
+    {garrison force:0} -> 1
+    {store resource:food} -> 1
+  {territory biome:grassland id:2 nature:0} -> 1
+    {garrison force:0} -> 1
+    {pioneer fuel:2 id:1 ready:yes} -> 1
+```
+
+## discard
+
+Run by the **world**.
+
+- **consume** 1 energy
+
+### An example
+
+**One ending, 10 recipes.** This same firing is the example for upkeep, bear, breed, renew, perish, age, spoil, stow, refresh as well - no command fires one of the world's alone.
+
+the world's ten in one ending, in the release's order, and the way the population settles when **the food is the lesser**. Territory 1 has three food for two citizens: `upkeep` feeds both, `bear` turns each of them spent and leaves two fertility, and `breed` fires **once** rather than twice - there is one food left and each new citizen costs one. `renew` makes both parents fertile again. Territory 2 has no food, so its citizen goes unpaid, `breed` cannot fire there at all, and `perish` takes it. What food is left expires, the fertility nobody bred with is discarded, and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
+
+Before:
+
+```
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -> 1
+    {citizen ready:yes} -> 2
+    {deposit density:4 resource:food total-capacity:3} -> 1
+    {extractor ready:no resource:food} -> 1
+    {food} -> 3
+    {garrison force:0} -> 1
+    {store resource:food} -> 1
+  {territory biome:grassland id:2 nature:0} -> 1
+    {citizen ready:yes} -> 1
+    {garrison force:0} -> 1
+    {pioneer fuel:2 id:1 ready:yes} -> 1
+```
+
+`{end-turn}`
+
+After:
+
+```
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -> 1
+    {citizen ready:yes} -> 3
+    {deposit density:4 resource:food total-capacity:3} -> 1
+    {extractor ready:yes resource:food} -> 1
+    {garrison force:0} -> 1
+    {store resource:food} -> 1
+  {territory biome:grassland id:2 nature:0} -> 1
+    {garrison force:0} -> 1
+    {pioneer fuel:2 id:1 ready:yes} -> 1
+```
+
+## discard
+
+Run by the **world**.
+
+- **consume** 1 labor
+
+### An example
+
+**One ending, 10 recipes.** This same firing is the example for upkeep, bear, breed, renew, perish, age, spoil, stow, refresh as well - no command fires one of the world's alone.
+
+the world's ten in one ending, in the release's order, and the way the population settles when **the food is the lesser**. Territory 1 has three food for two citizens: `upkeep` feeds both, `bear` turns each of them spent and leaves two fertility, and `breed` fires **once** rather than twice - there is one food left and each new citizen costs one. `renew` makes both parents fertile again. Territory 2 has no food, so its citizen goes unpaid, `breed` cannot fire there at all, and `perish` takes it. What food is left expires, the fertility nobody bred with is discarded, and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
+
+Before:
+
+```
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -> 1
+    {citizen ready:yes} -> 2
+    {deposit density:4 resource:food total-capacity:3} -> 1
+    {extractor ready:no resource:food} -> 1
+    {food} -> 3
+    {garrison force:0} -> 1
+    {store resource:food} -> 1
+  {territory biome:grassland id:2 nature:0} -> 1
+    {citizen ready:yes} -> 1
+    {garrison force:0} -> 1
+    {pioneer fuel:2 id:1 ready:yes} -> 1
+```
+
+`{end-turn}`
+
+After:
+
+```
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -> 1
+    {citizen ready:yes} -> 3
+    {deposit density:4 resource:food total-capacity:3} -> 1
+    {extractor ready:yes resource:food} -> 1
+    {garrison force:0} -> 1
+    {store resource:food} -> 1
+  {territory biome:grassland id:2 nature:0} -> 1
+    {garrison force:0} -> 1
+    {pioneer fuel:2 id:1 ready:yes} -> 1
+```
+
+## discard
+
+Run by the **world**.
+
+- **consume** 1 fertility
+
+### An example
+
+**One ending, 10 recipes.** This same firing is the example for upkeep, bear, breed, renew, perish, age, spoil, stow, refresh as well - no command fires one of the world's alone.
+
+the world's ten in one ending, in the release's order, and the way the population settles when **the food is the lesser**. Territory 1 has three food for two citizens: `upkeep` feeds both, `bear` turns each of them spent and leaves two fertility, and `breed` fires **once** rather than twice - there is one food left and each new citizen costs one. `renew` makes both parents fertile again. Territory 2 has no food, so its citizen goes unpaid, `breed` cannot fire there at all, and `perish` takes it. What food is left expires, the fertility nobody bred with is discarded, and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
 
 Before:
 
@@ -662,9 +1035,9 @@ Run by the **world**.
 
 ### An example
 
-**One ending, six recipes.** This same firing is the example for upkeep, grow, perish, age, spoil as well - no command fires one of the world's alone.
+**One ending, 10 recipes.** This same firing is the example for upkeep, bear, breed, renew, perish, age, spoil, stow, discard as well - no command fires one of the world's alone.
 
-five of the world's six in one ending, in the release's order, and the way `grow` turns out when **the surplus is the lesser**. Territory 1 has three food for two citizens, so both eat and the one left over grows one more - one, because a surplus of one is less than two citizens. Territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
+the world's ten in one ending, in the release's order, and the way the population settles when **the food is the lesser**. Territory 1 has three food for two citizens: `upkeep` feeds both, `bear` turns each of them spent and leaves two fertility, and `breed` fires **once** rather than twice - there is one food left and each new citizen costs one. `renew` makes both parents fertile again. Territory 2 has no food, so its citizen goes unpaid, `breed` cannot fire there at all, and `perish` takes it. What food is left expires, the fertility nobody bred with is discarded, and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
 
 Before:
 
