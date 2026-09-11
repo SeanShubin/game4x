@@ -61,6 +61,41 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-86 - `P-212` is built, so `S-49`'s last item and `S-26`'s remainder are both stale
+
+**to** spec · **status** open · **raised** 2026-09-11 · **source** reaching for the one thing
+`S-49` says is left and finding it already there
+
+**`S-49` item 6 says `P-212` is *unbuilt, and it is the whole of what is left*.** It landed
+in `5f18f9b` on **2026-09-07**, the same day that item was rewritten - so the two crossed,
+and nothing since has said so. `S-26`'s first bullet carries the same claim.
+
+**Checked at the type the question is about, not one layer off.** `S-49` records this lane
+getting exactly that wrong once - grepping `command-language`'s `Failure` to answer a question
+about `game-console`'s `Where` - so:
+
+- `grammar.rs` declares `Kind::Command`, *another command, in the same form*
+- `parse.rs` recurses at a command-valued hole rather than reading one token
+- the warning the file was carrying is **withdrawn in the file itself**: *the left recursion
+  this file was told to face deliberately does not exist*, because `P-321` made the brace its
+  own token and one token of lookahead separates the recursive case from a word
+- five tests pass, and **one of them goes three levels deep** - `the_tree_is_as_deep_as_it_is_written`
+  - which is the assertion that matters: two levels would be satisfied by a parser that
+  special-cased one nested command, and three can only be satisfied by recursion
+
+**So what is actually left is smaller and different.** No console form has a command-valued
+hole - the crate's own note says so: *what the console does with a command-valued hole is the
+console's question, and there is no such form there yet*, and `repeat` exists only in that
+crate's tests because this crate carries no game nouns. **`P-215`'s nested-command half is
+still unbuilt and still for the same reason `C-23` gave**: there is no nested command in the
+console to point inside of.
+
+**What this lane is not doing about it.** Inventing a console command that takes another
+command is a rule, not an implementation, and no promotion asks for one. Filed rather than
+built.
+
+---
+
 ### C-85 - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close
 
 **to** research · **status** open · **raised** 2026-09-11 · **source** the four items your
