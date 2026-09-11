@@ -11,7 +11,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **P-390** - What a thing can do is something it holds, and an action is named · `docs/notes/proposals.md`
 - **P-389** - `spec/resources.md` says a source holds matter, and one of the three holds turns · `docs/notes/proposals.md`
 - **P-391** - Three things a kind may declare about what it holds, and one inference to drop · `docs/notes/proposals.md`
-- **P-392** - `action` has four meanings in `spec/` and `P-390` needs a fifth, so one of them moves · `docs/notes/proposals.md`
+- **P-392** - The no-black-box bullet, in a section this lane named wrongly, saying its second half plainly · `docs/notes/proposals.md`
 - **P-393** - Two phrases in the paragraph promoted today, one of which contradicts your `X-20` answer · `docs/notes/proposals.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`

@@ -197,33 +197,51 @@ the point of change. **The other ten bullets hold**: nothing else mentions *cons
 else assumes a maximum exists - *room is spent and given back* is about a thing that has room, and
 is silent where there is none.
 
-### P-392 - `action` has four meanings in `spec/` and `P-390` needs a fifth, so one of them moves
+### P-392 - The no-black-box bullet, in a section this lane named wrongly, saying its second half plainly
 
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/invariants.md` -> Everything is expressible · from `P-390`
+**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, because the destination was wrong and the replacement read worse than what it replaced · **kind** entailed · **shape** text · **asks** approval · **into** `spec/invariants.md` -> Control without tedium · from `P-390`
 
-**`P-390` names an action and makes a recipe spend one.** Counted rather than recalled, `spec/` uses
-the word four times, and **three of them survive that unchanged**:
+**Two faults in the first draft, and you found the second by reading it.** It named *Everything is
+expressible*; **the bullet is in *Control without tedium***, four bullets up from *nothing plays
+itself*. And it offered *down to single rules* after *composed of rules*, which says rules are
+composed of rules down to rules.
 
-| Where                                                | What it says                                                                  | Compatible?                                                                          |
-| ---------------------------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| `spec/interface.md`                                  | *an action that would waste part of what it costs says so before it is taken* | **yes** - a taking, of which a named action is the sort                              |
-| `spec/invariants.md` -> No step that is always taken | *no action has an intermediate step that is always taken*                     | **yes** - same sense                                                                 |
-| `spec/console.md`                                    | *for each action the* subject affords                                         | **yes** - same sense                                                                 |
-| `spec/invariants.md` -> Everything is expressible    | *composed of rules they can also use, **down to single actions***             | **no** - here an action is a **rule**, which is the one thing `P-390` says it is not |
+## What the bullet is for, which is the context you asked for
 
-**Replacing that bullet:**
+**It landed on 2026-08-28 in `e71b5e5`, *the middle layer, and the proportionality test*.** Its
+neighbours are what give it its job:
 
-> - Every rule a player can use is composed of rules they can also use, down to single rules.
->   Nothing is provided only as a whole
+- *Nothing plays itself. Every behaviour that acts on a player's behalf is a rule some person wrote,
+  **including any the game ships with***
+- *Any rule can be read and changed by the player using it, **whatever its origin***
+- *A player has complete control over every detail*
 
-**Two words change and the bullet's claim does not.** It is about rules being composed of usable
-rules all the way down; *single actions* was naming the floor of that descent, and the floor is a
-rule.
+**So the section is one argument: there are no black boxes.** A convenience the game ships - a rule
+that manages a colony, say - **must be built out of the same pieces a player builds with**, and the
+player must be able to open it. *Nothing is provided only as a whole* is the sentence that forbids
+the other thing: shipping such a rule as a **single opaque unit**, usable but not openable, with
+nothing inside it the player could have written.
 
-**This is the choice you asked to resolve, and it is the cheaper of the two.** The other was to write
-*kind of action* everywhere in `P-390` - four occurrences, in a table cell and twice in one sentence.
-**One edit here frees the word instead**, and the remaining three uses read correctly beside
-`P-390`'s definition because a firing is an instance of a named action.
+**It is `spec/invariants.md`'s recurring shape, a third time** - *no action has an intermediate step
+that is always taken*, and *every rule has a text form, and the text is the rule*. **Each one closes
+a way for the engine to keep something to itself.**
+
+## The replacement
+
+> - Every rule a player can use is composed of rules they can also use, down to single commands.
+>   **There is nothing a player can use and cannot take apart**
+
+**Two changes, and the second is the one you asked for.**
+
+- ***single actions* becomes *single commands***, which is what `P-390` needs: an action there is a
+  name a recipe spends, so a decomposition cannot bottom out in one. **A command is the floor and
+  the specification already says so** - `spec/console.md`, *there is one command for each recipe the
+  player may fire*
+- ***Nothing is provided only as a whole* becomes *there is nothing a player can use and cannot take
+  apart***. Same claim, said as what it forbids rather than as what is not done
+
+**If the second sentence is saying something this lane has not understood, that is the one to reject**
+- the first change stands on its own and `P-390` needs only that.
 
 ### P-393 - Two phrases in the paragraph promoted today, one of which contradicts your `X-20` answer
 
