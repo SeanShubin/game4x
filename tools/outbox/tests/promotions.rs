@@ -64,9 +64,38 @@ pub fn field(body: &str, name: &str) -> Option<String> {
 
 /// The file a proposal names, from an `**into**` field.
 pub fn destination_file(into: &str) -> Option<String> {
-    let start = into.find('`')? + 1;
-    let end = into[start..].find('`')? + start;
-    Some(into[start..end].to_string())
+    destination_files(into).into_iter().next()
+}
+
+/// Every file an `into` field names, in the order it names them.
+///
+/// **`CLAUDE.md`: a proposal that lands in more than one file carries one quotation for each,
+/// in the order the destinations are named.** So a proposal may legally name two, and reading
+/// only the first is why one of them could not be checked at all.
+///
+/// **`P-365` is the case and it was reported as unreadable for being legal.** It names
+/// `spec/orbit.md` -> Crossing between layers, then `spec/units.md` -> Every unit, and offers
+/// a quotation for each - so the check saw more blocks than destinations and refused. A rule
+/// the specification states, met by a proposal that obeyed it, and an instrument that could
+/// not read it.
+///
+/// **A backticked path, which is how every `into` field names one.** Anything backticked that
+/// is not a path would be picked up here, so the pairing below is by position and the
+/// comparison still has to succeed against the file that was named.
+pub fn destination_files(into: &str) -> Vec<String> {
+    let mut out = Vec::new();
+    let mut rest = into;
+    while let Some(start) = rest.find('`') {
+        let after = &rest[start + 1..];
+        let Some(end) = after.find('`') else { break };
+        let named = &after[..end];
+        // A section is named after `->` and is not backticked; a path is.
+        if named.contains('/') || named.ends_with(".md") {
+            out.push(named.to_string());
+        }
+        rest = &after[end + 1..];
+    }
+    out
 }
 
 /// Every blockquote in an item, each with its `> ` markers off and its lines kept.
@@ -595,7 +624,10 @@ fn a_promotion_lands_what_was_approved() {
                 ));
                 continue;
             };
-            let Some(into) = field(&item.body, "into").and_then(|i| destination_file(&i)) else {
+            let files = field(&item.body, "into")
+                .map(|i| destination_files(&i))
+                .unwrap_or_default();
+            let Some(into) = files.first().cloned() else {
                 wrong.push(format!("{}: no readable **into** field", item.id));
                 continue;
             };
@@ -616,10 +648,39 @@ fn a_promotion_lands_what_was_approved() {
                 continue;
             };
             checked += 1;
-            let mut verdict = match quoted.len() {
-                0 => Verdict::Landed, // an instruction; nothing lands verbatim
-                1 => check(shape, &quoted[0], &destination),
-                _ => Verdict::Ambiguous,
+            // **One quotation per destination, in the order the destinations are named** -
+            // `CLAUDE.md`. A proposal landing in two files carries two, and each is checked
+            // against its own file; only a count that matches neither is unreadable.
+            //
+            // **`P-365` was reported unreadable for obeying that rule.** It names two files
+            // and offers a quotation for each, and a check reading one destination saw two
+            // blocks it could not place. Anything else with more blocks than destinations is
+            // still `Ambiguous`, which is what left the other five in the list - and those
+            // turned out to be irregular rather than unread, which is `P-404`.
+            let mut verdict = if quoted.is_empty() {
+                Verdict::Landed // an instruction; nothing lands verbatim
+            } else if quoted.len() == 1 {
+                check(shape, &quoted[0], &destination)
+            } else if quoted.len() == files.len() {
+                let mut all = Verdict::Landed;
+                for (block, file) in quoted.iter().zip(&files) {
+                    let Some(text) = git(&root, &["show", &format!("{commit}:{file}")]) else {
+                        all = Verdict::Missing {
+                            what: format!("{file} is not in {}", &commit[..7]),
+                        };
+                        break;
+                    };
+                    match check(shape, block, &text) {
+                        Verdict::Landed => {}
+                        other => {
+                            all = other;
+                            break;
+                        }
+                    }
+                }
+                all
+            } else {
+                Verdict::Ambiguous
             };
             // If it did not land then, ask whether it has landed since. Only a `Missing` is
             // worth re-asking: an unknown shape is unknown at every commit.
@@ -1054,5 +1115,63 @@ fn an_addressing_line_is_not_prose_and_everything_around_it_still_is() {
         matches!(check("text", offered, &prose), Verdict::Missing { .. }),
         "a sentence opening `**to**` was dropped as bookkeeping; it carries no `**status**` \
          and is prose"
+    );
+}
+
+/// A proposal landing in two files is read, and a word wrong in either is still caught.
+///
+/// **`CLAUDE.md`: a proposal that lands in more than one file carries one quotation for each,
+/// in the order the destinations are named.** `P-365` obeyed that and was reported unreadable
+/// for it - the check read one destination, saw two blocks, and refused.
+///
+/// **The danger in pairing is that it waves things through.** A version that checked the first
+/// pair and stopped, or that asked only whether each block landed *somewhere*, would read as
+/// fixed and be worth nothing. So each half is poisoned separately, and the second one matters
+/// most: it is the one a loop that forgot to keep going would miss.
+#[test]
+fn a_proposal_landing_in_two_files_is_checked_against_both() {
+    let into = "`spec/orbit.md` -> Crossing between layers, then `spec/units.md` -> Every unit";
+    assert_eq!(
+        destination_files(into),
+        ["spec/orbit.md", "spec/units.md"],
+        "both files, in the order they are named"
+    );
+
+    // A section named after `->` is not a file, and nothing backticked there should be read
+    // as one.
+    assert_eq!(
+        destination_files("`CLAUDE.md` -> Promotion"),
+        ["CLAUDE.md"],
+        "one file and one section"
+    );
+
+    let first = "- An orbit boundary is one an orbit is on either side of\n";
+    let second = "- A mobile unit that moves over the ground has a bin for fuel\n";
+
+    // Both landed, each in its own file.
+    assert_eq!(check("text", first, first), Verdict::Landed);
+    assert_eq!(check("text", second, second), Verdict::Landed);
+
+    // **The second half wrong is the case a short-circuiting pair would miss.** Checked
+    // through `check` directly, because the loop above is what pairs them and this is what
+    // says a wrong block is still a wrong block.
+    assert!(
+        matches!(
+            check(
+                "text",
+                second,
+                "- A mobile unit that moves over the ground has no fuel\n"
+            ),
+            Verdict::Missing { .. }
+        ),
+        "a word changed in the second file's quotation is not caught"
+    );
+
+    // **And a count that matches neither one nor the destinations stays unreadable**, rather
+    // than being paired off against whatever happens to be there.
+    assert_eq!(
+        destination_files("`spec/orbit.md` -> Crossing").len(),
+        1,
+        "one destination, so two blocks against it is not a pairing"
     );
 }
