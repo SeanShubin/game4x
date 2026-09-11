@@ -45,34 +45,56 @@ fn every_recipe_is_either_drawn_or_named_as_not_drawn() {
         net.names < net.recipes,
         "no name is stated twice, so the two counts are checking one thing rather than two"
     );
+    // **The partition is over blocks, not over nodes** - `P-376` lets `work` be spelled out
+    // as one transition per `(resource, density)`, so one block is sixteen nodes.
     assert_eq!(
-        net.transitions.len() + net.excluded.len(),
+        net.blocks_drawn + net.excluded.len(),
         net.recipes,
-        "{} drawn and {} excluded do not account for {} recipes - a recipe in neither list is \
+        "{} block(s) drawn and {} excluded do not account for {} - a block in neither list is \
          one nothing on the page mentions",
-        net.transitions.len(),
+        net.blocks_drawn,
         net.excluded.len(),
         net.recipes
     );
+
+    // **Nothing is excluded, and that is new.** `work` was the last block that could not be
+    // an arc; `P-376` says a rule that makes a territory's density is one rule with a number
+    // per case *which whatever reads it may spell out*, so it is drawn as its cases.
     assert!(
-        !net.excluded.is_empty(),
-        "no recipe is excluded, which would mean either the release changed or the test for \
-         a constant weight stopped working - and the second looks exactly like the first"
+        net.excluded.is_empty(),
+        "{} block(s) are excluded again: {:?}",
+        net.excluded.len(),
+        net.excluded.iter().map(|one| &one.name).collect::<Vec<_>>()
     );
+
+    // **An empty exclusion list means something only because the unfolding is doing work.**
+    // A version that silently dropped `work` would also report nothing excluded, and would
+    // have fewer transitions than blocks rather than more.
     assert!(
-        net.transitions.len() > net.excluded.len(),
-        "more of the release is undrawable than drawable, which is not a diagram worth \
-         publishing"
+        net.transitions.len() > net.recipes,
+        "{} transitions from {} blocks - nothing was spelled out, so *nothing excluded* may \
+         mean a block went missing rather than that it was unfolded",
+        net.transitions.len(),
+        net.recipes
     );
 }
 
-/// A recipe is excluded exactly when one of its rows has no constant weight.
+/// The one row without a constant weight is spelled out rather than excluded.
 ///
-/// **Both directions, because one of them is the failure mode.** Excluding too much makes a
-/// thin diagram, which a person notices; excluding too little means an arc was drawn with a
-/// made-up weight, which nobody notices.
+/// **The rule this test checked has been replaced, not relaxed.** It used to say a recipe is
+/// excluded exactly when a row has no constant weight. `P-376` distinguishes two things that
+/// look alike: *a rule that takes a thing's upkeep, or makes a territory's density, is one
+/// rule with a number per case ... which whatever reads it may spell out*, while *a rule that
+/// takes the lesser of the food and the citizens* measures what is present and is forbidden.
+/// So a non-constant quantity is now a reason to unfold or a defect, and which one it is
+/// depends on the form.
+///
+/// **Both directions still, because one of them is the failure mode.** Spelling out too
+/// little leaves a thin diagram, which a person notices; spelling out with a made-up number
+/// is an arc nobody can check, which nobody notices. So the cases are compared against
+/// *Territory resources*, read here a second time.
 #[test]
-fn exclusion_is_decided_by_the_quantity_and_nothing_else() {
+fn the_density_rule_is_spelled_out_against_the_planet_it_describes() {
     let document = release();
     let net = net(&document);
 
@@ -109,21 +131,92 @@ fn exclusion_is_decided_by_the_quantity_and_nothing_else() {
         .iter()
         .filter(|name| has_expression.get(*name).copied().unwrap_or(false))
         .collect();
-    let actual: Vec<&String> = net.excluded.iter().map(|out| &out.name).collect();
 
-    assert_eq!(
-        actual, expected,
-        "the net excludes {actual:?} and the table says the ones with an expression are \
-         {expected:?}"
-    );
     // **One, and it used to be four.** The saturating rewrite took the other three out:
     // `grow` is gone entirely - `P-379` - and the two capacity clamps became `stow` and
     // `discard`, which carry a constant weight. `work` is the last row in the release whose
-    // quantity is read from the state, *`$where`'s density for that resource*.
+    // quantity is read from a trait, *`$where`'s density for that resource*.
     assert_eq!(
-        expected.len(),
-        1,
-        "one recipe has a quantity that is not a number, and these are {expected:?}"
+        expected,
+        [&"work".to_string()],
+        "the table says these have a quantity that is not a number: {expected:?}"
+    );
+
+    // **And it is drawn, not dropped.** Nothing is excluded now, so the exclusion list is
+    // empty for a reason rather than by a parse failing.
+    assert!(
+        net.excluded.is_empty(),
+        "`work` is excluded again rather than spelled out: {:?}",
+        net.excluded.iter().map(|one| &one.name).collect::<Vec<_>>()
+    );
+
+    // **The cases are the planet's, read here from *Territory resources* a second time.** A
+    // net that invented a density - a range, or the biome table's guiding numbers, which the
+    // release says do not bind - would produce a plausible set of transitions for a planet
+    // that does not exist.
+    let mut offered: Vec<(String, u32)> = Vec::new();
+    let mut inside = false;
+    for line in document.lines() {
+        let trimmed = line.trim();
+        if trimmed.starts_with("## ") || trimmed.starts_with("### ") {
+            if inside {
+                break;
+            }
+            inside = trimmed == "### Territory resources";
+            continue;
+        }
+        if !inside || !trimmed.starts_with('|') {
+            continue;
+        }
+        let cells: Vec<&str> = trimmed
+            .trim_matches('|')
+            .split('|')
+            .map(str::trim)
+            .collect();
+        if cells.len() < 4 || cells[0].parse::<u32>().is_err() {
+            continue;
+        }
+        for (at, resource) in ["food", "metal", "energy"].iter().enumerate() {
+            if let Some((_, density)) = cells[at + 1].split_once('x')
+                && let Ok(density) = density.trim().parse::<u32>()
+            {
+                let pair = ((*resource).to_string(), density);
+                if !offered.contains(&pair) {
+                    offered.push(pair);
+                }
+            }
+        }
+    }
+    offered.sort();
+    assert_eq!(
+        game_console::petri::densities(&document),
+        offered,
+        "the net's cases and the release's table disagree about what the planet offers"
+    );
+
+    // **A `none` cell is no case, not a case yielding nothing.** Territory 6 offers no metal
+    // and territory 7 no energy, so a zero-weight arc for either would say `work` fires there
+    // and produces nothing.
+    assert!(
+        offered.iter().all(|(_, density)| *density > 0),
+        "a density of zero became a case: {offered:?}"
+    );
+
+    let spelled: Vec<&String> = net
+        .transitions
+        .iter()
+        .filter(|name| name.starts_with("work ("))
+        .collect();
+    assert_eq!(
+        spelled.len(),
+        offered.len(),
+        "{} case(s) drawn against {} the planet offers: {spelled:?}",
+        spelled.len(),
+        offered.len()
+    );
+    assert!(
+        !offered.is_empty(),
+        "the planet offers no density at all, so every count above is against nothing"
     );
 }
 
@@ -161,21 +254,32 @@ fn what_the_exclusions_cost_is_visible_rather_than_implied() {
         );
     }
 
-    // **What the exclusion costs, asked against the excluded rows rather than the kinds.**
-    // `work` produces a `resource`, which is a family - so a check reading the *Kinds* table
-    // would find nothing missing and report a cost of zero. That is the narrow-predicate
-    // failure, and a zero would have looked like good news.
+    // **The exclusion costs nothing because there is no exclusion, and those are different
+    // statements.** `docs/process.md`: a zero means something only against a population that
+    // is not also zero. So this asserts the emptiness of the *population* rather than
+    // reporting a green zero about the cost - a version where the parse collapsed and every
+    // block vanished would satisfy a cost-is-empty check just as well.
     let cost = game_console::petri::what_exclusion_costs(&net, &document);
-    assert_eq!(
-        cost,
-        vec!["resource".to_string()],
-        "what the {} excluded recipe(s) cost the drawing is {cost:?}",
+    assert!(
+        cost.is_empty() && net.excluded.is_empty(),
+        "{} block(s) excluded, costing {cost:?} - the page's account of what is missing has \
+         to come back with them",
         net.excluded.len()
     );
+
+    // **`resource` is no longer a place, and that is the unfolding rather than a loss.**
+    // `work` named the family while it was one transition; spelled out, each case names the
+    // member it makes. A family standing in for its members was the last thing in the drawing
+    // that was not a thing a territory can hold.
     assert!(
-        !net.excluded.is_empty(),
-        "nothing is excluded, so the cost above was counted against an empty population and \
-         means nothing"
+        !names.contains(&"resource".to_string()),
+        "the family `resource` is drawn as a place, so `work` is not spelled out after all"
+    );
+
+    assert!(
+        !net.transitions.is_empty(),
+        "the net has no transitions at all, so every emptiness asserted above is about a \
+         failed parse rather than about the release"
     );
 
     // **And the page says so, which is the half a test alone does not achieve.** This
@@ -206,9 +310,17 @@ fn what_the_exclusions_cost_is_visible_rather_than_implied() {
         "the page does not separate what the exclusion costs from what no recipe names, and \
          a reader will read the second as the first"
     );
+    // **The page says the diagram is complete, and says it only while it is.** The sentence
+    // is written under `net.excluded.is_empty()`, so a block falling out of the drawing takes
+    // the claim with it rather than leaving a reassurance nobody re-checked.
     assert!(
-        page.contains("would conclude the game has none"),
-        "the page does not tell a reader what the exclusion costs them"
+        page.contains("Nothing is left out"),
+        "nothing is excluded and the page does not say so, which leaves a reader counting \
+         transitions against blocks and finding more"
+    );
+    assert!(
+        page.contains("became") && page.contains("transitions"),
+        "the page does not explain why there are more transitions than blocks"
     );
     for kind in &never {
         assert!(

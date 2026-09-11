@@ -10,7 +10,7 @@
 //! the checks operate on, a changed weight is one changed cell where in the SVG it moves every
 //! coordinate after it, and github.com renders it with no deploy at all.
 
-use crate::petri::{Net, by_role, kinds_never_drawn, matrix, net, what_exclusion_costs};
+use crate::petri::{Net, Role, by_role, kinds_never_drawn, matrix, net, what_exclusion_costs};
 use crate::petri_draw::{excluded_table, places_table, recipe_svg, svg};
 
 /// A markdown table, already padded.
@@ -66,29 +66,51 @@ fn table(rows: &[Vec<String>]) -> String {
 fn accounting(net: &Net, document: &str) -> String {
     let mut out = String::new();
     out.push_str(&format!(
-        "The release states **{} blocks of recipe rows** under **{} names**. **{} are drawn** \
-         and **{} are not**, because a Petri net arc carries a constant weight and those \
-         recipes have amounts that depend on the state when they fire.\n\n",
+        "The release states **{} blocks of recipe rows** under **{} names**. **{} of the \
+         blocks are drawn** and **{} are not**, as **{} transitions**.\n\n",
         net.recipes,
         net.names,
-        net.transitions.len(),
-        net.excluded.len()
+        net.blocks_drawn,
+        net.excluded.len(),
+        net.transitions.len()
     ));
+    if net.excluded.is_empty() {
+        out.push_str(
+            "**Nothing is left out.** A Petri net arc carries a constant weight, and until \
+             `P-376` the release had one row that did not: `work` produces *`$where`'s \
+             density for that resource*. That rule is not a rule that measures what is \
+             present - it is **one rule with a number per case**, and the specification says \
+             whatever reads it may spell the cases out. So it is drawn as its cases rather \
+             than counted as missing, and this page no longer has a list of what a reader \
+             cannot see.\n\n",
+        );
+    }
+    if net.transitions.len() > net.blocks_drawn {
+        out.push_str(&format!(
+            "**{} blocks became {} transitions**, which is that spelling out. The cases are \
+             the ones *Territory resources* offers - a `(resource, density)` pair a territory \
+             actually has - rather than a range or the biome table's numbers, which the \
+             release says guide and do not bind. A density no territory offers would be a \
+             transition for a planet that does not exist.\n\n",
+            net.blocks_drawn,
+            net.transitions.len()
+        ));
+    }
     if net.names < net.recipes {
         out.push_str(&format!(
-            "**The two numbers differ because a rule whose subject is a family is a rule for \
+            "**Blocks outnumber names because a rule whose subject is a family is a rule for \
              each of them** - `P-373`. `stow` and `discard` are each stated once per kind, and \
              in a net they really are separate transitions: `discard` metal takes metal and \
-             `discard` labor takes labor. So {} blocks are drawn as {} nodes, and a repeated \
-             name is labelled with the kind it acts on so that two of them are never one node \
-             on the page.\n\n",
-            net.recipes, net.recipes
+             `discard` labor takes labor. A repeated name is labelled with the kind it acts \
+             on, so two of them are never one node on the page. {} names, {} blocks.\n\n",
+            net.names, net.recipes
         ));
     }
     out.push_str(
-        "**That is the whole of what is missing, and it is counted rather than mentioned.** A \
-         diagram that quietly left them out would be a picture of a game that is not this one, \
-         and nothing on the page would say so.\n\n",
+        "**What is missing is counted rather than mentioned.** A diagram that quietly left \
+         something out would be a picture of a game that is not this one, and nothing on the \
+         page would say so - so the arithmetic above is printed whether or not it has anything \
+         to report.\n\n",
     );
 
     // **What the exclusion costs, and what is missing for another reason entirely.** These
@@ -176,12 +198,11 @@ fn accounting(net: &Net, document: &str) -> String {
     out.push_str(&format!(
         "**{} of these arcs are zero tests, and that number used to be two.** Reachability in \
          a plain Petri net is decidable and an inhibitor arc makes the net Turing-complete; \
-         the release had two, both `limit 0 garrison`. `P-374` removed them without meaning \
-         to: *there is no garrison here* is *the garrison's room is untouched*, which is an \
-         ordinary requirement on an ordinary place. **That translation is exact only because \
-         a garrison's capacity is one** - at two, *there is none* and *there is room for one* \
-         are different claims - and the reader is refused rather than approximated if a \
-         `limit 0` ever appears somewhere with more room than that.\n\n",
+         the release had two, both `limit 0 garrison`. **`P-385` deleted both rows.** Sean, \
+         2026-09-11: *repeated deployments are player choice, safe because they are not \
+         capable of causing an infinite resource glitch* - so a second landing on a colony \
+         you already hold is allowed, and nothing in the rules refuses it. The `limit` role \
+         is still one of the four the release names and no row carries it.\n\n",
         net.inhibitors().len()
     ));
     out
@@ -241,10 +262,39 @@ pub fn markdown(document: &str) -> String {
     out.push_str(
         "The net above answers how the rules connect and cannot answer what one of them does - \
          at this many arcs the eye cannot follow a single transition out of the bundle. Each is \
-         drawn on its own on the page.\n\n",
+         drawn on its own on the page, and written out here.\n\n",
     );
-    for name in &net.transitions {
+    // **Written out as well as drawn, which it was not until the unfolding.** These headings
+    // carried nothing in the markdown: the page splices a drawing under each, and the diffable
+    // sibling was left with a run of empty sections. That was tolerable at twenty-four and is
+    // not at thirty-nine - and `github.com` renders the markdown, which is where Sean said he
+    // wanted to read this. A heading with nothing under it is also the one shape a reader
+    // cannot tell from a transition that touches nothing.
+    for (at, name) in net.transitions.iter().enumerate() {
         out.push_str(&format!("### {name}\n\n"));
+        let arcs = net.arcs_of(at);
+        for arc in &arcs {
+            let place = net.places[arc.place].label();
+            let said = match arc.role {
+                Role::Consume => format!("takes {} {place}", arc.weight),
+                Role::Produce => format!("makes {} {place}", arc.weight),
+                Role::Require => format!("needs {} {place}, and does not take it", arc.weight),
+                Role::Limit if arc.weight == 0 => format!("fires only where there is no {place}"),
+                Role::Limit => format!("fires only at {} {place} or fewer", arc.weight),
+            };
+            let traits = arc.traits.trim();
+            if traits.is_empty() {
+                out.push_str(&format!("- {said}\n"));
+            } else {
+                out.push_str(&format!("- {said} - {traits}\n"));
+            }
+        }
+        // **Said rather than left blank.** A transition with no arcs would otherwise look
+        // exactly like one whose arcs the renderer dropped.
+        if arcs.is_empty() {
+            out.push_str("- touches no place at all, which no recipe in this release does\n");
+        }
+        out.push('\n');
     }
     out
 }

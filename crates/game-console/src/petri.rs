@@ -312,6 +312,17 @@ pub struct Net {
     /// release counts; *twenty-four transitions* is what they count in the drawing, and a
     /// page giving one without the other invites the reader to think something went missing.
     pub names: usize,
+    /// How many of the release's blocks are drawn at all.
+    ///
+    /// **The partition is over blocks, and a block is no longer one transition** - `P-376`
+    /// lets a rule that makes a territory's density be spelled out, so `work`'s one block
+    /// becomes one transition per `(resource, density)` the planet offers. Counting nodes
+    /// against blocks would report more drawn than the release states and read as an
+    /// accounting error rather than as an unfolding.
+    ///
+    /// So: `blocks_drawn + excluded.len() == recipes`, and `transitions.len()` is separately
+    /// however many nodes those blocks became.
+    pub blocks_drawn: usize,
 }
 
 impl Net {
@@ -424,7 +435,27 @@ pub fn net(document: &str) -> Net {
     let mut arcs: Vec<Arc> = Vec::new();
     let mut excluded: Vec<Excluded> = Vec::new();
 
-    for ((_, lines), label) in named.iter().zip(&labels) {
+    // **Spelled out before anything is drawn** - `P-376`. A rule that makes a territory's
+    // density is one rule with a number per case, and *whatever reads it may spell them out*.
+    // So the blocks the net draws are the release's blocks with every such rule replaced by
+    // its cases, and a case is an ordinary block with constant weights from here on.
+    //
+    // **Each case remembers which block it came from**, because the partition below is over
+    // the release's blocks and a block may now become sixteen transitions. Counting nodes
+    // against blocks would report more drawn than exist and look like an accounting error.
+    let expanded: Vec<(usize, String, Vec<Vec<String>>)> = named
+        .iter()
+        .zip(&labels)
+        .enumerate()
+        .flat_map(|(block, ((_, lines), label))| {
+            unfold(label, lines, document)
+                .into_iter()
+                .map(move |(label, lines)| (block, label, lines))
+        })
+        .collect();
+
+    let mut blocks_drawn: Vec<usize> = Vec::new();
+    for (block, label, lines) in &expanded {
         // **The whole recipe, or none of it.** An arc without a weight cannot be drawn, and
         // drawing a recipe's other rows without it would show a transition that takes less
         // than it does.
@@ -442,6 +473,9 @@ pub fn net(document: &str) -> Net {
 
         let transition = transitions.len();
         transitions.push(label.clone());
+        if !blocks_drawn.contains(block) {
+            blocks_drawn.push(*block);
+        }
         for row in lines {
             let Some(role) = Role::parse(row.get(2).map(String::as_str).unwrap_or_default()) else {
                 continue;
@@ -533,6 +567,7 @@ pub fn net(document: &str) -> Net {
         excluded,
         recipes,
         names,
+        blocks_drawn: blocks_drawn.len(),
     }
 }
 
@@ -669,4 +704,113 @@ pub fn what_exclusion_costs(net: &Net, document: &str) -> Vec<String> {
         lost.push(kind);
     }
     lost
+}
+
+/// Every `(resource, density)` pair the planet actually offers, in a stable order.
+///
+/// **`P-376` is what makes this reading rather than inventing.** `spec/invariants.md`: *an
+/// amount read from a trait is not an amount that depends on what is present. A rule that
+/// takes a thing's upkeep, or makes a territory's density, is one rule with a number per case
+/// ... The first is written once and stands for as many rules as it has cases, **which
+/// whatever reads it may spell out**.* This spells them out.
+///
+/// **Read from *Territory resources* rather than from the biome table.** The biomes' numbers
+/// *guide and do not bind* - the release says so directly - and a territory's own are what a
+/// recipe fires against. Using the guiding numbers would produce a net for a planet that does
+/// not exist.
+///
+/// **`none` is not a density of zero.** A territory with no metal offers no case at all,
+/// rather than a case that yields nothing: `work` cannot fire there, and a zero-weight arc
+/// would say it fires and produces nothing.
+pub fn densities(document: &str) -> Vec<(String, u32)> {
+    let mut pairs: Vec<(String, u32)> = Vec::new();
+    let mut inside = false;
+    for line in document.lines() {
+        let trimmed = line.trim();
+        if trimmed.starts_with("## ") || trimmed.starts_with("### ") {
+            if inside {
+                break;
+            }
+            inside = trimmed == "### Territory resources";
+            continue;
+        }
+        if !inside || !trimmed.starts_with('|') {
+            continue;
+        }
+        let cells: Vec<&str> = trimmed
+            .trim_matches('|')
+            .split('|')
+            .map(str::trim)
+            .collect();
+        // The header and the separator both fail the id parse, so neither needs naming.
+        if cells.len() < 4 || cells[0].parse::<u32>().is_err() {
+            continue;
+        }
+        for (at, resource) in ["food", "metal", "energy"].iter().enumerate() {
+            // `3 x 4` is total capacity for three extractors each yielding four, so the
+            // density is the second number. `none` is no case at all.
+            let Some((_, density)) = cells[at + 1].split_once('x') else {
+                continue;
+            };
+            let Ok(density) = density.trim().parse::<u32>() else {
+                continue;
+            };
+            let pair = ((*resource).to_string(), density);
+            if !pairs.contains(&pair) {
+                pairs.push(pair);
+            }
+        }
+    }
+    pairs.sort();
+    pairs
+}
+
+/// The phrase a row uses to say *a number per case, one case per density*.
+///
+/// Matched as a whole rather than by keyword, so a different state-dependent quantity does not
+/// get spelled out by accident: anything this does not recognise falls through to being
+/// excluded, which is loud and counted.
+const PER_DENSITY: &str = "`$where`'s density for that resource";
+
+/// One block, or the several cases it stands for.
+///
+/// **`P-376` distinguishes two things that look alike**, and this is the line between them: a
+/// rule that *reads a number from a trait* is one rule per case and may be spelled out; a rule
+/// that *measures what is present* - `grow`'s old *the lesser of the surplus food and the
+/// citizens here* - may not, and is a defect rather than a case. Only the first is unfolded
+/// here; the second no longer exists in the release and would be excluded if it returned.
+///
+/// **The cases are the planet's, not a range.** `densities` reads *Territory resources*, so a
+/// density no territory offers produces no case - the net draws the game this release
+/// specifies rather than every game the rule could describe.
+fn unfold(label: &str, lines: &[Vec<String>], document: &str) -> Vec<(String, Vec<Vec<String>>)> {
+    let per_density = lines.iter().position(|row| {
+        row.get(3)
+            .map(|cell| cell.trim() == PER_DENSITY)
+            .unwrap_or(false)
+    });
+    let Some(at) = per_density else {
+        return vec![(label.to_string(), lines.to_vec())];
+    };
+
+    let cases = densities(document);
+    assert!(
+        !cases.is_empty(),
+        "`{label}` reads a density per case and *Territory resources* offers none, so \
+         spelling it out would replace one drawn rule with nothing at all"
+    );
+
+    cases
+        .into_iter()
+        .map(|(resource, density)| {
+            let mut spelled = lines.to_vec();
+            let row = &mut spelled[at];
+            // The quantity becomes the case's number and the family becomes the member it
+            // stands for - `P-373`: a rule whose subject is a family is a rule for each of
+            // them, and this row's subject is `resource`.
+            row[3] = density.to_string();
+            row[4] = resource.clone();
+            (format!("{label} ({resource} x{density})"), spelled)
+        })
+        .collect()
 }
