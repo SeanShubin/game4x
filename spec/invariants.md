@@ -130,6 +130,11 @@ These are what make the rule above checkable rather than merely believed.
 
 - A rule's amounts are constants. **What one firing takes and makes does not depend on how much of
   anything is present**
+- **An amount read from a trait is not an amount that depends on what is present.** A rule that
+  takes a thing's upkeep, or makes a territory's density, is one rule with a number per case; a
+  rule that takes *the lesser of the food and the citizens* is one rule that measures. **Only the
+  second is forbidden above.** The first is written once and stands for as many rules as it has
+  cases, which whatever reads it may spell out
 - Where a rule would need a quantity that varies, it is written as a smaller rule that fires as
   many times as it can. **The quantity is then how often it fired**, rather than a number it read
 - A rule whose subject is a family of kinds is a rule for each of them. **A family is not a thing a

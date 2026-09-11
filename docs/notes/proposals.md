@@ -62,225 +62,31 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-378 - How a line is marked soft
+### P-379 - The world's firing order names a recipe that no longer exists
 
-**to** sean · **status** open · **raised** 2026-09-10 · **rewritten** 2026-09-10 as an approval,
-because one of the three candidates has been exercised and the others have not · **kind** recovered · **shape** text · **asks** approval · **into** `spec/console.md` -> The language · from `C-82`
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** entailed · **shape** text · **asks** approval · **into** `releases/first-release.md` -> Recipes
 
-**`P-373` landed a rule about soft lines and there is no way to write one.** Checked: `soft` appears
-in `spec/` **only in `P-373`'s own two bullets**, and in `releases/first-release.md` **not at all**.
-The rule says what soft means; nothing says how a line is marked as one, so the code lane cannot build
-the check it makes possible - `C-82`.
+**Filed in the same turn as the promotion that caused it**, which is the rule for a promotion that
+makes something else stale.
 
-**Added after the rule about what a value may be:**
+**`P-375` and `P-377` added five world recipes and removed one.** The sentence above the table still
+reads *`upkeep`, then `grow` and `perish`, then `age`, then `spoil`, then `refresh`* - and **`grow`
+is gone**, while `bear`, `breed`, `renew`, `stow` and `discard` are not named.
 
-> **A line may carry an attachment, written in brackets after its amount** - `-1 [soft]`. It says what
-> to do when the line cannot do all of what it says, and it is a fact about the operation rather than
-> about the thing operated on. **A line with no attachment does all of what it says, or the rule does
-> nothing.**
+**Replacing that sentence:**
 
-## Why the bracket rather than a column or a word beside the constraints
+> The player's recipes fire when the player chooses them. The world's fire when the turn ends, in
+> that order: `upkeep`, then `bear`, `breed` and `renew`, then `perish`, then `age`, then `spoil`,
+> then `stow` and `discard`, then `refresh`. The rows below are in that order.
 
-**Because it is the only one of the three that has been used.** The research lens's encoding carries
-an attachment on every line of 23 recipes and renders it exactly this way. **Choosing it adopts
-something exercised; the other two would be designed here and tried afterwards.**
+**The order is read from the rows rather than chosen here.** `P-375` said where its two go - *after
+what expires and before everything becomes ready* - and `P-377`'s three take `grow`'s place. **This
+sentence is the table saying what it already is**, which is why it is `entailed`.
 
-And it puts the mark in the right place. **Soft is not a constraint on the ingredient** - it does not
-say which thing the line is about - so a word in the Traits cell would put two questions in one cell.
-**Nor is it a fifth role**: the four roles say what a line does, and soft says what happens when it
-cannot.
-
-**If you would rather have a column, say so and this becomes a decision again.** The bracket is
-recommended, not assumed.
-
-## The second half, which comes with it
-
-**Unmarked means hard**, which the offered text says in its last sentence. The alternative is marking
-every line, and the release has 58 of them. **The lens marks `hard` explicitly and this does not** -
-the one place this departs from what it adopts, because an exception is worth writing and a default
-is not.
-
-## What is waiting behind it
-
-**Your own decision.** You said firing `deploy ark` and `found by land` on ground you already hold is
-intentional - *I like giving the player more options*. **Today both are refused**, by
-`limit 0 garrison`, and the way to make them fire and waste the garrison is a soft line. Landing this
-is what lets those two rows go, **and with them the release's last two zero tests.**
-
-## A correction this lane owes you
-
-**When you approved `P-373` I said it cost nothing today because the release had two soft lines,
-`age` and `refuel`, neither on an unbounded place.** Both are from the research lens's re-encoding;
-`refuel` is not a release recipe. **The release has zero.** The conclusion held and the evidence did
-not - it costs nothing because there is nothing to check.
-
-**That is the second time this lane quoted the lens's model as a measurement of the release**, after
-`S-87`'s five undrawable recipes where the release has four. Both were caught by the code lane
-deriving from the release instead.
-
-### P-375 - The sweep, and two recipes that only needed grounding
-
-**to** sean · **status** open · **raised** 2026-09-10 · **kind** entailed · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes
-
-**Three of the four undrawable recipes, and none of them needed a new construct.** `P-372` gave the
-release the words for disorder and deliberately not the rules; these are the rules.
-
-**Rows, in the order they go into the table. `stow` and `discard` are new and join the world's
-recipes; `upkeep` and `perish` replace the rows they have now.**
-
-> | **stow**    | world  | consume | 1 | metal   |                        |                     |
-> |             |        | produce | 1 | metal   |                        | a store for metal   |
-> | **stow**    | world  | consume | 1 | energy  |                        |                     |
-> |             |        | produce | 1 | energy  |                        | a store for energy  |
-> | **discard** | world  | consume | 1 | metal   |                        |                     |
-> | **discard** | world  | consume | 1 | energy  |                        |                     |
-> | **upkeep**  | world  | require | 1 | citizen |                        |                     |
-> |             |        | consume | 1 | food    |                        |                     |
-> | **perish**  | world  | consume | 1 | citizen | whose upkeep is unpaid |                     |
-
-## Why no guard is needed, which is the thing that changed
-
-**`P-374` is what unblocked this.** A sweep that removes *the amount above what fits* is a quantity
-read from the state, which `P-368` forbids. With room stored, **`stow` needs no such quantity**: it
-takes one loose unit and puts it where there is room, and **it stops because there is no more room or
-no more loose matter**, not because anything measured either. `discard` then takes what is left.
-
-**Both are ordinary.** Every amount is 1. Nothing asks how full anything is.
-
-**The order is already written.** `spec/turn.md` fixes when the world's recipes fire, and these go in
-as *stow, then discard*, after what expires and before everything becomes ready.
-
-## Why `upkeep` and `perish` were never saturation problems
-
-**Both are required by `P-368`'s third bullet** - *a rule whose subject is a family of kinds is a
-rule for each of them* - and **not by anything about their amounts.** `P-376` settles that a trait
-read is not a measurement, so neither was ever forbidden for what it produces. **What makes them one
-rule each is that their subject is `thing`, which is a family.**
-
-- **`upkeep`** reads *the thing's upkeep* over the family `thing`. **A citizen is the only thing in
-  the release with upkeep**, and it is 1, so grounded the amount is a literal
-- **`perish`** consumes a thing whose upkeep is unpaid and produces *the thing's metal*. Grounded the
-  same way it is **only ever a citizen**, and a citizen has no metal, so the produce row goes
-
-**That is two of the four gone for a rule you have already approved**, and it is why this proposal is
-`entailed` rather than `invented`.
-
-## Two things this does not touch
-
-**Food is not stowed.** Food is made with `keeps` 1 and `spoil` removes it at the turn's end whatever
-holds it, so a food store would be a building that does nothing. **That is the condition rather than
-an exception**, and it is why `stow` and `discard` name metal and energy only.
-
-**The number 10 stays where it is.** `releases/first-release.md` -> *Where things are* says a store
-holds **10**, and **`spec/` contains no such number anywhere** - checked. These rows say *a store for
-metal*, never how much it holds, so the figure remains tunable exactly as a biome's force of nature
-is. `S-30` is the item that will move both into a data file.
-
-
-### P-376 - A parameterised amount is not a state-dependent one
-
-**to** sean · **status** open · **raised** 2026-09-10 · **rewritten** 2026-09-10, from a decision about
-`work`'s rows into an approval that leaves them alone · **kind** entailed · **shape** text · **asks** approval · **into** `spec/invariants.md` -> What a rule may cost
-
-**Sean, 2026-09-10, asking why `work` was a problem**: *territory has a constant density per resource,
-so extractor pulls out a constant amount based on territories density. How is this not grounded?*
-**It is, and the first draft of this proposal was wrong to ask him to change anything.**
-
-**Added to *What a rule may cost*, after the constant-amounts bullet:**
-
-> - **An amount read from a trait is not an amount that depends on what is present.** A rule that
->   takes a thing's upkeep, or makes a territory's density, is one rule with a number per case; a
->   rule that takes *the lesser of the food and the citizens* is one rule that measures. **Only the
->   second is forbidden above.** The first is written once and stands for as many rules as it has
->   cases, which whatever reads it may spell out
-
-## What this settles
-
-**Three of the four recipes the Petri net page excludes are not breaking the rule.** `P-368` forbids
-an amount that depends on **how much of anything is present**. A density, a thing's upkeep and a
-thing's metal are **traits**, not counts:
-
-| Recipe   | Its Qty reads                                   | Is that how much is present?  |
-| -------- | ----------------------------------------------- | ----------------------------- |
-| `work`   | the territory's density                         | **no** - a trait of a deposit |
-| `upkeep` | the thing's upkeep                              | **no** - a trait              |
-| `perish` | the thing's metal                               | **no** - a derived trait      |
-| `grow`   | the lesser of the surplus food and the citizens | **yes** - two counts          |
-
-**Only `grow` breaks it**, and `P-377` is what fixes that one.
-
-## Why the page excludes four, and why it is still right to
-
-`crates/game-console/src/petri.rs` excludes a recipe when **a Qty is not a whole number** - a
-syntactic test, and a **conservative proxy** for the rule. It over-excludes, which is the right
-direction for a generator to err in. **What is wrong is only the impression the page leaves**: it
-reads as though four recipes break an invariant when one does.
-
-**So this asks nothing of the release and one sentence of the page.** `work` keeps its single row, and
-whatever builds a matrix spells it out - seven cases, one per density the release uses.
-
-**That is what the first draft got wrong.** It offered seven rows in the release, or thirty-six, and
-either would have written into the release a fact about this planet that the release should not carry.
-
-### P-377 - Growth by a resource, which removes the last minimum
-
-**to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes, Kinds and Traits
-
-**The only recipe in the release that breaks `P-368`.** `P-376` settles that a density, a thing's
-upkeep and a thing's metal are traits rather than counts; **`grow` alone measures what is present** -
-*the lesser of the surplus food and the citizens here* - and so is the only one that has to change
-rather than be spelled out.
-
-**Your sketch of 2026-09-10**: *create an arbitrary resource, call it resource X, then each citizen can only
-produce one of resource x a turn, so they have a separate exhaustion trait for that. Then the formula
-for a new citizen is 1 of resource X and 1 food.*
-
-**Rows, into the three tables they belong in.**
-
-> | **fertility** | a citizen's capacity to raise one more, spent by raising one and renewed each turn |
->
-> | **spent**     | a citizen | yes or no | stored |
->
-> | **bear**   | world | consume | 1 | citizen   | fertile   |          |
-> |            |       | produce | 1 | citizen   | spent     |          |
-> |            |       | produce | 1 | fertility |           |          |
-> | **breed**  | world | consume | 1 | fertility |           |          |
-> |            |       | consume | 1 | food      |           |          |
-> |            |       | produce | 1 | citizen   |           |          |
-> | **renew**  | world | consume | 1 | citizen   | spent     |          |
-> |            |       | produce | 1 | citizen   | fertile   |          |
-
-**`grow` goes**, and so does its `min`.
-
-## It is the same game, checked rather than argued
-
-**Over all 2400 pairs of citizens 0-39 and food 0-59, firing `upkeep`, `bear` and `breed` to
-saturation in turn order gives exactly what `population_after` computes today. Zero disagreements.**
-
-**And the doubling cap stops being a clause.** Today it is written `.min(citizens)`. Here there are
-only ever as many `fertility` as there are citizens, one apiece, **so at most that many births can
-happen.** The cap is arithmetic on how much exists rather than a rule anyone states.
-
-## What it costs
-
-**One kind, one trait, three recipes where there was one.** `fertility` is the kind; `spent` is the
-trait; `bear`, `breed` and `renew` replace `grow`.
-
-- **`fertility` is discarded at a turn's end like labor**, or a territory banks it and then explodes.
-  `P-372`'s disorder rule already does this to anything nothing holds
-- **It is a second labor.** A citizen has one of each per turn, independently, **so it may work and
-  bear in the same turn** - which preserves today's rule, where every citizen counts toward growth
-  whether or not it worked. Merging them would change the numbers
-- **`renew` is `refresh` for a different trait.** If `refresh` is ever written over every stored
-  flag rather than over `ready` alone, `renew` folds into it
-
-## The name
-
-**You called it resource X and said it was arbitrary.** `fertility` is this lane's word, offered
-because `P-370` says the fiction may be richer than the rules and an unnamed resource is a modelling
-artifact showing through. **The mechanism does not depend on it** - change the word and nothing else
-moves.
-
+**One placement was this lane's and is worth your eye.** `renew` resets a citizen from `spent` to
+`fertile`, and it went where `P-377` listed it, beside `bear` and `breed`. **Nothing between there and
+the turn's end reads `spent`**, so it makes no difference today - but if it should sit with `refresh`,
+where it belongs by kind rather than by subject, say so and it moves.
 
 ## Addressed to other perspectives
 
@@ -3426,6 +3232,10 @@ work the release exists to order.
 | P-372, the release learns disorder, and a territory declares no limit rather than no capacity                                | `releases/first-release.md` -> What bounds a kind in a territory                                                                                                                                         | 2026-09-10 |
 | P-373, what soft means, and that a soft line names something with a finite capacity                                          | `spec/invariants.md` -> What a rule may cost                                                                                                                                                             | 2026-09-10 |
 | P-374, store the room, derive the total, and destroying a thing gives its room back                                          | `spec/logistics.md` -> Containment                                                                                                                                                                       | 2026-09-10 |
+| P-375, the sweep, and upkeep and perish grounded to the one kind they are about                                              | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-10 |
+| P-376, an amount read from a trait is not an amount that depends on what is present                                          | `spec/invariants.md` -> What a rule may cost                                                                                                                                                             | 2026-09-10 |
+| P-377, growth by a resource, which removes the last minimum                                                                  | `releases/first-release.md` -> Recipes, Kinds, Traits                                                                                                                                                    | 2026-09-10 |
+| P-378, a line may carry an attachment in brackets after its amount                                                           | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-10 |
 
 ## Rejected
 

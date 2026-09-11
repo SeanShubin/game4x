@@ -83,6 +83,11 @@ of these and nothing else:
 **The words an expression is built from are the notation's own.** They are the one thing in a data
 file that is not a kind, a trait, or one of a trait's values.
 
+**A line may carry an attachment, written in brackets after its amount** - `-1 [soft]`. It says what
+to do when the line cannot do all of what it says, and it is a fact about the operation rather than
+about the thing operated on. **A line with no attachment does all of what it says, or the rule does
+nothing.**
+
 ## Commands
 
 - Commands to query the game state are available
