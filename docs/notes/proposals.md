@@ -62,6 +62,37 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-410 - A word I have to look up is a reference I cannot resolve
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** text · **asks** approval · **into** `docs/process.md` -> What I read, and what I do
+
+**Sean, 2026-09-11**, on `P-408` offering *carries* against *holds* without saying what either
+meant: *text needs to be comprehensible on its own without me having to look up specific context of
+words. If we must use jargon, put clarifying text after.*
+
+**`docs/process.md` already forbids the same failure for references and not for words.** *Say what
+you are referring to, not where it was ... an assistant resolves these without effort and I cannot
+resolve them at all on one read.* **A term whose meaning lives in another document is that
+sentence's case**, and the document does not cover it.
+
+**Into *What I read, and what I do*, after the paragraph beginning *Say what you are referring to*:**
+
+> **And a word I have to look up is a reference I cannot resolve either.** Where a sentence turns on
+> a term that means something particular here, it says what the term means in the same breath,
+> **even where the term is already defined elsewhere** - because a reader who has to go and check has
+> been stopped just as surely as one counting back through a list. **Jargon is allowed and
+> unexplained jargon is not.**
+
+**It was `carries` against `holds` that prompted it, and both words were right.** `spec/logistics.md`
+uses **carry** for a trait - *a thing may carry an `id`* - and **hold** for containment. **This lane
+leaned on a distinction the repository really makes and never wrote the distinction down**, so the
+sentence was correct and unreadable at the same time, which is the worst of the two.
+
+**What it changes about how this lane writes.** A proposal that uses a term of art states it inline
+even when the term is promoted and established. **The cost is a clause; the failure it prevents is a
+sentence you cannot check without leaving the page**, which for a queue read once is the same as a
+sentence you cannot check.
+
 ### P-409 - Uniformity is an instrument, not a preference
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** text · **asks** approval · **into** `docs/process.md` -> Three rules for using AI assistants
@@ -112,26 +143,41 @@ did no work for the net, and cost the map form its ability to tell two citizens 
 
 **Replacing the two bullets beginning *Producing happens in any order* and *Ending a turn*:**
 
-> - Producing happens in any order. **What a thing can do is something it carries**: an **action** is
->   named, and each kind declares how many of each action a thing of it may take in a turn. A recipe
->   names the action it spends, and firing it spends one. **Two recipes naming the same action draw
->   on the same count**, which is how it is said that a thing must choose between them; two recipes
->   naming different actions never compete. A thing created during a turn begins with its full count
->   and may act at once. **When nothing has an action left there is nothing left to do**
+> - Producing happens in any order. **What a thing can do is a count it carries as a trait**, rather
+>   than something it contains: an **action** is named, and each kind declares how many of each
+>   action a thing of it may take in a turn. A recipe names the action it spends, and firing it
+>   lowers that count by one. **Two recipes naming the same action spend the same count**, which is
+>   how it is said that a thing must choose between them; two recipes naming different actions never
+>   compete. A thing created during a turn begins at its full count and may act at once. **When no
+>   thing has a count left, there is nothing left to do**
 > - Ending a turn: everything with upkeep pays it; then a population grows on surplus food or
 >   starves for want of it; **what expires expires, and what was not kept in order is lost**; and
->   **time restores every thing's actions to the number its kind declares**
+>   **time restores every count to the number that thing's kind declares**
 
 **Six phrases change and nothing else**, all of them the word *token* or *hold*:
 
-| Approved                                                                         | Offered                                                      |
-| -------------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| something it **holds**                                                           | something it **carries**                                     |
-| how many **tokens of readiness a thing of it holds for** each action it can take | how many **of each action a thing of it may take in a turn** |
-| draw on the same **tokens**                                                      | draw on the same **count**                                   |
-| begins **holding its tokens**                                                    | begins **with its full count**                               |
-| when nothing **holds a token**                                                   | when nothing **has an action left**                          |
-| time **refills** every thing's **tokens**                                        | time **restores** every thing's **actions**                  |
+| Approved                                                                         | Offered                                                                |
+| -------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| something it **holds**                                                           | **a count it carries as a trait**, rather than something it contains   |
+| how many **tokens of readiness a thing of it holds for** each action it can take | how many **of each action a thing of it may take in a turn**           |
+| **draw on** the same **tokens**                                                  | **spend** the same **count**                                           |
+| begins **holding its tokens**                                                    | begins **at its full count**                                           |
+| when **nothing holds a token**                                                   | when **no thing has a count left**                                     |
+| time **refills every thing's tokens to the number its kind declares**            | time **restores every count to the number that thing's kind declares** |
+
+## The first row is a distinction the offered text now states rather than assumes
+
+**`carries` and `holds` already mean different things in `spec/`, and this lane used the contrast
+without saying so.** A reader meeting it had to know:
+
+| Word                | What it already means in `spec/` | Where it says so                                                                                                      |
+| ------------------- | -------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| **holds**, contains | one thing is inside another      | `spec/logistics.md` -> Containment                                                                                    |
+| **carries**         | the thing has it as a trait      | `spec/logistics.md`: *a thing may carry an `id`*; `spec/resources.md`: *a thing may carry a number of turns it lasts* |
+
+**So the word was right and the sentence was not**, because it leaned on a distinction a reader has
+to leave the page to resolve. **The offered text now draws the line inside itself** - *a count it
+carries as a trait, rather than something it contains* - and needs no other document read first.
 
 **Everything you approved this morning survives.** An action is named; a recipe names the one it
 spends; **two recipes naming the same action compete and two naming different ones never do**, which

@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-410** - A word I have to look up is a reference I cannot resolve · `docs/notes/proposals.md`
 - **P-409** - Uniformity is an instrument, not a preference · `docs/notes/proposals.md`
 - **P-408** - What a thing can do is something it carries, not something it holds · `docs/notes/proposals.md`
 - **P-406** - The third version of this sentence today, and the first one written from the purpose rather than the case · `docs/notes/proposals.md`
