@@ -8,6 +8,24 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-11, more than one resource will come from time
+
+*I think we are going to need multiple resources from time, so multiple things that can exhaust.
+Let's brainstorm names along the lines of ready, not ready, fertile, spent, and see if we can come up
+with something that would still work even if we later find a third time-based resource. Another
+possibility to explore could involve templating.*
+
+**Two of them exist already and the release names them inconsistently.** `ready` is a trait named for
+the **full** state; `spent` is a trait named for the **empty** one, and the recipes write its other
+value as `fertile`, which the *Traits* table never mentions. **A third would have to pick one of the
+two habits**, and nothing says which.
+
+**What must not be reused is `capacity`.** It is containment's word - *total capacity*, *used
+capacity*, *a capacity of 1*, *room* - and using it for a per-turn allowance would make one word mean
+two unrelated things in one release.
+
+`P-390` carries the choice. This row stays until it lands.
+
 ## Said 2026-09-08, the path from `temporary-notes/` into the project
 
 *There is a path from temporary-notes into the project, it is when I tell you what ideas to read from

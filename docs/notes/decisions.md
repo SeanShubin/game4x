@@ -21,42 +21,76 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-390 - The check decides which traits are a capacity, and that is a fact about the game
+### P-390 - What to call a thing time refills, given there will be a third
 
-**to** sean - **status** open - **raised** 2026-09-11 - **kind** entailed, from `S-93` built - **asks** a decision - **into** `releases/first-release.md` -> Traits, and `spec/invariants.md` -> Nothing comes back round with more
+**to** sean - **status** open - **raised** 2026-09-11 - **rewritten** 2026-09-11, when Sean said more than one resource will come from time - **kind** entailed, from `S-93` built - **asks** a decision - **into** `releases/first-release.md` -> Traits, and `spec/invariants.md` -> Nothing comes back round with more
 
-**Your invariant is decided mechanically now** - `reports/nogain.md`, 43 rules ground from 24
-blocks, a weighting solved for rather than declared, and no rule gaining. **This lane verified the
-arithmetic rather than relaying it**: the tightest rule is `work (food x6)`, which nets +6 food at 4
-against one draw on the planet at 20 and a labor and a readiness at 2 each. Exactly zero.
+**Your invariant is decided mechanically now** - `reports/nogain.md`, 43 rules, a weighting solved for
+rather than declared, nothing gaining. **The arithmetic was verified here rather than relayed**: the
+tightest rule is `work (food x6)`, netting +6 food at 4 against a draw on the planet at 20 and a labor
+and a readiness at 2 each. Exactly zero.
 
-**It rests on one list that is written in code and nowhere else.**
-`crates/game-console/src/nogain.rs` declares `CAPACITIES` as two trait pairs - `ready`/`not ready`
-and `fertile`/`spent`. **That list decides which rules draw on time**, and therefore whether a
-weighting exists at all.
+**It rests on a list written in Rust.** `nogain.rs` declares two trait pairs - `ready`/`not ready`
+and `fertile`/`spent` - and **that list decides which rules draw on time**, and so whether a weighting
+exists at all. A third one is a code edit today.
 
-**The generalisation is sound and you have not approved it.** `P-388` says *anything that **exhausts**
-is a **readiness** extractor for a turn.* The check reads that as *any capacity spent by acting*, so
-that `renew` draws on time the way `refresh` does. **Its ground is the release's own words** -
-fertility is *a citizen's capacity to raise one more, spent by raising one and renewed each turn* -
-so this is a fair reading rather than an invention. **It is still a rule that exists only in Rust.**
+## The two that exist are named two different ways
 
-**Two questions, and the second is the one that lasts.**
+| Trait   | Named for           | Its other value | In the *Traits* table                               |
+| ------- | ------------------- | --------------- | --------------------------------------------------- |
+| `ready` | the **full** state  | `not ready`     | yes or no                                           |
+| `spent` | the **empty** state | `fertile`       | yes or no - **and `fertile` appears nowhere in it** |
 
-- **Does `P-388`'s *readiness* mean any capacity that is spent by acting and refilled?** If yes, one
-  word in `spec/invariants.md` carries what the check already does. If no, `renew` needs its own
-  sentence and this lane will draft it
-- **Should the release name which trait pairs are a capacity?** It is a fact about the game, and
-  `spec/invariants.md` says *what the game is made of lives in a data file*. Today the code decides
-  it, so a third capacity is a Rust edit rather than a release edit
+**A third has to copy one habit or the other and nothing says which.** That is the cost being paid
+now, before any third exists.
 
-**Not urgent, and the reason is worth having.** A capacity the list misses is never charged to time,
-so a rule refilling it reads as a gain and **the check fails loudly rather than passing quietly.**
-The failure mode is the safe one. **What it costs is that the answer is partly believed** - which is
-the one thing you said this check was for.
+## One word is not available
 
-**One smaller thing travels with it.** The release's *Traits* table names `spent`, a citizen, yes or
-no. The recipes say `fertile` and `spent` as if they were two values of one trait. **The check
-bridges that** and nothing states it. Whichever way the second question goes, that bridge stops being
-the code's guess.
+**`capacity` is containment's.** *Total capacity*, *used capacity*, *a capacity of 1*, *room* - nine
+uses in two files. Using it for a per-turn allowance would give one word two unrelated meanings in one
+release. **The check already collides with this**, calling these places *a capacity, spent by acting*
+in a report that also prints containment capacities.
 
+## Three ways, and they disagree about what changes
+
+- **Name the pair.** A template declares, per allowance, the word for full and the word for empty;
+  `ready`/`not ready` and `fertile`/`spent` become two rows of it. **Vocabulary changes, the model
+  does not.** A third is a row
+- **Name the resource.** Time offers resources the way the planet does, and a thing holding one is
+  holding that resource. The states stop being named at all - full is *holding one*, empty is
+  *holding none*. **The model changes and the vocabulary shrinks**
+- **Make it a count.** A thing holds *n* of an allowance and acting spends one, so `ready` is `n = 1`
+  and `not ready` is `n = 0`. **A unit that acts twice in a turn becomes expressible with no new
+  rule** - and `refresh` becomes a soft line refilling up to the allowance, which `P-386` and `P-387`
+  just made a shape the game has
+
+**The first is smallest and the third is the one that buys something.** They are not exclusive: a
+count needs a name, and the template is where an allowance would be declared either way.
+
+## If it is a template, this is the shape
+
+> | Allowance   | Full      | Empty       | Of                | Refilled |
+> | ----------- | --------- | ----------- | ----------------- | -------- |
+> | `readiness` | `ready`   | `not ready` | whatever readies  | 1 a turn |
+> | `fertility` | `fertile` | `spent`     | a citizen         | 1 a turn |
+
+**Offered as a shape rather than as words to approve**, because the column heading is the question
+below and the table cannot be final until it is answered.
+
+## The word itself
+
+**Candidates, and what each costs.** None of them collides with anything in the repository - checked
+rather than assumed.
+
+| Word          | For it                                                                                 | Against it                                                                                     |
+| ------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| **allowance** | says *per turn* without being told; a plain English word a player would read correctly | faintly bureaucratic                                                                           |
+| **faculty**   | precise - a power to act, held and spent; reads well as *a thing's faculties*          | formal, and unfamiliar as a game term                                                          |
+| **charge**    | short, and *charged*/`discharged` is a ready-made pair                                 | reads as energy, which is a resource this game already has                                     |
+| **vigor**     | fictional flavour, no technical baggage                                                | says nothing about where it comes from or that it is per-turn                                  |
+| **readiness** | already `P-388`'s word, so nothing new is introduced                                   | it is also the name of **one** of them, so the general and the particular become the same word |
+
+**This lane would take *allowance*, and that is a preference rather than a finding.** It is the only
+candidate whose everyday meaning already carries *one per turn*, which is the half a reader has to be
+told otherwise. **`readiness` is the one to avoid** for the reason `capacity` is: it would name both
+the family and a member.
