@@ -996,6 +996,7 @@ pub fn index(generated: &[(String, String)]) -> String {
             "containment.md" => {
                 "what holds what, collapsible, with used against total on every container"
             }
+            "petri.md" => "the rules as a Petri net: places, transitions, and what cannot be drawn",
             other => panic!("no description for {other}"),
         }
     };
@@ -1150,7 +1151,8 @@ pub fn index(generated: &[(String, String)]) -> String {
     // **Seven, and it read eight while one was listed twice.** The duplicate came in when
     // `R-7` moved `recipes.md` into `generated` while it was still named by hand below, and
     // this count accommodated it instead of catching it - which is the thing a count is for.
-    assert_eq!(listed, 7, "seven reports are linked");
+    // Eight since `S-87` added the Petri net.
+    assert_eq!(listed, 8, "eight reports are linked");
     assert_eq!(
         paired, listed,
         "every report has its markdown beside it. `containment` was the one that did not, \
@@ -1422,6 +1424,19 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(String, String)> {
     // feature - twenty-five lines shut and several hundred open - and a markdown file is
     // always open, so a twin would be the same information in the form that made it
     // unreadable. `crate::tree` says so at more length.
+    // **`S-87`: the rules as a Petri net.** Read out of the same release the recipes view is
+    // read out of, so the two cannot describe different games. The page carries drawings and
+    // the markdown carries the incidence matrix, which is the form a diff can show and the
+    // form the research lens's checks operate on.
+    written.push((
+        String::from("petri.md"),
+        crate::petri_page::markdown(&release),
+    ));
+    written.push((
+        String::from("petri.html"),
+        crate::petri_page::page(&release),
+    ));
+
     written.push((
         String::from("containment.html"),
         crate::tree::page(&session.game, "containment"),
