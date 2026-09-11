@@ -62,6 +62,40 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-386 - What a rule takes is hard and what it makes is soft
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/invariants.md` -> What a rule may cost
+
+**Sean, 2026-09-11**: *Costs are hard. Effects are soft.* **This is not in `spec/`**, which is why
+`P-385` asked it as though it were open. What is there is `P-373`'s *a line may be soft* and what
+soft means, and `P-378`'s `[soft]` notation - **both say what soft does and neither says which lines
+are soft.**
+
+**The bullet, to go before *A line may be soft*:**
+
+> - **What a rule takes is hard and what it makes is soft.** A rule that cannot take all of what it
+>   takes does not fire. A rule that cannot make all of what it makes fires anyway and makes what it
+>   can, because what it could not make was never a cost
+
+**Takes and makes rather than cost and effect**, because the section's first bullet is already
+written in those words - *what one firing takes and makes does not depend on how much of anything is
+present*. **Say the word if you would rather the spec said cost and effect**, and the bullet changes
+here rather than on the way in.
+
+**What this does to two lines already there, neither of which is a contradiction.**
+
+- ***A line may be soft*** wants one word. Under this rule a line that makes is soft without being
+  marked, so *may* is describing an option where there is none. **The cleanup is filed the moment
+  this lands**, not before, because its wording depends on this one
+- **`P-378`'s `[soft]` attachment needs a job.** If softness follows from the role, the notation is
+  either redundant or it is how a **take** is marked exceptionally soft. `C-82` records that the
+  release has zero soft lines today, so nothing is built on either reading and nothing is urgent
+
+**The garrison case, in your words, is what the rule buys.** *If a garrison is not there one is
+built; if a garrison is there it fails to build because of the limit, but doesn't fail the command,
+because the garrison wasn't a cost - it was an effect.* That is the bullet applied, and `P-385` is
+what it leaves open.
+
 ### P-383 - Two more consequences of the shared index, both learned by crossing it
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `docs/process.md` -> Who writes what · from `Q-59`

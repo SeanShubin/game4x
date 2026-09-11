@@ -21,49 +21,46 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-385 - Is `limit 0 garrison` hard or soft, and does founding twice do it twice
+### P-385 - Does deploying onto a colony you already hold give it two more citizens
 
-**to** sean - **status** open - **raised** 2026-09-11 - **kind** entailed, from `X-12` and `C-87` - **asks** a decision - **into** `releases/first-release.md` -> Recipes
+**to** sean - **status** open - **raised** 2026-09-11 - **rewritten** 2026-09-11, because its first version asked a question you had already settled - **kind** entailed, from `X-12` and `C-87` - **asks** a decision - **into** `releases/first-release.md` -> Recipes
 
-**`deploy ark` and `found by land` are the same recipe apart from what is spent.** Counted from the
-release rather than recalled, and re-counted by this lane today: nine rows and eight, **seven
-identical** - `limit 0 garrison`, `produce 1 garrison`, `produce 2 citizen`, two extractors and two
-stores. `deploy ark` spends an ark from the orbit above; `found by land` spends a pioneer. Nothing
-else differs.
+**Your rule settles the mechanism and this is what it leaves.** *Costs are hard, effects are soft* is
+`P-386`. Applied to `deploy ark` and `found by land`, `produce 1 garrison` is an effect, the
+garrison's capacity of 1 stops it, and the command does not fail.
 
-**So *what a new colony starts with* is two edits, and one of them can be forgotten.** You intend
-players to edit recipes inside the game, which makes a duplicated block a rule somebody changes once
-and sees take effect half the time.
+**So the `limit 0 garrison` row has no work left to do.** It is a hard gate standing in front of a
+line that the capacity already bounds - and the two are not the same test. `spec/invariants.md`:
+*soft means what holds it will not take another - never there is one already. Those differ wherever
+a capacity is more than one, and agree only by accident where it is one.* **A garrison's capacity is
+one, so this is the accident**, and the row reads as though it were the rule when the capacity is.
 
-**The blocker is not the duplication. It is one word in the row both copies share.**
+**Removing it changes what a second deployment does, and that is the question.** Both recipes make
+seven things. Six of them are bounded and stay soft on their own: two extractors and two stores go
+in only where there is capacity, and the garrison does not go in at all. **`produce 2 citizen` is
+bounded by nothing** - *What bounds a kind in a territory* gives citizens *the food produced here,
+through upkeep*, which is not a capacity to be short of.
 
-Today `limit 0 garrison` is **hard**: it gates the whole recipe, so deploying onto ground that
-already has a garrison does nothing at all. **Made soft** - the way `create-if-missing` works - the
-garrison line is skipped when one is already there and **the other six rows still fire**: deploying
-onto an existing colony gives it two more citizens, two more extractors and two more stores.
+| Deploying an Ark onto ground you already hold | Today, with the hard gate       | With the row removed     |
+| --------------------------------------------- | ------------------------------- | ------------------------ |
+| the ark                                       | **not spent** - nothing happens | **spent**                |
+| garrison, extractors, stores                  | none                            | only where there is room |
+| citizens                                      | none                            | **+2, always**           |
 
-| The gate             | Deploying onto an existing colony              | What the other six rows mean                                  |
-| -------------------- | ---------------------------------------------- | ------------------------------------------------------------- |
-| **hard**, as written | nothing happens                                | they are one indivisible founding                             |
-| **soft**             | it grows by 2 citizens, 2 extractors, 2 stores | each is a separate question, and they are not the same answer |
+**Two ways, and the choice is which of them the game is.**
 
-**The table as written hides that there is a question.** One hard gate in front of seven rows reads
-as though the seven were considered together; splitting it is what shows they were never considered
-individually. **This is why nothing can be extracted first** - a shared sub-recipe freezes whichever
-answer it is built on, in the one place two recipes would then both read from.
+- **The row goes.** An Ark can be unloaded into an existing colony, and what it adds is two citizens
+  plus whatever there is room for. The two recipes become identical apart from what is spent, so a
+  shared sub-recipe can be extracted - `X-12`, and the first recipe that calls a recipe, which is
+  what makes `C-75`'s acyclicity check stop being vacuous
+- **The row stays and becomes a cost.** Deploying onto held ground is refused, and the refusal is
+  written as something the rule takes rather than as a limit - which is the only shape that is hard
+  under `P-386`
 
-**Two things ride on it, and neither is a reason to hurry.** A `found-colony` sub-recipe would be the
-first recipe that calls a recipe, which is the population `C-75` correctly refused to wire an
-acyclicity check over - the check stops being green over nothing the moment it lands. And once
-players edit recipes, the engine has to reject a bad one at edit time with a reason, which makes
-that check editor validation rather than elegance.
+**Nobody is asking you to approve an extraction**, and the second question from `X-12` still stands
+on its own: your sketch of the founding recipe **omits both stores**, which the release produces.
 
-**One more question, flagged rather than reconciled, because answering it is also yours.** Your
-sketch of the founding recipe **omits both stores**, which the release produces. Dropping them is a
-change to the game and not a refactor, so nothing has been reconciled toward either version.
-
-**Nobody is asking you to approve an extraction.** The research lens says the duplication is worth
-acting on and deliberately did not decide this; the code lane says it has built nothing and why.
-**This item exists because the question was sitting in a lens's outbox addressed to a producer, where
-nothing was carrying it to you** - which is the hop this lane owes and had not made.
-
+**What this lane got wrong.** The first version of this asked whether the garrison gate was hard or
+soft. **You had settled that and the answer was general** - it is about costs and effects, not about
+garrisons - and no file said so, which is `P-386`. The question that was actually open is the one
+above, and it is one line rather than a table of readings.
