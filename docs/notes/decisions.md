@@ -23,7 +23,7 @@ here without first becoming a proposal.
 
 ### P-380 - Nothing removes `labor` or `fertility`, and neither is a resource
 
-**to** sean - **status** open - **raised** 2026-09-10 - **rewritten** 2026-09-11, when Sean corrected the rule it argued from - **kind** entailed, from `C-83` - **asks** a decision - **into** `releases/first-release.md` -> Recipes, then What bounds a kind in a territory
+**to** sean - **status** open - **cited** `985adaa`, `6495f1c` - **raised** 2026-09-10 - **rewritten** 2026-09-11, when Sean corrected the rule it argued from - **kind** entailed, from `C-83` - **asks** a decision - **into** `releases/first-release.md` -> Recipes, then What bounds a kind in a territory
 
 **The code lane found this by working it rather than imagining it.** A territory with two citizens
 and no food: `upkeep` fires nothing so both are unpaid, `bear` turns both spent and leaves two

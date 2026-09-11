@@ -20,7 +20,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-380** - `985adaa` P-380 from C-83: two kinds nothing sweeps, and one kind nothing bounds · still open in `docs/notes/decisions.md`
 - **C-83** - `985adaa` P-380 from C-83: two kinds nothing sweeps, and one kind nothing bounds · still open in `crates/outbox.md`
 - **C-82** - `6f04c44` P-378 from C-82: how a line is marked soft, which P-373 governs and nothing can write · still open in `crates/outbox.md`
 
