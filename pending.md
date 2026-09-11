@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-411** - The release follows `P-408`: a count per action, carried as a trait · `docs/notes/proposals.md`
 - **P-409** - Uniformity is an instrument, not a preference · `docs/notes/proposals.md`
 - **P-406** - The third version of this sentence today, and the first one written from the purpose rather than the case · `docs/notes/proposals.md`
 - **P-407** - Is a trait that never varies stored, and does it belong in a description · `docs/notes/decisions.md`

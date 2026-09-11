@@ -62,6 +62,74 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-411 - The release follows `P-408`: a count per action, carried as a trait
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Kinds, Traits, Where things are, then Recipes
+
+**`P-408` landed, so the release follows it.** `readiness` stops being a kind; each action becomes a
+count a thing carries. **Every action name takes the `-ing` form**, which is Option A - `moving`,
+`laboring`, `working`, `bearing`.
+
+**Into *Kinds*: the `readiness` row is deleted and nothing replaces it.** It has no offered row, so
+the promotion's check is that no row in *Kinds* names `readiness`.
+
+**Into *Traits*, replacing the `for` row with four:**
+
+> | **moving** | a unit | 0 or 1 | stored |
+> | **laboring** | a citizen | 0 or 1 | stored |
+> | **working** | an extractor | 0 or 1 | stored |
+> | **bearing** | a citizen | 0 or 1 | stored |
+
+**Into *Where things are*: the `a thing, per action` row is deleted.** A count is carried, so nothing
+contains it. The check is that no row there names an action.
+
+**Into *Recipes*, replacing the five blocks named:**
+
+> | **move** | player | require | 1 | place | | `$from` |
+> | | | require | 1 | place | joined to `$from` by an edge the unit crosses | `$to` |
+> | | | require | 1 | unit | moving at least 1 | `$from` |
+> | | | put | | unit | moving one less | `$to` |
+> | | | consume | 1 | energy | | that unit |
+> | **create labor** | player | require | 1 | citizen | laboring at least 1 | |
+> | | | put | | citizen | laboring one less | |
+> | | | produce | 1 | labor | | |
+> | **work** | player | require | 1 | territory | | `$where` |
+> | | | require | 1 | extractor | working at least 1 | |
+> | | | put | | extractor | working one less | |
+> | | | consume | 1 | labor | | |
+> | | | produce | `$where`'s density for that resource | resource | | |
+> | **bear** | world | require | 1 | citizen | bearing at least 1 | |
+> | | | put | | citizen | bearing one less | |
+> | | | produce | 1 | fertility | | |
+> | **refresh** | world | put | | unit | moving at its maximum | |
+> | **refresh** | world | put | | citizen | laboring at its maximum | |
+> | **refresh** | world | put | | citizen | bearing at its maximum | |
+> | **refresh** | world | put | | extractor | working at its maximum | |
+
+## Three things in those rows to look at
+
+**`at least 1` and `one less` are `age`'s words**, already in the table: *age* consumes a thing
+`keeps at least 1` and produces one `keeps one less`. **Nothing new is introduced** - the same
+vocabulary now works on four more traits.
+
+**`refresh` is four rows where it was one.** That is `discard`'s shape, which the release already
+writes four times, once per kind it sweeps. **One row per kind and action says which things refresh
+and which do not**, where a single row over `thing` would have claimed it reaches every kind.
+
+**`put` with an empty `Where` means the thing stays where it is and only the named trait changes.**
+`move` is the one row that fills that cell, because moving is the only change of place. **If `put`
+should be about place alone**, the trait change needs a role of its own and these nineteen rows are
+drawn the wrong way.
+
+## Two choices this lane made and could not avoid
+
+**`0 or 1` in the *Values* cell.** `P-408` says each kind declares how many of each action a thing
+may take, and this is where the release declares it. **Today every count is one**; a kind that should
+act twice gets `0 to 2` in that cell and nothing else changes.
+
+**`at its maximum` in `refresh`.** It reads the top of the *Values* cell rather than naming `1`, so
+a kind that later allows two refreshes to two without this rule being edited.
+
 ### P-409 - Uniformity is an instrument, not a preference
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** text · **asks** approval · **into** `docs/process.md` -> Three rules for using AI assistants
