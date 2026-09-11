@@ -9,7 +9,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 ## What must be decided
 
 - **P-386** - What a rule takes is hard and what it makes is soft · `docs/notes/proposals.md`
-- **P-383** - Two more consequences of the shared index, both learned by crossing it · `docs/notes/proposals.md`
+- **P-383** - Two more consequences of the shared index, and they belong in different sections · `docs/notes/proposals.md`
 - **P-384** - A green suite under a change measures the tests, not the code · `docs/notes/proposals.md`
 - **P-385** - Does deploying onto a colony you already hold give it two more citizens · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`

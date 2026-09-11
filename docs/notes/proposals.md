@@ -76,8 +76,8 @@ are soft.**
 > - **What a rule takes is hard and what it makes is soft.** A rule that cannot take all of what it
 >   takes does not fire. A rule that cannot make all of what it makes fires anyway and makes what it
 >   can, because what it could not make was never a cost. **Where nothing bounds what a line makes it
->   can never be short**, so no such line is soft and the rule below still holds of every line that
->   is
+>   can never be short**, so no such line is soft, and every line that is soft still names something
+>   with a finite capacity
 
 **The last sentence is why this was rewritten, and it is the half worth your eye.** The first draft
 said only that what a rule makes is soft. **That contradicted `P-373` within one section.** *A soft
@@ -107,16 +107,21 @@ nothing is built on either reading.
 built; if a garrison is there it fails to build because of the limit, but doesn't fail the command,
 because the garrison wasn't a cost - it was an effect.* `P-385` is what it leaves open.
 
-### P-383 - Two more consequences of the shared index, both learned by crossing it
+### P-383 - Two more consequences of the shared index, and they belong in different sections
 
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `docs/process.md` -> Who writes what · from `Q-59`
+**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, because the second bullet was addressed to the wrong section · **kind** entailed · **shape** text · **asks** approval · **into** `docs/process.md` -> Who writes what, then All lanes · from `Q-59`
 
 *Who writes what* already says the index is shared, so **staging is publishing**. **Two further
 rules follow from that same fact and are in neither file**, and each was learned by breaking it.
 
+**Into *Who writes what*, after the bullet about staging:**
+
 > - A probe uses a file the lane already owns, or a clone. Verifying a fix sometimes needs a commit,
 >   and making one by creating a scratch file at the root of a tree three instances are committing
 >   to is a crossing made in order to test a fix for a crossing
+
+**Into *All lanes*, among the bullets about an item and the hash that cites it:**
+
 > - A commit hash is a pointer for a reader and not evidence. A commit can carry work it does not
 >   mention, so where a citation and a file could differ, the claim rests on the file
 
@@ -125,9 +130,21 @@ fix. `93d839d` is titled *finding: Q-8 acted* and carries twenty-six lines of `h
 belonging to another lane, staged when that lane's commit lost the race for the index lock - and
 neither party did anything wrong, which is why care does not close it.
 
-**Entailed rather than new**: the bullet above them says a file one instance stages is committed by
-whichever instance commits next. **A probe file is a file staged, and a citation is a claim about
-what a commit carried.** Neither adds a fact; both say what the existing one costs.
+**Why two sections rather than one, which is what this rewrite is.** The probe rule is about where a
+lane may write and belongs beside the staging bullet. **The citation rule is about what closes an
+item**, and *All lanes* already carries its neighbours: *it closes the item the commit cites, or
+records the hash to say it looked*, and *an item whose cited file has taken a promotion since it was
+raised is re-read before it is relied on*. Filed under *Who writes what*, it would read as a rule
+about writing.
+
+**It does not contradict *Coding instance*, and the pair is worth reading together.** That section
+says *every commit cites the id of the item it acts on, which is what makes the path checkable*.
+**That is the commit naming the item; this is a closure naming the commit** - opposite directions,
+and only the second can be wrong while looking right.
+
+**Entailed rather than new**: the staging bullet already says a file one instance stages is
+committed by whichever instance commits next. **A probe file is a file staged, and a citation is a
+claim about what a commit carried.** Neither adds a fact; both say what the existing one costs.
 
 ### P-384 - A green suite under a change measures the tests, not the code
 
@@ -139,7 +156,7 @@ That section already says a poison aimed where a check already looks confirms on
 > **And a change that leaves every test green has measured the tests.** That is the poison rule with
 > its sign flipped: *every test stays green* names the test suite and says nothing about the
 > program. **A finding called small on that evidence has been sized by the coverage rather than by
-> the code**, and the remedy is the same one - name the population the green run acted on.
+> the code** - so a green run, like a count of zero, names the population it was made over.
 
 **The measurement, which is `Q-58` on 2026-09-06.** The quality lens found a `saturating_sub` whose
 comment gave density zero as its reason, observed that no case in the tree has one, wrote *changing
