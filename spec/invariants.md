@@ -134,5 +134,12 @@ These are what make the rule above checkable rather than merely believed.
   many times as it can. **The quantity is then how often it fired**, rather than a number it read
 - A rule whose subject is a family of kinds is a rule for each of them. **A family is not a thing a
   rule can take one of**
+- **A line may be soft**: where it cannot do all of what it says, it does what it can and the rule
+  goes on regardless. **Soft means what holds it will not take another** - never *there is one
+  already*. Those differ wherever a capacity is more than one, and agree only by accident where it
+  is one
+- **A soft line names something with a finite capacity.** Where nothing bounds it there is no room
+  to be short of, so such a line either does nothing at all or asks whether a place is empty - and a
+  rule able to ask that of an unbounded place puts every check above it out of reach
 
 ## Open questions

@@ -149,9 +149,10 @@ Food is made with `keeps` 1. The force nature holds a territory with.
 | **metal**     | the things in it that hold it                            |
 | **energy**    | the things in it that hold it                            |
 
-A territory declares no capacity for a resource. It declares capacity for the things that
-hold them - a store holds what it was built to hold, and an extractor holds nothing. **A resource that is in nothing can be used the turn it is made, and is lost when that turn ends -
-use it immediately, store it, or lose it.**
+A territory declares **no limit** for a resource. It declares capacity for the things that hold
+them - a store holds what it was built to hold, and an extractor holds nothing. **What a territory
+holds directly is in disorder**: it may be spent the turn it is made, and what nothing is holding
+when the turn ends returns to its source.
 
 ## Units and structures
 

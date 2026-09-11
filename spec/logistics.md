@@ -15,11 +15,13 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - A thing may contain things, and is itself in at most one other thing. Nothing else holds
   anything
 - What a thing may contain is a maximum **per kind, per family of kinds, or per kind carrying a
-  particular value of a trait**. That maximum is its **total capacity** for that kind, and it is
-  stored. **Used capacity** is how many of that kind it holds, and **available capacity** is the
-  total less the used; both are derived, so neither can disagree with what is there. A total
-  capacity of four extractors is a maximum of four, so nothing a player builds ever crowds out
-  something of another kind.
+  particular value of a trait**. **What is stored is the room left**: how many more of that kind it
+  could take. **Used capacity** is how many it holds, which is simply what is there, and **total
+  capacity** is the two added. **Nothing records the total**, so nothing can disagree with it. A
+  total capacity of four extractors is a maximum of four, so nothing a player builds ever crowds
+  out something of another kind
+- **Room is spent and given back.** Making a thing takes one of the room in whatever will hold it;
+  **destroying it returns one**. The two never come apart, because the total is only ever their sum
 - A thing that contains things takes up capacity in whatever contains it, so capacity is not conserved
 - A thing says which of the things in it are next to which. That is a fact about the container
   rather than about its contents

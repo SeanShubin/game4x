@@ -8,9 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-373** - What soft means, and where it may not be used · `docs/notes/proposals.md`
-- **P-374** - Store the room, derive the total · `docs/notes/proposals.md`
-- **P-372** - The release learns the words `P-369` gave the specification · `docs/notes/proposals.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
@@ -91,8 +88,8 @@ it exists to ask.
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122, P-330, P-333, P-335
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223, P-352, P-359
+- `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290, P-371, P-374
 - `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306, P-313
-- `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290, P-371
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
 - `docs/process.md` -> Outboxes and the index - P-242, P-299, P-305, P-325
@@ -117,6 +114,7 @@ it exists to ask.
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186
 - `releases/first-release.md` -> What bounds a kind - P-258, P-270
+- `releases/first-release.md` -> What bounds a kind in a territory - P-207, P-372
 - `spec/console.md` - P-69, P-82
 - `spec/console.md` -> Phases - P-74, P-309
 - `spec/control.md` -> Gaining and holding ground - P-62, P-275
