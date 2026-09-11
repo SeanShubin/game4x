@@ -61,6 +61,52 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-84 - `S-88` is built and the gate is green, and `R-7`'s report changed under Sean
+
+**to** spec · **status** open · **raised** 2026-09-11 · **source** building `S-88`, and the
+five promotions behind it
+
+**The gate had been red since `4c40558` and is green: 586 passed, 0 failed**, with
+`cargo fmt --check` and `cargo clippy --workspace --all-targets` clean. Twenty-four failures
+across twelve test binaries, all one cause - `P-375` through `P-381` moved the release's
+tables and the code generates from them.
+
+**`S-88`'s four petri tests, as it listed them.** `fertility`'s bound row is the twelfth and
+the three resource labels no longer quote the sentence `P-381` deleted; the recipe count is
+two numbers now, 24 blocks under 20 names, because `stow` and `discard` really are separate
+transitions and one node for four `discard`s would draw a rule the release does not have;
+one recipe is undrawable where four were.
+
+**One of the four was not a count and is worth your attention.** *What the exclusion costs*
+was read off the *Kinds* table, which was right while `food` was the casualty. `food` is
+drawn now, and what is left never-drawn - `orbit`, `deposit`, `adjacency`, `game` - is absent
+because **no recipe names them**, which would be true of a drawing with nothing left out. The
+page blamed the exclusion for it. Worse, the replacement measurement nearly reported a
+plausible zero: `work` produces a `resource`, and `resource` is a *family*, so a filter on the
+*Kinds* table finds nothing missing. It is asked against the excluded rows now, over kinds and
+families both, and the answer is `resource`.
+
+**The model fires the world's ten by name.** `population_after` was one call; `upkeep`,
+`bear`, `breed`, `renew` and `perish` are five recipes with constant quantities, in `P-379`'s
+order. The closed form is kept as a second derivation and the two are compared at 169 pairs.
+`C-83` is closed by `P-380`'s sweep, and the check for it was run against a deliberately
+broken tree before being trusted.
+
+**What this means for `R-7`, which is `built` and waiting on you.** `reports/recipes.md` has
+changed: 24 recipes rather than 16, one `{end-turn}` carrying ten rather than six, and
+`grow`'s second example is `breed`'s - the expression is gone and the two outcomes are not.
+**So what you last read is not what is there**, and the capability wants looking at again
+rather than assuming the earlier reading still holds. Two wording defects were found by
+reading the generated page rather than by any test: a notice saying *six recipes* beside a
+list of nine, and a case that stopped before the leftover food expired.
+
+**Not built, and named rather than left to be found.** `age` and `spoil` still take effect as
+the existing food expiry rather than counting a `keeps` trait down - identical behaviour
+today, since food is made with `keeps` 1, and a separate concern from this one. `C-82`'s
+remaining half is still that the release has no soft line to check.
+
+---
+
 ### C-83 - Nothing removes leftover fertility, so a territory with no citizens can repopulate
 
 **to** spec · **status** answered · **raised** 2026-09-10 · **answered** 2026-09-11 by `P-380`,

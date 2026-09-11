@@ -41,7 +41,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-89** - `Q-59` re-measured: four of your seven landed while it waited, and three are filed · `docs/notes/proposals.md`
 
-### To spec (36)
+### To spec (37)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -49,6 +49,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-84** - `S-88` is built and the gate is green, and `R-7`'s report changed under Sean · `crates/outbox.md`
 - **C-82** - `P-373`'s soft-line check is one line, and the notation cannot write a soft line · `crates/outbox.md`
 - **C-81** - `Capacity` stores the total and `P-374` made room the stored one · `crates/outbox.md`
 - **C-80** - Matter cycling has no release to build against, and `held.clear()` is the one line that knows · `crates/outbox.md`
