@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-369** - The ground is disorder, work is what orders it, and what is not held goes back · `docs/notes/proposals.md`
+- **P-369** - Matter cycles: the ground, then disorder, then the ground again · `docs/notes/proposals.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
