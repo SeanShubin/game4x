@@ -8,6 +8,22 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-11, unification is how he sees what this lane cannot
+
+*Option A, definitely. Unification is a big deal for me, it is how I keep systems simple, and more
+importantly, how I recognize patterns you don't.*
+
+**Said choosing one naming rule over a rule with one exception.** The exception would have been
+correct - only `labor` collides with a kind - and he took the uniform rule anyway.
+
+**The second clause is the one that is not already written down.** `docs/process.md` says he rejects
+responses that do not read clearly, and that he makes every decision. **It does not say that
+uniformity is an instrument** - that an exception hides the pattern an exception is an instance of,
+and that he is the one positioned to see it. **That is a reason for this lane to stop offering
+minimal-diff options as though they were cheaper.**
+
+`P-409` carries it. This row stays until it lands.
+
 ## Said 2026-09-11, I am deploying in order to verify, not verifying in order to deploy
 
 *I am looking at but not approving the artifacts such as play.4x, so I wouldn't call it a "review".

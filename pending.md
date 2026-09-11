@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-409** - Uniformity is an instrument, not a preference · `docs/notes/proposals.md`
 - **P-408** - What a thing can do is something it carries, not something it holds · `docs/notes/proposals.md`
 - **P-406** - The third version of this sentence today, and the first one written from the purpose rather than the case · `docs/notes/proposals.md`
 - **P-407** - Is a trait that never varies stored, and does it belong in a description · `docs/notes/decisions.md`
@@ -21,6 +22,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-408** - `4020734` P-405 is answered and leaves decisions.md; P-408 carries it · still open in `docs/notes/proposals.md`
 - **S-99** - `29e993c` S-98 and S-99: the model follows P-399 into the token model, and the gate is green · still open in `docs/notes/proposals.md`
 - **S-98** - `29e993c` S-98 and S-99: the model follows P-399 into the token model, and the gate is green · still open in `docs/notes/proposals.md`
 - **C-92** - `e2a9cfb` P-407 from C-92: is a trait that never varies stored · still open in `crates/outbox.md`

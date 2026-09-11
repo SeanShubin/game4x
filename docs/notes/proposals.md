@@ -62,6 +62,35 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-409 - Uniformity is an instrument, not a preference
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** text · **asks** approval · **into** `docs/process.md` -> Three rules for using AI assistants
+
+**Sean, 2026-09-11**, choosing one naming rule over a rule with one exception: *unification is a big
+deal for me, it is how I keep systems simple, and more importantly, **how I recognize patterns you
+don't**.*
+
+**The exception would have been correct.** Only `labor` collides with a kind; `move` and `work` are
+recipe names and never appear in a data file. **This lane offered the minimal rule as though fewer
+changes made it cheaper**, and the second half of his sentence is why that is wrong.
+
+**Into *Three rules for using AI assistants*, after *The third one is the data dump in this case*:**
+
+> **A fourth, about how I read rather than how I decide.** I want one rule applied everywhere rather
+> than a rule with a correct exception, **because uniformity is how I recognise a pattern that
+> nobody has named yet.** An exception is an instance of something, and a form that carries
+> exceptions hides what they are instances of. **So a smaller diff is not a cheaper answer**: it is
+> the same answer with the evidence taken out.
+
+**Why this is worth a section rather than a habit.** `docs/process.md` already says he makes every
+decision and rejects what does not read clearly. **Neither of those tells a lane why a correct
+exception is refused**, so a lane goes on offering them - this one did today, and would have again.
+
+**What it changes about how this lane files.** An option list that includes *and here is the smaller
+version with one exception* stops being a service. **Where an exception is genuinely necessary the
+proposal says why the uniform rule fails**, rather than offering both and letting the smaller one
+look thrifty.
+
 ### P-408 - What a thing can do is something it carries, not something it holds
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/turn.md` -> Order of operations · from `P-405`
