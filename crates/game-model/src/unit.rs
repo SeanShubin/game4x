@@ -54,9 +54,6 @@ pub struct Unit {
     /// ready or exhausted; a thing that is merely used up for the turn is exhausted,
     /// where labor and energy cells are genuinely spent because they are consumed.
     pub exhausted: bool,
-    /// `spec/control.md`: when nature takes a territory back, any ark on it becomes
-    /// unusable. It is still there; it can no longer do anything.
-    pub usable: bool,
 }
 
 impl Unit {
@@ -68,12 +65,11 @@ impl Unit {
             location: Location::Orbit(above),
             cells: kind.cells(),
             exhausted: false,
-            usable: true,
         }
     }
 
     pub fn force(&self) -> u32 {
-        if self.usable { self.kind.force() } else { 0 }
+        self.kind.force()
     }
 
     pub fn is_on(&self, territory: TerritoryId) -> bool {
@@ -84,9 +80,12 @@ impl Unit {
         matches!(self.location, Location::Orbit(_))
     }
 
-    /// Whether this unit could act at all: it has not been used and is not a wreck.
+    /// Whether this unit could act at all, which is now only whether it has been used.
+    ///
+    /// **It used to ask whether the unit was a wreck as well** - `P-367` made nature destroy
+    /// what stands on a territory it takes back, so there are no wrecks to ask about.
     pub fn ready(&self) -> bool {
-        self.usable && !self.exhausted
+        !self.exhausted
     }
 }
 
@@ -103,15 +102,11 @@ mod tests {
         assert_eq!(unit.force(), 2);
     }
 
-    /// An unusable ark is still an object in the world; it simply does nothing. Force
-    /// included, since it can no longer be used to hold anything.
-    #[test]
-    fn an_unusable_unit_holds_no_force_and_cannot_act() {
-        let mut unit = Unit::new(UnitId(1), UnitKind::Ark, TerritoryId(1));
-        unit.usable = false;
-        assert_eq!(unit.force(), 0);
-        assert!(!unit.ready());
-    }
+    // **The test for an unusable unit is gone, and so is the state** - `P-367`. It asserted
+    // that a wrecked ark holds no force and cannot act; nature destroys what it takes now,
+    // so there is no wrecked ark to ask about. The rule that replaced it is checked in
+    // `game.rs`, at `nature_taking_a_territory_back_destroys_the_units_on_it`, because it is
+    // about what a turn does and not about what a unit is.
 
     #[test]
     fn a_spent_unit_is_not_ready_but_still_holds_its_force() {

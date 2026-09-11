@@ -288,10 +288,15 @@ impl Game {
         self.won
     }
 
+    /// **No citizens anywhere and no units left** - and it used to be *no usable unit*.
+    ///
+    /// `P-367` made nature destroy what stands on a territory it takes back, which was the
+    /// only thing that ever set `usable` to false. With nothing setting it, *no usable unit*
+    /// and *no unit* became the same question asked two ways, and the trait went.
     pub fn has_lost(&self) -> bool {
         self.phase == Phase::Play
             && self.territories.iter().all(|t| t.citizens() == 0)
-            && !self.units.iter().any(|unit| unit.usable)
+            && self.units.is_empty()
     }
 
     // -- acting -------------------------------------------------------------
@@ -904,11 +909,19 @@ impl Game {
         for id in ids {
             let needed = self.territory(id).map(|t| t.force_of_nature).unwrap_or(0);
             if self.force_in(id) < needed {
-                for unit in &mut self.units {
-                    if unit.is_on(id) {
-                        unit.usable = false;
-                    }
-                }
+                // **Destroyed, where they used to be marked unusable** - `P-367`.
+                // `spec/control.md` now reads *its entire population perishes, and every unit
+                // on it is destroyed*; it said *any ark on it becomes unusable*. The old
+                // behaviour left a state the release cannot describe: a unit that is
+                // somewhere, owned, and can never act, reading in a hand derivation exactly
+                // like one that is merely exhausted. That is the confusion `P-339` removed
+                // for `unpaid`, and this is the same one a rule over.
+                //
+                // **Every unit, not every ark.** The code already caught pioneers under a
+                // sentence that named only arks, which `C-77` raised; the new sentence says
+                // every unit, so the breadth is now the specified one rather than an
+                // accident that happened to be right.
+                self.units.retain(|unit| !unit.is_on(id));
                 if let Ok(territory) = self.territory_mut(id) {
                     territory.lost_to_nature();
                 }
@@ -930,8 +943,11 @@ impl Game {
         // hand. **An ark and a pioneer take no upkeep now**, so there is no unpaid unit and
         // the twenty lines that shared the food out are gone rather than made unreachable.
         //
-        // `usable` itself stays: nature retaking a territory still wrecks what is standing on
-        // it, which is `spec/control.md` and is a different rule.
+        // **`usable` is gone too, as of `P-367`.** It survived `P-339` because nature
+        // retaking a territory still wrecked what stood on it - and nature destroys those
+        // units now, so nothing sets it. It was a trait the release does not declare and no
+        // artifact could show, which is what made a starved pioneer unreadable in the first
+        // place; that whole class of invisible state is now closed.
 
         // Then a population grows on surplus food, or starves for want of it.
         let food = self.territories[id.index()].store(Resource::Food);
@@ -1843,8 +1859,67 @@ mod tests {
             .find(|unit| unit.kind == UnitKind::Pioneer)
             .expect("the pioneer is still there");
         assert!(
-            pioneer.usable,
+            pioneer.ready(),
             "a unit eats nothing, so it cannot go unpaid"
+        );
+    }
+
+    /// Nature taking a territory back destroys what is standing on it - `P-367`.
+    ///
+    /// **The rule changed and the old one was not a defect**, which is why this is here
+    /// rather than a correction. `spec/control.md` said *any ark on it becomes unusable*; it
+    /// now says *its entire population perishes, and every unit on it is destroyed*. The old
+    /// behaviour left a unit that is somewhere, owned, and can never act - a state the
+    /// release cannot describe, reading in a hand derivation exactly like a unit that is
+    /// merely exhausted.
+    ///
+    /// **Two units, one on the territory and one elsewhere**, because a rule that destroyed
+    /// every unit in the game would pass a check that only counted the one it was about.
+    #[test]
+    fn nature_taking_a_territory_back_destroys_the_units_on_it() {
+        let mut game = founded();
+        let doomed = TerritoryId(1);
+        let safe = TerritoryId(2);
+
+        for (at, place) in [(doomed, 9), (safe, 0)] {
+            let id = UnitId(game.units.len() as u32 + 1);
+            let mut pioneer = Unit::new(id, UnitKind::Pioneer, at);
+            pioneer.location = Location::On(at);
+            game.units.push(pioneer);
+            let _ = place;
+        }
+        let before = game.units.len();
+        assert!(before >= 2, "two units were put down and {before} are here");
+
+        // Nature takes it: no garrison, and a force of nature above what is left to hold it.
+        //
+        // **Fed, deliberately.** The nature sweep runs over `controlled()` *after* settling,
+        // so a territory that starves to nobody stops being controlled and nature never
+        // reaches it - which is how the first version of this test passed its setup and
+        // failed its assertion.
+        game.territories[doomed.index()].force_of_nature = 5;
+        game.territories[doomed.index()].set_garrison(None);
+        game.territories[doomed.index()].add(Resource::Food, 10);
+        assert!(
+            game.force_in(doomed) < 5,
+            "the fixture has to leave the territory undefended or nothing happens"
+        );
+
+        let after = game.after(&Transition::EndTurn).expect("the turn ends");
+
+        assert!(
+            !after.units.iter().any(|unit| unit.is_on(doomed)),
+            "a unit is still on the territory nature took back"
+        );
+        assert!(
+            after.units.iter().any(|unit| unit.is_on(safe)),
+            "the unit on the territory nature did not take is gone too, so this destroys \
+             more than the rule says"
+        );
+        assert_eq!(
+            after.units.len(),
+            before - 1,
+            "exactly the one unit on the lost territory was destroyed"
         );
     }
 }

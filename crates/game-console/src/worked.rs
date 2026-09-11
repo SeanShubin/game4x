@@ -332,10 +332,12 @@ pub fn examples() -> Vec<Example> {
                  left over grows one more - one, because a surplus of one is less than \
                  two citizens. Territory 2 has none, so its citizen goes unpaid and \
                  perishes. What food is left is discarded and the worked extractor is \
-                 ready again. **The pioneer in territory 2 starved too and \
-                 the file cannot show it** - the model marks it unusable rather than \
-                 consuming it, and `usable` is a trait the release does not declare, so \
-                 it reads unchanged. `C-62`",
+                 ready again. **The pioneer in territory 2 is untouched**, because \
+                 nothing but a citizen eats - `P-339`. This note used to say it starved \
+                 and that the file could not show it, which was true of an older rule and \
+                 of a `usable` trait the release never declared; `P-367` removed the last \
+                 thing that set that trait, so there is no state a unit can be in now that \
+                 an artifact cannot show. `C-62`",
             ),
             before: || {
                 let mut game = founded(&[(Resource::Food, 3, 4)], &[(Kind::Citizen, 2)]);

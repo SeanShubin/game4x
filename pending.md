@@ -18,6 +18,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-87** - `ab21cd9` S-87: the rules as a Petri net, drawn from the release and honest about what it cannot draw · still open in `docs/notes/proposals.md`
 - **R-8** - `dd93bd1` C-71 acted: S-78 said R-8 was not built until it was, and it was right · still open in `releases/first-release.md`
 
 ## What is outstanding

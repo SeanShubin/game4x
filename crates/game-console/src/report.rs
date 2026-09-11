@@ -93,13 +93,11 @@ pub fn show(game: &Game, subject: &Subject) -> String {
                         Location::Orbit(id) => format!("in orbit above territory {id}"),
                         Location::On(id) => format!("on territory {id}"),
                     };
-                    format!(
-                        "{} {} {place}, {} cells{}",
-                        unit.kind,
-                        unit.id,
-                        unit.cells,
-                        if unit.usable { "" } else { ", unusable" }
-                    )
+                    // **No `unusable` suffix since `P-367`.** Nature destroys what stands
+                    // on a territory it takes back, so there is no wrecked unit to mark -
+                    // and `usable` was a trait the release never declared, which is what
+                    // made a wrecked unit unreadable in the file Sean derives by hand.
+                    format!("{} {} {place}, {} cells", unit.kind, unit.id, unit.cells)
                 })
                 .collect::<Vec<_>>()
                 .join("\n")
@@ -304,7 +302,6 @@ pub fn entities(game: &Game) -> Vec<Entry> {
                 ("cells".to_string(), unit.cells.to_string()),
                 ("force".to_string(), unit.force().to_string()),
                 ("exhausted".to_string(), unit.exhausted.to_string()),
-                ("usable".to_string(), unit.usable.to_string()),
             ],
         });
     }

@@ -401,7 +401,7 @@ Run by the **world**.
 
 **One ending, six recipes.** This same firing is the example for grow, perish, age, spoil, refresh as well - no command fires one of the world's alone.
 
-five of the world's six in one ending, in the release's order, and the way `grow` turns out when **the surplus is the lesser**. Territory 1 has three food for two citizens, so both eat and the one left over grows one more - one, because a surplus of one is less than two citizens. Territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. **The pioneer in territory 2 starved too and the file cannot show it** - the model marks it unusable rather than consuming it, and `usable` is a trait the release does not declare, so it reads unchanged. `C-62`.
+five of the world's six in one ending, in the release's order, and the way `grow` turns out when **the surplus is the lesser**. Territory 1 has three food for two citizens, so both eat and the one left over grows one more - one, because a surplus of one is less than two citizens. Territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
 
 Before:
 
@@ -448,7 +448,7 @@ Run by the **world**.
 
 **One ending, six recipes.** This same firing is the example for upkeep, perish, age, spoil, refresh as well - no command fires one of the world's alone.
 
-five of the world's six in one ending, in the release's order, and the way `grow` turns out when **the surplus is the lesser**. Territory 1 has three food for two citizens, so both eat and the one left over grows one more - one, because a surplus of one is less than two citizens. Territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. **The pioneer in territory 2 starved too and the file cannot show it** - the model marks it unusable rather than consuming it, and `usable` is a trait the release does not declare, so it reads unchanged. `C-62`.
+five of the world's six in one ending, in the release's order, and the way `grow` turns out when **the surplus is the lesser**. Territory 1 has three food for two citizens, so both eat and the one left over grows one more - one, because a surplus of one is less than two citizens. Territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
 
 Before:
 
@@ -524,7 +524,7 @@ Run by the **world**.
 
 **One ending, six recipes.** This same firing is the example for upkeep, grow, age, spoil, refresh as well - no command fires one of the world's alone.
 
-five of the world's six in one ending, in the release's order, and the way `grow` turns out when **the surplus is the lesser**. Territory 1 has three food for two citizens, so both eat and the one left over grows one more - one, because a surplus of one is less than two citizens. Territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. **The pioneer in territory 2 starved too and the file cannot show it** - the model marks it unusable rather than consuming it, and `usable` is a trait the release does not declare, so it reads unchanged. `C-62`.
+five of the world's six in one ending, in the release's order, and the way `grow` turns out when **the surplus is the lesser**. Territory 1 has three food for two citizens, so both eat and the one left over grows one more - one, because a surplus of one is less than two citizens. Territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
 
 Before:
 
@@ -571,7 +571,7 @@ Run by the **world**.
 
 **One ending, six recipes.** This same firing is the example for upkeep, grow, perish, spoil, refresh as well - no command fires one of the world's alone.
 
-five of the world's six in one ending, in the release's order, and the way `grow` turns out when **the surplus is the lesser**. Territory 1 has three food for two citizens, so both eat and the one left over grows one more - one, because a surplus of one is less than two citizens. Territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. **The pioneer in territory 2 starved too and the file cannot show it** - the model marks it unusable rather than consuming it, and `usable` is a trait the release does not declare, so it reads unchanged. `C-62`.
+five of the world's six in one ending, in the release's order, and the way `grow` turns out when **the surplus is the lesser**. Territory 1 has three food for two citizens, so both eat and the one left over grows one more - one, because a surplus of one is less than two citizens. Territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
 
 Before:
 
@@ -617,7 +617,7 @@ Run by the **world**.
 
 **One ending, six recipes.** This same firing is the example for upkeep, grow, perish, age, refresh as well - no command fires one of the world's alone.
 
-five of the world's six in one ending, in the release's order, and the way `grow` turns out when **the surplus is the lesser**. Territory 1 has three food for two citizens, so both eat and the one left over grows one more - one, because a surplus of one is less than two citizens. Territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. **The pioneer in territory 2 starved too and the file cannot show it** - the model marks it unusable rather than consuming it, and `usable` is a trait the release does not declare, so it reads unchanged. `C-62`.
+five of the world's six in one ending, in the release's order, and the way `grow` turns out when **the surplus is the lesser**. Territory 1 has three food for two citizens, so both eat and the one left over grows one more - one, because a surplus of one is less than two citizens. Territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
 
 Before:
 
@@ -664,7 +664,7 @@ Run by the **world**.
 
 **One ending, six recipes.** This same firing is the example for upkeep, grow, perish, age, spoil as well - no command fires one of the world's alone.
 
-five of the world's six in one ending, in the release's order, and the way `grow` turns out when **the surplus is the lesser**. Territory 1 has three food for two citizens, so both eat and the one left over grows one more - one, because a surplus of one is less than two citizens. Territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. **The pioneer in territory 2 starved too and the file cannot show it** - the model marks it unusable rather than consuming it, and `usable` is a trait the release does not declare, so it reads unchanged. `C-62`.
+five of the world's six in one ending, in the release's order, and the way `grow` turns out when **the surplus is the lesser**. Territory 1 has three food for two citizens, so both eat and the one left over grows one more - one, because a surplus of one is less than two citizens. Territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
 
 Before:
 
