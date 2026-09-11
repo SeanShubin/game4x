@@ -1010,6 +1010,9 @@ pub fn index(generated: &[(String, String)]) -> String {
                 "what holds what, collapsible, with used against total on every container"
             }
             "petri.md" => "the rules as a Petri net: places, transitions, and what cannot be drawn",
+            "nogain.md" => {
+                "whether the rules can come back round with more, and the weighting that decides it"
+            }
             other => panic!("no description for {other}"),
         }
     };
@@ -1164,8 +1167,8 @@ pub fn index(generated: &[(String, String)]) -> String {
     // **Seven, and it read eight while one was listed twice.** The duplicate came in when
     // `R-7` moved `recipes.md` into `generated` while it was still named by hand below, and
     // this count accommodated it instead of catching it - which is the thing a count is for.
-    // Eight since `S-87` added the Petri net.
-    assert_eq!(listed, 8, "eight reports are linked");
+    // Eight since `S-87` added the Petri net, nine since `S-93` added the no-gain check.
+    assert_eq!(listed, 9, "nine reports are linked");
     assert_eq!(
         paired, listed,
         "every report has its markdown beside it. `containment` was the one that did not, \
@@ -1448,6 +1451,16 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(String, String)> {
     written.push((
         String::from("petri.html"),
         crate::petri_page::page(&release),
+    ));
+    // **`S-93`: the no-gain invariant, decided rather than believed.** A third reading of the
+    // same Recipes table, at a finer granularity than the drawing - readiness is a state
+    // there, where the drawing has only kinds - and the weighting it solves for is published
+    // because Sean chose a derived weighting over a declared one and asked to see what it
+    // arrives at.
+    written.push((String::from("nogain.md"), crate::nogain::markdown(&release)));
+    written.push((
+        String::from("nogain.html"),
+        crate::dump::page(&crate::nogain::markdown(&release), "nogain.md"),
     ));
 
     written.push((

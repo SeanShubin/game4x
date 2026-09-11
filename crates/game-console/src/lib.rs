@@ -20,6 +20,7 @@ pub mod browse;
 pub mod dump;
 pub mod fired;
 pub mod grammar;
+pub mod nogain;
 pub mod petri;
 pub mod petri_draw;
 pub mod petri_page;

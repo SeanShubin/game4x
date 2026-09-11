@@ -178,7 +178,7 @@ fn said(row: &[String]) -> String {
 /// **Parsed to cells rather than matched as text**, for the reason `CLAUDE.md` gives: the
 /// padder owns the column widths and rewrites them whenever anything else in the file
 /// changes, so splitting on `|` is pad-proof where matching a row's bytes is not.
-pub(crate) fn body_under(document: &str, heading: &str) -> Vec<Vec<String>> {
+pub fn body_under(document: &str, heading: &str) -> Vec<Vec<String>> {
     let mut rows = Vec::new();
     let mut inside = false;
     let mut after_separator = false;

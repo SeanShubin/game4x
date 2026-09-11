@@ -770,7 +770,7 @@ pub fn densities(document: &str) -> Vec<(String, u32)> {
 /// Matched as a whole rather than by keyword, so a different state-dependent quantity does not
 /// get spelled out by accident: anything this does not recognise falls through to being
 /// excluded, which is loud and counted.
-const PER_DENSITY: &str = "`$where`'s density for that resource";
+pub const PER_DENSITY: &str = "`$where`'s density for that resource";
 
 /// One block, or the several cases it stands for.
 ///
