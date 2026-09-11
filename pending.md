@@ -10,6 +10,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 - **P-406** - The third version of this sentence today, and the first one written from the purpose rather than the case · `docs/notes/proposals.md`
 - **P-405** - Where a token lives, now that the map form cannot tell two citizens apart · `docs/notes/decisions.md`
+- **P-407** - Is a trait that never varies stored, and does it belong in a description · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
