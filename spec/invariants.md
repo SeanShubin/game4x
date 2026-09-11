@@ -120,6 +120,11 @@ specific rule.
   are endless. What is finite is the gathering - bounded by the finite things that do it, in a
   finite number of turns - so an endless well behind a bounded pump takes nothing away from the
   rule above. **Outside what is named this way, nothing increases**
+- **There are three sources: the planet, the star, and time.** The planet's material and the
+  star's energy are endless, and so are time's turns. **Anything that exhausts is a readiness
+  extractor for a turn**: it draws one readiness out of time and is spent doing it, the way an
+  extractor draws material out of the planet and is spent doing it. So readiness is gathered
+  rather than made, and what bounds the gathering is the count of things that exhaust
 - **Whether this holds is decided mechanically, from the rules alone**, and stays so however many
   rules there are. **The game is meant to become complicated by simple things interacting**, and an
   invariant only a careful reader could confirm would not survive that
@@ -144,10 +149,10 @@ These are what make the rule above checkable rather than merely believed.
   can, because what it could not make was never a cost. **Where nothing bounds what a line makes
   it can never be short**, so no such line is soft, and every line that is soft still names
   something with a finite capacity
-- **A line may be soft**: where it cannot do all of what it says, it does what it can and the rule
-  goes on regardless. **Soft means what holds it will not take another** - never *there is one
-  already*. Those differ wherever a capacity is more than one, and agree only by accident where it
-  is one
+- **A line that makes may be soft, and a line that takes may not**: where a soft line cannot do
+  all of what it says, it does what it can and the rule goes on regardless. **Soft means what
+  holds it will not take another** - never *there is one already*. Those differ wherever a
+  capacity is more than one, and agree only by accident where it is one
 - **A soft line names something with a finite capacity.** Where nothing bounds it there is no room
   to be short of, so such a line either does nothing at all or asks whether a place is empty - and a
   rule able to ask that of an unbounded place puts every check above it out of reach

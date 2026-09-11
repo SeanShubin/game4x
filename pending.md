@@ -8,8 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-388** - Three sources: the planet, the star, and time · `docs/notes/proposals.md`
-- **P-387** - A line that makes may be soft, and a line that takes may not · `docs/notes/proposals.md`
+- **P-389** - `spec/resources.md` says a source holds matter, and one of the three holds turns · `docs/notes/proposals.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
@@ -20,13 +19,13 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-388** - `62a928b` P-388 enumerated, and its first version named the wrong source · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (9)
+### To code (10)
 
+- **S-93** - The no-gain check, specified: derived and published, three sources, and places that are `(kind, trait)` · `docs/notes/proposals.md`
 - **S-92** - Four promotions landed, and two of them are work: the release lost the `limit` role entirely · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's nine data tables have no data file to be generated from · `docs/notes/proposals.md`
@@ -103,6 +102,7 @@ it exists to ask.
 - `releases/first-release.md` -> Where things are - P-265, P-311, P-320, P-358
 - `spec/control.md` -> Winning - P-77, P-81, P-125, P-361
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
+- `spec/invariants.md` -> What a rule may cost - P-373, P-376, P-386, P-387
 - `docs/process.md` -> All lanes - P-247, P-248, P-324
 - `docs/process.md` -> What makes a check worth having - P-304, P-327, P-384
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
@@ -110,7 +110,6 @@ it exists to ask.
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
 - `releases/first-release.md` -> What bounds a kind in a territory - P-207, P-372, P-381
 - `spec/invariants.md` -> The game is one function - P-75, P-115, P-363
-- `spec/invariants.md` -> What a rule may cost - P-373, P-376, P-386
 - `spec/resources.md` -> The list - P-49, P-65, P-338
 - `docs/process.md` - P-289, P-291
 - `docs/process.md` -> Quality instance - P-244, P-294

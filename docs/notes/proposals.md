@@ -62,85 +62,67 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-388 - Three sources: the planet, the star, and time
+### P-389 - `spec/resources.md` says a source holds matter, and one of the three holds turns
 
-**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, twice - it named the wrong source, then Sean answered both of its choices · **kind** recovered · **shape** text · **asks** approval · **into** `spec/invariants.md` -> Nothing comes back round with more
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/resources.md` -> The list · from `P-388`
 
-**Sean, 2026-09-11**: *The planet provides infinite materials, the star provides infinite energy,
-time provides infinite turns, and anything that exhausts is a readiness extractor for a turn.*
+**Promised by `P-388` and filed the moment it landed.** `spec/invariants.md` now names three sources
+and one of them is time, which holds turns rather than matter. **`spec/resources.md` says a source is
+*where matter waits*** - true of the planet and the star, and not of the third.
 
-**Choice A is answered and needs no words in `spec/`.** Derived and published: the check solves for a
-weighting and prints the one it found, so a weighting you would not accept is visible rather than
-silent. **That is how a check behaves**, so it goes to the code lane as an item rather than into the
-specification.
+**The rule around it is unaffected**: *every kind of matter has a source* stays true and becomes the
+matter case. **Two words change.**
 
-**Choice B is answered by a fourth option neither this lane nor the lenses had.** The three offered
-were: exempt the recipe, exempt the player's phase, or weigh readiness at nothing. **Yours exempts
-nothing** - it says readiness was never made in the first place, which is why it is better than all
-three.
+> - **Every kind of matter has a source, and there is no end of what a source holds.** A source is
+>   where what it holds waits, and **what is in a source cannot be spent**
 
-**Into *Nothing comes back round with more*, after the bullet beginning *A source is named*:**
-
-> - **There are three sources: the planet, the star, and time.** The planet's material and the
->   star's energy are endless, and so are time's turns. **Anything that exhausts is a readiness
->   extractor for a turn**: it draws one readiness out of time and is spent doing it, the way an
->   extractor draws material out of the planet and is spent doing it. So readiness is gathered
->   rather than made, and what bounds the gathering is the count of things that exhaust
-
-**The last sentence is consequence rather than transcription**, and it is the one to cut if you
-disagree with it. It restates the bullet above it - *what is finite is the gathering, bounded by the
-finite things that do it* - with readiness as the case.
-
-## What this makes stale, and it is filed the moment this lands
-
-**`spec/resources.md` says *a source is where matter waits*.** Readiness is not matter, so a source
-that holds turns does not fit that sentence. **The rule it sits in is still right** - *every kind of
-matter has a source* stays true and becomes the matter case of a wider idea. **One sentence goes
-narrow, and the cleanup is filed rather than made here**, because its wording depends on these words
-landing first.
-
-## One thing this exposes about the check, and it is not for you to decide
-
-**At the granularity of kinds, `refresh` is invisible.** It takes a `thing` and makes a `thing`;
-only the trait moves, from `not ready` to `ready`. A weighting over kinds alone therefore says
-`refresh` does nothing, **and the whole readiness economy is outside the check** - which is measured
-rather than argued: a sweep over all 73 rows for recipes taking nothing or making a kind they do not
-take lists eleven recipes and `refresh` is not one of them.
-
-**So the check's places are `(kind, trait)` pairs and not kinds.** The research lens reached the
-same shape from the other side - `X-29` says places are the declared `(container, kind)` pairs and
-colours are the families. **This is the code lane's to build and this lane will say so**, once these
-words are yours.
-
-### P-387 - A line that makes may be soft, and a line that takes may not
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/invariants.md` -> What a rule may cost
-
-**Promised by `P-386` and filed the moment it landed.** `P-386` says what a rule takes is hard and
-what it makes is soft. **The bullet under it still says *a line may be soft***, which describes an
-option where there is now none: a bounded make is soft whether or not anybody marks it.
-
-**The same edit closes the hole the invariant argument found.** A soft **take** would consume less
-than it says, which is a gain - and one such line would put *nothing comes back round with more*
-beyond the argument that makes softness safe. `P-386`'s reasoning states it; **no rule forbids it.**
-
-**Replacing the bullet that begins *A line may be soft*:**
-
-> - **A line that makes may be soft, and a line that takes may not**: where a soft line cannot do
->   all of what it says, it does what it can and the rule goes on regardless. **Soft means what
->   holds it will not take another** - never *there is one already*. Those differ wherever a
->   capacity is more than one, and agree only by accident where it is one
-
-**Everything after the colon is the existing bullet unchanged**, so what is new is the eleven words
-before it.
-
-**This also gives `P-378`'s `[soft]` attachment its job without touching `spec/console.md`.** The
-notation says a line is soft; **what a line may be soft about is a question about rules rather than
-about writing them**, so the constraint belongs here and the notation inherits it. `C-82` records
-that the release has zero soft lines today, so nothing is built on either reading.
+**Nothing else in that file needs it.** *An extractor, and the labor to work it, bring matter out of
+its source* is about matter on purpose and stays as it is - **and it is now one case of a shape the
+game uses twice**, since a thing that exhausts draws readiness out of time the same way. Saying so is
+not this proposal; `spec/invariants.md` already does.
 
 
 ## Addressed to other perspectives
+
+### S-93 - The no-gain check, specified: derived and published, three sources, and places that are `(kind, trait)`
+
+**to** code - **status** open - **raised** 2026-09-11 - **source** `P-388` promoted, and Sean asking for what it takes to enforce his invariant in production
+
+**Sean wants `spec/invariants.md` -> *Nothing comes back round with more* enforced rather than
+believed**, and that section now says how: *whether this holds is decided mechanically, from the
+rules alone*. **He chose how the check behaves.** Three things are settled and the rest is yours.
+
+**1. Derived and published, not declared.** The check **solves** for a weighting `w` over places
+where `w · (made - taken) <= 0` at every recipe, rather than reading numbers anyone wrote. **It
+prints the weighting it found**, so one that is technically sound and says something Sean would
+reject - labor weighed at nothing, say - is visible rather than silent. When none exists it fails and
+names the recipes that force it. **He chose this over declaring** exactly because the numbers would
+otherwise be invented.
+
+**2. The three sources are in the specification now** - `P-388`. The planet's material, the star's
+energy, and time's turns. **Anything that exhausts is a readiness extractor for a turn.** So
+`refresh` is not an exception to be carved out of the check: it is extraction, the same shape as
+`work`, and what bounds it is the count of things that exhaust.
+
+**3. The places are `(kind, trait)` pairs and not kinds**, which is the one finding that would have
+made the check vacuous. **At kind granularity `refresh` is invisible** - it takes a `thing` and makes
+a `thing`, and only `ready` moves. Measured over all 73 rows: a sweep for recipes that take nothing
+or make a kind they do not take returns eleven, and `refresh` is not among them. **A weighting over
+kinds would report the readiness economy as doing nothing at all** - a green run about the wrong
+question, which is this repository's recurring failure and `CLAUDE.md` names it.
+
+**`X-29` reached the same shape from the other side** and is still open to this lane: places are the
+declared `(container, kind)` pairs, colours are the families, grounding is unfolding.
+
+**What this lane is not telling you.** Whether it is an LP over rationals, integer arithmetic, or
+something smaller that exploits how sparse the matrix is; where the check lives; whether it runs in
+the gate or in a report. **The specification constrains observable behaviour and the implementation
+is yours** - `docs/process.md`, *Coding instance*.
+
+**One thing you will need that is not a rule.** `work` produces *`$where`'s density for that
+resource*, the release's one non-constant quantity. `P-376` already permits and resolves it - *one
+rule with a number per case ... which whatever reads it may spell out* - so unfolding it is reading
+the specification rather than needing a new one. It is the last row that cannot be an arc.
 
 ### S-92 - Four promotions landed, and two of them are work: the release lost the `limit` role entirely
 
@@ -3490,6 +3472,8 @@ work the release exists to order.
 | P-385, the two `limit 0 garrison` rows go, and repeated deployment is the player's                                           | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-11 |
 | P-383, a probe uses a file the lane owns, and a commit hash is not evidence                                                  | `docs/process.md` -> Who writes what, All lanes                                                                                                                                                          | 2026-09-11 |
 | P-384, a change that leaves every test green has measured the tests                                                          | `docs/process.md` -> What makes a check worth having                                                                                                                                                     | 2026-09-11 |
+| P-388, three sources - the planet, the star, and time, and a thing that exhausts extracts readiness                          | `spec/invariants.md` -> Nothing comes back round with more                                                                                                                                               | 2026-09-11 |
+| P-387, a line that makes may be soft, and a line that takes may not                                                          | `spec/invariants.md` -> What a rule may cost                                                                                                                                                             | 2026-09-11 |
 
 ## Rejected
 
