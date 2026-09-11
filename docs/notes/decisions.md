@@ -21,43 +21,49 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-396 - The release cannot follow `P-390` until a moved thing can be said to hold nothing
+### P-396 - `move` destroys a unit and builds another, and that loses more than a token
 
-**to** sean - **status** open - **raised** 2026-09-11 - **kind** entailed, from `P-390` promoted - **asks** a decision - **into** `releases/first-release.md` -> Recipes
+**to** sean - **status** open - **raised** 2026-09-11 - **rewritten** 2026-09-11, because Sean asked what the second option solves and the answer is less than this item implied - **kind** entailed, from `P-390` promoted - **asks** a decision - **into** `releases/first-release.md` -> Recipes
 
-**You asked for the release to be brought into line with the specification, and five of the six
-blocks are mechanical.** `create labor`, `work` and `bear` each lose their *produce ... not ready*
-row and consume a readiness instead; `renew` stops existing; `refresh` becomes one rule. **`move` is
-the one that does not go through**, and the reason is a sentence in `P-390` meeting a habit in the
-release.
+**Five of the six blocks go straight through.** `create labor`, `work` and `bear` lose their
+*produce ... not ready* row and consume a readiness; `renew` stops existing; `refresh` becomes one
+rule. **`move` does not**, and your question is the right one to ask about it.
 
-**`move` is written as consume-and-produce.** It takes the unit at `$from` and makes one at `$to` -
-five rows, and the produced one is marked **`not ready`** so it cannot move again this turn.
+## What the second option was solving, and it is one symptom of three
 
-**`P-390` says a created thing arrives holding its tokens.** *A thing created during a turn begins
-holding its tokens and may act at once.* **So the unit `move` produces arrives with a fresh token to
-move with**, and a unit can cross the planet in one turn. The trait `not ready` was what stopped
-that, and tokens have no trait to be marked with.
+**`move` is written as consume-and-produce**: it takes the unit at `$from` and makes one at `$to`.
+**So the unit that arrives is a different thing from the one that left**, and the release has to
+undo that thing by thing.
 
-**Two ways, and the choice is which one the game is.**
+| What the departing unit had                                                     | What the arriving one has                                                      | Undone today by                                                                       |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| a spent readiness                                                               | **a fresh one**, since `P-390` says a created thing arrives holding its tokens | the `not ready` trait, which tokens do not have - **this is what option two patches** |
+| an **`id`**, and `spec/logistics.md` says a thing carrying one **is one thing** | no id, because the produce row states none                                     | **nothing**                                                                           |
+| **energy in its tank**, which `move` spends from                                | no tank contents, because the tank went with the unit                          | **nothing**                                                                           |
 
-- **A moved thing is not a created thing.** `move` stops being consume-and-produce and becomes a rule
-  that changes where one thing is - which is what it always meant, and what `spec/logistics.md`
-  already says holds it: *what holds it is what says where it is*. **The notation gains a way to say
-  a thing moves**, and `deploy ark` and `found by land` are the other two rules that would want it
-- **A produce may say what it does not carry.** `move` stays as it is and its produce row names the
-  tokens the new thing arrives without. **Smaller, and it keeps a shape that says a unit is destroyed
-  and another created every time one walks** - which is also what makes the no-gain check weigh a
-  unit against itself twice
+**So option two answers the first row and leaves the other two.** That is the honest answer to your
+question: **it solves no problem option one does not**, and it stops at the one this lane happened to
+notice because `P-390` had just made it visible.
 
-**This lane is not recommending, because the first changes the notation and that is yours.** What it
-will say is that the second reads as a workaround for the first being unavailable, and `X-12` already
-records the same pressure from another direction - *deriving the territory from the selected ark
-deletes row 1 and a `Where`*.
+**The second and third are not urgent, which is why nobody has hit them.** No unit exists in the
+scenario yet, so no id has been lost and no tank has been emptied by arriving somewhere.
 
-**Nothing is blocked while this waits.** The release is consistent with itself today and inconsistent
-with `spec/turn.md`, which is the state a release is allowed to be in: *the spec is the destination
-and always wins; a release only says what is true today*. **The other five blocks are held rather
-than landed**, because splitting them from `move` would leave the release half in each model, which
-is worse than being wholly in the old one.
+## So the choice is narrower than this item first said
 
+- **A moved thing is not a created thing.** `move` says a thing changes where it is. `spec/logistics.md`
+  already carries the idea - *a thing is not located by a trait; **what holds it is what says where it
+  is***, and *a thing carrying an `id` is one thing, and anything that holds it holds exactly it*.
+  **All three rows above stop existing**, because nothing is destroyed
+- **Keep consume-and-produce and patch it.** One patch per row: the produce names the tokens it
+  arrives without, then the id it keeps, then what its tank still holds
+
+**The thing that looked like an argument for the second is not one.** A Petri net has no move
+primitive - a token moving is an input arc and an output arc, which is exactly consume-and-produce -
+so keeping that shape looked like keeping the drawing honest. **But the release already states rules
+in one form and grounds them into another**: a family becomes its members, a density becomes its
+cases, and `P-390`'s actions ground into tokens. **A move in the notation can ground into two arcs in
+the net**, and the net loses nothing.
+
+**This lane is still not recommending, because the first changes the notation and notation is yours.**
+What it will now say plainly is that the second is three patches rather than one, and that it was
+offered as one because only one of the three had been noticed.
