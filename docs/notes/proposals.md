@@ -62,6 +62,75 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-380 - Two kinds nothing sweeps, and one kind nothing bounds
+
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** entailed · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes, then What bounds a kind in a territory · from `C-83`
+
+**The code lane found that `fertility` accumulates and worked it rather than imagining it.** Two
+citizens and no food: `upkeep` fires nothing so both are unpaid, `bear` turns both spent and leaves
+two `fertility`, `breed` cannot fire, `renew` makes them fertile, `perish` takes both. **The territory
+ends with no citizens and two fertility**, and next turn `breed` fires twice and two citizens appear
+from nobody. `game-model` has a test named for the rule that forbids it.
+
+**Checking it found the gap is wider, and two of the three are this lane's.**
+
+| What        | Made by        | Removed by                        |                                                       |
+| ----------- | -------------- | --------------------------------- | ----------------------------------------------------- |
+| `fertility` | `bear`         | `breed` **only**                  | accumulates - `C-83`                                  |
+| `labor`     | `create labor` | the things that spend it **only** | accumulates - **nobody had raised this**              |
+| `fertility` | -              | -                                 | **has no row in *What bounds a kind in a territory*** |
+
+**`discard` names metal and energy and nothing else.** Only food is made with `keeps`, so `age` and
+`spoil` never reach either of these.
+
+**Rows, in the order of the two destinations.**
+
+**Into *Recipes*, beside the two `discard` rows already there:**
+
+> | **discard** | world  | consume | 1 | labor     |                        |                     |
+> | **discard** | world  | consume | 1 | fertility |                        |                     |
+
+**Into *What bounds a kind in a territory*:**
+
+> | **fertility** | the citizens that make it, one each per turn |
+
+## Why this is entailed rather than a decision
+
+**`P-369` already decided it.** *What is still in disorder when a turn ends returns to its source.*
+Nothing holds labor and nothing holds fertility - no container declares either - **so both are in
+disorder by the rule, and both should already be going.** The `discard` rows simply do not name them.
+
+**So the third of the code lane's three readings is not open.** It offered *the accumulation is
+intended, a starving territory banking its recovery* - which would mean a dead population no longer
+stays dead, and would contradict a rule promoted this morning. **It is worth saying only because it
+had to be ruled out rather than passed over.**
+
+**And the bound row is the same rule as labor's**, word for word: *the citizens that make it, one each
+per turn*. One citizen, one fertility, one turn.
+
+## What this lane did wrong
+
+**`P-375` and `P-377` were drafted in one batch and neither was checked against the other.** `P-375`
+enumerated `discard` over metal and energy; `P-377` introduced `fertility` in the same breath. **The
+sweep was written before the kind it needed to sweep, and nothing went back.**
+
+**`labor` was already unswept before either of them** - it has no removal recipe and never had one, and
+the code discards it in `end_of_turn_losses` with nothing naming it. **That is one of `S-83`'s six
+behaviours with no recipe**, and it took the fertility bug to make anyone look at the neighbour.
+
+## One thing this does not settle, and it decides the next enumeration
+
+**What makes a kind *in disorder* is not stated sharply enough to check.** `P-372` says *what a
+territory holds directly is in disorder*, and a garrison is held directly by a territory. **Nothing
+sweeps garrisons and nothing should** - but the rule as written does not say why not.
+
+**The reading that works is that a territory declares a capacity for a garrison and no limit for a
+resource**, so the test is *whether what holds it bounds it*. **That is not what the sentence says**,
+and until it does, an enumeration like the one above is checked by reading rather than by rule. **A
+sharper sentence is worth having and is not this proposal**, which only adds what is missing under
+either reading.
+
+
 ## Addressed to other perspectives
 
 ### S-87 - A Petri net view of the rules, in the reports
