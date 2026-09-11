@@ -62,77 +62,35 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-396 - A rule may name one thing and say what changes about it
-
-**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, three times - the last when Sean chose the noun over the patches · **kind** recovered · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
-
-**Sean, 2026-09-11**, choosing it over patching `move`: *that reads natural enough that even if it is
-not the perfect answer, I am certain it is better than the alternative.*
-
-**Into *The language*, after the paragraph beginning *A field's value may name a kind rather than a
-thing*:**
-
-> **A rule may name one thing and say what changes about it**, rather than taking a quantity of its
-> kind. What is named keeps its `id`, what it holds, and what it has already spent; **only what the
-> rule changes changes**. A quantity is for what is interchangeable, and **a thing carrying an `id`
-> is never a quantity**.
-
-**It sits there because that is where the notation already separates the two.** *`territory:1` refers
-to one particular territory; `resource:food` says which resource, and means no particular food.*
-**The language could already point at one thing and a rule could not be about one**, which is the
-gap.
-
-## What it settles, and it was broken before `P-390`
-
-**`move`'s third row consumes `1 unit`** - a quantity - **and its fourth takes energy from *that
-unit***, one particular thing. `spec/logistics.md`: *there is never a quantity of a thing with an
-`id`*. **One of those two rows has always been unwritable**, and nobody could say which until the
-notation had the other noun.
-
-**Three things stop being lost**, none of which needed a patch of its own: the unit's `id`, whatever
-its tank still holds, and the readiness it has already spent. **Nothing is destroyed, so the rule
-that refreshes a created thing never fires** - and that rule stays exactly as it is, because it is
-right for the extractor it was written for.
-
-## What this does not do, and it is the next proposal
-
-**The release still has to be able to write it.** Its recipe table has four roles - `require`,
-`limit`, `consume`, `produce` - and **none of them names a thing and changes it**. What that row
-looks like is a question about the release's table rather than about the language, and **this lane
-has not invented a word for it**, because a fifth role is the sort of thing that is easier to add
-than to remove.
-
-**`X-12` is waiting on the same thing** from the other direction: `deploy ark`'s *`require 1
-territory @ $where`* is a parameter declaration wearing a threshold's clothes, and `found by land`
-needs no such row at all. **All three rules want the same noun.**
-
-### P-398 - `R-5` quotes words `spec/planet.md` does not contain, and it is vetted
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `releases/first-release.md` -> Capabilities · from `P-397`
-
-**Found by the check `P-397` prompted**, run over every *In* line in the release rather than the one
-that had just been fixed. **Twelve cite a file; eleven quote it verbatim.**
-
-**`R-5`'s says** *nothing of how a drawing is made is visible in it*. **That sentence is nowhere in
-`spec/planet.md`**, or anywhere else in the repository. What that document says is: *A drawing never
-betrays how it was made. A viewer sees the planet, never the process.*
-
-**It is a paraphrase wearing a quotation's clothes**, and the rule it paraphrases is the right rule -
-`R-5`'s *vetted when* echoes the real words, *no facet, band or flat wash **betrays how the surface
-was built***. **So nothing was built wrongly and nothing you vetted is in doubt.**
-
-**Replacing `R-5`'s *In* line:**
-
-> - **In** - `spec/planet.md`, *a drawing never betrays how it was made. A viewer sees the planet,
->   never the process*
-
-**Why it matters even though the rule is unchanged.** An *In* line is where a capability says which
-promise it is keeping. **A paraphrase cannot be checked against its source**, so it stops being a
-citation and becomes a second copy that can drift - which is what `spec/README.md` keeps relationships
-in one place to prevent. **This one had already drifted far enough that a machine could not match it.**
+*Nothing is open. Everything filed has been decided.*
 
 
 ## Addressed to other perspectives
+
+### S-97 - `P-396` gives the notation a second noun, and the release cannot write it yet
+
+**to** code - **status** open - **raised** 2026-09-11 - **source** `P-396` and `P-398` promoted
+
+**`spec/console.md` -> *The language* now says a rule may name one thing and say what changes about
+it**, rather than taking a quantity of its kind - and that what is named keeps its `id`, what it
+holds, and what it has already spent. **Sean chose this over patching `move` three times.**
+
+**It settles a contradiction older than `P-390`.** `move`'s third row consumes `1 unit`, a quantity;
+its fourth takes energy from *that unit*, one particular thing; and `spec/logistics.md` says there is
+never a quantity of a thing with an `id`. **One of those rows has always been unwritable.**
+
+**Nothing is red and nothing is buildable yet.** The release's recipe table has four roles and none
+of them names a thing and changes it, so `move` still reads as it did. **This lane has not invented a
+fifth role** - the row's shape is the next proposal and Sean will see it before you do.
+
+**What it will mean when it lands**, so it is not a surprise: `move` stops being a destruction and a
+creation. The unit that arrives is the one that left, which is why its tank and its `id` survive, and
+**why the rule that a created thing arrives holding its tokens never fires for it** - that rule is
+unchanged and still right for a newly built extractor.
+
+**`P-398` fixed `R-5`'s `In` line**, which quoted words `spec/planet.md` does not contain. **All
+twelve `In` lines in the release are now verbatim in the file they cite**, checked after the
+promotion. `S-96` is the standing check and is still open to you.
 
 ### S-96 - A check for `In` lines: twelve cite a file, and two were not quoting it
 
@@ -3630,6 +3588,8 @@ work the release exists to order.
 | P-394, the fiction and the rule agree about what a source holds                                                              | `spec/narrative.md` -> Violence and order                                                                                                                                                                | 2026-09-11 |
 | P-395, `R-10`: a generated drawing is legible in the reader's theme                                                          | `releases/first-release.md` -> Capabilities                                                                                                                                                              | 2026-09-11 |
 | P-397, the release's `In` line quotes the sentence `P-390` replaced                                                          | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-11 |
+| P-396, a rule may name one thing and say what changes about it                                                               | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-11 |
+| P-398, `R-5` quoted words `spec/planet.md` does not contain                                                                  | `releases/first-release.md` -> Capabilities                                                                                                                                                              | 2026-09-11 |
 | P-389, a source is where what it holds waits, since one of the three holds turns                                             | `spec/resources.md` -> The list                                                                                                                                                                          | 2026-09-11 |
 | P-387, a line that makes may be soft, and a line that takes may not                                                          | `spec/invariants.md` -> What a rule may cost                                                                                                                                                             | 2026-09-11 |
 

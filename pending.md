@@ -8,8 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-396** - A rule may name one thing and say what changes about it · `docs/notes/proposals.md`
-- **P-398** - `R-5` quotes words `spec/planet.md` does not contain, and it is vetted · `docs/notes/proposals.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
@@ -20,13 +18,13 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-396** - `8e4ffac` P-396: the cause predates P-390 and is visible inside move's own rows · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (10)
+### To code (11)
 
+- **S-97** - `P-396` gives the notation a second noun, and the release cannot write it yet · `docs/notes/proposals.md`
 - **S-96** - A check for `In` lines: twelve cite a file, and two were not quoting it · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's nine data tables have no data file to be generated from · `docs/notes/proposals.md`
@@ -85,11 +83,11 @@ it exists to ask.
 
 - `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310, P-342, P-362, P-375, P-379, P-382, P-385, P-397
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210, P-286, P-288, P-308, P-312, P-314, P-331
+- `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366, P-378, P-396
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229, P-230, P-250, P-251, P-263, P-266, P-283
-- `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366, P-378
 - `spec/planet.md` -> Presentation - P-10, P-11, P-53, P-88, P-96, P-97, P-98, P-107, P-104, P-105
+- `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122, P-330, P-333, P-335, P-395, P-398
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119, P-172, P-392
-- `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122, P-330, P-333, P-335, P-395
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208, P-277, P-346
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217, P-364
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147, P-193, P-199, P-213, P-218, P-222

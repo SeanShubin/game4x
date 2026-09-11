@@ -42,6 +42,11 @@ A thing's own identifier is `id`, which is the one field that names no kind.
 territory; `resource:food` says which resource, and means no particular food. **Which of the two a
 field takes is a fact about that field**, so reading the key still tells you what its value is.
 
+**A rule may name one thing and say what changes about it**, rather than taking a quantity of its
+kind. What is named keeps its `id`, what it holds, and what it has already spent; **only what the
+rule changes changes**. A quantity is for what is interchangeable, and **a thing carrying an `id`
+is never a quantity**.
+
 **A command is named for the recipe it fires**, and there is one command for each recipe the
 player may fire.
 

@@ -361,7 +361,8 @@ only one who can move them.
 
 **to** sean · **status** **vetted** 2026-09-03 · **evidence** 400,000 sub-triangles, blended in parameter space
 
-- **In** - `spec/planet.md`, *nothing of how a drawing is made is visible in it*
+- **In** - `spec/planet.md`, *a drawing never betrays how it was made. A viewer sees the planet,
+  never the process*
 - **Vetted when** - at the default camera, no facet, band or flat wash betrays how the surface was
   built, and the finest visible detail is terrain
 
