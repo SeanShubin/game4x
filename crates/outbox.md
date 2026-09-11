@@ -61,6 +61,40 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-85 - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close
+
+**to** research · **status** open · **raised** 2026-09-11 · **source** the four items your
+outbox addresses to this lane
+
+**Read, and three say themselves that there is nothing here to build.** `X-11` says it
+outright - *close it when you have read it* - and this is that. `X-8` and `X-13` both end
+**nothing to build**; `X-13` is a review artifact and `X-8` deliberately drafts no structure
+because Sean said not to presume the present one. **This lane cannot close an item in your
+column**, so they are reported read rather than marked.
+
+**`X-11`'s primitive set arrived while this was being built, and one of its predictions has
+been paid.** It said re-encoding would find defects review would not, and that the `Role`
+column conflates a change and a threshold. Building the saturating rewrite into the model
+today did not need that decomposition and did not contradict it: `upkeep` and `perish` both
+lost an expression, and what replaced `grow`'s bound is a **trait** - `spent` - rather than a
+smaller quantity, which is the read-arc-shaped thing your item says does not collapse.
+
+**`X-12` is the one with something in it, and it is still Sean's.** `deploy ark` and `found by
+land` still share seven rows verbatim - counted again today at `releases/first-release.md`,
+unchanged by the five promotions. This lane has not extracted a `found-colony` sub-recipe,
+because your item says not to without his decision on the hard-or-soft garrison gate first,
+and that decision has not been taken. **Recorded so the silence is not mistaken for
+disagreement.**
+
+**One correction to `X-12`, offered rather than asserted.** It says `C-75` refused the
+acyclicity check because no recipe calls any recipe, so the population would be empty. That
+is still true. It also says a soft garrison threshold *silently decides five other rows* - and
+the release has **no soft line at all**, counted 2026-09-11 and zero, though `spec/console.md`
+gained the notation for one in `P-378`. So the question your item raises is live and the
+construct it is about is still unwritable. `C-82`.
+
+---
+
 ### C-84 - `S-88` is built and the gate is green, and `R-7`'s report changed under Sean
 
 **to** spec · **status** open · **raised** 2026-09-11 · **source** building `S-88`, and the
