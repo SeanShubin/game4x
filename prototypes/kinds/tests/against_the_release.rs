@@ -83,15 +83,38 @@ fn the_release_tables_are_the_ones_in_this_crate() {
     }
 }
 
-/// Fifteen. Twenty became sixteen by collapsing, not by cutting: `launch` was `move` with
-/// a different destination, `land` became `deploy ark`, `eat` was `upkeep` with a citizen's
-/// upkeep assumed rather than written, `depart` was `perish`, and `revert` could never fire.
-/// Then food gained a `keeps` counter, and `age` is what counts it down.
+/// Twenty-four blocks under twenty names.
+///
+/// Twenty became sixteen by collapsing, not by cutting: `launch` was `move` with a different
+/// destination, `land` became `deploy ark`, `eat` was `upkeep` with a citizen's upkeep
+/// assumed rather than written, `depart` was `perish`, and `revert` could never fire. Then
+/// food gained a `keeps` counter, and `age` is what counts it down.
+///
+/// **Sixteen became twenty-four in the saturating rewrite.** `grow` went and `bear`, `breed`
+/// and `renew` replaced it; the two capacity clamps became `stow` and `discard`, each stated
+/// once per kind because `P-373` makes a rule whose subject is a family a rule for each of
+/// them. `P-380` added two more `discard` rows for `labor` and `fertility`.
+///
+/// **Both numbers, because the difference is the whole of what deduplication means here.**
+/// `RECIPES` holds blocks, and a check on blocks alone would pass a version that had
+/// forgotten `stow` was one recipe stated twice.
 #[test]
-fn there_are_sixteen_recipes() {
-    // Fifteen until `P-260` added `build store`, which is what a territory needs before
-    // it keeps anything at all between turns.
-    assert_eq!(kinds::RECIPES.len(), 16);
+fn there_are_twenty_four_recipe_blocks_under_twenty_names() {
+    assert_eq!(kinds::RECIPES.len(), 24);
+
+    let mut names: Vec<&str> = kinds::RECIPES.iter().map(|recipe| recipe.name).collect();
+    names.sort_unstable();
+    names.dedup();
+    assert_eq!(
+        names.len(),
+        20,
+        "twenty distinct names, and these are {names:?}"
+    );
+
+    assert!(
+        names.len() < kinds::RECIPES.len(),
+        "no name is stated twice, so the two counts above are one check rather than two"
+    );
 }
 
 /// Every name in the recipes' `Kind` column is a kind or a family the release declares.
@@ -118,10 +141,12 @@ fn every_kind_a_recipe_names_is_declared() {
 
     // Over every case, and how many cases there were. A column that stopped being the fifth
     // would leave this checking an empty set and passing.
+    // Seventeen since `fertility` arrived - thirteen kinds and the four families, counted
+    // from the failure that named them.
     assert_eq!(
         used.len(),
-        16,
-        "sixteen distinct names across the recipes' Kind column, and these are {used:?}"
+        17,
+        "seventeen distinct names across the recipes' Kind column, and these are {used:?}"
     );
 }
 
@@ -229,23 +254,44 @@ fn a_recipe_naming_a_family_matches_every_kind_in_it() {
         "`thing` is every kind above, so declaring a territory puts one inside the family"
     );
 
-    // **`grow`'s `thing, houses` row was the example here and `P-310` deleted it.** The row
-    // published a requirement nothing could satisfy: no kind carried `houses`, and the only
-    // three occurrences of the word in the tree were its own declaration, the qualifier, and
-    // this row. What replaces it as the example is the family that is still load-bearing -
-    // `grow` consumes `food, surplus`, and `surplus` is a trait of food rather than of a
-    // family, so the two are checked side by side.
-    let grow = kinds::RECIPES
+    // **`grow` was the example here and the saturating rewrite deleted it.** Before that,
+    // `P-310` had deleted the row that was the example before *that* - `thing, houses`, a
+    // requirement nothing could satisfy and no kind carried. **`age` is the example now**,
+    // and it is the better one: it names the family `thing` and narrows it with `keeps at
+    // least 1`, so a family and a trait on it are checked in the one row rather than side by
+    // side.
+    let age = kinds::RECIPES
         .iter()
-        .find(|recipe| recipe.name == "grow")
-        .expect("the world grows citizens");
+        .find(|recipe| recipe.name == "age")
+        .expect("what expires expires");
+    assert_eq!(age.lines.len(), 2, "one thing in and one thing out");
     assert!(
-        grow.lines
+        age.lines
             .iter()
-            .all(|line| line.traits.iter().all(|t| t.written != "houses")),
+            .all(|line| line.noun == kinds::Noun::Any(Family::Thing)),
+        "both of `age`'s rows name the family rather than a kind, which is what makes it \
+         the example"
+    );
+    assert_eq!(
+        age.lines[0]
+            .traits
+            .iter()
+            .map(|qualifier| qualifier.written)
+            .collect::<Vec<_>>(),
+        ["keeps at least 1"],
+        "the family is narrowed by a trait, and that narrowing is the thing under test"
+    );
+
+    // **`houses` is gone and stays gone.** It was declared, qualified and used in exactly one
+    // row, and nothing enforced it. Asserted over every recipe rather than over the one that
+    // had it, because the row that carried it no longer exists to check.
+    assert!(
+        kinds::RECIPES.iter().all(|recipe| recipe
+            .lines
+            .iter()
+            .all(|line| line.traits.iter().all(|t| t.written != "houses"))),
         "`houses` is gone from the release and must be gone from here - `P-310`, `P-312`"
     );
-    assert_eq!(grow.lines.len(), 2, "three rows became two");
 }
 
 /// Every role the release writes is one of the four, and each is used.

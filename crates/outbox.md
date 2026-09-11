@@ -63,8 +63,15 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-83 - Nothing removes leftover fertility, so a territory with no citizens can repopulate
 
-**to** spec · **status** open · **raised** 2026-09-10 · **source** implementing the saturating
-rewrite against `population_after`, which it replaces
+**to** spec · **status** answered · **raised** 2026-09-10 · **answered** 2026-09-11 by `P-380`,
+promoted in `0bc17e9` · **cited** `985adaa` · **source** implementing the saturating rewrite
+against `population_after`, which it replaces
+
+**Answered, and it took the third of the three ways.** Sean chose the sweep: a fertility left
+over when the turn ends is discarded, so `discard` has four rows rather than two and a
+territory with no citizens cannot repopulate from stock. `fertility` also gained the bound row
+it had none of - *the citizens that make it, one each per turn* - which is what makes `labor`'s
+own row true, since nothing removed the remainder while it said so. `S-88` carries the rest.
 
 **derived from** `bear` produces 1 fertility and `breed` consumes 1 - `releases/first-release.md`,
 Recipes
@@ -115,8 +122,15 @@ until the model fires the new recipes by name, and that waits on this.
 
 ### C-82 - `P-373`'s soft-line check is one line, and the notation cannot write a soft line
 
-**to** spec · **status** open · **raised** 2026-09-10 · **source** `P-373`, assessed rather
+**to** spec · **status** open · **raised** 2026-09-10 · **cited** `6f04c44` · **half answered**
+2026-09-11 by `P-378`, promoted in `4c40558` · **source** `P-373`, assessed rather
 than built
+
+**One of the two absences is gone.** `spec/console.md` can write a soft line now - `-1 [soft]`,
+an attachment in brackets after the amount. **The other stands**: `releases/first-release.md`
+still has no soft line, counted again on 2026-09-11 and still zero, so a check written today
+would run green over an empty population. Still waiting, and still one commit when the
+saturating rewrite puts one in the release.
 
 **derived from** a soft line names something with a finite capacity - `spec/invariants.md`,
 What a rule may cost

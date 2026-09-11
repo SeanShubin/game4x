@@ -28,7 +28,12 @@ pub mod release;
 // Kinds
 // ---------------------------------------------------------------------------------------
 
-/// The sixteen kinds the release declares.
+/// The seventeen kinds the release declares.
+///
+/// **`fertility` is the seventeenth**, arriving with the saturating rewrite: `grow` consumed
+/// *the lesser of the surplus food and the citizens here*, and `bear`, `breed` and `renew`
+/// are that rule written as smaller ones that fire as many times as they can. Fertility is
+/// the thing they pass between them - a citizen's capacity to raise one more.
 ///
 /// **Ten until `P-192`.** The recipes' `Kind` column had held `territory` in four rows all
 /// along, and the Kinds table did not list it - so the release named a kind it had not
@@ -53,6 +58,7 @@ pub enum Kind {
     Deposit,
     Adjacency,
     Game,
+    Fertility,
 }
 
 impl Kind {
@@ -74,6 +80,7 @@ impl Kind {
             Kind::Deposit => "deposit",
             Kind::Adjacency => "adjacency",
             Kind::Game => "game",
+            Kind::Fertility => "fertility",
         }
     }
 
@@ -98,6 +105,10 @@ impl Kind {
             Kind::Deposit => "what a territory's ground offers of one resource, and how richly",
             Kind::Adjacency => "two places that share an edge, held by the thing that holds them",
             Kind::Game => "every thing is in it, and it is the one thing that is in nothing",
+            Kind::Fertility => concat!(
+                "a citizen's capacity to raise one more, spent by raising one ",
+                "and renewed each turn"
+            ),
         }
     }
 
@@ -121,6 +132,11 @@ impl Kind {
             Kind::Ark => "a capacity of 2",
             Kind::Pioneer => "a capacity of 2",
             Kind::Labor => "the citizens that make it, one each per turn",
+            // **`P-380` gave `fertility` this row, word for word with `labor`'s above**, and
+            // in doing so made `labor`'s own row true: both are transient, and nothing swept
+            // the remainder while the sentence said the citizens bounded it. `discard` has
+            // four rows now rather than two.
+            Kind::Fertility => "the citizens that make it, one each per turn",
             // **`P-258`: a territory declares no capacity for a resource.** It declares
             // capacity for the things that hold them, so what it keeps is what its stores
             // hold - and a territory that has built none keeps nothing. The flat twenty was
@@ -144,7 +160,7 @@ impl Kind {
 }
 
 /// In the order the Kinds table lists them.
-pub const KINDS: [Kind; 16] = [
+pub const KINDS: [Kind; 17] = [
     Kind::Citizen,
     Kind::Garrison,
     Kind::Extractor,
@@ -161,10 +177,11 @@ pub const KINDS: [Kind; 16] = [
     Kind::Deposit,
     Kind::Adjacency,
     Kind::Game,
+    Kind::Fertility,
 ];
 
 /// In the order the bounds table lists them, which is not the Kinds order.
-pub const BOUND_ORDER: [Kind; 11] = [
+pub const BOUND_ORDER: [Kind; 12] = [
     Kind::Citizen,
     Kind::Garrison,
     Kind::Extractor,
@@ -173,6 +190,7 @@ pub const BOUND_ORDER: [Kind; 11] = [
     Kind::Ark,
     Kind::Pioneer,
     Kind::Labor,
+    Kind::Fertility,
     Kind::Food,
     Kind::Metal,
     Kind::Energy,
@@ -302,7 +320,7 @@ pub struct TraitRow {
     pub held: Held,
 }
 
-pub const TRAITS: [TraitRow; 20] = [
+pub const TRAITS: [TraitRow; 21] = [
     TraitRow {
         name: "kind",
         of: "every thing",
@@ -439,6 +457,16 @@ pub const TRAITS: [TraitRow; 20] = [
     TraitRow {
         name: "movable",
         of: "whatever moves",
+        values: "yes or no",
+        held: Held::Stored,
+    },
+    // **The saturating rewrite's own trait.** `bear` turns a fertile citizen spent and leaves
+    // a fertility behind; `renew` turns a spent citizen fertile again, once per turn. It is
+    // what stops a citizen bearing twice in one ending, which `grow`'s expression used to do
+    // by bounding the whole increase at the number of citizens.
+    TraitRow {
+        name: "spent",
+        of: "a citizen",
         values: "yes or no",
         held: Held::Stored,
     },
@@ -693,24 +721,11 @@ const fn measured(role: Role, quantity: Quantity, noun: Noun) -> Line {
     }
 }
 
-/// A quantity that is an expression, on a kind that is also qualified.
-///
-/// `grow` is the one row that needs both - `P-310` gave it *the lesser of the surplus food
-/// and the citizens here* while it still consumes food that is `surplus`.
-const fn measured_traited(
-    role: Role,
-    quantity: Quantity,
-    noun: Noun,
-    traits: &'static [Qualifier],
-) -> Line {
-    Line {
-        role,
-        quantity,
-        noun,
-        traits,
-        place: None,
-    }
-}
+// **`measured_traited` was here and is gone with `grow`.** It existed for the one row that
+// needed an expression and a qualifier at once - *the lesser of the surplus food and the
+// citizens here*, on food that is `surplus`. The saturating rewrite removed that row, so
+// every remaining expression is `work`'s and carries no qualifier. Deleted rather than kept
+// against a future caller: an unused constructor is a shape the release no longer has.
 
 use Kind::*;
 use Owner::{Player, World};
@@ -728,8 +743,10 @@ const FOR_METAL: [Qualifier; 1] = [by("metal", "resource")];
 const OF_RESOURCE: [Qualifier; 1] = [by("`$resource`", "resource")];
 const READY: [Qualifier; 1] = [by("ready", "ready")];
 const NOT_READY: [Qualifier; 1] = [by("not ready", "ready")];
-const SURPLUS: [Qualifier; 1] = [by("surplus", "surplus")];
-const WITH_UPKEEP: [Qualifier; 1] = [by("with upkeep", "upkeep")];
+// **`fertile` and `spent` are one trait read both ways** - `spent`, yes or no. `bear` takes a
+// citizen that is not spent and leaves one that is; `renew` does the reverse, once per turn.
+const FERTILE: [Qualifier; 1] = [by("fertile", "spent")];
+const SPENT: [Qualifier; 1] = [by("spent", "spent")];
 const UPKEEP_UNPAID: [Qualifier; 1] = [by("whose upkeep is unpaid", "unpaid")];
 const KEEPS_NONE: [Qualifier; 1] = [by("keeps 0", "keeps")];
 const KEEPS_SOME: [Qualifier; 1] = [by("keeps at least 1", "keeps")];
@@ -865,44 +882,63 @@ pub const RECIPES: &[Recipe] = &[
             ),
         ],
     },
+    // **The world's ten, in `P-379`'s stated order** - `upkeep`, then `bear`, `breed` and
+    // `renew`, then `perish`, then `age`, then `spoil`, then `stow` and `discard`, then
+    // `refresh`. It was six, and the saturating rewrite is what changed them: `P-373` says a
+    // rule whose quantity is read from the state is written as a smaller rule that fires as
+    // many times as it can.
     Recipe {
+        // **Every quantity is a constant now.** It was *require 1 thing with upkeep* and
+        // *consume the thing's upkeep food*; a citizen is the only thing in this release with
+        // upkeep and its upkeep is one food, so the rule that fires once per citizen says the
+        // same thing without reading a trait for the amount.
         name: "upkeep",
         owner: World,
         lines: &[
-            traited(Require, 1, THING, &WITH_UPKEEP),
-            measured(Consume, OfATrait("the thing's upkeep"), Noun::Of(Food)),
+            just(Require, 1, Noun::Of(Citizen)),
+            just(Consume, 1, Noun::Of(Food)),
         ],
     },
+    // **`grow` is gone and these three replace it.** It consumed *the lesser of the surplus
+    // food and the citizens here*, which is a quantity read from the state. `bear` makes one
+    // fertility per fertile citizen and turns that citizen spent; `breed` turns a fertility
+    // and a food into a citizen; `renew` makes a spent citizen fertile again. **The `spent`
+    // trait is what bounds the increase at the number of citizens** - the job `grow`'s
+    // expression used to do - because a citizen that has borne cannot bear again this turn.
     Recipe {
-        name: "grow",
+        name: "bear",
         owner: World,
-        // **`P-310`: three rows become two, and the fiction goes.** The `require 1 thing,
-        // houses` row published a requirement nothing could satisfy and nothing enforced -
-        // no kind carried `houses`, and `population_after(citizens, food)` takes two
-        // arguments, neither of them housing. And the quantities were `1`, which said one
-        // new citizen per surplus food: at 2 citizens and 6 food the table promised four
-        // where `spec/population.md` and the code both say two.
         lines: &[
-            measured_traited(
-                Consume,
-                OfATrait("the lesser of the surplus food and the citizens here"),
-                Noun::Of(Food),
-                &SURPLUS,
-            ),
-            measured(
-                Produce,
-                OfATrait("the lesser of the surplus food and the citizens here"),
-                Noun::Of(Citizen),
-            ),
+            traited(Consume, 1, Noun::Of(Citizen), &FERTILE),
+            traited(Produce, 1, Noun::Of(Citizen), &SPENT),
+            just(Produce, 1, Noun::Of(Fertility)),
         ],
     },
     Recipe {
+        name: "breed",
+        owner: World,
+        lines: &[
+            just(Consume, 1, Noun::Of(Fertility)),
+            just(Consume, 1, Noun::Of(Food)),
+            just(Produce, 1, Noun::Of(Citizen)),
+        ],
+    },
+    Recipe {
+        name: "renew",
+        owner: World,
+        lines: &[
+            traited(Consume, 1, Noun::Of(Citizen), &SPENT),
+            traited(Produce, 1, Noun::Of(Citizen), &FERTILE),
+        ],
+    },
+    Recipe {
+        // **One row, and it used to have two.** The second produced *the thing's metal* in
+        // metal, which is a quantity read from a trait; a citizen is what perishes and a
+        // citizen has no metal in it, so the row gave back nothing and said it in an
+        // expression.
         name: "perish",
         owner: World,
-        lines: &[
-            traited(Consume, 1, THING, &UPKEEP_UNPAID),
-            measured(Produce, OfATrait("the thing's metal"), Noun::Of(Metal)),
-        ],
+        lines: &[traited(Consume, 1, Noun::Of(Citizen), &UPKEEP_UNPAID)],
     },
     Recipe {
         // **`P-340`: `age` fires before `spoil`, and both name `thing`.** Under the old
@@ -921,6 +957,52 @@ pub const RECIPES: &[Recipe] = &[
         name: "spoil",
         owner: World,
         lines: &[traited(Consume, 1, THING, &KEEPS_NONE)],
+    },
+    // **`stow` and `discard` are each stated once per kind, which is `P-373` again.** A rule
+    // whose subject is a family is a rule for each member, and writing *a resource* here
+    // would be one rule with a quantity that depends on which member it caught. So `stow` has
+    // two blocks and `discard` four - and `discard`'s four are not a family at all: metal and
+    // energy are resources returning to their source, `labor` and `fertility` are transient
+    // and have no source to return to.
+    Recipe {
+        name: "stow",
+        owner: World,
+        lines: &[
+            just(Consume, 1, Noun::Of(Metal)),
+            placed(Produce, 1, Noun::Of(Metal), &[], "a store for metal"),
+        ],
+    },
+    Recipe {
+        name: "stow",
+        owner: World,
+        lines: &[
+            just(Consume, 1, Noun::Of(Energy)),
+            placed(Produce, 1, Noun::Of(Energy), &[], "a store for energy"),
+        ],
+    },
+    Recipe {
+        name: "discard",
+        owner: World,
+        lines: &[just(Consume, 1, Noun::Of(Metal))],
+    },
+    Recipe {
+        name: "discard",
+        owner: World,
+        lines: &[just(Consume, 1, Noun::Of(Energy))],
+    },
+    // **`P-380` added these two**, and they are what makes `labor`'s and `fertility`'s bound
+    // rows true: both are transient, always in disorder, and nothing swept the remainder
+    // before. A fertility that outlived the turn let a territory with no citizens repopulate
+    // from stock - `C-83`.
+    Recipe {
+        name: "discard",
+        owner: World,
+        lines: &[just(Consume, 1, Noun::Of(Labor))],
+    },
+    Recipe {
+        name: "discard",
+        owner: World,
+        lines: &[just(Consume, 1, Noun::Of(Fertility))],
     },
     Recipe {
         name: "refresh",

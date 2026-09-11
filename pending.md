@@ -20,8 +20,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **C-83** - `985adaa` P-380 from C-83: two kinds nothing sweeps, and one kind nothing bounds · still open in `crates/outbox.md`
-- **C-82** - `6f04c44` P-378 from C-82: how a line is marked soft, which P-373 governs and nothing can write · still open in `crates/outbox.md`
+- **S-88** - `7460e97` S-88's four petri tests, and the exclusion's cost measured the right way round · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
@@ -42,7 +41,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-89** - `Q-59` re-measured: four of your seven landed while it waited, and three are filed · `docs/notes/proposals.md`
 
-### To spec (37)
+### To spec (36)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -50,7 +49,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
-- **C-83** - Nothing removes leftover fertility, so a territory with no citizens can repopulate · `crates/outbox.md`
 - **C-82** - `P-373`'s soft-line check is one line, and the notation cannot write a soft line · `crates/outbox.md`
 - **C-81** - `Capacity` stores the total and `P-374` made room the stored one · `crates/outbox.md`
 - **C-80** - Matter cycling has no release to build against, and `held.clear()` is the one line that knows · `crates/outbox.md`

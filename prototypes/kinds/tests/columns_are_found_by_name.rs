@@ -67,7 +67,7 @@ fn a_signature_does_not_depend_on_which_column_a_value_sits_in() {
         .iter()
         .map(|row| plain(&row[0]))
         .collect();
-    assert_eq!(kinds.len(), 16, "sixteen kinds is the population here");
+    assert_eq!(kinds.len(), 17, "seventeen kinds is the population here");
 
     // Recipe, Owner, Role, Qty, Kind, Traits, Where -> reversed, which moves all seven.
     let shuffled = reordered(&document, "## Recipes", &[6, 5, 4, 3, 2, 1, 0]);
@@ -91,7 +91,7 @@ fn a_signature_does_not_depend_on_which_column_a_value_sits_in() {
         pairs_seen += before.pairs.len();
         compared += 1;
     }
-    assert_eq!(compared, 16, "a kind was skipped");
+    assert_eq!(compared, 17, "a kind was skipped");
     assert!(
         pairs_seen > 0,
         "no kind had a single (recipe, role) pair, so the columns under test were never read"
@@ -151,7 +151,7 @@ fn a_trait_of_a_family_reaches_its_members() {
         .iter()
         .map(|row| plain(&row[0]))
         .collect();
-    assert_eq!(kinds.len(), 16, "sixteen kinds is the population here");
+    assert_eq!(kinds.len(), 17, "seventeen kinds is the population here");
     for kind in &kinds {
         assert!(
             signature(&document, kind)
