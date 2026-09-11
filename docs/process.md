@@ -37,6 +37,12 @@ anecdote is not.**
 
 The third one is the data dump in this case.
 
+**A fourth, about how I read rather than how I decide.** I want one rule applied everywhere rather
+than a rule with a correct exception, **because uniformity is how I recognise a pattern that
+nobody has named yet.** An exception is an instance of something, and a form that carries
+exceptions hides what they are instances of. **So a smaller diff is not a cheaper answer**: it is
+the same answer with the evidence taken out.
+
 ## What I read, and what I do
 
 - From the specification lane, I read and approve proposals, and I make sure the specification is

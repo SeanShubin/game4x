@@ -8,8 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-411** - The release follows `P-408`: a count per action, carried as a trait · `docs/notes/proposals.md`
-- **P-409** - Uniformity is an instrument, not a preference · `docs/notes/proposals.md`
 - **P-406** - The third version of this sentence today, and the first one written from the purpose rather than the case · `docs/notes/proposals.md`
 - **P-407** - Is a trait that never varies stored, and does it belong in a description · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
@@ -133,6 +131,7 @@ it exists to ask.
 - `docs/process.md` -> Starting the instances - P-268, P-273
 - `docs/process.md` -> What this document has to be - P-302, P-303
 - `docs/process.md` -> Who writes what - P-271, P-316
+- `releases/first-release.md` -> Kinds, Traits, Where things are, Recipes - P-399, P-411
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186
 - `releases/first-release.md` -> What bounds a kind - P-258, P-270
