@@ -10,8 +10,8 @@
 //! the checks operate on, a changed weight is one changed cell where in the SVG it moves every
 //! coordinate after it, and github.com renders it with no deploy at all.
 
-use crate::petri::{Net, by_role, matrix, net};
-use crate::petri_draw::{excluded_table, places_table, recipe_svg, svg, unreached};
+use crate::petri::{Net, by_role, kinds_never_drawn, matrix, net};
+use crate::petri_draw::{excluded_table, places_table, recipe_svg, svg};
 
 /// A markdown table, already padded.
 ///
@@ -63,7 +63,7 @@ fn table(rows: &[Vec<String>]) -> String {
 /// **The accounting comes first deliberately.** A reader who sees the picture first has
 /// already formed a view of what the game is, and a note underneath saying *four recipes are
 /// missing* arrives too late to change it.
-fn accounting(net: &Net) -> String {
+fn accounting(net: &Net, document: &str) -> String {
     let mut out = String::new();
     out.push_str(&format!(
         "The release declares **{} recipes**. **{} are drawn** and **{} are not**, because a \
@@ -79,19 +79,31 @@ fn accounting(net: &Net) -> String {
          and nothing on the page would say so.\n\n",
     );
 
-    let missing = unreached(net);
-    if !missing.is_empty() {
+    // **What the exclusions cost, which is more than four rows.** A page reporting places
+    // with no arcs would always report nothing, because the net only makes a place when an
+    // arc needs one. What is worth saying is which *kinds* the release declares that the
+    // drawn net never mentions at all.
+    let never = kinds_never_drawn(net, document);
+    if !never.is_empty() {
         out.push_str(&format!(
-            "**It costs more than four rows.** {} named by no drawn arc: {}. Those kinds are \
-             not absent from the game - they are absent from what can be drawn of it.\n\n",
-            if missing.len() == 1 {
-                "One place is".to_string()
+            "**It costs more than four rows.** {} the release declares {} nowhere in the \
+             drawn net: {}. **They are not absent from the game - they are absent from what \
+             can be drawn of it**, and `food` is the one that matters: every recipe that \
+             moves it is one of the four above, so a reader looking at the picture for food \
+             would conclude the game has none.\n\n",
+            if never.len() == 1 {
+                "One kind".to_string()
             } else {
-                format!("{} places are", missing.len())
+                format!("{} kinds", never.len())
             },
-            missing
+            if never.len() == 1 {
+                "appears"
+            } else {
+                "appear"
+            },
+            never
                 .iter()
-                .map(|place| format!("`{}`", place.label()))
+                .map(|kind| format!("`{kind}`"))
                 .collect::<Vec<_>>()
                 .join(", ")
         ));
@@ -108,12 +120,24 @@ fn accounting(net: &Net) -> String {
             .collect::<Vec<_>>()
             .join(", ")
     ));
+    let rooms = net.places.iter().filter(|place| place.room).count();
     out.push_str(&format!(
-        "**{} of those arcs are zero tests**, and they are why this is worth drawing rather \
-         than tabulating. Reachability in a plain Petri net is decidable; an inhibitor arc \
-         makes the net Turing-complete. Both of this release's are `limit 0 garrison`, and a \
-         garrison is bounded by a capacity of 1 - a zero test on a bounded place costs \
-         nothing, which is `C-75` and what `X-9` asks the specification to adopt.\n\n",
+        "**{rooms} of those places are room rather than a count** - `P-374`. What a container \
+         stores is the room left, not the total: used capacity is what is there, total \
+         capacity is the two added, and nothing records the total so nothing can disagree \
+         with it. Making a thing takes one of the room and destroying it gives one back. Room \
+         is stored, so room is state, so it is drawn - a diagram showing the count and hiding \
+         the room would be leaving out half of what containment is.\n\n"
+    ));
+    out.push_str(&format!(
+        "**{} of these arcs are zero tests, and that number used to be two.** Reachability in \
+         a plain Petri net is decidable and an inhibitor arc makes the net Turing-complete; \
+         the release had two, both `limit 0 garrison`. `P-374` removed them without meaning \
+         to: *there is no garrison here* is *the garrison's room is untouched*, which is an \
+         ordinary requirement on an ordinary place. **That translation is exact only because \
+         a garrison's capacity is one** - at two, *there is none* and *there is room for one* \
+         are different claims - and the reader is refused rather than approximated if a \
+         `limit 0` ever appears somewhere with more room than that.\n\n",
         net.inhibitors().len()
     ));
     out
@@ -133,14 +157,15 @@ pub fn markdown(document: &str) -> String {
          network **is** a Petri net rather than resembling one. The release's four roles are \
          the four arc kinds and nothing had to be invented to get from one to the other.\n\n",
     );
-    out.push_str(&accounting(&net));
+    out.push_str(&accounting(&net, document));
 
     out.push_str(
         "A **place** is a circle - somewhere a kind can be, which is a container and a kind \
-         together, because energy in a tank is not energy in a territory. A **transition** is a \
-         bar: one recipe. An arc into a bar is `consume`, or `require` when it is dotted and \
-         the thing is not taken; an arc out of a bar is `produce`. An **inhibitor arc** has a \
-         hollow head and fires only when its place is empty.\n\n",
+         together, because energy in a tank is not energy in a territory and the first of \
+         those is bounded while the second has no limit. A place named *room for* something \
+         holds the room left in its container rather than the things themselves. A \
+         **transition** is a bar: one recipe. An arc into a bar is `consume`, or `require` \
+         when it is dotted and the thing is not taken; an arc out of a bar is `produce`.\n\n",
     );
 
     out.push_str("## The whole net\n\n");

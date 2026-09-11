@@ -107,10 +107,27 @@ impl Description {
 /// `spec/logistics.md`:
 ///
 /// > What a thing may contain is a maximum **per kind, per family of kinds, or per kind
-/// > carrying a particular value of a trait**. That maximum is its **total capacity** for
-/// > that kind, and it is stored. **Used capacity** is how many of that kind it holds, and
-/// > **available capacity** is the total less the used; both are derived, so neither can
-/// > disagree with what is there.
+/// > carrying a particular value of a trait**. **What is stored is the room left**: how many
+/// > more of that kind it could take. **Used capacity** is how many it holds, which is simply
+/// > what is there, and **total capacity** is the two added. **Nothing records the total**, so
+/// > nothing can disagree with it.
+///
+/// # `P-374` swapped which of the three is the stored one
+///
+/// **It used to be the total**, with used and available derived from it, and this type still
+/// stores `total`. That is now the derived quantity and `room` is the stored one - the same
+/// three numbers with a different one of them written down.
+///
+/// **The swap answers `C-46` rather than leaving it open.** That item said a total capacity
+/// per kind cannot be written into a description, because a description is a flat map and a
+/// territory has one total per kind. Room has exactly the same shape, so the difficulty does
+/// not go away by itself - but `P-374` adds the half that does: **room is spent and given
+/// back**, so it moves by the same rules as anything else a thing holds, and a thing that
+/// holds room is a thing a description can carry.
+///
+/// **This type has not followed yet.** `C-81` carries what it costs to make it, and nothing
+/// in the game is wrong meanwhile: the total and the room are each derivable from the other
+/// wherever both ends are known, which is everywhere the model looks today.
 ///
 /// **Neither field is in the data file, and they are absent for different reasons.** Saying
 /// so is `Q-66`: one account made the omission sound like a rule being obeyed, and the other
@@ -118,10 +135,9 @@ impl Description {
 ///
 /// - **`used` is derived**, so `spec/console.md` keeps it out: *a derived trait is never part
 ///   of one*. That is the rule working.
-/// - **`total` is stored** - `releases/first-release.md` -> *Traits*, and the quotation
-///   above says it outright - **so nothing excuses its absence.** It is out because a
-///   description is a flat map and a territory has a total capacity per kind, which the map
-///   form has no way to write. `C-46`, and it is a gap rather than a simplification.
+/// - **`total` was the stored one** when this was written, so nothing excused its absence.
+///   It is out because a description is a flat map and a territory has a total capacity per
+///   kind, which the map form has no way to write. `C-46`.
 ///
 /// Both are here because `S-54` asks for `used/total` on a collapsed summary line, and a
 /// container that cannot say whether it is full defeats the reason for collapsing it.

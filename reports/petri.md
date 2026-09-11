@@ -8,11 +8,15 @@ The release declares **16 recipes**. **12 are drawn** and **4 are not**, because
 
 **That is the whole of what is missing, and it is counted rather than mentioned.** A diagram that quietly left them out would be a picture of a game that is not this one, and nothing on the page would say so.
 
-**15 places and 49 arcs** between them: 20 `consume`, 2 `limit`, 22 `produce`, 5 `require`.
+**It costs more than four rows.** 5 kinds the release declares appear nowhere in the drawn net: `food`, `orbit`, `deposit`, `adjacency`, `game`. **They are not absent from the game - they are absent from what can be drawn of it**, and `food` is the one that matters: every recipe that moves it is one of the four above, so a reader looking at the picture for food would conclude the game has none.
 
-**2 of those arcs are zero tests**, and they are why this is worth drawing rather than tabulating. Reachability in a plain Petri net is decidable; an inhibitor arc makes the net Turing-complete. Both of this release's are `limit 0 garrison`, and a garrison is bounded by a capacity of 1 - a zero test on a bounded place costs nothing, which is `C-75` and what `X-9` asks the specification to adopt.
+**21 places and 65 arcs** between them: 34 `consume`, 24 `produce`, 7 `require`.
 
-A **place** is a circle - somewhere a kind can be, which is a container and a kind together, because energy in a tank is not energy in a territory. A **transition** is a bar: one recipe. An arc into a bar is `consume`, or `require` when it is dotted and the thing is not taken; an arc out of a bar is `produce`. An **inhibitor arc** has a hollow head and fires only when its place is empty.
+**6 of those places are room rather than a count** - `P-374`. What a container stores is the room left, not the total: used capacity is what is there, total capacity is the two added, and nothing records the total so nothing can disagree with it. Making a thing takes one of the room and destroying it gives one back. Room is stored, so room is state, so it is drawn - a diagram showing the count and hiding the room would be leaving out half of what containment is.
+
+**0 of these arcs are zero tests, and that number used to be two.** Reachability in a plain Petri net is decidable and an inhibitor arc makes the net Turing-complete; the release had two, both `limit 0 garrison`. `P-374` removed them without meaning to: *there is no garrison here* is *the garrison's room is untouched*, which is an ordinary requirement on an ordinary place. **That translation is exact only because a garrison's capacity is one** - at two, *there is none* and *there is room for one* are different claims - and the reader is refused rather than approximated if a `limit 0` ever appears somewhere with more room than that.
+
+A **place** is a circle - somewhere a kind can be, which is a container and a kind together, because energy in a tank is not energy in a territory and the first of those is bounded while the second has no limit. A place named *room for* something holds the room left in its container rather than the things themselves. A **transition** is a bar: one recipe. An arc into a bar is `consume`, or `require` when it is dotted and the thing is not taken; an arc out of a bar is `produce`.
 
 ## The whole net
 
@@ -31,45 +35,57 @@ The drawing is on the page beside this file; what follows is the same net in the
 
 ## Places
 
-| Place                   | Container     | Kind      |
-| ----------------------- | ------------- | --------- |
-| territory in the game   | the game      | territory |
-| ark in an orbit         | an orbit      | ark       |
-| garrison                | a territory   | garrison  |
-| citizen                 | a territory   | citizen   |
-| extractor               | a territory   | extractor |
-| store                   | a territory   | store     |
-| place in the game       | the game      | place     |
-| unit                    | a territory   | unit      |
-| energy in a unit's tank | a unit's tank | energy    |
-| pioneer                 | a territory   | pioneer   |
-| labor                   | a territory   | labor     |
-| metal                   | a territory   | metal     |
-| yard                    | a territory   | yard      |
-| energy                  | a territory   | energy    |
-| thing                   | a territory   | thing     |
+| Place                            | Container     | Kind      |
+| -------------------------------- | ------------- | --------- |
+| territory in the game            | the game      | territory |
+| ark in an orbit                  | an orbit      | ark       |
+| room for garrison                | a territory   | garrison  |
+| garrison                         | a territory   | garrison  |
+| citizen                          | a territory   | citizen   |
+| extractor                        | a territory   | extractor |
+| room for extractor               | a territory   | extractor |
+| store                            | a territory   | store     |
+| room for store                   | a territory   | store     |
+| place in the game                | the game      | place     |
+| unit                             | a territory   | unit      |
+| energy in a unit's tank          | a unit's tank | energy    |
+| room for energy in a unit's tank | a unit's tank | energy    |
+| pioneer                          | a territory   | pioneer   |
+| room for pioneer                 | a territory   | pioneer   |
+| labor                            | a territory   | labor     |
+| metal                            | a territory   | metal     |
+| yard                             | a territory   | yard      |
+| room for yard                    | a territory   | yard      |
+| energy                           | a territory   | energy    |
+| thing                            | a territory   | thing     |
 
 ## The incidence matrix
 
 Places down, transitions across. `-n` is taken, `+n` is made, `rn` is required and not taken, `0!` is the zero test. **This is what the checks operate on.**
 
-| Place                   | deploy ark | move   | found by land | build extractor | build store | build yard | produce pioneer | launch ark | create labor | age    | spoil | refresh |
-| ----------------------- | ---------- | ------ | ------------- | --------------- | ----------- | ---------- | --------------- | ---------- | ------------ | ------ | ----- | ------- |
-| territory in the game   | r1         |        |               |                 |             |            |                 | r1         |              |        |       |         |
-| ark in an orbit         | -1         |        |               |                 |             |            |                 | +1         |              |        |       |         |
-| garrison                | 0!, +1     |        | 0!, +1        |                 |             |            |                 |            |              |        |       |         |
-| citizen                 | +2         |        | +2            |                 |             |            | -2              | -2         | -1, +1       |        |       |         |
-| extractor               | +1, +1     |        | +1, +1        | +1              |             |            |                 |            |              |        |       |         |
-| store                   | +1, +1     |        | +1, +1        |                 | +1          |            |                 |            |              |        |       |         |
-| place in the game       |            | r1, r1 |               |                 |             |            |                 |            |              |        |       |         |
-| unit                    |            | -1, +1 |               |                 |             |            |                 |            |              |        |       |         |
-| energy in a unit's tank |            | -1     |               |                 |             |            |                 |            |              |        |       |         |
-| pioneer                 |            |        | -1            |                 |             |            | +1              |            |              |        |       |         |
-| labor                   |            |        |               | -1              | -1          | -1         |                 |            | +1           |        |       |         |
-| metal                   |            |        |               | -1              | -1          | -15        | -3              | -3         |              |        |       |         |
-| yard                    |            |        |               |                 |             | +1         |                 | r1         |              |        |       |         |
-| energy                  |            |        |               |                 |             |            | -6              | -12        |              |        |       |         |
-| thing                   |            |        |               |                 |             |            |                 |            |              | -1, +1 | -1    | -1, +1  |
+| Place                            | deploy ark | move   | found by land | build extractor | build store | build yard | produce pioneer | launch ark | create labor | age    | spoil | refresh |
+| -------------------------------- | ---------- | ------ | ------------- | --------------- | ----------- | ---------- | --------------- | ---------- | ------------ | ------ | ----- | ------- |
+| territory in the game            | r1         |        |               |                 |             |            |                 | r1         |              |        |       |         |
+| ark in an orbit                  | -1         |        |               |                 |             |            |                 | +1         |              |        |       |         |
+| room for garrison                | r1, -1     |        | r1, -1        |                 |             |            |                 |            |              |        |       |         |
+| garrison                         | +1         |        | +1            |                 |             |            |                 |            |              |        |       |         |
+| citizen                          | +2         |        | +2            |                 |             |            | -2              | -2         | -1, +1       |        |       |         |
+| extractor                        | +1, +1     |        | +1, +1        | +1              |             |            |                 |            |              |        |       |         |
+| room for extractor               | -1, -1     |        | -1, -1        | -1              |             |            |                 |            |              |        |       |         |
+| store                            | +1, +1     |        | +1, +1        |                 | +1          |            |                 |            |              |        |       |         |
+| room for store                   | -1, -1     |        | -1, -1        |                 | -1          |            |                 |            |              |        |       |         |
+| place in the game                |            | r1, r1 |               |                 |             |            |                 |            |              |        |       |         |
+| unit                             |            | -1, +1 |               |                 |             |            |                 |            |              |        |       |         |
+| energy in a unit's tank          |            | -1     |               |                 |             |            |                 |            |              |        |       |         |
+| room for energy in a unit's tank |            | +1     |               |                 |             |            |                 |            |              |        |       |         |
+| pioneer                          |            |        | -1            |                 |             |            | +1              |            |              |        |       |         |
+| room for pioneer                 |            |        | +1            |                 |             |            | -1              |            |              |        |       |         |
+| labor                            |            |        |               | -1              | -1          | -1         |                 |            | +1           |        |       |         |
+| metal                            |            |        |               | -1              | -1          | -15        | -3              | -3         |              |        |       |         |
+| yard                             |            |        |               |                 |             | +1         |                 | r1         |              |        |       |         |
+| room for yard                    |            |        |               |                 |             | -1         |                 |            |              |        |       |         |
+| energy                           |            |        |               |                 |             |            | -6              | -12        |              |        |       |         |
+| thing                            |            |        |               |                 |             |            |                 |            |              | -1, +1 | -1    | -1, +1  |
 
 ## One recipe at a time
 

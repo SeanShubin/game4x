@@ -99,15 +99,117 @@ impl Role {
 pub struct Place {
     pub container: String,
     pub kind: String,
+    /// Whether this is the room left for that kind rather than the count of it.
+    ///
+    /// **`P-374`: what is stored is the room left.** Used capacity is what is there and total
+    /// capacity is the two added, recorded nowhere so that nothing can disagree with it. Room
+    /// is therefore state, and state is a place - drawing the count and leaving the room out
+    /// would be the diagram omitting part of the state, which is the thing its own accounting
+    /// paragraph exists to prevent.
+    pub room: bool,
 }
 
 impl Place {
     pub fn label(&self) -> String {
-        if self.container == "a territory" {
+        let what = if self.container == "a territory" {
             self.kind.clone()
         } else {
             format!("{} in {}", self.kind, self.container)
+        };
+        if self.room {
+            format!("room for {what}")
+        } else {
+            what
         }
+    }
+}
+
+/// The kinds a territory declares room for, and what the release says bounds each.
+///
+/// **A list with a check over it, rather than a rule that reads the words.** The bound is
+/// stated in prose - *a capacity of 1*, *as many as the extractors of its resource* - and a
+/// predicate matching on `capacity` would classify the store as unbounded because its
+/// sentence does not use the word. That is the narrow-predicate failure this repository keeps
+/// recording, so the classification is written down and
+/// `every_bound_the_release_states_is_classified` asserts that every row of the table is in
+/// one list or the other.
+pub const BOUNDED: [(&str, &str); 6] = [
+    ("garrison", "a capacity of 1"),
+    ("extractor", "a capacity, from Territory resources"),
+    ("store", "as many as the extractors of its resource"),
+    ("yard", "a capacity of 1"),
+    ("ark", "a capacity of 2"),
+    ("pioneer", "a capacity of 2"),
+];
+
+/// The kinds a territory bounds by something other than room, and why that is not capacity.
+///
+/// **A bound is not a capacity.** Room is spent and given back - `P-374` - and none of these
+/// works that way: nothing frees a citizen's worth of room by eating, and `P-372` says a
+/// territory declares **no limit** for a resource at all.
+pub const UNBOUNDED: [(&str, &str); 5] = [
+    (
+        "citizen",
+        "the food produced here, through upkeep - a rate, not room",
+    ),
+    ("labor", "the citizens that make it - a rate, not room"),
+    (
+        "food",
+        "no limit: what a territory holds directly is in disorder",
+    ),
+    (
+        "metal",
+        "no limit: what a territory holds directly is in disorder",
+    ),
+    (
+        "energy",
+        "no limit: what a territory holds directly is in disorder",
+    ),
+];
+
+/// Whether the release declares room for this kind in this container.
+///
+/// **A kind is not bounded or unbounded on its own**, which the first version of this got
+/// wrong in both directions at once. Energy in a territory has no limit - `P-372` - and
+/// energy in a unit's tank is bounded by that unit's fuel; an ark in a territory has a
+/// capacity of 2 and an ark in an orbit has none declared at all, so the net grew a *room for
+/// ark in an orbit* that the release never says exists.
+///
+/// **Every container is answered here rather than defaulting**, and
+/// `every_container_the_net_uses_is_classified` asserts the net produces no other.
+pub fn bounded(container: &str, kind: &str) -> bool {
+    match container {
+        // `releases/first-release.md`, *What bounds a kind in a territory*.
+        "a territory" => BOUNDED.iter().any(|(name, _)| *name == kind),
+        // *Where things are*: a store holds the resource it was built for, up to 10; a unit's
+        // tank holds energy, up to the unit's fuel.
+        "a store" | "a unit's tank" => true,
+        // *An orbit holds units and nothing else*, and states no capacity. The capacity of 2
+        // for an ark is stated of a territory.
+        "an orbit" => false,
+        // The game holds the twelve territories and declares no capacity to hold anything,
+        // which is this lane's own `C-68`.
+        "the game" => false,
+        other => panic!("`{other}` holds `{kind}` and nothing says whether it is bounded"),
+    }
+}
+
+/// Every container the release gives things to be in.
+///
+/// Listed so a test can assert the net produces no other, which is what makes the `panic!` in
+/// [`bounded`] a guard rather than a hazard.
+pub const CONTAINERS: [&str; 4] = ["a territory", "a store", "a unit's tank", "an orbit"];
+
+/// The capacity the release states as a number, where it states one.
+///
+/// **Only needed to check one translation.** A `limit 0` row becomes a requirement on room,
+/// and that is equivalent only where the capacity is exactly one: at a capacity of two,
+/// *there is none* and *there is room for one* are different claims.
+pub fn stated_capacity(kind: &str) -> Option<u32> {
+    match kind {
+        "garrison" | "yard" => Some(1),
+        "ark" | "pioneer" => Some(2),
+        _ => None,
     }
 }
 
@@ -238,24 +340,78 @@ pub fn net(document: &str) -> Net {
             if kind.is_empty() {
                 continue;
             }
-            let place = Place {
-                container: container_of(row.get(6).map(String::as_str).unwrap_or_default(), &kind),
-                kind,
-            };
-            let at = match places.iter().position(|it| *it == place) {
-                Some(at) => at,
-                None => {
-                    places.push(place);
-                    places.len() - 1
+            let container = container_of(row.get(6).map(String::as_str).unwrap_or_default(), &kind);
+            let weight = number(row).unwrap_or_default();
+            let traits = row.get(5).cloned().unwrap_or_default();
+
+            let find = |places: &mut Vec<Place>, room: bool| {
+                let place = Place {
+                    container: container.clone(),
+                    kind: kind.clone(),
+                    room,
+                };
+                match places.iter().position(|it| *it == place) {
+                    Some(at) => at,
+                    None => {
+                        places.push(place);
+                        places.len() - 1
+                    }
                 }
             };
+
+            // **A zero test becomes a claim on room** - `P-374`, and it is exact only at a
+            // capacity of one. *There is no garrison* and *there is room for a garrison* are
+            // the same statement when one is the most it can hold, and different statements
+            // at two. So the translation is made only where the release states a capacity of
+            // one, and refused loudly otherwise rather than quietly approximated.
+            if role == Role::Limit && weight == 0 && bounded(&container, &kind) {
+                assert_eq!(
+                    stated_capacity(&kind),
+                    Some(1),
+                    "`limit 0 {kind}` is being read as a requirement on room, which says the \
+                     same thing only where the capacity is one - and {kind}'s is not"
+                );
+                let at = find(&mut places, true);
+                arcs.push(Arc {
+                    transition,
+                    place: at,
+                    role: Role::Require,
+                    weight: 1,
+                    traits,
+                });
+                continue;
+            }
+
+            let at = find(&mut places, false);
             arcs.push(Arc {
                 transition,
                 place: at,
                 role,
-                weight: number(row).unwrap_or_default(),
-                traits: row.get(5).cloned().unwrap_or_default(),
+                weight,
+                traits: traits.clone(),
             });
+
+            // **Making takes room and destroying gives it back** - `P-374`, and the two never
+            // come apart because the total is only ever their sum. A requirement takes
+            // nothing and makes nothing, so it moves no room.
+            if !bounded(&container, &kind) {
+                continue;
+            }
+            let room = match role {
+                Role::Produce => Some(Role::Consume),
+                Role::Consume => Some(Role::Produce),
+                Role::Require | Role::Limit => None,
+            };
+            if let Some(role) = room {
+                let at = find(&mut places, true);
+                arcs.push(Arc {
+                    transition,
+                    place: at,
+                    role,
+                    weight,
+                    traits,
+                });
+            }
         }
     }
 
@@ -327,4 +483,25 @@ pub fn by_role(net: &Net) -> BTreeMap<&'static str, usize> {
         *out.entry(arc.role.name()).or_insert(0) += 1;
     }
     out
+}
+
+/// Kinds the release declares that the drawn net never names.
+///
+/// **This is what the exclusions actually cost**, and it is not the same as a place with no
+/// arcs - the net only makes a place when an arc needs one, so that set is always empty and a
+/// page reporting it would always report nothing.
+///
+/// `food` is the case and neither this lane nor the specification lane predicted it: every
+/// recipe that moves food - `work`, `upkeep`, `grow` - has a state-dependent amount, so all
+/// three are excluded and the drawn net has no food in it anywhere. **A reader looking at the
+/// picture for it would conclude the game has none.**
+pub fn kinds_never_drawn(net: &Net, document: &str) -> Vec<String> {
+    let declared = crate::recipes::body_under(document, "## Kinds");
+    let drawn: Vec<&str> = net.places.iter().map(|place| place.kind.as_str()).collect();
+    declared
+        .iter()
+        .filter_map(|row| row.first())
+        .map(|cell| crate::recipes::plain(cell))
+        .filter(|kind| !kind.is_empty() && !drawn.contains(&kind.as_str()))
+        .collect()
 }

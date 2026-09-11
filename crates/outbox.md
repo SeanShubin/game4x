@@ -61,6 +61,35 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-81 - `Capacity` stores the total and `P-374` made room the stored one
+
+**to** spec · **status** open · **raised** 2026-09-10 · **source** `P-374`, found by the
+quotation check going red on `containment.rs`
+
+**derived from** what is stored is the room left - `spec/logistics.md`, Containment
+
+**What.** `crates/game-model/src/containment.rs` has `Capacity { of, total }` and derives the
+used from what a thing holds. `P-374` swapped which of the three is written down: **room left is
+stored**, used is what is there, and the total is the two added and recorded nowhere.
+
+**Nothing is presently wrong**, which is why this is an item rather than a fix in this commit.
+Each of the three is derivable from the other two, and the model knows both ends everywhere it
+looks - so the game computes the same answers either way. What changes is which number the data
+file would carry if it carried one, and `C-46` is the item that has been waiting on that.
+
+**And `P-374` improves `C-46` rather than only moving it.** That item said a total capacity per
+kind cannot go into a description, because a description is a flat map and a territory has one
+total per kind. **Room has the same shape, so the difficulty does not dissolve** - but room is
+*spent and given back*, which a total never was, so it moves by the same rules as anything else
+a thing holds. A thing that holds room is a thing a description can carry.
+
+**Whether.** Worth doing when `C-46` is, and not before: swapping the stored field without the
+data file following would be churn in the one place where the two numbers are known to agree.
+The Petri net view already draws room as a place - `reports/petri.md` - so the shape is
+exercised somewhere before it is committed to here.
+
+---
+
 ### C-80 - Matter cycling has no release to build against, and `held.clear()` is the one line that knows
 
 **to** spec · **status** open · **raised** 2026-09-10 · **source** `P-369`, and the specification
@@ -74,7 +103,18 @@ labor bring matter out into disorder; matter out of a source is spendable whethe
 a destroyed thing's matter falls into disorder; and what is still in disorder at a turn's end
 returns to its source. **Nothing is destroyed.**
 
-**Why it is not built.** `releases/first-release.md` contains the word *disorder* **zero times**,
+**Partly answered by `P-372`, 2026-09-10.** The release now names disorder: *what a territory
+holds directly is in disorder*, it may be spent the turn it is made, and a territory declares
+**no limit** for a resource. So loose matter has a name and territory resources are explicitly
+unbounded - which the Petri net view already reflects, and which is why no resource has a room
+place in it.
+
+**What is still missing is the sweep**, and it is the half that makes the cycle a cycle: no
+recipe returns what is in disorder to its source at a turn's end, and `spec/turn.md`'s order of
+operations does not have the step. The specification lane says that waits on the saturating
+rewrite.
+
+**When this was filed, `releases/first-release.md` contained the word *disorder* zero times**,
 counted rather than remembered. There is no place for loose matter, no sweep at a turn's end that
 returns it, and no kind or container the tables declare for it. Building it means inventing all
 three, and inventing a rule is not this lane's.
@@ -90,8 +130,9 @@ nothing consistently.
 
 - **Where loose matter is.** A kind, a container, or a property of a territory - the three have
   different consequences for the dump, which states a thing inside what holds it
-- **When the sweep runs.** `spec/turn.md`'s order of operations does not have it
-- **Whether a source is a place at all.** *What is in a source cannot be spent* reads like a place
+- **When the sweep runs.** The order of operations in `spec/turn.md` does not have it
+- **Whether a source is a place at all.** `spec/resources.md`: *what is in a source cannot be
+  spent*. That reads like a place
   with tokens that no transition can take from, which is expressible; *there is no end of what a
   source holds* is not, because an unbounded place is what `X-9` says costs decidability
 
@@ -1263,15 +1304,18 @@ implies six either. A reader with the data file alone cannot say what that groun
 **The reason given is the error, and it is the same one twice in two days.** `P-322`: *`total
 capacity` is untouched and needs nothing. `spec/logistics.md` makes it a fact about
 containment keyed by kind, so it is computed from what a thing holds rather than written.*
-The rule says the opposite. `spec/logistics.md`, under Containment:
+The rule said the opposite at the time: Containment made the **total** the stored thing, with
+used and available derived from it. **A stored trait was described as derived, and the
+description made an absence sound like a rule being obeyed** - which is `Q-66` exactly, filed
+the day before against this lane and then true of a promotion.
 
-> That maximum is its **total capacity** for that kind, and it is stored. **Used capacity** is
-> how many of that kind it holds, and **available capacity** is the total less the used; both
-> are derived, so neither can disagree with what is there.
-
-Total is stored; used and available are the derived pair. **A stored trait was described as derived, and the description
-made an absence sound like a rule being obeyed** - which is `Q-66` exactly, filed yesterday
-against this lane and now true of a promotion.
+**`P-374` has since reversed which of the three is stored**, 2026-09-10, and the wording this
+item quoted is gone - found by `every_block_quoted_under_a_file_is_in_that_file`, which is
+that check doing precisely its job on an item rather than on code. What is stored is now the
+**room left**; used is what is there; the total is the two added and is recorded nowhere. So
+the shape this item asked for arrived, by a route that had nothing to do with it, and the
+quotation is described above rather than quoted because it is no longer anything the file
+says.
 
 **Nothing is blocked and nothing was guessed.** The code builds what the promotion approved -
 `{deposit resource:food density:4} -> 1`, quantity one - and the containment module says in

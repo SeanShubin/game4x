@@ -141,11 +141,30 @@ fn what_the_exclusions_cost_is_visible_rather_than_implied() {
          rather than about resources"
     );
 
+    // **And the page says so, which is the half a test alone does not achieve.** This
+    // assertion existed before the page did: the accounting reported places with no arcs,
+    // which is always empty, so the finding lived in this file and nowhere a reader goes.
+    let never = game_console::petri::kinds_never_drawn(&net, &document);
+    assert!(
+        never.contains(&"food".to_string()),
+        "food is drawn somewhere now, so the page's sentence about it is false: {never:?}"
+    );
+
     let page = game_console::petri_page::markdown(&document);
     assert!(
         page.contains("not drawn"),
         "the page never says anything is not drawn"
     );
+    assert!(
+        page.contains("would conclude the game has none"),
+        "the page does not tell a reader that food is missing from the drawing"
+    );
+    for kind in &never {
+        assert!(
+            page.contains(kind.as_str()),
+            "`{kind}` is never drawn and the page does not name it"
+        );
+    }
     for excluded in &net.excluded {
         assert!(
             page.contains(&excluded.name),
@@ -155,38 +174,194 @@ fn what_the_exclusions_cost_is_visible_rather_than_implied() {
     }
 }
 
-/// The two zero tests are found, and drawn as something other than an ordinary arc.
+/// The two zero tests are gone, and room is what replaced them.
 ///
-/// **They are the reason the picture is worth more than the table.** A plain Petri net has
-/// decidable reachability and one with inhibitor arcs does not, so which arcs these are is the
-/// single most consequential thing on the page.
+/// **`P-374` removed the only reason this net was Turing-complete.** Reachability in a plain
+/// Petri net is decidable and an inhibitor arc destroys that; the release had two, both
+/// `limit 0 garrison`. Capacity is stored as room left now, so *there is no garrison here*
+/// became *the garrison's room is untouched* - an ordinary requirement on an ordinary place.
+///
+/// **The release still says `limit 0` twice**, which is why this checks both ends: the rows
+/// are still there, and no arc is an inhibitor. A version that lost the rows instead would
+/// pass a check that only counted inhibitors.
 #[test]
-fn the_zero_tests_are_marked_as_what_they_are() {
+fn the_zero_tests_became_claims_on_room() {
     let document = release();
     let net = net(&document);
 
-    let inhibitors = net.inhibitors();
+    let rows = document
+        .lines()
+        .filter(|line| line.contains("| limit ") && line.contains("| 0 "))
+        .count();
     assert_eq!(
-        inhibitors.len(),
-        2,
-        "the release has two `limit 0` rows and the net found {}",
-        inhibitors.len()
+        rows, 2,
+        "the release states `limit 0` twice and this found {rows} - if it is now zero the \
+         translation below is checking nothing"
     );
-    for arc in &inhibitors {
-        assert_eq!(arc.role, Role::Limit);
-        assert_eq!(arc.weight, 0);
-        assert_eq!(
-            net.places[arc.place].kind, "garrison",
-            "both zero tests are on a garrison, which is bounded by a capacity of 1 - that is \
-             what makes them affordable, and a zero test somewhere unbounded would not be"
-        );
-    }
+
+    assert!(
+        net.inhibitors().is_empty(),
+        "{} arcs are still zero tests, so the net is still Turing-complete and the page's \
+         historical note is wrong",
+        net.inhibitors().len()
+    );
+
+    // What they became: a requirement on the room for a garrison, which is the same claim
+    // only because a garrison's capacity is one.
+    let on_room: Vec<&game_console::petri::Arc> = net
+        .arcs
+        .iter()
+        .filter(|arc| net.places[arc.place].room && net.places[arc.place].kind == "garrison")
+        .filter(|arc| arc.role == Role::Require)
+        .collect();
+    assert_eq!(
+        on_room.len(),
+        2,
+        "two `limit 0 garrison` rows should have become two requirements on a garrison's \
+         room, and {} did",
+        on_room.len()
+    );
+    assert_eq!(
+        game_console::petri::stated_capacity("garrison"),
+        Some(1),
+        "the translation is exact only at a capacity of one, and this is what says the \
+         release still declares one"
+    );
 
     let drawing = game_console::petri_draw::svg(&net);
     assert!(
-        drawing.contains("url(#o)"),
-        "no arc is drawn with the inhibitor head, so the two are indistinguishable from \
-         ordinary requirements"
+        !drawing.contains("url(#o)"),
+        "an arc is still drawn with the inhibitor head and there are none left to draw"
+    );
+}
+
+/// Room is spent when a thing is made and given back when it is destroyed - `P-374`.
+///
+/// **Both directions, over every bounded kind**, because a version that only took room would
+/// drain every place to zero and a version that only gave it back would fill them, and either
+/// looks plausible in one recipe.
+#[test]
+fn making_takes_room_and_destroying_gives_it_back() {
+    let net = net(&release());
+
+    let mut checked = 0;
+    for arc in &net.arcs {
+        let place = &net.places[arc.place];
+        if place.room || !game_console::petri::bounded(&place.container, &place.kind) {
+            continue;
+        }
+        let opposite = match arc.role {
+            Role::Produce => Role::Consume,
+            Role::Consume => Role::Produce,
+            // A requirement takes nothing and makes nothing, so it moves no room.
+            _ => continue,
+        };
+        assert!(
+            net.arcs.iter().any(|other| {
+                other.transition == arc.transition
+                    && net.places[other.place].room
+                    && net.places[other.place].kind == place.kind
+                    && other.role == opposite
+                    && other.weight == arc.weight
+            }),
+            "`{}` {} {} {} and no matching room arc goes the other way",
+            net.transitions[arc.transition],
+            arc.role.name(),
+            arc.weight,
+            place.label()
+        );
+        checked += 1;
+    }
+    assert!(
+        checked > 10,
+        "only {checked} arcs on bounded kinds were paired, which is too few for this to be \
+         about the release rather than about one recipe"
+    );
+
+    // And nothing unbounded got room, which `P-372` requires: a territory declares no limit
+    // for a resource, so there is no room to be short of.
+    //
+    // **In a territory**, which is the qualifier the first version of this left out - and it
+    // was wrong in the same way the code was: energy in a territory has no limit and energy
+    // in a unit's tank is bounded by that unit's fuel, so a check keyed on the kind alone
+    // asks about neither.
+    for (kind, _) in game_console::petri::UNBOUNDED {
+        assert!(
+            !net.places
+                .iter()
+                .any(|place| place.room && place.kind == kind && place.container == "a territory"),
+            "`{kind}` has a room place in a territory and the release declares no limit for it"
+        );
+    }
+}
+
+/// Every kind the release bounds is classified, and a new row fails until somebody decides.
+///
+/// **This is the check that stops the list going quietly stale.** `bounded` is a written list
+/// rather than a predicate over the words, because the bounds are prose - *a capacity of 1*,
+/// *as many as the extractors of its resource* - and a rule matching on `capacity` would call
+/// the store unbounded, which is the narrow-predicate failure this repository keeps recording.
+/// A list is safe only with something asserting it covers the population.
+#[test]
+fn every_bound_the_release_states_is_classified() {
+    let document = release();
+    let mut rows = Vec::new();
+    let mut inside = false;
+    for line in document.lines() {
+        if line.starts_with("## ") {
+            if inside {
+                break;
+            }
+            inside = line.trim() == "## What bounds a kind in a territory";
+            continue;
+        }
+        let line = line.trim();
+        if !inside || !line.starts_with("| **") {
+            continue;
+        }
+        let name = line
+            .trim_matches('|')
+            .split('|')
+            .next()
+            .unwrap_or_default()
+            .trim()
+            .trim_matches('*')
+            .to_string();
+        if !name.is_empty() {
+            rows.push(name);
+        }
+    }
+
+    assert_eq!(
+        rows.len(),
+        11,
+        "the release bounds eleven kinds and this found {}: {rows:?}",
+        rows.len()
+    );
+
+    for kind in &rows {
+        let in_bounded = game_console::petri::BOUNDED
+            .iter()
+            .any(|(name, _)| name == kind);
+        let in_unbounded = game_console::petri::UNBOUNDED
+            .iter()
+            .any(|(name, _)| name == kind);
+        assert!(
+            in_bounded != in_unbounded,
+            "`{kind}` is {} - every kind the release bounds is exactly one of the two, and a \
+             new row has to be decided rather than defaulting",
+            if in_bounded {
+                "in both lists"
+            } else {
+                "in neither list: decide whether a territory declares room for it, in \
+                 `petri::BOUNDED` or `petri::UNBOUNDED`"
+            }
+        );
+    }
+    assert_eq!(
+        game_console::petri::BOUNDED.len() + game_console::petri::UNBOUNDED.len(),
+        rows.len(),
+        "the two lists together name something the release does not bound"
     );
 }
 

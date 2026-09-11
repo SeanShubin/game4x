@@ -15,91 +15,121 @@
 <p><code>S-87</code>, and the formalism is the research lens's: <code>lenses/research/2026-09-08-simple-finite-and-decidable.md</code> establishes that a recipe network <strong>is</strong> a Petri net rather than resembling one. The release's four roles are the four arc kinds and nothing had to be invented to get from one to the other.</p>
 <p>The release declares <strong>16 recipes</strong>. <strong>12 are drawn</strong> and <strong>4 are not</strong>, because a Petri net arc carries a constant weight and those recipes have amounts that depend on the state when they fire.</p>
 <p><strong>That is the whole of what is missing, and it is counted rather than mentioned.</strong> A diagram that quietly left them out would be a picture of a game that is not this one, and nothing on the page would say so.</p>
-<p><strong>15 places and 49 arcs</strong> between them: 20 <code>consume</code>, 2 <code>limit</code>, 22 <code>produce</code>, 5 <code>require</code>.</p>
-<p><strong>2 of those arcs are zero tests</strong>, and they are why this is worth drawing rather than tabulating. Reachability in a plain Petri net is decidable; an inhibitor arc makes the net Turing-complete. Both of this release's are <code>limit 0 garrison</code>, and a garrison is bounded by a capacity of 1 - a zero test on a bounded place costs nothing, which is <code>C-75</code> and what <code>X-9</code> asks the specification to adopt.</p>
-<p>A <strong>place</strong> is a circle - somewhere a kind can be, which is a container and a kind together, because energy in a tank is not energy in a territory. A <strong>transition</strong> is a bar: one recipe. An arc into a bar is <code>consume</code>, or <code>require</code> when it is dotted and the thing is not taken; an arc out of a bar is <code>produce</code>. An <strong>inhibitor arc</strong> has a hollow head and fires only when its place is empty.</p>
+<p><strong>It costs more than four rows.</strong> 5 kinds the release declares appear nowhere in the drawn net: <code>food</code>, <code>orbit</code>, <code>deposit</code>, <code>adjacency</code>, <code>game</code>. <strong>They are not absent from the game - they are absent from what can be drawn of it</strong>, and <code>food</code> is the one that matters: every recipe that moves it is one of the four above, so a reader looking at the picture for food would conclude the game has none.</p>
+<p><strong>21 places and 65 arcs</strong> between them: 34 <code>consume</code>, 24 <code>produce</code>, 7 <code>require</code>.</p>
+<p><strong>6 of those places are room rather than a count</strong> - <code>P-374</code>. What a container stores is the room left, not the total: used capacity is what is there, total capacity is the two added, and nothing records the total so nothing can disagree with it. Making a thing takes one of the room and destroying it gives one back. Room is stored, so room is state, so it is drawn - a diagram showing the count and hiding the room would be leaving out half of what containment is.</p>
+<p><strong>0 of these arcs are zero tests, and that number used to be two.</strong> Reachability in a plain Petri net is decidable and an inhibitor arc makes the net Turing-complete; the release had two, both <code>limit 0 garrison</code>. <code>P-374</code> removed them without meaning to: <em>there is no garrison here</em> is <em>the garrison's room is untouched</em>, which is an ordinary requirement on an ordinary place. <strong>That translation is exact only because a garrison's capacity is one</strong> - at two, <em>there is none</em> and <em>there is room for one</em> are different claims - and the reader is refused rather than approximated if a <code>limit 0</code> ever appears somewhere with more room than that.</p>
+<p>A <strong>place</strong> is a circle - somewhere a kind can be, which is a container and a kind together, because energy in a tank is not energy in a territory and the first of those is bounded while the second has no limit. A place named <em>room for</em> something holds the room left in its container rather than the things themselves. A <strong>transition</strong> is a bar: one recipe. An arc into a bar is <code>consume</code>, or <code>require</code> when it is dotted and the thing is not taken; an arc out of a bar is <code>produce</code>.</p>
 <h2 id="the-whole-net">The whole net</h2>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 590" width="900" height="590" role="img" aria-label="the release's rules as a Petri net">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 794" width="900" height="794" role="img" aria-label="the release's rules as a Petri net">
 <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/></marker><marker id="o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="5" cy="5" r="4" fill="none" stroke="#e0a33f" stroke-width="2"/></marker></defs>
-<path d="M 200 244 C 430 244, 430 74, 660 74" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" stroke-dasharray="2 3" marker-end="url(#a)"/>
+<path d="M 200 380 C 430 380, 430 74, 660 74" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" stroke-dasharray="2 3" marker-end="url(#a)"/>
+<path d="M 200 414 C 430 414, 430 74, 660 74" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 176 C 430 176, 430 74, 660 74" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" stroke-dasharray="2 3" marker-end="url(#a)"/>
+<path d="M 660 74 C 430 74, 430 210, 200 210" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 176 C 430 176, 430 74, 660 74" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 660 74 C 430 74, 430 516, 200 516" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 660 74 C 430 74, 430 244, 200 244" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
 <path d="M 200 278 C 430 278, 430 74, 660 74" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 200 142 C 430 142, 430 74, 660 74" fill="none" stroke="#e0a33f" stroke-width="1.2" stroke-opacity="0.75" stroke-dasharray="5 4" marker-end="url(#o)"/>
-<path d="M 660 74 C 430 74, 430 142, 200 142" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 660 74 C 430 74, 430 244, 200 244" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 278 C 430 278, 430 74, 660 74" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
 <path d="M 660 74 C 430 74, 430 312, 200 312" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 660 74 C 430 74, 430 176, 200 176" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 660 74 C 430 74, 430 176, 200 176" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 660 74 C 430 74, 430 210, 200 210" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 660 74 C 430 74, 430 210, 200 210" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 346 C 430 346, 430 74, 660 74" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 660 74 C 430 74, 430 312, 200 312" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 346 C 430 346, 430 74, 660 74" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
 <path d="M 200 40 C 430 40, 430 40, 660 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" stroke-dasharray="2 3" marker-end="url(#a)"/>
 <path d="M 200 40 C 430 40, 430 40, 660 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" stroke-dasharray="2 3" marker-end="url(#a)"/>
 <path d="M 200 74 C 430 74, 430 40, 660 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
 <path d="M 200 108 C 430 108, 430 40, 660 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 660 40 C 430 40, 430 142, 200 142" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
 <path d="M 660 40 C 430 40, 430 74, 200 74" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 200 346 C 430 346, 430 108, 660 108" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 200 142 C 430 142, 430 108, 660 108" fill="none" stroke="#e0a33f" stroke-width="1.2" stroke-opacity="0.75" stroke-dasharray="5 4" marker-end="url(#o)"/>
-<path d="M 660 108 C 430 108, 430 142, 200 142" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 448 C 430 448, 430 108, 660 108" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 660 108 C 430 108, 430 482, 200 482" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 176 C 430 176, 430 108, 660 108" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" stroke-dasharray="2 3" marker-end="url(#a)"/>
+<path d="M 660 108 C 430 108, 430 210, 200 210" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 176 C 430 176, 430 108, 660 108" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 660 108 C 430 108, 430 516, 200 516" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 660 108 C 430 108, 430 244, 200 244" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 278 C 430 278, 430 108, 660 108" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 660 108 C 430 108, 430 244, 200 244" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 278 C 430 278, 430 108, 660 108" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
 <path d="M 660 108 C 430 108, 430 312, 200 312" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 660 108 C 430 108, 430 176, 200 176" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 660 108 C 430 108, 430 176, 200 176" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 660 108 C 430 108, 430 210, 200 210" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 660 108 C 430 108, 430 210, 200 210" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 200 380 C 430 380, 430 142, 660 142" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 200 414 C 430 414, 430 142, 660 142" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 660 142 C 430 142, 430 176, 200 176" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 200 380 C 430 380, 430 176, 660 176" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 200 414 C 430 414, 430 176, 660 176" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 660 176 C 430 176, 430 210, 200 210" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 200 380 C 430 380, 430 312, 660 312" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 200 414 C 430 414, 430 312, 660 312" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 660 312 C 430 312, 430 482, 200 482" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 200 414 C 430 414, 430 278, 660 278" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 200 448 C 430 448, 430 278, 660 278" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 200 312 C 430 312, 430 278, 660 278" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 660 278 C 430 278, 430 346, 200 346" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 200 244 C 430 244, 430 244, 660 244" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" stroke-dasharray="2 3" marker-end="url(#a)"/>
-<path d="M 200 414 C 430 414, 430 244, 660 244" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 200 448 C 430 448, 430 244, 660 244" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 200 312 C 430 312, 430 244, 660 244" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 200 482 C 430 482, 430 244, 660 244" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" stroke-dasharray="2 3" marker-end="url(#a)"/>
-<path d="M 660 244 C 430 244, 430 278, 200 278" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 200 312 C 430 312, 430 210, 660 210" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 660 210 C 430 210, 430 312, 200 312" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 660 210 C 430 210, 430 380, 200 380" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 200 516 C 430 516, 430 346, 660 346" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 660 346 C 430 346, 430 516, 200 516" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 200 516 C 430 516, 430 380, 660 380" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 200 516 C 430 516, 430 414, 660 414" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<path d="M 660 414 C 430 414, 430 516, 200 516" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
-<circle cx="200" cy="244" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="186" y="248" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">territory in the game</text>
-<circle cx="200" cy="278" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="186" y="282" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">ark in an orbit</text>
-<circle cx="200" cy="142" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="186" y="146" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">garrison</text>
-<circle cx="200" cy="312" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="186" y="316" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">citizen</text>
+<path d="M 200 346 C 430 346, 430 108, 660 108" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 660 108 C 430 108, 430 312, 200 312" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 346 C 430 346, 430 108, 660 108" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 584 C 430 584, 430 142, 660 142" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 550 C 430 550, 430 142, 660 142" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 660 142 C 430 142, 430 244, 200 244" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 278 C 430 278, 430 142, 660 142" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 584 C 430 584, 430 176, 660 176" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 550 C 430 550, 430 176, 660 176" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 660 176 C 430 176, 430 312, 200 312" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 346 C 430 346, 430 176, 660 176" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 584 C 430 584, 430 312, 660 312" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 550 C 430 550, 430 312, 660 312" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 660 312 C 430 312, 430 652, 200 652" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 686 C 430 686, 430 312, 660 312" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 550 C 430 550, 430 244, 660 244" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 618 C 430 618, 430 244, 660 244" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 516 C 430 516, 430 244, 660 244" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 660 244 C 430 244, 430 448, 200 448" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 482 C 430 482, 430 244, 660 244" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 380 C 430 380, 430 210, 660 210" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" stroke-dasharray="2 3" marker-end="url(#a)"/>
+<path d="M 200 550 C 430 550, 430 210, 660 210" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 618 C 430 618, 430 210, 660 210" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 516 C 430 516, 430 210, 660 210" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 652 C 430 652, 430 210, 660 210" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" stroke-dasharray="2 3" marker-end="url(#a)"/>
+<path d="M 660 210 C 430 210, 430 414, 200 414" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 516 C 430 516, 430 278, 660 278" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 660 278 C 430 278, 430 516, 200 516" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 660 278 C 430 278, 430 584, 200 584" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 720 C 430 720, 430 346, 660 346" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 660 346 C 430 346, 430 720, 200 720" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 720 C 430 720, 430 380, 660 380" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 200 720 C 430 720, 430 414, 660 414" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<path d="M 660 414 C 430 414, 430 720, 200 720" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.75" marker-end="url(#a)"/>
+<circle cx="200" cy="380" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="186" y="384" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">territory in the game</text>
+<circle cx="200" cy="414" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="186" y="418" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">ark in an orbit</text>
 <circle cx="200" cy="176" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="186" y="180" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">extractor</text>
+<text x="186" y="180" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">room for garrison</text>
 <circle cx="200" cy="210" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="186" y="214" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">store</text>
+<text x="186" y="214" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">garrison</text>
+<circle cx="200" cy="516" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="186" y="520" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">citizen</text>
+<circle cx="200" cy="244" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="186" y="248" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">extractor</text>
+<circle cx="200" cy="278" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="186" y="282" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">room for extractor</text>
+<circle cx="200" cy="312" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="186" y="316" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">store</text>
+<circle cx="200" cy="346" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="186" y="350" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">room for store</text>
 <circle cx="200" cy="40" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="186" y="44" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">place in the game</text>
 <circle cx="200" cy="74" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="186" y="78" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">unit</text>
 <circle cx="200" cy="108" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="186" y="112" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">energy in a unit's tank</text>
-<circle cx="200" cy="346" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="186" y="350" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">pioneer</text>
-<circle cx="200" cy="380" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="186" y="384" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">labor</text>
-<circle cx="200" cy="414" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="186" y="418" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">metal</text>
-<circle cx="200" cy="482" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="186" y="486" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">yard</text>
+<circle cx="200" cy="142" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="186" y="146" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">room for energy in a unit's tank</text>
 <circle cx="200" cy="448" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="186" y="452" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">energy</text>
-<circle cx="200" cy="516" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="186" y="520" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">thing</text>
+<text x="186" y="452" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">pioneer</text>
+<circle cx="200" cy="482" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="186" y="486" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">room for pioneer</text>
+<circle cx="200" cy="584" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="186" y="588" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">labor</text>
+<circle cx="200" cy="550" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="186" y="554" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">metal</text>
+<circle cx="200" cy="652" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="186" y="656" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">yard</text>
+<circle cx="200" cy="686" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="186" y="690" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">room for yard</text>
+<circle cx="200" cy="618" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="186" y="622" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">energy</text>
+<circle cx="200" cy="720" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="186" y="724" text-anchor="end" font-family="system-ui, sans-serif" font-size="13">thing</text>
 <rect x="657" y="64" width="6" height="20" fill="currentColor"/>
 <text x="674" y="78" font-family="system-ui, sans-serif" font-size="13">deploy ark</text>
 <rect x="657" y="30" width="6" height="20" fill="currentColor"/>
@@ -112,12 +142,12 @@
 <text x="674" y="180" font-family="system-ui, sans-serif" font-size="13">build store</text>
 <rect x="657" y="302" width="6" height="20" fill="currentColor"/>
 <text x="674" y="316" font-family="system-ui, sans-serif" font-size="13">build yard</text>
-<rect x="657" y="268" width="6" height="20" fill="currentColor"/>
-<text x="674" y="282" font-family="system-ui, sans-serif" font-size="13">produce pioneer</text>
 <rect x="657" y="234" width="6" height="20" fill="currentColor"/>
-<text x="674" y="248" font-family="system-ui, sans-serif" font-size="13">launch ark</text>
+<text x="674" y="248" font-family="system-ui, sans-serif" font-size="13">produce pioneer</text>
 <rect x="657" y="200" width="6" height="20" fill="currentColor"/>
-<text x="674" y="214" font-family="system-ui, sans-serif" font-size="13">create labor</text>
+<text x="674" y="214" font-family="system-ui, sans-serif" font-size="13">launch ark</text>
+<rect x="657" y="268" width="6" height="20" fill="currentColor"/>
+<text x="674" y="282" font-family="system-ui, sans-serif" font-size="13">create labor</text>
 <rect x="657" y="336" width="6" height="20" fill="currentColor"/>
 <text x="674" y="350" font-family="system-ui, sans-serif" font-size="13">age</text>
 <rect x="657" y="370" width="6" height="20" fill="currentColor"/>
@@ -148,17 +178,23 @@
 <tbody>
 <tr><td>territory in the game</td><td>the game</td><td>territory</td></tr>
 <tr><td>ark in an orbit</td><td>an orbit</td><td>ark</td></tr>
+<tr><td>room for garrison</td><td>a territory</td><td>garrison</td></tr>
 <tr><td>garrison</td><td>a territory</td><td>garrison</td></tr>
 <tr><td>citizen</td><td>a territory</td><td>citizen</td></tr>
 <tr><td>extractor</td><td>a territory</td><td>extractor</td></tr>
+<tr><td>room for extractor</td><td>a territory</td><td>extractor</td></tr>
 <tr><td>store</td><td>a territory</td><td>store</td></tr>
+<tr><td>room for store</td><td>a territory</td><td>store</td></tr>
 <tr><td>place in the game</td><td>the game</td><td>place</td></tr>
 <tr><td>unit</td><td>a territory</td><td>unit</td></tr>
 <tr><td>energy in a unit's tank</td><td>a unit's tank</td><td>energy</td></tr>
+<tr><td>room for energy in a unit's tank</td><td>a unit's tank</td><td>energy</td></tr>
 <tr><td>pioneer</td><td>a territory</td><td>pioneer</td></tr>
+<tr><td>room for pioneer</td><td>a territory</td><td>pioneer</td></tr>
 <tr><td>labor</td><td>a territory</td><td>labor</td></tr>
 <tr><td>metal</td><td>a territory</td><td>metal</td></tr>
 <tr><td>yard</td><td>a territory</td><td>yard</td></tr>
+<tr><td>room for yard</td><td>a territory</td><td>yard</td></tr>
 <tr><td>energy</td><td>a territory</td><td>energy</td></tr>
 <tr><td>thing</td><td>a territory</td><td>thing</td></tr>
 </tbody>
@@ -172,17 +208,23 @@
 <tbody>
 <tr><td>territory in the game</td><td>r1</td><td></td><td></td><td></td><td></td><td></td><td></td><td>r1</td><td></td><td></td><td></td><td></td></tr>
 <tr><td>ark in an orbit</td><td>-1</td><td></td><td></td><td></td><td></td><td></td><td></td><td>+1</td><td></td><td></td><td></td><td></td></tr>
-<tr><td>garrison</td><td>0!, +1</td><td></td><td>0!, +1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>room for garrison</td><td>r1, -1</td><td></td><td>r1, -1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>garrison</td><td>+1</td><td></td><td>+1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>citizen</td><td>+2</td><td></td><td>+2</td><td></td><td></td><td></td><td>-2</td><td>-2</td><td>-1, +1</td><td></td><td></td><td></td></tr>
 <tr><td>extractor</td><td>+1, +1</td><td></td><td>+1, +1</td><td>+1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>room for extractor</td><td>-1, -1</td><td></td><td>-1, -1</td><td>-1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>store</td><td>+1, +1</td><td></td><td>+1, +1</td><td></td><td>+1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>room for store</td><td>-1, -1</td><td></td><td>-1, -1</td><td></td><td>-1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>place in the game</td><td></td><td>r1, r1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>unit</td><td></td><td>-1, +1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>energy in a unit's tank</td><td></td><td>-1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>room for energy in a unit's tank</td><td></td><td>+1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>pioneer</td><td></td><td></td><td>-1</td><td></td><td></td><td></td><td>+1</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>room for pioneer</td><td></td><td></td><td>+1</td><td></td><td></td><td></td><td>-1</td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>labor</td><td></td><td></td><td></td><td>-1</td><td>-1</td><td>-1</td><td></td><td></td><td>+1</td><td></td><td></td><td></td></tr>
 <tr><td>metal</td><td></td><td></td><td></td><td>-1</td><td>-1</td><td>-15</td><td>-3</td><td>-3</td><td></td><td></td><td></td><td></td></tr>
 <tr><td>yard</td><td></td><td></td><td></td><td></td><td></td><td>+1</td><td></td><td>r1</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>room for yard</td><td></td><td></td><td></td><td></td><td></td><td>-1</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>energy</td><td></td><td></td><td></td><td></td><td></td><td></td><td>-6</td><td>-12</td><td></td><td></td><td></td><td></td></tr>
 <tr><td>thing</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>-1, +1</td><td>-1</td><td>-1, +1</td></tr>
 </tbody>
@@ -190,150 +232,198 @@
 <h2 id="one-recipe-at-a-time">One recipe at a time</h2>
 <p>The net above answers how the rules connect and cannot answer what one of them does - at this many arcs the eye cannot follow a single transition out of the bundle. Each is drawn on its own on the page.</p>
 <h3 id="deploy-ark">deploy ark</h3>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 308" width="820" height="308" role="img" aria-label="deploy ark as a Petri net">
-<rect x="297" y="141" width="7" height="26" fill="currentColor"/>
-<text x="300" y="184" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13">deploy ark</text>
-<path d="M 150 28 C 222, 28, 222, 154, 294 154" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 3" marker-end="url(#a)"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 448" width="820" height="448" role="img" aria-label="deploy ark as a Petri net">
+<rect x="297" y="211" width="7" height="26" fill="currentColor"/>
+<text x="300" y="254" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13">deploy ark</text>
+<path d="M 150 28 C 222, 28, 222, 224, 294 224" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 3" marker-end="url(#a)"/>
 <circle cx="150" cy="28" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="136" y="32" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 territory in the game</text>
-<path d="M 150 56 C 222, 56, 222, 154, 294 154" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<path d="M 150 56 C 222, 56, 222, 224, 294 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="150" cy="56" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="136" y="60" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 ark in an orbit</text>
-<path d="M 150 84 C 222, 84, 222, 154, 294 154" fill="none" stroke="#e0a33f" stroke-width="1.2" stroke-dasharray="5 4" marker-end="url(#o)"/>
+<path d="M 150 84 C 222, 84, 222, 224, 294 224" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 3" marker-end="url(#a)"/>
 <circle cx="150" cy="84" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="136" y="88" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">0! garrison</text>
-<path d="M 306 112 C 388, 112, 388, 154, 470 154" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<text x="136" y="88" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 room for garrison</text>
+<path d="M 306 112 C 388, 112, 388, 224, 470 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="470" cy="112" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="484" y="116" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 garrison</text>
-<path d="M 306 140 C 388, 140, 388, 154, 470 154" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
-<circle cx="470" cy="140" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="484" y="144" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">2 citizen</text>
-<path d="M 306 168 C 388, 168, 388, 154, 470 154" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<path d="M 150 140 C 222, 140, 222, 224, 294 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="150" cy="140" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="136" y="144" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 room for garrison</text>
+<path d="M 306 168 C 388, 168, 388, 224, 470 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="470" cy="168" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="484" y="172" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 extractor</text>
-<path d="M 306 196 C 388, 196, 388, 154, 470 154" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<text x="484" y="172" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">2 citizen</text>
+<path d="M 306 196 C 388, 196, 388, 224, 470 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="470" cy="196" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="484" y="200" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 extractor</text>
-<path d="M 306 224 C 388, 224, 388, 154, 470 154" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
-<circle cx="470" cy="224" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="484" y="228" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 store</text>
-<path d="M 306 252 C 388, 252, 388, 154, 470 154" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<path d="M 150 224 C 222, 224, 222, 224, 294 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="150" cy="224" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="136" y="228" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 room for extractor</text>
+<path d="M 306 252 C 388, 252, 388, 224, 470 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="470" cy="252" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="484" y="256" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 store</text>
+<text x="484" y="256" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 extractor</text>
+<path d="M 150 280 C 222, 280, 222, 224, 294 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="150" cy="280" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="136" y="284" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 room for extractor</text>
+<path d="M 306 308 C 388, 308, 388, 224, 470 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="470" cy="308" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="484" y="312" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 store</text>
+<path d="M 150 336 C 222, 336, 222, 224, 294 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="150" cy="336" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="136" y="340" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 room for store</text>
+<path d="M 306 364 C 388, 364, 388, 224, 470 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="470" cy="364" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="484" y="368" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 store</text>
+<path d="M 150 392 C 222, 392, 222, 224, 294 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="150" cy="392" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="136" y="396" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 room for store</text>
 </svg>
 
 <h3 id="move">move</h3>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 196" width="820" height="196" role="img" aria-label="move as a Petri net">
-<rect x="297" y="85" width="7" height="26" fill="currentColor"/>
-<text x="300" y="128" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13">move</text>
-<path d="M 150 28 C 222, 28, 222, 98, 294 98" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 3" marker-end="url(#a)"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 224" width="820" height="224" role="img" aria-label="move as a Petri net">
+<rect x="297" y="99" width="7" height="26" fill="currentColor"/>
+<text x="300" y="142" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13">move</text>
+<path d="M 150 28 C 222, 28, 222, 112, 294 112" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 3" marker-end="url(#a)"/>
 <circle cx="150" cy="28" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="136" y="32" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 place in the game</text>
-<path d="M 150 56 C 222, 56, 222, 98, 294 98" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 3" marker-end="url(#a)"/>
+<path d="M 150 56 C 222, 56, 222, 112, 294 112" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 3" marker-end="url(#a)"/>
 <circle cx="150" cy="56" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="136" y="60" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 place in the game</text>
-<path d="M 150 84 C 222, 84, 222, 98, 294 98" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<path d="M 150 84 C 222, 84, 222, 112, 294 112" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="150" cy="84" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="136" y="88" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 unit</text>
-<path d="M 150 112 C 222, 112, 222, 98, 294 98" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<path d="M 150 112 C 222, 112, 222, 112, 294 112" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="150" cy="112" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="136" y="116" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 energy in a unit's tank</text>
-<path d="M 306 140 C 388, 140, 388, 98, 470 98" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<path d="M 306 140 C 388, 140, 388, 112, 470 112" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="470" cy="140" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="484" y="144" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 unit</text>
+<text x="484" y="144" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 room for energy in a unit's tank</text>
+<path d="M 306 168 C 388, 168, 388, 112, 470 112" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="470" cy="168" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="484" y="172" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 unit</text>
 </svg>
 
 <h3 id="found-by-land">found by land</h3>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 280" width="820" height="280" role="img" aria-label="found by land as a Petri net">
-<rect x="297" y="127" width="7" height="26" fill="currentColor"/>
-<text x="300" y="170" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13">found by land</text>
-<path d="M 150 28 C 222, 28, 222, 140, 294 140" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 448" width="820" height="448" role="img" aria-label="found by land as a Petri net">
+<rect x="297" y="211" width="7" height="26" fill="currentColor"/>
+<text x="300" y="254" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13">found by land</text>
+<path d="M 150 28 C 222, 28, 222, 224, 294 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="150" cy="28" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="136" y="32" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 pioneer</text>
-<path d="M 150 56 C 222, 56, 222, 140, 294 140" fill="none" stroke="#e0a33f" stroke-width="1.2" stroke-dasharray="5 4" marker-end="url(#o)"/>
-<circle cx="150" cy="56" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="136" y="60" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">0! garrison</text>
-<path d="M 306 84 C 388, 84, 388, 140, 470 140" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
-<circle cx="470" cy="84" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="484" y="88" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 garrison</text>
-<path d="M 306 112 C 388, 112, 388, 140, 470 140" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<path d="M 306 56 C 388, 56, 388, 224, 470 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="470" cy="56" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="484" y="60" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 room for pioneer</text>
+<path d="M 150 84 C 222, 84, 222, 224, 294 224" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 3" marker-end="url(#a)"/>
+<circle cx="150" cy="84" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="136" y="88" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 room for garrison</text>
+<path d="M 306 112 C 388, 112, 388, 224, 470 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="470" cy="112" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="484" y="116" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">2 citizen</text>
-<path d="M 306 140 C 388, 140, 388, 140, 470 140" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
-<circle cx="470" cy="140" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="484" y="144" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 extractor</text>
-<path d="M 306 168 C 388, 168, 388, 140, 470 140" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<text x="484" y="116" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 garrison</text>
+<path d="M 150 140 C 222, 140, 222, 224, 294 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="150" cy="140" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="136" y="144" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 room for garrison</text>
+<path d="M 306 168 C 388, 168, 388, 224, 470 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="470" cy="168" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="484" y="172" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 extractor</text>
-<path d="M 306 196 C 388, 196, 388, 140, 470 140" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<text x="484" y="172" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">2 citizen</text>
+<path d="M 306 196 C 388, 196, 388, 224, 470 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="470" cy="196" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="484" y="200" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 store</text>
-<path d="M 306 224 C 388, 224, 388, 140, 470 140" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
-<circle cx="470" cy="224" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
-<text x="484" y="228" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 store</text>
+<text x="484" y="200" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 extractor</text>
+<path d="M 150 224 C 222, 224, 222, 224, 294 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="150" cy="224" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="136" y="228" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 room for extractor</text>
+<path d="M 306 252 C 388, 252, 388, 224, 470 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="470" cy="252" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="484" y="256" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 extractor</text>
+<path d="M 150 280 C 222, 280, 222, 224, 294 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="150" cy="280" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="136" y="284" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 room for extractor</text>
+<path d="M 306 308 C 388, 308, 388, 224, 470 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="470" cy="308" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="484" y="312" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 store</text>
+<path d="M 150 336 C 222, 336, 222, 224, 294 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="150" cy="336" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="136" y="340" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 room for store</text>
+<path d="M 306 364 C 388, 364, 388, 224, 470 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="470" cy="364" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="484" y="368" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 store</text>
+<path d="M 150 392 C 222, 392, 222, 224, 294 224" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="150" cy="392" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="136" y="396" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 room for store</text>
 </svg>
 
 <h3 id="build-extractor">build extractor</h3>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 140" width="820" height="140" role="img" aria-label="build extractor as a Petri net">
-<rect x="297" y="57" width="7" height="26" fill="currentColor"/>
-<text x="300" y="100" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13">build extractor</text>
-<path d="M 150 28 C 222, 28, 222, 70, 294 70" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 168" width="820" height="168" role="img" aria-label="build extractor as a Petri net">
+<rect x="297" y="71" width="7" height="26" fill="currentColor"/>
+<text x="300" y="114" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13">build extractor</text>
+<path d="M 150 28 C 222, 28, 222, 84, 294 84" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="150" cy="28" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="136" y="32" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 labor</text>
-<path d="M 150 56 C 222, 56, 222, 70, 294 70" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<path d="M 150 56 C 222, 56, 222, 84, 294 84" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="150" cy="56" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="136" y="60" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 metal</text>
-<path d="M 306 84 C 388, 84, 388, 70, 470 70" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<path d="M 306 84 C 388, 84, 388, 84, 470 84" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="470" cy="84" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="484" y="88" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 extractor</text>
+<path d="M 150 112 C 222, 112, 222, 84, 294 84" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="150" cy="112" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="136" y="116" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 room for extractor</text>
 </svg>
 
 <h3 id="build-store">build store</h3>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 140" width="820" height="140" role="img" aria-label="build store as a Petri net">
-<rect x="297" y="57" width="7" height="26" fill="currentColor"/>
-<text x="300" y="100" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13">build store</text>
-<path d="M 150 28 C 222, 28, 222, 70, 294 70" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 168" width="820" height="168" role="img" aria-label="build store as a Petri net">
+<rect x="297" y="71" width="7" height="26" fill="currentColor"/>
+<text x="300" y="114" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13">build store</text>
+<path d="M 150 28 C 222, 28, 222, 84, 294 84" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="150" cy="28" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="136" y="32" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 labor</text>
-<path d="M 150 56 C 222, 56, 222, 70, 294 70" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<path d="M 150 56 C 222, 56, 222, 84, 294 84" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="150" cy="56" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="136" y="60" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 metal</text>
-<path d="M 306 84 C 388, 84, 388, 70, 470 70" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<path d="M 306 84 C 388, 84, 388, 84, 470 84" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="470" cy="84" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="484" y="88" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 store</text>
+<path d="M 150 112 C 222, 112, 222, 84, 294 84" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="150" cy="112" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="136" y="116" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 room for store</text>
 </svg>
 
 <h3 id="build-yard">build yard</h3>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 140" width="820" height="140" role="img" aria-label="build yard as a Petri net">
-<rect x="297" y="57" width="7" height="26" fill="currentColor"/>
-<text x="300" y="100" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13">build yard</text>
-<path d="M 150 28 C 222, 28, 222, 70, 294 70" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 168" width="820" height="168" role="img" aria-label="build yard as a Petri net">
+<rect x="297" y="71" width="7" height="26" fill="currentColor"/>
+<text x="300" y="114" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13">build yard</text>
+<path d="M 150 28 C 222, 28, 222, 84, 294 84" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="150" cy="28" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="136" y="32" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 labor</text>
-<path d="M 150 56 C 222, 56, 222, 70, 294 70" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<path d="M 150 56 C 222, 56, 222, 84, 294 84" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="150" cy="56" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="136" y="60" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">15 metal</text>
-<path d="M 306 84 C 388, 84, 388, 70, 470 70" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<path d="M 306 84 C 388, 84, 388, 84, 470 84" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="470" cy="84" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="484" y="88" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 yard</text>
+<path d="M 150 112 C 222, 112, 222, 84, 294 84" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="150" cy="112" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="136" y="116" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 room for yard</text>
 </svg>
 
 <h3 id="produce-pioneer">produce pioneer</h3>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 168" width="820" height="168" role="img" aria-label="produce pioneer as a Petri net">
-<rect x="297" y="71" width="7" height="26" fill="currentColor"/>
-<text x="300" y="114" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13">produce pioneer</text>
-<path d="M 150 28 C 222, 28, 222, 84, 294 84" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 196" width="820" height="196" role="img" aria-label="produce pioneer as a Petri net">
+<rect x="297" y="85" width="7" height="26" fill="currentColor"/>
+<text x="300" y="128" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13">produce pioneer</text>
+<path d="M 150 28 C 222, 28, 222, 98, 294 98" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="150" cy="28" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="136" y="32" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">3 metal</text>
-<path d="M 150 56 C 222, 56, 222, 84, 294 84" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<path d="M 150 56 C 222, 56, 222, 98, 294 98" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="150" cy="56" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="136" y="60" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">6 energy</text>
-<path d="M 150 84 C 222, 84, 222, 84, 294 84" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<path d="M 150 84 C 222, 84, 222, 98, 294 98" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="150" cy="84" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="136" y="88" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">2 citizen</text>
-<path d="M 306 112 C 388, 112, 388, 84, 470 84" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<path d="M 306 112 C 388, 112, 388, 98, 470 98" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
 <circle cx="470" cy="112" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
 <text x="484" y="116" text-anchor="start" font-family="system-ui, sans-serif" font-size="12">1 pioneer</text>
+<path d="M 150 140 C 222, 140, 222, 98, 294 98" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"/>
+<circle cx="150" cy="140" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+<text x="136" y="144" text-anchor="end" font-family="system-ui, sans-serif" font-size="12">1 room for pioneer</text>
 </svg>
 
 <h3 id="launch-ark">launch ark</h3>
