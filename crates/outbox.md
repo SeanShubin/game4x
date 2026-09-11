@@ -61,6 +61,56 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-87 - What blocks this lane, in the order it would build them
+
+**to** spec · **status** open · **raised** 2026-09-11 · **source** Sean asking what would
+unblock this lane, and finding one of the three is in nobody's outbox
+
+**The gate is green and nothing is blocked on repair.** `586` tests, `cargo fmt --check` and
+`cargo clippy --workspace --all-targets` clean, working tree clean. What follows is work this
+lane would do and cannot start, not damage.
+
+**Existing ids, not restated.** Two of the three are already filed and this points at them
+rather than saying them again: a second copy of a question costs a reader exactly what the
+first one did.
+
+**1. The garrison gate, hard or soft - and it is in nobody's outbox, which is why this item
+exists.** `X-12` says `deploy ark` and `found by land` share **seven rows verbatim** - counted
+again 2026-09-11 at `releases/first-release.md`, nine rows and eight, unchanged by the five
+promotions. It also says not to extract a shared sub-recipe until Sean decides whether
+`limit 0 garrison` is hard or soft, **because the answer decides five other rows and not just
+one**: make it soft and deploying onto an existing colony adds two more citizens, two more
+extractors and two more stores, and each of those needs its own answer.
+
+This lane agrees with the lens that the decision comes first, so it has built nothing and says
+so rather than leaving silence - `C-85`. **It is a decision for Sean and needs a proposal**,
+which is the hop this lane cannot make for itself.
+
+**Two things travel with it.** `C-75`'s acyclicity check is still vacuous because no recipe
+calls any recipe, and a `found-colony` sub-recipe is the first call site - the check stops
+being green over nothing the moment it lands. And `X-12` notes the sketch drops both stores,
+which the specification produces; that is a change to the game rather than a refactor.
+
+**2. A soft line in the release - `C-82`, already filed.** `spec/console.md` gained the
+notation in `P-378` (`-1 [soft]`); `releases/first-release.md` still has **zero**, counted
+2026-09-11. `P-373`'s check is one call to `petri::bounded`, which already exists and is
+already covered by `every_bound_the_release_states_is_classified`. **One commit on the day a
+soft line lands**, and worth nothing before then, because a green run over an empty population
+is the failure `CLAUDE.md` names with the sign flipped.
+
+**3. `S-30`'s data file, waiting on `C-49` - already filed, and `S-30` itself calls it not
+urgent.** The ordering is the decision; the building is a day's work after it.
+
+**And one ask that is not a blocker.** This lane has **23 items open to you**, and two of the
+first it re-read on 2026-09-11 were answered and stale - `C-20` quoting a sentence `P-249`
+deleted **the day `C-20` was raised**, and `C-59` reasoning about `grow` and about six world
+recipes where there are now ten. Both are closed. **If any others have been settled or
+overtaken, saying which costs you a line and saves this lane an audit** - and an item that
+still reads correctly while having stopped being true costs a reader exactly as much as a live
+one. Otherwise this lane will work through them itself.
+
+---
+
 ### C-86 - `P-212` is built, so `S-49`'s last item and `S-26`'s remainder are both stale
 
 **to** spec · **status** open · **raised** 2026-09-11 · **source** reaching for the one thing
