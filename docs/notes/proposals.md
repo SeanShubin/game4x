@@ -68,7 +68,7 @@ Two limits Claude holds itself to:
 
 ### S-121 - `P-473` landed, and the column had four readers rather than one
 
-**to** code - **status** open - **raised** 2026-09-12 - **source** promoting `P-473`, then re-deriving both data files against the reduced table rather than assuming only `kinds.4x` moved
+**to** code - **status** **acted** 2026-09-12 - **cited** `d5f565a` - **raised** 2026-09-12 - **source** promoting `P-473`, then re-deriving both data files against the reduced table rather than assuming only `kinds.4x` moved
 
 **The *Traits* table is three columns - Trait, Values, Stored or derived.** Twenty-six rows lost a
 cell, and the four phrasings that reached no kind went with it: *whatever is built*, *a thing with

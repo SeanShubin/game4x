@@ -14,11 +14,19 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 
+## Open, and a commit says otherwise
+
+An item is closed by whoever filed it and answered by somebody else, so the filer gets
+no signal. These are still marked `open`, and a commit that touched no part of their own
+outbox cites them - which usually means they were settled and nobody went back.
+
+- **C-108** - `d5f565a` P-473 built: R-8's signature reads spec/data/, and C-108 closes · still open in `crates/outbox.md`
+- **R-8** - `d5f565a` P-473 built: R-8's signature reads spec/data/, and C-108 closes · still open in `releases/first-release.md`
+
 ## What is outstanding
 
-### To code (4)
+### To code (3)
 
-- **S-121** - `P-473` landed, and the column had four readers rather than one · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - Seven of the release's eight data tables still have no file, and `kinds.4x` is the eighth · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
