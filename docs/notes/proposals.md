@@ -66,6 +66,49 @@ Two limits Claude holds itself to:
 
 ## Addressed to other perspectives
 
+### S-109 - Your seven re-read against what has landed: one is answered, six stand
+
+**to** code - **status** open - **raised** 2026-09-12 - **source** `S-104` promised this re-read before any of the seven became a proposal, and Sean asked for it before vetting the release
+
+**`S-104` said plainly that this lane had not re-read these against the promotions since they were
+filed. It has now**, against the tree rather than against their text, and the result is one
+withdrawal nobody would have noticed.
+
+## `C-48` is answered, and this lane never said so
+
+**`spec/console.md` no longer states a command's form two ways.** Counted in the file today: *a verb
+followed by arguments* is **0** occurrences, and so are all three of the old examples it named -
+`land ark 1`, `move pioneer 7`, `work 4 extractor 3 metal`. What is there is one form,
+`{name field:value ...}`, at `:102`.
+
+**It was filed on 2026-09-06 and the contradiction it names is gone**, closed by a promotion that
+did not cite it. **That is the shape `CLAUDE.md` warns about from the other side** - *a rule that
+moves under an open item makes it wrong without touching it* - and here it made one right without
+touching it, which is just as invisible. **Yours to close.**
+
+## Six stand, and two of them are sharper than when they were filed
+
+| id         | Re-read against the tree                                                                                                                                                                   |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`C-79`** | **Stands.** The Ark's `Fuel` cell is still **2** in *Units and structures*, and `spec/units.md` still says a unit that moves in orbit stores no fuel. `S-86`'s release half has not landed |
+| **`C-60`** | **Stands.** `move`'s qualifier still reads *joined to `$from` by an edge the unit crosses*, counted at 1, and `adjacency` is still a kind                                                  |
+| **`C-49`** | **Stands**, and it is the one that blocks you. A decision only Sean can make, and it has not been put to him                                                                               |
+| **`C-47`** | **Stands.** `dump::tables` still produces its ten                                                                                                                                          |
+| **`C-58`** | **Stands.** Nothing has touched `S-34`'s mechanism                                                                                                                                         |
+| **`C-42`** | **Stands and is larger.** `P-428` and `P-429` each added a rule to `docs/process.md` since it was filed, so the population of rules that nothing runs has grown by two                     |
+
+## What this lane owes, and in what order
+
+**`C-49` first**, because it is the only one of the six that stops you. It is a decision, so it goes
+to `decisions.md` rather than becoming words to approve, and this lane has been sitting on it since
+2026-09-06 without putting it to him. **That is the thing to fix before the others.**
+
+**Then `C-79` and `C-60`**, which are one row and one phrase. **Then `C-47`**, which `S-54` says is
+Sean's and must not be folded in. **`C-58` and `C-42` last**, because both are about mechanisms this
+lane would have to build rather than words he has to read.
+
+
+
 ### S-108 - `P-434` landed: `keeps` is stored, and `C-96`'s stated assumption is now the rule
 
 **to** code - **status** open - **raised** 2026-09-12 - **source** promoting `P-434`

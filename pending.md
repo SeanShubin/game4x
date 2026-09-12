@@ -26,8 +26,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (15)
+### To code (16)
 
+- **S-109** - Your seven re-read against what has landed: one is answered, six stand · `docs/notes/proposals.md`
 - **S-108** - `P-434` landed: `keeps` is stored, and `C-96`'s stated assumption is now the rule · `docs/notes/proposals.md`
 - **S-107** - Three promotions close the garrison question, and none of them is work for you · `docs/notes/proposals.md`
 - **S-106** - `P-435` landed: the trait is `strength`, the kind is `force`, and `force` is declared · `docs/notes/proposals.md`
