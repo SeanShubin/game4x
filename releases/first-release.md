@@ -380,13 +380,28 @@ only one who can move them.
 
 ### R-6 - The loop can be played through
 
-**to** code - **status** open - **cited** `faafb5f`, `2f38241`, `53bd58d`, `58c8b4a`, `92786a9` - **nothing in the code blocks it**, 2026-09-05
+**to** code - **status** open - **cited** `faafb5f`, `2f38241`, `53bd58d`, `58c8b4a`, `92786a9`, `d7ed1e8` - **measured 2026-09-11 and it is not built**, where this line said *nothing in the code blocks it* on 2026-09-05
 
 - **In** - `spec/control.md`, *a player wins by launching an Ark from a fully exploited planet*
 - **Vetted when** - A scenario reaches a fully exploited planet and launches an Ark, on the
   definitions and the machinery of the main scenario - **which I have vetted, and which is what
   makes this one worth trusting.**
-- **Nothing in the code blocks it, as of 2026-09-05.** `C-7` was withdrawn on the 31st; `C-11` landed in `05097a6` and a territory's stores carry; `C-9` landed in `ec96bc9` and *fully exploited* is decidable from a territory alone. **What is now in question is not whether it can be played but how much of it has to be** - see the proposal queue.
+- **Nothing in the code blocks it, as of 2026-09-05.** `C-7` was withdrawn on the 31st; `C-11` landed in `05097a6` and a territory's stores carry; `C-9` landed in `ec96bc9` and *fully exploited* is decidable from a territory alone. **What is now in question is not whether it can be played but how much of it has to be** - `P-422`.
+- **Measured 2026-09-11, and the first half of the *vetted when* does not hold.** `C-95`, in
+  `d7ed1e8`: running `setup.4x`, `{start}` and `play.4x` and asking the model gives **twelve
+  claimable territories, two founded, none at maximum output**, with `is_fully_exploited` and
+  `has_won` both false. It does launch an Ark, at line 164 of a 133-command scenario, so the second
+  half holds. **The code lane does not set this `built` and this lane has not recorded it as
+  such.**
+- **The gap is not a near miss**, which is the part a summary loses. `tests/fully_exploited.rs:410`
+  derives the bill for finishing the planet as **57 buildings and 114 commands**, against a scenario
+  that is 133 commands and has founded two of twelve. **Re-run by this lane rather than taken from
+  the report**: `the_committed_scenario_launches_an_ark_and_does_not_finish_the_planet` passes on
+  `(12, 2, 0)`.
+- **One thing this proved that nothing had asserted.** Launching from an unfinished planet did not
+  win, so `spec/control.md`'s *from a fully exploited planet* is doing work rather than being
+  incidentally true, and that is now a check rather than an observation.
+
 
 
 ### R-7 - Each recipe can be confirmed on its own

@@ -21,7 +21,43 @@ here without first becoming a proposal.
 
 ## Open
 
+### P-422 - `R-6` asks how much of the planet has to be played, and has pointed at an empty queue since 2026-09-05
+
+**to** sean - **status** open - **raised** 2026-09-11 - **kind** recovered, from `R-6`'s own note and the code lane's `C-95` - **asks** a decision - **into** `releases/first-release.md` -> `R-6`
+
+**`R-6` has carried the question in prose and never as an item.** Its third bullet reads *what is
+now in question is not whether it can be played but how much of it has to be - see the proposal
+queue*, and **the queue has never held it**: 0 hits for that question across `proposals.md` and
+this file, searched for by concept as well as by wording, against a population of **418 rows in
+the Accepted ledger** plus every open, rejected and withdrawn item. So the pointer has been
+dangling for six days. It now points here.
+
+**What made it urgent is that the answer stopped being hypothetical.** `C-95` measured the
+committed scenario on 2026-09-11: **twelve claimable territories, two founded, none at maximum
+output**, `is_fully_exploited` and `has_won` both false. It launches an Ark at line 164 of 133
+commands, so the *vetted when*'s second half holds and its first does not. `tests/fully_exploited.rs`
+derives the remaining bill as **57 buildings and 114 commands**. **This is not a near miss**, and
+`R-6` cannot be vetted as it stands.
+
+**Three ways out, and the choice is which you want to look at.**
+
+1. **Commit the full scenario.** `play.4x` grows by **at least** the 114 commands the bill names -
+   that figure counts labor-and-build pairs only, and founding the other ten territories, moving
+   pioneers to them and ending the turns are all on top - and `R-6` is then vetted by reading a
+   scenario nobody will read line by line
+2. **Play a smaller planet.** A scenario on fewer territories finishes, and *fully exploited* is
+   demonstrated on something a person can hold in their head - at the cost of the vetted planet not
+   being the one the game ships
+3. **Reword the capability.** `R-6` becomes what the current scenario already shows, and *reaching
+   a fully exploited planet* moves to a later release
+
+**This lane has no recommendation**, because the three differ in what you would be looking at when
+you vet it, and that is the whole of the question. **What it can say** is that 1 and 2 both keep
+`docs/process.md`'s *the definitions and the commands are enough to derive the data dump by hand*
+literally true of a scenario you could work through, and 3 does not.
+
 ### P-421 - `put` is a role in twelve rows that no document defines, and `limit` is defined and used nowhere
+
 
 **to** sean - **status** open - **raised** 2026-09-11 - **kind** entailed, from the code lane's `C-88` - **asks** a decision - **into** `releases/first-release.md` -> Recipes
 
