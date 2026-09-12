@@ -62,7 +62,52 @@ Two limits Claude holds itself to:
 
 ## Open
 
-*Nothing is open. Everything filed has been decided.*
+### P-443 - the vocabulary declares itself, so the rule needs no exception
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered, from your answer on `P-442` · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**Sean, 2026-09-12**: *Lets go with option a.*
+
+**What a file of kinds now looks like:**
+
+```
+{kind name:kind}
+{kind name:trait}
+{kind name:family}
+{kind name:citizen}
+{kind name:garrison}
+```
+
+**And what that buys is that the rule above it does not move.** *Every word in a data file is a
+kind, a trait, or one of a trait's values* - `kind` is a kind, so the file obeys the rule it is
+written under.
+
+**The sentence, to follow *Every word in a data file is a kind, a trait, or one of a trait's
+values*:**
+
+> **A file may declare the vocabulary rather than use it, and it is written in the same form.**
+> `kind`, `trait` and `family` are themselves kinds, so a line that declares one is a description
+> like any other and the rule above needs no exception. **A declaration is the third thing the one
+> notation carries**, beside a command and a state.
+
+## Why anything is added at all, when option A changes no rule
+
+**Because the next reader asks the question you have just answered.** Nothing in `spec/console.md`
+says a data file may declare rather than describe, and the rule about words reads as though every
+file is a state. **The sentence is the answer written down**, not a change to what is true.
+
+## One consequence, so it is not discovered later
+
+**The set of kinds now has two sorts and nothing marks them.** `citizen` and `force` can be in a
+game state; `kind`, `trait` and `family` appear only in declarations. **This is not new** - `orbit`,
+`deposit`, `adjacency` and `game` are declared and no recipe names them either, which is why the
+drawing leaves them out. **It is the same shape one step further**, and the offered sentence does not
+try to mark the difference.
+
+**The release's *Kinds* table is not touched here.** Under `P-440` it becomes a copy of the data file
+rather than the source, so the three lines belong in the file when it is written - **adding them to a
+table that is about to be generated would be work done twice.**
+
 
 ## Addressed to other perspectives
 

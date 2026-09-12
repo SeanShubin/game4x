@@ -8,7 +8,33 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Decided 2026-09-12, the vocabulary declares itself
+
+*Lets go with option a.*
+
+**Answering `P-442`, and it is the option that changes no rule.** A file of kinds opens
+
+```
+{kind name:kind}
+{kind name:trait}
+{kind name:family}
+```
+
+and `spec/console.md`'s *every word in a data file is a kind, a trait, or one of a trait's values*
+**stands exactly as written**, because `kind` is a kind.
+
+**`P-443` adds a sentence anyway**, and the reason is worth keeping: **option A changes nothing that
+is true and leaves the question unanswered on the page.** Nothing in `spec/console.md` says a file
+may declare rather than describe, so the next reader asks what the code lane asked. **A decision that
+requires no change still needs recording where the question is met.**
+
+**One consequence, unmarked on purpose.** Kinds now come in two sorts - those that can be in a game
+state, and `kind`, `trait` and `family`, which appear only in declarations. **That is not new**:
+`orbit`, `deposit`, `adjacency` and `game` are declared and named by no recipe, which is why the
+drawing leaves them out. **It is the same shape one step further.**
+
 ## Said 2026-09-12, lead with the example and let the abstraction explain it
+
 
 *Show me an example of what each option looks like. Also note, the way you presented this is very
 hard for a human to understand. You speak in the abstract so I have to puzzle out what you mean,
