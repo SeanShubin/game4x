@@ -3061,3 +3061,14 @@ or `1` - so a fleet of a million is four entries and a fleet of ten is four entr
 earlier was *territory, orbit, ark, pioneer*, on the grounds that `move` names one unit and leaves
 the other where it was. **`move` names a kind**, and two units are told apart by their state and by
 the place the command names - so nothing had to be named. Filed as `P-456`, which now asks approval.
+
+## Filed 2026-09-12, `C-101`: a command binds one place where `move` names two
+
+**The code lane confirmed a gap this lane was not confident enough to file**, and demonstrated it
+rather than arguing it: two pioneers, two territories, both next to a third, both with a move left,
+and `{move unit:pioneer territory:2}` is a correct description of two different moves.
+
+**`P-456` is what turned it from a placeholder into a gap.** The model picks the lowest-numbered
+ready unit, which was standing in for an identity the specification might one day have supplied. It
+will not. Filed as `P-460`, asking a decision between naming both places and deriving `$from` -
+and only the first survives `P-456`, because deriving it needs a way to say *which unit*.

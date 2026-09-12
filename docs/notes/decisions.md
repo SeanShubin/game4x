@@ -21,6 +21,69 @@ here without first becoming a proposal.
 
 ## Open
 
+### P-460 - a command binds one place where `move` names two
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** contradiction, filed by the code lane as `C-101` and demonstrated by a test · **shape** text · **asks** a decision · **into** `spec/console.md` -> The language, or `releases/first-release.md` -> Recipes
+
+**Two pioneers, two territories, both next to a third, both with a move left. One command:**
+
+```
+{move unit:pioneer territory:2}
+```
+
+**That is a correct description of two different moves.** Exactly one pioneer goes, and nothing the
+player typed said which. The code lane put it in a test rather than an argument -
+`a_move_command_names_one_place_where_the_recipe_names_two` - and asserted the ambiguity rather than
+the choice, so it stays true if the tie-break changes.
+
+**Why now, and not before.** `spec/console.md` says **a command binds what that recipe leaves open:
+the place it acts in, and any ingredient or trait value it names with a `$`.** `move` names two
+places with a `$`:
+
+```
+require 1 place                                                   $from
+require 1 place, joined to `$from` by an edge the unit crosses    $to
+require 1 unit, moving at least 1                                 $from
+put     unit, moving one less                                     $to
+```
+
+**So `$from` is bound by nothing and the model chooses it** - the lowest-numbered ready unit of that
+kind standing next to the destination. **`P-456` is what turns that from a placeholder into a gap**:
+while an `id` might one day have come to units, the tie-break was standing in for something the
+specification might supply. It will not, and for a reason about cost rather than taste.
+
+## The two ways, and only one survives `P-456`
+
+**A** - **the command names both places:**
+
+```
+{move unit:pioneer from:1 to:2}
+```
+
+Every `$` the recipe names is bound, which is what `spec/console.md` already requires. **Costs one
+argument on one command**, and the scenario's line changes.
+
+**B** - **`$from` is derived from the unit**, and the notation says so - *a place a recipe does not
+bind is where the thing it names already is.*
+
+Costs nothing to write and **cannot be made unambiguous under `P-456`**: the unit is named by its
+kind, two pioneers of the same kind and state are one entry, and the entry does not say where. **So
+`B` needs a way to name which unit, which is the `id` you have just ruled out.**
+
+## What this lane would take, and what it is careful not to claim
+
+**`A`**, because it is the rule that is already written rather than a new one: a command binds every
+`$` the recipe names, and `move` names two. **`B` is not a smaller change, it is a different rule**,
+and the thing it would need is the thing `P-456` says the game will not have.
+
+**What is not in question is two units in one place.** Those are interchangeable - which is what
+`P-456` says a fleet *is* - and picking either is correct rather than arbitrary. **This is only
+about two units the player can tell apart by where they are**, and has no way to say it.
+
+**And this lane is not claiming the scenario is wrong.** `{move unit:pioneer territory:2}` is
+unambiguous in a game with one pioneer, which is every game this release can play. **The test is a
+game the release cannot reach**, built to show the rule rather than a failure - which is the
+difference between a gap and a defect.
 ### P-457 - what a trait's own line says, which is the other thing `traits.4x` waits on
 
 **to** sean - **status** open - **raised** 2026-09-12 - **kind** entailed, from `P-451` - **asks** a decision - **into** `spec/data/traits.4x`, and one sentence into `spec/console.md` -> The language

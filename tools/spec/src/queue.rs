@@ -254,15 +254,19 @@ pub fn replace_run(text: &str, old: &str, new: &str) -> Result<String, Problem> 
 /// What an empty `Open` section says, so that emptiness is stated rather than inferred.
 pub const NOTHING_OPEN: &str = "*Nothing is open. Everything filed has been decided.*";
 
-/// Put the sentence back when landing the last item empties the queue.
+/// Make the sentence agree with the section, in both directions.
 ///
 /// **The section saying nothing and the section saying it is empty are different claims**,
 /// and only the second one a reader can act on. Landing `P-434` left `## Open` followed by a
 /// blank line and the next section, which reads as *this has not been looked at* rather than
 /// *there is nothing here*.
 ///
-/// **Found by the integration test rather than by reading the file**, which is the first time
-/// that has happened to this lane today.
+/// **It wrote the sentence and never took it out, which made it a lie twice in one day.**
+/// `P-455` was filed under a standing sentinel, and so was `P-456` an hour after the gate
+/// check for it was added. **A sentence only ever written says something true once and then
+/// goes on saying it**, which is the same shape as the absence assertions the code lane
+/// retired the same morning - and the fix is the same one: derive it from the section rather
+/// than remember to change it.
 pub fn say_if_empty(text: &str) -> Result<String, Problem> {
     let lines: Vec<&str> = text.lines().collect();
     let Some(open) = lines.iter().position(|line| line.trim() == "## Open") else {
@@ -282,7 +286,28 @@ pub fn say_if_empty(text: &str) -> Result<String, Problem> {
         .filter(|line| !line.trim().is_empty())
         .collect();
     if !inside.is_empty() {
-        return Ok(text.to_string());
+        // **And it takes the sentinel out again, which is the half that was missing.** This
+        // only ever wrote it, so the sentence went in when the last item landed and stayed
+        // when the next one was filed - and for an hour on 2026-09-12 the queue said nothing
+        // was open with `P-456` standing three lines below the sentence. Twice in one day,
+        // because filing is done by hand and no verb ran then.
+        if !inside.iter().any(|line| line.trim() == NOTHING_OPEN) {
+            return Ok(text.to_string());
+        }
+        let mut out: Vec<&str> = Vec::with_capacity(lines.len());
+        out.extend_from_slice(&lines[..open + 1]);
+        let mut kept: Vec<&str> = lines[open + 1..next]
+            .iter()
+            .copied()
+            .filter(|line| line.trim() != NOTHING_OPEN)
+            .collect();
+        while kept.first().is_some_and(|line| line.trim().is_empty()) {
+            kept.remove(0);
+        }
+        out.push("");
+        out.extend_from_slice(&kept);
+        out.extend_from_slice(&lines[next..]);
+        return Ok(join(&out));
     }
     let mut out: Vec<&str> = Vec::with_capacity(lines.len() + 3);
     out.extend_from_slice(&lines[..open + 1]);
@@ -543,6 +568,36 @@ another one.
 ## Accepted
 ";
         assert_eq!(say_if_empty(held).expect("unchanged"), held);
+    }
+
+    /// And a section with both the sentinel and an item loses the sentinel.
+    ///
+    /// **This is the case that happened twice on 2026-09-12** and that the one-directional
+    /// version could not fix: an item filed by hand under a sentence saying nothing is open.
+    #[test]
+    fn a_queue_that_says_it_is_empty_and_is_not_loses_the_sentence() {
+        let lying = format!(
+            "## Open
+
+{NOTHING_OPEN}
+
+### P-1 - a title
+
+## Accepted
+"
+        );
+        let said = say_if_empty(&lying).expect("a section");
+        assert!(!said.contains(NOTHING_OPEN), "{said:?}");
+        assert_eq!(
+            said,
+            "## Open
+
+### P-1 - a title
+
+## Accepted
+",
+            "{said:?}"
+        );
     }
 
     /// Approved text is found however the destination wrapped it.

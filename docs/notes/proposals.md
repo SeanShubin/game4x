@@ -131,8 +131,6 @@ with the same state is interchangeable and it does not matter which. **Whether t
 both places is a question this lane is putting to the code lane rather than to you**, and it is
 theirs to state precisely before it is anyone's to decide.
 
-*Nothing is open. Everything filed has been decided.*
-
 ## Addressed to other perspectives
 
 ### S-120 - `P-455` landed: the three files are in `spec/data/`, and three of your checks are red by design

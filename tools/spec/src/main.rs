@@ -5,7 +5,13 @@
 //! spec after <id>[:n] <file> <anchor>    put it in after that line, and assert it landed
 //! spec replacing <id>[:n] <file> <old>   put it in where those lines are, and assert it landed
 //! spec land <id> <after>                 ledger row from the item's own `into`, then remove it
+//! spec file <path>                       put a drafted item at the top of Open
 //! ```
+//!
+//! **`file` was the last step still done by a script written fresh each time**, and it routes
+//! by the item's own `asks`: a decision goes to `docs/notes/decisions.md` and approval to the
+//! queue, because those two files are that field written down. It also makes the sentinel
+//! agree afterwards, which is what a hand-written insert has no reason to think about.
 //!
 //! **`:n` names which block, and only a proposal offering more than one needs it.**
 //! `CLAUDE.md`: *each indented quotation is one block of text being offered, and the proposal
@@ -36,6 +42,7 @@ fn main() -> ExitCode {
         ["after", id, file, anchor] => after(&root, id, file, anchor),
         ["replacing", id, file, old] => replacing(&root, id, file, old),
         ["land", id, previous] => land(&root, id, previous),
+        ["file", path] => file(&root, path),
         _ => Err(usage()),
     };
     match outcome {
@@ -56,6 +63,7 @@ fn usage() -> String {
         "spec after <id>[:n] <file> <anchor>    put it in after that line, and assert it landed",
         "spec replacing <id>[:n] <file> <old>   put it in where those lines are, and assert it landed",
         "spec land <id> <after-id>              ledger row from the item's own `into`, then remove it",
+        "spec file <path>                       put a drafted item at the top of Open",
         "",
         "<id>:n names one of several offered blocks, numbered from 1 in the order they appear.",
     ]
@@ -243,6 +251,99 @@ fn land(root: &Path, id: &str, previous: &str) -> Result<String, String> {
     }
     Ok(format!(
         "{id} landed: one ledger row into {into}, block removed"
+    ))
+}
+
+/// Put a drafted item at the top of `## Open`, and make the sentinel agree afterwards.
+///
+/// **Filing was the one step still done by a script written fresh each time**, and
+/// `CLAUDE.md` records what that costs: every hand-rolled edit to this file has eventually
+/// reintroduced something the tool already guards. It cost the sentinel twice in one day -
+/// `P-455`, then `P-456` an hour after the gate check for it existed - because a script that
+/// inserts a block has no reason to think about a sentence three lines above it.
+///
+/// The draft is a file whose first line is the `### P-n - title` heading. It is checked the
+/// way a promotion is: no carriage return, no `###` inside the body, and the id not already
+/// in the queue.
+fn file(root: &Path, path: &str) -> Result<String, String> {
+    let draft = read(Path::new(path))?.replace("\r\n", "\n");
+    let heading = draft
+        .lines()
+        .next()
+        .ok_or_else(|| format!("{path} is empty"))?;
+    let id = heading
+        .strip_prefix("### ")
+        .and_then(|rest| rest.split_once(" - "))
+        .map(|(id, _)| id.trim().to_string())
+        .ok_or_else(|| format!("{path} does not begin with `### P-n - title`"))?;
+    if draft.lines().skip(1).any(|line| line.starts_with("### ")) {
+        return Err(format!(
+            "{id}'s body holds a `###`, which every tool reads as the next item - CLAUDE.md"
+        ));
+    }
+
+    // **`asks` chooses the file, because the two files are that field written down.**
+    // `docs/notes/decisions.md` holds choices only Sean can make and the queue holds words for
+    // him to approve; an item lives in one at a time. `CLAUDE.md` already makes `asks`
+    // checkable rather than descriptive, and this is the other thing it can check. Filed
+    // `P-460` into the wrong one by hand within a minute of this verb existing.
+    let asks_decision = match (
+        draft.contains("**asks** a decision"),
+        draft.contains("**asks** approval"),
+    ) {
+        (true, false) => true,
+        (false, true) => false,
+        (true, true) => return Err(format!("{id} says it asks both")),
+        (false, false) => return Err(format!("{id} has no **asks** field, so it has no home")),
+    };
+    let into = if asks_decision {
+        "docs/notes/decisions.md"
+    } else {
+        "docs/notes/proposals.md"
+    };
+    let at = root.join(into);
+    let before = read(&at)?;
+    if before.contains(&format!("### {id} - ")) {
+        return Err(format!("{id} is already in the queue"));
+    }
+    let anchor = "## Open\n";
+    let cut = before
+        .find(anchor)
+        .ok_or_else(|| "the queue has no Open section".to_string())?
+        + anchor.len();
+    let body = draft.trim_end();
+    let written = format!("{}\n{body}\n{}", &before[..cut], before[cut..].trim_start());
+    // Only the queue carries the sentinel; the decisions file says its own thing.
+    let settled = if asks_decision {
+        written
+    } else {
+        queue::say_if_empty(&written).map_err(|why| why.to_string())?
+    };
+    write(&at, &settled)?;
+
+    let back = read(&at)?;
+    if back.matches(&format!("### {id} - ")).count() != 1 {
+        return Err(format!("{id} is not in {into} exactly once after filing"));
+    }
+    if !asks_decision && back.contains(queue::NOTHING_OPEN) {
+        return Err("the queue still says nothing is open".to_string());
+    }
+    if back.contains('\r') {
+        return Err(format!("{into} holds a carriage return after the write"));
+    }
+    let other = if asks_decision {
+        "docs/notes/proposals.md"
+    } else {
+        "docs/notes/decisions.md"
+    };
+    if read(&root.join(other))?.contains(&format!("### {id} - ")) {
+        return Err(format!(
+            "{id} is in {other} too, and an item lives in one at a time"
+        ));
+    }
+    Ok(format!(
+        "{id} filed: {} line(s) at the top of {into} -> Open",
+        body.lines().count()
     ))
 }
 
