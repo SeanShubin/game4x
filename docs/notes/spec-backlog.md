@@ -3146,3 +3146,24 @@ paragraph is offered whole.
 **And the release's `Readies` column stops saying whether and starts saying how many of each** -
 four cells, eight counts, every one of them 1. Six `refresh` rows give eight counts because `unit`
 is `ark` and `pioneer`, which is where the two numbers differ.
+
+## Said 2026-09-12, an id's magnitude means nothing
+
+Sean, reading `P-462`: *A territory id is a unique identifier, its magnitude doesn't have relevance
+typical to a petri net, different ids are different things. Biome is a fixed list of types and nature
+is a finite value. Help me understand what the question is.*
+
+**The question was badly framed and `P-462` is rewritten.** Everything he says about `id`, `biome`
+and `nature` is `traits.4x`, which `P-457` settles. The open thing is `kinds.4x` - which traits a
+kind *has* - where `P-459` gave a form for a bounded trait and an unbounded one still has none.
+
+**And the first half of what he said is a second finding, filed as `P-463`.** `id` admits a number,
+so `max id of {territory}` and `id of x > 5` are well-formed expressions that mean nothing. The
+notation already draws this line once - `from` and `to` admit `place` rather than a number, and a
+place is written as its id.
+
+**`P-458` does not settle it and comes close enough to look as though it should**: its second bullet
+removes `identity` because removing it moves no work to a person, and its third keeps it because an
+identity is not a number, a family or a declared value. **The two disagree because the test is about
+authoring cost and this is about correctness** - which is a case the invariant does not reach, and
+worth knowing about the invariant rather than about `id`.

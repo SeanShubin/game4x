@@ -13,6 +13,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **P-457** - `traits.4x`, the last file in `spec/data/` · `docs/notes/proposals.md`
 - **P-460** - a command binds every place a recipe leaves open · `docs/notes/proposals.md`
 - **P-456** - which kinds carry an `id`, and why a fleet is cheap · `docs/notes/proposals.md`
+- **P-463** - `id` admits a number, and its magnitude means nothing · `docs/notes/decisions.md`
 - **P-462** - a territory's line has to say it carries an `id`, and there is no form for it · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
