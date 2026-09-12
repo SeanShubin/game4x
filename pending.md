@@ -20,27 +20,17 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-103** - `6f8d75b` P-431 built, S-103's proposed_blocks, gap-view joins the workspace, and C-96 filed · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (22)
+### To code (13)
 
 - **S-116** - Your guess was right, and `R-10` is `built` and with Sean · `docs/notes/proposals.md`
 - **S-115** - `P-451` and `P-452` landed: `traits.4x` is fully specified and sorting is written down · `docs/notes/proposals.md`
 - **S-114** - `spec/data/kinds.4x` exists, and `P-448` is the shape for the rest · `docs/notes/proposals.md`
 - **S-113** - `C-98` answered, and then answered differently an hour later - build the second one · `docs/notes/proposals.md`
-- **S-112** - `P-443` landed: the vocabulary declares itself, and `C-97` is answered · `docs/notes/proposals.md`
-- **S-111** - `P-441` landed: an Ark's `Fuel` cell is blank, and your half is one line · `docs/notes/proposals.md`
-- **S-110** - `C-49` answered with a third order that dissolves it, and two questions are now yours · `docs/notes/proposals.md`
-- **S-109** - Your seven re-read against what has landed: one is answered, six stand · `docs/notes/proposals.md`
-- **S-108** - `P-434` landed: `keeps` is stored, and `C-96`'s stated assumption is now the rule · `docs/notes/proposals.md`
-- **S-107** - Three promotions close the garrison question, and none of them is work for you · `docs/notes/proposals.md`
-- **S-106** - `P-435` landed: the trait is `strength`, the kind is `force`, and `force` is declared · `docs/notes/proposals.md`
-- **S-105** - `P-433` landed and `C-68` is answered by a sentence rather than a row · `docs/notes/proposals.md`
 - **S-104** - Your fifteen, read one by one: four are closable and two are acted on today · `docs/notes/proposals.md`
-- **S-103** - `proposed_text()` refuses a proposal with two destinations, and `tools/spec` needs the blocks · `docs/notes/proposals.md`
 - **S-97** - `P-396` gives the notation a second noun, and the release cannot write it yet · `docs/notes/proposals.md`
 - **S-96** - A check for `In` lines: twelve cite a file, and two were not quoting it · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`

@@ -350,7 +350,9 @@ now is wasted either way.
 
 ### S-112 - `P-443` landed: the vocabulary declares itself, and `C-97` is answered
 
-**to** code - **status** open - **raised** 2026-09-12 - **source** promoting `P-443`, which is your `C-97` answered
+**to** code - **status** **acted** 2026-09-12 - **cited** `6f8d75b` - **raised** 2026-09-12 - **source** promoting `P-443`, which is your `C-97` answered
+
+**Closed by this lane, verified against the tree rather than taken from a report.** `C-97` reads **answered** and the notation did not have to move.
 
 **Sean took option A**, so **`spec/console.md`'s rule does not move.** *Every word in a data file is
 a kind, a trait, or one of a trait's values* stands exactly as written, because `kind` is a kind.
@@ -394,7 +396,9 @@ eight are named there now.
 
 ### S-111 - `P-441` landed: an Ark's `Fuel` cell is blank, and your half is one line
 
-**to** code - **status** open - **raised** 2026-09-12 - **source** promoting `P-441`, which is `S-86` item 2 and half of your `C-79`
+**to** code - **status** **acted** 2026-09-12 - **cited** `0506c39` - **raised** 2026-09-12 - **source** promoting `P-441`, which is `S-86` item 2 and half of your `C-79`
+
+**Closed by this lane, verified against the tree rather than taken from a report.** `prototypes/kinds` carries `fuel: None` and the gate is green, so `C-79`'s first bullet is done. **Its second is not** - `move` still charges every unit 1 energy - and that half is `C-79`, still open to this lane.
 
 **The cell is blank.** *Units and structures*, the Ark's `Fuel`: written cell by cell, 10 cells
 against the live row's 10, **one changed** - `2` to a blank. **A blank rather than a zero**, which
@@ -428,7 +432,9 @@ says about a recipe naming the kind it produces. **Say if you would rather have 
 
 ### S-110 - `C-49` answered with a third order that dissolves it, and two questions are now yours
 
-**to** code - **status** open - **raised** 2026-09-12 - **source** Sean answering `P-439`, which was `C-49` put to him
+**to** code - **status** **acted** 2026-09-12 - **cited** `044e4ed` - **raised** 2026-09-12 - **source** Sean answering `P-439`, which was `C-49` put to him
+
+**Closed by this lane, verified against the tree rather than taken from a report.** `C-49` reads **answered**, and both questions it named were answered by Sean rather than proposed by either lane.
 
 **Sean, 2026-09-12**: *Lets put the data in the specification, in the format of the data file, so the
 specification now owns it. The data is copied as needed.*
@@ -530,7 +536,9 @@ when its tables leave, so the loss of a table is noticed rather than silent when
 
 ### S-109 - Your seven re-read against what has landed: one is answered, six stand
 
-**to** code - **status** open - **raised** 2026-09-12 - **source** `S-104` promised this re-read before any of the seven became a proposal, and Sean asked for it before vetting the release
+**to** code - **status** **acted** 2026-09-12 - **cited** `8dc8d57` - **raised** 2026-09-12 - **source** `S-104` promised this re-read before any of the seven became a proposal, and Sean asked for it before vetting the release
+
+**Closed by this lane, verified against the tree rather than taken from a report.** `C-48` reads **answered**; the other six were re-read against the tree and stand, and each is carried by a later item or by this lane's own list.
 
 **`S-104` said plainly that this lane had not re-read these against the promotions since they were
 filed. It has now**, against the tree rather than against their text, and the result is one
@@ -573,7 +581,9 @@ lane would have to build rather than words he has to read.
 
 ### S-108 - `P-434` landed: `keeps` is stored, and `C-96`'s stated assumption is now the rule
 
-**to** code - **status** open - **raised** 2026-09-12 - **source** promoting `P-434`
+**to** code - **status** **acted** 2026-09-12 - **cited** `b0b938a` - **raised** 2026-09-12 - **source** promoting `P-434`
+
+**Closed by this lane, verified against the tree rather than taken from a report.** `C-96` reads **answered** and the stored reading it built under is the rule.
 
 **You built under the stored reading and said so. It is the rule now.** `releases/first-release.md`
 -> *Traits*, `keeps`: the **Stored or derived** cell reads **stored** where it read *of the kind*.
@@ -602,7 +612,9 @@ answered so that two questions about one number did not arrive together; it is a
 
 ### S-107 - Three promotions close the garrison question, and none of them is work for you
 
-**to** code - **status** open - **raised** 2026-09-12 - **source** promoting `P-436`, `P-437` and `P-438`
+**to** code - **status** **acted** 2026-09-12 - **cited** `ed5071e` - **raised** 2026-09-12 - **source** promoting `P-436`, `P-437` and `P-438`
+
+**Closed by this lane, verified against the tree rather than taken from a report.** Nothing in it was work for that lane and nothing came back. The three `spec/` files agree with the release.
 
 **The rule they settle is the one the release already implements**, which is why this is an account
 rather than a request. Sean: *every citizen has 1 strength but does not generate force unless a
@@ -636,7 +648,9 @@ been quoted in `crates/`, it is quoting something that was wrong rather than sta
 
 ### S-106 - `P-435` landed: the trait is `strength`, the kind is `force`, and `force` is declared
 
-**to** code - **status** open - **raised** 2026-09-11 - **source** promoting `P-435`, and `C-93` answered by it
+**to** code - **status** **acted** 2026-09-12 - **cited** `59291b7`, `0506c39` - **raised** 2026-09-11 - **source** promoting `P-435`, and `C-93` answered by it
+
+**Closed by this lane, verified against the tree rather than taken from a report.** `C-93` reads **answered**, `Kind::Force` is in `prototypes/kinds` rather than excepted, and *four roles* is 0 occurrences under `crates/` and `reports/`.
 
 **`C-93` is answered and this is work.** *Kinds* declares **eighteen** now, and the eighteenth is
 `force`: *what a territory presents to hold or take ground; mustered each turn and swept at its end*,
@@ -676,7 +690,9 @@ aggregate: 3, 3 and 1, before and after.
 
 ### S-105 - `P-433` landed and `C-68` is answered by a sentence rather than a row
 
-**to** code - **status** open - **raised** 2026-09-11 - **source** promoting `P-433`
+**to** code - **status** **acted** 2026-09-12 - **cited** `efe34eb` - **raised** 2026-09-11 - **source** promoting `P-433`
+
+**Closed by this lane, verified against the tree rather than taken from a report.** `C-68` reads **answered** and changed no code - `may_contain` already admitted the game, and what was stale was its comment.
 
 **`C-68` is answered and the release does not change.** `spec/logistics.md` -> Containment now says
 **the game declares no limit, for every kind** - it contains everything, there is no room to record
@@ -760,7 +776,9 @@ that landed, that is what the re-read is for.
 
 ### S-103 - `proposed_text()` refuses a proposal with two destinations, and `tools/spec` needs the blocks
 
-**to** code - **status** open - **raised** 2026-09-11 - **source** building `tools/spec`'s `promote` half, which `docs/notes/tools-spec-design.md` designed in 2026-09-02
+**to** code - **status** **acted** 2026-09-12 - **cited** `6f8d75b` - **raised** 2026-09-11 - **source** building `tools/spec`'s `promote` half, which `docs/notes/tools-spec-design.md` designed in 2026-09-02
+
+**Closed by this lane, verified against the tree rather than taken from a report.** `proposed_blocks()` is in `outbox/src/lib.rs`, and `proposed_text()` is written in terms of it, so there is one parser rather than two.
 
 **`Item::proposed_text()` is exactly right and its signature is one block too narrow.** It returns
 `Err(NoText::Several)` when a proposal carries more than one blockquote - *if a proposal ever carries
@@ -3029,24 +3047,32 @@ the release's *Kinds* table: it is about to be generated, and adding one is work
 - **`docs/process.md` -> Three rules for using AI assistants**: *a unification that is not there
   cannot be had by writing one*, and *a need I have not noticed is not a need*
 
-## The order
+## The order, as of the end of 2026-09-12
 
-1. **`S-114` and `S-113`** - the live thread. `spec/data/kinds.4x` exists; `families.4x` is next, and
-   `kinds.4x` gains a `family` trait on seven of its twenty-one lines. **Start here: it is the only
-   work Sean is not waiting on you for, and it is the largest**
-2. **The two-family check**, in `S-113`. **Small, and it is the instrument of a decision** rather
-   than a restriction - it fires the first time a kind needs two families, which is how Sean decides
-   whether it does
-3. **`R-10`** - the only capability you can finish alone. What is open is that the whole net is one
-   drawing of 62 nodes and 195 arcs and nothing shows it in parts
-4. **`S-96`** - the standing check that every `In` line quotes its source, **wrong three times so
+**The declaration rule is complete** - `spec/console.md` -> The language carries all four sentences,
+and **the shape will not move again.** Everything in `1` follows from them without another decision.
+
+1. **Finish the data files** - `S-114`, `S-115`, `S-116`. `families.4x` and the kinds half are built
+   and want proposing; `traits.4x` and `biomes.4x` follow from the fourth sentence. **This is the
+   largest work and nothing waits on Sean for it**
+2. **The stripping assertion comes out** with the finished `kinds.4x`, which is `C-61`'s pattern -
+   the exception stops being true rather than being widened
+3. **`S-96`** - the standing check that every `In` line quotes its source, **wrong three times so
    far**, each found by a sweep that happened to run
-5. **`X-8`, `X-12`, `X-13`** - the research lens's three
+4. **`X-8`, `X-12`, `X-13`** - the research lens's three
+
+**`R-10` is done and is Sean's.** And the two-family question `S-113` asked about is answered in a
+better place than it asked: **the emitter refuses a kind in two families rather than picking one** -
+`declare.rs`, *a key takes one value, so this refuses rather than picking* - which fires at the
+release rather than at the file, and is where the first such kind would be written.
+
 
 ## Closable on your side, and this lane cannot do it
 
-**`C-98`** is answered by `P-448`, **`C-95`** by `R-6` reading `built`, and **`S-103` is built** -
-`proposed_blocks()` is in `outbox`. `hooks/pre-commit` names some of these on every commit.
+**Nothing that this lane knows of.** `C-93`, `C-96`, `C-97`, `C-68` read **answered** and `C-98`
+reads **acted**; `S-103` is closed here as of `6f8d75b`. **Nine of this lane's own notifications
+closed on 2026-09-12**, so what is left in your inbox is work rather than news.
+
 
 ## Held, and not by you
 

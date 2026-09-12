@@ -89,11 +89,17 @@ one of three sources - *anything that exhausts draws on time for a turn: it spen
 carries, and only the turn's end restores that count.* **`refresh` is that sentence written as
 rows**, and it is the only rule in the game that writes a count upward from nothing.
 
-**Counted by hand from the Qty and Traits columns of the *Recipes* table, over its 81 role cells**,
-so it can be re-run: 69 cells carry a quantity and 12 are blank, and **the twelve blanks are exactly
-the twelve `put` rows**. Of the 69, 66 are constants and three read a trait - *that unit's force*,
-*that citizen's force*, *`$where`'s density for that resource* - which is a colour rather than a
-marking read.
+**Counted from the Qty and Traits columns of the *Recipes* table, over its 77 role cells**, so it
+can be re-run: **64 cells carry a quantity and 13 are blank, and the thirteen blanks are exactly the
+thirteen `put` rows.** Of the 64, three read a trait - *that citizen's strength*, *that unit's
+strength*, *`$where`'s density for that resource* - which is a colour rather than a marking read.
+
+**Corrected 2026-09-12, and both numbers went stale from promotions this lane made.** It read 81
+cells and twelve `put` rows. **`P-427` took four `store` rows out of founding**, so 81 became 77;
+**`P-431` made `age`'s second row a `put`**, so twelve became thirteen. **Nothing edited this
+paragraph and nothing had to** - which is `C-9`'s shape, and it was found by re-deriving the figures
+rather than by reading them.
+
 
 
 **What breaks it is an arc the unfolding cannot flatten**: one that tests a place is **empty** - an
