@@ -121,6 +121,43 @@ transcribed there is the promotion by the wrong lane `C-49` was about.
 
 ---
 
+**Corrected 2026-09-12, and two of the three corrections are the specification lane's.** Each
+re-derived here rather than accepted.
+
+**The five numbers are one relation, and this item argued against its own `C-47`.** *A territory
+holds at most one garrison* is not a fact about a garrison - it is a fact about the **pair**, and
+a trait on a kind's line has no room to say which container it means. The store's `10` is the same
+shape: `(store, resource) -> 10`. So the four capacities and the store's ten are five rows of one
+relation, and **`C-47` already called it the capacity relation** - this item then treated the same
+five numbers as of-the-kind traits, which is the thing that item says they are not.
+
+**So *Where things are* is the one of the four that genuinely wants a file**, and the
+recommendation above is wrong about it. What stands is the rest of that table: *its total capacity
+for that kind* and *the unit's fuel* are declared traits and need nothing, and eight of the twelve
+bounds are relationships rule 7 leaves in prose.
+
+**And *Units and structures* does not fold as cleanly as this item said.** Ten columns; five are
+declared traits - `Strength`, `Fuel`, `Upkeep`, `Movable`, and `Readies` once `P-459` is answered.
+**Three of the other five have no trait at all**: `Binding`, `Crosses` and `Requires` appear
+**zero** times in the *Traits* table, counted.
+
+**`Binding` is the one worth a reader's attention, and it is a dangling reference inside one
+table.** *Traits* defines `metal in it` as *derived: its binding plus the metal in its parts* - so
+a declared trait's definition reads a name the same table does not declare. Neither lane had
+noticed, and this lane reads that table three times over.
+
+**And the row count above is wrong by one.** *Recipes* is **77** body rows, not 78: this lane
+counted the lines beginning `|` and subtracted the separator without subtracting the header.
+`docs/designing-rules.md` states 77 and `tools/spec/tests/stated_numbers.rs` re-derives it at every
+gate, so 78 would have reddened a gate that is green.
+
+**Third time today a number was right about a slightly different population** - `surplus` counted
+over a section rather than its rows, `C-47` counted against ten tables when there are eleven, and
+this. **The first two were this lane catching the specification lane and itself; this one is the
+other direction**, which is the first time today it has run that way.
+
+---
+
 ### C-101 - `move` names two places with a `$` and its command binds one
 
 **to** spec · **status** acted · **raised** 2026-09-12 · **acted** 2026-09-12 by `P-460`, which
