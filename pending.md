@@ -9,7 +9,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 ## What must be decided
 
 - **P-444** - the first data file, and the directory it goes in · `docs/notes/proposals.md`
-- **P-445** - a cell holding several values, written three ways · `docs/notes/decisions.md`
+- **P-445** - a cell holding several values, written four ways · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`

@@ -21,13 +21,19 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-445 - a cell holding several values, written three ways
+### P-445 - a cell holding several values, written four ways
 
-**to** sean - **status** open - **raised** 2026-09-12 - **kind** entailed, from the code lane's `C-98` - **asks** a decision - **into** `spec/console.md` -> The language, and `spec/data/`
+**to** sean - **status** open - **raised** 2026-09-12 - **rewritten** 2026-09-12, when the fourth option was found and then left buried - **kind** entailed, from the code lane's `C-98` - **asks** a decision - **into** `spec/console.md` -> The language, and `spec/data/`
 
 **`unit` has two members and the notation gives a key one value.** Here is the *Families* table
-written each way. **`resource` and `place` are shown with it because `unit` alone hides the third
-option's cost.**
+written four ways. **Each shows the three families that are lists** - `unit`, `resource`, `place` -
+and **`thing` is held back to a table of its own below**, because it is eighteen lines under A and
+one under C, and side by side that is the whole decision.
+
+
+**`D` was added after you read the first three and is now beside them.** It was buried under *what
+each costs* for an hour, so the file said three and this lane said four.
+
 
 ## Option A - a line per pair
 
@@ -57,6 +63,28 @@ option's cost.**
 {family name:place rule:holds-things}
 ```
 
+## Option D - a list where it is a list, a rule where it is a rule
+
+```
+{family name:unit member:ark}
+{family name:unit member:pioneer}
+{family name:resource member:food}
+{family name:resource member:metal}
+{family name:resource member:energy}
+{family name:place member:territory}
+{family name:place member:orbit}
+{family name:thing rule:every-kind}
+```
+
+**`unit` is a list and `thing` is a rule, and they are different sorts of thing.** A kind added
+tomorrow is a `thing` by definition and is not a `unit` unless someone says so. **D says that;
+A and C each say only half of it.**
+
+**Whether that is unification or the exception `P-428` warns against is yours to judge**, and it is
+the reason this is a decision rather than words to approve. The form is uniform - a family
+declaration - and the trait differs. **Three families need no rule and one needs no list**, so
+neither A nor C is wrong about all four.
+
 **And the fourth family is what separates them.** `thing` is written *every kind above* - a rule
 about the table, not a list:
 
@@ -65,6 +93,7 @@ about the table, not a list:
 | **A** | **eighteen lines**, one per kind, repeating `kinds.4x` entirely                          |
 | **B** | one line, `members:citizen-garrison-extractor-yard-store-ark-...`, eighteen words joined |
 | **C** | one line, `{family name:thing rule:every-kind}`                                          |
+| **D** | one line, the same as C - D and C differ on the other three, never on this one           |
 
 ## The same choice on the other two cells
 
@@ -74,7 +103,9 @@ about the table, not a list:
 A   {trait name:strength of:citizen}  and three more lines
 B   {trait name:strength of:citizen-garrison-ark-pioneer}
 C   {trait name:strength of:has-strength}   - a family, which is option A one level up
+D   {trait name:strength of:citizen}  and three more lines - a list, so D writes it as one
 ```
+
 
 **A trait's `Values`.** `biome` admits six:
 
@@ -82,7 +113,14 @@ C   {trait name:strength of:has-strength}   - a family, which is option A one le
 A   {trait name:biome admits:ice}  and five more lines
 B   {trait name:biome admits:ice-desert-grassland-jungle-mountain-ocean}
 C   {trait name:biome admits:biome}   - the values are a kind's members
+D   {trait name:biome admits:ice}  and five more lines - a list, so D writes it as one
 ```
+
+**So `D` is `A` everywhere except `thing`.** Those are the only two cells in the eight tables where
+the several values are a **rule** rather than an enumeration, and `thing` is the only one of them
+this proposal has found. **If there turns out to be a second, `D` is the option that already
+accommodates it and `A` is the one that quietly writes it out longhand.**
+
 
 ## What each costs, revised 2026-09-12 when Sean read A and B as a matter of style
 
@@ -113,29 +151,6 @@ under C cannot drift because it is not stored.
 **And C's plumbing is real but smaller than it looks.** The rule names have to be declared values of
 a `rule` trait, which keeps the word rule intact; whatever reads the file has to know what
 `every-kind` means, which is one function.
-
-## Option D - a family declares either members or a rule, and this lane missed it
-
-```
-{family name:unit member:ark}
-{family name:unit member:pioneer}
-{family name:resource member:food}
-{family name:resource member:metal}
-{family name:resource member:energy}
-{family name:place member:territory}
-{family name:place member:orbit}
-{family name:thing rule:every-kind}
-```
-
-**`unit` is a list and `thing` is a rule, and they are different sorts of thing.** A kind added
-tomorrow is a `thing` by definition and is not a `unit` unless someone says so. **D says that;
-A and C each say only half of it.**
-
-**Whether that is unification or the exception `P-428` warns against is yours to judge**, and it is
-the reason this is a decision rather than words to approve. The form is uniform - a family
-declaration - and the trait differs. **Three families need no rule and one needs no list**, so
-neither A nor C is wrong about all four.
-
 
 ## Why this is yours and not the code lane's
 
