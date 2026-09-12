@@ -23,6 +23,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-465** - `431058a` C-103: the stale two-valued cells are caught now, which P-465 said nothing did · still open in `docs/notes/proposals.md`
 - **P-467** - `fd3659c` P-465, P-466 and P-467: the cleanup P-457 owed, and what deriving found · still open in `docs/notes/decisions.md`
 - **P-466** - `fd3659c` P-465, P-466 and P-467: the cleanup P-457 owed, and what deriving found · still open in `docs/notes/decisions.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`

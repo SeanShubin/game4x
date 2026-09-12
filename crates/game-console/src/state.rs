@@ -156,7 +156,7 @@ pub fn declarations(text: &str) -> Result<Vec<Description>, String> {
                  file of declarations is a list rather than a tree"
             ));
         }
-        let (description, quantity) = parse(&tokens, line_number)?;
+        let (description, quantity) = parse(&tokens, line_number, true)?;
         if quantity.is_some() {
             return Err(format!(
                 "line {line_number}: a declaration carries no quantity - it says the word \
@@ -236,7 +236,7 @@ pub fn read(text: &str) -> Result<Entry, String> {
             ));
         }
         let depth = indent / INDENT;
-        let (description, quantity) = parse(&tokens, line_number)?;
+        let (description, quantity) = parse(&tokens, line_number, false)?;
 
         if stack.is_empty() {
             if depth != 0 {
@@ -301,7 +301,18 @@ fn close(stack: &mut Vec<Entry>) {
 }
 
 /// One line: `{kind trait:value ...}` and, unless it is the root, ` -> quantity`.
-fn parse(tokens: &[Token], at: usize) -> Result<(Description, Option<u32>), String> {
+/// One line of the notation: a description, and the quantity after `->` if there is one.
+///
+/// **`named` is whether a trait may be written with no value.** `spec/console.md`: *a trait of
+/// the kind is written with its value and a stored one with its name* - which is a rule about
+/// a kind's line in a declaration, and about nothing else. A state values everything it names,
+/// because a state is about things and a thing has the value; so `read` passes `false` and
+/// `declarations` passes `true`, and the two readers go on sharing one line.
+///
+/// **A flag rather than two parsers**, because `Q-67` is what happens when one notation gets
+/// two readers: `command_language` honoured a trailing comment and this did not, nobody wrote
+/// the divergence down, and each went on passing its own tests.
+fn parse(tokens: &[Token], at: usize, named: bool) -> Result<(Description, Option<u32>), String> {
     let written = |tokens: &[Token]| -> String {
         tokens
             .iter()
@@ -336,8 +347,15 @@ fn parse(tokens: &[Token], at: usize) -> Result<(Description, Option<u32>), Stri
             closed = true;
             break;
         }
-        let Some((name, value)) = token.text.split_once(':') else {
-            return Err(format!("line {at}: `{}` is not `trait:value`", token.text));
+        let (name, value) = match token.text.split_once(':') {
+            Some(pair) => pair,
+            None if named => (token.text.as_str(), ""),
+            None => {
+                return Err(format!(
+                    "line {at}: `{}` is not `trait:value`. A trait may be named without a                      value on a kind's line in a declaration, and this is a state",
+                    token.text
+                ));
+            }
         };
         if description
             .traits

@@ -61,6 +61,12 @@ use crate::{Game, Phase};
 pub struct Description {
     pub kind: &'static str,
     /// Sorted by name, because a description is a map and a map has no order of its own.
+    ///
+    /// **An empty value is a trait named and not valued**, which `spec/console.md` allows on
+    /// a declaration and nowhere else: *a trait of the kind is written with its value and a
+    /// stored one with its name*. A state always values what it names, because a state is
+    /// about things rather than about kinds - so an empty value here is a declaration's, and
+    /// [`state::declarations`] is the only reader that will produce one.
     pub traits: BTreeMap<String, String>,
 }
 
@@ -89,8 +95,13 @@ impl Description {
         for (name, value) in &self.traits {
             out.push(' ');
             out.push_str(name);
-            out.push(':');
-            out.push_str(value);
+            // **A named trait with no value writes as its name**, which is the form it was
+            // read in. `{kind biome family:place id name:territory nature}` is a kind
+            // declaring two traits of its own and three it has by name.
+            if !value.is_empty() {
+                out.push(':');
+                out.push_str(value);
+            }
         }
         out.push('}');
         out
@@ -101,7 +112,11 @@ impl Description {
         let mut out = vec![self.kind.to_string()];
         for (name, value) in &self.traits {
             out.push(name.clone());
-            out.push(value.clone());
+            // A trait named and not valued contributes its name and no value, rather than
+            // an empty string that every vocabulary check would then have to admit.
+            if !value.is_empty() {
+                out.push(value.clone());
+            }
         }
         out
     }

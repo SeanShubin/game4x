@@ -180,6 +180,82 @@ fn a_declaration_carries_no_quantity_and_is_in_nothing() {
     }
 }
 
+/// A kind's line may name a stored trait and not value it, and the file round-trips.
+///
+/// **`spec/console.md`: *a trait of the kind is written with its value and a stored one with
+/// its name*.** So a territory's line reads `{kind biome family:place id name:territory
+/// nature}` - `family` and `name` valued, `biome`, `id` and `nature` named - and the sort is
+/// over the trait names whether a value follows or not.
+///
+/// **Built before a file uses it, because the rule is promoted and the file is not this lane's
+/// to write.** `spec/data/kinds.4x` has no such line today; when the specification lane
+/// proposes one, the reader is already the reader of it rather than the thing that has to
+/// change first. What is asserted here is the form the rule states, not a guess at the file.
+///
+/// # The flag, and why a state does not get it
+///
+/// **A state values everything it names**, because a state is about things and the thing is
+/// what holds the value. So `read` refuses a bare word and says why, and that refusal is
+/// asserted here rather than left to the reader of the parser - a permission given to one
+/// caller is only a permission if the other one still refuses.
+#[test]
+fn a_kind_may_name_a_trait_without_valuing_it() {
+    let file = "{kind biome family:place id name:territory nature}\n";
+    let read = state::declarations(file).expect("a kind naming three traits and valuing two");
+    assert_eq!(read.len(), 1);
+
+    let named: Vec<(&str, &str)> = read[0]
+        .traits
+        .iter()
+        .map(|(name, value)| (name.as_str(), value.as_str()))
+        .collect();
+    assert_eq!(
+        named,
+        [
+            ("biome", ""),
+            ("family", "place"),
+            ("id", ""),
+            ("name", "territory"),
+            ("nature", ""),
+        ],
+        "three named and two valued, sorted together by name - the sort is over the trait \
+         rather than over which of the two forms it is in"
+    );
+
+    // **The bytes come back**, which is what makes this a form the notation carries rather
+    // than something the reader tolerates and the writer cannot produce.
+    assert_eq!(state::declared(&read), file);
+
+    // **A state refuses it, and says which rule it is on the wrong side of.** Without this the
+    // flag is a permission nobody checks the other half of.
+    let refusal =
+        state::read("{territory biome} -> 1\n").expect_err("a state values what it names");
+    assert!(
+        refusal.contains("is not `trait:value`") && refusal.contains("this is a state"),
+        "refused for the wrong reason: {refusal}"
+    );
+
+    // And the other three refusals still hold on a line that uses the new form, so admitting
+    // a bare name did not admit a quantity, an indent or a quotation with it.
+    let mut checked = 0;
+    for (text, why) in [
+        ("{kind biome name:territory} -> 1\n", "carries no quantity"),
+        ("  {kind biome name:territory}\n", "is in nothing"),
+        ("{kind biome name:\"a territory\"}\n", "is quoted"),
+    ] {
+        let refusal = state::declarations(text).expect_err(&format!("`{text}` must be refused"));
+        assert!(
+            refusal.contains(why),
+            "`{text}` was refused for the wrong reason: {refusal}"
+        );
+        checked += 1;
+    }
+    assert_eq!(
+        checked, 3,
+        "the three refusals, over the form that was added"
+    );
+}
+
 /// What the two sides say that the other does not, given a file and a table.
 ///
 /// **Lifted out so both arms can be driven against a document written here**, which is
