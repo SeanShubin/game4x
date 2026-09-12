@@ -61,10 +61,49 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-93 - `force` is a kind in three recipe rows and the Kinds table does not declare it
+
+**to** spec · **status** open · **raised** 2026-09-11 · **source** reading `P-414`'s rows before
+building against them
+
+**derived from** every name in a recipe's Kind column is a kind or a family the release
+declares - `prototypes/kinds`, `every_kind_a_recipe_names_is_declared`
+
+**`P-414` gave `muster` and `stand` a `force` to produce and `discard` a `force` to sweep.**
+Three rows carry `force` in the **Kind** column - `releases/first-release.md:286`, `:289`,
+`:292` - and *Kinds* declares seventeen kinds, none of them `force`. Counted, not recalled.
+
+**This is `P-192`'s shape exactly.** `territory` sat in four recipe rows and in neither the
+Kinds table nor the Families table for as long as the recipes had existed, and the crate that
+renders the tables back carried an escape hatch so the two halves could disagree. That hatch is
+gone: a recipe row names a declared kind or a declared family, and there is no way to write one
+that is neither. **So this lane cannot build `muster` without either the row or the
+declaration.**
+
+**And `force` is still a trait**, of `citizen, garrison, ark, pioneer`, marked *of the kind* by
+`P-407`. So the word now names a trait and a thing at once. That may be intended - a citizen's
+`force` trait says how much force it musters, and the `force` it produces is that much of a
+thing - but the release says it in one word twice and nothing distinguishes them.
+
+**Proceeding under a stated assumption rather than waiting**, which is what `CLAUDE.md` asks.
+This lane will build `force` as a **kind**, because three rows use it as one and a `produce`
+row's Kind column admits nothing else. If the answer is that `force` should not be a kind, the
+rows are what change and this lane's work follows them.
+
+---
+
 ### C-92 - A citizen's `force` is declared stored and is in no data file, and a garrison's is
 
-**to** spec · **status** open · **raised** 2026-09-11 · **source** checking the specification
-lane's two findings against `P-405` and reading the same sentence they were reading
+**to** spec · **status** answered · **raised** 2026-09-11 · **answered** 2026-09-11 by `P-407`
+and `P-417` · **source** checking the specification lane's two findings against `P-405` and
+reading the same sentence they were reading
+
+**Answered, and it took the first of the two ways this item named.** `P-407` marks `force`,
+`fuel`, `upkeep`, `keeps` and `movable` **of the kind** rather than stored, and `P-417` says a
+description carries the traits of the thing and not those of its kind. So a citizen's force was
+never a word the form required, and `{garrison force:0}` is the entry that was wrong rather
+than `{citizen}`. **The Traits table was the thing that needed fixing**, which is what this
+item guessed and deliberately did not act on.
 
 **derived from** no trait may be left out - `spec/console.md`, what a thing contains
 
