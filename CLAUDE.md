@@ -691,6 +691,30 @@ Rebuild a table from a declared list instead, and **assert** the result: that ev
 accounted for exactly once, and that a list of files matches what is actually on disk. A
 scripted edit that cannot fail loudly will fail quietly.
 
+## Quoting a specification file, and one way a checker misreads it
+
+**Do not name a file inside a bold span when the sentence introduces a quotation.** The promotion
+checker reads the `**` that closes the span as the start of the quoted text, so **a verbatim
+quotation is reported as wrong** - and the quotation underneath it is correct.
+
+This fails:
+
+```
+**`P-443`, and `spec/console.md` says it is the same form**: *the quotation*
+```
+
+This does not:
+
+```
+`spec/console.md` says it is the same form, and **the rule needs no exception**: *the quotation*
+```
+
+**It is a false alarm, which is the expensive kind** - a right sentence is re-read in search of a
+difference that is not there. Found by the code lane twice on 2026-09-12 and left as a limitation
+rather than repaired: **the repair is a parser guessing at nesting in prose**, which has more ways to
+be wrong than this has. This lane quotes `spec/` far more often than the code lane does, which is why
+it is written here.
+
 ## Writing notes
 
 - Date the note in its header line.

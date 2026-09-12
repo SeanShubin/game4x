@@ -21,4 +21,89 @@ here without first becoming a proposal.
 
 ## Open
 
-*Nothing is open. A question only Sean can answer lives here while it is unanswered.*
+### P-445 - a cell holding several values, written three ways
+
+**to** sean - **status** open - **raised** 2026-09-12 - **kind** entailed, from the code lane's `C-98` - **asks** a decision - **into** `spec/console.md` -> The language, and `spec/data/`
+
+**`unit` has two members and the notation gives a key one value.** Here is the *Families* table
+written each way. **`resource` and `place` are shown with it because `unit` alone hides the third
+option's cost.**
+
+## Option A - a line per pair
+
+```
+{family name:unit member:ark}
+{family name:unit member:pioneer}
+{family name:resource member:food}
+{family name:resource member:metal}
+{family name:resource member:energy}
+{family name:place member:territory}
+{family name:place member:orbit}
+```
+
+## Option B - the values joined into one
+
+```
+{family name:unit members:ark-pioneer}
+{family name:resource members:food-metal-energy}
+{family name:place members:territory-orbit}
+```
+
+## Option C - a rule instead of a list
+
+```
+{family name:unit rule:movable}
+{family name:resource rule:extracted}
+{family name:place rule:holds-things}
+```
+
+**And the fourth family is what separates them.** `thing` is written *every kind above* - a rule
+about the table, not a list:
+
+|       | `thing` under each                                                                       |
+| ----- | ---------------------------------------------------------------------------------------- |
+| **A** | **eighteen lines**, one per kind, repeating `kinds.4x` entirely                          |
+| **B** | one line, `members:citizen-garrison-extractor-yard-store-ark-...`, eighteen words joined |
+| **C** | one line, `{family name:thing rule:every-kind}`                                          |
+
+## The same choice on the other two cells
+
+**A trait's `Of`.** `strength` is of citizen, garrison, ark and pioneer:
+
+```
+A   {trait name:strength of:citizen}  and three more lines
+B   {trait name:strength of:citizen-garrison-ark-pioneer}
+C   {trait name:strength of:has-strength}   - a family, which is option A one level up
+```
+
+**A trait's `Values`.** `biome` admits six:
+
+```
+A   {trait name:biome admits:ice}  and five more lines
+B   {trait name:biome admits:ice-desert-grassland-jungle-mountain-ocean}
+C   {trait name:biome admits:biome}   - the values are a kind's members
+```
+
+## What each costs
+
+**A is the notation as it stands and needs no decision from you at all** - `P-334` already writes an
+adjacency as `{adjacency from:1 to:2}`, one line per pair. **It pays in `thing`**: eighteen lines
+that restate `kinds.4x` and go stale the day a kind is added and one line is forgotten.
+
+**B needs one sentence from you and no new machinery.** `spec/console.md` already joins the words of
+a **name** with dashes - `in-play`, not `"in play"`. **The question is whether a list is a name.**
+It reads badly at eighteen and fine at two.
+
+**C is the smallest file and the largest change.** Every list becomes a rule with a name, and the
+names are new vocabulary you would be inventing - `movable`, `extracted`, `every-kind`. **It also
+moves work into whatever reads the file**, which has to know what each rule means.
+
+## Why this is yours and not the code lane's
+
+**They refused to pick and said why**, which is `C-49`'s rule working: *a shape invented here and
+transcribed into the specification is the promotion by the wrong lane that item was about.*
+
+**Nothing is blocked.** `Biomes` and `Units and structures` hold one value per cell and need no
+answer to this - they are next either way, and they raise a different question, because they declare
+**facts about kinds** rather than vocabulary and `P-443` settled only the vocabulary case.
+

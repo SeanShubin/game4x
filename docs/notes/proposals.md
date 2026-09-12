@@ -62,7 +62,74 @@ Two limits Claude holds itself to:
 
 ## Open
 
-*Nothing is open. Everything filed has been decided.*
+### P-444 - the first data file, and the directory it goes in
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed, from `P-440` and the code lane's transcription · **shape** instruction · **asks** approval · **into** a new file, `spec/data/kinds.4x`
+
+**This is rule 7's first file.** It is twenty-one lines: your three from `P-443`, then the eighteen
+kinds the release's *Kinds* table declares.
+
+```
+{kind name:kind}
+{kind name:trait}
+{kind name:family}
+{kind name:citizen}
+{kind name:garrison}
+{kind name:extractor}
+{kind name:yard}
+{kind name:store}
+{kind name:ark}
+{kind name:pioneer}
+{kind name:food}
+{kind name:metal}
+{kind name:energy}
+{kind name:labor}
+{kind name:territory}
+{kind name:orbit}
+{kind name:deposit}
+{kind name:adjacency}
+{kind name:game}
+{kind name:fertility}
+{kind name:force}
+```
+
+**The instruction: create `spec/data/kinds.4x` holding exactly those twenty-one lines.**
+
+**The check the promoting commit runs**, and this lane has already run it: **the eighteen agree with
+the release's *Kinds* table in both directions**, and the three left over are exactly `kind`, `trait`
+and `family`. Counted rather than eyeballed - the table has 18 rows, the file has 21 lines.
+
+## The directory name is the only thing here this lane chose
+
+**`spec/data/`.** It is the plain word and it sits beside the prose files rather than inside one of
+them.
+
+**Two others were considered.** `spec/kinds/` would name this file's subject rather than the
+directory's, and the directory will hold seven more. `spec/tables/` names what they are leaving
+rather than what they are.
+
+**Say a different word and it costs nothing** - nothing references the path yet, because the release
+still holds the tables.
+
+## What the code lane did and did not do
+
+**It wrote the bytes and could not write the file.** `spec/` is yours, so the transcription reaches
+you as a proposal rather than as a commit - which is `C-49`'s objection honoured rather than argued
+with. `cargo run -q -p game-console --example declared-kinds` prints them and writes nothing.
+
+**Nothing about the shape was theirs to pick.** `{kind name:citizen}` is your own example from
+`P-442`, and the *What it is* column stays prose in the release, where rule 7 puts it.
+
+**And they needed no second parser**, which is what `P-443` bought beyond a form: a declaration is
+read by the same `parse` a state is. **`Q-67` is why that matters** - one notation with two readers
+is a divergence nobody writes down, and each reader goes on passing its own tests.
+
+## What does not happen yet
+
+**The release keeps its *Kinds* table.** It becomes a copy once there is something to copy from, and
+deleting it is a separate proposal - **this one only creates a file**, so there is no moment at which
+neither holds the data.
+
 
 ## Addressed to other perspectives
 
