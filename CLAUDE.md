@@ -553,6 +553,18 @@ they may already be building against, with no way to see when it arrived or why.
 requirement: not how the commits are grouped, but that none of them is still pending when the turn
 ends.
 
+**And a change to a proposal is committed before the promotion that lands it.** A promotion
+deletes the block, so folding a correction into the same commit leaves **no commit anywhere showing
+the text that was approved** - the parent holds the uncorrected proposal and the child holds the
+landed file, with nothing in between. **`promote` means *I have read this***, and the history has to
+be able to say what *this* was.
+
+On 2026-09-12 `P-474` was corrected - a blockquote that quoted an existing rule became a code block,
+because `spec show` was handing back `spec/logistics.md`'s own sentence as the approved text - and
+the correction went into the promoting commit. **What landed was right and the record cannot
+demonstrate it.** Found by the code lane running a check against the promoting commit's parent,
+after this lane asserted from memory that the correction was there.
+
 **One commit per promotion is a good default and not a rule.** It makes the history record decisions
 rather than sessions, and it makes a single change easy to read back. Several promotions in one
 commit is fine when they answer one decision, and the message should then say so.
