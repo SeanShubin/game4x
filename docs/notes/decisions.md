@@ -57,39 +57,88 @@ you vet it, and that is the whole of the question. **What it can say** is that 1
 `docs/process.md`'s *the definitions and the commands are enough to derive the data dump by hand*
 literally true of a scenario you could work through, and 3 does not.
 
-### P-421 - `put` is a role in twelve rows that no document defines, and `limit` is defined and used nowhere
+### P-423 - `limit` is safe exactly where what it tests is bounded, and nothing says which kinds are
 
+**to** sean - **status** open - **raised** 2026-09-11 - **kind** entailed, from the research lens's `X-9` and the code lane's `C-75` - **asks** a decision - **into** `releases/first-release.md` -> Recipes, and possibly `spec/invariants.md` -> Nothing comes back round with more
 
-**to** sean - **status** open - **cited** `d29dc6d`, where the code lane recorded that `C-88` stays open until this comes back - **raised** 2026-09-11 - **kind** entailed, from the code lane's `C-88` - **asks** a decision - **into** `releases/first-release.md` -> Recipes
+**This is the half of `P-421` your answer did not settle**, re-asked against what you said the net
+is for. **You said the end is that a user can edit recipes without worrying about infinite resources
+on one turn.** `X-9` is the finding that speaks to exactly that, and it has been open since
+2026-09-08.
 
+**`limit 0` is a zero test, and a zero test is an inhibitor arc.** Petri nets with inhibitor arcs
+are Turing-complete; two of them model a two-counter machine. **What that costs is the thing you
+want**: with a plain net, *an unintended infinite-resource loop is computable rather than something
+you playtest for*. Crossing that line gives it away silently.
 
-**One sentence declares the roles and it is out of step with the table under it in both
-directions.** `releases/first-release.md:186` reads *`Role` is one of `require`, `limit`, `consume`
-or `produce`*, and then defines each of the four. Counted over the table's 81 role cells: `consume`
-29, `produce` 26, `require` 14, **`put` 12**, **`limit` 0**.
+**But the line is not `limit` and `X-9` corrected itself on this.** Its first draft said moving the
+test from a precondition to a guard saves it, and that was wrong. **The real line is boundedness**:
+an unbounded place cannot be zero-tested safely, and a **bounded** one can, by the standard
+complementary-place construction, with no inhibitor arc and no loss. So `limit 0 garrison` was
+always safe - a garrison's capacity is 1 - and `limit 0 food` would be the cliff.
 
-**`put` arrived twice without a definition.** `P-399` gave it to `move`; `P-411` undid the rest of
-`P-399` and left `put` behind on the readiness rows. Neither promotion said what the word means, so
-twelve rows are read by inference - which the code lane did, and `C-88` states the assumption it
-built under.
+**`C-75` measured what adopting that rule would cost, and the answer was nothing.** *What bounds a
+kind in a territory* already splits the eleven kinds:
 
-**What the twelve rows do, so the question is cheap to answer.** Eleven name a trait and a value -
-*laboring one less*, *defending at its maximum* - and set it. The twelfth is `move`'s, which names
-the trait **and** a `Where` of `$to`, so the unit ends at `$to` with `moving` one less. **All twelve
-read as one thing**: a statement about the state the thing is left in, rather than a quantity
-flowing anywhere. That is why its `Qty` cell is blank, and it is what distinguishes `put` from
-`consume` and `produce`, which move quantities.
+- **Bounded by a stated capacity**, where a zero test is free: garrison, extractor, yard, ark,
+  pioneer
+- **Bounded by something else**, where it is the cliff: citizen, store, labor, food, metal, energy
 
-**Two questions, and the second is smaller.**
+**The six are exactly the ones a resource game invites a zero test on** - *if there is no food*, *if
+the store is empty*. So the rule is free now and is not free later.
 
-1. **Is that what `put` means** - the row states the state the thing is left in, its `Qty` always
-   blank - and if so, what sentence declares it beside the other four?
-2. **Does `limit` stay?** It is declared and defined in that sentence and no row uses it. Keeping a
-   role with no instance is a reasonable thing to do deliberately, and nothing says it was.
+**Two numbers in `C-75` have gone stale since it was filed and the conclusion is stronger, not
+weaker.** It counted *two zero tests, both `limit 0 garrison`*; `P-385` deleted both in `795f053`,
+so there are now **zero**. Adopting the rule today is vacuous, which means it costs nothing and
+proves nothing - it is a guard against a row nobody has written yet.
 
-**This lane has not written the sentence**, because what `put` means is the choice and a definition
-offered here would resolve it quietly. **Nothing is blocked**: the code lane is built and green
-under its stated assumption, and `reports/petri.md` and `reports/nogain.md` both read the `put` rows
-rather than refusing them.
+**So the question is which of three, and this lane has no recommendation.**
 
+1. **Drop `limit` from the declaring sentence.** The language loses the one construct that can cost
+   you decidability, and a future rule that needs a maximum is a question you answer then
+2. **Keep `limit`, and declare the constraint**: a `limit` row may name only a kind bounded by a
+   stated capacity. **That is a property a check can enforce over the whole recipe set**, which is
+   what makes it worth having rather than believing
+3. **Keep `limit` unconstrained**, and accept that the first `limit 0 food` moves the rule editor
+   into a class where your invariant is no longer decidable, with nothing saying so
 
+**Option 2 is the one that reads as your stated criteria**, which is a reason to look at it first
+and not a reason to take it. It keeps the building block, bounds it, and makes the bound mechanical
+- *limited enough to manage complexity, able to maintain the invariants, flexible enough to design
+the rest*. **This lane is not choosing it for you**, because dropping a construct you have no use
+for is also a way to manage complexity, and which of those you prefer is the whole question.
+
+### P-424 - `age` destroys and recreates a thing, which is what `put` was introduced to stop
+
+**to** sean - **status** open - **raised** 2026-09-11 - **kind** entailed, from your answer on `P-421` - **asks** a decision - **into** `releases/first-release.md` -> Recipes
+
+**You said `put` was to simplify the destroy-then-recreate mechanics of `move`.** `age` still does
+it, in the release, for the same operation:
+
+```
+| **age** | world | consume | 1 | thing | keeps at least 1 |
+|         |       | produce | 1 | thing | keeps one less   |
+```
+
+**That is the readiness pattern written the other way.** `work` is `require extractor working at
+least 1` then `put extractor working one less`; `age` is `consume thing keeps at least 1` then
+`produce thing keeps one less`. **Same shape, same intent, two idioms** - and the release now says
+one operation two ways, which is the unification you said you wanted less of, not more.
+
+**It works today because nothing that ages has an identity.** `age` names the family `thing` and
+what actually ages is food, which is counted rather than identified. **So this is not a bug and
+nothing is broken** - it is the question of whether `age` should be rewritten as `require` and
+`put` now that the construct exists.
+
+**One thing that would change if it were.** Under `consume`/`produce`, a thing that ages is
+destroyed and a new one made, so any rule keyed to creation sees an event each turn for every
+perishable thing. Under `require`/`put` it does not. **Nothing in the release is keyed to creation
+today**, counted over the 21 recipes - so the rewrite is invisible now and would stop being
+invisible the moment such a rule is written.
+
+**Three ways, and no recommendation.**
+
+1. **Rewrite `age` as `require`/`put`**, and the release has one idiom for *the same thing, changed*
+2. **Leave it**, and `consume`/`produce` stays the idiom wherever identity does not matter - which
+   is a real distinction and could be stated rather than implied
+3. **Say which rule decides it**, so the next recipe does not have to be asked one at a time

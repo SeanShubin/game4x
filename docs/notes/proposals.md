@@ -62,7 +62,52 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-421 - `put` is declared, in your words: the same thing, not a new one
+
+**to** sean · **status** open · **cited** `d29dc6d` · **raised** 2026-09-11 · **rewritten** 2026-09-11, when you answered what `put` is for · **kind** recovered · **shape** text · **asks** approval · **into** `releases/first-release.md` -> Recipes · from the code lane's `C-88`
+
+**Sean, 2026-09-11**: *I recall put being there so we could move things with an identity without
+destroying, then creating them.*
+
+**That is sharper than the reading this lane derived and it is why this now asks approval.** From
+the twelve rows alone the answer looked like *the row states the state the thing is left in*, which
+never mentions identity - **and identity is the thing a plain Petri net cannot say.** A token is
+fungible, so `consume 1 unit` then `produce 1 unit` is correct in a net and wrong for a thing with
+an id.
+
+**`releases/first-release.md:186` currently reads:**
+
+**Auto** is `player` or `world`. **Role** is one of `require`, `limit`, `consume` or `produce`: a
+requirement must be present and is not taken, a limit is a maximum that must not be exceeded, a
+consumption is taken, and a production is made.
+
+**The whole sentence is replaced by this one:**
+
+> **Auto** is `player` or `world`. **Role** is one of `require`, `limit`, `consume`, `produce` or
+> `put`: a requirement must be present and is not taken, a limit is a maximum that must not be
+> exceeded, a consumption is taken, a production is made, and **a put names a thing that is already
+> there and says what is true of it afterwards - the same thing and not a new one, so what has an
+> identity keeps it.** A put has no quantity, because nothing is made or taken.
+
+**`limit` is left exactly as it stands here.** Whether it stays is `P-423`, which is a different
+question with evidence this proposal does not carry - so this sentence can land whichever way that
+goes, and if `limit` goes it is one clause removed from a sentence you have already read.
+
+**The two facts the last clause states, counted rather than recalled.** All twelve `put` rows have a
+blank `Qty`, over the Recipes table's 81 role cells. And `put`'s twelve break into six that write
+*one less* and six that write *at its maximum* - **every one of the six that writes a maximum is in
+`refresh`, which is a world recipe** - which is why adding `put` costs you nothing in the net: the
+player's sublanguage keeps only the ordinary ones.
+
+**What this does not claim.** It does not say `move` is or is not inside the net. This lane's
+reading is that identity is what a **coloured** net already gives you - a token carrying a colour,
+moved by an ordinary arc - so `put` for `move` is not an extension but the coloured version of what
+`consume`/`produce` was approximating. **That reading is not in the offered text**, because it is an
+argument rather than a rule, and because you have said a mechanic outside the net is also
+acceptable.
+
 ### P-420 - `spec/control.md` says *military unit* and the game has no military unit
+
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/control.md` -> Open questions · from `C-94`
 

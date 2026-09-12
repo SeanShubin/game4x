@@ -8,9 +8,11 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-421** - `put` is declared, in your words: the same thing, not a new one · `docs/notes/proposals.md`
 - **P-420** - `spec/control.md` says *military unit* and the game has no military unit · `docs/notes/proposals.md`
 - **P-422** - `R-6` asks how much of the planet has to be played, and has pointed at an empty queue since 2026-09-05 · `docs/notes/decisions.md`
-- **P-421** - `put` is a role in twelve rows that no document defines, and `limit` is defined and used nowhere · `docs/notes/decisions.md`
+- **P-423** - `limit` is safe exactly where what it tests is bounded, and nothing says which kinds are · `docs/notes/decisions.md`
+- **P-424** - `age` destroys and recreates a thing, which is what `put` was introduced to stop · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
@@ -21,6 +23,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-421** - `4bc6f02` Record d29dc6d on P-421, which stays open until Sean answers it · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
