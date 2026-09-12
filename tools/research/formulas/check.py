@@ -817,10 +817,29 @@ def check_arcs():
     return kinds, by_group.get("marking", []), unfold, by_colour, by_both, per
 
 
-def release_recipes():
-    """The release's *Recipes* table: {recipe: {(role, kind): qty}}."""
-    out, current, inside = {}, None, False
-    for line in RELEASE.read_text(encoding="utf-8").splitlines():
+def release_recipes(document=None):
+    """The release's *Recipes* table: {recipe: {(role, kind, traits): qty}}.
+
+    `document` exists so the guards below can be shown to fire. This lane may not edit the
+    release, so the only way to demonstrate that a silent drop would now be loud is to hand
+    the parser a document with the rows taken out.
+
+    **The role list was doing two jobs and one of them was an accident.** It read
+    `role in ("require", "consume", "produce", "limit")`, which decided both *is this a row I
+    understand* and *is this a row at all* - so when `P-421` added a fifth role, every `put`
+    row was dropped in silence. Check 12 compares this against a copy that drops its own
+    `set` lines for an unrelated reason, so the two omissions cancelled and the check stayed
+    green over a population it was no longer reading. The code lane found the same assumption
+    in `tests/petri.rs` from the same flag.
+
+    **So the rule is stated and an unknown role is an error.** A `put` is keyed by its traits
+    as well as its kind, because `refresh` carries two puts on `citizen` that differ in
+    nothing else, and keying them by kind alone would silently keep one.
+    """
+    out, current, inside, puts = {}, None, False, []
+    if document is None:
+        document = RELEASE.read_text(encoding="utf-8")
+    for line in document.splitlines():
         if line.startswith("| Recipe "):
             inside = True
             continue
@@ -844,13 +863,38 @@ def release_recipes():
         if current is None:
             continue
         role, qty, kind = cells[2], cells[3], cells[4].strip("`")
-        if role in ("require", "consume", "produce", "limit") and kind:
-            out[current][(role, kind)] = qty
+        if not role or not kind:
+            continue
+        traits = cells[5].strip()
+        if role == "put":
+            # `P-421`: *a put has no quantity, because nothing is made or taken.* Asserted
+            # rather than assumed, because that is the property the key relies on.
+            assert not qty, f"{current}: a put carries a quantity {qty!r}"
+            out[current][(role, kind, traits)] = ""
+            puts.append((current, kind, traits))
+        elif role in ("require", "consume", "produce", "limit"):
+            out[current][(role, kind, "")] = qty
+        else:
+            raise AssertionError(
+                f"{current}: unknown role {role!r} - the release grew a role this parser "
+                f"does not know, which is how the last one was dropped in silence"
+            )
+    # **A silent skip and an empty population look identical from inside**, so the count is
+    # asserted rather than trusted. This is the same reason check 17 names a zero instead of
+    # reporting it as a pass.
+    assert puts, "parsed no put rows, which the release has had since P-421"
     return out
 
 
 def ours_by_effect():
-    """This lane's recipes as {recipe: {(role, kind): qty}}, in the release's vocabulary."""
+    """This lane's recipes as {recipe: {(role, kind, traits): qty}}, in the release's words.
+
+    **`set` maps to `put`**, which is the same primitive under the name `P-421` gave it. It
+    was dropped here before, at the same time the release's `put` rows were being dropped by
+    `release_recipes` - two independent omissions that cancelled, leaving check 12 green over
+    rows neither side was reading. Mapping it is what makes the drift visible, and the drift
+    is real: this copy still has one `ready` where the release now has five counters.
+    """
     out = {}
     for f in DATA["player"] + DATA["world"]:
         name = f["name"].split("(")[0].strip()
@@ -859,11 +903,17 @@ def ours_by_effect():
             kind = place_of(target)
             if op == "change":
                 role = "consume" if sign_of(amount) < 0 else "produce"
-                rows[(role, kind)] = str(amount).lstrip("+-")
+                rows[(role, kind, "")] = str(amount).lstrip("+-")
             elif op == "require":
                 inner = re.search(r"\{(\w[\w-]*)", str(target))
                 if inner:
-                    rows[("require", inner.group(1))] = str(amount)
+                    rows[("require", inner.group(1), "")] = str(amount)
+            elif op == "set":
+                # `thing.ready = yes` - the subject is the kind, the rest is what is true of
+                # it afterwards, which is what the release's Traits cell carries.
+                subject, _, value = str(target).partition("=")
+                trait = subject.strip().split(".", 1)[-1].strip()
+                rows[("put", subject.strip().split(".", 1)[0], f"{trait} {value.strip()}")] = ""
         out[name] = rows
     return out
 
@@ -949,10 +999,15 @@ def check_recipe_drift():
             rows.append((name, "ONLY IN THE RELEASE", ""))
             continue
         for key in sorted(set(a) | set(b)):
+            # **The traits are printed, because for a `put` they are the whole difference.**
+            # Without them `refresh` reported four dropped rows and one added, all reading
+            # `put citizen` - true, and unreadable. A row a reader cannot tell apart from its
+            # neighbour is a row nobody acts on.
+            role, kind, traits = key
             if key not in b:
-                rows.append((name, "dropped", f"{key[0]} {a[key]} {key[1]}"))
+                rows.append((name, "dropped", f"{role} {a[key]} {kind} {traits}".strip()))
             elif key not in a:
-                rows.append((name, "ADDED", f"{key[0]} {b[key]} {key[1]}"))
+                rows.append((name, "ADDED", f"{role} {b[key]} {kind} {traits}".strip()))
     return len(theirs), rows
 
 
@@ -1129,6 +1184,27 @@ def self_test():
             f" ({_name}, of {len(_shared)} traits in both)"
         )
     _row[2] = _was
+
+    # Check 12 poison: the two guards that replaced the accidental four-role filter must both
+    # fire. A guard that has never been seen to fire is a comment.
+    _doc = RELEASE.read_text(encoding="utf-8")
+    _no_puts = "\n".join(
+        l for l in _doc.splitlines() if not re.match(r"\|[^|]*\|[^|]*\|\s*put\s*\|", l)
+    )
+    assert _no_puts != _doc, "the release has no put rows to remove, so this poison is vacuous"
+    try:
+        release_recipes(_no_puts)
+        print("  POISON FAILED: check 12 accepted a release with every put row removed")
+        ok = False
+    except AssertionError:
+        _bad = _doc.replace("| produce |", "| bestow  |", 1)
+        assert _bad != _doc, "no produce row to rename, so the second half is vacuous"
+        try:
+            release_recipes(_bad)
+            print("  POISON FAILED: check 12 accepted a role it does not know")
+            ok = False
+        except AssertionError:
+            print("  poison ok: check 12 refuses a dropped role and an unknown one")
 
     # Check 17 poison: move an arc across the line in BOTH directions, because a classifier
     # that can only be made to over-count is half a check.
