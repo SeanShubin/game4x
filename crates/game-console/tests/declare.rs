@@ -67,12 +67,20 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
             .traits
             .get("name")
             .expect("a declaration names the word it declares");
-        assert_eq!(
-            row.traits.len(),
-            1,
-            "`{name}` carries {} traits, and a declaration carries only the name - the prose \
-             column stays prose, which is what rule 7 says",
-            row.traits.len()
+        // **A kind's line is its name, and its family where it is in one** - `P-448`. This
+        // asserted one trait, which was the shape before the inversion: a family declared its
+        // members, so a kind's line had nothing to say but its own name.
+        //
+        // **The prose column still stays prose**, which is what the one-trait assertion was
+        // really guarding and what rule 7 says. So what is checked is the key rather than the
+        // count: a kind carries `name`, and `family` where the release puts it in one, and
+        // nothing else - `What it is` is a sentence and is in no data file.
+        let mut keys: Vec<&str> = row.traits.keys().map(String::as_str).collect();
+        keys.sort();
+        assert!(
+            keys == ["name"] || keys == ["family", "name"],
+            "`{name}` carries {keys:?}, and a kind's line is its name and its family - the \
+             prose column stays prose, which is what rule 7 says"
         );
         named.push(name.clone());
     }
@@ -116,59 +124,29 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
         "eighteen compared, and the count is here so that two empty sets cannot agree"
     );
 
-    // **The generator is ahead of the file, and the gap is named line by line.** `P-448` puts
-    // each kind's family on its own line and `P-451` adds `value` to the vocabulary;
-    // `spec/data/kinds.4x` has neither yet, and this lane cannot promote it. Reddening the
-    // gate for everyone while waiting on a promotion is not the way to say so.
+    // **The generator writes the file, byte for byte.** `P-455` landed `spec/data/kinds.4x`
+    // with its families and the `value` line, so the gap this stood in for is closed.
     //
-    // **So the difference is asserted as the whole of itself** rather than tolerated: seven
-    // lines lose their bare form and gain a family, and one is added. Both sides are listed,
-    // so anything drifting for any other reason still fails.
+    // **What was here was an exception and it came out rather than being widened** - `C-61`'s
+    // pattern, and this is the day it says that happens. While the file was one promotion
+    // behind, the assertion named both sides of the difference: seven lines losing their bare
+    // form and one added. The moment the file had them, that list stopped being the
+    // difference and the assertion failed, which is what an exception that cannot outlive its
+    // excuse looks like from inside.
     //
-    // **It cannot outlive its excuse** - `C-61`. The day the file lands with these lines, this
-    // list stops being the difference, the assertion fails, and it comes out.
-    let generated = declare::kinds(&document);
-    let has: std::collections::BTreeSet<&str> = generated.lines().collect();
-    let had: std::collections::BTreeSet<&str> = file.lines().collect();
-    let dropped: Vec<&&str> = had.difference(&has).collect();
+    // **Byte equality is the strongest form and it is now true**, so the handover is checked
+    // rather than described: `--example declared-kinds` prints what is in the specification.
     assert_eq!(
-        dropped,
-        [
-            "{kind name:ark}",
-            "{kind name:energy}",
-            "{kind name:food}",
-            "{kind name:metal}",
-            "{kind name:orbit}",
-            "{kind name:pioneer}",
-            "{kind name:territory}",
-        ]
-        .iter()
-        .collect::<Vec<_>>(),
-        "the file has lines the generator does not write, and they are not the seven that \
-         gained a family"
-    );
-    let added: Vec<&&str> = has.difference(&had).collect();
-    assert_eq!(
-        added,
-        [
-            "{kind family:place name:orbit}",
-            "{kind family:place name:territory}",
-            "{kind family:resource name:energy}",
-            "{kind family:resource name:food}",
-            "{kind family:resource name:metal}",
-            "{kind family:unit name:ark}",
-            "{kind family:unit name:pioneer}",
-            "{kind name:value}",
-        ]
-        .iter()
-        .collect::<Vec<_>>(),
-        "the generator and the file differ by more than the families `P-448` adds and the \
-         `value` `P-451` adds"
+        declare::kinds(&document),
+        file,
+        "`declare::kinds` and `spec/data/kinds.4x` have parted, so the generator would promote \
+         bytes that are not what is there"
     );
     assert_eq!(
-        generated.matches("family:").count(),
+        file.matches("family:").count(),
         7,
-        "seven kinds are in a family the release names - two units, three resources, two          places - and `thing` is in none of them because it is a rule rather than a list"
+        "seven kinds are in a family the release names - two units, three resources and two \
+         places - and `thing` is in none of them, because it is a rule rather than a list"
     );
 }
 
@@ -262,25 +240,18 @@ fn a_word_missing_from_either_side_is_reported_against_the_other() {
 
 /// The families file names every family the release declares, and no other word.
 ///
-/// **`spec/data/families.4x` does not exist yet**, so this holds the generator against the
-/// release rather than against the file - and says so, because that is the weaker of the two
-/// and `docs/process.md` is why: a check that reads a copy of the population is checking the
-/// copy. **The moment the file lands, this reads it**, the way its sibling already does.
-///
-/// **What it can check today is still worth checking**: that the generator writes every
-/// family and invents none, which is what a promotion of these bytes would be promising.
+/// **It reads `spec/data/families.4x`, which `P-455` landed.** Until then it held the
+/// generator against the release and **asserted the file's absence**, so that the day the file
+/// arrived this failed and had to be pointed at it - the population rather than a copy of it,
+/// which is what `docs/process.md` asks and what an absence assertion is for.
 #[test]
 fn the_families_file_names_every_family_and_invents_none() {
     let document = release();
     let at = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/families.4x");
-    assert!(
-        !at.exists(),
-        "`spec/data/families.4x` exists now, so this must read it instead of the generator - \
-         the file is the population and the generator is a copy of it"
-    );
-
-    let file = declare::families(&document);
-    let read = state::declarations(&file).expect("the file it writes is a file it can read");
+    let file = std::fs::read_to_string(&at)
+        .unwrap_or_else(|why| panic!("cannot read {}: {why}", at.display()));
+    let read = state::declarations(&file)
+        .unwrap_or_else(|why| panic!("{} does not parse: {why}", at.display()));
 
     let mut named: Vec<String> = Vec::new();
     for row in &read {
@@ -330,25 +301,28 @@ fn the_families_file_names_every_family_and_invents_none() {
         !file.contains("every kind above"),
         "the file carries the table's rule as if it were data: {file}"
     );
+
+    // **And the generator writes the file, byte for byte**, so the handover is checked rather
+    // than described: the example that prints these bytes prints what is in the specification.
+    assert_eq!(
+        declare::families(&document),
+        file,
+        "`declare::families` and `spec/data/families.4x` have parted"
+    );
 }
 
 /// The biomes file names every biome, and carries the one column the release says binds.
 ///
-/// **`spec/data/biomes.4x` does not exist yet**, so this holds the generator against the
-/// release and asserts the file's absence - the same shape as its sibling, and for the same
-/// reason: the day it lands this fails and gets pointed at the population rather than at a
-/// copy of it.
+/// **It reads `spec/data/biomes.4x`, which `P-455` landed.** Until then it held the generator
+/// against the release and asserted the file's absence, for the reason its sibling gives.
 #[test]
 fn the_biomes_file_carries_nature_and_leaves_the_guiding_numbers_out() {
     let document = release();
     let at = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/biomes.4x");
-    assert!(
-        !at.exists(),
-        "`spec/data/biomes.4x` exists now, so this must read it instead of the generator"
-    );
-
-    let file = declare::biomes(&document);
-    let read = state::declarations(&file).expect("the file it writes is a file it can read");
+    let file = std::fs::read_to_string(&at)
+        .unwrap_or_else(|why| panic!("cannot read {}: {why}", at.display()));
+    let read = state::declarations(&file)
+        .unwrap_or_else(|why| panic!("{} does not parse: {why}", at.display()));
 
     let declared: Vec<String> = game_console::recipes::body_under(&document, "## Biomes")
         .iter()
@@ -416,6 +390,13 @@ fn the_biomes_file_carries_nature_and_leaves_the_guiding_numbers_out() {
         Some("2"),
         "a jungle's force of nature is two, and every other claimable biome is one - so a \
          constant would pass everything above this line"
+    );
+
+    // **And the generator writes the file, byte for byte.**
+    assert_eq!(
+        declare::biomes(&document),
+        file,
+        "`declare::biomes` and `spec/data/biomes.4x` have parted"
     );
 }
 
