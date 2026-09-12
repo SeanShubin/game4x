@@ -2,75 +2,75 @@
 window.GAME = {
   "kinds": [
     {
-      "name": "citizen",
+      "name": "**citizen**",
       "what": "a person: provides labor, eats, and grows on surplus"
     },
     {
-      "name": "garrison",
+      "name": "**garrison**",
       "what": "what holds a territory; a territory has at most one"
     },
     {
-      "name": "extractor",
+      "name": "**extractor**",
       "what": "built for one resource, and worked to produce it"
     },
     {
-      "name": "yard",
+      "name": "**yard**",
       "what": "where an Ark is produced"
     },
     {
-      "name": "store",
+      "name": "**store**",
       "what": "built to hold one resource, and holds nothing else"
     },
     {
-      "name": "ark",
+      "name": "**ark**",
       "what": "carries a landing, and can invade from orbit"
     },
     {
-      "name": "pioneer",
+      "name": "**pioneer**",
       "what": "founds a territory"
     },
     {
-      "name": "food",
+      "name": "**food**",
       "what": "eaten by citizens; expires"
     },
     {
-      "name": "metal",
+      "name": "**metal**",
       "what": "what things are built from; drawn from the planet, and conserved once above ground"
     },
     {
-      "name": "energy",
+      "name": "**energy**",
       "what": "what moves things; neither conserved nor expiring"
     },
     {
-      "name": "labor",
+      "name": "**labor**",
       "what": "what working a machine takes; a citizen provides it each turn"
     },
     {
-      "name": "territory",
+      "name": "**territory**",
       "what": "a place things are in, which has a biome, a force of nature, and a density and a total capacity per resource"
     },
     {
-      "name": "orbit",
+      "name": "**orbit**",
       "what": "a place above one territory, which holds units and nothing else"
     },
     {
-      "name": "deposit",
+      "name": "**deposit**",
       "what": "what a territory's ground offers of one resource, and how richly"
     },
     {
-      "name": "adjacency",
+      "name": "**adjacency**",
       "what": "two places that share an edge, held by the thing that holds them"
     },
     {
-      "name": "game",
+      "name": "**game**",
       "what": "every thing is in it, and it is the one thing that is in nothing"
     },
     {
-      "name": "fertility",
+      "name": "**fertility**",
       "what": "a citizen's capacity to raise one more, spent by raising one and renewed each turn"
     },
     {
-      "name": "force",
+      "name": "**force**",
       "what": "what a territory presents to hold or take ground; mustered each turn and swept at its end"
     }
   ],
@@ -128,43 +128,43 @@ window.GAME = {
   "traits": [
     {
       "name": "id",
-      "of": "a thing that must be named individually",
-      "values": "a number, unique among things of its kind",
+      "of": "a place",
+      "values": "an identity",
       "storage": "stored",
       "derivation": ""
     },
     {
       "name": "moving",
       "of": "a unit",
-      "values": "0 or 1",
+      "values": "a number",
       "storage": "stored",
       "derivation": ""
     },
     {
       "name": "laboring",
       "of": "a citizen",
-      "values": "0 or 1",
+      "values": "a number",
       "storage": "stored",
       "derivation": ""
     },
     {
       "name": "working",
       "of": "an extractor",
-      "values": "0 or 1",
+      "values": "a number",
       "storage": "stored",
       "derivation": ""
     },
     {
       "name": "bearing",
       "of": "a citizen",
-      "values": "0 or 1",
+      "values": "a number",
       "storage": "stored",
       "derivation": ""
     },
     {
       "name": "defending",
       "of": "a citizen or a unit",
-      "values": "0 or 1",
+      "values": "a number",
       "storage": "stored",
       "derivation": ""
     },
@@ -195,6 +195,13 @@ window.GAME = {
       "values": "food per turn",
       "storage": "of the kind",
       "derivation": ""
+    },
+    {
+      "name": "binding",
+      "of": "whatever is built",
+      "values": "a number",
+      "storage": "derived",
+      "derivation": "the metal the recipe that makes it consumes"
     },
     {
       "name": "metal in it",
@@ -262,14 +269,14 @@ window.GAME = {
     {
       "name": "surplus",
       "of": "food",
-      "values": "yes or no",
+      "values": "a number",
       "storage": "derived",
       "derivation": "left after every upkeep was paid"
     },
     {
       "name": "unpaid",
       "of": "a thing with upkeep",
-      "values": "yes or no",
+      "values": "a number",
       "storage": "derived",
       "derivation": "its upkeep was not met"
     },
@@ -283,7 +290,7 @@ window.GAME = {
     {
       "name": "movable",
       "of": "whatever moves",
-      "values": "yes or no",
+      "values": "a number",
       "storage": "of the kind",
       "derivation": ""
     }
@@ -338,6 +345,43 @@ window.GAME = {
       "boundedBy": "the things in it that hold it"
     }
   ],
+  "thingColumns": [
+    {
+      "key": "name",
+      "label": "Thing",
+      "type": "name"
+    },
+    {
+      "key": "strength",
+      "label": "Strength",
+      "type": "number"
+    },
+    {
+      "key": "fuel",
+      "label": "Fuel",
+      "type": "number"
+    },
+    {
+      "key": "upkeep",
+      "label": "Upkeep",
+      "type": "amounts"
+    },
+    {
+      "key": "crosses",
+      "label": "Crosses",
+      "type": "crosses"
+    },
+    {
+      "key": "readies",
+      "label": "Readies",
+      "type": "counters"
+    },
+    {
+      "key": "movable",
+      "label": "Movable",
+      "type": "bool"
+    }
+  ],
   "things": [
     {
       "name": "citizen",
@@ -349,11 +393,21 @@ window.GAME = {
           "kind": "food"
         }
       ],
-      "costs": [],
-      "binding": null,
       "crosses": "",
-      "requires": "",
-      "readies": true,
+      "readies": [
+        {
+          "trait": "bearing",
+          "max": 1
+        },
+        {
+          "trait": "defending",
+          "max": 1
+        },
+        {
+          "trait": "laboring",
+          "max": 1
+        }
+      ],
       "movable": false
     },
     {
@@ -361,20 +415,8 @@ window.GAME = {
       "strength": 0,
       "fuel": null,
       "upkeep": [],
-      "costs": [
-        {
-          "qty": 1,
-          "kind": "labor"
-        },
-        {
-          "qty": 1,
-          "kind": "metal"
-        }
-      ],
-      "binding": 1,
       "crosses": "",
-      "requires": "",
-      "readies": false,
+      "readies": [],
       "movable": false
     },
     {
@@ -382,20 +424,13 @@ window.GAME = {
       "strength": null,
       "fuel": null,
       "upkeep": [],
-      "costs": [
+      "crosses": "",
+      "readies": [
         {
-          "qty": 1,
-          "kind": "labor"
-        },
-        {
-          "qty": 1,
-          "kind": "metal"
+          "trait": "working",
+          "max": 1
         }
       ],
-      "binding": 1,
-      "crosses": "",
-      "requires": "",
-      "readies": true,
       "movable": false
     },
     {
@@ -403,20 +438,8 @@ window.GAME = {
       "strength": null,
       "fuel": null,
       "upkeep": [],
-      "costs": [
-        {
-          "qty": 1,
-          "kind": "labor"
-        },
-        {
-          "qty": 15,
-          "kind": "metal"
-        }
-      ],
-      "binding": 15,
       "crosses": "",
-      "requires": "",
-      "readies": false,
+      "readies": [],
       "movable": false
     },
     {
@@ -424,20 +447,8 @@ window.GAME = {
       "strength": null,
       "fuel": null,
       "upkeep": [],
-      "costs": [
-        {
-          "qty": 1,
-          "kind": "labor"
-        },
-        {
-          "qty": 1,
-          "kind": "metal"
-        }
-      ],
-      "binding": 1,
       "crosses": "",
-      "requires": "",
-      "readies": false,
+      "readies": [],
       "movable": false
     },
     {
@@ -445,24 +456,17 @@ window.GAME = {
       "strength": 2,
       "fuel": null,
       "upkeep": [],
-      "costs": [
+      "crosses": "orbit border",
+      "readies": [
         {
-          "qty": 3,
-          "kind": "metal"
+          "trait": "defending",
+          "max": 1
         },
         {
-          "qty": 12,
-          "kind": "energy"
-        },
-        {
-          "qty": 2,
-          "kind": "citizens"
+          "trait": "moving",
+          "max": 1
         }
       ],
-      "binding": 3,
-      "crosses": "orbit border",
-      "requires": "a Yard",
-      "readies": true,
       "movable": true
     },
     {
@@ -470,24 +474,17 @@ window.GAME = {
       "strength": 2,
       "fuel": 2,
       "upkeep": [],
-      "costs": [
+      "crosses": "border",
+      "readies": [
         {
-          "qty": 3,
-          "kind": "metal"
+          "trait": "defending",
+          "max": 1
         },
         {
-          "qty": 6,
-          "kind": "energy"
-        },
-        {
-          "qty": 2,
-          "kind": "citizens"
+          "trait": "moving",
+          "max": 1
         }
       ],
-      "binding": 3,
-      "crosses": "border",
-      "requires": "",
-      "readies": true,
       "movable": true
     }
   ],
@@ -1676,8 +1673,8 @@ window.GAME = {
       "a citizen",
       "a citizen or a unit",
       "a deposit",
+      "a place",
       "a territory",
-      "a thing that must be named individually",
       "a thing with upkeep",
       "a unit",
       "an adjacency",
@@ -1691,18 +1688,16 @@ window.GAME = {
       "whatever moves"
     ],
     "traitValues": [
-      "0 or 1",
       "a number",
-      "a number, unique among things of its kind",
       "a place",
+      "an identity",
       "design or play",
       "food per turn",
       "held by a player, or unclaimed",
       "how much energy its tank holds",
       "one of the biomes",
       "one of the resources",
-      "the number of turns it will last",
-      "yes or no"
+      "the number of turns it will last"
     ],
     "boundReasons": [
       "a capacity of 1",
@@ -1733,7 +1728,8 @@ window.GAME = {
       "a citizen of that player is there",
       "its binding plus the metal in its parts",
       "its upkeep was not met",
-      "left after every upkeep was paid"
+      "left after every upkeep was paid",
+      "the metal the recipe that makes it consumes"
     ]
   },
   "quantityExpressions": [

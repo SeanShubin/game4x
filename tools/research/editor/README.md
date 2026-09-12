@@ -55,8 +55,21 @@ and that is the wrong way round from what you would guess.**
   the game: a kind's description, a territory's *what it exercises*, and the steps of the loop.
   Those are documentation and are not a defect.
 - **Seven columns that read as prose are not**, once the release's own phrases are gathered:
-  a trait's *Of* has 16 distinct values across 23 traits, its *Values* has 12, and both are
+  a trait's *Of* has 16 distinct values across 24 traits, its *Values* has 10, and both are
   small closed sets wearing sentences.
+
+## What it survived
+
+**On 2026-09-12 the release dropped three columns from *Units and structures* and changed a
+fourth**, between one run of `extract.py` and the next. The extractor raised an `IndexError`,
+which was luck: the columns went from the end. Had one gone from the middle, every value after
+it would have shifted one place into the wrong field, silently, with every count still looking
+plausible - which is `P-429`'s failure wearing yet another hat.
+
+**So the tables are read by column name, and that one table's columns are derived from the
+release's own headers.** A column that goes disappears from the editor; one that comes back
+reappears; and a column the release grows that this file has no type for is a named error
+rather than a silent omission. Position is the bug class, and a name cannot shift.
 
 ## What it does not do
 

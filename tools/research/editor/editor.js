@@ -114,20 +114,18 @@ const SCHEMA = [
   {
     key: "things",
     title: "Units and structures",
-    about: "The numbers each built thing carries. Every one of them is a stepper or a toggle.",
+    about:
+      "The numbers each built thing carries. The columns are the release's own - this table " +
+      "has gained and lost three in two days, so they are read from it rather than listed here.",
     count: () => game.things.length,
-    columns: [
-      { key: "name", label: "Thing", type: "name" },
-      { key: "strength", label: "Strength", type: "number" },
-      { key: "fuel", label: "Fuel", type: "number" },
-      { key: "upkeep", label: "Upkeep", type: "amounts", of: "kinds" },
-      { key: "costs", label: "Costs to produce", type: "amounts", of: "kinds" },
-      { key: "binding", label: "Binding", type: "number" },
-      { key: "crosses", label: "Crosses", type: "pick", of: "crosses", optional: true },
-      { key: "requires", label: "Requires", type: "pick", of: "requires", optional: true },
-      { key: "readies", label: "Readies", type: "bool" },
-      { key: "movable", label: "Movable", type: "bool" },
-    ],
+    get columns() {
+      return game.thingColumns.map((c) =>
+        c.type === "crosses" ? { ...c, type: "pick", of: "crosses", optional: true }
+        : c.type === "requires" ? { ...c, type: "pick", of: "requires", optional: true }
+        : c.type === "amounts" ? { ...c, type: "amounts", of: "kinds" }
+        : c
+      );
+    },
   },
   {
     key: "territories",
@@ -368,6 +366,31 @@ function amounts(list, vocabulary, onChange) {
   );
 }
 
+/** A list of counters a thing refreshes to: `bearing 1, defending 1, laboring 1`. */
+function counters(list, onChange) {
+  return el(
+    "div",
+    { class: "rows" },
+    list.map((item, index) =>
+      el(
+        "span",
+        { class: "row" },
+        pick(item.trait, V.traits(), (v) => { list[index].trait = v; onChange(list); }),
+        number(item.max, (v) => { list[index].max = v; onChange(list); }, { min: 1, allowBlank: false }),
+        el("button", {
+          class: "drop",
+          title: "remove",
+          onclick: () => { list.splice(index, 1); onChange(list); touched(); draw(); },
+        }, "×")
+      )
+    ),
+    el("button", {
+      class: "add",
+      onclick: () => { list.push({ trait: V.traits()[0], max: 1 }); onChange(list); touched(); draw(); },
+    }, "+ add")
+  );
+}
+
 /** A total capacity and a density, or nothing at all. */
 function capdens(value, onChange) {
   if (!value) {
@@ -483,6 +506,10 @@ function field(column, record, where) {
       return bool(record[column.key], set);
     case "amounts":
       return amounts(record[column.key] || [], V[column.of](), set);
+    case "counters":
+      // `Readies` stopped being a yes and became a list of trait maxima when the release
+      // split readiness into five counters. Each is a trait and a number, both chosen.
+      return counters(record[column.key] || [], set);
     case "capdens":
       return capdens(record[column.key], set);
     default:

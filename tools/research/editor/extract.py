@@ -24,33 +24,66 @@ RELEASE = ROOT / "releases" / "first-release.md"
 OUT = pathlib.Path(__file__).parent / "game.json"
 
 
+class Table:
+    """One markdown table, read by column NAME rather than by position.
+
+    **Position is the bug class this whole file is about.** The first version indexed cells by
+    number, and when the release dropped three columns from *Units and structures* it raised an
+    IndexError - which was lucky. Had it dropped a column in the middle instead, every value
+    after it would have shifted one place and been read into the wrong field, silently, with
+    every count still looking plausible. A name cannot shift.
+    """
+
+    def __init__(self, heading, headers):
+        self.heading = heading
+        self.headers = [plain(h) for h in headers]
+        self.rows = []
+
+    def cell(self, row, name, otherwise=None):
+        """One cell by its column's name. A missing column is an error, not a blank."""
+        if name not in self.headers:
+            if otherwise is not None:
+                return otherwise
+            raise AssertionError(
+                f"{self.heading!r} has no column {name!r} - it has {self.headers}. "
+                f"The release moved; this parser has to be told, not guessed at."
+            )
+        index = self.headers.index(name)
+        return row[index] if index < len(row) else ""
+
+    def each(self, *names):
+        """Every row as a tuple of the named columns, in the order asked for."""
+        for row in self.rows:
+            yield tuple(self.cell(row, name) for name in names)
+
+
 def tables(document):
-    """Every markdown table in the document, as {heading: [[cell, ...], ...]}.
+    """Every markdown table in the document, as {heading: Table}.
 
     Parsed to stripped cells rather than matched as text, because the padder rewrites column
     widths and a pattern that matched yesterday stops matching after the next pad. The
     heading is the nearest `##`/`###` above the table, plus an index when a section holds
     more than one.
     """
-    out, heading, rows, seen = {}, None, None, {}
+    out, heading, table, seen = {}, None, None, {}
     for line in document.split("\n"):
         if line.startswith("#"):
             heading = line.lstrip("#").strip()
-            rows = None
+            table = None
             continue
         if line.startswith("|"):
             cells = [c.strip() for c in line.strip().strip("|").split("|")]
             if set("".join(cells)) <= set("- :"):
                 continue  # the separator row
-            if rows is None:
-                rows = []
+            if table is None:
                 seen[heading] = seen.get(heading, 0) + 1
                 key = heading if seen[heading] == 1 else f"{heading} {seen[heading]}"
-                out[key] = rows
+                table = Table(key, cells)
+                out[key] = table
                 continue  # the header row
-            rows.append(cells)
+            table.rows.append(cells)
         else:
-            rows = None
+            table = None
     return out
 
 
@@ -135,7 +168,25 @@ def constraint(text, trait_names, kind_names, resources):
     return None
 
 
-def recipes_from(rows):
+def counters(cell):
+    """`bearing 1, defending 1, laboring 1` -> [{trait: 'bearing', max: 1}, ...].
+
+    **The `Readies` column stopped being a yes and became a list of counters** when the
+    release split readiness into five traits. A yes/no reader would have seen a non-empty
+    cell and gone on saying yes, which is true and says nothing about which counter.
+    """
+    text = plain(cell)
+    if not text:
+        return []
+    out = []
+    for part in text.split(","):
+        match = re.fullmatch(r"([\w ]+?)\s+(\d+)", part.strip())
+        assert match, f"not a counter and a maximum: {part!r} in {cell!r}"
+        out.append({"trait": match.group(1).strip(), "max": int(match.group(2))})
+    return out
+
+
+def recipes_from(table):
     """The Recipes table, grouped. A blank first cell continues the recipe above it.
 
     **A recipe name may appear more than once** - `stow`, `discard` and `refresh` are each
@@ -143,9 +194,18 @@ def recipes_from(rows):
     written in pieces. What joins rows is a blank name, never a matching one.
     """
     out, current = [], None
-    for cells in rows:
-        assert len(cells) == 7, f"expected seven columns, got {len(cells)}: {cells}"
-        name, owner, role, qty, kind, traits, where = (plain(c) for c in cells)
+    # The first column has been called `Recipe` and `Owner` has been called `Auto`; ask for
+    # what is there rather than assuming either.
+    first = table.headers[0]
+    owner_column = "Owner" if "Owner" in table.headers else "Auto"
+    for cells in table.rows:
+        name = plain(table.cell(cells, first))
+        owner = plain(table.cell(cells, owner_column))
+        role = plain(table.cell(cells, "Role"))
+        qty = plain(table.cell(cells, "Qty"))
+        kind = plain(table.cell(cells, "Kind"))
+        traits = plain(table.cell(cells, "Traits"))
+        where = plain(table.cell(cells, "Where"))
         if name:
             current = {"name": name, "owner": owner, "rows": []}
             out.append(current)
@@ -188,19 +248,21 @@ def main():
     game = {}
 
     game["kinds"] = [
-        {"name": plain(r[0]), "what": plain(r[1])} for r in need("Kinds")
+        {"name": name, "what": what} for name, what in need("Kinds").each("Kind", "What it is")
     ]
     game["families"] = [
         {
-            "name": plain(r[0]),
-            "members": [m.strip() for m in plain(r[1]).split(",")],
-            "everyKind": plain(r[1]) == "every kind above",
+            "name": name,
+            "members": [m.strip() for m in members.split(",")],
+            "everyKind": members == "every kind above",
         }
-        for r in need("Families")
+        for name, members in map(
+            lambda p: (plain(p[0]), plain(p[1])), need("Families").each("Family", "Members")
+        )
     ]
     game["containers"] = [
-        {"container": plain(r[0]), "holds": plain(r[1]), "upTo": plain(r[2])}
-        for r in need("Where things are")
+        {"container": plain(a), "holds": plain(b), "upTo": plain(c)}
+        for a, b, c in need("Where things are").each("Container", "Holds", "Up to")
     ]
     # **The Stored-or-derived column says two things in one cell**: which of three a trait is,
     # and - for a derived one - the rule it is derived by. The first is a choice from a closed
@@ -208,55 +270,82 @@ def main():
     # is a choice.
     game["traits"] = [
         {
-            "name": plain(r[0]),
-            "of": plain(r[1]),
-            "values": plain(r[2]),
-            "storage": plain(r[3]).split(":", 1)[0].strip(),
-            "derivation": (
-                plain(r[3]).split(":", 1)[1].strip() if ":" in plain(r[3]) else ""
-            ),
+            "name": plain(name),
+            "of": plain(of),
+            "values": plain(values),
+            "storage": plain(store).split(":", 1)[0].strip(),
+            "derivation": plain(store).split(":", 1)[1].strip() if ":" in plain(store) else "",
         }
-        for r in need("Traits")
+        for name, of, values, store in need("Traits").each(
+            "Trait", "Of", "Values", "Stored or derived"
+        )
     ]
     game["bounds"] = [
-        {"kind": plain(r[0]), "boundedBy": plain(r[1])}
-        for r in need("What bounds a kind in a territory")
+        {"kind": plain(kind), "boundedBy": plain(by)}
+        for kind, by in need("What bounds a kind in a territory").each("Kind", "Bounded by")
+    ]
+    # **This table's columns come and go, so the editor's columns are derived from it.**
+    # Between 2026-09-11 and 2026-09-12 the release dropped `Costs to produce`, `Binding` and
+    # `Requires`, and turned `Readies` from a yes into a list of counters. A parser reading by
+    # position would have put `Crosses` values into `Upkeep` and said nothing.
+    #
+    # **So what is declared here is a type per column name, and what is emitted is the
+    # intersection with what the release actually has.** A column that goes disappears from
+    # the editor; one that comes back reappears; and a column the release grows that is not
+    # named here is an error rather than a silent omission.
+    THING_COLUMNS = {
+        "Thing": ("name", "name", lambda c: plain(c)),
+        "Strength": ("strength", "number", number_or),
+        "Fuel": ("fuel", "number", number_or),
+        "Upkeep": ("upkeep", "amounts", amounts),
+        "Costs to produce": ("costs", "amounts", amounts),
+        "Binding": ("binding", "number", number_or),
+        "Crosses": ("crosses", "crosses", lambda c: plain(c)),
+        "Requires": ("requires", "requires", lambda c: plain(c)),
+        "Readies": ("readies", "counters", counters),
+        "Movable": ("movable", "bool", lambda c: bool(plain(c))),
+    }
+    units = need("Units and structures")
+    unknown = [h for h in units.headers if h not in THING_COLUMNS]
+    assert not unknown, (
+        f"Units and structures grew columns this parser has no type for: {unknown}. "
+        f"Add them to THING_COLUMNS rather than letting them be dropped."
+    )
+    game["thingColumns"] = [
+        {"key": THING_COLUMNS[h][0], "label": h, "type": THING_COLUMNS[h][1]}
+        for h in units.headers
     ]
     game["things"] = [
         {
-            "name": plain(r[0]),
-            "strength": number_or(r[1]),
-            "fuel": number_or(r[2]),
-            "upkeep": amounts(r[3]),
-            "costs": amounts(r[4]),
-            "binding": number_or(r[5]),
-            "crosses": plain(r[6]),
-            "requires": plain(r[7]),
-            "readies": plain(r[8]) == "yes",
-            "movable": plain(r[9]) == "yes",
+            THING_COLUMNS[h][0]: THING_COLUMNS[h][2](units.cell(row, h))
+            for h in units.headers
         }
-        for r in need("Units and structures")
+        for row in units.rows
     ]
     game["recipes"] = recipes_from(need("Recipes"))
     game["biomes"] = [
         {
-            "name": plain(r[0]),
-            "food": capacity_density(r[1]),
-            "metal": capacity_density(r[2]),
-            "energy": capacity_density(r[3]),
-            "nature": number_or(r[4]),
+            "name": plain(name),
+            "food": capacity_density(food),
+            "metal": capacity_density(metal),
+            "energy": capacity_density(energy),
+            "nature": number_or(nature),
         }
-        for r in need("Biomes")
+        for name, food, metal, energy, nature in need("Biomes").each(
+            "Biome", "Food", "Metal", "Energy", "Force of nature"
+        )
     ]
     game["territories"] = [
         {
-            "id": number_or(r[0]),
-            "food": capacity_density(r[1]),
-            "metal": capacity_density(r[2]),
-            "energy": capacity_density(r[3]),
-            "exercises": plain(r[4]),
+            "id": number_or(tid),
+            "food": capacity_density(food),
+            "metal": capacity_density(metal),
+            "energy": capacity_density(energy),
+            "exercises": plain(what),
         }
-        for r in need("Territory resources")
+        for tid, food, metal, energy, what in need("Territory resources").each(
+            "Territory", "Food", "Metal", "Energy", "What it exercises"
+        )
     ]
     game["worldOrder"] = world_order(document)
     game["loop"] = loop(document)
