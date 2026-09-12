@@ -132,6 +132,28 @@ does not.** Deleting the column deletes that. **Rule 7 sends a relationship to p
 reason earns a sentence it can have one - and this proposal writes none, because none of the four
 has been missed by anyone in the weeks the column has been read.
 
+## Two consequences this lane had not written, one of which is larger than the proposal
+
+**The direction of derivation reverses, and that is the bigger half.** `spec/data/kinds.4x` is
+**generated today by inverting the very column this deletes** - so deleting it makes `kinds.4x` the
+source rather than the output. **That is where `P-471` was always going** - the data is a normalized
+relational model and the notation is a text form of it - but it is a change to what is canonical and
+it is not this proposal.
+
+**So this one lands and the inversion goes with the column**, leaving `kinds.4x` authored and the
+release's tables projections of it. **The proposal that says so, and says what checks it instead of
+a byte comparison against a generator, is the next one.** Named here so it is not discovered
+afterwards.
+
+**And `keeps` still appears on every kind, which needs one correction to how it would be read.**
+`kinds.4x` puts it on no line, because `P-470` gave the trait `of:thing`. **A signature read from
+`kinds.4x` alone would show eighteen kinds none of which carries it**, where the column gives it to
+all eighteen.
+
+**The traits a kind carries is its own line plus every trait declared `of:thing`**, which is
+derivable from the two files together and is what `of:thing` means. **So the page does not change
+here**: `keeps` shows on all eighteen, as it does today, and it distinguishes nothing either way.
+
 ## What it changes about the conclusion, which is nothing
 
 **Re-derived rather than carried over.** Under the catalog's reading and under `kinds.4x` alike,
