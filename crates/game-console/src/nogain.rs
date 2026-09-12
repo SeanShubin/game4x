@@ -500,20 +500,6 @@ pub fn forces(document: &str) -> BTreeMap<String, i64> {
         .collect()
 }
 
-/// The kinds the release says readiness applies to.
-///
-/// **Read from the *Readies* column, and the release closes the set itself**: *Nothing outside
-/// this table readies.* So grounding `refresh`'s `thing` against every kind would invent three
-/// readiness economies the game does not have - a garrison, a store and a yard that exhaust.
-pub fn readies(document: &str) -> Vec<String> {
-    crate::recipes::body_under(document, "## Units and structures")
-        .iter()
-        .filter(|row| row.get(8).map(|cell| cell.trim() == "yes").unwrap_or(false))
-        .filter_map(|row| row.first())
-        .map(|cell| crate::recipes::plain(cell))
-        .collect()
-}
-
 /// The kinds made with a `keeps` counter, which is what `age` and `spoil` act on.
 ///
 /// **One sentence in the release and it names one kind**: *Food is made with `keeps` 1.* So
@@ -580,7 +566,6 @@ pub fn keeps(document: &str) -> Vec<String> {
 ///   kind, so nothing has to be done for them.
 pub fn rules(document: &str) -> Vec<Rule> {
     let rows = crate::recipes::body_under(document, "## Recipes");
-    let readies = readies(document);
     let keeps = keeps(document);
     let forces = forces(document);
 
@@ -607,7 +592,7 @@ pub fn rules(document: &str) -> Vec<Rule> {
 
     let mut out = Vec::new();
     for (name, lines) in &blocks {
-        for (suffix, ground) in groundings(document, name, lines, &readies, &keeps, &forces) {
+        for (suffix, ground) in groundings(document, name, lines, &keeps, &forces) {
             let mut delta: BTreeMap<Place, i64> = BTreeMap::new();
             for (place, change) in ground {
                 *delta.entry(place).or_insert(0) += change;
@@ -636,7 +621,6 @@ fn groundings(
     document: &str,
     name: &str,
     lines: &[Vec<String>],
-    readies: &[String],
     keeps: &[String],
     forces: &BTreeMap<String, i64>,
 ) -> Vec<(String, Vec<(Place, i64)>)> {
@@ -713,9 +697,8 @@ fn groundings(
         families.contains(&kind).then_some(kind)
     });
     if let Some(named_family) = named_family {
-        // Which members: readiness is closed to the *Readies* column, and `keeps` is declared
-        // of food alone. Both narrow `thing`, which is every kind and would otherwise give
-        // this release nine more things that expire and three more that exhaust.
+        // Which members: `keeps` is declared of food alone, which narrows `thing` - every
+        // kind - to the one that expires.
         let about = |word: &str| {
             lines.iter().any(|row| {
                 row.get(5)
@@ -723,9 +706,26 @@ fn groundings(
                     .unwrap_or(false)
             })
         };
-        let members: Vec<String> = if named_family == "thing" && about("ready") {
-            readies.to_vec()
-        } else if named_family == "thing" && about("keeps") {
+        // **A branch for readiness stood here and was dead, and a second rot hid the first.**
+        // `refresh` used to say *ready* in its Traits cell, and this ground `thing` against
+        // the kinds the *Readies* column marked `yes`. `P-411` made readiness a count and no
+        // recipe row has said *ready* since, so the branch was unreachable - and the function
+        // it called read cell 8 of a table `P-466` cut to seven columns and compared it with
+        // `yes`, which `P-459` had already replaced with counts. **It returned an empty list
+        // and nothing noticed**, because the one assertion that would have caught an empty
+        // grounding is below this branch and the branch was never taken.
+        //
+        // **Asserted rather than deleted quietly.** If a recipe row says *ready* again, the
+        // grounding it needs is missing and that has to be loud where the branch was, not
+        // wrong in a report. `every_recipe_row_names_a_count_rather_than_readiness` carries
+        // the same claim over the whole table with the count, because a claim of zero names
+        // what it counted against.
+        assert!(
+            !about("ready"),
+            "`{name}` says `ready` in a Traits cell, and the grounding that narrowed `thing` \
+             to the kinds that ready was deleted when `P-411` made readiness a count"
+        );
+        let members: Vec<String> = if named_family == "thing" && about("keeps") {
             keeps.to_vec()
         } else {
             family(document, &named_family).unwrap_or_default()

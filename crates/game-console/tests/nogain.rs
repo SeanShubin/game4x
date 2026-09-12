@@ -500,3 +500,65 @@ fn traits_marked(document: &str, word: &str) -> Vec<String> {
     }
     out
 }
+
+/// No recipe row says `ready`, which is what let a dead branch and a rotted reader hide each
+/// other.
+///
+/// **Two rots, stacked.** `nogain::groundings` had a branch narrowing `thing` to the kinds that
+/// ready, taken when a recipe's Traits cell said *ready*. `P-411` made readiness a count and no
+/// row has said it since, so the branch was unreachable. The function it called read cell 8 of
+/// *Units and structures* and compared it with `yes` - and `P-459` replaced `yes` with counts,
+/// then `P-466` cut the table to seven columns. **It returned an empty list unconditionally**,
+/// and the assertion that catches an empty grounding sits below the branch that never ran.
+///
+/// **The gate was green through all of it**, which is the point. Neither rot could be seen from
+/// the other: a dead branch hides a broken reader, and a reader nobody calls cannot fail.
+///
+/// **A claim of zero names what it counted against** - `CLAUDE.md`. Seventy-seven rows, so this
+/// cannot pass by the table having parsed to nothing.
+#[test]
+fn every_recipe_row_names_a_count_rather_than_readiness() {
+    let document = release();
+    let rows = game_console::recipes::body_under(&document, "## Recipes");
+    let at = game_console::recipes::column_of(&document, "## Recipes", "Traits");
+    let saying: Vec<String> = rows
+        .iter()
+        .filter(|row| {
+            row.get(at)
+                .map(|traits| traits.contains("ready"))
+                .unwrap_or(false)
+        })
+        .map(|row| row.get(at).cloned().unwrap_or_default())
+        .collect();
+    assert_eq!(
+        rows.len(),
+        77,
+        "seventy-seven recipe rows is the population this counted against"
+    );
+    assert!(
+        saying.is_empty(),
+        "a recipe row says `ready`, and the grounding for it was deleted: {saying:?}"
+    );
+
+    // **And the counts are what replaced it**, asserted here so that *no row says ready* cannot
+    // be satisfied by a table that says nothing about readiness at all.
+    let counts = game_console::nogain::counts(&document);
+    assert_eq!(
+        counts,
+        ["moving", "laboring", "working", "bearing", "defending"],
+        "five counts replaced the one flag, and they are what a recipe row names instead"
+    );
+    let naming = rows
+        .iter()
+        .filter(|row| {
+            row.get(at)
+                .map(|traits| counts.iter().any(|count| traits.contains(count.as_str())))
+                .unwrap_or(false)
+        })
+        .count();
+    assert!(
+        naming >= 8,
+        "only {naming} recipe rows name a count, which is too few for this table to be the one \
+         `P-411` wrote"
+    );
+}
