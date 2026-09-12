@@ -759,3 +759,69 @@ fn the_same_release_gives_the_same_bytes() {
         game_console::petri_page::page(&document)
     );
 }
+
+/// A block that names a count carries it in its label, whether or not it needs to.
+///
+/// **The label used to say the least that told a block from today's neighbours.** `refresh`
+/// on an extractor is the only one for its kind, so it was drawn as `refresh (extractor)`
+/// while its five siblings were `refresh (citizen laboring)` and the like - two naming schemes
+/// in one drawing, and `nogain.md` called the same block `refresh (extractor working)`.
+///
+/// **The failure that matters is not today's inconsistency.** A name that depends on which
+/// other blocks exist is a node that gets renamed by an unrelated promotion: the day a second
+/// extractor count is declared, `refresh (extractor)` becomes `refresh (extractor working)`
+/// and every reference to the old name is silently about nothing. `R-9` wants a diffable
+/// report, and a rename that no rule change caused is the opposite.
+///
+/// **Over every block with a `put` row, with the count**, read from the release rather than
+/// listed here.
+#[test]
+fn a_block_that_names_a_count_carries_it_in_its_label() {
+    let document = release();
+    let net = net(&document);
+
+    // The counts the Traits table declares, which is what a label may carry.
+    let counts = game_console::nogain::counts(&document);
+    assert!(
+        counts.len() >= 5,
+        "only {} counts read from the release: {counts:?}",
+        counts.len()
+    );
+
+    let mut checked = 0;
+    for name in &net.transitions {
+        let Some(inside) = name
+            .split_once(" (")
+            .map(|(_, rest)| rest.trim_end_matches(')'))
+        else {
+            continue;
+        };
+        // A density case is spelled `work (food x4)` and names no count, which is its own
+        // scheme and is not what this is about.
+        if inside.contains(" x") {
+            continue;
+        }
+        let Some((_, last)) = inside.rsplit_once(' ') else {
+            continue;
+        };
+        assert!(
+            counts.iter().any(|count| count == last),
+            "`{name}` carries `{last}` after its kind and that is not a declared count"
+        );
+        checked += 1;
+    }
+    assert_eq!(
+        checked, 6,
+        "six blocks carry a count in their label - the six `refresh` rows - and {checked} did"
+    );
+
+    // **And the extractor's is one of them**, which is the case the rule was written for: it
+    // needs no disambiguator and carries the count anyway.
+    assert!(
+        net.transitions
+            .iter()
+            .any(|name| name == "refresh (extractor working)"),
+        "the one `refresh` that needs no disambiguator has lost its count: {:?}",
+        net.transitions
+    );
+}

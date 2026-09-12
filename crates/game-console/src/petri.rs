@@ -420,17 +420,35 @@ pub fn net(document: &str) -> Net {
     // the member of the family the rule was instantiated for - so it is the thing that made
     // the block a separate block rather than a suffix invented to tell them apart.
     //
-    // **And the kind is not always enough, since `P-414`.** Three `refresh` blocks put a
-    // count back on a citizen and two put one back on a unit, so what tells those apart is
-    // the count rather than the kind - `refresh (citizen laboring)` beside `refresh (citizen
-    // defending)`. The count is the first word of the block's first row of traits, which is
-    // where the release writes it: *laboring at its maximum*.
+    // **And a block that names a count carries it always, not only when the kind collides.**
+    // Three `refresh` blocks put a count back on a citizen and two on a unit, so there the
+    // count is the only thing that tells them apart. The extractor's is the only `refresh`
+    // for its kind, and labelling it by the minimum that disambiguates gave
+    // `refresh (extractor)` beside `refresh (citizen laboring)` - **two naming schemes in one
+    // drawing, and a node whose name would change the day a second extractor count arrived.**
+    //
+    // **A label says what makes the block that block, rather than the least that tells it
+    // from today's neighbours.** That also makes this agree with `nogain.rs`, which names the
+    // same block `refresh (extractor working)`; a reader holding the two reports should not
+    // have to work out that they are the same rule.
     let first_cell = |lines: &[Vec<String>], column: usize| {
         lines
             .first()
             .and_then(|row| row.get(column))
             .map(|cell| crate::recipes::plain(cell))
             .unwrap_or_default()
+    };
+    let count_of = |lines: &Vec<Vec<String>>| {
+        lines.iter().find_map(|row| {
+            (row.get(2).map(String::as_str) == Some("put"))
+                .then(|| {
+                    crate::nogain::count_in(&crate::recipes::plain(
+                        row.get(5).map(String::as_str).unwrap_or_default(),
+                    ))
+                })
+                .flatten()
+                .map(|(count, _)| count)
+        })
     };
     let labels: Vec<String> = named
         .iter()
@@ -444,24 +462,10 @@ pub fn net(document: &str) -> Net {
                 "`{name}` is stated more than once and its first row names no kind, so the \
                  two cannot be told apart on the page"
             );
-            let sharing = named
-                .iter()
-                .filter(|(other, rows)| other == name && first_cell(rows, 4) == kind)
-                .count();
-            if sharing < 2 {
-                return format!("{name} ({kind})");
+            match count_of(lines) {
+                Some(count) => format!("{name} ({kind} {count})"),
+                None => format!("{name} ({kind})"),
             }
-            let count = first_cell(lines, 5)
-                .split_whitespace()
-                .next()
-                .unwrap_or_default()
-                .to_string();
-            assert!(
-                !count.is_empty(),
-                "`{name}` is stated more than once for `{kind}` and its first row names no \
-                 count, so the two cannot be told apart on the page"
-            );
-            format!("{name} ({kind} {count})")
         })
         .collect();
     assert_eq!(
