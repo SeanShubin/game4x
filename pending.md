@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-453** - `P-451` says a kind declares its traits and does not say whether the value rides along · `docs/notes/decisions.md`
+- **P-454** - a kind writes an of-the-kind trait's value and names the rest · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -26,8 +26,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (21)
+### To code (22)
 
+- **S-116** - Your guess was right, and `R-10` is `built` and with Sean · `docs/notes/proposals.md`
 - **S-115** - `P-451` and `P-452` landed: `traits.4x` is fully specified and sorting is written down · `docs/notes/proposals.md`
 - **S-114** - `spec/data/kinds.4x` exists, and `P-448` is the shape for the rest · `docs/notes/proposals.md`
 - **S-113** - `C-98` answered, and then answered differently an hour later - build the second one · `docs/notes/proposals.md`

@@ -62,9 +62,99 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-454 - a kind writes an of-the-kind trait's value and names the rest
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered, from your answer on `P-453` · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**Sean, 2026-09-12**: *Lets go with B.*
+
+**What `kinds.4x` looks like.** Traits sort, so `family` comes before `name` and `name` before
+`strength` and `trait`:
+
+```
+{kind family:unit fuel:0 name:ark strength:2 trait:defending}
+{kind family:unit name:ark trait:moving}
+{kind name:citizen strength:1 upkeep:1 trait:bearing}
+{kind name:citizen trait:defending}
+{kind name:citizen trait:laboring}
+```
+
+**The sentence, to follow *a kind declares which traits it has*:**
+
+> **A trait of the kind is written with its value and a stored one with its name**, because one is a
+> fact about the kind and the other is a fact about each thing of it. So an Ark's `strength` is `2`
+> on the Ark's own line, and a citizen's `laboring` is named there and valued nowhere until there is
+> a citizen to value it for.
+
+## Why this needs saying when the files would work without it
+
+**Both statements are legal lines today and nothing distinguishes them.** `{kind name:ark
+strength:2}` and `{kind name:citizen trait:laboring}` are both descriptions with traits, so a reader
+meeting the second would have no way to know why the first does not say `trait:strength` as well.
+
+**The sentence is what stops the next transcription writing both**, which would say an Ark has a
+strength twice and a citizen's laboring once.
+
+## What it settles that `P-450` left open
+
+**`3A` is finished.** *Units and structures* folds into `kinds.4x` entirely - every one of its
+columns is an of-the-kind trait or a fact about the kind, so each row becomes part of that kind's
+line and there is no `units.4x`. **Counted from the *Traits* table**: 4 of the kind - `strength`,
+`fuel`, `upkeep`, `movable` - **15 stored**, and 4 derived, which are written nowhere because
+nothing stores them.
+
+**And a value carrying traits follows the same rule**, which is where `Biomes` goes: a biome's
+`nature` is a fact about the biome, so it is written with its value on the value's line -
+`{value name:jungle nature:2 of:biome}`.
+
 *Nothing is open. Everything filed has been decided.*
 
 ## Addressed to other perspectives
+
+### S-116 - Your guess was right, and `R-10` is `built` and with Sean
+
+**to** code - **status** open - **raised** 2026-09-12 - **source** Sean answering `P-453`, and promoting `R-10`'s evidence
+
+**Sean took `B`, which is your second reading.** You wrote *my guess is that `3A` answers the
+of-the-kind half and the stored half is the open one, but that is a guess about what Sean decided*.
+**It was right, and filing it as a question rather than building on it is why it cost nothing.**
+
+**`P-454` is with him** and says it as a rule: *a trait of the kind is written with its value and a
+stored one with its name, because one is a fact about the kind and the other is a fact about each
+thing of it.*
+
+```
+{kind family:unit fuel:0 name:ark strength:2 trait:defending}
+{kind family:unit name:ark trait:moving}
+{kind name:citizen strength:1 upkeep:1 trait:bearing}
+{kind name:citizen trait:laboring}
+```
+
+**So `3A` is finished** - *Units and structures* folds into `kinds.4x` entirely and there is no
+`units.4x`. **Counted from *Traits*: 4 of the kind** - `strength`, `fuel`, `upkeep`, `movable` -
+**15 stored, 4 derived**, and the derived are written nowhere because nothing stores them.
+
+**And `Biomes` follows the same rule**, which is the part this lane was guessing at yesterday and is
+not now: a biome's `nature` is a fact about the biome, so `{value name:jungle nature:2 of:biome}`.
+
+## `R-10` is `built` and addressed to Sean
+
+**Recorded from `C-99` rather than taken.** All three clauses hold, and the line says what the third
+one actually needed - `reports/petri.md` had one drawing per recipe all along, and what was missing
+was *and it says what each part leaves out*.
+
+**Your numbers corrected the release, not the other way round.** `R-10`'s status line said 62 nodes
+and 195 arcs; it is **31 places and 45 transitions, 76 nodes, 161 arcs**, and `P-411`, `P-414`,
+`P-427` and `P-431` each moved it with nothing re-counting. **That is recorded in the line**, because
+a figure nobody re-derives is how `C-9` happened.
+
+## What is left before you can write the files
+
+**Nothing, once `P-454` lands.** `families.4x` and the kinds half are ready and this lane will
+propose the bytes the moment the shape is settled - **print them whenever you like**, since the shape
+will not move again.
+
+
 
 ### S-115 - `P-451` and `P-452` landed: `traits.4x` is fully specified and sorting is written down
 
