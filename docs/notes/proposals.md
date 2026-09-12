@@ -103,291 +103,71 @@ makes this one different is that the fix is one sentence and the failure was sil
 none of the four announced itself, and three were caught only because another lane happened to
 count the same thing.
 
-### P-422 - `R-6` is rewritten: two territories and a launch, and every recipe fires
-
-**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, when you answered it · **kind** recovered · **shape** text · **asks** approval · **into** `releases/first-release.md` -> `R-6`
-
-**Sean, 2026-09-11**: *We don't need to fully exploit the planet for our initial scenario test, but
-we should try to exercise most mechanics. Lets take the first territory, the second territory, then
-launch an ark.*
-
-**Your scenario exercises more than *most* - it exercises all of them**, and that turns an unmeasurable
-predicate into an exact one. The release has **21 recipes, 10 the player's and 11 the world's**,
-counted from the *Recipes* table by the Owner column.
-
-| To do this                           | These fire                                               |
-| ------------------------------------ | -------------------------------------------------------- |
-| take the first territory from orbit  | `deploy ark`                                             |
-| take the second by land              | `produce pioneer`, `move`, `found by land`               |
-| launch an Ark, which requires a Yard | `build yard`, `launch ark`                               |
-| pay for any of it                    | `create labor`, `work`, `build extractor`, `build store` |
-
-**That is all ten player recipes**, and the world's eleven fire at a turn's end, which your scenario
-reaches repeatedly. **So *exercise most mechanics* and *every recipe fires at least once* are the
-same requirement for this scenario** - and only the second can be checked.
-
-## The *vetted when*, replacing the one that is there
-
-> - **Vetted when** - the scenario takes a first territory from orbit, takes a second by land, and
->   launches an Ark; and **every recipe in the release fires at least once while it runs**, measured
->   by what fired rather than by what the file says. **It does not win, and that is the win condition
->   working**: `spec/control.md` gives victory for launching from a fully exploited planet, and this
->   planet is not one
-
-## Why the last clause is in the offered text rather than a note
-
-**Launching without winning is the thing a reader will think is a bug.** The code lane asserted it
-on 2026-09-11 and found it was `spec/control.md` doing its job rather than a coincidence. **Saying
-so in the capability is what stops the next person filing it.**
-
-## And why *measured by what fired*
-
-**`CLAUDE.md` records this exact check failing.** A coverage check asked whether a line of the
-scenario *begins with* each recipe's command - *satisfied for `move` by the line that founds*, nine
-of nine, green for weeks, and `move` had never once fired. **The instrument answered a narrower
-question and returned a plausible number rather than an error.**
-
-**The machinery to do it right exists**: `crates/game-console/src/fired.rs` records what each command
-fired, and `tests/worked.rs` already fails when a recipe has no worked example. **This is that
-instrument pointed at the scenario**, and it is the code lane's to wire.
-
-## What this makes stale, named rather than left
-
-- **`tests/fully_exploited.rs`** derives the bill for finishing the planet - 57 buildings - and
-  `the_committed_scenario_launches_an_ark_and_does_not_finish_the_planet` asserts `(12, 2, 0)` with
-  the message *if this has moved, `R-6` is worth asking again*. **Under this wording that state stops
-  being a gap and becomes the intended one**, so the test's framing wants inverting even though its
-  numbers are right
-- **`C-20` and `S-90`** rest on the sentence this replaces
-- **`spec/scenarios.md` is clear and was checked rather than assumed**: *exploit* and *fully
-  exploited* have **0** occurrences in it, so nothing there claims the scenario finishes the planet
-
-
-### P-425 - force, rewritten under unification, and `Coordination` folds into `Producing force`
-
-**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, when you chose way one · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Producing force, and -> Gaining and holding ground · from `C-94` and your redefinition
-
-**Sean, 2026-09-11**: *I am deciding with unification for now... since I am not seeing much
-difference here I am starting with unification.* **So force stays a token on its own exhaustion
-track, and nothing in `releases/first-release.md` changes** - the release already implements every
-clause of your definition. **What changes is `spec/`**, which still carries the `max` era.
-
-**This supersedes `P-420`**, which is held: its bullet made a unit coordinate citizens, and your
-definition gives a unit force of its own and no coordinating role. **The word `military` is gone
-from both bullets here**, so `P-420` is withdrawn rather than promoted - it wanted one word changed
-in a sentence this replaces.
-
-## What is wrong today, so the rewrite is checkable rather than tasteful
-
-- **The same rule is stated twice, in two sections, in different words.** *Producing force* has *a
-  citizen can fight but cannot organise; coordinated, it musters its force each turn; uncoordinated
-  it musters none*. *Coordination* has *citizens are capable of violence but not of coordination;
-  without something to coordinate them they muster nothing*
-- **The sections are mis-sorted.** *Coordination* opens with *force is mustered each turn and does
-  not outlast it*, which is duration. *Producing force* carries the garrison's coordinating role,
-  which is coordination
-- **`military unit` has a rule and no instance** - two occurrences, 0 elsewhere in `spec/` or
-  `releases/`, and `spec/unit-types.md` declares Ark and Pioneer and calls neither military
-- **Nothing says a citizen's mustering is its own track**, which is your third clause and is the one
-  the spec has never had
-
-## The first block: `## Producing force` keeps its heading and takes these six bullets, and `## Coordination` is deleted
-
-> - **Force is mustered each turn and does not outlast it.** What a territory presents is what it
->   mustered this turn, and nothing accumulates
-> - A citizen can fight but cannot organise. **It musters no force unless something coordinates it**
-> - A garrison coordinates the citizens of its territory, so that **each of them musters one force
->   each turn**. It has no force of its own, and **it does this by existing** - nothing has to work
->   it
-> - **What a citizen spends to muster is its own**, and is not what it spends to labor or to bear
-> - **A unit is organised force in itself**, and musters its own force needing nothing to coordinate
->   it
-> - A territory has at most one garrison, because it represents the organisation of the whole
->   territory rather than a presence in one part of it
-
-## The second block: in `## Gaining and holding ground`, replacing the bullet that begins *A military unit is organised force*
-
-> - Several units brought to one place sum their force. Taking a territory uses the organised force
->   brought to it, and several units may take together
-
-## What this asks you to agree to beyond the words
-
-**Deleting a heading is structural and this lane will not do it quietly.** `## Coordination`
-disappears and its three bullets are accounted for: the duration bullet moves up unchanged, the
-duplicate citizen bullet is **dropped as a duplicate**, and the coordination-source bullet is
-**replaced** - a garrison coordinates, a unit does not, which is your definition rather than a
-rephrasing of what was there.
-
-**Two references point at that heading and neither is yours to fix.** `crates/outbox.md:157` is
-`C-94`, which this answers, and a research report dated 2026-09-10 cites it. **Both are told once
-this lands.**
-
-**One bullet is new rather than moved**: *what a citizen spends to muster is its own*. It is your
-third clause, it is already true of the release - `defending` sits beside `laboring` and `bearing` -
-and the specification has never stated it.
-
-**And `C-93` survives this and is not made worse.** Force stays a kind, so the release still uses
-`force` in three recipe rows while *Kinds* declares seventeen without it. **Way one was the option
-that leaves that to answer**, which the decision knew.
-
-### P-428 - unification first, until there is a reason not to
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** text · **asks** approval · **into** `docs/process.md` -> Three rules for using AI assistants
-
-**Sean, 2026-09-11**: *My current thinking is to always try for unification first, until there is a
-good reason not to. Since I am not seeing much difference here I am starting with unification.*
-
-**`docs/process.md` has the reason and not the rule.** `P-409` landed *I want one rule applied
-everywhere rather than a rule with a correct exception, because uniformity is how I recognise a
-pattern that nobody has named yet* - which says **why** uniformity is worth something. **It does not
-say when to reach for it**, and the sentence above is a decision procedure: a default, a defeater,
-and what to do when the case is close.
-
-**The last clause is the one that changes what this lane does.** *Since I am not seeing much
-difference here* - **a tie goes to unification.** `P-425` is exactly that case: this lane laid out
-two ways, said one fact was strongest and declined to pick, and you picked on the ordering rule
-rather than on the merits. **Written down, this lane stops presenting a close call as open.**
-
-**The sentence, to follow the paragraph `P-409` landed:**
-
-> **Which is a rule about what to try first, not only about what to prefer.** I try for unification
-> first and look for a reason not to; where I cannot see much difference between the unified form
-> and the exception, the unified form wins by default.
-
-### P-426 - metal is declared *conserved* and the planet is a source, in two documents that cannot both hold
-
-**to** sean · **status** open · **cited** `4461445`, where the research lens closed `X-14` into this · **raised** 2026-09-11 · **kind** entailed, from the research lens's `X-14` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Kinds · from `X-14`
-
-**`releases/first-release.md:63` says metal is *conserved*, unqualified.
-`spec/invariants.md:124` says the planet is one of three sources and its material is endless.**
-They contradict each other, and the release is the one that is wrong - `work` produces a
-territory's density of metal from the ground every time it fires, taking nothing.
-
-**The spec already has the reconciling sentence** and the release does not use it: *a source is
-named, and a named source is not a gain... an endless well behind a bounded pump takes nothing away
-from the rule above.* **What metal actually is** is drawn from a named source and conserved
-thereafter - which is a different claim from *conserved*, and the one that is true.
-
-**The row, replacing the `metal` row of *Kinds* cell for cell:**
-
-> | **metal** | what things are built from; drawn from the planet, and conserved once above ground |
-
-**`energy`'s row is already correct and is not offered** - it reads *neither conserved nor
-expiring*, which is what an endless star behind a bounded pump gives.
-
-### P-427 - founding creates two metal it does not consume, and the lens reports you decided this on 2026-09-09
-
-**to** sean · **status** open · **cited** `4461445`, where the research lens closed `X-14` into this · **raised** 2026-09-11 · **kind** recovered · **shape** instruction · **asks** approval · **into** `releases/first-release.md` -> Recipes · from `X-14`
-
-**The arithmetic, re-derived from the release rather than taken from the lens's check** - which
-measures that lane's own encoding and not this one, as `X-29` has just shown. From the **Binding**
-column of *Units and structures*: garrison 1, extractor 1, store 1, ark 3, pioneer 3, citizen none.
-
-| Recipe            | Metal consumed         | Metal created                                                      | Net    |
-| ----------------- | ---------------------- | ------------------------------------------------------------------ | ------ |
-| **deploy ark**    | an ark, worth **3**    | garrison 1 + extractor 1 + extractor 1 + store 1 + store 1 = **5** | **+2** |
-| **found by land** | a pioneer, worth **3** | the same **5**                                                     | **+2** |
-
-**Dropping the two `store` rows from each makes both exactly zero** - 3 consumed, 3 created - so
-founding stops being a metal source. **That is the whole of the fix and it is four rows.**
-
-**The instruction: delete the `produce 1 store food` and `produce 1 store metal` rows from
-`deploy ark` and from `found by land`.** Four rows, nothing replaces them, and no other recipe is
-touched.
-
-**The check the promoting commit runs**: the `deploy ark` and `found by land` blocks contain **0**
-rows whose Kind is `store`, counted over blocks that today contain 4.
-
-## Why this asks you rather than just landing
-
-**The lens reports that you decided this on 2026-09-09** - *the two stores are dropped from
-founding* - **and this lane has no record of it.** Nothing in `docs/notes/spec-backlog.md` carries a
-2026-09-09 entry, so the decision exists in `X-14`'s summary of a conversation and nowhere else.
-
-**`CLAUDE.md` says a relayed approval is worth acting on outside that file**, so this is not a
-refusal to act - it is the proposal the decision implies, put to you so that approving it is you
-saying it rather than this lane citing a report. **If you did not decide this, say so and the
-arithmetic above is still a defect wanting a different fix.**
-
-**What a founded territory loses.** Nowhere to put food or metal until a store is built, which costs
-1 labor and 1 metal each. **This lane has not checked whether the main scenario still plays**, and
-that is the code lane's to say before or after it lands.
-
-### P-420 - `military unit` becomes `unit`, in both places
-
-**to** sean · **status** **withdrawn** 2026-09-11, superseded by `P-425` · **raised** 2026-09-11 · **kind** recovered · **shape** text · **into** `spec/control.md` -> Coordination, and -> Gaining and holding ground · from `C-94`
-
-**Withdrawn the same day it was written, and not because it was wrong.** Its instruction - *lets
-just call them units* - is carried out in `P-425`, which removes `military` from both bullets. What
-did not survive is the sentence it kept the word in: it would have made a unit coordinate citizens,
-and Sean's redefinition gives a unit force of its own and no coordinating role. **`P-425` replaces
-the section rather than editing a word in it**, so there is nothing left here to promote.
-
-
-**Held 2026-09-11, an hour after being written, by your own next message.** Its first bullet would
-make coordination come from *a structure, such as a garrison, or by a unit*, so a Pioneer would
-coordinate the citizens of a territory. **Your redefinition of force gives a unit force of its own
-and gives it no coordinating role at all** - so the two cannot both stand, and this one is the
-younger claim.
-
-**The word `military` still wants removing either way**, and that much survives. What does not
-survive is the bullet this proposal chose to keep it in. **`P-425` carries the section**, and this
-comes back rewritten once that is answered.
-
-
-
-**Sean, 2026-09-11**: *Lets just call them units, we dont really have a distinction between military
-units and units yet, that is language for the future, and I don't even know what the difference
-would be yet.*
-
-**Two bullets carry the word and nothing else in `spec/` or `releases/` does** - 2 hits over 20
-files, case-insensitive, and *army*, *soldier*, *warrior* and *troop* are 0. Both are offered here,
-each into the section it is already in.
-
-**The first, in *Coordination*, replacing the bullet that begins *Coordination is imposed*:**
-
-
-> - Coordination is imposed on citizens by a structure, such as a garrison, or by a unit, which
->   carries coordination with it rather than needing a place.
-
-**The second, in *Gaining and holding ground*, replacing the bullet that begins *A military unit is
-organised force*:**
-
-> - A unit is organised force in itself, so several brought to one place sum. Taking a territory
->   uses the organised force brought to it, and several units may take together
-
-## What this changes beyond the word, which is the part to read before approving
-
-**It is not only vocabulary, and this lane is not going to let that pass as tidying.** While the
-word was `military` the first bullet had **no instance** - `spec/unit-types.md` declares Ark and
-Pioneer and calls neither military - so in practice only a structure coordinated citizens. **Struck,
-the bullet reaches every unit**, and an Ark or a Pioneer standing in a territory coordinates the
-citizens there. **Both bullets are in sections named for what they are about** - `Coordination` and
-`Gaining and holding ground` - and neither moves.
-
-
-**The release does not do that.** `muster` requires a garrison and names no alternative. So on a
-founded territory with two citizens, a Pioneer and no garrison: **the release gives 2 force and the
-edited spec gives 4**, against a force of nature running 1 to 3 - which is the disagreement `C-94`
-found, resolved by this in the spec's favour rather than the release's.
-
-**That is ordinary and does not block the promotion.** `CLAUDE.md`: *the spec is the destination and
-always wins; a release spec only says what is true today.* A release narrower than the spec is the
-normal case. **What is not ordinary is that nothing says so** - which is the whole of `C-94`, and it
-survives this promotion rather than being answered by it.
-
-**So promoting this files one follow-on item**, and which one is yours:
-
-- **If the release should follow**, that is work for the code lane - `muster` gains an alternative,
-  and a territory's force changes wherever a unit stands without a garrison
-- **If the release should stay narrower**, that is a line in `releases/first-release.md` saying it
-  is narrower on purpose, so the next reader holding both documents finds a note instead of a
-  contradiction
-
-**Say nothing about this and the second is what gets filed**, because it is the smaller claim and
-because you have not asked for a rules change.
-
 ## Addressed to other perspectives
+
+### S-102 - Five promotions, and `P-427` makes the gate red until founding stops building stores
+
+**to** code - **status** open - **raised** 2026-09-11 - **source** promoting `P-422`, `P-425`, `P-426`, `P-427` and `P-428`
+
+**One of the five is a rules change you have built against, and it is `P-427`.** The rest are
+wording, a capability and a rule about how Sean decides.
+
+## `P-427` - founding no longer builds two stores
+
+**The four `produce 1 store` rows are gone** from `deploy ark` and `found by land`. Checked after
+the edit rather than intended: **0 `store` rows in either block**, over blocks that held 4, and the
+metal arithmetic re-derived from the *Binding* column - **both recipes now consume 3 and create 3,
+net 0**, where both were `+2`.
+
+**Why**: `X-14`, and Sean's own decision relayed through it. Founding was a metal source, which
+`spec/invariants.md` does not license - only the planet, the star and time are sources.
+
+**What this costs the scenario, and it is yours to say.** A founded territory now has **nowhere to
+put food or metal** until a store is built, at 1 labor and 1 metal each. `game.rs:655` creates a
+`Kind::Store` on founding and **that is now two rows ahead of the release**. **`play.4x` may stop
+playing**, and if it does, extending it is the fix rather than putting the rows back.
+
+## `P-422` - `R-6`'s *vetted when* is replaced, and it is a smaller target than before
+
+**It no longer asks for a fully exploited planet.** It asks that the scenario **takes a first
+territory from orbit, takes a second by land, launches an Ark, and that every recipe in the release
+fires at least once** - *measured by what fired rather than by what the file says*.
+
+**That last clause is the requirement, not a flourish.** `CLAUDE.md` records the coverage check that
+asked whether a scenario line *begins with* each recipe's command, was satisfied for `move` by the
+line that founds, went green for weeks, and `move` had never fired. **`fired.rs` is the instrument
+that reads outcomes** and `tests/worked.rs` already fails when a recipe has no worked example.
+
+**Counted from the release**: 21 recipes, **10 the player's and 11 the world's**. Sean's three acts
+require all ten player recipes, and the world's eleven fire at a turn's end.
+
+**`tests/fully_exploited.rs` wants its framing inverted rather than its numbers changed.**
+`the_committed_scenario_launches_an_ark_and_does_not_finish_the_planet` asserts `(12, 2, 0)` and
+says *if this has moved, `R-6` is worth asking again*. **That state is now the intended one.** Two
+files quote the replaced sentence.
+
+## `P-425` - `spec/control.md` has no `## Coordination` section any more
+
+`Producing force` took six bullets and `Coordination` is deleted; `military unit` is **0**
+occurrences across `spec/` and `releases/`. **Nothing about force changed in the release** - Sean
+chose the token model, so `muster`, `stand`, `discard` and `defending` all stand exactly as built.
+
+**Two of your files point at what moved**: one quotes *Coordination is imposed*, and two mention
+*military unit*. `crates/outbox.md:157` is `C-94`, **which this answers** - a unit has force of its
+own and coordinates nobody, so the release was never narrower than the spec on this point.
+
+**One bullet is new rather than moved** and is worth reading: *what a citizen spends to muster is
+its own, and is not what it spends to labor or to bear*. Already true of your model; never stated
+before.
+
+## `P-426` and `P-428` - wording, and a rule about Sean
+
+`metal`'s *Kinds* row now reads *drawn from the planet, and conserved once above ground*. Two files
+say *conserved*; **check whether either is quoting the release**.
+
+`P-428` is in `docs/process.md` and binds this lane rather than yours: **try unification first, and
+a tie goes to the unified form.**
+
 
 ### S-101 - `P-421` landed: the release declares five roles and three places in your column say four
 
@@ -4129,6 +3909,11 @@ work the release exists to order.
 | P-418, a selector leaves traits out, and the example names a trait the game has                                              | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-11 |
 | P-419, the bullet's last sentence says what a thing can do, not `readiness`                                                  | `spec/invariants.md` -> Nothing comes back round with more                                                                                                                                               | 2026-09-11 |
 | P-421, `put` is declared: the same thing and not a new one, and a put has no quantity                                        | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-11 |
+| P-422, `R-6` is two territories and a launch, and every recipe fires                                                         | `releases/first-release.md` -> `R-6`                                                                                                                                                                     | 2026-09-11 |
+| P-425, force under unification: `Coordination` folds into `Producing force`, and `military` goes                             | `spec/control.md` -> Producing force, Gaining and holding ground                                                                                                                                         | 2026-09-11 |
+| P-426, metal is drawn from the planet and conserved once above ground                                                        | `releases/first-release.md` -> Kinds                                                                                                                                                                     | 2026-09-11 |
+| P-427, the four `store` rows go, and founding stops being a metal source                                                     | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-11 |
+| P-428, unification first, and a tie goes to the unified form                                                                 | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
 | P-403, an outbox item's addressing line is not part of what is promoted                                                      | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
 | P-402, vetting gates finishing a release, not shipping one                                                                   | `releases/README.md` -> Vetting, and deletion                                                                                                                                                            | 2026-09-11 |
@@ -4175,6 +3960,7 @@ again in a later session.
 | P-4, "the twelve five-neighbour territories sit in six antipodal pairs"               | Derivable from the Goldberg choice, and no rule leans on it.                                                                                                                                                                                                                                                                                                |            |
 | P-5, "a pentagon's farthest territory is its antipodal twin"                          | Merged into P-4, then withdrawn with it.                                                                                                                                                                                                                                                                                                                    |            |
 | P-7, "the smallest planet has no six-neighbour territories"                           | Derivable from P-6 plus a line Sean had already written - the minimum is 12, **a dodecahedron**.                                                                                                                                                                                                                                                            |            |
+| P-420, "military unit becomes unit" | Carried out inside P-425, which replaces the section rather than editing a word in it. The word is gone from both bullets; the sentence it kept the word in did not survive Sean's redefinition of force, which gives a unit force of its own and no coordinating role. |  |
 | P-9, "the distance between every pair is computed once and stored"                    | An implementation directive, not a rule of the game.                                                                                                                                                                                                                                                                                                        |            |
 | P-13, "the greatest distance is 3 / 5 / 6 / 7 / 9 by planet size"                     | Determined by the Goldberg choice and the size, nothing leans on it, and the numbers are **already asserted by a test**.                                                                                                                                                                                                                                    |            |
 | P-15, "Native life is a planet's own, Feral is printed life gone wild"                | **Feral is behavioural, not an origin**, and origin is not substantively relevant.                                                                                                                                                                                                                                                                          |            |

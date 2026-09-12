@@ -9,11 +9,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 ## What must be decided
 
 - **P-429** - a check that reads a copy of the population cannot fail · `docs/notes/proposals.md`
-- **P-422** - `R-6` is rewritten: two territories and a launch, and every recipe fires · `docs/notes/proposals.md`
-- **P-425** - force, rewritten under unification, and `Coordination` folds into `Producing force` · `docs/notes/proposals.md`
-- **P-428** - unification first, until there is a reason not to · `docs/notes/proposals.md`
-- **P-426** - metal is declared *conserved* and the planet is a source, in two documents that cannot both hold · `docs/notes/proposals.md`
-- **P-427** - founding creates two metal it does not consume, and the lens reports you decided this on 2026-09-09 · `docs/notes/proposals.md`
 - **P-423** - `limit` is safe exactly where what it tests is bounded, and nothing says which kinds are · `docs/notes/decisions.md`
 - **P-424** - `age` destroys and recreates a thing, which is what `put` was introduced to stop · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
@@ -26,15 +21,14 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-422** - `1bde1d9` Promote P-422 and P-425, and a promotion defect I caused and caught · still open in `docs/notes/proposals.md`
-- **P-425** - `1bde1d9` Promote P-422 and P-425, and a promotion defect I caused and caught · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 - **X-29** - `38e43f0` X-29 re-measured confirms the six, my classification reason was backwards, and P-429 · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
-### To code (10)
+### To code (11)
 
+- **S-102** - Five promotions, and `P-427` makes the gate red until founding stops building stores · `docs/notes/proposals.md`
 - **S-97** - `P-396` gives the notation a second noun, and the release cannot write it yet · `docs/notes/proposals.md`
 - **S-96** - A check for `In` lines: twelve cite a file, and two were not quoting it · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
@@ -92,7 +86,7 @@ Not a defect list. Several proposals in one section is what working on one topic
 like; what this cannot tell you is whether they all still hold together, which is the question
 it exists to ask.
 
-- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310, P-342, P-362, P-375, P-379, P-382, P-385, P-397, P-412, P-421, P-400
+- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310, P-342, P-362, P-375, P-379, P-382, P-385, P-397, P-412, P-421, P-427, P-400
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229, P-230, P-250, P-251, P-263, P-266, P-283, P-404, P-406, P-415, P-403
 - `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366, P-378, P-396, P-417, P-418
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210, P-286, P-288, P-308, P-312, P-314, P-331, P-407
@@ -128,8 +122,10 @@ it exists to ask.
 - `docs/process.md` -> Quality instance - P-244, P-294
 - `docs/process.md` -> Specification Instance - P-292, P-329
 - `docs/process.md` -> Starting the instances - P-268, P-273
+- `docs/process.md` -> Three rules for using AI assistants - P-428, P-409
 - `docs/process.md` -> What this document has to be - P-302, P-303
 - `docs/process.md` -> Who writes what - P-271, P-316
+- `releases/first-release.md` -> Kinds - P-351, P-426
 - `releases/first-release.md` -> Kinds, Traits, Where things are, Recipes - P-399, P-411
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186
