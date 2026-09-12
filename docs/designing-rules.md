@@ -72,10 +72,17 @@ approximating badly, and it buys identity **at no cost to any guarantee in this 
 - **Six write *one less*** - `move`, `create labor`, `work`, `bear`, `muster`, `stand`. Each is
   preceded by a `require ... at least 1`, so the value is known before it is written. **An ordinary
   decrement arc**, and four of the six are player recipes
-- **Six write *at its maximum*** - all of them `refresh`, which is a **world** recipe. Setting a
-  count to a constant regardless of what is there is the shape that reads the marking, because
-  reaching a fixed value means knowing the current one. **This is the reset arc, and it is confined
-  to the one rule that restores what time gives back**
+- **Six write *at its maximum*** - all of them `refresh`, which is a **world** recipe. **The test is
+  what the amount is, not what the row looks like**: *at its maximum* is **how much is missing**, so
+  the amount depends on the current marking. *One less* is a fixed decrement and reads nothing.
+  **This is the reset arc, and it is confined to the one rule that restores what time gives back**
+
+**Two rows look like marking reads and are not**, which is the same distinction from the other
+side. `work` produces *`$where`'s density for that resource* and `muster` produces *that citizen's
+force*. **A density is a trait of the place and a force is a trait of the kind - both constant, and
+both colours.** What makes an amount illegal is depending on *how much is there*, not on being
+written as a phrase instead of a number.
+
 
 **That confinement is the whole reason `put` is free.** `spec/invariants.md` already names time as
 one of three sources - *anything that exhausts draws on time for a turn: it spends a count it

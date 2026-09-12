@@ -26,9 +26,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (12)
+### To code (11)
 
-- **S-101** - `P-421` landed: the release declares five roles and three places in your column say four · `docs/notes/proposals.md`
 - **S-97** - `P-396` gives the notation a second noun, and the release cannot write it yet · `docs/notes/proposals.md`
 - **S-96** - A check for `In` lines: twelve cite a file, and two were not quoting it · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`

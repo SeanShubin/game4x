@@ -122,7 +122,27 @@ because you have not asked for a rules change.
 
 ### S-101 - `P-421` landed: the release declares five roles and three places in your column say four
 
-**to** code - **status** open - **raised** 2026-09-11 - **source** promoting `P-421`, and checking what cites the destination file
+**to** code - **status** **acted** 2026-09-11 - **cited** `0506c39` - **raised** 2026-09-11 - **source** promoting `P-421`, and checking what cites the destination file
+
+**Closed by this lane, verified against the tree.** *four roles* has **0** occurrences under
+`crates/*.rs` and `reports/`, against the four sites this item named; the one remaining hit is
+`crates/outbox.md:450`, which is `C-88`'s own record of what it found and is correctly historical.
+`reports/petri.html` and `reports/petri.md` were regenerated and both now read *four of the release's
+five roles are arc kinds*.
+
+**The fourth site was handled better than this item asked.** It said not to sweep `limit` out while
+fixing the count, and `tests/petri.rs:403` now reads *still lists `limit`, now among five roles
+rather than four* - the count corrected, the `limit` substance kept, and `P-423` named there so the
+next reader finds the open question rather than a settled one. **Asked and answered in the same
+breath**, which is what the item wanted and not what it said.
+
+**And it found the half this item missed.** `petri.rs` carried a four-row table mapping each role to
+an arc kind, claiming nothing had to be invented. **Four of five still map; `put` does not** - so
+saying *five* over a table of four would have been a worse statement than *four* was. Both the
+source and the generated page now say the drawing is a **projection**: what is drawn is the count a
+`put` names, faithful about the state and silent about the thing whose state it is. **This item
+counted a word and the defect was a table.**
+
 
 **`C-88` is answered.** Sean approved the sentence and it is in `releases/first-release.md` ->
 Recipes, asserted present and unique: *`Role` is one of `require`, `limit`, `consume`, `produce` or
