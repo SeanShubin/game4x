@@ -299,6 +299,7 @@ pub enum Verdict {
 pub fn sentences(text: &str) -> Vec<String> {
     let mut out = Vec::new();
     let mut block = String::new();
+    let mut after_bullet = false;
     for line in text.lines() {
         let mut rest = line.trim();
         // A quotation marker is not prose, and it may be followed by another marker.
@@ -307,6 +308,7 @@ pub fn sentences(text: &str) -> Vec<String> {
         }
         if rest.is_empty() {
             drain(&mut block, &mut out);
+            after_bullet = false;
             continue;
         }
         // An outbox addressing line: `**to** ... **status** ...`, which a promotion writes and
@@ -314,6 +316,7 @@ pub fn sentences(text: &str) -> Vec<String> {
         // with a bold word is not swallowed.
         if rest.starts_with("**to**") && rest.contains("**status**") {
             drain(&mut block, &mut out);
+            after_bullet = false;
             continue;
         }
         // A heading bounds the prose on both sides of it and is a sentence of its own, so
@@ -322,11 +325,27 @@ pub fn sentences(text: &str) -> Vec<String> {
             drain(&mut block, &mut out);
             block.push_str(heading.trim_start_matches('#').trim());
             drain(&mut block, &mut out);
+            after_bullet = false;
             continue;
         }
-        if let Some(inner) = bullet(rest) {
+        // **A dash that opens a line is a bullet only where a bullet could start.** `P-418`
+        // offered a paragraph whose last clause wrapped so that ` - a selector in a recipe`
+        // began a line, and the destination wrapped it one word earlier - so the same
+        // paragraph parsed to four sentences on one side and five on the other, and a
+        // promotion that had landed exactly was reported missing. **Wrapping is structure**,
+        // which is the one thing `P-283` allows to move, so the parse may not depend on it.
+        //
+        // A bullet begins a block or follows another bullet; a dash inside a paragraph is
+        // punctuation continuing the sentence it is in.
+        // **A list is open from its first item until the block ends**, which is what the
+        // three resets above say: a blank line, a heading or an addressing line closes it.
+        // So consecutive items are each a bullet, and a dash wrapped into the middle of a
+        // paragraph is not one.
+        let opens = block.is_empty() || after_bullet;
+        if opens && let Some(inner) = bullet(rest) {
             drain(&mut block, &mut out);
             rest = inner;
+            after_bullet = true;
         }
         if !block.is_empty() {
             block.push(' ');
@@ -1027,6 +1046,61 @@ fn a_bullet_and_its_full_stop_may_move_and_nothing_else_may() {
             "this is a change to the words and should be reported: {landed:?}"
         );
     }
+}
+
+/// A dash wrapped into the middle of a paragraph is punctuation, not a bullet.
+///
+/// **`P-418` landed exactly and was reported missing**, which is the same failure `P-257`
+/// had and a different cause. The offered paragraph ends *...what says which it is** - a
+/// selector in a recipe, a description in a state.*, and the two sides wrapped it one word
+/// apart: the proposal put ` - a selector` at the start of a line and `spec/console.md` did
+/// not. One side therefore parsed to one more sentence than the other, and the comparison
+/// - which is a sequence of sentences in order - could not match.
+///
+/// **Wrapping is the one thing `P-283` says may move**, so a parse that depends on it is
+/// wrong however plausible its answer. Both directions are driven here, because the fix
+/// could as easily have stopped seeing real bullets.
+#[test]
+fn a_dash_in_a_wrapped_line_is_not_a_bullet_and_a_real_bullet_still_is() {
+    // The same paragraph, wrapped two ways. Only the line breaks differ.
+    let one = "**Where the form stands is what says which it is** - a selector in a recipe, a\ndescription in a state.";
+    let other = "**Where the form stands is what says which it\nis** - a selector in a recipe, a description in a state.";
+    assert_eq!(
+        sentences(one),
+        sentences(other),
+        "the same paragraph wrapped two ways parses two ways, so a promotion's verdict \
+         depends on where a line broke"
+    );
+    assert_eq!(
+        sentences(one).len(),
+        1,
+        "it is one sentence however it wraps: {:?}",
+        sentences(one)
+    );
+
+    // And a list is still a list, however many items and however they wrap.
+    let list = "- one thing\n- another thing\n  wrapped\n- a third";
+    assert_eq!(
+        sentences(list),
+        vec![
+            "one thing".to_string(),
+            "another thing wrapped".to_string(),
+            "a third".to_string()
+        ],
+        "consecutive bullets are separate sentences"
+    );
+
+    // A list that opens a block after a paragraph opens on its own line, not inside one.
+    let mixed = "A paragraph that ends here.\n\n- one thing\n- another";
+    assert_eq!(
+        sentences(mixed),
+        vec![
+            "A paragraph that ends here".to_string(),
+            "one thing".to_string(),
+            "another".to_string()
+        ],
+        "a blank line closes the paragraph and the list that follows is a list"
+    );
 }
 
 /// The one case the loose comparison admitted, which is `C-35`'s whole verification.
