@@ -312,6 +312,23 @@ pub fn trait_name(name: Trait) -> &'static str {
 
 /// The counts a thing of this kind carries, under the names `P-411` gives them.
 ///
+/// The maximum an action count is restored to, which nothing declares.
+///
+/// **`refresh` reads *at its maximum* six times and the release states no maximum** - `P-459`.
+/// `spec/turn.md` says *each kind declares how many of each action a thing of it may take in a
+/// turn*, and the *Units and structures* **Readies** column says `yes`: one cell for a
+/// citizen's three actions, where the rule asks for a number.
+///
+/// **The two agree today only because every maximum is one**, which is the shape this
+/// repository keeps finding - correct by the population rather than by the rule, the way
+/// `keeps` was correct while food was the only kind that had one.
+///
+/// **So the constant is named rather than spelled `1` at the point of use.** It was
+/// `unwrap_or(1)`, a bare literal standing for a fact the release does not state; naming it
+/// gives `P-459` one place to change and a reader one place to find out that nothing declares
+/// it. **The behaviour is identical** - this is not a fix, it is the assumption made findable.
+pub const UNDECLARED_MAXIMUM: u32 = 1;
+
 /// **One trait per action, and the name depends on the kind.** `spec/console.md`: a
 /// description is a kind and **every trait of that thing**, and **no trait of the thing may be
 /// left out** - `{citizen defending:1} -> 8` and `{citizen defending:0} -> 6`. So a count is
@@ -321,7 +338,7 @@ pub fn trait_name(name: Trait) -> &'static str {
 /// made this turn needs no trait to be able to act. That is storage; what a data file says is
 /// the number either way.
 fn counts(kind: Kind, thing: &Thing) -> Vec<(&'static str, u32)> {
-    let held = |name: Trait| thing.trait_of(name).unwrap_or(1);
+    let held = |name: Trait| thing.trait_of(name).unwrap_or(UNDECLARED_MAXIMUM);
     match kind {
         Kind::Citizen => vec![
             ("bearing", held(Trait::Spent)),

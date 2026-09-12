@@ -482,14 +482,28 @@ fn the_traits_file_declares_what_a_data_file_needs() {
             open += 1;
         }
     }
-    // **Seven open cells, which is the one question `P-457` puts to Sean.** `0 or 1` five
-    // times and `yes or no` three times are the same two-valued set spelled twice - eight
-    // cells in the table, and **one of the three `yes or no` traits is `surplus`**, which is
-    // in no data file. So dropping it drops an open cell with it, and the question is over
-    // seven rather than eight.
+    // **Two open cells, and `spec/turn.md` is what took it from seven.** The five action
+    // counts admit a **number**: *each kind declares how many of each action a thing of it may
+    // take in a turn*, so `0 or 1` is this release's maxima showing through rather than the
+    // trait's shape, and a unit that one day takes two moves needs no change to this file.
+    //
+    // **What is left is `unpaid` and `movable`**, which are not action counts and have no
+    // maximum behind them - either numbers like the counts, or values declared the way a biome
+    // is. `P-457` is where that is decided.
     assert_eq!(
-        open, 7,
-        "seven cells wait on what the notation calls a two-valued set; {open} do"
+        open, 2,
+        "two cells wait on what the notation calls a two-valued set; {open} do"
+    );
+    let waiting: Vec<&str> = read
+        .iter()
+        .filter(|row| row.traits.get("admits").map(String::as_str) == Some("???"))
+        .filter_map(|row| row.traits.get("name"))
+        .map(String::as_str)
+        .collect();
+    assert_eq!(
+        waiting,
+        ["unpaid", "movable"],
+        "the two open cells are not the two that have no maximum behind them"
     );
 
     // **The counts the release's own column gives**, so a generator inventing a `kept` would

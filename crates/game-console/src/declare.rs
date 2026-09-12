@@ -279,9 +279,23 @@ fn names_it(document: &str, name: &str) -> bool {
 }
 
 /// What a trait admits, read from its Values cell.
+///
+/// **`0 or 1` is a maximum showing through, not the trait's shape.** `spec/turn.md`: *an action
+/// is named, and each kind declares how many of each action a thing of it may take in a turn.*
+/// So an action count admits a **number**, bounded by a maximum the kind declares, and `0 or 1`
+/// is what that range looks like in a release where every maximum is one.
+///
+/// **That is read from a promoted rule rather than chosen here**, which is why it is not
+/// `???`: a unit that one day takes two moves needs no change to this file. `P-457` carries
+/// the same reading to Sean, and if he reads it the other way this function changes and
+/// nothing else does.
+///
+/// **`yes or no` is still open.** `unpaid` and `movable` are not action counts and have no
+/// maximum behind them - either numbers like the counts, or values declared the way a biome
+/// is. Two cells, and `P-457` is where they are decided.
 fn admits(values: &str) -> String {
     let said = values.trim();
-    if said == "0 or 1" || said == "yes or no" {
+    if said == "yes or no" {
         return "???".to_string();
     }
     if said == "design or play" {
@@ -293,9 +307,13 @@ fn admits(values: &str) -> String {
     if said == "a place" {
         return "place".to_string();
     }
-    // Everything left is a number, however the cell describes what it counts.
+    // Everything left is a number: `0 or 1` by the rule above, `a number` outright, and four
+    // cells that are a number with a sentence about what it counts.
     assert!(
-        said.contains("number") || said.contains("how much") || said.contains("per turn"),
+        said == "0 or 1"
+            || said.contains("number")
+            || said.contains("how much")
+            || said.contains("per turn"),
         "`{said}` is a Values cell this does not read, and guessing at it would put a word in \
          the file that the release did not say"
     );
