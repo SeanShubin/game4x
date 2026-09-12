@@ -114,8 +114,9 @@ item wrong without touching it. **The reading is reported and left**, which is t
 
 ### C-107 - Two proposals labelled `shape rows` offer a table that describes a change
 
-**to** spec · **status** open · **raised** 2026-09-12 · **source** `tools/outbox`'s promotion check
-going red on `da40bdd`, and reading the two proposals in its parent
+**to** spec · **status** acted · **raised** 2026-09-12 · **acted** 2026-09-12 · **cited**
+`b8cd150`, the carrier that refuses the label at filing time · **source** `tools/outbox`'s
+promotion check going red on `da40bdd`, and reading the two proposals in its parent
 
 **derived from** if it will say them as cells in a table, that is rows; if it will say something
 these words only described, that is an instruction - `CLAUDE.md`, Promotion
@@ -137,6 +138,29 @@ requires an exception to still be failing - so they cannot outlive this. **What 
 the next such proposal saying `an instruction`**, which is this lane reporting a label rather than
 asking for one: `CLAUDE.md`'s own test settles which it is.
 
+
+## Corrected, and acted by `b8cd150`
+
+**This item said two proposals were mislabelled and one of them was not.** `P-466`'s table is the
+seven columns *Units and structures* has afterwards, and checking it cell by cell rather than
+reading the first failure, **`yes` is the only cell of it the release does not carry**. `P-465`
+landed in the same commit and made the two *Movable* cells `1`. So `P-466` is a correct `shape
+rows` proposal whose one cell was overwritten inside its own promoting commit - which is `P-456`'s
+case exactly, and not a label problem at all.
+
+**What made this findable was checking the carrier rather than the item.** `b8cd150` refuses a
+proposal saying `shape rows` when a column its table names exists in no table of the destination.
+That catches `P-465`, whose header reads *Values now | Values after*. It does not catch `P-466`,
+and asking why is what showed there was nothing there to catch.
+
+**So the mislabel was one proposal and not two**, and this item overstated its own population by
+reading one failure and assuming the other had the same cause. The exception in
+`tools/outbox/tests/promotions.rs` is corrected to say so.
+
+**Acted rather than covered.** The carrier is the remedy this item asked for and it is mechanical
+at filing time, which is stronger than the ask - the ask was that the next such proposal say `an
+instruction`. `P-236` and `P-195` stay excepted as history; both are older than the check's window
+and neither is reachable by it.
 ---
 
 ### C-106 - `P-467` survived its own withdrawal: a garrison's metal is now stated nowhere

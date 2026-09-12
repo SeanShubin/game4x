@@ -613,7 +613,7 @@ pub fn check(shape: &str, block: &str, destination: &str) -> Verdict {
 const KNOWN: &[(&str, &str)] = &[
     (
         "P-466",
-        "declared `shape rows` and its tables describe a change rather than being one. It removes three columns, and it shows what it removes - so its cells include `yes`, a *Movable* value the release no longer has, and every other cell it names as going. **The promotion is correct**: `releases/first-release.md` has seven columns and the three are gone. What cannot pass is a rows check, which asks that every cell offered be present in the destination, against a proposal whose point is that some of them are not. `CLAUDE.md`'s own test says which shape that is - *if it will say something these words only described, that is an instruction* - so the label is what is wrong, and a label is what this check reads. `C-107`.",
+        "one cell superseded inside its own promoting commit, which is `P-456`'s case and not the label problem this item first recorded. Its table is the seven columns *Units and structures* has afterwards, and **`yes` is the only cell of it the release does not carry** - checked cell by cell rather than inferred from the first failure. `P-465`, landing in the same commit, made the two *Movable* cells `1`. So the proposal is correct, the label is correct, and what cannot be judged is a promotion against a commit that also contains the one that overwrote a cell of it. **`C-107` said this was a before-and-after table and it is not**; the item is corrected.",
     ),
     (
         "P-465",
