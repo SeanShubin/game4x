@@ -62,7 +62,83 @@ Two limits Claude holds itself to:
 
 ## Open
 
-*Nothing is open. Everything filed has been decided.*
+### P-473 - the *Of* column goes, and `R-8`'s signature is computed from `spec/data/`
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed, from `P-469` and `P-470`, reported by the code lane as `C-108` · **shape** text and rows · **asks** approval · **into** `releases/first-release.md` -> Traits, and the `R-8` capability
+
+**`R-8` asks you to read `reports/catalog.md`, and seven of its eighteen kinds understate their
+traits.** Counted from the regenerated report against `spec/data/kinds.4x`:
+
+```
+kind        catalog.md shows               and kinds.4x adds
+ark         fuel,keeps,moving,strength     binding,defending,metal-in-it,movable
+citizen     bearing,defending,keeps,...    unpaid,upkeep
+extractor   keeps,resource,working         binding,metal-in-it
+garrison    keeps,strength                 binding,metal-in-it
+pioneer     fuel,keeps,moving,strength     binding,defending,metal-in-it,movable
+store       keeps,resource                 binding,metal-in-it
+yard        keeps                          binding,metal-in-it
+```
+
+**The cause is four cells of the *Of* column that describe rather than name**, and the signature is
+computed from that column:
+
+```
+whatever is built     -> binding, metal-in-it     six kinds
+a thing with upkeep   -> upkeep, unpaid           citizen
+whatever moves        -> movable                  ark, pioneer
+a citizen or a unit   -> defending                ark, pioneer
+```
+
+**It was one such cell when the signature was written and it is four now.** Nothing broke; the
+column grew phrasings a matcher cannot read.
+
+## Why the answer is to delete the column rather than to teach the matcher
+
+**`kinds.4x` states the same fact and states it exactly.** `spec/console.md`: **a kind declares which
+traits it has**, and a trait **says nothing about which kinds carry it**. So *Of* is what `P-451`
+took off the trait, written back on it in the table - and `P-469` is the rule: **a fact is stated
+once and every other form of it is derived.**
+
+**The two forms already disagree in four places.** Teaching the matcher to read *whatever is built*
+makes them agree today and leaves the same trap for the next phrasing.
+
+**And one of its predicates can no longer be derived from anything.** *Whatever is built* was read
+off the `Binding` column, which `P-466` removed - so the code lane now has those six kinds written
+down in a list, with a test that fails the day the derivation reproduces them. **That list exists
+because this column exists.**
+
+## The rows
+
+**The *Traits* table loses its `Of` column**, keeping Trait, Values and Stored or derived. Twenty-four
+rows, each losing one cell.
+
+## The text, into `R-8`'s *vetted when*
+
+**One clause changes.** The bullet is offered whole so what moves is visible.
+
+> - **Vetted when** - `reports/catalog.md` gives each kind a **signature**: the traits it carries and
+>   every *(recipe, role)* pair that names it. **Kinds with the same signature are shown together**,
+>   and the signature is computed from `spec/data/` rather than written by anyone. I can scan
+>   the groups, see that two kinds behave alike, and have a name to grep for when I want the detail
+
+**`from the release's tables` becomes `from spec/data/`**, which is where a kind's traits are now
+stated. **Nothing else in the bullet moves.**
+
+## What is lost, and it is real
+
+**A phrase like *a thing with upkeep* tells a reader why a citizen carries `unpaid`, and `citizen`
+does not.** Deleting the column deletes that. **Rule 7 sends a relationship to prose**, so where the
+reason earns a sentence it can have one - and this proposal writes none, because none of the four
+has been missed by anyone in the weeks the column has been read.
+
+## What it changes about the conclusion, which is nothing
+
+**Re-derived rather than carried over.** Under the catalog's reading and under `kinds.4x` alike,
+**every pair of kinds that shares a trait set is still separated by the recipes that name it** - so
+*no two behave alike* holds either way. **What moves is which kinds collide on traits alone**: nine
+under the old reading, seven under `kinds.4x`, and `yard` separates because it gains `binding` and
+`metal-in-it` where an empty set had swallowed it.
 
 ## Addressed to other perspectives
 
