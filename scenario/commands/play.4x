@@ -136,7 +136,7 @@
 # requires the pioneer to be standing on the ground, so crossing and founding are two acts a
 # turn apart. `P-214` still holds - the player says which recipe this is, and moving onto
 # unclaimed ground founds nothing.
-{move unit:pioneer territory:2}
+{move unit:pioneer from:1 to:2}
 {create-labor territory:1}
 {work territory:1 resource:food}
 {create-labor territory:1}

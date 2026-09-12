@@ -9,7 +9,7 @@
 //! commands and an expectation about what they leave behind; `spec/console.md` says
 //! command files may invoke each other as subroutines, and `scenario/commands/setup.4x` does.
 
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::path::PathBuf;
 
 use game_console::{Library, Outcome, Problem, Session};
@@ -636,7 +636,7 @@ fn a_player_is_told_what_went_wrong_and_where() {
         other => panic!("expected a rejection, got {other}"),
     }
     assert!(
-        refuse(&mut session, "{move unit:pioneer territory:2}")
+        refuse(&mut session, "{move unit:pioneer from:1 to:2}")
             .to_string()
             .contains("no pioneer"),
         "a unit that does not exist"
@@ -800,7 +800,8 @@ fn every_way_the_state_can_change_is_a_command() {
         },
         Transition::Move {
             kind: UnitKind::Pioneer,
-            territory: TerritoryId(1),
+            from: TerritoryId(2),
+            to: TerritoryId(1),
         },
         // `P-214`: one command per recipe, so the two the model used to choose between by
         // looking at the ground are two transitions and two commands.
@@ -942,6 +943,107 @@ fn every_player_recipe_has_one_command_named_for_it() {
     assert_eq!(
         checked,
         distinct.len(),
+        "every player recipe, and the count so that an empty table cannot pass"
+    );
+}
+
+/// Every place a recipe leaves open is a field of the command named for it.
+///
+/// **`spec/console.md`, since `P-460`: a command *binds what that recipe leaves open: every
+/// place it leaves open, and any ingredient or trait value it names with a `$`*.** The
+/// sentence before it bound only *the place it acts in*, which is the wording `C-101` was
+/// filed against: `move` names two places with a `$` and its command bound one, so the model
+/// chose the other by picking the lowest-numbered unit that could have made the move.
+///
+/// **Checked over every player recipe rather than over `move`.** One example stops meaning
+/// anything the moment the example is edited away, and the recipe that gains a second open
+/// place next is the one nobody is watching. Ten recipes, each counted from the release's
+/// *Where* column and compared against its command's own required number fields.
+///
+/// # What counts as open, and the cells that do not
+///
+/// **A blank *Where* is one place rather than none** - `releases/first-release.md`: *a blank
+/// means the one place the recipe acts* - and `spec/console.md` says as much from the other
+/// side: *a recipe acting in one place need not name it*. So `found by land` leaves one place
+/// open and its command names one.
+///
+/// **A place worked out from another is not open**: *the orbit above `$where`* is named by
+/// naming `$where`, which the same paragraph says outright. A cell that is more than its
+/// `$name` is worked out from one, and the reference is the tell.
+///
+/// **And a *Where* cell that names a thing rather than a place is neither** - `that unit`,
+/// which says where the energy comes from and leaves nothing for the player to say.
+#[test]
+fn every_place_a_recipe_leaves_open_is_a_field_of_its_command() {
+    let document = std::fs::read_to_string(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../releases/first-release.md"),
+    )
+    .expect("the release");
+    let rows = game_console::recipes::body_under(&document, "## Recipes");
+
+    // The rows of one recipe run until the next one names itself, which is how a table with a
+    // blank first cell says *the same recipe, another row*.
+    let mut order: Vec<String> = Vec::new();
+    let mut players: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
+    let mut current = String::new();
+    for row in &rows {
+        let named = row
+            .first()
+            .map(|cell| cell.trim().trim_matches('*').trim().to_string())
+            .filter(|name| !name.is_empty());
+        if let Some(name) = named {
+            current = name.replace(' ', "-");
+            if row.get(1).map(String::as_str) == Some("player") {
+                order.push(current.clone());
+                players.entry(current.clone()).or_default();
+            }
+        }
+        let Some(places) = players.get_mut(&current) else {
+            continue;
+        };
+        let cell = row.get(6).map(String::as_str).unwrap_or("").trim();
+        let bare = cell.trim_matches('`');
+        if let Some(name) = bare.strip_prefix('$')
+            && !name.contains(char::is_whitespace)
+        {
+            places.insert(name.to_string());
+        }
+    }
+    assert_eq!(
+        order.len(),
+        10,
+        "ten recipes the player may fire when this was written; the release has {} ({order:?})",
+        order.len()
+    );
+
+    let grammar = game_console::command_grammar();
+    let mut checked = 0;
+    for recipe in &order {
+        // A recipe that names no place still acts in one, and the command names that one.
+        let places = players[recipe].len().max(1);
+        let form = grammar
+            .forms()
+            .iter()
+            .find(|form| form.opening() == *recipe)
+            .unwrap_or_else(|| panic!("`{recipe}` is a player recipe with no command"));
+        // **A place is a number in the grammar**, which is what a territory's id is, and
+        // `repeat` is optional so it is not a hole the recipe left open.
+        let bound = form
+            .holes()
+            .filter(|(name, kind, required)| {
+                *required && *kind == command_language::Kind::Number && *name != "repeat"
+            })
+            .count();
+        assert_eq!(
+            bound, places,
+            "`{recipe}` leaves {places} place(s) open in the release's *Where* column and its \
+             command binds {bound}. `spec/console.md`: a command binds every place a recipe \
+             leaves open"
+        );
+        checked += 1;
+    }
+    assert_eq!(
+        checked, 10,
         "every player recipe, and the count so that an empty table cannot pass"
     );
 }

@@ -46,7 +46,7 @@
 {work territory:1 resource:energy repeat:2}
 {create-labor territory:2}
 {work territory:2 resource:food}
-{move unit:pioneer territory:3}
+{move unit:pioneer from:1 to:3}
 {end-turn}
 
 # Turn 13. The pioneer founds the ground it is standing on, and the new territory feeds itself

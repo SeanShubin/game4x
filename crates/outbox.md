@@ -197,12 +197,37 @@ that unit happened to be.
 ## What it costs, run rather than reasoned
 
 `a_move_command_names_one_place_where_the_recipe_names_two` in `crates/game-model/src/game.rs`
+- since rewritten, and the section below says into what -
 puts two pioneers in two territories, both adjacent to a third, both with a move left. **One
 command is a correct description of two different moves.** Exactly one goes, and nothing the
 player typed said which.
 
 **Asserted as the ambiguity rather than as the choice**, so it stays true if the tie-break
 changes: both were eligible, one moved, one stayed.
+
+## Built, and this item is closed on both sides
+
+**The command binds both places now**, and the gap this item reported is gone rather than
+recorded. `{move unit:pioneer from:1 to:2}` is the form; `Transition::Move` carries `from` and
+`to`; `Game::move_unit` asks the two places the player named whether they are adjacent, and
+looks for the unit in the place the player said it was standing.
+
+**The ambiguity test became its opposite, at the same fixture.**
+`a_command_names_the_place_the_unit_moves_from` keeps the two pioneers adjacent to the same
+third territory and now asserts that `from:1` moves the one on 1 and `from:2` moves the one on
+2 - **both directions, because one of them agrees with the old lowest-numbered behaviour and
+would have passed against it.**
+
+**And the rule is checked over every recipe rather than over `move`.**
+`every_place_a_recipe_leaves_open_is_a_field_of_its_command` counts the `$`-named places in
+each player recipe's *Where* column and compares them with its command's required number
+fields, over ten recipes with the count asserted. A blank *Where* is one place and a place
+worked out from another is none, which is what `spec/console.md` says and what the two Ark
+recipes need. **Poisoned to prove it bites**: with `move`'s two fields put back to one it
+reports *`move` leaves 2 place(s) open ... and its command binds 1*.
+
+**Nothing in the scenario moved but the words.** `scenario/expected/` is byte-identical: the
+pioneer that went is the pioneer that always went, and the command now says so.
 
 **`P-456` is what makes this worth filing now.** While an id might have come to units, the model's
 tie-break was a placeholder for a thing the specification might one day give it. It will not: a

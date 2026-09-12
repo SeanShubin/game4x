@@ -79,7 +79,7 @@ Before:
     {garrison} -> 1
 ```
 
-`{move unit:pioneer territory:2}`
+`{move unit:pioneer from:1 to:2}`
 
 After:
 

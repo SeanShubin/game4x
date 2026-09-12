@@ -43,6 +43,16 @@ pub enum Rejection {
         kind: UnitKind,
         where_from: &'static str,
     },
+    /// Nothing of that kind is standing where the command said it was.
+    ///
+    /// **Separate from `NoUnitAvailable` because the question is different.** That one says
+    /// the player has none anywhere it could act from; this one says the player named a
+    /// place and the unit is not in it. Before `P-460` the model chose the place, so this
+    /// complaint could not arise.
+    NoUnitThere {
+        kind: UnitKind,
+        territory: TerritoryId,
+    },
     NotAdjacent {
         from: TerritoryId,
         to: TerritoryId,
@@ -146,6 +156,9 @@ impl fmt::Display for Rejection {
             Rejection::NoSuchResource(word) => write!(out, "there is no resource called {word}"),
             Rejection::NoSuchUnitKind(word) => write!(out, "there is no unit called {word}"),
             Rejection::NoSuchStructure(word) => write!(out, "there is no structure called {word}"),
+            Rejection::NoUnitThere { kind, territory } => {
+                write!(out, "there is no {kind} on territory {territory}")
+            }
             Rejection::NoUnitAvailable { kind, where_from } => {
                 write!(out, "there is no {kind} {where_from}")
             }

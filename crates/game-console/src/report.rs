@@ -362,7 +362,7 @@ mod tests {
         // recipe and a name is one word, so `move` is the whole name and which unit moves is
         // a field.
         assert!(
-            text.contains("{move unit:<value> territory:<value> [repeat:<value>]}"),
+            text.contains("{move unit:<value> from:<value> to:<value> [repeat:<value>]}"),
             "{text}"
         );
         assert!(

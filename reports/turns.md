@@ -2091,7 +2091,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 ## commands
 
 ```
-{move unit:pioneer territory:2}
+{move unit:pioneer from:1 to:2}
 {create-labor territory:1}
 {work territory:1 resource:food}
 {create-labor territory:1}

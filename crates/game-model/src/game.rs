@@ -170,7 +170,7 @@ impl Game {
 
             Transition::Land { kind, territory } => next.land(*kind, *territory)?,
             Transition::Launch { territory } => next.launch(*territory)?,
-            Transition::Move { kind, territory } => next.move_unit(*kind, *territory)?,
+            Transition::Move { kind, from, to } => next.move_unit(*kind, *from, *to)?,
             Transition::FoundByLand { territory } => next.found_by_land(*territory)?,
             Transition::BuildStore {
                 resource,
@@ -427,34 +427,48 @@ impl Game {
             .all(|place| place.founded() && place.at_maximum_output())
     }
 
-    fn move_unit(&mut self, kind: UnitKind, territory: TerritoryId) -> Result<(), Rejection> {
-        self.territory(territory)?;
-        // A unit must be next door with a cell left. Adjacency is checked while choosing
-        // so that "no pioneer can reach there" and "there is no pioneer" stay different
-        // complaints.
-        let anywhere = self.pick(kind, |unit| !unit.in_orbit());
-        let at = self
-            .pick(kind, |unit| match unit.location {
-                Location::On(from) => {
-                    unit.cells >= cost::MOVE_CELLS && self.are_adjacent(from, territory)
-                }
-                Location::Orbit(_) => false,
-            })
-            .ok_or_else(|| match anywhere {
-                Some(other) => match self.units[other].location {
-                    Location::On(from) if !self.are_adjacent(from, territory) => {
-                        Rejection::NotAdjacent {
-                            from,
-                            to: territory,
-                        }
-                    }
-                    _ => Rejection::NoCells(kind),
+    /// **`P-460`: the player says where the unit is standing, and the model no longer
+    /// chooses.** `C-101` reported that `move` leaves two places open and the command bound
+    /// one, so `$from` was whichever unit `pick` reached first - which is an identity the
+    /// specification does not give a unit and, since `P-456`, never will.
+    ///
+    /// **The complaints separate along the same line.** *There is no pioneer on territory 3*
+    /// is now a different answer from *there is no pioneer anywhere*, because the player
+    /// named the place; before this, only the second could be said.
+    fn move_unit(
+        &mut self,
+        kind: UnitKind,
+        from: TerritoryId,
+        to: TerritoryId,
+    ) -> Result<(), Rejection> {
+        self.territory(from)?;
+        self.territory(to)?;
+        // Adjacency is asked of the two places the command named rather than of whatever
+        // the model found, so "these are not adjacent" is about the move the player
+        // described.
+        if !self.are_adjacent(from, to) {
+            return Err(Rejection::NotAdjacent { from, to });
+        }
+        // **Standing there is asked before a cell is**, so that "there is no pioneer on 3"
+        // and "it has already moved" stay different complaints.
+        let there = self.pick(kind, |unit| unit.location == Location::On(from));
+        if there.is_none() {
+            return Err(match self.pick(kind, |unit| !unit.in_orbit()) {
+                Some(_) => Rejection::NoUnitThere {
+                    kind,
+                    territory: from,
                 },
                 None => Rejection::NoUnitAvailable {
                     kind,
                     where_from: "on the planet",
                 },
-            })?;
+            });
+        }
+        let at = self
+            .pick(kind, |unit| {
+                unit.location == Location::On(from) && unit.cells >= cost::MOVE_CELLS
+            })
+            .ok_or(Rejection::NoCells(kind))?;
 
         // **`P-214` still holds and this guard no longer serves it.** Moving is moving and
         // founding is a different command - that was the rule, and the guard existed because
@@ -466,7 +480,7 @@ impl Game {
         // and refusing it would make the recipe unreachable. Moving still founds nothing:
         // arriving leaves the ground unclaimed and the player still says which recipe.
         self.units[at].cells -= cost::MOVE_CELLS;
-        self.units[at].location = Location::On(territory);
+        self.units[at].location = Location::On(to);
         self.units[at].exhausted = true;
         Ok(())
     }
@@ -1732,7 +1746,8 @@ mod tests {
         let rejected = line
             .after(&Transition::Move {
                 kind: UnitKind::Pioneer,
-                territory: TerritoryId(3),
+                from: TerritoryId(1),
+                to: TerritoryId(3),
             })
             .unwrap_err();
         assert_eq!(
@@ -1744,30 +1759,27 @@ mod tests {
         );
     }
 
-    /// Two pioneers that could both make the move, and the command names neither.
+    /// Two pioneers that could both make the move, and the command says which.
     ///
     /// **`spec/console.md`: a command *binds what that recipe leaves open: every place it
     /// leaves open, and any ingredient or trait value it names with a `$`*.** `move` names two
     /// places with a `$` - `require 1 place ... $from` and `require 1 place, joined to $from
-    /// ... $to` - and the command binds one territory. So `$from` is not bound by anything.
+    /// ... $to` - and since `P-460` the command binds both.
     ///
-    /// **That sentence moved under this test, and the model has not caught up.** When this was
-    /// written the rule bound only the place a recipe acts in, and a command naming one place
-    /// was inside it; `C-101` reported the gap and `P-460` closed it by binding every open
-    /// place. So the command below is now wrong rather than merely ambiguous, and what follows
-    /// describes what the model does rather than what the specification asks for.
+    /// **This is the check that could not be written before.** `C-101` reported the gap and
+    /// this test asserted it: two pioneers stood in different territories, both adjacent to
+    /// the same third, both with a move left, and one command was a correct description of
+    /// two different moves. The model picked the lowest-numbered - reaching for an identity
+    /// the specification does not give a unit and, since `P-456`, never will. The assertion
+    /// was *exactly one moved*, which is all that could be said.
     ///
-    /// **This is what that costs.** Two pioneers stand in different territories, both adjacent
-    /// to the same third, both with a move left. One command is a correct description of two
-    /// different moves, and the model picks the lowest-numbered - reaching for an identity the
-    /// specification does not give a unit and, since `P-456`, never will.
-    ///
-    /// **Asserted as the ambiguity rather than as the choice.** What is wrong is not that unit
-    /// 1 goes rather than unit 2; it is that the player said something that did not say which.
-    /// So this asserts both were eligible and that exactly one moved, which is true whichever
-    /// the model picks and stays true if the tie-break changes.
+    /// **Now the fixture is the same and the question is answerable.** `from:1` moves the
+    /// pioneer on 1 and `from:2` moves the pioneer on 2, from the same starting state - so the
+    /// tie is broken by the player rather than by the model, and a tie-break in `pick` cannot
+    /// make this pass. **Both directions**, because one of them agrees with the old
+    /// lowest-numbered behaviour and would have passed against it.
     #[test]
-    fn a_move_command_names_one_place_where_the_recipe_names_two() {
+    fn a_command_names_the_place_the_unit_moves_from() {
         let mut game = founded();
         game.territories[1].set_garrison(Some(Garrison::from_founding_unit(2)));
         game.territories[1].put(Kind::Citizen, 1);
@@ -1786,37 +1798,46 @@ mod tests {
             "the fixture needs both pioneers next door to the destination"
         );
 
-        let moved = game
+        let mut checked = 0;
+        for (from, expected) in [(TerritoryId(1), 9u32), (TerritoryId(2), 10)] {
+            let moved = game
+                .after(&Transition::Move {
+                    kind: UnitKind::Pioneer,
+                    from,
+                    to: TerritoryId(3),
+                })
+                .expect("the command is accepted");
+            let there: Vec<u32> = moved
+                .units
+                .iter()
+                .filter(|unit| unit.is_on(TerritoryId(3)))
+                .map(|unit| unit.id.0)
+                .collect();
+            assert_eq!(
+                there,
+                vec![expected],
+                "the command said `from:{}`, so that is the pioneer that went",
+                from.0
+            );
+            checked += 1;
+        }
+        assert_eq!(checked, 2, "both directions, from one starting state");
+
+        // **And naming a place the unit is not in is refused rather than rounded to the
+        // nearest one.** `NoUnitThere` is the complaint this rule made sayable.
+        let refused = game
             .after(&Transition::Move {
                 kind: UnitKind::Pioneer,
-                territory: TerritoryId(3),
+                from: TerritoryId(3),
+                to: TerritoryId(1),
             })
-            .expect("the command is accepted");
-
-        // **Exactly one went, and the command did not say which.** Both were eligible; the
-        // player named a kind and a destination, and `$from` was chosen for them.
-        let there: Vec<u32> = moved
-            .units
-            .iter()
-            .filter(|unit| unit.is_on(TerritoryId(3)))
-            .map(|unit| unit.id.0)
-            .collect();
+            .expect_err("no pioneer is standing on territory 3");
         assert_eq!(
-            there.len(),
-            1,
-            "one pioneer moved, and the question is which - not how many"
-        );
-        let still: Vec<u32> = moved
-            .units
-            .iter()
-            .filter(|unit| unit.is_on(TerritoryId(1)) || unit.is_on(TerritoryId(2)))
-            .map(|unit| unit.id.0)
-            .collect();
-        assert_eq!(
-            still.len(),
-            1,
-            "the other stayed, so both were genuinely eligible and this is a tie rather than \
-             one candidate"
+            refused,
+            Rejection::NoUnitThere {
+                kind: UnitKind::Pioneer,
+                territory: TerritoryId(3),
+            }
         );
     }
     /// A unit moves once a turn, whatever fuel it has left.
@@ -1859,7 +1880,8 @@ mod tests {
         let once = game
             .after(&Transition::Move {
                 kind: UnitKind::Pioneer,
-                territory: TerritoryId(2),
+                from: TerritoryId(1),
+                to: TerritoryId(2),
             })
             .expect("the first move is the one a turn allows");
         let moved = once
@@ -1878,7 +1900,8 @@ mod tests {
         // test would pass while the rule went unenforced.
         let again = once.after(&Transition::Move {
             kind: UnitKind::Pioneer,
-            territory: TerritoryId(1),
+            from: TerritoryId(2),
+            to: TerritoryId(1),
         });
         let why = again.expect_err(
             "a pioneer moved twice in one turn with fuel to spare, where `move` requires \
@@ -1907,7 +1930,8 @@ mod tests {
         let moved = game
             .after(&Transition::Move {
                 kind: UnitKind::Pioneer,
-                territory: TerritoryId(2),
+                from: TerritoryId(1),
+                to: TerritoryId(2),
             })
             .unwrap();
         let pioneer = moved
@@ -1957,7 +1981,8 @@ mod tests {
         let moved = game
             .after(&Transition::Move {
                 kind: UnitKind::Pioneer,
-                territory: TerritoryId(2),
+                from: TerritoryId(1),
+                to: TerritoryId(2),
             })
             .expect("a pioneer may cross onto unclaimed ground");
         assert!(

@@ -173,7 +173,7 @@ The hierarchy is flattened. `run setup` opens `setup.4x`, which opens others, an
 | 161 | 7      | `{create-labor territory:1}`                                         | `create labor`                                                                                       |
 | 162 | 7      | `{produce-pioneer territory:1}`                                      | `produce pioneer`                                                                                    |
 | 163 | 7      | `{end-turn}`                                                         | `upkeep`, `bear`, `breed`, `perish`, `age`, `spoil`, `stow`, `discard`, `refresh`, `muster`, `stand` |
-| 164 | 8      | `{move unit:pioneer territory:2}`                                    | `move`                                                                                               |
+| 164 | 8      | `{move unit:pioneer from:1 to:2}`                                    | `move`                                                                                               |
 | 165 | 8      | `{create-labor territory:1}`                                         | `create labor`                                                                                       |
 | 166 | 8      | `{work territory:1 resource:food}`                                   | `work`                                                                                               |
 | 167 | 8      | `{create-labor territory:1}`                                         | `create labor`                                                                                       |

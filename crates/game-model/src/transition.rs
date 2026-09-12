@@ -90,9 +90,16 @@ pub enum Transition {
     /// so one command fired `move` or `found by land` depending on what was there, and the
     /// player never said which. The model decided by looking. Now the player says, and
     /// `FoundByLand` is the other one.
+    ///
+    /// **`P-460` gave it a second place, and `C-101` is why.** `spec/console.md`: *a command
+    /// names a recipe and binds what that recipe leaves open: every place it leaves open*.
+    /// `move` leaves two open - `$from` and `$to` - and this bound one, so `$from` was
+    /// whichever unit the model reached for first. Two pioneers of the same kind next to the
+    /// same ground made one command a correct description of two different moves.
     Move {
         kind: UnitKind,
-        territory: TerritoryId,
+        from: TerritoryId,
+        to: TerritoryId,
     },
     /// Send a pioneer onto adjacent unclaimed ground and found it there.
     ///

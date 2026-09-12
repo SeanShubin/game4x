@@ -262,7 +262,7 @@ pub fn examples() -> Vec<Example> {
         Example {
             also: &[],
             recipe: "move",
-            command: "{move unit:pioneer territory:2}",
+            command: "{move unit:pioneer from:1 to:2}",
             case: Some("moving spends one fuel and leaves the unit not ready"),
             before: || {
                 let mut game = beside(true);

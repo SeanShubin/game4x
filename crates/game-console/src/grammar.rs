@@ -161,13 +161,17 @@ pub fn grammar() -> Grammar {
         ),
         Form::new(
             form::MOVE,
+            // **Two places since `P-460`, and `C-101` asked for them.** The recipe leaves
+            // `$from` and `$to` open and a command binds every place a recipe leaves open,
+            // so the player says which unit moves by saying where it is standing.
             vec![
                 Term::Keyword("move"),
                 Term::required("unit", Kind::Name),
-                Term::required("territory", Kind::Number),
+                Term::required("from", Kind::Number),
+                Term::required("to", Kind::Number),
                 Term::optional("repeat", Kind::Number),
             ],
-            "move a unit to an adjacent territory, held or not",
+            "move a unit from the territory it stands on to an adjacent one, held or not",
         ),
         Form::new(
             form::FOUND_BY_LAND,
@@ -306,7 +310,7 @@ mod tests {
     fn every_example_in_the_specification_parses() {
         let examples = [
             ("{deploy-ark territory:1}", form::DEPLOY_ARK),
-            ("{move unit:pioneer territory:7}", form::MOVE),
+            ("{move unit:pioneer from:3 to:7}", form::MOVE),
             (
                 "{build-extractor territory:3 resource:metal}",
                 form::BUILD_EXTRACTOR,
