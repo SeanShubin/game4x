@@ -8,10 +8,11 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-471** - the data is a normalized relational model, and the notation is a text form of it · `docs/notes/proposals.md`
 - **P-468** - biome is named as an input to output and reaches nothing · `docs/notes/proposals.md`
 - **P-467** - a garrison costs nothing and binds nothing · `docs/notes/proposals.md`
 - **P-465** - ten cells still say `yes` where `traits.4x` says a number · `docs/notes/proposals.md`
-- **P-470** - a kind's line gains its trait names, and two of twenty-four do not invert · `docs/notes/decisions.md`
+- **P-470** - a kind's line gains its trait names, and a trait of every kind says so · `docs/notes/decisions.md`
 - **P-466** - three columns of *Units and structures* are the Recipes table said twice · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
@@ -26,7 +27,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **P-467** - `6392650` P-466 and P-467 into the decisions file · still open in `docs/notes/proposals.md`
-- **P-465** - `431058a` C-103: the stale two-valued cells are caught now, which P-465 said nothing did · still open in `docs/notes/proposals.md`
+- **P-465** - `9b1f838` C-104 is acted: P-465 carries both corrections and reports/ is the shape being taken · still open in `docs/notes/proposals.md`
 - **P-466** - `fd3659c` P-465, P-466 and P-467: the cleanup P-457 owed, and what deriving found · still open in `docs/notes/decisions.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 

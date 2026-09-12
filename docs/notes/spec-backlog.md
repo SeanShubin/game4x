@@ -3279,3 +3279,23 @@ this lane owes.
 **And it strengthens the capacity-relation proposal that is not written yet.** *Where things are*
 and *What bounds a kind in a territory* are two views of one relation, which is `C-47`; `P-469` is
 why one of them has to be the fact and the other a projection of it.
+
+## Said 2026-09-12, how and why Sean models
+
+> I model my data as fully normalized relational tables to make sure there is a consistent data model
+> with no duplication. I usually create a text form of this relational model for convenience. I leave
+> the physical model as an implementation detail for production, and only expose it for debugging
+> purposes. Most of the app behaves as if it only knows about the logical model, which is relational
+> and normalized.
+
+**The specification already had the words and applied them to a surface.** `spec/interface.md`
+describes the data browser showing *the same facts normalized into a table for each relation*, and
+says *that is what normalizing is* - as though normalizing were done for display. **Nothing said what
+it was a view of.** Filed as `P-471`.
+
+**And it is why `P-469` is achievable rather than only required.** *A fact is stated once* says what
+must hold; a normalized relational model is the shape in which it holds by construction.
+
+**One word is this lane's**: *most of the app* became *everything above the store*, which names the
+exception rather than leaving a word a specification cannot check. Flagged in the item as possibly a
+narrowing.

@@ -62,6 +62,66 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-471 - the data is a normalized relational model, and the notation is a text form of it
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** asked for, from how you model · **shape** text · **asks** approval · **into** `spec/invariants.md` -> a new section after *A fact is stated once*
+
+**The specification already describes a normalized view and never says what it is a view of.**
+`spec/interface.md`, on the data browser:
+
+```
+...the game's own data, read directly, in two views: every entity with its components,
+and THE SAME FACTS NORMALIZED INTO A TABLE FOR EACH RELATION.
+
+So the normalized view has no nested cells - THAT IS WHAT NORMALIZING IS.
+```
+
+**So `relation` and `normalized` are already the specification's words** - applied to a **surface**,
+as though normalizing were something done for display. **Your statement is that it is the model**,
+and the browser's view is a view of it rather than a transformation of something else.
+
+**And it is why `P-469` is achievable rather than only required.** *A fact is stated once* says what
+must hold; a normalized relational model is the shape in which it holds by construction.
+
+## The words
+
+> ## The data is a normalized relational model
+>
+> - **The game's data is a set of fully normalized relations.** That is what makes it one consistent
+>   model with no duplication, and it is how *a fact is stated once* is kept rather than merely
+>   required.
+> - **The notation is a text form of that model, written for convenience.** It is how a person reads
+>   and writes the relations; **it is not a second model**, and anything said in it is said about a
+>   relation.
+> - **How the data is actually held is an implementation detail.** It is chosen for production, and
+>   **it is exposed only for debugging**.
+> - **Everything above the store behaves as though the logical model is all there is.** A rule, a
+>   recipe, a command and a report each read relations; none of them reads a layout.
+
+## One word that is this lane's and not yours
+
+**You said *most of the app behaves as if it only knows about the logical model* and the bullet says
+*everything above the store*.** That names the exception rather than leaving it as *most*, which a
+specification cannot check. **If the store is not the only thing that knows, say so and the word goes
+back** - this lane chose the reading that makes the sentence testable and may have narrowed it.
+
+## What it settles that was open, and what it does not
+
+**It is the frame `C-47` has been asking for since 2026-09-04.** That item says **the two relations
+subsume ten of the dump's eleven tables, and the eleventh needs one number** - and it has had no rule
+to lean on. **This is that rule**: the tables are views and the relations are the model, so *which
+table* was never the question.
+
+**It makes the capacity relation a consequence rather than a proposal.** *Where things are* and *What
+bounds a kind in a territory* are two views of one relation - which under this is simply what a
+normalized model means, and the proposal that writes it is bookkeeping rather than a decision.
+
+**It does not conflict with *a game's state is things, in places, and how many of each*.** That is a
+relation - container, description, quantity - stated in the entity form. **Both views are in
+`spec/interface.md` already**, and this says which of them is the model.
+
+**And it does not say which relations there are.** That is the work `C-47`, the capacity relation and
+`Recipes` are each part of, and none of it is decided here.
 ### P-468 - biome is named as an input to output and reaches nothing
 
 **to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed, from your answer to `P-467` applied to `Q-80` · **shape** text · **asks** approval · **into** `spec/control.md` -> Winning

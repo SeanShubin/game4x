@@ -21,88 +21,102 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-470 - a kind's line gains its trait names, and two of twenty-four do not invert
+### P-470 - a kind's line gains its trait names, and a trait of every kind says so
 
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed, from `P-462`'s form and the code lane's `C-104` · **asks** a decision · **into** `spec/data/kinds.4x`, and `spec/console.md` -> The language if either question needs a rule
+**to** sean · **status** open · **cited** `24260a6` · **raised** 2026-09-12 · **kind** part answered, by you, 2026-09-12 · **shape** an instruction and text · **asks** a decision · **into** `spec/data/kinds.4x`, `spec/data/traits.4x`, and `spec/console.md` -> The language
 
-**`P-462` promoted the form this evening and nothing uses it yet:**
-
-```
-{kind family:place name:territory}                            kinds.4x today
-{kind biome control family:place id name:territory nature}    with its traits named
-```
-
-**`P-451` says a kind declares which traits it has, and `spec/data/kinds.4x` does not.** Until it
-does, the release's *Of* column cannot be derived from anything - it is the one column of *Traits*
-that `traits.4x` is **forbidden** to carry, because a trait *says nothing about which kinds carry
-it*. **That is why this is the first of the three the code lane's `C-104` names**, before the four
-tables can be rendered rather than written.
-
-## Twenty-three of the twenty-four invert mechanically
-
-**Each *Of* cell resolved to kinds, computed rather than read:**
+**You took `C` for `keeps`, so a trait of every kind says so and no kind's line carries it:**
 
 ```
-citizen     bearing defending laboring strength unpaid upkeep
-garrison    binding metal-in-it strength
-extractor   binding metal-in-it resource working
-yard        binding metal-in-it
-store       binding metal-in-it resource
-ark         binding defending fuel metal-in-it movable moving strength
-pioneer     binding defending fuel metal-in-it movable moving strength
-food        surplus
-territory   biome control id nature
-orbit       id
-deposit     density total-capacity
-adjacency   from to
-game        phase
-metal energy labor fertility force      (no trait)
+{trait admits:number kept:thing name:keeps of:thing}         traits.4x - one line changes
+{kind bearing defending laboring name:citizen ...}           kinds.4x - no line carries keeps
 ```
 
-**Five kinds carry no trait at all and that is fine** - a line naming none is still a declaration.
+**`P-451` says a trait *says nothing about which kinds carry it*, and this is that clause yielding.**
+Three things make it yield rather than break:
 
-## The first question: `keeps` is of every kind
+- **`P-469` requires it.** *A fact is stated once* - and *every kind has `keeps`* under `A` is one
+  fact stated **eighteen times**, counted. **There is nowhere else to say it once**: a family
+  declares only its name, so `thing` cannot carry it
+- **`spec/invariants.md` says which wins** - *where an invariant and a specific rule appear to
+  conflict, the conflict is a defect in the specific rule*. `P-469` is an invariant and `P-451`'s
+  clause is in `spec/console.md`
+- **And it is an exception rather than a reversal.** The clause exists so a **family does not list
+  its members**, which is `C-98` and `P-448`. **`of:thing` lists nothing; it says all of them.**
+  **The exception fires exactly once** - one cell of twenty-four has `Of: thing`
 
-**Its *Of* cell is `thing`, and the recipes mean it.** `age` requires `thing` *keeps at least 1* and
-`spoil` consumes `thing` *keeps 0* - **any thing, not food**. Only food is ever **made** with one.
+## The sentence, into `spec/console.md` -> The language
 
-**A** - **every kind's line names it**, eighteen times.
+**It goes into the paragraph that carries the clause it excepts**, which is offered whole so the
+change is visible. Only the final clause is new.
 
-**B** - **no kind's line names it**, the way `thing` is the family every kind is in and **no line says
-so kind by kind** - `P-448`'s precedent, and `P-469`'s *a fact is stated once*: naming it eighteen
-times states one fact eighteen ways.
+> **A kind declares which traits it has, and a value declares which trait it is one of.** So a trait
+> says what it admits and where its value lives, and says nothing about which kinds carry it; and a
+> trait whose values are kinds names their family instead, because they are already declared. **The
+> thing that belongs to something says so, and the something says only what is true of itself.**
+> **A trait of every kind is the one exception, and says so with `of:thing`** - because there is no
+> kind for it to belong to and no family that could hold it.
 
-**`B` is what both rules point at and it has a cost neither anticipated**: a trait no kind names
-would mean *of every kind* **by absence**, and a generator reading `kinds.4x` cannot tell that from a
-trait nothing carries. **A family declares only its name**, so there is nowhere to hang it either.
+## Why `B` is out, and the reason is not the one this lane first gave
 
-**This lane has no recommendation.** `A` is ugly and readable; `B` is right and unreadable; and the
-third way - **a trait says it is of every kind, on its own line in `traits.4x`** - puts back on the
-trait a thing `P-451` took off it, which is a rule to change rather than a gap to fill.
+**This lane called `B` ambiguous - *indistinguishable from a kind that genuinely has none*. That was
+wrong**, and you were right to push on it: every kind has `keeps`, so there is no kind to confuse it
+with.
 
-## The second question: does a kind name its derived traits
+**`B`'s real defect is that the fact is stated nowhere.** `kinds.4x` would not carry it, `traits.4x`
+says nothing about which kinds carry a trait, and **`spec/data/` would hold no record that `keeps` is
+universal at all.** It survives only in the release's `Of` cell - the column the code lane's `C-105`
+says may not be rendered - and in `age` and `spoil` naming `thing`, which is a recipe rather than a
+declaration.
 
-**Four of the inverted names are derived** - `metal-in-it`, `control`, `surplus`, `unpaid` - and
-**`Of` cannot be derived without them.**
+## What is still open, and this lane's lean has changed
 
-**`spec/console.md` says a derived trait is never part of a description**, and a kind's declaration
-**is** a description - `{kind name:citizen}` is a description whose kind is `kind`. **So the sentence
-reads two ways** and neither is silly:
+**Does a kind name its derived traits?** `control`, `metal-in-it`, `surplus`, `unpaid`.
 
-- **it is about a thing's description in a state**, where a derived trait would be recomputed, and
-  says nothing about a declaration - so a kind names its derived traits and `Of` derives
-- **it is about any description**, so a kind may not name them, and the *Of* cells for those four
-  come from somewhere else or not at all
+**Last night this lane leaned *not named* and now leans the other way, because your test for `keeps`
+applies to them too.** If a fact must be stated once **and somewhere**, then *which kinds have
+`control`* cannot be stated nowhere either:
 
-**This lane leans to the first**, because the sentence's reason - *nothing writes one* - is about a
-value being stored, and a declaration stores no value. **But it is a reading of his words and not
-mine to make**, which is `C-49`'s line.
+```
+named        {kind biome control family:place id name:territory nature}
+not named    {kind biome family:place id name:territory nature}
+             ...and no file in spec/data/ says a territory has `control`
+```
 
-## What is not in question
+**Two of the four are recoverable and two are not**, which is what this lane had not worked out:
 
-**The other twenty-two names**, and the form - `P-462` promoted it and the code lane has a reader
-that round-trips it byte-identical. **Nothing here waits on the four tables being rendered**; that is
-the third proposal of the three, and this is the first.
+| Derived trait | `Of`                | Recoverable from `kinds.4x` because                                                          |
+| ------------- | ------------------- | -------------------------------------------------------------------------------------------- |
+| `metal-in-it` | whatever is built   | **yes** - the same six kinds name `binding`, and it is *binding plus the metal in its parts* |
+| `unpaid`      | a thing with upkeep | **yes** - the citizen names `upkeep`, and it is *its upkeep was not met*                     |
+| `surplus`     | food                | **no** - nothing on food's line implies it                                                   |
+| `control`     | a territory         | **no** - nothing on a territory's line implies it                                            |
+
+**So the honest reading is that *not named* loses two facts and duplicates two**, and *named*
+duplicates two and loses none. **This lane will not invent a third option that names two and not the
+other two** - splitting a rule by which cases happen to be recoverable today is the kind of exception
+that rots.
+
+## What the lines look like either way
+
+**Twenty-two lines in `kinds.4x` whichever you take** - four declaring kinds and eighteen - and the
+difference is nine trait mentions, 43 against 34.
+
+```
+named        {kind bearing defending laboring name:citizen strength unpaid upkeep}
+             {kind binding metal-in-it name:garrison strength}
+             {kind family:resource name:food surplus}
+             {kind biome control family:place id name:territory nature}
+
+not named    {kind bearing defending laboring name:citizen strength upkeep}
+             {kind binding name:garrison strength}
+             {kind family:resource name:food}
+             {kind biome family:place id name:territory nature}
+```
+
+**Five kinds carry no trait at all either way** - `metal`, `energy`, `labor`, `fertility`, `force` -
+and that is a fact about them rather than a gap.
+
 ### P-466 - three columns of *Units and structures* are the Recipes table said twice
 
 **to** sean · **status** open · **raised** 2026-09-12 · **kind** simplification, found deriving each column from the recipes rather than reading it · **asks** a decision · **into** `releases/first-release.md` -> Units and structures
