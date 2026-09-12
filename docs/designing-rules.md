@@ -5,9 +5,38 @@ expressible.
 
 [Documentation map](README.md) · [Specification](../spec/README.md) · [Root README](../README.md)
 
-The recipes are a **Petri net**: each kind-and-state is a **place** holding a count, each recipe is a
-**transition**, and each row is an **arc** carrying a constant weight. That is not an analogy - it is
-the mapping `crates/game-console/src/petri.rs` builds, and `reports/nogain.md` computes over.
+The recipes are a **coloured Petri net**, and the difference from a plain one is load-bearing.
+
+**A place holds a count, a recipe is a transition, and a row is an arc carrying a constant weight.**
+That is not an analogy - it is the mapping `crates/game-console/src/petri.rs` builds and
+`reports/nogain.md` computes over.
+
+## Two nets, and the guarantees belong to the second
+
+**What we write is coloured.** A rule whose subject is a **family** is one rule standing for several
+- `discard` over the resources, `refresh` over the things that act. An amount **read from a trait**
+is the same move: `work` makes a territory's density, which is one rule with a number per case.
+**The family and the trait are the colours.**
+
+**What the guarantees are about is the plain net you get by unfolding it.** `reports/nogain.md` says
+so in its own words: *41 rules, ground from 23 blocks of recipe rows - a family becomes its members,
+a density becomes its cases.* **Boundedness and termination are decidable for the unfolded net**,
+and that is the net the weighting is solved over.
+
+**So every colour set must be finite, and that is a real constraint rather than a formality.** A
+family has a listed membership; a trait read as an amount has a listed set of values. **A rule
+parameterised over something unbounded has no finite unfolding, and every guarantee in this document
+is about a net that would not exist.**
+
+**There is more than one legitimate unfolding.** The check grounds to places at `(kind, state)`; the
+drawing grounds to `(container, kind)`. Both are correct readings of the same coloured net at
+different granularities, which is why one can see a thing the other cannot - `work` nets to zero in
+the drawing and not in the check.
+
+**What breaks it is an arc the unfolding cannot flatten**: one that tests a place is **empty** - an
+inhibitor arc - or one whose weight **reads the marking** rather than being a constant, which is a
+reset or transfer arc. `X-29` counted ten of the second kind in this game and found **all ten in
+world recipes and none in a player's**.
 
 **This document exists so the constraints are known in advance.** The design space is wide, and
 almost all of it is reachable; what is not reachable is small, specific, and worth recognising on
@@ -30,7 +59,7 @@ had.
 net is expressible as rows of a table, which is what makes a rule something a player can edit rather
 than something the program knows.
 
-**A bad player-written rule becomes refusable at edit time, with a reason.** For an ordinary net,
+**A bad player-written rule becomes refusable at edit time, with a reason.** For the unfolded net,
 boundedness and termination are decidable - so an editor can say *this rule never finishes* rather
 than letting a game discover it. **A Turing-complete rule language cannot have this feature at all**,
 which is why the constructs below are refused rather than merely discouraged.
@@ -42,12 +71,13 @@ between them is visible - which is how `work` was found netting to zero in the d
 ## What it costs
 
 Every one of those guarantees is bought with the same currency: **no rule may ask how much of
-something is present, test that something is absent, or compare one thing against another.** The
-constraints are not a tax on the design. They are the guarantee, stated in advance.
+something is present, and no rule may test that something is absent.** Everything else refused
+below is one of those two wearing different clothes. **The constraints are not a tax on the design.
+They are the guarantee, stated in advance.**
 
 ## Deciding whether a formula is allowed
 
-Ask three questions in order. **If all three answer no, the formula is expressible.**
+Ask two questions in order. **If both answer no, the formula is expressible.**
 
 **1. Does the amount depend on how much is present?** `spec/invariants.md`: *a rule's amounts are
 constants*, and *what one firing takes and makes does not depend on how much of anything is
@@ -64,10 +94,15 @@ territory's density; that is one rule with a number per case, and it is allowed.
 one the net is Turing-complete: reachability stops being decidable and so does everything this
 document promises. **This is the one that costs the invariant outright.**
 
-**3. Does the rule need to compare individual things?** *The largest, the oldest, the strongest of
-them.* **Tokens in a place are anonymous** - eight citizens are a count of eight, not eight things
-you can rank. `spec/logistics.md` says the same from the other end: *there is never a quantity of a
-thing with an `id`*. **A comparison needs identity; a quantity has none.**
+**A comparison is an instance of the second, which is why there are two questions and not three.**
+*The largest of them* is *this one, and nothing is greater* - and **nothing is greater** is a test
+that a set of places is empty. **Max is not refused for being a comparison; it is refused for being
+a zero test wearing a comparison's clothes.**
+
+**Comparing two things you have named is a different act and is allowed.** `spec/logistics.md`:
+*there is never a quantity of a thing with an `id`* - a named thing is one thing, and `P-396` lets a
+rule name one and say what changes about it. **What cannot be done is ranking the contents of a
+place**, because the contents are a count and finding the greatest means proving the rest are not.
 
 ## The folds, and what to do with each
 
@@ -78,7 +113,7 @@ thing with an `id`*. **A comparison needs identity; a quantity has none.**
 | **at least n**          | **yes**  | an input arc of weight `n` - a `require` or a `consume` of `n`                       |
 | **at most n**           | **yes**  | a capacity. `P-374`: what is stored is the room left, so *at most* is *room remains* |
 | **a number per kind**   | **yes**  | an amount read from a trait - `P-376`                                                |
-| **max**                 | **no**   | it needs to tell the things apart, and a count cannot                                |
+| **max**                 | **no**   | *nothing is greater* is a zero test. Over things you have named it is allowed        |
 | **a branch on absence** | **no**   | an inhibitor arc. Legal in a file, fatal to the guarantee                            |
 
 ### `min` is a pairing, and the game already contains one
