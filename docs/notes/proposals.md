@@ -126,9 +126,16 @@ the release, Units     | **ark**     | ... | Movable: yes |
 **`P-457` should have carried this and did not.** A promotion that makes something else stale files
 the cleanup immediately; this one did not, and the two files have disagreed since `b7fc6a6`.
 
-**And no check catches it**, which is worth knowing rather than assuming: the code lane's comparison
-derives `admits` from the release's own cell, so both sides read the same stale words and agree.
-**A check whose two sides come from one source cannot see that source move.**
+**Nothing caught it, and something does now.** The code lane's comparison derives `admits` from the
+release's own cell, so both sides read the same stale words and agree - **a check whose two sides
+come from one source cannot see that source move.** They confirmed it by reading the mapping rather
+than the check: `0 or 1`, `yes or no` and `a number` all reach the same word.
+
+**`C-103` is the tripwire they built from that paragraph**, in
+`crates/game-console/tests/vocabulary.rs`, and it is **this proposal's own excuse**: it asserts that
+exactly these eight cells state a range and exactly these two say `yes`, in the release's order.
+**The day this lands it fails, and the right move is to delete it rather than update it** - a named
+exception that cannot outlive what it is for.
 
 ## The cells
 
