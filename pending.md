@@ -16,8 +16,9 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What is outstanding
 
-### To code (3)
+### To code (4)
 
+- **S-121** - `P-473` landed, and the column had four readers rather than one · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - Seven of the release's eight data tables still have no file, and `kinds.4x` is the eighth · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`

@@ -437,6 +437,45 @@ fn shape_is_rows_only_if_the_cells_land(root: &Path, id: &str, draft: &str) -> R
     Ok(())
 }
 
+/// Put a notice at the top of *Addressed to other perspectives*.
+///
+/// **A notice carries no `asks` because only a proposal does**, and it is the commonest item this
+/// lane writes - `S-121` was refused by a verb that had no case for it. The queue is the only
+/// outbox this lane owns, so there is one destination and no routing to do.
+fn file_notice(root: &Path, id: &str, draft: &str) -> Result<String, String> {
+    let at = root.join("docs/notes/proposals.md");
+    let before = read(&at)?;
+    if before.contains(&format!("### {id} - ")) {
+        return Err(format!("{id} is already in the queue"));
+    }
+    let anchor = "## Addressed to other perspectives\n";
+    let cut = before
+        .find(anchor)
+        .ok_or_else(|| "the queue has no section for notices".to_string())?
+        + anchor.len();
+    let body = draft.trim_end();
+    let written = format!(
+        "{}\n{body}\n\n{}",
+        &before[..cut],
+        before[cut..].trim_start()
+    );
+    write(&at, &written)?;
+
+    let back = read(&at)?;
+    if back.matches(&format!("### {id} - ")).count() != 1 {
+        return Err(format!(
+            "{id} is not in the queue exactly once after filing"
+        ));
+    }
+    if back.contains('\r') {
+        return Err("the queue holds a carriage return after the write".to_string());
+    }
+    Ok(format!(
+        "{id} filed: {} line(s) under Addressed to other perspectives",
+        body.lines().count()
+    ))
+}
+
 /// Put a drafted item at the top of `## Open`, and make the sentinel agree afterwards.
 ///
 /// **Filing was the one step still done by a script written fresh each time**, and
@@ -470,6 +509,13 @@ fn file(root: &Path, path: &str) -> Result<String, String> {
     // him to approve; an item lives in one at a time. `CLAUDE.md` already makes `asks`
     // checkable rather than descriptive, and this is the other thing it can check. Filed
     // `P-460` into the wrong one by hand within a minute of this verb existing.
+    //
+    // **And an item with no `asks` is a notice rather than a proposal**, which `CLAUDE.md` says
+    // in as many words: *only a proposal carries it*. A notice goes under *Addressed to other
+    // perspectives* in the queue. This verb refused `S-121` for a reason true of every notice
+    // ever filed - it had no case for the commonest item this lane writes.
+    let fields = draft.lines().nth(2).unwrap_or("");
+    let to_sean = fields.contains("**to** sean");
     let asks_decision = match (
         draft.contains("**asks** a decision"),
         draft.contains("**asks** approval"),
@@ -477,7 +523,15 @@ fn file(root: &Path, path: &str) -> Result<String, String> {
         (true, false) => true,
         (false, true) => false,
         (true, true) => return Err(format!("{id} says it asks both")),
-        (false, false) => return Err(format!("{id} has no **asks** field, so it has no home")),
+        // **Nothing but a proposal is addressed to Sean** - `CLAUDE.md` - so an item with no
+        // `asks` and no other reader has no home, and saying which of the two is wrong is more
+        // use than saying it has none.
+        (false, false) if to_sean => {
+            return Err(format!(
+                "{id} is addressed to sean and asks nothing. Nothing but a proposal is addressed                  to him, so it wants an `**asks**` or a different reader"
+            ));
+        }
+        (false, false) => return file_notice(root, &id, &draft),
     };
     let into = if asks_decision {
         "docs/notes/decisions.md"
