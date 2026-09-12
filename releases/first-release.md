@@ -110,32 +110,32 @@ because a plausible subset passes it.
 Where a trait admits a closed set of values, its **Values** cell names them, or says where they
 are listed.
 
-| Trait              | Of                              | Values                           | Stored or derived                                |
-| ------------------ | ------------------------------- | -------------------------------- | ------------------------------------------------ |
-| **id**             | a place                         | an identity                      | stored                                           |
-| **moving**         | a unit                          | 0 or 1                           | stored                                           |
-| **laboring**       | a citizen                       | 0 or 1                           | stored                                           |
-| **working**        | an extractor                    | 0 or 1                           | stored                                           |
-| **bearing**        | a citizen                       | 0 or 1                           | stored                                           |
-| **defending**      | a citizen or a unit             | 0 or 1                           | stored                                           |
-| **resource**       | an extractor or a store         | one of the resources             | stored                                           |
-| **strength**       | citizen, garrison, ark, pioneer | a number                         | of the kind                                      |
-| **fuel**           | a unit                          | how much energy its tank holds   | of the kind                                      |
-| **upkeep**         | a thing with upkeep             | food per turn                    | of the kind                                      |
-| **binding**        | whatever is built               | a number                         | of the kind                                      |
-| **metal in it**    | whatever is built               | a number                         | derived: its binding plus the metal in its parts |
-| **density**        | a deposit                       | a number                         | stored                                           |
-| **total capacity** | a deposit                       | a number                         | stored                                           |
-| **control**        | a territory                     | held by a player, or unclaimed   | derived: a citizen of that player is there       |
-| **biome**          | a territory                     | one of the biomes                | stored                                           |
-| **nature**         | a territory                     | a number                         | stored                                           |
-| **from**           | an adjacency                    | a place                          | stored                                           |
-| **to**             | an adjacency                    | a place                          | stored                                           |
-| **keeps**          | thing                           | the number of turns it will last | stored                                           |
-| **surplus**        | food                            | yes or no                        | derived: left after every upkeep was paid        |
-| **unpaid**         | a thing with upkeep             | yes or no                        | derived: its upkeep was not met                  |
-| **phase**          | the game                        | design or play                   | stored                                           |
-| **movable**        | whatever moves                  | yes or no                        | of the kind                                      |
+| Trait              | Of                              | Values                           | Stored or derived                                    |
+| ------------------ | ------------------------------- | -------------------------------- | ---------------------------------------------------- |
+| **id**             | a place                         | an identity                      | stored                                               |
+| **moving**         | a unit                          | a number                         | stored                                               |
+| **laboring**       | a citizen                       | a number                         | stored                                               |
+| **working**        | an extractor                    | a number                         | stored                                               |
+| **bearing**        | a citizen                       | a number                         | stored                                               |
+| **defending**      | a citizen or a unit             | a number                         | stored                                               |
+| **resource**       | an extractor or a store         | one of the resources             | stored                                               |
+| **strength**       | citizen, garrison, ark, pioneer | a number                         | of the kind                                          |
+| **fuel**           | a unit                          | how much energy its tank holds   | of the kind                                          |
+| **upkeep**         | a thing with upkeep             | food per turn                    | of the kind                                          |
+| **binding**        | whatever is built               | a number                         | derived: the metal the recipe that makes it consumes |
+| **metal in it**    | whatever is built               | a number                         | derived: its binding plus the metal in its parts     |
+| **density**        | a deposit                       | a number                         | stored                                               |
+| **total capacity** | a deposit                       | a number                         | stored                                               |
+| **control**        | a territory                     | held by a player, or unclaimed   | derived: a citizen of that player is there           |
+| **biome**          | a territory                     | one of the biomes                | stored                                               |
+| **nature**         | a territory                     | a number                         | stored                                               |
+| **from**           | an adjacency                    | a place                          | stored                                               |
+| **to**             | an adjacency                    | a place                          | stored                                               |
+| **keeps**          | thing                           | the number of turns it will last | stored                                               |
+| **surplus**        | food                            | a number                         | derived: left after every upkeep was paid            |
+| **unpaid**         | a thing with upkeep             | a number                         | derived: its upkeep was not met                      |
+| **phase**          | the game                        | design or play                   | stored                                               |
+| **movable**        | whatever moves                  | a number                         | of the kind                                          |
 
 Food is made with `keeps` 1. The force nature holds a territory with.
 
@@ -167,15 +167,15 @@ a raw material returns to its source.
 
 ## Units and structures
 
-| Thing         | Strength | Fuel | Upkeep          | Costs to produce               | Binding | Crosses      | Requires | Readies                            | Movable |
-| ------------- | -------- | ---- | --------------- | ------------------------------ | ------- | ------------ | -------- | ---------------------------------- | ------- |
-| **citizen**   | 1        |      | 1 food per turn |                                |         |              |          | bearing 1, defending 1, laboring 1 |         |
-| **garrison**  | 0        |      |                 | 1 labor, 1 metal               | 1       |              |          |                                    |         |
-| **extractor** |          |      |                 | 1 labor, 1 metal               | 1       |              |          | working 1                          |         |
-| **yard**      |          |      |                 | 1 labor, 15 metal              | 15      |              |          |                                    |         |
-| **store**     |          |      |                 | 1 labor, 1 metal               | 1       |              |          |                                    |         |
-| **ark**       | 2        |      |                 | 3 metal, 12 energy, 2 citizens | 3       | orbit border | a Yard   | defending 1, moving 1              | yes     |
-| **pioneer**   | 2        | 2    |                 | 3 metal, 6 energy, 2 citizens  | 3       | border       |          | defending 1, moving 1              | yes     |
+| Thing         | Strength | Fuel | Upkeep          | Crosses      | Readies                            | Movable |
+| ------------- | -------- | ---- | --------------- | ------------ | ---------------------------------- | ------- |
+| **citizen**   | 1        |      | 1 food per turn |              | bearing 1, defending 1, laboring 1 |         |
+| **garrison**  | 0        |      |                 |              |                                    |         |
+| **extractor** |          |      |                 |              | working 1                          |         |
+| **yard**      |          |      |                 |              |                                    |         |
+| **store**     |          |      |                 |              |                                    |         |
+| **ark**       | 2        |      |                 | orbit border | defending 1, moving 1              | 1       |
+| **pioneer**   | 2        | 2    |                 | border       | defending 1, moving 1              | 1       |
 
 An Ark can invade land from orbit. Nothing outside this table
 readies.

@@ -178,6 +178,22 @@ specific rule.
 - **A change made to a form that is not canonical is not a change.** It is lost when that form is
   next made, and **losing it is correct** - the alternative is one fact with two histories.
 
+## The data is a normalized relational model
+
+- **The game's data is a set of fully normalized relations.** That is what makes it one consistent
+  model with no duplication, and it is how *a fact is stated once* is kept rather than merely
+  required.
+- **The notation is a text form of that model, written for convenience.** It is how a person reads
+  and writes the relations; **it is not a second model**, and anything said in it is said about a
+  relation.
+- **How the data is actually held is an implementation detail**, chosen for production.
+- **One thing knows how it is held, and everything else asks it.** It can answer any question about
+  the data, so **nothing else has a reason to know a layout and nothing else may**. A rule, a
+  recipe, a command and a report each read relations.
+- **The layout has one other reader and it is a view for debugging**, which shows it on purpose.
+  **Nothing reads through it**: it is an output and not a path, so no rule and no report depends on
+  it.
+
 ## Nothing comes back round with more
 
 - **There is a weighting of the kinds, and under it no sequence of rules ends holding more than it

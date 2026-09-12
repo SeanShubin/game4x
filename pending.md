@@ -8,12 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-470** - a kind's line names its traits, derived ones included · `docs/notes/proposals.md`
-- **P-466** - three columns of *Units and structures* come out, and `binding` becomes derived · `docs/notes/proposals.md`
-- **P-472** - the debug view is a fifth surface · `docs/notes/proposals.md`
-- **P-471** - the data is a normalized relational model, and the notation is a text form of it · `docs/notes/proposals.md`
-- **P-468** - biome is named as an input to output and reaches nothing · `docs/notes/proposals.md`
-- **P-465** - ten cells still say `yes` where `traits.4x` says a number · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -26,8 +20,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-466** - `6392650` P-466 and P-467 into the decisions file · still open in `docs/notes/proposals.md`
-- **P-465** - `9b1f838` C-104 is acted: P-465 carries both corrections and reports/ is the shape being taken · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
@@ -97,6 +89,8 @@ it exists to ask.
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185, P-390, P-408
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223, P-352, P-359
 - `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306, P-313, P-410
+- `spec/control.md` -> Winning - P-77, P-81, P-125, P-361, P-468
+- `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216, P-472
 - `spec/invariants.md` -> What a rule may cost - P-373, P-376, P-386, P-430, P-387
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
 - `docs/process.md` -> Outboxes and the index - P-242, P-299, P-305, P-325
@@ -106,8 +100,6 @@ it exists to ask.
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233, P-414
 - `releases/first-release.md` -> What bounds a kind in a territory - P-207, P-372, P-381, P-393
 - `releases/first-release.md` -> Where things are - P-265, P-311, P-320, P-358
-- `spec/control.md` -> Winning - P-77, P-81, P-125, P-361
-- `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
 - `spec/resources.md` -> The list - P-49, P-65, P-338, P-389
 - `docs/process.md` -> All lanes - P-247, P-248, P-324
 - `docs/process.md`, a new section - P-204, P-211, P-401

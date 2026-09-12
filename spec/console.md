@@ -80,6 +80,8 @@ because it is a kind, and is in no other family unless it says so.
 says what it admits and where its value lives, and says nothing about which kinds carry it; and a
 trait whose values are kinds names their family instead, because they are already declared. **The
 thing that belongs to something says so, and the something says only what is true of itself.**
+**A trait of every kind is the one exception, and says so with `of:thing`** - because there is no
+kind for it to belong to and no family that could hold it.
 
 **A trait says those two things with two keys.** **`admits`** is `number`, or a **family** whose
 kinds are its values, or **`value`** where its values declare themselves. **`kept`** is

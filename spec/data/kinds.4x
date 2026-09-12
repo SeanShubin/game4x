@@ -2,21 +2,21 @@
 {kind name:trait}
 {kind name:family}
 {kind name:value}
-{kind name:citizen}
-{kind name:garrison}
-{kind name:extractor}
-{kind name:yard}
-{kind name:store}
-{kind family:unit name:ark}
-{kind family:unit name:pioneer}
-{kind family:resource name:food}
+{kind bearing defending laboring name:citizen strength unpaid upkeep}
+{kind binding metal-in-it name:garrison strength}
+{kind binding metal-in-it name:extractor resource working}
+{kind binding metal-in-it name:yard}
+{kind binding metal-in-it name:store resource}
+{kind binding defending family:unit fuel metal-in-it movable moving name:ark strength}
+{kind binding defending family:unit fuel metal-in-it movable moving name:pioneer strength}
+{kind family:resource name:food surplus}
 {kind family:resource name:metal}
 {kind family:resource name:energy}
 {kind name:labor}
-{kind family:place name:territory}
-{kind family:place name:orbit}
-{kind name:deposit}
-{kind name:adjacency}
-{kind name:game}
+{kind biome control family:place id name:territory nature}
+{kind family:place id name:orbit}
+{kind density name:deposit total-capacity}
+{kind from name:adjacency to}
+{kind name:game phase}
 {kind name:fertility}
 {kind name:force}

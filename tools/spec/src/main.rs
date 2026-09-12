@@ -202,7 +202,14 @@ fn replacing(root: &Path, argument: &str, file: &str, old: &str) -> Result<Strin
     if back.contains('\r') {
         return Err(format!("{file} holds a carriage return after the write"));
     }
-    if queue::collapse(&back).contains(&queue::collapse(old)) {
+    // **A replacement that keeps what it replaces is the ordinary case, not a failure.**
+    // `P-470` offered a paragraph plus one sentence, so the old words are inside the new ones
+    // and *the replaced text is gone* can never be true - it fired after writing correctly,
+    // which is this tool's third false alarm and the second to cost a reader a doubt about a
+    // file that was right. The check is only meaningful when the new text drops the old.
+    if !queue::collapse(&text).contains(&queue::collapse(old))
+        && queue::collapse(&back).contains(&queue::collapse(old))
+    {
         return Err(format!("{file} still holds the text {argument} replaced"));
     }
     Ok(format!(

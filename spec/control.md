@@ -50,8 +50,8 @@ How a territory is claimed and held. Weapons and their ranges are in [combat](co
   food extractors as those will take - which is what sets the population - and every remaining
   citizen at a metal or an energy extractor, the player choosing how they divide.
 - What that greatest output is follows from the territory's own permanent facts: how many
-  extractors it has total capacity for, their densities, and its biome. Not whether the player can
-  afford it this turn, and not whether any particular game happened to reach it.
+  extractors it has total capacity for, and their densities. Not whether the player can afford it
+  this turn, and not whether any particular game happened to reach it.
 - A territory that cannot feed a citizen has no output to reach, and never holds the condition
   open.
 - A player wins by launching an Ark from a fully exploited planet.

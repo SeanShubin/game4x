@@ -11,7 +11,7 @@ the command language is in [console](console.md).
 
 ## Surfaces
 
-The game presents four surfaces, all reachable from the front end, in every build:
+The game presents five surfaces, all reachable from the front end, in every build:
 
 - **The game itself** - the planet, its territories, and what the player does with them
 - **The console** - typing commands, with help listing every command and its syntax, and
@@ -20,6 +20,9 @@ The game presents four surfaces, all reachable from the front end, in every buil
   components, and the same facts normalized into a table for each relation. **Both name every
   table and every column, whether or not anything is in it.**
 - **The rule editor** - the rules the player has, read and changed
+- **The debug view** - how the data is actually held, shown as it is held. **It is an output and
+  not a path**: nothing in the game reads through it, and it is the one place the layout every
+  other surface is shielded from can be seen
 
 The rule editor is two-dimensional. It may carry three-dimensional decoration, and nothing the
 player has to read or act on is in that decoration.
