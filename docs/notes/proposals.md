@@ -172,7 +172,7 @@ so there are five, and `P-472` carries the count and the bullet.
 
 **Which means it carries the two promises the other four do** - *all reachable from the front end, in
 every build*, and *nothing is available in one build and not another*. **The debug view ships**, and
- says so where it can be read rather than leaving it to be inferred from a count.
+`P-472` says so where it can be read rather than leaving it to be inferred from a count.
 
 ## What it settles that was open, and what it does not
 
