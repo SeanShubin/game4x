@@ -63,8 +63,18 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-100 - `traits.4x` is the last file, and what a trait's own line says is not settled
 
-**to** spec · **status** open · **raised** 2026-09-12 · **source** building the three files
-`P-455` proposes, and reaching the fourth
+**to** spec · **status** acted · **raised** 2026-09-12 · **acted** 2026-09-12 by `P-457`, which
+carries it to Sean · **source** building the three files `P-455` proposes, and reaching the fourth
+
+**Carried as `P-457`, and it asks one thing rather than the two this item named.** The fourth
+group dissolved: `control` is in no file, and the other four prose cells are a number with a
+sentence about what the number counts - so the third group and the fourth are one group of
+eight. **The keys are `admits` and `kept`**, both Sean's to change.
+
+**And the two derivations found a line neither would have found alone.** `P-457` carried
+twenty-one lines and the file is twenty: no recipe **row** names `surplus`, and its one
+appearance under *## Recipes* is the `In` line's prose. That takes an open cell with it, so the
+question is over seven cells rather than eight.
 
 **Three of the four are built and proposed.** What is left is `traits.4x`, and `P-456` is only
 one of the two things it waits on.
@@ -109,8 +119,13 @@ wait on `P-456` for `id` alone; everything else on those lines is settled.
 
 ### C-99 - `R-10`'s third clause is built: the drawing is in parts and each says what it leaves out
 
-**to** spec · **status** open · **raised** 2026-09-12 · **source** looking for work that does not
-wait on `P-451` and `P-452`, and finding the one clause of `R-10` that was still open
+**to** spec · **status** acted · **raised** 2026-09-12 · **acted** 2026-09-12 · **cited**
+`8fd18d9` · **source** looking for work that does not wait on `P-451` and `P-452`, and finding the
+one clause of `R-10` that was still open
+
+**`R-10` is `built` as of 2026-09-12 and cites the commit this item reported.** The evidence was
+taken and the capability changed hands, so what is left is a person looking at a drawing - which
+is the one thing this lane may not do for him.
 
 **`R-10`'s own status line says two of three held and named the third**: *the whole net is one
 drawing of 62 nodes and 195 arcs, and nothing yet shows it in parts that can be read whole.*
@@ -310,9 +325,15 @@ not ask a single thing about it.
 
 ### C-95 - `R-6` is not built: `play.4x` launches an Ark and finishes none of the planet
 
-**to** spec · **status** open · **raised** 2026-09-11 · **source** the specification lane asking
-whether `play.4x` reaches a fully exploited planet, which `R-6`'s *vetted when* makes this lane's
-to say
+**to** spec · **status** acted · **raised** 2026-09-11 · **acted** 2026-09-12 · **source** the
+specification lane asking whether `play.4x` reaches a fully exploited planet, which `R-6`'s
+*vetted when* makes this lane's to say
+
+**`R-6` is `built` as of 2026-09-11 and the title of this item is the state it was filed
+against.** `P-422` changed the target rather than the scenario, every clause of the new *vetted
+when* was measured and holds, and the capability has changed hands. **Left titled as it was
+filed**, because an item is a record of what was found and renaming it would lose why it existed;
+the status is what says it is done.
 
 **`R-6` is vetted when a scenario reaches a fully exploited planet and launches an Ark.** The
 committed scenario does the second and not the first, so **this lane does not set it `built`.**
