@@ -82,18 +82,67 @@ places the count is stated.
 **Nothing else in the paragraph changes**, and the two halves now say one thing: a quotation is an
 offer, and there are as many as there are offers.
 
-### P-414 - A garrison lets each citizen muster one force, and force stops being a stored trait
+### P-416 - Force is mustered rather than presented, and there is no highest case left
 
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Traits, then Recipes
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Producing force, then Coordination · from `P-414`
+
+**Sean, 2026-09-11**: *let's just have a garrison to allow citizens to provide 1 force each.* **That
+is a change to `spec/control.md` and it has to land before `P-414`**, because a release never states
+a rule the specification lacks.
+
+**Three lines say the thing that stops being true.** A citizen has a force *coordinated or not*; a
+garrison lets citizens *sum their force instead of presenting only the highest*; and *unorganised
+force is the highest present*. **Under your rule there is no highest case** - an uncoordinated
+citizen musters nothing at all.
+
+**Replacing the second and third bullets of *Producing force*:**
+
+> - A citizen can fight but cannot organise. **Coordinated, it musters its force each turn;
+>   uncoordinated it musters none**
+> - A garrison has no force of its own. It does one thing: it coordinates the citizens of that
+>   territory, so that each of them musters. **It does this by existing, and nothing has to work
+>   it.**
+
+**Replacing the first and second bullets of *Coordination*:**
+
+> - **Force is mustered each turn and does not outlast it.** What a territory presents is what it
+>   mustered this turn, and nothing accumulates
+> - Citizens are capable of violence but not of coordination. **Without something to coordinate
+>   them they muster nothing**
+
+**Four bullets change and two survive untouched** - *a territory has at most one garrison*, and
+*coordination is imposed on citizens by a structure, such as a garrison, or by a military unit,
+which carries coordination with it rather than needing a place*. **The second is what lets `P-414`
+give a unit a `stand` that needs no garrison.**
+
+## Why *organised force sums* goes rather than staying
+
+**It is now true by construction rather than by rule.** Force is a count in a place, and a count is
+a sum - `docs/designing-rules.md`: *sum is free; it is the marking of a place.* **A rule saying that
+force sums would be describing the notation rather than the game**, which `CLAUDE.md` warns against:
+a consequence belongs in the spec only where another rule leans on it.
+
+## What it costs, said plainly
+
+**A territory with citizens and no garrison presents nothing**, where today it presents one force.
+**Holding therefore requires a garrison everywhere**, which is 1 labor and 1 metal - and the purpose
+you gave is preserved, because an ark is 3 metal, 12 energy and 2 citizens.
+
+### P-414 - A garrison lets each citizen muster its force, and force is mustered afresh each turn
+
+**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, to read force from the kind rather than writing 2 in a cell · **kind** recovered · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Traits, then Recipes · needs `P-416` first
 
 **Sean, 2026-09-11**: *let's just have a garrison to allow citizens to provide 1 force each, without
 consuming any resource they use for something else.*
 
-**The second clause is what decides the shape.** A citizen's `laboring` and `bearing` are already
-separate counts, and `P-408` says **two recipes naming different actions never compete**. So
-defending is a third count, and a citizen that defends can still labor and still bear.
+**The second clause decides the shape.** A citizen's `laboring` and `bearing` are already separate
+counts, and `P-408` says **two recipes naming different actions never compete**. So defending is a
+third count, and a citizen that defends can still labor and still bear.
 
-**Into *Traits*, replacing the `force` row with one for the new count:**
+**`P-416` rewrites `spec/control.md` and must land first**, because these rows contradict three
+lines of it and a release never states a rule the specification lacks.
+
+**Into *Traits*, after `bearing`:**
 
 > | **defending** | a citizen or a unit | 0 or 1 | stored |
 
@@ -102,10 +151,10 @@ defending is a third count, and a citizen that defends can still labor and still
 > | **muster** | world | require | 1 | garrison | | |
 > | | | require | 1 | citizen | defending at least 1 | |
 > | | | put | | citizen | defending one less | |
-> | | | produce | 1 | force | | |
+> | | | produce | that citizen's force | force | | |
 > | **stand** | world | require | 1 | unit | defending at least 1 | |
 > | | | put | | unit | defending one less | |
-> | | | produce | 2 | force | | |
+> | | | produce | that unit's force | force | | |
 > | **refresh** | world | put | | citizen | defending at its maximum | |
 > | **refresh** | world | put | | unit | defending at its maximum | |
 > | **discard** | world | consume | 1 | force | | |
@@ -113,17 +162,19 @@ defending is a third count, and a citizen that defends can still labor and still
 ## What each row is doing
 
 **`muster` fires once per citizen**, because each carries one `defending`, and **only where a
-garrison is present** - a `require`, not a branch on absence. Eight citizens under a garrison muster
-eight force. **No garrison and it cannot fire at all.**
+garrison is present** - a `require`, not a branch on absence. **No garrison and it cannot fire at
+all.**
 
 **`stand` needs no garrison**, which is `spec/control.md` already: *a military unit is organised
-force in itself, so several brought to one place sum.* Its **2** is the ark's and the pioneer's
-force, now the quantity a rule makes rather than a number stored on each one.
+force in itself, so several brought to one place sum.*
+
+**Both read the force from the kind rather than writing a number in the cell.** *That citizen's
+force* and *that unit's force* are amounts read from a trait, which `P-376` allows - *one rule with
+a number per case*. **So the Force column of *Units and structures* stays and is where those numbers
+live**, and one row covers the ark and the pioneer without repeating either.
 
 **`discard` makes force transient**, like labor and fertility. Without it a territory grows
 invincible by sitting still, since `muster` runs every turn and nothing removes what it made.
-**Force is mustered each turn and compared against nature each turn**, which is what *holding a
-territory takes force equal to its force of nature* already assumes.
 
 ## What this changes about the game, stated rather than buried
 
@@ -131,15 +182,15 @@ territory takes force equal to its force of nature* already assumes.
 **So every held territory needs a garrison** - 1 labor and 1 metal, against an ark at 3 metal, 12
 energy and 2 citizens. **Holding stays far cheaper than conquering**, which is the purpose you named.
 
-**And a jungle needs two citizens rather than a garrison plus two**, since nature's force there is 2
-and each citizen now musters 1.
+**And a jungle needs two citizens rather than one**, since nature's force there is 2 and each citizen
+now musters 1.
 
-## It settles `P-407` by removing what that question was about
+## What it does not settle
 
-**`force` stops being a stored trait.** It is a quantity two rules make, read from the kind the way
-`P-376` allows - *a rule that makes a territory's density is one rule with a number per case*.
-**Nothing carries a force any more**, so `{garrison force:0}` loses its word and the three kinds that
-never wrote one were right. **`P-407` can be closed rather than answered.**
+**`P-407` is wider than this and is unaffected.** `force` stays a trait either way; what `P-407`
+decides is whether a trait that never varies appears in a **description**, and it turns out to cover
+five traits rather than one. **This proposal was first written claiming to settle it, which was
+wrong.**
 
 ### P-412 - The release's `In` line quotes the sentence `P-408` replaced, for the second time today
 
@@ -175,8 +226,8 @@ hour ago - says a term that means something particular here says what it means i
 **Into *Nothing comes back round with more*, replacing the sentence beginning *Anything that
 exhausts*:**
 
-> **Anything that exhausts is a time extractor for a turn**: it spends a count it carries, and only
-> the turn's end restores it, the way an extractor draws material out of the planet and is spent
+> **Anything that exhausts draws on time for a turn**: it spends a count it carries, and only the
+> turn's end restores that count, the way an extractor draws material out of the planet and is spent
 > doing it.
 
 **The idea is unchanged in both.** A cycle still has to spend something that only time gives back,

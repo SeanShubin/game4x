@@ -21,50 +21,41 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-407 - Is a trait that never varies stored, and does it belong in a description
+### P-407 - Five traits are declared stored and never vary, and the dump writes four of them nowhere
 
-**to** sean - **status** open - **raised** 2026-09-11 - **kind** entailed, from the code lane's `C-92` - **asks** a decision - **into** `releases/first-release.md` -> Traits, or `spec/console.md` -> The language
+**to** sean - **status** open - **raised** 2026-09-11 - **rewritten** 2026-09-11, when counting turned one case into five - **kind** entailed, from the code lane's `C-92` - **asks** a decision - **into** `spec/console.md` -> The language, and `releases/first-release.md` -> Traits
 
-**The code lane found this reading the same sentence that produced `P-405`, and it predates `P-399`
-so neither lane can blame today.** This lane checked every claim against the files.
+**`C-92` found this about `force` and it is not about `force`.** Counted over the release's *Traits*
+table against `scenario/expected/play.4x`: **nineteen traits are declared `stored`, and eight appear
+in no description.**
 
-**`spec/console.md`**: a description is a kind and **every stored trait that thing has**; *no trait
-may be left out*.
+| Declared stored, written nowhere              | Why it is absent                                                              |
+| --------------------------------------------- | ----------------------------------------------------------------------------- |
+| `fuel`, `upkeep`, `keeps`, `movable`, `force` | **one number per kind**, the same for every thing of that kind                |
+| `moving`, `laboring`, `working`, `bearing`    | the code has not followed `P-411` yet - **not a defect**                      |
+| `kind`                                        | it is the head of a description rather than a field in one - **not a defect** |
 
-**The release declares `force` **stored**, of citizen, garrison, ark and pioneer.** The data file
-writes **`{garrison force:0}`** and **`{citizen}`**. **Three of the four kinds that have a force do
-not carry one, and the one that does is the one whose force is zero.**
+**So the pattern is five traits, not one**, and `force` is only the visible case because
+`{garrison force:0}` writes it while `{citizen}` does not.
 
-## What checking it added
-
-**All four forces are constants.** *Units and structures* gives one number per kind - citizen 1,
-garrison 0, ark 2, pioneer 2 - and nothing varies them. What varies is a **territory's** force,
-which `spec/control.md` computes from what is standing there. **So there is no citizen anywhere with
-a force of anything but 1.**
-
-**That inverts which line is at fault.** If a trait that never varies is not stored, then
-`{citizen}` is right and **`{garrison force:0}` is the defect** - one kind writing a fact about its
-kind into a description of one of its instances. **Three lines are not missing a word; one line has
-a word too many.**
+**`spec/console.md` says a description is a kind and every stored trait that thing has, and that no
+trait may be left out.** Four of the five are left out of every description in the file.
 
 ## The two ways
 
-- **`force` is not stored.** It is a fact about the kind, the way a store's capacity of ten is -
-  which is the line `S-58` already drew, with `catalog.md` saying which bounds belong to a kind and
-  which to each one. **The *Traits* table loses a word and `{garrison force:0}` becomes
-  `{garrison}`**
-- **`force` is stored and three kinds are missing it.** Every citizen writes `force:1`, every ark
-  `force:2`. **The dump grows a word per thing that never differs**, and the model grows a field to
-  hold it
+|       | The rule                                                                                                         | What the dump becomes                                                                                                                      |
+| ----- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **1** | **A trait that is the same for every thing of its kind is a fact about the kind**, and no description carries it | `{garrison force:0}` loses a word. **Everything else is already correct**                                                                  |
+| **2** | **All five are facts about each thing** and every description carries them                                       | `{citizen}` becomes `{citizen bearing:1 force:1 laboring:1 upkeep:1}`; `{food}` gains `keeps:1`; an ark gains `force:2 fuel:2 movable:yes` |
 
-## Why this and `P-405` are one question asked twice
+**`S-58` already drew this line once**, for bounds: `catalog.md` says which belong to a kind and
+which to each one. **This is the same line asked of traits.**
 
-**`P-405` asks where a fact about **one** interchangeable thing can live**, when the map groups
-identical things and readiness is no longer part of the key. **This asks whether a fact about a
-**kind** belongs in the description of an instance at all.** Both are the map form not
-distinguishing what is true of a kind from what is true of a thing - **and answering them
-separately risks two mechanisms for one distinction.**
+**The arithmetic is one-sided and the choice is still yours.** Under **1** one line loses one word.
+Under **2** every citizen in twelve territories carries three fields that never differ, and a reader
+deriving the dump by hand copies them out every time.
 
-**This lane is not recommending either**, but it will say that the arithmetic favours the first:
-`{citizen}` appears in every territory and `{garrison force:0}` in one, so the cheaper repair is
-also the one that removes a word rather than adding thousands.
+**Whichever you take, `force` stays a trait.** `P-414` has `muster` and `stand` produce *that
+citizen's force* and *that unit's force*, which is an amount read from a trait and is what `P-376`
+allows. **What this decides is only whether such a trait appears in a description.**
+

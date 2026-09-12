@@ -9,10 +9,11 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 ## What must be decided
 
 - **P-415** - `P-406` left a count four lines above the sentence that says there is no count · `docs/notes/proposals.md`
-- **P-414** - A garrison lets each citizen muster one force, and force stops being a stored trait · `docs/notes/proposals.md`
+- **P-416** - Force is mustered rather than presented, and there is no highest case left · `docs/notes/proposals.md`
+- **P-414** - A garrison lets each citizen muster its force, and force is mustered afresh each turn · `docs/notes/proposals.md`
 - **P-412** - The release's `In` line quotes the sentence `P-408` replaced, for the second time today · `docs/notes/proposals.md`
 - **P-413** - `readiness` now names nothing, and `spec/invariants.md` uses it three times · `docs/notes/proposals.md`
-- **P-407** - Is a trait that never varies stored, and does it belong in a description · `docs/notes/decisions.md`
+- **P-407** - Five traits are declared stored and never vary, and the dump writes four of them nowhere · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
