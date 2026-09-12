@@ -62,37 +62,52 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-446 - forced unification is a lie that hides complexity
+### P-447 - a family declares which its members are, or how to tell
 
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered · **shape** text · **asks** approval · **into** `docs/process.md` -> Three rules for using AI assistants
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered, from your answer on `P-445` · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
 
-**Sean, 2026-09-12**: *I want unification when possible, special cases when necessary. Unification is
-good when I can get it, but when I can't and try to force it I only create a lie that hides its
-complexity.*
+**Sean, 2026-09-12**: *we are going with D.*
 
-**`P-428` says what to try first and this says what the trying costs when it fails.** That paragraph
-ends *where I cannot see much difference between the unified form and the exception, the unified form
-wins by default* - **and says nothing about the case where the difference is real and gets flattened
-anyway.**
+**What `families.4x` looks like:**
 
-**The sentence, to follow it:**
+```
+{family name:unit member:ark}
+{family name:unit member:pioneer}
+{family name:resource member:food}
+{family name:resource member:metal}
+{family name:resource member:energy}
+{family name:place member:territory}
+{family name:place member:orbit}
+{family name:thing rule:every-kind}
+```
 
-> **And a unification that is not there cannot be had by writing one.** Where two things differ in
-> what they mean, one form for both says they do not - so the form is a lie, and the complexity it
-> denies moves somewhere nobody is looking. **A special case that is named costs less than a
-> uniformity that is false.**
+**The sentence, to follow *a file may declare the vocabulary rather than use it*:**
 
-## Why this is worth a sentence when `P-428` already exists
+> **A family declares which its members are, or how to tell.** It names them one to a line where
+> they are a set somebody chose, and names a rule where it is not - `thing` is every kind, so a kind
+> added tomorrow belongs to it and to no other family unless someone says so. **Which of the two a
+> family uses is visible in the line**, and it is the difference between a membership that has to be
+> maintained and one that cannot fall behind.
 
-**It changes what this lane does with a close call in the opposite direction.** `P-428` made it stop
-presenting ties as open questions. **This makes it stop reaching for the unified form when the
-difference is real** - and it has done that twice in two days, on `force` against `strength` and on
-where the game's data lives, both times with the rule in hand.
+## Why a sentence at all, when the file would work without one
 
-**`P-445` is the case that produced it.** Three of four families are enumerations and one is a rule;
-option A writes the rule as eighteen lines and option C writes the enumerations as labels. **Each is a
-uniformity that is false, and each hides its complexity in a different place** - A in eighteen lines
-nothing keeps in step, C in whatever reads the file.
+**Nothing in the notation forbids either line today** - `member` and `rule` are traits of a family
+and a description carries whatever traits it has. **So this changes no parser and refuses nothing.**
+
+**What it stops is the next person writing `thing` as eighteen lines.** That is not hypothetical:
+`C-71` records the last copy of `thing`'s membership going wrong, where *every kind above* was read
+as a comma-separated list, **and the world's five recipes named nothing at all.** The sentence is
+what makes the choice a decision rather than a habit.
+
+## What this does not settle
+
+**`rule`'s values are a closed set and `every-kind` is the only one.** That belongs in `traits.4x`
+with the rest of the vocabulary rather than here - **a list of one is data, and this is the
+relationship.**
+
+**And whether `thing` should be a family at all is still open.** If *any kind* turns out not to be a
+family, this sentence describes a case with no instances and comes out. **It costs nothing
+meanwhile**, and `P-445` has the argument.
 
 ### P-444 - the first data file, and the directory it goes in
 
@@ -164,6 +179,59 @@ neither holds the data.
 
 
 ## Addressed to other perspectives
+
+### S-113 - `C-98` answered: D, a list where it is a list and a rule where it is a rule
+
+**to** code - **status** open - **raised** 2026-09-12 - **source** Sean answering `P-445`, which was your `C-98`
+
+**Sean, 2026-09-12**: *we are going with D.*
+
+**So `families.4x` is seven lines and one:**
+
+```
+{family name:unit member:ark}
+{family name:unit member:pioneer}
+{family name:resource member:food}
+{family name:resource member:metal}
+{family name:resource member:energy}
+{family name:place member:territory}
+{family name:place member:orbit}
+{family name:thing rule:every-kind}
+```
+
+**Bytes are yours the way `kinds.4x`'s were** - print them, this lane proposes them into `spec/data/`,
+and the comparison holds them to the release's *Families* table in both directions. **`thing` is the
+one row the comparison cannot check that way**, because *every kind above* is not a list: it wants
+checking against `kinds.4x` instead, and that is the check `C-71` never had.
+
+## What it took to get here, because two of your three shapes were refused for reasons you can use
+
+**`B` broke `spec/console.md`.** The words of `{family name:unit members:ark-pioneer}` include
+`ark-pioneer`, which is not a kind, not a trait, and not sensibly a value - **so a file could no
+longer be checked word by word against the vocabulary.**
+
+**`C` did not terminate.** `thing` and `unit` have rules - `every-kind` from `kinds.4x`, and
+`movable`, which is yes for ark and pioneer and blank for the other sixteen. **`resource` and `place`
+have none**: checked over every trait's `Of` column, nothing marks a kind as a place or a resource.
+**And a trait's `Of` regresses** - `{trait name:strength of:has-strength}` needs
+`{family name:has-strength rule:???}`, whose rule is *kinds that have a strength*, and the only
+column separating those four from extractor, yard and store is the strength column itself.
+
+**So `A` is right for a trait's `Of` and `Values` too.** D differs from A on exactly one row in the
+eight tables.
+
+## And the rule that decided it is in `docs/process.md` now
+
+`P-446`, promoted: **a unification that is not there cannot be had by writing one… a special case
+that is named costs less than a uniformity that is false.** **Worth reading before the next cell**,
+because it is the rule this lane will be applying to them.
+
+**One thing still open and it is smaller than it sounds.** Whether `thing` should be a family at all -
+`unit` and `resource` are sets somebody chose, and `thing` is the absence of a restriction. **Three
+of your recipe rows name it**, so it cannot simply go. **D costs nothing if the answer is yes**, so
+do not wait on it.
+
+
 
 ### S-112 - `P-443` landed: the vocabulary declares itself, and `C-97` is answered
 
@@ -4448,6 +4516,7 @@ work the release exists to order.
 | P-440, the specification holds the default, and tuning happens in the editor                                                 | `spec/README.md` -> Rules for this directory                                                                                                                                                             | 2026-09-12 |
 | P-441, an Ark's `Fuel` cell should be blank, and it is about to be transcribed                                               | `releases/first-release.md` -> Units and structures                                                                                                                                                      | 2026-09-12 |
 | P-443, the vocabulary declares itself, so the rule needs no exception                                                        | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-12 |
+| P-446, forced unification is a lie that hides complexity                                                                     | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
 | P-403, an outbox item's addressing line is not part of what is promoted                                                      | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
 | P-402, vetting gates finishing a release, not shipping one                                                                   | `releases/README.md` -> Vetting, and deletion                                                                                                                                                            | 2026-09-11 |

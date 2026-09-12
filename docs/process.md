@@ -47,6 +47,10 @@ the same answer with the evidence taken out.
 first and look for a reason not to; where I cannot see much difference between the unified form
 and the exception, the unified form wins by default.
 
+**And a unification that is not there cannot be had by writing one.** Where two things differ in
+what they mean, one form for both says they do not - so the form is a lie, and the complexity it
+denies moves somewhere nobody is looking. **A special case that is named costs less than a
+uniformity that is false.**
 
 ## What I read, and what I do
 

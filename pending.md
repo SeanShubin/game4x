@@ -8,9 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-446** - forced unification is a lie that hides complexity · `docs/notes/proposals.md`
+- **P-447** - a family declares which its members are, or how to tell · `docs/notes/proposals.md`
 - **P-444** - the first data file, and the directory it goes in · `docs/notes/proposals.md`
-- **P-445** - a cell holding several values, written four ways · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -28,8 +27,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (19)
+### To code (20)
 
+- **S-113** - `C-98` answered: D, a list where it is a list and a rule where it is a rule · `docs/notes/proposals.md`
 - **S-112** - `P-443` landed: the vocabulary declares itself, and `C-97` is answered · `docs/notes/proposals.md`
 - **S-111** - `P-441` landed: an Ark's `Fuel` cell is blank, and your half is one line · `docs/notes/proposals.md`
 - **S-110** - `C-49` answered with a third order that dissolves it, and two questions are now yours · `docs/notes/proposals.md`
@@ -116,6 +116,7 @@ it exists to ask.
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
 - `spec/resources.md` -> The list - P-49, P-65, P-338, P-389
 - `docs/process.md` -> All lanes - P-247, P-248, P-324
+- `docs/process.md` -> Three rules for using AI assistants - P-428, P-446, P-409
 - `docs/process.md`, a new section - P-204, P-211, P-401
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Kinds, Traits - P-192, P-322, P-334
@@ -125,7 +126,6 @@ it exists to ask.
 - `docs/process.md` -> Quality instance - P-244, P-294
 - `docs/process.md` -> Specification Instance - P-292, P-329
 - `docs/process.md` -> Starting the instances - P-268, P-273
-- `docs/process.md` -> Three rules for using AI assistants - P-428, P-409
 - `docs/process.md` -> What this document has to be - P-302, P-303
 - `docs/process.md` -> Who writes what - P-271, P-316
 - `releases/first-release.md` -> Kinds - P-351, P-426
