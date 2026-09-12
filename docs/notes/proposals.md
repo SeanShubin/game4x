@@ -67,6 +67,50 @@ Two limits Claude holds itself to:
 
 ## Addressed to other perspectives
 
+### S-100 - Ten promotions since `S-98`, and this lane told you about none of them
+
+**to** code - **status** open - **raised** 2026-09-11 - **source** Sean asking whether anything needs deciding before the code lane starts, and this lane finding it had gone silent
+
+**`CLAUDE.md` says a promotion either files an item citing it or records that it is not work - never
+silence, because silence and *nobody has looked yet* are the same bytes.** **Ten went by without
+either.** `P-411`, then `P-416`, `P-414`, `P-417`, `P-407`, `P-412`, `P-413`, `P-415`, `P-418` and
+`P-419`. **This item is late rather than early, and the lateness is this lane's.**
+
+## The two that are real work
+
+**`P-411` undid `P-399` and you have built `P-399`.** Readiness stopped being a kind. A thing now
+**carries a count per action as a trait**: `moving`, `laboring`, `working`, `bearing`, each `0 or 1`,
+and `refresh` is four rows rather than one. `P-408` is the rule behind it in `spec/turn.md` - *what a
+thing can do is a count it carries as a trait, rather than something it contains*. **The reason is
+`C-90`, which you filed**: as a held kind, two citizens differing only in readiness had the same
+description and the map form could not tell them apart.
+
+**Force is now mustered rather than computed.** `P-416` rewrote `spec/control.md`: **there is no
+*highest* case anywhere in the game.** `P-414` added the rows - `muster` requires a garrison and
+fires once per citizen, `stand` needs none and fires once per unit, both producing *that thing's
+force*, and `discard` sweeps force at the turn's end. **A territory with no garrison presents no
+force at all**, where the model today takes the maximum.
+
+## The one that changes what a dump says
+
+**`P-407` marks five traits *of the kind*** - `force`, `fuel`, `upkeep`, `keeps`, `movable` - and
+**`P-417` says a description carries the traits of the thing and not those of its kind.** So
+`{garrison force:0}` loses its word, and the other four were already absent and are now correct
+rather than in breach. **The `kind` row is gone from *Traits* entirely**, because a kind is not a
+trait - `spec/console.md` lists them as different categories and no recipe writes `kind:`.
+
+## The rest is wording, and binds you only where you quote it
+
+`P-412` fixed the release's `In` line for the second time today. `P-413` and `P-419` took `readiness`
+out of `spec/invariants.md`; `P-418` took `ready:yes` and *every stored trait* out of
+`spec/console.md`; `P-415` is `CLAUDE.md`. **Swept after promoting**: `readiness`, `ready:yes`,
+*every stored trait*, *the highest among them* and `tokens` appear in **no file** under `spec/` or
+`releases/`. **If any of them is quoted in `crates/`, it is quoting something that no longer exists.**
+
+## What this does not ask
+
+**Nothing here needs a decision from Sean**, and `decisions.md` is empty. **`S-49` has the order.**
+
 ### S-99 - Two of your files quote release wording that has moved, found while answering *what blocks release*
 
 **to** code - **status** open - **raised** 2026-09-11 - **source** Sean asking whether anything blocks the release, and this lane reading the scenario to answer him
@@ -2044,56 +2088,41 @@ all. Read `docs/process.md` -> *All lanes* and *What I read, and what I do* rath
 
 ### S-49 - Everything a fresh instance of you needs, in order
 
-**to** code - **status** open - **cited** `1716f6d` - **raised** 2026-09-06 - **rewritten** 2026-09-11, when Sean asked for one prompt that misses nothing - **source** the specification lane
+**to** code - **status** open - **cited** `1716f6d` - **raised** 2026-09-06 - **rewritten** 2026-09-11, after Sean pushed and the ordering that assumed he had not went stale - **source** the specification lane
 
-**The goal right now is one thing: a green gate, so Sean can push.** The repository is **123 commits
-ahead of `origin/master`** and the last thing deployed is from 2026-09-10, so **nothing from today is
-out there** - not the token model, not the no-gain check, not the label fix. `hooks/pre-push` runs
-`fmt`, `clippy --workspace --all-targets -D warnings` and the suite, so the gate is what stands
-between a day's work and the pipeline. **He intends to push himself once you are done.**
+**He has pushed.** `origin/master` is at `0fd1982` and the tree is seventeen commits ahead, so
+everything through this morning is deployed. **The gate is no longer the thing standing between a
+day's work and the pipeline**, which is what the previous version of this item was written around.
 
 **Read `pending.md` -> *To code* for the list. This is the order, which the index cannot give.**
 
-## One thing blocks the push
-
-1. **`S-98`** - `P-399` moved four sections of `releases/first-release.md` an hour ago and the model
-   has not followed. **Kinds gains `readiness`; `ready` and `spent` become one trait `for`; *Where
-   things are* gains a thing's one readiness per action; six recipe blocks became seventeen rows and
-   `renew` is gone; and there is a fifth role, `put`.** This lane has not measured your gate and
-   expects it red. **Nothing else on this list blocks a push.**
-
-## Then, in the order this lane would take them
-
-2. **`S-99`** - two stale quotations, both in what Sean reads or what backs it: `play.4x`'s header
-   says *declares no capacity* where the release says **no limit**, and `fully_exploited.rs:16`
-   quotes `R-6`'s old *vetted when*, whose word *a person* `P-249` removed. **Same area as 1, so
-   cheapest taken with it**
-3. **`R-10`** - two of its three clauses hold; what is open is that the whole net is one drawing of
-   62 nodes and 195 arcs and nothing shows it in parts. **The one capability you can finish alone**
-4. **`S-96`** - the standing check that every `In` line quotes its source. Two were wrong; both are
-   fixed; **the check is what stops a third**. `S-99` notes it would want `crates/` as well as
-   `releases/`
-5. **`R-6`** - its evidence is a scenario reaching a fully exploited planet and launching an Ark.
-   **`play.4x` launches one and is 133 commands; whether it reaches a fully exploited planet is
-   yours to say**, and if it does, `R-6` is `built` and waiting on Sean rather than on you
-6. **`X-8`, `X-11`, `X-12`, `X-13`** - the research lens's four. Reading and design input; **`X-12`
-   is the only one with work in it**, and it wants the noun `P-396` just gave the notation
+1. **`S-100`** - ten promotions this lane never told you about, and two of them are real work: the
+   token model became a count carried as a trait, and force became something mustered rather than
+   computed. **Start here, because the rest of the list assumes the release it describes**
+2. **`S-99`** - two stale quotations, in `play.4x`'s header and `fully_exploited.rs`. **Cheapest
+   taken with 1**, since both are in the same area
+3. **`R-10`** - the only capability you can finish alone. Colour and naming hold; what is open is
+   that the whole net is one drawing of 62 nodes and 195 arcs and nothing shows it in parts
+4. **`S-96`** - the standing check that every `In` line quotes its source. **It has now been wrong
+   three times**, twice in one day, and each was found by a sweep that happened to be run
+5. **`R-6`** - a scenario reaching a fully exploited planet and launching an Ark. **`play.4x`
+   launches one and is 133 commands; whether it reaches a fully exploited planet is yours to say**,
+   and if it does then `R-6` is `built` and waiting on Sean
+6. **`X-8`, `X-11`, `X-12`, `X-13`** - the research lens's four. `X-12` is the only one with work
+   in it, and it wants the noun `P-396` gave the notation
 
 ## Held, and not by you
 
-- **`S-26`** - `P-214` and `P-213` wait on recipes being data. `P-212` is built; this lane said
-  otherwise for four days and `C-86` corrected it
+- **`S-26`** - `P-214` and `P-213` wait on recipes being data
 - **`S-30`** - waits on the ordering question in your own `C-49`, which is a decision rather than
   work
-- **`S-97`** - informational: the notation has a second noun and the release can now write it, which
-  `P-399` did
+- **`S-97` and `S-98`** - informational, and `S-100` supersedes what they said about the release
 
 ## What Sean is waiting on that no lane can do
 
-**Nothing, for a deploy.** `scenario/expected/play.4x` still opens `NOT YET REVIEWED`, and under
-`docs/process.md` -> *What I am pushing out*, **that no longer gates anything** - he deploys in order
-to verify rather than verifying in order to deploy. `R-7`, `R-8` and `R-9` sit at `built` for the
-same reason.
+**Nothing.** `decisions.md` is empty, the proposal queue is empty, and `scenario/expected/play.4x`
+opening `NOT YET REVIEWED` gates nothing under `docs/process.md` -> *What I am pushing out*. **`R-7`,
+`R-8` and `R-9` sit at `built` for the same reason.**
 
 ### S-48 - `node` goes, and the game's row loses `turn`
 

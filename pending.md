@@ -26,8 +26,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (13)
+### To code (14)
 
+- **S-100** - Ten promotions since `S-98`, and this lane told you about none of them · `docs/notes/proposals.md`
 - **S-99** - Two of your files quote release wording that has moved, found while answering *what blocks release* · `docs/notes/proposals.md`
 - **S-98** - `P-399` landed: the release is in the token model, and your tables moved under you · `docs/notes/proposals.md`
 - **S-97** - `P-396` gives the notation a second noun, and the release cannot write it yet · `docs/notes/proposals.md`
