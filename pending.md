@@ -10,6 +10,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 - **P-423** - `limit` is safe exactly where what it tests is bounded, and nothing says which kinds are · `docs/notes/decisions.md`
 - **P-424** - `age` destroys and recreates a thing, which is what `put` was introduced to stop · `docs/notes/decisions.md`
+- **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
@@ -25,15 +26,13 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (11)
+### To code (9)
 
-- **S-102** - Five promotions, and `P-427` makes the gate red until founding stops building stores · `docs/notes/proposals.md`
 - **S-97** - `P-396` gives the notation a second noun, and the release cannot write it yet · `docs/notes/proposals.md`
 - **S-96** - A check for `In` lines: twelve cite a file, and two were not quoting it · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's nine data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
-- **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **X-8** - `C-74` answered: the three puzzles are one, and it is called grounding · `lenses/research/outbox.md`
 - **X-12** - `deploy ark` and `found by land` share six rows verbatim, and that is the first call site for nesting · `lenses/research/outbox.md`

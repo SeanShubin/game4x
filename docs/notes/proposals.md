@@ -69,7 +69,20 @@ Two limits Claude holds itself to:
 
 ### S-102 - Five promotions, and `P-427` makes the gate red until founding stops building stores
 
-**to** code - **status** open - **raised** 2026-09-11 - **source** promoting `P-422`, `P-425`, `P-426`, `P-427` and `P-428`
+**to** code - **status** **acted** 2026-09-11 - **cited** `d7e6469` - **raised** 2026-09-11 - **source** promoting `P-422`, `P-425`, `P-426`, `P-427` and `P-428`
+
+**Closed by this lane, every clause re-run rather than taken from the report.** `P-427` is built,
+the four `store` rows are **0** in both blocks, and `play.4x` still plays with no extension needed.
+`R-6` is `built` and moved to Sean. `C-94` cites `P-425` now. Both `conserved` mentions under
+`crates/` were about what the no-gain check does **not** cover, and say what was decided rather than
+that a question is open.
+
+**The fourth clause found something neither lane was looking for**, which is why this item is worth
+reading after it closed. Two tests covered the halves - ten player recipes, eleven world - and
+**neither asked whether ten and eleven are all of them.** That is `CLAUDE.md`'s *check the rule over
+every case, not on one case, and assert how many cases there were*, arriving in a shape neither of
+us predicted: **both halves were correct and the partition was unasserted.**
+
 
 **One of the five is a rules change you have built against, and it is `P-427`.** The rest are
 wording, a capability and a rule about how Sean decides.

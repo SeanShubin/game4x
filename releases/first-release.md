@@ -378,7 +378,24 @@ only one who can move them.
 
 ### R-6 - The loop can be played through
 
-**to** code - **status** open - **cited** `faafb5f`, `2f38241`, `53bd58d`, `58c8b4a`, `92786a9`, `d7ed1e8` - **measured 2026-09-11 and it is not built**, where this line said *nothing in the code blocks it* on 2026-09-05
+**to** sean - **status** **built** 2026-09-11 - **cited** `faafb5f`, `2f38241`, `53bd58d`, `58c8b4a`, `92786a9`, `d7ed1e8`, `d7e6469` - **evidence reported by the code lane and recorded here rather than by the lane that built it**, and **every clause re-run by this lane rather than taken from the report.** `{deploy-ark territory:1}` at `play.4x:19`, `{found-by-land territory:2}` at `:154`, `{launch-ark territory:1}` at `:164`.
+`every_recipe_the_release_declares_fires_while_the_scenario_runs` passes, and
+`the_committed_scenario_launches_an_ark_and_does_not_finish_the_planet` passes with it. **It does
+not win, which is the last clause rather than a shortfall.**
+
+**The fourth clause needed a test that did not exist, and the reason is worth keeping.** Two tests
+already covered the halves - ten player recipes and eleven world - and **neither asked whether ten
+and eleven are all of them.** A recipe whose `Owner` cell said anything else would have been in
+neither population, both would have stayed green, and the clause this capability now turns on would
+have been false with nothing saying so. The new test counts the declared set entire, asserts the two
+owners partition it, and reads what fired rather than the scenario's text. **Poisoned by dropping
+`muster` from what fires: it reports `["muster"]` rather than passing.**
+
+**What it cost, visible in the reseeded data rather than argued.** `P-427` took the two stores out
+of founding, so territory 2 has no stores at all, territory 1 has one fewer of each, and ten metal
+that used to be kept is lost at a turn's end. `scenario/expected/play.4x` was reseeded under
+`P-225`'s protocol and is **unreviewed, and says so**.
+
 
 - **In** - `spec/control.md`, *a player wins by launching an Ark from a fully exploited planet*
 - **Vetted when** - the scenario takes a first territory from orbit, takes a second by land, and
