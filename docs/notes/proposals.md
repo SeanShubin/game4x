@@ -62,6 +62,26 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-415 - `P-406` left a count four lines above the sentence that says there is no count
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `CLAUDE.md` -> Promotion · from `P-406`
+
+**Filed the moment `P-406` landed**, because that paragraph now contradicts itself. It says *a
+proposal asking for approval carries **exactly one quotation***, and four lines later *there is no
+count*.
+
+**`P-406` replaced the sentence about landing in more than one place and left the earlier one
+standing.** This lane wrote *drops the count* in the proposal and then dropped only one of the two
+places the count is stated.
+
+**Replacing the sentence beginning *So a proposal asking for approval*:**
+
+> So a proposal asking for approval carries a quotation for each block of text it offers, and a
+> proposal asking for a decision carries none until it becomes the other kind.
+
+**Nothing else in the paragraph changes**, and the two halves now say one thing: a quotation is an
+offer, and there are as many as there are offers.
+
 ### P-414 - A garrison lets each citizen muster one force, and force stops being a stored trait
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Traits, then Recipes
@@ -167,63 +187,6 @@ a thing**, and what replaces it says what it is - *a count that only the turn's 
 names three kinds. **This lane is not proposing that**, because a word that names a family needs the
 family declared and nothing declares it; if you want it, it is a row in *Traits* rather than a
 sentence here.
-
-### P-406 - The third version of this sentence today, and the first one written from the purpose rather than the case
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `CLAUDE.md` -> Promotion · from the code lane counting what `P-404` actually fixed
-
-**`P-404` fixed three of the five and this lane said it fixed all five.** The code lane counted from
-the proposals as they stood in each promoting commit's parent:
-
-|         | Names                                  | Carries            | Under `P-404`       |
-| ------- | -------------------------------------- | ------------------ | ------------------- |
-| `P-399` | four sections                          | four quotations    | **legal**           |
-| `P-380` | two sections                           | two quotations     | **legal**           |
-| `P-383` | two sections                           | two quotations     | **legal**           |
-| `P-390` | **one** section of `spec/turn.md`      | **two** quotations | **still irregular** |
-| `P-391` | **one** section of `spec/logistics.md` | **two** quotations | **still irregular** |
-
-**Two bullets of one section is neither two files nor two sections of one.** `P-391`'s two bullets
-are not even adjacent in *Containment*, so they could not have been one contiguous quotation. **The
-rule has no version in which that proposal was legal**, and it is a proposal you approved and this
-lane promoted.
-
-## What this lane did wrong, twice, in one day
-
-**The sentence said *file* because `P-365` spanned two files.** `P-404` said *place* because `P-399`
-spanned four sections. **Both times the rule was written from the case in front of it**, which is
-`docs/notes/checks-outlive-examples.md`'s failure in a rule rather than in a check. **A third
-version written the same way would say *bullet* and be wrong again the next time.**
-
-## So this one is written from what the rule is for
-
-**The paragraph's own first sentence says it**: *the indented quotation is reserved for what is
-being offered.* **The count was never the point** - it was a proxy for a reader being able to tell
-what is offered from what is merely quoted.
-
-**Replacing the sentence beginning *A proposal that lands in more than one place*:**
-
-> **Each indented quotation is one block of text being offered, and the proposal says where that one
-> goes.** There is no count: two bullets of one section is two quotations, and four tables across
-> four sections is four. **What is required is that a reader can tell, for every quotation, what it
-> replaces or where it is added.** Everything else a proposal quotes is shown some other way, as
-> before.
-
-**Nothing is loosened.** The reservation is unchanged and does the work it always did: a quotation
-is an offer, and the words being replaced are shown some other way. **What goes is a count that was
-standing in for a requirement, and which was wrong in both of its versions.**
-
-## Two things the code lane found by running it rather than reading it
-
-**Its `field` reader ran past the end of an `into` line** into prose full of backticked paths, so
-`P-383` came back with more destinations than it has. An `into` field is one line and now says so.
-**And `· from `Q-59`` was read as a destination**, because it is backticked; only a name containing
-a slash or ending `.md` counts now.
-
-**One limit it named rather than left to be found**: the check asks whether the offered words are in
-the **file**, not in the right **section**. **This lane agrees with leaving it** - every promotion
-this week asserted against the section by hand, and the words landing at all is the half that has
-caught every failure so far.
 
 
 ## Addressed to other perspectives
@@ -3835,6 +3798,7 @@ work the release exists to order.
 | P-408, what a thing can do is a count it carries as a trait                                                                  | `spec/turn.md` -> Order of operations                                                                                                                                                                    | 2026-09-11 |
 | P-410, a word I have to look up is a reference I cannot resolve                                                              | `docs/process.md` -> What I read, and what I do                                                                                                                                                          | 2026-09-11 |
 | P-411, the release follows: a count per action, carried as a trait                                                           | `releases/first-release.md` -> Kinds, Traits, Where things are, Recipes                                                                                                                                  | 2026-09-11 |
+| P-406, each quotation is one block offered, and there is no count                                                            | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
 | P-403, an outbox item's addressing line is not part of what is promoted                                                      | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
 | P-402, vetting gates finishing a release, not shipping one                                                                   | `releases/README.md` -> Vetting, and deletion                                                                                                                                                            | 2026-09-11 |

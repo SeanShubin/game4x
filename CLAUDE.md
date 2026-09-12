@@ -491,10 +491,11 @@ quotes - the words being replaced, an existing rule, a line of code - is shown s
 So a proposal asking for approval carries exactly one quotation, and a proposal asking for a
 decision carries none until it becomes the other kind. **An instruction may carry no quotation
 at all**, because what it offers is a change described rather than words that land. What it
-must carry instead is the check that says it was made. **A proposal that lands in more than
-one place carries one quotation for each**, in the order the destinations are named - whether
-those places are two files or two sections of one. Everything else it quotes is shown some
-other way, as before.
+must carry instead is the check that says it was made. **Each indented quotation is one block
+of text being offered, and the proposal says where that one goes.** There is no count: two
+bullets of one section is two quotations, and four tables across four sections is four. **What
+is required is that a reader can tell, for every quotation, what it replaces or where it is
+added.** Everything else a proposal quotes is shown some other way, as before.
 
 **To tell which, ask what the file will say afterwards.** If it will say these words, that is text.
 If it will say them as cells in a table, that is rows. If it will say something these words only
