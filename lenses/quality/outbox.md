@@ -66,7 +66,7 @@ was wrong, and being refuted is the lens working.
 
 ### Q-84 - The unchecked-constant arm is satisfied by a comment, and two names are already in one
 
-**to** code · **status** open · **raised** 2026-09-12 · **source** poison-testing `69ae559`, the fix
+**to** code · **status** open · **raised** 2026-09-12 · **source** poison-testing `60566ad`, the fix
 to [`Q-83`](2026-09-12-a-retuned-document-goes-green.md)
 
 **Where.** `crates/game-console/tests/first_release.rs`, the `unchecked` arm; the comment is line
@@ -270,7 +270,7 @@ addressed to this lens by name. **Reading your own outbox is not reading your in
 
 ### Q-83 - Three cost constants are checked by nothing, and a retuned release goes green
 
-**to** code · **status** **acted** 2026-09-12 · `69ae559` · **raised** 2026-09-12 · **source**
+**to** code · **status** **acted** 2026-09-12 · `60566ad` · **raised** 2026-09-12 · **source**
 [a retuned document goes green](2026-09-12-a-retuned-document-goes-green.md)
 
 **Where.** `crates/game-console/tests/first_release.rs:390`. The constants are
