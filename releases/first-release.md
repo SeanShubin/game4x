@@ -84,11 +84,11 @@ Every territory has total capacity for at least one food extractor.
 
 Every thing but the game is in another thing, and this release has three sorts of capacity.
 
-| Container                               | Holds                         | Up to                            |
-| --------------------------------------- | ----------------------------- | -------------------------------- |
-| a territory's total capacity for a kind | that kind                     | its total capacity for that kind |
-| a store                                 | the resource it was built for | 10                               |
-| a unit's tank                           | energy                        | the unit's fuel                  |
+| Container     | Holds                         | Up to                  |
+| ------------- | ----------------------------- | ---------------------- |
+| a territory   | that kind                     | its room for that kind |
+| a store       | the resource it was built for | 10                     |
+| a unit's tank | energy                        | the unit's fuel        |
 
 There are twelve territories and twelve orbits. An orbit holds units and nothing else.
 
@@ -110,32 +110,32 @@ because a plausible subset passes it.
 Where a trait admits a closed set of values, its **Values** cell names them, or says where they
 are listed.
 
-| Trait              | Values                           | Stored or derived                                    |
-| ------------------ | -------------------------------- | ---------------------------------------------------- |
-| **id**             | an identity                      | stored                                               |
-| **moving**         | a number                         | stored                                               |
-| **laboring**       | a number                         | stored                                               |
-| **working**        | a number                         | stored                                               |
-| **bearing**        | a number                         | stored                                               |
-| **defending**      | a number                         | stored                                               |
-| **resource**       | one of the resources             | stored                                               |
-| **strength**       | a number                         | of the kind                                          |
-| **fuel**           | how much energy its tank holds   | of the kind                                          |
-| **upkeep**         | food per turn                    | of the kind                                          |
-| **binding**        | a number                         | derived: the metal the recipe that makes it consumes |
-| **metal in it**    | a number                         | derived: its binding plus the metal in its parts     |
-| **density**        | a number                         | stored                                               |
-| **total capacity** | a number                         | stored                                               |
-| **control**        | held by a player, or unclaimed   | derived: a citizen of that player is there           |
-| **biome**          | one of the biomes                | stored                                               |
-| **nature**         | a number                         | stored                                               |
-| **from**           | a place                          | stored                                               |
-| **to**             | a place                          | stored                                               |
-| **keeps**          | the number of turns it will last | stored                                               |
-| **surplus**        | a number                         | derived: left after every upkeep was paid            |
-| **unpaid**         | a number                         | derived: its upkeep was not met                      |
-| **phase**          | design or play                   | stored                                               |
-| **movable**        | a number                         | of the kind                                          |
+| Trait           | Values                           | Stored or derived                                    |
+| --------------- | -------------------------------- | ---------------------------------------------------- |
+| **id**          | an identity                      | stored                                               |
+| **moving**      | a number                         | stored                                               |
+| **laboring**    | a number                         | stored                                               |
+| **working**     | a number                         | stored                                               |
+| **bearing**     | a number                         | stored                                               |
+| **defending**   | a number                         | stored                                               |
+| **resource**    | one of the resources             | stored                                               |
+| **strength**    | a number                         | of the kind                                          |
+| **fuel**        | how much energy its tank holds   | of the kind                                          |
+| **upkeep**      | food per turn                    | of the kind                                          |
+| **binding**     | a number                         | derived: the metal the recipe that makes it consumes |
+| **metal in it** | a number                         | derived: its binding plus the metal in its parts     |
+| **density**     | a number                         | stored                                               |
+| **room**        | a number                         | stored                                               |
+| **control**     | held by a player, or unclaimed   | derived: a citizen of that player is there           |
+| **biome**       | one of the biomes                | stored                                               |
+| **nature**      | a number                         | stored                                               |
+| **from**        | a place                          | stored                                               |
+| **to**          | a place                          | stored                                               |
+| **keeps**       | the number of turns it will last | stored                                               |
+| **surplus**     | a number                         | derived: left after every upkeep was paid            |
+| **unpaid**      | a number                         | derived: its upkeep was not met                      |
+| **phase**       | design or play                   | stored                                               |
+| **movable**     | a number                         | of the kind                                          |
 
 Food is made with `keeps` 1. The force nature holds a territory with.
 

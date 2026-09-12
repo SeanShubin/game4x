@@ -62,74 +62,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-474 - the dump stores the total, and `spec/logistics.md` says nothing records it
-
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** contradiction, found by you reading `reports/recipes.md` · **shape** rows and text · **asks** approval · **into** `releases/first-release.md` -> Traits, and Where things are
-
-**You are right that there are three numbers, and the specification already says which one is
-written.** `spec/logistics.md` -> Containment:
-
-> **What is stored is the room left**: how many more of that kind it could take. **Used capacity**
-> is how many it holds, which is simply what is there, and **total capacity** is the two added.
-> **Nothing records the total**, so nothing can disagree with it.
-
-**The release declares `total capacity` a stored trait, and the dump prints it** - which is the one
-of the three the specification says nothing records.
-
-## The three, in the state you were reading
-
-**Derived from `scenario/expected/play.4x` rather than described:**
-
-```
-territory  resource  total   built   room
-1          energy    3       3       0
-1          food      3       3       0
-1          metal     3       3       0
-2          energy    2       0       2
-2          food      2       1       1
-2          metal     2       1       1
-```
-
-**`built` is what is there** - `{extractor resource:food working:1} -> 3` - so the dump already
-carries used. **What it carries beside it is the total**, and the room is the one a reader has to do
-arithmetic for. The specification wants the opposite.
-
-## Why it matters beyond tidiness, in the specification's own words
-
-**`spec/logistics.md`: *the two never come apart, because the total is only ever their sum*.** Store
-the total and used, and room is derived - fine. Store the total and room, and **two of the three are
-written and can disagree.** Store room alone and nothing can: used is what is there, and there is no
-third number to drift.
-
-**That is `P-469` - a fact is stated once - arrived at from the other side and already promoted**, in
-a file that predates it.
-
-## The rows
-
-| Trait    | Values   | Stored or derived |
-| -------- | -------- | ----------------- |
-| **room** | a number | stored            |
-
-**`total capacity` leaves the *Traits* table and `room` takes its place.** A deposit then carries
-`density` and `room`, and territory 1's food deposit reads `{deposit density:4 resource:food
-room:0}` where it reads `total-capacity:3` today.
-
-**And *Where things are* loses its third row's arithmetic.** *a territory's total capacity for a
-kind · that kind · its total capacity for that kind* becomes *a territory · that kind · its room for
-that kind*.
-
-## What this lane is not deciding, and one thing it is not hiding
-
-**Whether the model changes with it is the code lane's.** `crates/game-model/src/containment.rs`
-stores `Capacity { of, total }` and derives used - so the model, the release and the dump all agree
-with each other and all disagree with `spec/logistics.md`. **`C-81` has said so since 2026-09-10 and
-this lane did not turn it into a proposal.** You found it by reading a report; it was in an outbox
-the whole time.
-
-**It is not nothing to change.** Every territory's three deposits, the dump's format, the model's
-`Capacity`, and every expected state in `scenario/` move together - and `R-6` rests on that expected
-state matching byte for byte. **The change is mechanical and the re-vetting is not**, which is why
-this asks rather than assumes.
+*Nothing is open. Everything filed has been decided.*
 
 ## Addressed to other perspectives
 
@@ -5091,6 +5024,7 @@ work the release exists to order.
 | P-465, ten cells still say `yes` where `traits.4x` says a number                                                             | `releases/first-release.md` -> Traits, and Units and structures                                                                                                                                          | 2026-09-12 |
 | P-468, biome is named as an input to output and reaches nothing                                                              | `spec/control.md` -> Winning                                                                                                                                                                             | 2026-09-12 |
 | P-473, the *Of* column goes, and `R-8`'s signature is computed from `spec/data/`                                             | `releases/first-release.md` -> Traits, and the `R-8` capability                                                                                                                                          | 2026-09-12 |
+| P-474, the dump stores the total, and `spec/logistics.md` says nothing records it                                            | `releases/first-release.md` -> Traits, and Where things are                                                                                                                                              | 2026-09-12 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |

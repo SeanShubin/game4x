@@ -15,7 +15,7 @@
 {kind name:labor}
 {kind biome control family:place id name:territory nature}
 {kind family:place id name:orbit}
-{kind density name:deposit total-capacity}
+{kind density name:deposit room}
 {kind from name:adjacency to}
 {kind name:game phase}
 {kind name:fertility}
