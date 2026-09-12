@@ -8,7 +8,28 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Decided 2026-09-12, he is not authoring the files and the existing data is the data
+
+*I am not authoring the files, go with the data we have been using.*
+
+**This is the sentence that unblocks `S-30`, and it answers the half of `C-49` that was never about
+sequencing.** That item's real objection was not the window in which the data exists twice - it was
+that *the content of the data file would be your ideas transcribed by me, and a transcription that
+becomes canonical is a promotion done by the wrong lane.*
+
+**He has removed the objection by naming the source.** The data in the release's nine tables is the
+data; moving it invents nothing. **So the transcription is mechanical, and the check is that the
+files say what the tables say** - which makes a cell-for-cell comparison the first thing to build
+rather than the last.
+
+**Worth keeping for the next time this lane offers options.** `P-439` offered two orders that
+differed in when the release was emptied, and treated *who authors the file* as the fixed thing both
+shared. **He changed the fixed thing twice** - first by putting the file in `spec/`, then by saying
+he would not write it - and neither move was in the option set. **Two of this lane's option sets in
+one day have had their real question outside the options.**
+
 ## Decided 2026-09-12, several files in a directory, in the notation
+
 
 *For editing manually, several files in a directory dedicated for that purpose, our text format.*
 

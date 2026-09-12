@@ -62,103 +62,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-440 - the specification holds the default, and tuning happens in the editor
-
-**to** sean · **status** open · **raised** 2026-09-12 · **rewritten** 2026-09-12, when you described the loop · **kind** recovered · **shape** text · **asks** approval · **into** `spec/README.md` -> Rules for this directory · from `P-439`
-
-**Sean, 2026-09-12**: *there is a loop here, the data starts in the specification, that is the
-default value. I tune it in the games editor. Depending on how the tuning works out, I may choose to
-update the specification.*
-
-## This proposal said rule 7's last clause was false. It is not, and the correction matters
-
-**It reads**: *state the game's data in a data file, **where it can be tuned without touching the
-specification***.
-
-**This lane read *tuned* as *edited in the file*, and concluded that putting the file in `spec/` made
-the clause false.** Your loop says tuning happens **in the editor**, which touches nothing in
-`spec/` - so **the clause's conclusion is true and only its reason has changed.** It survives because
-tuning was never editing the file.
-
-**What still has to change is what the clause implies**: *without touching the specification* only
-needs saying if the file is somewhere else. **Now that it is here, the sentence has to say the loop
-instead of implying a location.**
-
-## And the mechanism is already written down
-
-`spec/invariants.md`: *every rule has a text form, and **the text is the rule**. Anything the rule
-editor can build can be written as text, and anything written as text can be opened in the editor.*
-
-**That is the loop's two directions, stated before you described it.** The data file's text opens in
-the editor; what the editor builds can be written back as text. **What is missing is only that the
-specification's copy is the default, and that promoting a tuned value back is your choice.**
-
-**Sean, 2026-09-12, on the shape of it**: *For editing manually, several files in a directory
-dedicated for that purpose, our text format.*
-
-**Rule 7, replacing it whole:**
-
-> 7. **Relationships in prose, data in data files, and both are in this directory.** State that a
->    predator has more force than a scavenger; **state the game's data in several files in a
->    directory of their own**, in the notation rather than in a table. **What the specification
->    states is the default.** Tuning happens in the editor and does not touch the specification, and
->    a tuned value becomes the default only when I say it does.
-
-## Two words in that are this lane's choice and are flagged rather than slipped in
-
-**"the notation" rather than "our text format".** `spec/console.md` opens *there is one notation*, and
-a command and a description of game state are written in it - so the specification already has a
-name for what you called our text format, and a second name for one thing is the collision you
-declined this morning. **Say the word and it reads as you wrote it.**
-
-**"a directory of their own" rather than a name.** The directory is not named here because naming it
-is a separate small thing and this proposal is about the rule. `scenario/commands/` is the precedent
-for the shape - `biomes.4x`, `forces.4x`, `nodes.4x`, several files split by topic, in the notation.
-
-## The two layers, because this is about only one of them
-
-**`scenario/commands/` already holds data in exactly the shape you describe**, and it is **not** this
-data. It holds *this planet's* facts - territory 1 is grassland, its food deposit has three
-extractors at density four - which differ per scenario.
-
-**The nine tables in the release are the game's own** - kinds, families, traits, recipes, what a
-thing costs, what a biome is like - and every scenario shares them. **That set has no file, which is
-what `S-30` is about**, and it is what this rule sends to a directory.
-
-
-
-## What this withdraws from its own earlier version
-
-**It offered**: *the specification owns the data, and every other form of it - a table in a release,
-a page in a report, a constant in a crate - is a copy that is generated rather than written.*
-
-**That is wrong under the loop and would have been promoted.** A tuned value in the editor is
-**neither generated nor a copy** - it has diverged on purpose, which is the whole point of tuning.
-The earlier wording would have made every divergence a defect.
-
-**Rule 3 is untouched** and still right: *the game's data is decided in its data file, reviewed by
-hand and locked by the scenario test.*
-
-## What this does not settle, and what it unblocks
-
-**It does not name the file or the format**, and those are the next two questions. `spec/invariants.md`
-already says *the format may be a standard one or one we invent*, and `spec/console.md` fully
-specifies one the scenario already uses - `{kind field:value}` entries, a name is one word, nothing
-quoted. **Whether the game's data uses that same format is a choice**, and this lane is not making it
-inside a proposal about a rule.
-
-**What it does unblock is the direction.** `C-49` asked which of two orders, and both of them ended
-with the data in a file outside the specification. **You have answered with a third**, and it
-dissolves the transcription problem rather than sequencing around it: **there is no second copy to
-hold in step, because the release's tables become generated rather than authored.**
-
-## Why rule 7 rather than adding a rule beside it
-
-**The rule already exists and one clause of it is wrong.** Adding a second rule about data would
-leave two, and a reader meeting *tuned without touching the specification* would have no way to know
-it had been superseded. **`spec/README.md` rule 3 is untouched** and still says the right thing: *the
-game's data is decided in its data file, reviewed by hand and locked by the scenario test.*
-
+*Nothing is open. Everything filed has been decided.*
 
 ## Addressed to other perspectives
 
@@ -212,15 +116,35 @@ holds *this planet's* facts - territory 1 is grassland, its food deposit has thr
 density four - and they differ per scenario. **The nine tables in the release are the game's own**,
 shared by every scenario, and that set is what has no file. **Do not fold the two together.**
 
-## What is left, and one piece of it is yours
+## `P-440` has landed, and he is not authoring the files
 
-**The directory's name is unnamed** and is a small thing this lane will propose unless you would
-rather. **How the nine tables split across files is the real question and it is yours**, because you
-load them: one file per table, or grouped by what they are about, or something the notation suggests
-that a table does not.
+**Sean, 2026-09-12**: *I am not authoring the files, go with the data we have been using.*
 
-**`P-440` is with Sean and is the rule**, not the contents. Nothing moves until it lands and he has
-authored the files.
+**Rule 7 is in `spec/README.md`** - *state the game's data in several files in a directory of their
+own, in the notation rather than in a table. What the specification states is the default.*
+
+**And the thing `C-49` stopped on is settled by that sentence.** Your worry was that the file's
+content would be his ideas transcribed by another lane, and *a transcription that becomes canonical
+is a promotion done by the wrong hand*. **He has said the data you have been using is the data.** So
+the move is mechanical rather than authorial: **nothing is invented, and the check is that the files
+say what the tables say.**
+
+**Which makes the check the thing to build first, not last.** A comparison cell for cell, failing in
+both directions, is what makes *go with the data we have been using* verifiable rather than trusted -
+and `S-30`'s measured half already says the checks reading the release do not go green when its
+tables leave.
+
+## What is left, and the shape of it is yours
+
+**How the nine tables split across files**, because you load them: one file per table, or grouped by
+what they are about, or something the notation suggests that a table does not. **The directory's name
+is small** and this lane will propose one unless you would rather.
+
+**Nothing needs a decision from Sean to start.** The rule is landed, the data is named, and the
+transcription is sanctioned. **What reaches him afterwards is the release losing its nine tables**,
+which is `releases/` and arrives by promotion through this lane.
+
+
 
 
 ## What is true today
@@ -4334,6 +4258,7 @@ work the release exists to order.
 | P-437, the number 1 leaves `spec/control.md`, and a citizen musters its strength                                             | `spec/control.md` -> Producing force                                                                                                                                                                     | 2026-09-12 |
 | P-438, `spec/economy.md` says mustering competes with labor, and `spec/control.md` says it does not                          | `spec/economy.md` -> Structures and labor                                                                                                                                                                | 2026-09-12 |
 | P-434, `keeps` is declared *of the kind* and `age` lowers it for one thing                                                   | `releases/first-release.md` -> Traits                                                                                                                                                                    | 2026-09-12 |
+| P-440, the specification holds the default, and tuning happens in the editor                                                 | `spec/README.md` -> Rules for this directory                                                                                                                                                             | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
 | P-403, an outbox item's addressing line is not part of what is promoted                                                      | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
 | P-402, vetting gates finishing a release, not shipping one                                                                   | `releases/README.md` -> Vetting, and deletion                                                                                                                                                            | 2026-09-11 |

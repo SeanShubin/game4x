@@ -46,6 +46,8 @@ Add a file when a topic firms up. Add its row here first.
    for why. Keep this directory short enough to hold in your head.
 5. **Open questions go at the bottom of the file**, under that heading, never scattered.
 6. **Record what was rejected** when the rejection is load-bearing.
-7. **Relationships here, data elsewhere.** State that a predator has more force than a
-   scavenger; state the game's data in a data file, where it can be tuned without touching the
-   specification.
+7. **Relationships in prose, data in data files, and both are in this directory.** State that a
+   predator has more force than a scavenger; **state the game's data in several files in a
+   directory of their own**, in the notation rather than in a table. **What the specification
+   states is the default.** Tuning happens in the editor and does not touch the specification, and
+   a tuned value becomes the default only when I say it does.
