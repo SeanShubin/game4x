@@ -1744,6 +1744,75 @@ mod tests {
         );
     }
 
+    /// Two pioneers that could both make the move, and the command names neither.
+    ///
+    /// **`spec/console.md`: a command *binds what that recipe leaves open: the place it acts
+    /// in, and any ingredient or trait value it names with a `$`*.** `move` names two places
+    /// with a `$` - `require 1 place ... $from` and `require 1 place, joined to $from ... $to`
+    /// - and the command binds one territory. So `$from` is not bound by anything.
+    ///
+    /// **This is what that costs.** Two pioneers stand in different territories, both adjacent
+    /// to the same third, both with a move left. One command is a correct description of two
+    /// different moves, and the model picks the lowest-numbered - reaching for an identity the
+    /// specification does not give a unit and, since `P-456`, never will.
+    ///
+    /// **Asserted as the ambiguity rather than as the choice.** What is wrong is not that unit
+    /// 1 goes rather than unit 2; it is that the player said something that did not say which.
+    /// So this asserts both were eligible and that exactly one moved, which is true whichever
+    /// the model picks and stays true if the tie-break changes.
+    #[test]
+    fn a_move_command_names_one_place_where_the_recipe_names_two() {
+        let mut game = founded();
+        game.territories[1].set_garrison(Some(Garrison::from_founding_unit(2)));
+        game.territories[1].put(Kind::Citizen, 1);
+        game.territories[2].set_garrison(Some(Garrison::from_founding_unit(2)));
+        game.territories[2].put(Kind::Citizen, 1);
+
+        // Two pioneers, in two different places, both next to territory 3.
+        for (id, at) in [(9u32, TerritoryId(1)), (10, TerritoryId(2))] {
+            let mut one = Unit::new(UnitId(id), UnitKind::Pioneer, at);
+            one.location = Location::On(at);
+            game.units.push(one);
+        }
+        assert!(
+            game.are_adjacent(TerritoryId(1), TerritoryId(3))
+                && game.are_adjacent(TerritoryId(2), TerritoryId(3)),
+            "the fixture needs both pioneers next door to the destination"
+        );
+
+        let moved = game
+            .after(&Transition::Move {
+                kind: UnitKind::Pioneer,
+                territory: TerritoryId(3),
+            })
+            .expect("the command is accepted");
+
+        // **Exactly one went, and the command did not say which.** Both were eligible; the
+        // player named a kind and a destination, and `$from` was chosen for them.
+        let there: Vec<u32> = moved
+            .units
+            .iter()
+            .filter(|unit| unit.is_on(TerritoryId(3)))
+            .map(|unit| unit.id.0)
+            .collect();
+        assert_eq!(
+            there.len(),
+            1,
+            "one pioneer moved, and the question is which - not how many"
+        );
+        let still: Vec<u32> = moved
+            .units
+            .iter()
+            .filter(|unit| unit.is_on(TerritoryId(1)) || unit.is_on(TerritoryId(2)))
+            .map(|unit| unit.id.0)
+            .collect();
+        assert_eq!(
+            still.len(),
+            1,
+            "the other stayed, so both were genuinely eligible and this is a tie rather than \
+             one candidate"
+        );
+    }
     /// A unit moves once a turn, whatever fuel it has left.
     ///
     /// **The release's `move` requires two things and they are different limits.** *1 unit,

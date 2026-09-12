@@ -61,6 +61,54 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-101 - `move` names two places with a `$` and its command binds one
+
+**to** spec · **status** open · **raised** 2026-09-12 · **source** the specification lane asking
+this lane to confirm a gap it was not confident enough to file, after `P-456` settled that a unit
+carries no id
+
+**Confirmed, and demonstrated rather than argued.** `spec/console.md`: **a command names a recipe
+and binds what that recipe leaves open: the place it acts in, and any ingredient or trait value it
+names with a `$`.**
+
+**`move` names two places with a `$`** - `require 1 place` in `$from`, and `require 1 place,
+joined to `$from` by an edge the unit crosses` in `$to`. **The command binds one**:
+`{move unit:pioneer territory:2}`, which is a kind and a place.
+
+**So `$from` is bound by nothing, and the model chooses it.** `Game::move_unit` picks the
+lowest-numbered ready unit of that kind standing next to the destination, and `$from` is wherever
+that unit happened to be.
+
+## What it costs, run rather than reasoned
+
+`a_move_command_names_one_place_where_the_recipe_names_two` in `crates/game-model/src/game.rs`
+puts two pioneers in two territories, both adjacent to a third, both with a move left. **One
+command is a correct description of two different moves.** Exactly one goes, and nothing the
+player typed said which.
+
+**Asserted as the ambiguity rather than as the choice**, so it stays true if the tie-break
+changes: both were eligible, one moved, one stayed.
+
+**`P-456` is what makes this worth filing now.** While an id might have come to units, the model's
+tie-break was a placeholder for a thing the specification might one day give it. It will not: a
+unit carries no id, because **massive fleets are intended and operations on one unit should be as
+simple as operations on a million**. So the lowest-numbered pick is the model reaching for an
+identity that is never coming.
+
+## What this lane is not deciding
+
+**Which of the two readings is right.** Either the command is short an argument - a `from` beside
+the `territory` - or `$from` is derived from the unit by a rule the specification does not state.
+Under `P-456`'s answer the second cannot be made unambiguous by naming a unit, so the resolution
+looks like naming the place; but that is a rule about the notation and is `spec/`'s.
+
+**And two units in one place with the same state are not this item.** Those are interchangeable,
+which is exactly what `P-456` says a fleet is, and picking either is correct rather than
+arbitrary. What this item is about is two units the player can tell apart by **where they are**,
+where the command gives no way to say it.
+
+---
+
 ### C-100 - `traits.4x` is the last file, and what a trait's own line says is not settled
 
 **to** spec · **status** acted · **raised** 2026-09-12 · **acted** 2026-09-12 by `P-457`, which
