@@ -62,150 +62,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-473 - the *Of* column goes, and `R-8`'s signature is computed from `spec/data/`
-
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed, from `P-469` and `P-470`, reported by the code lane as `C-108` · **shape** text and rows · **asks** approval · **into** `releases/first-release.md` -> Traits, and the `R-8` capability
-
-**`R-8` asks you to read `reports/catalog.md`, and seven of its eighteen kinds understate their
-traits.** Counted from the regenerated report against `spec/data/kinds.4x`:
-
-```
-kind        catalog.md shows               and kinds.4x adds
-ark         fuel,keeps,moving,strength     binding,defending,metal-in-it,movable
-citizen     bearing,defending,keeps,...    unpaid,upkeep
-extractor   keeps,resource,working         binding,metal-in-it
-garrison    keeps,strength                 binding,metal-in-it
-pioneer     fuel,keeps,moving,strength     binding,defending,metal-in-it,movable
-store       keeps,resource                 binding,metal-in-it
-yard        keeps                          binding,metal-in-it
-```
-
-**The cause is four cells of the *Of* column that describe rather than name**, and the signature is
-computed from that column:
-
-```
-whatever is built     -> binding, metal-in-it     six kinds
-a thing with upkeep   -> upkeep, unpaid           citizen
-whatever moves        -> movable                  ark, pioneer
-a citizen or a unit   -> defending                ark, pioneer
-```
-
-**It was one such cell when the signature was written and it is four now.** Nothing broke; the
-column grew phrasings a matcher cannot read.
-
-## Why the answer is to delete the column rather than to teach the matcher
-
-**`kinds.4x` states the same fact and states it exactly.** `spec/console.md`: **a kind declares which
-traits it has**, and a trait **says nothing about which kinds carry it**. So *Of* is what `P-451`
-took off the trait, written back on it in the table - and `P-469` is the rule: **a fact is stated
-once and every other form of it is derived.**
-
-**The two forms already disagree in four places.** Teaching the matcher to read *whatever is built*
-makes them agree today and leaves the same trap for the next phrasing.
-
-**And one of its predicates can no longer be derived from anything.** *Whatever is built* was read
-off the `Binding` column, which `P-466` removed - so the code lane now has those six kinds written
-down in a list, with a test that fails the day the derivation reproduces them. **That list exists
-because this column exists.**
-
-## The rows
-
-**The *Traits* table loses its `Of` column**, keeping Trait, Values and Stored or derived. Twenty-four
-rows, each losing one cell.
-
-## The text, into `R-8`'s *vetted when*
-
-**One clause changes.** The bullet is offered whole so what moves is visible.
-
-> - **Vetted when** - `reports/catalog.md` gives each kind a **signature**: the traits it carries and
->   every *(recipe, role)* pair that names it. **Kinds with the same signature are shown together**,
->   and the signature is computed from `spec/data/` rather than written by anyone. I can scan
->   the groups, see that two kinds behave alike, and have a name to grep for when I want the detail
-
-**`from the release's tables` becomes `from spec/data/`**, which is where a kind's traits are now
-stated. **Nothing else in the bullet moves.**
-
-## What is lost, and it is real
-
-**A phrase like *a thing with upkeep* tells a reader why a citizen carries `unpaid`, and `citizen`
-does not.** Deleting the column deletes that. **Rule 7 sends a relationship to prose**, so where the
-reason earns a sentence it can have one - and this proposal writes none, because none of the four
-has been missed by anyone in the weeks the column has been read.
-
-## What it costs the code lane, measured by them rather than estimated here
-
-**The specification loses one column of twenty-four rows. `declare.rs` loses 274 of its 538 lines**,
-and the rest survives:
-
-```
-BUILT            74   the six kinds written down because *whatever is built* stopped deriving
-carried          55   the inversion of the Of column onto the kinds' lines
-of_cell          50   the six phrasings resolved
-kinds            29   the generator itself
-family_members   23   used only by carried
-filled_in        21   used only by of_cell
-header_of        22   used only by filled_in
-```
-
-Plus three tests and `examples/declared-kinds.rs`. **`traits`, `admits`, `biomes` and `families`
-survive** - they read *Trait*, *Values*, *Stored or derived*, *Biomes* and *Families*, none of which
-this touches.
-
-**An earlier draft of this proposal said the generators have nothing left to read. That was wrong**,
-and the code lane measured it rather than letting it stand: **three generators read three tables
-this does not touch.** The proposal after this one takes the rest.
-
-**`BUILT` being the largest single piece is the argument, and it makes itself.** Its own doc comment
-says why it exists - *`P-466` removed the column this was read from* - and it goes further:
-**derived from `binding`'s new definition the set would be `ark, energy, extractor, metal, pioneer,
-store, yard`, which is not these six.** Seventy-four lines of hand-written list, existing only
-because a column exists that states a fact a file already states.
-
-## One thing this freezes, and the next proposal has to settle it
-
-**`spec/data/kinds.4x` was derived from the very column this deletes, so whatever that column said is
-now permanent unless something corrects it.** The case to look at is the garrison: its line names
-`binding` and `metal-in-it` because *whatever is built* named it, and **no metal-consuming recipe
-produces a garrison** - `found by land` consumes a pioneer and `deploy ark` an ark. So a garrison's
-`binding` derives from nothing.
-
-**That is `P-467` surviving its own withdrawal a second time**, and it is `C-106`. **It is not a
-reason to keep the column** - the column is what put the claim there - but the proposal that makes
-`kinds.4x` canonical has to decide whether a garrison carries `binding` at all, and this one says so
-rather than leaving it to be found.
-
-## Two consequences this lane had not written, one of which is larger than the proposal
-
-**The direction of derivation reverses, and that is the bigger half.** `spec/data/kinds.4x` is
-**generated today by inverting the very column this deletes** - so deleting it makes `kinds.4x` the
-source rather than the output. **That is where `P-471` was always going** - the data is a normalized
-relational model and the notation is a text form of it - but it is a change to what is canonical and
-it is not this proposal.
-
-**So this one lands and the inversion goes with the column**, leaving `kinds.4x` authored and the
-release's tables projections of it. **The proposal that says so is the next one**, and the code lane
-has answered what replaces the byte comparison: **it never made the file right, it made the file
-agree with the release's table.** What replaces it is the game running - *every word in a data file
-is a kind, a trait, or one of a trait's values*, checked against a played state rather than against
-another document. `CLAUDE.md`: **a check whose subject is behaviour reads the outcome, not the
-input** - and a diff between two documents is the input twice.
-
-**And `keeps` still appears on every kind, which needs one correction to how it would be read.**
-`kinds.4x` puts it on no line, because `P-470` gave the trait `of:thing`. **A signature read from
-`kinds.4x` alone would show eighteen kinds none of which carries it**, where the column gives it to
-all eighteen.
-
-**The traits a kind carries is its own line plus every trait declared `of:thing`**, which is
-derivable from the two files together and is what `of:thing` means. **So the page does not change
-here**: `keeps` shows on all eighteen, as it does today, and it distinguishes nothing either way.
-
-## What it changes about the conclusion, which is nothing
-
-**Re-derived rather than carried over.** Under the catalog's reading and under `kinds.4x` alike,
-**every pair of kinds that shares a trait set is still separated by the recipes that name it** - so
-*no two behave alike* holds either way. **What moves is which kinds collide on traits alone**: nine
-under the old reading, seven under `kinds.4x`, and `yard` separates because it gains `binding` and
-`metal-in-it` where an empty set had swallowed it.
+*Nothing is open. Everything filed has been decided.*
 
 ## Addressed to other perspectives
 
@@ -5112,6 +4969,7 @@ work the release exists to order.
 | P-471, the data is a normalized relational model, and the notation is a text form of it                                      | `spec/invariants.md` -> a new section after *A fact is stated once*                                                                                                                                      | 2026-09-12 |
 | P-465, ten cells still say `yes` where `traits.4x` says a number                                                             | `releases/first-release.md` -> Traits, and Units and structures                                                                                                                                          | 2026-09-12 |
 | P-468, biome is named as an input to output and reaches nothing                                                              | `spec/control.md` -> Winning                                                                                                                                                                             | 2026-09-12 |
+| P-473, the *Of* column goes, and `R-8`'s signature is computed from `spec/data/`                                             | `releases/first-release.md` -> Traits, and the `R-8` capability                                                                                                                                          | 2026-09-12 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |

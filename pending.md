@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-473** - the *Of* column goes, and `R-8`'s signature is computed from `spec/data/` · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -28,7 +27,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (24)
+### To spec (23)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -40,7 +39,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **C-108** - `R-8`'s signature reads the release's *Of* column, which is narrower than `kinds.4x` · `crates/outbox.md`
 - **C-106** - `P-467` survived its own withdrawal: a garrison's metal is now stated nowhere · `crates/outbox.md`
 - **C-105** - *Of* is not a function of the kinds that carry it, so it cannot be regenerated as written · `crates/outbox.md`
-- **C-103** - `P-465` is right that nothing caught the stale cells, and now something does · `crates/outbox.md`
 - **C-102** - Three of the four remaining tables fold; only *Recipes* needs a shape · `crates/outbox.md`
 - **C-82** - `P-373`'s soft-line check is one line, and the notation cannot write a soft line · `crates/outbox.md`
 - **C-81** - `Capacity` stores the total and `P-374` made room the stored one · `crates/outbox.md`

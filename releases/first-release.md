@@ -110,32 +110,32 @@ because a plausible subset passes it.
 Where a trait admits a closed set of values, its **Values** cell names them, or says where they
 are listed.
 
-| Trait              | Of                              | Values                           | Stored or derived                                    |
-| ------------------ | ------------------------------- | -------------------------------- | ---------------------------------------------------- |
-| **id**             | a place                         | an identity                      | stored                                               |
-| **moving**         | a unit                          | a number                         | stored                                               |
-| **laboring**       | a citizen                       | a number                         | stored                                               |
-| **working**        | an extractor                    | a number                         | stored                                               |
-| **bearing**        | a citizen                       | a number                         | stored                                               |
-| **defending**      | a citizen or a unit             | a number                         | stored                                               |
-| **resource**       | an extractor or a store         | one of the resources             | stored                                               |
-| **strength**       | citizen, garrison, ark, pioneer | a number                         | of the kind                                          |
-| **fuel**           | a unit                          | how much energy its tank holds   | of the kind                                          |
-| **upkeep**         | a thing with upkeep             | food per turn                    | of the kind                                          |
-| **binding**        | whatever is built               | a number                         | derived: the metal the recipe that makes it consumes |
-| **metal in it**    | whatever is built               | a number                         | derived: its binding plus the metal in its parts     |
-| **density**        | a deposit                       | a number                         | stored                                               |
-| **total capacity** | a deposit                       | a number                         | stored                                               |
-| **control**        | a territory                     | held by a player, or unclaimed   | derived: a citizen of that player is there           |
-| **biome**          | a territory                     | one of the biomes                | stored                                               |
-| **nature**         | a territory                     | a number                         | stored                                               |
-| **from**           | an adjacency                    | a place                          | stored                                               |
-| **to**             | an adjacency                    | a place                          | stored                                               |
-| **keeps**          | thing                           | the number of turns it will last | stored                                               |
-| **surplus**        | food                            | a number                         | derived: left after every upkeep was paid            |
-| **unpaid**         | a thing with upkeep             | a number                         | derived: its upkeep was not met                      |
-| **phase**          | the game                        | design or play                   | stored                                               |
-| **movable**        | whatever moves                  | a number                         | of the kind                                          |
+| Trait              | Values                           | Stored or derived                                    |
+| ------------------ | -------------------------------- | ---------------------------------------------------- |
+| **id**             | an identity                      | stored                                               |
+| **moving**         | a number                         | stored                                               |
+| **laboring**       | a number                         | stored                                               |
+| **working**        | a number                         | stored                                               |
+| **bearing**        | a number                         | stored                                               |
+| **defending**      | a number                         | stored                                               |
+| **resource**       | one of the resources             | stored                                               |
+| **strength**       | a number                         | of the kind                                          |
+| **fuel**           | how much energy its tank holds   | of the kind                                          |
+| **upkeep**         | food per turn                    | of the kind                                          |
+| **binding**        | a number                         | derived: the metal the recipe that makes it consumes |
+| **metal in it**    | a number                         | derived: its binding plus the metal in its parts     |
+| **density**        | a number                         | stored                                               |
+| **total capacity** | a number                         | stored                                               |
+| **control**        | held by a player, or unclaimed   | derived: a citizen of that player is there           |
+| **biome**          | one of the biomes                | stored                                               |
+| **nature**         | a number                         | stored                                               |
+| **from**           | a place                          | stored                                               |
+| **to**             | a place                          | stored                                               |
+| **keeps**          | the number of turns it will last | stored                                               |
+| **surplus**        | a number                         | derived: left after every upkeep was paid            |
+| **unpaid**         | a number                         | derived: its upkeep was not met                      |
+| **phase**          | design or play                   | stored                                               |
+| **movable**        | a number                         | of the kind                                          |
 
 Food is made with `keeps` 1. The force nature holds a territory with.
 
@@ -476,7 +476,7 @@ that used to be kept is lost at a turn's end. `scenario/expected/play.4x` was re
   to a kind's behaviour rather than to a scenario's outcome
 - **Vetted when** - `reports/catalog.md` gives each kind a **signature**: the traits it carries and
   every *(recipe, role)* pair that names it. **Kinds with the same signature are shown together**,
-  and the signature is computed from the release's tables rather than written by anyone. I can scan
+  and the signature is computed from `spec/data/` rather than written by anyone. I can scan
   the groups, see that two kinds behave alike, and have a name to grep for when I want the detail
 
 ### R-9 - I can browse the reports without a script running
