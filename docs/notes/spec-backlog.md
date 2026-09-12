@@ -8,7 +8,27 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-11, the kind keeps `force` and the trait becomes `strength`
+
+*Lets go with 2. Declare it and rename one of the two, force and strength are fine.*
+
+**Answering `P-432`, taking the way this lane said it would not propose on its own.** `P-428` pointed
+at declaring `force` and leaving the word doing two jobs - three transient kinds of one shape, beside
+`labor` and `fertility`. **He took the rename**, and the reason to think he would not is the one this
+lane had recorded: on the same day he chose the uniform rule over an exception for `laboring` beside
+`labor`. **That was a near-collision and this is an exact one**, and he treats the two differently.
+
+**Which is the general thing worth keeping.** `P-428` says a tie goes to the unified form; an exact
+name collision is not a tie. **A word that names two things is not an exception to a rule - it is a
+word that has stopped saying which thing it means**, and no amount of uniformity elsewhere buys that
+back.
+
+**Read as the kind keeping `force` and the trait becoming `strength`**, which is the order he wrote
+them. `P-435` says so at the top and offers to swap if it is the other way, because `spec/` uses
+`force` for the mustered quantity nearly everywhere and the trait is the smaller half - six sites.
+
 ## Said 2026-09-11, `age` is rewritten and `spoil` is not
+
 
 *Yes, do this: P-428 answers it outright and my answer is way 1 - rewrite it, with spoil untouched
 because it genuinely destroys.*

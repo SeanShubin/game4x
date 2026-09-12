@@ -62,6 +62,87 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-435 - the trait becomes `strength`, the kind stays `force`, and `force` is declared
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered, from your answer on `P-432` · **shape** instruction · **asks** approval · **into** `releases/first-release.md` -> Kinds, Traits, Units and structures, Recipes, and `spec/control.md`, `spec/units.md`
+
+**Sean, 2026-09-11**: *Lets go with 2. Declare it and rename one of the two, force and strength are
+fine.*
+
+**Read as: the kind keeps `force` and the trait becomes `strength`** - which is the order you wrote
+them in and the order `P-432` offered them. **Say the word if it is the other way round** and this
+comes back with the sites swapped; everything below is the same list either way.
+
+## Why this reading rather than the other
+
+**`spec/` uses `force` for the mustered quantity almost everywhere** - *force is mustered each turn
+and does not outlast it*, *taking a territory takes force greater than the existing force*, *several
+units brought to one place sum their force*. **Renaming the kind would touch all of those.** The
+trait is the smaller half: how much a thing musters, in six places.
+
+**And `force of nature` is untouched under this reading**, which matters because it is not the trait
+being renamed. A territory's number is the `nature` trait - `releases/first-release.md:129` - and
+*force of nature* is the prose for it.
+
+## The instruction: rename the trait at six sites, and add one row
+
+**Six sites, each named. Nothing else changes.**
+
+| Where                                                   | From                             | To                              |
+| ------------------------------------------------------- | -------------------------------- | ------------------------------- |
+| `releases/first-release.md:121`, *Traits*               | the row's first cell `**force**` | `**strength**`                  |
+| `releases/first-release.md:168`, *Units and structures* | the column header `Force`        | `Strength`                      |
+| `releases/first-release.md:284`, `muster`               | Qty `that citizen's force`       | `that citizen's strength`       |
+| `releases/first-release.md:287`, `stand`                | Qty `that unit's force`          | `that unit's strength`          |
+| `spec/control.md:25`                                    | *It has no force of its own*     | *It has no strength of its own* |
+| `spec/units.md:15`                                      | *Each unit has a force*          | *Each unit has a strength*      |
+
+**The three `Kind` cells that read `force` do not change** - `releases/first-release.md:284`, `:287`
+and `:290` - because those name the kind, which is what this keeps.
+
+**And the row, into *Kinds*, after `fertility`:**
+
+> | **force** | what a territory presents to hold or take ground; mustered each turn and swept at its end |
+
+## The check the promoting commit runs
+
+- **`strength` appears at exactly six sites** across `releases/` and `spec/`, and at none before
+- **No Traits row and no column header says `force`**: the *Traits* table has no `force` row, and
+  *Units and structures* has no `Force` column
+- **The three `Kind` cells still say `force`**, counted at three
+- **`force of nature` is unchanged**, counted at its present **five** occurrences -
+  `releases/first-release.md` 1, `spec/console.md` 1, `spec/control.md` 3
+
+
+### P-436 - `spec/structures.md` says a garrison holds force of its own and `spec/control.md` says it has none
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/structures.md` -> Garrison
+
+**Found while enumerating `P-435`'s sites**, and filed before doing anything else, because two
+`spec/` files cannot both be right.
+
+- **`spec/structures.md:18`**: *The structure through which the citizens of a territory apply force.
+  **A garrison holds force of its own**, and is what allows units that travel by land to be
+  produced.*
+- **`spec/control.md:25`**, which you promoted this afternoon: *A garrison coordinates the citizens
+  of its territory, so that each of them musters one force each turn. **It has no force of its
+  own**, and it does this by existing.*
+
+**The release agrees with `control.md`**: the garrison's `Force` cell in *Units and structures* is
+**0**, and `muster` produces *that citizen's force* rather than the garrison's.
+
+**So `structures.md` is the one that is wrong**, and it is the older sentence - `P-276` made a
+garrison's own force zero and this line was never followed.
+
+**The bullet, replacing the one that begins *The structure through which*:**
+
+> - The structure through which the citizens of a territory apply force. A garrison has no force of
+>   its own and is what allows the citizens of its territory to muster theirs, and it is what allows
+>   units that travel by land to be produced.
+
+**If `P-435` lands first this bullet says `strength` rather than `force`**, and this lane will bring
+it for you to read again rather than adjusting it on the way in.
+
 ### P-434 - `keeps` is declared *of the kind* and `age` lowers it for one thing
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed, from the code lane's `C-96` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Traits · from `C-96`
