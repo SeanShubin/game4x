@@ -62,40 +62,61 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-420 - `spec/control.md` says *military unit* and the game has no military unit
+### P-420 - `military unit` becomes `unit`, in both places
+
+**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, when you answered it · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Coordination, and -> Gaining and holding ground · from `C-94`
 
 
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/control.md` -> Open questions · from `C-94`
+**Sean, 2026-09-11**: *Lets just call them units, we dont really have a distinction between military
+units and units yet, that is language for the future, and I don't even know what the difference
+would be yet.*
 
-**The word appears twice in `spec/control.md` and nowhere else in `spec/` or `releases/`.** Line 35
-makes coordination come from *a structure, such as a garrison, or by a military unit*, and line 45
-makes *a military unit organised force in itself*. `spec/unit-types.md` declares exactly two units,
-Ark and Pioneer, and says of neither that it is military. So the term has a rule and no instance.
+**Two bullets carry the word and nothing else in `spec/` or `releases/` does** - 2 hits over 20
+files, case-insensitive, and *army*, *soldier*, *warrior* and *troop* are 0. Both are offered here,
+each into the section it is already in.
 
-**The release answered half of it without saying so.** `stand` requires `unit` - which the code
-lane's own test names as *an ark and a pioneer* - and produces *that unit's force*, so every unit
-presents its own force whether or not it is military. `muster` requires a garrison and names no
-alternative, so no unit coordinates anybody. Two readings of `spec/` are both consistent with what is
-written, and on a founded territory with two citizens, a pioneer and no garrison they give **2 force
-and 4** - against a force of nature running 1 to 3, so they disagree about whether a jungle is held.
-
-**This asks approval for the question, not for an answer.** `spec/README.md` rule 5 puts an open
-question at the bottom of the file it concerns; `decisions.md` says a question about the
-specification's own content stays there rather than in it. These are the words to add under
-`## Open questions`:
-
-> - Which units are military? Every unit has a force, and a military unit is organised force in
->   itself and imposes coordination on citizens. Neither an Ark nor a Pioneer is said to be either
-> - Does a unit that is not military present its force where it stands, and coordinate nobody?
-
-**Why this is `entailed` and not `invented`.** Both bullets restate what is already in
-`spec/control.md` and `spec/unit-types.md` and add no rule; what they add is the observation that
-the two documents do not meet. **Nothing needs to change in the code or the release either way** -
-the code lane built the release's reading and `force_in` is `held_force() + stood`, which is that
-reading exactly.
+**The first, in *Coordination*, replacing the bullet that begins *Coordination is imposed*:**
 
 
+> - Coordination is imposed on citizens by a structure, such as a garrison, or by a unit, which
+>   carries coordination with it rather than needing a place.
 
+**The second, in *Gaining and holding ground*, replacing the bullet that begins *A military unit is
+organised force*:**
+
+> - A unit is organised force in itself, so several brought to one place sum. Taking a territory
+>   uses the organised force brought to it, and several units may take together
+
+## What this changes beyond the word, which is the part to read before approving
+
+**It is not only vocabulary, and this lane is not going to let that pass as tidying.** While the
+word was `military` the first bullet had **no instance** - `spec/unit-types.md` declares Ark and
+Pioneer and calls neither military - so in practice only a structure coordinated citizens. **Struck,
+the bullet reaches every unit**, and an Ark or a Pioneer standing in a territory coordinates the
+citizens there. **Both bullets are in sections named for what they are about** - `Coordination` and
+`Gaining and holding ground` - and neither moves.
+
+
+**The release does not do that.** `muster` requires a garrison and names no alternative. So on a
+founded territory with two citizens, a Pioneer and no garrison: **the release gives 2 force and the
+edited spec gives 4**, against a force of nature running 1 to 3 - which is the disagreement `C-94`
+found, resolved by this in the spec's favour rather than the release's.
+
+**That is ordinary and does not block the promotion.** `CLAUDE.md`: *the spec is the destination and
+always wins; a release spec only says what is true today.* A release narrower than the spec is the
+normal case. **What is not ordinary is that nothing says so** - which is the whole of `C-94`, and it
+survives this promotion rather than being answered by it.
+
+**So promoting this files one follow-on item**, and which one is yours:
+
+- **If the release should follow**, that is work for the code lane - `muster` gains an alternative,
+  and a territory's force changes wherever a unit stands without a garrison
+- **If the release should stay narrower**, that is a line in `releases/first-release.md` saying it
+  is narrower on purpose, so the next reader holding both documents finds a note instead of a
+  contradiction
+
+**Say nothing about this and the second is what gets filed**, because it is the smaller claim and
+because you have not asked for a rules change.
 
 ## Addressed to other perspectives
 
