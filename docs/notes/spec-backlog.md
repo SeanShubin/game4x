@@ -3130,3 +3130,19 @@ readiness had the same description and the map form could not tell them apart.
 
 `P-459` re-presented with `C` removed and one question left inside `B`: whether the kind's number is
 a fourth `kept` value or a case of `P-454`'s existing rule.
+
+## Decided 2026-09-12, `P-459`: a number beside a stored trait's name is its maximum
+
+Sean: *go with B2.*
+
+**So `kept` stays three** - `thing`, `kind`, `nothing` - and what a kind's line adds for a stored
+trait is a bound rather than a second home. A citizen reads
+`{kind name:citizen bearing:1 defending:1 laboring:1}`, and `refresh` has a number to read.
+
+**It replaces a sentence of `P-454` rather than adding to one.** *A citizen's `laboring` is named
+there and valued nowhere until there is a citizen to value it for* is false under `B2`, so the
+paragraph is offered whole.
+
+**And the release's `Readies` column stops saying whether and starts saying how many of each** -
+four cells, eight counts, every one of them 1. Six `refresh` rows give eight counts because `unit`
+is `ark` and `pioneer`, which is where the two numbers differ.

@@ -62,6 +62,71 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-459 - a number beside a stored trait's name is its maximum
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** answered, by you, 2026-09-12 · **shape** text and rows · **asks** approval · **into** `spec/console.md` -> The language, and `releases/first-release.md` -> Units and structures
+
+**You took `B2`, so `kept` stays three and a kind's line carries the bound.** A citizen reads
+`{kind name:citizen bearing:1 defending:1 laboring:1}`, and `refresh` has a number to read.
+
+## The text, replacing one paragraph of `spec/console.md`
+
+**`B2` makes the paragraph's last clause false and so replaces it rather than adding to it.** It
+reads *a citizen's `laboring` is named there and valued nowhere until there is a citizen to value it
+for*, and under `B2` it is valued there - as a maximum.
+
+> **A trait of the kind is written with its value and a stored one with its name**, because one is a
+> fact about the kind and the other is a fact about each thing of it. So an Ark's `strength` is `2`
+> on the Ark's own line, and a citizen's `laboring` is named there and valued on each citizen.
+>
+> **A stored trait's name may carry a number on a kind's line, and that number is its maximum** -
+> where a thing of that kind begins, and the most it may hold. So a citizen's line reads
+> `laboring:1`. **`kept` still says `thing`**, because that is where the value lives; what the kind
+> adds is a bound rather than a second home. **Which a number is, is read from the trait**:
+> `kept:kind` makes it the value and `kept:thing` makes it the maximum. **A stored trait with no
+> number on the kind's line has no maximum.**
+
+**The last sentence is what keeps `id`, `biome` and `resource` unaffected** - all stored, none
+bounded, and none gaining a number.
+
+## The rows, into *Units and structures*
+
+**The `Readies` column stops saying whether and starts saying how many of each**, which is where a
+citizen's three actions stop sharing one cell. **Four cells change and three stay empty:**
+
+| Thing         | Readies                            |
+| ------------- | ---------------------------------- |
+| **citizen**   | bearing 1, defending 1, laboring 1 |
+| **garrison**  |                                    |
+| **extractor** | working 1                          |
+| **yard**      |                                    |
+| **store**     |                                    |
+| **ark**       | defending 1, moving 1              |
+| **pioneer**   | defending 1, moving 1              |
+
+**Read from `refresh` rather than composed** - its six `put ... at its maximum` rows are exactly
+these **eight** counts once `unit` is read as `ark` and `pioneer` - which is where six becomes
+eight. **Every number is 1**, so nothing in the game moves; what changes is that the numbers are
+now written down.
+
+**The column keeps its name.** *Readies* reads as *what it readies*, which is what the cell now
+holds, and the sentence under the table - *Nothing outside this table readies* - is still true and
+untouched.
+
+## What this settles that was open
+
+**`UNDECLARED_MAXIMUM` gets something to read.** The code lane named a constant today standing where
+the release had no number, with a tripwire that fails the day the column carries one. **This is that
+day**, and the tripwire is the notice rather than a defect.
+
+**And the boundedness invariant becomes checkable as promised.** `spec/invariants.md` says *whether
+this holds is decided mechanically, from the rules alone* - which it was not while the maximum lived
+in a checker as a literal. **Your own reading is the reason**: `refresh` is an endless well behind a
+bounded pump, and what bounds the pump has to be in the rules for the check to read it.
+
+**A list in a cell is not `C-98` here.** That item was a key taking several values in a **data
+file**; this is a rendering, and the kind's line gives each action its own key -
+`bearing:1 defending:1 laboring:1`, three keys rather than one key with three values.
 ### P-461 - `metal in it` is defined by a name the Traits table does not declare
 
 **to** sean · **status** open · **raised** 2026-09-12 · **kind** contradiction, found counting the four tables with no data file and verified by the code lane as `C-102` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Traits

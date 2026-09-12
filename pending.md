@@ -8,11 +8,11 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-459** - a number beside a stored trait's name is its maximum · `docs/notes/proposals.md`
 - **P-461** - `metal in it` is defined by a name the Traits table does not declare · `docs/notes/proposals.md`
 - **P-457** - `traits.4x`, the last file in `spec/data/` · `docs/notes/proposals.md`
 - **P-460** - a command binds every place a recipe leaves open · `docs/notes/proposals.md`
 - **P-456** - which kinds carry an `id`, and why a fleet is cheap · `docs/notes/proposals.md`
-- **P-459** - `refresh` reads a maximum that nothing declares · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -25,6 +25,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-459** - `544ca72` P-459: Sean's reading rules out C, which this lane recommended · still open in `docs/notes/proposals.md`
 - **P-456** - `cd392c2` P-456 records the commit that cited it while leaving it open · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
