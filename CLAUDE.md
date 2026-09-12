@@ -145,6 +145,16 @@ Four things the perspectives make necessary, all of which have teeth:
   the work survived and the commit message was what was lost. **`hooks/pre-commit` refuses a
   commit whose files span two perspectives' columns**, which is the shape of the race and of
   writing outside your own column alike.
+- **Never amend a commit here.** `git commit --amend` replaces a hash, and another perspective may
+  already have read the old one and written it into an outbox. **The window between committing and
+  amending is not one anyone can observe** - on 2026-09-12 it was seconds, before any push, and the
+  quality lens's outbox went red on two citations of a hash that had stopped existing, in a file the
+  lane that amended may not edit. **So judging it per case is the wrong instrument**: what is short
+  enough to be safe cannot be measured from inside the window. **A hash is the one citation here
+  that cannot be re-derived** - a path can be looked for and an id searched, and a short hash that
+  has stopped existing looks exactly like one that still does. `tools/spec` fails the gate when a
+  `**cited**` field names no commit; `tools/outbox` does the same for every outbox. Adopted by the
+  code lane after causing it, and written here because it binds every lane.
 - **`hooks/pre-push` runs the full gate** - `cargo fmt`, clippy and the test suite across every
   crate. A documentation-only or report-only push is therefore gated on code that perspective did
   not write and must not repair. If it fails for that reason, **say so and stop**; whether to
