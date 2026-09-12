@@ -63,10 +63,19 @@ fn every_item_has_a_block_that_holds_itself_and_nothing_else() {
 ///
 /// **Measured rather than assumed to exist**: if no item in the queue has a sub-heading, this
 /// test proves nothing, so it says how many did.
+///
+/// **Counted rather than searched for, and the first version was searched for.** It asked
+/// whether the heading's text appears anywhere in what is left, which is a wider question than
+/// *did this block's lines go* - so `P-458`'s `## What lands with it, if it lands` failed it on
+/// behalf of `P-455`'s `## What lands with it`, one being a prefix of the other. The file was
+/// right and the instrument was wrong, which is `CLAUDE.md` -> *a right number about the wrong
+/// thing invites none*. Counting whole lines asks the question that was meant: as many
+/// occurrences leave as the block held, and any other occurrence is somebody else's.
 #[test]
 fn sub_headings_belong_to_their_item_and_leave_with_it() {
     let text = queue();
     let lines: Vec<&str> = text.lines().collect();
+    let occurrences = |body: &str, heading: &str| body.lines().filter(|l| *l == heading).count();
     let mut with_sub_headings = 0;
     for id in ids(&text) {
         let (start, end) = block_of(&text, &id).expect("a block");
@@ -80,9 +89,14 @@ fn sub_headings_belong_to_their_item_and_leave_with_it() {
         with_sub_headings += 1;
         let left = remove_block(&text, &id).expect("removable");
         for sub in subs {
-            assert!(
-                !left.contains(sub.trim()),
-                "{id} left its sub-heading {sub:?} behind, which is the 2026-09-11 defect"
+            let inside = lines[start + 1..end].iter().filter(|l| l == &sub).count();
+            let before = occurrences(&text, sub);
+            let after = occurrences(&left, sub);
+            assert_eq!(
+                before - inside,
+                after,
+                "{id} left {} of its {inside} {sub:?} behind, which is the 2026-09-11 defect",
+                after - (before - inside)
             );
         }
     }
