@@ -8,7 +8,30 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Decided 2026-09-12, the specification holds the default and the editor is where tuning happens
+
+*there is a loop here, the data starts in the specification, that is the default value. I tune it in
+the games editor. Depending on how the tuning works out, I may choose to update the specification.*
+
+**Said correcting `P-440`, and it corrects two things rather than one.**
+
+**The first is a claim this lane made and would have promoted.** `P-440` said rule 7's clause -
+*where it can be tuned without touching the specification* - had been made **false** by putting the
+data file in `spec/`. **It has not.** Tuning happens in the editor, which touches nothing in `spec/`,
+so the clause's conclusion holds and only its reason changed. **This lane read *tuned* as *edited in
+the file* and never checked the word against how he works.**
+
+**The second is the shape of the whole thing.** `P-440`'s first version had every other form of the
+data *generated rather than written*, which is right for a release table and a report page and
+**wrong for a tuned value** - that has diverged on purpose. **A wording that makes divergence a
+defect would have shipped.**
+
+**The mechanism is already written**: `spec/invariants.md`, *the text is the rule… anything written
+as text can be opened in the editor*. **The loop's two directions exist; what was missing was that
+the specification's copy is the default and that promoting a tuned value back is his choice.**
+
 ## Decided 2026-09-12, the specification owns the data, in the data format
+
 
 *Lets put the data in the specification, in the format of the data file, so the specification now
 owns it. The data is copied as needed.*

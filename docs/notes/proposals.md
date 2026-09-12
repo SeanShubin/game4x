@@ -62,35 +62,56 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-440 - rule 7 says data is tuned without touching the specification, and you have just put it there
+### P-440 - the specification holds the default, and tuning happens in the editor
 
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/README.md` -> Rules for this directory · from `P-439`
+**to** sean · **status** open · **raised** 2026-09-12 · **rewritten** 2026-09-12, when you described the loop · **kind** recovered · **shape** text · **asks** approval · **into** `spec/README.md` -> Rules for this directory · from `P-439`
 
-**Sean, 2026-09-12**: *Lets put the data in the specification, in the format of the data file, so the
-specification now owns it. The data is copied as needed.*
+**Sean, 2026-09-12**: *there is a loop here, the data starts in the specification, that is the
+default value. I tune it in the games editor. Depending on how the tuning works out, I may choose to
+update the specification.*
 
-**Both halves are already rules of yours, and one clause now contradicts them.**
+## This proposal said rule 7's last clause was false. It is not, and the correction matters
 
-`spec/invariants.md` says the data lives in a data file, **not a presentation file such as markdown
-or HTML**, and that *the data may be replicated in the presentation layer, and **no replication is
-canonical***. **That is *the data is copied as needed*, written down before you said it.** Nothing
-there has to change.
+**It reads**: *state the game's data in a data file, **where it can be tuned without touching the
+specification***.
 
-**`spec/README.md` rule 7 is the one that does:**
+**This lane read *tuned* as *edited in the file*, and concluded that putting the file in `spec/` made
+the clause false.** Your loop says tuning happens **in the editor**, which touches nothing in
+`spec/` - so **the clause's conclusion is true and only its reason has changed.** It survives because
+tuning was never editing the file.
 
-*Relationships here, data elsewhere. State that a predator has more force than a scavenger; state
-the game's data in a data file, **where it can be tuned without touching the specification**.*
+**What still has to change is what the clause implies**: *without touching the specification* only
+needs saying if the file is somewhere else. **Now that it is here, the sentence has to say the loop
+instead of implying a location.**
 
-**The last clause is now false.** The file is in the specification, so tuning it touches the
-specification - which is the point of your decision rather than an oversight in it.
+## And the mechanism is already written down
+
+`spec/invariants.md`: *every rule has a text form, and **the text is the rule**. Anything the rule
+editor can build can be written as text, and anything written as text can be opened in the editor.*
+
+**That is the loop's two directions, stated before you described it.** The data file's text opens in
+the editor; what the editor builds can be written back as text. **What is missing is only that the
+specification's copy is the default, and that promoting a tuned value back is your choice.**
 
 **Rule 7, replacing it whole:**
 
-> 7. **Relationships in prose, data in a data file, and both are yours.** State that a predator has
->    more force than a scavenger; state the game's data in a data file **in this directory**, in the
->    data format rather than in a table. **The specification owns the data**, and every other form of
->    it - a table in a release, a page in a report, a constant in a crate - is a copy that is
->    generated rather than written.
+> 7. **Relationships in prose, data in a data file, and both are in this directory.** State that a
+>    predator has more force than a scavenger; state the game's data in a data file, in the data
+>    format rather than in a table. **What the specification states is the default.** Tuning happens
+>    in the editor and does not touch the specification, and a tuned value becomes the default only
+>    when I say it does.
+
+## What this withdraws from its own earlier version
+
+**It offered**: *the specification owns the data, and every other form of it - a table in a release,
+a page in a report, a constant in a crate - is a copy that is generated rather than written.*
+
+**That is wrong under the loop and would have been promoted.** A tuned value in the editor is
+**neither generated nor a copy** - it has diverged on purpose, which is the whole point of tuning.
+The earlier wording would have made every divergence a defect.
+
+**Rule 3 is untouched** and still right: *the game's data is decided in its data file, reviewed by
+hand and locked by the scenario test.*
 
 ## What this does not settle, and what it unblocks
 
@@ -121,6 +142,20 @@ game's data is decided in its data file, reviewed by hand and locked by the scen
 
 **Sean, 2026-09-12**: *Lets put the data in the specification, in the format of the data file, so the
 specification now owns it. The data is copied as needed.*
+
+**And then, which changes what you build**: *there is a loop here, the data starts in the
+specification, that is the default value. I tune it in the games editor. Depending on how the tuning
+works out, I may choose to update the specification.*
+
+**So the specification's data is the default and not the only value.** A tuned value in the editor
+is **neither a copy nor generated** - it has diverged on purpose, and promoting it back is a
+deliberate act of his. **This lane's first reading had every other form of the data generated from
+`spec/`, which would have made every divergence a defect**; `P-440` withdraws that in its own text.
+
+**The mechanism is already in `spec/invariants.md`**: *every rule has a text form, and the text is
+the rule. Anything the rule editor can build can be written as text, and anything written as text
+can be opened in the editor.* **The loop's two directions, stated before he described it.**
+
 
 **`C-49` offered two orders and he took a third.** Both of yours ended with the data in a file
 outside the specification, and the transcription problem was about the window between writing it and
