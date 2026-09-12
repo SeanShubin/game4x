@@ -187,11 +187,14 @@ fn the_density_rule_is_spelled_out_against_the_planet_it_describes() {
         *has_expression.entry(current.clone()).or_insert(false) |= !numeric;
     }
 
-    // **Twelve `put` rows were skipped and the count says so**, because a skip that is
+    // **Thirteen `put` rows were skipped and the count says so**, because a skip that is
     // silent and a population that is empty look identical from here.
+    //
+    // **Twelve until `P-431`**, which rewrote `age` from consume-and-produce into
+    // require-and-put - the thirteenth, and the one that says the thing survives being aged.
     assert_eq!(
-        puts, 12,
-        "{puts} `put` rows were skipped; the release states twelve"
+        puts, 13,
+        "{puts} `put` rows were skipped; the release states thirteen"
     );
 
     let expected: Vec<&String> = names

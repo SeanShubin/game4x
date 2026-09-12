@@ -343,11 +343,14 @@ fn two_kinds_the_release_says_the_same_things_about_share_a_signature() {
         "the synthetic recipe is what this case is about: {:?}",
         a.pairs
     );
+    // **`age`'s two pairs were renamed by `P-431`, not removed.** It was consume-and-produce
+    // and is require-and-put: the thing survives being aged, so what reaches `thing` through
+    // the family is the same two rows under two different roles.
     assert_eq!(
         a.pairs,
         vec![
-            String::from("age consume"),
-            String::from("age produce"),
+            String::from("age put"),
+            String::from("age require"),
             String::from("pair up produce"),
             String::from("spoil consume"),
         ]

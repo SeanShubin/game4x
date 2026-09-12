@@ -35,9 +35,8 @@ Every rule is non-increasing under the weighting below, so any sequence of them 
 | energy                          | 3      | a thing                  |
 | extractor                       | 3      | a thing                  |
 | fertility                       | 3      | a thing                  |
+| food, keeps                     | 3      | a state a thing is in    |
 | food, keeps 0                   | 3      | a state a thing is in    |
-| food, keeps at least 1          | 3      | a state a thing is in    |
-| food, keeps one less            | 3      | a state a thing is in    |
 | garrison                        | 3      | a thing                  |
 | labor                           | 3      | a thing                  |
 | metal                           | 3      | a thing                  |
@@ -83,7 +82,7 @@ Made minus taken, per place. A `require` row moves nothing and is absent rather 
 | bear (citizen bearing)          | +1 fertility · -1 citizen, bearing                          | 0     |
 | breed                           | +1 citizen · -1 fertility · -1 food                         | -4    |
 | perish                          | -1 citizen · -1 citizen, whose upkeep is unpaid             | -6    |
-| age (food)                      | +1 food, keeps one less · -1 food, keeps at least 1         | 0     |
+| age (food keeps)                | -1 food, keeps                                              | -3    |
 | spoil (food)                    | -1 food · -1 food, keeps 0                                  | -7    |
 | stow                            | nothing                                                     | 0     |
 | stow                            | nothing                                                     | 0     |

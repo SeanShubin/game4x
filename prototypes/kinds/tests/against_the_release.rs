@@ -404,6 +404,11 @@ fn a_role_says_what_becomes_of_what_a_recipe_names() {
             "work",
             "upkeep",
             "bear",
+            // **`age` joined with `P-431`**, and it is the same shape one rule later: it
+            // consumed a thing with `keeps at least 1` and produced one with `keeps one
+            // less`, which destroyed and recreated the thing. It requires and puts now, so
+            // the thing it ages is a thing it keeps.
+            "age",
             "refresh",
             "refresh",
             "refresh",

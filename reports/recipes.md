@@ -602,8 +602,8 @@ After:
 
 Run by the **world**.
 
-- **consume** 1 thing, keeps at least 1
-- **produce** 1 thing, keeps one less
+- **require** 1 thing, keeps at least 1
+- **put** thing — , keeps one less
 
 ### An example
 

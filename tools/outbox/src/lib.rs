@@ -660,6 +660,48 @@ impl std::fmt::Display for NoText {
 }
 
 impl Item {
+    /// Every block this proposal offers, in the order its destinations are named.
+    ///
+    /// **`S-103`, and `CLAUDE.md` is why it is a list.** *A proposal that lands in more than
+    /// one file carries one quotation for each* - and more than one section of one file does
+    /// too: *two bullets of one section is two quotations, and four tables across four
+    /// sections is four.* So a second blockquote is usually a second destination rather than
+    /// a second purpose, and [`Item::proposed_text`] reporting `Several` for it was one block
+    /// too narrow.
+    ///
+    /// **One parser, not two.** [`Item::proposed_text`] is written in terms of this, so the
+    /// two cannot come to disagree about where a proposal's body ends - which is the whole
+    /// reason this lives here rather than in `tools/spec`, and is what
+    /// `docs/notes/tools-spec-design.md` called on 2026-09-02.
+    ///
+    /// **`Err(NoText::None)` for a proposal that offers nothing**, which is the same answer
+    /// the single-block reader gives and means the same thing: an instruction may carry no
+    /// quotation at all, and then there is nothing to promote verbatim.
+    ///
+    /// The `> ` markers are stripped, because what Sean approves is the text and not its
+    /// quoting.
+    pub fn proposed_blocks(&self) -> Result<Vec<String>, NoText> {
+        let mut blocks: Vec<Vec<&str>> = Vec::new();
+        let mut current: Vec<&str> = Vec::new();
+        for line in self.body.lines() {
+            let trimmed = line.trim_start();
+            if let Some(rest) = trimmed.strip_prefix('>') {
+                current.push(rest.strip_prefix(' ').unwrap_or(rest));
+            } else if !current.is_empty() {
+                blocks.push(std::mem::take(&mut current));
+            }
+        }
+        if !current.is_empty() {
+            blocks.push(current);
+        }
+        if blocks.is_empty() {
+            return Err(NoText::None);
+        }
+        Ok(blocks
+            .into_iter()
+            .map(|block| block.join("\n").trim_end().to_string())
+            .collect())
+    }
     /// The text this proposal proposes, as it would appear in the destination.
     ///
     /// **`S-11`.** `tools/spec`'s `promote` reads this, applies it, and asserts it appears
@@ -676,22 +718,9 @@ impl Item {
     /// The `> ` markers are stripped, because what Sean approves is the text and not its
     /// quoting.
     pub fn proposed_text(&self) -> Result<String, NoText> {
-        let mut blocks: Vec<Vec<&str>> = Vec::new();
-        let mut current: Vec<&str> = Vec::new();
-        for line in self.body.lines() {
-            let trimmed = line.trim_start();
-            if let Some(rest) = trimmed.strip_prefix('>') {
-                current.push(rest.strip_prefix(' ').unwrap_or(rest));
-            } else if !current.is_empty() {
-                blocks.push(std::mem::take(&mut current));
-            }
-        }
-        if !current.is_empty() {
-            blocks.push(current);
-        }
+        let mut blocks = self.proposed_blocks()?;
         match blocks.len() {
-            0 => Err(NoText::None),
-            1 => Ok(blocks[0].join("\n").trim_end().to_string()),
+            1 => Ok(blocks.remove(0)),
             several => Err(NoText::Several(several)),
         }
     }

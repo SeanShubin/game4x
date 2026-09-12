@@ -391,7 +391,11 @@ fn every_block_becomes_at_least_one_rule() {
 fn every_place_is_a_kind_or_a_count_and_never_a_derived_trait() {
     let document = release();
     let rules = nogain::rules(&document);
-    let counts = nogain::counts(&document);
+    // **Every trait the release names, not only the counts.** `age` puts `keeps one less`
+    // since `P-431`, so `keeps` is a place - and it is a trait the release declares, which
+    // is the category this check is really about. Reading only the `0 or 1` counts made the
+    // allowlist narrower than the claim it guards, and `keeps` arriving is what said so.
+    let declared: Vec<String> = traits_marked(&document, "");
 
     let mut places: std::collections::BTreeSet<&Place> = std::collections::BTreeSet::new();
     for rule in &rules {
@@ -410,13 +414,13 @@ fn every_place_is_a_kind_or_a_count_and_never_a_derived_trait() {
     for place in &places {
         let state = place.state.as_str();
         let known = state.is_empty()
-            || counts.iter().any(|count| count == state)
+            || declared.iter().any(|name| name == state)
             || nogain::COUNTERS.contains(&state);
         assert!(
             known || sources.contains(&place.kind.as_str()),
-            "`{}` is a place and `{state}` is neither a count the Traits table declares nor \
-             one of the counters this check keeps - if it is a derived trait, the page's \
-             account of what it does not decide has stopped being true",
+            "`{}` is a place and `{state}` is neither a trait the Traits table declares nor \
+             one of the counters this check keeps - a place whose state names nothing the \
+             release declares is a vocabulary this check invented",
             place.label()
         );
         checked += 1;
@@ -471,6 +475,7 @@ fn every_place_is_a_kind_or_a_count_and_never_a_derived_trait() {
 /// covered without anyone editing this file - which is the whole point of the sweep that uses
 /// it.
 fn traits_marked(document: &str, word: &str) -> Vec<String> {
+    // An empty `word` matches every row, which is how the whole Traits table is read.
     let mut out = Vec::new();
     let mut inside = false;
     for line in document.lines() {

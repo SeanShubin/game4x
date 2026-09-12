@@ -29,103 +29,103 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 **Traits** `bearing`, `defending`, `force`, `keeps`, `laboring`
 
-**Named by** `age consume`, `age produce`, `bear put`, `bear require`, `breed produce`, `create labor put`, `create labor require`, `deploy ark produce`, `found by land produce`, `launch ark consume`, `muster put`, `muster require`, `perish consume`, `produce pioneer consume`, `refresh put`, `spoil consume`, `upkeep require`
+**Named by** `age put`, `age require`, `bear put`, `bear require`, `breed produce`, `create labor put`, `create labor require`, `deploy ark produce`, `found by land produce`, `launch ark consume`, `muster put`, `muster require`, `perish consume`, `produce pioneer consume`, `refresh put`, `spoil consume`, `upkeep require`
 
 ### `s-2` - garrison
 
 **Traits** `force`, `keeps`
 
-**Named by** `age consume`, `age produce`, `deploy ark produce`, `found by land produce`, `muster require`, `spoil consume`
+**Named by** `age put`, `age require`, `deploy ark produce`, `found by land produce`, `muster require`, `spoil consume`
 
 ### `s-3` - extractor
 
 **Traits** `keeps`, `resource`, `working`
 
-**Named by** `age consume`, `age produce`, `build extractor produce`, `deploy ark produce`, `found by land produce`, `refresh put`, `spoil consume`, `work put`, `work require`
+**Named by** `age put`, `age require`, `build extractor produce`, `deploy ark produce`, `found by land produce`, `refresh put`, `spoil consume`, `work put`, `work require`
 
 ### `s-4` - yard
 
 **Traits** `keeps`
 
-**Named by** `age consume`, `age produce`, `build yard produce`, `launch ark require`, `spoil consume`
+**Named by** `age put`, `age require`, `build yard produce`, `launch ark require`, `spoil consume`
 
 ### `s-5` - store
 
 **Traits** `keeps`, `resource`
 
-**Named by** `age consume`, `age produce`, `build store produce`, `spoil consume`, `stow produce`
+**Named by** `age put`, `age require`, `build store produce`, `spoil consume`, `stow produce`
 
 ### `s-6` - ark
 
 **Traits** `force`, `fuel`, `keeps`, `moving`
 
-**Named by** `age consume`, `age produce`, `deploy ark consume`, `launch ark produce`, `move put`, `move require`, `refresh put`, `spoil consume`, `stand put`, `stand require`
+**Named by** `age put`, `age require`, `deploy ark consume`, `launch ark produce`, `move put`, `move require`, `refresh put`, `spoil consume`, `stand put`, `stand require`
 
 ### `s-7` - pioneer
 
 **Traits** `force`, `fuel`, `keeps`, `moving`
 
-**Named by** `age consume`, `age produce`, `found by land consume`, `move put`, `move require`, `produce pioneer produce`, `refresh put`, `spoil consume`, `stand put`, `stand require`
+**Named by** `age put`, `age require`, `found by land consume`, `move put`, `move require`, `produce pioneer produce`, `refresh put`, `spoil consume`, `stand put`, `stand require`
 
 ### `s-8` - food
 
 **Traits** `keeps`, `surplus`
 
-**Named by** `age consume`, `age produce`, `breed consume`, `spoil consume`, `upkeep consume`, `work produce`
+**Named by** `age put`, `age require`, `breed consume`, `spoil consume`, `upkeep consume`, `work produce`
 
 ### `s-9` - metal
 
 **Traits** `keeps`
 
-**Named by** `age consume`, `age produce`, `build extractor consume`, `build store consume`, `build yard consume`, `discard consume`, `launch ark consume`, `produce pioneer consume`, `spoil consume`, `stow consume`, `stow produce`, `work produce`
+**Named by** `age put`, `age require`, `build extractor consume`, `build store consume`, `build yard consume`, `discard consume`, `launch ark consume`, `produce pioneer consume`, `spoil consume`, `stow consume`, `stow produce`, `work produce`
 
 ### `s-10` - energy
 
 **Traits** `keeps`
 
-**Named by** `age consume`, `age produce`, `discard consume`, `launch ark consume`, `move consume`, `produce pioneer consume`, `spoil consume`, `stow consume`, `stow produce`, `work produce`
+**Named by** `age put`, `age require`, `discard consume`, `launch ark consume`, `move consume`, `produce pioneer consume`, `spoil consume`, `stow consume`, `stow produce`, `work produce`
 
 ### `s-11` - labor
 
 **Traits** `keeps`
 
-**Named by** `age consume`, `age produce`, `build extractor consume`, `build store consume`, `build yard consume`, `create labor produce`, `discard consume`, `spoil consume`, `work consume`
+**Named by** `age put`, `age require`, `build extractor consume`, `build store consume`, `build yard consume`, `create labor produce`, `discard consume`, `spoil consume`, `work consume`
 
 ### `s-12` - territory
 
 **Traits** `biome`, `control`, `keeps`, `nature`
 
-**Named by** `age consume`, `age produce`, `deploy ark require`, `launch ark require`, `move require`, `spoil consume`, `work require`
+**Named by** `age put`, `age require`, `deploy ark require`, `launch ark require`, `move require`, `spoil consume`, `work require`
 
 ### `s-13` - orbit
 
 **Traits** `keeps`
 
-**Named by** `age consume`, `age produce`, `deploy ark consume`, `launch ark produce`, `move require`, `spoil consume`
+**Named by** `age put`, `age require`, `deploy ark consume`, `launch ark produce`, `move require`, `spoil consume`
 
 ### `s-14` - deposit
 
 **Traits** `density`, `keeps`, `total capacity`
 
-**Named by** `age consume`, `age produce`, `spoil consume`
+**Named by** `age put`, `age require`, `spoil consume`
 
 ### `s-15` - adjacency
 
 **Traits** `from`, `keeps`, `to`
 
-**Named by** `age consume`, `age produce`, `spoil consume`
+**Named by** `age put`, `age require`, `spoil consume`
 
 ### `s-16` - game
 
 **Traits** `keeps`, `phase`
 
-**Named by** `age consume`, `age produce`, `spoil consume`
+**Named by** `age put`, `age require`, `spoil consume`
 
 ### `s-17` - fertility
 
 **Traits** `keeps`
 
-**Named by** `age consume`, `age produce`, `bear produce`, `breed consume`, `discard consume`, `spoil consume`
+**Named by** `age put`, `age require`, `bear produce`, `breed consume`, `discard consume`, `spoil consume`
 
 ## citizen
 
@@ -154,8 +154,8 @@ a person: provides labor, eats, and grows on surplus.
 - `bear` puts , bearing one less
 - `breed` produces 1
 - `perish` consumes 1, whose upkeep is unpaid
-- `age` consumes 1 (as a thing), keeps at least 1
-- `age` produces 1 (as a thing), keeps one less
+- `age` requires 1 (as a thing), keeps at least 1
+- `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 - `refresh` puts , laboring at its maximum
 - `refresh` puts , bearing at its maximum
@@ -181,8 +181,8 @@ what holds a territory; a territory has at most one.
 
 - `deploy ark` produces 1
 - `found by land` produces 1
-- `age` consumes 1 (as a thing), keeps at least 1
-- `age` produces 1 (as a thing), keeps one less
+- `age` requires 1 (as a thing), keeps at least 1
+- `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 - `muster` requires 1
 
@@ -209,8 +209,8 @@ built for one resource, and worked to produce it.
 - `build extractor` produces 1, `$resource`
 - `work` requires 1, working at least 1
 - `work` puts , working one less
-- `age` consumes 1 (as a thing), keeps at least 1
-- `age` produces 1 (as a thing), keeps one less
+- `age` requires 1 (as a thing), keeps at least 1
+- `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 - `refresh` puts , working at its maximum
 
@@ -232,8 +232,8 @@ where an Ark is produced.
 
 - `build yard` produces 1
 - `launch ark` requires 1
-- `age` consumes 1 (as a thing), keeps at least 1
-- `age` produces 1 (as a thing), keeps one less
+- `age` requires 1 (as a thing), keeps at least 1
+- `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 
 ## store
@@ -255,8 +255,8 @@ built to hold one resource, and holds nothing else.
 **In recipes**
 
 - `build store` produces 1, `$resource`
-- `age` consumes 1 (as a thing), keeps at least 1
-- `age` produces 1 (as a thing), keeps one less
+- `age` requires 1 (as a thing), keeps at least 1
+- `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 - `stow` produces 1 (as the place holding metal), in a store for metal
 - `stow` produces 1 (as the place holding energy), in a store for energy
@@ -283,8 +283,8 @@ carries a landing, and can invade from orbit.
 - `move` requires 1 (as a unit), moving at least 1, in `$from`
 - `move` puts  (as a unit), moving one less, in `$to`
 - `launch ark` produces 1, in the orbit above `$where`
-- `age` consumes 1 (as a thing), keeps at least 1
-- `age` produces 1 (as a thing), keeps one less
+- `age` requires 1 (as a thing), keeps at least 1
+- `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 - `refresh` puts  (as a unit), moving at its maximum
 - `stand` requires 1 (as a unit), defending at least 1
@@ -313,8 +313,8 @@ founds a territory.
 - `move` puts  (as a unit), moving one less, in `$to`
 - `found by land` consumes 1
 - `produce pioneer` produces 1
-- `age` consumes 1 (as a thing), keeps at least 1
-- `age` produces 1 (as a thing), keeps one less
+- `age` requires 1 (as a thing), keeps at least 1
+- `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 - `refresh` puts  (as a unit), moving at its maximum
 - `stand` requires 1 (as a unit), defending at least 1
@@ -338,8 +338,8 @@ eaten by citizens; expires.
 - `work` produces `$where`'s density for that resource (as a resource)
 - `upkeep` consumes 1
 - `breed` consumes 1
-- `age` consumes 1 (as a thing), keeps at least 1
-- `age` produces 1 (as a thing), keeps one less
+- `age` requires 1 (as a thing), keeps at least 1
+- `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 
 ## metal
@@ -362,8 +362,8 @@ what things are built from; drawn from the planet, and conserved once above grou
 - `produce pioneer` consumes 3
 - `launch ark` consumes 3
 - `work` produces `$where`'s density for that resource (as a resource)
-- `age` consumes 1 (as a thing), keeps at least 1
-- `age` produces 1 (as a thing), keeps one less
+- `age` requires 1 (as a thing), keeps at least 1
+- `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 - `stow` consumes 1
 - `stow` produces 1, in a store for metal
@@ -387,8 +387,8 @@ what moves things; neither conserved nor expiring.
 - `produce pioneer` consumes 6
 - `launch ark` consumes 12
 - `work` produces `$where`'s density for that resource (as a resource)
-- `age` consumes 1 (as a thing), keeps at least 1
-- `age` produces 1 (as a thing), keeps one less
+- `age` requires 1 (as a thing), keeps at least 1
+- `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 - `stow` consumes 1
 - `stow` produces 1, in a store for energy
@@ -413,8 +413,8 @@ what working a machine takes; a citizen provides it each turn.
 - `build yard` consumes 1
 - `create labor` produces 1
 - `work` consumes 1
-- `age` consumes 1 (as a thing), keeps at least 1
-- `age` produces 1 (as a thing), keeps one less
+- `age` requires 1 (as a thing), keeps at least 1
+- `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 - `discard` consumes 1
 
@@ -437,8 +437,8 @@ a place things are in, which has a biome, a force of nature, and a density and a
 - `move` requires 1 (as a place), joined to `$from` by an edge the unit crosses, in `$to`
 - `launch ark` requires 1, in `$where`
 - `work` requires 1, in `$where`
-- `age` consumes 1 (as a thing), keeps at least 1
-- `age` produces 1 (as a thing), keeps one less
+- `age` requires 1 (as a thing), keeps at least 1
+- `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 
 ## orbit
@@ -457,8 +457,8 @@ a place above one territory, which holds units and nothing else.
 - `move` requires 1 (as a place), in `$from`
 - `move` requires 1 (as a place), joined to `$from` by an edge the unit crosses, in `$to`
 - `launch ark` produces 1 (as the place holding ark), in the orbit above `$where`
-- `age` consumes 1 (as a thing), keeps at least 1
-- `age` produces 1 (as a thing), keeps one less
+- `age` requires 1 (as a thing), keeps at least 1
+- `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 
 ## deposit
@@ -473,8 +473,8 @@ what a territory's ground offers of one resource, and how richly.
 
 **In recipes**
 
-- `age` consumes 1 (as a thing), keeps at least 1
-- `age` produces 1 (as a thing), keeps one less
+- `age` requires 1 (as a thing), keeps at least 1
+- `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 
 ## adjacency
@@ -489,8 +489,8 @@ two places that share an edge, held by the thing that holds them.
 
 **In recipes**
 
-- `age` consumes 1 (as a thing), keeps at least 1
-- `age` produces 1 (as a thing), keeps one less
+- `age` requires 1 (as a thing), keeps at least 1
+- `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 
 ## game
@@ -505,8 +505,8 @@ every thing is in it, and it is the one thing that is in nothing.
 
 **In recipes**
 
-- `age` consumes 1 (as a thing), keeps at least 1
-- `age` produces 1 (as a thing), keeps one less
+- `age` requires 1 (as a thing), keeps at least 1
+- `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 
 ## fertility
@@ -525,8 +525,8 @@ a citizen's capacity to raise one more, spent by raising one and renewed each tu
 
 - `bear` produces 1
 - `breed` consumes 1
-- `age` consumes 1 (as a thing), keeps at least 1
-- `age` produces 1 (as a thing), keeps one less
+- `age` requires 1 (as a thing), keeps at least 1
+- `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 - `discard` consumes 1
 

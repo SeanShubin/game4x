@@ -1048,9 +1048,14 @@ pub const RECIPES: &[Recipe] = &[
         // is the release catching up.
         name: "age",
         owner: World,
+        // **`P-431` rewrote both rows**, answering the research lens's `X-30`. It was
+        // `consume` a thing with `keeps at least 1` and `produce` one with `keeps one less`,
+        // which destroyed and recreated the thing - and, under *a rule fires as many times as
+        // it can*, the produce satisfied its own consume whenever `keeps` was 2 or more, so a
+        // thing declared to last three turns aged to nothing in one.
         lines: &[
-            traited(Consume, 1, THING, &KEEPS_SOME),
-            traited(Produce, 1, THING, &KEEPS_LESS),
+            traited(Require, 1, THING, &KEEPS_SOME),
+            put(THING, &KEEPS_LESS),
         ],
     },
     Recipe {

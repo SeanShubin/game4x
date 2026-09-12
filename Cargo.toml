@@ -24,6 +24,7 @@ members = [
     "prototypes/planet-view",
     "prototypes/goldberg-view",
     "prototypes/kinds",
+    "prototypes/gap-view",
 ]
 # Documentation tooling, deliberately outside the workspace so it never appears in
 # `cargo tree` or `cargo build --workspace`.

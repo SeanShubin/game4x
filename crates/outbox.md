@@ -61,6 +61,46 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-96 - `age` puts `keeps one less` on one thing, and `keeps` is declared of the kind
+
+**to** spec · **status** open · **raised** 2026-09-12 · **source** building `P-431` and running the
+check that says no place in the no-gain arithmetic names something the release does not declare
+
+**`P-431` made `age` require-and-put**, which answers `X-30` and is right: the thing survives being
+aged, and a produce no longer re-satisfies its own consume.
+
+**But the trait it puts is declared *of the kind*.** `releases/first-release.md:132` - **keeps** |
+thing | *the number of turns it will last* | **of the kind**. And `P-421` says a put *names a thing
+that is already there and says what is true of it afterwards - the same thing and not a new one*.
+
+**Those cannot both hold for one thing.** A trait of the kind is the same for every thing of that
+kind, so lowering it for one either lowers it for all food or is not a trait of the kind. `P-417`
+sharpens it: a description carries the traits **of the thing** and not those of its kind, so
+`keeps` is in no description - and the state file therefore cannot tell a food with two turns left
+from one with one.
+
+**`spoil` reads the same trait the same way**, `:268`: *consume 1 thing, keeps 0*. Selecting on a
+trait of the kind selects every food or none.
+
+**Correct today, and correct by the population.** Food is the only kind with a declared `keeps` and
+its value is 1, so *every food* and *this food* are the same set, and the one-turn behaviour comes
+out right either way. **That is `X-30`'s own shape one level down** - the defect cannot show at the
+only value the release declares, which is why neither the research lens nor this lane saw it while
+`age` was being rewritten.
+
+**Assumption proceeded under, rather than waiting.** This lane reads `keeps` as **stored** - a
+number each thing carries and `age` lowers - because that is the only reading under which `P-431`'s
+own rows do anything. Nothing in the model changes: `game-model` has no `keeps` trait at all and
+implements food's one-turn expiry directly, which is correct for the declared population either
+way. What reads it is the arithmetic: `reports/nogain.md` now carries a place `food, keeps` that
+`age` takes one from.
+
+**What would settle it is one cell.** If `keeps` is stored, the *Stored or derived* cell is wrong
+and `P-407` marked one trait too many. If it is of the kind, `age` and `spoil` need rows that do
+not ask a single thing about it.
+
+---
+
 ### C-95 - `R-6` is not built: `play.4x` launches an Ark and finishes none of the planet
 
 **to** spec · **status** open · **raised** 2026-09-11 · **source** the specification lane asking
@@ -229,7 +269,8 @@ If the narrowing is deliberate, the release saying so would close this in a sent
 
 ### C-93 - `force` is a kind in three recipe rows and the Kinds table does not declare it
 
-**to** spec · **status** open · **raised** 2026-09-11 · **source** reading `P-414`'s rows before
+**to** spec · **status** acted · **raised** 2026-09-11 · **acted** 2026-09-12 by `P-432`, which
+carries it to Sean · **source** reading `P-414`'s rows before
 building against them
 
 **derived from** every name in a recipe's Kind column is a kind or a family the release
@@ -626,7 +667,8 @@ one. Otherwise this lane will work through them itself.
 
 ### C-86 - `P-212` is built, so `S-49`'s last item and `S-26`'s remainder are both stale
 
-**to** spec · **status** open · **raised** 2026-09-11 · **source** reaching for the one thing
+**to** spec · **status** answered · **raised** 2026-09-11 · **answered** 2026-09-12, recorded in
+`S-104` · **source** reaching for the one thing
 `S-49` says is left and finding it already there
 
 **`S-49` item 6 says `P-212` is *unbuilt, and it is the whole of what is left*.** It landed
@@ -739,7 +781,8 @@ both directions at once.
 
 ### C-84 - `S-88` is built and the gate is green, and `R-7`'s report changed under Sean
 
-**to** spec · **status** open · **raised** 2026-09-11 · **source** building `S-88`, and the
+**to** spec · **status** answered · **raised** 2026-09-11 · **answered** 2026-09-12 · **source**
+building `S-88`, and the
 five promotions behind it
 
 **The gate had been red since `4c40558` and is green: 586 passed, 0 failed**, with
@@ -1108,8 +1151,17 @@ until that lands.
 
 ### C-76 - A new prototype needs two rows in your column before it can join the workspace
 
-**to** spec · **status** open · **raised** 2026-09-09 · **source** Sean asking this lane for a
-prototype of movement across the world
+**to** spec · **status** acted · **raised** 2026-09-09 · **acted** 2026-09-12 · **source** Sean
+asking this lane for a prototype of movement across the world
+
+**Both rows landed and the member line went in the same day.** `docs/architecture.md` has the
+`prototypes/gap-view` row with its dependency and its question, and `docs/prototypes/README.md`
+has its row and status - prototype rows went three to four in both. `prototypes/gap-view` is a
+workspace member, its standalone `[workspace]` is gone, and the gate exits 0 with it in.
+
+**The sequencing cost nothing, which is what this item said it would.** The crate sat outside the
+workspace for three days rather than reddening the gate for a deploy over a file this lane may not
+write, and joining it was one line once the row existed.
 
 **derived from** every workspace member has a row in `docs/architecture.md` -
 `tools/outbox/tests/architecture.rs`, `S-2`
@@ -1145,8 +1197,19 @@ which is worth having before anyone relies on it.
 
 ### C-75 - The boundedness rule `X-9` names already holds, so adopting it costs nothing
 
-**to** spec · **status** open · **raised** 2026-09-08 · **source** `X-9` from the research lens,
-measured against the release rather than taken
+**to** spec · **status** answered · **raised** 2026-09-08 · **answered** 2026-09-12 by `P-430` ·
+**source** `X-9` from the research lens, measured against the release rather than taken
+
+**Adopted, in Sean's words rather than the lens's.** `spec/invariants.md` -> *What a rule may
+cost* now reads: **a rule may ask whether something is absent only where what would hold it
+declares a limit for it.** Verified present, `:160`.
+
+**The measurement this item carried is what that rule reads**, and it cost nothing then and costs
+nothing now: `P-385` deleted the only two `limit 0` rows, so the population the rule governs is
+empty and no existing row breaks it. **This lane did not assert it as a check while it was a
+finding**, because asserting it would have been inventing a rule about a document this lane does
+not write - and now it is a rule, so `petri.rs`'s refusal to draw a `limit` has a sentence behind
+it rather than a judgement.
 
 **derived from** a place is declared bounded, or a zero test on it is refused - `X-9`
 
@@ -1431,7 +1494,8 @@ is filed rather than left in the commit message that made it.
 
 ### C-68 - `game` holds twelve territories and declares no capacity to hold anything
 
-**to** spec · **status** open · **raised** 2026-09-07 · **source** building `P-351` and reaching
+**to** spec · **status** acted · **raised** 2026-09-07 · **acted** 2026-09-12 by `P-433`, which
+carries it to Sean · **source** building `P-351` and reaching
 `may_contain`
 
 **derived from** a kind that declares no capacity contains nothing, and never can -
