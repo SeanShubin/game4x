@@ -62,50 +62,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-451 - a kind declares its traits, and a value declares which trait it is one of
-
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered, from your answer on `P-450` · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
-
-**Sean, 2026-09-12**: *These answers look sound, lets go with them* - `1B`, `2A`, `3A`.
-
-**What `traits.4x` and `kinds.4x` look like.** Traits inside a description are sorted, so `family`
-comes before `name` and `name` before `trait`:
-
-```
-kinds.4x                                      traits.4x
-{kind family:unit name:ark trait:strength}    {trait admits:number held:of-the-kind name:strength}
-{kind name:citizen trait:strength}            {trait admits:0-or-1 held:stored name:laboring}
-{kind name:citizen trait:laboring}            {trait held:stored name:biome}
-{kind name:garrison trait:strength}
-                                              {value name:ice of:biome}
-                                              {value name:jungle of:biome}
-```
-
-**The sentence, to follow *a kind declares which family it is in*:**
-
-> **A kind declares which traits it has, and a value declares which trait it is one of.** So a trait
-> says what it admits and whether it is stored, and says nothing about which kinds carry it; and a
-> trait whose values are kinds names their family instead, because they are already declared. **The
-> thing that belongs to something says so, and the something says only what is true of itself.**
-
-## Why `3A` needs no sentence
-
-**Every column of *Units and structures* is a trait the thing has**, so that table folds into
-`kinds.4x` the way `family` did and there is no `units.4x`. **That follows from the sentence above
-rather than adding to it** - a kind's line carries the values of its traits, which is what a
-description has always been.
-
-## What the test said and did not say, since it is why these three
-
-**`least expressive yet complete` chose `2A` and `3A` and was silent on `1B`.** A value declaring
-its trait keeps `{jungle} -> 1` from being a well-formed description of a thing that cannot exist -
-`adjacency` is a kind and appears **30** times in the expected dump, every biome **0**. And folding
-*Units and structures* removes a copy rather than moving an explosion.
-
-**`1B` rests on `P-428`'s tie-break alone**, because `1A` and `1B` are the same relation written
-from opposite ends and the line count is identical. **It is the weakest of the three and this
-proposal says so** rather than presenting all three as equally settled.
-
 ### P-452 - the traits inside a description are sorted, and only the entries are said to be
 
 **to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed, from the code lane asking which order to write · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
@@ -123,10 +79,30 @@ so the same state is always the same bytes* - **and says nothing about the trait
 **The code lane asked which order to write a declaration in** and could not read the answer out of
 the specification, only out of the existing files. **That is the gap.**
 
-**The sentence, to extend the one that is there:**
+## Rewritten 2026-09-12: the first version could not be promoted without moving a full stop
 
-> **and the traits inside a description sort too**, so a description is one string however it was
-> built
+**It offered a fragment beginning *and***, to extend a sentence that ends in a full stop:
+
+```
+...so the same state is always the same bytes.
+```
+
+**Landing it would have meant changing that stop to a comma**, and `CLAUDE.md` allows a promotion to
+move line wrapping, bullet-versus-paragraph and heading level and **nothing else** - *no other
+punctuation may move.* **So the fragment was unpromotable and this lane only found out by going to
+promote it**, which is the right time but not the cheapest.
+
+**Offered as the whole sentence instead, replacing the one that is there:**
+
+> **Entries are in the order their descriptions sort in, and the traits inside a description sort
+> too**, so the same state is always the same bytes and a description is one string however it was
+> built.
+
+**What is added is *and the traits inside a description sort too* and *and a description is one
+string however it was built*.** Everything else is the sentence as it stands, and the check is that
+the words *entries are in the order their descriptions sort in* and *the same state is always the
+same bytes* survive unchanged.
+
 
 ## Why it matters more than it looks
 
@@ -4644,6 +4620,7 @@ work the release exists to order.
 | P-446, forced unification is a lie that hides complexity                                                                     | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-12 |
 | P-448, a kind declares its family, and `thing` is the one every kind is in                                                   | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-12 |
 | P-449, if I never notice I need it, I don't need it                                                                          | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-12 |
+| P-451, a kind declares its traits, and a value declares which trait it is one of                                             | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
 | P-403, an outbox item's addressing line is not part of what is promoted                                                      | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |

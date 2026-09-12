@@ -74,6 +74,11 @@ notation carries**, beside a command and a state.
 family every kind is in**, and no line says so kind by kind - a kind added tomorrow is a `thing`
 because it is a kind, and is in no other family unless it says so.
 
+**A kind declares which traits it has, and a value declares which trait it is one of.** So a trait
+says what it admits and whether it is stored, and says nothing about which kinds carry it; and a
+trait whose values are kinds names their family instead, because they are already declared. **The
+thing that belongs to something says so, and the something says only what is true of itself.**
+
 **In a recipe the same form is a selector, not a description.** A selector may name a **family**
 rather than a kind, and it may **leave traits out** - `{extractor resource:food}` selects every
 extractor built for food, whatever else is true of it. **A description may do neither**: it names
