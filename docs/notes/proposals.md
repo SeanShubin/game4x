@@ -62,6 +62,71 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-460 - a command binds every place a recipe leaves open
+
+**to** sean · **status** open · **cited** `161a056`, `bb9bba4` · **raised** 2026-09-12 · **kind** entailed, from `P-456` · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**You are right and it is not a decision.** It has to be `A`, for the reason you gave: fungible
+means interchangeable, and **two pioneers in different territories are not interchangeable to the
+player**, because where a thing is is a thing the player can see and act on. `B` needs a way to say
+*which unit*, and `P-456` is the answer that there will never be one.
+
+**Filing it as a decision was this lane applying *it does not decide* where nothing was open.** That
+costs you a decision you do not have to make, which is the one thing the queue exists to prevent.
+
+## What is actually wrong, and it is one word
+
+`spec/console.md` already says a command binds what the recipe leaves open. **The clause is
+singular:**
+
+```
+A command names a recipe and binds what that recipe leaves open: THE PLACE IT ACTS IN,
+and any ingredient or trait value it names with a `$`.
+```
+
+**Counted over the release's twenty-one recipes**, three shapes and only one of them breaks:
+
+| How many places a recipe names | Which                                          | Does the sentence hold |
+| ------------------------------ | ---------------------------------------------- | ---------------------- |
+| none - it acts in one place    | seventeen, including `create labor` and `bear` | **yes**                |
+| one, as `$where`               | `work`, `deploy ark`, `launch ark`             | **yes**                |
+| two, as `$from` and `$to`      | `move`, and only `move`                        | **no**                 |
+
+**`deploy ark` and `launch ark` also reach a second place and are not a fourth shape** - *the orbit
+above `$where`* is worked out from the first rather than left open, so naming the territory names
+the orbit.
+
+## The words
+
+> **A command names a recipe and binds what that recipe leaves open**: every place it leaves open,
+> and any ingredient or trait value it names with a `$`. **A recipe acting in one place need not
+> name it; one acting in two names both, and the command binds both.** **A place worked out from
+> another is not open** - the orbit above a territory is named by naming the territory.
+
+**This replaces the one sentence quoted above**, and the two after it - *There is one command for
+each recipe the player may fire*, and *ending a turn fires the world's* - are untouched.
+
+## What follows, and one of it is not this lane's
+
+**The scenario's move command gains an argument**, which is the code lane's file and not this
+proposal:
+
+```
+{move unit:pioneer territory:2}      becomes      {move unit:pioneer from:1 to:2}
+```
+
+**`S-26` says not to change the scenario's commands under you without saying so**, and this is the
+saying. It is one line of `scenario/commands/play.4x`, in turn 8, and the expected state does not
+change - the pioneer ends in territory 2 either way.
+
+**`from` and `to` are also traits of an `adjacency`, and that is not a collision.** `{adjacency
+from:1 to:2}` is a description and `{move from:1 to:2 ...}` is a command; `spec/console.md` already
+says **where the form stands is what says which it is**.
+
+**And the code lane's test stops being about a gap and becomes a guard.**
+`a_move_command_names_one_place_where_the_recipe_names_two` puts two pioneers on two territories
+adjacent to a third and shows one command describing two moves. After this it is the check that the
+command cannot be written that way.
 ### P-456 - which kinds carry an `id`, and why a fleet is cheap
 
 **to** sean · **status** open · **cited** `036a305`, `a18e94b`, `9d4e6b8` · **raised** 2026-09-12 · **kind** answered, by you, 2026-09-12 · **shape** text and rows · **asks** approval · **into** `spec/logistics.md` -> Containment, and `releases/first-release.md` -> Traits

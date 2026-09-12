@@ -3072,3 +3072,21 @@ and `{move unit:pioneer territory:2}` is a correct description of two different 
 ready unit, which was standing in for an identity the specification might one day have supplied. It
 will not. Filed as `P-460`, asking a decision between naming both places and deriving `$from` -
 and only the first survives `P-456`, because deriving it needs a way to say *which unit*.
+
+## Said 2026-09-12, an entailment is not a decision
+
+Sean, on `P-460`: *Why is this a decision? Doesn't it have to be A because units without ids are
+fungable?*
+
+**He is right and the reason is his.** Fungible means interchangeable, and two pioneers in different
+territories are not interchangeable to the player, because where a thing is is something the player
+can see and act on. `B` - deriving `$from` from the unit - needs a way to say *which unit*, and
+`P-456` is the answer that there will never be one.
+
+**This lane applied *it does not decide* where nothing was open**, which costs him a decision he does
+not have to make - the one thing the queue exists to prevent. `P-460` asks approval now.
+
+**And the question sharpened what is actually wrong**, which the decision framing had obscured:
+`spec/console.md` says a command binds *the place it acts in*, **singular**. Seventeen recipes name
+no place, three name one as `$where`, and `move` names two - so the sentence is short a case rather
+than the game being short a rule.
