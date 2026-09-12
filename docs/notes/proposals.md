@@ -62,6 +62,100 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-458 - what a person types, as an invariant
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** asked for, from your three types · **shape** text · **asks** approval · **into** `spec/invariants.md` -> a new section after *Control without tedium*
+
+**Four fields of the game as it stands today, and how a person reaches each:**
+
+| What is being edited                 | How it is reached                                  | Which of your three |
+| ------------------------------------ | -------------------------------------------------- | ------------------- |
+| `consume` on a recipe's line         | one of five roles, and the five are built in       | **(a)** then (c)    |
+| `{citizen}` in `count {citizen} ≥ 1` | one of the kinds the game holds                    | **(c)**             |
+| `≥` in the same guard                | one of five comparisons, and the five are built in | **(a)** then (c)    |
+| a new kind called `refinery`         | typed, once, when it is created                    | **(b)**             |
+
+**Nothing in that guard was typed, and it is an expression.** `count`, `{citizen}`, `≥` and `1` are
+four choices - the first and third from closed lists that are built in, the second from what the game
+holds, the fourth a number. **That is why (b) can stay at names**: an expression is composed, and
+composing is choosing.
+
+**And the fifth field is the one that fails**, which is `X-31`, open to this lane from the research
+lens since this morning:
+
+| `move`, row 2 | a place *joined to `$from` by an edge the unit crosses* | **nothing offers this** |
+
+**27 of the release's 29 conditions decompose into a trait, a comparison and a value. Two are
+sentences**, and the finding is that the game already has the words for both - `perish`'s condition
+is `unpaid is yes`, and `move`'s is a `require` on an `adjacency`. So the format is not short of
+anything; two rows do not use it. **The invariant below is what makes that a defect rather than a
+preference.**
+
+## The words
+
+> ## What a person types
+>
+> - **Everything in the game is reached one of three ways, and which one is a fact about the thing
+>   rather than about the person reaching it.** A **primitive** is built in and no edit adds one; a
+>   **name** is typed; **everything else is chosen from what the game already holds**
+> - **The primitives are a closed list, and keeping it short is a goal rather than an accident.**
+>   Adding one is a change to the program, so what is on it is decided once and deliberately. It is
+>   the forms an expression may take, the comparisons a guard may make, the roles a line of a recipe
+>   may have, and the words the notation owns
+> - **A recipe is data; the roles its lines may take are primitives.** A kind, a recipe, a cost, a
+>   trait and a value are data however many there are, and what is built in is the small set of
+>   forms they are written in
+> - **A name is compared and never interpreted, and prose is shown to a person and never run.** **A
+>   number is a value rather than a composition**, so whether it is typed or stepped is presentation
+> - **The console parses, and its grammar is the primitive list**, so **typing reaches exactly as far
+>   as choosing and no further**. That is *every rule has a text form, and the text is the rule* read
+>   from the other side. **What is never added is a field whose text the game reads**: one of those
+>   is a programming language arriving a field at a time
+> - **What may be chosen is whatever the game holds, and the offering is derived rather than
+>   listed.** Adding a kind makes it choosable everywhere a kind may be chosen, and nothing is told
+>   about it
+> - **A field that cannot be offered as a choice is the data asking for a primitive**, and that is a
+>   decision rather than a gap: either the list grows by one, deliberately, or the field is said in
+>   words the game already has. **It is never left as a sentence** - prose is a rule no tool can see,
+>   and a rule the specification can state twice is one two readers can disagree about
+
+## The one thing these words had to resolve, rather than leave to you
+
+**The console parses typed text, so *the game never reads what a person typed* would have been false
+the moment it was written** - and that is the sentence your (b) most wants to be. It is resolved the
+only way the existing invariants allow rather than by a choice: *Anything the rule editor can build
+can be written as text, and anything written as text can be opened in the editor* already says the
+two reach equally far. **So the console is not an exception to the rule; it is the rule stated in the
+other direction**, and what it forbids is not parsing but a field whose grammar is open.
+
+## What each bullet is for, and which are yours verbatim
+
+**The first, second and fourth are your three types and your two goals**, in your order. **The other
+four are what makes them bite**, and each answers a question the first three leave open:
+
+- **The third** answers *where does the line fall* - the question you will actually hit, because
+  adding a recipe feels like adding a primitive and is not
+- **The fifth** is the console, above
+- **The sixth** is what keeps (c) from rotting into (a). A list written down goes stale the day a
+  kind is added; a list computed from the state cannot. **This is the property your prototype
+  already has** and the one worth making normative, because it is the difference between an editor
+  that tests the data and one that pictures it
+- **The seventh is the constraint doing its work.** It converts *I want to minimize (a)* from a
+  preference into a procedure: meeting the wall is not a failure, it is the moment a decision is
+  due, and the two ways out are named so that *leave it as prose* is not one of them
+
+## What lands with it, if it lands
+
+**`X-31` becomes a proposal rather than a finding**, because the seventh bullet decides it: two rows
+are prose, the game has the words, and prose is never where it is left. **This lane will file it
+next rather than now**, so the invariant is not read alongside the first thing it judges.
+
+**Nothing in `spec/` contradicts this** - checked over every invariant, `spec/console.md` and
+`spec/interface.md`. The nearest neighbours agree and none of them says this: *Rules are specified
+through the interface. Playing the game never requires writing a program* is the same intent for the
+player and is silent about you, and *the game is data* draws the data-versus-code line without saying
+which of the three ways a person reaches either side.
+
 ### P-455 - three data files, and `kinds.4x` finished
 
 **to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed, from `P-448`, `P-451` and `P-454` · **shape** instruction · **asks** approval · **into** `spec/data/`

@@ -2979,3 +2979,25 @@ stale and has been since before 2026-08-30, which is the surviving half of `C-5`
 ### A field naming a kind is provisional
 
 Sean, 2026-09-10, deciding `P-356`: *yes, a field may name a kind instead of a thing. **This is to get something concrete and runnable. I will want to revisit this decision empirically once we have something running.*** So the rule lands to unblock building, and the measurement that would confirm or overturn it has not been designed. **It is not a question waiting on him** - it is a decision he has flagged as provisional, recorded here so that the flag outlives the conversation.
+
+## Said 2026-09-12, three ways a person reaches the game's data
+
+Sean, evaluating the flexibility of editing:
+
+> I can think of 3 types. (a) There are things I clearly can not edit dynamically, such as the
+> primitives, they must be built in. (b) There are things I must type in, such as names. (c) There
+> are things I can edit by selecting from lists or pressing buttons.
+>
+> I want to minimize (a) and this should be a finite list. I want to limit (b) to names, not
+> expressions, I don't want to create a programming language. I have already started work on this
+> here: `tools/research/editor`
+>
+> Help me describe a constraint/invariant what will guide me in this direction.
+
+**Filed as `P-458`**, into `spec/invariants.md` as a new section. Nothing here is decided until it
+lands.
+
+**The one thing the words had to resolve** is that the console parses typed text, so *typing is
+never reading* would have been false the moment it was written. It is resolved the only way the
+existing invariants allow: the console's grammar **is** the primitive list, and *anything written
+as text can be opened in the editor* already says typing reaches no further than choosing.
