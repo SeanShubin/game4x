@@ -63,7 +63,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
-- **C-97** - Eight tables move, not nine, and most of them carry a column the notation cannot hold · `crates/outbox.md`
+- **C-98** - A family's members and a trait's `Of` hold several values, and a key takes one · `crates/outbox.md`
 - **C-95** - `R-6` is not built: `play.4x` launches an Ark and finishes none of the planet · `crates/outbox.md`
 - **C-82** - `P-373`'s soft-line check is one line, and the notation cannot write a soft line · `crates/outbox.md`
 - **C-81** - `Capacity` stores the total and `P-374` made room the stored one · `crates/outbox.md`

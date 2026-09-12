@@ -363,12 +363,20 @@ fn counts(kind: Kind, thing: &Thing) -> Vec<(&'static str, u32)> {
 /// omission.** *Where things are* gives a unit's tank as a sort of capacity, and the *Traits*
 /// table gives `fuel` as *how much energy its tank holds* - so in this release the tank is a
 /// number on the unit rather than a thing with a description, and a unit contains nothing.
-/// **`game` is the fourth, and it is an assumption rather than a reading - `C-68`.** `P-351`
-/// made `game` a kind and added no row to *Where things are*, so the rule quoted above says a
-/// kind declaring no capacity *contains nothing, and never can* - while `tree` puts twelve
-/// territories inside it and `spec/logistics.md` requires exactly that. **The release and the
-/// code cannot both be read literally**, and drawing the root as a thing that never could hold
-/// would contradict the tree it is the root of. So this proceeds, and the question is filed.
+/// **`game` is the fourth, and `P-433` made it a reading rather than an assumption.**
+/// `spec/logistics.md` -> Containment now says it outright: **the game declares no limit, for
+/// every kind** - *it contains everything, there is no room to record because nothing can be
+/// short of it, and it is the one thing that is in nothing, so the tree has a root that no
+/// rule has to except.*
+///
+/// **This was `C-68` and it stood open for five days.** `P-351` made `game` a kind and added
+/// no row to *Where things are*, so the rule quoted above said a kind declaring no capacity
+/// *contains nothing, and never can* - while `tree` put twelve territories inside it. This
+/// lane proceeded and filed rather than drawing a root that never could hold what it holds.
+///
+/// **The release did not change and did not need to.** *Where things are* was right to omit
+/// the game all along: a kind that declares no limit has no capacity row to write, which is a
+/// different thing from a kind nothing has looked at.
 pub fn may_contain(kind: Kind) -> bool {
     matches!(
         kind,

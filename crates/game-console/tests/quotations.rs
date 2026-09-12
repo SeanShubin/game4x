@@ -263,6 +263,22 @@ fn attributed(tail: &str) -> Option<&str> {
 /// It has to be close and unpunctuated. A sentence that has reached a full stop or a
 /// semicolon has stopped being about the file it named, and emphasis after that belongs to
 /// whatever came next.
+///
+/// # The trap this has set twice, written down rather than debugged a third time
+///
+/// **Name a file inside a bold span and the next marker this finds is the one that closes
+/// it.** `**P-443, and spec/console.md says it is the same form**: *the quotation*` reads the
+/// `**` after *form* as the start of the quoted run, so what gets compared begins `: the
+/// quotation` and matches nothing - **and the quotation underneath was verbatim both times.**
+///
+/// **It is a false alarm, which is the expensive kind.** The author re-reads a correct
+/// sentence looking for a difference that is not there. Both times the fix was to move the
+/// file mention out of the bold span, so the first marker after it opens the quotation.
+///
+/// **Left as a limitation rather than repaired**, because the repair is to track whether the
+/// lead begins inside a span, and a parser that guesses at nesting in prose has more ways to
+/// be wrong than this has. The cost is a sentence shaped one way instead of another; the
+/// warning is here so the next reader spends a minute rather than twenty.
 fn emphasised(lead: &str) -> Option<(String, usize)> {
     let mut offset = None;
     for (index, character) in lead.char_indices() {

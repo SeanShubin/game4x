@@ -61,10 +61,70 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-98 - A family's members and a trait's `Of` hold several values, and a key takes one
+
+**to** spec · **status** open · **raised** 2026-09-12 · **source** writing the first data file under
+rule 7, and reaching the second table
+
+**The first file is built and checked.** `{kind name:citizen}` is `P-443`'s own example and
+nothing about it was this lane's to decide, so `crates/game-console/src/declare.rs` writes the
+*Kinds* file from the release and `tests/declare.rs` compares the two **in both directions** - a
+kind in the release and not the file would go missing when the table is deleted, and one in the
+file and not the release would be a word this lane invented, which `C-49` says a transcription
+may never do. Twenty-one lines: the three `P-443` names, then eighteen.
+
+**The next two tables stop on the same cell.** `spec/console.md` gives a key one value -
+*`resource:food` says which resource* - and these hold several:
+
+- ***Families*, `Members`**: `unit` is *ark, pioneer*; `resource` is *food, metal, energy*;
+  `place` is *territory, orbit*. And `thing` is **every kind above**, which is not a list at all
+  but a rule about the table it sits in.
+- ***Traits*, `Of`**: `defending` is *a citizen or a unit*; `strength` is *citizen, garrison, ark,
+  pioneer*.
+- ***Traits*, `Values`**: `resource` is *one of the resources*, which names a family rather than
+  listing values.
+
+**Three shapes this lane can see, and it is not choosing between them.**
+
+- **A line per pair** - `{family name:unit member:ark}` and `{family name:unit member:pioneer}`.
+  There is precedent: `P-334` made an adjacency a **kind** rather than a pair of fields, for the
+  same reason. It makes `thing`'s *every kind above* eighteen lines that repeat what the Kinds
+  file already says.
+- **A joined value** - `{family name:unit members:ark-pioneer}`. `spec/console.md` joins the words
+  of **a name** with dashes; whether a list is a name is exactly the question.
+- **A rule rather than a list**, so `thing` stays *every kind above* in some form, and the file
+  says which families are enumerated and which are derived.
+
+**This lane is not guessing at it, for the reason `C-49` gave**: the content of a data file that
+becomes canonical is the specification's, and a shape invented here and transcribed there is a
+promotion done by the wrong lane. **The file that is decided is written; the ones that are not are
+this item.**
+
+**Nothing is blocked.** *Kinds* is done, and the two tables `C-97` measured as data throughout -
+*Biomes* and *Units and structures* - hold one value per cell and need no answer to this. What
+they need is a different decision: they declare **facts about kinds** rather than vocabulary, and
+`P-443` settled the vocabulary case only.
+
+---
+
 ### C-97 - Eight tables move, not nine, and most of them carry a column the notation cannot hold
 
-**to** spec · **status** open · **raised** 2026-09-12 · **source** rule 7 and `S-110`, working out
-how the release's tables split across files before writing a loader for them
+**to** spec · **status** answered · **raised** 2026-09-12 · **answered** 2026-09-12 by `P-443` ·
+**source** rule 7 and `S-110`, working out how the release's tables split across files before
+writing a loader for them
+
+**Answered, and the notation did not have to move.** `P-443`: *a file may declare the vocabulary
+rather than use it, and it is written in the same form* - `kind`, `trait` and `family` are
+themselves kinds, so a declaration is an ordinary description and the rule this item asked about
+needs no exception. **No second form and no second parser**: `state::declarations` reads a
+declaration with the same `parse` a state uses, differing in what a **file** is rather than in
+what a line is.
+
+**The count of eight is in the record**, and the ninth was the fold-together that item named.
+
+**What is built on it**: `declare::kinds` writes the *Kinds* file from the release, and
+`tests/declare.rs` compares the two in both directions. **What is not**: `C-98`, the cells that
+hold several values.
 
 **Counted, not taken.** Nine sections of `releases/first-release.md` contain a table. **One of
 them is not the game's data**: the table under *Scope* -> *Territory resources* is **this
@@ -1557,9 +1617,20 @@ is filed rather than left in the commit message that made it.
 
 ### C-68 - `game` holds twelve territories and declares no capacity to hold anything
 
-**to** spec · **status** acted · **raised** 2026-09-07 · **acted** 2026-09-12 by `P-433`, which
-carries it to Sean · **source** building `P-351` and reaching
-`may_contain`
+**to** spec · **status** answered · **raised** 2026-09-07 · **answered** 2026-09-12 by `P-433` ·
+**source** building `P-351` and reaching `may_contain`
+
+**Answered by a sentence rather than a row, and the release did not change.**
+`spec/logistics.md` -> Containment: **the game declares no limit, for every kind** - *it contains
+everything, there is no room to record because nothing can be short of it, and it is the one
+thing that is in nothing, so the tree has a root that no rule has to except.*
+
+**So *Where things are* was right to omit the game all along.** A kind that declares no limit has
+no capacity row to write, which is a different thing from a kind nobody has looked at - and this
+item was open for five days because the two are the same bytes from outside.
+
+**Nothing in the code changed.** `may_contain` already admitted `Kind::Game`; what was stale was
+its comment calling that an assumption.
 
 **derived from** a kind that declares no capacity contains nothing, and never can -
 `releases/first-release.md`, *Where things are*

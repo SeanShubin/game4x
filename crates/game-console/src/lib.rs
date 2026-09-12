@@ -17,6 +17,7 @@
 
 pub mod binding;
 pub mod browse;
+pub mod declare;
 pub mod dump;
 pub mod fired;
 pub mod grammar;

@@ -110,6 +110,76 @@ fn write_entry(out: &mut String, entry: &Entry, depth: usize) {
     }
 }
 
+/// The declarations in a file that declares the vocabulary rather than using it.
+///
+/// **`P-443` made this the same form rather than a second one.** `spec/console.md`: *a file
+/// may declare the vocabulary rather than use it, and it is written in the same form. `kind`,
+/// `trait` and `family` are themselves kinds, so a line that declares one is a description
+/// like any other and the rule above needs no exception. **A declaration is the third thing
+/// the one notation carries**, beside a command and a state.*
+///
+/// # Why this is a sibling of [`read`] and not a second reader
+///
+/// **They differ in what a file is, not in what a line is.** A state is a tree with quantities
+/// and indentation; a declaration file is a flat list of descriptions and neither. So the two
+/// disagree about the file and agree about the line - and the line is [`parse`], which they
+/// share. `Q-67` is what happens when one notation gets two readers: `command_language`
+/// honoured a trailing comment and this did not, nobody wrote the divergence, and each went on
+/// passing its own tests.
+///
+/// **A declaration carries no quantity**, because nothing is being counted: `{kind name:citizen}`
+/// says the word exists, and asking how many would be asking how many kinds of citizen there
+/// are. A line that carries one is refused rather than ignored.
+pub fn declarations(text: &str) -> Result<Vec<Description>, String> {
+    let mut out = Vec::new();
+    for (at, line) in text.lines().enumerate() {
+        let line_number = at + 1;
+        let tokens = tokenize(line, line_number);
+        if tokens.is_empty() {
+            continue;
+        }
+        if let Some(quoted) = tokens.iter().find(|token| token.text.contains('"')) {
+            return Err(format!(
+                "line {line_number}: `{}` is quoted - `P-252`: nothing in a data file is, and \
+                 a name that needs two words joins them with dashes",
+                quoted.text
+            ));
+        }
+        // **Flat, so an indented line is a mistake rather than a nesting.** A declaration is
+        // not inside anything - the vocabulary has no tree - and silently accepting an indent
+        // would let a file look like a state and read as a list.
+        let indent = tokens[0].span.from.column - 1;
+        if indent != 0 {
+            return Err(format!(
+                "line {line_number}: indented {indent}, and a declaration is in nothing - a \
+                 file of declarations is a list rather than a tree"
+            ));
+        }
+        let (description, quantity) = parse(&tokens, line_number)?;
+        if quantity.is_some() {
+            return Err(format!(
+                "line {line_number}: a declaration carries no quantity - it says the word \
+                 exists, and how many would be asking how many kinds of one kind there are"
+            ));
+        }
+        out.push(description);
+    }
+    Ok(out)
+}
+
+/// Declarations back as a file, one to a line.
+///
+/// **The same bytes the reader takes**, which is what makes the round trip a check rather than
+/// two functions that happen to agree today.
+pub fn declared(rows: &[Description]) -> String {
+    let mut out = String::new();
+    for row in rows {
+        out.push_str(&row.written());
+        out.push('\n');
+    }
+    out
+}
+
 /// Read a state back from its data file.
 ///
 /// **The check the release asks for is that this is the inverse of [`written`]** -
