@@ -62,7 +62,47 @@ Two limits Claude holds itself to:
 
 ## Open
 
-*Nothing is open. Everything filed has been decided.*
+### P-441 - an Ark's `Fuel` cell should be blank, and it is about to be transcribed
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed, from `S-86` item 2 and the code lane's `C-79` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Units and structures
+
+**`spec/units.md`**: *a mobile unit that moves in orbit takes its energy directly from the sun. **It
+stores no fuel**, and moving costs it nothing.*
+
+**An Ark moves in orbit** - *Units and structures* gives its `Crosses` as **orbit border** - **and
+the same table gives it `Fuel` 2.** The two cannot both hold.
+
+**A blank is not a zero**, which the release already says elsewhere, so blanking the cell is the
+faithful edit rather than zeroing it: an Ark has no tank, where a garrison has a strength of nought.
+
+**The row, replacing the Ark's cell for cell:**
+
+> | **ark** | 2 | | | 3 metal, 12 energy, 2 citizens | 3 | orbit border | a Yard | yes | yes |
+
+## Why now rather than when it bites
+
+**This has been `S-86` item 2 since 2026-09-10 and nothing broke**, because no Ark moves between
+orbits in the first release - the scenario's one `move` is a pioneer, counted at 1 of 1.
+
+**What changed today is `P-440`.** The release's tables are about to be transcribed into the
+specification's data files and become the source every copy is made from. **A wrong cell transcribed
+is a wrong cell with a longer life**, and the check that keeps the files honest would then hold them
+to it faithfully.
+
+**The code lane cannot do its half until this lands.** `C-79`: `prototypes/kinds` holds
+`fuel: Some(2)` for the ark and the two are compared cell for cell, so blanking one without the
+other fails the comparison. **It says it will change its half in the same breath.**
+
+## One thing this does not fix, which is the other half of `C-79`
+
+**`move` charges every unit 1 energy**, and `spec/units.md` says orbital movement *costs it nothing*.
+**So an Ark that moved would pay from a tank it does not have.** That is a second defect and a larger
+one - it needs `move` to distinguish the two kinds of movement, which the recipe table cannot say
+today.
+
+**It is not folded in here** because this row is one cell and that is a rule. **Filed next**, unless
+you would rather have them together.
+
 
 ## Addressed to other perspectives
 
