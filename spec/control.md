@@ -18,22 +18,17 @@ How a territory is claimed and held. Weapons and their ranges are in [combat](co
 
 ## Producing force
 
-- A territory has at most one garrison, because it represents the organisation of the whole
-  territory rather than a presence in one part of it.
-- A citizen can fight but cannot organise. **Coordinated, it musters its force each turn;
-  uncoordinated it musters none**
-- A garrison has no force of its own. It does one thing: it coordinates the citizens of that
-  territory, so that each of them musters. **It does this by existing, and nothing has to work
-  it.**
-
-## Coordination
-
 - **Force is mustered each turn and does not outlast it.** What a territory presents is what it
   mustered this turn, and nothing accumulates
-- Citizens are capable of violence but not of coordination. **Without something to coordinate them
-  they muster nothing**
-- Coordination is imposed on citizens by a structure, such as a garrison, or by a military unit,
-  which carries coordination with it rather than needing a place.
+- A citizen can fight but cannot organise. **It musters no force unless something coordinates it**
+- A garrison coordinates the citizens of its territory, so that **each of them musters one force
+  each turn**. It has no force of its own, and **it does this by existing** - nothing has to work
+  it
+- **What a citizen spends to muster is its own**, and is not what it spends to labor or to bear
+- **A unit is organised force in itself**, and musters its own force needing nothing to coordinate
+  it
+- A territory has at most one garrison, because it represents the organisation of the whole
+  territory rather than a presence in one part of it
 
 ## Gaining and holding ground
 
@@ -42,8 +37,9 @@ How a territory is claimed and held. Weapons and their ranges are in [combat](co
 - Holding a territory takes force equal to its force of nature
 - Should the force in a territory fall below its force of nature, nature takes it back. Its entire
   population perishes, and every unit on it is destroyed
-- A military unit is organised force in itself, so several brought to one place sum. Taking a
-  territory uses the organised force brought to it, and several units may take together
+- Several units brought to one place sum their force. Taking a territory uses the organised force
+  brought to it, and several units may take together
+
 
 ## Winning
 

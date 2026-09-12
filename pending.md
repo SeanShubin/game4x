@@ -28,6 +28,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **P-422** - `21deef5` R-6 is not built, recorded with the numbers, and P-422 for the question it pointed at · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
+- **X-29** - `38e43f0` X-29 re-measured confirms the six, my classification reason was backwards, and P-429 · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 

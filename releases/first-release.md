@@ -385,9 +385,12 @@ only one who can move them.
 **to** code - **status** open - **cited** `faafb5f`, `2f38241`, `53bd58d`, `58c8b4a`, `92786a9`, `d7ed1e8` - **measured 2026-09-11 and it is not built**, where this line said *nothing in the code blocks it* on 2026-09-05
 
 - **In** - `spec/control.md`, *a player wins by launching an Ark from a fully exploited planet*
-- **Vetted when** - A scenario reaches a fully exploited planet and launches an Ark, on the
-  definitions and the machinery of the main scenario - **which I have vetted, and which is what
-  makes this one worth trusting.**
+- **Vetted when** - the scenario takes a first territory from orbit, takes a second by land, and
+  launches an Ark; and **every recipe in the release fires at least once while it runs**, measured
+  by what fired rather than by what the file says. **It does not win, and that is the win condition
+  working**: `spec/control.md` gives victory for launching from a fully exploited planet, and this
+  planet is not one
+
 - **Nothing in the code blocks it, as of 2026-09-05.** `C-7` was withdrawn on the 31st; `C-11` landed in `05097a6` and a territory's stores carry; `C-9` landed in `ec96bc9` and *fully exploited* is decidable from a territory alone. **What is now in question is not whether it can be played but how much of it has to be** - `P-422`.
 - **Measured 2026-09-11, and the first half of the *vetted when* does not hold.** `C-95`, in
   `d7ed1e8`: running `setup.4x`, `{start}` and `play.4x` and asking the model gives **twelve
