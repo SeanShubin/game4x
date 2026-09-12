@@ -62,30 +62,53 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-432 - `force` is a kind in three recipe rows and *Kinds* declares seventeen without it
+### P-434 - `keeps` is declared *of the kind* and `age` lowers it for one thing
 
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed, from the code lane's `C-93` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Kinds · from `C-93`
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed, from the code lane's `C-96` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Traits · from `C-96`
 
-**Your decision on `P-425` is what makes this one live rather than closed.** You chose the token
-model, so force stays a thing that is made and swept - and a thing the recipes name has to be a
-kind the release declares.
+**`P-431`, which you promoted this afternoon, is what made this visible.** `age` is `require 1 thing
+keeps at least 1` then `put thing keeps one less` - and `releases/first-release.md:132` declares
+`keeps` **of the kind**. A trait of the kind is the same for every thing of that kind, so lowering
+it for one either lowers it for all food, or it is not of the kind.
 
-**Three rows carry `force` in the `Kind` column and *Kinds* declares seventeen kinds, none of them
-`force`.** Counted from the table, not recalled: `muster` produces *that citizen's force*, `stand`
-produces *that unit's force*, `discard` consumes 1.
+**The count that settles which.** Of the five traits `P-407` marked *of the kind* - `force`, `fuel`,
+`upkeep`, `keeps`, `movable` - **`keeps` is the only one any recipe writes**, counted over every
+Traits cell in the *Recipes* table. `force`, `fuel` and `movable` are written by no recipe at all;
+`perish` reads `unpaid`, which is derived. **One of five, and it is the one `age` decrements.**
 
-**The code lane cannot write the rows without it and built under a stated assumption**, because the
-escape hatch that let the two halves disagree is gone: a recipe row names a declared kind or a
-declared family and there is no way to write one that is neither. **`prototypes/kinds` has a
-`Kind::Force` deliberately outside the declared set**, and a test asserts the undeclared set is
-exactly `["force"]` - so the day this row lands, that assertion fails and says so.
+**And the release already calls it an initial value in its own words.** One line under the Traits
+table: *food is made with `keeps` 1.* **A trait of the kind is not something a thing is made with**
+- it simply is, for every thing of that kind.
 
-**This is `P-192`'s shape exactly**, which is why it is `entailed`: `territory` sat in four recipe
-rows and in no table for as long as the recipes existed.
+**The cell, in the *Traits* table's `keeps` row:**
 
-**The row, into *Kinds*, after `labor`:**
+> | **keeps** | thing | the number of turns it will last | stored |
 
-> | **force** | what a territory presents to hold or take ground; mustered each turn and swept at its end |
+## Why this rather than rewriting `age` and `spoil`
+
+**`P-428` selects it.** Every other count a thing spends and gets back - `moving`, `laboring`,
+`working`, `bearing`, `defending` - is **stored**, and `age` is now written in exactly their idiom
+after `P-431`. **Stored is the uniform form; *of the kind* is the exception**, and the exception is
+the one cell that makes `P-431`'s own rows do nothing.
+
+**The reason not to, if you see one**: `age` and `spoil` could instead be rewritten to ask nothing
+about a single thing, which is the other way `C-96` names. That keeps `keeps` a fact about food and
+gives expiry a different mechanism.
+
+## Two things this costs, so neither is a surprise
+
+**The dump grows.** `P-417` says a description carries the traits of the thing and not of its kind,
+so a stored `keeps` appears in descriptions - and **every distinct value splits a fleet into another
+entry**. Food with two turns left and food with one become two lines where they are one today.
+
+**Nothing is presently wrong, and that is the uncomfortable part.** Food is the only kind with a
+declared `keeps` and its value is **1**, so *every food* and *this food* are the same set and the
+one-turn behaviour comes out right under either reading. **The defect cannot show at the only value
+the release declares** - which is why neither lane saw it while `age` was being rewritten, and is
+`X-30`'s shape one level down.
+
+**The code lane is building under the stored reading** and says so, because it is the only one under
+which `P-431`'s rows do anything.
 
 ## The second half, which is a question rather than a row
 
