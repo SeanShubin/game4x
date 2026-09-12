@@ -8,7 +8,31 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Decided 2026-09-12, the specification owns the data, in the data format
+
+*Lets put the data in the specification, in the format of the data file, so the specification now
+owns it. The data is copied as needed.*
+
+**Answering `P-439`, which was the code lane's `C-49` put to him six days late, with a third order
+neither lane offered.** Both offered orders ended with the data in a file outside the specification
+and differed only in when the release was emptied - so both had a window in which the data existed
+twice. **His answer has no window**: the file is in `spec/`, he authors it, and the release's tables
+become generated. **Nothing is transcribed, so the transcription problem does not arise.**
+
+**Two halves of it are already written down.** `spec/invariants.md` says the data lives in a data
+file, *not a presentation file such as markdown or HTML*, and that *the data may be replicated in the
+presentation layer, and no replication is canonical* - which is *copied as needed*, stated before he
+said it. **One clause contradicts him and `P-440` carries it**: rule 7's *where it can be tuned
+without touching the specification*.
+
+**What this lane got wrong in `P-439` is worth keeping.** It offered two orders and framed the
+question as *which order*. **The question was where the data lives**, and both options had answered
+that the same way without noticing they had. **An option set that shares an unexamined premise is a
+question with a hidden answer in it** - and this lane wrote the premise into both bullets without
+seeing it, having spent the proposal arguing about the sequencing on top.
+
 ## Decided 2026-09-12, the garrison stays the condition, and the design that was tried instead
+
 
 *I am considering having citizens muster their strength each turn automatically, regardless of
 whether or not the garrison is present. The citizens default strength is 0. The garrison increases

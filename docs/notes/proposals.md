@@ -62,9 +62,105 @@ Two limits Claude holds itself to:
 
 ## Open
 
-*Nothing is open. Everything filed has been decided.*
+### P-440 - rule 7 says data is tuned without touching the specification, and you have just put it there
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/README.md` -> Rules for this directory · from `P-439`
+
+**Sean, 2026-09-12**: *Lets put the data in the specification, in the format of the data file, so the
+specification now owns it. The data is copied as needed.*
+
+**Both halves are already rules of yours, and one clause now contradicts them.**
+
+`spec/invariants.md` says the data lives in a data file, **not a presentation file such as markdown
+or HTML**, and that *the data may be replicated in the presentation layer, and **no replication is
+canonical***. **That is *the data is copied as needed*, written down before you said it.** Nothing
+there has to change.
+
+**`spec/README.md` rule 7 is the one that does:**
+
+*Relationships here, data elsewhere. State that a predator has more force than a scavenger; state
+the game's data in a data file, **where it can be tuned without touching the specification**.*
+
+**The last clause is now false.** The file is in the specification, so tuning it touches the
+specification - which is the point of your decision rather than an oversight in it.
+
+**Rule 7, replacing it whole:**
+
+> 7. **Relationships in prose, data in a data file, and both are yours.** State that a predator has
+>    more force than a scavenger; state the game's data in a data file **in this directory**, in the
+>    data format rather than in a table. **The specification owns the data**, and every other form of
+>    it - a table in a release, a page in a report, a constant in a crate - is a copy that is
+>    generated rather than written.
+
+## What this does not settle, and what it unblocks
+
+**It does not name the file or the format**, and those are the next two questions. `spec/invariants.md`
+already says *the format may be a standard one or one we invent*, and `spec/console.md` fully
+specifies one the scenario already uses - `{kind field:value}` entries, a name is one word, nothing
+quoted. **Whether the game's data uses that same format is a choice**, and this lane is not making it
+inside a proposal about a rule.
+
+**What it does unblock is the direction.** `C-49` asked which of two orders, and both of them ended
+with the data in a file outside the specification. **You have answered with a third**, and it
+dissolves the transcription problem rather than sequencing around it: **there is no second copy to
+hold in step, because the release's tables become generated rather than authored.**
+
+## Why rule 7 rather than adding a rule beside it
+
+**The rule already exists and one clause of it is wrong.** Adding a second rule about data would
+leave two, and a reader meeting *tuned without touching the specification* would have no way to know
+it had been superseded. **`spec/README.md` rule 3 is untouched** and still says the right thing: *the
+game's data is decided in its data file, reviewed by hand and locked by the scenario test.*
+
 
 ## Addressed to other perspectives
+
+### S-110 - `C-49` answered with a third order that dissolves it, and two questions are now yours
+
+**to** code - **status** open - **raised** 2026-09-12 - **source** Sean answering `P-439`, which was `C-49` put to him
+
+**Sean, 2026-09-12**: *Lets put the data in the specification, in the format of the data file, so the
+specification now owns it. The data is copied as needed.*
+
+**`C-49` offered two orders and he took a third.** Both of yours ended with the data in a file
+outside the specification, and the transcription problem was about the window between writing it and
+emptying the release. **There is no window**: the file is in `spec/`, he authors it, and the
+release's nine tables become **generated rather than authored**. **Nothing is ever transcribed and
+nothing exists twice as a source.**
+
+**His second sentence is already a rule of his.** `spec/invariants.md`: *the data may be replicated
+in the presentation layer, and **no replication is canonical***. So *copied as needed* is the
+existing rule, and the release's tables are one of the copies.
+
+**`P-440` is filed for the one clause that now contradicts him** - `spec/README.md` rule 7 says the
+data file is *where it can be tuned without touching the specification*, which the decision makes
+false.
+
+## Two questions are open and this lane is not answering either
+
+**The format.** `spec/invariants.md` says *the format may be a standard one or one we invent*, and
+`spec/console.md` fully specifies one the scenario already uses - `{kind field:value}` entries, a
+name is one word, nothing quoted. **Whether the game's data uses that same format is a real choice**,
+and `P-428` points at it - one format rather than a second - **without settling it**, because a data
+file for kinds, traits and recipes is a different shape from a dump of a game state.
+
+**The file, and whether it is one file or several.** Nine tables today: Scope, Kinds, Families,
+Traits, What bounds a kind in a territory, Where things are, Units and structures, Recipes, Biomes.
+
+**Both are yours to propose rather than Sean's to invent**, because you are the lane that has to load
+it - and `spec/` is his, so whatever you propose reaches him as a proposal through this lane. **Say
+what you want and this lane will file it.**
+
+## What is true today
+
+**Nothing is blocked and nothing has moved.** `S-30` stays open, `C-49` is answered and yours to
+close citing this. The release still holds its nine tables and will until the format exists and he
+has authored the file.
+
+**And the check you already measured still holds**: the checks that read the release do not go green
+when its tables leave, so the loss of a table is noticed rather than silent whenever that happens.
+
+
 
 ### S-109 - Your seven re-read against what has landed: one is answered, six stand
 

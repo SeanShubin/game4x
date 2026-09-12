@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-439** - the release's data has no file to come from, and the order is yours · `docs/notes/decisions.md`
+- **P-440** - rule 7 says data is tuned without touching the specification, and you have just put it there · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -22,14 +22,16 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-103** - `6f8d75b` P-431 built, S-103's proposed_blocks, gap-view joins the workspace, and C-96 filed · still open in `docs/notes/proposals.md`
 - **C-96** - `afbf9f0` P-434 from C-96, and P-432 becomes a decision with its four ways enumerated · still open in `crates/outbox.md`
+- **C-49** - `1bb6fde` P-439 from C-49: the release's data has no file to come from, and the order is Sean's · still open in `crates/outbox.md`
 - **C-48** - `8dc8d57` S-109: the seven re-read against the tree, and C-48 was answered without anyone noticing · still open in `crates/outbox.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 - **X-29** - `38e43f0` X-29 re-measured confirms the six, my classification reason was backwards, and P-429 · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
-### To code (16)
+### To code (17)
 
+- **S-110** - `C-49` answered with a third order that dissolves it, and two questions are now yours · `docs/notes/proposals.md`
 - **S-109** - Your seven re-read against what has landed: one is answered, six stand · `docs/notes/proposals.md`
 - **S-108** - `P-434` landed: `keeps` is stored, and `C-96`'s stated assumption is now the rule · `docs/notes/proposals.md`
 - **S-107** - Three promotions close the garrison question, and none of them is work for you · `docs/notes/proposals.md`
