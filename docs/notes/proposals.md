@@ -62,7 +62,64 @@ Two limits Claude holds itself to:
 
 ## Open
 
-*Nothing is open. Everything filed has been decided.*
+### P-465 - ten cells still say `yes` where `traits.4x` says a number
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** cleanup, owed by `P-457` and not filed with it · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Traits, and Units and structures
+
+**`P-457` landed *nothing in the game is two-valued anywhere* and ten cells still say it is:**
+
+```
+spec/data/traits.4x    {trait admits:number kept:kind name:movable}
+the release, Traits    | **movable** | whatever moves | yes or no | of the kind |
+the release, Units     | **ark**     | ... | Movable: yes |
+```
+
+**`P-457` should have carried this and did not.** A promotion that makes something else stale files
+the cleanup immediately; this one did not, and the two files have disagreed since `b7fc6a6`.
+
+**And no check catches it**, which is worth knowing rather than assuming: the code lane's comparison
+derives `admits` from the release's own cell, so both sides read the same stale words and agree.
+**A check whose two sides come from one source cannot see that source move.**
+
+## The cells
+
+**Eight in *Traits*, where `Values` stops describing this release's data and says what the trait
+admits:**
+
+| Trait         | Values now | Values after |
+| ------------- | ---------- | ------------ |
+| **moving**    | 0 or 1     | a number     |
+| **laboring**  | 0 or 1     | a number     |
+| **working**   | 0 or 1     | a number     |
+| **bearing**   | 0 or 1     | a number     |
+| **defending** | 0 or 1     | a number     |
+| **surplus**   | yes or no  | a number     |
+| **unpaid**    | yes or no  | a number     |
+| **movable**   | yes or no  | a number     |
+
+**`0 or 1` was this release's maxima showing through**, which is `P-457`'s own finding, and `P-459`
+put the maxima where they belong - the *Readies* column, `bearing 1, defending 1, laboring 1`. **The
+range is not a fact about the trait and is no longer stated as one.**
+
+**Two in *Units and structures*, where `Movable` is of the kind and its value is a number:**
+
+| Thing       | Movable now | Movable after |
+| ----------- | ----------- | ------------- |
+| **ark**     | yes         | 1             |
+| **pioneer** | yes         | 1             |
+
+**Every other cell of that column is empty and stays empty**, which is a blank rather than a zero -
+the file already says a blank is not a zero.
+
+## The check
+
+**`traits.4x` is re-derived after the edit and must come out byte-identical.** The derivation reads
+the `Values` cell, so `a number` and `0 or 1` both give `admits:number` - **the file does not move,
+which is the point**: this changes what the release *says* and not what it means, and the assertion
+is that nothing downstream shifts.
+
+**And `surplus` is in no data file**, being derived and named by no recipe row, so its cell is
+corrected for the reader rather than for any generator.
 
 ## Addressed to other perspectives
 
