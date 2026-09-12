@@ -107,6 +107,59 @@ fn released_table() -> BTreeMap<u32, Vec<(Resource, u32, u32)>> {
     table
 }
 
+/// What one recipe, named, consumes - as `(amount, what)` pairs.
+///
+/// **Separate from [`released_cost`] because not every figure is a cost.** `cost::MOVE_CELLS`
+/// is what `move` consumes, and `move` produces nothing - so a reader that finds a recipe by
+/// what it makes cannot reach it, and for as long as this test had only that reader the
+/// constant stood against nothing. `Q-83`.
+fn recipe_consumes(named: &str) -> Vec<(u32, String)> {
+    let text = std::fs::read_to_string(
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../releases/first-release.md"),
+    )
+    .expect("the release document");
+    let rows = game_console::recipes::body_under(&text, "## Recipes");
+    assert!(
+        !rows.is_empty(),
+        "the Recipes table parsed to nothing, so every figure would read as zero"
+    );
+    let role_at = game_console::recipes::column_of(&text, "## Recipes", "Role");
+    let qty_at = game_console::recipes::column_of(&text, "## Recipes", "Qty");
+    let kind_at = game_console::recipes::column_of(&text, "## Recipes", "Kind");
+
+    let mut name = String::new();
+    let mut out = Vec::new();
+    let mut seen = false;
+    for row in &rows {
+        if let Some(next) = row
+            .first()
+            .map(|cell| game_console::recipes::plain(cell))
+            .filter(|cell| !cell.is_empty())
+        {
+            name = next;
+        }
+        if name != named {
+            continue;
+        }
+        seen = true;
+        if row.get(role_at).map(String::as_str) != Some("consume") {
+            continue;
+        }
+        let (Some(qty), Some(kind)) = (row.get(qty_at), row.get(kind_at)) else {
+            continue;
+        };
+        if let Ok(amount) = qty.trim().parse::<u32>() {
+            out.push((amount, kind.trim().to_string()));
+        }
+    }
+    assert!(
+        seen,
+        "the release has no recipe called `{named}`, so this read nothing and would have \
+         compared a constant against an absence"
+    );
+    out
+}
+
 /// What the release says a thing costs to produce, as `(amount, what)` pairs.
 ///
 /// Read from the release for the same reason the node table is: these are tuning figures that
@@ -377,23 +430,90 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
     // times; the split lived in the definitions and nowhere else.
     assert_eq!(cost_of("extractor", "labor"), cost::EXTRACTOR_LABOR);
     assert_eq!(cost_of("extractor", "metal"), cost::EXTRACTOR_METAL);
+    assert_eq!(cost_of("store", "labor"), cost::STORE_LABOR);
+    assert_eq!(cost_of("store", "metal"), cost::STORE_METAL);
+
+    // **`move` consumes and produces nothing, so `released_cost` cannot reach it** - `Q-83`.
+    // `MOVE_CELLS` is what a move costs and `move` makes no thing, so the reader that finds a
+    // recipe by what it produces looks for a recipe that makes a `move` and finds none.
+    assert_eq!(
+        recipe_consumes("move")
+            .iter()
+            .find(|(_, what)| what == "energy")
+            .map(|(amount, _)| *amount),
+        Some(cost::MOVE_CELLS),
+        "`move` consumes energy and `MOVE_CELLS` is how much"
+    );
+
+    // **The population is the constants, not a list of names** - `Q-83`, and it is the half of
+    // that finding worth keeping. This checked ten of thirteen and said so with a figure summed
+    // over the same six names that were missing `store`: **ten was ten because the list was six
+    // long.** A count over a hand list can only ever confirm the hand list.
+    //
+    // **So the module is read and every constant in it must be named here.** A constant added
+    // to `game::cost` with nothing comparing it against the release fails at once, which is the
+    // failure this whole test exists to have.
+    let model = std::fs::read_to_string(
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../crates/game-model/src/game.rs"),
+    )
+    .expect("the model");
+    let module = model
+        .split_once("pub mod cost")
+        .expect("the model has a `cost` module")
+        .1;
+    let module = &module[..module.find("\n}").expect("the module ends")];
+    let constants: Vec<&str> = module
+        .lines()
+        .filter_map(|line| line.trim().strip_prefix("pub const "))
+        .filter_map(|rest| rest.split(':').next())
+        .collect();
+    assert_eq!(
+        constants.len(),
+        13,
+        "thirteen constants in `game::cost`; the module has {} ({constants:?})",
+        constants.len()
+    );
+    let mine = std::fs::read_to_string(file!()).unwrap_or_else(|_| {
+        std::fs::read_to_string(
+            PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/first_release.rs"),
+        )
+        .expect("this file")
+    });
+    let unchecked: Vec<&&str> = constants
+        .iter()
+        .filter(|name| !mine.contains(&format!("cost::{name}")))
+        .collect();
+    assert!(
+        unchecked.is_empty(),
+        "these are in `game::cost` and nothing here compares them with the release: \
+         {unchecked:?}"
+    );
+
+    // Every figure the release states for a thing this model has a constant for. It checked
+    // six of eleven when the table had six; the table grew and the test did not, so a garrison
+    // and an extractor gained a metal cost that nothing compared against anything.
+    //
     // **A garrison had two figures here and has none** - `C-106`. `P-466` removed the *Costs
     // to produce* column as the Recipes table said twice, which it was for every other thing;
     // no recipe is named for a garrison, so its two figures were the one place they were
-    // stated and they are now stated nowhere. `cost::GARRISON_LABOR` and
-    // `cost::GARRISON_METAL` are deleted rather than left asserting against nothing - **the
-    // model never charged them**, which is what `P-467` found and why its withdrawal did not
-    // change the game.
-    //
-    // **Ten figures, not twelve, and the two that left are named.** A count that moved with no
-    // reason recorded is how `C-9` went stale.
-    let figures: usize = ["citizen", "garrison", "extractor", "yard", "ark", "pioneer"]
-        .into_iter()
-        .map(|thing| released_cost(thing).len())
-        .sum();
+    // stated and they are now stated nowhere. `cost::GARRISON_LABOR` and `cost::GARRISON_METAL`
+    // are deleted rather than left asserting against nothing - **the model never charged
+    // them**, which is what `P-467` found and why its withdrawal did not change the game.
+    let figures: usize = [
+        "citizen",
+        "garrison",
+        "extractor",
+        "yard",
+        "store",
+        "ark",
+        "pioneer",
+    ]
+    .into_iter()
+    .map(|thing| released_cost(thing).len())
+    .sum();
     assert_eq!(
-        figures, 10,
-        "ten figures across the recipes named for a thing; this checks each one by name"
+        figures, 12,
+        "twelve figures across the recipes named for a thing; this checks each one by name"
     );
     assert!(
         released_cost("garrison").is_empty() && released_cost("citizen").is_empty(),
