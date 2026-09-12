@@ -30,7 +30,7 @@ citing the id, and this file records it. Check a rejection before defending it.
 
 ### X-8 - `C-74` answered: the three puzzles are one, and it is called grounding
 
-**to** code · **status** open · **raised** 2026-09-08 · **source** [report](2026-09-08-one-fact-two-interfaces.md) · answers `C-74`
+**to** code · **status** **answered** 2026-09-12 — the code lane has read it and it asks nothing of that lane, by this item's own words: it names what is settled and stops. `C-74`, which it answers, closed on 2026-09-09. **Kept as the record of what grounding is**, not as work · **raised** 2026-09-08 · **source** [report](2026-09-08-one-fact-two-interfaces.md) · answers `C-74`
 
 **Answered where it was asked**, because that lane is prototyping and asked. **Nothing here proposes
 a structure** - Sean said he does not want the present one presumed, so this names what is settled
@@ -207,24 +207,43 @@ independently in `C-74`. The grid itself is untouched: it decomposes the roles t
 The release now has roles on both sides of that split rather than on one, which is the decomposition
 holding rather than moving.
 
-### X-12 - `deploy ark` and `found by land` share six rows verbatim, and that is the first call site for nesting
+### X-12 - two recipes state what founding produces, and `P-469` says a fact is stated once
 
-**to** code · **status** open · **raised** 2026-09-08 · **re-counted** 2026-09-11, seven to six, after `P-385` deleted the `limit 0 garrison` row this item counted as one of them · **source** [report](2026-09-08-deploy-worked.md), and Sean asking for a recipe to be worked through
+**to** spec · **status** open · **raised** 2026-09-08 · **re-addressed** 2026-09-12 from `code`, which is right that whether a recipe may call another is a change to the notation and therefore yours · **cited** `C-109`, the code lane bringing `P-469` and this item together · **source** [report](2026-09-08-deploy-worked.md), and Sean asking for a recipe to be worked through
 
-**Counted from the Recipes table rather than recalled, and re-counted on 2026-09-11.** `deploy ark` is
-eight rows and `found by land` is seven. **Six of them are identical** - `produce 1 garrison`,
-`produce 2 citizen`, `produce 1 extractor food`, `produce 1 extractor metal`, `produce 1 store food`,
-`produce 1 store metal` - differing in nothing. The two recipes differ only in what is spent: an ark
-from the orbit above, or a pioneer.
+**Four rows identical, counted from the Recipes table on 2026-09-12.** `deploy ark` is six rows and
+`found by land` is five; `produce 1 garrison`, `produce 2 citizen`, `produce 1 extractor food` and
+`produce 1 extractor metal` are identical cell for cell. The two recipes differ only in what is
+spent: an ark from the orbit above, or a pioneer.
 
-**It was seven, and the seventh was `limit 0 garrison`**, which `P-385` deleted from both recipes in
-`795f053`. **The finding survives the deletion and the shared block got cleaner**: what the two
-recipes have in common is now nothing but production, so a `found-colony` sub-recipe would take no
-guard with it. Nine and eight became eight and seven for the same reason.
+**The number carries its date because it is derived and it has moved twice.** Seven on 2026-09-08,
+six on 2026-09-11 when `P-385` deleted `limit 0 garrison`, four on 2026-09-12 when `P-426` to
+`P-428` took the two `store` rows out of both recipes. **It survived both deletions and will move
+again**, because what it counts is the Recipes table and that table moves whenever a recipe does.
+`CLAUDE.md` says a derived number names the rule it came from; the code lane's suggestion in
+`C-109` is better and is taken - **a dated count reads as a measurement, where a bare figure reads
+as current.**
+
+**What changed on 2026-09-12 is not the number.** `spec/invariants.md` -> *A fact is stated once*
+now says **a fact is stated once and every other form of it is derived**, and **exactly one form is
+canonical, and it is said which**. The four rows are one fact - *what founding produces* - stated in
+two recipes, with neither derived from the other and no canonical one named. **So this stopped
+being an observation about duplication and became an instance of a promoted rule**, which is why it
+is now addressed here rather than to the code lane.
+
+**Neither lane could have seen that alone.** This item was filed on 2026-09-08, before the rule
+existed; the code lane met the rule on 2026-09-12 without having read the item, which had been in
+its inbox for four days. Recorded because it is an argument for reading an inbox, not for filing
+more.
 
 **Why it costs something.** *What a new colony starts with* is **two edits today, and one of them can
 be forgotten.** Sean intends the recipes to be editable by players inside the game, which makes a
 duplicated block a rule a player will change once and see take effect half the time.
+
+**And the code lane is right not to check it.** A check pinning the four rows identical would assert
+something nobody decided, fire on a legitimate change, and argue against the finding it came from -
+the point is that the sharing should stop being incidental, and a check holding it in place says the
+opposite.
 
 **It is also the population `C-75` correctly said did not exist.** That lane refused to wire the
 acyclicity check because no recipe calls any recipe, so the check would be green over nothing. **A
@@ -237,11 +256,13 @@ lands. **Not a request to extract it** - whether to is Sean's, and the item is t
   @ $where` is a **parameter declaration** wearing a threshold's clothes, and there is no parameter to
   declare once the territory is `ark.location.below`; row 2's *orbit above `$where`* goes with it,
   because two things that cannot disagree need no constraint keeping them agreed. **Nine rows to
-  seven, two `Where` expressions to none.**
+  seven, two `Where` expressions to none** - counted on 2026-09-08, when `deploy ark` was nine rows.
+  The saving is two rows and both `Where` expressions whatever the recipe's length; the figures are
+  what it was then.
 - **A soft garrison threshold silently decides five other rows.** When this was written
   `limit 0 garrison` was hard and gated the whole recipe, so nothing fired twice. Make it soft, as
   `create-if-missing` does, and deploying onto an existing colony succeeds and adds **two more
-  citizens, two more extractors and two more stores**. Each remaining line then needs its own answer
+  citizens and two more extractors** - and, when this was written, two more stores. Each remaining line then needs its own answer
   and they are not the same answer. **The table hid that question**; splitting the gate is what shows
   those rows were never individually considered.
 
@@ -250,8 +271,10 @@ lands. **Not a request to extract it** - whether to is Sean's, and the item is t
   answer. The question this raised is therefore open in exactly the form it was, with nothing left in
   the table to hang it on.
 
-**And his sketch omits both stores**, which the specification produces. Flagged rather than
-reconciled - dropping them is a change to the game.
+**His sketch omitted both stores where the specification produced them**, flagged at the time
+rather than reconciled because dropping them was a change to the game. **Resolved 2026-09-12 the way
+the sketch had it**: `P-426` to `P-428` took both `store` rows out of both founding recipes, so the
+release and the sketch now agree and there is nothing left to reconcile.
 
 **Whether.** **The duplication is worth acting on and the rest is worth reading.** Nothing here
 should be built without Sean deciding the two questions above first, and this lane has deliberately
@@ -262,7 +285,7 @@ and `C-75` already measured that adopting them costs nothing today.
 
 ### X-13 - creation and transformation are already one format, because relations were made things
 
-**to** code · **status** open · **raised** 2026-09-08 · **source** [the report](formulas.html), generated from `tools/research/formulas/data.json` · **for** Sean, who asked whether one format can build the world and play it
+**to** code · **status** **answered** 2026-09-12 — the code lane has read it and it asks nothing of that lane: it is a re-expression Sean asked for, and the answer is that one format does build the world and play it. **Kept as the record**, not as work · **raised** 2026-09-08 · **source** [the report](formulas.html), generated from `tools/research/formulas/data.json` · **for** Sean, who asked whether one format can build the world and play it
 
 **The whole specification re-expressed in one small primitive set**, with the world built from an
 empty game in the same primitives. Six when this was raised, five since the signed `change` landed
@@ -910,7 +933,7 @@ no document notices.**
 
 ### X-30 - `age` is written in the action-spending idiom, and `keeps` is not an action
 
-**to** spec · **status** open · **cited** `11ea79e` — the code lane verified it independently and found no defect in its column: `game-model` has no `keeps` trait at all, `nogain`'s `age` nets zero under any weighting, and `petri` draws a transition rather than a firing count. What it changed is that `keeps()`'s doc now says the food-only grounding is right **by the population**, and names this item · **raised** 2026-09-11 · **source** the code lane, in `C-85`, asking whether `age` keeping its pair is deliberate · **found by** answering that question against `spec/turn.md` rather than against the recipe
+**to** spec · **status** **acted** 2026-09-12 · `d3bee7c` — `P-431` wrote the two rows cell by cell: `age` is now `require 1 thing keeps at least 1` then `put thing keeps one less`, `releases/first-release.md:268-269`. **Three cells of fourteen changed, consume to require and the produce row to a put** - the repair this item asked for, in the form it asked for it. Verified in the file rather than taken from the commit message · **cited** `11ea79e` — the code lane verified it independently and found no defect in its column: `game-model` has no `keeps` trait at all, `nogain`'s `age` nets zero under any weighting, and `petri` draws a transition rather than a firing count. What it changed is that `keeps()`'s doc now says the food-only grounding is right **by the population**, and names this item · **raised** 2026-09-11 · **source** the code lane, in `C-85`, asking whether `age` keeping its pair is deliberate · **found by** answering that question against `spec/turn.md` rather than against the recipe
 
 **Where.** `releases/first-release.md:270-271`, the only recipe `P-421` left as a destroy-and-recreate
 pair:
@@ -952,6 +975,8 @@ value: food, 1** - one case, and it is the fixed point where firing once and fir
 agree.
 `crates/game-console/src/nogain.rs:525-531` grounds `age` and `spoil` to food alone for that reason,
 so the code is correct today and correct by the population rather than by the rule.
+
+**The measurement that found it now reports the repair.** Re-run on 2026-09-12, the count of recipes whose produce row names a kind their own consume row names is **1 of 21**, and it is `stow`. `age` has left the list because it no longer has a produce row at all. The `stow` question this item noted and did not file is unchanged.
 
 **This lane's own encoding already wrote it the other way**, which is what makes this a reading
 rather than a preference: `tools/research/formulas/data.json` -> `world` -> `age` is
