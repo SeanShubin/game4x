@@ -23,65 +23,83 @@ here without first becoming a proposal.
 
 ### P-459 - `refresh` reads a maximum that nothing declares
 
-**to** sean - **status** open - **raised** 2026-09-12 - **kind** contradiction, found working `P-457` - **asks** a decision - **into** `releases/first-release.md` -> Units and structures, and `spec/console.md` -> The language
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** contradiction, found working `P-457` · **asks** a decision · **into** `releases/first-release.md` -> Units and structures, and `spec/console.md` -> The language
 
-**`spec/turn.md` says a kind declares a number and the release declares a `yes`:**
+**Your reading is relevant, and it is already the rule - in your own words.** `spec/invariants.md`
+-> *Nothing comes back round with more*:
+
+> **Anything that exhausts draws on time for a turn**: it spends a count it carries, and only the
+> turn's end restores that count, the way an extractor draws material out of the planet and is spent
+> doing it. So what a thing can do is gathered rather than made, and **what bounds the gathering is
+> the number of things that exhaust**.
+
+**Time is the endless well and the count is the bounded pump.** `refresh` is a named source draw, so
+it takes nothing away from *nothing comes back round with more* - exactly as you say, and the
+specification already says it.
+
+## And it rules out `C`, which is what this lane recommended
+
+**The same section ends with the sentence that decides this:**
+
+> **Whether this holds is decided mechanically, from the rules alone**, and stays so however many
+> rules there are.
+
+**`C` was *the maximum is one, said once*.** Under `C`, the one invariant the game is built around
+is checked by a program reading a number **the rules do not contain** - it is in the checker as a
+constant, which is where the code lane found it today and named it `UNDECLARED_MAXIMUM`. **A
+boundedness argument that runs on a literal is not decided from the rules alone.**
+
+**So your lean is right and this lane's recommendation was wrong.** The maximum has to be declared,
+because the check that reads it is the check the invariant promises.
+
+## The obvious way to avoid `B`'s cost is already closed, and worth knowing
+
+**If a count were a quantity a thing holds rather than a trait, its maximum would be a capacity** -
+the same relation that says a territory holds at most one garrison and a store holds ten. No new
+`kept` value, and one relation instead of two mechanisms.
+
+**That is `P-399`, and `P-411` undid it.** The reason was `C-90`, filed by the code lane: **as a held
+kind, two citizens differing only in readiness had the same description**, and the map form could
+not tell them apart. `spec/turn.md` now says the conclusion - *what a thing can do is a count it
+carries as a trait, rather than something it contains*.
+
+**So the trait is right and `B` is the shape.** What is left is one question inside it.
+
+## The question inside `B`: how a kind's line says a maximum
+
+**`P-454` already gives a kind's line one meaning for a number.** *A trait of the kind is written
+with its value and a stored one with its name* - so `{kind name:citizen bearing:1}` reads today as
+*`bearing` is of the kind, and its value is 1*. **But `bearing` is stored**: each citizen has its
+own. The same line has to say two things.
+
+**B1** - **a fourth value of `kept`:**
 
 ```
-spec/turn.md    "each kind declares HOW MANY of each action a thing of
-                 it may take in a turn"
-
-the release     | **citizen** | ... | Readies: yes |     one cell, three actions
-                | **ark**     | ... | Readies: yes |     one cell, two actions
-```
-
-**A citizen has three actions** - `laboring`, `bearing`, `defending` - and one `Readies` cell for all
-three. **`refresh` puts each of them *at its maximum*, six rows**, so the maximum is read by a
-recipe and declared by nothing.
-
-**It agrees today only because every maximum is one**, which is the shape `CLAUDE.md` warns about: a
-right answer about a narrower question. Give a unit two moves and there is nowhere to write it.
-
-## The three shapes
-
-**A** - **the `Readies` cell holds the actions and their counts**, and the data file writes one line
-per action:
-
-```
-| **citizen** | ... | laboring 1, bearing 1, defending 1 |
-```
-
-Says exactly what `spec/turn.md` says. **Costs a second name per action** in the data file, because a
-kind's line already writes `laboring` to mean *this kind has a stored `laboring`* and cannot also
-write `laboring:1` to mean its maximum.
-
-**B** - **an action count is of the kind and stored at once**, and the kind's line gives the maximum:
-
-```
+{trait admits:number kept:refilled name:bearing}
 {kind name:citizen bearing:1 defending:1 laboring:1}
 ```
 
-One name, and the number is both the maximum and where a new thing starts. **Costs a fourth value of
-`kept`** - today it is `thing`, `kind` or `nothing`, and this is a thing's value with the kind's
-number behind it.
+`kept:refilled` means *each thing carries the value and the kind carries its maximum*. **Costs a
+fourth word** where `P-457` has just settled three, and every reader of `kept` gains a case.
 
-**C** - **the maximum is one, said once, and a number arrives when something needs two:**
+**B2** - **`P-454`'s rule gains a case, and `kept` stays three:**
 
 ```
-Every action's maximum is one. Nothing in this release takes an action twice in a turn.
+{trait admits:number kept:thing name:bearing}
+{kind name:citizen bearing:1 defending:1 laboring:1}
 ```
 
-Costs nothing and leaves `refresh`'s *at its maximum* reading a constant. **This is your own test** -
-`P-445`: *I want to decide this empirically. If I never notice I need it, I don't need it.*
+**A number on a kind's line for a `kept:thing` trait is its maximum** - where a new thing starts and
+the most it can hold. `kept` is still `thing`, `kind`, `nothing`. **Costs one sentence in
+`spec/console.md`** and nothing in `traits.4x`.
 
 ## What this lane would take
 
-**`C` now and `B` when it stops being true.** `B` is the shape that will be right - one name, and the
-maximum where every other of-the-kind number already is - but it buys a fourth `kept` value for a
-distinction no rule in this release can see. **`C` is not a deferral of the decision, it is the
-answer while every number is one**, and the sentence it adds is what makes the constant honest rather
-than implied.
+**`B2`.** `kept` says where the value lives and that answer has not changed - it lives on the thing.
+What the kind's line adds is a **bound**, not a second home, and `P-458` is the test: a list is the
+right length when every primitive is a thing rather than a point on an axis that already exists.
+**`refilled` is `thing` with a bound**, so it is not a fourth place.
 
-**This blocks nothing.** `traits.4x` is unaffected either way: an action count admits a number under
-all three, which is what `P-457` now says and reads from `spec/turn.md` rather than from the
-release's `0 or 1`.
+**And `B2` costs the release one column change rather than a rewrite.** *Readies* says `yes` for
+four kinds; it becomes the count per action, which is where a citizen's three actions stop sharing
+one cell. The numbers are all `1` today, so nothing in the game moves.

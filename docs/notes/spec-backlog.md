@@ -3104,3 +3104,29 @@ names - `ocean`, `design` - rather than a flag wearing them.
 
 `P-457` asks approval now: twenty lines into `spec/data/traits.4x`, and two sentences into
 `spec/console.md` giving `admits` and `kept` their written form.
+
+## Said 2026-09-12, refresh as an endless well behind a bounded pump
+
+Sean, on `P-459`:
+
+> I am leaning B. It also occures to me that refreshing can be though of as an infinite resource
+> combining with a finite resource in a recipe, so it is bounded as long as at least one resource is
+> finite. Is that relevant here?
+
+**Relevant, and already promoted in his own words.** `spec/invariants.md`: *anything that exhausts
+draws on time for a turn: it spends a count it carries, and only the turn's end restores that count,
+the way an extractor draws material out of the planet and is spent doing it... what bounds the
+gathering is the number of things that exhaust.*
+
+**And it rules out `C`, which this lane recommended.** The same section: *whether this holds is
+decided mechanically, from the rules alone.* Under `C` the game's central invariant is checked by a
+program reading a number the rules do not contain - the constant the code lane named
+`UNDECLARED_MAXIMUM` today. A boundedness argument that runs on a literal is not decided from the
+rules alone.
+
+**The way to avoid `B`'s cost is closed and worth not rediscovering.** A count as a quantity with a
+capacity is `P-399`, and `P-411` undid it for `C-90`: as a held kind, two citizens differing only in
+readiness had the same description and the map form could not tell them apart.
+
+`P-459` re-presented with `C` removed and one question left inside `B`: whether the kind's number is
+a fourth `kept` value or a case of `P-454`'s existing rule.
