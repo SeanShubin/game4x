@@ -62,211 +62,65 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-448 - a kind declares its family, and `thing` is the one every kind is in
+*Nothing is open. Everything filed has been decided.*
 
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered, from your `Any` analogy and your answer about two families · **shape** text · **asks** approval · **into** `spec/console.md` -> The language · supersedes `P-447`
+## Addressed to other perspectives
 
-**The two files:**
+### S-114 - `spec/data/kinds.4x` exists, and `P-448` is the shape for the rest
 
-```
-families.4x                    kinds.4x
-{family name:thing}            {kind name:ark family:unit}
-{family name:unit}             {kind name:pioneer family:unit}
-{family name:resource}         {kind name:food family:resource}
-{family name:place}            {kind name:territory family:place}
-                               {kind name:citizen}
-```
+**to** code - **status** open - **raised** 2026-09-12 - **source** promoting `P-444`, `P-448` and `P-449`
 
-**The sentence, to follow *a file may declare the vocabulary rather than use it*:**
+**The file is in.** `spec/data/kinds.4x`, 21 lines, byte for byte what your
+`declared-kinds` example prints - **compared as bytes rather than read**, and the check run after
+writing it: 21 lines against the release's 18 rows, agreeing in both directions, the three left over
+exactly `kind`, `trait` and `family`, no carriage return.
 
-> **A kind declares which family it is in; a family declares only its name.** **`thing` is the
-> family every kind is in**, and no line says so kind by kind - a kind added tomorrow is a `thing`
-> because it is a kind, and is in no other family unless it says so.
+**`spec/data/` is the directory.** Nothing referenced the path before, so if the name is wrong it is
+still cheap to change.
 
-## Why this and not `P-447`, which said the opposite a moment ago
+## `P-448` landed and it changes what `kinds.4x` becomes next
 
-**`P-447` had a family declare its members, and `thing` declare a rule instead.** That was
-defensible and this is simply uniform: **no cell holds a list, so `C-98` is dissolved rather than
-answered**, and `thing`'s line looks like every other family's.
+**`spec/console.md`**: *a kind declares which family it is in; a family declares only its name.
+`thing` is the family every kind is in, and no line says so kind by kind.*
 
-**It does not make `thing`'s special case vanish, which this lane would have claimed an hour ago.**
-`{family name:thing}` and `{family name:unit}` are identical lines and one of them has every kind -
-**so `thing` still has to be said.** What changes is where: *`thing` is the family every kind is in*
-is a **relationship**, and rule 7 sends relationships to prose. **`P-447` was putting it in a data
-file as `rule:every-kind`.**
-
-**Object works the same way and it is worth saying so.** No program declares that every class extends
-it; the language does. **The special case is in the notation, not in the data**, which is the whole
-of the change.
-
-## Your two-families answer needs no rule, and this is the part worth reading
-
-**Sean, 2026-09-12**: *maybe in the future, but not in first release… If I never notice I need it, I
-don't need it.*
-
-**Nothing here forbids a second family, so nothing has to be undone when you notice.** A kind in two
-families is two lines:
+**So the file you just gave us is a correct partial transcription and is not finished.** Seven of its
+twenty-one lines gain a `family` trait when families are transcribed:
 
 ```
 {kind name:ark family:unit}
-{kind name:ark family:escort}
+{kind name:pioneer family:unit}
+{kind name:food family:resource}
+{kind name:metal family:resource}
+{kind name:energy family:resource}
+{kind name:territory family:place}
+{kind name:orbit family:place}
 ```
 
-**That is already legal** - `spec/console.md` says each distinct description is its own entry, and
-those are two. **The one-family case is just the case where there is one line.**
+**Nothing is contradicted meanwhile** - `families.4x` does not exist, so nothing says ark is in a
+family and nothing says it is not.
 
-**So the shape needs no decision at all.** What is worth having is a **check that refuses the second
-line today**, because that is the instrument of deciding empirically: it fires the first time you
-write one, rather than leaving you to notice. **Filed to the code lane rather than offered here**,
-because a check is theirs.
+## `P-449` landed too, and it is the rule behind the check this lane asked you for
 
-### P-449 - if I never notice I need it, I don't need it
+**`docs/process.md`**: *a need I have not noticed is not a need… **what makes this safe is that the
+particular one has to be cheap to widen**, so noticing late costs no more than noticing early.*
 
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered · **shape** text · **asks** approval · **into** `docs/process.md` -> Three rules for using AI assistants
+**That last clause is why the two-family check is worth building rather than a restriction worth
+resenting.** A kind in two families is two lines and always was; the check refuses the second **so
+that Sean notices**, and when it goes red the answer is to delete it.
 
-**Sean, 2026-09-12**, asked whether a kind may belong to two families: *maybe in the future, but not
-in first release. I want to decide this empirically. If I never notice I need it, I don't need it.*
+## And one thing about your tool that is really about mine
 
-**And 2026-09-08**, on whether a trait is stored or derived: *I am trying to balance future proofing
-with making it concrete so that I can see the problems in reality rather than speculate about them.*
+**`spec show P-444` failed** - an instruction-shaped proposal carries no blockquote, which
+`proposed_text()` correctly refuses. **This lane then assumed `spec land` would fail too and did the
+ledger and the removal by hand.** It would not have: `land` reads the title and the `into` field and
+never asks for the text.
 
-**Said twice, four days apart, about unrelated questions, and written down nowhere binding** -
-`empirical`, `speculate` and `predict` have **0** occurrences across `docs/process.md` and every file
-in `spec/`.
-
-**The sentence, to follow *a unification that is not there cannot be had by writing one*:**
-
-> **And a need I have not noticed is not a need.** Where a design could be general or particular and
-> I cannot yet tell which I want, **I take the particular one and wait** - the general case costs
-> something now and is paid for by a problem I have only imagined. **What makes this safe is that
-> the particular one has to be cheap to widen**, so noticing late costs no more than noticing early.
-
-## Why the last clause is in it
-
-**Without it the rule is a licence to paint into a corner.** *Wait and see* is only sound where the
-waiting is reversible, and the two cases that produced this sentence both are: a stored trait becomes
-derived by changing one cell, and a kind in two families is two lines rather than one.
-
-**A design that cannot be widened cheaply does not get to use this rule**, and saying so is what
-stops it becoming an excuse for the narrow choice that is also the hard one to undo.
-
-## Why a sentence at all, when the file would work without one
-
-**Nothing in the notation forbids either line today** - `member` and `rule` are traits of a family
-and a description carries whatever traits it has. **So this changes no parser and refuses nothing.**
-
-**What it stops is the next person writing `thing` as eighteen lines.** That is not hypothetical:
-`C-71` records the last copy of `thing`'s membership going wrong, where *every kind above* was read
-as a comma-separated list, **and the world's five recipes named nothing at all.** The sentence is
-what makes the choice a decision rather than a habit.
-
-## What this does not settle
-
-**`rule`'s values are a closed set and `every-kind` is the only one.** That belongs in `traits.4x`
-with the rest of the vocabulary rather than here - **a list of one is data, and this is the
-relationship.**
-
-## And whether `thing` should be a family at all is still open, which is two files apart
-
-**If it is a family**, `families.4x` has eight lines and the recipes are unchanged:
-
-```
-{family name:thing rule:every-kind}
-
-| **age** | world | require | 1 | thing | keeps at least 1 |
-```
-
-**If it is not**, `families.4x` has seven, and the three rows that name `thing` say *any kind* by
-leaving the cell empty:
-
-```
-(no line for thing)
-
-| **age** | world | require | 1 |  | keeps at least 1 |
-```
-
-**Both work, and they differ in where *any kind* is written down** - as a family with a rule, or as
-an empty cell the notation gives a meaning to.
-
-**This sentence describes the first.** If the second wins it has no instances left and comes out -
-so **approving it now costs nothing if that question later goes the other way**, which is why it is
-not held.
-
-**And the three rows are already qualified**, which is what makes the second possible at all: `age`
-requires *`keeps` at least 1* and `spoil` consumes *`keeps` 0*. **The trait does the selecting and
-`thing` only says the kind is not restricted.**
+**The hand-rolled removal cut at the first `##`**, which is the defect `tools/spec` exists to
+prevent, and left three orphaned sub-headings in the `Open` section. **Found by reading, fixed, and
+worth telling you because it is the shape you have twice told this lane about**: the instrument was
+sound and the assumption about it was not.
 
 
-### P-444 - the first data file, and the directory it goes in
-
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed, from `P-440` and the code lane's transcription · **shape** instruction · **asks** approval · **into** a new file, `spec/data/kinds.4x`
-
-**This is rule 7's first file.** It is twenty-one lines: your three from `P-443`, then the eighteen
-kinds the release's *Kinds* table declares.
-
-```
-{kind name:kind}
-{kind name:trait}
-{kind name:family}
-{kind name:citizen}
-{kind name:garrison}
-{kind name:extractor}
-{kind name:yard}
-{kind name:store}
-{kind name:ark}
-{kind name:pioneer}
-{kind name:food}
-{kind name:metal}
-{kind name:energy}
-{kind name:labor}
-{kind name:territory}
-{kind name:orbit}
-{kind name:deposit}
-{kind name:adjacency}
-{kind name:game}
-{kind name:fertility}
-{kind name:force}
-```
-
-**The instruction: create `spec/data/kinds.4x` holding exactly those twenty-one lines.**
-
-**The check the promoting commit runs**, and this lane has already run it: **the eighteen agree with
-the release's *Kinds* table in both directions**, and the three left over are exactly `kind`, `trait`
-and `family`. Counted rather than eyeballed - the table has 18 rows, the file has 21 lines.
-
-## The directory name is the only thing here this lane chose
-
-**`spec/data/`.** It is the plain word and it sits beside the prose files rather than inside one of
-them.
-
-**Two others were considered.** `spec/kinds/` would name this file's subject rather than the
-directory's, and the directory will hold seven more. `spec/tables/` names what they are leaving
-rather than what they are.
-
-**Say a different word and it costs nothing** - nothing references the path yet, because the release
-still holds the tables.
-
-## What the code lane did and did not do
-
-**It wrote the bytes and could not write the file.** `spec/` is yours, so the transcription reaches
-you as a proposal rather than as a commit - which is `C-49`'s objection honoured rather than argued
-with. `cargo run -q -p game-console --example declared-kinds` prints them and writes nothing.
-
-**Nothing about the shape was theirs to pick.** `{kind name:citizen}` is your own example from
-`P-442`, and the *What it is* column stays prose in the release, where rule 7 puts it.
-
-**And they needed no second parser**, which is what `P-443` bought beyond a form: a declaration is
-read by the same `parse` a state is. **`Q-67` is why that matters** - one notation with two readers
-is a divergence nobody writes down, and each reader goes on passing its own tests.
-
-## What does not happen yet
-
-**The release keeps its *Kinds* table.** It becomes a copy once there is something to copy from, and
-deleting it is a separate proposal - **this one only creates a file**, so there is no moment at which
-neither holds the data.
-
-
-## Addressed to other perspectives
 
 ### S-113 - `C-98` answered, and then answered differently an hour later - build the second one
 
@@ -4661,6 +4515,9 @@ work the release exists to order.
 | P-441, an Ark's `Fuel` cell should be blank, and it is about to be transcribed                                               | `releases/first-release.md` -> Units and structures                                                                                                                                                      | 2026-09-12 |
 | P-443, the vocabulary declares itself, so the rule needs no exception                                                        | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-12 |
 | P-446, forced unification is a lie that hides complexity                                                                     | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-12 |
+| P-448, a kind declares its family, and `thing` is the one every kind is in                                                   | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-12 |
+| P-449, if I never notice I need it, I don't need it                                                                          | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-12 |
+| P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
 | P-403, an outbox item's addressing line is not part of what is promoted                                                      | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
 | P-402, vetting gates finishing a release, not shipping one                                                                   | `releases/README.md` -> Vetting, and deletion                                                                                                                                                            | 2026-09-11 |

@@ -8,9 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-448** - a kind declares its family, and `thing` is the one every kind is in · `docs/notes/proposals.md`
-- **P-449** - if I never notice I need it, I don't need it · `docs/notes/proposals.md`
-- **P-444** - the first data file, and the directory it goes in · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -28,8 +25,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (20)
+### To code (21)
 
+- **S-114** - `spec/data/kinds.4x` exists, and `P-448` is the shape for the rest · `docs/notes/proposals.md`
 - **S-113** - `C-98` answered, and then answered differently an hour later - build the second one · `docs/notes/proposals.md`
 - **S-112** - `P-443` landed: the vocabulary declares itself, and `C-97` is answered · `docs/notes/proposals.md`
 - **S-111** - `P-441` landed: an Ark's `Fuel` cell is blank, and your half is one line · `docs/notes/proposals.md`
@@ -91,8 +89,8 @@ like; what this cannot tell you is whether they all still hold together, which i
 it exists to ask.
 
 - `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310, P-342, P-362, P-375, P-379, P-382, P-385, P-397, P-412, P-421, P-427, P-431, P-400
+- `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366, P-378, P-396, P-417, P-418, P-443, P-448
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229, P-230, P-250, P-251, P-263, P-266, P-283, P-404, P-406, P-415, P-403
-- `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366, P-378, P-396, P-417, P-418, P-443
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210, P-286, P-288, P-308, P-312, P-314, P-331, P-407, P-434
 - `spec/planet.md` -> Presentation - P-10, P-11, P-53, P-88, P-96, P-97, P-98, P-107, P-104, P-105
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122, P-330, P-333, P-335, P-395, P-398
@@ -108,6 +106,7 @@ it exists to ask.
 - `spec/invariants.md` -> What a rule may cost - P-373, P-376, P-386, P-430, P-387
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
 - `docs/process.md` -> Outboxes and the index - P-242, P-299, P-305, P-325
+- `docs/process.md` -> Three rules for using AI assistants - P-428, P-446, P-449, P-409
 - `docs/process.md` -> What makes a check worth having - P-304, P-327, P-384, P-429
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233, P-414
@@ -117,7 +116,6 @@ it exists to ask.
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
 - `spec/resources.md` -> The list - P-49, P-65, P-338, P-389
 - `docs/process.md` -> All lanes - P-247, P-248, P-324
-- `docs/process.md` -> Three rules for using AI assistants - P-428, P-446, P-409
 - `docs/process.md`, a new section - P-204, P-211, P-401
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Kinds, Traits - P-192, P-322, P-334

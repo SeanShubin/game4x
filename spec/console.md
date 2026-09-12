@@ -70,6 +70,10 @@ other word is wrong about the game rather than describing it.
 like any other and the rule above needs no exception. **A declaration is the third thing the one
 notation carries**, beside a command and a state.
 
+**A kind declares which family it is in; a family declares only its name.** **`thing` is the
+family every kind is in**, and no line says so kind by kind - a kind added tomorrow is a `thing`
+because it is a kind, and is in no other family unless it says so.
+
 **In a recipe the same form is a selector, not a description.** A selector may name a **family**
 rather than a kind, and it may **leave traits out** - `{extractor resource:food}` selects every
 extractor built for food, whatever else is true of it. **A description may do neither**: it names

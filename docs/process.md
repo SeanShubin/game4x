@@ -52,6 +52,11 @@ what they mean, one form for both says they do not - so the form is a lie, and t
 denies moves somewhere nobody is looking. **A special case that is named costs less than a
 uniformity that is false.**
 
+**And a need I have not noticed is not a need.** Where a design could be general or particular and
+I cannot yet tell which I want, **I take the particular one and wait** - the general case costs
+something now and is paid for by a problem I have only imagined. **What makes this safe is that
+the particular one has to be cheap to widen**, so noticing late costs no more than noticing early.
+
 ## What I read, and what I do
 
 - From the specification lane, I read and approve proposals, and I make sure the specification is
