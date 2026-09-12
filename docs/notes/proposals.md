@@ -117,6 +117,11 @@ kind's line names them now.
 **All three `kept:nothing`, which `unpaid` already uses.** The sentences that compute them stay in
 prose, where rule 7 puts them.
 
+**One more line moves if `P-466` lands, and this does not depend on it.** `P-466` makes `binding`
+derived, so its line reads `{trait admits:number kept:nothing name:binding}` rather than `kept:kind`.
+**The derivation reads the release's *Stored or derived* column either way**, so the two can land in
+either order or one without the other, and the count is twenty-four regardless.
+
 **The file is still derived rather than written.** `P-457`'s instruction reads the release's *Traits*
 table; what changes is the exception it carried - **one line per declared trait, with no exception**
 - so the count is whatever the table gives, asserted against it at promotion.
@@ -214,9 +219,15 @@ pioneer    binding 3   metal charged 3
 garrison   binding 1   metal charged NONE   <- P-467 blanks both
 ```
 
-**So `P-467` lands first or with this.** Without it, `binding` derived would make a garrison's 1
-metal disappear rather than never arrive, and this proposal would be deleting a number instead of
-finding where it came from.
+**So this proposal carries your answer to `P-467` rather than depending on it.** You said a
+garrison costs nothing and binds nothing; **`P-467` is withdrawn because this removes the two cells
+it would have blanked**, and the answer arrives here instead - by the number never having a source
+rather than by a cell being emptied.
+
+**The distinction matters and is worth one line.** A garrison is produced by founding and consumed by
+nothing, so its metal was never drawn from the planet and is never recovered. **Nothing comes back
+round with more is untouched; what was wrong was the accounting**, and deriving `binding` from the
+recipe is what repairs it.
 
 ## What follows in `spec/data/`, and nothing needs saying twice
 
@@ -422,7 +433,21 @@ rather than a gap** - `R-4` is vetted on `biomes_of` giving every territory one 
 separate proposal and this one does not make it.
 ### P-467 - a garrison costs nothing and binds nothing
 
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** answered, by you, 2026-09-12 · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Units and structures
+**to** sean · **status** **withdrawn** 2026-09-12 · **cited** `6392650` · **raised** 2026-09-12 · **kind** answered by you and then subsumed · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Units and structures
+
+**Withdrawn because `P-466` deletes the two cells this edits, and your answer is kept.** This
+blanks the garrison's `Costs to produce` and `Binding`; `A` removes both columns. **The two
+cannot be promoted at once** - this one would be editing cells that no longer exist - and landing
+it first makes it a no-op that `P-466` erases a moment later.
+
+**Nothing is lost, checked rather than assumed.** After `P-466` no file says a garrison costs
+anything: the columns are gone, no recipe ever charged labor or metal for one, and `binding` is
+**derived from the metal the recipe charges**, which for a garrison is none. **Your answer - a
+garrison costs nothing and binds nothing - is what the files then say**, reached by the number
+never arriving rather than by a cell being emptied.
+
+**`P-466` carries the reasoning**, so the decision is recorded where it is acted on. What follows
+is the item as it stood when you answered it.
 
 **Your answer decides it, and by your own test rather than this lane's preference.** *At this point
 I don't have any strong opinions about costs, they are a means to the end of getting our first
