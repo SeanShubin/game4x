@@ -2858,6 +2858,24 @@ folded in: `reports/containment.html` is new and `state.md` is untouched.
 density answers this, and until it is answered the ten tables are the only place density is
 written down. **Nothing should be deleted before that**, which is why nothing was.
 
+**Re-derived 2026-09-12, and the arithmetic moved by one while the conclusion did not.**
+`dump::tables` produces **eleven** tables now, not ten. `adjacency` arrived with `P-334` the day
+after this item was filed, and `territory-resource` is called `deposit`.
+
+**The eleventh joins the first group rather than the last.** An adjacency is a **kind** since
+`P-334`, so it is wholly the containment tree - `{adjacency from:1 to:2} -> 1`, thirty entries in
+`scenario/expected/play.4x`, counted. So: **seven** wholly the tree, **three** the tree once a
+count is read off it, and **one** the capacity relation less one number.
+
+**Ten of eleven, where this item said nine of ten.** `density` is still that number: the `deposit`
+table's columns are `territory`, `resource`, `capacity`, `density`, `built`, and `density` is in
+neither relation and in no data file. **So the question is still one number rather than a pile of
+tables**, which is the whole of what this item says.
+
+**Re-derived rather than adjusted**, because a number that is edited to match is a number nobody
+checked. `C-9` is the case: a figure true under one rule, left standing when the rule moved, and
+reading exactly as before.
+
 **And one thing in the markdown dump that no rule now authorises.** `state.md`'s `unit` table
 carries `in-kind` and `in-id`. Those columns are mine, from `P-311`, which `P-320` withdrew
 this evening - and the column they replaced, `place`, is one `P-286` stopped declaring. **So
