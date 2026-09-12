@@ -62,32 +62,93 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-447 - a family declares which its members are, or how to tell
+### P-448 - a kind declares its family, and `thing` is the one every kind is in
 
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered, from your answer on `P-445` · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered, from your `Any` analogy and your answer about two families · **shape** text · **asks** approval · **into** `spec/console.md` -> The language · supersedes `P-447`
 
-**Sean, 2026-09-12**: *we are going with D.*
-
-**What `families.4x` looks like:**
+**The two files:**
 
 ```
-{family name:unit member:ark}
-{family name:unit member:pioneer}
-{family name:resource member:food}
-{family name:resource member:metal}
-{family name:resource member:energy}
-{family name:place member:territory}
-{family name:place member:orbit}
-{family name:thing rule:every-kind}
+families.4x                    kinds.4x
+{family name:thing}            {kind name:ark family:unit}
+{family name:unit}             {kind name:pioneer family:unit}
+{family name:resource}         {kind name:food family:resource}
+{family name:place}            {kind name:territory family:place}
+                               {kind name:citizen}
 ```
 
 **The sentence, to follow *a file may declare the vocabulary rather than use it*:**
 
-> **A family declares which its members are, or how to tell.** It names them one to a line where
-> they are a set somebody chose, and names a rule where it is not - `thing` is every kind, so a kind
-> added tomorrow belongs to it and to no other family unless someone says so. **Which of the two a
-> family uses is visible in the line**, and it is the difference between a membership that has to be
-> maintained and one that cannot fall behind.
+> **A kind declares which family it is in; a family declares only its name.** **`thing` is the
+> family every kind is in**, and no line says so kind by kind - a kind added tomorrow is a `thing`
+> because it is a kind, and is in no other family unless it says so.
+
+## Why this and not `P-447`, which said the opposite a moment ago
+
+**`P-447` had a family declare its members, and `thing` declare a rule instead.** That was
+defensible and this is simply uniform: **no cell holds a list, so `C-98` is dissolved rather than
+answered**, and `thing`'s line looks like every other family's.
+
+**It does not make `thing`'s special case vanish, which this lane would have claimed an hour ago.**
+`{family name:thing}` and `{family name:unit}` are identical lines and one of them has every kind -
+**so `thing` still has to be said.** What changes is where: *`thing` is the family every kind is in*
+is a **relationship**, and rule 7 sends relationships to prose. **`P-447` was putting it in a data
+file as `rule:every-kind`.**
+
+**Object works the same way and it is worth saying so.** No program declares that every class extends
+it; the language does. **The special case is in the notation, not in the data**, which is the whole
+of the change.
+
+## Your two-families answer needs no rule, and this is the part worth reading
+
+**Sean, 2026-09-12**: *maybe in the future, but not in first release… If I never notice I need it, I
+don't need it.*
+
+**Nothing here forbids a second family, so nothing has to be undone when you notice.** A kind in two
+families is two lines:
+
+```
+{kind name:ark family:unit}
+{kind name:ark family:escort}
+```
+
+**That is already legal** - `spec/console.md` says each distinct description is its own entry, and
+those are two. **The one-family case is just the case where there is one line.**
+
+**So the shape needs no decision at all.** What is worth having is a **check that refuses the second
+line today**, because that is the instrument of deciding empirically: it fires the first time you
+write one, rather than leaving you to notice. **Filed to the code lane rather than offered here**,
+because a check is theirs.
+
+### P-449 - if I never notice I need it, I don't need it
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered · **shape** text · **asks** approval · **into** `docs/process.md` -> Three rules for using AI assistants
+
+**Sean, 2026-09-12**, asked whether a kind may belong to two families: *maybe in the future, but not
+in first release. I want to decide this empirically. If I never notice I need it, I don't need it.*
+
+**And 2026-09-08**, on whether a trait is stored or derived: *I am trying to balance future proofing
+with making it concrete so that I can see the problems in reality rather than speculate about them.*
+
+**Said twice, four days apart, about unrelated questions, and written down nowhere binding** -
+`empirical`, `speculate` and `predict` have **0** occurrences across `docs/process.md` and every file
+in `spec/`.
+
+**The sentence, to follow *a unification that is not there cannot be had by writing one*:**
+
+> **And a need I have not noticed is not a need.** Where a design could be general or particular and
+> I cannot yet tell which I want, **I take the particular one and wait** - the general case costs
+> something now and is paid for by a problem I have only imagined. **What makes this safe is that
+> the particular one has to be cheap to widen**, so noticing late costs no more than noticing early.
+
+## Why the last clause is in it
+
+**Without it the rule is a licence to paint into a corner.** *Wait and see* is only sound where the
+waiting is reversible, and the two cases that produced this sentence both are: a stored trait becomes
+derived by changing one cell, and a kind in two families is two lines rather than one.
+
+**A design that cannot be widened cheaply does not get to use this rule**, and saying so is what
+stops it becoming an excuse for the narrow choice that is also the hard one to undo.
 
 ## Why a sentence at all, when the file would work without one
 
@@ -207,29 +268,44 @@ neither holds the data.
 
 ## Addressed to other perspectives
 
-### S-113 - `C-98` answered: D, a list where it is a list and a rule where it is a rule
+### S-113 - `C-98` answered, and then answered differently an hour later - build the second one
+
 
 **to** code - **status** open - **raised** 2026-09-12 - **source** Sean answering `P-445`, which was your `C-98`
 
-**Sean, 2026-09-12**: *we are going with D.*
+**He chose D, then reasoned by analogy to `Any` in an object hierarchy and chose the inversion.**
+`P-447` is withdrawn and `P-448` is what to build. **Nothing was built against D**, so this costs
+nothing but reading twice.
 
-**So `families.4x` is seven lines and one:**
+**`families.4x` holds names and no members:**
 
 ```
-{family name:unit member:ark}
-{family name:unit member:pioneer}
-{family name:resource member:food}
-{family name:resource member:metal}
-{family name:resource member:energy}
-{family name:place member:territory}
-{family name:place member:orbit}
-{family name:thing rule:every-kind}
+{family name:thing}
+{family name:unit}
+{family name:resource}
+{family name:place}
 ```
 
-**Bytes are yours the way `kinds.4x`'s were** - print them, this lane proposes them into `spec/data/`,
-and the comparison holds them to the release's *Families* table in both directions. **`thing` is the
-one row the comparison cannot check that way**, because *every kind above* is not a list: it wants
-checking against `kinds.4x` instead, and that is the check `C-71` never had.
+**and `kinds.4x` gains a `family` trait on seven of its twenty-one lines:**
+
+```
+{kind name:ark family:unit}
+{kind name:pioneer family:unit}
+{kind name:food family:resource}
+{kind name:metal family:resource}
+{kind name:energy family:resource}
+{kind name:territory family:place}
+{kind name:orbit family:place}
+```
+
+**No cell holds a list anywhere**, so `C-98` is dissolved rather than answered. **`thing` has no
+member lines at all** - a kind is a `thing` because it is a kind, and `P-448` says so in
+`spec/console.md` because that is a relationship rather than data.
+
+**Bytes are yours the way `kinds.4x`'s were.** Print them, this lane proposes them into `spec/data/`.
+**The comparison is now two-directional against the release's *Families* table by unfolding the
+`family` trait**, and `thing` is checked by there being no such line rather than by a row.
+
 
 ## What it took to get here, because two of your three shapes were refused for reasons you can use
 
@@ -253,7 +329,30 @@ eight tables.
 that is named costs less than a uniformity that is false.** **Worth reading before the next cell**,
 because it is the rule this lane will be applying to them.
 
+## A check this lane is asking you for, because it is the instrument of a decision
+
+**Sean, on whether a kind may be in two families**: *maybe in the future, but not in first release. I
+want to decide this empirically. If I never notice I need it, I don't need it.*
+
+**Nothing in the shape forbids a second family**, which is why he can decide it later at no cost. A
+kind in two is two lines, and `spec/console.md` already permits them - each distinct description is
+its own entry:
+
+```
+{kind name:ark family:unit}
+{kind name:ark family:escort}
+```
+
+**So please refuse the second line today.** A check that fails when a kind carries two `family` lines
+is what makes *decide empirically* work: **it fires the first time he writes one**, rather than
+leaving him to notice. **Poison it with a second line for `ark`** - over one kind, since the
+population is the twenty-one and the violation is per kind.
+
+**That check is the decision, not a restriction on it.** When it goes red, that is him noticing, and
+the answer is to delete the check rather than to work around it.
+
 ## One thing still open, and it is two files apart rather than vague
+
 
 **If `thing` is a family**, you write eight lines and your recipe rows do not change:
 
@@ -4608,6 +4707,7 @@ again in a later session.
 | P-4, "the twelve five-neighbour territories sit in six antipodal pairs"               | Derivable from the Goldberg choice, and no rule leans on it.                                                                                                                                                                                                                                                                                                |            |
 | P-5, "a pentagon's farthest territory is its antipodal twin"                          | Merged into P-4, then withdrawn with it.                                                                                                                                                                                                                                                                                                                    |            |
 | P-7, "the smallest planet has no six-neighbour territories"                           | Derivable from P-6 plus a line Sean had already written - the minimum is 12, **a dodecahedron**.                                                                                                                                                                                                                                                            |            |
+| P-447, "a family declares which its members are, or how to tell" | Superseded by P-448 within the hour. Option D was right that a family and a rule are different things and wrong about where the difference is written: a kind declares its family, so no family declares members at all, and thing is said in prose because it is a relationship. |  |
 | P-420, "military unit becomes unit" | Carried out inside P-425, which replaces the section rather than editing a word in it. The word is gone from both bullets; the sentence it kept the word in did not survive Sean's redefinition of force, which gives a unit force of its own and no coordinating role. |  |
 | P-9, "the distance between every pair is computed once and stored"                    | An implementation directive, not a rule of the game.                                                                                                                                                                                                                                                                                                        |            |
 | P-13, "the greatest distance is 3 / 5 / 6 / 7 / 9 by planet size"                     | Determined by the Goldberg choice and the size, nothing leans on it, and the numbers are **already asserted by a test**.                                                                                                                                                                                                                                    |            |

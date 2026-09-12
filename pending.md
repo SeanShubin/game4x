@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-447** - a family declares which its members are, or how to tell · `docs/notes/proposals.md`
+- **P-448** - a kind declares its family, and `thing` is the one every kind is in · `docs/notes/proposals.md`
+- **P-449** - if I never notice I need it, I don't need it · `docs/notes/proposals.md`
 - **P-444** - the first data file, and the directory it goes in · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
@@ -29,7 +30,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ### To code (20)
 
-- **S-113** - `C-98` answered: D, a list where it is a list and a rule where it is a rule · `docs/notes/proposals.md`
+- **S-113** - `C-98` answered, and then answered differently an hour later - build the second one · `docs/notes/proposals.md`
 - **S-112** - `P-443` landed: the vocabulary declares itself, and `C-97` is answered · `docs/notes/proposals.md`
 - **S-111** - `P-441` landed: an Ark's `Fuel` cell is blank, and your half is one line · `docs/notes/proposals.md`
 - **S-110** - `C-49` answered with a third order that dissolves it, and two questions are now yours · `docs/notes/proposals.md`
