@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-437** - the number 1 leaves `spec/control.md`, and a citizen musters its strength · `docs/notes/proposals.md`
 - **P-436** - `spec/structures.md` says a garrison holds force of its own and `spec/control.md` says it has none · `docs/notes/proposals.md`
 - **P-434** - `keeps` is declared *of the kind* and `age` lowers it for one thing · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`

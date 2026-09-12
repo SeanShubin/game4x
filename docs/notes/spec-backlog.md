@@ -8,7 +8,27 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-12, a citizen musters its strength rather than one force
+
+*sounds right: each of them musters its strength each turn.*
+
+**Said after this lane found the number `1` sitting in `spec/control.md`**, where `P-425` had put it
+faithfully from his own earlier words - *a garrison allows each citizen to generate 1 force per
+turn*. **The release says `muster` produces *that citizen's strength***, and the two agree only
+because a citizen's strength is 1.
+
+**His own rule 7 is what decides which document moves**: *relationships here, data elsewhere*. `1`
+is data and already sits in *Units and structures*. `P-437` carries it.
+
+**And the check for other instances corrected this lane rather than confirming it.** The proposal
+first claimed `spec/` had no other number the release also states. Numerals are in **seven** of the
+specification's files; most are illustrative, and **one is not**: `spec/resources.md`'s *Lasts*
+column gives food **1**, and the release says *food is made with `keeps` 1*. **The same number in two
+documents**, unfiled for now because it touches `P-434` and two questions about one number is one
+too many at a time.
+
 ## Said 2026-09-11, containment stated whole, and two thirds of it were already written
+
 
 *The top level game contains everything without limit. Everything under that, for each kind of
 thing: may not contain any, has room for a certain amount, can contain unlimited. Many object are

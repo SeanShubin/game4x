@@ -62,6 +62,54 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-437 - the number 1 leaves `spec/control.md`, and a citizen musters its strength
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Producing force
+
+**Sean, 2026-09-12**: *sounds right: each of them musters its strength each turn.*
+
+**What it fixes.** `spec/control.md` says *each of them musters **one** force each turn* - your own
+words from `P-425`, faithfully recorded - and the release says `muster` produces ***that citizen's
+strength***. **They agree only because a citizen's strength is 1**, which is `C-96`'s shape: the
+divergence cannot show at the only value the release declares.
+
+**And `spec/README.md` rule 7 is the reason it is the spec that moves rather than the release**:
+*relationships here, data elsewhere… state the game's data in a data file, where it can be tuned
+without touching the specification.* **`1` is data**, and it already sits in *Units and structures*.
+
+**The bullet, replacing the one that begins *A garrison coordinates*:**
+
+> - A garrison coordinates the citizens of its territory, so that **each of them musters its
+>   strength each turn**. It has no strength of its own, and **it does this by existing** - nothing
+>   has to work it
+
+## The one thing to look at before approving
+
+**The bullet now says `strength` twice, about two different things** - the citizen's in the first
+sentence and the garrison's in the second. It reads correctly and it reads densely.
+
+**The alternative is to split it in two bullets**, which this lane has not offered because splitting
+a bullet is a reorganisation and `CLAUDE.md` says a move that could change what a line claims is
+raised rather than made. **Say the word and it comes back split**; the words themselves do not
+change.
+
+## One other place states a number the release also states, and the sweep that found it corrected me
+
+**This proposal first said `spec/` had no other instance. That was wrong.** Numerals appear in
+**seven** of the specification's files, not one. Most are illustrative - `{territory id:1}` in
+`spec/console.md`, *costs 8 metal and 5 energy* in `spec/logistics.md`, *density 6* in
+`spec/economy.md` - and an example is not data the release also carries.
+
+**One is not illustrative.** `spec/resources.md` -> *The list* has a table whose **Lasts** column
+gives food **1**, and `releases/first-release.md` says *food is made with `keeps` 1*. **The same
+number, stated twice, in two documents** - which is exactly what rule 7 is about.
+
+**It is not filed here and it is not a contradiction**, because the two agree. It wants its own item
+and it touches `P-434`, which is about whether `keeps` is stored or of the kind. **Filing it before
+`P-434` is answered would put two questions about one number in front of you at once.**
+
+
+
 ### P-436 - `spec/structures.md` says a garrison holds force of its own and `spec/control.md` says it has none
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/structures.md` -> Garrison
