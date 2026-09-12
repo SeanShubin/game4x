@@ -375,10 +375,27 @@ fn header_rows(text: &str) -> Vec<Vec<String>> {
 /// **The check is that every column the proposal's table names exists in a table of the file it
 /// names.** `Values now` exists nowhere, which is what makes it findable.
 ///
-/// **This has happened four times and the label was wrong every time** - `P-236`, `C-19`, and
-/// `P-465` and `P-466` on 2026-09-12, the last two adding named exceptions to a test in another
-/// lane's column. **The exception list was accumulating instances of one labelling error made
-/// here**, which is why the check is here rather than there. Reported by the quality lens.
+/// **This check covers one of three, and the three do not share a direction.** Re-derived by the
+/// code lane as `C-107` after this was written, each read in the file rather than from the
+/// exception text that names it:
+///
+/// - `P-195` declared `text` and offered an **instruction**
+/// - `P-236` declared `text` and offered a **row**
+/// - `P-465` declared `rows` and offered an **instruction**
+///
+/// **This sees `P-465`'s direction and only that one.** It cannot see a `text` proposal offering
+/// a row or an instruction - and those are the two that recurred first. **So it is a case rather
+/// than a fix**, and *four instances of one thing* - what this comment said first - is a
+/// different claim from *three instances, one per direction* about whether the class is closed.
+///
+/// **`C-19` is the item about `P-236` and `P-466` is not an instance at all.** Counting an item
+/// beside the proposal it reports is a population double-counted by its own record; `P-466`'s
+/// table is the seven columns *Units and structures* has afterwards, and the one cell the release
+/// lacked was written by `P-465` inside the same promoting commit.
+///
+/// **What would cover the other two is comparing the declared shape against the shape of what is
+/// quoted** - a row opens with `|`, an instruction says *becomes* and appears nowhere verbatim.
+/// `C-19` described it and did not build it, said so, and nobody has asked. Still true.
 fn shape_is_rows_only_if_the_cells_land(root: &Path, id: &str, draft: &str) -> Result<(), String> {
     if !draft.contains("**shape** rows") {
         return Ok(());
