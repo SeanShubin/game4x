@@ -81,7 +81,30 @@ model:
 
 **The gap is not a near miss, which is the part worth having.** `fully_exploited.rs` already
 derives the bill for finishing the planet - **57 buildings, 114 commands** - so *it launches an
-Ark* must not be read as *it nearly wins*. `play.4x` is 133 commands and would roughly double.
+Ark* must not be read as *it nearly wins*.
+
+**114 is a floor and not a total, and this item said otherwise for one commit.** It read *`play.4x`
+is 133 commands and would roughly double*, which is `133 + 114` wearing a different hat. The
+specification lane caught the same inference in its own wording and said so; the arithmetic is
+wrong for both of us and the reason is what 114 counts. `fully_exploited.rs:404`: **each building
+is two commands - the labor that pays for it, and the building.** That is all it counts.
+
+**What it therefore excludes, read off the predicate rather than guessed.**
+`Territory::at_maximum_output` wants enough citizens, enough food extractors and enough other
+extractors, and `is_fully_exploited` wants every claimable territory **founded** as well. So on
+top of the 57 buildings:
+
+- **Ten territories to found.** `play.4x` founds two of twelve, and each of the rest needs a
+  pioneer produced, moved and landed - three commands at least, plus the 3 metal and 6 energy
+  each pioneer costs, which is more `work` and more labor.
+- **A population to grow.** The same test derives **144 citizens** sustained across the planet.
+  Citizens arrive by `breed` at a turn's end, so that is turns and the food to pay for them.
+- **The turns themselves.** `play.4x` spends **10** `{end turn}` commands reaching two founded
+  territories.
+
+**So the honest statement is *at least 114 more commands*, and this lane is not estimating the
+total.** A number that took work to obtain is not thereby worth stating - and one that is a floor
+stated as a total is the `C-9` shape, which this file now records three times in two days.
 
 **Launching from an unfinished planet did not win, and that is the rule holding.**
 `spec/control.md` wants the Ark launched *from a fully exploited planet*; `has_won` is false with
