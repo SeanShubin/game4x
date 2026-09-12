@@ -779,19 +779,26 @@ it is written here.
 
 **The class is that an artifact says more than its author meant, because quoting a thing and doing
 it are the same bytes.** Named by the quality lens on 2026-09-12 after four instances in one
-evening: a hash quoted inside a sentence *about* a malformed citation field, read as a citation by
-two different checks; two more inside an item explaining the first; and then a third failure on the
-sentence written to explain those two.
+evening: a hash quoted inside a sentence *about* a malformed citation field, read as a citation;
+two more inside the item explaining the first; and then a third failure on the sentence written to
+explain those two.
 
 **It is the twin of *the instrument answers a narrower question than the one asked*.** That one is
 about the reader; this one is about the text. **Nothing distinguishes a hash an item is *about* from
 a hash it *cites*** except a convention someone remembers at the moment of writing - which is a rule
 firing at a moment of confidence, and `docs/process.md` says those need a carrier.
 
-**The carrier is structure rather than memory, and both halves of it already exist.** `cited()` in
-`tools/outbox` drops double-backticked spans - *drop what is being shown rather than said, then read
-the rest* - and `tools/spec` reads a `cited` field only on a line opening `**to**`. **Both worked
-the instant they were used**, which is what distinguishes a carrier from a reminder.
+**The carrier is structure rather than memory, and the sharpest evidence is where it was already
+working.** `docs/notes/proposals.md` writes that hash inside a double-backticked span, and
+`cited()` in `tools/outbox` drops such spans - *drop what is being shown rather than said, then read
+the rest*. **So the older check sailed past a hash it would otherwise have flagged, silently, for
+as long as the sentence has been there.**
+
+**The failure appeared exactly where a second check was built without the carrier.** `tools/spec`
+reads a `cited` field only on a line opening `**to**` now, and that works the same way - but it was
+written over a file that was already defended, by somebody who did not look at what defended it.
+**That is what distinguishes a carrier from a reminder**: the one in use is invisible, and building
+beside it without it is how you find out it was there.
 
 ## Writing notes
 
