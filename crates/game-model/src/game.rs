@@ -37,9 +37,11 @@ pub mod cost {
     /// has to have had metal put into it.
     pub const EXTRACTOR_LABOR: u32 = 1;
     pub const EXTRACTOR_METAL: u32 = 1;
-    /// A Garrison costs 1 labor and 1 metal, for the same reason.
-    pub const GARRISON_LABOR: u32 = 1;
-    pub const GARRISON_METAL: u32 = 1;
+    // **A Garrison's two figures are gone, and `C-106` is why.** `P-466` removed the *Costs
+    // to produce* column as the Recipes table said twice - true of every other thing, and not
+    // of a garrison: no recipe is named for one, so those two figures were stated there and
+    // nowhere else and are now stated nowhere. **Nothing here ever charged them**, which is
+    // `P-467`'s finding and why deleting them changes no game.
     /// A move costs one energy cell.
     pub const MOVE_CELLS: u32 = 1;
 }

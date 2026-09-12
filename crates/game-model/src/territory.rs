@@ -540,9 +540,13 @@ impl Territory {
     /// # Why it is not simply capacity times density
     ///
     /// `spec/control.md` says the answer follows from *how many extractors it has total
-    /// capacity for, their densities, and its biome* - and two of the release's twelve
-    /// territories reach a ceiling below that, for reasons that are themselves permanent
-    /// facts rather than history.
+    /// capacity for, and their densities* - and two of the release's twelve territories reach
+    /// a ceiling below that, for reasons that are themselves permanent facts rather than
+    /// history.
+    ///
+    /// **`P-468` took `its biome` out of that list**, which answers `Q-80`: the lens found
+    /// biome named as an input to maximum output with nothing reading it, and the sentence
+    /// was what was wrong rather than the code. Nothing below changes.
     ///
     /// **Building an extractor costs a metal and a labor.** A territory has spare labor only
     /// when a food extractor feeds more than the citizen working it, which is density two or
@@ -661,9 +665,9 @@ impl Territory {
     /// Whether this territory can ever build an extractor, from its nodes alone.
     ///
     /// `spec/control.md`: *what that greatest output is follows from the territory's own
-    /// permanent facts: how many extractors it has total capacity for, their densities, and
-    /// its biome. Not whether the player can afford it this turn, and not whether any
-    /// particular game happened to reach it.*
+    /// permanent facts: how many extractors it has total capacity for, and their densities.
+    /// Not whether the player can afford it this turn, and not whether any particular game
+    /// happened to reach it.*
     ///
     /// **`P-361` rewrote that sentence and left this rule alone.** It used to say a
     /// *structure* can be built where those facts allow it; it now says the greatest

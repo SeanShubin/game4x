@@ -385,25 +385,25 @@ pub const TRAITS: [TraitRow; 24] = [
     TraitRow {
         name: "moving",
         of: "a unit",
-        values: "0 or 1",
+        values: "a number",
         held: Held::Stored,
     },
     TraitRow {
         name: "laboring",
         of: "a citizen",
-        values: "0 or 1",
+        values: "a number",
         held: Held::Stored,
     },
     TraitRow {
         name: "working",
         of: "an extractor",
-        values: "0 or 1",
+        values: "a number",
         held: Held::Stored,
     },
     TraitRow {
         name: "bearing",
         of: "a citizen",
-        values: "0 or 1",
+        values: "a number",
         held: Held::Stored,
     },
     // **`P-414`: force is mustered rather than computed**, and this is what a thing spends to
@@ -411,7 +411,7 @@ pub const TRAITS: [TraitRow; 24] = [
     TraitRow {
         name: "defending",
         of: "a citizen or a unit",
-        values: "0 or 1",
+        values: "a number",
         held: Held::Stored,
     },
     TraitRow {
@@ -444,11 +444,15 @@ pub const TRAITS: [TraitRow; 24] = [
     // **`P-461` declared the column that was already being read.** *Units and structures* has
     // a **Binding** column and `metal in it` refers to *its binding*, and until this landed
     // no row said what a binding was.
+    // **`P-472` made it derived.** It was a number the kind carried; `binding` is *the metal
+    // the recipe that makes it consumes*, so nothing carries it and the recipe states it. That
+    // is also why `P-466` could remove the **Binding** column of *Units and structures* - it
+    // was the Recipes table said twice.
     TraitRow {
         name: "binding",
         of: "whatever is built",
         values: "a number",
-        held: Held::OfTheKind,
+        held: Held::Derived("the metal the recipe that makes it consumes"),
     },
     TraitRow {
         name: "metal in it",
@@ -513,13 +517,13 @@ pub const TRAITS: [TraitRow; 24] = [
     TraitRow {
         name: "surplus",
         of: "food",
-        values: "yes or no",
+        values: "a number",
         held: Held::Derived("left after every upkeep was paid"),
     },
     TraitRow {
         name: "unpaid",
         of: "a thing with upkeep",
-        values: "yes or no",
+        values: "a number",
         held: Held::Derived("its upkeep was not met"),
     },
     // **`P-288`: `phase` is a declared trait and `turn` is not.** The release grew this row
@@ -542,7 +546,7 @@ pub const TRAITS: [TraitRow; 24] = [
     TraitRow {
         name: "movable",
         of: "whatever moves",
-        values: "yes or no",
+        values: "a number",
         held: Held::OfTheKind,
     },
 ];
@@ -1210,9 +1214,6 @@ pub struct Producible {
     pub force: Option<u32>,
     pub fuel: Option<u32>,
     pub upkeep: Option<(u32, Kind)>,
-    pub costs: &'static [(u32, Kind)],
-    /// What holds it together, and what `perish` gives back before its parts are counted.
-    pub binding: Option<u32>,
     /// **`P-355`: whatever moves, yes or no, stored.** Filled for an ark and a pioneer only.
     ///
     /// **Three columns now name exactly those two - Fuel, Crosses and this - and that is a
@@ -1233,7 +1234,6 @@ pub struct Producible {
     /// Ark's cost at a Yard and puts nothing into orbit. So the edge kind still exists and
     /// nothing crosses it.
     pub crosses: Option<&'static str>,
-    pub requires: Option<&'static str>,
     /// The **Readies** column: which actions a turn's `refresh` returns to this thing, and
     /// how many of each.
     ///
@@ -1246,11 +1246,6 @@ pub struct Producible {
 }
 
 impl Producible {
-    /// The **Metal in it** column, which the Traits table calls derived: *its binding plus
-    /// the metal in its parts*.
-    ///
-    /// Derived here rather than stored, so that the two cannot disagree - which is what the
-    /// trait table says it is.
     /// The **Readies** cell, `trait count` per action and comma-separated.
     ///
     /// Blank for a thing that readies nothing, which is what the release writes rather than
@@ -1263,32 +1258,86 @@ impl Producible {
             .join(", ")
     }
 
-    pub fn metal_in_it(&self) -> Option<u32> {
-        let binding = self.binding?;
-        let parts: u32 = self
-            .costs
-            .iter()
-            .filter(|(_, kind)| *kind == Kind::Citizen)
-            .map(|_| 0)
-            .sum();
-        Some(binding + parts)
+    /// The one recipe named for this thing that produces it, if there is one.
+    ///
+    /// **Named for it, not merely producing it.** Three recipes produce an extractor -
+    /// `build extractor`, and the two that found a territory - and only the first is the
+    /// recipe for making one, which is `P-214`'s shape.
+    ///
+    /// **And producing it, not merely named for it.** `deploy ark` and `launch ark` both carry
+    /// the word; the first consumes an Ark and the second makes one. Reading the name alone
+    /// made an Ark's metal `6` - its own three, plus the three in the Ark that `deploy ark`
+    /// takes apart - which is a true sum over the wrong pair of recipes.
+    fn made_by(&self) -> Option<&'static Recipe> {
+        RECIPES.iter().find(|recipe| {
+            recipe
+                .name
+                .split_whitespace()
+                .any(|word| word == self.kind.name())
+                && recipe
+                    .lines
+                    .iter()
+                    .any(|line| line.role == Role::Produce && line.noun == Noun::Of(self.kind))
+        })
     }
 
-    /// The **Costs to produce** column.
+    /// The `binding` trait: **the metal the recipe that makes it consumes** - `P-472`.
     ///
-    /// *Two citizens*, and *15 metal*: a resource is a mass noun and labor is one too, so
-    /// only the things you can count take a plural. The release writes it that way and this
-    /// is compared with the release, so the rule lives here rather than being smoothed over.
-    pub fn cost_written(&self) -> String {
-        self.costs
+    /// **It was a field on this struct and a column of the release, and `P-466` removed the
+    /// column.** *Costs to produce*, *Binding* and *Requires* were the Recipes table said
+    /// twice, which is what `spec/invariants.md` forbids: *a fact is stated once and every
+    /// other form of it is derived*. So the three fields are gone with the three columns and
+    /// this reads `RECIPES`, which is the crate's copy of the one table that states them - and
+    /// which the cell-by-cell comparison holds against the release.
+    ///
+    /// **The recipe named for the thing, not any recipe that makes one.** Three recipes
+    /// produce an extractor: `build extractor`, and the two that found a territory. Only the
+    /// first is the recipe for making one, which is `P-214`'s shape.
+    ///
+    /// **A thing no recipe is named for has no binding.** A citizen, and a garrison - and the
+    /// garrison is `C-106`: it had `1` in the removed column and no recipe states it, so the
+    /// figure is now stated nowhere.
+    pub fn binding(&self) -> Option<u32> {
+        self.made_by()?
+            .lines
             .iter()
-            .map(|(count, kind)| {
-                let mass = Family::Resource.covers(*kind) || *kind == Kind::Labor;
-                let plural = if *count == 1 || mass { "" } else { "s" };
-                format!("{count} {}{plural}", kind.name())
+            .filter(|line| line.role == Role::Consume && line.noun == Noun::Of(Kind::Metal))
+            .find_map(|line| match line.quantity {
+                Quantity::Exactly(metal) => Some(metal),
+                _ => None,
             })
-            .collect::<Vec<_>>()
-            .join(", ")
+    }
+
+    /// The **Metal in it** column, which the Traits table calls derived: *its binding plus
+    /// the metal in its parts*.
+    ///
+    /// Derived here rather than stored, so that the two cannot disagree - which is what the
+    /// trait table says it is.
+    ///
+    /// **Its parts contribute nothing today**, because the only thing a recipe consumes that
+    /// is itself made of metal is a citizen, and a citizen has no binding. The term is kept
+    /// rather than dropped: the rule is *plus the metal in its parts*, and a recipe consuming
+    /// a garrison tomorrow would need it.
+    pub fn metal_in_it(&self) -> Option<u32> {
+        let binding = self.binding()?;
+        let parts: u32 = self
+            .made_by()
+            .into_iter()
+            .flat_map(|recipe| recipe.lines.iter())
+            .filter(|line| line.role == Role::Consume)
+            .filter_map(|line| match (line.quantity, line.noun) {
+                (Quantity::Exactly(count), Noun::Of(kind)) => Some((count, kind)),
+                _ => None,
+            })
+            .filter_map(|(count, kind)| {
+                PRODUCIBLE
+                    .iter()
+                    .find(|part| part.kind == kind)
+                    .and_then(|part| part.binding())
+                    .map(|metal| count * metal)
+            })
+            .sum();
+        Some(binding + parts)
     }
 
     pub fn upkeep_written(&self) -> String {
@@ -1305,11 +1354,8 @@ pub const PRODUCIBLE: &[Producible] = &[
         force: Some(1),
         fuel: None,
         upkeep: Some((1, Food)),
-        costs: &[],
         movable: false,
-        binding: None,
         crosses: None,
-        requires: None,
         readies: &[("bearing", 1), ("defending", 1), ("laboring", 1)],
     },
     Producible {
@@ -1320,11 +1366,8 @@ pub const PRODUCIBLE: &[Producible] = &[
         force: Some(0),
         fuel: None,
         upkeep: None,
-        costs: &[(1, Labor), (1, Metal)],
         movable: false,
-        binding: Some(1),
         crosses: None,
-        requires: None,
         readies: &[],
     },
     Producible {
@@ -1332,11 +1375,8 @@ pub const PRODUCIBLE: &[Producible] = &[
         force: None,
         fuel: None,
         upkeep: None,
-        costs: &[(1, Labor), (1, Metal)],
         movable: false,
-        binding: Some(1),
         crosses: None,
-        requires: None,
         readies: &[("working", 1)],
     },
     Producible {
@@ -1344,11 +1384,8 @@ pub const PRODUCIBLE: &[Producible] = &[
         force: None,
         fuel: None,
         upkeep: None,
-        costs: &[(1, Labor), (15, Metal)],
         movable: false,
-        binding: Some(15),
         crosses: None,
-        requires: None,
         readies: &[],
     },
     // **`P-260`: one kind with a `resource` trait, not three that differ in one word.**
@@ -1359,11 +1396,8 @@ pub const PRODUCIBLE: &[Producible] = &[
         force: None,
         fuel: None,
         upkeep: None,
-        costs: &[(1, Labor), (1, Metal)],
         movable: false,
-        binding: Some(1),
         crosses: None,
-        requires: None,
         readies: &[],
     },
     Producible {
@@ -1374,11 +1408,8 @@ pub const PRODUCIBLE: &[Producible] = &[
         // waiting on the release's half of that, and this is it.
         fuel: None,
         upkeep: None,
-        costs: &[(3, Metal), (12, Energy), (2, Citizen)],
         movable: true,
-        binding: Some(3),
         crosses: Some("orbit border"),
-        requires: Some("a Yard"),
         readies: &[("defending", 1), ("moving", 1)],
     },
     Producible {
@@ -1388,11 +1419,8 @@ pub const PRODUCIBLE: &[Producible] = &[
         // `P-339`: a pioneer's Upkeep cell is empty, and a citizen is the only thing in
         // the release with one.
         upkeep: None,
-        costs: &[(3, Metal), (6, Energy), (2, Citizen)],
         movable: true,
-        binding: Some(3),
         crosses: Some("border"),
-        requires: None,
         readies: &[("defending", 1), ("moving", 1)],
     },
 ];
@@ -1465,16 +1493,7 @@ pub fn bounds_table() -> Vec<Vec<String>> {
 
 pub fn units_table() -> Vec<Vec<String>> {
     let mut rows = vec![header(&[
-        "Thing",
-        "Strength",
-        "Fuel",
-        "Upkeep",
-        "Costs to produce",
-        "Binding",
-        "Crosses",
-        "Requires",
-        "Readies",
-        "Movable",
+        "Thing", "Strength", "Fuel", "Upkeep", "Crosses", "Readies", "Movable",
     ])];
     for thing in PRODUCIBLE {
         rows.push(vec![
@@ -1482,12 +1501,11 @@ pub fn units_table() -> Vec<Vec<String>> {
             thing.force.map(|n| n.to_string()).unwrap_or_default(),
             thing.fuel.map(|n| n.to_string()).unwrap_or_default(),
             thing.upkeep_written(),
-            thing.cost_written(),
-            thing.binding.map(|n| n.to_string()).unwrap_or_default(),
             thing.crosses.unwrap_or_default().to_string(),
-            thing.requires.unwrap_or_default().to_string(),
             thing.readies_written(),
-            if thing.movable { "yes" } else { "" }.to_string(),
+            // **`P-465` made this a number**: *nothing in the game is two-valued anywhere*,
+            // and `movable:1` is what `{citizen defending:1}` already writes.
+            if thing.movable { "1" } else { "" }.to_string(),
         ]);
     }
     rows

@@ -612,6 +612,14 @@ pub fn check(shape: &str, block: &str, destination: &str) -> Verdict {
 /// instead of asserted.
 const KNOWN: &[(&str, &str)] = &[
     (
+        "P-466",
+        "declared `shape rows` and its tables describe a change rather than being one. It removes three columns, and it shows what it removes - so its cells include `yes`, a *Movable* value the release no longer has, and every other cell it names as going. **The promotion is correct**: `releases/first-release.md` has seven columns and the three are gone. What cannot pass is a rows check, which asks that every cell offered be present in the destination, against a proposal whose point is that some of them are not. `CLAUDE.md`'s own test says which shape that is - *if it will say something these words only described, that is an instruction* - so the label is what is wrong, and a label is what this check reads. `C-107`.",
+    ),
+    (
+        "P-465",
+        "the same shape one proposal later, and clearer because the header says it: `| Trait | Values now | Values after |`. A column headed *Values now* is a description of what the file said before, and `rows` means every cell lands. Eight cells changed and the release carries the eight; the four this check cannot find are the header of a before-and-after table and the values it replaced. `C-107`.",
+    ),
+    (
         "P-456",
         "its `Values` cell was superseded inside its own promoting commit. `b7fc6a6` landed six proposals in the order the message gives them, and `P-463` - the first of the six - had already made `id` admit *an identity*, so the cell `P-456` offered, *a number, unique among things of its kind*, is not in the file the commit produced. **Both promotions are correct**: the later one supersedes a cell of the earlier, and the message says so. What cannot be judged is a promotion against a commit that also contains the promotion that replaced it, which is the same shape as `P-214` and `P-216` a week apart rather than a commit apart. Its text block landed and is checked; only the row is excepted.",
     ),

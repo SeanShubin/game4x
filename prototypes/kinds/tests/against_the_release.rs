@@ -520,12 +520,55 @@ fn a_named_ingredient_is_bound_before_it_is_referred_to() {
     );
 }
 
-/// `Metal in it` is derived, and the release says so.
+/// `Metal in it` is derived, and so is the binding it is derived from.
+///
+/// **`P-472` made `binding` derived and `P-466` removed the column that stated it.** Both were
+/// hand-written fields on `Producible` and a column of *Units and structures*, and *Costs to
+/// produce*, *Binding* and *Requires* were the Recipes table said twice. So all three fields
+/// are gone and both figures are read from `RECIPES`.
+///
+/// **Asserted against the figures rather than against each other.** The parts term sums to
+/// nothing today - the only thing a recipe consumes that is itself built is a citizen, and a
+/// citizen has no binding - so comparing `metal_in_it()` with `binding()` would be comparing a
+/// number with itself plus zero, and would pass whatever either said.
+///
+/// **The garrison is `C-106`.** It had `1` in the removed column, no recipe is named for one,
+/// and the figure is now stated nowhere - so its binding is `None` rather than `Some(0)`, which
+/// is the difference between *no recipe says* and *the recipe says none*.
 #[test]
 fn metal_in_it_is_its_binding_plus_its_parts() {
-    for thing in kinds::PRODUCIBLE {
-        assert_eq!(thing.metal_in_it(), thing.binding, "{}", thing.kind.name());
+    let mut checked = 0;
+    for (name, want) in [
+        ("citizen", None),
+        ("garrison", None),
+        ("extractor", Some(1)),
+        ("yard", Some(15)),
+        ("store", Some(1)),
+        ("ark", Some(3)),
+        ("pioneer", Some(3)),
+    ] {
+        let thing = kinds::PRODUCIBLE
+            .iter()
+            .find(|thing| thing.kind.name() == name)
+            .unwrap_or_else(|| panic!("`{name}` is not a producible thing"));
+        assert_eq!(
+            thing.binding(),
+            want,
+            "`{name}`'s binding is the metal the recipe named for it consumes"
+        );
+        assert_eq!(
+            thing.metal_in_it(),
+            want,
+            "`{name}`'s metal is its binding plus the metal in its parts, and nothing it \
+             consumes has a binding of its own"
+        );
+        checked += 1;
     }
+    assert_eq!(
+        checked,
+        kinds::PRODUCIBLE.len(),
+        "every producible thing, so a new one cannot arrive unchecked"
+    );
 }
 
 /// What a trait says its values are is borne out by the table that lists them.

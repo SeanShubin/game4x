@@ -109,81 +109,92 @@ fn released_table() -> BTreeMap<u32, Vec<(Resource, u32, u32)>> {
 
 /// What the release says a thing costs to produce, as `(amount, what)` pairs.
 ///
-/// Read from the release for the same reason the node table is: these are tuning figures
-/// that are meant to move. When P-80 halved three of them, the only thing standing between
-/// a retuned document and a model that quietly disagreed with it was a test that reads
-/// both. This is that test's other half.
-/// What the release says a thing costs to produce, read off the table at test time.
+/// Read from the release for the same reason the node table is: these are tuning figures that
+/// are meant to move. When `P-80` halved three of them, the only thing standing between a
+/// retuned document and a model that quietly disagreed with it was a test that reads both.
 ///
-/// It used to read `- cost to produce:` under a `### Create Pioneer` heading. `P-130`
-/// replaced those headings with one **Units and structures** table, and this went looking
-/// for a heading that no longer exists - which is the failure a test that reads a document
-/// is for. The document moved and said so.
+/// # It reads the recipe now, because `P-466` removed the column
 ///
-/// The thing is named as the table names it: `pioneer`, not `Create Pioneer`.
+/// **The *Costs to produce* column was the Recipes table said twice**, which is what `P-466`
+/// found and removed - along with *Binding* and *Requires*. This is not a workaround for the
+/// removal: it is the same figures read from the one place that states them, which is what
+/// `spec/invariants.md` asks for. *A fact is stated once and every other form of it is
+/// derived.*
+///
+/// **What a thing costs is what the recipe named for it consumes.** Three recipes produce an
+/// extractor - `build extractor`, and the two that found a territory - so *the recipe that
+/// produces it* is not enough to pick one. **The recipe named for the thing is**, which is
+/// `P-214`'s shape: there is one command for each recipe the player may fire, and a recipe that
+/// makes a thing as part of founding is not the recipe for making that thing.
+///
+/// **So a thing no recipe is named for costs nothing.** A citizen, whose cell was blank in the
+/// removed column, and a garrison, whose cell was not. **The garrison is `C-106`** - `P-467`
+/// found that nothing charges it, was withdrawn because `P-466` removes the cells, and the
+/// fact it found is unchanged and now unstated.
+///
+/// **It used to read `- cost to produce:` under a `### Create Pioneer` heading**, which `P-130`
+/// replaced with the *Units and structures* table. Two moves, both found by this test failing
+/// and saying what it could not find, which is what a test that reads a document is for.
 fn released_cost(thing: &str) -> Vec<(u32, String)> {
     let text = std::fs::read_to_string(
         PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../releases/first-release.md"),
     )
     .expect("the release document");
 
-    let mut inside = false;
-    // **Which column holds the costs, read from the header rather than counted.**
-    // This was `cells.get(5)` with the header order written above it in a comment, and
-    // `P-346` deleting the `A move` column moved *Costs to produce* from 5 to 4 - so the
-    // test failed saying `pioneer` has no metal cost, which is a true statement about
-    // column 5 and nothing at all about the release. **That is the failure this repository
-    // designed the command language to avoid** - `syntax.rs`: the predecessor indexed a
-    // list by position, so inserting a term silently shifted every index after it. The
-    // same mistake, in a test that reads a document instead of a grammar.
-    let mut costs_at: Option<usize> = None;
-    for line in text.lines() {
-        let line = line.trim();
-        if line.starts_with("## ") {
-            if inside {
-                break;
-            }
-            inside = line == "## Units and structures";
-            continue;
-        }
-        if !inside {
-            continue;
-        }
-        let cells: Vec<&str> = line.trim_matches('|').split('|').map(str::trim).collect();
-        if costs_at.is_none() && cells.contains(&"Thing") {
-            costs_at = cells.iter().position(|cell| *cell == "Costs to produce");
+    let rows = game_console::recipes::body_under(&text, "## Recipes");
+    assert!(
+        !rows.is_empty(),
+        "the Recipes table parsed to nothing, so every cost would read as zero"
+    );
+    let role_at = game_console::recipes::column_of(&text, "## Recipes", "Role");
+    let qty_at = game_console::recipes::column_of(&text, "## Recipes", "Qty");
+    let kind_at = game_console::recipes::column_of(&text, "## Recipes", "Kind");
+
+    // A recipe's rows run until the next one names itself. Its consume rows are what it costs,
+    // and its produce rows say what it makes.
+    let mut recipe: Vec<Vec<String>> = Vec::new();
+    let mut found: Option<Vec<Vec<String>>> = None;
+    let mut name = String::new();
+    let shut = |name: &str, recipe: &mut Vec<Vec<String>>, found: &mut Option<Vec<Vec<String>>>| {
+        let makes = recipe.iter().any(|row| {
+            row.get(role_at).map(String::as_str) == Some("produce")
+                && row.get(kind_at).map(|cell| cell.trim()) == Some(thing)
+        });
+        if makes && name.split_whitespace().any(|word| word == thing) {
             assert!(
-                costs_at.is_some(),
-                "the units table has no `Costs to produce` column: {cells:?}"
+                found.is_none(),
+                "two recipes are named for a `{thing}` and produce one, so what it costs \
+                     is a choice this reader is not entitled to make"
             );
-            continue;
+            *found = Some(std::mem::take(recipe));
         }
-        if !line.starts_with("| **") {
-            continue;
+        recipe.clear();
+    };
+    for row in rows.iter().chain(std::iter::once(&Vec::new())) {
+        let named = row
+            .first()
+            .map(|cell| game_console::recipes::plain(cell))
+            .filter(|name| !name.is_empty());
+        if named.is_some() || row.is_empty() {
+            shut(&name, &mut recipe, &mut found);
+            if let Some(next) = named {
+                name = next;
+            }
         }
-        let Some(name) = cells.first().map(|cell| cell.trim_matches('*')) else {
-            continue;
-        };
-        if name != thing {
-            continue;
+        if !row.is_empty() {
+            recipe.push(row.clone());
         }
-        let at = costs_at.expect("the header row comes before any row of things");
-        let Some(costs) = cells.get(at) else { continue };
-        return costs
-            .split(',')
-            .filter_map(|part| {
-                let mut words = part.split_whitespace();
-                // "and nothing else" carries no figure, and neither does "not produced".
-                let amount: u32 = words.next()?.parse().ok()?;
-                // "2 citizens" and "1 citizen" name the same cost. The figure decides the
-                // plural and the caller should not have to know which it will be.
-                let thing = words.next()?;
-                let thing = thing.strip_suffix('s').unwrap_or(thing);
-                Some((amount, thing.to_string()))
-            })
-            .collect();
     }
-    panic!("no row for `{thing}` in the release's units table");
+
+    found
+        .unwrap_or_default()
+        .iter()
+        .filter(|row| row.get(role_at).map(String::as_str) == Some("consume"))
+        .filter_map(|row| {
+            let amount: u32 = row.get(qty_at)?.trim().parse().ok()?;
+            Some((amount, row.get(kind_at)?.trim().to_string()))
+        })
+        .collect()
 }
 
 fn cost_of(thing: &str, what: &str) -> u32 {
@@ -366,19 +377,28 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
     // times; the split lived in the definitions and nowhere else.
     assert_eq!(cost_of("extractor", "labor"), cost::EXTRACTOR_LABOR);
     assert_eq!(cost_of("extractor", "metal"), cost::EXTRACTOR_METAL);
-    assert_eq!(cost_of("garrison", "labor"), cost::GARRISON_LABOR);
-    assert_eq!(cost_of("garrison", "metal"), cost::GARRISON_METAL);
-
-    // Every figure in the column, not the ones this test happened to name. It checked six
-    // of eleven when the table had six; the table grew and the test did not, so a garrison
-    // and an extractor gained a metal cost that nothing compared against anything.
+    // **A garrison had two figures here and has none** - `C-106`. `P-466` removed the *Costs
+    // to produce* column as the Recipes table said twice, which it was for every other thing;
+    // no recipe is named for a garrison, so its two figures were the one place they were
+    // stated and they are now stated nowhere. `cost::GARRISON_LABOR` and
+    // `cost::GARRISON_METAL` are deleted rather than left asserting against nothing - **the
+    // model never charged them**, which is what `P-467` found and why its withdrawal did not
+    // change the game.
+    //
+    // **Ten figures, not twelve, and the two that left are named.** A count that moved with no
+    // reason recorded is how `C-9` went stale.
     let figures: usize = ["citizen", "garrison", "extractor", "yard", "ark", "pioneer"]
         .into_iter()
         .map(|thing| released_cost(thing).len())
         .sum();
     assert_eq!(
-        figures, 12,
-        "twelve figures in the Costs to produce column; this checks each one by name"
+        figures, 10,
+        "ten figures across the recipes named for a thing; this checks each one by name"
+    );
+    assert!(
+        released_cost("garrison").is_empty() && released_cost("citizen").is_empty(),
+        "a garrison and a citizen are made by recipes named for neither, so the release \
+         states no cost for either - `C-106`"
     );
 }
 
@@ -1077,11 +1097,18 @@ fn the_readies_column_declares_the_maximum_this_reads() {
     .expect("the release");
 
     let rows = game_console::recipes::body_under(&document, "## Units and structures");
+    // **Found by name, and this test is why `column_of` exists.** It read cell 8, `P-466`
+    // removed three columns, *Readies* became cell 5, and this reported that four things ready
+    // nothing - which is a true statement about cell 8. The sibling reader forty lines up
+    // carries a comment explaining exactly this failure, written after `P-346` caused it once
+    // already. **Reading that comment is not what stopped it happening again**; a function
+    // both of them call is.
+    let at = game_console::recipes::column_of(&document, "## Units and structures", "Readies");
     let mut pairs = 0;
     let mut readying = 0;
     for row in &rows {
         let thing = row[0].trim().trim_matches('*').trim();
-        let said = row.get(8).map(String::as_str).unwrap_or_default().trim();
+        let said = row.get(at).map(String::as_str).unwrap_or_default().trim();
         if said.is_empty() {
             continue;
         }

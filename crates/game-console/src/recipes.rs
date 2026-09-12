@@ -212,7 +212,41 @@ pub fn body_under(document: &str, heading: &str) -> Vec<Vec<String>> {
     rows
 }
 
+/// Which column of a table has this heading, found by its name.
+///
+/// **Because a position silently becomes a different column.** `P-346` deleted *A move* and
+/// moved *Costs to produce* from 5 to 4, and a test reading cell 5 reported that a pioneer has
+/// no metal cost - a true statement about column 5 and nothing at all about the release.
+/// `P-466` then removed three columns at once and moved *Readies* from 8 to 5, and a second
+/// test read cell 8 and found four things readying nothing. **Twice, in the same file, with the
+/// first one's comment explaining the fix directly above it.**
+///
+/// **A missing column panics rather than returning nothing**, so a column that has been removed
+/// is a loud failure at the reader instead of a quiet zero at the assertion.
+pub fn column_of(document: &str, heading: &str, column: &str) -> usize {
+    let mut inside = false;
+    for line in document.lines() {
+        if line.starts_with("## ") {
+            if inside {
+                break;
+            }
+            inside = line.trim() == heading;
+            continue;
+        }
+        let line = line.trim();
+        if !inside || !line.starts_with('|') {
+            continue;
+        }
+        let cells: Vec<String> = line.trim_matches('|').split('|').map(plain).collect();
+        return cells
+            .iter()
+            .position(|cell| cell == column)
+            .unwrap_or_else(|| panic!("`{heading}` has no `{column}` column: {cells:?}"));
+    }
+    panic!("`{heading}` has no table under it")
+}
+
 /// A name as the tables write it, with the emphasis markers taken off.
-pub(crate) fn plain(cell: &str) -> String {
+pub fn plain(cell: &str) -> String {
     cell.trim().trim_matches('*').trim().to_string()
 }

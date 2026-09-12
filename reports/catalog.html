@@ -76,7 +76,7 @@
 <h2 id="citizen">citizen</h2>
 <p>a person: provides labor, eats, and grows on surplus.</p>
 <p><strong>In families</strong> thing</p>
-<p><strong>Traits of it</strong> <code>laboring</code> (0 or 1), <code>bearing</code> (0 or 1), <code>defending</code> (0 or 1), <code>strength</code> (a number), <code>keeps</code> (the number of turns it will last)</p>
+<p><strong>Traits of it</strong> <code>laboring</code> (a number), <code>bearing</code> (a number), <code>defending</code> (a number), <code>strength</code> (a number), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-1</code></p>
 <p><strong>Bounded by</strong> the food produced here, through upkeep</p>
 <p><strong>As a thing</strong> Strength: 1 · Upkeep: 1 food per turn · Readies: bearing 1, defending 1, laboring 1</p>
@@ -108,7 +108,7 @@
 <p><strong>Traits of it</strong> <code>strength</code> (a number), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-2</code></p>
 <p><strong>Bounded by</strong> a capacity of 1</p>
-<p><strong>As a thing</strong> Strength: 0 · Costs to produce: 1 labor, 1 metal · Binding: 1</p>
+<p><strong>As a thing</strong> Strength: 0</p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
 <li><code>deploy ark</code> produces 1</li>
@@ -121,10 +121,10 @@
 <h2 id="extractor">extractor</h2>
 <p>built for one resource, and worked to produce it.</p>
 <p><strong>In families</strong> thing</p>
-<p><strong>Traits of it</strong> <code>working</code> (0 or 1), <code>resource</code> (one of the resources), <code>keeps</code> (the number of turns it will last)</p>
+<p><strong>Traits of it</strong> <code>working</code> (a number), <code>resource</code> (one of the resources), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-3</code></p>
 <p><strong>Bounded by</strong> a capacity, from <em>Territory resources</em></p>
-<p><strong>As a thing</strong> Costs to produce: 1 labor, 1 metal · Binding: 1 · Readies: working 1</p>
+<p><strong>As a thing</strong> Readies: working 1</p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
 <li><code>deploy ark</code> produces 1, food</li>
@@ -145,7 +145,6 @@
 <p><strong>Traits of it</strong> <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-4</code></p>
 <p><strong>Bounded by</strong> a capacity of 1</p>
-<p><strong>As a thing</strong> Costs to produce: 1 labor, 15 metal · Binding: 15</p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
 <li><code>build yard</code> produces 1</li>
@@ -160,7 +159,6 @@
 <p><strong>Traits of it</strong> <code>resource</code> (one of the resources), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-5</code></p>
 <p><strong>Bounded by</strong> as many as the extractors of its resource</p>
-<p><strong>As a thing</strong> Costs to produce: 1 labor, 1 metal · Binding: 1</p>
 <p><strong>Holds</strong> the resource it was built for, up to 10 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
@@ -174,10 +172,10 @@
 <h2 id="ark">ark</h2>
 <p>carries a landing, and can invade from orbit.</p>
 <p><strong>In families</strong> thing, unit</p>
-<p><strong>Traits of it</strong> <code>moving</code> (0 or 1), <code>strength</code> (a number), <code>fuel</code> (how much energy its tank holds), <code>keeps</code> (the number of turns it will last)</p>
+<p><strong>Traits of it</strong> <code>moving</code> (a number), <code>strength</code> (a number), <code>fuel</code> (how much energy its tank holds), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-6</code></p>
 <p><strong>Bounded by</strong> a capacity of 2</p>
-<p><strong>As a thing</strong> Strength: 2 · Costs to produce: 3 metal, 12 energy, 2 citizens · Binding: 3 · Crosses: orbit border · Requires: a Yard · Readies: defending 1, moving 1 · Movable: yes</p>
+<p><strong>As a thing</strong> Strength: 2 · Crosses: orbit border · Readies: defending 1, moving 1 · Movable: 1</p>
 <p><strong>Holds</strong> energy, up to the unit's fuel - <em>a fact about each one rather than about the kind</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
@@ -196,10 +194,10 @@
 <h2 id="pioneer">pioneer</h2>
 <p>founds a territory.</p>
 <p><strong>In families</strong> thing, unit</p>
-<p><strong>Traits of it</strong> <code>moving</code> (0 or 1), <code>strength</code> (a number), <code>fuel</code> (how much energy its tank holds), <code>keeps</code> (the number of turns it will last)</p>
+<p><strong>Traits of it</strong> <code>moving</code> (a number), <code>strength</code> (a number), <code>fuel</code> (how much energy its tank holds), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-7</code></p>
 <p><strong>Bounded by</strong> a capacity of 2</p>
-<p><strong>As a thing</strong> Strength: 2 · Fuel: 2 · Costs to produce: 3 metal, 6 energy, 2 citizens · Binding: 3 · Crosses: border · Readies: defending 1, moving 1 · Movable: yes</p>
+<p><strong>As a thing</strong> Strength: 2 · Fuel: 2 · Crosses: border · Readies: defending 1, moving 1 · Movable: 1</p>
 <p><strong>Holds</strong> energy, up to the unit's fuel - <em>a fact about each one rather than about the kind</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
@@ -218,7 +216,7 @@
 <h2 id="food">food</h2>
 <p>eaten by citizens; expires.</p>
 <p><strong>In families</strong> thing, resource</p>
-<p><strong>Traits of it</strong> <code>keeps</code> (the number of turns it will last), <code>surplus</code> (yes or no)</p>
+<p><strong>Traits of it</strong> <code>keeps</code> (the number of turns it will last), <code>surplus</code> (a number)</p>
 <p><strong>Signature</strong> <code>s-8</code></p>
 <p><strong>Bounded by</strong> the things in it that hold it, and it keeps for one turn</p>
 <p><strong>In recipes</strong></p>

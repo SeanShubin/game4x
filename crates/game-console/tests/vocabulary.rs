@@ -265,21 +265,28 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
         .values()
         .filter(|a| matches!(a, Admits::OneOf(_)))
         .count();
-    // **Eleven, and five of them are the counts.** `C-37` measured six - `ready`, `surplus`
-    // and `unpaid` outright, and `kind`, `resource`, `biome` by pointing at a table - `P-308`
-    // named `phase`'s values for the seventh, and `P-355` added `movable`, *yes or no*. This
-    // arrives at the figure by reading the rows rather than by adding one to a remembered
-    // number, which is the only way the two counts are independent. `control` is the next
-    // candidate and describes rather than naming: *held by a player, or unclaimed* names one
-    // value and describes the other.
+    // **Three since `P-465`, and the eight that left are the whole of the difference.**
+    // `resource`, `biome` and `phase` name their values or point at a table that does. The
+    // five action counts, `surplus`, `unpaid` and `movable` said *0 or 1* or *yes or no*, and
+    // `P-465` made all eight *a number* - which is `P-457`'s rule reaching the cells:
+    // **nothing in the game is two-valued anywhere.**
     //
-    // **What moved since:** `P-399` took `ready` and `spent` out and added `for`; `P-411`
-    // took `for` out again and added `moving`, `laboring`, `working`, `bearing` and
-    // `defending`, each admitting *0 or 1*; `P-417` deleted `kind`, because a kind is not a
-    // trait. Six that were here all along, and five counts.
+    // **A tripwire watched for exactly this and has been deleted.** `C-103` filed it because
+    // `P-465` said no check caught the eight; it fired on the first run after `P-465` landed,
+    // with the set empty, and its own doc said the day it fires is the day to delete it rather
+    // than update it. **This count is what carries the fact now**, which is where it belongs:
+    // a check about what a trait admits rather than a list of what was wrong once.
+    //
+    // **`control` is still the next candidate and still describes rather than naming**:
+    // *held by a player, or unclaimed* names one value and describes the other, and
+    // `spec/data/traits.4x` resolves it to `admits:number` - which is `C-106`.
+    //
+    // **What moved before that:** `P-399` took `ready` and `spent` out and added `for`;
+    // `P-411` took `for` out again and added the five counts; `P-417` deleted `kind`, because
+    // a kind is not a trait.
     assert_eq!(
-        closed, 11,
-        "eleven traits name a closed set - `resource`, `biome`, `surplus`, `unpaid`, `phase`, `movable` and the five counts; {closed} do"
+        closed, 3,
+        "three traits name a closed set - `resource`, `biome` and `phase`; {closed} do"
     );
 
     let session = played();
@@ -480,128 +487,5 @@ fn turn_is_neither_a_kind_nor_a_trait_nor_a_value_and_is_not_in_the_file() {
     assert!(
         carrying.is_empty(),
         "`turn` is still in the data file: {carrying:?}"
-    );
-}
-
-/// Every *Traits* row whose *Values* cell states a range rather than what the trait admits.
-///
-/// **Separate from the test so it can be run on a document written to be wrong.** The release
-/// is the specification lane's file and this lane does not edit it, not even to poison a
-/// fixture and restore it - the window is the thing, and other lanes read the working tree. So
-/// the reading is exercised against a fixture instead, which is `closed_sets.rs`'s precedent.
-fn ranged_cells(document: &str) -> Vec<(String, String)> {
-    rows_under(document, "## Traits")
-        .into_iter()
-        .filter_map(|row| {
-            let name = row.first()?.trim().trim_matches('*').trim().to_string();
-            let values = row.get(2)?.trim().to_string();
-            (values == "0 or 1" || values == "yes or no").then_some((name, values))
-        })
-        .collect()
-}
-
-/// The two-valued cells `P-457` left behind, named so they cannot be forgotten.
-///
-/// **`P-465` says no check catches these, and it is right about the check it names.**
-/// `the_file_of_traits_and_the_release_declare_the_same_words` compares `spec/data/traits.4x`
-/// against what `declare::traits` makes of the release - and `admits` maps `0 or 1`, `yes or
-/// no` and `a number` all to `number`, so a cell saying one and a file saying another agree.
-/// **A check whose two sides come from one source cannot see that source move**, and here the
-/// mapping both sides pass through is that source.
-///
-/// **So this checks what the mapping throws away**: which cells still state a range. `P-457`
-/// landed *nothing in the game is two-valued anywhere*; ten cells still say it is, and
-/// `P-465` is the cleanup that removes them.
-///
-/// # This is a tripwire and its excuse is `P-465`
-///
-/// **It fails the day those cells change**, which is the day to delete it rather than update
-/// it. The numbers are what make that work: an exception that quietly covers nine cells or
-/// eleven has stopped describing anything. `C-61` is the pattern - a named exception that
-/// cannot outlive its excuse.
-///
-/// **It also fails if a cell nobody listed starts stating a range**, which is the half that
-/// keeps it a check rather than a record. The release is read for every two-valued cell
-/// rather than asked about these eight.
-#[test]
-fn the_release_still_states_a_range_in_exactly_the_cells_p_465_lists() {
-    let document = release();
-
-    let ranged = ranged_cells(&document);
-    assert_eq!(
-        ranged
-            .iter()
-            .map(|(name, _)| name.as_str())
-            .collect::<Vec<_>>(),
-        [
-            "moving",
-            "laboring",
-            "working",
-            "bearing",
-            "defending",
-            "surplus",
-            "unpaid",
-            "movable",
-        ],
-        "`P-465` lists eight *Values* cells still stating a range, in the release's own order. \
-         A different set means it has landed, or that something new states one - delete this \
-         when it is the first and read the difference when it is the second"
-    );
-
-    // **`0 or 1` was this release's maxima showing through** - `P-457`'s finding - and `P-459`
-    // put the maxima in the *Readies* column where they belong. So the five counts state a
-    // range for one reason and the three flags for another, and the split is worth asserting:
-    // making them one thing is what `P-465` proposes.
-    let counts = ranged.iter().filter(|(_, v)| v == "0 or 1").count();
-    let flags = ranged.iter().filter(|(_, v)| v == "yes or no").count();
-    assert_eq!(
-        (counts, flags),
-        (5, 3),
-        "five counts and three flags, which is eight read two ways rather than one number"
-    );
-
-    // And the two cells of *Units and structures* that say `yes` where `movable` is of the
-    // kind and a value of the kind is a number. **Every other cell of that column is empty
-    // and stays empty**, which is a blank rather than a zero.
-    let movable: Vec<String> = rows_under(&document, "## Units and structures")
-        .into_iter()
-        .filter(|row| row.get(9).map(|cell| cell.trim()) == Some("yes"))
-        .filter_map(|row| Some(row.first()?.trim().trim_matches('*').trim().to_string()))
-        .collect();
-    assert_eq!(
-        movable,
-        ["ark", "pioneer"],
-        "two *Movable* cells say `yes`, and `P-465` makes them `1`"
-    );
-
-    // **And the reading is shown to change when a cell does**, on a fixture rather than on
-    // the release. Without this the list above is a claim that the check ran, and a check
-    // that cannot be shown to fail is a record of what was true once.
-    let fixture = "## Traits
-
-| Trait      | Of     | Values    | Stored or derived |
-| ---------- | ------ | --------- | ----------------- |
-| **moving** | a unit | 0 or 1    | stored            |
-| **spent**  | a unit | yes or no | stored            |
-| **nature** | a land | a number  | stored            |
-
-## Biomes
-";
-    assert_eq!(
-        ranged_cells(fixture),
-        vec![
-            ("moving".to_string(), "0 or 1".to_string()),
-            ("spent".to_string(), "yes or no".to_string()),
-        ],
-        "both range forms are found and the number is not"
-    );
-    assert!(
-        ranged_cells(
-            &fixture
-                .replace("0 or 1   ", "a number")
-                .replace("yes or no", "a number ")
-        )
-        .is_empty(),
-        "the same table with the ranges removed states none, which is the state `P-465`          proposes and the state that deletes this test"
     );
 }

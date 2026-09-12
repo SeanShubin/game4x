@@ -67,8 +67,13 @@ fn a_section_gathers_what_six_tables_say_separately() {
         "**In families** thing, unit", // Families
         "`strength`",                  // Traits
         "a capacity of 2",             // What bounds a kind in a territory
-        "Costs to produce: 3 metal",   // Units and structures
-        "`found by land` consumes 1",  // Recipes
+        // **Was `Costs to produce: 3 metal` until `P-466` removed that column** as the
+        // Recipes table said twice. A column of *Units and structures* is still what this
+        // arm is for, so it moved to one the table still has rather than being dropped -
+        // dropping it would have left the join asserted over five tables while the comment
+        // said six.
+        "Crosses: border",            // Units and structures
+        "`found by land` consumes 1", // Recipes
     ] {
         assert!(
             section.contains(said),

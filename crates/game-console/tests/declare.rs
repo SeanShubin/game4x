@@ -12,6 +12,7 @@
 //! the wrong lane.
 
 use game_console::{declare, state};
+use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
 fn release() -> String {
@@ -67,21 +68,52 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
             .traits
             .get("name")
             .expect("a declaration names the word it declares");
-        // **A kind's line is its name, and its family where it is in one** - `P-448`. This
-        // asserted one trait, which was the shape before the inversion: a family declared its
-        // members, so a kind's line had nothing to say but its own name.
+        // **A kind's line is its name, its family, and every trait it carries** - `P-470`,
+        // which inverted the *Of* column onto the kinds. This asserted `["name"]` or
+        // `["family", "name"]`, which was the shape before that.
         //
-        // **The prose column still stays prose**, which is what the one-trait assertion was
-        // really guarding and what rule 7 says. So what is checked is the key rather than the
-        // count: a kind carries `name`, and `family` where the release puts it in one, and
-        // nothing else - `What it is` is a sentence and is in no data file.
-        let mut keys: Vec<&str> = row.traits.keys().map(String::as_str).collect();
-        keys.sort();
-        assert!(
-            keys == ["name"] || keys == ["family", "name"],
-            "`{name}` carries {keys:?}, and a kind's line is its name and its family - the \
-             prose column stays prose, which is what rule 7 says"
+        // **The prose column still stays prose**, which is what the assertion was really
+        // guarding and what rule 7 says. So `What it is` must not appear, and the way to say
+        // that without listing the traits here is that every key is `name`, `family`, or a
+        // trait the release declares.
+        let declared: std::collections::BTreeSet<String> =
+            game_console::recipes::body_under(&document, "## Traits")
+                .iter()
+                .map(|row| {
+                    row.first()
+                        .map(String::as_str)
+                        .unwrap_or_default()
+                        .trim()
+                        .trim_matches('*')
+                        .trim()
+                        .replace(' ', "-")
+                })
+                .collect();
+        assert_eq!(
+            declared.len(),
+            24,
+            "the Traits table is the population here"
         );
+        for key in row.traits.keys() {
+            assert!(
+                key == "name" || key == "family" || declared.contains(key),
+                "`{name}` carries `{key}`, which is neither its name, its family, nor a trait \
+                 the release declares - `spec/console.md`: every word in a data file is a kind, \
+                 a trait, or one of a trait's values"
+            );
+        }
+        // **A trait is named and not valued**, which is the form `P-462` gave a kind's line and
+        // `0130c0e` gave the reader. `name` and `family` carry values and nothing else does.
+        for (key, value) in &row.traits {
+            let valued = key == "name" || key == "family";
+            assert_eq!(
+                valued,
+                !value.is_empty(),
+                "`{name}` writes `{key}` {}, and a trait of the kind is written with its value \
+                 while a stored one is written with its name",
+                if value.is_empty() { "bare" } else { "valued" }
+            );
+        }
         named.push(name.clone());
     }
 
@@ -494,34 +526,54 @@ fn the_traits_file_declares_what_a_data_file_needs() {
     let read = state::declarations(&file)
         .unwrap_or_else(|why| panic!("{} does not parse: {why}", at.display()));
 
-    // **Twenty-one of twenty-four, and which three is the whole of the arithmetic.** Four
-    // traits are derived; a derived trait is declared only where a recipe names it, because
-    // every word in a data file is a kind, a trait or one of a trait's values. `unpaid` is
-    // named by `perish`; `surplus`, `metal in it` and `control` are named by no recipe row.
+    // **Twenty-four, and `P-470` is why it is no longer twenty-one.** `P-457` declared a
+    // derived trait only where a recipe named it, which left `metal in it`, `control` and
+    // `surplus` out. Then a kind's line gained the traits it carries, and **a kind may only
+    // name a declared trait** - `spec/console.md`: *every word in a data file is a kind, a
+    // trait, or one of a trait's values*. So all three had to be declared, `kept:nothing`.
     //
-    // **Twenty-four rather than twenty-three since `P-461`**, which declared `binding` - the
-    // dangling reference this lane verified and the specification lane filed: `metal in it` is
-    // *derived: its binding plus the metal in its parts*, and nothing declared `binding`.
+    // **The exception is superseded rather than broken.** It was right while nothing named
+    // them, which is the difference between a rule that was wrong and a rule whose premise
+    // moved.
     assert_eq!(
         read.len(),
-        21,
-        "twenty-one traits belong in a data file; this wrote {}",
+        24,
+        "twenty-four traits, one per row of the release's table; this read {}",
         read.len()
+    );
+    assert_eq!(
+        read.len(),
+        game_console::recipes::body_under(&document, "## Traits").len(),
+        "the file and the table declare a different number of traits"
     );
     let named: Vec<&str> = read
         .iter()
         .filter_map(|row| row.traits.get("name"))
         .map(String::as_str)
         .collect();
-    for gone in ["surplus", "metal-in-it", "control"] {
+    // **The three `P-457` left out are in, and each is `kept:nothing`.** Named rather than
+    // counted, because three arriving and one leaving is the same count.
+    let mut arrived = 0;
+    for derived in ["surplus", "metal-in-it", "control", "binding", "unpaid"] {
         assert!(
-            !named.contains(&gone),
-            "`{gone}` is derived and named by no recipe row, so it is in no data file"
+            named.contains(&derived),
+            "`{derived}` is derived, a kind's line names it, and a kind may only name a \
+             declared trait"
         );
+        let row = read
+            .iter()
+            .find(|row| row.traits.get("name").map(String::as_str) == Some(derived))
+            .expect("just asserted present");
+        assert_eq!(
+            row.traits.get("kept").map(String::as_str),
+            Some("nothing"),
+            "`{derived}` is derived, so nothing carries its value"
+        );
+        arrived += 1;
     }
-    assert!(
-        named.contains(&"unpaid"),
-        "`unpaid` is derived and `perish` names it, so it is declared"
+    assert_eq!(
+        arrived, 5,
+        "the five derived traits, each checked for both things"
     );
 
     // **`surplus` is the one the two derivations disagreed about, so it is asserted by the
@@ -541,10 +593,25 @@ fn the_traits_file_declares_what_a_data_file_needs() {
     let mut open = 0;
     for row in &read {
         assert_eq!(row.kind, "trait", "a trait is declared as a `{}`", row.kind);
+        // **Three keys, and a fourth only for a trait of every kind** - `P-471`:
+        // *a trait of every kind is the one exception, and says so with `of:thing`, because
+        // there is no kind for it to belong to and no family that could hold it.* Asserted as
+        // the pair rather than as a range, so a stray `of` on an ordinary trait fails here
+        // instead of widening the rule.
+        let name = row
+            .traits
+            .get("name")
+            .map(String::as_str)
+            .unwrap_or_default();
+        let of = row.traits.get("of").map(String::as_str);
         assert_eq!(
-            row.traits.len(),
-            3,
-            "a trait's line is its name, what it admits and how it is kept - {} keys",
+            (row.traits.len(), of),
+            if name == "keeps" {
+                (4, Some("thing"))
+            } else {
+                (3, None)
+            },
+            "`{name}` carries {} keys and `of` {of:?}, where a trait's line is its name, what              it admits and how it is kept - plus `of:thing` where it is of every kind",
             row.traits.len()
         );
         let kept = row
@@ -592,7 +659,83 @@ fn the_traits_file_declares_what_a_data_file_needs() {
     };
     assert_eq!(
         (kept_by("thing"), kept_by("kind"), kept_by("nothing")),
-        (15, 5, 1),
-        "fifteen stored, five of the kind, and one derived that a recipe names"
+        (15, 4, 5),
+        "fifteen stored, four of the kind, and five derived - and `binding` moved from the          second to the third, which is `P-472`: it is *derived: the metal the recipe that          makes it consumes* rather than a number the kind carries"
+    );
+}
+
+/// *Whatever is built* is written down in `declare.rs` because it no longer derives, and this
+/// is the assertion that says so rather than the comment.
+///
+/// **`P-466` removed the column it was read from.** *Units and structures* had a **Binding**
+/// cell for exactly six kinds; it has seven columns now and none of them is that one.
+/// `binding`'s *Values* cell says what it is instead - *derived: the metal the recipe that
+/// makes it consumes* - so the derivation is available and gives a different set.
+///
+/// **Two kinds of difference, and only one of them is a naming problem.** The derivation gains
+/// `metal` and `energy`, which `extract` produces while `work` consumes metal - an artefact of
+/// asking the question per recipe rather than per production. **And it loses the garrison**,
+/// which is not an artefact: no recipe consuming metal produces one. That is `P-467`, withdrawn
+/// on 2026-09-12, and `C-106` is where this lane files that it survived the withdrawal.
+///
+/// **This fails the day the derivation reproduces the list**, which is the day to delete both
+/// it and the constant. A named exception that cannot outlive its excuse - `C-61`.
+#[test]
+fn whatever_is_built_no_longer_derives_from_the_release() {
+    let document = release();
+    let rows = game_console::recipes::body_under(&document, "## Recipes");
+    assert!(
+        !rows.is_empty(),
+        "no recipes, so the derivation is empty for the wrong reason"
+    );
+
+    let mut recipe = String::new();
+    let mut consumes: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
+    let mut produces: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
+    for row in &rows {
+        let named = row
+            .first()
+            .map(|c| c.trim().trim_matches('*').trim().to_string());
+        if let Some(name) = named.filter(|n| !n.is_empty()) {
+            recipe = name;
+        }
+        let (Some(role), Some(kind)) = (row.get(2), row.get(4)) else {
+            continue;
+        };
+        match role.trim() {
+            "consume" => consumes
+                .entry(recipe.clone())
+                .or_default()
+                .insert(kind.trim().to_string()),
+            "produce" => produces
+                .entry(recipe.clone())
+                .or_default()
+                .insert(kind.trim().to_string()),
+            _ => continue,
+        };
+    }
+    let derived: BTreeSet<String> = produces
+        .iter()
+        .filter(|(name, _)| consumes.get(*name).is_some_and(|c| c.contains("metal")))
+        .flat_map(|(_, made)| made.iter().cloned())
+        .collect();
+    assert!(
+        !derived.is_empty(),
+        "nothing is produced by a metal-consuming recipe, so the two sets agree by both being \
+         empty and this would pass for the wrong reason"
+    );
+
+    let written: BTreeSet<String> = declare::BUILT.iter().map(|s| s.to_string()).collect();
+    assert_ne!(
+        derived, written,
+        "*whatever is built* derives from the release again - delete `declare::BUILT` and this \
+         test, and read the cell instead"
+    );
+    // **The garrison is the half that matters**, and it is asserted by name so that the two
+    // resources arriving cannot make this pass on its own.
+    assert!(
+        written.contains("garrison") && !derived.contains("garrison"),
+        "the garrison is what `C-106` is about: its line in `spec/data/kinds.4x` names \
+         `binding`, and no recipe consuming metal produces one"
     );
 }

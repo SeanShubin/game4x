@@ -102,14 +102,6 @@ impl Place {
 /// The three `spec/invariants.md` names, spelled as it spells them.
 pub const SOURCES: [&str; 3] = ["the planet", "the star", "time"];
 
-/// What a count trait's Values cell says, which is how a count is told from every other trait.
-///
-/// **`P-411` gives them all the same two values** - *`moving`, `laboring`, `working`,
-/// `bearing`, `defending`, each `0 or 1`* - so the set is closed by the Traits table rather
-/// than by a list here. Nothing else in that table admits exactly these two values, which is
-/// what makes reading them a derivation instead of a guess dressed as one.
-pub const COUNT_VALUES: &str = "0 or 1";
-
 /// One rule, ground to constants and to single kinds, and what it does to each place.
 #[derive(Clone, Debug)]
 pub struct Rule {
@@ -952,28 +944,57 @@ fn changed(
     out
 }
 
-/// The counts a thing can carry, read from the Traits table's Values column.
+/// The counts a thing can carry, read from the *Readies* column.
 ///
 /// **`P-411` undid `P-399` and the question turned round with it.** A readiness was a kind and
 /// the question was *which actions are there*, read from the `for` trait's declared values. A
-/// count is a trait again, and the question is *which traits are counts* - answered by the
-/// Values cell saying [`COUNT_VALUES`], which no other trait's does.
+/// count is a trait again, and the question is *which traits are counts*.
 ///
-/// **Read rather than listed, which is the whole reason this is here.** A hand list would be
-/// the check declaring what the release declares, and a count added tomorrow would be spent
-/// by a recipe and made by a `refresh` with nothing saying the arithmetic had missed it.
+/// **`P-465` took away the answer this used and `P-459` had already supplied a better one.**
+/// It read the *Values* cell for `0 or 1`, which no other trait's said - and `P-465` made all
+/// eight two-valued cells say *a number*, because `P-457` settled that **nothing in the game is
+/// two-valued anywhere**. So the identifying fact was a range the trait never had.
+///
+/// **A count is a trait something readies**, which is what the *Readies* column says and what
+/// the sentence under it says outright: *nothing outside this table readies*. That is a
+/// stronger reading than the one it replaces - the old one identified a count by a bound that
+/// had leaked into the trait, and this one identifies it by the thing a count is for.
+///
+/// **The order is the Traits table's**, so the set is closed by one table and ordered by
+/// another, and neither is a list written here. A hand list would be the check declaring what
+/// the release declares, and a count added tomorrow would be spent by a recipe and made by a
+/// `refresh` with nothing saying the arithmetic had missed it.
 pub fn counts(document: &str) -> Vec<String> {
-    crate::recipes::body_under(document, "## Traits")
+    let at = crate::recipes::column_of(document, "## Units and structures", "Readies");
+    let mut readied: std::collections::BTreeSet<String> = std::collections::BTreeSet::new();
+    for row in crate::recipes::body_under(document, "## Units and structures") {
+        let Some(cell) = row.get(at) else { continue };
+        for part in cell.split(',') {
+            if let Some((action, _)) = part.trim().split_once(' ') {
+                readied.insert(action.trim().to_string());
+            }
+        }
+    }
+    assert!(
+        !readied.is_empty(),
+        "nothing readies anything, so every count would be missed and the arithmetic would \
+         balance over an empty set"
+    );
+    let out: Vec<String> = crate::recipes::body_under(document, "## Traits")
         .iter()
-        .filter(|row| {
-            row.get(2)
-                .map(|values| values.trim() == COUNT_VALUES)
-                .unwrap_or(false)
-        })
         .filter_map(|row| row.first())
         .map(|cell| crate::recipes::plain(cell))
-        .filter(|name| !name.is_empty())
-        .collect()
+        .filter(|name| readied.contains(name))
+        .collect();
+    assert_eq!(
+        out.len(),
+        readied.len(),
+        "the *Readies* column names {} actions and the Traits table declares {} of them - a \
+         readied action that is not a trait is a word in no data file",
+        readied.len(),
+        out.len()
+    );
+    out
 }
 
 /// What a `put` row does to a count, or nothing if it does not name one.

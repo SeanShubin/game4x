@@ -146,7 +146,7 @@ a person: provides labor, eats, and grows on surplus.
 
 **In families** thing
 
-**Traits of it** `laboring` (0 or 1), `bearing` (0 or 1), `defending` (0 or 1), `strength` (a number), `keeps` (the number of turns it will last)
+**Traits of it** `laboring` (a number), `bearing` (a number), `defending` (a number), `strength` (a number), `keeps` (the number of turns it will last)
 
 **Signature** `s-1`
 
@@ -188,7 +188,7 @@ what holds a territory; a territory has at most one.
 
 **Bounded by** a capacity of 1
 
-**As a thing** Strength: 0 · Costs to produce: 1 labor, 1 metal · Binding: 1
+**As a thing** Strength: 0
 
 **In recipes**
 
@@ -205,13 +205,13 @@ built for one resource, and worked to produce it.
 
 **In families** thing
 
-**Traits of it** `working` (0 or 1), `resource` (one of the resources), `keeps` (the number of turns it will last)
+**Traits of it** `working` (a number), `resource` (one of the resources), `keeps` (the number of turns it will last)
 
 **Signature** `s-3`
 
 **Bounded by** a capacity, from *Territory resources*
 
-**As a thing** Costs to produce: 1 labor, 1 metal · Binding: 1 · Readies: working 1
+**As a thing** Readies: working 1
 
 **In recipes**
 
@@ -239,8 +239,6 @@ where an Ark is produced.
 
 **Bounded by** a capacity of 1
 
-**As a thing** Costs to produce: 1 labor, 15 metal · Binding: 15
-
 **In recipes**
 
 - `build yard` produces 1
@@ -261,8 +259,6 @@ built to hold one resource, and holds nothing else.
 
 **Bounded by** as many as the extractors of its resource
 
-**As a thing** Costs to produce: 1 labor, 1 metal · Binding: 1
-
 **Holds** the resource it was built for, up to 10 - *a fact about the kind, so every one of them holds that many*
 
 **In recipes**
@@ -280,13 +276,13 @@ carries a landing, and can invade from orbit.
 
 **In families** thing, unit
 
-**Traits of it** `moving` (0 or 1), `strength` (a number), `fuel` (how much energy its tank holds), `keeps` (the number of turns it will last)
+**Traits of it** `moving` (a number), `strength` (a number), `fuel` (how much energy its tank holds), `keeps` (the number of turns it will last)
 
 **Signature** `s-6`
 
 **Bounded by** a capacity of 2
 
-**As a thing** Strength: 2 · Costs to produce: 3 metal, 12 energy, 2 citizens · Binding: 3 · Crosses: orbit border · Requires: a Yard · Readies: defending 1, moving 1 · Movable: yes
+**As a thing** Strength: 2 · Crosses: orbit border · Readies: defending 1, moving 1 · Movable: 1
 
 **Holds** energy, up to the unit's fuel - *a fact about each one rather than about the kind*
 
@@ -310,13 +306,13 @@ founds a territory.
 
 **In families** thing, unit
 
-**Traits of it** `moving` (0 or 1), `strength` (a number), `fuel` (how much energy its tank holds), `keeps` (the number of turns it will last)
+**Traits of it** `moving` (a number), `strength` (a number), `fuel` (how much energy its tank holds), `keeps` (the number of turns it will last)
 
 **Signature** `s-7`
 
 **Bounded by** a capacity of 2
 
-**As a thing** Strength: 2 · Fuel: 2 · Costs to produce: 3 metal, 6 energy, 2 citizens · Binding: 3 · Crosses: border · Readies: defending 1, moving 1 · Movable: yes
+**As a thing** Strength: 2 · Fuel: 2 · Crosses: border · Readies: defending 1, moving 1 · Movable: 1
 
 **Holds** energy, up to the unit's fuel - *a fact about each one rather than about the kind*
 
@@ -340,7 +336,7 @@ eaten by citizens; expires.
 
 **In families** thing, resource
 
-**Traits of it** `keeps` (the number of turns it will last), `surplus` (yes or no)
+**Traits of it** `keeps` (the number of turns it will last), `surplus` (a number)
 
 **Signature** `s-8`
 

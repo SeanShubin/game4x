@@ -61,6 +61,129 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-108 - `R-8`'s signature reads the release's *Of* column, which is narrower than `kinds.4x`
+
+**to** spec · **status** open · **raised** 2026-09-12 · **source** the specification lane asking,
+before writing `R-8`'s status line, whether a signature now reads from `kinds.4x` or from the
+release
+
+**derived from** the traits it carries and every *(recipe, role)* pair that names it -
+`releases/first-release.md`, `R-8`'s *vetted when*
+
+**It reads the release's *Of* column, and the answer to the question as asked is: the report moved
+**and** what it is computed from moved.**
+
+`catalog::trait_rows` matches a kind against the *Of* cell two ways - by word, and by the cell
+being exactly a family the kind is in. **`S-78`'s third case is deliberately left out of both**: a
+cell that describes rather than names. That was one cell when it was written and it is seven now.
+
+## What it misses, measured rather than reasoned
+
+| Cell                | Traits                   | Kinds that lose them                                               |
+| ------------------- | ------------------------ | ------------------------------------------------------------------ |
+| whatever is built   | `binding`, `metal-in-it` | garrison, extractor, yard, store, ark, pioneer                     |
+| a thing with upkeep | `upkeep`, `unpaid`       | citizen                                                            |
+| whatever moves      | `movable`                | ark, pioneer                                                       |
+| a citizen or a unit | `defending`              | ark, pioneer - the cell names a family and is not only that family |
+
+**And one it gains, correctly.** Every section carries `keeps`, which `spec/data/kinds.4x` puts on
+no line because `P-471` gave the trait `of:thing`. **Both are right**: the two forms state *of every
+kind* differently, and a check comparing them would have to know that.
+
+## What it does to `R-8`'s number
+
+**The catalog says *the traits alone do collide - 8 of the kinds carry exactly the traits another
+one carries*.** Under `kinds.4x` it is seven, and the membership differs: `yard` separates, because
+it gains `binding` and `metal-in-it` where the empty set had swallowed it.
+
+**`ark` and `pioneer` carry identical trait sets under `kinds.4x`** and differ by `fuel` under the
+catalog's reading - so the pair the report says is separated by recipes is separated by a trait
+today and would not be.
+
+**The conclusion `R-8` rests on is not overturned**: every colliding pair is still separated by the
+recipes that name it, under both readings. **The number in the report is computed from the narrower
+one**, and that is what Sean would be reading.
+
+## What this lane is not doing
+
+**Not repointing the signature at `spec/data/kinds.4x`.** `R-8` is `built` and with Sean; changing
+what its evidence is computed from while he is looking at it is the thing `CLAUDE.md` says makes an
+item wrong without touching it. **The reading is reported and left**, which is this lane's half.
+
+---
+
+### C-107 - Two proposals labelled `shape rows` offer a table that describes a change
+
+**to** spec · **status** open · **raised** 2026-09-12 · **source** `tools/outbox`'s promotion check
+going red on `da40bdd`, and reading the two proposals in its parent
+
+**derived from** if it will say them as cells in a table, that is rows; if it will say something
+these words only described, that is an instruction - `CLAUDE.md`, Promotion
+
+**`P-465` and `P-466` both declared `shape rows`, and neither offers rows.**
+
+`P-465`'s table is headed `| Trait | Values now | Values after |`. **A column headed *Values now* is
+a description of what the file said before**, and `rows` means every cell lands - so the check looks
+for `Values now` in `releases/first-release.md` and correctly does not find it. `P-466` is the same
+shape: it removes three columns and shows what it removes, so its cells include `yes`, a *Movable*
+value the release no longer has.
+
+**Both promotions are correct.** The release has seven columns, the eight *Values* cells say
+*a number*, and the two *Movable* cells say `1`. **Only the label is wrong**, and a label is what
+this check reads.
+
+**Excepted by name in `tools/outbox/tests/promotions.rs`**, each with its reason, and the test
+requires an exception to still be failing - so they cannot outlive this. **What would remove them is
+the next such proposal saying `an instruction`**, which is this lane reporting a label rather than
+asking for one: `CLAUDE.md`'s own test settles which it is.
+
+---
+
+### C-106 - `P-467` survived its own withdrawal: a garrison's metal is now stated nowhere
+
+**to** spec · **status** open · **raised** 2026-09-12 · **source** building `P-466` into the code
+and finding two model constants with nothing left to check them against
+
+**derived from** a garrison is stated to cost 1 labor and 1 metal, and nothing charges it -
+`P-467`, withdrawn 2026-09-12
+
+**`P-467` was withdrawn because `P-466` removes the cells it would have blanked. It removed the
+cells and the fact is unchanged.**
+
+- **`binding` is *derived: the metal the recipe that makes it consumes*** - `P-472`. No recipe is
+  named for a garrison: `found by land` consumes a pioneer and `deploy ark` consumes an ark, and
+  neither consumes metal.
+- The garrison's line in `spec/data/kinds.4x` carries `binding` and `metal-in-it`. **So the
+  declaration says it has both and the derivation has nothing to give them.**
+- **The *Costs to produce* column was the only place `1 labor, 1 metal` was stated.** It was the
+  Recipes table said twice for every other thing, and for a garrison it was said once - so removing
+  it removed the fact rather than a copy of it.
+
+## Three things followed in the code, none of them a decision
+
+**`cost::GARRISON_LABOR` and `cost::GARRISON_METAL` are deleted.** Nothing in the model read them -
+which is `P-467`'s own finding and why deleting them changes no game - and the test that held them
+against the release had nothing left to read.
+
+**`released_cost` reads the Recipes table**, which is where `P-466` says the costs always were. It
+finds the recipe **named for** the thing, because three recipes produce an extractor and only
+`build extractor` is the recipe for making one. A garrison has no such recipe and so no cost, which
+is what the release now says.
+
+**`declare::BUILT` is written down because *whatever is built* no longer derives.** The derivation
+`binding` states gives `ark, energy, extractor, metal, pioneer, store, yard`; the cell means six
+kinds. The two resources are an artefact of asking per recipe; **the garrison is not.**
+`whatever_is_built_no_longer_derives_from_the_release` fails the day the two agree, which is the day
+to delete the constant.
+
+## What this lane is not deciding
+
+**Whether a garrison should cost anything** is Sean's, and `P-467` asked it. What is reported is
+that the answer is now *nothing*, by removal rather than by decision, and that three places in the
+code were built on the other answer.
+
+---
+
 ### C-105 - *Of* is not a function of the kinds that carry it, so it cannot be regenerated as written
 
 **to** spec · **status** open · **raised** 2026-09-12 · **source** checking `P-470`'s claim that
