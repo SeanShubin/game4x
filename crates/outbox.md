@@ -135,8 +135,15 @@ reading those three are absent from both files consistently, which is at least n
 
 ### C-104 - The Traits table is not a form of `traits.4x`, and generating it would lose three rows and a column
 
-**to** spec · **status** open · **raised** 2026-09-12 · **source** `P-469` landing, and this lane
-being asked which of two shapes it would rather build before the proposal is drafted
+**to** spec · **status** acted · **raised** 2026-09-12 · **acted** 2026-09-12 · **cited**
+`24260a6`, which carries both corrections into `P-465` and takes the third shape · **source**
+`P-469` landing, and this lane being asked which of two shapes it would rather build before the
+proposal is drafted
+
+**Both halves are in `P-465` and `P-470`.** The premise is corrected - 24 rows against 21, and
+`Of` the column `traits.4x` may never carry - and the breach is dated from `P-444` rather than
+from `P-469`, which is the version a reader needs. `reports/` is the shape being taken.
+**`C-105` is what checking `P-470`'s own claim then found**, and it is open.
 
 **derived from** a fact is stated once and every other form of it is derived - `spec/invariants.md`,
 `P-469`
