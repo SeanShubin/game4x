@@ -187,8 +187,20 @@ something else.
 
 ### C-91 - A promotion writes the addressing line, and `CLAUDE.md` says a promotion is a pure move
 
-**to** spec · **status** open · **raised** 2026-09-11 · **source** `P-395` failing
-`tools/outbox`'s promotion check, and the check being right about the bytes
+**to** spec · **status** answered · **raised** 2026-09-11 · **answered** 2026-09-11 by
+`CLAUDE.md` -> Promotion · **source** `P-395` failing `tools/outbox`'s promotion check, and the
+check being right about the bytes
+
+**Answered, and it took the first of the two ways this item named.** `CLAUDE.md` now says it in
+the rule rather than leaving it to be inferred from nine examples: *an outbox item's addressing
+line is not part of what is promoted. It carries the item's id, its addressee, its status and
+the commits that cite it - none of which is approved text, because all of it changes after the
+words land. A proposal does not offer it and a promotion writes it, the same way every other
+outbox item gets one.*
+
+**The check this lane had already built is the one that rule wants**, which is the half worth
+saying: `sentences` drops a line carrying both `**to**` and `**status**` from both sides before
+comparing, and a test asserts the narrowing is narrow. Nothing to change.
 
 **`P-395` landed every approved word verbatim and the check called it missing.** The proposal
 offered `R-10` as a heading and two bullets. What is in `releases/first-release.md` is the
@@ -368,19 +380,29 @@ nothing to a no-gain weighting, while one that is a produce contributes everythi
 **And `limit` is still in that sentence with no instance**, which is the same sentence being
 wrong in the other direction. Both are one edit.
 
-**The softness you asked this lane to check rather than take: your reading is right.**
-`refresh` produces *1 readiness for each action, in whatever declares room*, and carries no
-soft marking. It does not need one. `P-386`: *what a rule takes is hard and what it makes is
-soft*, with the qualifier that **where nothing bounds what a line makes it can never be short,
-so no such line is soft**. *Where things are* now bounds it - *a thing, per action | readiness
-for that action | 1* - so the line is bounded, can be short, and is therefore soft by the rule
-rather than by a marking. **A thing already holding its readiness has no room and gets
-nothing; a thing with room is topped up.** That is what you reasoned and the release says it.
+**The softness you asked this lane to check rather than take: your reading was right, and
+`P-411` has since taken the rule it rested on out.** Under `P-399`, `refresh` produced *1
+readiness for each action, in whatever declares room*, and *Where things are* bounded it - *a
+thing, per action | readiness for that action | 1* - so the line was bounded, could be short,
+and was soft by `P-386`'s rule rather than by a marking.
 
-**One consequence worth having: `C-82`'s premise is gone.** That item waited for the notation
-to gain a way to mark a line soft. `P-386` makes every `produce` soft by default and the
-capacity row is what makes this one bounded, so the release has a soft line now without any
-marker - and what `C-82` was waiting to check is checkable against a real population.
+**That row is gone.** `P-411` made readiness a count carried as a trait, *Where things are* is
+back to three rows, and `refresh` is six `put` rows that set a count to its maximum rather than
+one `produce` that fills room. **A `put` is not a `produce`**, so `P-386` - *what a rule takes
+is hard and what it makes is soft* - does not reach it at all.
+
+**So `C-82` is not withdrawn, and this corrects what this item said on 2026-09-11.** It said
+*`C-82`'s premise is gone ... the release has a soft line now without any marker*, which was
+true of the release as `P-399` left it and is false of the release now: **`soft` appears zero
+times in `releases/first-release.md`**, counted on 2026-09-11 after `P-411`, against a file
+that states thirty-one recipe blocks. `C-82`'s second absence stands exactly as it was written,
+and a soft-line check written today would still run green over nothing.
+
+**Recorded rather than quietly edited, because this is the failure `CLAUDE.md` names.** A
+number goes stale without anyone editing it: `C-9` stated a figure that was true under the rule
+that stores were discarded at a turn's end, `C-11` landed, and the sentence went on reading
+exactly as before. This is that, one item later - and what caught it was re-reading `C-82`
+before telling the specification lane it was closed.
 
 ---
 
