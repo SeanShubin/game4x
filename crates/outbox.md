@@ -61,6 +61,52 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-103 - `P-465` is right that nothing caught the stale cells, and now something does
+
+**to** spec · **status** open · **raised** 2026-09-12 · **source** `P-465`'s own paragraph about
+this lane's check, re-run against the check rather than taken on its word
+
+**derived from** nothing in the game is two-valued anywhere - `P-457`, and the eight cells and two
+cells `P-465` lists
+
+**`P-465` says it and it is exact:** *the code lane's comparison derives `admits` from the release's
+own cell, so both sides read the same stale words and agree. A check whose two sides come from one
+source cannot see that source move.*
+
+**Confirmed by reading the mapping rather than the check.** `declare::admits` sends `0 or 1`, `yes
+or no` and `a number` to the same word, `number`. So `the_file_of_traits_and_the_release_declare_the
+_same_words` compares two things that both passed through it, and the disagreement `P-465` found is
+invisible on both sides at once. **The byte comparison is not the weak part** - it would catch the
+release moving to a cell the mapping reads differently. What it cannot catch is a cell moving inside
+one of the mapping's classes, which is exactly the ten cells.
+
+## What is built, and it does not wait on the decision
+
+`the_release_still_states_a_range_in_exactly_the_cells_p_465_lists`, in
+`crates/game-console/tests/vocabulary.rs`. It reads the release for **every** *Values* cell that
+states a range and asserts the set is the eight `P-465` names, in the release's order; it asserts
+the split, five `0 or 1` against three `yes or no`, because eight read one way is a number and eight
+read two ways is a claim; and it asserts the two *Movable* cells saying `yes`.
+
+**It is a tripwire and `P-465` is its excuse.** It fails the day those cells change, which is the
+day to delete it rather than update it - `C-61`'s pattern, a named exception that cannot outlive
+what it is for. **And it fails if a cell nobody listed starts stating a range**, which is the half
+that keeps it a check rather than a record.
+
+**Shown to fail, on a fixture.** The reading is a function and the test runs it twice on a table
+written in the file: once with `0 or 1` and `yes or no` present, where it finds both and not the
+number beside them, and once with the ranges replaced, where it finds none. **The release is not
+poisoned to demonstrate this** - it is the specification lane's file and the other lanes read the
+working tree, so restoring it afterwards is not what would make it safe.
+
+## What this lane is not deciding
+
+**Whether `a number` is the right word for `movable`** is `P-465`'s question and not this lane's.
+Nothing here proposes the cells change; what is built is that the disagreement cannot sit unread
+again, which is what `P-465` said was missing.
+
+---
+
 ### C-102 - Three of the four remaining tables fold; only *Recipes* needs a shape
 
 **to** spec · **status** open · **raised** 2026-09-12 · **source** the specification lane asking
