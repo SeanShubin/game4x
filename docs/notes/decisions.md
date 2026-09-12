@@ -84,19 +84,58 @@ B   {trait name:biome admits:ice-desert-grassland-jungle-mountain-ocean}
 C   {trait name:biome admits:biome}   - the values are a kind's members
 ```
 
-## What each costs
+## What each costs, revised 2026-09-12 when Sean read A and B as a matter of style
 
-**A is the notation as it stands and needs no decision from you at all** - `P-334` already writes an
-adjacency as `{adjacency from:1 to:2}`, one line per pair. **It pays in `thing`**: eighteen lines
-that restate `kinds.4x` and go stale the day a kind is added and one line is forgotten.
+**A and B are not the same size, and this proposal presented them as though they were.**
 
-**B needs one sentence from you and no new machinery.** `spec/console.md` already joins the words of
-a **name** with dashes - `in-play`, not `"in play"`. **The question is whether a list is a name.**
-It reads badly at eighteen and fine at two.
+**B breaks the rule you chose to keep two days ago.** *Every word in a data file is a kind, a trait,
+or one of a trait's values.* The words in `{family name:unit members:ark-pioneer}` are `family`,
+`name`, `unit`, `members` and **`ark-pioneer`** - **which is not a kind, not a trait, and not
+sensibly a value**, because making it one means declaring every combination of members that could
+ever be written. Under A the last word is `ark`, which is a kind.
 
-**C is the smallest file and the largest change.** Every list becomes a rule with a name, and the
-names are new vocabulary you would be inventing - `movable`, `extracted`, `every-kind`. **It also
-moves work into whatever reads the file**, which has to know what each rule means.
+**So B costs the property that a file can be checked word by word against the vocabulary.** A reader
+would first have to know which traits hold lists, and split those and not the others. **That is not
+visual style; it is a second category of value arriving by the back door** - which is precisely what
+option B of `P-442` was and you declined it.
+
+**A's cost is larger than *eighteen lines*, and it is the one that has already happened.** `thing` is
+not a list. It is written *every kind above*, and `C-71` is what that cost: both joins split on
+commas, missed it, and **the world's five recipes named nothing at all** - a computation that ran and
+was wrong. **Writing `thing` as eighteen lines is the same copy in a new form**, and it drifts the
+first time a kind is added and a line is not.
+
+**C is what you said it is**, and there is a sharper way to put its advantage than *explicitly
+declaring patterns*: **a derived thing cannot disagree with what it derives from.** That is your own
+move in `spec/logistics.md` - *nothing records the total, so nothing can disagree with it*. `thing`
+under C cannot drift because it is not stored.
+
+**And C's plumbing is real but smaller than it looks.** The rule names have to be declared values of
+a `rule` trait, which keeps the word rule intact; whatever reads the file has to know what
+`every-kind` means, which is one function.
+
+## Option D - a family declares either members or a rule, and this lane missed it
+
+```
+{family name:unit member:ark}
+{family name:unit member:pioneer}
+{family name:resource member:food}
+{family name:resource member:metal}
+{family name:resource member:energy}
+{family name:place member:territory}
+{family name:place member:orbit}
+{family name:thing rule:every-kind}
+```
+
+**`unit` is a list and `thing` is a rule, and they are different sorts of thing.** A kind added
+tomorrow is a `thing` by definition and is not a `unit` unless someone says so. **D says that;
+A and C each say only half of it.**
+
+**Whether that is unification or the exception `P-428` warns against is yours to judge**, and it is
+the reason this is a decision rather than words to approve. The form is uniform - a family
+declaration - and the trait differs. **Three families need no rule and one needs no list**, so
+neither A nor C is wrong about all four.
+
 
 ## Why this is yours and not the code lane's
 
