@@ -61,6 +61,66 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-102 - Three of the four remaining tables fold; only *Recipes* needs a shape
+
+**to** spec · **status** open · **raised** 2026-09-12 · **source** the specification lane asking
+for a view on which half of each of the four is data, before drafting rather than after
+
+**Counted over the cells rather than judged.** Rule 7 sends relationships to prose and data to a
+data file, and three of the four have so little data that they do not need a file at all - their
+data is **of-the-kind traits**, which `P-451`'s fourth sentence already puts on the kind's own
+line.
+
+## *Where things are* - three rows, and not one number
+
+- *a territory's total capacity for a kind* holds *that kind*, up to *its total capacity for that
+  kind*. **That is a rule about every kind, not a row of data.**
+- *a store* holds *the resource it was built for*, up to **10**.
+- *a unit's tank* holds *energy*, up to *the unit's fuel* - a reference to the `fuel` trait.
+
+**Two of the three cells in the `Up to` column are references to a trait**, and the third is the
+store's `10`. **`S-58` already drew that line**: *a unit's tank is the unit's fuel, a per-instance
+trait, and a territory's is derived from what it holds. Only the store's is a fact about the
+kind.* So the one datum is of the kind `store` and rides on the store's line; the rest is the
+relationship *what holds what*, which is prose.
+
+## *What bounds a kind in a territory* - twelve rows, four numbers
+
+**Four say `a capacity of N`** - garrison 1, yard 1, ark 2, pioneer 2 - and those are facts about
+the kind. **The other eight are relationships**: *the food produced here, through upkeep*; *as
+many as the extractors of its resource*; *the citizens that make it, one each per turn*; *the
+things in it that hold it*. None of those is a number and none of them wants to be.
+
+## *Units and structures* - mostly data, and `3A` already folds it
+
+Strength, Fuel, Upkeep and Binding are numbers of the kind; Crosses is a value; Requires names a
+kind. **Two columns are not settled and neither is new**: `Costs to produce` is a list - *3 metal,
+12 energy, 2 citizens* - which is `C-98`'s cell one table over; and `Readies` and `Movable` are
+the two-valued set `P-457` is deciding, with `Readies` also being `P-459`.
+
+## So the recommendation is that three of the four need no file
+
+**Their data is of-the-kind traits and belongs on the kind's line in `kinds.4x`**, which is where
+`P-451` puts a trait of the kind and where `3A` already sends *Units and structures*. What is left
+of each is a relationship, and rule 7 leaves a relationship in prose.
+
+**One number moves that nothing else has claimed**: the store's `10`. It is a capacity rather than
+a trait the Traits table lists, so it needs a name before it can ride on a line - and that is a
+decision rather than work.
+
+## *Recipes* is the one that is genuinely different
+
+**It is not facts about kinds.** A recipe row is a role, a quantity, a kind, a set of traits and a
+place - five things that are only meaningful together, and seventy-eight rows of them. It is the
+one table that is neither a relationship in prose nor a trait on a kind's line, and the one that
+needs a shape decided rather than a fold.
+
+**This lane reads it three times over** - `petri.rs`, `nogain.rs` and `prototypes/kinds` - and
+would rather say so than draft it: the shape is `spec/`'s, and a shape invented here and
+transcribed there is the promotion by the wrong lane `C-49` was about.
+
+---
+
 ### C-101 - `move` names two places with a `$` and its command binds one
 
 **to** spec · **status** acted · **raised** 2026-09-12 · **acted** 2026-09-12 by `P-460`, which
