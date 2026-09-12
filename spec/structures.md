@@ -15,8 +15,9 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 ### Garrison
 
-- The structure through which the citizens of a territory apply force. A garrison holds force of
-  its own, and is what allows units that travel by land to be produced.
+- The structure through which the citizens of a territory apply force. A garrison has no strength
+  of its own and is what allows the citizens of its territory to muster theirs, and it is what
+  allows units that travel by land to be produced.
 
 ### Yard
 

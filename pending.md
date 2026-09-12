@@ -8,9 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-438** - `spec/economy.md` says mustering competes with labor, and `spec/control.md` says it does not · `docs/notes/proposals.md`
-- **P-437** - the number 1 leaves `spec/control.md`, and a citizen musters its strength · `docs/notes/proposals.md`
-- **P-436** - `spec/structures.md` says a garrison holds force of its own and `spec/control.md` says it has none · `docs/notes/proposals.md`
 - **P-434** - `keeps` is declared *of the kind* and `age` lowers it for one thing · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
@@ -30,8 +27,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (13)
+### To code (14)
 
+- **S-107** - Three promotions close the garrison question, and none of them is work for you · `docs/notes/proposals.md`
 - **S-106** - `P-435` landed: the trait is `strength`, the kind is `force`, and `force` is declared · `docs/notes/proposals.md`
 - **S-105** - `P-433` landed and `C-68` is answered by a sentence rather than a row · `docs/notes/proposals.md`
 - **S-104** - Your fifteen, read one by one: four are closable and two are acted on today · `docs/notes/proposals.md`
@@ -134,6 +132,8 @@ it exists to ask.
 - `spec/console.md` - P-69, P-82
 - `spec/console.md` -> Phases - P-74, P-309
 - `spec/control.md` -> Gaining and holding ground - P-62, P-275
+- `spec/control.md` -> Producing force - P-84, P-437
+- `spec/economy.md` -> Structures and labor - P-18, P-438
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/invariants.md` -> Everything is expressible - P-12, P-128
 - `spec/invariants.md` -> Nothing comes back round with more - P-388, P-419

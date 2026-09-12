@@ -62,139 +62,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-438 - `spec/economy.md` says mustering competes with labor, and `spec/control.md` says it does not
-
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed · **shape** instruction · **asks** approval · **into** `spec/economy.md` -> Structures and labor · from the garrison sweep
-
-**Found sweeping for anything that contradicts *citizens muster only with a garrison, at strength
-1*, which is what you asked for.** This is the third, and unlike the other two it is not about the
-garrison at all - it is about what mustering costs.
-
-**`spec/economy.md` -> Structures and labor:**
-
-*Structures that produce force and structures that extract resources are alike in this: **a citizen
-at one is not at the other**.*
-
-**`spec/control.md` -> Producing force**, from your own words this morning - *separate from any of
-its other exhaustion tracks*:
-
-*What a citizen spends to muster is its own, and is not what it spends to labor or to bear.*
-
-**They cannot both hold.** The first makes mustering compete with working; the second makes them
-independent. **The release agrees with the second**: `muster` spends `defending`, `create labor`
-spends `laboring`, and `refresh` restores both - so a citizen working at an extractor musters as
-well, every turn.
-
-**And its first clause is stale twice over.** *Structures that produce force* - **no structure
-produces force.** A garrison has no strength of its own; citizens muster, and `muster` does not ask
-where in the territory a citizen is.
-
-**The instruction: delete the bullet.** It begins *Structures that produce force* and is the second
-of three under *Structures and labor*. **Nothing replaces it** - `spec/control.md` states the true
-relationship, and `spec/README.md` rule 4 says state the rule once.
-
-**The check the promoting commit runs**: `spec/economy.md` contains **0** occurrences of *force*,
-counted at **1** today, and *Structures and labor* holds **two** bullets where it holds three.
-
-## Why deleting rather than correcting
-
-**The bullet exists to say that force and resources compete for a citizen, and they do not.** Once
-that is gone there is nothing left of it: *a citizen works at one structure and cannot be in two
-places at once* is the bullet above it and already says the part that survives.
-
-**If you would rather it said the true thing**, the sentence is *mustering is not working, and a
-citizen does both* - and that is `spec/control.md`'s bullet in other words, which is the duplication
-rule 4 exists to stop.
-
-### P-437 - the number 1 leaves `spec/control.md`, and a citizen musters its strength
-
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Producing force
-
-**Sean, 2026-09-12**: *sounds right: each of them musters its strength each turn.*
-
-**What it fixes.** `spec/control.md` says *each of them musters **one** force each turn* - your own
-words from `P-425`, faithfully recorded - and the release says `muster` produces ***that citizen's
-strength***. **They agree only because a citizen's strength is 1**, which is `C-96`'s shape: the
-divergence cannot show at the only value the release declares.
-
-**And `spec/README.md` rule 7 is the reason it is the spec that moves rather than the release**:
-*relationships here, data elsewhere… state the game's data in a data file, where it can be tuned
-without touching the specification.* **`1` is data**, and it already sits in *Units and structures*.
-
-**The bullet, replacing the one that begins *A garrison coordinates*:**
-
-> - A garrison coordinates the citizens of its territory, so that **each of them musters its
->   strength each turn**. It has no strength of its own, and **it does this by existing** - nothing
->   has to work it
-
-## The one thing to look at before approving
-
-**The bullet now says `strength` twice, about two different things** - the citizen's in the first
-sentence and the garrison's in the second. It reads correctly and it reads densely.
-
-**The alternative is to split it in two bullets**, which this lane has not offered because splitting
-a bullet is a reorganisation and `CLAUDE.md` says a move that could change what a line claims is
-raised rather than made. **Say the word and it comes back split**; the words themselves do not
-change.
-
-## One other place states a number the release also states, and the sweep that found it corrected me
-
-**This proposal first said `spec/` had no other instance. That was wrong.** Numerals appear in
-**seven** of the specification's files, not one. Most are illustrative - `{territory id:1}` in
-`spec/console.md`, *costs 8 metal and 5 energy* in `spec/logistics.md`, *density 6* in
-`spec/economy.md` - and an example is not data the release also carries.
-
-**One is not illustrative.** `spec/resources.md` -> *The list* has a table whose **Lasts** column
-gives food **1**, and `releases/first-release.md` says *food is made with `keeps` 1*. **The same
-number, stated twice, in two documents** - which is exactly what rule 7 is about.
-
-**It is not filed here and it is not a contradiction**, because the two agree. It wants its own item
-and it touches `P-434`, which is about whether `keeps` is stored or of the kind. **Filing it before
-`P-434` is answered would put two questions about one number in front of you at once.**
-
-
-
-### P-436 - `spec/structures.md` says a garrison holds force of its own and `spec/control.md` says it has none
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/structures.md` -> Garrison
-
-**Found while enumerating `P-435`'s sites**, and filed before doing anything else, because two
-`spec/` files cannot both be right.
-
-- **`spec/structures.md:18`**: *The structure through which the citizens of a territory apply force.
-  **A garrison holds force of its own**, and is what allows units that travel by land to be
-  produced.*
-- **`spec/control.md:25`**, which you promoted this afternoon: *A garrison coordinates the citizens
-  of its territory, so that each of them musters one force each turn. **It has no force of its
-  own**, and it does this by existing.*
-
-**The release agrees with `control.md`**: the garrison's `Force` cell in *Units and structures* is
-**0**, and `muster` produces *that citizen's force* rather than the garrison's.
-
-**So `structures.md` is the one that is wrong**, and it is the older sentence - `P-276` made a
-garrison's own force zero and this line was never followed.
-
-## Promote `P-435` before this one
-
-**They meet on one word and the order removes a re-read.** `P-435` renames the trait, so
-`spec/control.md`'s *it has no force of its own* becomes *no strength of its own*. **The bullet below
-is written for after that**, so the two `spec/` files say the same word about the same thing.
-
-**If you reject `P-435`**, this comes back with `force` in place of `strength` and nothing else
-changes. **If you promote this one first**, `spec/structures.md` says `strength` while the *Traits*
-table still says `force`, which is the state this ordering exists to avoid.
-
-**The bullet, replacing the one that begins *The structure through which*:**
-
-> - The structure through which the citizens of a territory apply force. A garrison has no strength
->   of its own and is what allows the citizens of its territory to muster theirs, and it is what
->   allows units that travel by land to be produced.
-
-**The first sentence keeps `force` on purpose.** *Citizens apply force* is the mustered quantity -
-the kind - which `P-435` does not rename. Only *its own* becomes `strength`, because that is the
-trait.
-
-
 ### P-434 - `keeps` is declared *of the kind* and `age` lowers it for one thing
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed, from the code lane's `C-96` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Traits · from `C-96`
@@ -255,6 +122,40 @@ different columns, so no row is ambiguous. **This lane is not proposing a rename
 that the collision is deliberate if you say so, and `C-93` asked.
 
 ## Addressed to other perspectives
+
+### S-107 - Three promotions close the garrison question, and none of them is work for you
+
+**to** code - **status** open - **raised** 2026-09-12 - **source** promoting `P-436`, `P-437` and `P-438`
+
+**The rule they settle is the one the release already implements**, which is why this is an account
+rather than a request. Sean: *every citizen has 1 strength but does not generate force unless a
+garrison is present.* `muster`'s `require 1 garrison` and the citizen's `Strength` of 1 are exactly
+that, unchanged.
+
+**What moved was three `spec/` files that disagreed with it.**
+
+| Landed                        | Was                                                                       | Is                                                                                                 |
+| ----------------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `P-436`, `spec/structures.md` | *a garrison **holds force of its own***                                   | *has **no strength** of its own and is what allows the citizens of its territory to muster theirs* |
+| `P-437`, `spec/control.md`    | *each of them musters **one force** each turn*                            | *musters **its strength** each turn*                                                               |
+| `P-438`, `spec/economy.md`    | *structures that produce force… **a citizen at one is not at the other*** | **deleted** - the bullet asserted that mustering competes with labor, and it does not              |
+
+**`P-437` is the one that could touch you and does not.** It takes the number `1` out of `spec/` -
+rule 7, *relationships here, data elsewhere* - and the number stays where it was, in *Units and
+structures*. **Nothing reads the spec for that value**, and `muster` already produced *that citizen's
+strength* rather than a literal.
+
+**`P-438`'s deletion is the one to read if any.** `spec/economy.md` had said a citizen at a
+force-producing structure is not at a resource-extracting one. **Your model has said otherwise since
+`defending` and `laboring` became separate counts**, and the spec has now caught up rather than the
+other way round.
+
+**And `docs/designing-rules.md` was the source of the question**, which is this lane's file and is
+fixed. Its worked example had **a garrison producing 2 force** and its counter-example called the
+garrison *the shape that cannot be had* - written before `P-416` removed the `max`. If either has
+been quoted in `crates/`, it is quoting something that was wrong rather than stale.
+
+
 
 ### S-106 - `P-435` landed: the trait is `strength`, the kind is `force`, and `force` is declared
 
@@ -4246,6 +4147,9 @@ work the release exists to order.
 | P-431, `age` becomes `require` and `put`; `stow` stays `consume` and `produce`                                               | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-11 |
 | P-433, the game declares no limit, for every kind                                                                            | `spec/logistics.md` -> Containment                                                                                                                                                                       | 2026-09-12 |
 | P-435, the trait becomes `strength`, the kind stays `force`, and `force` is declared                                         | `releases/first-release.md` -> Kinds, Traits, Units and structures, Recipes, and `spec/control.md`, `spec/units.md`                                                                                      | 2026-09-12 |
+| P-436, `spec/structures.md` says a garrison holds force of its own and `spec/control.md` says it has none                    | `spec/structures.md` -> Garrison                                                                                                                                                                         | 2026-09-12 |
+| P-437, the number 1 leaves `spec/control.md`, and a citizen musters its strength                                             | `spec/control.md` -> Producing force                                                                                                                                                                     | 2026-09-12 |
+| P-438, `spec/economy.md` says mustering competes with labor, and `spec/control.md` says it does not                          | `spec/economy.md` -> Structures and labor                                                                                                                                                                | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
 | P-403, an outbox item's addressing line is not part of what is promoted                                                      | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
 | P-402, vetting gates finishing a release, not shipping one                                                                   | `releases/README.md` -> Vetting, and deletion                                                                                                                                                            | 2026-09-11 |
