@@ -122,7 +122,59 @@ this proposal has found. **If there turns out to be a second, `D` is the option 
 accommodates it and `A` is the one that quietly writes it out longhand.**
 
 
-## What each costs, revised 2026-09-12 when Sean read A and B as a matter of style
+## Re-presented 2026-09-12 under *unification when possible, special cases when necessary*
+
+**Two things are in these cells and they differ in meaning, not in shape.**
+
+```
+{family name:unit ...}      ark and pioneer, because someone said so
+{family name:thing ...}     every kind, because that is what the word means
+```
+
+**Add a kind tomorrow.** It is a `thing` **without anyone saying so**. It is not a `unit` unless
+someone says so. **That is the difference, and it is the whole decision.**
+
+| Option          | What it says                           | What it hides                                                                                       |
+| --------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| **A** all lists | `thing` is an enumeration              | **eighteen lines nothing keeps in step with `kinds.4x`.** `C-71` is what the last copy of this cost |
+| **B** joined    | the same, plus `ark-pioneer` is a word | **a second category of value**, and a file can no longer be checked word by word                    |
+| **C** all rules | `resource` and `place` are derived     | **their membership, in whatever reads the file** - and a trait's `Of` regresses forever             |
+| **D** either    | **exactly what each one is**           | nothing found                                                                                       |
+
+**A and C are each a uniformity that is false**, and they hide their complexity in different places -
+A in lines nobody maintains, C in code. **B is A's lie plus a broken rule, and this lane recommends
+dropping it outright** rather than carrying it as an option.
+
+## Why `D` is not the special case it looks like
+
+**`D` is one mechanism with a parameter, and you already have that shape.** `spec/logistics.md`: *a
+kind declares one of three things about what it may hold* - no capacity, a limit, or no limit.
+**Nobody calls that three mechanisms.**
+
+**A family declares one of two things about its members: which they are, or how to tell.** That is
+the same sentence one level over. The form is uniform, what differs is which trait carries the
+answer - and **a reader who meets `rule:` knows immediately that adding a kind changes this family
+and adding one to `member:` does not.**
+
+**So this lane's recommendation is `D`**, and it is a recommendation rather than a preference: A and
+C both require writing down something that is not true, and `D` requires writing down two things that
+are.
+
+## The one thing left open, which is smaller and might remove the case entirely
+
+**`thing` is the only rule found in the eight tables.** If it stopped being a family, `D` would have
+nothing to do and `A` would be true of everything left.
+
+**It cannot simply go**, because three recipe rows name it - `age` twice and `spoil` once - and they
+mean *any kind*. **But whether *any kind* is a family at all is a real question**: `unit` and
+`resource` are sets someone chose, and `thing` is the absence of a restriction.
+
+**This lane has not pursued it** because it is a bigger change than the cell this item is about, and
+because `D` costs nothing if the answer turns out to be yes. **Say if you would rather see it before
+deciding.**
+
+## The evidence for the table above, one: what A and B hide
+
 
 **A and B are not the same size, and this proposal presented them as though they were.**
 
@@ -152,7 +204,8 @@ under C cannot drift because it is not stored.
 a `rule` trait, which keeps the word rule intact; whatever reads the file has to know what
 `every-kind` means, which is one function.
 
-## You chose C, and writing it up found where it stops
+## The evidence for the table above, two: where C stops
+
 
 **Two of the four families have a rule and two do not**, checked against the tables rather than
 assumed:

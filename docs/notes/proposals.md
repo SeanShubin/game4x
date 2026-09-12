@@ -62,6 +62,38 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-446 - forced unification is a lie that hides complexity
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered · **shape** text · **asks** approval · **into** `docs/process.md` -> Three rules for using AI assistants
+
+**Sean, 2026-09-12**: *I want unification when possible, special cases when necessary. Unification is
+good when I can get it, but when I can't and try to force it I only create a lie that hides its
+complexity.*
+
+**`P-428` says what to try first and this says what the trying costs when it fails.** That paragraph
+ends *where I cannot see much difference between the unified form and the exception, the unified form
+wins by default* - **and says nothing about the case where the difference is real and gets flattened
+anyway.**
+
+**The sentence, to follow it:**
+
+> **And a unification that is not there cannot be had by writing one.** Where two things differ in
+> what they mean, one form for both says they do not - so the form is a lie, and the complexity it
+> denies moves somewhere nobody is looking. **A special case that is named costs less than a
+> uniformity that is false.**
+
+## Why this is worth a sentence when `P-428` already exists
+
+**It changes what this lane does with a close call in the opposite direction.** `P-428` made it stop
+presenting ties as open questions. **This makes it stop reaching for the unified form when the
+difference is real** - and it has done that twice in two days, on `force` against `strength` and on
+where the game's data lives, both times with the rule in hand.
+
+**`P-445` is the case that produced it.** Three of four families are enumerations and one is a rule;
+option A writes the rule as eighteen lines and option C writes the enumerations as labels. **Each is a
+uniformity that is false, and each hides its complexity in a different place** - A in eighteen lines
+nothing keeps in step, C in whatever reads the file.
+
 ### P-444 - the first data file, and the directory it goes in
 
 **to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed, from `P-440` and the code lane's transcription · **shape** instruction · **asks** approval · **into** a new file, `spec/data/kinds.4x`

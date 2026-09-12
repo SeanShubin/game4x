@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-446** - forced unification is a lie that hides complexity · `docs/notes/proposals.md`
 - **P-444** - the first data file, and the directory it goes in · `docs/notes/proposals.md`
 - **P-445** - a cell holding several values, written four ways · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
