@@ -8,7 +8,28 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Decided 2026-09-12, several files in a directory, in the notation
+
+*For editing manually, several files in a directory dedicated for that purpose, our text format.*
+
+**Answering both questions `S-110` put to the code lane**, which this lane had said were theirs to
+propose. **They were his**, and the answer took one sentence.
+
+**"Our text format" is the notation** - `spec/console.md`, *there is one notation*, which a command
+and a description of game state are both written in. `P-440` uses the specification's own word and
+flags the substitution rather than making it silently, because a second name for one thing is the
+collision he declined this morning over `force` and `strength`.
+
+**The shape already exists one directory over.** `scenario/commands/` is several `.4x` files split by
+topic - `biomes.4x`, `forces.4x`, `nodes.4x`. **What it holds is a different layer**: this planet's
+facts, which differ per scenario. The nine tables in the release are the game's own and every
+scenario shares them. **Two layers, one of which has files and one of which does not.**
+
+**What is left is how the nine split across files**, which is the code lane's to propose because it
+loads them, and the directory's name, which is small.
+
 ## Decided 2026-09-12, the specification holds the default and the editor is where tuning happens
+
 
 *there is a loop here, the data starts in the specification, that is the default value. I tune it in
 the games editor. Depending on how the tuning works out, I may choose to update the specification.*

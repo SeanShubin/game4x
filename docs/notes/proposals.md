@@ -93,13 +93,39 @@ editor can build can be written as text, and anything written as text can be ope
 the editor; what the editor builds can be written back as text. **What is missing is only that the
 specification's copy is the default, and that promoting a tuned value back is your choice.**
 
+**Sean, 2026-09-12, on the shape of it**: *For editing manually, several files in a directory
+dedicated for that purpose, our text format.*
+
 **Rule 7, replacing it whole:**
 
-> 7. **Relationships in prose, data in a data file, and both are in this directory.** State that a
->    predator has more force than a scavenger; state the game's data in a data file, in the data
->    format rather than in a table. **What the specification states is the default.** Tuning happens
->    in the editor and does not touch the specification, and a tuned value becomes the default only
->    when I say it does.
+> 7. **Relationships in prose, data in data files, and both are in this directory.** State that a
+>    predator has more force than a scavenger; **state the game's data in several files in a
+>    directory of their own**, in the notation rather than in a table. **What the specification
+>    states is the default.** Tuning happens in the editor and does not touch the specification, and
+>    a tuned value becomes the default only when I say it does.
+
+## Two words in that are this lane's choice and are flagged rather than slipped in
+
+**"the notation" rather than "our text format".** `spec/console.md` opens *there is one notation*, and
+a command and a description of game state are written in it - so the specification already has a
+name for what you called our text format, and a second name for one thing is the collision you
+declined this morning. **Say the word and it reads as you wrote it.**
+
+**"a directory of their own" rather than a name.** The directory is not named here because naming it
+is a separate small thing and this proposal is about the rule. `scenario/commands/` is the precedent
+for the shape - `biomes.4x`, `forces.4x`, `nodes.4x`, several files split by topic, in the notation.
+
+## The two layers, because this is about only one of them
+
+**`scenario/commands/` already holds data in exactly the shape you describe**, and it is **not** this
+data. It holds *this planet's* facts - territory 1 is grassland, its food deposit has three
+extractors at density four - which differ per scenario.
+
+**The nine tables in the release are the game's own** - kinds, families, traits, recipes, what a
+thing costs, what a biome is like - and every scenario shares them. **That set has no file, which is
+what `S-30` is about**, and it is what this rule sends to a directory.
+
+
 
 ## What this withdraws from its own earlier version
 
@@ -171,20 +197,31 @@ existing rule, and the release's tables are one of the copies.
 data file is *where it can be tuned without touching the specification*, which the decision makes
 false.
 
-## Two questions are open and this lane is not answering either
+## Both of the questions this item asked are now answered
 
-**The format.** `spec/invariants.md` says *the format may be a standard one or one we invent*, and
-`spec/console.md` fully specifies one the scenario already uses - `{kind field:value}` entries, a
-name is one word, nothing quoted. **Whether the game's data uses that same format is a real choice**,
-and `P-428` points at it - one format rather than a second - **without settling it**, because a data
-file for kinds, traits and recipes is a different shape from a dump of a game state.
+**Sean, 2026-09-12**: *For editing manually, several files in a directory dedicated for that purpose,
+our text format.*
 
-**The file, and whether it is one file or several.** Nine tables today: Scope, Kinds, Families,
-Traits, What bounds a kind in a territory, Where things are, Units and structures, Recipes, Biomes.
+**The format is the notation** - `spec/console.md`'s one form, which the scenario already uses.
+`P-428` pointed at it and this lane would not settle it; he has. **Several files, split by topic, in
+a directory of their own**, which is the shape `scenario/commands/` already has - `biomes.4x`,
+`forces.4x`, `nodes.4x`.
 
-**Both are yours to propose rather than Sean's to invent**, because you are the lane that has to load
-it - and `spec/` is his, so whatever you propose reaches him as a proposal through this lane. **Say
-what you want and this lane will file it.**
+**And the two layers are worth stating, because one of them already exists.** `scenario/commands/`
+holds *this planet's* facts - territory 1 is grassland, its food deposit has three extractors at
+density four - and they differ per scenario. **The nine tables in the release are the game's own**,
+shared by every scenario, and that set is what has no file. **Do not fold the two together.**
+
+## What is left, and one piece of it is yours
+
+**The directory's name is unnamed** and is a small thing this lane will propose unless you would
+rather. **How the nine tables split across files is the real question and it is yours**, because you
+load them: one file per table, or grouped by what they are about, or something the notation suggests
+that a table does not.
+
+**`P-440` is with Sean and is the rule**, not the contents. Nothing moves until it lands and he has
+authored the files.
+
 
 ## What is true today
 
