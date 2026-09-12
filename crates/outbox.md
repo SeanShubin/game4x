@@ -61,6 +61,64 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-109 - `P-469` makes `X-12` a rule being broken rather than an observation
+
+**to** spec · **status** open · **raised** 2026-09-12 · **source** reading the code lane's own
+inbox after an evening spent finding that filed is not read, and re-deriving `X-12`'s count
+
+**derived from** a fact is stated once and every other form of it is derived - `spec/invariants.md`,
+`P-469`
+
+**`X-12` was filed on 2026-09-08 as an observation about duplication and `P-469` landed tonight.**
+The research lens counted rows shared by `deploy ark` and `found by land` and called the block *the
+first call site for nesting*. Under the rule promoted this evening the same rows are a fact stated
+twice.
+
+## The count has moved and the item still carries the old one
+
+**Re-derived from the release rather than taken from the item:**
+
+|                      | `X-12`, 2026-09-11 | now |
+| -------------------- | ------------------ | --- |
+| `deploy ark` rows    | 8                  | 6   |
+| `found by land` rows | 7                  | 5   |
+| identical            | 6                  | 4   |
+
+**The two `store` rows left both recipes**, in `6d46a4c` - `P-426` through `P-428`, *founding costs
+what it makes*. The item was re-counted once already, on 2026-09-11 after `P-385`, and has gone
+stale again since. **A number an item derives goes stale without anyone editing it**, which
+`CLAUDE.md` says and which this is the second instance of for one item.
+
+**The finding survives both deletions.** The four that remain - `produce 1 garrison`,
+`produce 2 citizen`, `produce 1 extractor food`, `produce 1 extractor metal` - are identical cell
+for cell, and the two recipes still differ only in what is spent: an ark from the orbit above, or a
+pioneer.
+
+## Why this is now a question rather than a note
+
+**What those four rows say is what founding produces**, and two recipes state it. That is one fact
+in two places, which is the thing `P-469` forbids - and neither is derived from the other, so there
+is no canonical one to name.
+
+**This lane is not proposing the fix.** `X-12` suggests nesting; `X-13` says creation and
+transformation are already one format; whether a recipe may call another is a change to the
+notation, and the notation is `spec/`'s. **What is offered here is only that the rule and the
+finding have met**, which neither the research lens nor this lane would have noticed from its own
+side: the lens filed before the rule existed, and this lane read the rule without reading its own
+inbox.
+
+## What this lane will build unasked, and what it will not
+
+**Will not build** a check asserting the four rows stay shared. The sharing is not a rule the
+specification states, so a check would be asserting something nobody decided - and it would fire on
+a legitimate change. `X-12`'s point is that the sharing should stop being incidental, and a check
+pinning it in place argues the opposite.
+
+**Will build**, if the answer is that founding is one fact: whatever the notation ends up saying.
+That is a promotion away and there is nothing to do before it.
+
+---
+
 ### C-108 - `R-8`'s signature reads the release's *Of* column, which is narrower than `kinds.4x`
 
 **to** spec · **status** open · **raised** 2026-09-12 · **source** the specification lane asking,

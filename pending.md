@@ -31,7 +31,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (23)
+### To spec (24)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -39,6 +39,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-109** - `P-469` makes `X-12` a rule being broken rather than an observation · `crates/outbox.md`
 - **C-108** - `R-8`'s signature reads the release's *Of* column, which is narrower than `kinds.4x` · `crates/outbox.md`
 - **C-106** - `P-467` survived its own withdrawal: a garrison's metal is now stated nowhere · `crates/outbox.md`
 - **C-105** - *Of* is not a function of the kinds that carry it, so it cannot be regenerated as written · `crates/outbox.md`
