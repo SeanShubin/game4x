@@ -410,49 +410,91 @@ fn the_first_release_plays_from_a_designed_world_through_to_a_working_territory(
     assert_eq!(session.game.phase, Phase::Play, "and it played through");
 }
 
-/// The model's costs are the release's costs.
+/// The model's costs are the release's costs, over every constant `game::cost` has.
 ///
 /// Nothing keeps a constant in Rust and a figure in a markdown table in step except this.
+///
+/// # The population is the module, and the table below is what makes that enforceable
+///
+/// **`Q-83`: this checked ten of thirteen and its count could not notice.** `store` was absent
+/// and `MOVE_CELLS` unreachable, and the figure it asserted was summed over the same six names
+/// the assertions used - so *ten* was ten because the list was six long. **A count over a hand
+/// list can only ever confirm the hand list.**
+///
+/// **`Q-84`: the first repair read this file's own text**, asking whether `cost::NAME` appeared
+/// in it - and a comment satisfies that. The comment explaining why `GARRISON_LABOR` and
+/// `GARRISON_METAL` were deleted names them both, so those two constants could have been
+/// restored, compared against nothing, and the arm that exists to catch exactly that would
+/// have been satisfied by the sentence about their absence. **The question was *does this
+/// string appear* and the question being asked was *is this constant compared against the
+/// release*** - which is the narrower-predicate shape one level down from the one `Q-83`
+/// fixed.
+///
+/// **So the constants drive the assertions instead of sitting beside them.** Every row below
+/// names a constant, *uses* it - the compiler enforces that it exists - and says where the
+/// release states the same figure. The module's `pub const` names are parsed and compared with
+/// this table as a set, so a constant added to `game::cost` has nowhere to hide: not in a
+/// comment, not in a string, and not behind a count somebody bumped.
 #[test]
 fn the_costs_in_the_model_are_the_costs_in_the_release() {
     use game_model::game::cost;
 
-    assert_eq!(cost_of("pioneer", "metal"), cost::PIONEER_METAL);
-    assert_eq!(cost_of("pioneer", "energy"), cost::PIONEER_ENERGY);
-    assert_eq!(cost_of("pioneer", "citizen"), cost::PIONEER_CITIZENS);
-    assert_eq!(cost_of("ark", "metal"), cost::ARK_METAL);
-    assert_eq!(cost_of("ark", "energy"), cost::ARK_ENERGY);
-    assert_eq!(cost_of("ark", "citizen"), cost::ARK_CITIZENS);
-    assert_eq!(cost_of("yard", "labor"), cost::YARD_LABOR);
-    assert_eq!(cost_of("yard", "metal"), cost::YARD_METAL);
-    // One row again, since `P-234` collapsed the three kinds back into one with a
-    // `resource` trait. `P-206` had split it and the release stated the same cost three
-    // times; the split lived in the definitions and nowhere else.
-    assert_eq!(cost_of("extractor", "labor"), cost::EXTRACTOR_LABOR);
-    assert_eq!(cost_of("extractor", "metal"), cost::EXTRACTOR_METAL);
-    assert_eq!(cost_of("store", "labor"), cost::STORE_LABOR);
-    assert_eq!(cost_of("store", "metal"), cost::STORE_METAL);
+    // **`move` is read by recipe name and everything else by what the recipe makes** - `Q-83`.
+    // `MOVE_CELLS` is what a move consumes and `move` produces nothing, so a reader that finds
+    // a recipe by what it makes cannot reach it. A recipe that produces nothing is an ordinary
+    // shape - every one of the world's is - rather than an exception.
+    let checked: [(&str, u32, &str, &str); 13] = [
+        ("STORE_LABOR", cost::STORE_LABOR, "store", "labor"),
+        ("STORE_METAL", cost::STORE_METAL, "store", "metal"),
+        ("YARD_LABOR", cost::YARD_LABOR, "yard", "labor"),
+        ("YARD_METAL", cost::YARD_METAL, "yard", "metal"),
+        ("ARK_METAL", cost::ARK_METAL, "ark", "metal"),
+        ("ARK_ENERGY", cost::ARK_ENERGY, "ark", "energy"),
+        ("ARK_CITIZENS", cost::ARK_CITIZENS, "ark", "citizen"),
+        ("PIONEER_METAL", cost::PIONEER_METAL, "pioneer", "metal"),
+        ("PIONEER_ENERGY", cost::PIONEER_ENERGY, "pioneer", "energy"),
+        (
+            "PIONEER_CITIZENS",
+            cost::PIONEER_CITIZENS,
+            "pioneer",
+            "citizen",
+        ),
+        // One row again, since `P-234` collapsed the three kinds back into one with a
+        // `resource` trait. `P-206` had split it and the release stated the same cost three
+        // times; the split lived in the definitions and nowhere else.
+        (
+            "EXTRACTOR_LABOR",
+            cost::EXTRACTOR_LABOR,
+            "extractor",
+            "labor",
+        ),
+        (
+            "EXTRACTOR_METAL",
+            cost::EXTRACTOR_METAL,
+            "extractor",
+            "metal",
+        ),
+        ("MOVE_CELLS", cost::MOVE_CELLS, "move", "energy"),
+    ];
 
-    // **`move` consumes and produces nothing, so `released_cost` cannot reach it** - `Q-83`.
-    // `MOVE_CELLS` is what a move costs and `move` makes no thing, so the reader that finds a
-    // recipe by what it produces looks for a recipe that makes a `move` and finds none.
-    assert_eq!(
-        recipe_consumes("move")
-            .iter()
-            .find(|(_, what)| what == "energy")
-            .map(|(amount, _)| *amount),
-        Some(cost::MOVE_CELLS),
-        "`move` consumes energy and `MOVE_CELLS` is how much"
-    );
+    for (name, held, thing, what) in checked {
+        let stated = if thing == "move" {
+            recipe_consumes(thing)
+                .into_iter()
+                .find(|(_, cell)| cell == what)
+                .unwrap_or_else(|| panic!("`{thing}` consumes no {what}"))
+                .0
+        } else {
+            cost_of(thing, what)
+        };
+        assert_eq!(
+            held, stated,
+            "`cost::{name}` is {held} and the release says `{thing}` takes {stated} {what}"
+        );
+    }
 
-    // **The population is the constants, not a list of names** - `Q-83`, and it is the half of
-    // that finding worth keeping. This checked ten of thirteen and said so with a figure summed
-    // over the same six names that were missing `store`: **ten was ten because the list was six
-    // long.** A count over a hand list can only ever confirm the hand list.
-    //
-    // **So the module is read and every constant in it must be named here.** A constant added
-    // to `game::cost` with nothing comparing it against the release fails at once, which is the
-    // failure this whole test exists to have.
+    // **The population is `game::cost` itself.** Parsed rather than listed, because a list of
+    // names beside a list of names is the failure `Q-83` found.
     let model = std::fs::read_to_string(
         PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../crates/game-model/src/game.rs"),
     )
@@ -462,43 +504,35 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
         .expect("the model has a `cost` module")
         .1;
     let module = &module[..module.find("\n}").expect("the module ends")];
-    let constants: Vec<&str> = module
+    let declared: BTreeSet<&str> = module
         .lines()
         .filter_map(|line| line.trim().strip_prefix("pub const "))
         .filter_map(|rest| rest.split(':').next())
         .collect();
+    let compared: BTreeSet<&str> = checked.iter().map(|(name, _, _, _)| *name).collect();
     assert_eq!(
-        constants.len(),
-        13,
-        "thirteen constants in `game::cost`; the module has {} ({constants:?})",
-        constants.len()
+        declared, compared,
+        "`game::cost` and the table above name different constants - anything in the first and \
+         not the second is a figure in the model that nothing compares with the release"
     );
-    let mine = std::fs::read_to_string(file!()).unwrap_or_else(|_| {
-        std::fs::read_to_string(
-            PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/first_release.rs"),
-        )
-        .expect("this file")
-    });
-    let unchecked: Vec<&&str> = constants
-        .iter()
-        .filter(|name| !mine.contains(&format!("cost::{name}")))
-        .collect();
-    assert!(
-        unchecked.is_empty(),
-        "these are in `game::cost` and nothing here compares them with the release: \
-         {unchecked:?}"
+    assert_eq!(
+        declared.len(),
+        13,
+        "thirteen constants is the population here"
     );
 
-    // Every figure the release states for a thing this model has a constant for. It checked
-    // six of eleven when the table had six; the table grew and the test did not, so a garrison
-    // and an extractor gained a metal cost that nothing compared against anything.
-    //
-    // **A garrison had two figures here and has none** - `C-106`. `P-466` removed the *Costs
-    // to produce* column as the Recipes table said twice, which it was for every other thing;
-    // no recipe is named for a garrison, so its two figures were the one place they were
-    // stated and they are now stated nowhere. `cost::GARRISON_LABOR` and `cost::GARRISON_METAL`
-    // are deleted rather than left asserting against nothing - **the model never charged
-    // them**, which is what `P-467` found and why its withdrawal did not change the game.
+    // **A garrison had two figures here and has none** - `C-106`. The *Costs to produce*
+    // column was the Recipes table said twice for every other thing; no recipe is named for a
+    // garrison, so its two figures were the one place they were stated and are now stated
+    // nowhere. The two constants were deleted rather than left asserting against nothing, and
+    // **the model never charged them**, which is what `P-467` found.
+    assert!(
+        released_cost("garrison").is_empty() && released_cost("citizen").is_empty(),
+        "a garrison and a citizen are made by recipes named for neither, so the release \
+         states no cost for either - `C-106`"
+    );
+    // And every figure the release does state for a thing, so a row deleted from the table
+    // above fails here as well as in the set comparison.
     let figures: usize = [
         "citizen",
         "garrison",
@@ -513,12 +547,9 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
     .sum();
     assert_eq!(
         figures, 12,
-        "twelve figures across the recipes named for a thing; this checks each one by name"
-    );
-    assert!(
-        released_cost("garrison").is_empty() && released_cost("citizen").is_empty(),
-        "a garrison and a citizen are made by recipes named for neither, so the release \
-         states no cost for either - `C-106`"
+        "twelve figures across the recipes named for a thing, and twelve of the thirteen \
+         constants read them - the thirteenth is `MOVE_CELLS`, which is a consumption rather \
+         than a cost"
     );
 }
 
