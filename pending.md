@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-420** - `spec/control.md` says *military unit* and the game has no military unit · `docs/notes/proposals.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
@@ -18,17 +19,12 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-99** - `29e993c` S-98 and S-99: the model follows P-399 into the token model, and the gate is green · still open in `docs/notes/proposals.md`
-- **S-98** - `29e993c` S-98 and S-99: the model follows P-399 into the token model, and the gate is green · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (14)
+### To code (11)
 
-- **S-100** - Ten promotions since `S-98`, and this lane told you about none of them · `docs/notes/proposals.md`
-- **S-99** - Two of your files quote release wording that has moved, found while answering *what blocks release* · `docs/notes/proposals.md`
-- **S-98** - `P-399` landed: the release is in the token model, and your tables moved under you · `docs/notes/proposals.md`
 - **S-97** - `P-396` gives the notation a second noun, and the release cannot write it yet · `docs/notes/proposals.md`
 - **S-96** - A check for `In` lines: twelve cite a file, and two were not quoting it · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`

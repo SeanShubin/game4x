@@ -62,14 +62,58 @@ Two limits Claude holds itself to:
 
 ## Open
 
-*Nothing is open. Everything filed has been decided.*
+### P-420 - `spec/control.md` says *military unit* and the game has no military unit
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/control.md` -> Open questions · from `C-94`
+
+**The word appears twice in `spec/control.md` and nowhere else in `spec/` or `releases/`.** Line 35
+makes coordination come from *a structure, such as a garrison, or by a military unit*, and line 45
+makes *a military unit organised force in itself*. `spec/unit-types.md` declares exactly two units,
+Ark and Pioneer, and says of neither that it is military. So the term has a rule and no instance.
+
+**The release answered half of it without saying so.** `stand` requires `unit` - which the code
+lane's own test names as *an ark and a pioneer* - and produces *that unit's force*, so every unit
+presents its own force whether or not it is military. `muster` requires a garrison and names no
+alternative, so no unit coordinates anybody. Two readings of `spec/` are both consistent with what is
+written, and on a founded territory with two citizens, a pioneer and no garrison they give **2 force
+and 4** - against a force of nature running 1 to 3, so they disagree about whether a jungle is held.
+
+**This asks approval for the question, not for an answer.** `spec/README.md` rule 5 puts an open
+question at the bottom of the file it concerns; `decisions.md` says a question about the
+specification's own content stays there rather than in it. These are the words to add under
+`## Open questions`:
+
+> - Which units are military? Every unit has a force, and a military unit is organised force in
+>   itself and imposes coordination on citizens. Neither an Ark nor a Pioneer is said to be either
+> - Does a unit that is not military present its force where it stands, and coordinate nobody?
+
+**Why this is `entailed` and not `invented`.** Both bullets restate what is already in
+`spec/control.md` and `spec/unit-types.md` and add no rule; what they add is the observation that
+the two documents do not meet. **Nothing needs to change in the code or the release either way** -
+the code lane built the release's reading and `force_in` is `held_force() + stood`, which is that
+reading exactly.
+
+
 
 
 ## Addressed to other perspectives
 
 ### S-100 - Ten promotions since `S-98`, and this lane told you about none of them
 
-**to** code - **status** open - **raised** 2026-09-11 - **source** Sean asking whether anything needs deciding before the code lane starts, and this lane finding it had gone silent
+**to** code - **status** **acted** 2026-09-11 - **cited** `59291b7`, `da389f8`, `f72f4be` - **raised** 2026-09-11 - **source** Sean asking whether anything needs deciding before the code lane starts, and this lane finding it had gone silent
+
+**Closed by this lane, verified against the tree rather than taken from the report.** `held_force`
+returns `0` with no garrison and sums with one - `crates/game-model/src/territory.rs:776,783` - and
+`force_in` adds the units standing there. The expected data writes `working:`, `laboring:`,
+`bearing:` and `defending:` and writes `ready:yes` **0 times**, against a file of 44 `resource:`
+entries, so readiness is a count carried as a trait in the data a person validates. **The sweep is
+done for everything load-bearing and one doc example is left**:
+`crates/game-console/src/state.rs:29-31` still shows `{ark id:1 fuel:1 ready:yes}` under the heading
+*The form*, which is a form the game no longer writes. Counted over 114 files under `crates/`; the
+other hits are commentary narrating what `P-399` and `P-411` did, which is the `S-48` shape and
+fine. **Not filed as its own item** - it is one comment, and it is recorded here where the sweep was
+asked for.
+
 
 **`CLAUDE.md` says a promotion either files an item citing it or records that it is not work - never
 silence, because silence and *nobody has looked yet* are the same bytes.** **Ten went by without
@@ -88,8 +132,18 @@ description and the map form could not tell them apart.
 **Force is now mustered rather than computed.** `P-416` rewrote `spec/control.md`: **there is no
 *highest* case anywhere in the game.** `P-414` added the rows - `muster` requires a garrison and
 fires once per citizen, `stand` needs none and fires once per unit, both producing *that thing's
-force*, and `discard` sweeps force at the turn's end. **A territory with no garrison presents no
-force at all**, where the model today takes the maximum.
+force*, and `discard` sweeps force at the turn's end. **A territory with no garrison musters
+nothing from its citizens**, where the model then took the maximum.
+
+
+**Corrected 2026-09-11, and the wrong sentence stood here until the code lane had built from it.**
+It read *a territory with no garrison presents no force at all*, which is false and contradicts the
+clause two lines above it: `stand` needs no garrison. What a garrison gates is the **citizens**, and
+a unit standing there musters its own force regardless. The code is right and only the sentence was
+wrong - `force_in` is `held_force() + stood` at `crates/game-model/src/game.rs:248`, so a territory
+holding a pioneer and no garrison presents 2 - but the false sentence was echoed back in `59291b7`'s
+message, one paragraph after the clause that refutes it.
+
 
 ## The one that changes what a dump says
 
@@ -113,7 +167,16 @@ out of `spec/invariants.md`; `P-418` took `ready:yes` and *every stored trait* o
 
 ### S-99 - Two of your files quote release wording that has moved, found while answering *what blocks release*
 
-**to** code - **status** open - **raised** 2026-09-11 - **source** Sean asking whether anything blocks the release, and this lane reading the scenario to answer him
+**to** code - **status** **acted** 2026-09-11 - **cited** `da389f8` - **raised** 2026-09-11 - **source** Sean asking whether anything blocks the release, and this lane reading the scenario to answer him
+
+**Closed by this lane, both quotations read in the tree.** `scenario/commands/play.4x:11` now says
+*a territory declares **no limit** for a*, and `no capacity` has 0 occurrences in that file.
+`crates/game-console/tests/fully_exploited.rs:16-17` now quotes `R-6`'s *vetted when* as *a scenario
+reaches a fully exploited planet and launches an Ark, on the definitions and the machinery of the
+main scenario*, and *a person reaches* is gone. **What this item asked about `R-6` is still open**:
+whether `play.4x` reaches a fully exploited planet is the code lane's to say, and `R-6` is still
+`open` and `to code`.
+
 
 **Neither is urgent and both are in what Sean reads or what backs it.**
 
@@ -138,7 +201,15 @@ check**, and this lane is naming it rather than deciding it.
 
 ### S-98 - `P-399` landed: the release is in the token model, and your tables moved under you
 
-**to** code - **status** open - **raised** 2026-09-11 - **source** `P-399` promoted
+**to** code - **status** **acted** 2026-09-11 - **cited** `59291b7`, `da389f8` - **raised** 2026-09-11 - **source** `P-399` promoted
+
+**Closed, and everything below it describes a model the game no longer has.** `P-411` undid `P-399`
+on the same day: readiness is not a kind, `renew` did not come back, and the *Where things are* row
+this item announced was deleted. The code lane followed the release in and then back out, which is
+what the two commits are. **Read `S-100` instead** - it states what is actually built. Left standing
+rather than deleted, because `59291b7` cites it and a cited item that vanishes is worse than a stale
+one that says it is stale.
+
 
 **This is the one that makes the gate red**, and it is the change `S-97` said was coming. **Four
 sections of `releases/first-release.md` moved**, all asserted cell for cell:
