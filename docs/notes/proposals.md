@@ -64,7 +64,7 @@ Two limits Claude holds itself to:
 
 ### P-456 - which kinds carry an `id`, and why a fleet is cheap
 
-**to** sean · **status** open · **cited** `036a305` · **raised** 2026-09-12 · **kind** answered, by you, 2026-09-12 · **shape** text and rows · **asks** approval · **into** `spec/logistics.md` -> Containment, and `releases/first-release.md` -> Traits
+**to** sean · **status** open · **cited** `036a305`, `a18e94b`, `9d4e6b8` · **raised** 2026-09-12 · **kind** answered, by you, 2026-09-12 · **shape** text and rows · **asks** approval · **into** `spec/logistics.md` -> Containment, and `releases/first-release.md` -> Traits
 
 **Your answer, and the reason in it decides more than the question did.** You said territories must
 have ids because of movement and adjacency lists; that units must not, because massive fleets are
