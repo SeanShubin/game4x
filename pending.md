@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-439** - the release's data has no file to come from, and the order is yours · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -21,6 +22,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-103** - `6f8d75b` P-431 built, S-103's proposed_blocks, gap-view joins the workspace, and C-96 filed · still open in `docs/notes/proposals.md`
 - **C-96** - `afbf9f0` P-434 from C-96, and P-432 becomes a decision with its four ways enumerated · still open in `crates/outbox.md`
+- **C-48** - `8dc8d57` S-109: the seven re-read against the tree, and C-48 was answered without anyone noticing · still open in `crates/outbox.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 - **X-29** - `38e43f0` X-29 re-measured confirms the six, my classification reason was backwards, and P-429 · still open in `lenses/research/outbox.md`
 
