@@ -22,11 +22,26 @@ fn release() -> String {
 }
 
 /// Every kind the release declares is in the file, and every kind in the file is declared.
+///
+/// # It reads the specification's file, and it did not at first
+///
+/// **This compared `declare::kinds` against the release** - the emitter's output against the
+/// table the emitter reads. Both sides came from this lane, so it could only ever have caught
+/// the emitter disagreeing with itself. **`spec/data/kinds.4x` exists now**, and it is the
+/// population that matters: it is what the specification states, and what a reader of the
+/// game reads.
+///
+/// **That is the rule from `docs/process.md`** - *a check that reads a copy of the population
+/// is checking the copy* - firing on a check written an hour before the file landed. The
+/// emitter is still held, below, but as a **second** assertion rather than the subject.
 #[test]
 fn the_file_of_kinds_and_the_release_declare_the_same_words() {
     let document = release();
-    let file = declare::kinds(&document);
-    let read = state::declarations(&file).expect("the file it writes is a file it can read");
+    let at = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/kinds.4x");
+    let file = std::fs::read_to_string(&at)
+        .unwrap_or_else(|why| panic!("cannot read {}: {why}", at.display()));
+    let read = state::declarations(&file)
+        .unwrap_or_else(|why| panic!("{} does not parse: {why}", at.display()));
 
     // What the release says, read a second time by the route the rest of this crate uses.
     let table: Vec<String> = game_console::recipes::body_under(&document, "## Kinds")
@@ -95,6 +110,16 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
         18,
         "eighteen compared, and the count is here so that two empty sets cannot agree"
     );
+
+    // **And the generator still writes what landed**, byte for byte. This is the second
+    // assertion rather than the first: what the specification says is the subject, and this
+    // says the handover has not drifted - so `--example declared-kinds` can still be trusted
+    // to produce the next version of the file rather than something that merely resembles it.
+    assert_eq!(
+        declare::kinds(&document),
+        file,
+        "`declare::kinds` and `spec/data/kinds.4x` have parted, so the generator would          promote bytes that are not what is there"
+    );
 }
 
 /// A line the reader takes is a line the writer wrote, and neither accepts a state.
@@ -125,4 +150,62 @@ fn a_declaration_carries_no_quantity_and_is_in_nothing() {
             "`{text}` was refused for the wrong reason: {refusal}"
         );
     }
+}
+
+/// What the two sides say that the other does not, given a file and a table.
+///
+/// **Lifted out so both arms can be driven against a document written here**, which is
+/// `closed_sets.rs`'s rule - and this lane broke it once. The first check that this bites was
+/// done by appending a line to `spec/data/kinds.4x` and running the suite. That is a file this
+/// lane may not write, and the other lanes read the working tree, so for as long as it took
+/// the specification declared a kind nobody promoted.
+///
+/// **Restoring it afterwards is not what makes it safe.** The window is the thing, and the way
+/// to have no window is to poison a document written here.
+fn differing(file: &str, table: &[String]) -> (Vec<String>, Vec<String>) {
+    let read = state::declarations(file).expect("a file of declarations");
+    let from_file: std::collections::BTreeSet<String> = read
+        .iter()
+        .filter_map(|row| row.traits.get("name"))
+        .filter(|name| !declare::VOCABULARY.contains(&name.as_str()))
+        .cloned()
+        .collect();
+    let from_table: std::collections::BTreeSet<String> = table.iter().cloned().collect();
+    (
+        from_table.difference(&from_file).cloned().collect(),
+        from_file.difference(&from_table).cloned().collect(),
+    )
+}
+
+/// Both arms of the comparison fail, shown on a document written here.
+///
+/// **The real file is not poisoned to find this out.** `closed_sets.rs` puts it in its own
+/// words: it is Sean's file and this lane does not edit it, so the two failures are
+/// demonstrated against a document written to carry each.
+#[test]
+fn a_word_missing_from_either_side_is_reported_against_the_other() {
+    let table = vec!["citizen".to_string(), "garrison".to_string()];
+    let opening = "{kind name:kind}\n{kind name:trait}\n{kind name:family}\n";
+
+    let agreeing = format!("{opening}{{kind name:citizen}}\n{{kind name:garrison}}\n");
+    assert_eq!(
+        differing(&agreeing, &table),
+        (Vec::new(), Vec::new()),
+        "the control: a file and a table that agree differ in nothing, so a failure below is \
+         the arm rather than the fixture"
+    );
+
+    let short = format!("{opening}{{kind name:citizen}}\n");
+    assert_eq!(
+        differing(&short, &table).0,
+        vec!["garrison".to_string()],
+        "a kind the table declares and the file omits would go missing when the table goes"
+    );
+
+    let long = format!("{agreeing}{{kind name:invented}}\n");
+    assert_eq!(
+        differing(&long, &table).1,
+        vec!["invented".to_string()],
+        "a kind the file declares and the table does not is a word this lane invented"
+    );
 }
