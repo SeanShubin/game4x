@@ -66,6 +66,9 @@ listing the open items naming the same rule whenever an item closes, and it is n
 **to** spec · **status** open · **raised** 2026-09-12 · **source** the specification lane asking
 for a view on which half of each of the four is data, before drafting rather than after
 
+**derived from** state the game's data in several files in a directory of their own, in the notation
+rather than in a table - `spec/README.md`, rule 7
+
 **Counted over the cells rather than judged.** Rule 7 sends relationships to prose and data to a
 data file, and three of the four have so little data that they do not need a file at all - their
 data is **of-the-kind traits**, which `P-451`'s fourth sentence already puts on the kind's own
@@ -164,6 +167,9 @@ other direction**, which is the first time today it has run that way.
 carries it to Sean · **source** the specification lane asking this lane to confirm a gap it was not
 confident enough to file, after `P-456` settled that a unit carries no id
 
+**derived from** a command names a recipe and binds what that recipe leaves open: the place it acts
+in, and any ingredient or trait value it names with a `$` - `spec/console.md`
+
 **Carried as `P-460`, and the two exclusions this item made are in it.** Two ways are offered and
 only one survives `P-456`: naming both places, `{move unit:pioneer from:1 to:2}`. Deriving `$from`
 from the unit needs a way to say **which** unit, which is the thing Sean has ruled out - so it is
@@ -219,6 +225,9 @@ where the command gives no way to say it.
 
 **to** spec · **status** acted · **raised** 2026-09-12 · **acted** 2026-09-12 by `P-457`, which
 carries it to Sean · **source** building the three files `P-455` proposes, and reaching the fourth
+
+**derived from** a kind declares which traits it has, and a value declares which trait it is one of -
+`spec/console.md`, `P-451`
 
 **Carried as `P-457`, and it asks one thing rather than the two this item named.** The fourth
 group dissolved: `control` is in no file, and the other four prose cells are a number with a
@@ -277,6 +286,9 @@ wait on `P-456` for `id` alone; everything else on those lines is settled.
 `8fd18d9` · **source** looking for work that does not wait on `P-451` and `P-452`, and finding the
 one clause of `R-10` that was still open
 
+**derived from** every generated drawing is legible in both a light and a dark reader, and where a
+drawing is too large it is shown in parts that say what each leaves out - `releases/first-release.md`, `R-10`
+
 **`R-10` is `built` as of 2026-09-12 and cites the commit this item reported.** The evidence was
 taken and the capability changed hands, so what is left is a person looking at a drawing - which
 is the one thing this lane may not do for him.
@@ -315,6 +327,9 @@ shares nothing with `stow (metal)`, so a pasted list would fail where a computed
 
 **to** spec · **status** acted · **raised** 2026-09-12 · **acted** 2026-09-12 · **cited** `ead2c21`
 · **source** writing the first data file under rule 7, and reaching the second table
+
+**derived from** a field's value may name a kind rather than a thing, and which of the two a field
+takes is a fact about that field - `spec/console.md`
 
 **One of the three cells is answered and built; the other two are `P-450`, with Sean.**
 
@@ -381,6 +396,9 @@ they need is a different decision: they declare **facts about kinds** rather tha
 **source** rule 7 and `S-110`, working out how the release's tables split across files before
 writing a loader for them
 
+**derived from** state the game's data in several files in a directory of their own, in the notation
+rather than in a table - `spec/README.md`, rule 7
+
 **Answered, and the notation did not have to move.** `P-443`: *a file may declare the vocabulary
 rather than use it, and it is written in the same form* - `kind`, `trait` and `family` are
 themselves kinds, so a declaration is an ordinary description and the rule this item asked about
@@ -436,6 +454,9 @@ planet's table in with the game's.
 **source** building `P-431` and running the
 check that says no place in the no-gain arithmetic names something the release does not declare
 
+**derived from** a put names a thing that is already there and says what is true of it afterwards -
+`releases/first-release.md`, the Recipes column description
+
 **Answered the way this item assumed, and by one cell.** `keeps` is **stored**, so `P-431`'s rows
 do what they say: `age` requires a thing with `keeps at least 1` and puts `keeps one less` **on
 that thing**, which of-the-kind forbade. The count that decided it is the one this item made -
@@ -482,6 +503,9 @@ not ask a single thing about it.
 **to** spec · **status** acted · **raised** 2026-09-11 · **acted** 2026-09-12 · **source** the
 specification lane asking whether `play.4x` reaches a fully exploited planet, which `R-6`'s
 *vetted when* makes this lane's to say
+
+**derived from** the scenario takes a first territory from orbit, takes a second by land, and launches
+an Ark - `releases/first-release.md`, `R-6`
 
 **`R-6` is `built` as of 2026-09-11 and the title of this item is the state it was filed
 against.** `P-422` changed the target rather than the scenario, every clause of the new *vetted
