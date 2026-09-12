@@ -11,6 +11,26 @@ The recipes are a **coloured Petri net**, and the difference from a plain one is
 That is not an analogy - it is the mapping `crates/game-console/src/petri.rs` builds and
 `reports/nogain.md` computes over.
 
+## The net is a means, and this is the end it is a means to
+
+**Sean, 2026-09-11**: *They are a means to an end. I want it to be safe for a user to edit recipes
+without having to worry about infinite resources on one turn.*
+
+**Everything below is that sentence, worked out.** The formalism is not here because a net is
+elegant; it is here because it is the thing that makes *safe to edit* checkable instead of hoped
+for. **The person being protected is someone editing a recipe**, and the failure being prevented is
+a rule that hands them more than it took.
+
+**Which is why the refusals are refusals and not advice.** A construct that costs decidability does
+not make the game wrong - it makes the editor unable to tell the player their rule is wrong. `X-9`
+states the trade in one line: with a plain net, *an unintended infinite-resource loop is computable
+rather than something you playtest for.*
+
+**And it is why the scope matters.** The guarantee is wanted for the sublanguage **a player writes
+in**. The world's rules are the game's own and nobody edits them, so they may be stronger - and they
+are. That split is real, unstated, and the subject of this document's open question.
+
+
 ## Two nets, and the guarantees belong to the second
 
 **What we write is coloured.** A rule whose subject is a **family** is one rule standing for several
@@ -19,9 +39,10 @@ is the same move: `work` makes a territory's density, which is one rule with a n
 **The family and the trait are the colours.**
 
 **What the guarantees are about is the plain net you get by unfolding it.** `reports/nogain.md` says
-so in its own words: *41 rules, ground from 23 blocks of recipe rows - a family becomes its members,
+so in its own words: *50 rules, ground from 31 blocks of recipe rows - a family becomes its members,
 a density becomes its cases.* **Boundedness and termination are decidable for the unfolded net**,
 and that is the net the weighting is solved over.
+
 
 **So every colour set must be finite, and that is a real constraint rather than a formality.** A
 family has a listed membership; a trait read as an amount has a listed set of values. **A rule
@@ -33,10 +54,54 @@ drawing grounds to `(container, kind)`. Both are correct readings of the same co
 different granularities, which is why one can see a thing the other cannot - `work` nets to zero in
 the drawing and not in the check.
 
+## `put`, and why identity costs the net nothing
+
+**A `put` row is the one that does not carry a weight**, and it is the clearest case of the colour
+doing work. **Sean, 2026-09-11**: *put was there so we could move things with an identity without
+destroying, then creating them.*
+
+**In a plain net a token is fungible**, so moving a unit is `consume 1 unit` here and `produce 1
+unit` there. That is arithmetically right and it is a lie about the thing: the unit that arrives is
+not the unit that left, and any id, tank or spent count it carried is gone. **In a coloured net the
+token carries a colour, and an arc that preserves the colour is an ordinary arc.** So `put` is not
+an extension of the formalism - it is the coloured version of what `consume`/`produce` was
+approximating badly, and it buys identity **at no cost to any guarantee in this document**.
+
+**The twelve rows split six and six, and only one half is interesting.**
+
+- **Six write *one less*** - `move`, `create labor`, `work`, `bear`, `muster`, `stand`. Each is
+  preceded by a `require ... at least 1`, so the value is known before it is written. **An ordinary
+  decrement arc**, and four of the six are player recipes
+- **Six write *at its maximum*** - all of them `refresh`, which is a **world** recipe. Setting a
+  count to a constant regardless of what is there is the shape that reads the marking, because
+  reaching a fixed value means knowing the current one. **This is the reset arc, and it is confined
+  to the one rule that restores what time gives back**
+
+**That confinement is the whole reason `put` is free.** `spec/invariants.md` already names time as
+one of three sources - *anything that exhausts draws on time for a turn: it spends a count it
+carries, and only the turn's end restores that count.* **`refresh` is that sentence written as
+rows**, and it is the only rule in the game that writes a count upward from nothing.
+
+**Counted by hand from the Qty and Traits columns of the *Recipes* table, over its 81 role cells**,
+so it can be re-run: 69 cells carry a quantity and 12 are blank, and **the twelve blanks are exactly
+the twelve `put` rows**. Of the 69, 66 are constants and three read a trait - *that unit's force*,
+*that citizen's force*, *`$where`'s density for that resource* - which is a colour rather than a
+marking read.
+
+
 **What breaks it is an arc the unfolding cannot flatten**: one that tests a place is **empty** - an
 inhibitor arc - or one whose weight **reads the marking** rather than being a constant, which is a
-reset or transfer arc. `X-29` counted ten of the second kind in this game and found **all ten in
-world recipes and none in a player's**.
+reset or transfer arc. **Every such arc in this game is in a world recipe and none is in a
+player's**, which is the property the open question at the bottom is about.
+
+**That claim has been measured twice and the two measurements do not describe the same game.**
+`X-29` counted the arcs with tooling on 2026-09-10 and found ten, in `grow`, `refuel` and
+*end-of-turn losses*. **Two of those three are no longer recipes**: the saturating rewrite removed
+`grow` and `refuel`, and the release now states 21 recipe names. Counting by hand today gives
+**six**, all of them `refresh`'s *at its maximum* rows. **The conclusion survives the change and its
+evidence did not**, so the number above is this lane's and the lens's tooling should re-run over the
+recipes that exist - filed as part of `X-29`, which is still open.
+
 
 **This document exists so the constraints are known in advance.** The design space is wide, and
 almost all of it is reachable; what is not reachable is small, specific, and worth recognising on
@@ -92,7 +157,32 @@ territory's density; that is one rule with a number per case, and it is allowed.
 
 **2. Does the rule need to know something is absent?** A zero test is an **inhibitor arc**, and with
 one the net is Turing-complete: reachability stops being decidable and so does everything this
-document promises. **This is the one that costs the invariant outright.**
+document promises.
+
+**But the line is boundedness, not the zero test**, and this is the correction worth reading twice
+because the obvious version of it is wrong. **`X-9`'s first draft said moving the test from a
+precondition to a guard on an effect saves it. It does not** - a zero-guarded effect can record the
+test's result elsewhere and the branch returns. What actually separates the safe case from the fatal
+one is **what is being tested**:
+
+- **A place bounded by a stated capacity can be zero-tested for free.** The standard
+  complementary-place construction turns *is it empty* into *is the room full*, with no inhibitor
+  arc and nothing lost. `limit 0 garrison` was always safe, because a garrison's capacity is 1
+- **An unbounded place cannot.** *If there is no food*, *if the store is empty* - these are the
+  cliff, and they are exactly the tests a resource game invites
+
+**`C-75` measured the split over the eleven bound kinds**, and it is the same division `C-74` found
+from the other side - a thing that is at most one against a thing that is counted:
+
+| Zero test | Kinds                                      |
+| --------- | ------------------------------------------ |
+| **free**  | garrison, extractor, yard, ark, pioneer    |
+| **fatal** | citizen, store, labor, food, metal, energy |
+
+**No rule says this and no check enforces it.** The release has zero `limit` rows today - `P-385`
+deleted both `limit 0 garrison` rows - so adopting the constraint is **vacuous now and is not
+vacuous later**. Whether to adopt it is `P-423`, open to Sean.
+
 
 **A comparison is an instance of the second, which is why there are two questions and not three.**
 *The largest of them* is *this one, and nothing is greater* - and **nothing is greater** is a test
@@ -106,15 +196,16 @@ place**, because the contents are a count and finding the greatest means proving
 
 ## The folds, and what to do with each
 
-| Fold                    | Allowed  | How it is written                                                                    |
-| ----------------------- | -------- | ------------------------------------------------------------------------------------ |
-| **sum**                 | **free** | it is the marking of a place. You never compute it                                   |
-| **min**                 | **yes**  | a pairing - one rule that spends one of each, fired as many times as it can          |
-| **at least n**          | **yes**  | an input arc of weight `n` - a `require` or a `consume` of `n`                       |
-| **at most n**           | **yes**  | a capacity. `P-374`: what is stored is the room left, so *at most* is *room remains* |
-| **a number per kind**   | **yes**  | an amount read from a trait - `P-376`                                                |
-| **max**                 | **no**   | *nothing is greater* is a zero test. Over things you have named it is allowed        |
-| **a branch on absence** | **no**   | an inhibitor arc. Legal in a file, fatal to the guarantee                            |
+| Fold                    | Allowed        | How it is written                                                                    |
+| ----------------------- | -------------- | ------------------------------------------------------------------------------------ |
+| **sum**                 | **free**       | it is the marking of a place. You never compute it                                   |
+| **min**                 | **yes**        | a pairing - one rule that spends one of each, fired as many times as it can          |
+| **at least n**          | **yes**        | an input arc of weight `n` - a `require` or a `consume` of `n`                       |
+| **at most n**           | **yes**        | a capacity. `P-374`: what is stored is the room left, so *at most* is *room remains* |
+| **a number per kind**   | **yes**        | an amount read from a trait - `P-376`                                                |
+| **max**                 | **no**         | *nothing is greater* is a zero test. Over things you have named it is allowed        |
+| **a branch on absence** | **it depends** | an inhibitor arc on an unbounded place. On a capacity-bounded one it is free         |
+
 
 ### `min` is a pairing, and the game already contains one
 
@@ -178,7 +269,25 @@ question the state cannot answer, and the rule wants a different shape.
 
 ## Open questions
 
-**Nothing states that the player's sublanguage is the ordinary one.** `X-29` measured that every
-marking-reading arc in the game is in a **world** recipe and none in a player's, so the property
-holds **by accident**. Until a rule says so and a check enforces it, the first player-authored recipe
-that empties a place moves the editor into a class where none of this is decidable.
+**Nothing states that the player's sublanguage is the ordinary one.** Every marking-reading arc in
+the game is in a **world** recipe and none is in a player's, so the property holds **by accident**.
+Until a rule says so and a check enforces it, the first player-authored recipe that empties a place
+moves the editor into a class where none of this is decidable. `X-29`, still open, and its own
+measurement wants re-running over the recipes that exist.
+
+**Nothing says which kinds may be zero-tested.** The boundedness split above is a finding and not a
+rule: `C-75` measured that adopting it would cost nothing, and `P-385` has since removed the only
+two rows it would have governed, so it is now free and proves nothing. **`P-423` asks whether to
+adopt it**, and the three ways out are stated there.
+
+**Nothing says which of two idioms a rule should use for *the same thing, changed*.** `work` writes
+`require` then `put`; `age` writes `consume` then `produce`, for the same operation. Both are legal
+and they differ only in whether identity survives - which is invisible while nothing that ages has
+an id. **`P-424` asks it.**
+
+**One worked example below uses a name the release has since taken.** *A worked example: force is
+`2 + min(guns, citizens)`* writes a hypothetical `stand` over a garrison with a `standing` trait.
+The release now has a real `stand` - over a **unit**, with `defending`, producing *that unit's
+force* - and a real `muster` for the garrison case. **The example's arithmetic is unaffected and its
+names collide**, which is worth fixing when someone next edits this section.
+
