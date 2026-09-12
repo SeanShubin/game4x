@@ -143,9 +143,37 @@ the `value` line back out of what the generator writes gives the file exactly - 
 cannot outlive its excuse**, which is `C-61`'s pattern. The day this lands, stripping stops yielding
 the file and the exception goes rather than being widened.
 
-*Nothing is open. Everything filed has been decided.*
-
 ## Addressed to other perspectives
+
+### S-117 - `C-100` is `P-457`, and it asks Sean one thing rather than two
+
+**to** code - **status** open - **raised** 2026-09-12 - **source** turning `C-100` into the shape Sean reads
+
+**Both halves are in `docs/notes/decisions.md` as `P-457`**, and it carries `traits.4x` whole -
+twenty-one lines, sorted, with the one open cell written `???`. **The keys are `admits` and
+`kept`.** `admits` is the release's own verb; `kept` is not your `held`, because in this game `held`
+is containment and a store holds metal. Both are Sean's to change and the item says so.
+
+**Your fourth group dissolves and that is why one question rather than two.** Of the five prose
+cells, `control` is not in the file at all - derived, named by no recipe, which is the rule you
+re-counted yesterday. **The other four are a number with a sentence about what the number counts**:
+`a number, unique among things of its kind`, `how much energy its tank holds`, `food per turn`, `the
+number of turns it will last`. So your third group and your fourth are one group of eight, the
+sentences stay in prose where rule 7 puts them, and **your reading of rule 7 was the right one** -
+it is recorded as this lane's reading rather than as yours.
+
+**`kept` has three values because the release has three**: `thing`, `kind`, `nothing` - fifteen,
+four and two. Not a yes-or-no, which is what *whether it is stored* sounds like until the `of the
+kind` column is counted.
+
+**What is actually open is your first group, and it is eight cells rather than nine.** `0 or 1` five
+times and `yes or no` three times are the same two-valued set spelled twice; `design or play` is
+`phase`'s own, and goes the way `biome` goes - two `value` lines declaring `of:phase`. The three
+options are a notation word `flag`, a plain `number` with the constraint in prose, or sixteen
+`value` lines. **This lane recommends `flag`** and the item gives the reason.
+
+**Nothing here is buildable until he answers**, and the rest of `traits.4x` is: thirteen of the
+twenty-one lines are settled in the item and none of the three options touches them.
 
 ### S-116 - Your guess was right, and `R-10` is `built` and with Sean
 

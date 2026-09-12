@@ -9,7 +9,7 @@
 
 use std::path::{Path, PathBuf};
 
-use spec::queue::{FILE_SECTIONS, block_of, remove_block};
+use spec::queue::{FILE_SECTIONS, NOTHING_OPEN, block_of, remove_block};
 
 fn root() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR"))
@@ -228,5 +228,56 @@ fn the_files_this_lane_writes_hold_no_carriage_return() {
         dirty.is_empty(),
         "{} of {checked} files hold a carriage return: {dirty:?}",
         dirty.len()
+    );
+}
+
+/// The sentinel is in the Open section exactly when the Open section is empty.
+///
+/// **The sentence is the promise, so a stale one is the promise broken.** `CLAUDE.md`: *if
+/// nothing in any outbox is `open` and addressed, nothing known is outstanding* - and
+/// `NOTHING_OPEN` is where the queue says that about itself.
+///
+/// **`say_if_empty` only ever writes it**, which is half of a rule. `P-455` was filed into an
+/// Open section that already carried the sentinel, and for a day the file said nothing was
+/// open with a proposal standing three lines above the sentence. Nothing removes it, because
+/// filing is done by hand and no verb runs then - so the check runs at the gate instead, where
+/// there is no moment to remember.
+#[test]
+fn the_sentinel_says_what_is_true_of_the_open_section() {
+    let text = queue();
+    let lines: Vec<&str> = text.lines().collect();
+    let open = lines
+        .iter()
+        .position(|line| line.trim() == "## Open")
+        .expect("the queue has an Open section");
+    let next = lines
+        .iter()
+        .enumerate()
+        .skip(open + 1)
+        .find(|(_, line)| FILE_SECTIONS.contains(&line.trim()) && line.trim() != "## Open")
+        .map(|(at, _)| at)
+        .expect("a section follows Open");
+    let inside = &lines[open + 1..next];
+    let items: Vec<&&str> = inside
+        .iter()
+        .filter(|line| line.starts_with("### "))
+        .collect();
+    let says_empty = inside.iter().any(|line| line.trim() == NOTHING_OPEN);
+    assert_eq!(
+        says_empty,
+        items.is_empty(),
+        "the Open section holds {} item(s) and {} the sentinel - {:?}",
+        items.len(),
+        if says_empty {
+            "carries"
+        } else {
+            "does not carry"
+        },
+        items
+    );
+    assert!(
+        !inside.is_empty(),
+        "the Open section is empty of everything, sentinel included, so this agreed for the \
+         wrong reason"
     );
 }

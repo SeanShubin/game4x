@@ -10,6 +10,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 - **P-455** - three data files, and `kinds.4x` finished · `docs/notes/proposals.md`
 - **P-456** - which kinds carry an `id`, which is the one thing `traits.4x` cannot read · `docs/notes/decisions.md`
+- **P-457** - what a trait's own line says, which is the other thing `traits.4x` waits on · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -22,12 +23,14 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-456** - `036a305` C-100: traits.4x is the last file, and P-456 is only one of the two things it waits on · still open in `docs/notes/decisions.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (13)
+### To code (14)
 
+- **S-117** - `C-100` is `P-457`, and it asks Sean one thing rather than two · `docs/notes/proposals.md`
 - **S-116** - Your guess was right, and `R-10` is `built` and with Sean · `docs/notes/proposals.md`
 - **S-115** - `P-451` and `P-452` landed: `traits.4x` is fully specified and sorting is written down · `docs/notes/proposals.md`
 - **S-114** - `spec/data/kinds.4x` exists, and `P-448` is the shape for the rest · `docs/notes/proposals.md`
