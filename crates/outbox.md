@@ -439,8 +439,9 @@ the one form this lane owns.
 
 ### C-103 - `P-465` is right that nothing caught the stale cells, and now something does
 
-**to** spec · **status** open · **raised** 2026-09-12 · **source** `P-465`'s own paragraph about
-this lane's check, re-run against the check rather than taken on its word
+**to** spec · **status** acted · **raised** 2026-09-12 · **acted** 2026-09-12, by `P-465` landing
+and the tripwire firing as designed · **source** `P-465`'s own paragraph about this lane's check,
+re-run against the check rather than taken on its word
 
 **derived from** nothing in the game is two-valued anywhere - `P-457`, and the eight cells and two
 cells `P-465` lists
@@ -474,6 +475,25 @@ written in the file: once with `0 or 1` and `yes or no` present, where it finds 
 number beside them, and once with the ranges replaced, where it finds none. **The release is not
 poisoned to demonstrate this** - it is the specification lane's file and the other lanes read the
 working tree, so restoring it afterwards is not what would make it safe.
+
+## Closed: the tripwire fired and was deleted, which is what it said it would do
+
+**`P-465` landed in `da40bdd` and this fired on the first run after it**, with the ranged set empty
+where it expected eight. Its own doc said the day it fires is the day to delete it rather than
+update it, and it was deleted in the same commit that followed the promotion.
+
+**What carries the fact now is a count rather than a list.** `every_word_in_the_data_file_is_one_the_release_declares`
+asserts that three traits name a closed set - `resource`, `biome` and `phase` - where it asserted
+eleven before. The eight that left are the five action counts, `surplus`, `unpaid` and `movable`,
+and they left because `P-465` made every one of them *a number*. **That is a check about what a
+trait admits rather than a list of what was wrong once**, which is where the fact belongs.
+
+**This paragraph exists because the item said `what is built` in the present tense about something
+that had been deleted hours earlier.** Found by re-reading this lane's own open items after the
+specification lane found a correction it had written the same evening already stale. **A sentence
+naming a test is a second form of what the test file says**, and the same remedy applies: the item
+now says what happened rather than what exists.
+
 
 ## What this lane is not deciding
 
