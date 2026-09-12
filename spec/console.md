@@ -60,7 +60,9 @@ out** - `{citizen defending:1} -> 8` and `{citizen defending:0} -> 6`, never `{c
 **Each distinct description is its own entry, and an entry is never zero.** A thing carrying an
 `id` has a description no other thing shares, so **its quantity is always one**. **Where a thing
 is, is where it appears**; nothing states its container. **Entries are in the order their
-descriptions sort in**, so the same state is always the same bytes.
+descriptions sort in, and the traits inside a description sort too**, so the same state is always
+the same bytes and a description is one string however it was built.
+
 
 **Every word in a data file is a kind, a trait, or one of a trait's values.** A file that uses any
 other word is wrong about the game rather than describing it.
