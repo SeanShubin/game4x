@@ -8,7 +8,31 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-12, lead with the example and let the abstraction explain it
+
+*Show me an example of what each option looks like. Also note, the way you presented this is very
+hard for a human to understand. You speak in the abstract so I have to puzzle out what you mean,
+while I expect the solution would be immediately obvious with a couple of examples. The abstract
+portion is fine as an explanation of the examples.*
+
+**Said of `P-442`, and it is about how this lane writes rather than about that proposal.**
+
+**What the abstract version hid.** It described *a declaration's first word names the thing being
+declared, and that word is not yet a kind* - true, and it makes a reader reconstruct the file before
+judging it. **Written out, the two options differ by three lines**: whether a file of kinds opens
+with `{kind name:kind}`, `{kind name:trait}`, `{kind name:family}`. **That difference is invisible in
+the abstract and obvious in the example**, which is exactly his point.
+
+**`docs/process.md` already has the reason** - *a proposal is read once, by one person, who decides
+from it* - and `CLAUDE.md` has the failure it prevents: `P-124` was sixty lines of esoterica about a
+rule that needed a sentence. **What neither says is the order**: example first, prose underneath.
+
+**The rule this lane is holding itself to**: where a proposal offers options, write out what each one
+looks like before explaining either. For a notation or a format question that means the actual lines.
+**Say which line is the difference.**
+
 ## Corrected 2026-09-12 by the code lane, and it is the mistake this lane had just warned against
+
 
 **This lane told the code lane not to fold two layers together and then folded them**, in the same
 message. It counted **nine** tables as the game's data. **The ninth is *Scope* -> *Territory
