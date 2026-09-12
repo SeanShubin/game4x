@@ -395,12 +395,25 @@ only one who can move them.
   such.**
 - **The gap is not a near miss**, which is the part a summary loses. `tests/fully_exploited.rs:410`
   derives **57 buildings**, which is **114 commands and counts nothing else** - each building is the
-  labor that pays for it and the building, read off the predicate at `:404`. **It is a floor.** On
-  top of it: ten territories to found, each wanting a pioneer produced, moved and landed at 3 metal
-  and 6 energy; **144 citizens** sustained across the twelve, arriving by `breed` at a turn's end -
-  summed from the per-territory figures the test derives by hand; and the turns themselves, where
-  `play.4x` spends **10** reaching two founded territories. **No total is estimated here**, against
-  a scenario that is 133 commands and has founded two of twelve.
+  labor that pays for it and the building, read off the predicate at `:404`. **It is a floor**, and
+  three things sit on top of it, each read from the release rather than recalled.
+- **Ten territories to found, and each wants a founding unit rather than a pioneer.** `found by
+  land` consumes 1 pioneer and `deploy ark` consumes 1 ark; `play.4x` uses one of each, territory 1
+  by ark and territory 2 by pioneer. **Which one is the player's choice and the release leaves it
+  open.**
+- **A founding unit costs citizens, and that is the cost that matters.** `produce pioneer` consumes
+  **3 metal, 6 energy and 2 citizens**; `launch ark` consumes 3 metal, 12 energy and 2 citizens and
+  requires a Yard. **So founding competes with the population rather than costing resources beside
+  it** - ten foundings is twenty citizens spent against a target of **144**, summed from the
+  per-territory figures `DERIVED_BY_HAND` states. Read as metal and energy alone it looks like a
+  cost paid out of production; it is paid out of the goal.
+- **Distance costs turns, not only energy.** `moving` is **0 or 1** and `move` requires *moving at
+  least 1*, puts the unit back with one less, and consumes 1 energy. **Only `refresh` restores it,
+  at a turn's end** - so a unit moves once per turn, and a territory *n* steps from a founded one is
+  *n* turns away. `play.4x` spends **10** `{end-turn}`s reaching two founded territories.
+- **No total is estimated anywhere here**, against a scenario that is 133 commands and has founded
+  two of twelve.
+
  **Re-run by this lane rather than taken from
   the report**: `the_committed_scenario_launches_an_ark_and_does_not_finish_the_planet` passes on
   `(12, 2, 0)`.
