@@ -156,6 +156,12 @@ chose the token model, so `muster`, `stand`, `discard` and `defending` all stand
 *military unit*. `crates/outbox.md:157` is `C-94`, **which this answers** - a unit has force of its
 own and coordinates nobody, so the release was never narrower than the spec on this point.
 
+**And `C-94`'s closing line cites `P-420`, which is withdrawn** - `hooks/pre-commit` caught it on
+the promoting commit: *it closed into something nobody decided to drop*. **The answer is `P-425`**,
+which carried out `P-420`'s instruction and replaced the section it lived in. **One id in your
+closing line**, and the complaint stops.
+
+
 **One bullet is new rather than moved** and is worth reading: *what a citizen spends to muster is
 its own, and is not what it spends to labor or to bear*. Already true of your model; never stated
 before.
