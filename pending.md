@@ -25,6 +25,8 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
+- **X-14** - `3553419` X-29's number was never stale, and X-14 becomes P-426 and P-427 · still open in `lenses/research/outbox.md`
+- **X-29** - `3553419` X-29's number was never stale, and X-14 becomes P-426 and P-427 · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 

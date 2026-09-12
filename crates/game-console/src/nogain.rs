@@ -528,6 +528,25 @@ pub fn readies(document: &str) -> Vec<String> {
 /// `age` and `spoil`, whose subject is `thing`, ground to food alone - and a version that
 /// ground them against every kind would have twelve kinds ageing, which is a bigger game than
 /// this release specifies.
+///
+/// # Correct today, and correct by the population rather than by the rule
+///
+/// **`X-30`, the research lens, and this lane agrees with it.** `age` is *consume 1 thing,
+/// keeps at least 1* and *produce 1 thing, keeps one less*, and `spec/invariants.md` says a
+/// rule written that way *fires as many times as it can*. **A produce of `keeps` one less
+/// satisfies its own consume whenever `keeps` was at least 2**, so a thing declared to last
+/// three turns ages to nothing in one, and `spoil` takes it in the same ending.
+///
+/// **Food is `keeps` 1, and at 1 firing once and firing to exhaustion are the same run.**
+/// That is why neither lane saw it: the only declared population is the one value where the
+/// defect cannot show. Re-derived here rather than taken on report - `age` consuming a
+/// `keeps` 1 thing produces a `keeps` 0 thing, which fails *at least 1* and stops.
+///
+/// **So the grounding below is right and the rule it grounds may not be.** `X-30` is `to
+/// spec` and this lane has not duplicated it. **What guards this side is the count**:
+/// `tests/nogain.rs` asserts `keeps` is exactly `["food"]`, so a second kind with a counter
+/// turns the gate red and brings a reader here rather than quietly widening a rule whose
+/// firing is in question.
 pub fn keeps(document: &str) -> Vec<String> {
     let mut out = Vec::new();
     for line in document.lines() {

@@ -347,7 +347,7 @@ fn every_block_becomes_at_least_one_rule() {
     assert_eq!(
         nogain::keeps(&document),
         ["food".to_string()],
-        "the release declares a `keeps` counter of these kinds"
+        "the release declares a `keeps` counter of these kinds - and `X-30` is why a second          one has to stop the gate rather than widen the grounding: `age` fires to exhaustion,          so a kind with `keeps` 2 or more ages to nothing in one turn"
     );
 
     // Every block is represented. Counted by name rather than by position, because a block
