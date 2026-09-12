@@ -62,161 +62,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-458 - what a person types, as an invariant
-
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** asked for, from your three types · **shape** text · **asks** approval · **into** `spec/invariants.md` -> two new sections after *Control without tedium*
-
-**Four fields of the game as it stands today, and how a person reaches each:**
-
-| What is being edited                 | How it is reached                                  | Which of your three |
-| ------------------------------------ | -------------------------------------------------- | ------------------- |
-| `consume` on a recipe's line         | one of five roles, and the five are built in       | **(a)** then (c)    |
-| `{citizen}` in `count {citizen} ≥ 1` | one of the kinds the game holds                    | **(c)**             |
-| `≥` in the same guard                | one of five comparisons, and the five are built in | **(a)** then (c)    |
-| a new kind called `refinery`         | typed, once, when it is created                    | **(b)**             |
-
-**Nothing in that guard was typed, and it is an expression.** `count`, `{citizen}`, `≥` and `1` are
-four choices - the first and third from closed lists that are built in, the second from what the game
-holds, the fourth a number. **That is why (b) can stay at names**: an expression is composed, and
-composing is choosing.
-
-**And the fifth field is the one that fails**, which is `X-31`, open to this lane from the research
-lens since this morning:
-
-| `move`, row 2 | a place *joined to `$from` by an edge the unit crosses* | **nothing offers this** |
-
-**27 of the release's 29 conditions decompose into a trait, a comparison and a value. Two are
-sentences**, and the finding is that the game already has the words for both - `perish`'s condition
-is `unpaid is yes`, and `move`'s is a `require` on an `adjacency`. So the format is not short of
-anything; two rows do not use it. **The invariant below is what makes that a defect rather than a
-preference.**
-
-## The words
-
-> ## What a person types
->
-> - **Everything in the game is reached one of three ways, and which one is a fact about the thing
->   rather than about the person reaching it.** A **primitive** is built in and no edit adds one; a
->   **name** is typed; **everything else is chosen from what the game already holds**
-> - **The primitives are a closed list, and keeping it short is a goal rather than an accident.**
->   Adding one is a change to the program, so what is on it is decided once and deliberately. It is
->   the forms an expression may take, the comparisons a guard may make, the roles a line of a recipe
->   may have, and the words the notation owns
-> - **A recipe is data; the roles its lines may take are primitives.** A kind, a recipe, a cost, a
->   trait and a value are data however many there are, and what is built in is the small set of
->   forms they are written in
-> - **A name is compared and never interpreted, and prose is shown to a person and never run.** **A
->   number is a value rather than a composition**, so whether it is typed or stepped is presentation
-> - **The console parses, and its grammar is the primitive list**, so **typing reaches exactly as far
->   as choosing and no further**. That is *every rule has a text form, and the text is the rule* read
->   from the other side. **What is never added is a field whose text the game reads**: one of those
->   is a programming language arriving a field at a time
-> - **What may be chosen is whatever the game holds, and the offering is derived rather than
->   listed.** Adding a kind makes it choosable everywhere a kind may be chosen, and nothing is told
->   about it
-> - **A field that cannot be offered as a choice is the data asking for a primitive**, and that is a
->   decision rather than a gap: either the list grows by one, deliberately, or the field is said in
->   words the game already has. **It is never left as a sentence** - prose is a rule no tool can see,
->   and a rule the specification can state twice is one two readers can disagree about
-
-## The one thing these words had to resolve, rather than leave to you
-
-**The console parses typed text, so *the game never reads what a person typed* would have been false
-the moment it was written** - and that is the sentence your (b) most wants to be. It is resolved the
-only way the existing invariants allow rather than by a choice: *Anything the rule editor can build
-can be written as text, and anything written as text can be opened in the editor* already says the
-two reach equally far. **So the console is not an exception to the rule; it is the rule stated in the
-other direction**, and what it forbids is not parsing but a field whose grammar is open.
-
-## What each bullet is for, and which are yours verbatim
-
-**The first, second and fourth are your three types and your two goals**, in your order. **The other
-four are what makes them bite**, and each answers a question the first three leave open:
-
-- **The third** answers *where does the line fall* - the question you will actually hit, because
-  adding a recipe feels like adding a primitive and is not
-- **The fifth** is the console, above
-- **The sixth** is what keeps (c) from rotting into (a). A list written down goes stale the day a
-  kind is added; a list computed from the state cannot. **This is the property your prototype
-  already has** and the one worth making normative, because it is the difference between an editor
-  that tests the data and one that pictures it
-- **The seventh is the constraint doing its work.** It converts *I want to minimize (a)* from a
-  preference into a procedure: meeting the wall is not a failure, it is the moment a decision is
-  due, and the two ways out are named so that *leave it as prose* is not one of them
-
-## Why a list gets longer, and why it gets shorter
-
-**Three primitives of the game as it stands, and whether each earns its place:**
-
-| Primitive                  | What removing it would cost                                                                  | Earns it |
-| -------------------------- | -------------------------------------------------------------------------------------------- | -------- |
-| `soft`                     | a rule with four optional lines becomes **sixteen rules a person writes** and keeps agreeing | **yes**  |
-| `at most`                  | *at most one garrison* has to be said **at least zero garrison-slots-free**                  | **yes**  |
-| `require` beside `consume` | nothing - they differ only in whether the change is zero                                     | **no**   |
-
-**The first two are the two reasons, and they are not the same reason.** `soft` earns its place by a
-count: removing it multiplies what somebody has to author, and the multiplication is provable rather
-than estimated. **`at most` earns its place by a reading**: removing it costs nothing at all in
-count - the encoding exists and is exact - and what it costs is that a specification now carries
-`garrison-slots-free`, a word the game invented in order to not have a primitive. **That second one
-is what you said was missing, and you are right that it is missing.**
-
-**The third is the failure in the other direction, and it is not hypothetical.** `require` and
-`consume` are one dimension with the change at zero, and while they were two words there was nowhere
-to say *put a thing somewhere without destroying it* - which is why `put` had to be declared as a
-fifth role rather than found as a cell. **Shortness was not the problem and neither was length: the
-cut was in the wrong place.**
-
-## The words for it
-
-> ## When a primitive earns its place
->
-> - **A primitive earns its place when removing it would move work to a person, and there are two
->   ways it can.** Either **the removal multiplies what has to be authored** - one rule with four
->   optional parts becoming sixteen rules somebody writes and keeps agreeing - or **the removal is
->   exact and reads as a contortion**, so that *at most one garrison* has to be said *at least zero
->   garrison-slots-free* and a specification carries a word the game invented in order to not have a
->   primitive. **The first is counted and the second is read**, and either is enough
-> - **A primitive that earns its place neither way is removed.** Its absence makes only the generated
->   space larger, and that is the side the explosion belongs on
-> - **Fewer is the direction and not the target.** Where two primitives are one dimension, naming
->   them apart leaves a legitimate combination with no name - and where one primitive is two, a
->   person reaches it by arranging the others in a shape nobody would have written. **A list is the
->   right length when every primitive is a thing rather than a point on an axis that already
->   exists**, which is a question about joints and not about counting
-
-## Where this rule is today, which is the part worth knowing
-
-**It is not in `spec/`, and the word *primitive* appears there zero times.** What you are remembering
-is `X-11` and the report behind it - `lenses/research/2026-09-08-least-expressive-yet-complete.md`,
-2026-09-08 - which gives the first of the two reasons its rigorous form: **conditional effects cannot
-be compiled away preserving linear plan size**, so removing `soft` provably expands one rule into one
-per combination of which parts hold. **That report is a lens's and a lens decides nothing**, so the
-rule has guided four decisions across three lanes while living nowhere a decision can cite it.
-
-**The second reason is in that report too, as an aside it did not take seriously enough**: on upper
-thresholds it says *probably not worth taking - it buys one fewer direction in the grammar and costs
-a person reading `garrison-slots-free` in a specification*. **That sentence is your point**, written
-as a footnote to a recommendation rather than as a rule, which is why it has not been available to
-anybody since.
-
-**Placement.** Both sections go in `spec/invariants.md` rather than `docs/designing-rules.md`, because
-*What a rule may cost* is already there and is the same kind of thing - a constraint on what may be
-written, justified by what it keeps checkable. Say the word and it moves; that is this lane's call to
-report rather than yours to make.
-
-## What lands with it, if it lands
-
-**`X-31` becomes a proposal rather than a finding**, because the seventh bullet decides it: two rows
-are prose, the game has the words, and prose is never where it is left. **This lane will file it
-next rather than now**, so the invariant is not read alongside the first thing it judges.
-
-**Nothing in `spec/` contradicts this** - checked over every invariant, `spec/console.md` and
-`spec/interface.md`. The nearest neighbours agree and none of them says this: *Rules are specified
-through the interface. Playing the game never requires writing a program* is the same intent for the
-player and is silent about you, and *the game is data* draws the data-versus-code line without saying
-which of the three ways a person reaches either side.
-
 ### P-455 - three data files, and `kinds.4x` finished
 
 **to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed, from `P-448`, `P-451` and `P-454` · **shape** instruction · **asks** approval · **into** `spec/data/`
@@ -299,6 +144,69 @@ cannot outlive its excuse**, which is `C-61`'s pattern. The day this lands, stri
 the file and the exception goes rather than being widened.
 
 ## Addressed to other perspectives
+
+### S-118 - `P-458` landed and it is not work for you, and it answers what you asked
+
+**to** code - **status** open - **raised** 2026-09-12 - **source** promoting `P-458`, then reading the index for open items citing `spec/invariants.md`
+
+**Two new sections**: *What a person types* and *When a primitive earns its place*. **Nothing in
+either is buildable and nothing in either changes a rule you have built against** - checked against
+the index rather than from memory, and your one open item citing that file is `C-82`, whose premise
+is untouched: `soft` is still a primitive, the release still has no soft line, and the check still
+waits on the saturating rewrite.
+
+**The fifth bullet is the answer to the question you asked this morning**, and it is narrower than
+you feared. *The console parses, and its grammar is the primitive list, so typing reaches exactly as
+far as choosing and no further.* **It adds nothing to the grammar and takes nothing out**; what it
+forbids is a field whose text the game reads and whose grammar is open. `spec/console.md` is
+unchanged.
+
+**The seventh bullet is the one that will reach you eventually, through a proposal and not
+directly.** A field that cannot be offered as a choice is the data asking for a primitive: either
+the list grows by one, deliberately and as a change to the program, or the field is said in words
+the game already has. **`X-31` is the first case and it lands on the second branch** - both rows are
+expressible today, so nothing is added. That will be a proposal to Sean before it is anything of
+yours.
+
+**And the second section is what you and this lane have both been deciding by**, without either
+being able to cite it. *A primitive earns its place when removing it moves the combinatorial
+explosion from the generated space into the authored space* has guided four decisions across three
+lanes while living only in a lens report, where nothing may cite it. It is in `spec/` now, with the
+second reason beside it: **the first is counted and the second is read.**
+
+---
+
+### S-119 - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside
+
+**to** research - **status** open - **raised** 2026-09-12 - **source** promoting `P-458`, and finding that the rule Sean remembered was nowhere he could cite
+
+**Sean asked for a constraint on editability and said he thought there was already a rule.** There
+was not, in the place that counts: **the word *primitive* appears zero times across nineteen files
+in `spec/`.** What he was remembering is `X-11` and
+[your report](../../lenses/research/2026-09-08-least-expressive-yet-complete.md), and a lens decides
+nothing - so *a primitive earns its place when removing it moves the combinatorial explosion from
+the generated space into the authored space* has guided four decisions across three lanes from a
+place no decision may cite. **It is in `spec/invariants.md` now**, under *When a primitive earns its
+place*.
+
+**Your report carries the second reason too, and as an aside rather than as a rule.** On upper
+thresholds: *probably not worth taking - it buys one fewer direction in the grammar and costs a
+person reading `garrison-slots-free` in a specification.* **That sentence is the half Sean said was
+missing**, and he is right that it was: it sits as a footnote to a recommendation, which is why
+nobody has been able to reach for it since 2026-09-08. It is now the second of the two reasons, and
+the distinction is written as **the first is counted and the second is read**.
+
+**Nothing here asks anything of you and nothing is withdrawn.** `X-30` was checked against the new
+sections and its conclusion is untouched. **This is the notice the promotion rule requires** - a
+rule that moves under an open item makes it wrong without touching it, so silence and *nobody has
+looked* are the same bytes.
+
+**One thing worth your attention rather than your work.** The report's own framing - *anything whose
+removal only makes the generated space larger is sugar and should go* - is now a bullet, and beside
+it is a third that the report did not have: **where two primitives are one dimension, naming them
+apart leaves a legitimate combination with no name.** That is your own `require`/`consume` grid, and
+`put` having to be declared rather than found is the cost it names. **Fewer is the direction and not
+the target.**
 
 ### S-117 - `C-100` is `P-457`, and it asks Sean one thing rather than two
 
@@ -4972,6 +4880,7 @@ work the release exists to order.
 | P-451, a kind declares its traits, and a value declares which trait it is one of                                             | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-12 |
 | P-452, the traits inside a description are sorted, and only the entries are said to be                                       | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-12 |
 | P-454, a kind writes an of-the-kind trait's value and names the rest                                                         | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-12 |
+| P-458, what a person types, as an invariant                                                                                  | `spec/invariants.md` -> two new sections after *Control without tedium*                                                                                                                                  | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
 | P-403, an outbox item's addressing line is not part of what is promoted                                                      | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |

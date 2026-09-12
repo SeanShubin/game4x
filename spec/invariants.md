@@ -47,6 +47,48 @@ specific rule.
 - Every rule has a text form, and the text is the rule. Anything the rule editor can build can be
   written as text, and anything written as text can be opened in the editor
 
+## What a person types
+
+- **Everything in the game is reached one of three ways, and which one is a fact about the thing
+  rather than about the person reaching it.** A **primitive** is built in and no edit adds one; a
+  **name** is typed; **everything else is chosen from what the game already holds**
+- **The primitives are a closed list, and keeping it short is a goal rather than an accident.**
+  Adding one is a change to the program, so what is on it is decided once and deliberately. It is
+  the forms an expression may take, the comparisons a guard may make, the roles a line of a recipe
+  may have, and the words the notation owns
+- **A recipe is data; the roles its lines may take are primitives.** A kind, a recipe, a cost, a
+  trait and a value are data however many there are, and what is built in is the small set of
+  forms they are written in
+- **A name is compared and never interpreted, and prose is shown to a person and never run.** **A
+  number is a value rather than a composition**, so whether it is typed or stepped is presentation
+- **The console parses, and its grammar is the primitive list**, so **typing reaches exactly as far
+  as choosing and no further**. That is *every rule has a text form, and the text is the rule* read
+  from the other side. **What is never added is a field whose text the game reads**: one of those
+  is a programming language arriving a field at a time
+- **What may be chosen is whatever the game holds, and the offering is derived rather than
+  listed.** Adding a kind makes it choosable everywhere a kind may be chosen, and nothing is told
+  about it
+- **A field that cannot be offered as a choice is the data asking for a primitive**, and that is a
+  decision rather than a gap: either the list grows by one, deliberately, or the field is said in
+  words the game already has. **It is never left as a sentence** - prose is a rule no tool can see,
+  and a rule the specification can state twice is one two readers can disagree about
+
+## When a primitive earns its place
+
+- **A primitive earns its place when removing it would move work to a person, and there are two
+  ways it can.** Either **the removal multiplies what has to be authored** - one rule with four
+  optional parts becoming sixteen rules somebody writes and keeps agreeing - or **the removal is
+  exact and reads as a contortion**, so that *at most one garrison* has to be said *at least zero
+  garrison-slots-free* and a specification carries a word the game invented in order to not have a
+  primitive. **The first is counted and the second is read**, and either is enough
+- **A primitive that earns its place neither way is removed.** Its absence makes only the generated
+  space larger, and that is the side the explosion belongs on
+- **Fewer is the direction and not the target.** Where two primitives are one dimension, naming
+  them apart leaves a legitimate combination with no name - and where one primitive is two, a
+  person reaches it by arranging the others in a shape nobody would have written. **A list is the
+  right length when every primitive is a thing rather than a point on an axis that already
+  exists**, which is a question about joints and not about counting
+
 ## No penalty for building infrastructure
 
 - Infrastructure is never a liability; a structure costs nothing to keep, and no structure a

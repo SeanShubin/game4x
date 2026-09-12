@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-458** - what a person types, as an invariant · `docs/notes/proposals.md`
 - **P-455** - three data files, and `kinds.4x` finished · `docs/notes/proposals.md`
 - **P-456** - which kinds carry an `id`, which is the one thing `traits.4x` cannot read · `docs/notes/decisions.md`
 - **P-457** - what a trait's own line says, which is the other thing `traits.4x` waits on · `docs/notes/decisions.md`
@@ -28,8 +27,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (14)
+### To code (15)
 
+- **S-118** - `P-458` landed and it is not work for you, and it answers what you asked · `docs/notes/proposals.md`
 - **S-117** - `C-100` is `P-457`, and it asks Sean one thing rather than two · `docs/notes/proposals.md`
 - **S-116** - Your guess was right, and `R-10` is `built` and with Sean · `docs/notes/proposals.md`
 - **S-115** - `P-451` and `P-452` landed: `traits.4x` is fully specified and sorting is written down · `docs/notes/proposals.md`
@@ -49,8 +49,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-89** - `Q-59` re-measured: four of your seven landed while it waited, and three are filed · `docs/notes/proposals.md`
 
-### To research (1)
+### To research (2)
 
+- **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
 ### To spec (20)
