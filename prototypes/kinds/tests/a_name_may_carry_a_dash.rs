@@ -83,14 +83,36 @@ fn every_kind_keeps_its_signature_when_its_name_carries_a_dash() {
         "the release declares eighteen kinds; the count below is against that population"
     );
 
+    // **The declarations are renamed with the document, and that is `P-473`'s change showing
+    // here.** Until tonight a kind's traits were read from the release's *Of* column, so
+    // renaming the document renamed both halves at once. They are read from
+    // `spec/data/kinds.4x` now, and a test that renamed only the document would be asking
+    // whether a kind called `citizen-of-a-kind` appears in a file that says `citizen` - to
+    // which the honest answer is no, and the check would have been measuring the rename rather
+    // than the matchers.
+    let at = |file: &str| {
+        std::fs::read_to_string(
+            std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("../../spec/data")
+                .join(file),
+        )
+        .unwrap_or_else(|why| panic!("cannot read {file}: {why}"))
+    };
+    let (kinds_file, traits_file) = (at("kinds.4x"), at("traits.4x"));
+    let declared = kinds::catalog::Declared::from_text(&kinds_file, &traits_file);
+
     let mut checked = 0;
     let mut traits_seen = 0;
     let mut pairs_seen = 0;
     for kind in &kinds {
-        let before = signature(&document, kind);
+        let before = signature(&document, &declared, kind);
         let hyphenated = format!("{kind}-of-a-kind");
         let renamed = renaming(&document, kind, &hyphenated);
-        let after = signature(&renamed, &hyphenated);
+        let renamed_declarations = kinds::catalog::Declared::from_text(
+            &kinds_file.replace(&format!("name:{kind}"), &format!("name:{hyphenated}")),
+            &traits_file,
+        );
+        let after = signature(&renamed, &renamed_declarations, &hyphenated);
 
         // A recipe may be named after a kind - `build extractor` is one - so renaming the kind
         // renames the recipe with it. That is the rename working, not the matcher failing, so
@@ -151,7 +173,8 @@ fn hyphenating_every_kind_merges_none_of_them() {
         .iter()
         .map(|row| plain(&row[0]))
         .collect();
-    let before = signatures(&document).len();
+    let declared = kinds::catalog::Declared::from_spec();
+    let before = signatures(&document, &declared).len();
     assert_eq!(
         (kinds.len(), before),
         (18, 18),
@@ -159,15 +182,34 @@ fn hyphenating_every_kind_merges_none_of_them() {
     );
 
     let mut hyphenated = document.clone();
+    // **Both sources, for the reason above**: the kinds' traits are stated in
+    // `spec/data/kinds.4x` since `P-473`, so renaming only the document would be asking
+    // whether eighteen kinds that are not in the file behave alike - and they would, by all
+    // eighteen having nothing.
+    let mut kinds_file = std::fs::read_to_string(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/kinds.4x"),
+    )
+    .expect("spec/data/kinds.4x");
+    let traits_file = std::fs::read_to_string(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/traits.4x"),
+    )
+    .expect("spec/data/traits.4x");
     for kind in &kinds {
         hyphenated = renaming(&hyphenated, kind, &format!("{kind}-of-a-kind"));
+        kinds_file = kinds_file.replace(
+            &format!("name:{kind}}}"),
+            &format!("name:{kind}-of-a-kind}}"),
+        );
+        kinds_file =
+            kinds_file.replace(&format!("name:{kind} "), &format!("name:{kind}-of-a-kind "));
     }
+    let renamed_all = kinds::catalog::Declared::from_text(&kinds_file, &traits_file);
     assert!(
         !hyphenated.contains("| **citizen** |"),
         "the renamed document still holds an un-renamed kind, so it is not the document meant"
     );
 
-    let after = signatures(&hyphenated).len();
+    let after = signatures(&hyphenated, &renamed_all).len();
     assert_eq!(
         after,
         before,

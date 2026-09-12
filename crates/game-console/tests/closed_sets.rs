@@ -257,40 +257,43 @@ fn every_trait_of_a_territory_is_shown_in_the_dump() {
          *if we actually need it I will notice when reviewing*. A decision, not a defect",
     )];
 
-    let document = release();
-    let mut of_a_territory = Vec::new();
-    let mut inside = false;
-    for line in document.lines() {
-        if line.starts_with("## ") {
-            if inside {
-                break;
-            }
-            inside = line.trim() == "## Traits";
-            continue;
-        }
-        let line = line.trim();
-        if !inside || !line.starts_with("| **") {
-            continue;
-        }
-        let cells: Vec<&str> = line.trim_matches('|').split('|').map(str::trim).collect();
-        let name = cells.first().unwrap_or(&"").trim_matches('*').trim();
-        let of = cells.get(1).unwrap_or(&"");
-        // *a territory*, *a territory, per resource*, *a territory, per kind*. The qualifier
-        // says how many rows it takes, not what it is a trait of.
-        if of.starts_with("a territory") {
-            of_a_territory.push(name.to_string());
-        }
-    }
-    // **Three, and both that left went to the deposit.** `density` moved in `P-322` and
-    // `total capacity` in `P-331`, because a description is a flat map and a territory had
-    // one of each per resource and per kind. So this count going down twice is the rule
-    // moving rather than traits being lost, and what is left - `control`, `biome`,
-    // `nature` - is one value each.
+    let file = std::fs::read_to_string(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/kinds.4x"),
+    )
+    .expect("spec/data/kinds.4x");
+    let declared = game_console::state::declarations(&file).expect("the file of kinds parses");
+    assert!(
+        declared.len() > 15,
+        "only {} kinds declared, so this would agree with anything",
+        declared.len()
+    );
+    let territory = declared
+        .iter()
+        .find(|row| row.traits.get("name").map(String::as_str) == Some("territory"))
+        .expect("`territory` is a declared kind");
+    // **A trait is named without a value on a kind's line and `name` and `family` carry one**,
+    // which is how `spec/console.md` writes a stored trait. So the traits of a territory are
+    // its bare keys.
+    let mut of_a_territory: Vec<String> = territory
+        .traits
+        .iter()
+        .filter(|(_, value)| value.is_empty())
+        .map(|(name, _)| name.clone())
+        .collect();
+    of_a_territory.sort();
+    // **Four, and the fourth arrived with the column going.** It was three - `control`,
+    // `biome`, `nature` - read from the release's *Of* column, where `id` said *a place* and
+    // so was not counted as of a territory. `P-462` made `id` a place's trait and `P-470`
+    // put it on the territory's own line, so reading the line rather than the column finds
+    // it. **`density` and `total capacity` left for the deposit** in `P-322` and `P-331`,
+    // because a description is a flat map and a territory had one of each per resource.
+    //
+    // **Named as well as counted**, because four is four whichever four they are, and this
+    // moved from one source to another rather than by a trait being added.
     assert_eq!(
-        of_a_territory.len(),
-        3,
-        "three traits are of a territory; the release has {} ({of_a_territory:?})",
-        of_a_territory.len()
+        of_a_territory,
+        ["biome", "control", "id", "nature"],
+        "the territory's line in `spec/data/kinds.4x` names the traits it carries"
     );
 
     // Every column of every table the dump produces, so a trait shown anywhere counts.

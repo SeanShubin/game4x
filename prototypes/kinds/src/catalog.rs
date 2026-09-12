@@ -17,6 +17,8 @@ use crate::release::{body_under, column_of, plain};
 
 /// The catalog, as markdown, from the release document.
 pub fn catalog(document: &str) -> String {
+    // **Read once, here, and handed down** - see [`Declared`] for why not inside the reader.
+    let declared = Declared::from_spec();
     let mut out = String::new();
     out.push_str("# Catalog\n\n");
     out.push_str(
@@ -44,11 +46,16 @@ pub fn catalog(document: &str) -> String {
         recipe_names(document).len()
     ));
 
-    out.push_str(&groups(document));
+    out.push_str(&groups(document, &declared));
 
     for row in &kinds {
         let name = plain(&row[0]);
-        out.push_str(&section(document, &name, row.get(1).map(String::as_str)));
+        out.push_str(&section(
+            document,
+            &declared,
+            &name,
+            row.get(1).map(String::as_str),
+        ));
     }
     out
 }
@@ -63,8 +70,8 @@ pub fn catalog(document: &str) -> String {
 /// **A group of one is listed too.** A page that showed only the collisions would answer
 /// *which kinds behave alike* and leave *does this one behave like anything* unanswered, and
 /// the second question is the one asked while reading a single kind.
-fn groups(document: &str) -> String {
-    let found = signatures(document);
+fn groups(document: &str, declared: &Declared) -> String {
+    let found = signatures(document, declared);
     let together = found.iter().filter(|(_, _, kinds)| kinds.len() > 1).count();
     let mut out = String::from("## Signatures\n\n");
     out.push_str(
@@ -369,50 +376,125 @@ fn recipe_rows(document: &str, kind: &str) -> Vec<(String, Vec<String>, Reach)> 
     out
 }
 
-/// Whether an *Of* cell names this family, rather than merely containing its name.
+/// Which traits a kind carries, from `spec/data/kinds.4x` and `spec/data/traits.4x`.
 ///
-/// **The distinction `C-71`'s first attempt lost.** [`mentions`] splits into words, which is
-/// right for a cell listing kinds - *citizen, garrison, ark, pioneer* - and wrong for a family:
-/// `upkeep` is declared of *a thing with upkeep*, which contains the word `thing` and is a
-/// predicate rather than the *thing* family. Matching by word attributed `upkeep`, `unpaid` and
-/// `id` to all sixteen kinds, which is `S-78`'s third case folded in by accident and badly.
+/// **`P-473` deleted the release's *Of* column and this read it.** `R-8`'s *vetted when* says a
+/// signature is *the traits it carries*, and where that is stated moved: `spec/console.md` puts
+/// it on the kind - *a kind declares which traits it has*, and a trait *says nothing about
+/// which kinds carry it*.
 ///
-/// **So a family is named by the whole cell, allowing an article.** `fuel` is *of a unit* and
-/// `keeps` is *of thing*; `upkeep` is *of a thing with upkeep* and is neither.
-fn names_the_family(of: &str, family: &str) -> bool {
-    let said = of.trim();
-    let said = said
-        .strip_prefix("a ")
-        .or_else(|| said.strip_prefix("an "))
-        .or_else(|| said.strip_prefix("the "))
-        .unwrap_or(said);
-    said.trim() == family
+/// **It also understated, which is `C-108` and is why `P-473` went further than a repoint.**
+/// The reader here matched a kind against the *Of* cell two ways, by word and by the cell being
+/// exactly a family, and left out a cell that describes rather than names. That was one cell
+/// when it was written and four by tonight, so seven of the eighteen kinds showed fewer traits
+/// than the specification states - an Ark showed four and carries eight.
+///
+/// **Two files, because `of:thing` is in the second one.** A kind's line names the traits it
+/// carries, and a trait of *every* kind is on no line at all - `P-471`: *a trait of every kind
+/// is the one exception, and says so with `of:thing`*. A signature reading only `kinds.4x`
+/// would lose `keeps` from all eighteen, which is the same shape of understatement one file
+/// over.
+///
+/// **The rows returned are still the release's**, because the *Values* cell is what a reader of
+/// the page sees - `moving` (a number). What moved is which rows, not where they are rendered
+/// from.
+fn trait_rows(document: &str, declared: &Declared, kind: &str) -> Vec<Vec<String>> {
+    let carried = declared.carried_by(kind);
+    body_under(document, "## Traits")
+        .into_iter()
+        .filter(|row| {
+            row.first()
+                .map(|name| carried.contains(&plain(name).replace(' ', "-")))
+                .unwrap_or(false)
+        })
+        .collect()
 }
 
-/// The Traits rows whose *Of* column covers this kind.
-fn trait_rows(document: &str, kind: &str) -> Vec<Vec<String>> {
-    let rows = body_under(document, "## Traits");
-    if rows.is_empty() {
-        return Vec::new();
+/// What `spec/data/` declares: each kind's line, and each trait's.
+///
+/// **Passed in rather than read inside the reader.** `trait_rows` read the two files from disk,
+/// which made it a pure function of one argument and a file - so
+/// `every_kind_keeps_its_signature_when_its_name_carries_a_dash`, which rewrites the names in a
+/// document and asks whether the signature survives, was comparing a renamed document against
+/// unrenamed declarations. **The test was right and the reader was wrong**: a function that
+/// reads a file nobody handed it cannot be driven on a document written to be different.
+#[derive(Clone, Debug, Default)]
+pub struct Declared {
+    lines: Vec<std::collections::BTreeMap<String, String>>,
+    of_every_kind: Vec<String>,
+}
+
+impl Declared {
+    /// The files as they sit in `spec/data/`, which is what the catalog is generated from.
+    pub fn from_spec() -> Self {
+        let at = |file: &str| {
+            let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("../../spec/data")
+                .join(file);
+            std::fs::read_to_string(&path)
+                .unwrap_or_else(|why| panic!("cannot read {}: {why}", path.display()))
+        };
+        Self::from_text(&at("kinds.4x"), &at("traits.4x"))
     }
-    // **A trait of a family is a trait of its members - `C-71`.** `R-8` asks for *the traits it
-    // carries*, and a signature that dropped every trait declared of a family was answering a
-    // narrower question than the capability asked.
-    //
-    // **Two matchers, because the cell says two kinds of thing.** A list of kinds is matched by
-    // word; a family is matched by the whole cell. `S-78`'s third case - a cell that describes
-    // rather than names, like *whatever readies* - is deliberately left out of both.
-    let families: Vec<String> = families_of(document, kind)
-        .into_iter()
-        .filter(|name| name != kind)
-        .collect();
-    let of_at = column_of(document, "## Traits", "Of");
-    rows.iter()
-        .filter(|row| {
-            let of = row.get(of_at).map(String::as_str).unwrap_or_default();
-            mentions(of, kind) || families.iter().any(|family| names_the_family(of, family))
+
+    /// The same two files as text, so a test can supply its own.
+    pub fn from_text(kinds: &str, traits: &str) -> Self {
+        let lines = read_lines(kinds);
+        // **`of:thing` is the one thing a trait says about which kinds carry it, and it says
+        // *all*** - `spec/console.md`: *a trait of every kind is the one exception, and says
+        // so with `of:thing`*. A signature reading only `kinds.4x` would lose it from every
+        // kind, which is the understatement `C-108` found one file over.
+        let of_every_kind = read_lines(traits)
+            .into_iter()
+            .filter(|line| line.get("of").map(String::as_str) == Some("thing"))
+            .filter_map(|line| line.get("name").cloned())
+            .collect();
+        Declared {
+            lines,
+            of_every_kind,
+        }
+    }
+
+    /// Every trait a kind carries: the bare names on its own line, and those of every kind.
+    pub fn carried_by(&self, kind: &str) -> Vec<String> {
+        let mut out: Vec<String> = self
+            .lines
+            .iter()
+            .find(|line| line.get("name").map(String::as_str) == Some(kind))
+            .map(|line| {
+                line.iter()
+                    .filter(|(_, value)| value.is_empty())
+                    .map(|(name, _)| name.clone())
+                    .collect()
+            })
+            .unwrap_or_default();
+        out.extend(self.of_every_kind.iter().cloned());
+        out
+    }
+}
+
+/// One `spec/data/` file, as a map per line.
+///
+/// **A reader of one line of the notation, and deliberately not a second reader of it.**
+/// `game_console::state::declarations` is the reader; this crate has no dependencies by
+/// design - *read it and compile it; it does not play* - and taking one to split on whitespace
+/// and a colon would cost more than it saves. **The divergence is written down here rather
+/// than discovered later**, which is the half `Q-67` says was missing when one notation last
+/// had two readers.
+fn read_lines(text: &str) -> Vec<std::collections::BTreeMap<String, String>> {
+    text.lines()
+        .map(str::trim)
+        .filter(|line| line.starts_with('{'))
+        .map(|line| {
+            line.trim_matches(|c| c == '{' || c == '}')
+                .split_whitespace()
+                .skip(1)
+                .map(|word| match word.split_once(':') {
+                    Some((name, value)) => (name.to_string(), value.to_string()),
+                    None => (word.to_string(), String::new()),
+                })
+                .collect()
         })
-        .cloned()
         .collect()
 }
 
@@ -439,8 +521,8 @@ impl Signature {
 }
 
 /// One kind's signature, computed from the release's tables and written by nobody.
-pub fn signature(document: &str, kind: &str) -> Signature {
-    let mut traits: Vec<String> = trait_rows(document, kind)
+pub fn signature(document: &str, declared: &Declared, kind: &str) -> Signature {
+    let mut traits: Vec<String> = trait_rows(document, declared, kind)
         .iter()
         .map(|row| plain(&row[0]))
         .collect();
@@ -473,11 +555,11 @@ pub fn signature(document: &str, kind: &str) -> Signature {
 /// the Kinds table is - and it is generated from that table rather than chosen, which is what
 /// `R-8` asks for. A group of one is a kind that behaves like nothing else and is listed
 /// exactly like a group of several, because *it is alone* is a finding too.
-pub fn signatures(document: &str) -> Vec<(String, Signature, Vec<String>)> {
+pub fn signatures(document: &str, declared: &Declared) -> Vec<(String, Signature, Vec<String>)> {
     let mut out: Vec<(String, Signature, Vec<String>)> = Vec::new();
     for row in body_under(document, "## Kinds") {
         let kind = plain(&row[0]);
-        let mine = signature(document, &kind);
+        let mine = signature(document, declared, &kind);
         match out.iter_mut().find(|(_, seen, _)| seen.key() == mine.key()) {
             Some((_, _, kinds)) => kinds.push(kind),
             None => {
@@ -490,15 +572,15 @@ pub fn signatures(document: &str) -> Vec<(String, Signature, Vec<String>)> {
 }
 
 /// The name of the signature a kind is in, which is the thing to grep for.
-fn signature_of(document: &str, kind: &str) -> String {
-    signatures(document)
+fn signature_of(document: &str, declared: &Declared, kind: &str) -> String {
+    signatures(document, declared)
         .into_iter()
         .find(|(_, _, kinds)| kinds.iter().any(|k| k == kind))
         .map(|(name, _, _)| name)
         .unwrap_or_else(|| panic!("`{kind}` is in the Kinds table and in no signature"))
 }
 
-fn section(document: &str, kind: &str, what_it_is: Option<&str>) -> String {
+fn section(document: &str, declared: &Declared, kind: &str, what_it_is: Option<&str>) -> String {
     let mut out = format!("## {kind}\n\n");
     if let Some(said) = what_it_is {
         out.push_str(&format!("{said}.\n\n"));
@@ -516,13 +598,24 @@ fn section(document: &str, kind: &str, what_it_is: Option<&str>) -> String {
         out.push_str(&format!("**In families** {}\n\n", families.join(", ")));
     }
 
-    let traits: Vec<String> = trait_rows(document, kind)
+    // **The cell shown is *Values*, found by name.** It was cell 2 and `P-473` deleting the
+    // *Of* column made it cell 1, so every trait on the page read `(stored)` - the *Stored or
+    // derived* cell, which is true of the wrong column.
+    // **A heading with no table under it has no columns**, and asking for one of them panics
+    // - correctly. A document with no Traits table has no trait rows either, so the index is
+    // never used and the question is not asked.
+    let values_at = if body_under(document, "## Traits").is_empty() {
+        0
+    } else {
+        column_of(document, "## Traits", "Values")
+    };
+    let traits: Vec<String> = trait_rows(document, declared, kind)
         .iter()
         .map(|row| {
             format!(
                 "`{}` ({})",
                 plain(&row[0]),
-                row.get(2).cloned().unwrap_or_default()
+                row.get(values_at).cloned().unwrap_or_default()
             )
         })
         .collect();
@@ -534,7 +627,7 @@ fn section(document: &str, kind: &str, what_it_is: Option<&str>) -> String {
     // that behave like this one is a search rather than a comparison by eye.
     out.push_str(&format!(
         "**Signature** `{}`\n\n",
-        signature_of(document, kind)
+        signature_of(document, declared, kind)
     ));
 
     for (heading, label) in [
@@ -628,18 +721,4 @@ fn section(document: &str, kind: &str, what_it_is: Option<&str>) -> String {
         out.push('\n');
     }
     out
-}
-
-/// Whether a Traits table's *Of* column covers this kind.
-///
-/// The column is prose - *every thing*, *a unit*, *citizen, garrison, ark, pioneer*, *a
-/// territory, per resource* - so this matches on the word rather than parsing English, and
-/// says so. A trait of *whatever readies* is not attributed to anything, which is honest:
-/// the release does not say which kinds those are, and guessing would put a fact in this
-/// document that the tables do not carry.
-fn mentions(of: &str, kind: &str) -> bool {
-    if of.trim() == "every thing" {
-        return true;
-    }
-    names_it(of, kind)
 }

@@ -355,7 +355,6 @@ impl Held {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct TraitRow {
     pub name: &'static str,
-    pub of: &'static str,
     pub values: &'static str,
     pub held: Held,
 }
@@ -374,7 +373,6 @@ pub const TRAITS: [TraitRow; 24] = [
     // already settled that a unit has none.
     TraitRow {
         name: "id",
-        of: "a place",
         values: "an identity",
         held: Held::Stored,
     },
@@ -384,25 +382,21 @@ pub const TRAITS: [TraitRow; 24] = [
     // are separate traits rather than values of one.
     TraitRow {
         name: "moving",
-        of: "a unit",
         values: "a number",
         held: Held::Stored,
     },
     TraitRow {
         name: "laboring",
-        of: "a citizen",
         values: "a number",
         held: Held::Stored,
     },
     TraitRow {
         name: "working",
-        of: "an extractor",
         values: "a number",
         held: Held::Stored,
     },
     TraitRow {
         name: "bearing",
-        of: "a citizen",
         values: "a number",
         held: Held::Stored,
     },
@@ -410,13 +404,11 @@ pub const TRAITS: [TraitRow; 24] = [
     // muster it. `spec/control.md` has no *highest* case any more.
     TraitRow {
         name: "defending",
-        of: "a citizen or a unit",
         values: "a number",
         held: Held::Stored,
     },
     TraitRow {
         name: "resource",
-        of: "an extractor or a store",
         values: "one of the resources",
         held: Held::Stored,
     },
@@ -425,19 +417,16 @@ pub const TRAITS: [TraitRow; 24] = [
         // a thing at once, and the kind kept it. A citizen's `strength` is how much it
         // musters; a `force` is what `muster` makes of it.
         name: "strength",
-        of: "citizen, garrison, ark, pioneer",
         values: "a number",
         held: Held::OfTheKind,
     },
     TraitRow {
         name: "fuel",
-        of: "a unit",
         values: "how much energy its tank holds",
         held: Held::OfTheKind,
     },
     TraitRow {
         name: "upkeep",
-        of: "a thing with upkeep",
         values: "food per turn",
         held: Held::OfTheKind,
     },
@@ -450,43 +439,36 @@ pub const TRAITS: [TraitRow; 24] = [
     // was the Recipes table said twice.
     TraitRow {
         name: "binding",
-        of: "whatever is built",
         values: "a number",
         held: Held::Derived("the metal the recipe that makes it consumes"),
     },
     TraitRow {
         name: "metal in it",
-        of: "whatever is built",
         values: "a number",
         held: Held::Derived("its binding plus the metal in its parts"),
     },
     TraitRow {
         name: "density",
-        of: "a deposit",
         values: "a number",
         held: Held::Stored,
     },
     TraitRow {
         name: "total capacity",
-        of: "a deposit",
         values: "a number",
         held: Held::Stored,
     },
     TraitRow {
         name: "control",
-        of: "a territory",
         values: "held by a player, or unclaimed",
         held: Held::Derived("a citizen of that player is there"),
     },
     TraitRow {
         name: "biome",
-        of: "a territory",
         values: "one of the biomes",
         held: Held::Stored,
     },
     TraitRow {
         name: "nature",
-        of: "a territory",
         values: "a number",
         held: Held::Stored,
     },
@@ -495,13 +477,11 @@ pub const TRAITS: [TraitRow; 24] = [
         // It read *a place / which places it touches*, which put the relation on each end of
         // it - so the same edge was stated twice and could disagree with itself.
         name: "from",
-        of: "an adjacency",
         values: "a place",
         held: Held::Stored,
     },
     TraitRow {
         name: "to",
-        of: "an adjacency",
         values: "a place",
         held: Held::Stored,
     },
@@ -510,19 +490,16 @@ pub const TRAITS: [TraitRow; 24] = [
         // `put` row lowering it on one thing, and of-the-kind forbade that: a trait of the
         // kind is the same for every thing of that kind.
         name: "keeps",
-        of: "thing",
         values: "the number of turns it will last",
         held: Held::Stored,
     },
     TraitRow {
         name: "surplus",
-        of: "food",
         values: "a number",
         held: Held::Derived("left after every upkeep was paid"),
     },
     TraitRow {
         name: "unpaid",
-        of: "a thing with upkeep",
         values: "a number",
         held: Held::Derived("its upkeep was not met"),
     },
@@ -536,7 +513,6 @@ pub const TRAITS: [TraitRow; 24] = [
     // release, and `play` was a forbidden word under `P-284` while sitting in the data file.
     TraitRow {
         name: "phase",
-        of: "the game",
         values: "design or play",
         held: Held::Stored,
     },
@@ -545,7 +521,6 @@ pub const TRAITS: [TraitRow; 24] = [
     // energy, and selecting by this trait rather than by the `unit` family waits on `C-56`.
     TraitRow {
         name: "movable",
-        of: "whatever moves",
         values: "a number",
         held: Held::OfTheKind,
     },
@@ -1468,11 +1443,13 @@ pub fn capacities_table() -> Vec<Vec<String>> {
 }
 
 pub fn traits_table() -> Vec<Vec<String>> {
-    let mut rows = vec![header(&["Trait", "Of", "Values", "Stored or derived"])];
+    // **`P-473` deleted the *Of* column**: a kind declares which traits it has, and a
+    // trait says nothing about which kinds carry it. What it said is on the kinds' lines in
+    // `spec/data/kinds.4x` now.
+    let mut rows = vec![header(&["Trait", "Values", "Stored or derived"])];
     for row in TRAITS {
         rows.push(vec![
             format!("**{}**", row.name),
-            row.of.to_string(),
             row.values.to_string(),
             row.held.written(),
         ]);

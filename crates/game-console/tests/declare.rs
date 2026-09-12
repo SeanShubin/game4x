@@ -12,7 +12,8 @@
 //! the wrong lane.
 
 use game_console::{declare, state};
-use std::collections::{BTreeMap, BTreeSet};
+use game_model::containment::Description;
+use std::collections::BTreeSet;
 use std::path::Path;
 
 fn release() -> String {
@@ -165,14 +166,69 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
     // form and one added. The moment the file had them, that list stopped being the
     // difference and the assertion failed, which is what an exception that cannot outlive its
     // excuse looks like from inside.
+    // **The generator writes a kind's name and its family, and the file writes its traits
+    // too.** `P-473` deleted the release's *Of* column, which is where the trait names were
+    // inverted from - so `spec/data/kinds.4x` now states something the release does not, and
+    // `declare::kinds` is a generator of the half that is still derivable.
     //
-    // **Byte equality is the strongest form and it is now true**, so the handover is checked
-    // rather than described: `--example declared-kinds` prints what is in the specification.
+    // **So the comparison is over that half, exactly, rather than loosened to fit.** Each
+    // line of the file is stripped of its bare traits and written back through the same
+    // writer, and the result must be the generator's bytes. A name or a family differing
+    // still fails here, which is what this check was for.
+    let without_traits: Vec<Description> = read
+        .iter()
+        .map(|row| Description {
+            kind: row.kind,
+            traits: row
+                .traits
+                .iter()
+                .filter(|(_, value)| !value.is_empty())
+                .map(|(name, value)| (name.clone(), value.clone()))
+                .collect(),
+        })
+        .collect();
     assert_eq!(
         declare::kinds(&document),
-        file,
-        "`declare::kinds` and `spec/data/kinds.4x` have parted, so the generator would promote \
-         bytes that are not what is there"
+        state::declared(&without_traits),
+        "`declare::kinds` and the names and families in `spec/data/kinds.4x` have parted"
+    );
+
+    // **And the half the release no longer states is checked against the file that does.**
+    // Every bare name on a kind's line is a trait `spec/data/traits.4x` declares - which is
+    // `spec/console.md`'s rule that every word in a data file is a kind, a trait, or one of a
+    // trait's values, over the one relation that used to be checked by byte equality.
+    let traits_file = std::fs::read_to_string(
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/traits.4x"),
+    )
+    .expect("spec/data/traits.4x");
+    let declared_traits: BTreeSet<String> = state::declarations(&traits_file)
+        .expect("the file of traits parses")
+        .iter()
+        .filter_map(|row| row.traits.get("name").cloned())
+        .collect();
+    assert_eq!(declared_traits.len(), 24, "twenty-four traits are declared");
+
+    let mut mentions = 0;
+    for row in &read {
+        let name = row.traits.get("name").expect("a declaration names a word");
+        for (carried, value) in &row.traits {
+            if !value.is_empty() {
+                continue;
+            }
+            assert!(
+                declared_traits.contains(carried),
+                "`{name}` carries `{carried}` and `spec/data/traits.4x` does not declare it"
+            );
+            mentions += 1;
+        }
+    }
+    // **Forty-three, and the arithmetic is stated so a reader can re-derive it.** Twenty-four
+    // traits; `keeps` is `of:thing` and is on no kind's line; the other twenty-three are
+    // carried by between one and six kinds each. **A count, because every name being declared
+    // is satisfied by a file that names none.**
+    assert_eq!(
+        mentions, 43,
+        "forty-three trait names across the kinds' lines; this read {mentions}"
     );
     assert_eq!(
         file.matches("family:").count(),
@@ -642,12 +698,40 @@ fn the_traits_file_declares_what_a_data_file_needs() {
          the specification rather than an answer"
     );
 
-    // **And the generator writes the file, byte for byte**, which is the third of the four
-    // and the last one to arrive.
+    // **Twenty-three of the twenty-four lines, and the twenty-fourth named.** `P-473` deleted
+    // the release's *Of* column, which is where `of:thing` was read from - so `keeps` is the
+    // one line the generator cannot write and the file states on its own. **The difference is
+    // asserted rather than tolerated**: a byte comparison with one exception is a byte
+    // comparison, and a byte comparison with a tolerance is not.
+    //
+    // **This is the direction reversing, seen from the code.** Until tonight the file was
+    // derivable from the release and the diff said the promotion was faithful. It is now the
+    // release that is short a fact, and what is checked is how far the derivation still
+    // reaches - twenty-three lines, and the reader can see which one it does not.
+    let written = declare::traits(&document);
+    let generated: Vec<&str> = written.lines().collect();
+    let stated: Vec<&str> = file.lines().collect();
     assert_eq!(
-        declare::traits(&document),
-        file,
-        "`declare::traits` and `spec/data/traits.4x` have parted"
+        generated.len(),
+        stated.len(),
+        "the generator writes {} lines and the file has {}",
+        generated.len(),
+        stated.len()
+    );
+    let differing: Vec<(&str, &str)> = generated
+        .iter()
+        .zip(&stated)
+        .filter(|(a, b)| a != b)
+        .map(|(a, b)| (*a, *b))
+        .collect();
+    assert_eq!(
+        differing,
+        [(
+            "{trait admits:number kept:thing name:keeps}",
+            "{trait admits:number kept:thing name:keeps of:thing}"
+        )],
+        "`spec/data/traits.4x` and what the release still states differ in more than `keeps`'s \
+         `of:thing`, which is the one fact `P-473` left the release unable to say"
     );
 
     // **The counts the release's own column gives**, so a generator inventing a `kept` would
@@ -662,151 +746,4 @@ fn the_traits_file_declares_what_a_data_file_needs() {
         (15, 4, 5),
         "fifteen stored, four of the kind, and five derived - and `binding` moved from the          second to the third, which is `P-472`: it is *derived: the metal the recipe that          makes it consumes* rather than a number the kind carries"
     );
-}
-
-/// *Whatever is built* is written down in `declare.rs` because it no longer derives, and this
-/// is the assertion that says so rather than the comment.
-///
-/// **`P-466` removed the column it was read from.** *Units and structures* had a **Binding**
-/// cell for exactly six kinds; it has seven columns now and none of them is that one.
-/// `binding`'s *Values* cell says what it is instead - *derived: the metal the recipe that
-/// makes it consumes* - so the derivation is available and gives a different set.
-///
-/// **Two kinds of difference, and only one of them is a naming problem.** The derivation gains
-/// `metal` and `energy`, which `extract` produces while `work` consumes metal - an artefact of
-/// asking the question per recipe rather than per production. **And it loses the garrison**,
-/// which is not an artefact: no recipe consuming metal produces one. That is `P-467`, withdrawn
-/// on 2026-09-12, and `C-106` is where this lane files that it survived the withdrawal.
-///
-/// **This fails the day the derivation reproduces the list**, which is the day to delete both
-/// it and the constant. A named exception that cannot outlive its excuse - `C-61`.
-#[test]
-fn whatever_is_built_no_longer_derives_from_the_release() {
-    let document = release();
-    let rows = game_console::recipes::body_under(&document, "## Recipes");
-    assert!(
-        !rows.is_empty(),
-        "no recipes, so the derivation is empty for the wrong reason"
-    );
-
-    let mut recipe = String::new();
-    let mut consumes: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
-    let mut produces: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
-    for row in &rows {
-        let named = row
-            .first()
-            .map(|c| c.trim().trim_matches('*').trim().to_string());
-        if let Some(name) = named.filter(|n| !n.is_empty()) {
-            recipe = name;
-        }
-        let (Some(role), Some(kind)) = (row.get(2), row.get(4)) else {
-            continue;
-        };
-        match role.trim() {
-            "consume" => consumes
-                .entry(recipe.clone())
-                .or_default()
-                .insert(kind.trim().to_string()),
-            "produce" => produces
-                .entry(recipe.clone())
-                .or_default()
-                .insert(kind.trim().to_string()),
-            _ => continue,
-        };
-    }
-    let derived: BTreeSet<String> = produces
-        .iter()
-        .filter(|(name, _)| consumes.get(*name).is_some_and(|c| c.contains("metal")))
-        .flat_map(|(_, made)| made.iter().cloned())
-        .collect();
-    assert!(
-        !derived.is_empty(),
-        "nothing is produced by a metal-consuming recipe, so the two sets agree by both being \
-         empty and this would pass for the wrong reason"
-    );
-
-    let written: BTreeSet<String> = declare::BUILT.iter().map(|s| s.to_string()).collect();
-    assert_ne!(
-        derived, written,
-        "*whatever is built* derives from the release again - delete `declare::BUILT` and this \
-         test, and read the cell instead"
-    );
-    // **The garrison is the half that matters**, and it is asserted by name so that the two
-    // resources arriving cannot make this pass on its own.
-    assert!(
-        written.contains("garrison") && !derived.contains("garrison"),
-        "the garrison is what `C-106` is about: its line in `spec/data/kinds.4x` names \
-         `binding`, and no recipe consuming metal produces one"
-    );
-}
-
-/// Every *Of* cell reaches at least one kind, and the whole column reaches forty-three.
-///
-/// **The byte comparison cannot see a cell reaching too few.** `declare::kinds` inverts the
-/// release's *Of* column onto the kinds' lines and the test above asserts the result equals
-/// `spec/data/kinds.4x` - so a cell that resolved to nothing would fail there today, loudly.
-/// **It would stop failing the moment the file is regenerated from the same reader**, which is
-/// what `P-473` proposes: `kinds.4x` becomes the source and there is nothing to diff against.
-///
-/// **So this counts instead, per cell and in total.** A cell reaching no kind is a trait that
-/// silently belongs to nothing; the column reaching fewer kinds than it does today is the same
-/// failure spread out. `C-105` is why both numbers are here rather than one: six phrasings, and
-/// the three predicates are the ones a new phrasing would join.
-///
-/// **Forty-three, and the arithmetic is stated so a reader can re-derive it.** Twenty-four
-/// traits; `keeps` is `of:thing` and reaches no line, and the other twenty-three reach between
-/// one and six kinds each.
-#[test]
-fn every_of_cell_reaches_a_kind_and_the_column_reaches_forty_three() {
-    let document = release();
-    let file = declare::kinds(&document);
-    let read = state::declarations(&file).expect("the generated file parses");
-
-    let mentions: usize = read
-        .iter()
-        .map(|row| {
-            row.traits
-                .iter()
-                .filter(|(name, value)| value.is_empty() && name.as_str() != "name")
-                .count()
-        })
-        .sum();
-    assert_eq!(
-        mentions, 43,
-        "forty-three trait names across the kinds' lines; this wrote {mentions}. A cell of the \
-         release's *Of* column has stopped reaching a kind it names"
-    );
-
-    // **And no trait is declared and carried by nothing**, which is the per-cell half: a total
-    // can stay right while one cell empties and another gains.
-    let carried: std::collections::BTreeSet<String> = read
-        .iter()
-        .flat_map(|row| row.traits.keys())
-        .filter(|name| name.as_str() != "name" && name.as_str() != "family")
-        .cloned()
-        .collect();
-    let declared: Vec<String> = game_console::recipes::body_under(&document, "## Traits")
-        .iter()
-        .map(|row| {
-            row.first()
-                .map(String::as_str)
-                .unwrap_or_default()
-                .trim()
-                .trim_matches('*')
-                .trim()
-                .replace(' ', "-")
-        })
-        .collect();
-    let unreached: Vec<&String> = declared
-        .iter()
-        .filter(|name| !carried.contains(*name))
-        .collect();
-    assert_eq!(
-        unreached,
-        [&"keeps".to_string()],
-        "`keeps` is `of:thing` and belongs to every kind without any line saying so - anything \
-         else here is a trait the release declares and no kind carries, which is a cell that \
-         reached nothing"
-    );
-    assert_eq!(declared.len(), 24, "the Traits table is the population");
 }

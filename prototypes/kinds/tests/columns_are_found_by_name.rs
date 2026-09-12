@@ -63,6 +63,7 @@ fn reordered(document: &str, heading: &str, order: &[usize]) -> String {
 #[test]
 fn a_signature_does_not_depend_on_which_column_a_value_sits_in() {
     let document = release();
+    let declared = kinds::catalog::Declared::from_spec();
     let kinds: Vec<String> = body_under(&document, "## Kinds")
         .iter()
         .map(|row| plain(&row[0]))
@@ -81,8 +82,8 @@ fn a_signature_does_not_depend_on_which_column_a_value_sits_in() {
     let mut compared = 0;
     let mut pairs_seen = 0;
     for kind in &kinds {
-        let before = signature(&document, kind);
-        let after = signature(&shuffled, kind);
+        let before = signature(&document, &declared, kind);
+        let after = signature(&shuffled, &declared, kind);
         assert_eq!(
             before.key(),
             after.key(),
@@ -99,8 +100,8 @@ fn a_signature_does_not_depend_on_which_column_a_value_sits_in() {
 
     // And the grouping, which is what `R-8` reports.
     assert_eq!(
-        signatures(&document).len(),
-        signatures(&shuffled).len(),
+        signatures(&document, &declared).len(),
+        signatures(&shuffled, &declared).len(),
         "the grouping changed when only the column order did"
     );
 }
@@ -125,12 +126,13 @@ fn a_column_that_is_not_there_is_refused() {
 #[test]
 fn a_trait_of_a_family_reaches_its_members() {
     let document = release();
+    let declared = kinds::catalog::Declared::from_spec();
     let families = body_under(&document, "## Families");
     assert_eq!(families.len(), 4, "four families is the population here");
 
     // `fuel` is *of a unit*, and the unit family is ark and pioneer.
     for kind in ["ark", "pioneer"] {
-        let carried = signature(&document, kind).traits;
+        let carried = signature(&document, &declared, kind).traits;
         assert!(
             carried.contains(&"fuel".to_string()),
             "`{kind}` is a unit and `fuel` is declared of a unit: {carried:?}"
@@ -138,7 +140,7 @@ fn a_trait_of_a_family_reaches_its_members() {
     }
     // And nothing outside the family gains it.
     for kind in ["citizen", "food", "territory"] {
-        let carried = signature(&document, kind).traits;
+        let carried = signature(&document, &declared, kind).traits;
         assert!(
             !carried.contains(&"fuel".to_string()),
             "`{kind}` is not a unit and should not carry `fuel`: {carried:?}"
@@ -149,14 +151,14 @@ fn a_trait_of_a_family_reaches_its_members() {
     // in the describing-cell test below until that landed: *a thing that must be named
     // individually* is a predicate, and *a place* is a family.
     for kind in ["territory", "orbit"] {
-        let carried = signature(&document, kind).traits;
+        let carried = signature(&document, &declared, kind).traits;
         assert!(
             carried.contains(&"id".to_string()),
             "`{kind}` is a place and `id` is declared of a place: {carried:?}"
         );
     }
     for kind in ["citizen", "food", "ark"] {
-        let carried = signature(&document, kind).traits;
+        let carried = signature(&document, &declared, kind).traits;
         assert!(
             !carried.contains(&"id".to_string()),
             "`{kind}` is not a place and should not carry `id`: {carried:?}"
@@ -172,7 +174,7 @@ fn a_trait_of_a_family_reaches_its_members() {
     assert_eq!(kinds.len(), 18, "eighteen kinds is the population here");
     for kind in &kinds {
         assert!(
-            signature(&document, kind)
+            signature(&document, &declared, kind)
                 .traits
                 .contains(&"keeps".to_string()),
             "`{kind}` is a thing and `keeps` is declared of thing"
@@ -180,46 +182,74 @@ fn a_trait_of_a_family_reaches_its_members() {
     }
 }
 
-/// A cell that describes rather than names is attributed to nothing.
+/// The four cells the old matcher could not read now reach the kinds that carry them.
 ///
-/// **`S-78`'s third case, deliberately left out and pinned here so it stays out.** `upkeep` is
-/// declared *of a thing with upkeep*, which contains the word `thing` and is a predicate rather
-/// than the *thing* family. Matching a family by word attributed `upkeep`, `unpaid` and `id` to
-/// all sixteen kinds - which is the first attempt at `C-71`, caught by regenerating the report
-/// and reading it.
+/// **This test asserted the opposite and was right to, until tonight.** The release's *Traits*
+/// table had an **Of** column, and `catalog::trait_rows` matched a kind against it two ways -
+/// by word, and by the cell being exactly a family the kind is in. **A cell that described
+/// rather than named matched neither**, so `upkeep`, *of a thing with upkeep*, reached no kind
+/// at all, and this pinned that so nobody widened the matcher into attributing `upkeep` to all
+/// eighteen.
 ///
-/// **`id` has left this list, and it left by the release changing rather than by this test
-/// weakening.** `P-462` made it *of a place*, which is a family the Families table lists, so it
-/// is now checked by `a_trait_of_a_family_reaches_its_members` above - a stronger assertion than
-/// the one it was under here, not a dropped one.
+/// **`C-108` measured what it cost**: four such cells by tonight where there was one when the
+/// matcher was written, and seven of the eighteen kinds showing fewer traits than the
+/// specification states. An Ark showed four and carries eight.
 ///
-/// Whether these should be resolved from *Units and structures*, which has a column for
-/// `Readies` and one for `Movable`, is a design decision and not this repair.
+/// **`P-473` deleted the column rather than teaching the matcher to read it**, because
+/// `spec/data/kinds.4x` states the same fact exactly and `spec/invariants.md` says a fact is
+/// stated once. So there is no cell to describe rather than name, and the four now reach by
+/// being written on the kinds' own lines.
+///
+/// **Asserted by name and counted**, because *the four reach something* is satisfied by a
+/// reader that attributes every trait to every kind - which is the failure the old assertion
+/// was guarding against and which has not stopped being possible.
 #[test]
-fn a_cell_that_describes_rather_than_names_reaches_nothing() {
+fn the_four_cells_the_old_matcher_could_not_read_now_reach_their_kinds() {
     let document = release();
-    let described = ["upkeep", "unpaid", "ready", "movable"];
-    let kinds: Vec<String> = body_under(&document, "## Kinds")
-        .iter()
-        .map(|row| plain(&row[0]))
-        .collect();
-
+    let declared = kinds::catalog::Declared::from_spec();
     let mut checked = 0;
-    for name in described {
-        for kind in &kinds {
+    for (name, carried_by, not_by) in [
+        // *a thing with upkeep*, which named a column of another table.
+        ("upkeep", &["citizen"][..], &["yard", "territory"][..]),
+        ("unpaid", &["citizen"][..], &["yard", "territory"][..]),
+        // *whatever is built*, whose column `P-466` had already removed.
+        (
+            "binding",
+            &["garrison", "extractor", "yard", "store", "ark", "pioneer"][..],
+            &["citizen", "food", "territory"][..],
+        ),
+        // *whatever moves*, and *a citizen or a unit* - a cell naming a family and not only it.
+        ("movable", &["ark", "pioneer"][..], &["citizen", "yard"][..]),
+        (
+            "defending",
+            &["citizen", "ark", "pioneer"][..],
+            &["yard", "store", "territory"][..],
+        ),
+    ] {
+        for kind in carried_by {
             assert!(
-                !signature(&document, kind)
+                signature(&document, &declared, kind)
                     .traits
-                    .contains(&name.to_string()),
-                "`{name}` describes which things carry it and names no family, so no kind \
-                 should be given it - `{kind}` was"
+                    .iter()
+                    .any(|carried| carried == name),
+                "`{kind}` carries `{name}` in `spec/data/kinds.4x` and its signature omits it"
+            );
+            checked += 1;
+        }
+        for kind in not_by {
+            assert!(
+                !signature(&document, &declared, kind)
+                    .traits
+                    .iter()
+                    .any(|carried| carried == name),
+                "`{kind}` does not carry `{name}` and its signature has it - a reader that \
+                 gives every trait to every kind passes the half above"
             );
             checked += 1;
         }
     }
     assert_eq!(
-        checked,
-        described.len() * kinds.len(),
-        "a case was skipped, so this checked less than it says"
+        checked, 25,
+        "five traits: thirteen kinds that carry one and twelve that do not"
     );
 }

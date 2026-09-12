@@ -18,27 +18,27 @@
 <h2 id="signatures">Signatures</h2>
 <p><strong>A kind's signature is the traits it carries and every <em>(recipe, role)</em> pair that names it.</strong> Computed from the tables above rather than written by anyone, so two kinds share one exactly when the release says the same things about them. Quantities are not part of it: two kinds that are produced in different numbers by the same recipe still behave alike. <strong>Being named through a family counts</strong>, because a family is how the release addresses several kinds at once.</p>
 <p><strong>No two of the 18 kinds behave alike</strong>, over all 153 pairs of them.</p>
-<p><strong>Every group below holds one kind</strong>, which is what that sentence means when you reach them. <strong>The traits alone do collide</strong> - 8 of the kinds carry exactly the traits another one carries - and every such pair is then separated by the recipes that name it. So the release has no two kinds it says <em>the same things</em> about, and Sean has accepted that as the answer: he expects a small number of distinct things.</p>
+<p><strong>Every group below holds one kind</strong>, which is what that sentence means when you reach them. <strong>The traits alone do collide</strong> - 7 of the kinds carry exactly the traits another one carries - and every such pair is then separated by the recipes that name it. So the release has no two kinds it says <em>the same things</em> about, and Sean has accepted that as the answer: he expects a small number of distinct things.</p>
 <h3 id="s-1-citizen"><code>s-1</code> - citizen</h3>
-<p><strong>Traits</strong> <code>bearing</code>, <code>defending</code>, <code>keeps</code>, <code>laboring</code>, <code>strength</code></p>
+<p><strong>Traits</strong> <code>bearing</code>, <code>defending</code>, <code>keeps</code>, <code>laboring</code>, <code>strength</code>, <code>unpaid</code>, <code>upkeep</code></p>
 <p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>bear put</code>, <code>bear require</code>, <code>breed produce</code>, <code>create labor put</code>, <code>create labor require</code>, <code>deploy ark produce</code>, <code>found by land produce</code>, <code>launch ark consume</code>, <code>muster put</code>, <code>muster require</code>, <code>perish consume</code>, <code>produce pioneer consume</code>, <code>refresh put</code>, <code>spoil consume</code>, <code>upkeep require</code></p>
 <h3 id="s-2-garrison"><code>s-2</code> - garrison</h3>
-<p><strong>Traits</strong> <code>keeps</code>, <code>strength</code></p>
+<p><strong>Traits</strong> <code>binding</code>, <code>keeps</code>, <code>metal in it</code>, <code>strength</code></p>
 <p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>deploy ark produce</code>, <code>found by land produce</code>, <code>muster require</code>, <code>spoil consume</code></p>
 <h3 id="s-3-extractor"><code>s-3</code> - extractor</h3>
-<p><strong>Traits</strong> <code>keeps</code>, <code>resource</code>, <code>working</code></p>
+<p><strong>Traits</strong> <code>binding</code>, <code>keeps</code>, <code>metal in it</code>, <code>resource</code>, <code>working</code></p>
 <p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>build extractor produce</code>, <code>deploy ark produce</code>, <code>found by land produce</code>, <code>refresh put</code>, <code>spoil consume</code>, <code>work put</code>, <code>work require</code></p>
 <h3 id="s-4-yard"><code>s-4</code> - yard</h3>
-<p><strong>Traits</strong> <code>keeps</code></p>
+<p><strong>Traits</strong> <code>binding</code>, <code>keeps</code>, <code>metal in it</code></p>
 <p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>build yard produce</code>, <code>launch ark require</code>, <code>spoil consume</code></p>
 <h3 id="s-5-store"><code>s-5</code> - store</h3>
-<p><strong>Traits</strong> <code>keeps</code>, <code>resource</code></p>
+<p><strong>Traits</strong> <code>binding</code>, <code>keeps</code>, <code>metal in it</code>, <code>resource</code></p>
 <p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>build store produce</code>, <code>spoil consume</code>, <code>stow produce</code></p>
 <h3 id="s-6-ark"><code>s-6</code> - ark</h3>
-<p><strong>Traits</strong> <code>fuel</code>, <code>keeps</code>, <code>moving</code>, <code>strength</code></p>
+<p><strong>Traits</strong> <code>binding</code>, <code>defending</code>, <code>fuel</code>, <code>keeps</code>, <code>metal in it</code>, <code>movable</code>, <code>moving</code>, <code>strength</code></p>
 <p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>deploy ark consume</code>, <code>launch ark produce</code>, <code>move put</code>, <code>move require</code>, <code>refresh put</code>, <code>spoil consume</code>, <code>stand put</code>, <code>stand require</code></p>
 <h3 id="s-7-pioneer"><code>s-7</code> - pioneer</h3>
-<p><strong>Traits</strong> <code>fuel</code>, <code>keeps</code>, <code>moving</code>, <code>strength</code></p>
+<p><strong>Traits</strong> <code>binding</code>, <code>defending</code>, <code>fuel</code>, <code>keeps</code>, <code>metal in it</code>, <code>movable</code>, <code>moving</code>, <code>strength</code></p>
 <p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>found by land consume</code>, <code>move put</code>, <code>move require</code>, <code>produce pioneer produce</code>, <code>refresh put</code>, <code>spoil consume</code>, <code>stand put</code>, <code>stand require</code></p>
 <h3 id="s-8-food"><code>s-8</code> - food</h3>
 <p><strong>Traits</strong> <code>keeps</code>, <code>surplus</code></p>
@@ -76,7 +76,7 @@
 <h2 id="citizen">citizen</h2>
 <p>a person: provides labor, eats, and grows on surplus.</p>
 <p><strong>In families</strong> thing</p>
-<p><strong>Traits of it</strong> <code>laboring</code> (a number), <code>bearing</code> (a number), <code>defending</code> (a number), <code>strength</code> (a number), <code>keeps</code> (the number of turns it will last)</p>
+<p><strong>Traits of it</strong> <code>laboring</code> (a number), <code>bearing</code> (a number), <code>defending</code> (a number), <code>strength</code> (a number), <code>upkeep</code> (food per turn), <code>keeps</code> (the number of turns it will last), <code>unpaid</code> (a number)</p>
 <p><strong>Signature</strong> <code>s-1</code></p>
 <p><strong>Bounded by</strong> the food produced here, through upkeep</p>
 <p><strong>As a thing</strong> Strength: 1 · Upkeep: 1 food per turn · Readies: bearing 1, defending 1, laboring 1</p>
@@ -105,7 +105,7 @@
 <h2 id="garrison">garrison</h2>
 <p>what holds a territory; a territory has at most one.</p>
 <p><strong>In families</strong> thing</p>
-<p><strong>Traits of it</strong> <code>strength</code> (a number), <code>keeps</code> (the number of turns it will last)</p>
+<p><strong>Traits of it</strong> <code>strength</code> (a number), <code>binding</code> (a number), <code>metal in it</code> (a number), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-2</code></p>
 <p><strong>Bounded by</strong> a capacity of 1</p>
 <p><strong>As a thing</strong> Strength: 0</p>
@@ -121,7 +121,7 @@
 <h2 id="extractor">extractor</h2>
 <p>built for one resource, and worked to produce it.</p>
 <p><strong>In families</strong> thing</p>
-<p><strong>Traits of it</strong> <code>working</code> (a number), <code>resource</code> (one of the resources), <code>keeps</code> (the number of turns it will last)</p>
+<p><strong>Traits of it</strong> <code>working</code> (a number), <code>resource</code> (one of the resources), <code>binding</code> (a number), <code>metal in it</code> (a number), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-3</code></p>
 <p><strong>Bounded by</strong> a capacity, from <em>Territory resources</em></p>
 <p><strong>As a thing</strong> Readies: working 1</p>
@@ -142,7 +142,7 @@
 <h2 id="yard">yard</h2>
 <p>where an Ark is produced.</p>
 <p><strong>In families</strong> thing</p>
-<p><strong>Traits of it</strong> <code>keeps</code> (the number of turns it will last)</p>
+<p><strong>Traits of it</strong> <code>binding</code> (a number), <code>metal in it</code> (a number), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-4</code></p>
 <p><strong>Bounded by</strong> a capacity of 1</p>
 <p><strong>In recipes</strong></p>
@@ -156,7 +156,7 @@
 <h2 id="store">store</h2>
 <p>built to hold one resource, and holds nothing else.</p>
 <p><strong>In families</strong> thing</p>
-<p><strong>Traits of it</strong> <code>resource</code> (one of the resources), <code>keeps</code> (the number of turns it will last)</p>
+<p><strong>Traits of it</strong> <code>resource</code> (one of the resources), <code>binding</code> (a number), <code>metal in it</code> (a number), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-5</code></p>
 <p><strong>Bounded by</strong> as many as the extractors of its resource</p>
 <p><strong>Holds</strong> the resource it was built for, up to 10 - <em>a fact about the kind, so every one of them holds that many</em></p>
@@ -172,7 +172,7 @@
 <h2 id="ark">ark</h2>
 <p>carries a landing, and can invade from orbit.</p>
 <p><strong>In families</strong> thing, unit</p>
-<p><strong>Traits of it</strong> <code>moving</code> (a number), <code>strength</code> (a number), <code>fuel</code> (how much energy its tank holds), <code>keeps</code> (the number of turns it will last)</p>
+<p><strong>Traits of it</strong> <code>moving</code> (a number), <code>defending</code> (a number), <code>strength</code> (a number), <code>fuel</code> (how much energy its tank holds), <code>binding</code> (a number), <code>metal in it</code> (a number), <code>keeps</code> (the number of turns it will last), <code>movable</code> (a number)</p>
 <p><strong>Signature</strong> <code>s-6</code></p>
 <p><strong>Bounded by</strong> a capacity of 2</p>
 <p><strong>As a thing</strong> Strength: 2 · Crosses: orbit border · Readies: defending 1, moving 1 · Movable: 1</p>
@@ -194,7 +194,7 @@
 <h2 id="pioneer">pioneer</h2>
 <p>founds a territory.</p>
 <p><strong>In families</strong> thing, unit</p>
-<p><strong>Traits of it</strong> <code>moving</code> (a number), <code>strength</code> (a number), <code>fuel</code> (how much energy its tank holds), <code>keeps</code> (the number of turns it will last)</p>
+<p><strong>Traits of it</strong> <code>moving</code> (a number), <code>defending</code> (a number), <code>strength</code> (a number), <code>fuel</code> (how much energy its tank holds), <code>binding</code> (a number), <code>metal in it</code> (a number), <code>keeps</code> (the number of turns it will last), <code>movable</code> (a number)</p>
 <p><strong>Signature</strong> <code>s-7</code></p>
 <p><strong>Bounded by</strong> a capacity of 2</p>
 <p><strong>As a thing</strong> Strength: 2 · Fuel: 2 · Crosses: border · Readies: defending 1, moving 1 · Movable: 1</p>

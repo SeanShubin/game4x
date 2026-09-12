@@ -476,6 +476,12 @@ fn every_place_is_a_kind_or_a_count_and_never_a_derived_trait() {
 /// it.
 fn traits_marked(document: &str, word: &str) -> Vec<String> {
     // An empty `word` matches every row, which is how the whole Traits table is read.
+    //
+    // **Read by name since `P-473`.** This took `cells.get(3)`, and deleting the *Of* column
+    // moved *Stored or derived* from 3 to 2 - so it read the *Values* cell, found no row
+    // marked `derived`, and reported a place whose state was a trait the release declares.
+    // **Fourth time in one evening**, and the guard below now covers this table too.
+    let at = game_console::recipes::column_of(document, "## Traits", "Stored or derived");
     let mut out = Vec::new();
     let mut inside = false;
     for line in document.lines() {
@@ -491,7 +497,7 @@ fn traits_marked(document: &str, word: &str) -> Vec<String> {
             continue;
         }
         let cells: Vec<&str> = line.trim_matches('|').split('|').map(str::trim).collect();
-        let (Some(name), Some(kept)) = (cells.first(), cells.get(3)) else {
+        let (Some(name), Some(kept)) = (cells.first(), cells.get(at)) else {
             continue;
         };
         if kept.contains(word) {
@@ -595,6 +601,10 @@ fn the_tables_this_crate_reads_by_position_are_in_the_order_it_assumes() {
                 "Thing", "Strength", "Fuel", "Upkeep", "Crosses", "Readies", "Movable",
             ][..],
         ),
+        // **Added after `P-473` moved *Stored or derived* from 3 to 2** by deleting *Of*,
+        // and `traits_marked` read cell 3 - the fourth positional read this evening to
+        // survive a column going and report something plausible.
+        ("## Traits", &["Trait", "Values", "Stored or derived"][..]),
     ] {
         for (at, column) in columns.iter().enumerate() {
             assert_eq!(
@@ -624,5 +634,8 @@ fn the_tables_this_crate_reads_by_position_are_in_the_order_it_assumes() {
             columns.len()
         );
     }
-    assert_eq!(checked, 14, "seven columns of each of the two tables");
+    assert_eq!(
+        checked, 17,
+        "seven columns of each of the two wide tables, and three of the Traits table"
+    );
 }

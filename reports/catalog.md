@@ -27,50 +27,50 @@ family counts**, because a family is how the release addresses several kinds at 
 **No two of the 18 kinds behave alike**, over all 153 pairs of them.
 
 **Every group below holds one kind**, which is what that sentence means when
-you reach them. **The traits alone do collide** - 8 of the kinds carry exactly
+you reach them. **The traits alone do collide** - 7 of the kinds carry exactly
 the traits another one carries - and every such pair is then separated by the recipes
 that name it. So the release has no two kinds it says *the same things* about, and Sean
 has accepted that as the answer: he expects a small number of distinct things.
 
 ### `s-1` - citizen
 
-**Traits** `bearing`, `defending`, `keeps`, `laboring`, `strength`
+**Traits** `bearing`, `defending`, `keeps`, `laboring`, `strength`, `unpaid`, `upkeep`
 
 **Named by** `age put`, `age require`, `bear put`, `bear require`, `breed produce`, `create labor put`, `create labor require`, `deploy ark produce`, `found by land produce`, `launch ark consume`, `muster put`, `muster require`, `perish consume`, `produce pioneer consume`, `refresh put`, `spoil consume`, `upkeep require`
 
 ### `s-2` - garrison
 
-**Traits** `keeps`, `strength`
+**Traits** `binding`, `keeps`, `metal in it`, `strength`
 
 **Named by** `age put`, `age require`, `deploy ark produce`, `found by land produce`, `muster require`, `spoil consume`
 
 ### `s-3` - extractor
 
-**Traits** `keeps`, `resource`, `working`
+**Traits** `binding`, `keeps`, `metal in it`, `resource`, `working`
 
 **Named by** `age put`, `age require`, `build extractor produce`, `deploy ark produce`, `found by land produce`, `refresh put`, `spoil consume`, `work put`, `work require`
 
 ### `s-4` - yard
 
-**Traits** `keeps`
+**Traits** `binding`, `keeps`, `metal in it`
 
 **Named by** `age put`, `age require`, `build yard produce`, `launch ark require`, `spoil consume`
 
 ### `s-5` - store
 
-**Traits** `keeps`, `resource`
+**Traits** `binding`, `keeps`, `metal in it`, `resource`
 
 **Named by** `age put`, `age require`, `build store produce`, `spoil consume`, `stow produce`
 
 ### `s-6` - ark
 
-**Traits** `fuel`, `keeps`, `moving`, `strength`
+**Traits** `binding`, `defending`, `fuel`, `keeps`, `metal in it`, `movable`, `moving`, `strength`
 
 **Named by** `age put`, `age require`, `deploy ark consume`, `launch ark produce`, `move put`, `move require`, `refresh put`, `spoil consume`, `stand put`, `stand require`
 
 ### `s-7` - pioneer
 
-**Traits** `fuel`, `keeps`, `moving`, `strength`
+**Traits** `binding`, `defending`, `fuel`, `keeps`, `metal in it`, `movable`, `moving`, `strength`
 
 **Named by** `age put`, `age require`, `found by land consume`, `move put`, `move require`, `produce pioneer produce`, `refresh put`, `spoil consume`, `stand put`, `stand require`
 
@@ -146,7 +146,7 @@ a person: provides labor, eats, and grows on surplus.
 
 **In families** thing
 
-**Traits of it** `laboring` (a number), `bearing` (a number), `defending` (a number), `strength` (a number), `keeps` (the number of turns it will last)
+**Traits of it** `laboring` (a number), `bearing` (a number), `defending` (a number), `strength` (a number), `upkeep` (food per turn), `keeps` (the number of turns it will last), `unpaid` (a number)
 
 **Signature** `s-1`
 
@@ -182,7 +182,7 @@ what holds a territory; a territory has at most one.
 
 **In families** thing
 
-**Traits of it** `strength` (a number), `keeps` (the number of turns it will last)
+**Traits of it** `strength` (a number), `binding` (a number), `metal in it` (a number), `keeps` (the number of turns it will last)
 
 **Signature** `s-2`
 
@@ -205,7 +205,7 @@ built for one resource, and worked to produce it.
 
 **In families** thing
 
-**Traits of it** `working` (a number), `resource` (one of the resources), `keeps` (the number of turns it will last)
+**Traits of it** `working` (a number), `resource` (one of the resources), `binding` (a number), `metal in it` (a number), `keeps` (the number of turns it will last)
 
 **Signature** `s-3`
 
@@ -233,7 +233,7 @@ where an Ark is produced.
 
 **In families** thing
 
-**Traits of it** `keeps` (the number of turns it will last)
+**Traits of it** `binding` (a number), `metal in it` (a number), `keeps` (the number of turns it will last)
 
 **Signature** `s-4`
 
@@ -253,7 +253,7 @@ built to hold one resource, and holds nothing else.
 
 **In families** thing
 
-**Traits of it** `resource` (one of the resources), `keeps` (the number of turns it will last)
+**Traits of it** `resource` (one of the resources), `binding` (a number), `metal in it` (a number), `keeps` (the number of turns it will last)
 
 **Signature** `s-5`
 
@@ -276,7 +276,7 @@ carries a landing, and can invade from orbit.
 
 **In families** thing, unit
 
-**Traits of it** `moving` (a number), `strength` (a number), `fuel` (how much energy its tank holds), `keeps` (the number of turns it will last)
+**Traits of it** `moving` (a number), `defending` (a number), `strength` (a number), `fuel` (how much energy its tank holds), `binding` (a number), `metal in it` (a number), `keeps` (the number of turns it will last), `movable` (a number)
 
 **Signature** `s-6`
 
@@ -306,7 +306,7 @@ founds a territory.
 
 **In families** thing, unit
 
-**Traits of it** `moving` (a number), `strength` (a number), `fuel` (how much energy its tank holds), `keeps` (the number of turns it will last)
+**Traits of it** `moving` (a number), `defending` (a number), `strength` (a number), `fuel` (how much energy its tank holds), `binding` (a number), `metal in it` (a number), `keeps` (the number of turns it will last), `movable` (a number)
 
 **Signature** `s-7`
 

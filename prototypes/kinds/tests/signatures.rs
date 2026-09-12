@@ -26,6 +26,7 @@ fn every_kind(document: &str) -> Vec<String> {
 #[test]
 fn the_groups_partition_the_kinds() {
     let document = release();
+    let declared = kinds::catalog::Declared::from_spec();
     let kinds = every_kind(&document);
     assert_eq!(
         kinds.len(),
@@ -33,7 +34,7 @@ fn the_groups_partition_the_kinds() {
         "the release declares eighteen kinds; every count below is against that population"
     );
 
-    let mut grouped: Vec<String> = signatures(&document)
+    let mut grouped: Vec<String> = signatures(&document, &declared)
         .into_iter()
         .flat_map(|(_, _, members)| members)
         .collect();
@@ -64,8 +65,9 @@ fn the_groups_partition_the_kinds() {
 #[test]
 fn a_pair_shares_a_group_exactly_when_it_shares_a_signature() {
     let document = release();
+    let declared = kinds::catalog::Declared::from_spec();
     let kinds = every_kind(&document);
-    let found = signatures(&document);
+    let found = signatures(&document, &declared);
 
     let group_of = |kind: &str| -> String {
         found
@@ -80,7 +82,8 @@ fn a_pair_shares_a_group_exactly_when_it_shares_a_signature() {
     for (at, one) in kinds.iter().enumerate() {
         for other in kinds.iter().skip(at + 1) {
             pairs += 1;
-            let same_key = signature(&document, one).key() == signature(&document, other).key();
+            let same_key = signature(&document, &declared, one).key()
+                == signature(&document, &declared, other).key();
             let same_group = group_of(one) == group_of(other);
             assert_eq!(
                 same_key,
@@ -190,16 +193,43 @@ fn mapping(document: &str, heading: &str, column: usize, to: impl Fn(&str) -> St
 #[test]
 fn the_key_moves_with_the_traits_and_with_nothing_else() {
     let document = release();
-    let key_by = |text: &str| -> Vec<(String, String)> {
+    let spec = |file: &str| {
+        std::fs::read_to_string(
+            std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("../../spec/data")
+                .join(file),
+        )
+        .unwrap_or_else(|why| panic!("cannot read {file}: {why}"))
+    };
+    let (kinds_file, traits_file) = (spec("kinds.4x"), spec("traits.4x"));
+    let key_by = |text: &str, kinds_text: &str| -> Vec<(String, String)> {
+        let declared = kinds::catalog::Declared::from_text(kinds_text, &traits_file);
         every_kind(text)
             .iter()
-            .map(|kind| (kind.clone(), signature(text, kind).key()))
+            .map(|kind| (kind.clone(), signature(text, &declared, kind).key()))
             .collect()
     };
-    let before = key_by(&document);
+    let before = key_by(&document, &kinds_file);
 
-    // A trait of the yard alone, which no kind carries today.
-    let poisoned = with_row(&document, "## Traits", &["`shielding`", "yard", "a number"]);
+    // **A trait of the yard alone, poisoned where the traits now live** - `P-473`. This added
+    // a row to the release's *Traits* table with `yard` in its *Of* cell, and that column is
+    // gone: a kind declares which traits it has, so the poison goes on the yard's own line in
+    // `spec/data/kinds.4x`. **The old poison would have moved nothing and passed nothing**,
+    // which is the shape of a check whose subject moved out from under it.
+    let poisoned_kinds = kinds_file.replace("name:yard", "name:yard shielding");
+    assert_ne!(
+        poisoned_kinds, kinds_file,
+        "the yard's line did not take the poison"
+    );
+    // **Both halves, because a signature is the two read together.** The kind's line says it
+    // carries the trait and the release's table says what the trait admits; a name on a line
+    // with no row to render shows nothing, which is a real property and not what this test
+    // is about.
+    let poisoned = with_row(
+        &document,
+        "## Traits",
+        &["**shielding**", "a number", "stored"],
+    );
     assert_eq!(
         body_under(&poisoned, "## Traits").len(),
         body_under(&document, "## Traits").len() + 1,
@@ -207,7 +237,7 @@ fn the_key_moves_with_the_traits_and_with_nothing_else() {
     );
     let moved: Vec<&String> = before
         .iter()
-        .zip(&key_by(&poisoned))
+        .zip(&key_by(&poisoned, &poisoned_kinds))
         .filter(|((_, was), (_, now))| was != now)
         .map(|((kind, _), _)| kind)
         .collect();
@@ -227,7 +257,7 @@ fn the_key_moves_with_the_traits_and_with_nothing_else() {
     assert_ne!(quantities, document, "no quantity moved");
     assert_eq!(
         before,
-        key_by(&quantities),
+        key_by(&quantities, &kinds_file),
         "a quantity is not part of a signature, so changing every one of them moves no key"
     );
 
@@ -240,7 +270,7 @@ fn the_key_moves_with_the_traits_and_with_nothing_else() {
     });
     assert_ne!(
         before,
-        key_by(&roles),
+        key_by(&roles, &kinds_file),
         "a role is part of a signature, so turning every consume into a produce moves a key"
     );
 }
@@ -284,7 +314,7 @@ fn two_kinds_the_release_says_the_same_things_about_share_a_signature() {
     poisoned = with_row(
         &poisoned,
         "## Traits",
-        &["**pairing**", "alpha, beta", "a number", "stored"],
+        &["**pairing**", "a number", "stored"],
     );
     poisoned = with_row(
         &poisoned,
@@ -304,11 +334,32 @@ fn two_kinds_the_release_says_the_same_things_about_share_a_signature() {
         "the two kinds are in the document; without them nothing below is about anything"
     );
 
+    // **The two kinds and their shared trait are declared where declarations live** - `P-473`.
+    // The trait row with *alpha, beta* in its *Of* cell went with the column; a kind declares
+    // which traits it has, so `alpha` and `beta` each name `pairing` on their own line, and
+    // `pairing` is declared in the traits file so that it is a word a data file may use.
+    let declared = kinds::catalog::Declared::from_text(
+        &format!(
+            "{}{{kind name:alpha pairing}}\n{{kind name:beta pairing}}\n",
+            std::fs::read_to_string(
+                std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/kinds.4x")
+            )
+            .expect("spec/data/kinds.4x")
+        ),
+        &format!(
+            "{}{{trait admits:number kept:thing name:pairing}}\n",
+            std::fs::read_to_string(
+                std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/traits.4x")
+            )
+            .expect("spec/data/traits.4x")
+        ),
+    );
+
     // **The premise, stated rather than assumed.** If the two were not equal here, the
     // assertion after it would be checking that unequal things are apart - which is what the
     // rest of this file already does, and not what this test is for.
-    let a = signature(&poisoned, "alpha");
-    let b = signature(&poisoned, "beta");
+    let a = signature(&poisoned, &declared, "alpha");
+    let b = signature(&poisoned, &declared, "beta");
     assert_eq!(
         a.key(),
         b.key(),
@@ -356,7 +407,7 @@ fn two_kinds_the_release_says_the_same_things_about_share_a_signature() {
         ]
     );
 
-    let found = signatures(&poisoned);
+    let found = signatures(&poisoned, &declared);
     let group_of = |kind: &str| -> String {
         found
             .iter()

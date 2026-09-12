@@ -11,7 +11,7 @@
 //! whitespace nobody wrote. Trimming each cell compares exactly what the table says and
 //! nothing about how it is laid out.
 
-use kinds::release::{release, table_under};
+use kinds::release::{column_of, release, table_under};
 
 fn compare(what: &str, written: &[Vec<String>], compiled: &[Vec<String>]) {
     let mut wrong = Vec::new();
@@ -656,7 +656,11 @@ fn what_a_trait_says_its_values_are_is_borne_out_by_the_table() {
             .into_iter()
             .find(|row| row.first().map(|c| c.trim_matches('*')) == Some(trait_name))
             .unwrap_or_else(|| panic!("the Traits table declares no `{trait_name}`"));
-        let values = row.get(2).cloned().unwrap_or_default();
+        // **Read by name since `P-473`.** *Values* was cell 2 and the *Of* column going made
+        // it cell 1, so this read *Stored or derived* and reported that `biome` names no set
+        // of values - a true statement about the wrong cell.
+        let at = column_of(&document, "## Traits", "Values");
+        let values = row.get(at).cloned().unwrap_or_default();
 
         let listed = table_under(&document, heading).len().saturating_sub(1);
         assert!(
@@ -734,7 +738,7 @@ fn the_check_catches_a_miscount_and_accepts_a_named_set() {
         let row = table_under(text, "## Traits")
             .into_iter()
             .find(|row| row.first().map(|c| c.trim_matches('*')) == Some("kind"))?;
-        let values = row.get(2)?.clone();
+        let values = row.get(column_of(text, "## Traits", "Values"))?.clone();
         let at = values.find("of the ")? + "of the ".len();
         let word = values[at..].split_whitespace().next()?.to_string();
         const WORDS: [&str; 20] = [

@@ -42,7 +42,6 @@ pub const VOCABULARY: [&str; 4] = ["kind", "trait", "family", "value"];
 /// rather than a second copy of it - which is the whole of why it can be compared.
 pub fn kinds(document: &str) -> String {
     let families = families_of(document);
-    let carries = carried(document);
     let mut rows: Vec<Description> = Vec::new();
     for name in VOCABULARY {
         rows.push(named("kind", name, None));
@@ -53,212 +52,13 @@ pub fn kinds(document: &str) -> String {
             !name.is_empty(),
             "a row of the Kinds table names no kind, so the file would declare a blank word"
         );
-        let mut row = named("kind", &name, families.get(&name).map(String::as_str));
-        // **`P-470`: a kind declares which traits it has**, and they are written with no value
-        // - `spec/console.md`: *a trait of the kind is written with its value and a stored one
-        // with its name*. The names sort in with `family` and `name` rather than after them,
-        // because a description is a map and the sort is over the trait.
-        for carried in carries.get(&name).into_iter().flatten() {
-            row.traits.insert(carried.clone(), String::new());
-        }
-        rows.push(row);
+        rows.push(named(
+            "kind",
+            &name,
+            families.get(&name).map(String::as_str),
+        ));
     }
     crate::state::declared(&rows)
-}
-
-/// The six kinds *whatever is built* names, which no longer derive from the release.
-///
-/// **`P-466` removed the column this was read from.** *Units and structures* had a **Binding**
-/// cell for exactly these six and has seven columns now; `binding`'s own *Values* cell says
-/// what it is instead - *derived: the metal the recipe that makes it consumes* - and by that
-/// definition the set is the kinds a metal-consuming recipe produces, which is
-/// `ark, energy, extractor, metal, pioneer, store, yard`. **That is not these six**: it gains
-/// two resources and loses the garrison.
-///
-/// **The garrison is `P-467` surviving its own withdrawal**, and it is filed as `C-106`. No
-/// recipe consuming metal produces one - `found by land` consumes a pioneer and `deploy ark`
-/// consumes an ark - so the garrison's `binding` derives from nothing while its line in
-/// `spec/data/kinds.4x` names it.
-///
-/// **Written down because it cannot be derived, and asserted so it cannot outlive that.**
-/// [`built_is_still_underivable`] fails the day the derivation reproduces this list, which is
-/// the day to delete both. `C-61`'s pattern.
-pub const BUILT: [&str; 6] = ["garrison", "extractor", "yard", "store", "ark", "pioneer"];
-
-/// Which traits each kind carries, from the release's *Of* column read backwards.
-///
-/// **`P-470` inverted it and `spec/console.md` is why**: *a kind declares which traits it has*,
-/// and a trait *says nothing about which kinds carry it*. So the column is a fact about kinds
-/// written on the traits' rows, and this is where it goes back.
-///
-/// **Inverting is mechanical and rendering back is not** - `C-105`. A cell resolves to a set of
-/// kinds; the set does not resolve to the cell, because `laboring` is *a citizen* and `upkeep`
-/// is *a thing with upkeep* and both sets are `{citizen}`. This is the direction that works,
-/// and it is the only one built here.
-///
-/// **Every cell must resolve or this panics.** A cell nobody wrote a rule for would otherwise
-/// contribute nothing and leave a kind's line short a trait - a plausible file, which is the
-/// failure this repository has recorded three times.
-fn carried(document: &str) -> std::collections::BTreeMap<String, Vec<String>> {
-    let families = family_members(document);
-    let kinds: Vec<String> = body_under(document, "## Kinds")
-        .iter()
-        .map(|row| plain(row.first().map(String::as_str).unwrap_or_default()))
-        .filter(|name| !name.is_empty())
-        .collect();
-    assert!(
-        !kinds.is_empty(),
-        "no kinds, so every cell would resolve to nothing"
-    );
-
-    let mut out: std::collections::BTreeMap<String, Vec<String>> =
-        std::collections::BTreeMap::new();
-    let mut resolved = 0;
-    for row in body_under(document, "## Traits") {
-        let trait_name =
-            plain(row.first().map(String::as_str).unwrap_or_default()).replace(' ', "-");
-        let of = plain(row.get(1).map(String::as_str).unwrap_or_default());
-        // A trait of every kind is on no kind's line - `spec/console.md`, and `traits` writes
-        // the `of:thing` that says so.
-        if of == "thing" {
-            resolved += 1;
-            continue;
-        }
-        for kind in of_cell(document, &of, &families, &kinds) {
-            assert!(
-                kinds.contains(&kind),
-                "`{of}` resolves to `{kind}`, which the Kinds table does not declare"
-            );
-            out.entry(kind).or_default().push(trait_name.clone());
-        }
-        resolved += 1;
-    }
-    assert_eq!(
-        resolved,
-        body_under(document, "## Traits").len(),
-        "a Traits row was skipped, so this inverted less than the column"
-    );
-    out
-}
-
-/// One *Of* cell, as the kinds it names.
-///
-/// **Six forms, and the release uses all six**: a family named bare (`thing`, handled by the
-/// caller), a predicate over another column, a bare comma list, alternatives joined by *or*, an
-/// article and a family, an article and a kind. **A form nobody wrote a rule for panics** rather
-/// than resolving to nothing.
-fn of_cell(
-    document: &str,
-    of: &str,
-    families: &std::collections::BTreeMap<String, Vec<String>>,
-    kinds: &[String],
-) -> Vec<String> {
-    // The predicates, each over a column of *Units and structures* - except the first, whose
-    // column `P-466` removed. See [`BUILT`].
-    if of == "whatever is built" {
-        return BUILT.iter().map(|name| name.to_string()).collect();
-    }
-    if let Some(column) = match of {
-        "a thing with upkeep" => Some("Upkeep"),
-        "whatever moves" => Some("Movable"),
-        _ => None,
-    } {
-        return filled_in(document, column);
-    }
-    let mut out = Vec::new();
-    for part in of.split(" or ").flat_map(|part| part.split(',')) {
-        let word = part.trim();
-        let word = word
-            .strip_prefix("an ")
-            .or_else(|| word.strip_prefix("a "))
-            .or_else(|| word.strip_prefix("the "))
-            .unwrap_or(word)
-            .trim();
-        if word.is_empty() {
-            continue;
-        }
-        if let Some(members) = families.get(word) {
-            out.extend(members.iter().cloned());
-        } else if kinds.iter().any(|kind| kind == word) {
-            out.push(word.to_string());
-        } else {
-            panic!(
-                "`{of}` names `{word}`, which is neither a kind nor a family - and guessing \
-                 would leave a kind's line short a trait it carries"
-            );
-        }
-    }
-    assert!(!out.is_empty(), "`{of}` resolved to no kind at all");
-    out
-}
-
-/// The things whose cell in one column of *Units and structures* is not blank.
-///
-/// **The column is found by its name rather than by counting**, because `P-466` has just
-/// removed three of them and a position is what silently becomes a different column.
-fn filled_in(document: &str, column: &str) -> Vec<String> {
-    let heading = "## Units and structures";
-    let at = header_of(document, heading)
-        .iter()
-        .position(|cell| plain(cell) == column)
-        .unwrap_or_else(|| panic!("*Units and structures* has no `{column}` column"));
-    body_under(document, heading)
-        .iter()
-        .filter(|row| {
-            !row.get(at)
-                .map(|cell| cell.trim().is_empty())
-                .unwrap_or(true)
-        })
-        .map(|row| plain(row.first().map(String::as_str).unwrap_or_default()))
-        .filter(|name| !name.is_empty())
-        .collect()
-}
-
-/// Each family's members, from the *Families* table as it is written.
-///
-/// **`thing` is skipped**, as it is in [`families_of`] and for the same reason: *every kind
-/// above* is a rule about the table rather than a list.
-fn family_members(document: &str) -> std::collections::BTreeMap<String, Vec<String>> {
-    let mut out = std::collections::BTreeMap::new();
-    for row in body_under(document, "## Families") {
-        let family = plain(row.first().map(String::as_str).unwrap_or_default());
-        let members = row.get(1).cloned().unwrap_or_default();
-        if family.is_empty() || members.contains("every kind above") {
-            continue;
-        }
-        out.insert(
-            family,
-            members
-                .split(',')
-                .map(plain)
-                .filter(|member| !member.is_empty())
-                .collect(),
-        );
-    }
-    out
-}
-
-/// The header row of the table under a heading, which [`body_under`] drops.
-fn header_of(document: &str, heading: &str) -> Vec<String> {
-    let mut inside = false;
-    for line in document.lines() {
-        if line.starts_with("## ") {
-            if inside {
-                break;
-            }
-            inside = line.trim() == heading;
-            continue;
-        }
-        let line = line.trim();
-        if inside && line.starts_with('|') {
-            return line
-                .trim_matches('|')
-                .split('|')
-                .map(|cell| cell.trim().to_string())
-                .collect();
-        }
-    }
-    panic!("`{heading}` has no table under it")
 }
 
 /// One line: a declaration of `what`, named `name`, optionally in a family.
@@ -434,9 +234,8 @@ pub fn traits(document: &str) -> String {
     let mut rows: Vec<Description> = Vec::new();
     for row in body_under(document, "## Traits") {
         let name = plain(row.first().map(String::as_str).unwrap_or_default()).replace(' ', "-");
-        let of = plain(row.get(1).map(String::as_str).unwrap_or_default());
-        let values = plain(row.get(2).map(String::as_str).unwrap_or_default());
-        let kept = plain(row.get(3).map(String::as_str).unwrap_or_default());
+        let values = plain(row.get(1).map(String::as_str).unwrap_or_default());
+        let kept = plain(row.get(2).map(String::as_str).unwrap_or_default());
         assert!(
             !name.is_empty() && !values.is_empty() && !kept.is_empty(),
             "a row of the Traits table is missing a cell, so the line would be short a fact"
@@ -454,14 +253,17 @@ pub fn traits(document: &str) -> String {
         traits.insert("name".to_string(), name);
         traits.insert("admits".to_string(), admits(&values));
         traits.insert("kept".to_string(), kept.to_string());
-        // **A trait of every kind says so, and it is the only trait that says anything about
-        // which kinds carry it** - `spec/console.md`, `P-471`: *a trait of every kind is the
-        // one exception, and says so with `of:thing`, because there is no kind for it to
-        // belong to and no family that could hold it.* Every other *Of* cell is inverted onto
-        // the kinds' lines by [`kinds`] and says nothing here.
-        if of == "thing" {
-            traits.insert("of".to_string(), "thing".to_string());
-        }
+        // **One fact `spec/data/traits.4x` states is not in the release any more.**
+        // `spec/console.md`: *a trait of every kind is the one exception, and says so with
+        // `of:thing`* - because there is no kind for it to belong to and no family that could
+        // hold it. It was read from the *Of* cell saying `thing`, and `P-473` deleted that
+        // column.
+        //
+        // **So this writes twenty-three of the file's twenty-four lines and says so**, rather
+        // than inventing the twenty-fourth. Which trait is of every kind is not derivable from
+        // what is left of the release, and a generator that guessed would be the second source
+        // `P-469` forbids. `the_traits_file_declares_what_a_data_file_needs` asserts the one
+        // difference by name.
         rows.push(Description {
             kind: "trait",
             traits,

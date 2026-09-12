@@ -148,9 +148,22 @@ fn declared_traits(document: &str) -> BTreeMap<String, Admits> {
         .map(|members| members.split(',').map(|m| m.trim().to_string()).collect())
         .unwrap_or_default();
 
+    // **Read by name since `P-473`.** *Values* was cell 2 and the *Of* column going made it
+    // cell 1, so this read *Stored or derived* and found no cell naming a closed set - three
+    // became zero. **The guard in `nogain.rs` states the release's column order and passed**,
+    // because it compares the release with a list written there and cannot see a reader
+    // elsewhere holding a different one. Only taking the index out finds those.
+    let rows = rows_under(document, "## Traits");
+    if rows.is_empty() {
+        // **A heading with no table under it reads as no traits**, which is what
+        // `an empty table has to read as empty` drives - and asking `column_of` for a column
+        // of a table that is not there panics, correctly, so the question is not asked.
+        return BTreeMap::new();
+    }
+    let at = game_console::recipes::column_of(document, "## Traits", "Values");
     let mut out = BTreeMap::new();
-    for row in rows_under(document, "## Traits") {
-        let (Some(name), Some(values)) = (row.first(), row.get(2)) else {
+    for row in rows {
+        let (Some(name), Some(values)) = (row.first(), row.get(at)) else {
             continue;
         };
         if name.is_empty() {
