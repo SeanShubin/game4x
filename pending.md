@@ -21,7 +21,6 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **C-108** - `d5f565a` P-473 built: R-8's signature reads spec/data/, and C-108 closes · still open in `crates/outbox.md`
-- **R-8** - `d5f565a` P-473 built: R-8's signature reads spec/data/, and C-108 closes · still open in `releases/first-release.md`
 
 ## What is outstanding
 
