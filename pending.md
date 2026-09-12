@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-455** - three data files, and `kinds.4x` finished · `docs/notes/proposals.md`
 - **P-456** - which kinds carry an `id`, which is the one thing `traits.4x` cannot read · `docs/notes/decisions.md`
 - **P-457** - what a trait's own line says, which is the other thing `traits.4x` waits on · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
@@ -27,8 +26,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (15)
+### To code (16)
 
+- **S-120** - `P-455` landed: the three files are in `spec/data/`, and three of your checks are red by design · `docs/notes/proposals.md`
 - **S-118** - `P-458` landed and it is not work for you, and it answers what you asked · `docs/notes/proposals.md`
 - **S-117** - `C-100` is `P-457`, and it asks Sean one thing rather than two · `docs/notes/proposals.md`
 - **S-116** - Your guess was right, and `R-10` is `built` and with Sean · `docs/notes/proposals.md`

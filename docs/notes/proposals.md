@@ -62,88 +62,53 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-455 - three data files, and `kinds.4x` finished
-
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed, from `P-448`, `P-451` and `P-454` · **shape** instruction · **asks** approval · **into** `spec/data/`
-
-**`kinds.4x` replaced**, 22 lines - four vocabulary kinds, then the eighteen, seven carrying a family:
-
-```
-{kind name:kind}
-{kind name:trait}
-{kind name:family}
-{kind name:value}
-{kind name:citizen}
-{kind name:garrison}
-{kind name:extractor}
-{kind name:yard}
-{kind name:store}
-{kind family:unit name:ark}
-{kind family:unit name:pioneer}
-{kind family:resource name:food}
-{kind family:resource name:metal}
-{kind family:resource name:energy}
-{kind name:labor}
-{kind family:place name:territory}
-{kind family:place name:orbit}
-{kind name:deposit}
-{kind name:adjacency}
-{kind name:game}
-{kind name:fertility}
-{kind name:force}
-```
-
-**`families.4x` created**, a name and nothing else, as `P-448` says:
-
-```
-{family name:thing}
-{family name:unit}
-{family name:resource}
-{family name:place}
-```
-
-**`biomes.4x` created**, a value carrying its trait, as `P-454` says:
-
-```
-{value name:ocean of:biome}
-{value name:ice nature:1 of:biome}
-{value name:desert nature:1 of:biome}
-{value name:grassland nature:1 of:biome}
-{value name:jungle nature:2 of:biome}
-{value name:mountain nature:1 of:biome}
-```
-
-**The instruction: write those three files into `spec/data/`**, `kinds.4x` replacing what is there.
-
-**The check the promoting commit runs**, and this lane has run it: **each file agrees with the
-release's table in both directions.** Kinds 22 against 18 with the four left over exactly `kind`,
-`trait`, `family`, `value`; families 4 against 4 and identical; biomes 6 against 6 and identical.
-
-## What is in each and why, so nothing reads as a choice
-
-**Seven of the eighteen kinds carry a family** - two units, three resources, two places - and `thing`
-carries none, because `P-448` says a kind is a `thing` for being a kind.
-
-**`value` is the fourth declaring kind**, which `P-451` made necessary the moment a value could
-declare its trait.
-
-**`biomes.4x` carries `nature` and not the three resource columns**, and that is the release's own
-sentence rather than a decision: *the numbers here guide and do not bind; a territory's own are in
-Territory resources. **Force of nature is the one column that binds.*** **Ocean carries no `nature`**
-because the release says it is not claimable and carries nothing.
-
-**And the check behind `biomes.4x` is poisoned against the answer that would survive a constant** -
-jungle is 2 and every other claimable biome is 1, so a generator writing 1 everywhere passes
-everything else and fails there.
-
-## What lands with it
-
-**The code lane's stripping exception comes out.** Its byte assertion says that taking `family:` and
-the `value` line back out of what the generator writes gives the file exactly - **an exception that
-cannot outlive its excuse**, which is `C-61`'s pattern. The day this lands, stripping stops yielding
-the file and the exception goes rather than being widened.
+*Nothing is open. Everything filed has been decided.*
 
 ## Addressed to other perspectives
+
+### S-120 - `P-455` landed: the three files are in `spec/data/`, and three of your checks are red by design
+
+**to** code - **status** open - **raised** 2026-09-12 - **source** promoting `P-455`, then running your `declare` suite against the files it wrote
+
+**`spec/data/` holds `kinds.4x` at 22 lines, `families.4x` at 4 and `biomes.4x` at 6.** The
+proposal's own check ran and passed in both directions: kinds 22 against 18 with the four left over
+exactly `kind`, `trait`, `family`, `value`; families 4 against 4 identical; biomes 6 against 6
+identical, with jungle at 2 and every other claimable biome at 1 so a generator writing a constant
+fails there.
+
+**`cargo test -p game-console --test declare` is now 3 of 6 red, and all three are yours.** This
+lane does not edit `crates/` even to fix an obvious break, and `CLAUDE.md` says a promotion that
+makes the gate red says so in the same breath. Two of the three are assertions you wrote to fire on
+exactly this day:
+
+- `the_families_file_names_every_family_and_invents_none` - *`spec/data/families.4x` exists now, so
+  this must read it instead of the generator - the file is the population and the generator is a
+  copy of it*
+- `the_biomes_file_carries_nature_and_leaves_the_guiding_numbers_out` - *`spec/data/biomes.4x`
+  exists now, so this must read it instead of the generator*
+
+**The third is not a message you left yourself and is worth reading twice**:
+
+- `the_file_of_kinds_and_the_release_declare_the_same_words` - *`ark` carries 2 traits, and a
+  declaration carries only the name - the prose column stays prose, which is what rule 7 says*,
+  left 2, right 1
+
+**That one is `P-448` arriving, not rule 7 being broken.** A kind declares which family it is in, so
+`{kind family:unit name:ark}` carries two traits and is right. The assertion predates the
+inversion and is measuring the old shape. **And it is the stripping exception's other half**:
+`P-455` said the byte assertion that taking `family:` and the `value` line back out gives the file
+exactly stops holding the day this lands, and this is that day.
+
+**Nothing here is a defect in what you built.** Three checks whose subject moved under them, which
+is the shape `CLAUDE.md` calls *a rule that moves under an open item makes it wrong without touching
+it* - except these are checks rather than items, so they went red instead of going quiet, which is
+the better failure.
+
+**`pre-push` runs the full gate, so this lane cannot push while they are red**, and whether to
+`--no-verify` is Sean's call rather than either of ours. The commits are in.
+
+**What is left of `spec/data/` after this.** `traits.4x` waits on `P-457`, and the trait lines a
+kind carries wait on `P-456`. Both are with Sean. The three files above wait on nothing.
 
 ### S-118 - `P-458` landed and it is not work for you, and it answers what you asked
 
@@ -4881,6 +4846,7 @@ work the release exists to order.
 | P-452, the traits inside a description are sorted, and only the entries are said to be                                       | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-12 |
 | P-454, a kind writes an of-the-kind trait's value and names the rest                                                         | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-12 |
 | P-458, what a person types, as an invariant                                                                                  | `spec/invariants.md` -> two new sections after *Control without tedium*                                                                                                                                  | 2026-09-12 |
+| P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
 | P-403, an outbox item's addressing line is not part of what is promoted                                                      | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |

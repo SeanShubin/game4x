@@ -1,19 +1,20 @@
 {kind name:kind}
 {kind name:trait}
 {kind name:family}
+{kind name:value}
 {kind name:citizen}
 {kind name:garrison}
 {kind name:extractor}
 {kind name:yard}
 {kind name:store}
-{kind name:ark}
-{kind name:pioneer}
-{kind name:food}
-{kind name:metal}
-{kind name:energy}
+{kind family:unit name:ark}
+{kind family:unit name:pioneer}
+{kind family:resource name:food}
+{kind family:resource name:metal}
+{kind family:resource name:energy}
 {kind name:labor}
-{kind name:territory}
-{kind name:orbit}
+{kind family:place name:territory}
+{kind family:place name:orbit}
 {kind name:deposit}
 {kind name:adjacency}
 {kind name:game}

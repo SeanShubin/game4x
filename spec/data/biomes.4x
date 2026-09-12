@@ -1,0 +1,6 @@
+{value name:ocean of:biome}
+{value name:ice nature:1 of:biome}
+{value name:desert nature:1 of:biome}
+{value name:grassland nature:1 of:biome}
+{value name:jungle nature:2 of:biome}
+{value name:mountain nature:1 of:biome}
