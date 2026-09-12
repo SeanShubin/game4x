@@ -132,24 +132,47 @@ does not.** Deleting the column deletes that. **Rule 7 sends a relationship to p
 reason earns a sentence it can have one - and this proposal writes none, because none of the four
 has been missed by anyone in the weeks the column has been read.
 
-## What it costs the code lane, which is more than it costs the specification
+## What it costs the code lane, measured by them rather than estimated here
 
-**The specification loses one column of twenty-four rows. The code loses up to thirteen hundred
-lines**, counted rather than estimated:
+**The specification loses one column of twenty-four rows. `declare.rs` loses 274 of its 538 lines**,
+and the rest survives:
 
 ```
-crates/game-console/src/declare.rs          537   the four generators
-crates/game-console/tests/declare.rs        741   and their checks
-crates/game-console/examples/declared-*.rs   67   four examples that print the files
+BUILT            74   the six kinds written down because *whatever is built* stopped deriving
+carried          55   the inversion of the Of column onto the kinds' lines
+of_cell          50   the six phrasings resolved
+kinds            29   the generator itself
+family_members   23   used only by carried
+filled_in        21   used only by of_cell
+header_of        22   used only by filled_in
 ```
 
-**Not all of it goes and the code lane will say which**, but `declare::kinds` and `declare::traits`
-have nothing left to read once the column is deleted and `kinds.4x` is the source - **a generator
-with no input is not a smaller generator.** This is said because a reader of *one column goes* would
-think the code is unaffected, and it is affected far more than the specification is.
+Plus three tests and `examples/declared-kinds.rs`. **`traits`, `admits`, `biomes` and `families`
+survive** - they read *Trait*, *Values*, *Stored or derived*, *Biomes* and *Families*, none of which
+this touches.
 
-**That is the right deletion rather than a cost to weigh against the change.** Two hand-maintained
-forms agreeing is worth something only while both exist, and this removes one of them.
+**An earlier draft of this proposal said the generators have nothing left to read. That was wrong**,
+and the code lane measured it rather than letting it stand: **three generators read three tables
+this does not touch.** The proposal after this one takes the rest.
+
+**`BUILT` being the largest single piece is the argument, and it makes itself.** Its own doc comment
+says why it exists - *`P-466` removed the column this was read from* - and it goes further:
+**derived from `binding`'s new definition the set would be `ark, energy, extractor, metal, pioneer,
+store, yard`, which is not these six.** Seventy-four lines of hand-written list, existing only
+because a column exists that states a fact a file already states.
+
+## One thing this freezes, and the next proposal has to settle it
+
+**`spec/data/kinds.4x` was derived from the very column this deletes, so whatever that column said is
+now permanent unless something corrects it.** The case to look at is the garrison: its line names
+`binding` and `metal-in-it` because *whatever is built* named it, and **no metal-consuming recipe
+produces a garrison** - `found by land` consumes a pioneer and `deploy ark` an ark. So a garrison's
+`binding` derives from nothing.
+
+**That is `P-467` surviving its own withdrawal a second time**, and it is `C-106`. **It is not a
+reason to keep the column** - the column is what put the claim there - but the proposal that makes
+`kinds.4x` canonical has to decide whether a garrison carries `binding` at all, and this one says so
+rather than leaving it to be found.
 
 ## Two consequences this lane had not written, one of which is larger than the proposal
 
