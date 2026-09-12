@@ -3006,83 +3006,62 @@ all. Read `docs/process.md` -> *All lanes* and *What I read, and what I do* rath
 
 ### S-49 - Everything a fresh instance of you needs, in order
 
-**to** code - **status** open - **cited** `1716f6d` - **raised** 2026-09-06 - **rewritten** 2026-09-12, after twenty-two promotions in two days made the previous version wrong in three of its six items - **source** the specification lane
+**to** code - **status** open - **cited** `1716f6d` - **raised** 2026-09-06 - **rewritten** 2026-09-12, to hold only what no tool can tell you, after going stale twice in one day - **source** the specification lane
 
-**Read this before `pending.md`.** The index gives you the list; this gives you the order and the
-things that will burn you.
+**This item says four things and points at a tool for everything else.** It went stale twice on
+2026-09-12 - once in the morning and again by evening - and both times **what was stale was a list
+something else already keeps.**
 
-## Eight assumptions that were true this week and are not now
+| You want                                           | Run                                                    |
+| -------------------------------------------------- | ------------------------------------------------------ |
+| what is open, to whom                              | `cargo run -q --manifest-path tools/outbox/Cargo.toml` |
+| what is open to you                                | the same, `-- --to code`                               |
+| what is waiting on Sean                            | the same, `-- --to sean`                               |
+| what changed in `spec/` and `releases/`, dated     | the **Accepted** table in `docs/notes/proposals.md`    |
+| which of your items a commit cited without closing | `hooks/pre-commit`, on every commit                    |
 
-**Each names the file to check rather than asking you to take this on trust.** `CLAUDE.md`: a lane
-told to go and read is not taking Claude's word for anything.
+**None of that is repeated below, because a copy of it is what keeps going wrong.**
 
-| It was                                                | It is                                                          | Where                                        |
-| ----------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------- |
-| `force` is a trait of citizen, garrison, ark, pioneer | **`strength` is**, and **`force` is a kind** - the eighteenth  | `releases/first-release.md` -> Traits, Kinds |
-| `keeps` is *of the kind*                              | **stored**                                                     | -> Traits                                    |
-| `age` is `consume` then `produce`                     | **`require` then `put`**                                       | -> Recipes                                   |
-| founding builds two stores                            | **it builds none**, and both foundings are net 0 metal         | -> Recipes                                   |
-| an Ark has `Fuel` 2                                   | **blank** - it moves in orbit and stores no fuel               | -> Units and structures                      |
-| `spec/control.md` has a `## Coordination` section     | **it does not** - folded into *Producing force*                | `spec/control.md`                            |
-| `R-6` wants a fully exploited planet                  | **it wants two territories, a launch, and every recipe fired** | `releases/first-release.md` -> `R-6`         |
-| the release's tables are the game's data              | **they are becoming copies.** `spec/data/` is the source       | `spec/README.md` rule 7                      |
+## 1. The order, which is the only thing here a tool cannot give
 
-**The last one is the one that changes what you do rather than what you know.** Do not add a row to
-the release's *Kinds* table: it is about to be generated, and adding one is work done twice -
-`S-114`.
+1. **Finish `spec/data/`** - the largest work, and nothing waits on Sean for it
+2. **Take the stripping assertion out** with the finished `kinds.4x` - `C-61`'s pattern, the
+   exception stops being true rather than being widened
+3. **`S-96`** - the standing check that every `In` line quotes its source
+4. **The research lens's three** - `X-8`, `X-12`, `X-13`
 
-## Five rules that are new and bind you
+## 2. Which recent changes bite, which is judgement rather than a list
 
-**Read them where they are; none is restated here.**
+**Read the Accepted table for what landed; these four are the ones that will change code you would
+otherwise write**, and each names where to check it:
 
-- **`docs/process.md` -> What makes a check worth having**: *a check that reads a copy of the
-  population is checking the copy.* **This is the one that would have caught four of this week's
-  defects in three lanes**
-- **`spec/invariants.md` -> What a rule may cost**: *a rule may ask whether something is absent only
-  where what would hold it declares a limit for it*
-- **`spec/console.md` -> The language**: a file may **declare** the vocabulary rather than use it,
-  and **a kind declares which family it is in**
-- **`spec/README.md` rule 7**: the game's data is several files in `spec/data/`, in the notation,
-  and **what the specification states is the default** - tuning is in the editor
-- **`docs/process.md` -> Three rules for using AI assistants**: *a unification that is not there
+- **`force` is a kind and the trait is `strength`** - `releases/first-release.md` -> Traits, Kinds
+- **`keeps` is stored**, not of the kind - -> Traits
+- **`age` is `require` then `put`** - -> Recipes
+- **founding builds no stores** - -> Recipes
+
+**The rest of what landed is wording or a rule**, and the rules are section 3.
+
+## 3. The rules that bind you, pointed at and not restated
+
+- **`docs/process.md` -> What makes a check worth having** - *a check that reads a copy of the
+  population is checking the copy.* **Read this one first**; it caught four defects in three lanes
+  this week, one of them inside the tool built to prevent it
+- **`spec/invariants.md` -> What a rule may cost** - a rule may ask whether something is absent only
+  where a limit is declared
+- **`spec/console.md` -> The language** - **four sentences** declare the vocabulary, a family, a
+  kind's traits, and how a trait's value is written. **The shape will not move again**
+- **`spec/README.md` rule 7** - the game's data is `spec/data/`, in the notation, and **what the
+  specification states is the default**
+- **`docs/process.md` -> Three rules for using AI assistants** - *a unification that is not there
   cannot be had by writing one*, and *a need I have not noticed is not a need*
 
-## The order, as of the end of 2026-09-12
+## 4. What only this lane can tell you
 
-**The declaration rule is complete** - `spec/console.md` -> The language carries all four sentences,
-and **the shape will not move again.** Everything in `1` follows from them without another decision.
-
-1. **Finish the data files** - `S-114`, `S-115`, `S-116`. `families.4x` and the kinds half are built
-   and want proposing; `traits.4x` and `biomes.4x` follow from the fourth sentence. **This is the
-   largest work and nothing waits on Sean for it**
-2. **The stripping assertion comes out** with the finished `kinds.4x`, which is `C-61`'s pattern -
-   the exception stops being true rather than being widened
-3. **`S-96`** - the standing check that every `In` line quotes its source, **wrong three times so
-   far**, each found by a sweep that happened to run
-4. **`X-8`, `X-12`, `X-13`** - the research lens's three
-
-**`R-10` is done and is Sean's.** And the two-family question `S-113` asked about is answered in a
-better place than it asked: **the emitter refuses a kind in two families rather than picking one** -
-`declare.rs`, *a key takes one value, so this refuses rather than picking* - which fires at the
-release rather than at the file, and is where the first such kind would be written.
-
-
-## Closable on your side, and this lane cannot do it
-
-**Nothing that this lane knows of.** `C-93`, `C-96`, `C-97`, `C-68` read **answered** and `C-98`
-reads **acted**; `S-103` is closed here as of `6f8d75b`. **Nine of this lane's own notifications
-closed on 2026-09-12**, so what is left in your inbox is work rather than news.
-
-
-## Held, and not by you
-
-- **`S-26`** - `P-214` and `P-213` wait on recipes being data
-- **`S-97`** - informational
-
-## What Sean is waiting on that no lane can do
-
-**Nothing.** His queue is empty and so is `decisions.md`. **`R-6`, `R-7`, `R-8` and `R-9` sit at
-`built`** - the whole first release, waiting on him to look rather than on anyone to build.
+- **`spec/` is not your column.** Print bytes for a data file and this lane proposes them
+- **`S-26` is held** - `P-214` and `P-213` wait on recipes being data
+- **Nothing is waiting on Sean that blocks you.** Five capabilities sit at `built` waiting on him
+  to look, and none of them is work
 
 ### S-48 - `node` goes, and the game's row loses `turn`
 
