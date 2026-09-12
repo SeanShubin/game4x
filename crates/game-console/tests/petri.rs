@@ -112,13 +112,38 @@ fn the_density_rule_is_spelled_out_against_the_planet_it_describes() {
     let mut names = Vec::new();
     let mut current = String::new();
     let mut has_expression = std::collections::BTreeMap::new();
+    let mut puts = 0usize;
+    // **Bounded to the Recipes table, which the role filter used to do by accident.** The
+    // loop read every `|` line in the document and the four-role `matches!` doubled as *is
+    // this a recipe row* - so a Biomes row was skipped for looking like an unknown role. Two
+    // jobs in one condition, and naming the fifth role broke the half nobody had written
+    // down. With the section bounded, an unknown role really is an error.
+    let mut inside = false;
+    let mut body = false;
     for line in document.lines() {
+        if line.starts_with("## ") {
+            if inside {
+                break;
+            }
+            inside = line.trim() == "## Recipes";
+            continue;
+        }
         let line = line.trim();
-        if !line.starts_with('|') {
+        if !inside || !line.starts_with('|') {
             continue;
         }
         let cells: Vec<&str> = line.trim_matches('|').split('|').map(str::trim).collect();
-        if cells.len() < 5 || cells.iter().all(|cell| cell.chars().all(|c| c == '-')) {
+        // **The separator, and the header above it.** `body_under` drops the header by
+        // waiting for the dashes; this dropped it by the word `Role` failing to be a role,
+        // which is the same accident one row higher than the four-role filter.
+        if cells
+            .iter()
+            .all(|cell| !cell.is_empty() && cell.chars().all(|c| c == '-'))
+        {
+            body = true;
+            continue;
+        }
+        if !body || cells.len() < 5 {
             continue;
         }
         let name = cells[0].trim_matches('*').trim();
@@ -128,12 +153,46 @@ fn the_density_rule_is_spelled_out_against_the_planet_it_describes() {
                 names.push(current.clone());
             }
         }
-        if current.is_empty() || !matches!(cells[2], "require" | "limit" | "consume" | "produce") {
+        if current.is_empty() {
             continue;
+        }
+        // **A `put` is skipped because it has no quantity, and that is a rule now.** `P-421`:
+        // *a put has no quantity, because nothing is made or taken.* Its Qty cell is blank,
+        // and a blank parses as no number - so counting it here would mark every recipe that
+        // carries one as having an expression, which is the opposite of true.
+        //
+        // **This read `require | limit | consume | produce` until `P-421`**, a four-role
+        // allowlist written before the fifth existed. It excluded `put` correctly and for no
+        // stated reason, which is the shape the research lens found in its own parser: a
+        // filter that is right by accident goes on being green when the accident stops
+        // holding. Named as a rule and checked below instead.
+        if cells[2] == "put" {
+            assert!(
+                cells[3].is_empty(),
+                "a `put` row carries the quantity `{}`, where `P-421` says a put has none - \
+                 so skipping it here has stopped being safe",
+                cells[3]
+            );
+            puts += 1;
+            continue;
+        }
+        if !matches!(cells[2], "require" | "limit" | "consume" | "produce") {
+            panic!(
+                "`{}` is a role the release uses and this check does not know - it is being \
+                 skipped, which is how a recipe quietly stops being measured",
+                cells[2]
+            );
         }
         let numeric = cells[3].parse::<u32>().is_ok();
         *has_expression.entry(current.clone()).or_insert(false) |= !numeric;
     }
+
+    // **Twelve `put` rows were skipped and the count says so**, because a skip that is
+    // silent and a population that is empty look identical from here.
+    assert_eq!(
+        puts, 12,
+        "{puts} `put` rows were skipped; the release states twelve"
+    );
 
     let expected: Vec<&String> = names
         .iter()
