@@ -111,14 +111,43 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
         "eighteen compared, and the count is here so that two empty sets cannot agree"
     );
 
-    // **And the generator still writes what landed**, byte for byte. This is the second
-    // assertion rather than the first: what the specification says is the subject, and this
-    // says the handover has not drifted - so `--example declared-kinds` can still be trusted
-    // to produce the next version of the file rather than something that merely resembles it.
+    // **The generator is one promotion ahead of the file, and the gap is named.**
+    // `P-448` puts each kind's family on the kind's own line, so `declare::kinds` writes
+    // `{kind family:unit name:ark}` where `spec/data/kinds.4x` still says `{kind name:ark}`.
+    // The file is the specification and this lane cannot promote it.
+    //
+    // **So the difference is asserted rather than tolerated**, and asserted as the whole of
+    // itself: taking `family:` back out of what the generator writes must give the file
+    // exactly. Anything else that had drifted would still fail.
+    //
+    // **It cannot outlive its excuse** - `C-61`'s pattern. The day the file is promoted with
+    // the families in it, stripping will stop yielding the file, this fails, and the
+    // exception comes out rather than being widened.
+    let generated = declare::kinds(&document);
+    let without_family = generated
+        .lines()
+        .map(|line| {
+            let Some((before, rest)) = line.split_once("family:") else {
+                return line.to_string();
+            };
+            let after = rest.split_once(' ').map(|(_, tail)| tail).unwrap_or("");
+            format!("{before}{after}")
+        })
+        .map(|line| {
+            format!(
+                "{line}
+"
+            )
+        })
+        .collect::<String>();
     assert_eq!(
-        declare::kinds(&document),
-        file,
-        "`declare::kinds` and `spec/data/kinds.4x` have parted, so the generator would          promote bytes that are not what is there"
+        without_family, file,
+        "`declare::kinds` and `spec/data/kinds.4x` differ by more than the families `P-448`          has not promoted yet, so the generator would promote bytes that are not what is there"
+    );
+    assert_eq!(
+        generated.matches("family:").count(),
+        7,
+        "seven kinds are in a family the release names - two units, three resources, two          places - and `thing` is in none of them because it is a rule rather than a list"
     );
 }
 
@@ -207,5 +236,77 @@ fn a_word_missing_from_either_side_is_reported_against_the_other() {
         differing(&long, &table).1,
         vec!["invented".to_string()],
         "a kind the file declares and the table does not is a word this lane invented"
+    );
+}
+
+/// The families file names every family the release declares, and no other word.
+///
+/// **`spec/data/families.4x` does not exist yet**, so this holds the generator against the
+/// release rather than against the file - and says so, because that is the weaker of the two
+/// and `docs/process.md` is why: a check that reads a copy of the population is checking the
+/// copy. **The moment the file lands, this reads it**, the way its sibling already does.
+///
+/// **What it can check today is still worth checking**: that the generator writes every
+/// family and invents none, which is what a promotion of these bytes would be promising.
+#[test]
+fn the_families_file_names_every_family_and_invents_none() {
+    let document = release();
+    let at = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/families.4x");
+    assert!(
+        !at.exists(),
+        "`spec/data/families.4x` exists now, so this must read it instead of the generator - \
+         the file is the population and the generator is a copy of it"
+    );
+
+    let file = declare::families(&document);
+    let read = state::declarations(&file).expect("the file it writes is a file it can read");
+
+    let mut named: Vec<String> = Vec::new();
+    for row in &read {
+        assert_eq!(
+            row.kind, "family",
+            "a line of the families file declares a `{}`",
+            row.kind
+        );
+        assert_eq!(
+            row.traits.len(),
+            1,
+            "`P-448`: a family declares only its name, and this line carries {} traits",
+            row.traits.len()
+        );
+        named.push(
+            row.traits
+                .get("name")
+                .expect("a declaration names the word it declares")
+                .clone(),
+        );
+    }
+
+    let declared: Vec<String> = game_console::recipes::body_under(&document, "## Families")
+        .iter()
+        .map(|row| row[0].trim().trim_matches('*').trim().to_string())
+        .collect();
+    assert_eq!(
+        named, declared,
+        "the families file and the release's table name different families, or name them in a \
+         different order"
+    );
+    assert_eq!(
+        named.len(),
+        4,
+        "four families when this was written; the release declares {} ({named:?})",
+        named.len()
+    );
+
+    // **`thing` is among them and carries no members**, which is the half `P-448` changed.
+    // The table spells it *every kind above*; the file says only that the family exists, and
+    // `spec/console.md` carries the rule that every kind is in it.
+    assert!(
+        named.contains(&"thing".to_string()),
+        "`thing` is a family and the file must declare it: {named:?}"
+    );
+    assert!(
+        !file.contains("every kind above"),
+        "the file carries the table's rule as if it were data: {file}"
     );
 }

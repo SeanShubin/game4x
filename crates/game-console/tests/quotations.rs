@@ -133,7 +133,46 @@ fn flattened(text: &str) -> String {
 /// Backticks and asterisks survive [`flattened`] because that is what the quotations are
 /// *found* by, and are dropped here because that is not what they are *judged* by.
 fn bare(text: &str) -> String {
-    flattened(&text.replace(['`', '*'], " "))
+    flattened(&text.replace(['`', '*'], ""))
+}
+
+/// Emphasis beside punctuation normalizes away, rather than leaving a space behind.
+///
+/// **This replaced each marker with a space until 2026-09-12**, and a space is what a marker
+/// is not: markdown emphasis does not separate words, so `**in**,` is `in,` and not `in ,`.
+/// The specification writes emphasis right up against a comma all the time - *`thing` is the
+/// family every kind is in*, and no line says so* - and a quotation of that sentence which
+/// did not reproduce the emphasis boundary normalized one way while the source normalized the
+/// other.
+///
+/// **So a verbatim quotation was reported as wrong**, which is the expensive kind of failure:
+/// the author re-reads a right sentence hunting a difference that is not there. It cost this
+/// lane twice in one day, once here and once to the trap `emphasised` documents - which is a
+/// different mechanism with the same symptom.
+///
+/// **The fix is safe because `prose` has already removed code**, so there is no `a*b` here
+/// that stripping would join into `ab`.
+#[test]
+fn a_marker_beside_punctuation_is_removed_rather_than_spaced() {
+    assert_eq!(
+        bare("the family every kind is in**, and no line"),
+        bare("the family every kind is in, and no line"),
+        "emphasis against a comma must normalize to the same thing as no emphasis - this is          the case that reported a verbatim quotation as wrong"
+    );
+    assert_eq!(
+        bare("a `kind`, a trait"),
+        bare("a kind, a trait"),
+        "and a backtick against a comma, which is how this file quotes a word"
+    );
+
+    // **Words still separate**, which is what spacing the markers was protecting. Stripping
+    // cannot join two words, because what sits between them is whitespace either way.
+    assert_eq!(bare("**one** **two**"), "one two");
+    assert_ne!(
+        bare("one two"),
+        bare("onetwo"),
+        "the control: if this passed, the comparison above would be meaningless"
+    );
 }
 
 /// The prose in a file, as runs, with code left out.
