@@ -8,8 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-431** - `age` becomes `require` and `put`, and `stow` is right as it is · `docs/notes/proposals.md`
-- **P-430** - a rule may ask whether something is absent only where a limit is declared for it · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -84,7 +82,7 @@ Not a defect list. Several proposals in one section is what working on one topic
 like; what this cannot tell you is whether they all still hold together, which is the question
 it exists to ask.
 
-- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310, P-342, P-362, P-375, P-379, P-382, P-385, P-397, P-412, P-421, P-427, P-400
+- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310, P-342, P-362, P-375, P-379, P-382, P-385, P-397, P-412, P-421, P-427, P-431, P-400
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229, P-230, P-250, P-251, P-263, P-266, P-283, P-404, P-406, P-415, P-403
 - `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366, P-378, P-396, P-417, P-418
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210, P-286, P-288, P-308, P-312, P-314, P-331, P-407
@@ -99,6 +97,7 @@ it exists to ask.
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185, P-390, P-408
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223, P-352, P-359
 - `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306, P-313, P-410
+- `spec/invariants.md` -> What a rule may cost - P-373, P-376, P-386, P-430, P-387
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
 - `docs/process.md` -> Outboxes and the index - P-242, P-299, P-305, P-325
 - `docs/process.md` -> What makes a check worth having - P-304, P-327, P-384, P-429
@@ -108,7 +107,6 @@ it exists to ask.
 - `releases/first-release.md` -> Where things are - P-265, P-311, P-320, P-358
 - `spec/control.md` -> Winning - P-77, P-81, P-125, P-361
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
-- `spec/invariants.md` -> What a rule may cost - P-373, P-376, P-386, P-387
 - `spec/resources.md` -> The list - P-49, P-65, P-338, P-389
 - `docs/process.md` -> All lanes - P-247, P-248, P-324
 - `docs/process.md`, a new section - P-204, P-211, P-401

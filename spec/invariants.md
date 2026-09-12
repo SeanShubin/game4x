@@ -157,5 +157,11 @@ These are what make the rule above checkable rather than merely believed.
 - **A soft line names something with a finite capacity.** Where nothing bounds it there is no room
   to be short of, so such a line either does nothing at all or asks whether a place is empty - and a
   rule able to ask that of an unbounded place puts every check above it out of reach
+- **A rule may ask whether something is absent only where what would hold it declares a limit for
+  it.** Where a limit is declared there is room to record, and *none is present* is read from the
+  room rather than measured. Where **no limit** is declared there is no room to be short of, so
+  the question can be answered only by measuring, and a rule able to ask it of such a thing puts
+  every check above out of reach. **Which kinds declare a limit is already written down, so
+  whether a rule may ask is decided from the declarations and not from the rule.**
 
 ## Open questions

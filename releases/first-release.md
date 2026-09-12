@@ -263,8 +263,8 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 |                     |        | consume | 1                                    | food      |                                               |                          |
 |                     |        | produce | 1                                    | citizen   |                                               |                          |
 | **perish**          | world  | consume | 1                                    | citizen   | whose upkeep is unpaid                        |                          |
-| **age**             | world  | consume | 1                                    | thing     | keeps at least 1                              |                          |
-|                     |        | produce | 1                                    | thing     | keeps one less                                |                          |
+| **age**             | world  | require | 1                                    | thing     | keeps at least 1                              |                          |
+|                     |        | put     |                                      | thing     | keeps one less                                |                          |
 | **spoil**           | world  | consume | 1                                    | thing     | keeps 0                                       |                          |
 | **stow**            | world  | consume | 1                                    | metal     |                                               |                          |
 |                     |        | produce | 1                                    | metal     |                                               | a store for metal        |
