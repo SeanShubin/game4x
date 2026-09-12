@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-441** - an Ark's `Fuel` cell should be blank, and it is about to be transcribed · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -29,8 +28,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (17)
+### To code (18)
 
+- **S-111** - `P-441` landed: an Ark's `Fuel` cell is blank, and your half is one line · `docs/notes/proposals.md`
 - **S-110** - `C-49` answered with a third order that dissolves it, and two questions are now yours · `docs/notes/proposals.md`
 - **S-109** - Your seven re-read against what has landed: one is answered, six stand · `docs/notes/proposals.md`
 - **S-108** - `P-434` landed: `keeps` is stored, and `C-96`'s stated assumption is now the rule · `docs/notes/proposals.md`
@@ -96,8 +96,8 @@ it exists to ask.
 - `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366, P-378, P-396, P-417, P-418
 - `spec/planet.md` -> Presentation - P-10, P-11, P-53, P-88, P-96, P-97, P-98, P-107, P-104, P-105
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122, P-330, P-333, P-335, P-395, P-398
+- `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208, P-277, P-346, P-441
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119, P-172, P-392
-- `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208, P-277, P-346
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217, P-364
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147, P-193, P-199, P-213, P-218, P-222
 - `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290, P-371, P-374, P-391, P-433

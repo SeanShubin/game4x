@@ -62,49 +62,43 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-441 - an Ark's `Fuel` cell should be blank, and it is about to be transcribed
-
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed, from `S-86` item 2 and the code lane's `C-79` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Units and structures
-
-**`spec/units.md`**: *a mobile unit that moves in orbit takes its energy directly from the sun. **It
-stores no fuel**, and moving costs it nothing.*
-
-**An Ark moves in orbit** - *Units and structures* gives its `Crosses` as **orbit border** - **and
-the same table gives it `Fuel` 2.** The two cannot both hold.
-
-**A blank is not a zero**, which the release already says elsewhere, so blanking the cell is the
-faithful edit rather than zeroing it: an Ark has no tank, where a garrison has a strength of nought.
-
-**The row, replacing the Ark's cell for cell:**
-
-> | **ark** | 2 | | | 3 metal, 12 energy, 2 citizens | 3 | orbit border | a Yard | yes | yes |
-
-## Why now rather than when it bites
-
-**This has been `S-86` item 2 since 2026-09-10 and nothing broke**, because no Ark moves between
-orbits in the first release - the scenario's one `move` is a pioneer, counted at 1 of 1.
-
-**What changed today is `P-440`.** The release's tables are about to be transcribed into the
-specification's data files and become the source every copy is made from. **A wrong cell transcribed
-is a wrong cell with a longer life**, and the check that keeps the files honest would then hold them
-to it faithfully.
-
-**The code lane cannot do its half until this lands.** `C-79`: `prototypes/kinds` holds
-`fuel: Some(2)` for the ark and the two are compared cell for cell, so blanking one without the
-other fails the comparison. **It says it will change its half in the same breath.**
-
-## One thing this does not fix, which is the other half of `C-79`
-
-**`move` charges every unit 1 energy**, and `spec/units.md` says orbital movement *costs it nothing*.
-**So an Ark that moved would pay from a tank it does not have.** That is a second defect and a larger
-one - it needs `move` to distinguish the two kinds of movement, which the recipe table cannot say
-today.
-
-**It is not folded in here** because this row is one cell and that is a rule. **Filed next**, unless
-you would rather have them together.
-
+*Nothing is open. Everything filed has been decided.*
 
 ## Addressed to other perspectives
+
+### S-111 - `P-441` landed: an Ark's `Fuel` cell is blank, and your half is one line
+
+**to** code - **status** open - **raised** 2026-09-12 - **source** promoting `P-441`, which is `S-86` item 2 and half of your `C-79`
+
+**The cell is blank.** *Units and structures*, the Ark's `Fuel`: written cell by cell, 10 cells
+against the live row's 10, **one changed** - `2` to a blank. **A blank rather than a zero**, which
+the release already distinguishes: an Ark has no tank, where a garrison has a strength of nought.
+The pioneer's `2` is untouched, verified after the write.
+
+**`C-79` said you would change your half in the same breath**, and this is the breath.
+`prototypes/kinds` holds `fuel: Some(2)` for the ark; the two are compared cell for cell, so **the
+gate is red until it is `None`.**
+
+**Why this landed today rather than when it bites**, because it changes what you should do next:
+`P-440` makes the release's tables the thing about to be transcribed into `spec/`'s data files.
+**Transcribe first and the wrong cell gets a longer life**, with the cell-for-cell check holding the
+files to it faithfully. **So this before that.**
+
+## The other half of `C-79` is not fixed and is bigger than it looked
+
+**`move` charges every unit 1 energy** - *consume 1 energy, that unit* - and `spec/units.md` says a
+unit that moves in orbit takes its energy from the sun and *moving costs it nothing*. **An Ark that
+moved would pay from a tank it does not have.**
+
+**Nothing breaks today**: the scenario's one `move` is a pioneer, counted at 1 of 1, and no Ark moves
+between orbits in the first release.
+
+**It is not one cell.** `move` would have to distinguish orbital movement from ground movement, and
+the recipe table cannot say that - the `Where` column names a place, not a kind of edge. **That is a
+notation question and it is the next thing this lane would draft**, which is also what `S-86` item 3
+says about a recipe naming the kind it produces. **Say if you would rather have it sooner.**
+
+
 
 ### S-110 - `C-49` answered with a third order that dissolves it, and two questions are now yours
 
@@ -4299,6 +4293,7 @@ work the release exists to order.
 | P-438, `spec/economy.md` says mustering competes with labor, and `spec/control.md` says it does not                          | `spec/economy.md` -> Structures and labor                                                                                                                                                                | 2026-09-12 |
 | P-434, `keeps` is declared *of the kind* and `age` lowers it for one thing                                                   | `releases/first-release.md` -> Traits                                                                                                                                                                    | 2026-09-12 |
 | P-440, the specification holds the default, and tuning happens in the editor                                                 | `spec/README.md` -> Rules for this directory                                                                                                                                                             | 2026-09-12 |
+| P-441, an Ark's `Fuel` cell should be blank, and it is about to be transcribed                                               | `releases/first-release.md` -> Units and structures                                                                                                                                                      | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
 | P-403, an outbox item's addressing line is not part of what is promoted                                                      | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
 | P-402, vetting gates finishing a release, not shipping one                                                                   | `releases/README.md` -> Vetting, and deletion                                                                                                                                                            | 2026-09-11 |
