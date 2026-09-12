@@ -401,23 +401,49 @@ pub fn net(document: &str) -> Net {
     // `discard`.** The disambiguator is the kind on the block's first row, which is exactly
     // the member of the family the rule was instantiated for - so it is the thing that made
     // the block a separate block rather than a suffix invented to tell them apart.
+    //
+    // **And the kind is not always enough, since `P-414`.** Three `refresh` blocks put a
+    // count back on a citizen and two put one back on a unit, so what tells those apart is
+    // the count rather than the kind - `refresh (citizen laboring)` beside `refresh (citizen
+    // defending)`. The count is the first word of the block's first row of traits, which is
+    // where the release writes it: *laboring at its maximum*.
+    let first_cell = |lines: &[Vec<String>], column: usize| {
+        lines
+            .first()
+            .and_then(|row| row.get(column))
+            .map(|cell| crate::recipes::plain(cell))
+            .unwrap_or_default()
+    };
     let labels: Vec<String> = named
         .iter()
         .map(|(name, lines)| {
             if named.iter().filter(|(other, _)| other == name).count() < 2 {
                 return name.clone();
             }
-            let kind = lines
-                .first()
-                .and_then(|row| row.get(4))
-                .map(|cell| crate::recipes::plain(cell))
-                .unwrap_or_default();
+            let kind = first_cell(lines, 4);
             assert!(
                 !kind.is_empty(),
                 "`{name}` is stated more than once and its first row names no kind, so the \
                  two cannot be told apart on the page"
             );
-            format!("{name} ({kind})")
+            let sharing = named
+                .iter()
+                .filter(|(other, rows)| other == name && first_cell(rows, 4) == kind)
+                .count();
+            if sharing < 2 {
+                return format!("{name} ({kind})");
+            }
+            let count = first_cell(lines, 5)
+                .split_whitespace()
+                .next()
+                .unwrap_or_default()
+                .to_string();
+            assert!(
+                !count.is_empty(),
+                "`{name}` is stated more than once for `{kind}` and its first row names no \
+                 count, so the two cannot be told apart on the page"
+            );
+            format!("{name} ({kind} {count})")
         })
         .collect();
     assert_eq!(
@@ -434,6 +460,8 @@ pub fn net(document: &str) -> Net {
     let mut transitions: Vec<String> = Vec::new();
     let mut arcs: Vec<Arc> = Vec::new();
     let mut excluded: Vec<Excluded> = Vec::new();
+    // Read once: `force` is a trait of the kind, so the number is the same for every citizen.
+    let forces = crate::nogain::forces(document);
 
     // **Spelled out before anything is drawn** - `P-376`. A rule that makes a territory's
     // density is one rule with a number per case, and *whatever reads it may spell them out*.
@@ -455,38 +483,60 @@ pub fn net(document: &str) -> Net {
         .collect();
 
     let mut blocks_drawn: Vec<usize> = Vec::new();
+    // **An exclusion is per block, where a transition is per case.** `work` unfolds into
+    // sixteen and every one of them carries the same `put` row, so excluding each case in
+    // turn would report twenty-seven exclusions against thirty-one blocks and break the
+    // partition - `blocks_drawn + excluded == recipes` - by counting one block sixteen times.
+    // The label of the first case is what names it, which is the block's own name wherever
+    // the block was not unfolded.
+    let mut blocks_excluded: Vec<usize> = Vec::new();
     for (block, label, lines) in &expanded {
+        if blocks_excluded.contains(block) {
+            continue;
+        }
+        // **Named by the block rather than by the case.** A case's label carries the density
+        // it was spelled out for, and `work (energy x2)` names one of sixteen where what is
+        // missing from the drawing is `work`.
+        let named_block = &labels[*block];
         // **The whole recipe, or none of it.** An arc without a weight cannot be drawn, and
         // drawing a recipe's other rows without it would show a transition that takes less
         // than it does.
-        // **A role the release does not declare is refused rather than drawn** - `C-88`.
-        // `P-399` gave `move` a `put` row: the unit is neither taken nor made, it goes
-        // somewhere else. The *Recipes* column description still names four roles and this is
-        // a fifth, so what a `put` does as an arc is not written down anywhere.
+        // **A `put` row is drawn as an arc on the count it names** - the assumption `C-88`
+        // states, and the item stays open until the release declares the role. `P-399` gave
+        // `move` the first `put` row and this file refused to draw it, because the role was a
+        // fifth the *Recipes* column description did not name and the row could be read as a
+        // move or as a production.
         //
-        // **It is close to obvious and that is not enough.** The arithmetic differs: a `put`
-        // read as a move contributes nothing to the net, and one read as a produce contributes
-        // a whole unit. Guessing would draw a game nobody specified, which is the mistake this
-        // file has already made once with `limit`.
-        if let Some(row) = lines
-            .iter()
-            .find(|row| row.get(2).map(String::as_str) == Some("put"))
-        {
+        // **`P-411` took that ambiguity out.** A count is a trait again and the Traits cell
+        // says which way it goes: *moving one less* spends one, *moving at its maximum* puts
+        // one back, and *moving at least 1* is a requirement that moves nothing. So the arc
+        // is read from the row rather than guessed, and the alternative - refusing twelve of
+        // thirty-one blocks - would leave the drawing without `work`, `move`, `bear` or any
+        // `refresh` at all.
+        //
+        // **What is still undeclared is the word**, which is what `C-88` asks for: the column
+        // description names `require`, `limit`, `consume` and `produce`, and the table uses a
+        // fifth role in twelve blocks.
+        if let Some(row) = lines.iter().find(|row| {
+            row.get(2).map(String::as_str) == Some("put")
+                && crate::nogain::count_in(row.get(5).map(String::as_str).unwrap_or_default())
+                    .is_none()
+        }) {
+            blocks_excluded.push(*block);
             excluded.push(Excluded {
-                name: label.clone(),
+                name: named_block.clone(),
                 because: format!(
-                    "it has a `put` row - `{}` in `{}` - and the release's *Recipes* column \
-                     description names only `require`, `limit`, `consume` and `produce`, so \
-                     what a `put` does as an arc is undeclared",
-                    row.get(4).cloned().unwrap_or_default(),
-                    row.get(6).cloned().unwrap_or_default()
+                    "it has a `put` row whose traits are `{}`, which names no count at least \
+                     1, one less or at its maximum - so nothing says which way the arc goes",
+                    row.get(5).cloned().unwrap_or_default()
                 ),
             });
             continue;
         }
-        if let Some(row) = lines.iter().find(|row| number(row).is_none()) {
+        if let Some(row) = lines.iter().find(|row| weight(row, &forces).is_none()) {
+            blocks_excluded.push(*block);
             excluded.push(Excluded {
-                name: label.clone(),
+                name: named_block.clone(),
                 because: format!(
                     "its {} row is `{}`, which is a state rather than a number",
                     row.get(2).cloned().unwrap_or_default(),
@@ -502,16 +552,55 @@ pub fn net(document: &str) -> Net {
             blocks_drawn.push(*block);
         }
         for row in lines {
-            let Some(role) = Role::parse(row.get(2).map(String::as_str).unwrap_or_default()) else {
-                continue;
-            };
             let kind = crate::recipes::plain(row.get(4).map(String::as_str).unwrap_or_default());
             if kind.is_empty() {
                 continue;
             }
             let container = container_of(row.get(6).map(String::as_str).unwrap_or_default(), &kind);
-            let weight = number(row).unwrap_or_default();
             let traits = row.get(5).cloned().unwrap_or_default();
+
+            // **A count is a place of its own, and the kind's own place is untouched.** A
+            // citizen that spends its `laboring` is the same citizen afterwards - `P-411` -
+            // so the arc is on `citizen laboring` and nothing goes in or out of `citizen`.
+            // **Drawing it on the kind instead would show `create labor` eating a citizen**,
+            // which is the game `P-399` had and `P-411` undid.
+            if row.get(2).map(String::as_str) == Some("put") {
+                let Some((count, change)) = crate::nogain::count_in(&traits) else {
+                    continue;
+                };
+                if change == 0 {
+                    continue;
+                }
+                let place = Place {
+                    container: container.clone(),
+                    kind: format!("{kind} {count}"),
+                    room: false,
+                };
+                let at = match places.iter().position(|it| *it == place) {
+                    Some(at) => at,
+                    None => {
+                        places.push(place);
+                        places.len() - 1
+                    }
+                };
+                arcs.push(Arc {
+                    transition,
+                    place: at,
+                    role: if change < 0 {
+                        Role::Consume
+                    } else {
+                        Role::Produce
+                    },
+                    weight: 1,
+                    traits,
+                });
+                continue;
+            }
+
+            let Some(role) = Role::parse(row.get(2).map(String::as_str).unwrap_or_default()) else {
+                continue;
+            };
+            let weight = weight(row, &forces).unwrap_or_default();
 
             let find = |places: &mut Vec<Place>, room: bool| {
                 let place = Place {
@@ -606,6 +695,29 @@ fn number(row: &[String]) -> Option<u32> {
         return None;
     }
     cell.parse().ok()
+}
+
+/// What a row moves, which is not always the number in its Qty cell.
+///
+/// **Three forms and the release uses all three.** A whole number is itself. **A `put` row
+/// carries no quantity at all** - it moves one count, and *a blank is not a zero* - so the
+/// weight is one and the Traits cell says which way. **And a quantity naming a thing's force
+/// is a constant per kind**: `P-407` marks `force` *of the kind*, so *that citizen's force*
+/// is the Units and structures number for a citizen rather than a fact about one of them.
+///
+/// **`that unit's force` is not one number**, because `unit` is a family with two members, so
+/// this returns nothing for it and the block is excluded and named. Reading it as either
+/// member's number would draw a game that happens to be right because the two agree today.
+fn weight(row: &[String], forces: &std::collections::BTreeMap<String, i64>) -> Option<u32> {
+    if row.get(2).map(String::as_str) == Some("put") {
+        return Some(1);
+    }
+    if let Some(number) = number(row) {
+        return Some(number);
+    }
+    let cell = row.get(3)?.trim();
+    let subject = cell.strip_prefix("that ")?.strip_suffix("'s force")?;
+    forces.get(subject).map(|force| *force as u32)
 }
 
 /// The incidence matrix: places down, transitions across.

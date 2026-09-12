@@ -99,13 +99,13 @@ fn ending_a_turn_runs_exactly_the_recipes_the_release_calls_the_worlds() {
         ours, worlds,
         "`ENDING_A_TURN` and the release's world recipes have parted"
     );
-    // **Nine since `P-399` deleted `renew`.** Readiness is a kind, so a citizen's capacity to
-    // bear is a token `refresh` puts back with every other - and the rule that turned a spent
-    // citizen fertile again has nothing left to do.
+    // **Eleven since `P-414` added `muster` and `stand`**, which is force becoming something
+    // the world does at a turn's end rather than something a reader computes from what is
+    // standing there.
     assert_eq!(
         worlds.len(),
-        9,
-        "nine world recipes; the release has {}",
+        11,
+        "eleven world recipes; the release has {}",
         worlds.len()
     );
 }

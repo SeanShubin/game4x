@@ -17,39 +17,46 @@
 //! `crates/game-console/src/petri.rs` draws places at `(container, kind)`. **At that
 //! granularity `work` takes an extractor and makes an extractor and nets to zero**, and
 //! `refresh` takes a thing and makes a thing and nets to zero too - so a weighting over those
-//! places would report the readiness economy as doing nothing at all. That is a green run
-//! about the wrong question, which is this repository's recurring failure.
+//! places would report the whole economy of acting as doing nothing at all. That is a green
+//! run about the wrong question, which is this repository's recurring failure.
 //!
 //! **So the places here are `(kind, state)`**, finer than the drawing's. Two readings of one
 //! table at two granularities. Found in the drawing rather than predicted - `S-93` was
 //! corrected by it.
 //!
-//! # What `P-399` took away from this file
+//! **The drawing draws a count as a place of its own now**, which narrows the gap without
+//! closing it: a container still holds a kind there, where here a state is a state whatever
+//! holds it.
 //!
-//! **Readiness was a yes-or-no trait and is a kind.** While it was a trait, this file had to
-//! decide things the release did not say: which traits were capacities, which of their two
-//! values meant full, which kinds had which, and what a row naming no trait meant. Two of
-//! those readings were wrong before they were right - counting what was spent rather than what
-//! was left made `create labor` look like pure gain - and none of them belonged here.
+//! # What `P-411` gave back to this file
 //!
-//! **A token is a thing, and a thing needs no special case.** A `readiness for work` is taken
-//! and made exactly as a metal is. The hand-written capacity list is gone, the actions are the
-//! `for` trait's declared values, and the maximum is containment. `S-98` predicted this
-//! dissolving rather than being answered, and that is what happened.
+//! **Readiness was a trait, then a kind, and is a count carried as a trait.** `P-399` made it
+//! a kind and this file got much shorter; `P-411` undid that, and the reason `S-100` gives is
+//! `C-90`, which this lane filed - as a held kind, two citizens differing only in readiness
+//! had the same description and the map form could not tell them apart.
 //!
-//! **One distinction survives and is worth naming.** A readiness *is* the thing a rule takes.
-//! `whose upkeep is unpaid` *describes* a citizen - it is derived, and a citizen that perishes
-//! leaves both the unpaid pool and the citizens. So a token is one place and a qualified thing
-//! is two.
+//! **The short version survived the reversal**, which is worth saying because it was not
+//! obvious it would. What made the old code long was deciding things the release did not say:
+//! which traits were capacities, which of their two values meant full, which kinds had which,
+//! and what a row naming no trait meant. Two of those readings were wrong before they were
+//! right - counting what was spent rather than what was left made `create labor` look like
+//! pure gain. **`P-411` says all four in the table**: a count's values are `0 or 1`, a `put`
+//! row names the count and says *one less* or *at its maximum*, and the kind is in the row.
+//! So the file reads the answer where it used to compute one.
+//!
+//! **One distinction survives and is worth naming.** A count *is* what a rule takes - the
+//! place is `citizen, laboring` and the citizen is untouched. `whose upkeep is unpaid`
+//! *describes* a citizen - it is derived, and a citizen that perishes leaves both the unpaid
+//! pool and the citizens. So a count is one place and a qualified thing is two.
 //!
 //! # The three sources
 //!
-//! `spec/invariants.md`, since `P-388`:
+//! `spec/invariants.md`, since `P-388` and as `P-419` now words it:
 //!
 //! > There are three sources: the planet, the star, and time. The planet's material and the
-//! > star's energy are endless, and so are time's turns. **Anything that exhausts is a
-//! > readiness extractor for a turn**: it draws one readiness out of time and is spent doing
-//! > it, the way an extractor draws material out of the planet and is spent doing it
+//! > star's energy are endless, and so are time's turns. **Anything that exhausts draws on
+//! > time for a turn**: it spends a count it carries, and only the turn's end restores that
+//! > count, the way an extractor draws material out of the planet and is spent doing it
 //!
 //! **A source is a place like any other, and that is what makes the check bite.** Naming a
 //! source as an exemption would let every rule that touches it out of the arithmetic; naming
@@ -58,17 +65,18 @@
 //! everything else has to balance without them.
 //!
 //! **`refresh` is therefore not an exception carved out of the check** - `S-93` is explicit
-//! about this, and it is Sean's own framing rather than a reading of it: readiness is gathered
-//! rather than made, and what bounds the gathering is the count of things that exhaust.
+//! about this, and it is Sean's own framing rather than a reading of it: what a thing can do
+//! is gathered rather than made, and what bounds the gathering is the number of things that
+//! exhaust.
 
 use std::collections::BTreeMap;
 
 /// Somewhere a thing of one kind, in one state, can be.
 ///
 /// **A kind alone is not enough**, which is the finding that keeps this check from being
-/// vacuous. A `readiness for work` and a `readiness for move` are different places - `P-399`:
-/// *two recipes naming the same action draw on the same tokens*, and two naming different
-/// actions never compete. A weighting blind to the difference would pool them.
+/// vacuous. A citizen's `laboring` and its `bearing` are different places, because they are
+/// different counts - `P-411` gives each of them its own trait with its own two values, and a
+/// weighting blind to the difference would let one pay for the other.
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub struct Place {
     pub kind: String,
@@ -94,12 +102,13 @@ impl Place {
 /// The three `spec/invariants.md` names, spelled as it spells them.
 pub const SOURCES: [&str; 3] = ["the planet", "the star", "time"];
 
-/// What a thing spends to act - `P-399`, and the kind that replaced a trait.
+/// What a count trait's Values cell says, which is how a count is told from every other trait.
 ///
-/// **Naming it is the one thing here that is not read from the release**, and it is a name
-/// rather than a rule: which kind carries the token economy. Everything about it - which
-/// actions there are, what bounds it, which rules spend it - is read.
-pub const READINESS: &str = "readiness";
+/// **`P-411` gives them all the same two values** - *`moving`, `laboring`, `working`,
+/// `bearing`, `defending`, each `0 or 1`* - so the set is closed by the Traits table rather
+/// than by a list here. Nothing else in that table admits exactly these two values, which is
+/// what makes reading them a derivation instead of a guess dressed as one.
+pub const COUNT_VALUES: &str = "0 or 1";
 
 /// One rule, ground to constants and to single kinds, and what it does to each place.
 #[derive(Clone, Debug)]
@@ -475,6 +484,30 @@ pub fn family(document: &str, name: &str) -> Option<Vec<String>> {
     None
 }
 
+/// The families a recipe row may name in its Kind column, each ground to its members.
+///
+/// **Named here and their members read from the release** - `P-373`. Which words are families
+/// is the *Families* table's business; which of them a recipe uses is this list, and a row
+/// naming one that is not here is ground as a kind and would be a place nothing else touches.
+pub const FAMILIES: [&str; 4] = ["thing", "unit", "resource", "place"];
+
+/// What each kind's force is, read from *Units and structures*.
+///
+/// **A trait of the kind since `P-407`**, which is what makes one number per kind the right
+/// shape: every citizen's force is 1, so *that citizen's force* is a lookup rather than a
+/// fact about one citizen. A kind with an empty cell has no force and is absent, so asking
+/// for one is a panic rather than a zero - a rule producing nothing is a rule that vanished.
+pub fn forces(document: &str) -> BTreeMap<String, i64> {
+    crate::recipes::body_under(document, "## Units and structures")
+        .iter()
+        .filter_map(|row| {
+            let kind = crate::recipes::plain(row.first().map(String::as_str).unwrap_or_default());
+            let force = row.get(1)?.trim().parse::<i64>().ok()?;
+            (!kind.is_empty()).then_some((kind, force))
+        })
+        .collect()
+}
+
 /// The kinds the release says readiness applies to.
 ///
 /// **Read from the *Readies* column, and the release closes the set itself**: *Nothing outside
@@ -538,6 +571,7 @@ pub fn rules(document: &str) -> Vec<Rule> {
     let rows = crate::recipes::body_under(document, "## Recipes");
     let readies = readies(document);
     let keeps = keeps(document);
+    let forces = forces(document);
 
     // Gathered by block, the way the table states them: the name is on the first row only.
     let mut blocks: Vec<(String, Vec<Vec<String>>)> = Vec::new();
@@ -562,7 +596,7 @@ pub fn rules(document: &str) -> Vec<Rule> {
 
     let mut out = Vec::new();
     for (name, lines) in &blocks {
-        for (suffix, ground) in groundings(document, name, lines, &readies, &keeps) {
+        for (suffix, ground) in groundings(document, name, lines, &readies, &keeps, &forces) {
             let mut delta: BTreeMap<Place, i64> = BTreeMap::new();
             for (place, change) in ground {
                 *delta.entry(place).or_insert(0) += change;
@@ -572,29 +606,11 @@ pub fn rules(document: &str) -> Vec<Rule> {
             // dropping the rule here would hide it from a reader looking for one.
             delta.retain(|_, change| *change != 0);
 
-            // **A rule that makes readiness draws it out of time** - `P-388`: *anything that
-            // exhausts is a readiness extractor for a turn ... it draws one readiness out of
-            // time*. `refresh` is the only rule that makes any.
-            //
-            // **This used to be four times as long and it was reasoning the release now does
-            // for us.** Readiness was a yes-or-no trait, so the check had to decide which
-            // traits were capacities, which value meant full, and whether a rule raising one
-            // was refilling an existing thing or making a new thing that arrived full.
-            // `P-399` made readiness a kind: it is made, it is taken, and a place that goes
-            // up has to come from somewhere like any other.
-            let made: i64 = delta
-                .iter()
-                .filter(|(place, change)| place.kind == READINESS && **change > 0)
-                .map(|(_, change)| *change)
-                .sum();
-            if made > 0 {
-                *delta
-                    .entry(Place {
-                        kind: "time".to_string(),
-                        state: String::new(),
-                    })
-                    .or_insert(0) -= made;
-            }
+            // **The draw on time is made by the row that puts a count back**, in `changed`,
+            // rather than gathered here. It was here while readiness was a kind, because
+            // whether a rule was making tokens could only be read off the whole delta; a
+            // `put ... at its maximum` says it in one cell, and the rule that puts one back
+            // is the rule that draws one out of time - `P-388`.
             out.push(Rule {
                 name: format!("{name}{suffix}"),
                 delta,
@@ -611,40 +627,26 @@ fn groundings(
     lines: &[Vec<String>],
     readies: &[String],
     keeps: &[String],
+    forces: &BTreeMap<String, i64>,
 ) -> Vec<(String, Vec<(Place, i64)>)> {
-    // **A row naming every action at once is spelled out per action** - `refresh`, whose one
-    // row makes *1 readiness for each action, in whatever declares room*. The actions are the
-    // `for` trait's declared values, so this grounds against the release rather than a list.
-    //
-    // **Four rules and not one, because the tokens do not pool.** `P-399`: two recipes naming
-    // the same action draw on the same tokens, and two naming different actions never compete.
-    // One rule making a readiness-in-general would say the opposite.
-    if let Some(at) = lines.iter().position(|row| {
-        row.get(5)
-            .map(|traits| traits.trim().starts_with("for each action"))
-            .unwrap_or(false)
-    }) {
-        let actions = actions(document);
-        assert!(
-            !actions.is_empty(),
-            "`{name}` makes a readiness for each action and the `for` trait declares none, so \
-             this would ground it to nothing and drop the only rule that makes any"
-        );
-        return actions
-            .into_iter()
-            .map(|action| {
-                let mut changes = Vec::new();
-                for (which, row) in lines.iter().enumerate() {
-                    let mut row = row.clone();
-                    if which == at {
-                        row[5] = format!("for `{action}`");
-                    }
-                    changes.extend(changed(&row, None, None));
-                }
-                (format!(" ({action})"), changes)
-            })
-            .collect();
-    }
+    // **`P-411` deleted the branch that used to be here.** `refresh` was one row making *1
+    // readiness for each action, in whatever declares room*, and this ground it to one rule
+    // per declared action. It is six rows now, each naming its kind and its count, so the
+    // release spells out what this file used to spell out for it.
+
+    // **A block that moves a count is named by the count it moves.** `refresh` is six blocks
+    // since `P-414`, three of them putting a citizen's counts back and two a unit's, and a
+    // name that stopped at the kind would give a report two rows called `refresh (ark)` and
+    // three called `refresh`. The count is read from the block's own `put` row, so what tells
+    // the rules apart on the page is the thing that made them separate rules.
+    let moved = lines.iter().find_map(|row| {
+        let role = row.get(2).map(String::as_str).unwrap_or_default().trim();
+        if role != "put" {
+            return None;
+        }
+        let traits = crate::recipes::plain(row.get(5).map(String::as_str).unwrap_or_default());
+        count_in(&traits).map(|(count, _)| count)
+    });
 
     // **The density cases next**, because a block with one is `work` and its other rows are
     // the same in every case.
@@ -659,7 +661,7 @@ fn groundings(
             .map(|(resource, density)| {
                 let mut changes = Vec::new();
                 for row in lines {
-                    changes.extend(changed(row, Some((&resource, density)), None));
+                    changes.extend(changed(row, Some((&resource, density)), None, forces));
                 }
                 // **The planet is what the material came from.** `work` draws it out of the
                 // ground and is spent doing so - the extractor it took is not ready afterwards
@@ -680,19 +682,20 @@ fn groundings(
     // going out of one and into the other, and a weighting with nothing to say about either.
     // Found by reading the report rather than by a test, which is why the report is generated
     // before it is trusted.
-    let families: Vec<String> = ["thing", "unit", "resource", "place"]
-        .iter()
-        .map(|name| (*name).to_string())
-        .collect();
+    let families: Vec<String> = FAMILIES.iter().map(|name| (*name).to_string()).collect();
     //
     // **Asked of the rows that move something, which is not every row.** `move` names two
     // families: `place`, on the two `require` rows that say where it goes, and `unit`, on the
     // rows that actually take and make. Grounding on the first family found gave
     // `move (territory)` and `move (orbit)` - one rule per *destination*, each having lost the
     // unit entirely. A `require` moves nothing, so it cannot be what a rule is ground over.
+    //
+    // **And a `put` row is one of the rows that move something**, since `P-411`. A `refresh`
+    // block is one row and that row is a `put`, so asking only about `produce` and `consume`
+    // ground it against no family at all and left `unit` standing as a place of its own.
     let named_family = lines.iter().find_map(|row| {
         let role = row.get(2).map(String::as_str).unwrap_or_default().trim();
-        if role != "produce" && role != "consume" {
+        if role != "produce" && role != "consume" && role != "put" {
             return None;
         }
         let kind = crate::recipes::plain(row.get(4).map(String::as_str).unwrap_or_default());
@@ -726,20 +729,35 @@ fn groundings(
             .map(|member| {
                 let mut changes = Vec::new();
                 for row in lines {
-                    changes.extend(changed(row, None, Some(&member)));
+                    changes.extend(changed(row, None, Some(&member), forces));
                 }
-                // The draw on time is added in `rules`, once the whole delta is known: it
-                // depends on whether the kind's own count moved, which one row cannot say.
-                (format!(" ({member})"), changes)
+                let label = match &moved {
+                    Some(count) => format!(" ({member} {count})"),
+                    None => format!(" ({member})"),
+                };
+                (label, changes)
             })
             .collect();
     }
 
     let mut changes = Vec::new();
     for row in lines {
-        changes.extend(changed(row, None, None));
+        changes.extend(changed(row, None, None, forces));
     }
-    vec![(String::new(), changes)]
+    // The kind is the `put` row's own, because that is the row the count belongs to.
+    let label = match &moved {
+        Some(count) => {
+            let kind = lines
+                .iter()
+                .find(|row| row.get(2).map(String::as_str).unwrap_or_default().trim() == "put")
+                .and_then(|row| row.get(4))
+                .map(|cell| crate::recipes::plain(cell))
+                .unwrap_or_default();
+            format!(" ({kind} {count})")
+        }
+        None => String::new(),
+    };
+    vec![(label, changes)]
 }
 
 /// Which source an endless material comes out of.
@@ -766,11 +784,17 @@ fn changed(
     row: &[String],
     density: Option<(&str, u32)>,
     member: Option<&str>,
+    forces: &BTreeMap<String, i64>,
 ) -> Vec<(Place, i64)> {
     let role = row.get(2).map(String::as_str).unwrap_or_default().trim();
     let sign: i64 = match role {
         "produce" => 1,
         "consume" => -1,
+        // **A `put` moves a count and nothing else** - `P-411`. It is neither a production nor
+        // a consumption of the thing itself: the citizen that spends its `laboring` is the
+        // same citizen afterwards. Handled below rather than here, because the sign is in the
+        // trait cell rather than in the role.
+        "put" => 0,
         // `require` takes nothing, and `limit` has no instance in the release - `P-385`.
         _ => return Vec::new(),
     };
@@ -780,12 +804,80 @@ fn changed(
     if kind.is_empty() {
         return Vec::new();
     }
+    let kind_for_count = match member {
+        Some(member) if FAMILIES.contains(&kind.as_str()) => member.to_string(),
+        _ => kind.clone(),
+    };
+    if role == "put" {
+        // **The count is a place, and spending it is what pays for acting.** A citizen that
+        // can labor holds one `laboring`; `create labor` spends it; `refresh` puts one back.
+        // Weighing the citizen alone would make `create labor` pure gain - a labor made and
+        // nothing taken - which is the error `spec/invariants.md` names directly: *anything
+        // that exhausts draws on time for a turn*, and *it spends a count it carries, and
+        // only the turn's end restores that count*.
+        let Some((count, change)) = count_in(&traits) else {
+            // **Loud rather than silent.** A `put` row this cannot read is a rule moving
+            // something the arithmetic never saw, and dropping it would leave the weighting
+            // balancing a game with one fewer cost in it.
+            panic!(
+                "`put` names `{traits}`, which is not a count at least 1, one less or at its maximum - so this row would move nothing and nothing would say so"
+            );
+        };
+        if change == 0 {
+            return Vec::new();
+        }
+        let place = Place {
+            kind: kind_for_count,
+            state: count,
+        };
+        let mut out = vec![(place, change)];
+        if change > 0 {
+            // **`P-388`: what puts a count back draws it out of time.** *Anything that
+            // exhausts is a readiness extractor for a turn ... it draws one readiness out of
+            // time.* Without this, `refresh` makes a capacity from nothing and the weighting
+            // has a free source it was never asked about.
+            out.push((
+                Place {
+                    kind: "time".to_string(),
+                    state: String::new(),
+                },
+                -change,
+            ));
+        }
+        return out;
+    }
 
+    let quantity = row.get(3).map(String::as_str).unwrap_or_default().trim();
     let (kind, amount) = match (density, kind.as_str()) {
         (Some((resource, density)), "resource") => (resource.to_string(), density as i64),
         _ => {
-            let Some(amount) = row.get(3).and_then(|cell| cell.trim().parse::<i64>().ok()) else {
-                return Vec::new();
+            // **A quantity that names a thing's force is looked up rather than skipped** -
+            // `P-414`, *that citizen's force* and *that unit's force*. Force is a trait **of
+            // the kind** since `P-407`, so the number is in *Units and structures* and the
+            // subject is whatever the block was ground to. A cell this could not read used to
+            // return nothing, which dropped the only rows that make any force at all.
+            let amount = match quantity.parse::<i64>() {
+                Ok(amount) => amount,
+                Err(_) if quantity.ends_with("'s force") => {
+                    // **The subject is in the quantity, not in the Kind column.** The row
+                    // reads `produce | that citizen's force | force`, so the kind is what is
+                    // made and the subject is what it is made from - and for `stand` the
+                    // subject is the family `unit`, which is whichever member this block is
+                    // being ground to.
+                    let subject = quantity
+                        .trim_start_matches("that ")
+                        .trim_end_matches("'s force");
+                    let subject = match member {
+                        Some(member) if FAMILIES.contains(&subject) => member,
+                        _ => subject,
+                    };
+                    *forces.get(subject).unwrap_or_else(|| {
+                        panic!(
+                            "`{quantity}` is a quantity and `{subject}` has no Force in *Units and structures*, so this rule would make nothing"
+                        )
+                    })
+                }
+                Err(_) => return Vec::new(),
             };
             (kind, amount)
         }
@@ -793,10 +885,9 @@ fn changed(
     // A family row being ground names its member instead.
     // **The member the family row is being ground to.** Matched on the row naming *a*
     // family rather than on the word `thing`, so `move`'s `unit` grounds the same way.
+    // A family row being ground names its member instead.
     let kind = match member {
-        Some(member) if ["thing", "unit", "resource", "place"].contains(&kind.as_str()) => {
-            member.to_string()
-        }
+        Some(member) if FAMILIES.contains(&kind.as_str()) => member.to_string(),
         _ => kind,
     };
 
@@ -814,24 +905,14 @@ fn changed(
     // **A readiness is one place and a qualified citizen is two, and the difference is
     // whether the trait names a thing or describes one.**
     //
-    // A `readiness for work` **is** the thing: `P-399` made it a kind, and a rule that takes
-    // one takes a whole thing, so the place is the token and there is no citizen-sized place
-    // beside it.
+    // A count **is** the thing being spent, and it is handled above: a `put` row names the
+    // count and the place is the citizen's `laboring` rather than the citizen.
     //
     // `whose upkeep is unpaid` **describes** a citizen. It is derived - *its upkeep was not
     // met* - and a citizen that perishes leaves both the unpaid pool and the citizens. Counting
     // only the pool would have `perish` remove nobody, which is how it read for one run of this
     // file before the distinction was drawn.
     let said = traits.trim();
-    if kind == READINESS {
-        return vec![(
-            Place {
-                kind,
-                state: said.to_string(),
-            },
-            sign * amount,
-        )];
-    }
     let mut out = vec![(
         Place {
             kind: kind.clone(),
@@ -851,50 +932,50 @@ fn changed(
     out
 }
 
-/// The actions a readiness can be for, read from the `for` trait's declared values.
+/// The counts a thing can carry, read from the Traits table's Values column.
 ///
-/// **`P-399` put them in the Traits table** - *`for`, of a readiness, values `move`, `labor`,
-/// `work` or `bearing`* - so `refresh`'s one row, which makes a readiness *for each action*,
-/// grounds to one rule per action without this file naming any of them.
+/// **`P-411` undid `P-399` and the question turned round with it.** A readiness was a kind and
+/// the question was *which actions are there*, read from the `for` trait's declared values. A
+/// count is a trait again, and the question is *which traits are counts* - answered by the
+/// Values cell saying [`COUNT_VALUES`], which no other trait's does.
 ///
-/// **This replaces a hand-written list and that is the point.** The check used to declare
-/// which traits were capacities and which kinds had them, because readiness was a trait and
-/// nothing in the release said. It is a kind now, its actions are declared values, and its
-/// maximum is containment - so all three are read.
-pub fn actions(document: &str) -> Vec<String> {
-    for row in crate::recipes::body_under(document, "## Traits") {
-        if crate::recipes::plain(row.first().map(String::as_str).unwrap_or_default()) != "for" {
-            continue;
-        }
-        return row
-            .get(2)
-            .map(|values| {
-                values
-                    .split(&[',', ' '][..])
-                    .map(|word| word.trim().trim_matches('`').to_string())
-                    .filter(|word| !word.is_empty() && word != "or")
-                    .collect()
-            })
-            .unwrap_or_default();
-    }
-    Vec::new()
+/// **Read rather than listed, which is the whole reason this is here.** A hand list would be
+/// the check declaring what the release declares, and a count added tomorrow would be spent
+/// by a recipe and made by a `refresh` with nothing saying the arithmetic had missed it.
+pub fn counts(document: &str) -> Vec<String> {
+    crate::recipes::body_under(document, "## Traits")
+        .iter()
+        .filter(|row| {
+            row.get(2)
+                .map(|values| values.trim() == COUNT_VALUES)
+                .unwrap_or(false)
+        })
+        .filter_map(|row| row.first())
+        .map(|cell| crate::recipes::plain(cell))
+        .filter(|name| !name.is_empty())
+        .collect()
 }
 
-/// A capacity to act, and the state a thing is in once it has been spent.
+/// What a `put` row does to a count, or nothing if it does not name one.
 ///
-/// **The place counts the capacity, not its absence, and getting that backwards is what the
-/// first two attempts did.** Counting things that are *not ready* makes `create labor` read as
-/// pure gain - it makes a labor and a not-ready citizen and takes nothing - when what actually
-/// paid for the labor is the citizen's readiness. `spec/invariants.md` says it directly:
-/// **anything that exhausts is a readiness extractor for a turn**, *it draws one readiness out
-/// of time and is spent doing it*. A thing that is drawn from and spent is a place that goes
-/// **down**.
+/// **Three phrasings and the release uses all three** - *`moving` at least 1*, *`moving` one
+/// less*, *`moving` at its maximum*. The first is a requirement and moves nothing; the second
+/// spends one; the third puts one back. **The count is the first word**, which is where the
+/// release writes it.
 ///
-/// So a ready citizen holds one readiness, `create labor` spends it, and `refresh` draws
-/// another out of time. Same shape for fertility: a fertile citizen holds one, `bear` spends
-/// it, `renew` draws another. **`renew` is a readiness extractor too**, which falls out of the
-/// rule rather than being decided here - the release calls fertility *renewed each turn*.
-pub const CAPACITIES: [(&str, &str); 2] = [("ready", "not ready"), ("fertile", "spent")];
+/// **Parsed rather than matched whole**, because the count is what varies and the three
+/// endings are what do not.
+pub(crate) fn count_in(traits: &str) -> Option<(String, i64)> {
+    let said = traits.trim();
+    let (name, rest) = said.split_once(' ')?;
+    let change = match rest.trim() {
+        "one less" => -1,
+        "at its maximum" => 1,
+        "at least 1" => 0,
+        _ => return None,
+    };
+    Some((name.trim_matches('`').to_string(), change))
+}
 
 /// The states that are neither a capacity nor a thing at rest, kept as places of their own.
 ///
@@ -921,6 +1002,8 @@ pub const COUNTERS: [&str; 4] = [
 pub fn markdown(document: &str) -> String {
     let rules = rules(document);
     let found = solve(&rules);
+    // Which states are counts is the Traits table's answer, not this file's - `P-411`.
+    let counted = counts(document);
 
     let mut out = String::from("# Nothing comes back round with more\n\n");
     out.push_str(
@@ -980,8 +1063,8 @@ pub fn markdown(document: &str) -> String {
                     weight.to_string(),
                     if place.is_source() {
                         "an endless well".to_string()
-                    } else if CAPACITIES.iter().any(|(held, _)| place.state == *held) {
-                        "a capacity, spent by acting".to_string()
+                    } else if counted.contains(&place.state) {
+                        "a count, spent by acting".to_string()
                     } else if place.state.is_empty() {
                         "a thing".to_string()
                     } else {

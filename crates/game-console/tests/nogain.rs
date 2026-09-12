@@ -72,79 +72,102 @@ fn a_weighting_exists_and_no_rule_gains_under_it() {
     }
 }
 
-/// The readiness economy is visible, and the actions do not pool.
+/// The counts are spent by acting and put back by `refresh`, and they do not pool.
 ///
-/// **`S-93`'s third point, and `P-399` changed what it takes to satisfy it.** While readiness
-/// was a trait, the danger was a weighting over kinds reporting the whole economy as doing
-/// nothing - `refresh` took a thing and made a thing. It is a kind now, so the danger moved:
-/// the places must separate one action's tokens from another's, because `P-399` declares that
-/// *two recipes naming the same action draw on the same tokens* and two naming different
-/// actions never compete. One `readiness` place would say the opposite.
+/// **`S-93`'s third point, and `P-411` changed what it takes to satisfy it for the second
+/// time.** While readiness was a trait the danger was a weighting over kinds reporting the
+/// whole economy as doing nothing - `refresh` took a thing and made a thing. `P-399` made it
+/// a kind and the danger moved to pooling one action's tokens with another's. It is a count
+/// carried as a trait again, so the place is the kind **and** the count - `citizen, laboring`
+/// beside `citizen, bearing` - and a weighting blind to the difference would let a citizen
+/// pay for laboring with the capacity it has to bear.
 #[test]
-fn readiness_is_spent_by_acting_and_the_actions_do_not_pool() {
+fn a_count_is_spent_by_acting_and_the_counts_do_not_pool() {
     let document = release();
     let rules = nogain::rules(&document);
 
-    let token = |action: &str| Place {
-        kind: "readiness".to_string(),
-        state: format!("for `{action}`"),
-    };
-
-    // Every action declared is spent by something and made by `refresh`.
-    let actions = nogain::actions(&document);
+    // The counts are read from the Traits table, where `P-411` declares them.
+    let counts = nogain::counts(&document);
     assert_eq!(
-        actions,
-        ["move", "labor", "work", "bearing"],
-        "the `for` trait's declared values are what `refresh` grounds against"
+        counts,
+        ["moving", "laboring", "working", "bearing", "defending"],
+        "the traits whose values are `0 or 1` are the counts a thing carries"
     );
 
+    // Every count is spent by something and put back by `refresh`, on some kind that has it.
     let mut checked = 0;
-    for action in &actions {
+    for count in &counts {
+        let of = |rule: &nogain::Rule, sign: i64| {
+            rule.delta
+                .iter()
+                .any(|(place, change)| place.state == *count && change.signum() == sign)
+        };
         let spent: Vec<&str> = rules
             .iter()
-            .filter(|rule| rule.delta.get(&token(action)).copied().unwrap_or(0) < 0)
+            .filter(|rule| of(rule, -1))
             .map(|rule| rule.name.as_str())
             .collect();
         assert!(
             !spent.is_empty(),
-            "nothing spends a readiness `for {action}`, so the action is declared and never              costs anything"
+            "nothing spends a `{count}`, so the count is declared and never costs anything"
         );
 
-        let made = rules
+        let put_back: Vec<&nogain::Rule> = rules
             .iter()
-            .find(|rule| rule.name == format!("refresh ({action})"))
-            .unwrap_or_else(|| panic!("`refresh` does not ground to `{action}`"));
-        assert_eq!(made.delta.get(&token(action)), Some(&1));
-        assert_eq!(
-            made.draws_from(),
-            ["time"],
-            "`refresh ({action})` makes a readiness out of nothing, where `P-388` says it              draws one out of time"
+            .filter(|rule| rule.name.starts_with("refresh (") && of(rule, 1))
+            .filter(|rule| rule.name.ends_with(&format!(" {count})")))
+            .collect();
+        assert!(
+            !put_back.is_empty(),
+            "`refresh` puts no `{count}` back, so acting would cost one thing for ever"
         );
+        for rule in &put_back {
+            assert_eq!(
+                rule.draws_from(),
+                ["time"],
+                "`{}` puts a count back out of nothing, where `P-388` says it draws one out of time",
+                rule.name
+            );
+        }
         checked += 1;
     }
-    assert_eq!(
-        checked,
-        actions.len(),
-        "every action, and the count with it"
-    );
-    assert!(
-        !actions.is_empty(),
-        "no actions at all, so nothing above ran"
-    );
+    assert_eq!(checked, counts.len(), "every count, and the count with it");
+    assert!(!counts.is_empty(), "no counts at all, so nothing above ran");
 
-    // **The tokens are separate places, which is the half a single `readiness` place loses.**
-    // `work` must not be payable with a readiness for moving.
+    // **The counts are separate places, which is the half a single place per kind loses.**
+    // `work` must not be payable with the extractor's capacity to do something else.
     let work = rules
         .iter()
         .find(|rule| rule.name.starts_with("work ("))
         .expect("`work` is spelled out per density");
-    assert_eq!(work.delta.get(&token("work")), Some(&-1));
+    let working = Place {
+        kind: "extractor".to_string(),
+        state: "working".to_string(),
+    };
+    assert_eq!(work.delta.get(&working), Some(&-1));
     assert!(
-        !work.delta.contains_key(&token("move")),
-        "`work` spends a readiness for moving, so the actions have been pooled"
+        work.delta.keys().all(|place| place.kind != "citizen"),
+        "`work` spends something of a citizen's, so the counts have been pooled: {:?}",
+        work.delta
     );
 
-    // **A qualified thing is two places and a token is one**, which is the distinction that
+    // **A citizen's three counts are three places**, which is `C-90`'s whole point arriving
+    // in the arithmetic: two citizens differing only in what they have left to do are two
+    // descriptions, and two places.
+    let citizen_counts: std::collections::BTreeSet<&str> = rules
+        .iter()
+        .flat_map(|rule| rule.delta.keys())
+        .filter(|place| place.kind == "citizen" && !place.state.is_empty())
+        .map(|place| place.state.as_str())
+        .filter(|state| counts.iter().any(|count| count == state))
+        .collect();
+    assert_eq!(
+        citizen_counts,
+        ["bearing", "defending", "laboring"].into_iter().collect(),
+        "a citizen's counts are three separate places"
+    );
+
+    // **A qualified thing is two places and a count is one**, which is the distinction that
     // took a run to find: `perish` takes a citizen out of the unpaid pool *and* out of the
     // citizens, where counting only the pool had it remove nobody.
     let perish = rules
@@ -159,6 +182,75 @@ fn readiness_is_spent_by_acting_and_the_actions_do_not_pool() {
         Some(&-1),
         "`perish` leaves the citizens unchanged, so it removes nobody: {:?}",
         perish.delta
+    );
+}
+
+/// Force is mustered from a count and swept in the same ending, and the arithmetic sees it.
+///
+/// **`P-414`, and it is the one thing in the release whose quantity is not a number.**
+/// `muster` produces *that citizen's force* and `stand` *that unit's force*, so a check that
+/// could only read a number would have dropped both rows and reported a game where force is
+/// made from nothing - the exact shape `spec/invariants.md` exists to refuse.
+#[test]
+fn force_is_mustered_from_a_count_and_costs_what_it_takes() {
+    let document = release();
+    let rules = nogain::rules(&document);
+    let force = Place {
+        kind: "force".to_string(),
+        state: String::new(),
+    };
+
+    // The release's own numbers: a citizen is force 1, an ark and a pioneer 2.
+    let forces = nogain::forces(&document);
+    assert_eq!(forces.get("citizen"), Some(&1));
+    assert_eq!(forces.get("ark"), Some(&2));
+    assert_eq!(forces.get("pioneer"), Some(&2));
+
+    let muster = rules
+        .iter()
+        .find(|rule| rule.name.starts_with("muster"))
+        .expect("`muster` is a rule");
+    assert_eq!(
+        muster.delta.get(&force),
+        Some(&1),
+        "`muster` makes one citizen's force: {:?}",
+        muster.delta
+    );
+    assert_eq!(
+        muster.delta.get(&Place {
+            kind: "citizen".to_string(),
+            state: "defending".to_string()
+        }),
+        Some(&-1),
+        "and it costs the citizen's capacity to defend: {:?}",
+        muster.delta
+    );
+
+    let stood: Vec<&nogain::Rule> = rules
+        .iter()
+        .filter(|rule| rule.name.starts_with("stand ("))
+        .collect();
+    assert_eq!(
+        stood.len(),
+        2,
+        "`stand` names the family `unit`, which is an ark and a pioneer: {:?}",
+        stood.iter().map(|rule| &rule.name).collect::<Vec<_>>()
+    );
+    for rule in &stood {
+        assert_eq!(
+            rule.delta.get(&force),
+            Some(&2),
+            "`{}` makes that unit's force, which the release says is two",
+            rule.name
+        );
+    }
+
+    // And it is swept in the same ending, so nothing carries force from one turn to the next.
+    assert!(
+        rules
+            .iter()
+            .any(|rule| rule.name.starts_with("discard") && rule.delta.get(&force) == Some(&-1)),
+        "nothing discards force, so it would accumulate across turns"
     );
 }
 
@@ -222,24 +314,32 @@ fn every_block_becomes_at_least_one_rule() {
     let document = release();
     let rules = nogain::rules(&document);
 
-    // **`refresh` grounds per action now, not per kind that readies.** `P-399` turned the
-    // question round: it was *which things can be refreshed*, read from the *Readies* column,
-    // and it is *which actions are there*, read from the `for` trait's declared values. One
-    // rule per action, because tokens for different actions never compete.
+    // **`refresh` grounds per block again, and the blocks are what `P-414` left.** Six of
+    // them: four counts put back on a citizen or an extractor, and two on a unit - which is
+    // a family, so each of those two becomes an ark and a pioneer. Eight rules from six
+    // blocks, and every one of them names the count it puts back.
     let refreshed: Vec<&str> = rules
         .iter()
         .filter(|rule| rule.name.starts_with("refresh ("))
         .map(|rule| rule.name.as_str())
         .collect();
     assert_eq!(
-        refreshed.len(),
-        nogain::actions(&document).len(),
-        "`refresh` ground to {refreshed:?}, and the `for` trait declares {:?}",
-        nogain::actions(&document)
+        refreshed,
+        [
+            "refresh (ark moving)",
+            "refresh (pioneer moving)",
+            "refresh (citizen laboring)",
+            "refresh (citizen bearing)",
+            "refresh (extractor working)",
+            "refresh (citizen defending)",
+            "refresh (ark defending)",
+            "refresh (pioneer defending)",
+        ],
+        "`refresh` ground to {refreshed:?}"
     );
     assert!(
         !refreshed.is_empty(),
-        "no actions at all, so the comparison above is between two empty lists"
+        "no refresh at all, so the comparison above is between two empty lists"
     );
 
     // `age` and `spoil` name `thing` too, and `keeps` is declared of food alone - so grounding
@@ -260,6 +360,8 @@ fn every_block_becomes_at_least_one_rule() {
         "bear",
         "breed",
         "refresh",
+        "muster",
+        "stand",
     ] {
         assert!(
             rules

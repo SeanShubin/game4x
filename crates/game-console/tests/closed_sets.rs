@@ -82,17 +82,22 @@ fn named_under(document: &str, heading: &str) -> Vec<String> {
 ///
 /// # The two ways this could pass over nothing
 ///
-/// `S-22` names both and this answers both. **The traits examined are written out rather
-/// than discovered**, because a trait whose values are free text has no table to check
-/// against and discovery would silently skip it - so the list is a decision, and the count
-/// of it is asserted. **And a table that lists nothing agrees with an empty set**, so each
-/// side is asserted non-empty before the comparison that would otherwise be vacuous.
+/// `S-22` names both and this answers both. **The sets examined are written out rather than
+/// discovered**, because a trait whose values are free text has no table to check against
+/// and discovery would silently skip it - so the list is a decision, and the count of it is
+/// asserted. **And a table that lists nothing agrees with an empty set**, so each side is
+/// asserted non-empty before the comparison that would otherwise be vacuous.
+///
+/// **One of the two is not a trait, since `P-417`.** The `kind` row is gone from *Traits* -
+/// a kind is not a trait, and `spec/console.md` lists the two as different categories - so
+/// what is held against *## Kinds* is the model's kinds themselves. The comparison is the
+/// one it always was; what moved is what it may be called.
 #[test]
 fn every_value_a_trait_admits_is_a_row_in_the_table_that_lists_them() {
     let document = release();
 
-    // Written out, not discovered. Two traits name a closed set; the rest are free text or
-    // numbers and have no table to be held against.
+    // Written out, not discovered. Two of the model's sets are closed and have a table to
+    // be held against; every other trait is free text or a number and has none.
     let closed: [(&str, &str, Vec<String>); 2] = [
         (
             "kind",
@@ -105,10 +110,10 @@ fn every_value_a_trait_admits_is_a_row_in_the_table_that_lists_them() {
             Biome::ALL.iter().map(|b| b.name().to_lowercase()).collect(),
         ),
     ];
-    assert_eq!(closed.len(), 2, "two traits name a closed set");
+    assert_eq!(closed.len(), 2, "two sets are closed and written down");
 
     let mut compared = 0;
-    for (trait_name, heading, admits) in &closed {
+    for (set, heading, admits) in &closed {
         let listed: BTreeSet<String> = named_under(&document, heading).into_iter().collect();
         let admits: BTreeSet<String> = admits.iter().cloned().collect();
 
@@ -118,14 +123,14 @@ fn every_value_a_trait_admits_is_a_row_in_the_table_that_lists_them() {
         );
         assert!(
             !admits.is_empty(),
-            "the model admits no `{trait_name}`, so this would agree with any table at all"
+            "the model admits no `{set}`, so this would agree with any table at all"
         );
 
         let unwritten: Vec<&String> = admits.difference(&listed).collect();
         let unbuilt: Vec<&String> = listed.difference(&admits).collect();
         assert!(
             unwritten.is_empty() && unbuilt.is_empty(),
-            "the `{trait_name}` trait and {heading} admit different sets:\n  \
+            "the model's `{set}` and {heading} admit different sets:\n  \
              the model has and {heading} does not list: {unwritten:?}\n  \
              {heading} lists and the model does not have: {unbuilt:?}"
         );
@@ -140,11 +145,12 @@ fn every_value_a_trait_admits_is_a_row_in_the_table_that_lists_them() {
     // **This count is what catches a kind arriving**: the release declares it, the model does
     // not have it, and the gate is red for every lane until the model follows. It has done
     // that four times, the fourth being `game` in `P-351`.
-    // The fifth was `fertility`, in the saturating rewrite; the sixth is `readiness`, which
-    // `P-399` turned from a yes-or-no trait into a kind.
+    // The fifth was `fertility`, in the saturating rewrite. **The sixth went away again**:
+    // `P-399` turned `readiness` from a yes-or-no trait into a kind and `P-411` turned it
+    // back into a count carried as a trait, so seventeen is where the count returned to.
     assert_eq!(
-        compared, 24,
-        "eighteen kinds and six biomes were compared when this was written; {compared} were"
+        compared, 23,
+        "seventeen kinds and six biomes were compared when this was written; {compared} were"
     );
 }
 

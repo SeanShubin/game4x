@@ -53,7 +53,16 @@ pub struct Unit {
     /// Whether this unit has already been used this turn. `spec/turn.md` calls this
     /// ready or exhausted; a thing that is merely used up for the turn is exhausted,
     /// where labor and energy cells are genuinely spent because they are consumed.
+    ///
+    /// **`P-411` names it `moving`**, a count of `0 or 1` that `move` spends and `refresh`
+    /// puts back. The storage is unchanged and the data file says the number.
     pub exhausted: bool,
+    /// Whether this unit has already stood this turn - `P-414`'s `defending`, `0 or 1`.
+    ///
+    /// **A separate count from `moving`, because `P-411` makes them separate**: two recipes
+    /// naming the same action draw on the same count, and two naming different actions never
+    /// compete. A unit that has moved can still stand.
+    pub stood: bool,
 }
 
 impl Unit {
@@ -65,6 +74,7 @@ impl Unit {
             location: Location::Orbit(above),
             cells: kind.cells(),
             exhausted: false,
+            stood: false,
         }
     }
 

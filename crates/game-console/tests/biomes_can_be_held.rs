@@ -207,8 +207,9 @@ fn every_claimable_biome_can_be_taken_by_something_the_release_provides() {
     // **Every biome that can be taken can be held by what taking it leaves** - `C-31`,
     // and this assertion ran the other way for one commit. `P-275` made a jungle takeable
     // and it was then handed straight back to nature, because `held_force` counted the
-    // garrison and dropped the citizens: `spec/control.md` says *a citizen has a force of
-    // its own, coordinated or not*, and only the garrison's multiplier was being read.
+    // garrison and dropped the citizens, where a citizen has a force of its own and only
+    // the garrison's multiplier was being read. `spec/control.md` says it this way now:
+    // *Coordinated, it musters its force each turn; uncoordinated it musters none*.
     //
     // Asserted empty rather than counted at zero, with the population named below, because
     // zero over nothing is the failure with the sign flipped.

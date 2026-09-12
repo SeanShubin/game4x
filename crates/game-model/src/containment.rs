@@ -46,10 +46,14 @@ use crate::territory::HOLDS;
 use crate::thing::{Kind, Thing, Trait};
 use crate::{Game, Phase};
 
-/// A kind, and every stored trait the thing has.
+/// A kind, and every trait of the thing.
+///
+/// **Of the thing, and not of its kind** - `P-417`. Naming the kind has already said what a
+/// trait of the kind is, so a description that repeated it would be saying the same thing
+/// twice; `{garrison force:0}` was the entry that lost a word.
 ///
 /// **The key of the map, so two things sharing one are indistinguishable.** That is the
-/// point rather than a limitation: `{citizen ready:yes} -> 8` says there are eight of them
+/// point rather than a limitation: `{citizen defending:1} -> 8` says there are eight of them
 /// and that nothing in the state tells them apart. Where two things *are* distinguishable
 /// they carry a trait that says so, and `id` is the trait that always does.
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -246,11 +250,11 @@ fn describe(thing: &Thing) -> Description {
     // `Game::units`.
     let mut description = Description::of(thing.kind);
     for (name, value) in &thing.traits {
-        // **Readiness is contents, not a trait** - `P-399`. `Ready` and `Spent` are how the
-        // model counts a thing's tokens, and `readiness` below writes them as the things the
-        // release says they are. Leaving them here as well would say the same fact twice, in
-        // two vocabularies, one of which the release no longer has.
-        if matches!(name, Trait::Ready | Trait::Spent) {
+        // **A count is written by [`counts`] below, under the name its kind gives it.**
+        // `P-411` names them apart - `moving` of a unit, `laboring` of a citizen, `working` of
+        // an extractor - so one variant cannot carry one name, and the generic loop cannot
+        // write them.
+        if matches!(name, Trait::Ready | Trait::Spent | Trait::Defending) {
             continue;
         }
         let written = match name {
@@ -265,51 +269,17 @@ fn describe(thing: &Thing) -> Description {
         };
         description = description.with(trait_name(*name), written);
     }
+    for (name, value) in counts(thing.kind, thing) {
+        description = description.with(name, value);
+    }
     description
 }
 
-/// The readiness a thing holds, as the things a data file says it contains - `P-399`.
-///
-/// **The model already stored this and called it two traits.** `Trait::Ready` is a count of
-/// what a citizen spends on labor and an extractor on work; `Trait::Spent` is the one a
-/// citizen spends on bearing. Both are *absent means one, zero means none*. So the release's
-/// tokens are what the model has held all along, and what changed is that a data file says
-/// them as things rather than as a yes-or-no on the holder.
-///
-/// **Which action each kind's token is for is read off the recipes rather than invented.**
-/// `create labor` takes a readiness `for labor` from a citizen, `bear` one `for bearing` from
-/// a citizen, `work` one `for work` from an extractor, and `move` one `for move` from a unit.
-/// Those four rows are the whole mapping.
-///
-/// **An entry is never zero** - `spec/console.md` - so a thing that has spent its token holds
-/// nothing rather than holding none.
-fn readiness(thing: &Thing) -> Vec<Entry> {
-    let held = |action: &str| {
-        Entry::leaf(Description::of(Kind::Readiness).with("for", action.to_string()))
-    };
-    let mut out = Vec::new();
-    match thing.kind {
-        // A citizen holds two: one it spends making labor, one it spends bearing.
-        Kind::Citizen => {
-            if thing.is_ready() {
-                out.push(held("labor"));
-            }
-            if thing.trait_of(Trait::Spent).unwrap_or(0) == 0 {
-                out.push(held("bearing"));
-            }
-        }
-        // An extractor spends its one on working, a unit on moving. Written as one arm with
-        // the action chosen, because the two differ only in the word.
-        Kind::Extractor if thing.is_ready() => out.push(held("work")),
-        Kind::Ark | Kind::Pioneer if thing.is_ready() => out.push(held("move")),
-        _ => {}
-    }
-    // **In description order** - `spec/console.md`: *Entries are in the order their
-    // descriptions sort in*, which is what makes the same state the same bytes. A citizen
-    // holds two and `bearing` sorts before `labor`.
-    out.sort_by(|one, other| one.description.cmp(&other.description));
-    out
-}
+// **`P-411` undid `P-399` and `readiness()` went with it.** That function rendered a thing's
+// tokens as things it contained, which is what made two citizens differing only in readiness
+// share a description - `C-90`, filed by this lane and the reason the release turned back. A
+// count the thing carries is part of its description again, so `describe` writes it and
+// nothing synthesises contents.
 
 /// What a trait is called in a data file.
 ///
@@ -322,10 +292,6 @@ pub fn trait_name(name: Trait) -> &'static str {
         Trait::Resource => "resource",
         Trait::Force => "force",
         Trait::Multiplier => "multiplier",
-        // **Not written into a data file any more** - `P-399` made readiness a kind, and
-        // `readiness` renders it as a thing the holder contains. The name stays because the
-        // trait is still how the model stores the count.
-        Trait::Ready => "ready",
         Trait::Density => "density",
         // **Dashed, because a name is one word.** `spec/console.md` joins the words of a
         // name that needs more than one, which is the rule `P-328` applied to commands and
@@ -335,7 +301,34 @@ pub fn trait_name(name: Trait) -> &'static str {
         Trait::TotalCapacity => "total-capacity",
         Trait::From => "from",
         Trait::To => "to",
-        Trait::Spent => "spent",
+        // **These three are never written through here** - [`counts`] writes them under the
+        // name the release gives them for the kind carrying them, which is why `readiness`
+        // is not one of them: `P-399` made it a kind and `P-411` made it a count again.
+        // Kept so the match is total and a new trait cannot be added without a name.
+        Trait::Ready | Trait::Spent | Trait::Defending => "a count, written by `counts`",
+    }
+}
+
+/// The counts a thing of this kind carries, under the names `P-411` gives them.
+///
+/// **One trait per action, and the name depends on the kind.** `spec/console.md`: a
+/// description is a kind and **every trait of that thing**, and **no trait of the thing may be
+/// left out** - `{citizen defending:1} -> 8` and `{citizen defending:0} -> 6`. So a count is
+/// always written, with its value, rather than omitted when it is full.
+///
+/// **Absent means one**, which is how the model has always stored readiness and is why a thing
+/// made this turn needs no trait to be able to act. That is storage; what a data file says is
+/// the number either way.
+fn counts(kind: Kind, thing: &Thing) -> Vec<(&'static str, u32)> {
+    let held = |name: Trait| thing.trait_of(name).unwrap_or(1);
+    match kind {
+        Kind::Citizen => vec![
+            ("bearing", held(Trait::Spent)),
+            ("defending", held(Trait::Defending)),
+            ("laboring", held(Trait::Ready)),
+        ],
+        Kind::Extractor => vec![("working", held(Trait::Ready))],
+        _ => Vec::new(),
     }
 }
 
@@ -427,13 +420,7 @@ pub fn tree(game: &Game) -> Entry {
         let mut held: Vec<Entry> = place
             .held
             .iter()
-            // **A thing carries the readiness it holds** - `P-399`, and it is contents rather
-            // than a trait because that is what the release says a readiness is.
-            .map(|t| {
-                let mut entry = Entry::leaf(describe(t));
-                entry.contents = readiness(t);
-                entry
-            })
+            .map(|t| Entry::leaf(describe(t)))
             .collect();
         // **`P-322`: a deposit is a thing, so a territory contains one per resource its
         // ground offers.** `{deposit resource:food density:4} -> 1`, which is where `density`
@@ -454,11 +441,11 @@ pub fn tree(game: &Game) -> Entry {
                     .with("total-capacity", offered.capacity),
             ));
         }
-        held.extend(game.units_on(place.id).into_iter().map(|unit| {
-            let mut entry = Entry::leaf(describe_unit(unit));
-            entry.contents = readiness_of_unit(unit);
-            entry
-        }));
+        held.extend(
+            game.units_on(place.id)
+                .into_iter()
+                .map(|unit| Entry::leaf(describe_unit(unit))),
+        );
         entry.contents = group(held);
         entry.capacity = capacities_of(game, place);
         children.push(entry);
@@ -477,11 +464,7 @@ pub fn tree(game: &Game) -> Entry {
             game.units
                 .iter()
                 .filter(|unit| unit.location == crate::Location::Orbit(place.id))
-                .map(|unit| {
-                    let mut entry = Entry::leaf(describe_unit(unit));
-                    entry.contents = readiness_of_unit(unit);
-                    entry
-                })
+                .map(|unit| Entry::leaf(describe_unit(unit)))
                 .collect(),
         );
         children.push(above);
@@ -601,22 +584,11 @@ fn describe_unit(unit: &crate::Unit) -> Description {
         crate::UnitKind::Pioneer => Kind::Pioneer,
     })
     .with("id", unit.id)
-    .with("fuel", unit.cells)
-}
-
-/// The readiness a unit holds, which is the one it spends on moving - `P-399`.
-///
-/// **Separate from [`readiness`] because a unit is not a `Thing`.** `Game::units` is its own
-/// list and `Unit::exhausted` is the same *absent means one* count that `Trait::Ready` is for
-/// everything else; both render the same way, and a reader of the file cannot tell that the
-/// model keeps them apart.
-fn readiness_of_unit(unit: &crate::Unit) -> Vec<Entry> {
-    if unit.exhausted {
-        return Vec::new();
-    }
-    vec![Entry::leaf(
-        Description::of(Kind::Readiness).with("for", "move"),
-    )]
+    // **A unit's counts, under `P-411`'s names.** `moving` is what the model has stored as
+    // `exhausted` all along - absent means one - and `defending` is `P-414`'s, which a unit
+    // spends to stand. `fuel` left the description with `P-407`: it is a trait of the kind.
+    .with("moving", u32::from(!unit.exhausted))
+    .with("defending", u32::from(!unit.stood))
 }
 
 /// What a territory may contain, per kind, with what it holds now.
@@ -699,9 +671,10 @@ mod tests {
 
     /// Two things with one description are one entry, and the quantity is the count.
     ///
-    /// **The description lost its `ready` since `P-399`.** Readiness is a kind now, so a ready
-    /// citizen is described `{citizen}` and *contains* the two tokens it holds - one for
-    /// labor and one for bearing.
+    /// **The counts are back in the description since `P-411`, one per action.** A citizen
+    /// carries `bearing`, `defending` and `laboring`, each `0 or 1`, and `spec/console.md`
+    /// says no trait of the thing may be left out - so a count is written with its value
+    /// rather than omitted when it is full.
     #[test]
     fn things_that_cannot_be_told_apart_are_one_entry_with_a_quantity() {
         let mut game = a_world();
@@ -709,38 +682,29 @@ mod tests {
         let territory = territory_in(&tree(&game), 1);
         assert_eq!(territory.contents.len(), 1, "one description, one entry");
         assert_eq!(territory.contents[0].quantity, 8);
-        assert_eq!(territory.contents[0].description.written(), "{citizen}");
         assert_eq!(
-            territory.contents[0]
-                .contents
-                .iter()
-                .map(|held| held.description.written())
-                .collect::<Vec<_>>(),
-            ["{readiness for:bearing}", "{readiness for:labor}"],
-            "a citizen holds one token per action it can take"
+            territory.contents[0].description.written(),
+            "{citizen bearing:1 defending:1 laboring:1}"
+        );
+        assert!(
+            territory.contents[0].contents.is_empty(),
+            "a citizen holds nothing; its counts are traits it carries"
         );
     }
 
-    /// A state the map form cannot write down, refused loudly rather than written wrongly.
+    /// A trait that distinguishes two things makes two entries, at their own counts.
     ///
-    /// **This test asserted the opposite until `P-399`, and the change is the finding.** While
-    /// readiness was a trait, six spent citizens and eight ready ones were two descriptions and
-    /// two entries - which is exactly what `spec/console.md` wants, since `{citizen} -> 14`
-    /// hides that six of them have already worked.
+    /// **`C-90` is answered and this test is the evidence.** For one afternoon readiness was a
+    /// kind a thing held, and two citizens differing only in it had the same description and
+    /// different contents - which a map keyed on the description cannot say. This lane filed
+    /// that; `P-411` turned readiness back into a count the thing carries, and the two
+    /// citizens are two descriptions again.
     ///
-    /// **Readiness is a kind now, so it is contents rather than a trait**, and two citizens
-    /// that differ only in what they hold have *the same description*. A description is the key
-    /// of the map, so the form has no way to say *six of these fourteen hold no labor token*.
-    ///
-    /// **It is refused rather than written**, which is the only safe direction: the alternative
-    /// is a file that says fourteen identical citizens and is wrong about six of them. `C-90`
-    /// carries it to the specification lane.
-    ///
-    /// **The committed scenario does not reach this**, because a turn ends with `refresh`
-    /// putting every token back - so every citizen in a dumped state holds the same two. The
-    /// state here is mid-turn, which is reachable by playing and not by the dump.
+    /// **So the state that had no written form has one**, and it is the form
+    /// `spec/console.md`'s own example uses: `{citizen defending:1} -> 8` and
+    /// `{citizen defending:0} -> 6`, never `{citizen} -> 14`.
     #[test]
-    fn a_state_the_map_form_cannot_write_is_refused_rather_than_written_wrongly() {
+    fn a_trait_that_tells_two_things_apart_makes_two_entries() {
         let mut game = a_world();
         game.territories[0].put(Kind::Citizen, 14);
         for thing in game.territories[0]
@@ -752,19 +716,18 @@ mod tests {
             thing.set(Trait::Ready, 0);
         }
 
-        let refused = std::panic::catch_unwind(move || tree(&game));
-        let Err(why) = refused else {
-            panic!(
-                "fourteen citizens of which six have spent a token were written down, and the                  map form cannot tell them apart - so six of them are recorded wrongly"
-            );
-        };
-        let said = why
-            .downcast_ref::<String>()
-            .cloned()
-            .unwrap_or_else(|| String::from("<not a string>"));
-        assert!(
-            said.contains("map form cannot write down"),
-            "refused for some other reason: {said}"
+        let held = territory_in(&tree(&game), 1).contents;
+        let written: Vec<(String, u32)> = held
+            .iter()
+            .map(|entry| (entry.description.written(), entry.quantity))
+            .collect();
+        assert_eq!(
+            written,
+            vec![
+                ("{citizen bearing:1 defending:1 laboring:0}".to_string(), 6),
+                ("{citizen bearing:1 defending:1 laboring:1}".to_string(), 8),
+            ],
+            "eight that can labor and six that cannot, in the order their descriptions sort in"
         );
     }
 

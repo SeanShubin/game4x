@@ -47,6 +47,10 @@ use game_model::{StructureKind, Transition, UnitKind};
 /// with `grow`, `age` with `spoil` - and a wrong placement would have gone unnoticed. The
 /// release states the whole order now, so the order is quoted rather than inferred.
 ///
+/// **Eleven since `P-414`**, which made force something the world musters rather than
+/// something a reader computes: `muster` once per citizen where a garrison stands, `stand`
+/// once per unit, and `discard` sweeping what is left at the turn's end.
+///
 /// **Nine since `P-399` deleted `renew`.** The token model took the whole fertile-and-spent
 /// pair out: a citizen holds a readiness `for bearing`, `bear` spends it, and `refresh` puts
 /// it back with every other token - so the rule that turned a spent citizen fertile again has
@@ -61,8 +65,9 @@ use game_model::{StructureKind, Transition, UnitKind};
 /// `tests/fired.rs` holds the set against the release's own *Recipes* table, read at test
 /// time, so a world recipe added or renamed fails here rather than quietly dropping out of
 /// the artifact.
-pub const ENDING_A_TURN: [&str; 9] = [
-    "upkeep", "bear", "breed", "perish", "age", "spoil", "stow", "discard", "refresh",
+pub const ENDING_A_TURN: [&str; 11] = [
+    "upkeep", "bear", "breed", "perish", "age", "spoil", "stow", "discard", "refresh", "muster",
+    "stand",
 ];
 
 /// What one command fired, if it fired anything.

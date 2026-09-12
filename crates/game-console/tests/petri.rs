@@ -26,17 +26,21 @@ fn every_recipe_is_either_drawn_or_named_as_not_drawn() {
 
     // **Two numbers, because the release states some recipes more than once.** `P-373` makes
     // a rule whose subject is a family a rule for each of them, so `stow` is stated twice and
-    // `discard` four times - twenty-four blocks of rows under twenty names. A net draws the
+    // `discard` five times - thirty-one blocks of rows under twenty-one names. A net draws the
     // blocks: `discard` metal and `discard` labor take different things and are different
     // transitions.
+    //
+    // **Eight more blocks and two more names since `P-414`.** `refresh` became six blocks
+    // where it was one, because a count is a trait again and each one is put back by its own
+    // row; `muster` and `stand` are the two new names.
     assert_eq!(
-        net.recipes, 23,
-        "the release states twenty-three blocks of recipe rows and the parse found {}",
+        net.recipes, 31,
+        "the release states thirty-one blocks of recipe rows and the parse found {}",
         net.recipes
     );
     assert_eq!(
-        net.names, 19,
-        "those blocks are stated under nineteen distinct names and the parse found {}",
+        net.names, 21,
+        "those blocks are stated under twenty-one distinct names and the parse found {}",
         net.names
     );
     // **The deduplication has to remove something**, or a version that stopped deduplicating
@@ -57,12 +61,14 @@ fn every_recipe_is_either_drawn_or_named_as_not_drawn() {
         net.recipes
     );
 
-    // **One block is excluded and it is `move`** - `P-399` gave it a `put` row, and the
-    // release's column description names four roles without that one, so what a `put` does as
-    // an arc is undeclared. `C-88`. `work` is still drawn, spelled out per density.
+    // **One block is excluded and it is `stand`** - its produce row is *that unit's force*,
+    // and `unit` is a family with two members, so there is no single number for the arc.
+    // `move` was the excluded one until `P-411`: it has a `put` row, and the release's column
+    // description still names four roles without that one - `C-88`, which stays open on the
+    // word. What a `put` moves is now read from its Traits cell rather than guessed.
     assert_eq!(
         net.excluded.iter().map(|one| &one.name).collect::<Vec<_>>(),
-        [&"move".to_string()],
+        [&"stand".to_string()],
         "the excluded blocks are not the one expected"
     );
 
@@ -131,29 +137,41 @@ fn the_density_rule_is_spelled_out_against_the_planet_it_describes() {
         .filter(|name| has_expression.get(*name).copied().unwrap_or(false))
         .collect();
 
-    // **One, and it used to be four.** The saturating rewrite took the other three out:
-    // `grow` is gone entirely - `P-379` - and the two capacity clamps became `stow` and
-    // `discard`, which carry a constant weight. `work` is the last row in the release whose
-    // quantity is read from a trait, *`$where`'s density for that resource*.
+    // **Three, and it was one until `P-414`.** `work`'s quantity is *`$where`'s density for
+    // that resource*, and `muster` and `stand` produce *that citizen's force* and *that
+    // unit's force* - a trait of the kind rather than a number in the row. The saturating
+    // rewrite had taken the other three out: `grow` is gone entirely - `P-379` - and the two
+    // capacity clamps became `stow` and `discard`, which carry a constant weight.
     assert_eq!(
         expected,
-        [&"work".to_string()],
+        [
+            &"work".to_string(),
+            &"muster".to_string(),
+            &"stand".to_string()
+        ],
         "the table says these have a quantity that is not a number: {expected:?}"
     );
 
-    // **`work` is drawn, and `move` is the one thing left out** - for a different reason,
-    // which is why they are asserted apart. `P-399` gave `move` a `put` row and the release's
-    // column description still names four roles, so what a `put` does as an arc is undeclared.
-    // `C-88`. Guessing it would draw a game nobody specified.
+    // **`work` and `muster` are drawn and `stand` is not**, and the three are asserted
+    // together because the reason differs. `work`'s quantity is a density and is spelled out
+    // per case; `muster`'s is *that citizen's force*, which is a trait **of the kind** since
+    // `P-407` and so one number; `stand`'s is *that unit's force*, and `unit` is a family
+    // with two members. Reading either member's number would draw a game that is right only
+    // because the two agree today.
     assert_eq!(
         net.excluded.iter().map(|one| &one.name).collect::<Vec<_>>(),
-        [&"move".to_string()],
-        "the excluded blocks are not the one expected"
+        [&"stand".to_string()],
+        "the excluded blocks are not the ones expected"
     );
     assert!(
-        net.excluded[0].because.contains("put"),
-        "`move` is excluded and the reason does not name the role that caused it: {}",
+        net.excluded[0].because.contains("that unit's force"),
+        "`stand` is excluded and the reason does not carry the cell that caused it: {}",
         net.excluded[0].because
+    );
+    assert!(
+        net.transitions.iter().any(|name| name == "muster"),
+        "`muster` is not drawn, so a quantity naming a trait of the kind was refused as though it were a state: {:?}",
+        net.transitions
     );
 
     // **The cases are the planet's, read here from *Territory resources* a second time.** A
@@ -264,10 +282,16 @@ fn what_the_exclusions_cost_is_visible_rather_than_implied() {
     // `place` and `unit` are the two families it names, and nothing drawn names either -
     // `move` is the only rule that takes a unit anywhere. So the drawing has no unit moving in
     // it, and the page has to say so rather than leave a reader to notice.
+    // **Nothing, since `P-411` let the `put` rows be drawn.** `move` was the exclusion and
+    // it was the only rule that took a unit anywhere, so `place` and `unit` were in the
+    // drawing's vocabulary and in none of its arcs. `stand` is the exclusion now and every
+    // kind it names - `unit`, `force` - is named by something drawn, so leaving it out costs
+    // the drawing no kind at all. **Asserted as empty against a non-empty exclusion**, which
+    // is what stops *nothing is missing* from being a fact about an empty list.
     let cost = game_console::petri::what_exclusion_costs(&net, &document);
     assert_eq!(
         cost,
-        ["place".to_string(), "unit".to_string()],
+        Vec::<String>::new(),
         "what excluding {:?} costs the drawing is {cost:?}",
         net.excluded.iter().map(|one| &one.name).collect::<Vec<_>>()
     );

@@ -102,18 +102,6 @@ pub enum Kind {
     /// that starved to nobody banked fertility and repopulated from stock the moment food
     /// arrived, which is `C-83`.
     Fertility,
-    /// **`P-399`: what a thing spends to act, drawn from time and refilled each turn.**
-    ///
-    /// **A kind, where it was a yes-or-no trait.** *Where things are* bounds it at one per
-    /// thing per action, and that is the token model's whole limit: two recipes naming the
-    /// same action draw on the same tokens, so one token is what makes a thing choose.
-    ///
-    /// **Stored as [`Trait::Ready`] and [`Trait::Spent`] on the thing that holds it, and
-    /// written into a data file as a thing it contains.** Those two traits are already a count
-    /// per action - `Ready` is the one a citizen spends on labor and an extractor on work,
-    /// `Spent` the one a citizen spends on bearing - so the release's four actions map onto
-    /// what the model already holds, and only the writing changed.
-    Readiness,
 }
 
 impl Kind {
@@ -136,12 +124,19 @@ impl Kind {
             Kind::Adjacency => "adjacency",
             Kind::Game => "game",
             Kind::Fertility => "fertility",
-            Kind::Readiness => "readiness",
         }
     }
 
     /// Every kind, so that a reader can name one that is nowhere.
-    pub const ALL: [Kind; 18] = [
+    ///
+    /// **Seventeen, and `force` is not among them** - `P-414` produces and consumes it in
+    /// three recipe rows and the release's *Kinds* table lists seventeen without it, which
+    /// is `C-93`. **Nothing the model holds is a force**: `muster` and `stand` make it at a
+    /// turn's end and `discard` sweeps it in the same ending, so what a territory presents
+    /// is a sum computed on demand - `Game::force_in` - rather than things in a territory.
+    /// A `Kind` here would be one nothing could ever hold, and `closed_sets.rs` would then
+    /// report the model admitting a kind the release does not declare.
+    pub const ALL: [Kind; 17] = [
         Kind::Citizen,
         Kind::Garrison,
         Kind::Extractor,
@@ -159,7 +154,6 @@ impl Kind {
         Kind::Adjacency,
         Kind::Game,
         Kind::Fertility,
-        Kind::Readiness,
     ];
 
     /// The kind a unit of this resource is.
@@ -268,6 +262,12 @@ pub enum Trait {
     /// depend on one having only two values.* A citizen with two actions a turn is that
     /// direction, and it needs a number here rather than a rename later. So this is a count,
     /// read through [`Thing::is_ready`], and every caller asks that rather than the value.
+    ///
+    /// **`P-411` split this into one trait per action** - `moving`, `laboring`, `working`,
+    /// `bearing`, `defending`, each `0 or 1`. This variant is what the model stores for the
+    /// three that a thing of a given kind can only have one of: an extractor's is `working`,
+    /// a unit's is `moving`, a citizen's is `laboring`. [`Trait::written`] is what says which,
+    /// because the release names them apart and a data file must too.
     Ready,
     /// Whether a citizen has already borne this turn. Absent means fertile.
     ///
@@ -290,7 +290,18 @@ pub enum Trait {
     /// **Absent means fertile, following [`Trait::Ready`]'s precedent**, so a citizen made
     /// this turn needs no trait to be able to bear and the default state writes nothing into
     /// the data file.
+    ///
+    /// **`P-411` names this `bearing`**, a count of `0 or 1` rather than a yes-or-no `spent`.
+    /// The storage is the same and the sense is inverted: `spent` was *has borne*, `bearing`
+    /// is *can bear*, so a citizen at rest carries `bearing:1` where it used to carry nothing.
     Spent,
+    /// **`P-414`: what a citizen or a unit spends to muster force.** `0 or 1`, absent meaning
+    /// one, following the others here.
+    ///
+    /// A separate count because `P-411` makes them separate: two recipes naming the same
+    /// action draw on the same count, and two naming different actions never compete. A
+    /// citizen that has made labor can still defend.
+    Defending,
 }
 
 /// A thing: its kind and its own traits.

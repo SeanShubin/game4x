@@ -69,21 +69,25 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
     // Asking for an example per *block* would be asking `discard` to be shown four times to
     // say one thing.
     //
-    // `dedup` removes only neighbours, which is what the release states - a repeated name's
-    // blocks sit together. A version that separated them would fail the count below rather
-    // than pass quietly, so the order is checked rather than assumed.
+    // **The neighbour assumption broke and failed loudly, which is what it was written to
+    // do.** This used `dedup`, which removes only adjacent duplicates, on the ground that a
+    // repeated name's blocks sit together - and the note said a version that separated them
+    // would fail the count rather than pass quietly. `P-414` separated them: `refresh` is four
+    // blocks, then `muster` and `stand`, then two more `refresh` and a `discard`. So the
+    // distinct names are taken as a set, which needs no assumption about order at all.
     let mut declared = blocks.clone();
+    declared.sort();
     declared.dedup();
     assert_eq!(
         blocks.len(),
-        23,
-        "the release states twenty-three blocks of recipe rows; it has {} ({blocks:?})",
+        31,
+        "the release states thirty-one blocks of recipe rows; it has {} ({blocks:?})",
         blocks.len()
     );
     assert_eq!(
         declared.len(),
-        19,
-        "those blocks are stated under nineteen names; there are {} ({declared:?})",
+        21,
+        "those blocks are stated under twenty-one names; there are {} ({declared:?})",
         declared.len()
     );
     assert!(
@@ -123,10 +127,11 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
     // **Nine, and it was five.** The world's six became ten in the saturating rewrite, and
     // one `{end-turn}` is still the only command that fires any of them - so the one example
     // carries nine recipes besides its own.
-    // **Eight since `P-399` deleted `renew`**, so one `{end-turn}` carries the world's nine.
+    // **Ten since `P-414` added `muster` and `stand`**, so one `{end-turn}` carries the
+    // world's eleven.
     assert_eq!(
-        shared, 8,
-        "one example carries eight recipes besides its own, which is the world's nine"
+        shared, 10,
+        "one example carries ten recipes besides its own, which is the world's eleven"
     );
 }
 

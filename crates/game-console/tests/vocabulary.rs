@@ -234,50 +234,49 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
     // whose tables stopped parsing would admit nothing and this would report every word,
     // which is loud - but a release whose tables parsed *empty* would be the silent one, and
     // that is the direction guarded here.
-    // Eighteen since `P-399` made `readiness` one - it was a yes-or-no trait, and the token
-    // model makes it a thing a thing holds.
+    // **Seventeen again since `P-411` took `readiness` back out.** The model has an
+    // eighteenth, `force`, which the release uses in three recipe rows and declares nowhere -
+    // `C-93` - so this counts the table rather than the model.
     assert_eq!(
         kinds.len(),
-        18,
-        "eighteen kinds; the release lists {kinds:?}"
+        17,
+        "seventeen kinds; the release lists {kinds:?}"
     );
     assert_eq!(
         families.len(),
         4,
         "four families; the release lists {families:?}"
     );
-    // **Twenty since `P-399`, which took two out and put one in.** `ready` and `spent` were
-    // both yes-or-no traits of a thing; readiness is a kind now, and what a reader needs of
-    // one is `for`, naming the action it is for.
+    // **Twenty-three, and the counts are why.** `P-399` made readiness a kind and took
+    // `ready` and `spent` out; `P-411` undid that and put five counts in - `moving`,
+    // `laboring`, `working`, `bearing` and `defending`, one per action, each `0 or 1`, where
+    // the two it replaced were one flag between them. `P-417` took `kind` out in the same
+    // pass, because a kind is not a trait.
     assert_eq!(
         traits.len(),
-        20,
-        "twenty traits; the release lists {:?}",
+        23,
+        "twenty-three traits; the release lists {:?}",
         traits.keys().collect::<Vec<_>>()
     );
     let closed = traits
         .values()
         .filter(|a| matches!(a, Admits::OneOf(_)))
         .count();
-    // **Eight, and the eighth is `movable`.** `C-37` measured six - `ready`, `surplus` and
-    // `unpaid` outright, and `kind`, `resource`, `biome` by pointing at a table - `P-308`
-    // named `phase`'s values for the seventh, and `P-355` added `movable`, *yes or no*.
-    // This arrives at the figure by reading the rows rather than by adding one to a
-    // remembered number, which is the only way the two counts are independent. `control` is
-    // the next candidate and describes rather than naming: *held by a player, or unclaimed*
-    // names one value and describes the other.
-    // **Seven since `P-399`.** `ready` and `spent` both named a closed set and both are gone;
-    // `for` names one - *`move`, `labor`, `work` or `bearing`* - but its values are backticked,
-    // and the rule above admits alternatives joined by *or* only where each is a bare word. So
-    // it is read as admitting a number, which is wrong about `for` and is the parser's reach
-    // rather than the release's: reported rather than widened, which is what `C-37` records
-    // this check getting wrong in the other direction.
-    // **Eight: the seven above and `for`**, whose values `P-399` writes backticked. It named
-    // a closed set all along and the parser could not see through the markup - which made the
-    // data file's own `for:labor` a word nothing admitted.
+    // **Eleven, and five of them are the counts.** `C-37` measured six - `ready`, `surplus`
+    // and `unpaid` outright, and `kind`, `resource`, `biome` by pointing at a table - `P-308`
+    // named `phase`'s values for the seventh, and `P-355` added `movable`, *yes or no*. This
+    // arrives at the figure by reading the rows rather than by adding one to a remembered
+    // number, which is the only way the two counts are independent. `control` is the next
+    // candidate and describes rather than naming: *held by a player, or unclaimed* names one
+    // value and describes the other.
+    //
+    // **What moved since:** `P-399` took `ready` and `spent` out and added `for`; `P-411`
+    // took `for` out again and added `moving`, `laboring`, `working`, `bearing` and
+    // `defending`, each admitting *0 or 1*; `P-417` deleted `kind`, because a kind is not a
+    // trait. Six that were here all along, and five counts.
     assert_eq!(
-        closed, 8,
-        "eight traits name a closed set - `kind`, `resource`, `biome`, `surplus`, `unpaid`, `phase`, `movable` and `for`; {closed} do"
+        closed, 11,
+        "eleven traits name a closed set - `resource`, `biome`, `surplus`, `unpaid`, `phase`, `movable` and the five counts; {closed} do"
     );
 
     let session = played();

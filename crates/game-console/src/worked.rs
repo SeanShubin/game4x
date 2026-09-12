@@ -317,6 +317,11 @@ pub fn examples() -> Vec<Example> {
         // `bear`, `breed` and `renew` are the rule it became; the two capacity clamps became
         // `stow` and `discard`. `P-379` states the order they fire in.
         //
+        // **Eleven since `P-414`.** `muster` and `stand` are the world's too: force is
+        // mustered at a turn's end from the citizens and units standing there, rather than
+        // computed by whoever reads the state. They fire on the same `{end-turn}` as the rest
+        // and are shown under it for the reason `P-332` gives - no command fires one alone.
+        //
         // **Nine since `P-399` deleted `renew`.** Readiness is a kind, so a citizen's capacity
         // to bear is a token `refresh` puts back with every other - and the rule that turned a
         // spent citizen fertile again has nothing left to do.
@@ -327,7 +332,8 @@ pub fn examples() -> Vec<Example> {
         // per territory, so a planet can do both in one ending and a territory cannot.
         Example {
             also: &[
-                "bear", "breed", "perish", "age", "spoil", "stow", "discard", "refresh",
+                "bear", "breed", "perish", "age", "spoil", "stow", "discard", "refresh", "muster",
+                "stand",
             ],
             recipe: "upkeep",
             command: "{end-turn}",

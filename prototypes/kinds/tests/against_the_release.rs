@@ -590,9 +590,13 @@ fn what_a_trait_says_its_values_are_is_borne_out_by_the_table() {
 
     let mut named = 0usize;
     let mut with_a_count = 0usize;
-    assert!(
-        !counted.is_empty(),
-        "no trait names a set written out in a table, so everything below runs over nothing"
+    // **One, and it is stated as a number rather than as *not empty*.** `kind` was the other
+    // until `P-417` took it out of the Traits table - a kind is not a trait - and a list this
+    // short is one a reader should see the size of, not merely be told is non-empty.
+    assert_eq!(
+        counted.len(),
+        1,
+        "one trait names a set written out in a table, and everything below runs over it"
     );
 
     for (trait_name, heading, set) in counted {

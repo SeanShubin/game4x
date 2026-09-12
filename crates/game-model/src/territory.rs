@@ -753,10 +753,10 @@ impl Territory {
 
     /// The force the territory itself presents, before any unit standing on it.
     ///
-    /// `spec/control.md`: organised force sums, unorganised force is the highest present.
-    /// A garrison is what organises citizens, so with one the garrison's own force and
-    /// every manned citizen's contribution add up; without one, the citizens present the
-    /// highest among them rather than the total.
+    /// `spec/control.md`: a citizen *can fight but cannot organise. Coordinated, it musters
+    /// its force each turn; uncoordinated it musters none*. A garrison is what coordinates
+    /// them, and it does so *by existing*, so with one every citizen musters and with none
+    /// the territory musters nothing.
     pub fn held_force(&self) -> u32 {
         match self.garrison() {
             // **`P-276`: a garrison has no force of its own and nothing has to work it.**
@@ -774,10 +774,12 @@ impl Territory {
             // `spec/narrative.md` is why that is the point rather than a rounding artefact:
             // *more dangerous territory requires more organised citizens to keep it secure.*
             Some(garrison) => garrison.force + self.citizens() * CITIZEN_FORCE,
-            // Citizens are capable of violence but not of coordination, so what they
-            // present is the highest among them rather than the total - and a citizen is
-            // force 1, so however many there are the answer is one.
-            None if self.citizens() > 0 => CITIZEN_FORCE,
+            // **Nothing, and `P-416` took the other answer out of the game.** This read
+            // `CITIZEN_FORCE` - the highest among them - until `spec/control.md` stopped
+            // having a *highest* case at all: *uncoordinated it musters none*. `P-414`
+            // states it as a recipe rather than a rule about reading, and the recipe is
+            // what makes the difference observable: `muster` **requires a garrison**, so
+            // with none it never fires and no force is produced to present.
             None => 0,
         }
     }
@@ -946,15 +948,19 @@ mod tests {
         assert_eq!(territory.extractors_for(Resource::Metal).len(), 0);
     }
 
-    /// Organised force sums; unorganised force is the highest present.
+    /// Coordinated, a citizen musters; uncoordinated it musters none.
     #[test]
     fn a_garrison_lets_citizens_add_their_force_together() {
         let mut territory = offering(&[]);
         territory.set_count(Kind::Citizen, 4);
+        // **Zero, and this line is `P-416` arriving.** It read 1 - *the highest present* -
+        // for as long as the game had a highest case. `spec/control.md` has none now:
+        // *uncoordinated it musters none*, and `muster` requires a garrison, so four
+        // citizens with nothing to coordinate them present exactly what one would.
         assert_eq!(
             territory.held_force(),
-            1,
-            "uncoordinated, the highest present"
+            0,
+            "uncoordinated, nothing is mustered"
         );
 
         // **`P-276` and `P-277`.** A garrison has no force of its own and does one thing:

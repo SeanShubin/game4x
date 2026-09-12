@@ -61,6 +61,37 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-94 - A unit coordinates citizens in `spec/control.md` and does not in the release's `muster`
+
+**to** spec · **status** open · **raised** 2026-09-11 · **source** building `P-414`'s `muster` and
+`stand` into the model, and finding the two documents disagree about a territory with a unit on it
+and no garrison
+
+**`spec/control.md` says a unit coordinates.** *Coordination is imposed on citizens by a structure,
+such as a garrison, or by a military unit, which carries coordination with it rather than needing a
+place.*
+
+**The release's `muster` requires a garrison and names no alternative.** Its first row is `require 1
+garrison`, so on a territory holding citizens and a unit and no garrison the recipe never fires and
+the citizens muster nothing - where the sentence above says that unit has coordinated them.
+
+**`S-100` states the release's side directly**, which is why this lane took it: *a territory with no
+garrison presents no force at all*. So the built rule is the release's, and `Territory::held_force`
+returns zero without a garrison however many units stand there. A unit's own force still sums into
+`Game::force_in`, because `stand` requires nothing.
+
+**What the difference is worth, on this release's numbers.** A pioneer is force 2 and a citizen 1,
+so a taken territory with two citizens and a pioneer on it presents 2 under the release and 4 under
+the specification. Nature's force runs 1 to 3, so the two readings disagree about whether a jungle
+is held.
+
+**This is a release that is narrower than the specification rather than a contradiction in either**,
+which is ordinary - `CLAUDE.md`: the spec is the destination and a release says what is true today.
+**Filed because nothing says which it is**, and a reader holding both finds two rules and no note.
+If the narrowing is deliberate, the release saying so would close this in a sentence.
+
+---
+
 ### C-93 - `force` is a kind in three recipe rows and the Kinds table does not declare it
 
 **to** spec · **status** open · **raised** 2026-09-11 · **source** reading `P-414`'s rows before
@@ -90,6 +121,21 @@ This lane will build `force` as a **kind**, because three rows use it as one and
 row's Kind column admits nothing else. If the answer is that `force` should not be a kind, the
 rows are what change and this lane's work follows them.
 
+**Where it ended up, so the assumption is checkable rather than merely stated.**
+`prototypes/kinds` has a `Kind::Force` that is deliberately not in `KINDS`, and
+`every_kind_a_recipe_names_is_declared` asserts the undeclared set is exactly `["force"]` - so
+the day a Kinds row arrives, that assertion fails and says so. **`game-model` has no `Force`
+kind at all**, because nothing the model holds is ever a force: `muster` and `stand` make it at
+a turn's end and `discard` sweeps it in the same ending, so what a territory presents is
+`Game::force_in`, a sum computed on demand. A kind there would be one nothing could hold, and
+`closed_sets.rs` would report the model admitting a kind the release does not declare.
+
+**The drawing and the no-gain check both name `force` as a place**, which is where the
+assumption is visible: `reports/petri.md` draws `muster` producing one and `discard` taking it,
+and `reports/nogain.md` weighs it. **`stand` is the one block the drawing leaves out**, and not
+for this reason - its quantity is *that unit's force*, and `unit` is a family whose two members
+could have had two different numbers.
+
 ---
 
 ### C-92 - A citizen's `force` is declared stored and is in no data file, and a garrison's is
@@ -107,9 +153,10 @@ item guessed and deliberately did not act on.
 
 **derived from** no trait may be left out - `spec/console.md`, what a thing contains
 
-**The release declares `force` of `citizen, garrison, ark, pioneer`, stored.** `spec/console.md`
-says a description is a kind and **every stored trait that thing has**, that a derived trait is
-never part of one, and that **no trait may be left out**. `scenario/expected/play.4x` writes
+**The release declares `force` of `citizen, garrison, ark, pioneer`, stored.** The console rules
+then said a description is a kind and **every stored trait that thing has**, that a derived trait is
+never part of one, and that **no trait may be left out** - `P-417` has since replaced the first of
+those three with *every trait of that thing*, which is what answered this item. `scenario/expected/play.4x` writes
 `{garrison force:0}` and `{citizen}`. Three of the four kinds that have a force do not carry
 one; the one that does is the one whose force is zero.
 
@@ -182,8 +229,20 @@ six is a lot and the number is climbing.
 
 ### C-90 - `P-399` makes a mid-turn state the map form cannot write down
 
-**to** spec · **status** open · **raised** 2026-09-11 · **source** building `S-98`, and a guard
+**to** spec · **status** answered · **raised** 2026-09-11 · **answered** 2026-09-11 by `P-411`,
+which undid `P-399` and names this item as the reason · **source** building `S-98`, and a guard
 in `containment.rs` firing on a state that is reachable by playing
+
+**Answered by turning readiness back into a count the thing carries.** None of the three ways
+this item named was taken, and none needed to be: with the count in the description again, two
+citizens differing only in it are two descriptions and the map form says them. `containment.rs`
+asserts exactly that now - `{citizen ... laboring:0} -> 6` beside `{citizen ... laboring:1} -> 8`
+- where it asserted the refusal this item was filed about.
+
+**The form is the one the map form illustrates itself with**, which is the other half of what
+made this worth filing: `spec/console.md` writes the rule out as `{citizen defending:1} -> 8`
+beside `{citizen defending:0} -> 6`, and for one afternoon the game could not produce that
+shape.
 
 **derived from** each distinct description is its own entry - `spec/console.md`, the map form
 
@@ -279,6 +338,27 @@ reads: *Role is one of `require`, `limit`, `consume` or `produce`*. `move`'s thi
 cannot find out what `put` means, and `prototypes/kinds` - which renders the table back and
 compares it cell for cell - has a `Role` type whose four variants are the four that sentence
 names.
+
+**Update, 2026-09-11, after `P-411` and `P-414`: this lane now draws a `put` and says under what
+assumption.** The role went from one row to twelve blocks - every `refresh`, `move`, `create
+labor`, `work`, `bear`, `muster` and `stand` - so refusing to draw one stopped being a small
+gap. The petri report would have lost `work` and every count, and `reports/nogain.md` would
+have reported a game where acting is free.
+
+**What made it safe to read is `P-411`, not this lane's patience.** The Traits cell now says
+which way the row goes: *moving at least 1* requires, *moving one less* spends one, *moving at
+its maximum* puts one back. So the arc is read from the row rather than guessed, and the
+ambiguity this item was filed about - a `put` as a move against a `put` as a production - is
+one the release has since resolved in the cell.
+
+**The assumption stated, which is the part that stays open.** A `put` moves the count the
+Traits cell names, by one, and touches nothing else: the citizen that spends its `laboring` is
+the same citizen afterwards. `crates/game-console/src/petri.rs` and `src/nogain.rs` both read it
+that way, and a row whose traits name no count is refused loudly rather than drawn.
+
+**What this item still asks is one sentence.** *Role is one of `require`, `limit`, `consume` or
+`produce`* names four and the table uses five. `limit` is still in that sentence with no
+instance, which is the same sentence wrong in the other direction. Both are one edit.
 
 **This lane is not inventing the fifth.** What `put` means is close to obvious from the row -
 the unit is not consumed and not produced, it moves - but *close to obvious* is what a
@@ -3176,8 +3256,10 @@ citizens were dropped, not mis-scaled.
 **The mechanism is neither of the two that lane guessed**, which is worth recording. It is not that
 `force_in` counts only coordinated force, and it is not the multiplier: `force_in`'s coordination
 test passes as soon as a garrison exists. `held_force` simply read the second of two bullets and not
-the first. `spec/control.md`: *a citizen has a force of its own, coordinated or not* - and
-*coordinated or not* is the clause that was doing the work nobody had read.
+the first. The wording at the time - *a citizen has a force of its own, coordinated or not* - had
+*coordinated or not* doing the work nobody had read. **`P-416` has since deleted that clause
+and the rule it belonged to**: a citizen musters coordinated and musters none otherwise, so
+what is quoted here is the rule this item was filed against rather than the rule now.
 
 **A working citizen produces the multiplier instead of its own force, and an idle one produces its
 own**, so the idle are what is left after the manned are taken out. Counting `manned` twice would be

@@ -229,27 +229,24 @@ impl Game {
 
     /// All the force present in a territory.
     ///
-    /// `spec/control.md`: organised force sums and unorganised force is the highest
-    /// present, and coordination comes either from a structure or from a military unit,
-    /// which carries it. So a garrison or any usable unit makes the total; with neither,
-    /// what is presented is the largest single contribution.
+    /// **Mustered, and `P-416` left nothing else.** `spec/control.md` says *force is
+    /// mustered each turn and does not outlast it*, and there is no *highest* case anywhere
+    /// in the game any more. `P-414` writes the two recipes that produce it: `muster`
+    /// requires a garrison and fires once per citizen, `stand` requires none and fires once
+    /// per unit. So what a territory presents is a sum and only a sum - what its citizens
+    /// mustered, which is nothing without a garrison, plus what each unit standing there
+    /// stood with.
+    ///
+    /// **This is a sum of what the recipes would produce rather than a walk of things
+    /// produced.** `discard` sweeps force at the same turn's end that musters it, so no
+    /// committed state holds any - the dump names `force` and counts zero for exactly that
+    /// reason - and a total computed on demand is the same number a walk would find.
     pub fn force_in(&self, id: TerritoryId) -> u32 {
         let Ok(territory) = self.territory(id) else {
             return 0;
         };
-        let units: Vec<u32> = self
-            .units_on(id)
-            .into_iter()
-            .map(|unit| unit.force())
-            .collect();
-        let coordinated = territory.garrison().is_some() || units.iter().any(|force| *force > 0);
-        if coordinated {
-            territory.held_force() + units.iter().sum::<u32>()
-        } else {
-            territory
-                .held_force()
-                .max(units.into_iter().max().unwrap_or(0))
-        }
+        let stood: u32 = self.units_on(id).into_iter().map(|unit| unit.force()).sum();
+        territory.held_force() + stood
     }
 
     /// Whoever is not you holds a territory with this much force. Nature's, until a

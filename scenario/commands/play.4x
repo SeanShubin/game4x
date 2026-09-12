@@ -8,7 +8,7 @@
 # Every line is a command. There is no other way for the state to move, so this file is a
 # complete account of how the game got where `scenario/expected/play.4x` says it is.
 #
-# **Storage is the constraint now** - `S-44`. A territory declares no capacity for a
+# **Storage is the constraint now** - `S-44`. A territory declares **no limit** for a
 # resource; it holds what its stores hold, and a store holds ten. An extractor holds
 # nothing, so what is produced goes into a store, is spent the turn it is made, or is lost
 # when that turn ends. A founding leaves a food store and a metal store and no energy store,

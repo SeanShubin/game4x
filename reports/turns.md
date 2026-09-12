@@ -18,20 +18,15 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 ## what changed
 
-**gone** (2)
+**gone** (1)
 
-- {orbit id:1} {ark fuel:2 id:1} -> 1
-- {orbit id:1} {ark fuel:2 id:1} {readiness for:move} -> 1
+- {orbit id:1} {ark defending:1 id:1 moving:1} -> 1
 
-**new** (11)
+**new** (7)
 
-- {territory biome:grassland id:1 nature:1} {citizen} -> 4
-- {territory biome:grassland id:1 nature:1} {citizen} {readiness for:bearing} -> 1
-- {territory biome:grassland id:1 nature:1} {citizen} {readiness for:labor} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:food} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:food} {readiness for:work} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal} {readiness for:work} -> 1
+- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} -> 4
+- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} -> 1
+- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:1} -> 1
 - {territory biome:grassland id:1 nature:1} {garrison force:0} -> 1
 - {territory biome:grassland id:1 nature:1} {metal} -> 4
 - {territory biome:grassland id:1 nature:1} {store resource:food} -> 1
@@ -294,9 +289,8 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | orbit     | 12      |
 | deposit   | 34      |
 | fertility | 0       |
-| readiness | 4       |
 
-16 row(s)
+15 row(s)
 
 # Turn 2
 
@@ -318,7 +312,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 **changed** (3)
 
-- {territory biome:grassland id:1 nature:1} {extractor resource:food} · 1 → 2
+- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} · 1 → 2
 - {territory biome:grassland id:1 nature:1} {metal} · 4 → 6
 - {territory biome:grassland id:1 nature:1} {store resource:food} · 1 → 2
 
@@ -580,9 +574,8 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | orbit     | 12      |
 | deposit   | 34      |
 | fertility | 0       |
-| readiness | 4       |
 
-16 row(s)
+15 row(s)
 
 # Turn 3
 
@@ -604,7 +597,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 **changed** (3)
 
-- {territory biome:grassland id:1 nature:1} {citizen} · 4 → 8
+- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} · 4 → 8
 - {territory biome:grassland id:1 nature:1} {metal} · 6 → 9
 - {territory biome:grassland id:1 nature:1} {store resource:metal} · 1 → 2
 
@@ -866,9 +859,8 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | orbit     | 12      |
 | deposit   | 34      |
 | fertility | 0       |
-| readiness | 4       |
 
-16 row(s)
+15 row(s)
 
 # Turn 4
 
@@ -894,16 +886,15 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 ## what changed
 
-**new** (3)
+**new** (2)
 
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy} {readiness for:work} -> 1
+- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:1} -> 1
 - {territory biome:grassland id:1 nature:1} {store resource:energy} -> 1
 
 **changed** (2)
 
-- {territory biome:grassland id:1 nature:1} {extractor resource:food} · 2 → 3
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal} · 1 → 2
+- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} · 2 → 3
+- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:1} · 1 → 2
 
 ## what is there now
 
@@ -1166,9 +1157,8 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | orbit     | 12      |
 | deposit   | 34      |
 | fertility | 0       |
-| readiness | 5       |
 
-16 row(s)
+15 row(s)
 
 # Turn 5
 
@@ -1202,9 +1192,9 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 **changed** (4)
 
-- {territory biome:grassland id:1 nature:1} {citizen} · 8 → 12
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy} · 1 → 2
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal} · 2 → 3
+- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} · 8 → 12
+- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:1} · 1 → 2
+- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:1} · 2 → 3
 - {territory biome:grassland id:1 nature:1} {metal} · 9 → 15
 
 ## what is there now
@@ -1470,9 +1460,8 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | orbit     | 12      |
 | deposit   | 34      |
 | fertility | 0       |
-| readiness | 5       |
 
-16 row(s)
+15 row(s)
 
 # Turn 6
 
@@ -1507,7 +1496,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 **changed** (4)
 
 - {territory biome:grassland id:1 nature:1} {energy} · 4 → 12
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy} · 2 → 3
+- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:1} · 2 → 3
 - {territory biome:grassland id:1 nature:1} {metal} · 15 → 20
 - {territory biome:grassland id:1 nature:1} {store resource:energy} · 1 → 2
 
@@ -1775,9 +1764,8 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | orbit     | 12      |
 | deposit   | 34      |
 | fertility | 0       |
-| readiness | 5       |
 
-16 row(s)
+15 row(s)
 
 # Turn 7
 
@@ -1811,10 +1799,9 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 ## what changed
 
-**new** (2)
+**new** (1)
 
-- {territory biome:grassland id:1 nature:1} {pioneer fuel:2 id:1} -> 1
-- {territory biome:grassland id:1 nature:1} {pioneer fuel:2 id:1} {readiness for:move} -> 1
+- {territory biome:grassland id:1 nature:1} {pioneer defending:1 id:1 moving:1} -> 1
 
 **changed** (3)
 
@@ -2087,9 +2074,8 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | orbit     | 12      |
 | deposit   | 34      |
 | fertility | 0       |
-| readiness | 6       |
 
-16 row(s)
+15 row(s)
 
 # Turn 8
 
@@ -2112,16 +2098,14 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 ## what changed
 
-**gone** (2)
+**gone** (1)
 
-- {territory biome:grassland id:1 nature:1} {pioneer fuel:2 id:1} -> 1
-- {territory biome:grassland id:1 nature:1} {pioneer fuel:2 id:1} {readiness for:move} -> 1
+- {territory biome:grassland id:1 nature:1} {pioneer defending:1 id:1 moving:1} -> 1
 
-**new** (3)
+**new** (2)
 
 - {territory biome:grassland id:1 nature:1} {yard} -> 1
-- {territory biome:grassland id:2 nature:1} {pioneer fuel:1 id:1} -> 1
-- {territory biome:grassland id:2 nature:1} {pioneer fuel:1 id:1} {readiness for:move} -> 1
+- {territory biome:grassland id:2 nature:1} {pioneer defending:1 id:1 moving:1} -> 1
 
 **changed** (2)
 
@@ -2393,9 +2377,8 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | orbit     | 12      |
 | deposit   | 34      |
 | fertility | 0       |
-| readiness | 6       |
 
-16 row(s)
+15 row(s)
 
 # Turn 9
 
@@ -2420,20 +2403,15 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 ## what changed
 
-**gone** (2)
+**gone** (1)
 
-- {territory biome:grassland id:2 nature:1} {pioneer fuel:1 id:1} -> 1
-- {territory biome:grassland id:2 nature:1} {pioneer fuel:1 id:1} {readiness for:move} -> 1
+- {territory biome:grassland id:2 nature:1} {pioneer defending:1 id:1 moving:1} -> 1
 
-**new** (10)
+**new** (6)
 
-- {territory biome:grassland id:2 nature:1} {citizen} -> 4
-- {territory biome:grassland id:2 nature:1} {citizen} {readiness for:bearing} -> 1
-- {territory biome:grassland id:2 nature:1} {citizen} {readiness for:labor} -> 1
-- {territory biome:grassland id:2 nature:1} {extractor resource:food} -> 1
-- {territory biome:grassland id:2 nature:1} {extractor resource:food} {readiness for:work} -> 1
-- {territory biome:grassland id:2 nature:1} {extractor resource:metal} -> 1
-- {territory biome:grassland id:2 nature:1} {extractor resource:metal} {readiness for:work} -> 1
+- {territory biome:grassland id:2 nature:1} {citizen bearing:1 defending:1 laboring:1} -> 4
+- {territory biome:grassland id:2 nature:1} {extractor resource:food working:1} -> 1
+- {territory biome:grassland id:2 nature:1} {extractor resource:metal working:1} -> 1
 - {territory biome:grassland id:2 nature:1} {garrison force:0} -> 1
 - {territory biome:grassland id:2 nature:1} {store resource:food} -> 1
 - {territory biome:grassland id:2 nature:1} {store resource:metal} -> 1
@@ -2710,9 +2688,8 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | orbit     | 12      |
 | deposit   | 34      |
 | fertility | 0       |
-| readiness | 9       |
 
-16 row(s)
+15 row(s)
 
 # Turn 10
 
@@ -2732,8 +2709,8 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 **changed** (2)
 
-- {territory biome:grassland id:1 nature:1} {citizen} · 12 → 8
-- {territory biome:grassland id:2 nature:1} {citizen} · 4 → 6
+- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} · 12 → 8
+- {territory biome:grassland id:2 nature:1} {citizen bearing:1 defending:1 laboring:1} · 4 → 6
 
 ## what is there now
 
@@ -3002,7 +2979,6 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | orbit     | 12      |
 | deposit   | 34      |
 | fertility | 0       |
-| readiness | 9       |
 
-16 row(s)
+15 row(s)
 

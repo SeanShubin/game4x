@@ -442,13 +442,13 @@ mod tests {
             .into_iter()
             .filter(|kind| !may_contain(*kind))
             .collect();
-        // Fourteen since `P-399` made `readiness` a kind. It holds nothing: it is what a
-        // thing spends to act, and a kind declaring no capacity holds nothing of that sort and
-        // never can - `P-391`'s first of three cases.
+        // Thirteen again since `P-411` undid `P-399`. Readiness stopped being a kind that a
+        // thing contains and became a count it carries as a trait, so the kind that held
+        // nothing and never could is not in the list to be counted.
         assert_eq!(
             cannot.len(),
-            14,
-            "four of the eighteen kinds may contain; {} may not",
+            13,
+            "four of the seventeen kinds may contain; {} may not",
             cannot.len()
         );
 
