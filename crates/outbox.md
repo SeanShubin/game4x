@@ -94,9 +94,16 @@ is two commands - the labor that pays for it, and the building.** That is all it
 extractors, and `is_fully_exploited` wants every claimable territory **founded** as well. So on
 top of the 57 buildings:
 
-- **Ten territories to found.** `play.4x` founds two of twelve, and each of the rest needs a
-  pioneer produced, moved and landed - three commands at least, plus the 3 metal and 6 energy
-  each pioneer costs, which is more `work` and more labor.
+- **Ten territories to found.** `play.4x` founds two of twelve. Each of the rest consumes a
+  founding unit - `found by land` takes a pioneer, `deploy ark` takes an ark, and `play.4x`
+  uses one of each - so **three commands at least**: produce it, move it, land it. **A pioneer
+  costs 3 metal, 6 energy and 2 citizens**, an ark 3 metal, 12 energy, 2 citizens and a Yard.
+  The two citizens matter and this item omitted them for one commit: citizens are the very
+  thing that has to reach 144, so founding competes with the population rather than merely
+  costing resources beside it.
+- **And *moved* is a floor too.** A pioneer has a capacity of 2 and `move` takes 1 energy and
+  one cell, so a territory two or more steps from a founded one needs more than one move and
+  more than one energy.
 - **A population to grow.** The same test derives **144 citizens** sustained across the planet.
   Citizens arrive by `breed` at a turn's end, so that is turns and the food to pay for them.
 - **The turns themselves.** `play.4x` spends **10** `{end turn}` commands reaching two founded
