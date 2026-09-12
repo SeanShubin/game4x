@@ -8,6 +8,26 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-11, the garrison's effect is an algorithm and he is open to changing it
+
+*Garrison has an effect that allows citizen force to be summed instead of using the max. This is an
+algorithm, not data. However, we did have an algorithm for population growth and were able to turn
+that into data. Also I am not set on having the garrison behave exactly the way it is specified now.
+Do we have a data driven way to make the garrison influence the force provided by citizens? The
+point of the garrison was to maintain a territory more cheaply than conquering one.*
+
+**Two facts from the data make this smaller than it looks.** Every citizen has force **1**, so
+`max` over citizens is not an aggregation at all - it is **1 if any citizen is present, else 0**.
+And nature's force is **1 everywhere except jungle, which is 2**. So today's garrison does exactly
+two things: **it makes a jungle holdable, and it makes a populous territory harder to take.**
+
+**What resists being data is not the fold but the condition.** A rule that always sums, or always
+takes the highest, is a fact about a trait and could be declared. *Sum when a garrison is present*
+is a branch, and nothing else in the game has one.
+
+**He is not attached to the current behaviour**, and the purpose to preserve is stated: **holding
+should be cheaper than conquering.**
+
 ## Said 2026-09-11, unification is how he sees what this lane cannot
 
 *Option A, definitely. Unification is a big deal for me, it is how I keep systems simple, and more
