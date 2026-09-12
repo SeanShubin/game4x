@@ -8,8 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-418** - A second paragraph of `spec/console.md` says what `P-417` just replaced, in the deleted trait · `docs/notes/proposals.md`
-- **P-419** - `P-413` replaced one sentence of a two-sentence bullet, and `readiness` is in the other · `docs/notes/proposals.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
@@ -95,8 +93,8 @@ it exists to ask.
 
 - `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310, P-342, P-362, P-375, P-379, P-382, P-385, P-397, P-412, P-400
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229, P-230, P-250, P-251, P-263, P-266, P-283, P-404, P-406, P-415, P-403
+- `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366, P-378, P-396, P-417, P-418
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210, P-286, P-288, P-308, P-312, P-314, P-331, P-407
-- `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366, P-378, P-396, P-417
 - `spec/planet.md` -> Presentation - P-10, P-11, P-53, P-88, P-96, P-97, P-98, P-107, P-104, P-105
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122, P-330, P-333, P-335, P-395, P-398
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119, P-172, P-392
@@ -140,6 +138,7 @@ it exists to ask.
 - `spec/control.md` -> Gaining and holding ground - P-62, P-275
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/invariants.md` -> Everything is expressible - P-12, P-128
+- `spec/invariants.md` -> Nothing comes back round with more - P-388, P-419
 - `spec/planet.md` - P-272, P-280
 - `spec/planet.md` -> Distance - P-24, P-349
 - `spec/planet.md` -> Shape - P-1, P-6

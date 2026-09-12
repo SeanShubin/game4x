@@ -66,10 +66,10 @@ descriptions sort in**, so the same state is always the same bytes.
 other word is wrong about the game rather than describing it.
 
 **In a recipe the same form is a selector, not a description.** A selector may name a **family**
-rather than a kind, and it may **leave stored traits out** - `{extractor ready:yes}` selects every
-ready extractor, whatever it extracts. **A description may do neither**: it names one kind and
-carries every stored trait that thing has. **Where the form stands is what says which it is** - a
-selector in a recipe, a description in a state.
+rather than a kind, and it may **leave traits out** - `{extractor resource:food}` selects every
+extractor built for food, whatever else is true of it. **A description may do neither**: it names
+one kind and carries every trait of that thing. **Where the form stands is what says which it
+is** - a selector in a recipe, a description in a state.
 
 **In a recipe, a quantity and either side of a guard may be an expression.** An expression is one
 of these and nothing else:

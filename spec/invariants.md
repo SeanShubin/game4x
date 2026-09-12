@@ -124,8 +124,8 @@ specific rule.
 - **There are three sources: the planet, the star, and time.** The planet's material and the
   star's energy are endless, and so are time's turns. **Anything that exhausts draws on time for a
   turn**: it spends a count it carries, and only the turn's end restores that count, the way an
-  extractor draws material out of the planet and is spent doing it. So readiness is gathered
-  rather than made, and what bounds the gathering is the count of things that exhaust
+  extractor draws material out of the planet and is spent doing it. So what a thing can do is
+  gathered rather than made, and what bounds the gathering is the number of things that exhaust.
 - **Whether this holds is decided mechanically, from the rules alone**, and stays so however many
   rules there are. **The game is meant to become complicated by simple things interacting**, and an
   invariant only a careful reader could confirm would not survive that

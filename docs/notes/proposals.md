@@ -62,58 +62,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-418 - A second paragraph of `spec/console.md` says what `P-417` just replaced, in the deleted trait
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/console.md` -> The language · from `P-417`
-
-**Found by the promotion's own assertion**, which asked whether the old words were gone from the
-whole file rather than from the sentence it had just replaced. **They were not.**
-
-**Six paragraphs below, *the same form is a selector* says it twice over**: a selector *may leave
-stored traits out* - `{extractor ready:yes}` - and *a description may do neither: it names one kind
-and carries **every stored trait that thing has***.
-
-**Two things are wrong with it now.** `ready` is the trait `P-399` deleted, so the example names
-something the game does not have. And **every stored trait** is the phrase `P-417` replaced, because
-a description carries the traits **of the thing** and not those of its kind.
-
-**Replacing the paragraph beginning *In a recipe the same form is a selector*:**
-
-> **In a recipe the same form is a selector, not a description.** A selector may name a **family**
-> rather than a kind, and it may **leave traits out** - `{extractor resource:food}` selects every
-> extractor built for food, whatever else is true of it. **A description may do neither**: it names
-> one kind and carries every trait of that thing. **Where the form stands is what says which it is**
-> - a selector in a recipe, a description in a state.
-
-**Three changes and the paragraph's claim is unaltered.** *Leave stored traits out* becomes *leave
-traits out*, because a selector was never leaving out a trait of the kind either. The example becomes
-`{extractor resource:food}`, which is a trait the game has and which every extractor in the dump
-already carries. And *every stored trait that thing has* becomes *every trait of that thing*, which
-is `P-417`'s wording.
-
-### P-419 - `P-413` replaced one sentence of a two-sentence bullet, and `readiness` is in the other
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/invariants.md` -> Nothing comes back round with more · from `P-413`
-
-**Found by the promotion asserting that `readiness` was gone from the whole file** rather than from
-the sentence it had just replaced. **One occurrence survived.**
-
-**`P-413`'s quotation covered *anything that exhausts draws on time for a turn ... spent doing it*
-and stopped there.** The bullet has one more sentence: *So **readiness** is gathered rather than
-made, and what bounds the gathering is the count of things that exhaust.*
-
-**Replacing that last sentence of the bullet:**
-
-> So what a thing can do is gathered rather than made, and what bounds the gathering is the number
-> of things that exhaust.
-
-**Two words change.** *Readiness* becomes *what a thing can do*, which is `P-408`'s own phrase for
-it; and *the count of things* becomes *the number of things*, because **count** now means the thing
-a trait carries and using it here for a tally would be the collision `P-410` was promoted to prevent.
-
-**This lane should have caught it when `P-413` was written.** The proposal quoted one sentence of a
-bullet it had read whole, which is the same failure as replacing one row of a table and leaving the
-rest.
+*Nothing is open. Everything filed has been decided.*
 
 
 ## Addressed to other perspectives
@@ -3733,6 +3682,8 @@ work the release exists to order.
 | P-415, a quotation for each block offered, in both places the count was stated                                               | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
 | P-412, the release's `In` line follows `P-408`                                                                               | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-11 |
 | P-413, `readiness` named nothing, and says what it is instead                                                                | `spec/invariants.md` -> two sections                                                                                                                                                                     | 2026-09-11 |
+| P-418, a selector leaves traits out, and the example names a trait the game has                                              | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-11 |
+| P-419, the bullet's last sentence says what a thing can do, not `readiness`                                                  | `spec/invariants.md` -> Nothing comes back round with more                                                                                                                                               | 2026-09-11 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
 | P-403, an outbox item's addressing line is not part of what is promoted                                                      | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
 | P-402, vetting gates finishing a release, not shipping one                                                                   | `releases/README.md` -> Vetting, and deletion                                                                                                                                                            | 2026-09-11 |
