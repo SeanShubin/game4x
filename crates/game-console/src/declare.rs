@@ -194,3 +194,110 @@ pub fn biomes(document: &str) -> String {
     );
     crate::state::declared(&rows)
 }
+
+/// Every trait the release declares that a data file needs, as the file that would declare them.
+///
+/// **`P-451`: a trait says what it admits and whether it is stored, and says nothing about
+/// which kinds carry it.** So the *Of* column is not here - it is inverted onto the kinds -
+/// and each line is the trait's name, what it admits, and how it is kept.
+///
+/// **The two keys are `admits` and `kept`, and they are the specification lane's proposal
+/// rather than a promoted rule** - `P-457`, open to Sean, and `C-100` is where this lane said
+/// the shape was not its to choose. `admits` is the release's own verb: *where a trait admits
+/// a closed set of values*. `kept` is not `held`, because in this game holding is containment
+/// and a store holds metal. **If either name changes, this function changes and nothing else
+/// does.**
+///
+/// # What `admits` says, by what the Values cell is
+///
+/// **A number, however the cell describes what it counts.** *A number* five times, and four
+/// more that are a number with a sentence about what it counts - *how much energy its tank
+/// holds*, *food per turn*, *the number of turns it will last*, and `id`'s *unique among
+/// things of its kind*. The sentence is a relationship and rule 7 leaves it in prose.
+///
+/// **Or the name of whatever already declares the values.** A family where they are kinds -
+/// `one of the resources` is the `resource` family, `a place` is the `place` family - and the
+/// trait's own name where they are values, because `{value name:ice of:biome}` says it there.
+///
+/// **Or `???`, which is the one open cell.** `0 or 1` five times and `yes or no` three times
+/// are the same two-valued set spelled twice, and what the notation calls it is `P-457`'s
+/// question. **Written as a word that cannot be mistaken for an answer**, so a reader of the
+/// generated file cannot take it for one.
+///
+/// # Which traits are here
+///
+/// **Twenty-one of twenty-three.** A derived trait that a recipe names must be declared, since
+/// every word in a data file is a kind, a trait or one of a trait's values - and `surplus` and
+/// `unpaid` are named once each. **`metal in it` and `control` are named by nothing**, counted
+/// over the *Recipes* table, so they are in no data file at all.
+pub fn traits(document: &str) -> String {
+    let mut rows: Vec<Description> = Vec::new();
+    for row in body_under(document, "## Traits") {
+        let name = plain(row.first().map(String::as_str).unwrap_or_default()).replace(' ', "-");
+        let values = plain(row.get(2).map(String::as_str).unwrap_or_default());
+        let kept = plain(row.get(3).map(String::as_str).unwrap_or_default());
+        assert!(
+            !name.is_empty() && !values.is_empty() && !kept.is_empty(),
+            "a row of the Traits table is missing a cell, so the line would be short a fact"
+        );
+        let kept = match kept.split(':').next().unwrap_or_default().trim() {
+            "stored" => "thing",
+            "of the kind" => "kind",
+            "derived" => "nothing",
+            other => panic!(
+                "`{name}` is kept `{other}`, and the release has three: stored, of the kind, \
+                 derived"
+            ),
+        };
+        // A derived trait no recipe names is in no data file, so it is not declared either.
+        if kept == "nothing" && !names_it(document, &name) {
+            continue;
+        }
+        let mut traits = std::collections::BTreeMap::new();
+        traits.insert("name".to_string(), name);
+        traits.insert("admits".to_string(), admits(&values));
+        traits.insert("kept".to_string(), kept.to_string());
+        rows.push(Description {
+            kind: "trait",
+            traits,
+        });
+    }
+    assert!(
+        rows.len() > 15,
+        "only {} traits, so the table parsed to nearly nothing",
+        rows.len()
+    );
+    crate::state::declared(&rows)
+}
+
+/// Whether any recipe row names this trait, which is what makes a derived one declarable.
+fn names_it(document: &str, name: &str) -> bool {
+    let looking = name.replace('-', " ");
+    body_under(document, "## Recipes")
+        .iter()
+        .any(|row| row.iter().any(|cell| cell.contains(&looking)))
+}
+
+/// What a trait admits, read from its Values cell.
+fn admits(values: &str) -> String {
+    let said = values.trim();
+    if said == "0 or 1" || said == "yes or no" {
+        return "???".to_string();
+    }
+    if said == "design or play" {
+        return "phase".to_string();
+    }
+    if let Some(rest) = said.strip_prefix("one of the ") {
+        return rest.trim_end_matches('s').to_string();
+    }
+    if said == "a place" {
+        return "place".to_string();
+    }
+    // Everything left is a number, however the cell describes what it counts.
+    assert!(
+        said.contains("number") || said.contains("how much") || said.contains("per turn"),
+        "`{said}` is a Values cell this does not read, and guessing at it would put a word in \
+         the file that the release did not say"
+    );
+    "number".to_string()
+}

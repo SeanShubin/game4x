@@ -418,3 +418,109 @@ fn the_biomes_file_carries_nature_and_leaves_the_guiding_numbers_out() {
          constant would pass everything above this line"
     );
 }
+
+/// The traits file declares what a data file needs, and nothing a recipe never names.
+///
+/// **Two derivations of one table, which is `Q-8`'s shape.** `P-457` carries these bytes
+/// written by hand; this reads the release. Where they differ, one of them is wrong, and that
+/// is worth more than either alone.
+///
+/// **`spec/data/traits.4x` does not exist yet**, so this holds the generator against the
+/// release and asserts the file's absence, the way its two siblings do.
+#[test]
+fn the_traits_file_declares_what_a_data_file_needs() {
+    let document = release();
+    let at = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/traits.4x");
+    assert!(
+        !at.exists(),
+        "`spec/data/traits.4x` exists now, so this must read it instead of the generator"
+    );
+
+    let file = declare::traits(&document);
+    let read = state::declarations(&file).expect("the file it writes is a file it can read");
+
+    // **Twenty of the twenty-three, and which three is the whole of the arithmetic.** Four
+    // traits are derived; a derived trait is declared only where a recipe names it, because
+    // every word in a data file is a kind, a trait or one of a trait's values. `unpaid` is
+    // named by `perish`; `surplus`, `metal in it` and `control` are named by no recipe row.
+    assert_eq!(
+        read.len(),
+        20,
+        "twenty traits belong in a data file; this wrote {}",
+        read.len()
+    );
+    let named: Vec<&str> = read
+        .iter()
+        .filter_map(|row| row.traits.get("name"))
+        .map(String::as_str)
+        .collect();
+    for gone in ["surplus", "metal-in-it", "control"] {
+        assert!(
+            !named.contains(&gone),
+            "`{gone}` is derived and named by no recipe row, so it is in no data file"
+        );
+    }
+    assert!(
+        named.contains(&"unpaid"),
+        "`unpaid` is derived and `perish` names it, so it is declared"
+    );
+
+    // **`surplus` is the one the two derivations disagreed about, so it is asserted by the
+    // reason rather than by the name.** It appears once under `## Recipes` and that once is
+    // the `In` line's prose quoting `spec/turn.md` - no row names it. A count over the
+    // section finds it; a count over the rows does not, and the rows are what a recipe is.
+    let rows_naming_surplus = game_console::recipes::body_under(&document, "## Recipes")
+        .iter()
+        .filter(|row| row.iter().any(|cell| cell.contains("surplus")))
+        .count();
+    assert_eq!(
+        rows_naming_surplus, 0,
+        "a recipe row names `surplus` now, so it belongs in the file after all"
+    );
+
+    // Every line carries the three facts and nothing else.
+    let mut open = 0;
+    for row in &read {
+        assert_eq!(row.kind, "trait", "a trait is declared as a `{}`", row.kind);
+        assert_eq!(
+            row.traits.len(),
+            3,
+            "a trait's line is its name, what it admits and how it is kept - {} keys",
+            row.traits.len()
+        );
+        let kept = row
+            .traits
+            .get("kept")
+            .map(String::as_str)
+            .unwrap_or_default();
+        assert!(
+            ["thing", "kind", "nothing"].contains(&kept),
+            "`{kept}` is not one of the three the release has"
+        );
+        if row.traits.get("admits").map(String::as_str) == Some("???") {
+            open += 1;
+        }
+    }
+    // **Seven open cells, which is the one question `P-457` puts to Sean.** `0 or 1` five
+    // times and `yes or no` three times are the same two-valued set spelled twice - eight
+    // cells in the table, and **one of the three `yes or no` traits is `surplus`**, which is
+    // in no data file. So dropping it drops an open cell with it, and the question is over
+    // seven rather than eight.
+    assert_eq!(
+        open, 7,
+        "seven cells wait on what the notation calls a two-valued set; {open} do"
+    );
+
+    // **The counts the release's own column gives**, so a generator inventing a `kept` would
+    // fail here rather than at the shape.
+    let kept_by = |what: &str| {
+        read.iter()
+            .filter(|row| row.traits.get("kept").map(String::as_str) == Some(what))
+            .count()
+    };
+    assert_eq!(
+        (kept_by("thing"), kept_by("kind"), kept_by("nothing")),
+        (15, 4, 1),
+        "fifteen stored, four of the kind, and one derived that a recipe names"
+    );
+}
