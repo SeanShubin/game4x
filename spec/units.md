@@ -12,7 +12,7 @@ What is true of every unit. Particular units are in [unit types](unit-types.md).
 
 - Each unit is of a certain type, which remains even if control of the unit changes
 - Each type of unit has a unique name
-- Each unit has a force
+- Each unit has a strength
 - A unit may require upkeep each turn, and is lost if it is not paid
 - A mobile unit that moves over the ground has a bin for fuel. Moving burns a unit of it, and one
   with an empty bin cannot move

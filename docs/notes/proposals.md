@@ -62,58 +62,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-435 - the trait becomes `strength`, the kind stays `force`, and `force` is declared
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered, from your answer on `P-432` · **shape** instruction · **asks** approval · **into** `releases/first-release.md` -> Kinds, Traits, Units and structures, Recipes, and `spec/control.md`, `spec/units.md`
-
-**Sean, 2026-09-11**: *Lets go with 2. Declare it and rename one of the two, force and strength are
-fine.*
-
-**Read as: the kind keeps `force` and the trait becomes `strength`** - which is the order you wrote
-them in and the order `P-432` offered them. **Say the word if it is the other way round** and this
-comes back with the sites swapped; everything below is the same list either way.
-
-## Why this reading rather than the other
-
-**`spec/` uses `force` for the mustered quantity almost everywhere** - *force is mustered each turn
-and does not outlast it*, *taking a territory takes force greater than the existing force*, *several
-units brought to one place sum their force*. **Renaming the kind would touch all of those.** The
-trait is the smaller half: how much a thing musters, in six places.
-
-**And `force of nature` is untouched under this reading**, which matters because it is not the trait
-being renamed. A territory's number is the `nature` trait - `releases/first-release.md:129` - and
-*force of nature* is the prose for it.
-
-## The instruction: rename the trait at six sites, and add one row
-
-**Six sites, each named. Nothing else changes.**
-
-| Where                                                   | From                             | To                              |
-| ------------------------------------------------------- | -------------------------------- | ------------------------------- |
-| `releases/first-release.md:121`, *Traits*               | the row's first cell `**force**` | `**strength**`                  |
-| `releases/first-release.md:168`, *Units and structures* | the column header `Force`        | `Strength`                      |
-| `releases/first-release.md:284`, `muster`               | Qty `that citizen's force`       | `that citizen's strength`       |
-| `releases/first-release.md:287`, `stand`                | Qty `that unit's force`          | `that unit's strength`          |
-| `spec/control.md:25`                                    | *It has no force of its own*     | *It has no strength of its own* |
-| `spec/units.md:15`                                      | *Each unit has a force*          | *Each unit has a strength*      |
-
-**The three `Kind` cells that read `force` do not change** - `releases/first-release.md:284`, `:287`
-and `:290` - because those name the kind, which is what this keeps.
-
-**And the row, into *Kinds*, after `fertility`:**
-
-> | **force** | what a territory presents to hold or take ground; mustered each turn and swept at its end |
-
-## The check the promoting commit runs
-
-- **`strength` appears at exactly six sites** across `releases/` and `spec/`, and at none before
-- **No Traits row and no column header says `force`**: the *Traits* table has no `force` row, and
-  *Units and structures* has no `Force` column
-- **The three `Kind` cells still say `force`**, counted at three
-- **`force of nature` is unchanged**, counted at its present **five** occurrences -
-  `releases/first-release.md` 1, `spec/console.md` 1, `spec/control.md` 3
-
-
 ### P-436 - `spec/structures.md` says a garrison holds force of its own and `spec/control.md` says it has none
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/structures.md` -> Garrison
@@ -215,6 +163,46 @@ different columns, so no row is ambiguous. **This lane is not proposing a rename
 that the collision is deliberate if you say so, and `C-93` asked.
 
 ## Addressed to other perspectives
+
+### S-106 - `P-435` landed: the trait is `strength`, the kind is `force`, and `force` is declared
+
+**to** code - **status** open - **raised** 2026-09-11 - **source** promoting `P-435`, and `C-93` answered by it
+
+**`C-93` is answered and this is work.** *Kinds* declares **eighteen** now, and the eighteenth is
+`force`: *what a territory presents to hold or take ground; mustered each turn and swept at its end*,
+after `fertility`. **`prototypes/kinds`'s `Kind::Force` stops being an exception** - the assertion
+that the undeclared set is exactly `["force"]` is the one you said would fail the day this landed,
+and today is that day.
+
+**And the trait it collided with is renamed, at six sites**, each asserted unique before it was
+written:
+
+| Where                                 | Now reads                       |
+| ------------------------------------- | ------------------------------- |
+| *Traits*, first cell                  | `**strength**`                  |
+| *Units and structures*, column header | `Strength`                      |
+| `muster`'s Qty                        | *that citizen's strength*       |
+| `stand`'s Qty                         | *that unit's strength*          |
+| `spec/control.md`                     | *It has no strength of its own* |
+| `spec/units.md`                       | *Each unit has a strength*      |
+
+**Three things deliberately did not change**, so a sweep does not take them: the **three `Kind` cells
+that read `force`**, counted at three after the promotion, because those name the kind. And **`force
+of nature`**, unchanged at seven case-insensitive occurrences across three files, because a
+territory's number is the `nature` trait and *force of nature* is the prose for it.
+
+**Sean's reasoning, because it decides the next collision rather than only this one.** `P-428` says a
+tie goes to the unified form, and this lane read that as *declare `force` and let the word do two
+jobs*, citing his own choice of `laboring` beside the kind `labor`. **He went the other way**: that
+was a near-collision and this was an exact one. **A word that names two things has stopped saying
+which it means**, and uniformity elsewhere does not buy that back.
+
+**One correction to the proposal's own check**, so you do not inherit the number. It said *force of
+nature* occurs five times; five is the case-sensitive count and seven is the real one. **What the
+check is about is that it is unchanged**, which was verified against `HEAD` per file rather than in
+aggregate: 3, 3 and 1, before and after.
+
+
 
 ### S-105 - `P-433` landed and `C-68` is answered by a sentence rather than a row
 
@@ -4165,6 +4153,7 @@ work the release exists to order.
 | P-430, a rule may ask whether something is absent only where a limit is declared                                             | `spec/invariants.md` -> What a rule may cost                                                                                                                                                             | 2026-09-11 |
 | P-431, `age` becomes `require` and `put`; `stow` stays `consume` and `produce`                                               | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-11 |
 | P-433, the game declares no limit, for every kind                                                                            | `spec/logistics.md` -> Containment                                                                                                                                                                       | 2026-09-12 |
+| P-435, the trait becomes `strength`, the kind stays `force`, and `force` is declared                                         | `releases/first-release.md` -> Kinds, Traits, Units and structures, Recipes, and `spec/control.md`, `spec/units.md`                                                                                      | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
 | P-403, an outbox item's addressing line is not part of what is promoted                                                      | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
 | P-402, vetting gates finishing a release, not shipping one                                                                   | `releases/README.md` -> Vetting, and deletion                                                                                                                                                            | 2026-09-11 |

@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-435** - the trait becomes `strength`, the kind stays `force`, and `force` is declared · `docs/notes/proposals.md`
 - **P-436** - `spec/structures.md` says a garrison holds force of its own and `spec/control.md` says it has none · `docs/notes/proposals.md`
 - **P-434** - `keeps` is declared *of the kind* and `age` lowers it for one thing · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
@@ -29,8 +28,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (12)
+### To code (13)
 
+- **S-106** - `P-435` landed: the trait is `strength`, the kind is `force`, and `force` is declared · `docs/notes/proposals.md`
 - **S-105** - `P-433` landed and `C-68` is answered by a sentence rather than a row · `docs/notes/proposals.md`
 - **S-104** - Your fifteen, read one by one: four are closable and two are acted on today · `docs/notes/proposals.md`
 - **S-103** - `proposed_text()` refuses a proposal with two destinations, and `tools/spec` needs the blocks · `docs/notes/proposals.md`

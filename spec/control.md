@@ -22,7 +22,7 @@ How a territory is claimed and held. Weapons and their ranges are in [combat](co
   mustered this turn, and nothing accumulates
 - A citizen can fight but cannot organise. **It musters no force unless something coordinates it**
 - A garrison coordinates the citizens of its territory, so that **each of them musters one force
-  each turn**. It has no force of its own, and **it does this by existing** - nothing has to work
+  each turn**. It has no strength of its own, and **it does this by existing** - nothing has to work
   it
 - **What a citizen spends to muster is its own**, and is not what it spends to labor or to bear
 - **A unit is organised force in itself**, and musters its own force needing nothing to coordinate

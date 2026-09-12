@@ -69,6 +69,7 @@ Every territory has total capacity for at least one food extractor.
 | **adjacency** | two places that share an edge, held by the thing that holds them                                             |
 | **game**      | every thing is in it, and it is the one thing that is in nothing                                             |
 | **fertility** | a citizen's capacity to raise one more, spent by raising one and renewed each turn                           |
+| **force**     | what a territory presents to hold or take ground; mustered each turn and swept at its end                    |
 
 ## Families
 
@@ -118,7 +119,7 @@ are listed.
 | **bearing**        | a citizen                               | 0 or 1                                    | stored                                           |
 | **defending**      | a citizen or a unit                     | 0 or 1                                    | stored                                           |
 | **resource**       | an extractor or a store                 | one of the resources                      | stored                                           |
-| **force**          | citizen, garrison, ark, pioneer         | a number                                  | of the kind                                      |
+| **strength**       | citizen, garrison, ark, pioneer         | a number                                  | of the kind                                      |
 | **fuel**           | a unit                                  | how much energy its tank holds            | of the kind                                      |
 | **upkeep**         | a thing with upkeep                     | food per turn                             | of the kind                                      |
 | **metal in it**    | whatever is built                       | a number                                  | derived: its binding plus the metal in its parts |
@@ -165,15 +166,15 @@ a raw material returns to its source.
 
 ## Units and structures
 
-| Thing         | Force | Fuel | Upkeep          | Costs to produce               | Binding | Crosses      | Requires | Readies | Movable |
-| ------------- | ----- | ---- | --------------- | ------------------------------ | ------- | ------------ | -------- | ------- | ------- |
-| **citizen**   | 1     |      | 1 food per turn |                                |         |              |          | yes     |         |
-| **garrison**  | 0     |      |                 | 1 labor, 1 metal               | 1       |              |          |         |         |
-| **extractor** |       |      |                 | 1 labor, 1 metal               | 1       |              |          | yes     |         |
-| **yard**      |       |      |                 | 1 labor, 15 metal              | 15      |              |          |         |         |
-| **store**     |       |      |                 | 1 labor, 1 metal               | 1       |              |          |         |         |
-| **ark**       | 2     | 2    |                 | 3 metal, 12 energy, 2 citizens | 3       | orbit border | a Yard   | yes     | yes     |
-| **pioneer**   | 2     | 2    |                 | 3 metal, 6 energy, 2 citizens  | 3       | border       |          | yes     | yes     |
+| Thing         | Strength | Fuel | Upkeep          | Costs to produce               | Binding | Crosses      | Requires | Readies | Movable |
+| ------------- | -------- | ---- | --------------- | ------------------------------ | ------- | ------------ | -------- | ------- | ------- |
+| **citizen**   | 1        |      | 1 food per turn |                                |         |              |          | yes     |         |
+| **garrison**  | 0        |      |                 | 1 labor, 1 metal               | 1       |              |          |         |         |
+| **extractor** |          |      |                 | 1 labor, 1 metal               | 1       |              |          | yes     |         |
+| **yard**      |          |      |                 | 1 labor, 15 metal              | 15      |              |          |         |         |
+| **store**     |          |      |                 | 1 labor, 1 metal               | 1       |              |          |         |         |
+| **ark**       | 2        | 2    |                 | 3 metal, 12 energy, 2 citizens | 3       | orbit border | a Yard   | yes     | yes     |
+| **pioneer**   | 2        | 2    |                 | 3 metal, 6 energy, 2 citizens  | 3       | border       |          | yes     | yes     |
 
 An Ark can invade land from orbit. Nothing outside this table
 readies.
@@ -281,10 +282,10 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 | **muster**          | world  | require | 1                                    | garrison  |                                               |                          |
 |                     |        | require | 1                                    | citizen   | defending at least 1                          |                          |
 |                     |        | put     |                                      | citizen   | defending one less                            |                          |
-|                     |        | produce | that citizen's force                 | force     |                                               |                          |
+|                     |        | produce | that citizen's strength              | force     |                                               |                          |
 | **stand**           | world  | require | 1                                    | unit      | defending at least 1                          |                          |
 |                     |        | put     |                                      | unit      | defending one less                            |                          |
-|                     |        | produce | that unit's force                    | force     |                                               |                          |
+|                     |        | produce | that unit's strength                 | force     |                                               |                          |
 | **refresh**         | world  | put     |                                      | citizen   | defending at its maximum                      |                          |
 | **refresh**         | world  | put     |                                      | unit      | defending at its maximum                      |                          |
 | **discard**         | world  | consume | 1                                    | force     |                                               |                          |
