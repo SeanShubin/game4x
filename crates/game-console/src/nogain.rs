@@ -491,10 +491,10 @@ pub fn family(document: &str, name: &str) -> Option<Vec<String>> {
 /// naming one that is not here is ground as a kind and would be a place nothing else touches.
 pub const FAMILIES: [&str; 4] = ["thing", "unit", "resource", "place"];
 
-/// What each kind's force is, read from *Units and structures*.
+/// What each kind's strength is, read from *Units and structures*.
 ///
 /// **A trait of the kind since `P-407`**, which is what makes one number per kind the right
-/// shape: every citizen's force is 1, so *that citizen's force* is a lookup rather than a
+/// shape: every citizen's strength is 1, so *that citizen's strength* is a lookup than a
 /// fact about one citizen. A kind with an empty cell has no force and is absent, so asking
 /// for one is a panic rather than a zero - a rule producing nothing is a rule that vanished.
 pub fn forces(document: &str) -> BTreeMap<String, i64> {
@@ -870,22 +870,23 @@ fn changed(
     let (kind, amount) = match (density, kind.as_str()) {
         (Some((resource, density)), "resource") => (resource.to_string(), density as i64),
         _ => {
-            // **A quantity that names a thing's force is looked up rather than skipped** -
-            // `P-414`, *that citizen's force* and *that unit's force*. Force is a trait **of
+            // **A quantity naming a thing's strength is looked up rather than skipped** -
+            // `P-414`, *that citizen's strength* and *that unit's strength*, renamed from
+            // `force` by `P-435`. Strength is a trait **of
             // the kind** since `P-407`, so the number is in *Units and structures* and the
             // subject is whatever the block was ground to. A cell this could not read used to
             // return nothing, which dropped the only rows that make any force at all.
             let amount = match quantity.parse::<i64>() {
                 Ok(amount) => amount,
-                Err(_) if quantity.ends_with("'s force") => {
+                Err(_) if quantity.ends_with("'s strength") => {
                     // **The subject is in the quantity, not in the Kind column.** The row
-                    // reads `produce | that citizen's force | force`, so the kind is what is
+                    // reads `produce | that citizen's strength | force`, so the kind is what is
                     // made and the subject is what it is made from - and for `stand` the
                     // subject is the family `unit`, which is whichever member this block is
                     // being ground to.
                     let subject = quantity
                         .trim_start_matches("that ")
-                        .trim_end_matches("'s force");
+                        .trim_end_matches("'s strength");
                     let subject = match member {
                         Some(member) if FAMILIES.contains(&subject) => member,
                         _ => subject,

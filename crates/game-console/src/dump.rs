@@ -344,11 +344,19 @@ pub fn tables(game: &Game) -> Vec<Table> {
     // kind at all: a thing carries a count per action as a trait, so `describe` writes it
     // beside the kind rather than under it and there is nothing here to count.
     //
-    // **And `force` is not a row either**, though three recipe rows name it as a kind.
-    // `muster` and `stand` make it at a turn's end and `discard` sweeps it in the same
-    // ending, so nothing the model holds is ever a force - what a territory presents is
-    // `Game::force_in`, a sum computed on demand, and the garrison table's `force` column
-    // is where a reader finds a number. `C-93` is the undeclared kind itself.
+    // **`force`, which reads zero at every turn boundary for the same reason `fertility`
+    // does.** `muster` and `stand` make it at a turn's end and `discard` sweeps what is left
+    // in the same ending, so no committed state holds any; what a territory presents is
+    // `Game::force_in`, a sum computed on demand.
+    //
+    // **Named because the release declares it** - `P-435`, answering `C-93`, which asked
+    // whether a word naming a trait and a thing at once was deliberate. It was: the trait is
+    // `strength` now and the kind is `force`. **A kind's presence is not a fact about one
+    // run**, which `orbit` above records learning the expensive way.
+    kinds.push(vec![
+        "force".into(),
+        total(&|t| t.count_of(game_model::thing::Kind::Force)).to_string(),
+    ]);
 
     vec![
         summary, territory, node, store, garrison, extractor, structure, labor, unit, adjacency,

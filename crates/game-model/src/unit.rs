@@ -107,9 +107,16 @@ mod tests {
     fn a_new_unit_starts_in_orbit_with_a_full_charge() {
         let unit = Unit::new(UnitId(1), UnitKind::Ark, TerritoryId(1));
         assert!(unit.in_orbit());
-        assert_eq!(unit.cells, 2);
+        // **An Ark's charge is none, and that is the full one** - `S-86` blanked its Fuel
+        // cell, because a unit that moves in orbit takes its energy from the sun. It reaches
+        // the ground by landing, which asks where it is and not what it has left.
+        assert_eq!(unit.cells, 0);
         assert!(unit.ready());
         assert_eq!(unit.force(), 2);
+
+        // A pioneer travels by land and carries the bin, so the two are asserted apart.
+        let pioneer = Unit::new(UnitId(2), UnitKind::Pioneer, TerritoryId(1));
+        assert_eq!(pioneer.cells, 2, "a pioneer's Fuel cell still says two");
     }
 
     // **The test for an unusable unit is gone, and so is the state** - `P-367`. It asserted

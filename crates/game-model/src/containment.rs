@@ -290,7 +290,7 @@ fn describe(thing: &Thing) -> Description {
 pub fn trait_name(name: Trait) -> &'static str {
     match name {
         Trait::Resource => "resource",
-        Trait::Force => "force",
+        Trait::Strength => "strength",
         Trait::Multiplier => "multiplier",
         Trait::Density => "density",
         // **Dashed, because a name is one word.** `spec/console.md` joins the words of a

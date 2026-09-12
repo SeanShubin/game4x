@@ -559,14 +559,14 @@ fn the_scenario_fires_every_player_recipe_the_release_declares() {
 fn every_kind_is_named_and_only_two_namings_depend_on_the_scenario() {
     use game_model::thing::Kind;
 
-    // **Seventeen, and the number came back down.** `P-399` made `readiness` a kind and
-    // `P-411` made it a count carried as a trait again, so the eighteenth went the way it
-    // came. `force` is not the eighteenth either - three recipe rows name it as a kind and
-    // no Kinds table declares it, which is `C-93`, and nothing the model holds is one.
+    // **Eighteen, and the eighteenth is `force`.** `P-399` made `readiness` a kind and
+    // `P-411` made it a count carried as a trait again, so that one went the way it came;
+    // `P-435` declared `force`, answering `C-93`, which asked whether one word naming a
+    // trait and a thing at once was deliberate. It was - the trait is `strength` now.
     assert_eq!(
         Kind::ALL.len(),
-        17,
-        "seventeen kinds: `store` from `P-260`, `deposit` from `P-322`, `adjacency` from `P-334`, `game` from `P-351` and `fertility` from the saturating rewrite; the model has {}",
+        18,
+        "eighteen kinds: `store` from `P-260`, `deposit` from `P-322`, `adjacency` from `P-334`, `game` from `P-351`, `fertility` from the saturating rewrite and `force` from `P-435`; the model has {}",
         Kind::ALL.len()
     );
 

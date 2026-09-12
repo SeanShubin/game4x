@@ -234,13 +234,14 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
     // whose tables stopped parsing would admit nothing and this would report every word,
     // which is loud - but a release whose tables parsed *empty* would be the silent one, and
     // that is the direction guarded here.
-    // **Seventeen again since `P-411` took `readiness` back out.** The model has an
-    // eighteenth, `force`, which the release uses in three recipe rows and declares nowhere -
-    // `C-93` - so this counts the table rather than the model.
+    // **Eighteen since `P-435` declared `force`**, which answers `C-93` - this lane asked
+    // whether one word naming a trait and a thing at once was deliberate, and the answer was
+    // that it was: the trait is `strength` now and the kind is `force`. Seventeen between
+    // `P-411` taking `readiness` out and that.
     assert_eq!(
         kinds.len(),
-        17,
-        "seventeen kinds; the release lists {kinds:?}"
+        18,
+        "eighteen kinds; the release lists {kinds:?}"
     );
     assert_eq!(
         families.len(),

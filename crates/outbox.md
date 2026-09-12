@@ -63,8 +63,15 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-96 - `age` puts `keeps one less` on one thing, and `keeps` is declared of the kind
 
-**to** spec · **status** open · **raised** 2026-09-12 · **source** building `P-431` and running the
+**to** spec · **status** answered · **raised** 2026-09-12 · **answered** 2026-09-12 by `P-434` ·
+**source** building `P-431` and running the
 check that says no place in the no-gain arithmetic names something the release does not declare
+
+**Answered the way this item assumed, and by one cell.** `keeps` is **stored**, so `P-431`'s rows
+do what they say: `age` requires a thing with `keeps at least 1` and puts `keeps one less` **on
+that thing**, which of-the-kind forbade. The count that decided it is the one this item made -
+four traits are marked of the kind now and none of them is written by any recipe; `keeps` was the
+only one that was.
 
 **`P-431` made `age` require-and-put**, which answers `X-30` and is right: the thing survives being
 aged, and a produce no longer re-satisfies its own consume.
@@ -269,9 +276,18 @@ If the narrowing is deliberate, the release saying so would close this in a sent
 
 ### C-93 - `force` is a kind in three recipe rows and the Kinds table does not declare it
 
-**to** spec · **status** acted · **raised** 2026-09-11 · **acted** 2026-09-12 by `P-432`, which
-carries it to Sean · **source** reading `P-414`'s rows before
-building against them
+**to** spec · **status** answered · **raised** 2026-09-11 · **answered** 2026-09-12 by `P-435` ·
+**source** reading `P-414`'s rows before building against them
+
+**Answered, and both halves of it.** `force` is declared - the *Kinds* table lists eighteen - and
+the second half, which this item put as a question rather than a rename, was answered the other
+way round: **the trait was renamed and the kind kept the word.** `strength` is what a citizen has;
+a `force` is what `muster` makes of it.
+
+**The exception did what an exception is for.** `every_kind_a_recipe_names_is_declared` asserted
+the undeclared set was exactly `["force"]` and said it was expected until the release declared it
+or dropped the rows. The release declared it, the assertion went red, and the exception came out
+rather than being widened - `C-61`'s pattern holding for the second time.
 
 **derived from** every name in a recipe's Kind column is a kind or a family the release
 declares - `prototypes/kinds`, `every_kind_a_recipe_names_is_declared`
@@ -1027,6 +1043,12 @@ that *nothing open means nothing outstanding* covers them rather than leaving th
 
 **`P-365` is blocked on your own cleanup, and only half of it.**
 
+- **DONE 2026-09-12. An Ark stores no fuel.** `S-86` landed and the ark's Fuel cell is blank,
+  so this lane changed its half in the same breath as this item said it would: `prototypes/kinds`
+  carries `fuel: None`, and `UnitKind::cells` gives an Ark **0** where it gave 2. **It costs an
+  Ark nothing** - it reaches the ground by landing, and `Game::land` asks where a unit is rather
+  than what it has left, so a bin of zero takes away a capacity nothing used. The rest of this
+  item stands. The original text follows.
 - **An Ark stores no fuel.** `prototypes/kinds` holds `fuel: Some(2)` for the ark and
   `releases/first-release.md` prints it in the *Units and structures* table, cell for cell. Those
   two are compared, so blanking one without the other fails the comparison. **The kinds crate is
@@ -2425,8 +2447,17 @@ rewrote it into the map form. Deleting it is still how changing your mind is sai
 
 ### C-48 - `spec/console.md` says a command is written two different ways, in two sections, and uses the older one throughout
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** starting `S-26`'s `P-212`
+**to** spec · **status** answered · **raised** 2026-09-06 · **answered** 2026-09-12, by a
+promotion that did not cite it · **source** starting `S-26`'s `P-212`
 half and finding no answer to *what does a command look like*
+
+**Answered, and re-measured rather than taken on report.** The positional form is gone:
+*a command is a verb followed by arguments* occurs **0 times** in `spec/console.md`, and so do
+its eight examples - `land ark 1`, `move pioneer 7`. What survives is the one form this lane
+built against: *a command is written `{name field:value ...}`*, at `:102`.
+
+**Six days open because the promotion that fixed it did not cite it**, which is the half worth
+recording: nothing was wrong with the fix and nothing said the item could close.
 
 **derived from** a command is written `{name field:value ...}` - `spec/console.md`, `P-212`
 

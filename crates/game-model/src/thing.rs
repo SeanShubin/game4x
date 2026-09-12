@@ -102,6 +102,9 @@ pub enum Kind {
     /// that starved to nobody banked fertility and repopulated from stock the moment food
     /// arrived, which is `C-83`.
     Fertility,
+    /// **What a territory presents to hold or take ground** - `P-435` declared it, answering
+    /// `C-93`. Mustered each turn and swept at its end, so nothing holds one overnight.
+    Force,
 }
 
 impl Kind {
@@ -124,19 +127,24 @@ impl Kind {
             Kind::Adjacency => "adjacency",
             Kind::Game => "game",
             Kind::Fertility => "fertility",
+            Kind::Force => "force",
         }
     }
 
     /// Every kind, so that a reader can name one that is nowhere.
     ///
-    /// **Seventeen, and `force` is not among them** - `P-414` produces and consumes it in
-    /// three recipe rows and the release's *Kinds* table lists seventeen without it, which
-    /// is `C-93`. **Nothing the model holds is a force**: `muster` and `stand` make it at a
-    /// turn's end and `discard` sweeps it in the same ending, so what a territory presents
-    /// is a sum computed on demand - `Game::force_in` - rather than things in a territory.
-    /// A `Kind` here would be one nothing could ever hold, and `closed_sets.rs` would then
-    /// report the model admitting a kind the release does not declare.
-    pub const ALL: [Kind; 17] = [
+    /// **Eighteen since `P-435` declared `force`**, which answers `C-93`. That item asked
+    /// whether the word naming a trait and a thing at once was deliberate; it was, and the
+    /// trait was renamed rather than the kind - `strength` is what a citizen has and a
+    /// `force` is what `muster` makes of it.
+    ///
+    /// **Nothing the model holds is ever a force**, and it is a kind anyway. `muster` and
+    /// `stand` make one at a turn's end and `discard` sweeps it in the same ending, so a
+    /// committed state holds none and `Game::force_in` computes what a territory presents.
+    /// **A kind is what the release declares, not what a state happens to contain** - which
+    /// is the rule `orbit` taught this crate the expensive way, and `fertility` sits here
+    /// for the same reason.
+    pub const ALL: [Kind; 18] = [
         Kind::Citizen,
         Kind::Garrison,
         Kind::Extractor,
@@ -154,6 +162,7 @@ impl Kind {
         Kind::Adjacency,
         Kind::Game,
         Kind::Fertility,
+        Kind::Force,
     ];
 
     /// The kind a unit of this resource is.
@@ -226,8 +235,13 @@ pub enum Trait {
     /// the command language always said - `build extractor 1 food` treats the resource as a
     /// parameter.
     Resource,
-    /// Force of its own.
-    Force,
+    /// How much force this thing musters - `P-435` renamed it from `force`.
+    ///
+    /// **The trait is `strength` and the kind is `force`**, which is the distinction the one
+    /// word was carrying twice: a citizen's `strength` is how much it musters, and a `force`
+    /// is the thing `muster` produces. `C-93` asked which the word meant and the answer was
+    /// both, so one of them was renamed.
+    Strength,
     /// What a citizen working here produces in force.
     Multiplier,
     /// Which place an adjacency runs from. `P-334`.

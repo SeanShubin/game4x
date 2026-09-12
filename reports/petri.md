@@ -32,9 +32,9 @@ The drawing is on the page beside this file; what follows is the same net in the
 
 ## What is not drawn
 
-| Recipe | Why not drawn                                                                 |
-| ------ | ----------------------------------------------------------------------------- |
-| stand  | its produce row is `that unit's force`, which is a state rather than a number |
+| Recipe | Why not drawn                                                                    |
+| ------ | -------------------------------------------------------------------------------- |
+| stand  | its produce row is `that unit's strength`, which is a state rather than a number |
 
 **Computed from the release, not listed.** `S-87` named five, taken from the research lens's own re-encoding rather than from `releases/first-release.md`, and two of that five - `refuel` and `end-of-turn losses` - are not recipes in the release at all. Deriving the set from the table is what keeps this page from inheriting that.
 

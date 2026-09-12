@@ -61,7 +61,7 @@ fn every_recipe_is_either_drawn_or_named_as_not_drawn() {
         net.recipes
     );
 
-    // **One block is excluded and it is `stand`** - its produce row is *that unit's force*,
+    // **One block is excluded and it is `stand`** - its produce row is *that unit's strength*,
     // and `unit` is a family with two members, so there is no single number for the arc.
     //
     // **`move` was the excluded one until `P-411`, and `C-88` is answered rather than
@@ -220,7 +220,7 @@ fn the_density_rule_is_spelled_out_against_the_planet_it_describes() {
     // **`work` and `muster` are drawn and `stand` is not**, and the three are asserted
     // together because the reason differs. `work`'s quantity is a density and is spelled out
     // per case; `muster`'s is *that citizen's force*, which is a trait **of the kind** since
-    // `P-407` and so one number; `stand`'s is *that unit's force*, and `unit` is a family
+    // `P-435` and so one number; `stand`'s is *that unit's strength*, and `unit` is a family
     // with two members. Reading either member's number would draw a game that is right only
     // because the two agree today.
     assert_eq!(
@@ -229,7 +229,7 @@ fn the_density_rule_is_spelled_out_against_the_planet_it_describes() {
         "the excluded blocks are not the ones expected"
     );
     assert!(
-        net.excluded[0].because.contains("that unit's force"),
+        net.excluded[0].because.contains("that unit's strength"),
         "`stand` is excluded and the reason does not carry the cell that caused it: {}",
         net.excluded[0].because
     );

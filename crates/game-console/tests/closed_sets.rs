@@ -147,10 +147,12 @@ fn every_value_a_trait_admits_is_a_row_in_the_table_that_lists_them() {
     // that four times, the fourth being `game` in `P-351`.
     // The fifth was `fertility`, in the saturating rewrite. **The sixth went away again**:
     // `P-399` turned `readiness` from a yes-or-no trait into a kind and `P-411` turned it
-    // back into a count carried as a trait, so seventeen is where the count returned to.
+    // back into a count carried as a trait. **The sixth is `force`**, declared by `P-435`
+    // answering this lane's `C-93` - the word named a trait and a thing at once, and the
+    // trait was renamed to `strength` rather than the kind being dropped.
     assert_eq!(
-        compared, 23,
-        "seventeen kinds and six biomes were compared when this was written; {compared} were"
+        compared, 24,
+        "eighteen kinds and six biomes were compared when this was written; {compared} were"
     );
 }
 

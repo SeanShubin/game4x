@@ -46,7 +46,7 @@
     {deposit density:4 resource:metal total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
     {extractor resource:metal working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
 </pre>
 <h2 id="move">move</h2>
 <p>Run by the <strong>player</strong>.</p>
@@ -64,11 +64,11 @@
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
 </pre>
 <p><code>{move unit:pioneer territory:2}</code></p>
 <p>After:</p>
@@ -76,10 +76,10 @@
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:0} -&gt; 1
 </pre>
 <h2 id="found-by-land">found by land</h2>
@@ -111,7 +111,7 @@
     {deposit density:4 resource:metal total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
     {extractor resource:metal working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
 </pre>
 <h2 id="build-extractor">build extractor</h2>
 <p>Run by the <strong>player</strong>.</p>
@@ -127,7 +127,7 @@
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
     {deposit density:4 resource:metal total-capacity:3} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {labor} -&gt; 1
     {metal} -&gt; 1
 </pre>
@@ -139,7 +139,7 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
     {deposit density:4 resource:metal total-capacity:3} -&gt; 1
     {extractor resource:metal working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
 </pre>
 <h2 id="build-store">build store</h2>
 <p>Run by the <strong>player</strong>.</p>
@@ -156,7 +156,7 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
     {deposit density:4 resource:metal total-capacity:3} -&gt; 1
     {extractor resource:metal working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {labor} -&gt; 1
     {metal} -&gt; 1
 </pre>
@@ -168,7 +168,7 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
     {deposit density:4 resource:metal total-capacity:3} -&gt; 1
     {extractor resource:metal working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:metal} -&gt; 1
 </pre>
 <h2 id="build-yard">build yard</h2>
@@ -184,7 +184,7 @@
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {labor} -&gt; 1
     {metal} -&gt; 15
 </pre>
@@ -194,7 +194,7 @@
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {yard} -&gt; 1
 </pre>
 <h2 id="produce-pioneer">produce pioneer</h2>
@@ -212,7 +212,7 @@
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 2
     {energy} -&gt; 6
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {metal} -&gt; 3
 </pre>
 <p><code>{produce-pioneer territory:1}</code></p>
@@ -220,7 +220,7 @@
 <pre>
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h2 id="launch-ark">launch ark</h2>
@@ -240,7 +240,7 @@
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 2
     {energy} -&gt; 12
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {metal} -&gt; 3
     {yard} -&gt; 1
 </pre>
@@ -249,7 +249,7 @@
 <pre>
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {yard} -&gt; 1
 </pre>
 <h2 id="create-labor">create labor</h2>
@@ -265,7 +265,7 @@
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
 </pre>
 <p><code>{create-labor territory:1}</code></p>
 <p>After:</p>
@@ -273,7 +273,7 @@
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {labor} -&gt; 1
 </pre>
 <h2 id="work">work</h2>
@@ -294,7 +294,7 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {labor} -&gt; 1
     {store resource:food} -&gt; 1
 </pre>
@@ -307,7 +307,7 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 4
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
 </pre>
 <h2 id="upkeep">upkeep</h2>
@@ -327,11 +327,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -342,10 +342,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h2 id="bear">bear</h2>
@@ -366,11 +366,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -381,10 +381,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h2 id="breed">breed</h2>
@@ -405,11 +405,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -420,10 +420,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h3 id="an-example">An example</h3>
@@ -435,7 +435,7 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 2
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {food} -&gt; 8
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -445,7 +445,7 @@
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 4
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
 </pre>
 <h2 id="perish">perish</h2>
@@ -464,11 +464,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -479,10 +479,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h2 id="age">age</h2>
@@ -502,11 +502,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -517,10 +517,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h2 id="spoil">spoil</h2>
@@ -539,11 +539,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -554,10 +554,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h2 id="stow">stow</h2>
@@ -577,11 +577,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -592,10 +592,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h2 id="stow">stow</h2>
@@ -615,11 +615,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -630,10 +630,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h2 id="discard">discard</h2>
@@ -652,11 +652,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -667,10 +667,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h2 id="discard">discard</h2>
@@ -689,11 +689,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -704,10 +704,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h2 id="discard">discard</h2>
@@ -726,11 +726,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -741,10 +741,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h2 id="discard">discard</h2>
@@ -763,11 +763,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -778,10 +778,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h2 id="refresh">refresh</h2>
@@ -800,11 +800,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -815,10 +815,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h2 id="refresh">refresh</h2>
@@ -837,11 +837,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -852,10 +852,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h2 id="refresh">refresh</h2>
@@ -874,11 +874,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -889,10 +889,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h2 id="refresh">refresh</h2>
@@ -911,11 +911,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -926,10 +926,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h2 id="muster">muster</h2>
@@ -938,7 +938,7 @@
 <li><strong>require</strong> 1 garrison</li>
 <li><strong>require</strong> 1 citizen, defending at least 1</li>
 <li><strong>put</strong> citizen — , defending one less</li>
-<li><strong>produce</strong> force — that citizen's force</li>
+<li><strong>produce</strong> force — that citizen's strength</li>
 </ul>
 <h3 id="an-example">An example</h3>
 <p><strong>One ending, 11 recipes.</strong> This same firing is the example for upkeep, bear, breed, perish, age, spoil, stow, discard, refresh, stand as well - no command fires one of the world's alone.</p>
@@ -951,11 +951,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -966,10 +966,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h2 id="stand">stand</h2>
@@ -977,7 +977,7 @@
 <ul class="bullets">
 <li><strong>require</strong> 1 unit, defending at least 1</li>
 <li><strong>put</strong> unit — , defending one less</li>
-<li><strong>produce</strong> force — that unit's force</li>
+<li><strong>produce</strong> force — that unit's strength</li>
 </ul>
 <h3 id="an-example">An example</h3>
 <p><strong>One ending, 11 recipes.</strong> This same firing is the example for upkeep, bear, breed, perish, age, spoil, stow, discard, refresh, muster as well - no command fires one of the world's alone.</p>
@@ -990,11 +990,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -1005,10 +1005,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h2 id="refresh">refresh</h2>
@@ -1027,11 +1027,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -1042,10 +1042,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h2 id="refresh">refresh</h2>
@@ -1064,11 +1064,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -1079,10 +1079,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <h2 id="discard">discard</h2>
@@ -1101,11 +1101,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:0} -&gt; 1
     {food} -&gt; 3
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -1116,10 +1116,10 @@
     {citizen bearing:1 defending:1 laboring:1} -&gt; 3
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor resource:food working:1} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0} -&gt; 1
+    {garrison} -&gt; 1
     {pioneer defending:1 id:1 moving:1} -&gt; 1
 </pre>
 </body>

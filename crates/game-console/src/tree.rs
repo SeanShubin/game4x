@@ -442,13 +442,14 @@ mod tests {
             .into_iter()
             .filter(|kind| !may_contain(*kind))
             .collect();
-        // Thirteen again since `P-411` undid `P-399`. Readiness stopped being a kind that a
-        // thing contains and became a count it carries as a trait, so the kind that held
-        // nothing and never could is not in the list to be counted.
+        // Thirteen again since `P-411` undid `P-399`, and fourteen since `P-435` declared
+        // `force`. Readiness stopped being a kind a thing contains; `force` became one, and
+        // it holds nothing and never could - it is what a territory presents, mustered at a
+        // turn's end and swept at the same one, which is `P-391`'s first of three cases.
         assert_eq!(
             cannot.len(),
-            13,
-            "four of the seventeen kinds may contain; {} may not",
+            14,
+            "four of the eighteen kinds may contain; {} may not",
             cannot.len()
         );
 

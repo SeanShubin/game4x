@@ -25,6 +25,19 @@ use std::collections::BTreeMap;
 /// What one citizen is worth in violence. `releases/first-release.md`: Citizen, force 1.
 pub const CITIZEN_FORCE: u32 = 1;
 
+/// What a garrison musters of its own, which is nothing.
+///
+/// **A fact about the kind, and that is now what the release says it is.** *Units and
+/// structures* gives the garrison row a **Strength** of 0, and `P-434`'s companion `P-435`
+/// marks `strength` **of the kind** - so it is the same for every garrison and belongs here
+/// rather than on each one.
+///
+/// **It was stored on the thing until `P-435`**, which is what `C-92` found: the state file
+/// wrote `{garrison force:0}`, a trait of the kind inside a description, where `P-417` says a
+/// description carries the traits **of the thing**. The item closed when the Traits table was
+/// fixed and the word stayed in the dump for a day, because nothing compared the two.
+pub const GARRISON_STRENGTH: u32 = 0;
+
 /// What a territory offers for one resource.
 ///
 /// `spec/planet.md`: *for each resource, a territory has total capacity for some number of
@@ -279,16 +292,21 @@ impl Territory {
         self.held
             .iter()
             .find(|thing| thing.kind == Kind::Garrison)
-            .map(|thing| Garrison {
-                force: thing.trait_of(Trait::Force).unwrap_or(0),
+            // **Read from the kind, not from the thing** - `GARRISON_STRENGTH`. A garrison
+            // carries no `strength` trait, so there is nothing here to read off one.
+            .map(|_| Garrison {
+                force: GARRISON_STRENGTH,
             })
     }
 
     pub fn set_garrison(&mut self, garrison: Option<Garrison>) {
         self.held.retain(|thing| thing.kind != Kind::Garrison);
         if let Some(garrison) = garrison {
-            self.held
-                .push(Thing::of(Kind::Garrison).with(Trait::Force, garrison.force));
+            // **No trait**, because a garrison's strength is its kind's and a description
+            // carries only the traits of the thing - `P-417`. The argument is kept so that
+            // callers read the same, and `GARRISON_STRENGTH` is what any of them gets back.
+            let _ = garrison;
+            self.held.push(Thing::of(Kind::Garrison));
         }
     }
 

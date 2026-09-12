@@ -122,7 +122,9 @@ impl Kind {
                 "a citizen's capacity to raise one more, spent by raising one ",
                 "and renewed each turn"
             ),
-            Kind::Force => "what a citizen or a unit musters, and what nature is measured against",
+            Kind::Force => {
+                "what a territory presents to hold or take ground; mustered each turn and swept at its end"
+            }
         }
     }
 
@@ -182,7 +184,7 @@ impl Kind {
 }
 
 /// In the order the Kinds table lists them.
-pub const KINDS: [Kind; 17] = [
+pub const KINDS: [Kind; 18] = [
     Kind::Citizen,
     Kind::Garrison,
     Kind::Extractor,
@@ -200,11 +202,11 @@ pub const KINDS: [Kind; 17] = [
     Kind::Adjacency,
     Kind::Game,
     Kind::Fertility,
-    // **`Kind::Force` is deliberately not here** - `C-93`. `KINDS` renders the release's
-    // *Kinds* table back and is compared to it cell for cell, and the release declares
-    // seventeen kinds without `force`. The variant exists because three recipe rows use
-    // `force` in the Kind column and a row has nowhere else to put it; the table says what
-    // the release says. **The two disagree, and that is the finding rather than a bug here.**
+    // **`Kind::Force` sat outside this list until `P-435` declared it** - `C-93`, and the
+    // exception was written to fail the day the row landed, which is what it did. The two
+    // no longer disagree: the release declares eighteen kinds, and the word that named a
+    // trait and a thing at once now names only the thing - the trait is `strength`.
+    Kind::Force,
 ];
 
 /// In the order the bounds table lists them, which is not the Kinds order.
@@ -415,7 +417,10 @@ pub const TRAITS: [TraitRow; 23] = [
         held: Held::Stored,
     },
     TraitRow {
-        name: "force",
+        // **`P-435` renamed this from `force`**, answering `C-93`: the word named a trait and
+        // a thing at once, and the kind kept it. A citizen's `strength` is how much it
+        // musters; a `force` is what `muster` makes of it.
+        name: "strength",
         of: "citizen, garrison, ark, pioneer",
         values: "a number",
         held: Held::OfTheKind,
@@ -484,10 +489,13 @@ pub const TRAITS: [TraitRow; 23] = [
         held: Held::Stored,
     },
     TraitRow {
+        // **Stored since `P-434`**, which answers this lane's `C-96`. `P-431` gave `age` a
+        // `put` row lowering it on one thing, and of-the-kind forbade that: a trait of the
+        // kind is the same for every thing of that kind.
         name: "keeps",
         of: "thing",
         values: "the number of turns it will last",
-        held: Held::OfTheKind,
+        held: Held::Stored,
     },
     TraitRow {
         name: "surplus",
@@ -1144,7 +1152,11 @@ pub const RECIPES: &[Recipe] = &[
             just(Require, 1, Noun::Of(Garrison)),
             traited(Require, 1, Noun::Of(Citizen), &DEFENDING_SOME),
             put(Noun::Of(Citizen), &DEFENDING_LESS),
-            measured(Produce, OfATrait("that citizen's force"), Noun::Of(Force)),
+            measured(
+                Produce,
+                OfATrait("that citizen's strength"),
+                Noun::Of(Force),
+            ),
         ],
     },
     Recipe {
@@ -1153,7 +1165,7 @@ pub const RECIPES: &[Recipe] = &[
         lines: &[
             traited(Require, 1, UNIT, &DEFENDING_SOME),
             put(UNIT, &DEFENDING_LESS),
-            measured(Produce, OfATrait("that unit's force"), Noun::Of(Force)),
+            measured(Produce, OfATrait("that unit's strength"), Noun::Of(Force)),
         ],
     },
     Recipe {
@@ -1324,7 +1336,10 @@ pub const PRODUCIBLE: &[Producible] = &[
     Producible {
         kind: Ark,
         force: Some(2),
-        fuel: Some(2),
+        // **Blank since `S-86` landed** - `spec/units.md`: *a mobile unit that moves in
+        // orbit takes its energy directly from the sun. It stores no fuel.* `C-79` was
+        // waiting on the release's half of that, and this is it.
+        fuel: None,
         upkeep: None,
         costs: &[(3, Metal), (12, Energy), (2, Citizen)],
         movable: true,
@@ -1418,7 +1433,7 @@ pub fn bounds_table() -> Vec<Vec<String>> {
 pub fn units_table() -> Vec<Vec<String>> {
     let mut rows = vec![header(&[
         "Thing",
-        "Force",
+        "Strength",
         "Fuel",
         "Upkeep",
         "Costs to produce",

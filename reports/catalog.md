@@ -7,7 +7,7 @@ Every kind the release declares, with everything it says about that kind gathere
 and generated rather than written; this is one such form. It is a view and not a copy - each
 section is a join across six tables that the document does not perform anywhere.
 
-17 kinds, 4 families, 23 traits, 31 recipes.
+18 kinds, 4 families, 23 traits, 31 recipes.
 
 ## Signatures
 
@@ -17,23 +17,23 @@ when the release says the same things about them. Quantities are not part of it:
 are produced in different numbers by the same recipe still behave alike. **Being named through a
 family counts**, because a family is how the release addresses several kinds at once.
 
-**No two of the 17 kinds behave alike**, over all 136 pairs of them.
+**No two of the 18 kinds behave alike**, over all 153 pairs of them.
 
 **Every group below holds one kind**, which is what that sentence means when
-you reach them. **The traits alone do collide** - 8 of the kinds carry exactly
+you reach them. **The traits alone do collide** - 9 of the kinds carry exactly
 the traits another one carries - and every such pair is then separated by the recipes
 that name it. So the release has no two kinds it says *the same things* about, and Sean
 has accepted that as the answer: he expects a small number of distinct things.
 
 ### `s-1` - citizen
 
-**Traits** `bearing`, `defending`, `force`, `keeps`, `laboring`
+**Traits** `bearing`, `defending`, `keeps`, `laboring`, `strength`
 
 **Named by** `age put`, `age require`, `bear put`, `bear require`, `breed produce`, `create labor put`, `create labor require`, `deploy ark produce`, `found by land produce`, `launch ark consume`, `muster put`, `muster require`, `perish consume`, `produce pioneer consume`, `refresh put`, `spoil consume`, `upkeep require`
 
 ### `s-2` - garrison
 
-**Traits** `force`, `keeps`
+**Traits** `keeps`, `strength`
 
 **Named by** `age put`, `age require`, `deploy ark produce`, `found by land produce`, `muster require`, `spoil consume`
 
@@ -57,13 +57,13 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 ### `s-6` - ark
 
-**Traits** `force`, `fuel`, `keeps`, `moving`
+**Traits** `fuel`, `keeps`, `moving`, `strength`
 
 **Named by** `age put`, `age require`, `deploy ark consume`, `launch ark produce`, `move put`, `move require`, `refresh put`, `spoil consume`, `stand put`, `stand require`
 
 ### `s-7` - pioneer
 
-**Traits** `force`, `fuel`, `keeps`, `moving`
+**Traits** `fuel`, `keeps`, `moving`, `strength`
 
 **Named by** `age put`, `age require`, `found by land consume`, `move put`, `move require`, `produce pioneer produce`, `refresh put`, `spoil consume`, `stand put`, `stand require`
 
@@ -127,19 +127,25 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 **Named by** `age put`, `age require`, `bear produce`, `breed consume`, `discard consume`, `spoil consume`
 
+### `s-18` - force
+
+**Traits** `keeps`
+
+**Named by** `age put`, `age require`, `discard consume`, `muster produce`, `spoil consume`, `stand produce`
+
 ## citizen
 
 a person: provides labor, eats, and grows on surplus.
 
 **In families** thing
 
-**Traits of it** `laboring` (0 or 1), `bearing` (0 or 1), `defending` (0 or 1), `force` (a number), `keeps` (the number of turns it will last)
+**Traits of it** `laboring` (0 or 1), `bearing` (0 or 1), `defending` (0 or 1), `strength` (a number), `keeps` (the number of turns it will last)
 
 **Signature** `s-1`
 
 **Bounded by** the food produced here, through upkeep
 
-**As a thing** Force: 1 · Upkeep: 1 food per turn · Readies: yes
+**As a thing** Strength: 1 · Upkeep: 1 food per turn · Readies: yes
 
 **In recipes**
 
@@ -169,13 +175,13 @@ what holds a territory; a territory has at most one.
 
 **In families** thing
 
-**Traits of it** `force` (a number), `keeps` (the number of turns it will last)
+**Traits of it** `strength` (a number), `keeps` (the number of turns it will last)
 
 **Signature** `s-2`
 
 **Bounded by** a capacity of 1
 
-**As a thing** Force: 0 · Costs to produce: 1 labor, 1 metal · Binding: 1
+**As a thing** Strength: 0 · Costs to produce: 1 labor, 1 metal · Binding: 1
 
 **In recipes**
 
@@ -267,13 +273,13 @@ carries a landing, and can invade from orbit.
 
 **In families** thing, unit
 
-**Traits of it** `moving` (0 or 1), `force` (a number), `fuel` (how much energy its tank holds), `keeps` (the number of turns it will last)
+**Traits of it** `moving` (0 or 1), `strength` (a number), `fuel` (how much energy its tank holds), `keeps` (the number of turns it will last)
 
 **Signature** `s-6`
 
 **Bounded by** a capacity of 2
 
-**As a thing** Force: 2 · Fuel: 2 · Costs to produce: 3 metal, 12 energy, 2 citizens · Binding: 3 · Crosses: orbit border · Requires: a Yard · Readies: yes · Movable: yes
+**As a thing** Strength: 2 · Costs to produce: 3 metal, 12 energy, 2 citizens · Binding: 3 · Crosses: orbit border · Requires: a Yard · Readies: yes · Movable: yes
 
 **Holds** energy, up to the unit's fuel - *a fact about each one rather than about the kind*
 
@@ -297,13 +303,13 @@ founds a territory.
 
 **In families** thing, unit
 
-**Traits of it** `moving` (0 or 1), `force` (a number), `fuel` (how much energy its tank holds), `keeps` (the number of turns it will last)
+**Traits of it** `moving` (0 or 1), `strength` (a number), `fuel` (how much energy its tank holds), `keeps` (the number of turns it will last)
 
 **Signature** `s-7`
 
 **Bounded by** a capacity of 2
 
-**As a thing** Force: 2 · Fuel: 2 · Costs to produce: 3 metal, 6 energy, 2 citizens · Binding: 3 · Crosses: border · Readies: yes · Movable: yes
+**As a thing** Strength: 2 · Fuel: 2 · Costs to produce: 3 metal, 6 energy, 2 citizens · Binding: 3 · Crosses: border · Readies: yes · Movable: yes
 
 **Holds** energy, up to the unit's fuel - *a fact about each one rather than about the kind*
 
@@ -528,5 +534,24 @@ a citizen's capacity to raise one more, spent by raising one and renewed each tu
 - `age` requires 1 (as a thing), keeps at least 1
 - `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
+- `discard` consumes 1
+
+## force
+
+what a territory presents to hold or take ground; mustered each turn and swept at its end.
+
+**In families** thing
+
+**Traits of it** `keeps` (the number of turns it will last)
+
+**Signature** `s-18`
+
+**In recipes**
+
+- `age` requires 1 (as a thing), keeps at least 1
+- `age` puts  (as a thing), keeps one less
+- `spoil` consumes 1 (as a thing), keeps 0
+- `muster` produces that citizen's strength
+- `stand` produces that unit's strength
 - `discard` consumes 1
 

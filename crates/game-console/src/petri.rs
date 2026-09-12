@@ -723,11 +723,12 @@ fn number(row: &[String]) -> Option<u32> {
 ///
 /// **Three forms and the release uses all three.** A whole number is itself. **A `put` row
 /// carries no quantity at all** - it moves one count, and *a blank is not a zero* - so the
-/// weight is one and the Traits cell says which way. **And a quantity naming a thing's force
-/// is a constant per kind**: `P-407` marks `force` *of the kind*, so *that citizen's force*
+/// weight is one and the Traits cell says which way. **And a quantity naming a thing's strength
+/// is a constant per kind**: `P-435` renames it `strength` and marks it *of the kind*, so
+/// *that citizen's strength*
 /// is the Units and structures number for a citizen rather than a fact about one of them.
 ///
-/// **`that unit's force` is not one number**, because `unit` is a family with two members, so
+/// **`that unit's strength` is not one number**, because `unit` is a family of two, so
 /// this returns nothing for it and the block is excluded and named. Reading it as either
 /// member's number would draw a game that happens to be right because the two agree today.
 fn weight(row: &[String], forces: &std::collections::BTreeMap<String, i64>) -> Option<u32> {
@@ -738,7 +739,7 @@ fn weight(row: &[String], forces: &std::collections::BTreeMap<String, i64>) -> O
         return Some(number);
     }
     let cell = row.get(3)?.trim();
-    let subject = cell.strip_prefix("that ")?.strip_suffix("'s force")?;
+    let subject = cell.strip_prefix("that ")?.strip_suffix("'s strength")?;
     forces.get(subject).map(|force| *force as u32)
 }
 

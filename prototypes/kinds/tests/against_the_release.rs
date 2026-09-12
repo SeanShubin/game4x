@@ -152,9 +152,13 @@ fn there_are_thirty_one_recipe_blocks_under_twenty_one_names() {
 fn every_kind_a_recipe_names_is_declared() {
     let document = release();
     let (used, undeclared) = undeclared_kinds(&document);
+    // **Empty since `P-435`, and the exception that stood here did its job.** It named
+    // `force` and said it was expected until the release declared it or dropped the rows;
+    // the release declared it, this went red, and the exception came out rather than being
+    // widened. `C-61` is the precedent and this is the second time it has held.
+    let none: [&str; 0] = [];
     assert_eq!(
-        undeclared,
-        ["force"],
+        undeclared, none,
         "the recipes name {undeclared:?}, which the Kinds and Families tables do not declare.          `force` is `C-93` and is expected here until the release declares it or drops the          rows; anything else is new"
     );
 

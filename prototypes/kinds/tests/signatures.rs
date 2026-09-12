@@ -29,8 +29,8 @@ fn the_groups_partition_the_kinds() {
     let kinds = every_kind(&document);
     assert_eq!(
         kinds.len(),
-        17,
-        "the release declares seventeen kinds; every count below is against that population"
+        18,
+        "the release declares eighteen kinds; every count below is against that population"
     );
 
     let mut grouped: Vec<String> = signatures(&document)
@@ -96,8 +96,8 @@ fn a_pair_shares_a_group_exactly_when_it_shares_a_signature() {
     }
     assert_eq!(
         pairs,
-        17 * 16 / 2,
-        "every pair of the seventeen kinds is compared, and there are 136 of them"
+        18 * 17 / 2,
+        "every pair of the eighteen kinds is compared, and there are 153 of them"
     );
 
     // **The population this check ran against, said out loud.** Every assertion above is

@@ -97,7 +97,11 @@ impl UnitKind {
         Self::ALL.into_iter().find(|kind| kind.name() == word)
     }
 
-    /// Both are force 2 in this release.
+    /// Both are strength 2 in this release.
+    ///
+    /// **The trait is `strength` since `P-435`**, which renamed it so that the kind could
+    /// keep the word `force` - `C-93`. This is still `force()` because what it answers is
+    /// how much force the unit musters, which `stand` turns into a `force`.
     pub fn force(self) -> u32 {
         match self {
             UnitKind::Ark | UnitKind::Pioneer => 2,
@@ -105,9 +109,20 @@ impl UnitKind {
     }
 
     /// How many energy cells it carries when built. A move costs one.
+    ///
+    /// **An Ark carries none, since `S-86` blanked its Fuel cell** - the release half `C-79`
+    /// was waiting on, and this is the other half changed in the same breath. `spec/units.md`:
+    /// *a mobile unit that moves in orbit takes its energy directly from the sun. It stores no
+    /// fuel.*
+    ///
+    /// **It costs an Ark nothing, which is why this is safe rather than merely correct.** An
+    /// Ark reaches the ground by landing and is consumed by `deploy ark`; `Game::land` asks
+    /// where it is and not what it has left, and `move` is the only thing that spends a cell.
+    /// So a bin of zero takes away a capacity nothing used.
     pub fn cells(self) -> u32 {
         match self {
-            UnitKind::Ark | UnitKind::Pioneer => 2,
+            UnitKind::Ark => 0,
+            UnitKind::Pioneer => 2,
         }
     }
 
@@ -205,7 +220,11 @@ mod tests {
     #[test]
     fn the_release_figures_are_what_the_release_says() {
         assert_eq!(UnitKind::Ark.force(), 2);
-        assert_eq!(UnitKind::Ark.cells(), 2);
+        assert_eq!(
+            UnitKind::Ark.cells(),
+            0,
+            "`S-86` blanked the Ark's Fuel cell: it takes its energy from the sun and stores              none"
+        );
         assert_eq!(UnitKind::Ark.upkeep(), 0);
         assert_eq!(UnitKind::Pioneer.force(), 2);
         assert_eq!(UnitKind::Pioneer.cells(), 2);
