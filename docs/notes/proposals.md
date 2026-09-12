@@ -62,91 +62,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-464 - the vocabulary is four kinds and one sentence says three
-
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** contradiction, found re-reading a section four proposals landed in · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
-
-**`spec/console.md` says three and `spec/data/kinds.4x` has four:**
-
-```
-spec/console.md    `kind`, `trait` and `family` are themselves kinds
-spec/data/kinds.4x  {kind name:kind}
-                    {kind name:trait}
-                    {kind name:family}
-                    {kind name:value}
-```
-
-**`value` joined them when `P-451` made a value declare which trait it is one of**, and the file has
-carried four since `P-455` landed this afternoon. **The sentence was true when it was written and
-nothing edited it**, which is the shape `docs/notes/nothing-removes.md` is about.
-
-## The words
-
-**One word, and the rest of the paragraph is untouched.**
-
-> **A file may declare the vocabulary rather than use it, and it is written in the same form.**
-> `kind`, `trait`, `family` and `value` are themselves kinds, so a line that declares one is a
-> description like any other and the rule above needs no exception. **A declaration is the third
-> thing the one notation carries**, beside a command and a state.
-
-**The check**: `spec/data/kinds.4x` opens with exactly those four lines and nothing else declares a
-declaring kind, so the sentence and the file agree by count and by name.
-
-**Found by the re-read trigger rather than by the promotions themselves.** None of the six touched
-this paragraph; `CLAUDE.md` says a section that takes a second proposal gets re-read whole, and it
-took four today.
-### P-462 - a kind's line may name a trait and give it no value
-
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** answered, by what was promoted in `b7fc6a6` and by an error in this proposal's own reasoning · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
-
-**Two of the three candidates are gone and the third was already the rule.**
-
-**`B` is ruled out by `P-463`, which you made an hour ago.** It offered `{kind name:territory
-id:any nature:any}` - and `P-459` has now landed the sentence *a stored trait's name may carry a
-number on a kind's line, and that number is its maximum*. **So `id:any` puts a value in a slot that
-means *maximum*, for a trait that can have none** - and an identity has no ordering, so its maximum
-is not merely absent but meaningless. **That is the data saying something false, which is a lie
-rather than a saving.**
-
-**`A` is what `P-454` already says.** *A trait of the kind is written with its value and **a stored
-one with its name***. A territory's `id` is stored and has no maximum, so it is written with its
-name and nothing else.
-
-**And this lane's argument against `A` was wrong.** `P-462` said a bare word *adds a second form to
-`{…}`, which today is `key:value` and nothing else*. **That is the grammar of a command** -
-`spec/console.md` says *a command is written `{name field:value ...}`* - and it was applied to a
-description, which the specification never constrains that way. **An inference read as a rule**,
-which is the same mistake as reading a number about a slightly different population.
-
-## The words
-
-**One sentence, because a form that exists only by nothing forbidding it is one two readers can
-disagree about.** It goes after the paragraph `P-459` added.
-
-> **On a kind's line a trait may be named with no value**, which says the kind has it and nothing
-> more. **That is a declaration's form and not a state's**: in a state every trait of a thing
-> carries its value, so `{citizen defending:1}` and never `{citizen defending}`.
-
-**The second sentence is what keeps it from reaching the dump.** `spec/console.md` already says
-**no trait of the thing may be left out** - `{citizen defending:1}` and `{citizen defending:0}`,
-never `{citizen} -> 14` - and this says the two forms do not meet.
-
-## What a territory's line becomes
-
-```
-{kind biome family:place id name:territory nature}
-```
-
-**Traits sorted, as `P-452` requires** - `biome`, `family`, `id`, `name`, `nature` - so a bare name
-sorts among the keys by its own name. **Nothing else in `spec/data/` changes**: `kinds.4x` carries
-no trait lines yet, and the proposal that writes them is the next one rather than this.
-
-## What is left open, and it is `C` rather than anything new
-
-**`C` was *a kind's line lists only what it bounds*, and it is still available.** It contradicts
-`P-451` - *a kind declares which traits it has* - so it is a proposal to change that rule rather
-than to fill a gap, and this one does not make it. **Named again because `A` landing does not close
-it**, and if you ever find the trait lists tiresome to read that is the trade on offer.
+*Nothing is open. Everything filed has been decided.*
 
 ## Addressed to other perspectives
 
@@ -5023,6 +4939,8 @@ work the release exists to order.
 | P-457, `traits.4x`, the last file in `spec/data/`                                                                            | `spec/data/traits.4x`, and `spec/console.md` -> The language                                                                                                                                             | 2026-09-12 |
 | P-459, a number beside a stored trait's name is its maximum                                                                  | `spec/console.md` -> The language, and `releases/first-release.md` -> Units and structures                                                                                                               | 2026-09-12 |
 | P-461, `metal in it` is defined by a name the Traits table does not declare                                                  | `releases/first-release.md` -> Traits                                                                                                                                                                    | 2026-09-12 |
+| P-462, a kind's line may name a trait and give it no value                                                                   | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-12 |
+| P-464, the vocabulary is four kinds and one sentence says three                                                              | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-12 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |

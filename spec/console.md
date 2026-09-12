@@ -68,9 +68,9 @@ the same bytes and a description is one string however it was built.
 other word is wrong about the game rather than describing it.
 
 **A file may declare the vocabulary rather than use it, and it is written in the same form.**
-`kind`, `trait` and `family` are themselves kinds, so a line that declares one is a description
-like any other and the rule above needs no exception. **A declaration is the third thing the one
-notation carries**, beside a command and a state.
+`kind`, `trait`, `family` and `value` are themselves kinds, so a line that declares one is a
+description like any other and the rule above needs no exception. **A declaration is the third
+thing the one notation carries**, beside a command and a state.
 
 **A kind declares which family it is in; a family declares only its name.** **`thing` is the
 family every kind is in**, and no line says so kind by kind - a kind added tomorrow is a `thing`
@@ -100,6 +100,10 @@ where a thing of that kind begins, and the most it may hold. So a citizen's line
 adds is a bound rather than a second home. **Which a number is, is read from the trait**:
 `kept:kind` makes it the value and `kept:thing` makes it the maximum. **A stored trait with no
 number on the kind's line has no maximum.**
+
+**On a kind's line a trait may be named with no value**, which says the kind has it and nothing
+more. **That is a declaration's form and not a state's**: in a state every trait of a thing
+carries its value, so `{citizen defending:1}` and never `{citizen defending}`.
 
 **In a recipe the same form is a selector, not a description.** A selector may name a **family**
 rather than a kind, and it may **leave traits out** - `{extractor resource:food}` selects every
