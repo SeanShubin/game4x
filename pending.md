@@ -8,12 +8,12 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-463** - `id` admits an identity, and a unification that lies is not one · `docs/notes/proposals.md`
 - **P-459** - a number beside a stored trait's name is its maximum · `docs/notes/proposals.md`
 - **P-461** - `metal in it` is defined by a name the Traits table does not declare · `docs/notes/proposals.md`
 - **P-457** - `traits.4x`, the last file in `spec/data/` · `docs/notes/proposals.md`
 - **P-460** - a command binds every place a recipe leaves open · `docs/notes/proposals.md`
 - **P-456** - which kinds carry an `id`, and why a fleet is cheap · `docs/notes/proposals.md`
-- **P-463** - `id` admits a number, and its magnitude means nothing · `docs/notes/decisions.md`
 - **P-462** - a territory's line has to say it carries an `id`, and there is no form for it · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
@@ -27,6 +27,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-463** - `2a60339` P-462 rewritten to lead with the two files, and P-463 files what Sean saw · still open in `docs/notes/proposals.md`
 - **P-459** - `a18e94b` P-456 and P-457 re-worked against the invariants, and P-459 filed · still open in `docs/notes/proposals.md`
 - **P-456** - `cd392c2` P-456 records the commit that cited it while leaving it open · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`

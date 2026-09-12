@@ -62,6 +62,61 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-463 - `id` admits an identity, and a unification that lies is not one
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** answered, by you, 2026-09-12 · **shape** text and rows · **asks** approval · **into** `spec/invariants.md` -> When a primitive earns its place, `spec/console.md` -> The language, and `releases/first-release.md` -> Traits
+
+**Your sentence settles more than `id`.** *It seems to me that id is a sufficiently distinct concept
+that unifying it would create a lie.* **`P-458`'s two tests disagreed on this and your reason is
+neither of them** - it is not about what a person authors, it is about whether what is written is
+true.
+
+**Three things land, and the first is the general one.**
+
+## The rule, into `spec/invariants.md` -> When a primitive earns its place
+
+**It goes last in that section**, after the two tests it outranks.
+
+> - **And a unification that makes the data say something false is not one.** Where two things are
+>   sufficiently distinct, giving them one form is a lie rather than a saving - an `id` written as a
+>   number can be ordered and summed, and neither means anything. **This outranks the two tests
+>   above**, which weigh what a person has to author and say nothing about whether what is authored
+>   is true.
+
+## What `identity` is, into `spec/console.md` -> The language
+
+**It goes directly under the sentence `P-457` adds**, which lists what `admits` may say.
+
+> **`identity` is a fourth thing a trait may admit.** Two identities are equal or they are not:
+> **no expression orders, sums or aggregates one**, and a guard on one compares with `=` and nothing
+> else.
+
+## The row, into `releases/first-release.md` -> Traits
+
+**The `Values` cell, and `P-456` gives the `Of` cell of the same row** - different cells, so the two
+proposals do not collide:
+
+| Trait  | Of      | Values      | Stored or derived |
+| ------ | ------- | ----------- | ----------------- |
+| **id** | a place | an identity | stored            |
+
+**`unique among things of its kind` comes out of the cell and is not lost.** `spec/logistics.md`
+already says it - *a thing may carry an `id`, and one that does is unique* - and rule 7 sends a
+relationship to prose.
+
+## What it does to `P-457`, which is nothing that needs doing
+
+**`P-457`'s instruction derives `traits.4x` from the release rather than being told what to write**,
+so this row changing is what produces `{trait admits:identity kept:thing name:id}`. **The block
+`P-457` shows is a rendering of that derivation and has been updated to match**, with a line saying
+it assumes this. **Either can land first.**
+
+## The one thing worth saying against it
+
+**`identity` is a word used exactly once**, by `id`, and nothing else in the release wants it.
+**Under `P-458`'s counting bullets that is the weakest kind of primitive** - and your rule is that
+counting is not the test where truth is at stake. **Recorded because a reader a year from now will
+find one use and ask**, and the answer is here rather than reconstructed.
 ### P-459 - a number beside a stored trait's name is its maximum
 
 **to** sean · **status** open · **cited** `544ca72`, `b0ecbe7` · **raised** 2026-09-12 · **kind** answered, by you, 2026-09-12 · **shape** text and rows · **asks** approval · **into** `spec/console.md` -> The language, and `releases/first-release.md` -> Units and structures
@@ -191,7 +246,7 @@ game is two-valued anywhere.** The file, entries in the release's table order an
 each line sorted:
 
 ```
-{trait admits:number kept:thing name:id}
+{trait admits:identity kept:thing name:id}
 {trait admits:number kept:thing name:moving}
 {trait admits:number kept:thing name:laboring}
 {trait admits:number kept:thing name:working}
@@ -221,9 +276,16 @@ order or one without the other.
 
 **The rule the file is derived by, which is what the promoting commit runs:** one line per trait the
 *Traits* table declares, **except a derived trait no recipe row names** - `metal in it`, `control`
-and `surplus` today. `admits` is `number`, or the family whose kinds are its values, or `value`
-where its values declare themselves. `kept` is read from the *Stored or derived* column. **The count
-is whatever that gives**, asserted against the table at promotion rather than against this text.
+and `surplus` today. `admits` is `identity`, `number`, the family whose kinds are its values, or
+`value` where its values declare themselves. `kept` is read from the *Stored or derived* column.
+**The count is whatever that gives**, asserted against the table at promotion rather than against
+this text.
+
+**The first line shows `admits:identity`, which is `P-463`.** That proposal changes the release's
+`Values` cell for `id` from *a number, unique among things of its kind* to *an identity*, and this
+derivation then produces it. **Without `P-463` the same rule gives `admits:number` and the file is
+otherwise identical** - so either can land first, the same way `P-461` adds a line without this
+proposal knowing the count.
 
 ## The text, replacing one paragraph of `spec/console.md`
 

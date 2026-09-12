@@ -3167,3 +3167,20 @@ removes `identity` because removing it moves no work to a person, and its third 
 identity is not a number, a family or a declared value. **The two disagree because the test is about
 authoring cost and this is about correctness** - which is a case the invariant does not reach, and
 worth knowing about the invariant rather than about `id`.
+
+## Decided 2026-09-12, a unification that lies is not one
+
+Sean, answering `P-463`: *It seems to me that id is a sufficiently distinct concept that unifying it
+would create a lie.*
+
+**That settles more than `id`.** `P-458`'s two tests disagreed on it - one removes a primitive whose
+absence moves no work to a person, the other keeps one that is a thing rather than a point on an
+existing axis. **His reason is neither**: both weigh what a person authors, and this weighs whether
+what is written is true.
+
+**So the section gains a third test that outranks the other two**, and the case it was found on is
+the smallest possible: an `id` written as a number can be ordered and summed, and neither means
+anything.
+
+**`identity` is a word used exactly once.** Under the counting bullets that is the weakest kind of
+primitive, which is the point - counting is not the test where truth is at stake.
