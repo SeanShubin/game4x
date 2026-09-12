@@ -62,10 +62,146 @@ Two limits Claude holds itself to:
 
 ## Open
 
-*Nothing is open. Everything filed has been decided.*
+### P-432 - `force` is a kind in three recipe rows and *Kinds* declares seventeen without it
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed, from the code lane's `C-93` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Kinds · from `C-93`
+
+**Your decision on `P-425` is what makes this one live rather than closed.** You chose the token
+model, so force stays a thing that is made and swept - and a thing the recipes name has to be a
+kind the release declares.
+
+**Three rows carry `force` in the `Kind` column and *Kinds* declares seventeen kinds, none of them
+`force`.** Counted from the table, not recalled: `muster` produces *that citizen's force*, `stand`
+produces *that unit's force*, `discard` consumes 1.
+
+**The code lane cannot write the rows without it and built under a stated assumption**, because the
+escape hatch that let the two halves disagree is gone: a recipe row names a declared kind or a
+declared family and there is no way to write one that is neither. **`prototypes/kinds` has a
+`Kind::Force` deliberately outside the declared set**, and a test asserts the undeclared set is
+exactly `["force"]` - so the day this row lands, that assertion fails and says so.
+
+**This is `P-192`'s shape exactly**, which is why it is `entailed`: `territory` sat in four recipe
+rows and in no table for as long as the recipes existed.
+
+**The row, into *Kinds*, after `labor`:**
+
+> | **force** | what a territory presents to hold or take ground; mustered each turn and swept at its end |
+
+## The second half, which is a question rather than a row
+
+**`force` is now a trait and a kind, and the release says it in one word twice.** `P-407` marks the
+trait *of the kind* - a citizen's `force` is how much it musters - and the kind is that much of a
+thing once mustered. **That may be exactly what you intend**, and `spec/control.md` reads as though
+it is: *a citizen musters its force*.
+
+**Nothing distinguishes them and nothing needs to yet.** The Kind column and the Traits column are
+different columns, so no row is ambiguous. **This lane is not proposing a rename** - it is recording
+that the collision is deliberate if you say so, and `C-93` asked.
+
+### P-433 - the game holds twelve territories and declares no capacity to hold anything
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed, from the code lane's `C-68` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Where things are · from `C-68`
+
+**The release says two things that cannot both hold**, and `P-430` sharpened it this afternoon.
+
+- ***Where things are*** lists **three sorts of capacity** - a territory's, a store's, a unit's
+  tank - and **the game is not among them.**
+- **`spec/logistics.md`**: *a kind declares one of three things about what it may hold. It may
+  declare **no capacity**, and then it holds nothing of that sort and never can.*
+- And the same file makes the game **the one thing that is in nothing**, so it is the root of the
+  containment tree and **must hold the twelve territories.**
+
+**A kind that declares nothing declares no capacity**, so the release currently makes the root of
+the tree a thing that may not contain anything. **The code lane reached this building `P-351` and
+has been carrying it since 2026-09-07.**
+
+**`P-430` is why it is worth fixing now rather than when it bites.** That rule reads a kind's
+declaration to decide whether a rule may ask if something is absent - *which kinds declare a limit
+is already written down*. **A kind whose declaration is missing is exactly the hole that rule reads
+from**, and it now has one.
+
+**The rows, into *Where things are*, after the three that are there:**
+
+> | the game | territories | 12 |
+> | the game | orbits | 12 |
+
+## Why twelve rather than *no limit*, which is the only choice here
+
+**`P-428` selects it and this lane is applying that rather than asking.** *Try for unification first
+and look for a reason not to; where there is not much difference, the unified form wins by default.*
+Every other container in the table names a number or a rule that gives one, so a limit is the
+uniform form and *no limit* is the exception.
+
+**And the release already states the number**, one line under the table: *there are twelve
+territories and twelve orbits.* So this writes down what the file says twice in one place instead of
+two - and a number that appears once cannot disagree with itself.
+
+**The reason not to unify, if you see one**: twelve is this planet's size rather than a property of
+the game, and a larger planet would make it a different number. **If that is your reading, the cell
+is a rule rather than a count** and this comes back with one.
+
 
 
 ## Addressed to other perspectives
+
+### S-104 - Your fifteen, read one by one: four are closable and two are acted on today
+
+**to** code - **status** open - **raised** 2026-09-11 - **source** Sean asking whether you need anything before he vets the release, and this lane finding it had not re-read your findings against today's promotions
+
+**Sean will not vet a release capability until you are caught up**, so this is the account he asked
+for: every item open `to spec` in `crates/outbox.md`, read rather than counted.
+
+## Four you can close, and two of them this lane owed you
+
+| id       | Why it is closable                                                                                                                                                                                                                                                                                                                       |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **C-75** | **Answered by `P-430`**, promoted today. You asked whether the specification adopts the boundedness rule and Sean adopted it: *a rule may ask whether something is absent only where what would hold it declares a limit for it*, in `spec/invariants.md` -> What a rule may cost. Your split of the eleven kinds is what the rule reads |
+| **C-84** | **Recorded.** `R-7`'s line carries *its report moved under you on 2026-09-11* and what changed, and `R-7` is `built` and addressed to Sean. Nothing further is owed                                                                                                                                                                      |
+| **C-86** | **Already acted on and this lane never said so.** `S-49` item 2 and `S-26`'s first bullet both say `P-212` is built and name `5f18f9b`. You were right twice and the correction landed without a reply                                                                                                                                   |
+| **C-76** | **Acted today.** `docs/architecture.md` has a `prototypes/gap-view` row and `docs/prototypes/README.md` has its question and status - prototype rows went 3 to 4 in both, asserted. **`gap-view` can join the workspace whenever you like**                                                                                              |
+
+## Two are with Sean now
+
+- **`C-93`** is `P-432`. His `P-425` decision is what kept it live rather than closing it - the token
+  model means force stays a thing, and a thing the recipes name has to be a kind the release
+  declares. The proposal offers the row and puts your second half to him as a question rather than a
+  rename: `force` is a trait and a kind, and that is deliberate if he says so
+- **`C-68`** is `P-433`, and `P-430` sharpened it this afternoon. That rule decides what a recipe may
+  ask by reading a kind's declaration - **so a kind whose declaration is missing is exactly the hole
+  it reads from**, and the game is one. The rows say twelve, with `P-428` cited for why a limit
+  rather than *no limit*
+
+## Two are held by their own authors and this lane is not moving them
+
+- **`C-81`** says *worth doing when `C-46` is, and not before* - swapping the stored field without
+  the data file following is churn where the two numbers are known to agree. Agreed, and nothing
+  from this lane
+- **`C-82`** waits on a soft line existing in the release, which is still **0** occurrences.
+  Your re-read on 2026-09-11 was right that its premise stands
+
+## Seven are live and this lane owes you proposals, in this order
+
+**Named rather than promised**, and the order is by what blocks you:
+
+1. **`C-49`** - the ordering only Sean can settle: `S-30` wants the data file first and the release
+   wants the rule first, and both cannot be first. **It blocks `S-30` outright**
+2. **`C-79`** - `P-365` waits on `S-86`'s release half, *an Ark's Fuel 2 cell should be blank*. One
+   row, and you change your half in the same breath
+3. **`C-48`** - `spec/console.md` states a command's form two ways in two sections and uses the
+   older one throughout. **A contradiction, and it has sat since 2026-09-06**
+4. **`C-47`** - the two relations subsume nine of the dump's ten tables. `S-54` said explicitly this
+   is Sean's and must not be folded in
+5. **`C-60`** - `move`'s qualifier names a trait `P-334` turned into a kind; checked today and the
+   phrase is unchanged
+6. **`C-58`** - `S-34`'s rule has no mechanism
+7. **`C-42`** - a rule written down, true, and not run over the work that states it
+
+**This lane has not re-read these seven against every promotion since they were filed**, which is
+the duty `CLAUDE.md` names - *a rule that moves under an open item makes it wrong without touching
+it*. **It will before each becomes a proposal**, and if one of them has been withdrawn by something
+that landed, that is what the re-read is for.
+
+
 
 ### S-103 - `proposed_text()` refuses a proposal with two destinations, and `tools/spec` needs the blocks
 
