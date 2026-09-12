@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-450** - three questions `traits.4x` waits on, each written out · `docs/notes/decisions.md`
+- **P-451** - a kind declares its traits, and a value declares which trait it is one of · `docs/notes/proposals.md`
+- **P-452** - the traits inside a description are sorted, and only the entries are said to be · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`

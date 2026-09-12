@@ -62,6 +62,83 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-451 - a kind declares its traits, and a value declares which trait it is one of
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered, from your answer on `P-450` · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**Sean, 2026-09-12**: *These answers look sound, lets go with them* - `1B`, `2A`, `3A`.
+
+**What `traits.4x` and `kinds.4x` look like.** Traits inside a description are sorted, so `family`
+comes before `name` and `name` before `trait`:
+
+```
+kinds.4x                                      traits.4x
+{kind family:unit name:ark trait:strength}    {trait admits:number held:of-the-kind name:strength}
+{kind name:citizen trait:strength}            {trait admits:0-or-1 held:stored name:laboring}
+{kind name:citizen trait:laboring}            {trait held:stored name:biome}
+{kind name:garrison trait:strength}
+                                              {value name:ice of:biome}
+                                              {value name:jungle of:biome}
+```
+
+**The sentence, to follow *a kind declares which family it is in*:**
+
+> **A kind declares which traits it has, and a value declares which trait it is one of.** So a trait
+> says what it admits and whether it is stored, and says nothing about which kinds carry it; and a
+> trait whose values are kinds names their family instead, because they are already declared. **The
+> thing that belongs to something says so, and the something says only what is true of itself.**
+
+## Why `3A` needs no sentence
+
+**Every column of *Units and structures* is a trait the thing has**, so that table folds into
+`kinds.4x` the way `family` did and there is no `units.4x`. **That follows from the sentence above
+rather than adding to it** - a kind's line carries the values of its traits, which is what a
+description has always been.
+
+## What the test said and did not say, since it is why these three
+
+**`least expressive yet complete` chose `2A` and `3A` and was silent on `1B`.** A value declaring
+its trait keeps `{jungle} -> 1` from being a well-formed description of a thing that cannot exist -
+`adjacency` is a kind and appears **30** times in the expected dump, every biome **0**. And folding
+*Units and structures* removes a copy rather than moving an explosion.
+
+**`1B` rests on `P-428`'s tie-break alone**, because `1A` and `1B` are the same relation written
+from opposite ends and the line count is identical. **It is the weakest of the three and this
+proposal says so** rather than presenting all three as equally settled.
+
+### P-452 - the traits inside a description are sorted, and only the entries are said to be
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed, from the code lane asking which order to write · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**Everything already sorts them and nothing says to.** From `scenario/expected/play.4x`:
+
+```
+{citizen bearing:1 defending:1 laboring:1}
+{deposit density:1 resource:food total-capacity:3}
+```
+
+**`spec/console.md` says the entries sort** - *entries are in the order their descriptions sort in,
+so the same state is always the same bytes* - **and says nothing about the traits inside one.**
+
+**The code lane asked which order to write a declaration in** and could not read the answer out of
+the specification, only out of the existing files. **That is the gap.**
+
+**The sentence, to extend the one that is there:**
+
+> **and the traits inside a description sort too**, so a description is one string however it was
+> built
+
+## Why it matters more than it looks
+
+**The promise it serves is *the same state is always the same bytes*, and that promise is false
+without it.** Two writers that agree on entry order and disagree on trait order produce different
+bytes for one state - and `Q-67` is this repository's record of one notation getting two readers that
+each went on passing its own tests.
+
+**Nothing changes.** `containment.rs` has always sorted, the expected dump is sorted, and the new
+declaration files are sorted. **This writes down what every file already does**, which is the cheap
+half of the rule - the expensive half was finding that nobody had.
+
 *Nothing is open. Everything filed has been decided.*
 
 ## Addressed to other perspectives

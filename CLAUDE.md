@@ -691,7 +691,22 @@ Rebuild a table from a declared list instead, and **assert** the result: that ev
 accounted for exactly once, and that a list of files matches what is actually on disk. A
 scripted edit that cannot fail loudly will fail quietly.
 
+## Never use `###` inside an item's body
+
+**`###` is the heading level an item's own title uses**, so a sub-heading written at that level is
+indistinguishable from the next item. **Every tool that finds where an item ends looks for `### `**,
+and `tools/spec` names the file's top-level sections precisely because `##` is ambiguous - `###`
+would be worse, because it is the item marker itself.
+
+**Use `##` for a sub-heading inside an item.** `tools/spec` knows the file's real sections by name
+and treats every other `##` as belonging to whatever item it sits under.
+
+**This lane wrote three `### Question` headings inside `P-450` on 2026-09-12** and its own removal
+refused to run, correctly. **The refusal is the tool working**; the cost was a script rewritten
+rather than a proposal destroyed, which is what the refusal exists to prevent.
+
 ## Quoting a specification file, and one way a checker misreads it
+
 
 **Do not name a file inside a bold span when the sentence introduces a quotation.** The promotion
 checker reads the `**` that closes the span as the start of the quoted text, so **a verbatim
