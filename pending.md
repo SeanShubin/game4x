@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-414** - A garrison lets each citizen muster one force, and force stops being a stored trait · `docs/notes/proposals.md`
 - **P-412** - The release's `In` line quotes the sentence `P-408` replaced, for the second time today · `docs/notes/proposals.md`
 - **P-413** - `readiness` now names nothing, and `spec/invariants.md` uses it three times · `docs/notes/proposals.md`
 - **P-406** - The third version of this sentence today, and the first one written from the purpose rather than the case · `docs/notes/proposals.md`

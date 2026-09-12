@@ -62,6 +62,65 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-414 - A garrison lets each citizen muster one force, and force stops being a stored trait
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Traits, then Recipes
+
+**Sean, 2026-09-11**: *let's just have a garrison to allow citizens to provide 1 force each, without
+consuming any resource they use for something else.*
+
+**The second clause is what decides the shape.** A citizen's `laboring` and `bearing` are already
+separate counts, and `P-408` says **two recipes naming different actions never compete**. So
+defending is a third count, and a citizen that defends can still labor and still bear.
+
+**Into *Traits*, replacing the `force` row with one for the new count:**
+
+> | **defending** | a citizen or a unit | 0 or 1 | stored |
+
+**Into *Recipes*, after `refresh`:**
+
+> | **muster** | world | require | 1 | garrison | | |
+> | | | require | 1 | citizen | defending at least 1 | |
+> | | | put | | citizen | defending one less | |
+> | | | produce | 1 | force | | |
+> | **stand** | world | require | 1 | unit | defending at least 1 | |
+> | | | put | | unit | defending one less | |
+> | | | produce | 2 | force | | |
+> | **refresh** | world | put | | citizen | defending at its maximum | |
+> | **refresh** | world | put | | unit | defending at its maximum | |
+> | **discard** | world | consume | 1 | force | | |
+
+## What each row is doing
+
+**`muster` fires once per citizen**, because each carries one `defending`, and **only where a
+garrison is present** - a `require`, not a branch on absence. Eight citizens under a garrison muster
+eight force. **No garrison and it cannot fire at all.**
+
+**`stand` needs no garrison**, which is `spec/control.md` already: *a military unit is organised
+force in itself, so several brought to one place sum.* Its **2** is the ark's and the pioneer's
+force, now the quantity a rule makes rather than a number stored on each one.
+
+**`discard` makes force transient**, like labor and fertility. Without it a territory grows
+invincible by sitting still, since `muster` runs every turn and nothing removes what it made.
+**Force is mustered each turn and compared against nature each turn**, which is what *holding a
+territory takes force equal to its force of nature* already assumes.
+
+## What this changes about the game, stated rather than buried
+
+**A territory with no garrison presents no force at all**, where today one citizen presents one.
+**So every held territory needs a garrison** - 1 labor and 1 metal, against an ark at 3 metal, 12
+energy and 2 citizens. **Holding stays far cheaper than conquering**, which is the purpose you named.
+
+**And a jungle needs two citizens rather than a garrison plus two**, since nature's force there is 2
+and each citizen now musters 1.
+
+## It settles `P-407` by removing what that question was about
+
+**`force` stops being a stored trait.** It is a quantity two rules make, read from the kind the way
+`P-376` allows - *a rule that makes a territory's density is one rule with a number per case*.
+**Nothing carries a force any more**, so `{garrison force:0}` loses its word and the three kinds that
+never wrote one were right. **`P-407` can be closed rather than answered.**
+
 ### P-412 - The release's `In` line quotes the sentence `P-408` replaced, for the second time today
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `releases/first-release.md` -> Recipes · from `P-408`
