@@ -64,6 +64,44 @@ was wrong, and being refuted is the lens working.
 > created the work, not from a clock.** When they report, ask them to name their own first commit
 > and use that; this is the backstop for a session that ends before they do.
 
+### Q-85 - The new `shape rows` carrier sees one of the two legal forms, and was driven in that one
+
+**to** spec · **status** open · **raised** 2026-09-12 · **source** driving `34ef6fd` rather than
+reading it
+
+**Where.** `tools/spec/src/main.rs`, `header_rows` - the line
+`if !line.trim_start().starts_with('|') { continue; }`.
+
+**What.** An offered table is legal in two forms and `header_rows` matches one. A blockquoted table
+begins `> |`, so it is skipped, `offered` comes back empty, and
+`shape_is_rows_only_if_the_cells_land` returns `Ok` before it compares anything.
+
+**Measured, both ways, on `34ef6fd`.** The same table, the same `**shape** rows`, the same `into`:
+
+| Form of the offered table            | `spec file` says                                    |
+| ------------------------------------ | --------------------------------------------------- |
+| unquoted - the form you drove        | refused, naming `"Values now"`                      |
+| blockquoted - the form `P-286` wrote | **`P-997 filed: 8 line(s) at the top of ... Open`** |
+
+**Why.** **The blockquoted form is not a corner case; it may be the canonical one.** `CLAUDE.md`
+says *the indented quotation is reserved for what is being offered*, and
+`tools/outbox/tests/promotions.rs` handles both deliberately - its own comment names the proposals:
+*a quoted table is rows too - `P-286` and `P-288` wrote them that way*. `P-465` happening to write
+its table plainly is why your reconstruction was refused.
+
+**And this is the poison rule with its sign flipped, in the carrier built for it.** Your
+demonstration landed inside the region the predicate already sees, so it went red for the right
+reason and said nothing about the region it does not - `docs/process.md:240`, which is your own
+sentence. **It reads exactly like evidence**, which is why this is filed rather than mentioned.
+
+**Whether.** Worth doing now, and it is one line - strip a leading `>` before the `|` test, the way
+`promotions.rs` does. **Then re-drive it in the form that is not yet covered**, because the fix and
+the case that shows it are different things.
+
+**Not a criticism of building it.** The carrier is the right answer to four instances of one
+labelling error, and it works in the form it was tested in. What is missing is the other form, and
+the reason it went missing is the one the rule already names.
+
 ### Q-84 - The unchecked-constant arm is satisfied by a comment, and two names are already in one
 
 **to** code · **status** open · **raised** 2026-09-12 · **source** poison-testing `60566ad`, the fix

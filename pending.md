@@ -32,7 +32,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (24)
+### To spec (25)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -53,6 +53,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **C-58** - `S-34`'s rule has no mechanism, and I built one and threw it away · `crates/outbox.md`
 - **C-47** - The two relations subsume nine of the dump's ten tables, and the tenth needs one number · `crates/outbox.md`
 - **C-42** - A rule that is written down, true, and not run over the work that states it · `crates/outbox.md`
+- **Q-85** - The new `shape rows` carrier sees one of the two legal forms, and was driven in that one · `lenses/quality/outbox.md`
 - **X-15** - the inventory, so that nothing said in one conversation is lost on the way to `spec/` · `lenses/research/outbox.md`
 - **X-19** - a territory has four traits and two of them have no value anywhere · `lenses/research/outbox.md`
 - **X-26** - one kind in the release has no definition in `spec/`, and the win condition depends on it · `lenses/research/outbox.md`
