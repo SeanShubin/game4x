@@ -77,14 +77,29 @@ family every kind is in**, and no line says so kind by kind - a kind added tomor
 because it is a kind, and is in no other family unless it says so.
 
 **A kind declares which traits it has, and a value declares which trait it is one of.** So a trait
-says what it admits and whether it is stored, and says nothing about which kinds carry it; and a
+says what it admits and where its value lives, and says nothing about which kinds carry it; and a
 trait whose values are kinds names their family instead, because they are already declared. **The
 thing that belongs to something says so, and the something says only what is true of itself.**
 
+**A trait says those two things with two keys.** **`admits`** is `number`, or a **family** whose
+kinds are its values, or **`value`** where its values declare themselves. **`kept`** is
+**`thing`** where each thing of a kind carries the value, **`kind`** where the kind carries it
+once, and **`nothing`** where it is derived and nothing carries it.
+
+**`identity` is a fourth thing a trait may admit.** Two identities are equal or they are not:
+**no expression orders, sums or aggregates one**, and a guard on one compares with `=` and nothing
+else.
+
 **A trait of the kind is written with its value and a stored one with its name**, because one is a
 fact about the kind and the other is a fact about each thing of it. So an Ark's `strength` is `2`
-on the Ark's own line, and a citizen's `laboring` is named there and valued nowhere until there is
-a citizen to value it for.
+on the Ark's own line, and a citizen's `laboring` is named there and valued on each citizen.
+
+**A stored trait's name may carry a number on a kind's line, and that number is its maximum** -
+where a thing of that kind begins, and the most it may hold. So a citizen's line reads
+`laboring:1`. **`kept` still says `thing`**, because that is where the value lives; what the kind
+adds is a bound rather than a second home. **Which a number is, is read from the trait**:
+`kept:kind` makes it the value and `kept:thing` makes it the maximum. **A stored trait with no
+number on the kind's line has no maximum.**
 
 **In a recipe the same form is a selector, not a description.** A selector may name a **family**
 rather than a kind, and it may **leave traits out** - `{extractor resource:food}` selects every
@@ -124,9 +139,11 @@ A command is written `{name field:value ...}`. **Its name is one word**, dashed 
 more, and its arguments are named. **A value is a word, a number, or another command in the same
 form**, so a command may carry a tree.
 
-**A command names a recipe and binds what that recipe leaves open**: the place it acts in, and any
-ingredient or trait value it names with a `$`. **There is one command for each recipe the player may fire**, and
-ending a turn fires the world's.
+**A command names a recipe and binds what that recipe leaves open**: every place it leaves open,
+and any ingredient or trait value it names with a `$`. **A recipe acting in one place need not
+name it; one acting in two names both, and the command binds both.** **A place worked out from
+another is not open** - the orbit above a territory is named by naming the territory.
+**There is one command for each recipe the player may fire**, and ending a turn fires the world's.
 
 The commands are therefore not a list this document keeps. They are the recipes whose owner is the
 player, and adding a recipe adds a command.

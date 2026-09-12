@@ -219,9 +219,21 @@ pub fn replace_run(text: &str, old: &str, new: &str) -> Result<String, Problem> 
     // A sentence offered on one line and wrapped onto two is the case this verb exists for,
     // so the run is grown a line at a time until its collapsed text matches - and abandoned
     // once it is longer than the target, which it can never shrink back under.
+    // **A run may not begin or end on a blank line.** Collapsing throws whitespace away, so a
+    // blank line before the paragraph makes a second run that collapses to the same string -
+    // and this refused `P-460` as ambiguous when the file held its sentence exactly once. The
+    // refusal was right about what it measured and wrong about the file, which is the false
+    // alarm this tool has now produced twice.
+    let blank = |at: usize| lines[at].trim().is_empty();
     let mut found: Vec<(usize, usize)> = Vec::new();
     for start in 0..lines.len() {
+        if blank(start) {
+            continue;
+        }
         for end in start + 1..=lines.len() {
+            if blank(end - 1) {
+                continue;
+            }
             let run = collapse(&lines[start..end].join(" "));
             if run == target {
                 found.push((start, end));

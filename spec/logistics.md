@@ -44,6 +44,13 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
   does
 - A thing may carry an **`id`**, and one that does is unique. **There is never a quantity of a
   thing with an `id`** - it is one thing, and anything that holds it holds exactly it
+- **A place carries an `id`**, because movement and adjacency name one place rather than some
+  place of its kind
+- **A unit does not, and the reason is scale.** Fleets of any size are intended, and **acting on
+  one unit and acting on a million are meant to be the same act** - which they are only while the
+  million is one entry with a count. **An `id` makes every thing its own entry**
+- **Things of a kind are grouped by their state**, and a kind has few states however many things
+  of it there are. **So a fleet's size grows and its number of entries does not**
 
 ## Moving materials
 

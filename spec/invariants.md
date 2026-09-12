@@ -88,6 +88,11 @@ specific rule.
   person reaches it by arranging the others in a shape nobody would have written. **A list is the
   right length when every primitive is a thing rather than a point on an axis that already
   exists**, which is a question about joints and not about counting
+- **And a unification that makes the data say something false is not one.** Where two things are
+  sufficiently distinct, giving them one form is a lie rather than a saving - an `id` written as a
+  number can be ordered and summed, and neither means anything. **This outranks the two tests
+  above**, which weigh what a person has to author and say nothing about whether what is authored
+  is true.
 
 ## No penalty for building infrastructure
 
