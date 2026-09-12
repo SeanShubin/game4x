@@ -21,42 +21,6 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-422 - `R-6` asks how much of the planet has to be played, and has pointed at an empty queue since 2026-09-05
-
-**to** sean - **status** open - **raised** 2026-09-11 - **kind** recovered, from `R-6`'s own note and the code lane's `C-95` - **asks** a decision - **into** `releases/first-release.md` -> `R-6`
-
-**`R-6` has carried the question in prose and never as an item.** Its third bullet reads *what is
-now in question is not whether it can be played but how much of it has to be - see the proposal
-queue*, and **the queue has never held it**: 0 hits for that question across `proposals.md` and
-this file, searched for by concept as well as by wording, against a population of **418 rows in
-the Accepted ledger** plus every open, rejected and withdrawn item. So the pointer has been
-dangling for six days. It now points here.
-
-**What made it urgent is that the answer stopped being hypothetical.** `C-95` measured the
-committed scenario on 2026-09-11: **twelve claimable territories, two founded, none at maximum
-output**, `is_fully_exploited` and `has_won` both false. It launches an Ark at line 164 of 133
-commands, so the *vetted when*'s second half holds and its first does not. `tests/fully_exploited.rs`
-derives **57 buildings**, which is 114 commands and **counts nothing but the buildings**. **This is
-not a near miss**, and `R-6` cannot be vetted as it stands.
-
-
-**Three ways out, and the choice is which you want to look at.**
-
-1. **Commit the full scenario.** `play.4x` grows by **at least** the 114 commands the bill names -
-   that figure counts labor-and-build pairs only, and founding the other ten territories, moving
-   pioneers to them and ending the turns are all on top - and `R-6` is then vetted by reading a
-   scenario nobody will read line by line
-2. **Play a smaller planet.** A scenario on fewer territories finishes, and *fully exploited* is
-   demonstrated on something a person can hold in their head - at the cost of the vetted planet not
-   being the one the game ships
-3. **Reword the capability.** `R-6` becomes what the current scenario already shows, and *reaching
-   a fully exploited planet* moves to a later release
-
-**This lane has no recommendation**, because the three differ in what you would be looking at when
-you vet it, and that is the whole of the question. **What it can say** is that 1 and 2 both keep
-`docs/process.md`'s *the definitions and the commands are enough to derive the data dump by hand*
-literally true of a scenario you could work through, and 3 does not.
-
 ### P-423 - `limit` is safe exactly where what it tests is bounded, and nothing says which kinds are
 
 **to** sean - **status** open - **raised** 2026-09-11 - **kind** entailed, from the research lens's `X-9` and the code lane's `C-75` - **asks** a decision - **into** `releases/first-release.md` -> Recipes, and possibly `spec/invariants.md` -> Nothing comes back round with more
@@ -102,11 +66,36 @@ proves nothing - it is a guard against a row nobody has written yet.
 3. **Keep `limit` unconstrained**, and accept that the first `limit 0 food` moves the rule editor
    into a class where your invariant is no longer decidable, with nothing saying so
 
-**Option 2 is the one that reads as your stated criteria**, which is a reason to look at it first
-and not a reason to take it. It keeps the building block, bounds it, and makes the bound mechanical
-- *limited enough to manage complexity, able to maintain the invariants, flexible enough to design
-the rest*. **This lane is not choosing it for you**, because dropping a construct you have no use
-for is also a way to manage complexity, and which of those you prefer is the whole question.
+**Option 2 is the one that reads as your stated criteria.** It keeps the building block, bounds it,
+and makes the bound mechanical - *limited enough to manage complexity, able to maintain the
+invariants, flexible enough to design the rest*.
+
+## `P-428` bears on this, and it points the opposite way from the obvious reading
+
+**Added 2026-09-11, after you stated the rule.** *Try for unification first and look for a reason
+not to; where there is not much difference, the unified form wins.* **The obvious application says
+drop `limit` - fewer constructs is simpler.** That reading is wrong, and `X-11` is why.
+
+**`limit` is not a fifth thing beside the others. It is a cell of a grid the four roles already
+form** - a **change** and a **threshold**:
+
+| Row                 | Change | Threshold     |
+| ------------------- | ------ | ------------- |
+| `consume 3 food`    | −3     | at least 3    |
+| `require 3 workers` | 0      | at least 3    |
+| `produce 1 metal`   | +1     | none          |
+| `limit 0 garrison`  | 0      | **at most 0** |
+
+**So dropping `limit` is the exception and keeping it is the uniform form**: the language would
+otherwise offer every threshold direction except *at most*, for no reason a reader could state.
+**Under `P-428` that is the default, and option 3 - keep it unconstrained - is refused for a good
+reason rather than a preference**, because it is the one that costs the invariant.
+
+**Which leaves option 2 as what your two rules jointly say**, and this lane is now saying so rather
+than presenting a close call as open - which is `P-428`'s other half. **What it still cannot decide
+is whether you want the constraint written as a rule in `spec/invariants.md` or as a line in the
+release**, and that is a real choice this item does not resolve.
+
 
 ### P-424 - `age` destroys and recreates a thing, which is what `put` was introduced to stop
 
@@ -136,9 +125,27 @@ perishable thing. Under `require`/`put` it does not. **Nothing in the release is
 today**, counted over the 21 recipes - so the rewrite is invisible now and would stop being
 invisible the moment such a rule is written.
 
-**Three ways, and no recommendation.**
+**Three ways.**
 
 1. **Rewrite `age` as `require`/`put`**, and the release has one idiom for *the same thing, changed*
 2. **Leave it**, and `consume`/`produce` stays the idiom wherever identity does not matter - which
    is a real distinction and could be stated rather than implied
 3. **Say which rule decides it**, so the next recipe does not have to be asked one at a time
+
+## `P-428` answers this one outright
+
+**Added 2026-09-11, after you stated the rule.** This is the case the rule was made for: **one
+operation written two ways, with no stated reason for the difference.** *Try for unification first
+and look for a reason not to* selects **way 1**, and the reason not to would have to be that
+identity matters somewhere - which is exactly what way 2 would have to state and never has.
+
+**And there is no cost to look for.** Nothing in the release is keyed to creation, counted over the
+21 recipes, so the rewrite is invisible today. **`spoil` is untouched and stays a `consume`**,
+because it genuinely destroys - so the two idioms end up meaning two different things rather than
+one thing twice, which is the unification rather than a casualty of it.
+
+**So this lane's answer is way 1**, offered as a reading of your rule rather than as a preference.
+**What would change it** is a reason to keep `consume`/`produce` for fungible things - and if you
+have one, it is way 2 and wants stating, because nothing states it now.
+
+

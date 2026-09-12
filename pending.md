@@ -8,11 +8,11 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-422** - `R-6` is rewritten: two territories and a launch, and every recipe fires · `docs/notes/proposals.md`
 - **P-425** - force, rewritten under unification, and `Coordination` folds into `Producing force` · `docs/notes/proposals.md`
 - **P-428** - unification first, until there is a reason not to · `docs/notes/proposals.md`
 - **P-426** - metal is declared *conserved* and the planet is a source, in two documents that cannot both hold · `docs/notes/proposals.md`
 - **P-427** - founding creates two metal it does not consume, and the lens reports you decided this on 2026-09-09 · `docs/notes/proposals.md`
-- **P-422** - `R-6` asks how much of the planet has to be played, and has pointed at an empty queue since 2026-09-05 · `docs/notes/decisions.md`
 - **P-423** - `limit` is safe exactly where what it tests is bounded, and nothing says which kinds are · `docs/notes/decisions.md`
 - **P-424** - `age` destroys and recreates a thing, which is what `put` was introduced to stop · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
@@ -25,6 +25,9 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-422** - `21deef5` R-6 is not built, recorded with the numbers, and P-422 for the question it pointed at · still open in `docs/notes/proposals.md`
+- **P-426** - `4461445` X-14 closed into P-426 and P-427, and two citations recorded · still open in `docs/notes/proposals.md`
+- **P-427** - `4461445` X-14 closed into P-426 and P-427, and two citations recorded · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding

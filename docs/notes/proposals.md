@@ -62,6 +62,66 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-422 - `R-6` is rewritten: two territories and a launch, and every recipe fires
+
+**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, when you answered it · **kind** recovered · **shape** text · **asks** approval · **into** `releases/first-release.md` -> `R-6`
+
+**Sean, 2026-09-11**: *We don't need to fully exploit the planet for our initial scenario test, but
+we should try to exercise most mechanics. Lets take the first territory, the second territory, then
+launch an ark.*
+
+**Your scenario exercises more than *most* - it exercises all of them**, and that turns an unmeasurable
+predicate into an exact one. The release has **21 recipes, 10 the player's and 11 the world's**,
+counted from the *Recipes* table by the Owner column.
+
+| To do this                           | These fire                                               |
+| ------------------------------------ | -------------------------------------------------------- |
+| take the first territory from orbit  | `deploy ark`                                             |
+| take the second by land              | `produce pioneer`, `move`, `found by land`               |
+| launch an Ark, which requires a Yard | `build yard`, `launch ark`                               |
+| pay for any of it                    | `create labor`, `work`, `build extractor`, `build store` |
+
+**That is all ten player recipes**, and the world's eleven fire at a turn's end, which your scenario
+reaches repeatedly. **So *exercise most mechanics* and *every recipe fires at least once* are the
+same requirement for this scenario** - and only the second can be checked.
+
+## The *vetted when*, replacing the one that is there
+
+> - **Vetted when** - the scenario takes a first territory from orbit, takes a second by land, and
+>   launches an Ark; and **every recipe in the release fires at least once while it runs**, measured
+>   by what fired rather than by what the file says. **It does not win, and that is the win condition
+>   working**: `spec/control.md` gives victory for launching from a fully exploited planet, and this
+>   planet is not one
+
+## Why the last clause is in the offered text rather than a note
+
+**Launching without winning is the thing a reader will think is a bug.** The code lane asserted it
+on 2026-09-11 and found it was `spec/control.md` doing its job rather than a coincidence. **Saying
+so in the capability is what stops the next person filing it.**
+
+## And why *measured by what fired*
+
+**`CLAUDE.md` records this exact check failing.** A coverage check asked whether a line of the
+scenario *begins with* each recipe's command - *satisfied for `move` by the line that founds*, nine
+of nine, green for weeks, and `move` had never once fired. **The instrument answered a narrower
+question and returned a plausible number rather than an error.**
+
+**The machinery to do it right exists**: `crates/game-console/src/fired.rs` records what each command
+fired, and `tests/worked.rs` already fails when a recipe has no worked example. **This is that
+instrument pointed at the scenario**, and it is the code lane's to wire.
+
+## What this makes stale, named rather than left
+
+- **`tests/fully_exploited.rs`** derives the bill for finishing the planet - 57 buildings - and
+  `the_committed_scenario_launches_an_ark_and_does_not_finish_the_planet` asserts `(12, 2, 0)` with
+  the message *if this has moved, `R-6` is worth asking again*. **Under this wording that state stops
+  being a gap and becomes the intended one**, so the test's framing wants inverting even though its
+  numbers are right
+- **`C-20` and `S-90`** rest on the sentence this replaces
+- **`spec/scenarios.md` is clear and was checked rather than assumed**: *exploit* and *fully
+  exploited* have **0** occurrences in it, so nothing there claims the scenario finishes the planet
+
+
 ### P-425 - force, rewritten under unification, and `Coordination` folds into `Producing force`
 
 **to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, when you chose way one · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Producing force, and -> Gaining and holding ground · from `C-94` and your redefinition

@@ -8,7 +8,21 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-11, the scenario need not finish the planet
+
+*We don't need to fully exploit the planet for our initial scenario test, but we should try to
+exercise most mechanics. Lets take the first territory, the second territory, then launch an ark.*
+
+**Answering `P-422`, and choosing its third way** - reword the capability rather than commit a
+longer scenario or play a smaller planet.
+
+**His scenario exercises all of them rather than most**, which is what makes it checkable: taking a
+territory from orbit, taking a second by land and launching an Ark requires all **ten** player
+recipes, and the world's **eleven** fire at a turn's end. So *most mechanics* and *every recipe
+fires at least once* coincide here, and only the second is a predicate. `P-422` carries it.
+
 ## Said 2026-09-11, unification first, until there is a reason not to
+
 
 *I am deciding with unification for now. My current thinking is to always try for unification first,
 until there is a good reason not to. Since I am not seeing much difference here I am starting with
