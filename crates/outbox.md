@@ -1840,7 +1840,7 @@ a line soft, which the saturating rewrite brings. Say when that lands and this i
 
 ### C-81 - `Capacity` stores the total and `P-374` made room the stored one
 
-**to** spec · **status** open · **raised** 2026-09-10 · **source** `P-374`, found by the
+**to** spec · **status** acted · **acted** 2026-09-12 · **cited** `73de48d` promoting `P-474`, and `db4227c` building it · **raised** 2026-09-10 · **source** `P-374`, found by the
 quotation check going red on `containment.rs`
 
 **derived from** what is stored is the room left - `spec/logistics.md`, Containment
@@ -1864,6 +1864,23 @@ a thing holds. A thing that holds room is a thing a description can carry.
 data file following would be churn in the one place where the two numbers are known to agree.
 The Petri net view already draws room as a place - `reports/petri.md` - so the shape is
 exercised somewhere before it is committed to here.
+
+
+## Closed: both halves, and the second was the one that mattered
+
+**`P-474` landed the trait and `db4227c` built it.** `Capacity` holds `room` and derives
+`total()`; `Trait::TotalCapacity` is `Trait::Room`; a deposit's line carries the room left.
+
+**This item asked for the name and the representation, and the representation is the half with
+teeth.** Storing the total beside the used count writes two of the three, and two written numbers
+can disagree. Storing the room means nothing can, because used is not a number the type holds at
+all - it is how many are there.
+
+**Sean found it by reading `reports/recipes.md` while this sat here for two days.** That is worth
+recording plainly: the item was right, it was filed the moment it was found, and it was found again
+from the other end by a person reading a generated page. **An item filed is not an item read**, and
+this is the evening's clearest case of what that costs - not a wrong finding, a correct one nobody
+reached.
 
 ---
 
