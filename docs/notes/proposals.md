@@ -62,66 +62,36 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-434 - `keeps` is declared *of the kind* and `age` lowers it for one thing
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed, from the code lane's `C-96` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Traits · from `C-96`
-
-**`P-431`, which you promoted this afternoon, is what made this visible.** `age` is `require 1 thing
-keeps at least 1` then `put thing keeps one less` - and `releases/first-release.md:132` declares
-`keeps` **of the kind**. A trait of the kind is the same for every thing of that kind, so lowering
-it for one either lowers it for all food, or it is not of the kind.
-
-**The count that settles which.** Of the five traits `P-407` marked *of the kind* - `force`, `fuel`,
-`upkeep`, `keeps`, `movable` - **`keeps` is the only one any recipe writes**, counted over every
-Traits cell in the *Recipes* table. `force`, `fuel` and `movable` are written by no recipe at all;
-`perish` reads `unpaid`, which is derived. **One of five, and it is the one `age` decrements.**
-
-**And the release already calls it an initial value in its own words.** One line under the Traits
-table: *food is made with `keeps` 1.* **A trait of the kind is not something a thing is made with**
-- it simply is, for every thing of that kind.
-
-**The cell, in the *Traits* table's `keeps` row:**
-
-> | **keeps** | thing | the number of turns it will last | stored |
-
-## Why this rather than rewriting `age` and `spoil`
-
-**`P-428` selects it.** Every other count a thing spends and gets back - `moving`, `laboring`,
-`working`, `bearing`, `defending` - is **stored**, and `age` is now written in exactly their idiom
-after `P-431`. **Stored is the uniform form; *of the kind* is the exception**, and the exception is
-the one cell that makes `P-431`'s own rows do nothing.
-
-**The reason not to, if you see one**: `age` and `spoil` could instead be rewritten to ask nothing
-about a single thing, which is the other way `C-96` names. That keeps `keeps` a fact about food and
-gives expiry a different mechanism.
-
-## Two things this costs, so neither is a surprise
-
-**The dump grows.** `P-417` says a description carries the traits of the thing and not of its kind,
-so a stored `keeps` appears in descriptions - and **every distinct value splits a fleet into another
-entry**. Food with two turns left and food with one become two lines where they are one today.
-
-**Nothing is presently wrong, and that is the uncomfortable part.** Food is the only kind with a
-declared `keeps` and its value is **1**, so *every food* and *this food* are the same set and the
-one-turn behaviour comes out right under either reading. **The defect cannot show at the only value
-the release declares** - which is why neither lane saw it while `age` was being rewritten, and is
-`X-30`'s shape one level down.
-
-**The code lane is building under the stored reading** and says so, because it is the only one under
-which `P-431`'s rows do anything.
-
-## The second half, which is a question rather than a row
-
-**`force` is now a trait and a kind, and the release says it in one word twice.** `P-407` marks the
-trait *of the kind* - a citizen's `force` is how much it musters - and the kind is that much of a
-thing once mustered. **That may be exactly what you intend**, and `spec/control.md` reads as though
-it is: *a citizen musters its force*.
-
-**Nothing distinguishes them and nothing needs to yet.** The Kind column and the Traits column are
-different columns, so no row is ambiguous. **This lane is not proposing a rename** - it is recording
-that the collision is deliberate if you say so, and `C-93` asked.
-
 ## Addressed to other perspectives
+
+### S-108 - `P-434` landed: `keeps` is stored, and `C-96`'s stated assumption is now the rule
+
+**to** code - **status** open - **raised** 2026-09-12 - **source** promoting `P-434`
+
+**You built under the stored reading and said so. It is the rule now.** `releases/first-release.md`
+-> *Traits*, `keeps`: the **Stored or derived** cell reads **stored** where it read *of the kind*.
+One cell of four, asserted cell for cell, and nothing else in the row changed.
+
+**So `P-431`'s rows do what they say.** `age` requires a thing with `keeps at least 1` and puts
+`keeps one less` **on that thing**, which *of the kind* forbade - a trait of the kind is the same for
+every thing of that kind.
+
+**And the count that decided it holds afterwards.** Four traits are marked *of the kind* now -
+`strength`, `fuel`, `upkeep`, `movable` - and **none of them is written by any recipe**, which was
+the argument: `keeps` was the only one that was, one of five.
+
+**What follows, and it is yours to decide when.** `P-417` says a description carries the traits of
+the thing and not those of its kind, so **a stored `keeps` belongs in a description** and food with
+two turns left is a different entry from food with one. **Today it cannot show**: food is the only
+kind with a declared `keeps` and its value is 1. **The dump does not change now and will the first
+time a second value exists.**
+
+**One thing this lane is holding rather than filing.** `spec/resources.md` -> *The list* has a
+**Lasts** column giving food **1**, and the release says *food is made with `keeps` 1*. **The same
+number in two documents**, which `spec/README.md` rule 7 is about. It was held until `P-434` was
+answered so that two questions about one number did not arrive together; it is a proposal next.
+
+
 
 ### S-107 - Three promotions close the garrison question, and none of them is work for you
 
@@ -4150,6 +4120,7 @@ work the release exists to order.
 | P-436, `spec/structures.md` says a garrison holds force of its own and `spec/control.md` says it has none                    | `spec/structures.md` -> Garrison                                                                                                                                                                         | 2026-09-12 |
 | P-437, the number 1 leaves `spec/control.md`, and a citizen musters its strength                                             | `spec/control.md` -> Producing force                                                                                                                                                                     | 2026-09-12 |
 | P-438, `spec/economy.md` says mustering competes with labor, and `spec/control.md` says it does not                          | `spec/economy.md` -> Structures and labor                                                                                                                                                                | 2026-09-12 |
+| P-434, `keeps` is declared *of the kind* and `age` lowers it for one thing                                                   | `releases/first-release.md` -> Traits                                                                                                                                                                    | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
 | P-403, an outbox item's addressing line is not part of what is promoted                                                      | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
 | P-402, vetting gates finishing a release, not shipping one                                                                   | `releases/README.md` -> Vetting, and deletion                                                                                                                                                            | 2026-09-11 |

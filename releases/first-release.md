@@ -130,7 +130,7 @@ are listed.
 | **nature**         | a territory                             | a number                                  | stored                                           |
 | **from**           | an adjacency                            | a place                                   | stored                                           |
 | **to**             | an adjacency                            | a place                                   | stored                                           |
-| **keeps**          | thing                                   | the number of turns it will last          | of the kind                                      |
+| **keeps**          | thing                                   | the number of turns it will last          | stored                                           |
 | **surplus**        | food                                    | yes or no                                 | derived: left after every upkeep was paid        |
 | **unpaid**         | a thing with upkeep                     | yes or no                                 | derived: its upkeep was not met                  |
 | **phase**          | the game                                | design or play                            | stored                                           |
