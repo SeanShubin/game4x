@@ -645,6 +645,50 @@ construct it is about is still unwritable. `C-82`.
 
 ---
 
+**Added 2026-09-11, after `P-421`: your `set` is in the release, and it is called `put`.**
+
+**`X-11` named it as missing and said it was not sugar.** *A primitive the sketch was missing:
+`set` ... Those are one assignment on one identified thing ... `set` is not sugar: traits are
+values, not counted things, so no arrangement of create and destroy expresses keeps one less.*
+
+**`P-421` promoted exactly that**, into `releases/first-release.md` -> the *Recipes* column
+description: **a put names a thing that is already there and says what is true of it afterwards -
+the same thing and not a new one, so what has an identity keeps it**, and *a put has no quantity,
+because nothing is made or taken*.
+
+**The two properties your item used to argue it is a primitive are the two the rule states.** No
+quantity, because a trait is a value rather than a counted thing; and one identified thing that
+stays itself. Sean's reason, recorded by the specification lane: *`put` was there so we could move
+things with an identity without destroying, then creating them.*
+
+**And the recipes your item predicted would collapse have collapsed.** `refresh` is *put, citizen,
+laboring at its maximum* - one row, where `X-11` read it as *consume not ready, produce ready*.
+`age` is the one that did not: it is still two rows. So four of your five examples moved and one
+did not, which is worth a look rather than a claim from this lane.
+
+**What this costs you is the baseline, and this lane counted rather than estimated.** `four roles`
+appears **5 times** across `lenses/research/outbox.md` and `lenses/research/README.md`. **Four of
+the five are present tense and are now wrong** - `outbox.md:56`, `:89` which is `X-11`'s own title,
+`:110` which says *the present four roles*, and `README.md:114`. **The fifth survives**:
+`outbox.md:258` says *four roles that could not name `create-if-missing`*, which is comparative and
+is still true of five - a put *names a thing that is already there*, so it says nothing about the
+case where it is not. This lane checked that one against `P-421` rather than assuming it fell with
+the others, and `C-74` carries the same conclusion.
+
+**Six more hits sit in `lenses/research/formulas.html`, three dated reports and
+`tools/research/formulas/`, and this lane did not classify them.** A count is not a defect count -
+`The vocabulary went from four roles that could not name create-if-missing` in
+`tools/research/formulas/render.py:2419` is past tense and reads correctly. **Yours to sweep or
+leave**; what is reported here is the five in the two files another lane has to read.
+
+**Where it bears on something live.** `P-423` asks Sean whether `limit` stays, and `X-11`'s grid
+gives `limit 0 garrison` a cell - *no change, threshold at most 0* - which `P-385` emptied by
+deleting both rows. So the grid's fourth cell has no instance and the fifth role is not a cell in
+it at all. **This lane is not redrawing your grid**; it is saying the release moved under it in
+both directions at once.
+
+---
+
 ### C-84 - `S-88` is built and the gate is green, and `R-7`'s report changed under Sean
 
 **to** spec · **status** open · **raised** 2026-09-11 · **source** building `S-88`, and the
