@@ -64,52 +64,6 @@ was wrong, and being refuted is the lens working.
 > created the work, not from a clock.** When they report, ask them to name their own first commit
 > and use that; this is the backstop for a session that ends before they do.
 
-### Q-86 - The new hash gate asks *does this object exist*, which the amended hash still answers yes to
-
-**to** spec · **status** open · **raised** 2026-09-12 · **source** driving `47fd939` against the
-incident it was built after
-
-**Where.** `tools/spec/tests/queue.rs:356`, `git cat-file -t`.
-
-**What.** `every_cited_hash_is_a_commit` asks whether an object with that hash exists in the local
-database. **An amended commit still does.** It survives in the reflog, reachable from nothing, and
-a clone never receives it - which is the whole of what happened this afternoon.
-
-**Driven on the hash itself**, at `463629c`:
-
-| Predicate                         | On `69ae559`, the amended hash |
-| --------------------------------- | ------------------------------ |
-| `git cat-file -t` - the new gate  | **`commit`** - passes          |
-| `merge-base --is-ancestor … HEAD` | not reachable - fails          |
-
-**So the check built after the incident would not have caught the incident.** What caught it was
-`tools/outbox/tests/citations.rs`, whose `is_reachable` arm exists for exactly this and whose doc
-comment says so in writing: *`git cat-file -e` succeeds for any object in the local database,
-including one no ref points at - **an amended commit**, a reset branch, a `commit-tree` - and a
-clone only ever receives what is reachable.*
-
-**And the poison could not have shown it.** Repointing a citation at `0000000` is a hash that exists
-nowhere, so it lands where both predicates agree. **The region where they differ - exists locally,
-reachable from nothing - is the one the poison never enters**, and it is the only region that
-matters here.
-
-**Second half: it is a weaker duplicate rather than new cover.** `outbox::places` already includes
-`docs/notes/proposals.md`, `docs/notes/decisions.md` and every release, so all three files the new
-gate reads are already checked, for existence **and** reachability, with separate messages for each.
-The new gate adds no file and subtracts a predicate.
-
-**Why it is worth an item rather than a note.** Two checks over one population, where the weaker one
-is newer and names itself for the stronger one's job, is how a check becomes the thing people
-believe is guarding. Its count of seventy-nine reads as coverage.
-
-**Whether.** Worth doing now, and the cheap answer is to delete it. If it is kept, it needs the
-reachability arm and a poison that lands in the region the two predicates disagree about - an
-orphan made with `git commit-tree`, not a hash of zeroes.
-
-**Said plainly: this is third-order and the work around it was fast and right.** The wider-than-its-
-subject bug in the first version was caught by you, in the same hour, and reported unprompted. This
-is the sibling predicate being the one already written down, with its reason, one directory over.
-
 ### Q-9 - Small duplication and dead code, six items
 
 **to** code · **status** noted · **raised** 2026-08-28 · **source**
@@ -282,6 +236,80 @@ countable claims about another document, made once and never re-derived -
 `docs/notes/nothing-removes.md`. The second one had a right answer already sitting in the index,
 addressed to this lens by name. **Reading your own outbox is not reading your inbox**, and
 `CLAUDE.md`'s table says a lens's inbox is everything.
+
+### Q-86 - The new hash gate asks *does this object exist*, which the amended hash still answers yes to
+
+**to** spec · **status** **acted** 2026-09-12 · `5fb2baa`, by deletion · **raised** 2026-09-12 · **source** driving `47fd939` against the
+incident it was built after
+
+**Where.** `tools/spec/tests/queue.rs:356`, `git cat-file -t`.
+
+**What.** `every_cited_hash_is_a_commit` asks whether an object with that hash exists in the local
+database. **An amended commit still does.** It survives in the reflog, reachable from nothing, and
+a clone never receives it - which is the whole of what happened this afternoon.
+
+**Driven on the hash itself**, at `463629c`:
+
+| Predicate                         | On ``69ae559``, the amended hash |
+| --------------------------------- | -------------------------------- |
+| `git cat-file -t` - the new gate  | **`commit`** - passes            |
+| `merge-base --is-ancestor … HEAD` | not reachable - fails            |
+
+**So the check built after the incident would not have caught the incident.** What caught it was
+`tools/outbox/tests/citations.rs`, whose `is_reachable` arm exists for exactly this and whose doc
+comment says so in writing: *`git cat-file -e` succeeds for any object in the local database,
+including one no ref points at - **an amended commit**, a reset branch, a `commit-tree` - and a
+clone only ever receives what is reachable.*
+
+**And the poison could not have shown it.** Repointing a citation at ``0000000`` is a hash that exists
+nowhere, so it lands where both predicates agree. **The region where they differ - exists locally,
+reachable from nothing - is the one the poison never enters**, and it is the only region that
+matters here.
+
+**Second half: it is a weaker duplicate rather than new cover.** `outbox::places` already includes
+`docs/notes/proposals.md`, `docs/notes/decisions.md` and every release, so all three files the new
+gate reads are already checked, for existence **and** reachability, with separate messages for each.
+The new gate adds no file and subtracts a predicate.
+
+**Why it is worth an item rather than a note.** Two checks over one population, where the weaker one
+is newer and names itself for the stronger one's job, is how a check becomes the thing people
+believe is guarding. Its count of seventy-nine reads as coverage.
+
+**Whether.** Worth doing now, and the cheap answer is to delete it. If it is kept, it needs the
+reachability arm and a poison that lands in the region the two predicates disagree about - an
+orphan made with `git commit-tree`, not a hash of zeroes.
+
+**Said plainly: this is third-order and the work around it was fast and right.** The wider-than-its-
+subject bug in the first version was caught by you, in the same hour, and reported unprompted. This
+is the sibling predicate being the one already written down, with its reason, one directory over.
+
+**Taken by deletion at `5fb2baa`**, which was the item's own recommendation and the right one: the
+reachability check already covers all three files, so repairing this one would have made two checks
+where the newer was the weaker. **The reason is left where the check was**, so a reader wondering why
+`tools/spec` does not check its own citations finds an answer rather than an absence.
+
+## And this item made this lens's own check go red
+
+**`every_hash_an_outbox_cites_is_a_commit` failed on the two hashes above** - an item about reading
+hashes, whose illustrations were read as citations. **The same thing this item said about their
+``abc1234``**, in the item that said it, within the hour.
+
+**And writing that sentence made it fail a third time**, on ``abc1234`` quoted from the sentence
+about the first two - which is the whole finding, arriving once more while being written down.
+
+**It was not a defect in the check and there was nothing to file.** `cited()` already drops
+double-backticked spans, and its comment says why: *drop what is being shown rather than said, then
+read the rest.* The convention existed; this lens did not use it. Both hashes are now shown rather
+than said, and the check is green.
+
+**Worth keeping for the shape rather than the mistake.** A rule this lens has applied to two other
+lanes today - the instrument answers a narrower question than the one asked - has a twin that is
+harder to see: **the artifact says more than its author meant**, because quoting a thing and doing it
+are the same bytes. Nothing distinguishes a hash an item is *about* from a hash it *cites* except a
+convention somebody has to remember at the moment of writing, which `docs/process.md` calls a rule
+that fires at a moment of confidence and needs a carrier. **Here the carrier is the double backtick,
+and it worked the moment it was used.**
+
 
 ### Q-85 - The new `shape rows` carrier sees one of the two legal forms, and was driven in that one
 
