@@ -57,7 +57,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (22)
+### To spec (23)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -81,6 +81,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-26** - one kind in the release has no definition in `spec/`, and the win condition depends on it · `lenses/research/outbox.md`
 - **X-29** - the player's recipes are an ordinary Petri net and the world's are not, and nothing says so · `lenses/research/outbox.md`
 - **X-30** - `age` is written in the action-spending idiom, and `keeps` is not an action · `lenses/research/outbox.md`
+- **X-31** - two conditions the release writes as prose, and it has the vocabulary for both · `lenses/research/outbox.md`
 
 ## Sections that have taken more than one proposal
 

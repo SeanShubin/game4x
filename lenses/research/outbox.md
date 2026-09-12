@@ -958,6 +958,48 @@ use for a once-per-thing sweep. **What this lane does not decide** is whether `k
 be refreshed like the action counts - that would make the present rows correct and is a different
 game - and which of the two Sean wants is the only open question here.
 
+### X-31 - two conditions the release writes as prose, and it has the vocabulary for both
+
+**to** spec · **status** open · **raised** 2026-09-12 · **source** [the editor](../../tools/research/editor/README.md), built after Sean asked for a prototype where nothing but a name is typed · **found by** trying to offer every cell of every table as a selection, and finding exactly two that would not go
+
+**Where.** `releases/first-release.md` -> *Recipes*, the Traits column:
+
+- **`move`**, row 2: a place *joined to `$from` by an edge the unit crosses*
+- **`perish`**: a citizen *whose upkeep is unpaid*
+
+**What.** Every other condition in the release decomposes into a trait, a comparator and a
+value - 27 of 29, offered as three selects. These two are sentences. **And the release can
+already say both**, which is what makes this worth your attention rather than a note about an
+editor:
+
+- **`unpaid` is a declared trait.** *Traits* gives it `a thing with upkeep`, values `yes or no`,
+  *derived: its upkeep was not met*. So `perish`'s condition is `unpaid is yes`, written out
+  longhand. The trait was declared and then not used by the one rule that needs it
+- **`adjacency` is a declared kind** with `from` and `to`, and *Units and structures* gives each
+  unit a `Crosses`. So `move`'s condition is a `require` on an adjacency, which is `X-13`'s
+  finding from the other side - the relation was already made a thing, and this row predates it
+
+**Why it costs something, and it is not tidiness.** Sean, 2026-09-12: *editability is going to
+become a constraint on future design*. A condition written as a sentence cannot be offered in a
+menu, cannot be checked by anything that reads the table, and cannot be edited by a player. **A
+rule the specification can state twice - once in vocabulary and once in prose - is a rule two
+readers can disagree about**, and the prose copy is the one no tool can see.
+
+**Counted, and the denominator is the point.** 29 conditions over 31 recipes, computed by
+`tools/research/editor/extract.py` from the release's table rather than read off it. **27 go, 2
+do not, and both of the two are expressible.** So the honest statement is not *the format is
+96% selectable* - it is **the format is already sufficient, and two rows do not use it.**
+
+**What this lane does not decide.** The wording of either replacement, and whether `move`'s
+adjacency condition wants a `require` row of its own or a new form. Both change the Recipes
+table, which is yours; this says only that the vocabulary to do it is already declared.
+
+**Whether.** **Worth doing, and not urgent.** Nothing is wrong with the game today - both rows
+read correctly to a person, and the code implements them. What they cost is paid later, by the
+first thing that tries to read the table without a person in the loop. **The measurement will
+not go stale**: the editor recomputes it at load, so if a third such row lands it appears on the
+page without anyone re-running anything.
+
 ## Resolved
 
 **Refused on 2026-09-10, and the refusal found something this item had not.** The code lane built

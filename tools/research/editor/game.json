@@ -1,0 +1,1743 @@
+{
+  "kinds": [
+    {
+      "name": "citizen",
+      "what": "a person: provides labor, eats, and grows on surplus"
+    },
+    {
+      "name": "garrison",
+      "what": "what holds a territory; a territory has at most one"
+    },
+    {
+      "name": "extractor",
+      "what": "built for one resource, and worked to produce it"
+    },
+    {
+      "name": "yard",
+      "what": "where an Ark is produced"
+    },
+    {
+      "name": "store",
+      "what": "built to hold one resource, and holds nothing else"
+    },
+    {
+      "name": "ark",
+      "what": "carries a landing, and can invade from orbit"
+    },
+    {
+      "name": "pioneer",
+      "what": "founds a territory"
+    },
+    {
+      "name": "food",
+      "what": "eaten by citizens; expires"
+    },
+    {
+      "name": "metal",
+      "what": "what things are built from; drawn from the planet, and conserved once above ground"
+    },
+    {
+      "name": "energy",
+      "what": "what moves things; neither conserved nor expiring"
+    },
+    {
+      "name": "labor",
+      "what": "what working a machine takes; a citizen provides it each turn"
+    },
+    {
+      "name": "territory",
+      "what": "a place things are in, which has a biome, a force of nature, and a density and a total capacity per resource"
+    },
+    {
+      "name": "orbit",
+      "what": "a place above one territory, which holds units and nothing else"
+    },
+    {
+      "name": "deposit",
+      "what": "what a territory's ground offers of one resource, and how richly"
+    },
+    {
+      "name": "adjacency",
+      "what": "two places that share an edge, held by the thing that holds them"
+    },
+    {
+      "name": "game",
+      "what": "every thing is in it, and it is the one thing that is in nothing"
+    },
+    {
+      "name": "fertility",
+      "what": "a citizen's capacity to raise one more, spent by raising one and renewed each turn"
+    },
+    {
+      "name": "force",
+      "what": "what a territory presents to hold or take ground; mustered each turn and swept at its end"
+    }
+  ],
+  "families": [
+    {
+      "name": "thing",
+      "members": [
+        "every kind above"
+      ],
+      "everyKind": true
+    },
+    {
+      "name": "unit",
+      "members": [
+        "ark",
+        "pioneer"
+      ],
+      "everyKind": false
+    },
+    {
+      "name": "resource",
+      "members": [
+        "food",
+        "metal",
+        "energy"
+      ],
+      "everyKind": false
+    },
+    {
+      "name": "place",
+      "members": [
+        "territory",
+        "orbit"
+      ],
+      "everyKind": false
+    }
+  ],
+  "containers": [
+    {
+      "container": "a territory's total capacity for a kind",
+      "holds": "that kind",
+      "upTo": "its total capacity for that kind"
+    },
+    {
+      "container": "a store",
+      "holds": "the resource it was built for",
+      "upTo": "10"
+    },
+    {
+      "container": "a unit's tank",
+      "holds": "energy",
+      "upTo": "the unit's fuel"
+    }
+  ],
+  "traits": [
+    {
+      "name": "id",
+      "of": "a thing that must be named individually",
+      "values": "a number, unique among things of its kind",
+      "storage": "stored",
+      "derivation": ""
+    },
+    {
+      "name": "moving",
+      "of": "a unit",
+      "values": "0 or 1",
+      "storage": "stored",
+      "derivation": ""
+    },
+    {
+      "name": "laboring",
+      "of": "a citizen",
+      "values": "0 or 1",
+      "storage": "stored",
+      "derivation": ""
+    },
+    {
+      "name": "working",
+      "of": "an extractor",
+      "values": "0 or 1",
+      "storage": "stored",
+      "derivation": ""
+    },
+    {
+      "name": "bearing",
+      "of": "a citizen",
+      "values": "0 or 1",
+      "storage": "stored",
+      "derivation": ""
+    },
+    {
+      "name": "defending",
+      "of": "a citizen or a unit",
+      "values": "0 or 1",
+      "storage": "stored",
+      "derivation": ""
+    },
+    {
+      "name": "resource",
+      "of": "an extractor or a store",
+      "values": "one of the resources",
+      "storage": "stored",
+      "derivation": ""
+    },
+    {
+      "name": "strength",
+      "of": "citizen, garrison, ark, pioneer",
+      "values": "a number",
+      "storage": "of the kind",
+      "derivation": ""
+    },
+    {
+      "name": "fuel",
+      "of": "a unit",
+      "values": "how much energy its tank holds",
+      "storage": "of the kind",
+      "derivation": ""
+    },
+    {
+      "name": "upkeep",
+      "of": "a thing with upkeep",
+      "values": "food per turn",
+      "storage": "of the kind",
+      "derivation": ""
+    },
+    {
+      "name": "metal in it",
+      "of": "whatever is built",
+      "values": "a number",
+      "storage": "derived",
+      "derivation": "its binding plus the metal in its parts"
+    },
+    {
+      "name": "density",
+      "of": "a deposit",
+      "values": "a number",
+      "storage": "stored",
+      "derivation": ""
+    },
+    {
+      "name": "total capacity",
+      "of": "a deposit",
+      "values": "a number",
+      "storage": "stored",
+      "derivation": ""
+    },
+    {
+      "name": "control",
+      "of": "a territory",
+      "values": "held by a player, or unclaimed",
+      "storage": "derived",
+      "derivation": "a citizen of that player is there"
+    },
+    {
+      "name": "biome",
+      "of": "a territory",
+      "values": "one of the biomes",
+      "storage": "stored",
+      "derivation": ""
+    },
+    {
+      "name": "nature",
+      "of": "a territory",
+      "values": "a number",
+      "storage": "stored",
+      "derivation": ""
+    },
+    {
+      "name": "from",
+      "of": "an adjacency",
+      "values": "a place",
+      "storage": "stored",
+      "derivation": ""
+    },
+    {
+      "name": "to",
+      "of": "an adjacency",
+      "values": "a place",
+      "storage": "stored",
+      "derivation": ""
+    },
+    {
+      "name": "keeps",
+      "of": "thing",
+      "values": "the number of turns it will last",
+      "storage": "stored",
+      "derivation": ""
+    },
+    {
+      "name": "surplus",
+      "of": "food",
+      "values": "yes or no",
+      "storage": "derived",
+      "derivation": "left after every upkeep was paid"
+    },
+    {
+      "name": "unpaid",
+      "of": "a thing with upkeep",
+      "values": "yes or no",
+      "storage": "derived",
+      "derivation": "its upkeep was not met"
+    },
+    {
+      "name": "phase",
+      "of": "the game",
+      "values": "design or play",
+      "storage": "stored",
+      "derivation": ""
+    },
+    {
+      "name": "movable",
+      "of": "whatever moves",
+      "values": "yes or no",
+      "storage": "of the kind",
+      "derivation": ""
+    }
+  ],
+  "bounds": [
+    {
+      "kind": "citizen",
+      "boundedBy": "the food produced here, through upkeep"
+    },
+    {
+      "kind": "garrison",
+      "boundedBy": "a capacity of 1"
+    },
+    {
+      "kind": "extractor",
+      "boundedBy": "a capacity, from *Territory resources*"
+    },
+    {
+      "kind": "store",
+      "boundedBy": "as many as the extractors of its resource"
+    },
+    {
+      "kind": "yard",
+      "boundedBy": "a capacity of 1"
+    },
+    {
+      "kind": "ark",
+      "boundedBy": "a capacity of 2"
+    },
+    {
+      "kind": "pioneer",
+      "boundedBy": "a capacity of 2"
+    },
+    {
+      "kind": "labor",
+      "boundedBy": "the citizens that make it, one each per turn"
+    },
+    {
+      "kind": "fertility",
+      "boundedBy": "the citizens that make it, one each per turn"
+    },
+    {
+      "kind": "food",
+      "boundedBy": "the things in it that hold it, and it keeps for one turn"
+    },
+    {
+      "kind": "metal",
+      "boundedBy": "the things in it that hold it"
+    },
+    {
+      "kind": "energy",
+      "boundedBy": "the things in it that hold it"
+    }
+  ],
+  "things": [
+    {
+      "name": "citizen",
+      "strength": 1,
+      "fuel": null,
+      "upkeep": [
+        {
+          "qty": 1,
+          "kind": "food"
+        }
+      ],
+      "costs": [],
+      "binding": null,
+      "crosses": "",
+      "requires": "",
+      "readies": true,
+      "movable": false
+    },
+    {
+      "name": "garrison",
+      "strength": 0,
+      "fuel": null,
+      "upkeep": [],
+      "costs": [
+        {
+          "qty": 1,
+          "kind": "labor"
+        },
+        {
+          "qty": 1,
+          "kind": "metal"
+        }
+      ],
+      "binding": 1,
+      "crosses": "",
+      "requires": "",
+      "readies": false,
+      "movable": false
+    },
+    {
+      "name": "extractor",
+      "strength": null,
+      "fuel": null,
+      "upkeep": [],
+      "costs": [
+        {
+          "qty": 1,
+          "kind": "labor"
+        },
+        {
+          "qty": 1,
+          "kind": "metal"
+        }
+      ],
+      "binding": 1,
+      "crosses": "",
+      "requires": "",
+      "readies": true,
+      "movable": false
+    },
+    {
+      "name": "yard",
+      "strength": null,
+      "fuel": null,
+      "upkeep": [],
+      "costs": [
+        {
+          "qty": 1,
+          "kind": "labor"
+        },
+        {
+          "qty": 15,
+          "kind": "metal"
+        }
+      ],
+      "binding": 15,
+      "crosses": "",
+      "requires": "",
+      "readies": false,
+      "movable": false
+    },
+    {
+      "name": "store",
+      "strength": null,
+      "fuel": null,
+      "upkeep": [],
+      "costs": [
+        {
+          "qty": 1,
+          "kind": "labor"
+        },
+        {
+          "qty": 1,
+          "kind": "metal"
+        }
+      ],
+      "binding": 1,
+      "crosses": "",
+      "requires": "",
+      "readies": false,
+      "movable": false
+    },
+    {
+      "name": "ark",
+      "strength": 2,
+      "fuel": null,
+      "upkeep": [],
+      "costs": [
+        {
+          "qty": 3,
+          "kind": "metal"
+        },
+        {
+          "qty": 12,
+          "kind": "energy"
+        },
+        {
+          "qty": 2,
+          "kind": "citizens"
+        }
+      ],
+      "binding": 3,
+      "crosses": "orbit border",
+      "requires": "a Yard",
+      "readies": true,
+      "movable": true
+    },
+    {
+      "name": "pioneer",
+      "strength": 2,
+      "fuel": 2,
+      "upkeep": [],
+      "costs": [
+        {
+          "qty": 3,
+          "kind": "metal"
+        },
+        {
+          "qty": 6,
+          "kind": "energy"
+        },
+        {
+          "qty": 2,
+          "kind": "citizens"
+        }
+      ],
+      "binding": 3,
+      "crosses": "border",
+      "requires": "",
+      "readies": true,
+      "movable": true
+    }
+  ],
+  "recipes": [
+    {
+      "name": "deploy ark",
+      "owner": "player",
+      "rows": [
+        {
+          "role": "require",
+          "qty": "1",
+          "kind": "territory",
+          "traits": "",
+          "where": "$where"
+        },
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "ark",
+          "traits": "",
+          "where": "the orbit above $where"
+        },
+        {
+          "role": "produce",
+          "qty": "1",
+          "kind": "garrison",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "produce",
+          "qty": "2",
+          "kind": "citizen",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "produce",
+          "qty": "1",
+          "kind": "extractor",
+          "traits": "food",
+          "where": "",
+          "constraint": {
+            "trait": "resource",
+            "compare": "is",
+            "value": "food"
+          }
+        },
+        {
+          "role": "produce",
+          "qty": "1",
+          "kind": "extractor",
+          "traits": "metal",
+          "where": "",
+          "constraint": {
+            "trait": "resource",
+            "compare": "is",
+            "value": "metal"
+          }
+        }
+      ]
+    },
+    {
+      "name": "move",
+      "owner": "player",
+      "rows": [
+        {
+          "role": "require",
+          "qty": "1",
+          "kind": "place",
+          "traits": "",
+          "where": "$from"
+        },
+        {
+          "role": "require",
+          "qty": "1",
+          "kind": "place",
+          "traits": "joined to $from by an edge the unit crosses",
+          "where": "$to",
+          "constraint": null
+        },
+        {
+          "role": "require",
+          "qty": "1",
+          "kind": "unit",
+          "traits": "moving at least 1",
+          "where": "$from",
+          "constraint": {
+            "trait": "moving",
+            "compare": "at least",
+            "value": 1
+          }
+        },
+        {
+          "role": "put",
+          "qty": "",
+          "kind": "unit",
+          "traits": "moving one less",
+          "where": "$to",
+          "constraint": {
+            "trait": "moving",
+            "compare": "one less",
+            "value": null
+          }
+        },
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "energy",
+          "traits": "",
+          "where": "that unit"
+        }
+      ]
+    },
+    {
+      "name": "found by land",
+      "owner": "player",
+      "rows": [
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "pioneer",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "produce",
+          "qty": "1",
+          "kind": "garrison",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "produce",
+          "qty": "2",
+          "kind": "citizen",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "produce",
+          "qty": "1",
+          "kind": "extractor",
+          "traits": "food",
+          "where": "",
+          "constraint": {
+            "trait": "resource",
+            "compare": "is",
+            "value": "food"
+          }
+        },
+        {
+          "role": "produce",
+          "qty": "1",
+          "kind": "extractor",
+          "traits": "metal",
+          "where": "",
+          "constraint": {
+            "trait": "resource",
+            "compare": "is",
+            "value": "metal"
+          }
+        }
+      ]
+    },
+    {
+      "name": "build extractor",
+      "owner": "player",
+      "rows": [
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "labor",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "metal",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "produce",
+          "qty": "1",
+          "kind": "extractor",
+          "traits": "$resource",
+          "where": "",
+          "constraint": {
+            "trait": "resource",
+            "compare": "is",
+            "value": "$resource"
+          }
+        }
+      ]
+    },
+    {
+      "name": "build store",
+      "owner": "player",
+      "rows": [
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "labor",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "metal",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "produce",
+          "qty": "1",
+          "kind": "store",
+          "traits": "$resource",
+          "where": "",
+          "constraint": {
+            "trait": "resource",
+            "compare": "is",
+            "value": "$resource"
+          }
+        }
+      ]
+    },
+    {
+      "name": "build yard",
+      "owner": "player",
+      "rows": [
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "labor",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "consume",
+          "qty": "15",
+          "kind": "metal",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "produce",
+          "qty": "1",
+          "kind": "yard",
+          "traits": "",
+          "where": ""
+        }
+      ]
+    },
+    {
+      "name": "produce pioneer",
+      "owner": "player",
+      "rows": [
+        {
+          "role": "consume",
+          "qty": "3",
+          "kind": "metal",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "consume",
+          "qty": "6",
+          "kind": "energy",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "consume",
+          "qty": "2",
+          "kind": "citizen",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "produce",
+          "qty": "1",
+          "kind": "pioneer",
+          "traits": "",
+          "where": ""
+        }
+      ]
+    },
+    {
+      "name": "launch ark",
+      "owner": "player",
+      "rows": [
+        {
+          "role": "require",
+          "qty": "1",
+          "kind": "territory",
+          "traits": "",
+          "where": "$where"
+        },
+        {
+          "role": "consume",
+          "qty": "3",
+          "kind": "metal",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "consume",
+          "qty": "12",
+          "kind": "energy",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "consume",
+          "qty": "2",
+          "kind": "citizen",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "require",
+          "qty": "1",
+          "kind": "yard",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "produce",
+          "qty": "1",
+          "kind": "ark",
+          "traits": "",
+          "where": "the orbit above $where"
+        }
+      ]
+    },
+    {
+      "name": "create labor",
+      "owner": "player",
+      "rows": [
+        {
+          "role": "require",
+          "qty": "1",
+          "kind": "citizen",
+          "traits": "laboring at least 1",
+          "where": "",
+          "constraint": {
+            "trait": "laboring",
+            "compare": "at least",
+            "value": 1
+          }
+        },
+        {
+          "role": "put",
+          "qty": "",
+          "kind": "citizen",
+          "traits": "laboring one less",
+          "where": "",
+          "constraint": {
+            "trait": "laboring",
+            "compare": "one less",
+            "value": null
+          }
+        },
+        {
+          "role": "produce",
+          "qty": "1",
+          "kind": "labor",
+          "traits": "",
+          "where": ""
+        }
+      ]
+    },
+    {
+      "name": "work",
+      "owner": "player",
+      "rows": [
+        {
+          "role": "require",
+          "qty": "1",
+          "kind": "territory",
+          "traits": "",
+          "where": "$where"
+        },
+        {
+          "role": "require",
+          "qty": "1",
+          "kind": "extractor",
+          "traits": "working at least 1",
+          "where": "",
+          "constraint": {
+            "trait": "working",
+            "compare": "at least",
+            "value": 1
+          }
+        },
+        {
+          "role": "put",
+          "qty": "",
+          "kind": "extractor",
+          "traits": "working one less",
+          "where": "",
+          "constraint": {
+            "trait": "working",
+            "compare": "one less",
+            "value": null
+          }
+        },
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "labor",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "produce",
+          "qty": "$where's density for that resource",
+          "kind": "resource",
+          "traits": "",
+          "where": ""
+        }
+      ]
+    },
+    {
+      "name": "upkeep",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "require",
+          "qty": "1",
+          "kind": "citizen",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "food",
+          "traits": "",
+          "where": ""
+        }
+      ]
+    },
+    {
+      "name": "bear",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "require",
+          "qty": "1",
+          "kind": "citizen",
+          "traits": "bearing at least 1",
+          "where": "",
+          "constraint": {
+            "trait": "bearing",
+            "compare": "at least",
+            "value": 1
+          }
+        },
+        {
+          "role": "put",
+          "qty": "",
+          "kind": "citizen",
+          "traits": "bearing one less",
+          "where": "",
+          "constraint": {
+            "trait": "bearing",
+            "compare": "one less",
+            "value": null
+          }
+        },
+        {
+          "role": "produce",
+          "qty": "1",
+          "kind": "fertility",
+          "traits": "",
+          "where": ""
+        }
+      ]
+    },
+    {
+      "name": "breed",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "fertility",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "food",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "produce",
+          "qty": "1",
+          "kind": "citizen",
+          "traits": "",
+          "where": ""
+        }
+      ]
+    },
+    {
+      "name": "perish",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "citizen",
+          "traits": "whose upkeep is unpaid",
+          "where": "",
+          "constraint": null
+        }
+      ]
+    },
+    {
+      "name": "age",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "require",
+          "qty": "1",
+          "kind": "thing",
+          "traits": "keeps at least 1",
+          "where": "",
+          "constraint": {
+            "trait": "keeps",
+            "compare": "at least",
+            "value": 1
+          }
+        },
+        {
+          "role": "put",
+          "qty": "",
+          "kind": "thing",
+          "traits": "keeps one less",
+          "where": "",
+          "constraint": {
+            "trait": "keeps",
+            "compare": "one less",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "spoil",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "thing",
+          "traits": "keeps 0",
+          "where": "",
+          "constraint": {
+            "trait": "keeps",
+            "compare": "is",
+            "value": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "stow",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "metal",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "produce",
+          "qty": "1",
+          "kind": "metal",
+          "traits": "",
+          "where": "a store for metal"
+        }
+      ]
+    },
+    {
+      "name": "stow",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "energy",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "produce",
+          "qty": "1",
+          "kind": "energy",
+          "traits": "",
+          "where": "a store for energy"
+        }
+      ]
+    },
+    {
+      "name": "discard",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "metal",
+          "traits": "",
+          "where": ""
+        }
+      ]
+    },
+    {
+      "name": "discard",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "energy",
+          "traits": "",
+          "where": ""
+        }
+      ]
+    },
+    {
+      "name": "discard",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "labor",
+          "traits": "",
+          "where": ""
+        }
+      ]
+    },
+    {
+      "name": "discard",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "fertility",
+          "traits": "",
+          "where": ""
+        }
+      ]
+    },
+    {
+      "name": "refresh",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "put",
+          "qty": "",
+          "kind": "unit",
+          "traits": "moving at its maximum",
+          "where": "",
+          "constraint": {
+            "trait": "moving",
+            "compare": "at its maximum",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "refresh",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "put",
+          "qty": "",
+          "kind": "citizen",
+          "traits": "laboring at its maximum",
+          "where": "",
+          "constraint": {
+            "trait": "laboring",
+            "compare": "at its maximum",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "refresh",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "put",
+          "qty": "",
+          "kind": "citizen",
+          "traits": "bearing at its maximum",
+          "where": "",
+          "constraint": {
+            "trait": "bearing",
+            "compare": "at its maximum",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "refresh",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "put",
+          "qty": "",
+          "kind": "extractor",
+          "traits": "working at its maximum",
+          "where": "",
+          "constraint": {
+            "trait": "working",
+            "compare": "at its maximum",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "muster",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "require",
+          "qty": "1",
+          "kind": "garrison",
+          "traits": "",
+          "where": ""
+        },
+        {
+          "role": "require",
+          "qty": "1",
+          "kind": "citizen",
+          "traits": "defending at least 1",
+          "where": "",
+          "constraint": {
+            "trait": "defending",
+            "compare": "at least",
+            "value": 1
+          }
+        },
+        {
+          "role": "put",
+          "qty": "",
+          "kind": "citizen",
+          "traits": "defending one less",
+          "where": "",
+          "constraint": {
+            "trait": "defending",
+            "compare": "one less",
+            "value": null
+          }
+        },
+        {
+          "role": "produce",
+          "qty": "that citizen's strength",
+          "kind": "force",
+          "traits": "",
+          "where": ""
+        }
+      ]
+    },
+    {
+      "name": "stand",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "require",
+          "qty": "1",
+          "kind": "unit",
+          "traits": "defending at least 1",
+          "where": "",
+          "constraint": {
+            "trait": "defending",
+            "compare": "at least",
+            "value": 1
+          }
+        },
+        {
+          "role": "put",
+          "qty": "",
+          "kind": "unit",
+          "traits": "defending one less",
+          "where": "",
+          "constraint": {
+            "trait": "defending",
+            "compare": "one less",
+            "value": null
+          }
+        },
+        {
+          "role": "produce",
+          "qty": "that unit's strength",
+          "kind": "force",
+          "traits": "",
+          "where": ""
+        }
+      ]
+    },
+    {
+      "name": "refresh",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "put",
+          "qty": "",
+          "kind": "citizen",
+          "traits": "defending at its maximum",
+          "where": "",
+          "constraint": {
+            "trait": "defending",
+            "compare": "at its maximum",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "refresh",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "put",
+          "qty": "",
+          "kind": "unit",
+          "traits": "defending at its maximum",
+          "where": "",
+          "constraint": {
+            "trait": "defending",
+            "compare": "at its maximum",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "discard",
+      "owner": "world",
+      "rows": [
+        {
+          "role": "consume",
+          "qty": "1",
+          "kind": "force",
+          "traits": "",
+          "where": ""
+        }
+      ]
+    }
+  ],
+  "biomes": [
+    {
+      "name": "Ocean",
+      "food": null,
+      "metal": null,
+      "energy": null,
+      "nature": null
+    },
+    {
+      "name": "Ice",
+      "food": {
+        "capacity": 1,
+        "density": 2
+      },
+      "metal": {
+        "capacity": 3,
+        "density": 5
+      },
+      "energy": {
+        "capacity": 1,
+        "density": 2
+      },
+      "nature": 1
+    },
+    {
+      "name": "Desert",
+      "food": {
+        "capacity": 2,
+        "density": 4
+      },
+      "metal": {
+        "capacity": 3,
+        "density": 4
+      },
+      "energy": {
+        "capacity": 5,
+        "density": 6
+      },
+      "nature": 1
+    },
+    {
+      "name": "Grassland",
+      "food": {
+        "capacity": 5,
+        "density": 6
+      },
+      "metal": {
+        "capacity": 2,
+        "density": 3
+      },
+      "energy": {
+        "capacity": 1,
+        "density": 3
+      },
+      "nature": 1
+    },
+    {
+      "name": "Jungle",
+      "food": {
+        "capacity": 6,
+        "density": 6
+      },
+      "metal": {
+        "capacity": 1,
+        "density": 2
+      },
+      "energy": {
+        "capacity": 1,
+        "density": 2
+      },
+      "nature": 2
+    },
+    {
+      "name": "Mountain",
+      "food": {
+        "capacity": 1,
+        "density": 3
+      },
+      "metal": {
+        "capacity": 5,
+        "density": 7
+      },
+      "energy": {
+        "capacity": 2,
+        "density": 3
+      },
+      "nature": 1
+    }
+  ],
+  "territories": [
+    {
+      "id": 1,
+      "food": {
+        "capacity": 3,
+        "density": 4
+      },
+      "metal": {
+        "capacity": 3,
+        "density": 4
+      },
+      "energy": {
+        "capacity": 3,
+        "density": 4
+      },
+      "exercises": "The landing site. Everything works"
+    },
+    {
+      "id": 2,
+      "food": {
+        "capacity": 2,
+        "density": 6
+      },
+      "metal": {
+        "capacity": 2,
+        "density": 4
+      },
+      "energy": {
+        "capacity": 2,
+        "density": 4
+      },
+      "exercises": "Few dense food extractors"
+    },
+    {
+      "id": 3,
+      "food": {
+        "capacity": 6,
+        "density": 2
+      },
+      "metal": {
+        "capacity": 2,
+        "density": 4
+      },
+      "energy": {
+        "capacity": 2,
+        "density": 4
+      },
+      "exercises": "Many thin food extractors, same food total"
+    },
+    {
+      "id": 4,
+      "food": {
+        "capacity": 1,
+        "density": 2
+      },
+      "metal": {
+        "capacity": 4,
+        "density": 5
+      },
+      "energy": {
+        "capacity": 4,
+        "density": 5
+      },
+      "exercises": "The minimum a territory can be"
+    },
+    {
+      "id": 5,
+      "food": {
+        "capacity": 3,
+        "density": 1
+      },
+      "metal": {
+        "capacity": 8,
+        "density": 8
+      },
+      "energy": {
+        "capacity": 8,
+        "density": 8
+      },
+      "exercises": "Food density 1"
+    },
+    {
+      "id": 6,
+      "food": {
+        "capacity": 4,
+        "density": 4
+      },
+      "metal": null,
+      "energy": {
+        "capacity": 4,
+        "density": 5
+      },
+      "exercises": "No metal"
+    },
+    {
+      "id": 7,
+      "food": {
+        "capacity": 4,
+        "density": 4
+      },
+      "metal": {
+        "capacity": 4,
+        "density": 5
+      },
+      "energy": null,
+      "exercises": "No energy"
+    },
+    {
+      "id": 8,
+      "food": {
+        "capacity": 6,
+        "density": 6
+      },
+      "metal": {
+        "capacity": 1,
+        "density": 2
+      },
+      "energy": {
+        "capacity": 1,
+        "density": 2
+      },
+      "exercises": "Population without industry"
+    },
+    {
+      "id": 9,
+      "food": {
+        "capacity": 2,
+        "density": 3
+      },
+      "metal": {
+        "capacity": 6,
+        "density": 8
+      },
+      "energy": {
+        "capacity": 1,
+        "density": 2
+      },
+      "exercises": "Rich metal, too few hands to work it"
+    },
+    {
+      "id": 10,
+      "food": {
+        "capacity": 3,
+        "density": 3
+      },
+      "metal": {
+        "capacity": 1,
+        "density": 3
+      },
+      "energy": {
+        "capacity": 6,
+        "density": 8
+      },
+      "exercises": "An energy depot"
+    },
+    {
+      "id": 11,
+      "food": {
+        "capacity": 5,
+        "density": 6
+      },
+      "metal": {
+        "capacity": 5,
+        "density": 6
+      },
+      "energy": {
+        "capacity": 5,
+        "density": 6
+      },
+      "exercises": "The prize"
+    },
+    {
+      "id": 12,
+      "food": {
+        "capacity": 2,
+        "density": 2
+      },
+      "metal": {
+        "capacity": 8,
+        "density": 8
+      },
+      "energy": {
+        "capacity": 8,
+        "density": 8
+      },
+      "exercises": "Rich extractors, almost no workers"
+    }
+  ],
+  "worldOrder": [
+    "upkeep",
+    "bear",
+    "breed",
+    "perish",
+    "age",
+    "spoil",
+    "stow",
+    "discard",
+    "refresh"
+  ],
+  "loop": [
+    "No presence on the planet",
+    "Land the ark on a territory from orbit, claiming it",
+    "Work the food extractor to grow the population",
+    "Build extractors for metal and energy",
+    "Produce pioneers and spread across the planet by land",
+    "Build a Yard",
+    "Build and launch an Ark, which is one act"
+  ],
+  "typedCells": [
+    {
+      "recipe": "move",
+      "text": "joined to $from by an edge the unit crosses"
+    },
+    {
+      "recipe": "perish",
+      "text": "whose upkeep is unpaid"
+    }
+  ],
+  "wheres": [
+    "$from",
+    "$to",
+    "$where",
+    "a store for energy",
+    "a store for metal",
+    "that unit",
+    "the orbit above $where"
+  ],
+  "vocabularies": {
+    "traitSubjects": [
+      "a citizen",
+      "a citizen or a unit",
+      "a deposit",
+      "a territory",
+      "a thing that must be named individually",
+      "a thing with upkeep",
+      "a unit",
+      "an adjacency",
+      "an extractor",
+      "an extractor or a store",
+      "citizen, garrison, ark, pioneer",
+      "food",
+      "the game",
+      "thing",
+      "whatever is built",
+      "whatever moves"
+    ],
+    "traitValues": [
+      "0 or 1",
+      "a number",
+      "a number, unique among things of its kind",
+      "a place",
+      "design or play",
+      "food per turn",
+      "held by a player, or unclaimed",
+      "how much energy its tank holds",
+      "one of the biomes",
+      "one of the resources",
+      "the number of turns it will last",
+      "yes or no"
+    ],
+    "boundReasons": [
+      "a capacity of 1",
+      "a capacity of 2",
+      "a capacity, from *Territory resources*",
+      "as many as the extractors of its resource",
+      "the citizens that make it, one each per turn",
+      "the food produced here, through upkeep",
+      "the things in it that hold it",
+      "the things in it that hold it, and it keeps for one turn"
+    ],
+    "containerNames": [
+      "a store",
+      "a territory's total capacity for a kind",
+      "a unit's tank"
+    ],
+    "containerHolds": [
+      "energy",
+      "that kind",
+      "the resource it was built for"
+    ],
+    "containerUpTo": [
+      "10",
+      "its total capacity for that kind",
+      "the unit's fuel"
+    ],
+    "derivations": [
+      "a citizen of that player is there",
+      "its binding plus the metal in its parts",
+      "its upkeep was not met",
+      "left after every upkeep was paid"
+    ]
+  },
+  "quantityExpressions": [
+    "$where's density for that resource",
+    "that citizen's strength",
+    "that unit's strength"
+  ]
+}

@@ -104,6 +104,15 @@ Newest first.
     and the places where a line needed something that notation does not define are listed and
     counted rather than papered over - which is the column's real output.
 
+- [The game's data, edited by choosing](../../tools/research/editor/README.md) - a prototype
+  editor, and the one artifact here that is run rather than read
+  - 2026-09-12. Carries `X-31`. Every table in the release, edited by selection alone: open
+    `tools/research/editor/index.html`, no server and no build. **The deliverable is what would
+    not go into a menu** - 2 of the 29 conditions in the recipes, and both expressible with
+    vocabulary the release already declares. Generated from the release by `extract.py`, so the
+    editor cannot drift from what it edits, and the count is recomputed at load rather than
+    written down.
+
 - [`deploy ark`, worked, and the seven rows that are already duplicated](2026-09-08-deploy-worked.md)
   - 2026-09-08. Carries `X-12`. `deploy ark` and `found by land` share seven rows verbatim, which
     is the first real call site for nesting; deriving the territory deletes a row and a `Where`;
