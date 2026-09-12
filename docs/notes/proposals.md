@@ -62,9 +62,9 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-469 - a fact is stated once
+### P-469 - a fact is stated once, and it is said which form is the fact
 
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** asked for, from your question on `P-466` · **shape** text · **asks** approval · **into** `spec/invariants.md` -> a new section after *The game is data*
+**to** sean · **status** open · **cited** `530d53a` · **raised** 2026-09-12 · **kind** asked for, from your question on `P-466` and your two additions · **shape** text · **asks** approval · **into** `spec/invariants.md` -> a new section after *The game is data*
 
 **The idea is in the specification three times and none of the three reaches `P-466`:**
 
@@ -86,6 +86,16 @@ CLAUDE.md
 a test, which is the gap between the three. **The same idea written three times, each too narrow, is
 itself an instance of what it is about.**
 
+**And your two additions are widely practised and stated nowhere.** **Eighteen of the twenty-six
+documents in `spec/`, `docs/` and the root open with Authored, Derived or Generated** - counted - and
+`pending.md` says *an edit here is a claim that disagrees with its source and loses at the next
+commit*. **`spec/` requires neither** - the nearest is *the data may be replicated in the
+presentation layer, and no replication is canonical*, which is scoped to the presentation layer.
+
+**The eight without it are the argument rather than a detail**: `README.md`, `spec/scenarios.md`, and
+six of `docs/` including `process.md` and `designing-rules.md`. **A convention kept by most files and
+required by none is one a reader cannot rely on**, so its absence says nothing.
+
 ## The words
 
 > ## A fact is stated once
@@ -100,22 +110,45 @@ itself an instance of what it is about.**
 > - **A second form kept for a reader is generated, and a check says the two agree.** A convenience
 >   that can drift is not one. **And the shorter specification is the one that says each thing once**,
 >   so removing the second form is better than checking it.
+> - **Exactly one form of a fact is canonical, and it is said which.** Not the clearest, not the
+>   newest, not the one a reader happens to be looking at - the one named. **Where nothing names it,
+>   two readers will choose differently and both will be reasonable.**
+> - **Every other form says that it is one, and says what it is a form of.** A projection names what
+>   it projects and a copy names what it copies. **A form that does not say is indistinguishable from
+>   the fact itself**, which is how a copy becomes a second source.
+> - **A change made to a form that is not canonical is not a change.** It is lost when that form is
+>   next made, and **losing it is correct** - the alternative is one fact with two histories.
 
-## What it settles, and what it does not
+## What the three new bullets add
 
-**It makes `P-466`'s `A` the default and its `C` the fallback.** Three columns of *Units and
-structures* restate the recipes; the rule says remove them, and permits generating them if a reader
-turns out to want them. **It does not decide `P-466`** - that item asks whether a reader wants them,
-which is a judgement about readers and not about facts.
+**The fourth** is what `P-466` most needs and what *no replication is canonical* half-says: that
+sentence rules one form out and names no winner. **Between two tables in `releases/` neither is a
+replication of the other by that wording**, and nothing else picks.
 
-**The three narrow statements stay.** The data-file sentence says more than this one - it says
-**which** form is canonical - and `P-458`'s clause is a justification inside a bullet about something
-else. **Neither is a copy of this**, which is worth saying in a proposal that is about copies.
+**The fifth** turns the Authored / Derived / Generated header from a convention into a requirement,
+and extends it past whole files - **a table inside an authored file can be a projection, and today
+nothing obliges it to say so.** `P-466`'s three columns say nothing, which is why two lanes read them
+as data for weeks.
 
-**And it does not mechanise anything.** No check can ask whether two sentences are the same fact;
-what it changes is which way to lean when you notice, and that the noticing has to be done by
-deriving. **That is the same wall `P-245` hit and `CLAUDE.md` records** - what is available is the habit
-and the cases.
+**The sixth** is the one with teeth for a person rather than a tool. It says the cost of editing the
+wrong copy is **the edit**, and that this is the design working rather than a loss. `pending.md`
+already behaves this way and says so; the rule generalises it.
+
+## What it does not do
+
+**It does not decide `P-466`.** That item asks whether a reader wants the convenience, which is a
+judgement about readers. **What this settles is the half about facts** - `A` is the default, `C` is
+the fallback, and whichever is taken the columns must say what they are.
+
+**The three narrow statements stay.** The data-file sentence carries more than this one - it says
+*which* form is canonical for data - and `P-458`'s clause is a justification inside a bullet about
+something else. **Neither is a copy of this**, which is worth saying in a proposal about copies.
+
+**And it mechanises almost nothing.** No check can ask whether two sentences are the same fact, which
+is the wall `P-245` hit and `CLAUDE.md` records. **The fifth bullet is the exception** - whether a
+form says what it is a form of is a thing a tool can read, and eight documents fail it today. **That
+is a check this lane owes rather than a claim this proposal makes.**
+
 ### P-468 - biome is named as an input to output and reaches nothing
 
 **to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed, from your answer to `P-467` applied to `Q-80` · **shape** text · **asks** approval · **into** `spec/control.md` -> Winning

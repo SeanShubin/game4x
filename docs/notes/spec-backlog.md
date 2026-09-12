@@ -3238,3 +3238,25 @@ and every one was found by **deriving one form from the other** - a garrison's c
 recipe, a trait's values against the file that declares them, a derived trait against the name it is
 defined by, and a named input against the code that reads it. **None was found by reading either
 form.**
+
+## Said 2026-09-12, one thing canonical and every copy saying so
+
+Sean, extending `P-469`: *Lets make sure we also have an invariant that says only one thing can be
+canonical, and it has to be made clear what is a projection or a modification of a copy.*
+
+**Both are widely practised and required nowhere.** Eighteen of the twenty-six documents in `spec/`,
+`docs/` and the root open with **Authored**, **Derived** or **Generated**; eight do not, including
+`README.md`, `docs/process.md` and `docs/designing-rules.md`. `pending.md` says an edit to it *loses
+at the next commit*. **`spec/` requires neither** - the nearest is *no replication is canonical*,
+scoped to the presentation layer, which rules one form out and names no winner.
+
+**Three bullets rather than a second section**, because a section beside `P-469` saying adjacent
+things would be the thing itself:
+
+- exactly one form is canonical **and it is said which**
+- every other form **says that it is one, and says what it is a form of** - which extends the
+  header convention past whole files, since a table inside an authored file can be a projection
+- **a change made to a non-canonical form is not a change**, and losing it is correct
+
+**The fifth is the only one a tool can read**, and eight documents fail it today. That is a check
+this lane owes.
