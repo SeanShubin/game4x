@@ -62,6 +62,87 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-455 - three data files, and `kinds.4x` finished
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed, from `P-448`, `P-451` and `P-454` · **shape** instruction · **asks** approval · **into** `spec/data/`
+
+**`kinds.4x` replaced**, 22 lines - four vocabulary kinds, then the eighteen, seven carrying a family:
+
+```
+{kind name:kind}
+{kind name:trait}
+{kind name:family}
+{kind name:value}
+{kind name:citizen}
+{kind name:garrison}
+{kind name:extractor}
+{kind name:yard}
+{kind name:store}
+{kind family:unit name:ark}
+{kind family:unit name:pioneer}
+{kind family:resource name:food}
+{kind family:resource name:metal}
+{kind family:resource name:energy}
+{kind name:labor}
+{kind family:place name:territory}
+{kind family:place name:orbit}
+{kind name:deposit}
+{kind name:adjacency}
+{kind name:game}
+{kind name:fertility}
+{kind name:force}
+```
+
+**`families.4x` created**, a name and nothing else, as `P-448` says:
+
+```
+{family name:thing}
+{family name:unit}
+{family name:resource}
+{family name:place}
+```
+
+**`biomes.4x` created**, a value carrying its trait, as `P-454` says:
+
+```
+{value name:ocean of:biome}
+{value name:ice nature:1 of:biome}
+{value name:desert nature:1 of:biome}
+{value name:grassland nature:1 of:biome}
+{value name:jungle nature:2 of:biome}
+{value name:mountain nature:1 of:biome}
+```
+
+**The instruction: write those three files into `spec/data/`**, `kinds.4x` replacing what is there.
+
+**The check the promoting commit runs**, and this lane has run it: **each file agrees with the
+release's table in both directions.** Kinds 22 against 18 with the four left over exactly `kind`,
+`trait`, `family`, `value`; families 4 against 4 and identical; biomes 6 against 6 and identical.
+
+## What is in each and why, so nothing reads as a choice
+
+**Seven of the eighteen kinds carry a family** - two units, three resources, two places - and `thing`
+carries none, because `P-448` says a kind is a `thing` for being a kind.
+
+**`value` is the fourth declaring kind**, which `P-451` made necessary the moment a value could
+declare its trait.
+
+**`biomes.4x` carries `nature` and not the three resource columns**, and that is the release's own
+sentence rather than a decision: *the numbers here guide and do not bind; a territory's own are in
+Territory resources. **Force of nature is the one column that binds.*** **Ocean carries no `nature`**
+because the release says it is not claimable and carries nothing.
+
+**And the check behind `biomes.4x` is poisoned against the answer that would survive a constant** -
+jungle is 2 and every other claimable biome is 1, so a generator writing 1 everywhere passes
+everything else and fails there.
+
+## What lands with it
+
+**The code lane's stripping exception comes out.** Its byte assertion says that taking `family:` and
+the `value` line back out of what the generator writes gives the file exactly - **an exception that
+cannot outlive its excuse**, which is `C-61`'s pattern. The day this lands, stripping stops yielding
+the file and the exception goes rather than being widened.
+
 *Nothing is open. Everything filed has been decided.*
 
 ## Addressed to other perspectives
