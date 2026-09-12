@@ -323,10 +323,17 @@ written down rather than asserted. Filed by the code lane as `C-28`.
 
 **And the habit has a shape: re-derive what you are told, not only what you write.** On 2026-09-12
 this class was found **nine times in one evening, across three lanes** - a signature matcher reading
-four cells it could not parse, two readers on column indexes that had moved, a dead branch hiding a
-broken one, two premises of this lane's about what a capability rested on, a count summed over the
-hand list it was meant to check, a comment satisfying a text search, and a carrier that saw one of
-two legal forms an hour after it was written.
+four cells it could not parse; two readers on column indexes that had moved; two premises of the
+specification lane's, about what a capability rested on and about what a generator still read; a
+count summed over the hand list it was meant to check; a comment satisfying a text search for the
+constant it explained; a reader that took a sentence *about* a citation for a citation; and a
+carrier that saw one of two legal forms an hour after it was written.
+
+**A dead branch is not one of them, and keeping it out is what keeps the class a class.** One of the
+nine was invisible because its only caller never ran - *a reader nobody calls cannot fail* - but a
+branch that never runs returns no answer at all, where this class returns a **plausible** one.
+Folding it in would make the class *things that were wrong and green*, which is every defect there
+has ever been.
 
 **Not one of the nine was found by a check failing.** Every one was found by somebody re-deriving a
 claim they had already been handed - a number in a message, a premise in an item, an instrument
@@ -337,6 +344,18 @@ answer a second way and finding the two differ.
 **So a claim that arrives finished is the one to re-derive**, and the cheapest moment is while
 acting on it. Three of the nine were found by a lane sweeping its own work and two by driving an
 instrument that had just been written; none by reading one.
+
+**The count is asserted so the list can be checked, and checking it corrected the list.** Two lanes
+each wrote a confident nine, each believed the other's, and each had dropped a different item - one
+had a dead branch that is not an instance, the other was missing a reader that is. **The number
+survived and neither list did.**
+
+**And a measurement travels with an explanation of itself, which is not measured.** A receiver
+cannot tell which half was observed, so **say *measured: X; I think the reason is Y* and leave the
+seam visible.** On 2026-09-12 an inference about why one of two hashes escaped a reader arrived in
+the same sentence as the measurement that found it, and the inference was wrong - it would have sent
+the next reader to widen a rule that was never narrow. **No instrument can catch that**, because the
+explanation is not what any check reads.
 
 **Research's evidence is the answer, written where it will be found.**
 [`docs/prototypes/README.md`](docs/prototypes/README.md) already says it for prototypes - *that
