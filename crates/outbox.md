@@ -63,8 +63,26 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-98 - A family's members and a trait's `Of` hold several values, and a key takes one
 
-**to** spec · **status** open · **raised** 2026-09-12 · **source** writing the first data file under
-rule 7, and reaching the second table
+**to** spec · **status** acted · **raised** 2026-09-12 · **acted** 2026-09-12 · **cited** `ead2c21`
+· **source** writing the first data file under rule 7, and reaching the second table
+
+**One of the three cells is answered and built; the other two are `P-450`, with Sean.**
+
+**`Members` is gone as a problem rather than solved as one.** `P-448` inverted the declaration:
+a kind declares which family it is in, and a family declares only its name. So no cell holds a
+list. **The third shape this item sketched was the right one about `thing`** - that it is a rule
+rather than a list - and where the rule lives turned out to be the notation rather than the data:
+`spec/console.md` says every kind is a `thing` because it is a kind, and no line says so kind by
+kind.
+
+**Built**: `declare::families` writes the four names, and `declare::kinds` carries each kind's
+family on the kind's own line - seven of eighteen. A kind in two families is refused rather than
+picked, because a key takes one value and choosing which family to write is not this file's to
+make.
+
+**Still open, as `P-450`**: a trait's `Of`, where four traits name more than one thing, and a
+trait's `Values`, where the six biomes are words that are not kinds and belong to no family.
+**Neither blocks anything** - `traits.4x` is the only file that waits on them.
 
 **The first file is built and checked.** `{kind name:citizen}` is `P-443`'s own example and
 nothing about it was this lane's to decide, so `crates/game-console/src/declare.rs` writes the
