@@ -562,3 +562,67 @@ fn every_recipe_row_names_a_count_rather_than_readiness() {
          `P-411` wrote"
     );
 }
+
+/// The two tables this crate reads by position, and the order it assumes.
+///
+/// **Three readers went wrong this way in one day and each was green.** `P-346` moved *Costs to
+/// produce* and a reader of cell 5 said a pioneer has no metal cost. `P-466` moved *Readies* to
+/// cell 5 and a reader of cell 8 said four things ready nothing. The same removal left
+/// `nogain::readies` reading cell 8 of a seven-column table, returning an empty list, with its
+/// only caller a branch that had been dead since `P-411`.
+///
+/// **`recipes::column_of` is the repair and it is not everywhere yet.** Twenty-odd sites in
+/// `nogain.rs` and `petri.rs` index the Recipes table, which is correct today and silent
+/// tomorrow. This is the guard that makes tomorrow loud **in the crate that does the
+/// indexing** - `prototypes/kinds` already compares both headers with the release, so a change
+/// is caught there, but it is caught in a crate that renders rather than one that reads, and
+/// whoever repairs it has no reason to look here.
+///
+/// **A header, not a count.** Asserting seven columns would pass a rename and a reorder, which
+/// are the two changes that break a positional read.
+#[test]
+fn the_tables_this_crate_reads_by_position_are_in_the_order_it_assumes() {
+    let document = release();
+    let mut checked = 0;
+    for (heading, columns) in [
+        (
+            "## Recipes",
+            &["Recipe", "Owner", "Role", "Qty", "Kind", "Traits", "Where"][..],
+        ),
+        (
+            "## Units and structures",
+            &[
+                "Thing", "Strength", "Fuel", "Upkeep", "Crosses", "Readies", "Movable",
+            ][..],
+        ),
+    ] {
+        for (at, column) in columns.iter().enumerate() {
+            assert_eq!(
+                game_console::recipes::column_of(&document, heading, column),
+                at,
+                "`{heading}` puts `{column}` somewhere other than {at}, and this crate reads \
+                 that table by position. Every `row.get(n)` against it is now reading a \
+                 different column and saying something true about the wrong cell - see \
+                 `recipes::column_of`"
+            );
+            checked += 1;
+        }
+        // And no eighth cell in a row, because a reader that indexes past the end gets
+        // `None` and treats it as an empty cell rather than as a question - which is what
+        // `nogain::readies` did with cell 8 of this very table, silently, for a day.
+        //
+        // **Measured on a body row rather than on the header**, because a body row is what a
+        // `row.get(n)` actually indexes into, and `body_under` drops the header.
+        let width = game_console::recipes::body_under(&document, heading)
+            .first()
+            .map(Vec::len)
+            .unwrap_or_default();
+        assert_eq!(
+            width,
+            columns.len(),
+            "a row of `{heading}` has {width} cells and this crate reads {}",
+            columns.len()
+        );
+    }
+    assert_eq!(checked, 14, "seven columns of each of the two tables");
+}
