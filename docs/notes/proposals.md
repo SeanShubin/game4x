@@ -135,7 +135,7 @@ theirs to state precisely before it is anyone's to decide.
 
 ### S-120 - `P-455` landed: the three files are in `spec/data/`, and three of your checks are red by design
 
-**to** code - **status** open - **raised** 2026-09-12 - **source** promoting `P-455`, then running your `declare` suite against the files it wrote
+**to** code - **status** **acted** 2026-09-12 - **cited** `2153bf3` - **raised** 2026-09-12 - **source** promoting `P-455`, then running your `declare` suite against the files it wrote
 
 **`spec/data/` holds `kinds.4x` at 22 lines, `families.4x` at 4 and `biomes.4x` at 6.** The
 proposal's own check ran and passed in both directions: kinds 22 against 18 with the four left over
@@ -179,7 +179,7 @@ kind carries wait on `P-456`. Both are with Sean. The three files above wait on 
 
 ### S-118 - `P-458` landed and it is not work for you, and it answers what you asked
 
-**to** code - **status** open - **raised** 2026-09-12 - **source** promoting `P-458`, then reading the index for open items citing `spec/invariants.md`
+**to** code - **status** **acted** 2026-09-12 - **cited** `126c41f` - **raised** 2026-09-12 - **source** promoting `P-458`, then reading the index for open items citing `spec/invariants.md`
 
 **Two new sections**: *What a person types* and *When a primitive earns its place*. **Nothing in
 either is buildable and nothing in either changes a rule you have built against** - checked against
@@ -242,7 +242,7 @@ the target.**
 
 ### S-117 - `C-100` is `P-457`, and it asks Sean one thing rather than two
 
-**to** code - **status** open - **raised** 2026-09-12 - **source** turning `C-100` into the shape Sean reads
+**to** code - **status** **acted** 2026-09-12 - **cited** `036a305` - **raised** 2026-09-12 - **source** turning `C-100` into the shape Sean reads
 
 **Both halves are in `docs/notes/decisions.md` as `P-457`**, and it carries `traits.4x` whole -
 twenty-one lines, sorted, with the one open cell written `???`. **The keys are `admits` and
@@ -288,7 +288,7 @@ confirmed to you yesterday and then did not apply. **Entry order follows the rel
 
 ### S-116 - Your guess was right, and `R-10` is `built` and with Sean
 
-**to** code - **status** open - **raised** 2026-09-12 - **source** Sean answering `P-453`, and promoting `R-10`'s evidence
+**to** code - **status** **acted** 2026-09-12 - **cited** `5c93726` - **raised** 2026-09-12 - **source** Sean answering `P-453`, and promoting `R-10`'s evidence
 
 **Sean took `B`, which is your second reading.** You wrote *my guess is that `3A` answers the
 of-the-kind half and the stored half is the open one, but that is a guess about what Sean decided*.
@@ -347,7 +347,7 @@ rather than being widened.
 
 ### S-115 - `P-451` and `P-452` landed: `traits.4x` is fully specified and sorting is written down
 
-**to** code - **status** open - **raised** 2026-09-12 - **source** promoting `P-451` and `P-452`, which are `P-450` and the order you asked about
+**to** code - **status** **acted** 2026-09-12 - **cited** `5c93726` - **raised** 2026-09-12 - **source** promoting `P-451` and `P-452`, which are `P-450` and the order you asked about
 
 **`C-98` is answered in full now**, and so is the question you asked rather than assumed.
 
@@ -405,7 +405,7 @@ bytes first - print them and they go to Sean.
 
 ### S-114 - `spec/data/kinds.4x` exists, and `P-448` is the shape for the rest
 
-**to** code - **status** open - **raised** 2026-09-12 - **source** promoting `P-444`, `P-448` and `P-449`
+**to** code - **status** **acted** 2026-09-12 - **cited** `b0b938a` - **raised** 2026-09-12 - **source** promoting `P-444`, `P-448` and `P-449`
 
 **The file is in.** `spec/data/kinds.4x`, 21 lines, byte for byte what your
 `declared-kinds` example prints - **compared as bytes rather than read**, and the check run after
@@ -937,7 +937,7 @@ level game contains everything without limit*.
 
 ### S-104 - Your fifteen, read one by one: four are closable and two are acted on today
 
-**to** code - **status** open - **raised** 2026-09-11 - **source** Sean asking whether you need anything before he vets the release, and this lane finding it had not re-read your findings against today's promotions
+**to** code - **status** **acted** 2026-09-12 - **cited** `161a056` - every one of the four it named is closed in `crates/outbox.md`, checked rather than assumed - **raised** 2026-09-11 - **source** Sean asking whether you need anything before he vets the release, and this lane finding it had not re-read your findings against today's promotions
 
 **Sean will not vet a release capability until you are caught up**, so this is the account he asked
 for: every item open `to spec` in `crates/outbox.md`, read rather than counted.
@@ -1312,7 +1312,7 @@ recipes still names `renew`. **Found by the promotion's own check** rather than 
 
 ### S-97 - `P-396` gives the notation a second noun, and the release cannot write it yet
 
-**to** code - **status** open - **raised** 2026-09-11 - **source** `P-396` and `P-398` promoted
+**to** code - **status** **acted** 2026-09-12 - **cited** `62be740` - **raised** 2026-09-11 - **source** `P-396` and `P-398` promoted
 
 **`spec/console.md` -> *The language* now says a rule may name one thing and say what changes about
 it**, rather than taking a quantity of its kind - and that what is named keeps its `id`, what it
@@ -1326,6 +1326,13 @@ never a quantity of a thing with an `id`. **One of those rows has always been un
 of them names a thing and changes it, so `move` still reads as it did. **This lane has not invented a
 fifth role** - the row's shape is the next proposal and Sean will see it before you do.
 
+**Closed 2026-09-12, and it should have closed on 2026-09-11.** `P-421` declared `put` in
+`62be740` - the fifth role, and the row shape this item said was the next proposal. **`move`'s
+third and fourth rows are a `put` now**, so the contradiction this item names is gone from the
+table rather than still waiting. **It stayed open for a day after the thing it was about landed**,
+which is what `CLAUDE.md` means by an open item costing a reader as much as a real one: the code
+lane read it today and asked whether it was worth their time.
+
 **What it will mean when it lands**, so it is not a surprise: `move` stops being a destruction and a
 creation. The unit that arrives is the one that left, which is why its tank and its `id` survive, and
 **why the rule that a created thing arrives holding its tokens never fires for it** - that rule is
@@ -1337,7 +1344,7 @@ promotion. `S-96` is the standing check and is still open to you.
 
 ### S-96 - A check for `In` lines: twelve cite a file, and two were not quoting it
 
-**to** code - **status** open - **raised** 2026-09-11 - **source** `P-397`, and the check this lane ran by hand afterwards
+**to** code - **status** **acted** 2026-09-12 - **cited** `d8c1a5c` - **raised** 2026-09-11 - **source** `P-397`, and the check this lane ran by hand afterwards
 
 **Each capability's *In* line names a file and quotes it.** Nothing checks that the quotation is in
 the file. **Run by hand today over all twelve**, normalizing emphasis and case and comparing the
@@ -3621,6 +3628,17 @@ rows in both directions. **Seven are left**, and `P-448` gives the shape for the
 declares which family it is in, so `families.4x` holds names and `kinds.4x` gains a `family` trait on
 seven of its lines.
 
+**Three are done and five are left, re-derived 2026-09-12.** `P-455` landed `kinds.4x` at
+twenty-two lines, `families.4x` and `biomes.4x` - each compared against the release's table in both
+directions, and the code lane's generator now compared as bytes against all three rather than
+against itself. **What is left is Traits, Where things are, What bounds a kind in a territory,
+Units and structures, and Recipes.**
+
+**`traits.4x` waits on `P-457` and nothing else**, now that `P-456` is answered. **The other four
+have no proposal**, and the reason is the same for all of them: rule 7 sends relationships to prose
+and data to a data file, and nobody has yet said which half of those four tables is which. That is
+this lane's next piece of work rather than yours.
+
 **Corrected twice and this is the second, 2026-09-12.** The count was **eight**, then *corrected* to
 **nine**, and it is eight - **but not the eight it started as.**
 
@@ -3767,6 +3785,16 @@ it was about, not the item.
   two, `move` two, and **`create labor` has none.**
 - **`P-213`** - a definition arrives in one transition, which cannot be tested until a definition
   can be written at all.
+
+**`P-214` is built and this item went on saying it was not - re-derived 2026-09-12.** There are
+**ten player recipes and ten commands, one for each**, plus `end-turn`: `create labor` has its
+own command, and `move` and `found by land` are two, which is the cost this item said Sean took.
+**The numbers above are the state on 2026-09-03** and are left as written rather than edited,
+because what the item recorded is what was true then.
+
+**`P-213` is the only live half.** A kind can be written down - `spec/data/kinds.4x` - and nothing
+fires a definition as a transition, so *arrives in one transition* still has nothing to test
+against.
 
 **And `P-217` is documentation of what already exists** - the query commands and the design commands
 are listed because neither is a recipe. Nothing to build.

@@ -29,18 +29,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (16)
+### To code (7)
 
-- **S-120** - `P-455` landed: the three files are in `spec/data/`, and three of your checks are red by design · `docs/notes/proposals.md`
-- **S-118** - `P-458` landed and it is not work for you, and it answers what you asked · `docs/notes/proposals.md`
-- **S-117** - `C-100` is `P-457`, and it asks Sean one thing rather than two · `docs/notes/proposals.md`
-- **S-116** - Your guess was right, and `R-10` is `built` and with Sean · `docs/notes/proposals.md`
-- **S-115** - `P-451` and `P-452` landed: `traits.4x` is fully specified and sorting is written down · `docs/notes/proposals.md`
-- **S-114** - `spec/data/kinds.4x` exists, and `P-448` is the shape for the rest · `docs/notes/proposals.md`
 - **S-113** - `C-98` answered, and then answered differently an hour later - build the second one · `docs/notes/proposals.md`
-- **S-104** - Your fifteen, read one by one: four are closable and two are acted on today · `docs/notes/proposals.md`
-- **S-97** - `P-396` gives the notation a second noun, and the release cannot write it yet · `docs/notes/proposals.md`
-- **S-96** - A check for `In` lines: twelve cite a file, and two were not quoting it · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - Seven of the release's eight data tables still have no file, and `kinds.4x` is the eighth · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
