@@ -3184,3 +3184,22 @@ anything.
 
 **`identity` is a word used exactly once.** Under the counting bullets that is the weakest kind of
 primitive, which is the point - counting is not the test where truth is at stake.
+
+## Said 2026-09-12, costs are a means to a playable release
+
+Sean, answering `P-467`: *At this point I don't have any strong opinions about costs, they are a
+means to the end of getting our first release playable. Does this help with p-467?*
+
+**It decides it, and by his own test.** `P-445`: *I want to decide this empirically. If I never
+notice I need it, I don't need it.* A garrison's cost is a number nothing reads - no recipe charges
+it, nothing consumes a garrison, and nothing in `crates/` reads its binding. He has not noticed
+needing it because nothing has ever asked.
+
+**So `B`: both cells blank.** The way back if the intent returns is named in the item - founding
+gains a `consume 1 metal` and a `consume 1 labor` - and that is a balance decision, which is what he
+has said he is not making today.
+
+**Worth keeping as a general answer rather than one about garrisons.** Where a number exists, is read
+by nothing, and expresses an intent nobody can find recorded, **the empirical test deletes it** -
+and the deletion is cheaper to undo than the number was to keep, because the way back is one row of
+one recipe.

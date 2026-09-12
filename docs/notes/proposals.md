@@ -62,6 +62,55 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-467 - a garrison costs nothing and binds nothing
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** answered, by you, 2026-09-12 · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Units and structures
+
+**Your answer decides it, and by your own test rather than this lane's preference.** *At this point
+I don't have any strong opinions about costs, they are a means to the end of getting our first
+release playable* - which is `P-445`: **I want to decide this empirically. If I never notice I need
+it, I don't need it.**
+
+**A garrison's cost is a number nothing reads.** No recipe charges it, no recipe consumes a
+garrison, and nothing in `crates/` reads a garrison's binding - checked rather than assumed. **You
+have not noticed needing it because nothing has ever asked.**
+
+## The cells
+
+| Thing        | Costs to produce | Binding |
+| ------------ | ---------------- | ------- |
+| **garrison** |                  |         |
+
+**Both empty, which is a blank and not a zero** - the file already draws that distinction, and every
+other row of those two columns that does not apply is blank the same way.
+
+## What it changes, which is nothing that runs
+
+**Checked rather than asserted:**
+
+- **No recipe charges labor or metal for a garrison.** Three rows in the release name one: `deploy
+  ark` and `found by land` produce it, `muster` requires it
+- **Nothing consumes a garrison**, so the metal was never recovered and nothing gains
+- **`metal in it` is derived and in no data file**, being named by no recipe row - so nothing reads
+  the binding it would have read
+- **The scenario's two garrisons are `{garrison}` with no traits**, in territories 1 and 2, and the
+  expected state does not change
+
+**So `spec/invariants.md` -> *nothing in the game appears or disappears without a cause inside the
+model* holds again**, and it holds by the metal never arriving rather than by founding paying for
+it.
+
+## What this deliberately does not do
+
+**It deletes a number rather than deciding what the number was for**, and this lane could find no
+note saying why a garrison was given a cost. **If the intent was that holding ground costs
+something, this loses it** - and the way back is `A` from the earlier draft: `found by land` and
+`deploy ark` each gain a `consume 1 metal` and a `consume 1 labor`. **That is a balance decision and
+you have said balance is not what you are deciding today.**
+
+**And it makes `P-466` cleaner.** That proposal shows five of six columns agreeing with the recipes
+and the garrison row disagreeing; after this the row agrees, and **the disagreement stays as the
+argument for `P-466` rather than as a live defect** - it happened, which is what the case was for.
 ### P-465 - ten cells still say `yes` where `traits.4x` says a number
 
 **to** sean · **status** open · **raised** 2026-09-12 · **kind** cleanup, owed by `P-457` and not filed with it · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Traits, and Units and structures
