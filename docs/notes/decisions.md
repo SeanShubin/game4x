@@ -59,7 +59,8 @@ literally true of a scenario you could work through, and 3 does not.
 ### P-421 - `put` is a role in twelve rows that no document defines, and `limit` is defined and used nowhere
 
 
-**to** sean - **status** open - **raised** 2026-09-11 - **kind** entailed, from the code lane's `C-88` - **asks** a decision - **into** `releases/first-release.md` -> Recipes
+**to** sean - **status** open - **cited** `d29dc6d`, where the code lane recorded that `C-88` stays open until this comes back - **raised** 2026-09-11 - **kind** entailed, from the code lane's `C-88` - **asks** a decision - **into** `releases/first-release.md` -> Recipes
+
 
 **One sentence declares the roles and it is out of step with the table under it in both
 directions.** `releases/first-release.md:186` reads *`Role` is one of `require`, `limit`, `consume`
