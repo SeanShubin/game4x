@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-429** - a check that reads a copy of the population cannot fail · `docs/notes/proposals.md`
 - **P-423** - `limit` is safe exactly where what it tests is bounded, and nothing says which kinds are · `docs/notes/decisions.md`
 - **P-424** - `age` destroys and recreates a thing, which is what `put` was introduced to stop · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
@@ -103,6 +102,7 @@ it exists to ask.
 - `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306, P-313, P-410
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
 - `docs/process.md` -> Outboxes and the index - P-242, P-299, P-305, P-325
+- `docs/process.md` -> What makes a check worth having - P-304, P-327, P-384, P-429
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233, P-414
 - `releases/first-release.md` -> What bounds a kind in a territory - P-207, P-372, P-381, P-393
@@ -112,7 +112,6 @@ it exists to ask.
 - `spec/invariants.md` -> What a rule may cost - P-373, P-376, P-386, P-387
 - `spec/resources.md` -> The list - P-49, P-65, P-338, P-389
 - `docs/process.md` -> All lanes - P-247, P-248, P-324
-- `docs/process.md` -> What makes a check worth having - P-304, P-327, P-384
 - `docs/process.md`, a new section - P-204, P-211, P-401
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Kinds, Traits - P-192, P-322, P-334

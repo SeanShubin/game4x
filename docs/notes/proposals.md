@@ -62,46 +62,8 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-429 - a check that reads a copy of the population cannot fail
+*Nothing is open. Everything filed has been decided.*
 
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** measured · **shape** text · **asks** approval · **into** `docs/process.md` -> What makes a check worth having
-
-**This happened four times in one week, in all three lanes**, and the section already has three
-neighbours of it without having this one.
-
-- **`X-29`** claimed a property of the release's recipes and measured
-  `tools/research/formulas/data.json`, the research lens's own re-encoding. Re-run on 2026-09-11 it
-  still reported ten arcs in `grow` and `refuel`, which stopped being recipes days earlier. **A
-  plausible number, about a different population**
-- **`release_recipes()`** matched a row's role against the four roles the release then declared, so
-  `P-421`'s twelve `put` rows were dropped **in silence**
-- **The lens's copy dropped its own equivalent rows** for an unrelated reason, so the comparison
-  between the two stayed green over rows **neither side was reading**
-- **The code lane found the same assumption in its tests**, from the same flag
-
-**And a fifth, in the document that describes the failure.** `docs/designing-rules.md` called
-`X-29`'s ten *stale* when it was never stale - it was a count of something else.
-
-**What the section already says and what it does not.** It has *a guard that permits what its rule
-forbids, because the same hand wrote the rule, the work and the guard*; it has *a check written by
-the hand that wrote the work will agree with the work*; it has *two counts that share a computation
-are one count*. **All three are about the computation. This one is about the population**, and it is
-the half that names its own fix.
-
-**The paragraph, to follow *Two counts that share a computation are one count*:**
-
-> **And a check that reads a copy of the population is checking the copy.** A copy under the same
-> hand as the thing being checked drifts with it and reports a number about what was encoded rather
-> than about what is - so it cannot fail the way it was built to fail, and it goes on returning a
-> plausible answer. **Read the population from the source**, and the check regains the ability to
-> be wrong.
-
-**Why `measured` rather than `entailed`.** It is four cases in a week and not a consequence of a
-line already written - which is also the reason to doubt it. **`CLAUDE.md` says measuring something
-is not a reason to specify it**, and three proposals have been withdrawn for exactly that. **What
-makes this one different is that the fix is one sentence and the failure was silent every time** -
-none of the four announced itself, and three were caught only because another lane happened to
-count the same thing.
 
 ## Addressed to other perspectives
 
@@ -3920,6 +3882,7 @@ work the release exists to order.
 | P-426, metal is drawn from the planet and conserved once above ground                                                        | `releases/first-release.md` -> Kinds                                                                                                                                                                     | 2026-09-11 |
 | P-427, the four `store` rows go, and founding stops being a metal source                                                     | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-11 |
 | P-428, unification first, and a tie goes to the unified form                                                                 | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
+| P-429, a check that reads a copy of the population is checking the copy                                                      | `docs/process.md` -> What makes a check worth having                                                                                                                                                     | 2026-09-11 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
 | P-403, an outbox item's addressing line is not part of what is promoted                                                      | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
 | P-402, vetting gates finishing a release, not shipping one                                                                   | `releases/README.md` -> Vetting, and deletion                                                                                                                                                            | 2026-09-11 |

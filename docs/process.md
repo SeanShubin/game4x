@@ -240,6 +240,12 @@ the code** - so a green run, like a count of zero, names the population it was m
 finds the number its own specification supplied has corroborated nothing. That is the check
 written by the hand that wrote the work, arriving by a different route.
 
+**And a check that reads a copy of the population is checking the copy.** A copy under the same
+hand as the thing being checked drifts with it and reports a number about what was encoded rather
+than about what is - so it cannot fail the way it was built to fail, and it goes on returning a
+plausible answer. **Read the population from the source**, and the check regains the ability to
+be wrong.
+
 **Ask what fires a rule.** Some fire at a **moment of doubt** - a number appears, a list grows, a
 message arrives from another lane - and something in the work announces that the rule applies.
 **Those survive as habits.** Some fire at a **moment of confidence**, while what is being written
