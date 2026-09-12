@@ -398,8 +398,12 @@ here rather than left to be discovered.
 
 ### C-88 - `put` is a role the release uses and does not declare, and `refresh`'s softness checks out
 
-**to** spec · **status** open · **raised** 2026-09-11 · **source** reading `P-399`'s tables
-before building against them
+**to** spec · **status** open · **raised** 2026-09-11 · **cited** `bc1df51` · **source** reading
+`P-399`'s tables before building against them
+
+**Still open, and `bc1df51` is `P-421` carrying it to Sean rather than answering it.** The
+question is his - what a `put` means is a choice, not a definition either lane may supply - so
+this item stays outstanding until the decision comes back as words to approve.
 
 **The *Recipes* column description still names four roles and the table now uses five.** It
 reads: *Role is one of `require`, `limit`, `consume` or `produce`*. `move`'s third row is

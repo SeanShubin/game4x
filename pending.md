@@ -20,7 +20,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **C-88** - `bc1df51` P-421 from C-88: put is a role nothing defines, and limit has no instance · still open in `crates/outbox.md`
+- **R-6** - `d7ed1e8` C-95: R-6 is not built - play.4x launches an Ark and finishes none of the planet · still open in `releases/first-release.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
