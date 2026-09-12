@@ -83,38 +83,38 @@ form.** Filed by the code lane as `C-100`, which declined to invent the key name
 shape. This is `traits.4x`, whole, with the one open cell written `???`:
 
 ```
-{trait name:bearing admits:??? kept:thing}
-{trait name:biome admits:biome kept:thing}
-{trait name:defending admits:??? kept:thing}
-{trait name:density admits:number kept:thing}
-{trait name:from admits:place kept:thing}
-{trait name:fuel admits:number kept:kind}
-{trait name:id admits:number kept:thing}
-{trait name:keeps admits:number kept:thing}
-{trait name:laboring admits:??? kept:thing}
-{trait name:movable admits:??? kept:kind}
-{trait name:moving admits:??? kept:thing}
-{trait name:nature admits:number kept:thing}
-{trait name:phase admits:phase kept:thing}
-{trait name:resource admits:resource kept:thing}
-{trait name:strength admits:number kept:kind}
-{trait name:surplus admits:??? kept:nothing}
-{trait name:to admits:place kept:thing}
-{trait name:total-capacity admits:number kept:thing}
-{trait name:unpaid admits:??? kept:nothing}
-{trait name:upkeep admits:number kept:kind}
-{trait name:working admits:??? kept:thing}
+{trait admits:number kept:thing name:id}
+{trait admits:??? kept:thing name:moving}
+{trait admits:??? kept:thing name:laboring}
+{trait admits:??? kept:thing name:working}
+{trait admits:??? kept:thing name:bearing}
+{trait admits:??? kept:thing name:defending}
+{trait admits:resource kept:thing name:resource}
+{trait admits:number kept:kind name:strength}
+{trait admits:number kept:kind name:fuel}
+{trait admits:number kept:kind name:upkeep}
+{trait admits:number kept:thing name:density}
+{trait admits:number kept:thing name:total-capacity}
+{trait admits:biome kept:thing name:biome}
+{trait admits:number kept:thing name:nature}
+{trait admits:place kept:thing name:from}
+{trait admits:place kept:thing name:to}
+{trait admits:number kept:thing name:keeps}
+{trait admits:??? kept:nothing name:unpaid}
+{trait admits:phase kept:thing name:phase}
+{trait admits:??? kept:kind name:movable}
 ```
 
-**Twenty-one lines, and the release's table has twenty-three.** `metal in it` and `control` are the
-two missing: both derived, and neither named by any recipe, which is the rule you took last - a
-derived trait is declared when a recipe names it. **`id` is here whatever `P-456` decides**, because
+**Twenty lines, and the release's table has twenty-three.** `metal in it`, `control` and `surplus`
+are the three missing: all derived, and none of the three named by any recipe row, which is the rule
+you took last - a derived trait is declared when a recipe names it. **Entries follow the release's
+table and the traits inside a line sort**, which is `P-452` and what `kinds.4x` already does. **`id` is here whatever `P-456` decides**, because
 which kinds carry it is on their lines and not on this one.
 
 ## `kept` says where the value lives, and it has three values because the release does
 
 `stored` on each thing, `of the kind` on the kind, `derived` nowhere at all - **fifteen, four and
-two**. `kept:nothing` is a trait computed when it is read; the sentence that computes it stays in
+one**. `kept:nothing` is a trait computed when it is read; the sentence that computes it stays in
 prose, where rule 7 puts it.
 
 **Two words are in play and neither is settled**: `admits` is the release's own verb - *where a trait
@@ -122,17 +122,17 @@ admits a closed set of values* - and `kept` is this lane's, chosen over the code
 because in this game `held` is containment and a store holds metal. Say the word if you want
 another.
 
-## The question: eight traits admit two values, and the release writes the set two ways
+## The question: seven traits admit two values, and the release writes the set two ways
 
 `0 or 1` five times - `moving`, `laboring`, `working`, `bearing`, `defending` - and `yes or no`
-three - `surplus`, `unpaid`, `movable`. Nothing distinguishes them; they are the same set spelled
+twice - `unpaid`, `movable`. Nothing distinguishes them; they are the same set spelled
 twice. **The other thirteen lines are settled and none of the three options touches them.**
 
 **A** - **`flag` is a word of the notation, beside `number`:**
 
 ```
-{trait name:defending admits:flag kept:thing}
-{trait name:movable admits:flag kept:kind}
+{trait admits:flag kept:thing name:defending}
+{trait admits:flag kept:kind name:movable}
 ```
 
 One new word. `yes or no` becomes `0 or 1`, so an Ark's line reads `movable:1`, matching
@@ -142,23 +142,23 @@ so the editor that offers you a value for `defending` can refuse `7`.
 **B** - **they are numbers, and being two-valued is a rule in prose:**
 
 ```
-{trait name:defending admits:number kept:thing}
-{trait name:movable admits:number kept:kind}
+{trait admits:number kept:thing name:defending}
+{trait admits:number kept:kind name:movable}
 ```
 
-Nothing is added to the notation, and sixteen of the twenty-one lines then say `number`. **The file
+Nothing is added to the notation, and fifteen of the twenty lines then say `number`. **The file
 stops telling a flag from a strength**, so nothing an editor reads says `defending:7` is wrong.
 
 **C** - **the values declare themselves, as a biome's do:**
 
 ```
-{trait name:defending admits:defending kept:thing}
+{trait admits:defending kept:thing name:defending}
 {value name:0 of:defending}
 {value name:1 of:defending}
 ```
 
-Uniform with `biome` and `phase`, and adds no word. **Sixteen extra lines, two per flag**, saying the
-same two words eight times - and two more for every flag the game ever grows.
+Uniform with `biome` and `phase`, and adds no word. **Fourteen extra lines, two per flag**, saying the
+same two words seven times - and two more for every flag the game ever grows.
 
 ## What this lane would take, and the reason
 
@@ -168,5 +168,5 @@ authored space.** Removing `flag` gives C, which authors two lines per flag fore
 authors nothing and loses the constraint. **A authors one word, once.**
 
 **The shared set is what makes it worth a word at all.** Were it one trait, C would be two lines and
-the better answer; it is eight, and the release already spells the same set two ways because nothing
+the better answer; it is seven, and the release already spells the same set two ways because nothing
 named it.

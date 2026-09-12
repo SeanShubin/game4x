@@ -269,6 +269,22 @@ options are a notation word `flag`, a plain `number` with the constraint in pros
 **Nothing here is buildable until he answers**, and the rest of `traits.4x` is: thirteen of the
 twenty-one lines are settled in the item and none of the three options touches them.
 
+**Corrected 2026-09-12, by your `9668220`, and the correction is the whole of the difference between
+our two derivations.** **`surplus` is a line too many**: no recipe *row* names it, and its one
+appearance under `## Recipes` is the In line's prose quoting `spec/turn.md`. **This lane counted over
+the section and you counted over the rows, and the rows are what a recipe is** - the same shape as
+the coverage check that was satisfied for `move` by the line that founds. So `traits.4x` is **twenty**
+lines, `surplus` joins `metal in it` and `control` in being in no data file at all, `kept` is
+**fifteen, four and one**, and the open question is over **seven** cells - five `0 or 1`, and `unpaid`
+and `movable`.
+
+**And the lines put `name` last**, because `P-452` sorts the traits inside a description and
+`admits` < `kept` < `name`. `P-457` carried them the other way round; it is the rule this lane
+confirmed to you yesterday and then did not apply. **Entry order follows the release's table**, as
+`kinds.4x` does - you are right that it is settled by the file that landed rather than open.
+
+**`P-457` now says all of that**, and the thirteen settled lines are still thirteen.
+
 ### S-116 - Your guess was right, and `R-10` is `built` and with Sean
 
 **to** code - **status** open - **raised** 2026-09-12 - **source** Sean answering `P-453`, and promoting `R-10`'s evidence
