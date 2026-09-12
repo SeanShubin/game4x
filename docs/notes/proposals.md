@@ -62,93 +62,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-469 - a fact is stated once, and it is said which form is the fact
-
-**to** sean · **status** open · **cited** `530d53a` · **raised** 2026-09-12 · **kind** asked for, from your question on `P-466` and your two additions · **shape** text · **asks** approval · **into** `spec/invariants.md` -> a new section after *The game is data*
-
-**The idea is in the specification three times and none of the three reaches `P-466`:**
-
-```
-spec/invariants.md, What a person types
-  "...a rule the specification can state twice is one two readers can disagree about"
-  a subordinate clause, inside a bullet about fields that cannot be offered as a choice
-
-spec/invariants.md, The game is data
-  "Nothing states by hand what a data file says; every other form of it is derived"
-  scoped to a data file, and the recipes are not in one yet
-
-CLAUDE.md
-  "A fact already asserted by a test does not belong in prose too"
-  scoped to a test, and not the specification
-```
-
-**`P-466` is a table in `releases/` restating another table in `releases/`** - neither a data file nor
-a test, which is the gap between the three. **The same idea written three times, each too narrow, is
-itself an instance of what it is about.**
-
-**And your two additions are widely practised and stated nowhere.** **Eighteen of the twenty-six
-documents in `spec/`, `docs/` and the root open with Authored, Derived or Generated** - counted - and
-`pending.md` says *an edit here is a claim that disagrees with its source and loses at the next
-commit*. **`spec/` requires neither** - the nearest is *the data may be replicated in the
-presentation layer, and no replication is canonical*, which is scoped to the presentation layer.
-
-**The eight without it are the argument rather than a detail**: `README.md`, `spec/scenarios.md`, and
-six of `docs/` including `process.md` and `designing-rules.md`. **A convention kept by most files and
-required by none is one a reader cannot rely on**, so its absence says nothing.
-
-## The words
-
-> ## A fact is stated once
->
-> - **Two statements of one fact can disagree, and the disagreement is invisible to anyone reading
->   either one alone.** **Four were found on 2026-09-12 and every one was found by deriving one form
->   from the other** - a garrison's cost against the recipe that makes it, a trait's values against
->   the file that declares them, a derived trait against the name it is defined by, and a named input
->   against the code that reads it. **None was found by reading either form.**
-> - **So a fact is stated once and every other form of it is derived.** *Nothing states by hand what
->   a data file says* is this rule for data, and it is not only true of data.
-> - **A second form kept for a reader is generated, and a check says the two agree.** A convenience
->   that can drift is not one. **And the shorter specification is the one that says each thing once**,
->   so removing the second form is better than checking it.
-> - **Exactly one form of a fact is canonical, and it is said which.** Not the clearest, not the
->   newest, not the one a reader happens to be looking at - the one named. **Where nothing names it,
->   two readers will choose differently and both will be reasonable.**
-> - **Every other form says that it is one, and says what it is a form of.** A projection names what
->   it projects and a copy names what it copies. **A form that does not say is indistinguishable from
->   the fact itself**, which is how a copy becomes a second source.
-> - **A change made to a form that is not canonical is not a change.** It is lost when that form is
->   next made, and **losing it is correct** - the alternative is one fact with two histories.
-
-## What the three new bullets add
-
-**The fourth** is what `P-466` most needs and what *no replication is canonical* half-says: that
-sentence rules one form out and names no winner. **Between two tables in `releases/` neither is a
-replication of the other by that wording**, and nothing else picks.
-
-**The fifth** turns the Authored / Derived / Generated header from a convention into a requirement,
-and extends it past whole files - **a table inside an authored file can be a projection, and today
-nothing obliges it to say so.** `P-466`'s three columns say nothing, which is why two lanes read them
-as data for weeks.
-
-**The sixth** is the one with teeth for a person rather than a tool. It says the cost of editing the
-wrong copy is **the edit**, and that this is the design working rather than a loss. `pending.md`
-already behaves this way and says so; the rule generalises it.
-
-## What it does not do
-
-**It does not decide `P-466`.** That item asks whether a reader wants the convenience, which is a
-judgement about readers. **What this settles is the half about facts** - `A` is the default, `C` is
-the fallback, and whichever is taken the columns must say what they are.
-
-**The three narrow statements stay.** The data-file sentence carries more than this one - it says
-*which* form is canonical for data - and `P-458`'s clause is a justification inside a bullet about
-something else. **Neither is a copy of this**, which is worth saying in a proposal about copies.
-
-**And it mechanises almost nothing.** No check can ask whether two sentences are the same fact, which
-is the wall `P-245` hit and `CLAUDE.md` records. **The fifth bullet is the exception** - whether a
-form says what it is a form of is a thing a tool can read, and eight documents fail it today. **That
-is a check this lane owes rather than a claim this proposal makes.**
-
 ### P-468 - biome is named as an input to output and reaches nothing
 
 **to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed, from your answer to `P-467` applied to `Q-80` · **shape** text · **asks** approval · **into** `spec/control.md` -> Winning
@@ -313,6 +226,20 @@ is that nothing downstream shifts.
 
 **And `surplus` is in no data file**, being derived and named by no recipe row, so its cell is
 corrected for the reader rather than for any generator.
+
+## What `P-469` says about this, which is larger than ten cells
+
+**`P-469` landed after this was filed**: *a fact is stated once and every other form of it is
+derived.* **The release's *Traits* table and `spec/data/traits.4x` are two forms of one fact**, and
+the data file is the canonical one - *nothing states by hand what a data file says*.
+
+**So the real repair is that the table is generated from the file**, and these ten cells are what
+its absence cost. **Four tables are in that position now** - Kinds, Families, Biomes and Traits all
+have data files and all are still hand-written - and **that is a proposal this lane owes rather than
+one this item makes.**
+
+**This one still stands on its own.** It costs ten cells, it can land today, and it makes the two
+files agree while the larger repair is written.
 
 ## Addressed to other perspectives
 
@@ -1961,6 +1888,11 @@ commands the player's recipes. The paragraph above them says *the commands are n
 document keeps; they are the recipes whose owner is the player* - and `spec/invariants.md` says a
 recipe lives in a data file. **So the six entries either stay as a convenience or move to the data.**
 `P-364` named this and did not decide it.
+
+**Narrowed by `P-469`, 2026-09-12.** *A second form kept for a reader is generated* - so **staying as
+a hand-written convenience is no longer one of the ways.** The six entries go, or they are generated
+from the recipes and say they are. **Same decision as `P-466` in a different file**, and this item is
+where it is recorded for `spec/console.md`.
 
 **2. An Ark's `Fuel` cell should be blank.** `P-365` says a unit that moves in orbit stores no fuel,
 and `releases/first-release.md` -> *Units and structures* gives an Ark **Fuel 2**. **A blank is not a
@@ -5191,6 +5123,7 @@ work the release exists to order.
 | P-461, `metal in it` is defined by a name the Traits table does not declare                                                  | `releases/first-release.md` -> Traits                                                                                                                                                                    | 2026-09-12 |
 | P-462, a kind's line may name a trait and give it no value                                                                   | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-12 |
 | P-464, the vocabulary is four kinds and one sentence says three                                                              | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-12 |
+| P-469, a fact is stated once, and it is said which form is the fact                                                          | `spec/invariants.md` -> a new section after *The game is data*                                                                                                                                           | 2026-09-12 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |

@@ -157,6 +157,27 @@ specific rule.
 - A trait may be derived rather than stored, computed from what is there. Nothing can leave a
   derived trait wrong, because nothing writes one
 
+## A fact is stated once
+
+- **Two statements of one fact can disagree, and the disagreement is invisible to anyone reading
+  either one alone.** **Four were found on 2026-09-12 and every one was found by deriving one form
+  from the other** - a garrison's cost against the recipe that makes it, a trait's values against
+  the file that declares them, a derived trait against the name it is defined by, and a named input
+  against the code that reads it. **None was found by reading either form.**
+- **So a fact is stated once and every other form of it is derived.** *Nothing states by hand what
+  a data file says* is this rule for data, and it is not only true of data.
+- **A second form kept for a reader is generated, and a check says the two agree.** A convenience
+  that can drift is not one. **And the shorter specification is the one that says each thing once**,
+  so removing the second form is better than checking it.
+- **Exactly one form of a fact is canonical, and it is said which.** Not the clearest, not the
+  newest, not the one a reader happens to be looking at - the one named. **Where nothing names it,
+  two readers will choose differently and both will be reasonable.**
+- **Every other form says that it is one, and says what it is a form of.** A projection names what
+  it projects and a copy names what it copies. **A form that does not say is indistinguishable from
+  the fact itself**, which is how a copy becomes a second source.
+- **A change made to a form that is not canonical is not a change.** It is lost when that form is
+  next made, and **losing it is correct** - the alternative is one fact with two histories.
+
 ## Nothing comes back round with more
 
 - **There is a weighting of the kinds, and under it no sequence of rules ends holding more than it

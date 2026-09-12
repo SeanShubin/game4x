@@ -69,16 +69,21 @@ Readies, Movable** - seven columns, every one of them of-the-kind data that no r
 the table agree. **Costs a generator and keeps a convenience** - a reader sees a thing's cost without
 looking it up.
 
-**C** - **they stay hand-written and a check compares them to the recipes.** Cheapest, and **the
-check is the whole of the value** - it is what would have caught the garrison.
+**C** - ~~they stay hand-written and a check compares them to the recipes~~. **Withdrawn by
+`P-469`, promoted 2026-09-12**: *a second form kept for a reader is generated, and a check says the
+two agree.* **Hand-written and checked is no longer one of the ways** - a check would have caught
+the garrison, and a generated column makes the garrison impossible.
 
 ## What this lane would take
 
-**`P-469` is what Sean asked for on reading this**, and it answers the half of this item that is
-about facts rather than about readers: **a fact is stated once, and removing the second form is
-better than checking it.** So `A` is the default and `C` is the fallback, and **what is left for you
-is whether a reader wants the convenience** - which is a judgement about readers and is why this is
-still a decision.
+**`P-469` landed and this item is two ways rather than three.** *A second form kept for a reader
+is generated, and a check says the two agree* - so `C` is withdrawn, and **whichever of `A` and `B`
+you take, the columns must say what they are**: *every other form says that it is one, and says what
+it is a form of.*
+
+**What is left for you is whether a reader wants the convenience**, which is a judgement about
+readers rather than about facts, and is why this is still a decision. `P-469` leans: *removing the
+second form is better than checking it.*
 
 **`A`.** `B` and `C` both keep a second statement of the same fact and pay something to keep the two
 agreeing; `A` removes the second statement. **The convenience `B` buys is small and shrinking** -

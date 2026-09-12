@@ -3260,3 +3260,22 @@ things would be the thing itself:
 
 **The fifth is the only one a tool can read**, and eight documents fail it today. That is a check
 this lane owes.
+
+## `P-469` promoted 2026-09-12, and what it resolved
+
+**Three items narrowed, read from the index rather than remembered.**
+
+- **`P-466` is two ways rather than three.** Its `C` - *they stay hand-written and a check compares
+  them* - is withdrawn: a second form kept for a reader is **generated**. And whichever of `A` and
+  `B` is taken, the columns must say what they are.
+- **`S-86`'s first item loses its first option.** The six design commands in `spec/console.md`
+  *either stay as a convenience or move to the data* - and staying as a **hand-written** convenience
+  is no longer one of the ways. Same decision as `P-466` in a different file.
+- **`P-465` is the symptom of something larger and says so now.** The release's *Traits* table and
+  `spec/data/traits.4x` are two forms of one fact and the data file is canonical, so the repair is
+  that the table is generated. **Four tables are in that position** - Kinds, Families, Biomes and
+  Traits all have data files and all are still hand-written. A proposal this lane owes.
+
+**And it strengthens the capacity-relation proposal that is not written yet.** *Where things are*
+and *What bounds a kind in a territory* are two views of one relation, which is `C-47`; `P-469` is
+why one of them has to be the fact and the other a projection of it.
