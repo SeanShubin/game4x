@@ -142,13 +142,55 @@ place from `kinds.4x`.
 food-extractors:6 food-density:6 ...}` - **a value carrying traits**, which nothing has said is
 allowed. Under `2B` a biome is a kind and it folds into `kinds.4x` like the ark.
 
-## What this lane would say, asked
+## Evaluated against *least expressive yet complete*, which answers two of the three
 
-**`1B`, `2A`, `3A`** - the member declares what it belongs to, every time, and no table becomes a
-file that repeats another.
+**The test, from `lenses/research/2026-09-08-least-expressive-yet-complete.md`:** *a primitive earns
+its place when removing it moves the combinatorial explosion from the generated space into the
+authored space. Anything whose removal only makes the generated space larger is sugar and should
+go.*
 
-**And the one thing that would change its mind** is question 1's cost: **`1B` is the only place the
-principle splits a declaration across two files**, and `P-446` says a uniformity that is false
-hides its complexity. **If a trait's domain belongs with the trait, `1A` is right and the principle
-has an exception that is worth naming rather than denying.**
+### Question 1 - the test is silent, and saying so is the answer
 
+**`1A` and `1B` are the same relation written from opposite ends.** Neither adds a primitive, and
+the line count is identical - `strength` is three lines either way. **Removing either does not move
+an explosion anywhere, because each one *is* the other.**
+
+**So this is a placement question wearing an expressiveness question's clothes**, and applying the
+test to it would be the shape `CLAUDE.md` warns about: an instrument answering a narrower question
+than the one asked. **`P-446` is silent too** - neither writes down anything false.
+
+**Which leaves `P-428`'s tie-break, and it is a real tie.** The unified form wins by default, and
+`1B` is the same shape as `family:` - **the member declares what it belongs to**. So **`1B`**, on the
+weakest of the three grounds rather than the strongest, and this item says so rather than dressing it
+up.
+
+### Question 2 - the test chooses `2A`, once *expressive* is read correctly
+
+**Counting words, `2B` looks cheaper**: it adds no declaring kind where `2A` adds `value`. **Counting
+what the notation admits, it is the opposite.**
+
+**A description names a kind.** Make `jungle` a kind and **`{jungle} -> 1` becomes a well-formed
+description of a thing that cannot exist.** Checked in the data: `adjacency` is a kind and appears as
+an entry **30** times in `scenario/expected/play.4x`; every biome appears **0** times, because a
+biome is something a territory *has* rather than something that is anywhere.
+
+**So `2B` is not one primitive fewer - it is one primitive doing two jobs, and the price is a
+formalism that admits states with no meaning.** That is expressiveness bought and not used, which is
+exactly what the test sends away.
+
+**And the authored cost of `2A` is one line fewer, not more**: six `value` lines and a trait line
+against six kind lines, a family line and a trait line. **Nothing explodes either way**, which is why
+the decision rests on what is admitted rather than on what is typed.
+
+### Question 3 - the test chooses `3A` directly
+
+**`3B` adds a declaring word and a second file that names the same kinds.** Removing it moves no
+explosion into the authored space; **it removes a copy.** Sugar, by the test, and `3A` needs nothing
+new at all - every column of *Units and structures* is a trait, and traits already attach to kinds.
+
+## So: `1B`, `2A`, `3A` - and only two of them for the reason you asked about
+
+**Two are settled by the test and the third is not a question it can answer.** `1B` rests on
+`P-428`, which is the weakest ground of the three, and **if a trait's domain belongs with the trait
+then `1A` is right** - the principle would have an exception, and `P-446` says a named exception
+costs less than a false uniformity.
