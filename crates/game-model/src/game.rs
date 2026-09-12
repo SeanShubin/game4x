@@ -1724,6 +1724,77 @@ mod tests {
         );
     }
 
+    /// A unit moves once a turn, whatever fuel it has left.
+    ///
+    /// **The release's `move` requires two things and they are different limits.** *1 unit,
+    /// moving at least 1* and *1 energy, that unit* - and it puts the unit back with *moving
+    /// one less*, which only `refresh` restores at a turn's end. So the fuel bounds how far a
+    /// unit goes in its life and `moving` bounds how often it goes in a turn.
+    ///
+    /// **Both hold, and nothing here asserted the second one.** The fuel half had a test -
+    /// *a move spends a cell* - and the once-a-turn half had none, so this is the missing
+    /// one rather than a repair.
+    ///
+    /// # Why it is asserted against a unit with fuel left
+    ///
+    /// **Otherwise it cannot tell the two limits apart.** A pioneer that had spent both cells
+    /// would be refused by the bin, and a test that watched that refusal would pass whether or
+    /// not `moving` was enforced at all. So the second move is attempted with one cell in
+    /// hand, and back the way it came, so adjacency cannot be the refusal either.
+    ///
+    /// **This lane read the rule as unenforced before writing it**, which is worth leaving
+    /// here. `move_unit`'s own closure tests `cells >= MOVE_CELLS` and adjacency and says
+    /// nothing about readiness, and `exhausted` is set on arriving and appears nowhere in that
+    /// function again. The gate is one level up: [`Game::pick`] takes only units where
+    /// `unit.ready()`, and `ready` is `!exhausted`. **Reading the predicate at the call site
+    /// and not the function it is handed to is how a rule looks missing when it is enforced**
+    /// - the same shape as reading a check's predicate without asking what it is about.
+    #[test]
+    fn a_unit_moves_once_a_turn_however_much_fuel_it_has() {
+        let mut game = founded();
+        game.territories[1].set_garrison(Some(Garrison::from_founding_unit(2)));
+        game.territories[1].put(Kind::Citizen, 1);
+        game.territories[2].set_garrison(Some(Garrison::from_founding_unit(2)));
+        game.territories[2].put(Kind::Citizen, 1);
+        let id = UnitId(game.units.len() as u32 + 1);
+        let mut pioneer = Unit::new(id, UnitKind::Pioneer, TerritoryId(1));
+        pioneer.location = Location::On(TerritoryId(1));
+        game.units.push(pioneer);
+
+        let once = game
+            .after(&Transition::Move {
+                kind: UnitKind::Pioneer,
+                territory: TerritoryId(2),
+            })
+            .expect("the first move is the one a turn allows");
+        let moved = once
+            .units
+            .iter()
+            .find(|unit| unit.kind == UnitKind::Pioneer)
+            .expect("it is still a unit");
+        assert_eq!(moved.cells, 1, "one of two units of fuel spent");
+        assert!(moved.exhausted, "and its `moving` is now 0");
+
+        // **The fuel is not what refuses the second move**, which is the half that makes this
+        // about `moving` rather than about the bin: there is a cell left and it is refused.
+        // **Back the way it came**, so adjacency cannot be what refuses it: the first move
+        // proved 1 and 2 are neighbours. A destination that merely happened not to be
+        // adjacent would refuse for a reason that has nothing to do with `moving`, and this
+        // test would pass while the rule went unenforced.
+        let again = once.after(&Transition::Move {
+            kind: UnitKind::Pioneer,
+            territory: TerritoryId(1),
+        });
+        let why = again.expect_err(
+            "a pioneer moved twice in one turn with fuel to spare, where `move` requires \
+             `moving at least 1` and `refresh` is the only thing that puts it back",
+        );
+        assert!(
+            !matches!(why, Rejection::NotAdjacent { .. }),
+            "refused for the wrong reason - this says nothing about `moving`: {why:?}"
+        );
+    }
+
     #[test]
     fn a_move_within_your_own_ground_spends_a_cell_and_keeps_the_unit() {
         let mut game = founded();
