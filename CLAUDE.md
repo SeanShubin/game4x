@@ -321,6 +321,23 @@ against.
 subject - the wall `P-245` hit. What is available is the habit and the cases, which is why they are
 written down rather than asserted. Filed by the code lane as `C-28`.
 
+**And the habit has a shape: re-derive what you are told, not only what you write.** On 2026-09-12
+this class was found **nine times in one evening, across three lanes** - a signature matcher reading
+four cells it could not parse, two readers on column indexes that had moved, a dead branch hiding a
+broken one, two premises of this lane's about what a capability rested on, a count summed over the
+hand list it was meant to check, a comment satisfying a text search, and a carrier that saw one of
+two legal forms an hour after it was written.
+
+**Not one of the nine was found by a check failing.** Every one was found by somebody re-deriving a
+claim they had already been handed - a number in a message, a premise in an item, an instrument
+written an hour earlier. **A check cannot catch this because a check is the thing that has the
+predicate**, which is `P-245`'s wall said from the other side. What catches it is producing the
+answer a second way and finding the two differ.
+
+**So a claim that arrives finished is the one to re-derive**, and the cheapest moment is while
+acting on it. Three of the nine were found by a lane sweeping its own work and two by driving an
+instrument that had just been written; none by reading one.
+
 **Research's evidence is the answer, written where it will be found.**
 [`docs/prototypes/README.md`](docs/prototypes/README.md) already says it for prototypes - *that
 answer is the deliverable; the code is a byproduct* - and it generalises: the question is stated, the
