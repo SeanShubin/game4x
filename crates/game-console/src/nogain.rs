@@ -1041,6 +1041,16 @@ pub fn markdown(document: &str) -> String {
          sound but says something you would reject is visible for that reason.\n\n",
     );
 
+    out.push_str(
+        "**What this does not decide, because the title reads wider than the check.** The \
+         invariant is over the **kinds**, and the places below are kinds and the counts a \
+         thing carries. **A derived trait is not among them** - `metal in it` is *its binding \
+         plus the metal in its parts*, it appears in no recipe row, and nothing here reads \
+         it. So the metal bound up in what a recipe builds is invisible to this page, and a \
+         green run is not evidence that the release's *conserved* holds of it. `P-426` and \
+         `P-427` are where that question is being asked.\n\n",
+    );
+
     let sources: Vec<&Rule> = rules
         .iter()
         .filter(|rule| !rule.draws_from().is_empty())

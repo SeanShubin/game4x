@@ -6,6 +6,8 @@
 
 **Nothing here is declared.** The weighting below is solved for, not read from anywhere: the only inputs are the release's rules. So a number that looks wrong is a fact about the rules rather than about somebody's judgement of them - and one that is sound but says something you would reject is visible for that reason.
 
+**What this does not decide, because the title reads wider than the check.** The invariant is over the **kinds**, and the places below are kinds and the counts a thing carries. **A derived trait is not among them** - `metal in it` is *its binding plus the metal in its parts*, it appears in no recipe row, and nothing here reads it. So the metal bound up in what a recipe builds is invisible to this page, and a green run is not evidence that the release's *conserved* holds of it. `P-426` and `P-427` are where that question is being asked.
+
 **50 rules**, ground from **31** blocks of recipe rows: a family becomes its members, a density becomes its cases. **24 of them draw on a source** - the planet, the star or time - and a source is a place they take from rather than an exemption from the arithmetic. That is what keeps them in the check instead of out of it.
 
 ## A weighting exists, so nothing comes back round with more

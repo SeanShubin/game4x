@@ -371,3 +371,127 @@ fn every_block_becomes_at_least_one_rule() {
         );
     }
 }
+
+/// Every place is a kind or a count a thing carries, and never a derived trait.
+///
+/// **The page says this and a sentence on a generated page is not a check.** `markdown` tells
+/// a reader that the invariant is over the kinds, that `metal in it` is derived and invisible
+/// here, and that a green run is therefore not evidence about the release's *conserved*. That
+/// claim is only worth making if something holds the vocabulary to it.
+///
+/// **The risk it guards is the one this repository keeps writing down.** A page titled
+/// *nothing comes back round with more* reads as deciding more than it decides, and the
+/// cheapest way for it to start lying is for a place to appear whose name is a derived trait -
+/// at which point the page would look like it had begun covering conservation without anyone
+/// deciding it should.
+///
+/// **Over every place, with the count**, because a run over no places would satisfy *none is
+/// derived* for the wrong reason.
+#[test]
+fn every_place_is_a_kind_or_a_count_and_never_a_derived_trait() {
+    let document = release();
+    let rules = nogain::rules(&document);
+    let counts = nogain::counts(&document);
+
+    let mut places: std::collections::BTreeSet<&Place> = std::collections::BTreeSet::new();
+    for rule in &rules {
+        places.extend(rule.delta.keys());
+    }
+    assert!(
+        places.len() > 20,
+        "only {} places, which is too few for this to be about the release",
+        places.len()
+    );
+
+    // The three sources are places too, and they are not kinds - `spec/invariants.md` names
+    // them, and they are the one thing here that is neither a kind nor a state of one.
+    let sources = ["the planet", "the star", "time"];
+    let mut checked = 0;
+    for place in &places {
+        let state = place.state.as_str();
+        let known = state.is_empty()
+            || counts.iter().any(|count| count == state)
+            || nogain::COUNTERS.contains(&state);
+        assert!(
+            known || sources.contains(&place.kind.as_str()),
+            "`{}` is a place and `{state}` is neither a count the Traits table declares nor \
+             one of the counters this check keeps - if it is a derived trait, the page's \
+             account of what it does not decide has stopped being true",
+            place.label()
+        );
+        checked += 1;
+    }
+    assert_eq!(checked, places.len(), "every place, and the count with it");
+
+    // **The half above consults `COUNTERS`, which is this file's own list, so on its own it
+    // would pass for a state added to that list.** What follows does not: the derived traits
+    // are read from the release's *Stored or derived* column, and no place may use one.
+    // **That is the page's claim stated against the release rather than against a constant
+    // here**, and it is what catches the way this check would actually start covering
+    // conservation - a derived trait becoming a place.
+    let derived_traits: Vec<String> = traits_marked(&document, "derived");
+    assert!(
+        derived_traits.len() >= 3,
+        "only {} derived traits read from the release, which is too few for the sweep below          to mean anything: {derived_traits:?}",
+        derived_traits.len()
+    );
+    for place in &places {
+        for name in &derived_traits {
+            assert!(
+                place.state != *name && place.kind != *name,
+                "`{}` is a place and `{name}` is declared derived, so this check has begun                  reading a derived trait and the page's account of what it does not decide                  is false",
+                place.label()
+            );
+        }
+    }
+
+    // **And the derived trait the page names by hand is really derived and really absent.**
+    // Naming it keeps the page's example honest rather than only its general claim.
+    let derived = document
+        .lines()
+        .find(|line| line.contains("**metal in it**"))
+        .expect("the Traits table declares `metal in it`");
+    assert!(
+        derived.contains("derived"),
+        "`metal in it` is not declared derived any more, so the page's example is wrong: \
+         {derived}"
+    );
+    assert!(
+        places
+            .iter()
+            .all(|place| !place.label().contains("metal in it")),
+        "`metal in it` is a place, so this check now sees binding metal and the page says it \
+         does not"
+    );
+}
+
+/// Every trait the release's *Traits* table marks with this word, by name.
+///
+/// **Read from the table rather than listed**, so that a trait becoming derived tomorrow is
+/// covered without anyone editing this file - which is the whole point of the sweep that uses
+/// it.
+fn traits_marked(document: &str, word: &str) -> Vec<String> {
+    let mut out = Vec::new();
+    let mut inside = false;
+    for line in document.lines() {
+        if line.starts_with("## ") {
+            if inside {
+                break;
+            }
+            inside = line.trim() == "## Traits";
+            continue;
+        }
+        let line = line.trim();
+        if !inside || !line.starts_with('|') {
+            continue;
+        }
+        let cells: Vec<&str> = line.trim_matches('|').split('|').map(str::trim).collect();
+        let (Some(name), Some(kept)) = (cells.first(), cells.get(3)) else {
+            continue;
+        };
+        if kept.contains(word) {
+            out.push(name.trim_matches('*').trim().to_string());
+        }
+    }
+    out
+}
