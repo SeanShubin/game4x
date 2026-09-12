@@ -61,6 +61,78 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-105 - *Of* is not a function of the kinds that carry it, so it cannot be regenerated as written
+
+**to** spec · **status** open · **raised** 2026-09-12 · **source** checking `P-470`'s claim that
+twenty-three of the twenty-four *Of* cells invert mechanically, before the renderer is built on it
+
+**derived from** a kind declares which traits it has - `spec/console.md`, `P-451`
+
+**Inverting is mechanical and rendering back is not, and the proof is two cells at a time.**
+`P-470` is right that a cell resolves to a set of kinds. What does not follow is that the set
+resolves back to the cell.
+
+| Trait                 | *Of* cell as written | The kinds it resolves to |
+| --------------------- | -------------------- | ------------------------ |
+| `laboring`, `bearing` | a citizen            | citizen                  |
+| `upkeep`, `unpaid`    | a thing with upkeep  | citizen                  |
+| `fuel`                | a unit               | ark, pioneer             |
+| `movable`             | whatever moves       | ark, pioneer             |
+
+**Two pairs, each one set written two ways.** A generator holding `{citizen}` cannot choose
+between *a citizen* and *a thing with upkeep*; holding `{ark, pioneer}` it cannot choose between
+*a unit* and *whatever moves*. **The distinction is not in `kinds.4x` and cannot be put there**,
+because it is not a fact about which kinds carry the trait - it is why they do.
+
+**The first pair is the one that matters**, because it does not lean on a column `P-466` may
+delete. *A thing with upkeep* is read from the Upkeep column and *whatever moves* from the
+Movable column, and `P-466` proposes removing three columns of that table; the citizen pair
+survives that and still cannot be rendered.
+
+**Six phrasings across twenty-four cells**, which is the general form: a singular kind, a family,
+alternatives joined by *or*, a bare comma list, a predicate over another column, and a family
+named bare. Nothing in a set of kind names says which.
+
+## What follows for the cutover, and it is a cost rather than a blocker
+
+**A generated *Of* column will be correct and will not be the release's column.** So **the cutover
+cannot be verified by regenerating and diffing** - the check this lane has for `reports/catalog.md`
+and for the dumps, and the one it would reach for here. What replaces it is a person reading the
+generated table once against the one it replaces, which in this repository has a name and a shape:
+a *vetted when* line.
+
+**This lane is not proposing which phrasing wins.** Rendering every cell as its kinds - *citizen*,
+*ark, pioneer* - is what a generator can do and it is a real loss: *a thing with upkeep* tells a
+reader why the citizen carries `upkeep`, and *citizen* does not.
+
+## And there may be no *Of* column to render
+
+**The transpose of *Of* is already generated, already checked, and already linked from the
+release.** `reports/catalog.md` gives every kind its **Traits** line - `citizen`: *bearing,
+defending, keeps, laboring, strength* - which is the same fact read from the side `spec/console.md`
+puts it on: *a kind declares which traits it has*, and a trait *says nothing about which kinds
+carry it*.
+
+**So the release's Traits table having an *Of* column is the thing `P-451` took off the trait,
+written back on it in a different file.** Whether the generated table carries the column at all is
+a question worth asking before choosing how to render it, and it is not this lane's to answer.
+
+## The two questions `P-470` leaves to Sean, and what this lane can say about one
+
+**`keeps` being of every kind**: the item says not naming it makes *of every kind* mean absence,
+*which your generator cannot tell from a trait nothing carries*. **Correct today and for a reason
+worth stating**: `spec/console.md` already has a fact true of every kind that no line carries -
+*`thing` is the family every kind is in, and no line says so kind by kind* - so a reader has a
+precedent for absence meaning *all* and no way to tell it from absence meaning *none*. **This lane
+has no preference between the two options and would build either.**
+
+**Whether a kind names its derived traits**: nothing here bears on it. The narrow reading costs the
+renderer nothing, because a trait no kind names is a trait with no *Of* cell to render, and
+`metal in it`, `control` and `surplus` have no lines in `traits.4x` either - so under the narrow
+reading those three are absent from both files consistently, which is at least not two answers.
+
+---
+
 ### C-104 - The Traits table is not a form of `traits.4x`, and generating it would lose three rows and a column
 
 **to** spec · **status** open · **raised** 2026-09-12 · **source** `P-469` landing, and this lane
