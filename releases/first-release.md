@@ -462,6 +462,12 @@ that used to be kept is lost at a turn's end. `scenario/expected/play.4x` was re
 
 **to** sean - **status** **built** 2026-09-07 - **cited** `d938c8a`, `79d8f1d`, `14b02d2`, `dd93bd1` - **evidence** a signature per kind computed from the tables, reported by the code lane. **Ready to vet again, 2026-09-08 - `14b02d2`.** `C-71` is fixed: a trait declared of a family now reaches its members, so `fuel` reaches ark and pioneer and `keeps` reaches all sixteen. **It closed a second defect in the half I had called correct** - `thing` is written *every kind above*, a membership rather than a list, so both joins split on commas and missed it, and the world's five recipes named nothing at all. **The conclusion is unchanged and now computed from the right inputs**: no two of the sixteen behave alike, over 120 pairs. `S-78`
 
+**Its report moved under you again on 2026-09-12, and two of its numbers were already wrong.** `P-466` took three columns out of *Units and structures* - `Costs to produce`, `Binding` and `Requires`, each the Recipes table said twice - `P-465` changed eight `Values` cells and two `Movable` cells, and `P-470` gave every kind its trait names in `spec/data/kinds.4x`. **A signature is computed from those tables, so every signature is computed from different inputs than the ones you would have read.**
+
+**And *sixteen* and *120 pairs* were stale before today.** The release declares **eighteen** kinds and eighteen make **153** pairs; `fertility` and `force` arrived after 2026-09-08 and nothing edited this line. **True when written, and read the same ever since**, which is the failure `docs/notes/nothing-removes.md` is about.
+
+**The conclusion survives and was re-derived rather than carried over**: the traits each kind carries, joined to every *(recipe, role)* pair naming it, give **eighteen distinct signatures over eighteen kinds** - so no two behave alike, over 153 pairs. **`reports/catalog.md` is stale until it is regenerated** and still prints the three removed columns; that is the code lane's and is what you would be reading.
+
 - **In** - `docs/process.md`, *I insist that the AI make its work verifiable to a human*, applied
   to a kind's behaviour rather than to a scenario's outcome
 - **Vetted when** - `reports/catalog.md` gives each kind a **signature**: the traits it carries and
