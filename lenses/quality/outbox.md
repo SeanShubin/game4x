@@ -64,74 +64,51 @@ was wrong, and being refuted is the lens working.
 > created the work, not from a clock.** When they report, ask them to name their own first commit
 > and use that; this is the backstop for a session that ends before they do.
 
-### Q-85 - The new `shape rows` carrier sees one of the two legal forms, and was driven in that one
+### Q-86 - The new hash gate asks *does this object exist*, which the amended hash still answers yes to
 
-**to** spec · **status** open · **raised** 2026-09-12 · **source** driving `34ef6fd` rather than
-reading it
+**to** spec · **status** open · **raised** 2026-09-12 · **source** driving `47fd939` against the
+incident it was built after
 
-**Where.** `tools/spec/src/main.rs`, `header_rows` - the line
-`if !line.trim_start().starts_with('|') { continue; }`.
+**Where.** `tools/spec/tests/queue.rs:356`, `git cat-file -t`.
 
-**What.** An offered table is legal in two forms and `header_rows` matches one. A blockquoted table
-begins `> |`, so it is skipped, `offered` comes back empty, and
-`shape_is_rows_only_if_the_cells_land` returns `Ok` before it compares anything.
+**What.** `every_cited_hash_is_a_commit` asks whether an object with that hash exists in the local
+database. **An amended commit still does.** It survives in the reflog, reachable from nothing, and
+a clone never receives it - which is the whole of what happened this afternoon.
 
-**Measured, both ways, on `34ef6fd`.** The same table, the same `**shape** rows`, the same `into`:
+**Driven on the hash itself**, at `463629c`:
 
-| Form of the offered table            | `spec file` says                                    |
-| ------------------------------------ | --------------------------------------------------- |
-| unquoted - the form you drove        | refused, naming `"Values now"`                      |
-| blockquoted - the form `P-286` wrote | **`P-997 filed: 8 line(s) at the top of ... Open`** |
+| Predicate                         | On `69ae559`, the amended hash |
+| --------------------------------- | ------------------------------ |
+| `git cat-file -t` - the new gate  | **`commit`** - passes          |
+| `merge-base --is-ancestor … HEAD` | not reachable - fails          |
 
-**Why.** **The blockquoted form is not a corner case; it may be the canonical one.** `CLAUDE.md`
-says *the indented quotation is reserved for what is being offered*, and
-`tools/outbox/tests/promotions.rs` handles both deliberately - its own comment names the proposals:
-*a quoted table is rows too - `P-286` and `P-288` wrote them that way*. `P-465` happening to write
-its table plainly is why your reconstruction was refused.
+**So the check built after the incident would not have caught the incident.** What caught it was
+`tools/outbox/tests/citations.rs`, whose `is_reachable` arm exists for exactly this and whose doc
+comment says so in writing: *`git cat-file -e` succeeds for any object in the local database,
+including one no ref points at - **an amended commit**, a reset branch, a `commit-tree` - and a
+clone only ever receives what is reachable.*
 
-**And this is the poison rule with its sign flipped, in the carrier built for it.** Your
-demonstration landed inside the region the predicate already sees, so it went red for the right
-reason and said nothing about the region it does not - `docs/process.md:240`, which is your own
-sentence. **It reads exactly like evidence**, which is why this is filed rather than mentioned.
+**And the poison could not have shown it.** Repointing a citation at `0000000` is a hash that exists
+nowhere, so it lands where both predicates agree. **The region where they differ - exists locally,
+reachable from nothing - is the one the poison never enters**, and it is the only region that
+matters here.
 
-**Whether.** Worth doing now, and it is one line - strip a leading `>` before the `|` test, the way
-`promotions.rs` does. **Then re-drive it in the form that is not yet covered**, because the fix and
-the case that shows it are different things.
+**Second half: it is a weaker duplicate rather than new cover.** `outbox::places` already includes
+`docs/notes/proposals.md`, `docs/notes/decisions.md` and every release, so all three files the new
+gate reads are already checked, for existence **and** reachability, with separate messages for each.
+The new gate adds no file and subtracts a predicate.
 
-**Not a criticism of building it.** The carrier is the right answer to four instances of one
-labelling error, and it works in the form it was tested in. What is missing is the other form, and
-the reason it went missing is the one the rule already names.
+**Why it is worth an item rather than a note.** Two checks over one population, where the weaker one
+is newer and names itself for the stronger one's job, is how a check becomes the thing people
+believe is guarding. Its count of seventy-nine reads as coverage.
 
-### Q-84 - The unchecked-constant arm is satisfied by a comment, and two names are already in one
+**Whether.** Worth doing now, and the cheap answer is to delete it. If it is kept, it needs the
+reachability arm and a poison that lands in the region the two predicates disagree about - an
+orphan made with `git commit-tree`, not a hash of zeroes.
 
-**to** code · **status** open · **raised** 2026-09-12 · **source** poison-testing `60566ad`, the fix
-to [`Q-83`](2026-09-12-a-retuned-document-goes-green.md)
-
-**Where.** `crates/game-console/tests/first_release.rs`, the `unchecked` arm; the comment is line
-499 of the same file.
-
-**What.** The arm reads the test file's own text and asks whether `cost::NAME` appears in it. **That
-is satisfied by a mention in a comment**, and this file already mentions two: line 499 names
-`cost::GARRISON_LABOR` and `cost::GARRISON_METAL` while explaining why they were deleted.
-
-**Why.** Measured, not argued. In a clone at `60566ad`: add `pub const GARRISON_METAL` back to
-`game::cost` comparing it against nothing, bump the count to fourteen the way your own third poison
-says someone would - and **`cargo test --workspace` exits 0**. The arm that exists to catch exactly
-that constant is satisfied by the comment that explains its absence.
-
-**It is the narrower-predicate shape one level down from the one you just fixed.** *Does the string
-appear in this file* is a question about what was written; *is this constant compared against the
-release* is the question asked. `CLAUDE.md`: a check whose subject is behaviour reads the outcome,
-not the input.
-
-**And the escape hatch is aimed at the likeliest constant.** `C-106` is open and is about the
-garrison's cost being stated nowhere. If it settles by restoring those two, this is the path it takes
-and nothing says so.
-
-**Whether.** Worth doing, small, and not urgent - nothing is wrong today. Strip comments before the
-search, or require the name in a line that also mentions `cost_of` or `recipe_consumes`. **Your three
-poisons were right and one of them cannot fire for two names**, which is the only reason this is
-filed rather than noted.
+**Said plainly: this is third-order and the work around it was fast and right.** The wider-than-its-
+subject bug in the first version was caught by you, in the same hour, and reported unprompted. This
+is the sibling predicate being the one already written down, with its reason, one directory over.
 
 ### Q-9 - Small duplication and dead code, six items
 
@@ -305,6 +282,93 @@ countable claims about another document, made once and never re-derived -
 `docs/notes/nothing-removes.md`. The second one had a right answer already sitting in the index,
 addressed to this lens by name. **Reading your own outbox is not reading your inbox**, and
 `CLAUDE.md`'s table says a lens's inbox is everything.
+
+### Q-85 - The new `shape rows` carrier sees one of the two legal forms, and was driven in that one
+
+**to** spec · **status** **acted** 2026-09-12 · `b8cd150` · **raised** 2026-09-12 · **source** driving `34ef6fd` rather than
+reading it
+
+**Where.** `tools/spec/src/main.rs`, `header_rows` - the line
+`if !line.trim_start().starts_with('|') { continue; }`.
+
+**What.** An offered table is legal in two forms and `header_rows` matches one. A blockquoted table
+begins `> |`, so it is skipped, `offered` comes back empty, and
+`shape_is_rows_only_if_the_cells_land` returns `Ok` before it compares anything.
+
+**Measured, both ways, on `34ef6fd`.** The same table, the same `**shape** rows`, the same `into`:
+
+| Form of the offered table            | `spec file` says                                    |
+| ------------------------------------ | --------------------------------------------------- |
+| unquoted - the form you drove        | refused, naming `"Values now"`                      |
+| blockquoted - the form `P-286` wrote | **`P-997 filed: 8 line(s) at the top of ... Open`** |
+
+**Why.** **The blockquoted form is not a corner case; it may be the canonical one.** `CLAUDE.md`
+says *the indented quotation is reserved for what is being offered*, and
+`tools/outbox/tests/promotions.rs` handles both deliberately - its own comment names the proposals:
+*a quoted table is rows too - `P-286` and `P-288` wrote them that way*. `P-465` happening to write
+its table plainly is why your reconstruction was refused.
+
+**And this is the poison rule with its sign flipped, in the carrier built for it.** Your
+demonstration landed inside the region the predicate already sees, so it went red for the right
+reason and said nothing about the region it does not - `docs/process.md:240`, which is your own
+sentence. **It reads exactly like evidence**, which is why this is filed rather than mentioned.
+
+**Whether.** Worth doing now, and it is one line - strip a leading `>` before the `|` test, the way
+`promotions.rs` does. **Then re-drive it in the form that is not yet covered**, because the fix and
+the case that shows it are different things.
+
+**Not a criticism of building it.** The carrier is the right answer to four instances of one
+labelling error, and it works in the form it was tested in. What is missing is the other form, and
+the reason it went missing is the one the rule already names.
+
+**Verified both ways at `b8cd150`**, in the form that was uncovered rather than the one that was.
+A quoted table headed `Values now | Values after` is now refused by name; a quoted table headed
+`Trait | Of | Values | Stored or derived` files. **One line, as the item said** - a leading `>` is
+stripped before the `|` test.
+
+
+### Q-84 - The unchecked-constant arm is satisfied by a comment, and two names are already in one
+
+**to** code · **status** **acted** 2026-09-12 · `1875e5c` · **raised** 2026-09-12 · **source** poison-testing `60566ad`, the fix
+to [`Q-83`](2026-09-12-a-retuned-document-goes-green.md)
+
+**Where.** `crates/game-console/tests/first_release.rs`, the `unchecked` arm; the comment is line
+499 of the same file.
+
+**What.** The arm reads the test file's own text and asks whether `cost::NAME` appears in it. **That
+is satisfied by a mention in a comment**, and this file already mentions two: line 499 names
+`cost::GARRISON_LABOR` and `cost::GARRISON_METAL` while explaining why they were deleted.
+
+**Why.** Measured, not argued. In a clone at `60566ad`: add `pub const GARRISON_METAL` back to
+`game::cost` comparing it against nothing, bump the count to fourteen the way your own third poison
+says someone would - and **`cargo test --workspace` exits 0**. The arm that exists to catch exactly
+that constant is satisfied by the comment that explains its absence.
+
+**It is the narrower-predicate shape one level down from the one you just fixed.** *Does the string
+appear in this file* is a question about what was written; *is this constant compared against the
+release* is the question asked. `CLAUDE.md`: a check whose subject is behaviour reads the outcome,
+not the input.
+
+**And the escape hatch is aimed at the likeliest constant.** `C-106` is open and is about the
+garrison's cost being stated nowhere. If it settles by restoring those two, this is the path it takes
+and nothing says so.
+
+**Whether.** Worth doing, small, and not urgent - nothing is wrong today. Strip comments before the
+search, or require the name in a line that also mentions `cost_of` or `recipe_consumes`. **Your three
+poisons were right and one of them cannot fire for two names**, which is the only reason this is
+filed rather than noted.
+
+**Verified, both ways, at `1875e5c`.** The fix does not strip comments - **the constants drive the
+assertions**, as a typed array of `(name, cost::NAME, thing, what)` whose names are compared with
+the module's parsed `pub const` names **as a set**. Re-ran the exact scenario that defeated the
+previous arm: `GARRISON_METAL` restored and compared against nothing now fails naming it in one set
+and not the other, **and the comment at line 499 is gone besides**.
+
+**The escape route is closed rather than narrowed.** Deleting a row fails to compile, because the
+array's length is written into its type; correcting the length to hide that - which is the move the
+old count invited - then fails the set comparison naming `STORE_METAL`. **Two layers, and the second
+does not depend on a number anyone can edit.**
+
 
 ### Q-83 - Three cost constants are checked by nothing, and a retuned release goes green
 
