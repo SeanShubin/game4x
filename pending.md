@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-456** - which kinds carry an `id`, which is the one thing `traits.4x` cannot read · `docs/notes/decisions.md`
+- **P-456** - which kinds carry an `id`, and why a fleet is cheap · `docs/notes/proposals.md`
 - **P-457** - what a trait's own line says, which is the other thing `traits.4x` waits on · `docs/notes/decisions.md`
 - **P-459** - `refresh` reads a maximum that nothing declares · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
@@ -23,6 +23,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-456** - `a18e94b` P-456 and P-457 re-worked against the invariants, and P-459 filed · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding

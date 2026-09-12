@@ -62,6 +62,75 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-456 - which kinds carry an `id`, and why a fleet is cheap
+
+**to** sean · **status** open · **cited** `036a305` · **raised** 2026-09-12 · **kind** answered, by you, 2026-09-12 · **shape** text and rows · **asks** approval · **into** `spec/logistics.md` -> Containment, and `releases/first-release.md` -> Traits
+
+**Your answer, and the reason in it decides more than the question did.** You said territories must
+have ids because of movement and adjacency lists; that units must not, because massive fleets are
+intended and **operations on one unit should be as simple as operations on a million**; and that
+units are still grouped by state, which is a small number of combinations however large a fleet
+gets.
+
+**That last sentence is the one worth having in `spec/`**, because it is the mechanism and not the
+conclusion. A unit today has four states - `moving` and `defending`, each `0` or `1` - so a fleet of
+a million is four entries, and a fleet of ten is four entries too.
+
+## The words, into `spec/logistics.md` -> Containment
+
+**They go directly under the `id` bullet already there**, which says what an `id` does and never
+which kinds have one.
+
+> - **A place carries an `id`**, because movement and adjacency name one place rather than some
+>   place of its kind
+> - **A unit does not, and the reason is scale.** Fleets of any size are intended, and **acting on
+>   one unit and acting on a million are meant to be the same act** - which they are only while the
+>   million is one entry with a count. **An `id` makes every thing its own entry**
+> - **Things of a kind are grouped by their state**, and a kind has few states however many things
+>   of it there are. **So a fleet's size grows and its number of entries does not**
+
+## The row, into `releases/first-release.md` -> Traits
+
+**The `Of` cell for `id` stops being a sentence**, which the invariant that landed this morning
+requires of it either way - *it is never left as a sentence*.
+
+| Trait  | Of      | Values                                    | Stored or derived |
+| ------ | ------- | ----------------------------------------- | ----------------- |
+| **id** | a place | a number, unique among things of its kind | stored            |
+
+**`a place` rather than `territory, orbit`**, because `place` is a family the game declares and the
+column already names families that way - *a unit*, *a citizen*. That is expression rather than
+idea, so it is this lane's and reported rather than asked; say the word if you want the two kinds
+spelled out.
+
+## What this settles that was not asked, and one thing it does not
+
+**It answers `movable` too, in the other direction.** The *Movable* column is `ark` and `pioneer`,
+which is the `unit` family - and units carry no `id`, so a rule that moves one takes a quantity of
+its kind. **That is why `{move unit:pioneer territory:2}` names a kind and not a thing**, and the
+scenario's one move is now a consequence of a rule rather than a coincidence.
+
+**And it retires this lane's reading rather than confirming it.** The recommendation offered
+yesterday was *territory, orbit, ark, pioneer*, on the grounds that `move` names one unit and leaves
+the other. **That was wrong for a reason worth recording**: `move` names a *kind* and the two units
+are told apart by their state, so nothing had to be named. The scenario was evidence and this lane
+read it as coincidence.
+
+**What is not settled is how a kind's line says it carries a stored trait.** `spec/console.md` says
+a stored trait is *named there* and does not say in what form - a bare word among `key:value` pairs,
+or a key of its own. **That is the code lane's next question rather than yours**, and it is the same
+shape as `C-100`: this lane will file it if they ask.
+
+**And one thing your answer puts a name to rather than leaves open.** The code lane reports that its
+model *picks the lowest-numbered unit of a kind that fits*, so with two pioneers a command naming
+only the kind would pick one and the player would not have said which. **That is not an argument for
+an `id`; it is an argument about what the command binds.** `move` requires a place `$from` and a
+place `$to`, and the scenario's `{move unit:pioneer territory:2}` gives one territory - so a unit in
+some other territory is told apart by the place the command names, and a unit in the same territory
+with the same state is interchangeable and it does not matter which. **Whether the command binds
+both places is a question this lane is putting to the code lane rather than to you**, and it is
+theirs to state precisely before it is anyone's to decide.
+
 *Nothing is open. Everything filed has been decided.*
 
 ## Addressed to other perspectives

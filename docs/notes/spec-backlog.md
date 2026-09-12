@@ -3043,3 +3043,21 @@ showing through. The question is two cells now.
 **And that turned up a contradiction, filed as `P-459`**: `refresh` puts six counts *at its
 maximum* and nothing declares one. The release's `Readies` column says `yes`, one cell for a
 citizen's three actions, where the specification says a number.
+
+## Decided 2026-09-12, units carry no `id` because a fleet must be cheap
+
+Sean, answering `P-456`:
+
+> P-456: territories must have id's because of movement and adjacency lists. Units must not have
+> id's because we intend to support massive fleets, operations on 1 unit should be just as simple as
+> operations on 1 million units. Units will still be grouped by state but that is a small number of
+> combinations compared to how big a fleet can get.
+
+**The reason decides more than the question did**, which is why the third sentence is the one going
+into `spec/` rather than the first. A unit has four states today - `moving` and `defending`, each `0`
+or `1` - so a fleet of a million is four entries and a fleet of ten is four entries.
+
+**And it retires this lane's reading rather than confirming it.** The recommendation offered an hour
+earlier was *territory, orbit, ark, pioneer*, on the grounds that `move` names one unit and leaves
+the other where it was. **`move` names a kind**, and two units are told apart by their state and by
+the place the command names - so nothing had to be named. Filed as `P-456`, which now asks approval.
