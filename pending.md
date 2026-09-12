@@ -11,7 +11,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **P-435** - the trait becomes `strength`, the kind stays `force`, and `force` is declared · `docs/notes/proposals.md`
 - **P-436** - `spec/structures.md` says a garrison holds force of its own and `spec/control.md` says it has none · `docs/notes/proposals.md`
 - **P-434** - `keeps` is declared *of the kind* and `age` lowers it for one thing · `docs/notes/proposals.md`
-- **P-433** - the game holds twelve territories and declares no capacity to hold anything · `docs/notes/proposals.md`
+- **P-433** - the game contains everything without limit, which is the one of your three the spec lacks · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`

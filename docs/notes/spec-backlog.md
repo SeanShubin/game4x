@@ -8,7 +8,33 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-11, containment stated whole, and two thirds of it were already written
+
+*The top level game contains everything without limit. Everything under that, for each kind of
+thing: may not contain any, has room for a certain amount, can contain unlimited. Many object are
+containers, and containers can contain other containers, but it must not be possible for anything to
+contain itself.*
+
+**Said to clear up `P-433`, and it did more than answer it.** Two of the three are already in
+`spec/logistics.md` -> Containment in almost those words - the three-way declaration, and *nothing
+contains itself, directly or through anything else*. **Only the first is missing**, and its absence
+is the whole of `C-68`: the spec makes the game the one thing that is in nothing and never says what
+it holds, so a reader applying the three-way rule finds it declaring **nothing**, which reads as *no
+capacity*.
+
+**`P-433` now offers one bullet and no release change at all**, where an hour earlier it offered two
+rows saying twelve. **Both numbers were wrong and so was the scope.**
+
+**And the way it went wrong is worth more than the fix.** This lane applied `P-428` to choose `12`
+over *no limit*, reasoning that every other container in the table names a number so a limit is the
+uniform form. **The game is not another container**; it is the root, and the root is the one place
+the uniform answer does not apply. **That is twice in one day that the unified form was the wrong
+answer** - the other was `force` and `strength` - and both times this lane reached for the rule where
+it should have asked. `P-428` says a tie goes to the unified form; **neither of these was a tie, and
+what this lane is bad at is noticing that.**
+
 ## Said 2026-09-11, the kind keeps `force` and the trait becomes `strength`
+
 
 *Lets go with 2. Declare it and rename one of the two, force and strength are fine.*
 

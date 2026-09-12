@@ -202,32 +202,49 @@ it is: *a citizen musters its force*.
 different columns, so no row is ambiguous. **This lane is not proposing a rename** - it is recording
 that the collision is deliberate if you say so, and `C-93` asked.
 
-### P-433 - the game holds twelve territories and declares no capacity to hold anything
+### P-433 - the game contains everything without limit, which is the one of your three the spec lacks
 
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed, from the code lane's `C-68` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Where things are · from `C-68`
+**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, when you stated the three · **kind** recovered · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment · from `C-68`
 
-**The release says two things that cannot both hold**, and `P-430` sharpened it this afternoon.
+**Sean, 2026-09-11**: *The top level game contains everything without limit. Everything under that,
+for each kind of thing: may not contain any, has room for a certain amount, can contain unlimited.
+Many object are containers, and containers can contain other containers, but it must not be possible
+for anything to contain itself.*
 
-- ***Where things are*** lists **three sorts of capacity** - a territory's, a store's, a unit's
-  tank - and **the game is not among them.**
-- **`spec/logistics.md`**: *a kind declares one of three things about what it may hold. It may
-  declare **no capacity**, and then it holds nothing of that sort and never can.*
-- And the same file makes the game **the one thing that is in nothing**, so it is the root of the
-  containment tree and **must hold the twelve territories.**
+**Two of the three are already in `spec/logistics.md` -> Containment**, checked line by line rather
+than assumed:
 
-**A kind that declares nothing declares no capacity**, so the release currently makes the root of
-the tree a thing that may not contain anything. **The code lane reached this building `P-351` and
-has been carrying it since 2026-09-07.**
+| Your statement                | Where it already is                                                                              |
+| ----------------------------- | ------------------------------------------------------------------------------------------------ |
+| three declarations per kind   | *A kind declares one of three things about what it may hold* - no capacity, a limit, or no limit |
+| containers contain containers | *A thing that contains things takes up capacity in whatever contains it*                         |
+| nothing contains itself       | *Nothing contains itself, directly or through anything else*                                     |
 
-**`P-430` is why it is worth fixing now rather than when it bites.** That rule reads a kind's
-declaration to decide whether a rule may ask if something is absent - *which kinds declare a limit
-is already written down*. **A kind whose declaration is missing is exactly the hole that rule reads
-from**, and it now has one.
+**The first is the one that is missing**, and its absence is exactly `C-68`. The spec makes the game
+*the one thing that is in nothing* and never says what it holds - so a reader applying the three-way
+declaration finds the game declaring **nothing**, which reads as **no capacity**: *it holds nothing
+of that sort and never can*. **The root of the containment tree, unable to contain the twelve
+territories.**
 
-**The rows, into *Where things are*, after the three that are there:**
+**The bullet, to follow *A kind declares one of three things about what it may hold*:**
 
-> | the game | territories | 12 |
-> | the game | orbits | 12 |
+> - **The game declares no limit, for every kind.** It contains everything, there is no room to
+>   record because nothing can be short of it, and it is the one thing that is in nothing - so the
+>   tree has a root that no rule has to except.
+
+## This withdraws its own earlier version, and the release needs no row
+
+**What this proposal offered an hour ago was two rows into `releases/first-release.md` saying the
+game holds twelve territories and twelve orbits. Both numbers were wrong and so was the scope** -
+it is everything, and it is unlimited. **`P-428` was applied to pick `12` over *no limit* and that
+was this lane reaching for a rule where it should have asked**, which is the second time today the
+uniform form was the wrong answer.
+
+**And with this bullet the release is already correct.** *Where things are* lists **three sorts of
+capacity** and its preamble says *every thing but the game is in another thing* - the game is
+excepted by name. **A kind that declares no limit has no room to record**, so a table of capacities
+is right to omit it. `C-68` is answered by one sentence in `spec/` and no change to the release at
+all.
 
 ## Why twelve rather than *no limit*, which is the only choice here
 
