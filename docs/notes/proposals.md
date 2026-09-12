@@ -2871,41 +2871,75 @@ all. Read `docs/process.md` -> *All lanes* and *What I read, and what I do* rath
 
 ### S-49 - Everything a fresh instance of you needs, in order
 
-**to** code - **status** open - **cited** `1716f6d` - **raised** 2026-09-06 - **rewritten** 2026-09-11, after Sean pushed and the ordering that assumed he had not went stale - **source** the specification lane
+**to** code - **status** open - **cited** `1716f6d` - **raised** 2026-09-06 - **rewritten** 2026-09-12, after twenty-two promotions in two days made the previous version wrong in three of its six items - **source** the specification lane
 
-**He has pushed.** `origin/master` is at `0fd1982` and the tree is seventeen commits ahead, so
-everything through this morning is deployed. **The gate is no longer the thing standing between a
-day's work and the pipeline**, which is what the previous version of this item was written around.
+**Read this before `pending.md`.** The index gives you the list; this gives you the order and the
+things that will burn you.
 
-**Read `pending.md` -> *To code* for the list. This is the order, which the index cannot give.**
+## Eight assumptions that were true this week and are not now
 
-1. **`S-100`** - ten promotions this lane never told you about, and two of them are real work: the
-   token model became a count carried as a trait, and force became something mustered rather than
-   computed. **Start here, because the rest of the list assumes the release it describes**
-2. **`S-99`** - two stale quotations, in `play.4x`'s header and `fully_exploited.rs`. **Cheapest
-   taken with 1**, since both are in the same area
-3. **`R-10`** - the only capability you can finish alone. Colour and naming hold; what is open is
-   that the whole net is one drawing of 62 nodes and 195 arcs and nothing shows it in parts
-4. **`S-96`** - the standing check that every `In` line quotes its source. **It has now been wrong
-   three times**, twice in one day, and each was found by a sweep that happened to be run
-5. **`R-6`** - a scenario reaching a fully exploited planet and launching an Ark. **`play.4x`
-   launches one and is 133 commands; whether it reaches a fully exploited planet is yours to say**,
-   and if it does then `R-6` is `built` and waiting on Sean
-6. **`X-8`, `X-11`, `X-12`, `X-13`** - the research lens's four. `X-12` is the only one with work
-   in it, and it wants the noun `P-396` gave the notation
+**Each names the file to check rather than asking you to take this on trust.** `CLAUDE.md`: a lane
+told to go and read is not taking Claude's word for anything.
+
+| It was                                                | It is                                                          | Where                                        |
+| ----------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------- |
+| `force` is a trait of citizen, garrison, ark, pioneer | **`strength` is**, and **`force` is a kind** - the eighteenth  | `releases/first-release.md` -> Traits, Kinds |
+| `keeps` is *of the kind*                              | **stored**                                                     | -> Traits                                    |
+| `age` is `consume` then `produce`                     | **`require` then `put`**                                       | -> Recipes                                   |
+| founding builds two stores                            | **it builds none**, and both foundings are net 0 metal         | -> Recipes                                   |
+| an Ark has `Fuel` 2                                   | **blank** - it moves in orbit and stores no fuel               | -> Units and structures                      |
+| `spec/control.md` has a `## Coordination` section     | **it does not** - folded into *Producing force*                | `spec/control.md`                            |
+| `R-6` wants a fully exploited planet                  | **it wants two territories, a launch, and every recipe fired** | `releases/first-release.md` -> `R-6`         |
+| the release's tables are the game's data              | **they are becoming copies.** `spec/data/` is the source       | `spec/README.md` rule 7                      |
+
+**The last one is the one that changes what you do rather than what you know.** Do not add a row to
+the release's *Kinds* table: it is about to be generated, and adding one is work done twice -
+`S-114`.
+
+## Five rules that are new and bind you
+
+**Read them where they are; none is restated here.**
+
+- **`docs/process.md` -> What makes a check worth having**: *a check that reads a copy of the
+  population is checking the copy.* **This is the one that would have caught four of this week's
+  defects in three lanes**
+- **`spec/invariants.md` -> What a rule may cost**: *a rule may ask whether something is absent only
+  where what would hold it declares a limit for it*
+- **`spec/console.md` -> The language**: a file may **declare** the vocabulary rather than use it,
+  and **a kind declares which family it is in**
+- **`spec/README.md` rule 7**: the game's data is several files in `spec/data/`, in the notation,
+  and **what the specification states is the default** - tuning is in the editor
+- **`docs/process.md` -> Three rules for using AI assistants**: *a unification that is not there
+  cannot be had by writing one*, and *a need I have not noticed is not a need*
+
+## The order
+
+1. **`S-114` and `S-113`** - the live thread. `spec/data/kinds.4x` exists; `families.4x` is next, and
+   `kinds.4x` gains a `family` trait on seven of its twenty-one lines. **Start here: it is the only
+   work Sean is not waiting on you for, and it is the largest**
+2. **The two-family check**, in `S-113`. **Small, and it is the instrument of a decision** rather
+   than a restriction - it fires the first time a kind needs two families, which is how Sean decides
+   whether it does
+3. **`R-10`** - the only capability you can finish alone. What is open is that the whole net is one
+   drawing of 62 nodes and 195 arcs and nothing shows it in parts
+4. **`S-96`** - the standing check that every `In` line quotes its source, **wrong three times so
+   far**, each found by a sweep that happened to run
+5. **`X-8`, `X-12`, `X-13`** - the research lens's three
+
+## Closable on your side, and this lane cannot do it
+
+**`C-98`** is answered by `P-448`, **`C-95`** by `R-6` reading `built`, and **`S-103` is built** -
+`proposed_blocks()` is in `outbox`. `hooks/pre-commit` names some of these on every commit.
 
 ## Held, and not by you
 
 - **`S-26`** - `P-214` and `P-213` wait on recipes being data
-- **`S-30`** - waits on the ordering question in your own `C-49`, which is a decision rather than
-  work
-- **`S-97` and `S-98`** - informational, and `S-100` supersedes what they said about the release
+- **`S-97`** - informational
 
 ## What Sean is waiting on that no lane can do
 
-**Nothing.** `decisions.md` is empty, the proposal queue is empty, and `scenario/expected/play.4x`
-opening `NOT YET REVIEWED` gates nothing under `docs/process.md` -> *What I am pushing out*. **`R-7`,
-`R-8` and `R-9` sit at `built` for the same reason.**
+**Nothing.** His queue is empty and so is `decisions.md`. **`R-6`, `R-7`, `R-8` and `R-9` sit at
+`built`** - the whole first release, waiting on him to look rather than on anyone to build.
 
 ### S-48 - `node` goes, and the game's row loses `turn`
 
