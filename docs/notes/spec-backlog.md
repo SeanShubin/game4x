@@ -3001,3 +3001,25 @@ lands.
 never reading* would have been false the moment it was written. It is resolved the only way the
 existing invariants allow: the console's grammar **is** the primitive list, and *anything written
 as text can be opened in the editor* already says typing reaches no further than choosing.
+
+## Said 2026-09-12, the two reasons to add a primitive
+
+Sean, on `P-458`:
+
+> Lets be clear about the reasons to add primitives and the reasons not to. I think we have a rule
+> somewhere else about how we want less primitives because by being less expressive we have more
+> unified expression, but when we take this too far we actually create more complexity because we
+> have to creatively arrange the primitives in unnatural ways.
+
+**The rule he remembers is not in `spec/`** - the word *primitive* appears there zero times, over
+nineteen files. It is `X-11` and
+`lenses/research/2026-09-08-least-expressive-yet-complete.md`, and a lens decides nothing, so it has
+guided four decisions across three lanes while living nowhere a decision can cite it.
+
+**And the half he says is missing is missing.** The report gives the first reason its rigorous form -
+removing `soft` provably expands one rule into one per combination of which parts hold. The second is
+in the same report as an aside: *probably not worth taking - it buys one fewer direction in the
+grammar and costs a person reading `garrison-slots-free` in a specification*. **That sentence is his
+point, written as a footnote to a recommendation rather than as a rule.**
+
+`P-458` now offers both as a second section.

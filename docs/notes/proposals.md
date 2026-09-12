@@ -64,7 +64,7 @@ Two limits Claude holds itself to:
 
 ### P-458 - what a person types, as an invariant
 
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** asked for, from your three types · **shape** text · **asks** approval · **into** `spec/invariants.md` -> a new section after *Control without tedium*
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** asked for, from your three types · **shape** text · **asks** approval · **into** `spec/invariants.md` -> two new sections after *Control without tedium*
 
 **Four fields of the game as it stands today, and how a person reaches each:**
 
@@ -143,6 +143,67 @@ four are what makes them bite**, and each answers a question the first three lea
 - **The seventh is the constraint doing its work.** It converts *I want to minimize (a)* from a
   preference into a procedure: meeting the wall is not a failure, it is the moment a decision is
   due, and the two ways out are named so that *leave it as prose* is not one of them
+
+## Why a list gets longer, and why it gets shorter
+
+**Three primitives of the game as it stands, and whether each earns its place:**
+
+| Primitive                  | What removing it would cost                                                                  | Earns it |
+| -------------------------- | -------------------------------------------------------------------------------------------- | -------- |
+| `soft`                     | a rule with four optional lines becomes **sixteen rules a person writes** and keeps agreeing | **yes**  |
+| `at most`                  | *at most one garrison* has to be said **at least zero garrison-slots-free**                  | **yes**  |
+| `require` beside `consume` | nothing - they differ only in whether the change is zero                                     | **no**   |
+
+**The first two are the two reasons, and they are not the same reason.** `soft` earns its place by a
+count: removing it multiplies what somebody has to author, and the multiplication is provable rather
+than estimated. **`at most` earns its place by a reading**: removing it costs nothing at all in
+count - the encoding exists and is exact - and what it costs is that a specification now carries
+`garrison-slots-free`, a word the game invented in order to not have a primitive. **That second one
+is what you said was missing, and you are right that it is missing.**
+
+**The third is the failure in the other direction, and it is not hypothetical.** `require` and
+`consume` are one dimension with the change at zero, and while they were two words there was nowhere
+to say *put a thing somewhere without destroying it* - which is why `put` had to be declared as a
+fifth role rather than found as a cell. **Shortness was not the problem and neither was length: the
+cut was in the wrong place.**
+
+## The words for it
+
+> ## When a primitive earns its place
+>
+> - **A primitive earns its place when removing it would move work to a person, and there are two
+>   ways it can.** Either **the removal multiplies what has to be authored** - one rule with four
+>   optional parts becoming sixteen rules somebody writes and keeps agreeing - or **the removal is
+>   exact and reads as a contortion**, so that *at most one garrison* has to be said *at least zero
+>   garrison-slots-free* and a specification carries a word the game invented in order to not have a
+>   primitive. **The first is counted and the second is read**, and either is enough
+> - **A primitive that earns its place neither way is removed.** Its absence makes only the generated
+>   space larger, and that is the side the explosion belongs on
+> - **Fewer is the direction and not the target.** Where two primitives are one dimension, naming
+>   them apart leaves a legitimate combination with no name - and where one primitive is two, a
+>   person reaches it by arranging the others in a shape nobody would have written. **A list is the
+>   right length when every primitive is a thing rather than a point on an axis that already
+>   exists**, which is a question about joints and not about counting
+
+## Where this rule is today, which is the part worth knowing
+
+**It is not in `spec/`, and the word *primitive* appears there zero times.** What you are remembering
+is `X-11` and the report behind it - `lenses/research/2026-09-08-least-expressive-yet-complete.md`,
+2026-09-08 - which gives the first of the two reasons its rigorous form: **conditional effects cannot
+be compiled away preserving linear plan size**, so removing `soft` provably expands one rule into one
+per combination of which parts hold. **That report is a lens's and a lens decides nothing**, so the
+rule has guided four decisions across three lanes while living nowhere a decision can cite it.
+
+**The second reason is in that report too, as an aside it did not take seriously enough**: on upper
+thresholds it says *probably not worth taking - it buys one fewer direction in the grammar and costs
+a person reading `garrison-slots-free` in a specification*. **That sentence is your point**, written
+as a footnote to a recommendation rather than as a rule, which is why it has not been available to
+anybody since.
+
+**Placement.** Both sections go in `spec/invariants.md` rather than `docs/designing-rules.md`, because
+*What a rule may cost* is already there and is the same kind of thing - a constraint on what may be
+written, justified by what it keeps checkable. Say the word and it moves; that is this lane's call to
+report rather than yours to make.
 
 ## What lands with it, if it lands
 
