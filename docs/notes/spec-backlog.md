@@ -8,7 +8,27 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-11, `limit` stays and the constraint is declared
+
+*Keep it, and declare the constraint: a limit row may name only a capacity-bounded kind. Checkable
+over the whole recipe set.*
+
+**Answering `P-423`, taking option 2 - the one this lane said his own two rules jointly pointed at.**
+Unification keeps `limit`, because `X-11` makes it the *at most* cell of a grid the four roles
+already form, so dropping it would offer every threshold direction but one. Decidability refuses
+keeping it unconstrained, because a zero test on an unbounded place is an inhibitor arc.
+
+**The constraint has a home in words `spec/` already uses**, which is why it is one bullet rather
+than a new idea: `spec/logistics.md` makes every kind declare **no capacity**, **a limit**, or **no
+limit**, and says of the third that *there is no room to record because nothing can be short of it*.
+`P-430` is that sentence turned round.
+
+**The second half of what he said is not built and is the code lane's**: a check over the whole
+recipe set, which passes over zero rows today and therefore has to be poisoned before it is
+believed.
+
 ## Said 2026-09-11, the scenario need not finish the planet
+
 
 *We don't need to fully exploit the planet for our initial scenario test, but we should try to
 exercise most mechanics. Lets take the first territory, the second territory, then launch an ark.*

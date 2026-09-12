@@ -62,7 +62,62 @@ Two limits Claude holds itself to:
 
 ## Open
 
-*Nothing is open. Everything filed has been decided.*
+### P-430 - a rule may ask whether something is absent only where a limit is declared for it
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered, from your answer on `P-423` · **shape** text · **asks** approval · **into** `spec/invariants.md` -> What a rule may cost · from `X-9` and `C-75`
+
+**Sean, 2026-09-11**: *Keep it, and declare the constraint: a limit row may name only a
+capacity-bounded kind. Checkable over the whole recipe set.*
+
+**The constraint has a home in words the specification already uses, which is why it is one bullet
+rather than a new idea.** `spec/logistics.md` -> *Containment* already makes every kind declare one
+of three things about what it may hold - **no capacity**, **a limit**, or **no limit** - and says of
+the third that *there is no room to record because nothing can be short of it.* **That sentence is
+the reason the constraint works**, and the rule below is it turned round.
+
+**The bullet, to follow *A soft line names something with a finite capacity*:**
+
+> - **A rule may ask whether something is absent only where what would hold it declares a limit for
+>   it.** Where a limit is declared there is room to record, and *none is present* is read from the
+>   room rather than measured. Where **no limit** is declared there is no room to be short of, so
+>   the question can be answered only by measuring, and a rule able to ask it of such a thing puts
+>   every check above out of reach. **Which kinds declare a limit is already written down, so
+>   whether a rule may ask is decided from the declarations and not from the rule.**
+
+## Why this wording rather than the release's
+
+**Your sentence says *capacity-bounded kind*, which is the release's vocabulary.** The specification
+does not have the `Role` column or the word `limit` as a role - it has the three-way declaration
+above, where `limit` means the bound itself. **So the rule is stated in the spec's own terms and
+says the same thing**, and the release refers to it rather than restating it, which is what
+`CLAUDE.md` asks of a release.
+
+**It also covers a case the release's phrasing leaves out.** *No capacity* is a third declaration,
+not a bounded one: a kind that holds none of that sort and never can. Asking whether such a thing is
+absent is always true and never useful. **Naming *declares a limit* rather than *is bounded*
+excludes both the dangerous case and the vacuous one**, with no extra clause.
+
+## What this costs today, counted
+
+**Nothing.** The release has **0** `limit` rows - `P-385` deleted both `limit 0 garrison` rows in
+`795f053`. So this is vacuous on the current recipe set, which means **it proves nothing and
+forbids nothing today**; it is a guard against a row nobody has written.
+
+**And the split it governs is already measured.** `C-75`, over the eleven bound kinds: **garrison,
+extractor, yard, ark and pioneer** declare a limit; **citizen, store, labor, food, metal and energy**
+do not. The second six are the ones a resource game invites the question about.
+
+## The check is not part of this and is the code lane's
+
+**You said *checkable over the whole recipe set*, and this proposal does not build it.** What it
+does is make the check possible to write: the predicate is *every `limit` row names a kind that
+declares a limit*, over every row of the *Recipes* table, and the population is the table rather
+than any copy of it.
+
+**It has to be poisoned to be believed**, because today it passes over zero rows - which is
+`docs/process.md`'s *a count over nothing is the same failure with the sign flipped*. **A `limit`
+row naming `food` must turn it red**, and that is what says it works rather than the green run.
+
 
 
 ## Addressed to other perspectives
