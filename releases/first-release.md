@@ -468,7 +468,9 @@ that used to be kept is lost at a turn's end. `scenario/expected/play.4x` was re
 
 **Three stale numbers in one status line is a pattern rather than an accident.** A capability's status is prose about a moment, and a number in it is a second form of a fact the tables hold - `spec/invariants.md` -> *A fact is stated once*. **Nothing re-derives these**, and the check that covers what `docs/` says about the release does not reach what the release says about itself.
 
-**The conclusion survives and was re-derived rather than carried over**: the traits each kind carries, joined to every *(recipe, role)* pair naming it, give **eighteen distinct signatures over eighteen kinds** - so no two behave alike, over 153 pairs. **`reports/catalog.md` is stale until it is regenerated** and still prints the three removed columns; that is the code lane's and is what you would be reading.
+**The conclusion survives and was re-derived rather than carried over**: the traits each kind carries, joined to every *(recipe, role)* pair naming it, give **eighteen distinct signatures over eighteen kinds** - so no two behave alike, over 153 pairs. **`reports/catalog.md` was regenerated in `0cb0dab` and is not stale** - this line said it was for some hours after it stopped being true, which the code lane caught. Measured: zero occurrences of `Costs to produce`, `Binding:` or `Requires:`, and a pioneer's *As a thing* line reads `Strength: 2 · Fuel: 2 · Crosses: border · Readies: defending 1, moving 1 · Movable: 1`.
+
+**What it still understates is the traits**, which is `P-473`: seven of the eighteen kinds show fewer than `spec/data/kinds.4x` states, because four cells of the *Of* column describe rather than name and the signature is computed from that column. **An Ark shows four traits and carries eight.** That is what is worth your eye before vetting this, and it is a proposal rather than a regeneration.
 
 - **In** - `docs/process.md`, *I insist that the AI make its work verifiable to a human*, applied
   to a kind's behaviour rather than to a scenario's outcome
