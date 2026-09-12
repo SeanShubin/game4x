@@ -112,7 +112,7 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 ### `s-14` - deposit
 
-**Traits** `density`, `keeps`, `total capacity`
+**Traits** `density`, `keeps`, `room`
 
 **Named by** `age put`, `age require`, `spoil consume`
 
@@ -437,7 +437,7 @@ a place things are in, which has a biome, a force of nature, and a density and a
 
 **Signature** `s-12`
 
-**Holds** that kind, up to its total capacity for that kind - *a fact about each one rather than about the kind*
+**Holds** that kind, up to its room for that kind - *a fact about each one rather than about the kind*
 
 **In recipes**
 
@@ -476,7 +476,7 @@ what a territory's ground offers of one resource, and how richly.
 
 **In families** thing
 
-**Traits of it** `density` (a number), `total capacity` (a number), `keeps` (the number of turns it will last)
+**Traits of it** `density` (a number), `room` (a number), `keeps` (the number of turns it will last)
 
 **Signature** `s-14`
 

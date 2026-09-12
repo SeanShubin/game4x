@@ -612,6 +612,10 @@ pub fn check(shape: &str, block: &str, destination: &str) -> Verdict {
 /// instead of asserted.
 const KNOWN: &[(&str, &str)] = &[
     (
+        "P-474",
+        "declared `shape rows and text` and offers no text. Its `into` names `releases/first-release.md` alone, and the blockquote it carries is `spec/logistics.md`'s own rule - *what is stored is the room left* - quoted as the contradiction's evidence. **The sentence is in `spec/logistics.md` and in no destination this proposal names**, which is what this reports, correctly. `CLAUDE.md`: *the indented quotation is reserved for what is being offered* - so quoting a rule and offering it are the same bytes, and the specification lane caught that by running `spec show` before promoting rather than by anything failing. The rows landed and the label is what is wrong. **Fifth mislabel and a fifth direction**: `text` declared where nothing at all is offered, after `P-195` text-for-instruction, `P-236` text-for-rows and `P-465` rows-for-instruction. `C-107`.",
+    ),
+    (
         "P-466",
         "one cell superseded inside its own promoting commit, which is `P-456`'s case and not the label problem this item first recorded. Its table is the seven columns *Units and structures* has afterwards, and **`yes` is the only cell of it the release does not carry** - checked cell by cell rather than inferred from the first failure. `P-465`, landing in the same commit, made the two *Movable* cells `1`. So the proposal is correct, the label is correct, and what cannot be judged is a promotion against a commit that also contains the one that overwrote a cell of it. **`C-107` said this was a before-and-after table and it is not**; the item is corrected.",
     ),

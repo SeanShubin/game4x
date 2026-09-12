@@ -297,10 +297,14 @@ pub struct Capacity {
 }
 
 pub const CAPACITIES: [Capacity; 3] = [
+    // **`P-474` made the bound the room rather than the total**, and the container with it:
+    // `spec/logistics.md` says *what is stored is the room left*, used is what is there, and
+    // nothing records the total. A territory bounded by its own total capacity was the total
+    // written twice - once as the container and once as the bound.
     Capacity {
-        what: "a territory's total capacity for a kind",
+        what: "a territory",
         holds: "that kind",
-        up_to: "its total capacity for that kind",
+        up_to: "its room for that kind",
     },
     // **`P-260` and `P-265`.** This row said *an extractor's catch*, holding up to the
     // territory's density - and the same document said four lines later that an extractor
@@ -453,7 +457,10 @@ pub const TRAITS: [TraitRow; 24] = [
         held: Held::Stored,
     },
     TraitRow {
-        name: "total capacity",
+        // **`P-474`: the room, not the total.** `spec/logistics.md` had said so since before
+        // this release - *what is stored is the room left* - and the release declared the one
+        // number it says nothing records.
+        name: "room",
         values: "a number",
         held: Held::Stored,
     },

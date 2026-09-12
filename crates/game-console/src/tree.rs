@@ -189,7 +189,7 @@ fn node(out: &mut String, entry: &Entry, depth: usize) {
 fn summary_of(capacity: &[Capacity]) -> String {
     let mut parts = Vec::new();
     for bound in capacity {
-        if bound.total == 0 {
+        if bound.total() == 0 {
             continue;
         }
         let named = bound
@@ -200,7 +200,8 @@ fn summary_of(capacity: &[Capacity]) -> String {
         let full = if bound.available() == 0 { " full" } else { "" };
         parts.push(format!(
             "<span class=\"bound{full}\">{named}&nbsp;{}/{}</span>",
-            bound.used, bound.total
+            bound.used,
+            bound.total()
         ));
     }
     parts.join(" ")
@@ -366,8 +367,8 @@ mod tests {
             .walk()
             .into_iter()
             .flat_map(|entry| entry.capacity.iter())
-            .filter(|bound| bound.total > 0 && bound.available() == 0)
-            .map(|bound| format!("{} {}/{}", bound.of.written(), bound.used, bound.total))
+            .filter(|bound| bound.total() > 0 && bound.available() == 0)
+            .map(|bound| format!("{} {}/{}", bound.of.written(), bound.used, bound.total()))
             .collect();
         assert!(
             !at_bound.is_empty(),
@@ -489,7 +490,7 @@ mod tests {
             "the fixture declares no energy anywhere, so this checks nothing"
         );
         assert!(
-            energy.iter().all(|bound| bound.total == 0),
+            energy.iter().all(|bound| bound.total() == 0),
             "the fixture's ground offers no energy"
         );
         let text = page(&game, "containment");

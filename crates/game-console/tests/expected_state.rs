@@ -353,8 +353,19 @@ fn every_territorys_own_numbers_survive_the_round_trip() {
                                 panic!("territory {}'s {resource} states no {name}", place.id)
                             })
                     };
+                    // **The file states the room and the release states the total** - `P-474`,
+                    // and `spec/logistics.md`: *what is stored is the room left*, used is what
+                    // is there, and **nothing records the total**. So the round trip is
+                    // `room + extractors present` against the release's figure, which is the
+                    // derivation stated rather than a second number compared.
+                    //
+                    // **That makes this a stronger check than it was.** It compared two copies
+                    // of one number; it now compares a number against a sum, so a room that
+                    // drifted from what is standing there fails here as well as a capacity
+                    // that drifted from the release.
+                    let standing = place.extractors_for(resource).len() as u32;
                     assert_eq!(
-                        (has("total-capacity"), has("density")),
+                        (has("room") + standing, has("density")),
                         (offered.capacity, offered.density),
                         "territory {}'s {resource}, which the release writes `{} x {}`",
                         place.id,

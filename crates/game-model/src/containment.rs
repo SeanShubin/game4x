@@ -165,13 +165,27 @@ impl Description {
 pub struct Capacity {
     /// The kind, or the kind carrying a trait value, that is bounded.
     pub of: Description,
-    pub total: u32,
+    /// **How many more will fit, which is the one of the three that is stored** - `P-474`,
+    /// and `spec/logistics.md` has said it since before this release: *what is stored is the
+    /// room left*, used is what is there, and **nothing records the total**.
+    ///
+    /// **This held `total` until `P-474`, and that is `C-81`.** Storing the total beside the
+    /// used count writes two of the three, and two written numbers can disagree; storing the
+    /// room alone means nothing can, because used is not a number this holds at all - it is
+    /// how many are there.
+    pub room: u32,
     pub used: u32,
 }
 
 impl Capacity {
+    /// How many more will fit, which is what is stored.
     pub fn available(&self) -> u32 {
-        self.total.saturating_sub(self.used)
+        self.room
+    }
+
+    /// **Derived, because nothing records it** - `spec/logistics.md`. The two added.
+    pub fn total(&self) -> u32 {
+        self.room + self.used
     }
 }
 
@@ -314,7 +328,7 @@ pub fn trait_name(name: Trait) -> &'static str {
         // this applies to a trait. **`C-25` dissolves with it** - it reported the dump
         // printing `capacity` where the release declared `total capacity`, and there is one
         // name spelled one way now.
-        Trait::TotalCapacity => "total-capacity",
+        Trait::Room => "room",
         Trait::From => "from",
         Trait::To => "to",
         // **These three are never written through here** - [`counts`] writes them under the
@@ -481,7 +495,15 @@ pub fn tree(game: &Game) -> Entry {
                 Description::of(Kind::Deposit)
                     .with("resource", resource.name())
                     .with("density", offered.density)
-                    .with("total-capacity", offered.capacity),
+                    // **The room left, not the total** - `P-474`. Used is how many extractors
+                    // are here, which is not a number anything keeps, and the total is the
+                    // two added.
+                    .with(
+                        "room",
+                        offered
+                            .capacity
+                            .saturating_sub(place.extractors_for(resource).len() as u32),
+                    ),
             ));
         }
         held.extend(
@@ -648,10 +670,12 @@ fn describe_unit(unit: &crate::Unit) -> Description {
 fn capacities_of(game: &Game, place: &crate::Territory) -> Vec<Capacity> {
     let _ = game;
     let mut out = Vec::new();
+    // **Room rather than total** - `P-474`. The caller states the bound because that is how
+    // the release states it, and what is kept is what is left.
     let mut fixed = |kind: Kind, total: u32, used: u32| {
         out.push(Capacity {
             of: Description::of(kind),
-            total,
+            room: total.saturating_sub(used),
             used,
         });
     };
@@ -662,19 +686,22 @@ fn capacities_of(game: &Game, place: &crate::Territory) -> Vec<Capacity> {
         let offered = place.deposit(resource);
         out.push(Capacity {
             of: Description::of(Kind::Extractor).with("resource", resource.name()),
-            total: offered.capacity,
+            room: offered
+                .capacity
+                .saturating_sub(place.extractors_for(resource).len() as u32),
             used: place.extractors_for(resource).len() as u32,
         });
         out.push(Capacity {
             of: Description::of(Kind::Store).with("resource", resource.name()),
-            total: place.store_capacity(resource) as u32,
+            room: (place.store_capacity(resource) as u32)
+                .saturating_sub(place.stores(resource) as u32),
             used: place.stores(resource) as u32,
         });
         // What the stores of a resource can hold between them. *Where things are*: a store
         // holds the resource it was built for, up to 10.
         out.push(Capacity {
             of: Description::of(Kind::from_resource(resource)),
-            total: place.stores(resource) as u32 * HOLDS,
+            room: (place.stores(resource) as u32 * HOLDS).saturating_sub(place.store(resource)),
             used: place.store(resource),
         });
     }
@@ -883,7 +910,9 @@ mod tests {
             .iter()
             .find(|c| c.of.written() == "{extractor resource:food}")
             .expect("a capacity for food extractors");
-        assert_eq!((food.total, food.used, food.available()), (3, 1, 2));
+        // **Room is what is kept and the total is the two added** - `P-474`. Asserted in
+        // that order so a reader sees which of the three is stored.
+        assert_eq!((food.room, food.used, food.total()), (2, 1, 3));
     }
 
     /// A unit in a place the tree cannot reach stops the tree rather than vanishing from it.
