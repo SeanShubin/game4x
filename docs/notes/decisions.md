@@ -74,6 +74,12 @@ check is the whole of the value** - it is what would have caught the garrison.
 
 ## What this lane would take
 
+**`P-469` is what Sean asked for on reading this**, and it answers the half of this item that is
+about facts rather than about readers: **a fact is stated once, and removing the second form is
+better than checking it.** So `A` is the default and `C` is the fallback, and **what is left for you
+is whether a reader wants the convenience** - which is a judgement about readers and is why this is
+still a decision.
+
 **`A`.** `B` and `C` both keep a second statement of the same fact and pay something to keep the two
 agreeing; `A` removes the second statement. **The convenience `B` buys is small and shrinking** -
 `spec/data/` is where the game's data lives now, and a reader looking up a cost will be reading a

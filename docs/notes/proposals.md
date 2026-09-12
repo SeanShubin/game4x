@@ -62,6 +62,60 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-469 - a fact is stated once
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** asked for, from your question on `P-466` · **shape** text · **asks** approval · **into** `spec/invariants.md` -> a new section after *The game is data*
+
+**The idea is in the specification three times and none of the three reaches `P-466`:**
+
+```
+spec/invariants.md, What a person types
+  "...a rule the specification can state twice is one two readers can disagree about"
+  a subordinate clause, inside a bullet about fields that cannot be offered as a choice
+
+spec/invariants.md, The game is data
+  "Nothing states by hand what a data file says; every other form of it is derived"
+  scoped to a data file, and the recipes are not in one yet
+
+CLAUDE.md
+  "A fact already asserted by a test does not belong in prose too"
+  scoped to a test, and not the specification
+```
+
+**`P-466` is a table in `releases/` restating another table in `releases/`** - neither a data file nor
+a test, which is the gap between the three. **The same idea written three times, each too narrow, is
+itself an instance of what it is about.**
+
+## The words
+
+> ## A fact is stated once
+>
+> - **Two statements of one fact can disagree, and the disagreement is invisible to anyone reading
+>   either one alone.** **Four were found on 2026-09-12 and every one was found by deriving one form
+>   from the other** - a garrison's cost against the recipe that makes it, a trait's values against
+>   the file that declares them, a derived trait against the name it is defined by, and a named input
+>   against the code that reads it. **None was found by reading either form.**
+> - **So a fact is stated once and every other form of it is derived.** *Nothing states by hand what
+>   a data file says* is this rule for data, and it is not only true of data.
+> - **A second form kept for a reader is generated, and a check says the two agree.** A convenience
+>   that can drift is not one. **And the shorter specification is the one that says each thing once**,
+>   so removing the second form is better than checking it.
+
+## What it settles, and what it does not
+
+**It makes `P-466`'s `A` the default and its `C` the fallback.** Three columns of *Units and
+structures* restate the recipes; the rule says remove them, and permits generating them if a reader
+turns out to want them. **It does not decide `P-466`** - that item asks whether a reader wants them,
+which is a judgement about readers and not about facts.
+
+**The three narrow statements stay.** The data-file sentence says more than this one - it says
+**which** form is canonical - and `P-458`'s clause is a justification inside a bullet about something
+else. **Neither is a copy of this**, which is worth saying in a proposal that is about copies.
+
+**And it does not mechanise anything.** No check can ask whether two sentences are the same fact;
+what it changes is which way to lean when you notice, and that the noticing has to be done by
+deriving. **That is the same wall `P-245` hit and `CLAUDE.md` records** - what is available is the habit
+and the cases.
 ### P-468 - biome is named as an input to output and reaches nothing
 
 **to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed, from your answer to `P-467` applied to `Q-80` · **shape** text · **asks** approval · **into** `spec/control.md` -> Winning

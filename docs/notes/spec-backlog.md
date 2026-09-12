@@ -3218,3 +3218,23 @@ making biome an input to output would contradict a rule that is already there.
 **And the honest answer to the question is that very little is left for him.** Two proposals to
 approve, one to decide, five capabilities at `built` that only he can vet - and twenty-two items
 open to this lane, which are this lane's work rather than his decisions.
+
+## Said 2026-09-12, an invariant against stating a fact twice
+
+Sean, on `P-466`: *do any of our invariants help push us towards avoiding the possibility of
+contradiction and longer-than-needed expressions? If not, should we add one?*
+
+**The idea is in the specification three times and none of the three reaches `P-466`.** A
+subordinate clause in *What a person types*; a sentence in *The game is data* scoped to a data file,
+and the recipes are not in one yet; and a line in `CLAUDE.md` scoped to a test, which is not the
+specification. **`P-466` is a table in `releases/` restating another table in `releases/`** - the gap
+between the three.
+
+**So the same idea written three times, each too narrow, is itself an instance of what it is
+about.** Filed as `P-469`, generalising rather than adding a fourth scope.
+
+**The argument in it is counted rather than asserted**: four contradictions were found on 2026-09-12
+and every one was found by **deriving one form from the other** - a garrison's cost against its
+recipe, a trait's values against the file that declares them, a derived trait against the name it is
+defined by, and a named input against the code that reads it. **None was found by reading either
+form.**
