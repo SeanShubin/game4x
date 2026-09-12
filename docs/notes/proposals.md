@@ -62,51 +62,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-454 - a kind writes an of-the-kind trait's value and names the rest
-
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered, from your answer on `P-453` · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
-
-**Sean, 2026-09-12**: *Lets go with B.*
-
-**What `kinds.4x` looks like.** Traits sort, so `family` comes before `name` and `name` before
-`strength` and `trait`:
-
-```
-{kind family:unit fuel:0 name:ark strength:2 trait:defending}
-{kind family:unit name:ark trait:moving}
-{kind name:citizen strength:1 upkeep:1 trait:bearing}
-{kind name:citizen trait:defending}
-{kind name:citizen trait:laboring}
-```
-
-**The sentence, to follow *a kind declares which traits it has*:**
-
-> **A trait of the kind is written with its value and a stored one with its name**, because one is a
-> fact about the kind and the other is a fact about each thing of it. So an Ark's `strength` is `2`
-> on the Ark's own line, and a citizen's `laboring` is named there and valued nowhere until there is
-> a citizen to value it for.
-
-## Why this needs saying when the files would work without it
-
-**Both statements are legal lines today and nothing distinguishes them.** `{kind name:ark
-strength:2}` and `{kind name:citizen trait:laboring}` are both descriptions with traits, so a reader
-meeting the second would have no way to know why the first does not say `trait:strength` as well.
-
-**The sentence is what stops the next transcription writing both**, which would say an Ark has a
-strength twice and a citizen's laboring once.
-
-## What it settles that `P-450` left open
-
-**`3A` is finished.** *Units and structures* folds into `kinds.4x` entirely - every one of its
-columns is an of-the-kind trait or a fact about the kind, so each row becomes part of that kind's
-line and there is no `units.4x`. **Counted from the *Traits* table**: 4 of the kind - `strength`,
-`fuel`, `upkeep`, `movable` - **15 stored**, and 4 derived, which are written nowhere because
-nothing stores them.
-
-**And a value carrying traits follows the same rule**, which is where `Biomes` goes: a biome's
-`nature` is a fact about the biome, so it is written with its value on the value's line -
-`{value name:jungle nature:2 of:biome}`.
-
 *Nothing is open. Everything filed has been decided.*
 
 ## Addressed to other perspectives
@@ -148,11 +103,25 @@ and 195 arcs; it is **31 places and 45 transitions, 76 nodes, 161 arcs**, and `P
 `P-427` and `P-431` each moved it with nothing re-counting. **That is recorded in the line**, because
 a figure nobody re-derives is how `C-9` happened.
 
-## What is left before you can write the files
+## `P-454` has landed and nothing is left
 
-**Nothing, once `P-454` lands.** `families.4x` and the kinds half are ready and this lane will
-propose the bytes the moment the shape is settled - **print them whenever you like**, since the shape
-will not move again.
+**The declaration rule is four sentences in `spec/console.md` -> The language**, in this order, and
+together they are the whole of it:
+
+1. **a file may declare the vocabulary rather than use it**, in the same form
+2. **a kind declares which family it is in**; a family declares only its name
+3. **a kind declares which traits it has**, and a value declares which trait it is one of
+4. **a trait of the kind is written with its value and a stored one with its name**
+
+**The shape will not move again**, so print the bytes for `families.4x` and the finished `kinds.4x`
+and this lane proposes them. **`traits.4x` and `biomes.4x` follow from sentence 4 without another
+decision** - a biome's `nature` is a fact about the biome, so it rides on the value's line.
+
+**And the stripping assertion can come out in the same change**, once `kinds.4x` lands with its
+`family` and `trait` lines - which is the day `C-61`'s pattern says the exception stops being true
+rather than being widened.
+
+
 
 
 
@@ -4717,6 +4686,7 @@ work the release exists to order.
 | P-449, if I never notice I need it, I don't need it                                                                          | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-12 |
 | P-451, a kind declares its traits, and a value declares which trait it is one of                                             | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-12 |
 | P-452, the traits inside a description are sorted, and only the entries are said to be                                       | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-12 |
+| P-454, a kind writes an of-the-kind trait's value and names the rest                                                         | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
 | P-403, an outbox item's addressing line is not part of what is promoted                                                      | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |

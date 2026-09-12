@@ -81,6 +81,11 @@ says what it admits and whether it is stored, and says nothing about which kinds
 trait whose values are kinds names their family instead, because they are already declared. **The
 thing that belongs to something says so, and the something says only what is true of itself.**
 
+**A trait of the kind is written with its value and a stored one with its name**, because one is a
+fact about the kind and the other is a fact about each thing of it. So an Ark's `strength` is `2`
+on the Ark's own line, and a citizen's `laboring` is named there and valued nowhere until there is
+a citizen to value it for.
+
 **In a recipe the same form is a selector, not a description.** A selector may name a **family**
 rather than a kind, and it may **leave traits out** - `{extractor resource:food}` selects every
 extractor built for food, whatever else is true of it. **A description may do neither**: it names
