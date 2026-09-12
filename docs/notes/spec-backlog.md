@@ -8,7 +8,45 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-11, the Petri net is a means and the end is safe recipe editing
+
+*They are a means to an end. I want it to be safe for a user to edit recipes without having to worry
+about infinite resources on one turn.*
+
+*The "put" was an attempt to simplify the destroy-then-recreate mechanics of the move command. You
+seemed to think at the time that I would not have to abandon the invariants I get from the petri
+net.*
+
+*If it is more natural to make the "move" a mechanic that stands apart from the petri net that is
+fine too, as the move can have its own invariants applied to make sure it is not possible for it to
+create a loophole in the petri net.*
+
+*The reason the move was in the petri net in the first place was for unification, I don't want any
+more mechanics than necessary, but sometimes they are necessary because I have to balance how
+complex the building blocks for recipes are against how complex the recipes are.*
+
+**The first sentence is the one that is not written down anywhere and is load-bearing for four open
+items.** `spec/invariants.md` states the invariant - *there is a weighting of the kinds, and under
+it no sequence of rules ends holding more than it began with* - and states that it is *decided
+mechanically, from the rules alone*. **It never says who the rule is protecting.** `X-29` had to
+reach for `spec/invariants.md` -> *Control without tedium* to find *a player's rules always finish*
+and infer the audience.
+
+**Naming the end changes what counts as an answer.** *Safe for a user editing recipes* scopes the
+property to the sublanguage a player writes in, which is what `X-29` measured and is a weaker and
+decidable question. Under the unscoped reading, the world's rules have to satisfy it too, and they
+are strictly stronger.
+
+**The third sentence licenses something this lane had not considered open**: that a mechanic may sit
+outside the net with its own invariant. **The fourth bounds it** - a mechanic costs, and the budget
+is the complexity of the building blocks against the complexity of the recipes.
+
+**What this lane said at the time and should be held to**: that `put` would not cost him the net's
+invariants. **Checked against the release on 2026-09-11 and it holds**, for a reason narrower than
+the claim - see the answer given with `P-421`.
+
 ## Said 2026-09-11, what `put` is for, and what the role language is for
+
 
 *I recall put being there so we could move things with an identity without destroying, then
 creating them.*
