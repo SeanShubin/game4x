@@ -8,9 +8,10 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-425** - force, rewritten under unification, and `Coordination` folds into `Producing force` · `docs/notes/proposals.md`
+- **P-428** - unification first, until there is a reason not to · `docs/notes/proposals.md`
 - **P-426** - metal is declared *conserved* and the planet is a source, in two documents that cannot both hold · `docs/notes/proposals.md`
 - **P-427** - founding creates two metal it does not consume, and the lens reports you decided this on 2026-09-09 · `docs/notes/proposals.md`
-- **P-425** - force redefined, run both ways, and the token is one nothing consumes · `docs/notes/decisions.md`
 - **P-422** - `R-6` asks how much of the planet has to be played, and has pointed at an empty queue since 2026-09-05 · `docs/notes/decisions.md`
 - **P-423** - `limit` is safe exactly where what it tests is bounded, and nothing says which kinds are · `docs/notes/decisions.md`
 - **P-424** - `age` destroys and recreates a thing, which is what `put` was introduced to stop · `docs/notes/decisions.md`
@@ -27,6 +28,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 - **X-14** - `3553419` X-29's number was never stale, and X-14 becomes P-426 and P-427 · still open in `lenses/research/outbox.md`
 - **X-29** - `3553419` X-29's number was never stale, and X-14 becomes P-426 and P-427 · still open in `lenses/research/outbox.md`
+- **X-30** - `11ea79e` X-30 recorded where the grounding that depends on it lives · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 

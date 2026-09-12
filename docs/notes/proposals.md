@@ -62,6 +62,97 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-425 - force, rewritten under unification, and `Coordination` folds into `Producing force`
+
+**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, when you chose way one · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Producing force, and -> Gaining and holding ground · from `C-94` and your redefinition
+
+**Sean, 2026-09-11**: *I am deciding with unification for now... since I am not seeing much
+difference here I am starting with unification.* **So force stays a token on its own exhaustion
+track, and nothing in `releases/first-release.md` changes** - the release already implements every
+clause of your definition. **What changes is `spec/`**, which still carries the `max` era.
+
+**This supersedes `P-420`**, which is held: its bullet made a unit coordinate citizens, and your
+definition gives a unit force of its own and no coordinating role. **The word `military` is gone
+from both bullets here**, so `P-420` is withdrawn rather than promoted - it wanted one word changed
+in a sentence this replaces.
+
+## What is wrong today, so the rewrite is checkable rather than tasteful
+
+- **The same rule is stated twice, in two sections, in different words.** *Producing force* has *a
+  citizen can fight but cannot organise; coordinated, it musters its force each turn; uncoordinated
+  it musters none*. *Coordination* has *citizens are capable of violence but not of coordination;
+  without something to coordinate them they muster nothing*
+- **The sections are mis-sorted.** *Coordination* opens with *force is mustered each turn and does
+  not outlast it*, which is duration. *Producing force* carries the garrison's coordinating role,
+  which is coordination
+- **`military unit` has a rule and no instance** - two occurrences, 0 elsewhere in `spec/` or
+  `releases/`, and `spec/unit-types.md` declares Ark and Pioneer and calls neither military
+- **Nothing says a citizen's mustering is its own track**, which is your third clause and is the one
+  the spec has never had
+
+## The first block: `## Producing force` keeps its heading and takes these six bullets, and `## Coordination` is deleted
+
+> - **Force is mustered each turn and does not outlast it.** What a territory presents is what it
+>   mustered this turn, and nothing accumulates
+> - A citizen can fight but cannot organise. **It musters no force unless something coordinates it**
+> - A garrison coordinates the citizens of its territory, so that **each of them musters one force
+>   each turn**. It has no force of its own, and **it does this by existing** - nothing has to work
+>   it
+> - **What a citizen spends to muster is its own**, and is not what it spends to labor or to bear
+> - **A unit is organised force in itself**, and musters its own force needing nothing to coordinate
+>   it
+> - A territory has at most one garrison, because it represents the organisation of the whole
+>   territory rather than a presence in one part of it
+
+## The second block: in `## Gaining and holding ground`, replacing the bullet that begins *A military unit is organised force*
+
+> - Several units brought to one place sum their force. Taking a territory uses the organised force
+>   brought to it, and several units may take together
+
+## What this asks you to agree to beyond the words
+
+**Deleting a heading is structural and this lane will not do it quietly.** `## Coordination`
+disappears and its three bullets are accounted for: the duration bullet moves up unchanged, the
+duplicate citizen bullet is **dropped as a duplicate**, and the coordination-source bullet is
+**replaced** - a garrison coordinates, a unit does not, which is your definition rather than a
+rephrasing of what was there.
+
+**Two references point at that heading and neither is yours to fix.** `crates/outbox.md:157` is
+`C-94`, which this answers, and a research report dated 2026-09-10 cites it. **Both are told once
+this lands.**
+
+**One bullet is new rather than moved**: *what a citizen spends to muster is its own*. It is your
+third clause, it is already true of the release - `defending` sits beside `laboring` and `bearing` -
+and the specification has never stated it.
+
+**And `C-93` survives this and is not made worse.** Force stays a kind, so the release still uses
+`force` in three recipe rows while *Kinds* declares seventeen without it. **Way one was the option
+that leaves that to answer**, which the decision knew.
+
+### P-428 - unification first, until there is a reason not to
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** text · **asks** approval · **into** `docs/process.md` -> Three rules for using AI assistants
+
+**Sean, 2026-09-11**: *My current thinking is to always try for unification first, until there is a
+good reason not to. Since I am not seeing much difference here I am starting with unification.*
+
+**`docs/process.md` has the reason and not the rule.** `P-409` landed *I want one rule applied
+everywhere rather than a rule with a correct exception, because uniformity is how I recognise a
+pattern that nobody has named yet* - which says **why** uniformity is worth something. **It does not
+say when to reach for it**, and the sentence above is a decision procedure: a default, a defeater,
+and what to do when the case is close.
+
+**The last clause is the one that changes what this lane does.** *Since I am not seeing much
+difference here* - **a tie goes to unification.** `P-425` is exactly that case: this lane laid out
+two ways, said one fact was strongest and declined to pick, and you picked on the ordering rule
+rather than on the merits. **Written down, this lane stops presenting a close call as open.**
+
+**The sentence, to follow the paragraph `P-409` landed:**
+
+> **Which is a rule about what to try first, not only about what to prefer.** I try for unification
+> first and look for a reason not to; where I cannot see much difference between the unified form
+> and the exception, the unified form wins by default.
+
 ### P-426 - metal is declared *conserved* and the planet is a source, in two documents that cannot both hold
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed, from the research lens's `X-14` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Kinds · from `X-14`
@@ -123,7 +214,14 @@ that is the code lane's to say before or after it lands.
 
 ### P-420 - `military unit` becomes `unit`, in both places
 
-**to** sean · **status** **held** - do not promote as it stands, see `P-425` · **raised** 2026-09-11 · **rewritten** 2026-09-11, when you answered it · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Coordination, and -> Gaining and holding ground · from `C-94`
+**to** sean · **status** **withdrawn** 2026-09-11, superseded by `P-425` · **raised** 2026-09-11 · **kind** recovered · **shape** text · **into** `spec/control.md` -> Coordination, and -> Gaining and holding ground · from `C-94`
+
+**Withdrawn the same day it was written, and not because it was wrong.** Its instruction - *lets
+just call them units* - is carried out in `P-425`, which removes `military` from both bullets. What
+did not survive is the sentence it kept the word in: it would have made a unit coordinate citizens,
+and Sean's redefinition gives a unit force of its own and no coordinating role. **`P-425` replaces
+the section rather than editing a word in it**, so there is nothing left here to promote.
+
 
 **Held 2026-09-11, an hour after being written, by your own next message.** Its first bullet would
 make coordination come from *a structure, such as a garrison, or by a unit*, so a Pioneer would

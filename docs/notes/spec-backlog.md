@@ -8,7 +8,24 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-11, unification first, until there is a reason not to
+
+*I am deciding with unification for now. My current thinking is to always try for unification first,
+until there is a good reason not to. Since I am not seeing much difference here I am starting with
+unification.*
+
+**Said choosing way one for force, and the general sentence is the part that outlives the choice.**
+`docs/process.md` carries `P-409`'s reason - *uniformity is how I recognise a pattern that nobody
+has named yet* - and **has no rule about when to reach for it**. This is a decision procedure: a
+default, a defeater, and a tie-break.
+
+**The tie-break is what changes how this lane writes.** It laid out two ways for force, said one
+fact was strongest, and declined to pick; he picked on the ordering rule rather than on the merits.
+**So a close call is not an open question**, and presenting one as though it were costs him a
+decision he had already made in general. `P-428` carries it.
+
 ## Said 2026-09-11, force redefined from the ground up
+
 
 *Citizens don't generate force by default. A garrison allows each citizen in the same territory to
 generate 1 force per turn, separate from any of its other exhaustion tracks. Territories have room
