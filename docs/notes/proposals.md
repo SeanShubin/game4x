@@ -62,6 +62,185 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-470 - a kind's line names its traits, derived ones included
+
+**to** sean · **status** open · **cited** `24260a6`, `d5681e5` · **raised** 2026-09-12 · **kind** answered, by you, 2026-09-12 · **shape** an instruction and text · **asks** approval · **into** `spec/data/kinds.4x`, `spec/data/traits.4x`, and `spec/console.md` -> The language
+
+**You took `C` for `keeps` and `named` for the derived traits.** `kinds.4x` becomes twenty-two lines
+with forty-three trait mentions:
+
+```
+{kind name:kind}
+{kind name:trait}
+{kind name:family}
+{kind name:value}
+{kind bearing defending laboring name:citizen strength unpaid upkeep}
+{kind binding metal-in-it name:garrison strength}
+{kind binding metal-in-it name:extractor resource working}
+{kind binding metal-in-it name:yard}
+{kind binding metal-in-it name:store resource}
+{kind binding defending family:unit fuel metal-in-it movable moving name:ark strength}
+{kind binding defending family:unit fuel metal-in-it movable moving name:pioneer strength}
+{kind family:resource name:food surplus}
+{kind family:resource name:metal}
+{kind family:resource name:energy}
+{kind name:labor}
+{kind biome control family:place id name:territory nature}
+{kind family:place id name:orbit}
+{kind density name:deposit total-capacity}
+{kind from name:adjacency to}
+{kind name:game phase}
+{kind name:fertility}
+{kind name:force}
+```
+
+**Derived from the release's *Of* column rather than typed**, and `keeps` is on no line because a
+trait of every kind says so itself.
+
+## `traits.4x` goes from twenty-one lines to twenty-four, and this is the consequence to see
+
+**A kind may only name a trait that is declared.** `spec/console.md`: **every word in a data file is
+a kind, a trait, or one of a trait's values**, and *a file that uses any other word is wrong about
+the game rather than describing it.*
+
+**So `named` forces `metal-in-it`, `control` and `surplus` into `traits.4x`** - the three `P-457`
+left out, on the rule that a derived trait no recipe row names need not be declared. **That rule is
+superseded by your answer rather than broken by it**: it was right while nothing named them, and a
+kind's line names them now.
+
+```
+{trait admits:number kept:nothing name:metal-in-it}
+{trait admits:number kept:nothing name:control}
+{trait admits:number kept:nothing name:surplus}
+```
+
+**All three `kept:nothing`, which `unpaid` already uses.** The sentences that compute them stay in
+prose, where rule 7 puts them.
+
+**The file is still derived rather than written.** `P-457`'s instruction reads the release's *Traits*
+table; what changes is the exception it carried - **one line per declared trait, with no exception**
+- so the count is whatever the table gives, asserted against it at promotion.
+
+## `keeps` says it is of every kind
+
+```
+{trait admits:number kept:thing name:keeps of:thing}
+```
+
+**One line of `traits.4x`, and no kind's line carries it.** `P-451` says a trait *says nothing about
+which kinds carry it*, and three things make that clause yield rather than break:
+
+- **`P-469` requires it** - *a fact is stated once*, and `keeps` on every kind is one fact stated
+  **eighteen** times. **There is nowhere else to say it once**: a family declares only its name
+- **`spec/invariants.md` says which wins** - *where an invariant and a specific rule appear to
+  conflict, the conflict is a defect in the specific rule*
+- **It is an exception and not a reversal.** The clause exists so a **family does not list its
+  members**, which is `C-98`. **`of:thing` lists nothing; it says all of them** - and **it fires
+  exactly once**, one cell of twenty-four
+
+## The sentence, into `spec/console.md` -> The language
+
+**The paragraph that carries the clause, offered whole. Only the final sentence is new.**
+
+> **A kind declares which traits it has, and a value declares which trait it is one of.** So a trait
+> says what it admits and where its value lives, and says nothing about which kinds carry it; and a
+> trait whose values are kinds names their family instead, because they are already declared. **The
+> thing that belongs to something says so, and the something says only what is true of itself.**
+> **A trait of every kind is the one exception, and says so with `of:thing`** - because there is no
+> kind for it to belong to and no family that could hold it.
+
+## The instruction, and what the promoting commit checks
+
+**Write `kinds.4x` with the trait names above, and re-derive `traits.4x` with no exception.** Three
+checks, each against the release rather than against this text:
+
+- **every kind's trait names are its column** - each *Of* cell resolved to kinds, and every kind's
+  line holding exactly what resolves to it
+- **`traits.4x` has one line per declared trait**, twenty-four, and every `kept` read from *Stored or
+  derived*
+- **every word in `kinds.4x` is a declared kind, trait or family**, which is the rule that made the
+  three new lines necessary and is what would have caught their absence
+
+## What this leaves open, and it is the code lane's finding rather than a gap
+
+**Inverting is mechanical and rendering back is not.** `{citizen}` is written two ways in the *Of*
+column - *a citizen* and *a thing with upkeep* - and `{ark, pioneer}` as *a unit* and *whatever
+moves*. **So the column cannot be regenerated from `kinds.4x` in the words it has now**, which is
+`C-105` and is a question about the rendered table rather than about these files.
+
+**And its transpose is already generated** - `reports/catalog.md` gives every kind a **Traits** line.
+**Whether the rendered *Traits* table carries an *Of* column at all** is the next question, not this
+one.
+
+### P-466 - three columns of *Units and structures* come out, and `binding` becomes derived
+
+**to** sean · **status** open · **cited** `fd3659c` · **raised** 2026-09-12 · **kind** answered, by you, 2026-09-12 · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Units and structures, and Traits
+
+**You took `A`, so the three columns that restate the Recipes table come out.** The table becomes
+seven columns:
+
+```
+| Thing         | Strength | Fuel | Upkeep          | Crosses      | Readies                            | Movable |
+| **citizen**   | 1        |      | 1 food per turn |              | bearing 1, defending 1, laboring 1 |         |
+| **garrison**  | 0        |      |                 |              |                                    |         |
+| **extractor** |          |      |                 |              | working 1                          |         |
+| **yard**      |          |      |                 |              |                                    |         |
+| **store**     |          |      |                 |              |                                    |         |
+| **ark**       | 2        |      |                 | orbit border | defending 1, moving 1              | yes     |
+| **pioneer**   | 2        | 2    |                 | border       | defending 1, moving 1              | yes     |
+```
+
+**`yard` and `store` become empty rows, and that is true rather than a defect.** Neither has a
+strength, a fuel, an upkeep; neither crosses, readies or moves. **Their only of-the-kind facts were
+the cost and the binding, and both belong to the recipe.**
+
+## `binding` changes with them, and `P-461` is an hour old
+
+**`P-461` made `binding` a declared trait, `of the kind`, and the column that held its value is one
+of the three coming out.** So it stops being of the kind and becomes derived:
+
+| Trait       | Of                | Values   | Stored or derived                                    |
+| ----------- | ----------------- | -------- | ---------------------------------------------------- |
+| **binding** | whatever is built | a number | derived: the metal the recipe that makes it consumes |
+
+**Exact, not approximate** - checked row by row, and `P-467` is what makes it exact:
+
+```
+extractor  binding 1   metal charged 1
+yard       binding 15  metal charged 15
+store      binding 1   metal charged 1
+ark        binding 3   metal charged 3
+pioneer    binding 3   metal charged 3
+garrison   binding 1   metal charged NONE   <- P-467 blanks both
+```
+
+**So `P-467` lands first or with this.** Without it, `binding` derived would make a garrison's 1
+metal disappear rather than never arrive, and this proposal would be deleting a number instead of
+finding where it came from.
+
+## What follows in `spec/data/`, and nothing needs saying twice
+
+**`traits.4x`'s line for `binding` changes from `kept:kind` to `kept:nothing`** - and it changes by
+itself, because `P-457`'s instruction **derives** the file from the release's *Stored or derived*
+column rather than being told what to write. **The promoting commit re-derives the file and asserts
+that exactly one line moved.**
+
+## What the two rules say, and neither of them forbids `B`
+
+**`P-469`:** *removing the second form is better than checking it*. **`P-471`, if it lands:** fully
+normalized, no duplication. **Both lean and neither forbids**, which is why this was a decision.
+
+**What `B` bought was one place to compare seven things' costs**, and that belongs in `reports/` -
+which exists, is generated, is marked *Do not edit*, and is already linked from this release four
+times.
+
+## What is not touched
+
+**`Crosses` stays and is still undeclared.** `orbit border` for an Ark, `border` for a pioneer, read
+by `move`'s *joined to `$from` by an edge the unit crosses*. **It is of-the-kind data that no trait
+declares** - the same shape `P-461` fixed for `binding` - and it is the next cleanup rather than part
+of this one. `Requires` leaves with the three and needs nothing; it was one cell.
+
 ### P-472 - the debug view is a fifth surface
 
 **to** sean · **status** open · **raised** 2026-09-12 · **kind** answered, by you, 2026-09-12 · **shape** text · **asks** approval · **into** `spec/interface.md` -> Surfaces

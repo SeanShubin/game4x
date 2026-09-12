@@ -3333,3 +3333,19 @@ This specification has no build flags.
 
 Filed as `P-472`. It does not say how the view is reached - `releases/first-release.md` names which
 surfaces a release carries, and nothing puts the debug view in the first one.
+
+## Decided 2026-09-12, P-466 take A and P-470 named
+
+**`P-466` A**: the three columns that restate the Recipes table come out of *Units and structures*.
+`yard` and `store` become empty rows, which is true rather than a defect - their only of-the-kind
+facts were the cost and the binding, and both belong to the recipe.
+
+**And it changes `binding`, which `P-461` declared an hour earlier.** The column holding its value is
+one of the three, so it becomes **derived: the metal the recipe that makes it consumes** - exact for
+five of five once `P-467` blanks the garrison, checked row by row. So `P-467` lands first or with it.
+
+**`P-470` named**: a kind's line names its derived traits, and the consequence is that **`traits.4x`
+goes from twenty-one lines to twenty-four.** A kind may only name a declared trait - *every word in a
+data file is a kind, a trait, or one of a trait's values* - so `metal-in-it`, `control` and `surplus`
+must be declared. **`P-457`'s exception is superseded rather than broken**: it was right while
+nothing named them.

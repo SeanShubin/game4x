@@ -8,13 +8,13 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-470** - a kind's line names its traits, derived ones included · `docs/notes/proposals.md`
+- **P-466** - three columns of *Units and structures* come out, and `binding` becomes derived · `docs/notes/proposals.md`
 - **P-472** - the debug view is a fifth surface · `docs/notes/proposals.md`
 - **P-471** - the data is a normalized relational model, and the notation is a text form of it · `docs/notes/proposals.md`
 - **P-468** - biome is named as an input to output and reaches nothing · `docs/notes/proposals.md`
 - **P-467** - a garrison costs nothing and binds nothing · `docs/notes/proposals.md`
 - **P-465** - ten cells still say `yes` where `traits.4x` says a number · `docs/notes/proposals.md`
-- **P-470** - a kind's line gains its trait names, and a trait of every kind says so · `docs/notes/decisions.md`
-- **P-466** - three columns of *Units and structures* are the Recipes table said twice · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -27,9 +27,9 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-466** - `6392650` P-466 and P-467 into the decisions file · still open in `docs/notes/proposals.md`
 - **P-467** - `6392650` P-466 and P-467 into the decisions file · still open in `docs/notes/proposals.md`
 - **P-465** - `9b1f838` C-104 is acted: P-465 carries both corrections and reports/ is the shape being taken · still open in `docs/notes/proposals.md`
-- **P-466** - `fd3659c` P-465, P-466 and P-467: the cleanup P-457 owed, and what deriving found · still open in `docs/notes/decisions.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
