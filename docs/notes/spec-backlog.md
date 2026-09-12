@@ -8,7 +8,55 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-11, what `put` is for, and what the role language is for
+
+*I recall put being there so we could move things with an identity without destroying, then
+creating them.*
+
+*Regarding limit, I wanted an expression language that was limited enough to manage complexity, able
+to maintain the invariants a petri net gets me, and with enough flexibility so that I can design the
+rest of the game.*
+
+**The first is the answer to `P-421`'s first question and is sharper than the reading this lane
+offered.** This lane proposed *the row states the state the thing is left in*, derived from what the
+twelve rows do. **His reason is identity**, which that reading does not mention and which is the
+thing a Petri net cannot say: a token is fungible, so `consume 1 unit` then `produce 1 unit` is
+correct in a net and wrong for a thing with an id. **`put` is the construct that says *this same
+one*.**
+
+**That also settles whether `put` is sugar, and by a different test than `X-11`'s.** `X-11` asks
+whether removing a primitive moves the combinatorial explosion into the authored space. Removing
+`put` does not explode anything - **it changes what the rule means**, because the identity is lost.
+A stronger argument than the one it would have been given.
+
+**The second is a goal for the language and not yet a decision about `limit`.** Three properties
+named: limited enough to manage complexity, able to maintain the invariants a Petri net gets him,
+flexible enough to design the rest of the game. **`P-421`'s second question is still open**, and
+`X-11`'s decomposition is what it should now be asked against - `limit 0 garrison` was *no change,
+threshold at most 0*, and the `Role` column names it with one word because that column conflates
+change and threshold.
+
+## Said 2026-09-11, that removing `limit 0 garrison` was a decision and not a tuning
+
+*I remember removing "you may not found where a garrison already is", is this just a matter of
+retuning the recipes?*
+
+**Asked as a question, and the files answer it: it was neither tuning nor incidental.** `P-385`,
+promoted in `795f053`, carries his reason - *repeated deployments are player choice, safe because
+they are not capable of causing an infinite resource glitch* - so repeated deployment is something
+he decided to allow rather than something that fell out.
+
+**And the proposal gives the structural reason for deleting rather than softening**, which is what
+makes the `limit` role's emptiness mean something. A `limit 0` row is a hard gate meaning *there is
+one already*; a capacity means *what holds it will not take another*. `spec/invariants.md`: those
+*differ wherever a capacity is more than one, and agree only by accident where it is one*. **A
+garrison's capacity is one, so the only two `limit` rows the release ever had were that accident.**
+
+**So the role is not waiting on a retune to come back.** It has no instance because its only
+instances were the case where it was indistinguishable from something else.
+
 ## Said 2026-09-11, the garrison's effect is an algorithm and he is open to changing it
+
 
 *Garrison has an effect that allows citizen force to be summed instead of using the max. This is an
 algorithm, not data. However, we did have an algorithm for population growth and were able to turn
