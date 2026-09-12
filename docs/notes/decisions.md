@@ -21,6 +21,108 @@ here without first becoming a proposal.
 
 ## Open
 
+### P-425 - force redefined, run both ways, and the token is one nothing consumes
+
+**to** sean - **status** open - **raised** 2026-09-11 - **kind** recovered, from your definition - **asks** a decision - **into** `spec/control.md` -> Force, Producing force, Coordination, and `releases/first-release.md` -> Recipes
+
+**Your six clauses are already true of the release**, checked row by row rather than recalled - so
+nothing has to be built to have the mechanic you described, and what needs purging is `spec/`.
+
+| Your clause                                      | Where it already is                                                                  |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| citizens generate no force by default            | `muster` requires 1 garrison, so with none it never fires                            |
+| a garrison lets each citizen generate 1 per turn | `muster` fires once per citizen, producing *that citizen's force*, which is **1**    |
+| separate from other exhaustion tracks            | `defending` is its own trait, beside `laboring`, `bearing`, `working`, `moving`      |
+| a territory has room for 1 garrison              | *What bounds a kind in a territory*: garrison, **a capacity of 1**                   |
+| units have force by default                      | `stand` requires no garrison and fires once per unit                                 |
+| nature is 1 or 2, jungle the only 2              | *Biomes*: jungle **2**, ice, desert, grassland and mountain **1**, ocean unclaimable |
+| greater to enter, same to maintain               | *Gaining and holding ground*, already in those words                                 |
+
+## The finding that decides it, and it is not an argument
+
+**Force appears in exactly three rows of the recipe table.** Counted over the *Recipes* table's 81
+role cells, by the Kind column:
+
+- `muster` **produces** *that citizen's force*
+- `stand` **produces** *that unit's force*
+- `discard` **consumes** 1
+
+**Nothing requires force. Nothing else consumes it.** It is made at a turn's end and swept at the
+same turn's end, and no rule in the game reads it in between. **The thing that actually reads force
+- *taking a territory takes force greater than the existing force* - is not a recipe at all**; it is
+a rule in `spec/control.md` that looks at the world.
+
+**So force as a token is a token no rule spends.** That is the fact both options below have to
+answer to.
+
+## Way one - a token on its own exhaustion track
+
+This is what exists. Force is a kind; `defending` is the track; `muster` and `stand` make it;
+`discard` sweeps it; `refresh` restores `defending`.
+
+**What it costs, counted:** 3 recipe rows for force plus 4 more for the `defending` tracks that feed
+them; a `defending` trait on citizen and unit; and **a `Kinds` row for `force` that does not exist** -
+which is `C-93`, open, where three rows use `force` as a kind and *Kinds* declares seventeen without
+it.
+
+**What it buys:** one mechanic. Force is a thing like every other thing, inside the net, subject to
+the no-gain invariant, and visible in a dump as a count between `muster` and `discard`.
+
+## Way two - a passive effect of presence
+
+Force stops being a kind and becomes a **derived trait of a territory**, like `control`, `surplus`
+and `unpaid` already are: **the sum of the force of the units standing there, plus one per citizen
+if a garrison is present.**
+
+**What it costs:** nothing per turn. `muster`, `stand` and `discard` go; `defending` goes and takes
+two `refresh` rows with it; `force` never needs a `Kinds` row, so **`C-93` dissolves rather than
+being answered**.
+
+**What it buys:** the force economy leaves the recipe table entirely, and a dump never shows a force.
+
+**And it is legal, which it would not have been a week ago.** `docs/designing-rules.md`: **sum is
+free - it is the marking of a place. You never compute it.** A passive force is a sum, and sums are
+free **precisely because the max is gone**. Under the old rule this option could not have been
+written down: *the highest among them* needs a ranking, a ranking needs *nothing is greater*, and
+that is a zero test. **Your own change is what made this option available.**
+
+**The garrison condition is legal too, and for a reason worth knowing.** *One per citizen if a
+garrison is present* is a branch on the presence of a kind bounded by **a capacity of 1** - and
+`X-9` establishes that zero-testing a bounded place is free, by the complementary-place
+construction. **Had a territory held any number of garrisons, this branch would be the cliff.**
+
+## What this lane will not do
+
+**It will not pick one.** Way one is unification and you have said you want no more mechanics than
+necessary. Way two removes a kind, a trait and seven rows for something no rule spends - and *not
+spent by anything* is the strongest single fact here, which is why it is stated above the options
+rather than inside one of them.
+
+**What this lane does say** is that the two are not equally reversible. **Way two is a deletion**
+and going back means re-deriving the tracks; **way one is already built**, so choosing it costs
+nothing today and leaves `C-93` to answer.
+
+## What either way makes stale, so nothing is promoted blind
+
+**`spec/control.md` says the same thing twice, in two sections, in different words** - and this is
+the *old mechanics* you suspected:
+
+- *Producing force*: **A citizen can fight but cannot organise. Coordinated, it musters its force
+  each turn; uncoordinated it musters none**
+- *Coordination*: **Citizens are capable of violence but not of coordination. Without something to
+  coordinate them they muster nothing**
+
+**And the sections are mis-sorted.** *Coordination* opens with *force is mustered each turn and does
+not outlast it*, which is about duration; *Producing force* carries the garrison's coordinating
+role, which is about coordination. **Way two deletes the duration bullet outright**, because nothing
+is mustered and nothing outlasts anything.
+
+**`P-420` is held and must not be promoted as it stands.** Its text makes coordination come from *a
+structure, such as a garrison, or by a unit* - so a Pioneer would coordinate citizens. **Your
+definition gives a unit force of its own and gives it no coordinating role.** The two cannot both
+hold, and the word `military` still wants removing either way - so `P-420` comes back rewritten once
+you have answered this.
+
 ### P-422 - `R-6` asks how much of the planet has to be played, and has pointed at an empty queue since 2026-09-05
 
 **to** sean - **status** open - **raised** 2026-09-11 - **kind** recovered, from `R-6`'s own note and the code lane's `C-95` - **asks** a decision - **into** `releases/first-release.md` -> `R-6`

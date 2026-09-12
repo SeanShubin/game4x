@@ -64,7 +64,18 @@ Two limits Claude holds itself to:
 
 ### P-420 - `military unit` becomes `unit`, in both places
 
-**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, when you answered it · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Coordination, and -> Gaining and holding ground · from `C-94`
+**to** sean · **status** **held** - do not promote as it stands, see `P-425` · **raised** 2026-09-11 · **rewritten** 2026-09-11, when you answered it · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Coordination, and -> Gaining and holding ground · from `C-94`
+
+**Held 2026-09-11, an hour after being written, by your own next message.** Its first bullet would
+make coordination come from *a structure, such as a garrison, or by a unit*, so a Pioneer would
+coordinate the citizens of a territory. **Your redefinition of force gives a unit force of its own
+and gives it no coordinating role at all** - so the two cannot both stand, and this one is the
+younger claim.
+
+**The word `military` still wants removing either way**, and that much survives. What does not
+survive is the bullet this proposal chose to keep it in. **`P-425` carries the section**, and this
+comes back rewritten once that is answered.
+
 
 
 **Sean, 2026-09-11**: *Lets just call them units, we dont really have a distinction between military

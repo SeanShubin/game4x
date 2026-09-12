@@ -8,7 +8,31 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-11, force redefined from the ground up
+
+*Citizens don't generate force by default. A garrison allows each citizen in the same territory to
+generate 1 force per turn, separate from any of its other exhaustion tracks. Territories have room
+for only 1 garrison. Units have force by default. Nature has a force of 1 or 2 (I believe jungle is
+the only 2 right now). It takes greater force to enter, same force to maintain.*
+
+*Run it two ways, force being something generated each turn on its own exhaustion track, or force
+being a passive effect by presence alone, without requiring anything to be accounted for each turn.
+Either way we need to make sure a garrison causes 1 force per citizen present.*
+
+**Every clause is already true of the release**, checked row by row - so the purge he suspects is
+needed is in `spec/control.md`, not in `releases/first-release.md`. `muster` requires a garrison and
+fires once per citizen; `stand` requires none and fires once per unit; `defending` is a track of its
+own beside `laboring` and `bearing`; garrison is bounded by *a capacity of 1*; jungle is the only
+biome at 2 and every other claimable one is 1; and *greater to enter, same to maintain* is already
+the wording in *Gaining and holding ground*.
+
+**One clause of his is narrower than what `P-420` offers, and they cannot both stand.** He makes a
+garrison the only thing that causes a citizen to generate force. `P-420`'s text says coordination is
+imposed *by a structure, such as a garrison, or by a unit* - which would make a Pioneer coordinate
+citizens. **`P-420` is held for that reason**, and `P-425` carries the whole question.
+
 ## Said 2026-09-11, the Petri net is a means and the end is safe recipe editing
+
 
 *They are a means to an end. I want it to be safe for a user to edit recipes without having to worry
 about infinite resources on one turn.*
