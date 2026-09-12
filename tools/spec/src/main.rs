@@ -325,11 +325,28 @@ fn touching(root: &Path, what: &str) -> Result<String, String> {
 }
 
 /// The cells of every table in a markdown text, as header rows only.
+///
+/// **A table is offered quoted or plain and this reads both.** `CLAUDE.md` reserves the indented
+/// quotation for what is being offered, so `> |` is the commoner form - and the first version of
+/// this tested `starts_with('|')` and skipped it, which made
+/// [`shape_is_rows_only_if_the_cells_land`] return `Ok` on an empty list rather than refuse.
+///
+/// **The demonstration missed it because `P-465` happened to write its table plainly**, so the
+/// probe landed inside the region the predicate already saw. `docs/process.md`: *a poison inside
+/// the region the predicate already sees goes red for the right reason and says nothing about the
+/// region it does not - and it reads exactly like evidence.* Found by the quality lens as `Q-85`,
+/// by driving the check rather than reading it, an hour after it was written.
 fn header_rows(text: &str) -> Vec<Vec<String>> {
-    let lines: Vec<&str> = text.lines().collect();
+    let bare = |line: &str| {
+        line.trim_start()
+            .trim_start_matches('>')
+            .trim_start()
+            .to_string()
+    };
+    let lines: Vec<String> = text.lines().map(|l| bare(l)).collect();
     let mut out = Vec::new();
     for (at, line) in lines.iter().enumerate() {
-        if !line.trim_start().starts_with('|') {
+        if !line.starts_with('|') {
             continue;
         }
         let next = lines.get(at + 1).map(|l| l.trim()).unwrap_or("");
