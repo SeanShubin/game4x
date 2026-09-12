@@ -124,7 +124,7 @@ can be opened in the editor.* **The loop's two directions, stated before he desc
 **`C-49` offered two orders and he took a third.** Both of yours ended with the data in a file
 outside the specification, and the transcription problem was about the window between writing it and
 emptying the release. **There is no window**: the file is in `spec/`, he authors it, and the
-release's nine tables become **generated rather than authored**. **Nothing is ever transcribed and
+release's eight become **generated rather than authored**. **Nothing is ever transcribed and
 nothing exists twice as a source.**
 
 **His second sentence is already a rule of his.** `spec/invariants.md`: *the data may be replicated
@@ -147,8 +147,18 @@ a directory of their own**, which is the shape `scenario/commands/` already has 
 
 **And the two layers are worth stating, because one of them already exists.** `scenario/commands/`
 holds *this planet's* facts - territory 1 is grassland, its food deposit has three extractors at
-density four - and they differ per scenario. **The nine tables in the release are the game's own**,
-shared by every scenario, and that set is what has no file. **Do not fold the two together.**
+density four - and they differ per scenario. **Eight of the release's nine tables are the game's
+own**, shared by every scenario, and that set is what has no file.
+
+**Corrected 2026-09-12 by the code lane, and it is the fold-together this item warned against.**
+This said **nine**. The ninth is *Scope* -> **Territory resources**, whose columns are `Territory`,
+`Food`, `Metal`, `Energy` - **this planet's twelve territories**, which is the scenario layer. **This
+lane wrote the warning and made the mistake in the same breath**, three times: here, in `P-439`, and
+in what it told Sean.
+
+**The eight are** Kinds, Families, Traits, Where things are, What bounds a kind in a territory, Units
+and structures, Recipes, Biomes.
+
 
 ## `P-440` has landed, and he is not authoring the files
 
@@ -170,12 +180,12 @@ tables leave.
 
 ## What is left, and the shape of it is yours
 
-**How the nine tables split across files**, because you load them: one file per table, or grouped by
+**How the eight split across files**, because you load them: one file per table, or grouped by
 what they are about, or something the notation suggests that a table does not. **The directory's name
 is small** and this lane will propose one unless you would rather.
 
 **Nothing needs a decision from Sean to start.** The rule is landed, the data is named, and the
-transcription is sanctioned. **What reaches him afterwards is the release losing its nine tables**,
+transcription is sanctioned. **What reaches him afterwards is the release losing those eight tables**,
 which is `releases/` and arrives by promotion through this lane.
 
 
@@ -184,7 +194,7 @@ which is `releases/` and arrives by promotion through this lane.
 ## What is true today
 
 **Nothing is blocked and nothing has moved.** `S-30` stays open, `C-49` is answered and yours to
-close citing this. The release still holds its nine tables and will until the format exists and he
+close citing this. The release still holds them and will until the format exists and he
 has authored the file.
 
 **And the check you already measured still holds**: the checks that read the release do not go green

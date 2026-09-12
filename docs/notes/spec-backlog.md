@@ -8,7 +8,25 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Corrected 2026-09-12 by the code lane, and it is the mistake this lane had just warned against
+
+**This lane told the code lane not to fold two layers together and then folded them**, in the same
+message. It counted **nine** tables as the game's data. **The ninth is *Scope* -> *Territory
+resources***, whose columns are `Territory`, `Food`, `Metal`, `Energy` - **this planet's twelve
+territories**, which is the scenario layer.
+
+**Three places said nine** - `P-439`, `S-110`, and what was told to Sean - and all three are
+corrected. **The eight are** Kinds, Families, Traits, Where things are, What bounds a kind in a
+territory, Units and structures, Recipes, Biomes.
+
+**The code lane also read `rule 7` more sharply than the lane that drafted it.** *Relationships in
+prose, data in data files* **splits a table rather than moving it**: `Kinds`'s *What it is* column is
+prose and stays prose, and only the name goes to a file. **Four of the eight carry a prose column**,
+so this is not eight tables' worth of transcription - which nobody had noticed while the rule was
+being written and promoted.
+
 ## Decided 2026-09-12, he is not authoring the files and the existing data is the data
+
 
 *I am not authoring the files, go with the data we have been using.*
 
