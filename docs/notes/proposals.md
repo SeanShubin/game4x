@@ -62,6 +62,65 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-426 - metal is declared *conserved* and the planet is a source, in two documents that cannot both hold
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed, from the research lens's `X-14` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Kinds · from `X-14`
+
+**`releases/first-release.md:63` says metal is *conserved*, unqualified.
+`spec/invariants.md:124` says the planet is one of three sources and its material is endless.**
+They contradict each other, and the release is the one that is wrong - `work` produces a
+territory's density of metal from the ground every time it fires, taking nothing.
+
+**The spec already has the reconciling sentence** and the release does not use it: *a source is
+named, and a named source is not a gain... an endless well behind a bounded pump takes nothing away
+from the rule above.* **What metal actually is** is drawn from a named source and conserved
+thereafter - which is a different claim from *conserved*, and the one that is true.
+
+**The row, replacing the `metal` row of *Kinds* cell for cell:**
+
+> | **metal** | what things are built from; drawn from the planet, and conserved once above ground |
+
+**`energy`'s row is already correct and is not offered** - it reads *neither conserved nor
+expiring*, which is what an endless star behind a bounded pump gives.
+
+### P-427 - founding creates two metal it does not consume, and the lens reports you decided this on 2026-09-09
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** instruction · **asks** approval · **into** `releases/first-release.md` -> Recipes · from `X-14`
+
+**The arithmetic, re-derived from the release rather than taken from the lens's check** - which
+measures that lane's own encoding and not this one, as `X-29` has just shown. From the **Binding**
+column of *Units and structures*: garrison 1, extractor 1, store 1, ark 3, pioneer 3, citizen none.
+
+| Recipe            | Metal consumed         | Metal created                                                      | Net    |
+| ----------------- | ---------------------- | ------------------------------------------------------------------ | ------ |
+| **deploy ark**    | an ark, worth **3**    | garrison 1 + extractor 1 + extractor 1 + store 1 + store 1 = **5** | **+2** |
+| **found by land** | a pioneer, worth **3** | the same **5**                                                     | **+2** |
+
+**Dropping the two `store` rows from each makes both exactly zero** - 3 consumed, 3 created - so
+founding stops being a metal source. **That is the whole of the fix and it is four rows.**
+
+**The instruction: delete the `produce 1 store food` and `produce 1 store metal` rows from
+`deploy ark` and from `found by land`.** Four rows, nothing replaces them, and no other recipe is
+touched.
+
+**The check the promoting commit runs**: the `deploy ark` and `found by land` blocks contain **0**
+rows whose Kind is `store`, counted over blocks that today contain 4.
+
+## Why this asks you rather than just landing
+
+**The lens reports that you decided this on 2026-09-09** - *the two stores are dropped from
+founding* - **and this lane has no record of it.** Nothing in `docs/notes/spec-backlog.md` carries a
+2026-09-09 entry, so the decision exists in `X-14`'s summary of a conversation and nowhere else.
+
+**`CLAUDE.md` says a relayed approval is worth acting on outside that file**, so this is not a
+refusal to act - it is the proposal the decision implies, put to you so that approving it is you
+saying it rather than this lane citing a report. **If you did not decide this, say so and the
+arithmetic above is still a defect wanting a different fix.**
+
+**What a founded territory loses.** Nowhere to put food or metal until a store is built, which costs
+1 labor and 1 metal each. **This lane has not checked whether the main scenario still plays**, and
+that is the code lane's to say before or after it lands.
+
 ### P-420 - `military unit` becomes `unit`, in both places
 
 **to** sean · **status** **held** - do not promote as it stands, see `P-425` · **raised** 2026-09-11 · **rewritten** 2026-09-11, when you answered it · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Coordination, and -> Gaining and holding ground · from `C-94`

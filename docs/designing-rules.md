@@ -101,13 +101,26 @@ inhibitor arc - or one whose weight **reads the marking** rather than being a co
 reset or transfer arc. **Every such arc in this game is in a world recipe and none is in a
 player's**, which is the property the open question at the bottom is about.
 
-**That claim has been measured twice and the two measurements do not describe the same game.**
-`X-29` counted the arcs with tooling on 2026-09-10 and found ten, in `grow`, `refuel` and
-*end-of-turn losses*. **Two of those three are no longer recipes**: the saturating rewrite removed
-`grow` and `refuel`, and the release now states 21 recipe names. Counting by hand today gives
-**six**, all of them `refresh`'s *at its maximum* rows. **The conclusion survives the change and its
-evidence did not**, so the number above is this lane's and the lens's tooling should re-run over the
-recipes that exist - filed as part of `X-29`, which is still open.
+**The claim has been measured twice, and the two measurements are not of the same thing.** `X-29`
+counted with tooling on 2026-09-10 and found ten, in `grow`, `refuel` and *end-of-turn losses*.
+Counting the release by hand gives **six**, all of them `refresh`'s *at its maximum* rows.
+
+**That is not a stale number and calling it one was this document's first mistake about it.** The
+research lens re-ran the check on 2026-09-11 and it still says ten - because it reads
+`tools/research/formulas/data.json`, **that lane's own re-encoding**, whose recipe names are `grow`,
+`refuel` and *end-of-turn losses*. **The instrument answers a narrower question than the one asked
+and returns a plausible number rather than an error**, which is the failure `CLAUDE.md` names. Six
+and ten never disagreed; they are two populations, and only the six is about the release.
+
+**So `X-29`'s evidence is withdrawn by its own author** and the six above is a hand count, stated
+with its method so it can be refuted. The code lane counted the release independently and got six,
+naming the six rows - **two hand counts and no tooling.**
+
+**And the classification has to be stated before the next count, not after.** The release's two
+`put` forms are not the same arc: *at its maximum* writes a constant whatever is there, and *one
+less* is a fixed decrement. **Whether the conclusion survives depends on which of those counts as
+reading a marking** - which is a definition, not a measurement.
+
 
 
 **This document exists so the constraints are known in advance.** The design space is wide, and
@@ -279,8 +292,10 @@ question the state cannot answer, and the rule wants a different shape.
 **Nothing states that the player's sublanguage is the ordinary one.** Every marking-reading arc in
 the game is in a **world** recipe and none is in a player's, so the property holds **by accident**.
 Until a rule says so and a check enforces it, the first player-authored recipe that empties a place
-moves the editor into a class where none of this is decidable. `X-29`, still open, and its own
-measurement wants re-running over the recipes that exist.
+moves the editor into a class where none of this is decidable. **`X-29` is open and its evidence is
+withdrawn by its author** - it measured that lane's own encoding rather than the release - so the
+property above rests on two hand counts and no tooling until it is re-derived.
+
 
 **Nothing says which kinds may be zero-tested.** The boundedness split above is a finding and not a
 rule: `C-75` measured that adopting it would cost nothing, and `P-385` has since removed the only

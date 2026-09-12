@@ -8,6 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-426** - metal is declared *conserved* and the planet is a source, in two documents that cannot both hold · `docs/notes/proposals.md`
+- **P-427** - founding creates two metal it does not consume, and the lens reports you decided this on 2026-09-09 · `docs/notes/proposals.md`
 - **P-425** - force redefined, run both ways, and the token is one nothing consumes · `docs/notes/decisions.md`
 - **P-422** - `R-6` asks how much of the planet has to be played, and has pointed at an empty queue since 2026-09-05 · `docs/notes/decisions.md`
 - **P-423** - `limit` is safe exactly where what it tests is bounded, and nothing says which kinds are · `docs/notes/decisions.md`
