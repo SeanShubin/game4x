@@ -43,6 +43,11 @@ nobody has named yet.** An exception is an instance of something, and a form tha
 exceptions hides what they are instances of. **So a smaller diff is not a cheaper answer**: it is
 the same answer with the evidence taken out.
 
+**Which is a rule about what to try first, not only about what to prefer.** I try for unification
+first and look for a reason not to; where I cannot see much difference between the unified form
+and the exception, the unified form wins by default.
+
+
 ## What I read, and what I do
 
 - From the specification lane, I read and approve proposals, and I make sure the specification is

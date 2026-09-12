@@ -60,7 +60,7 @@ Every territory has total capacity for at least one food extractor.
 | **ark**       | carries a landing, and can invade from orbit                                                                 |
 | **pioneer**   | founds a territory                                                                                           |
 | **food**      | eaten by citizens; expires                                                                                   |
-| **metal**     | what things are built from; conserved                                                                        |
+| **metal**     | what things are built from; drawn from the planet, and conserved once above ground                           |
 | **energy**    | what moves things; neither conserved nor expiring                                                            |
 | **labor**     | what working a machine takes; a citizen provides it each turn                                                |
 | **territory** | a place things are in, which has a biome, a force of nature, and a density and a total capacity per resource |
@@ -217,8 +217,6 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 |                     |        | produce | 2                                    | citizen   |                                               |                          |
 |                     |        | produce | 1                                    | extractor | food                                          |                          |
 |                     |        | produce | 1                                    | extractor | metal                                         |                          |
-|                     |        | produce | 1                                    | store     | food                                          |                          |
-|                     |        | produce | 1                                    | store     | metal                                         |                          |
 | **move**            | player | require | 1                                    | place     |                                               | `$from`                  |
 |                     |        | require | 1                                    | place     | joined to `$from` by an edge the unit crosses | `$to`                    |
 |                     |        | require | 1                                    | unit      | moving at least 1                             | `$from`                  |
@@ -229,8 +227,6 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 |                     |        | produce | 2                                    | citizen   |                                               |                          |
 |                     |        | produce | 1                                    | extractor | food                                          |                          |
 |                     |        | produce | 1                                    | extractor | metal                                         |                          |
-|                     |        | produce | 1                                    | store     | food                                          |                          |
-|                     |        | produce | 1                                    | store     | metal                                         |                          |
 | **build extractor** | player | consume | 1                                    | labor     |                                               |                          |
 |                     |        | consume | 1                                    | metal     |                                               |                          |
 |                     |        | produce | 1                                    | extractor | `$resource`                                   |                          |
