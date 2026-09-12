@@ -34,7 +34,7 @@ use game_model::containment::Description;
 /// there would be work done twice. **A file that used `kind` without declaring it would be
 /// using a word it had not introduced**, which is the rule this notation has about every other
 /// word.
-pub const VOCABULARY: [&str; 3] = ["kind", "trait", "family"];
+pub const VOCABULARY: [&str; 4] = ["kind", "trait", "family", "value"];
 
 /// Every kind the release declares, as the file that would declare them.
 ///
@@ -139,6 +139,57 @@ pub fn families(document: &str) -> String {
     assert!(
         !rows.is_empty(),
         "the Families table parsed to nothing, so this would write an empty file and the \
+         comparison against it would agree for the wrong reason"
+    );
+    crate::state::declared(&rows)
+}
+
+/// Every biome the release declares, as the file that would declare them.
+///
+/// **A biome is a value rather than a kind** - `P-451`: *a value declares which trait it is one
+/// of*. So each line is a `value`, named, `of:biome`, and `value` is the fourth declaring kind
+/// beside `kind`, `trait` and `family`.
+///
+/// **`nature` rides on the value's line**, because a biome's force of nature is a fact about
+/// the biome - `P-454`'s fourth sentence, and the release says which column that is: **the
+/// numbers here guide and do not bind; a territory's own are in *Territory resources*. Force
+/// of nature is the one column that binds.**
+///
+/// **So the three resource columns are not written here and that is the release's own
+/// sentence rather than a choice made in this file.** `5 x 6` is advice to whoever picks a
+/// territory's numbers - two numbers in one cell, guiding - and what binds is in *Territory
+/// resources*, which is **this planet's** and not the game's. `C-97` is where that
+/// distinction was measured.
+///
+/// **Ocean carries no `nature`**, because the release says it *is not claimable and carries
+/// nothing* and its every cell is `-`. A line with a name and its trait is the whole of what
+/// is true of it.
+pub fn biomes(document: &str) -> String {
+    let mut rows: Vec<Description> = Vec::new();
+    for row in body_under(document, "## Biomes") {
+        let name = plain(row.first().map(String::as_str).unwrap_or_default()).to_lowercase();
+        assert!(
+            !name.is_empty(),
+            "a row of the Biomes table names no biome, so the file would declare a blank word"
+        );
+        let mut traits = std::collections::BTreeMap::new();
+        traits.insert("name".to_string(), name);
+        traits.insert("of".to_string(), "biome".to_string());
+        let nature = row.get(4).map(String::as_str).unwrap_or_default().trim();
+        if nature != "-" && !nature.is_empty() {
+            nature.parse::<u32>().unwrap_or_else(|_| {
+                panic!("`{nature}` is a force of nature and is not a number, so the line would carry a word the notation has no place for")
+            });
+            traits.insert("nature".to_string(), nature.to_string());
+        }
+        rows.push(Description {
+            kind: "value",
+            traits,
+        });
+    }
+    assert!(
+        !rows.is_empty(),
+        "the Biomes table parsed to nothing, so this would write an empty file and a \
          comparison against it would agree for the wrong reason"
     );
     crate::state::declared(&rows)

@@ -77,12 +77,17 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
         named.push(name.clone());
     }
 
-    // **The three the file introduces before it uses them** - `P-443` puts them here rather
-    // than in the release's table, because that table becomes a copy of this file.
+    // **The generator declares the vocabulary before any line uses it.** `P-443` puts these in
+    // the file rather than in the release's table, because that table becomes a copy of this
+    // file; `P-451` added `value`, which is the fourth.
     assert_eq!(
-        &named[..3],
-        &declare::VOCABULARY,
-        "the file must declare `kind`, `trait` and `family` before a line uses `kind`"
+        declare::kinds(&document)
+            .lines()
+            .take(declare::VOCABULARY.len())
+            .map(|line| line.trim_start_matches("{kind name:").trim_end_matches('}'))
+            .collect::<Vec<_>>(),
+        declare::VOCABULARY,
+        "a file must declare `kind`, `trait`, `family` and `value` before a line uses one"
     );
 
     // Both directions, over the whole set.
@@ -111,38 +116,54 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
         "eighteen compared, and the count is here so that two empty sets cannot agree"
     );
 
-    // **The generator is one promotion ahead of the file, and the gap is named.**
-    // `P-448` puts each kind's family on the kind's own line, so `declare::kinds` writes
-    // `{kind family:unit name:ark}` where `spec/data/kinds.4x` still says `{kind name:ark}`.
-    // The file is the specification and this lane cannot promote it.
+    // **The generator is ahead of the file, and the gap is named line by line.** `P-448` puts
+    // each kind's family on its own line and `P-451` adds `value` to the vocabulary;
+    // `spec/data/kinds.4x` has neither yet, and this lane cannot promote it. Reddening the
+    // gate for everyone while waiting on a promotion is not the way to say so.
     //
-    // **So the difference is asserted rather than tolerated**, and asserted as the whole of
-    // itself: taking `family:` back out of what the generator writes must give the file
-    // exactly. Anything else that had drifted would still fail.
+    // **So the difference is asserted as the whole of itself** rather than tolerated: seven
+    // lines lose their bare form and gain a family, and one is added. Both sides are listed,
+    // so anything drifting for any other reason still fails.
     //
-    // **It cannot outlive its excuse** - `C-61`'s pattern. The day the file is promoted with
-    // the families in it, stripping will stop yielding the file, this fails, and the
-    // exception comes out rather than being widened.
+    // **It cannot outlive its excuse** - `C-61`. The day the file lands with these lines, this
+    // list stops being the difference, the assertion fails, and it comes out.
     let generated = declare::kinds(&document);
-    let without_family = generated
-        .lines()
-        .map(|line| {
-            let Some((before, rest)) = line.split_once("family:") else {
-                return line.to_string();
-            };
-            let after = rest.split_once(' ').map(|(_, tail)| tail).unwrap_or("");
-            format!("{before}{after}")
-        })
-        .map(|line| {
-            format!(
-                "{line}
-"
-            )
-        })
-        .collect::<String>();
+    let has: std::collections::BTreeSet<&str> = generated.lines().collect();
+    let had: std::collections::BTreeSet<&str> = file.lines().collect();
+    let dropped: Vec<&&str> = had.difference(&has).collect();
     assert_eq!(
-        without_family, file,
-        "`declare::kinds` and `spec/data/kinds.4x` differ by more than the families `P-448`          has not promoted yet, so the generator would promote bytes that are not what is there"
+        dropped,
+        [
+            "{kind name:ark}",
+            "{kind name:energy}",
+            "{kind name:food}",
+            "{kind name:metal}",
+            "{kind name:orbit}",
+            "{kind name:pioneer}",
+            "{kind name:territory}",
+        ]
+        .iter()
+        .collect::<Vec<_>>(),
+        "the file has lines the generator does not write, and they are not the seven that \
+         gained a family"
+    );
+    let added: Vec<&&str> = has.difference(&had).collect();
+    assert_eq!(
+        added,
+        [
+            "{kind family:place name:orbit}",
+            "{kind family:place name:territory}",
+            "{kind family:resource name:energy}",
+            "{kind family:resource name:food}",
+            "{kind family:resource name:metal}",
+            "{kind family:unit name:ark}",
+            "{kind family:unit name:pioneer}",
+            "{kind name:value}",
+        ]
+        .iter()
+        .collect::<Vec<_>>(),
+        "the generator and the file differ by more than the families `P-448` adds and the \
+         `value` `P-451` adds"
     );
     assert_eq!(
         generated.matches("family:").count(),
@@ -308,5 +329,92 @@ fn the_families_file_names_every_family_and_invents_none() {
     assert!(
         !file.contains("every kind above"),
         "the file carries the table's rule as if it were data: {file}"
+    );
+}
+
+/// The biomes file names every biome, and carries the one column the release says binds.
+///
+/// **`spec/data/biomes.4x` does not exist yet**, so this holds the generator against the
+/// release and asserts the file's absence - the same shape as its sibling, and for the same
+/// reason: the day it lands this fails and gets pointed at the population rather than at a
+/// copy of it.
+#[test]
+fn the_biomes_file_carries_nature_and_leaves_the_guiding_numbers_out() {
+    let document = release();
+    let at = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/biomes.4x");
+    assert!(
+        !at.exists(),
+        "`spec/data/biomes.4x` exists now, so this must read it instead of the generator"
+    );
+
+    let file = declare::biomes(&document);
+    let read = state::declarations(&file).expect("the file it writes is a file it can read");
+
+    let declared: Vec<String> = game_console::recipes::body_under(&document, "## Biomes")
+        .iter()
+        .map(|row| row[0].trim().trim_matches('*').trim().to_lowercase())
+        .collect();
+    assert_eq!(
+        declared.len(),
+        6,
+        "six biomes when this was written; the release declares {} ({declared:?})",
+        declared.len()
+    );
+
+    let named: Vec<String> = read
+        .iter()
+        .map(|row| {
+            assert_eq!(
+                row.kind, "value",
+                "a biome is a value, not a `{}`",
+                row.kind
+            );
+            assert_eq!(
+                row.traits.get("of").map(String::as_str),
+                Some("biome"),
+                "`P-451`: a value declares which trait it is one of"
+            );
+            row.traits
+                .get("name")
+                .expect("a value names itself")
+                .clone()
+        })
+        .collect();
+    assert_eq!(
+        named, declared,
+        "the biomes file and the release's table name different biomes, or in a different order"
+    );
+
+    // **The one column that binds is carried, and the three that guide are not.** The release
+    // says which is which: *the numbers here guide and do not bind ... force of nature is the
+    // one column that binds*. So this is the release's sentence rather than a choice made in
+    // the generator, and it is asserted in both directions.
+    let natured = read
+        .iter()
+        .filter(|row| row.traits.contains_key("nature"))
+        .count();
+    assert_eq!(
+        natured, 5,
+        "five biomes have a force of nature and ocean has none, which is the release saying \
+         it is not claimable and carries nothing"
+    );
+    for guiding in ["x", "food", "metal", "energy"] {
+        assert!(
+            !file.contains(guiding),
+            "the file carries `{guiding}`, which is one of the three columns the release says \
+             guide and do not bind - a territory's own numbers are in *Territory resources*"
+        );
+    }
+
+    // **Jungle is the one that is not 1**, so a generator writing a constant would fail here.
+    let jungle = read
+        .iter()
+        .find(|row| row.traits.get("name").map(String::as_str) == Some("jungle"))
+        .expect("the release declares a jungle");
+    assert_eq!(
+        jungle.traits.get("nature").map(String::as_str),
+        Some("2"),
+        "a jungle's force of nature is two, and every other claimable biome is one - so a \
+         constant would pass everything above this line"
     );
 }

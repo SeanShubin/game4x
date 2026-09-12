@@ -1815,9 +1815,25 @@ end - `spec/turn.md`, `P-100`
                 .all(|item| item.to == "code" || item.to == "sean"),
             "a capability is addressed to somebody who cannot act on it"
         );
+        // **This asserted that one was addressed to code, and on 2026-09-12 none was.** That
+        // is the release finishing rather than the parse failing: every capability reached
+        // `built` and changed hands, which is the state the two addressees exist to reach.
+        //
+        // **So what is checked is that they are all in one of the two hands and that some
+        // hand holds them** - a parse returning nothing would otherwise satisfy *all of them
+        // are addressed correctly* for the wrong reason, which is the count-over-nothing
+        // failure `docs/process.md` names.
+        let to_code = ordered.iter().filter(|item| item.to == "code").count();
+        let to_sean = ordered.iter().filter(|item| item.to == "sean").count();
+        assert_eq!(
+            to_code + to_sean,
+            ordered.len(),
+            "{} capabilities are in neither hand",
+            ordered.len() - to_code - to_sean
+        );
         assert!(
-            ordered.iter().any(|item| item.to == "code"),
-            "no capability is addressed to the lane that builds them"
+            to_sean > 0,
+            "no capability has reached `built`, which every one of them had by 2026-09-12"
         );
         assert!(ordered.iter().any(|item| item.id == "R-6"));
     }
