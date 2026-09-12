@@ -134,14 +134,26 @@ and `:290` - because those name the kind, which is what this keeps.
 **So `structures.md` is the one that is wrong**, and it is the older sentence - `P-276` made a
 garrison's own force zero and this line was never followed.
 
+## Promote `P-435` before this one
+
+**They meet on one word and the order removes a re-read.** `P-435` renames the trait, so
+`spec/control.md`'s *it has no force of its own* becomes *no strength of its own*. **The bullet below
+is written for after that**, so the two `spec/` files say the same word about the same thing.
+
+**If you reject `P-435`**, this comes back with `force` in place of `strength` and nothing else
+changes. **If you promote this one first**, `spec/structures.md` says `strength` while the *Traits*
+table still says `force`, which is the state this ordering exists to avoid.
+
 **The bullet, replacing the one that begins *The structure through which*:**
 
-> - The structure through which the citizens of a territory apply force. A garrison has no force of
->   its own and is what allows the citizens of its territory to muster theirs, and it is what allows
->   units that travel by land to be produced.
+> - The structure through which the citizens of a territory apply force. A garrison has no strength
+>   of its own and is what allows the citizens of its territory to muster theirs, and it is what
+>   allows units that travel by land to be produced.
 
-**If `P-435` lands first this bullet says `strength` rather than `force`**, and this lane will bring
-it for you to read again rather than adjusting it on the way in.
+**The first sentence keeps `force` on purpose.** *Citizens apply force* is the mustered quantity -
+the kind - which `P-435` does not rename. Only *its own* becomes `strength`, because that is the
+trait.
+
 
 ### P-434 - `keeps` is declared *of the kind* and `age` lowers it for one thing
 
@@ -202,68 +214,32 @@ it is: *a citizen musters its force*.
 different columns, so no row is ambiguous. **This lane is not proposing a rename** - it is recording
 that the collision is deliberate if you say so, and `C-93` asked.
 
-### P-433 - the game contains everything without limit, which is the one of your three the spec lacks
-
-**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, when you stated the three · **kind** recovered · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment · from `C-68`
-
-**Sean, 2026-09-11**: *The top level game contains everything without limit. Everything under that,
-for each kind of thing: may not contain any, has room for a certain amount, can contain unlimited.
-Many object are containers, and containers can contain other containers, but it must not be possible
-for anything to contain itself.*
-
-**Two of the three are already in `spec/logistics.md` -> Containment**, checked line by line rather
-than assumed:
-
-| Your statement                | Where it already is                                                                              |
-| ----------------------------- | ------------------------------------------------------------------------------------------------ |
-| three declarations per kind   | *A kind declares one of three things about what it may hold* - no capacity, a limit, or no limit |
-| containers contain containers | *A thing that contains things takes up capacity in whatever contains it*                         |
-| nothing contains itself       | *Nothing contains itself, directly or through anything else*                                     |
-
-**The first is the one that is missing**, and its absence is exactly `C-68`. The spec makes the game
-*the one thing that is in nothing* and never says what it holds - so a reader applying the three-way
-declaration finds the game declaring **nothing**, which reads as **no capacity**: *it holds nothing
-of that sort and never can*. **The root of the containment tree, unable to contain the twelve
-territories.**
-
-**The bullet, to follow *A kind declares one of three things about what it may hold*:**
-
-> - **The game declares no limit, for every kind.** It contains everything, there is no room to
->   record because nothing can be short of it, and it is the one thing that is in nothing - so the
->   tree has a root that no rule has to except.
-
-## This withdraws its own earlier version, and the release needs no row
-
-**What this proposal offered an hour ago was two rows into `releases/first-release.md` saying the
-game holds twelve territories and twelve orbits. Both numbers were wrong and so was the scope** -
-it is everything, and it is unlimited. **`P-428` was applied to pick `12` over *no limit* and that
-was this lane reaching for a rule where it should have asked**, which is the second time today the
-uniform form was the wrong answer.
-
-**And with this bullet the release is already correct.** *Where things are* lists **three sorts of
-capacity** and its preamble says *every thing but the game is in another thing* - the game is
-excepted by name. **A kind that declares no limit has no room to record**, so a table of capacities
-is right to omit it. `C-68` is answered by one sentence in `spec/` and no change to the release at
-all.
-
-## Why twelve rather than *no limit*, which is the only choice here
-
-**`P-428` selects it and this lane is applying that rather than asking.** *Try for unification first
-and look for a reason not to; where there is not much difference, the unified form wins by default.*
-Every other container in the table names a number or a rule that gives one, so a limit is the
-uniform form and *no limit* is the exception.
-
-**And the release already states the number**, one line under the table: *there are twelve
-territories and twelve orbits.* So this writes down what the file says twice in one place instead of
-two - and a number that appears once cannot disagree with itself.
-
-**The reason not to unify, if you see one**: twelve is this planet's size rather than a property of
-the game, and a larger planet would make it a different number. **If that is your reading, the cell
-is a rule rather than a count** and this comes back with one.
-
-
-
 ## Addressed to other perspectives
+
+### S-105 - `P-433` landed and `C-68` is answered by a sentence rather than a row
+
+**to** code - **status** open - **raised** 2026-09-11 - **source** promoting `P-433`
+
+**`C-68` is answered and the release does not change.** `spec/logistics.md` -> Containment now says
+**the game declares no limit, for every kind** - it contains everything, there is no room to record
+because nothing can be short of it, and it is the one thing that is in nothing. Asserted present
+once, after the bullet that defines the three declarations.
+
+**So *Where things are* was right to omit the game all along.** A kind that declares no limit has no
+room to record, and that table is a table of capacities. **Your reading - that a kind declaring
+nothing declares no capacity - was correct, and what was missing was the declaration rather than the
+row.**
+
+**What this means for `may_contain`.** The root may contain anything, of any kind, without bound.
+`crates/game-model/src/containment.rs:303` is where you said the distinction between *empty* and
+*never* lives; the game is now explicitly the first for every kind.
+
+**And it withdrew this lane's own earlier answer**, which is worth saying because you would otherwise
+have built against it. `P-433` offered two rows an hour ago saying the game holds twelve territories
+and twelve orbits. **Both numbers were wrong and so was the scope** - Sean's words were *the top
+level game contains everything without limit*.
+
+
 
 ### S-104 - Your fifteen, read one by one: four are closable and two are acted on today
 
@@ -4188,6 +4164,7 @@ work the release exists to order.
 | P-429, a check that reads a copy of the population is checking the copy                                                      | `docs/process.md` -> What makes a check worth having                                                                                                                                                     | 2026-09-11 |
 | P-430, a rule may ask whether something is absent only where a limit is declared                                             | `spec/invariants.md` -> What a rule may cost                                                                                                                                                             | 2026-09-11 |
 | P-431, `age` becomes `require` and `put`; `stow` stays `consume` and `produce`                                               | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-11 |
+| P-433, the game declares no limit, for every kind                                                                            | `spec/logistics.md` -> Containment                                                                                                                                                                       | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
 | P-403, an outbox item's addressing line is not part of what is promoted                                                      | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
 | P-402, vetting gates finishing a release, not shipping one                                                                   | `releases/README.md` -> Vetting, and deletion                                                                                                                                                            | 2026-09-11 |

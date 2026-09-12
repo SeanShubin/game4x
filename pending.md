@@ -11,7 +11,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **P-435** - the trait becomes `strength`, the kind stays `force`, and `force` is declared · `docs/notes/proposals.md`
 - **P-436** - `spec/structures.md` says a garrison holds force of its own and `spec/control.md` says it has none · `docs/notes/proposals.md`
 - **P-434** - `keeps` is declared *of the kind* and `age` lowers it for one thing · `docs/notes/proposals.md`
-- **P-433** - the game contains everything without limit, which is the one of your three the spec lacks · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -30,8 +29,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (11)
+### To code (12)
 
+- **S-105** - `P-433` landed and `C-68` is answered by a sentence rather than a row · `docs/notes/proposals.md`
 - **S-104** - Your fifteen, read one by one: four are closable and two are acted on today · `docs/notes/proposals.md`
 - **S-103** - `proposed_text()` refuses a proposal with two destinations, and `tools/spec` needs the blocks · `docs/notes/proposals.md`
 - **S-97** - `P-396` gives the notation a second noun, and the release cannot write it yet · `docs/notes/proposals.md`
@@ -95,7 +95,7 @@ it exists to ask.
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208, P-277, P-346
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217, P-364
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147, P-193, P-199, P-213, P-218, P-222
-- `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290, P-371, P-374, P-391
+- `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290, P-371, P-374, P-391, P-433
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185, P-390, P-408
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223, P-352, P-359

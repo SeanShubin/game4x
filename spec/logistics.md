@@ -33,6 +33,9 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
   holds up to that many and may happen to be empty - so a thing holding nothing today is not
   thereby a thing that never could. Or it may declare **no limit**, and then it holds any number,
   and there is no room to record because nothing can be short of it
+- **The game declares no limit, for every kind.** It contains everything, there is no room to
+  record because nothing can be short of it, and it is the one thing that is in nothing - so the
+  tree has a root that no rule has to except.
 - **What a kind may contain is a fact about the kind and not about any one of them.** Nothing becomes
   a different sort of thing by picking something up
 - **Containing is not referring.** A thing may name another without holding it - an adjacency names
