@@ -3230,19 +3230,35 @@ passes over nothing, so **assert how many traits it examined** - two today. And 
 are free text rather than a set has no table to check against, so the list of which traits are
 checked is written out rather than discovered.
 
-### S-30 - The release's nine data tables have no data file to be generated from
+### S-30 - Seven of the release's eight data tables still have no file, and `kinds.4x` is the eighth
 
 **to** code - **status** open - **cited** `0e5f8f4` - **raised** 2026-09-04 - **source** `P-218`, and `P-220` when it lands
 
-**`P-218` made these a replication and nothing generates them.** Territory resources, Kinds,
-Families, Where things are, Traits, What bounds a kind, Units and structures, Recipes and Biomes in
+**`P-218` made these a replication and nothing generates them.** **Kinds**, Families, Traits, Where
+things are, What bounds a kind in a territory, Units and structures, Recipes and Biomes in
 `releases/first-release.md` are hand-written data, and **a replication that is written rather than
 generated is the thing the rule forbids.**
 
-**Corrected 2026-09-11: nine, not eight.** *Where things are* has carried a table since `P-265`, and
-this item was raised on 2026-09-04 and never re-counted - **a number that went stale without anybody
-editing it**, which is the failure `C-9` recorded. Counted this time by walking the file's sections
-and counting rows under each, rather than by reading the list back.
+**`Kinds` is done.** `spec/data/kinds.4x` landed by `P-444` on 2026-09-12 - twenty-one lines,
+compared as bytes against what the code lane's generator prints, and holding the release's eighteen
+rows in both directions. **Seven are left**, and `P-448` gives the shape for the next: a kind
+declares which family it is in, so `families.4x` holds names and `kinds.4x` gains a `family` trait on
+seven of its lines.
+
+**Corrected twice and this is the second, 2026-09-12.** The count was **eight**, then *corrected* to
+**nine**, and it is eight - **but not the eight it started as.**
+
+- **The first list was eight and had the wrong members**: it counted *Territory resources*, which is
+  **this planet's** - twelve territories and their deposits - rather than the game's, and it missed
+  *Where things are*
+- **The 2026-09-11 correction fixed the second and kept the first**, so it read nine
+- **The code lane caught it on 2026-09-12**, in the same message where this lane had warned it not to
+  fold the two layers together
+
+**So the number was right the first time by accident and the membership was wrong both times.** The
+list above is now the eight the game owns, and the checking method is the one that would have caught
+it: **a table is the game's data if every scenario shares it**, rather than if it is a table.
+
 
 **`S-29` and `S-23` ask for the machinery and neither names these tables.** `S-29` is the scenario
 test's input and expected; `S-23` is `recipes.md`, a new view. **The release's own tables are a

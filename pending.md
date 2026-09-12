@@ -42,7 +42,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-97** - `P-396` gives the notation a second noun, and the release cannot write it yet · `docs/notes/proposals.md`
 - **S-96** - A check for `In` lines: twelve cite a file, and two were not quoting it · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
-- **S-30** - The release's nine data tables have no data file to be generated from · `docs/notes/proposals.md`
+- **S-30** - Seven of the release's eight data tables still have no file, and `kinds.4x` is the eighth · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **X-8** - `C-74` answered: the three puzzles are one, and it is called grounding · `lenses/research/outbox.md`
