@@ -26,9 +26,6 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
-- **X-14** - `3553419` X-29's number was never stale, and X-14 becomes P-426 and P-427 · still open in `lenses/research/outbox.md`
-- **X-29** - `3553419` X-29's number was never stale, and X-14 becomes P-426 and P-427 · still open in `lenses/research/outbox.md`
-- **X-30** - `11ea79e` X-30 recorded where the grounding that depends on it lives · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
@@ -53,7 +50,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (30)
+### To spec (29)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -79,7 +76,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-42** - A rule that is written down, true, and not run over the work that states it · `crates/outbox.md`
 - **Q-80** - `spec/control.md` names biome as an input to maximum output, and nothing reads it · `lenses/quality/outbox.md`
 - **Q-59** - `P-302` binds this lens's own README, and this lens cannot act on it · `lenses/quality/outbox.md`
-- **X-14** - founding is an undeclared metal source; Sean has decided, and the release still says otherwise · `lenses/research/outbox.md`
 - **X-15** - the inventory, so that nothing said in one conversation is lost on the way to `spec/` · `lenses/research/outbox.md`
 - **X-19** - a territory has four traits and two of them have no value anywhere · `lenses/research/outbox.md`
 - **X-26** - one kind in the release has no definition in `spec/`, and the win condition depends on it · `lenses/research/outbox.md`

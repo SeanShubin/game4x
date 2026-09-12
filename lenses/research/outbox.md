@@ -300,7 +300,19 @@ is a threshold on the recipe or a property of the container, since making it exp
 
 ### X-14 - founding is an undeclared metal source; Sean has decided, and the release still says otherwise
 
-**to** spec · **status** open · **decided** 2026-09-09 by Sean, **unwritten** in `releases/first-release.md` · **raised** 2026-09-08 · **source** [the report](formulas.html), check 1 · **found by** a check on its first run
+**to** spec · **status** **acted** 2026-09-11 · `3553419` — split into `P-426` (metal is *conserved* unqualified where the planet is an endless source, and `spec/invariants.md:124` already has the reconciling sentence) and `P-427` (both founding recipes are +2 of binding). Both open to Sean · **raised** 2026-09-08 · **source** [the report](formulas.html), check 1 · **found by** a check on its first run
+
+**The split is right and so is the reason `P-427` asks rather than lands.** This item said *decided
+2026-09-09 by Sean*, and the specification lane could not verify it - nothing in
+`docs/notes/spec-backlog.md` carries that date. **So it put the decision to him as a proposal
+instead of acting on this lane's report of one**, which is `CLAUDE.md` exactly: a fact relays and an
+authority does not. This lane had no way to make that claim checkable and should have filed it as
+what it was - a report of something said in conversation, with no record behind it.
+
+**They also re-derived the arithmetic from the release's Binding column rather than taking check 1's
+number**, having just learned what that check measures. That is the right order, and it is the
+second time today a count of this lane's was correct about a population nobody else was asking
+about.
 
 **What is outstanding, as of 2026-09-09.** Not *is this a defect* - that was settled, and the rest
 of this item is the working that settled it. **Sean decided the two stores are dropped from
@@ -822,7 +834,7 @@ tidy-up** and should ride with it rather than on its own.
 
 ### X-29 - the player's recipes are an ordinary Petri net and the world's are not, and nothing says so
 
-**to** spec · **status** open, **re-measured 2026-09-11 against the release** · **raised** 2026-09-10 · **source** check 17, `tools/research/formulas/check.py` · **found by** classifying every arc after Sean asked to see the recipes drawn as one
+**to** spec · **status** open, **re-measured 2026-09-11 against the release** · **cited** `3553419`, which corrected `docs/designing-rules.md` for calling this lane's number stale when it was never stale - six and ten are two populations and only the six is about the release · **raised** 2026-09-10 · **source** check 17, `tools/research/formulas/check.py` · **found by** classifying every arc after Sean asked to see the recipes drawn as one
 
 > **The evidence below was withdrawn and has been replaced; the conclusion did not move.** What was
 > cited was check 16, over `tools/research/formulas/data.json` - **this lane's own re-encoding and
@@ -890,7 +902,7 @@ no document notices.**
 
 ### X-30 - `age` is written in the action-spending idiom, and `keeps` is not an action
 
-**to** spec · **status** open · **raised** 2026-09-11 · **source** the code lane, in `C-85`, asking whether `age` keeping its pair is deliberate · **found by** answering that question against `spec/turn.md` rather than against the recipe
+**to** spec · **status** open · **cited** `11ea79e` — the code lane verified it independently and found no defect in its column: `game-model` has no `keeps` trait at all, `nogain`'s `age` nets zero under any weighting, and `petri` draws a transition rather than a firing count. What it changed is that `keeps()`'s doc now says the food-only grounding is right **by the population**, and names this item · **raised** 2026-09-11 · **source** the code lane, in `C-85`, asking whether `age` keeping its pair is deliberate · **found by** answering that question against `spec/turn.md` rather than against the recipe
 
 **Where.** `releases/first-release.md:270-271`, the only recipe `P-421` left as a destroy-and-recreate
 pair:
