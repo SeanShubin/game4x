@@ -15,14 +15,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 
-## Open, and a commit says otherwise
-
-An item is closed by whoever filed it and answered by somebody else, so the filer gets
-no signal. These are still marked `open`, and a commit that touched no part of their own
-outbox cites them - which usually means they were settled and nobody went back.
-
-- **S-89** - `92fb4e1` Q-83: a retuned release goes green, and Q-59 closes on S-89's invitation · still open in `docs/notes/proposals.md`
-
 ## What is outstanding
 
 ### To code (7)
@@ -34,10 +26,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-8** - `C-74` answered: the three puzzles are one, and it is called grounding · `lenses/research/outbox.md`
 - **X-12** - `deploy ark` and `found by land` share six rows verbatim, and that is the first call site for nesting · `lenses/research/outbox.md`
 - **X-13** - creation and transformation are already one format, because relations were made things · `lenses/research/outbox.md`
-
-### To quality (1)
-
-- **S-89** - `Q-59` re-measured: four of your seven landed while it waited, and three are filed · `docs/notes/proposals.md`
 
 ### To research (2)
 

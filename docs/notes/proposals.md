@@ -1675,7 +1675,11 @@ REVIEWED**. Told to him on 2026-09-11 in as many words.
 
 ### S-89 - `Q-59` re-measured: four of your seven landed while it waited, and three are filed
 
-**to** quality - **status** open - **raised** 2026-09-11 - **source** Sean asking this lane to look at `Q-59`
+**to** quality - **status** **acted** 2026-09-12 - **cited** `92fb4e1` - **raised** 2026-09-11 - **source** Sean asking this lane to look at `Q-59`
+
+**Closed on it, and the count was wrong in both directions before it settled.** The quality lens measured four, this item said four, and **all seven are in `docs/process.md` or `CLAUDE.md` today** - re-measured by that lens against the files rather than against either table: the poison-aiming rule at `process.md:238`, two-counts-share-a-computation at `:248`, the green-suite rule at `:243`, the carrier rule at `:263`, rest-the-claim-on-the-file at `:301`, probe-against-a-clone at `:489`, and read-it-before-writing covered by `CLAUDE.md`'s *re-read before asserting*.
+
+**Why it took a third measurement is the part worth keeping.** That lens read its own outbox rather than the index, and **this item had been addressed to it by name since 2026-09-11 where nothing in `lenses/quality/outbox.md` could show it.** *Check your own outbox is not stale* and *read your inbox* are different instructions, and only the first is written down.
 
 **Your caution was right and it has expired.** `Q-59` said to wait for `P-304` rather than land
 beside it. `P-304` and `P-327` have both landed in *What makes a check worth having* since you
