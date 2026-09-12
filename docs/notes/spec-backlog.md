@@ -3320,3 +3320,16 @@ one. **None of the four is a view of the layout.** So the debugging view is a fi
 view of the data browser, or something not reachable from the front end at all - and the difference
 matters, because *all reachable from the front end, in every build* is a promise the other four
 carry.
+
+## Decided 2026-09-12, the debug view is a fifth surface
+
+Sean: *The debug view is an additional surface.*
+
+**So `spec/interface.md` says five rather than four**, and the fifth carries what the other four
+carry: *all reachable from the front end, in every build*, and *nothing is available in one build and
+not another*. **The debug view ships** - which is consistent with everything around it and is worth
+naming, because a view of the physical model is the kind of thing that is a build flag elsewhere.
+This specification has no build flags.
+
+Filed as `P-472`. It does not say how the view is reached - `releases/first-release.md` names which
+surfaces a release carries, and nothing puts the debug view in the first one.

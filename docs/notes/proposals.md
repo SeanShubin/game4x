@@ -62,6 +62,54 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-472 - the debug view is a fifth surface
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** answered, by you, 2026-09-12 · **shape** text · **asks** approval · **into** `spec/interface.md` -> Surfaces
+
+**`P-471` says the layout has one reader besides the thing that mediates it, and you have said what
+that reader is.** `spec/interface.md` names four surfaces and none of them is a view of the layout -
+the data browser's two views are **both logical**, an entity view and a relational one.
+
+## The words
+
+**The count and one bullet, offered as the opening and the list so the change is visible.** The four
+existing bullets are unchanged.
+
+> The game presents five surfaces, all reachable from the front end, in every build:
+>
+> - **The game itself** - the planet, its territories, and what the player does with them
+> - **The console** - typing commands, with help listing every command and its syntax, and
+>   errors that say what was wrong and what was expected
+> - **The data browser** - the game's own data, read directly, in two views: every entity with its
+>   components, and the same facts normalized into a table for each relation. **Both name every
+>   table and every column, whether or not anything is in it.**
+> - **The rule editor** - the rules the player has, read and changed
+> - **The debug view** - how the data is actually held, shown as it is held. **It is an output and
+>   not a path**: nothing in the game reads through it, and it is the one place the layout every
+>   other surface is shielded from can be seen
+
+## What the count carries with it, which is worth seeing before approving
+
+**`spec/interface.md` makes two promises about every surface** and the fifth now carries both:
+
+- *all reachable from the front end, **in every build***
+- *Nothing is available in one build and not another*
+
+**So the debug view ships.** That is consistent with everything around it - *a player has complete
+control over every detail*, and the data browser already shows the game's own data - but it is worth
+naming, because a view of the physical model is the kind of thing that is often a build flag
+elsewhere. **This specification has no build flags and this proposal does not add one.**
+
+## What it does not do
+
+**It does not say how the view is reached.** `releases/first-release.md` says **the three surfaces in
+this release** are `F1`, `F2`, `F3` and `/game`, `/console`, `/browser` - the rule editor is not in
+this release - and **which surfaces a release carries is the release's business**. Nothing here puts
+the debug view in the first release.
+
+**And it does not say what the layout is.** `P-471` says how the data is held is an implementation
+detail chosen for production; this names the one surface that shows it. **Neither decides the
+layout**, which is the code lane's and is not a specification question.
 ### P-471 - the data is a normalized relational model, and the notation is a text form of it
 
 **to** sean · **status** open · **raised** 2026-09-12 · **kind** asked for, from how you model · **shape** text · **asks** approval · **into** `spec/invariants.md` -> a new section after *A fact is stated once*
@@ -116,17 +164,15 @@ can find by looking**. The bullets say it that way.
 hold: a debugging view that something else read through would be a second way to the layout wearing a
 surface's name.
 
-## One question it raises, which this lane is not answering
+## The question it raised, which you have answered
 
-**Which surface is that view?** `spec/interface.md` says **the game presents four surfaces** and
-names them, and the data browser is *the game's own data, read directly, in two views: every entity
-with its components, and the same facts normalized into a table for each relation*. **Both of those
-are logical** - an entity view and a relational one - so **none of the four is a view of the
-layout**.
+**Which surface is that view?** `spec/interface.md` named **four** and none of them is a view of the
+layout - the data browser's two views are both logical. **You have said it is an additional surface**,
+so there are five, and `P-472` carries the count and the bullet.
 
-**So it is a fifth surface, or a third view of the data browser, or something not reachable from the
-front end at all** - and the difference matters, because *all reachable from the front end, in every
-build* is a promise the other four carry. **Filed as the next proposal rather than guessed at here.**
+**Which means it carries the two promises the other four do** - *all reachable from the front end, in
+every build*, and *nothing is available in one build and not another*. **The debug view ships**, and
+ says so where it can be read rather than leaving it to be inferred from a count.
 
 ## What it settles that was open, and what it does not
 

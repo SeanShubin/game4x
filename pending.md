@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-472** - the debug view is a fifth surface · `docs/notes/proposals.md`
 - **P-471** - the data is a normalized relational model, and the notation is a text form of it · `docs/notes/proposals.md`
 - **P-468** - biome is named as an input to output and reaches nothing · `docs/notes/proposals.md`
 - **P-467** - a garrison costs nothing and binds nothing · `docs/notes/proposals.md`
