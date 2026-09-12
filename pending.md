@@ -8,12 +8,13 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-417** - A description carries the traits of the thing, and not the traits of its kind · `docs/notes/proposals.md`
+- **P-407** - Five traits are of the kind, and `kind` is not a trait at all · `docs/notes/proposals.md`
 - **P-415** - `P-406` left a count four lines above the sentence that says there is no count · `docs/notes/proposals.md`
 - **P-416** - Force is mustered rather than presented, and there is no highest case left · `docs/notes/proposals.md`
 - **P-414** - A garrison lets each citizen muster its force, and force is mustered afresh each turn · `docs/notes/proposals.md`
 - **P-412** - The release's `In` line quotes the sentence `P-408` replaced, for the second time today · `docs/notes/proposals.md`
 - **P-413** - `readiness` now names nothing, and `spec/invariants.md` uses it three times · `docs/notes/proposals.md`
-- **P-407** - Five traits are declared stored and never vary, and the dump writes four of them nowhere · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
@@ -24,6 +25,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-407** - `e2a9cfb` P-407 from C-92: is a trait that never varies stored · still open in `docs/notes/proposals.md`
 - **S-99** - `29e993c` S-98 and S-99: the model follows P-399 into the token model, and the gate is green · still open in `docs/notes/proposals.md`
 - **S-98** - `29e993c` S-98 and S-99: the model follows P-399 into the token model, and the gate is green · still open in `docs/notes/proposals.md`
 - **C-92** - `e2a9cfb` P-407 from C-92: is a trait that never varies stored · still open in `crates/outbox.md`

@@ -62,6 +62,81 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-417 - A description carries the traits of the thing, and not the traits of its kind
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/console.md` -> The language · from `P-407` · needs `P-414` first, for the trait its example names
+
+**Sean, 2026-09-11**, choosing between inferring the distinction and declaring it: *it is the third.*
+**So each trait says whether it belongs to the kind or to the thing, and the rule reads that rather
+than measuring the data.**
+
+**Replacing the sentence beginning *What a thing contains is a map*, down to *never `{citizen} ->
+14`*:**
+
+> **What a thing contains is a map from a description to a quantity.** A description is a kind and
+> **every trait of that thing**; a trait **of its kind** is not part of one, because naming the kind
+> has already said it, and a derived trait is never part of one. **No trait of the thing may be left
+> out** - `{citizen defending:1} -> 8` and `{citizen defending:0} -> 6`, never `{citizen} -> 14`.
+
+**Three changes and the rest of the paragraph is untouched.**
+
+| Was                                            | Is                                                  |
+| ---------------------------------------------- | --------------------------------------------------- |
+| every **stored** trait that thing has          | every trait **of that thing**                       |
+| *(nothing said about a trait of the kind)*     | a trait of its kind is not part of one              |
+| `{citizen ready:yes}` and `{citizen ready:no}` | `{citizen defending:1}` and `{citizen defending:0}` |
+
+**The third is a repair rather than a change.** `P-399` deleted the `ready` trait, so the sentence
+forbidding `{citizen} -> 14` has been illustrating itself with a trait the game does not have.
+**`defending` is the same shape and exists** - `P-414` declares it, so that proposal lands first or
+this example names something not yet there.
+
+**Why the rule reads a declaration rather than the data.** *A trait that never varies* is a fact
+about today's twelve territories. The day a damaged ark has less force the rule flips and every
+description gains a field, **with nothing to announce it** - which is how a count goes stale without
+anybody editing it. **A declaration changes when somebody edits a cell.**
+
+### P-407 - Five traits are of the kind, and `kind` is not a trait at all
+
+**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, when Sean chose to declare the distinction rather than infer it · **kind** entailed, from the code lane's `C-92` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Traits · needs `P-417` first
+
+**`C-92` found this about `force` and it is about five traits.** Counted over the release's *Traits*
+table against `scenario/expected/play.4x`: **nineteen are declared `stored`, and eight appear in no
+description.** Four of the eight are the counts `P-411` landed and the code has not followed. One is
+`kind`. **The other five are one number per kind**, and `force` was only the visible case because
+`{garrison force:0}` writes it while `{citizen}` does not.
+
+**`P-417` states the rule and lands first.** This marks which traits it applies to.
+
+**Into *Traits*, replacing five rows:**
+
+> | **force** | citizen, garrison, ark, pioneer | a number | of the kind |
+> | **fuel** | a unit | how much energy its tank holds | of the kind |
+> | **upkeep** | a thing with upkeep | food per turn | of the kind |
+> | **keeps** | thing | the number of turns it will last | of the kind |
+> | **movable** | whatever moves | yes or no | of the kind |
+
+**Only the last cell changes in each.** Every other cell is the one already there.
+
+## And the `kind` row is deleted, because `kind` is not a trait
+
+**`spec/console.md` lists them as different categories**: *every word in a data file is a kind, **a
+trait**, or one of a trait's values.* **A description is a kind and its traits** - so the kind is the
+head of a description rather than a field in one, and no recipe ever writes `kind:` as a qualifier,
+counted over the whole *Recipes* table.
+
+**So it needs no fourth value in that column.** It was never in the category the column is about.
+**The check for this half is that no row of *Traits* is named `kind`.**
+
+## What this does not do
+
+**It does not touch the five values themselves.** A citizen's force is still 1, an ark's fuel still
+2. **What changes is only whether a description repeats them**, and four of the five were never being
+repeated anyway - so this makes the file correct rather than changing it.
+
+**`{garrison force:0}` is the one line that loses a word**, and the code lane will see it when the
+dump is regenerated.
+
 ### P-415 - `P-406` left a count four lines above the sentence that says there is no count
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `CLAUDE.md` -> Promotion · from `P-406`
