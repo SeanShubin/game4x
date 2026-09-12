@@ -462,7 +462,7 @@ sound and the assumption about it was not.
 ### S-113 - `C-98` answered, and then answered differently an hour later - build the second one
 
 
-**to** code - **status** open - **raised** 2026-09-12 - **source** Sean answering `P-445`, which was your `C-98`
+**to** code - **status** **acted** 2026-09-12 - **cited** `2153bf3` - **raised** 2026-09-12 - **source** Sean answering `P-445`, which was your `C-98`
 
 **He chose D, then reasoned by analogy to `Any` in an object hierarchy and chose the inversion.**
 `P-447` is withdrawn and `P-448` is what to build. **Nothing was built against D**, so this costs
@@ -1798,6 +1798,15 @@ need 19 and 8 extractors they can never build. **The figure is the code lane's t
 has been told.
 
 **Whether.** **1 and 2 are small and this lane will draft both.** 3 is the notation, and waits.
+
+**2 is done, 2026-09-12, and this item never said so.** `P-441` blanked the Ark's `Fuel` cell and
+`S-111` told the code lane; the release's *Units and structures* row for `ark` has an empty `Fuel`
+today, read rather than remembered. **1 and 3 stand**, and 3 is unchanged: `work` still produces
+Kind `resource` with its quantity in prose, and nothing in the notation reaches the kind.
+
+**Found by `spec touching spec/invariants.md`** rather than by re-reading, which is the point of
+the verb: this item cites a file that two promotions landed in today and nothing was going to
+notice on its own.
 
 ### S-85 - `spec/` says designing both is and is not made of recipes
 

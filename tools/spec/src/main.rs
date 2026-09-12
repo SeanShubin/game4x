@@ -43,6 +43,7 @@ fn main() -> ExitCode {
         ["replacing", id, file, old] => replacing(&root, id, file, old),
         ["land", id, previous] => land(&root, id, previous),
         ["file", path] => file(&root, path),
+        ["touching", what] => touching(&root, what),
         _ => Err(usage()),
     };
     match outcome {
@@ -64,6 +65,7 @@ fn usage() -> String {
         "spec replacing <id>[:n] <file> <old>   put it in where those lines are, and assert it landed",
         "spec land <id> <after-id>              ledger row from the item's own `into`, then remove it",
         "spec file <path>                       put a drafted item at the top of Open",
+        "spec touching <file>                   every open item in every outbox that names it",
         "",
         "<id>:n names one of several offered blocks, numbered from 1 in the order they appear.",
     ]
@@ -251,6 +253,62 @@ fn land(root: &Path, id: &str, previous: &str) -> Result<String, String> {
     }
     Ok(format!(
         "{id} landed: one ledger row into {into}, block removed"
+    ))
+}
+
+/// Every open item, in every outbox, whose body names this file.
+///
+/// **`CLAUDE.md` already requires this and calls it reading the index**: *after promoting,
+/// check the index for open items that cite the destination file - `outbox` lists them - and
+/// tell their owner. A rule that moves under an open item makes it wrong without touching it,
+/// and nothing else will notice.* It also says the catch-up list is **read from the index
+/// rather than assembled from memory**, which is the only version that stays complete after a
+/// lane has been idle through forty promotions.
+///
+/// **This lane assembled it from a fresh script at every promotion instead**, which is the
+/// same failure filing had. The script was right each time and existed only in that turn.
+///
+/// **What it cannot do is worth saying, because the case that prompted it is one it misses.**
+/// `S-97` went stale when `P-421` landed in the release, and `S-97` names no path - it says
+/// *the release's recipe table*. **A body that names its subject in prose is invisible to
+/// this**, so what it makes findable is the citation and not the subject.
+fn touching(root: &Path, what: &str) -> Result<String, String> {
+    let all = outbox::read(root);
+    let needle = what.trim_start_matches("./");
+    let mut said = Vec::new();
+    let mut looked = 0;
+    for item in &all.items {
+        if item.status != "open" {
+            continue;
+        }
+        looked += 1;
+        if item.body.contains(needle) {
+            said.push(format!(
+                "  {} - to {} - {} - {}",
+                item.id,
+                if item.to.is_empty() {
+                    "nobody"
+                } else {
+                    &item.to
+                },
+                item.outbox,
+                item.title.trim().trim_start_matches(['-', ' '])
+            ));
+        }
+    }
+    if looked == 0 {
+        return Err("no open item in any outbox, so this counted over nothing".to_string());
+    }
+    if said.is_empty() {
+        return Ok(format!(
+            "nothing open names {needle}, out of {looked} open item(s) in {} outbox(es)",
+            all.files.len()
+        ));
+    }
+    Ok(format!(
+        "{} of {looked} open item(s) name {needle} - tell their owner:\n{}",
+        said.len(),
+        said.join("\n")
     ))
 }
 
