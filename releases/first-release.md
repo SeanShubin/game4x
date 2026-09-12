@@ -183,11 +183,13 @@ readies.
 The recipe table has seven columns: **Recipe**, **Auto**, **Role**, **Qty**, **Kind**, **Traits**
 and **Where**.
 
-**Auto** is `player` or `world`. **Role** is one of `require`, `limit`, `consume` or `produce`: a
-requirement must be present and is not taken, a limit is a maximum that must not be exceeded, a
-consumption is taken, and a production is made. **Qty** is a whole number or an expression. **Kind**
-is the kind or the family alone. **Traits** are the constraints on it. **Where** is the place the row
-is about, and a blank means the one place the recipe acts.
+**Auto** is `player` or `world`. **Role** is one of `require`, `limit`, `consume`, `produce` or
+`put`: a requirement must be present and is not taken, a limit is a maximum that must not be
+exceeded, a consumption is taken, a production is made, and **a put names a thing that is already
+there and says what is true of it afterwards - the same thing and not a new one, so what has an
+identity keeps it.** A put has no quantity, because nothing is made or taken. **Qty** is a whole
+number or an expression. **Kind** is the kind or the family alone. **Traits** are the constraints on
+it. **Where** is the place the row is about, and a blank means the one place the recipe acts.
 
 A quantity is a whole number. It is written in the recipe, read from a trait of one of the
 ingredients, or read from a trait of a named ingredient.

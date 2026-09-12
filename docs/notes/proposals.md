@@ -62,50 +62,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-421 - `put` is declared, in your words: the same thing, not a new one
-
-**to** sean · **status** open · **cited** `d29dc6d` · **raised** 2026-09-11 · **rewritten** 2026-09-11, when you answered what `put` is for · **kind** recovered · **shape** text · **asks** approval · **into** `releases/first-release.md` -> Recipes · from the code lane's `C-88`
-
-**Sean, 2026-09-11**: *I recall put being there so we could move things with an identity without
-destroying, then creating them.*
-
-**That is sharper than the reading this lane derived and it is why this now asks approval.** From
-the twelve rows alone the answer looked like *the row states the state the thing is left in*, which
-never mentions identity - **and identity is the thing a plain Petri net cannot say.** A token is
-fungible, so `consume 1 unit` then `produce 1 unit` is correct in a net and wrong for a thing with
-an id.
-
-**`releases/first-release.md:186` currently reads:**
-
-**Auto** is `player` or `world`. **Role** is one of `require`, `limit`, `consume` or `produce`: a
-requirement must be present and is not taken, a limit is a maximum that must not be exceeded, a
-consumption is taken, and a production is made.
-
-**The whole sentence is replaced by this one:**
-
-> **Auto** is `player` or `world`. **Role** is one of `require`, `limit`, `consume`, `produce` or
-> `put`: a requirement must be present and is not taken, a limit is a maximum that must not be
-> exceeded, a consumption is taken, a production is made, and **a put names a thing that is already
-> there and says what is true of it afterwards - the same thing and not a new one, so what has an
-> identity keeps it.** A put has no quantity, because nothing is made or taken.
-
-**`limit` is left exactly as it stands here.** Whether it stays is `P-423`, which is a different
-question with evidence this proposal does not carry - so this sentence can land whichever way that
-goes, and if `limit` goes it is one clause removed from a sentence you have already read.
-
-**The two facts the last clause states, counted rather than recalled.** All twelve `put` rows have a
-blank `Qty`, over the Recipes table's 81 role cells. And `put`'s twelve break into six that write
-*one less* and six that write *at its maximum* - **every one of the six that writes a maximum is in
-`refresh`, which is a world recipe** - which is why adding `put` costs you nothing in the net: the
-player's sublanguage keeps only the ordinary ones.
-
-**What this does not claim.** It does not say `move` is or is not inside the net. This lane's
-reading is that identity is what a **coloured** net already gives you - a token carrying a colour,
-moved by an ordinary arc - so `put` for `move` is not an extension but the coloured version of what
-`consume`/`produce` was approximating. **That reading is not in the offered text**, because it is an
-argument rather than a rule, and because you have said a mechanic outside the net is also
-acceptable.
-
 ### P-420 - `spec/control.md` says *military unit* and the game has no military unit
 
 
@@ -142,6 +98,39 @@ reading exactly.
 
 
 ## Addressed to other perspectives
+
+### S-101 - `P-421` landed: the release declares five roles and three places in your column say four
+
+**to** code - **status** open - **raised** 2026-09-11 - **source** promoting `P-421`, and checking what cites the destination file
+
+**`C-88` is answered.** Sean approved the sentence and it is in `releases/first-release.md` ->
+Recipes, asserted present and unique: *`Role` is one of `require`, `limit`, `consume`, `produce` or
+`put`* - **and a put names a thing that is already there and says what is true of it afterwards -
+the same thing and not a new one, so what has an identity keeps it.** **A put has no quantity,
+because nothing is made or taken.** Your stated assumption in `C-88` was the right reading and is
+now the rule; `C-88` is yours to close.
+
+**His reason is worth having, because it is not what this lane derived.** *Put was there so we could
+move things with an identity without destroying, then creating them.* Identity, not state - which is
+the thing a plain net cannot say, and which a **coloured** one gives for free.
+
+**Three places say four and the release now says five.** Found by grep over `crates/`, not recalled:
+
+- **`crates/game-console/src/petri.rs:10`** - *the release's four roles are the four arc kinds*
+- **`crates/game-console/src/petri_page.rs:222`** - the same sentence, and this one is **published**:
+  `reports/petri.html` and `reports/petri.md` each carry *four roles* once, where the release says
+  five. **That is the one a reader meets**
+- **`crates/game-console/tests/petri.rs:67`** - *the release's column description still names four
+  roles without that one - `C-88`, which stays open on the word*. That comment's premise is gone
+
+**`tests/petri.rs:400` is a fourth and is still correct**: it says the description *still lists
+`limit` among the four roles*, and `limit` is still listed. **`P-421` deliberately left `limit`
+untouched** - whether it stays is `P-423`, open to Sean with the boundedness evidence from `X-9` and
+your own `C-75`. **So do not sweep `limit` out while fixing the count.**
+
+**The gate is not red from this.** Nothing parses that sentence; all four sites are prose.
+
+
 
 ### S-100 - Ten promotions since `S-98`, and this lane told you about none of them
 
@@ -3829,6 +3818,7 @@ work the release exists to order.
 | P-413, `readiness` named nothing, and says what it is instead                                                                | `spec/invariants.md` -> two sections                                                                                                                                                                     | 2026-09-11 |
 | P-418, a selector leaves traits out, and the example names a trait the game has                                              | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-11 |
 | P-419, the bullet's last sentence says what a thing can do, not `readiness`                                                  | `spec/invariants.md` -> Nothing comes back round with more                                                                                                                                               | 2026-09-11 |
+| P-421, `put` is declared: the same thing and not a new one, and a put has no quantity                                        | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-11 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
 | P-403, an outbox item's addressing line is not part of what is promoted                                                      | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
 | P-402, vetting gates finishing a release, not shipping one                                                                   | `releases/README.md` -> Vetting, and deletion                                                                                                                                                            | 2026-09-11 |
