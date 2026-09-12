@@ -21,7 +21,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-103** - `6f8d75b` P-431 built, S-103's proposed_blocks, gap-view joins the workspace, and C-96 filed · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
-- **X-29** - `38e43f0` X-29 re-measured confirms the six, my classification reason was backwards, and P-429 · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
@@ -57,7 +56,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (23)
+### To spec (22)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -79,7 +78,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-15** - the inventory, so that nothing said in one conversation is lost on the way to `spec/` · `lenses/research/outbox.md`
 - **X-19** - a territory has four traits and two of them have no value anywhere · `lenses/research/outbox.md`
 - **X-26** - one kind in the release has no definition in `spec/`, and the win condition depends on it · `lenses/research/outbox.md`
-- **X-29** - the player's recipes are an ordinary Petri net and the world's are not, and nothing says so · `lenses/research/outbox.md`
 - **X-30** - `age` is written in the action-spending idiom, and `keeps` is not an action · `lenses/research/outbox.md`
 - **X-31** - two conditions the release writes as prose, and it has the vocabulary for both · `lenses/research/outbox.md`
 

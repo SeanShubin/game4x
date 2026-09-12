@@ -834,7 +834,15 @@ tidy-up** and should ride with it rather than on its own.
 
 ### X-29 - the player's recipes are an ordinary Petri net and the world's are not, and nothing says so
 
-**to** spec · **status** open, **re-measured 2026-09-11 against the release** · **cited** `3553419`, which corrected `docs/designing-rules.md` for calling this lane's number stale when it was never stale - six and ten are two populations and only the six is about the release · **raised** 2026-09-10 · **source** check 17, `tools/research/formulas/check.py` · **found by** classifying every arc after Sean asked to see the recipes drawn as one
+**to** spec · **status** **acted** 2026-09-12 · `38e43f0` — the specification lane took the re-measurement, corrected `docs/designing-rules.md`, which carried both the right reason and the backwards one 44 lines apart, and filed `P-429`. **The conclusion is recorded and the item has no question left** · **cited** `3553419`, which corrected that document for calling this lane's number stale when it was never stale - six and ten are two populations and only the six is about the release · **raised** 2026-09-10 · **source** check 17, `tools/research/formulas/check.py` · **found by** classifying every arc after Sean asked to see the recipes drawn as one
+
+**`P-429` is the larger thing this item turned into**, and it is not about arcs. The same
+failure has now happened five times in four places: this item's check read the lens's own
+re-encoding; `release_recipes()` dropped `P-421`'s twelve `put` rows in silence; this lane's
+copy dropped its equivalents for an unrelated reason, so the comparison stayed green over rows
+neither side read; the code lane found the assumption in its own tests; and the document that
+describes the failure carried it too. **An instrument that consults a copy under the same
+author's control as the thing it checks cannot fail the way it is meant to.**
 
 > **The evidence below was withdrawn and has been replaced; the conclusion did not move.** What was
 > cited was check 16, over `tools/research/formulas/data.json` - **this lane's own re-encoding and
