@@ -296,77 +296,18 @@ fn the_sentinel_says_what_is_true_of_the_open_section() {
     );
 }
 
-/// Every hash a `**cited**` field names resolves to a commit.
-///
-/// **A hash is the one citation in this repository that cannot be re-derived.** A file path can
-/// be looked for, an id can be searched, and a short hash that has stopped existing looks
-/// exactly like one that still does.
-///
-/// **The code lane amended a commit on 2026-09-12 and rewrote a hash out from under two
-/// citations in the quality lens's outbox**, which that lens repointed by hand. They have since
-/// adopted never amending in this repository - the window between commit and amend is one
-/// another lane can read a hash in, and it is not observable. **This lane cites more hashes than
-/// any other**, so this is where the guard belongs.
-///
-/// **Keyed on the field rather than on the shape.** A seven-character hex word in prose may be
-/// an illustration - `docs/notes/proposals.md` quotes `tools/outbox`'s own doc comment about
-/// parsing a `cited` list, and its `abc1234` was never a commit. The `**cited**` field is what
-/// claims a commit exists, so that is what is checked, and no exception list is needed.
-#[test]
-fn every_cited_hash_is_a_commit() {
-    let mut cited: Vec<(String, String)> = Vec::new();
-    for name in [
-        "docs/notes/proposals.md",
-        "docs/notes/decisions.md",
-        "releases/first-release.md",
-    ] {
-        let Ok(text) = std::fs::read_to_string(root().join(name)) else {
-            continue;
-        };
-        for line in text.lines() {
-            // **An item's addressing line is the only place a `cited` field is a claim.** The
-            // same words inside an inline code span are an illustration - the queue quotes
-            // `tools/outbox`'s own doc comment about parsing a `cited` list, and its `abc1234`
-            // was never a commit. Every addressing line opens `**to**`, which is structural
-            // rather than a guess, and needs no exception list.
-            if !line.starts_with("**to** ") {
-                continue;
-            }
-            let Some(after) = line.split("**cited**").nth(1) else {
-                continue;
-            };
-            let upto = after.split(" · ").next().unwrap_or(after);
-            let upto = upto.split(" - **").next().unwrap_or(upto);
-            for word in upto.split('`').skip(1).step_by(2) {
-                let word = word.trim();
-                if word.len() >= 7 && word.chars().all(|c| c.is_ascii_hexdigit()) {
-                    cited.push((word.to_string(), name.to_string()));
-                }
-            }
-        }
-    }
-    assert!(
-        cited.len() > 20,
-        "found only {} cited hashes, so this counted over almost nothing",
-        cited.len()
-    );
-
-    let mut dead = Vec::new();
-    for (hash, file) in &cited {
-        let found = std::process::Command::new("git")
-            .args(["cat-file", "-t", hash])
-            .current_dir(root())
-            .output()
-            .expect("git runs");
-        if String::from_utf8_lossy(&found.stdout).trim() != "commit" {
-            dead.push(format!("{hash} in {file}"));
-        }
-    }
-    assert!(
-        dead.is_empty(),
-        "{} of {} cited hashes name no commit - amended or rebased away: {}",
-        dead.len(),
-        cited.len(),
-        dead.join(", ")
-    );
-}
+// **`every_cited_hash_is_a_commit` was here and is deleted rather than repaired.** `Q-86`:
+// it asked `git cat-file -t`, which says whether an object is in the **local** database - and
+// an amended commit still is, surviving in the reflog reachable from nothing while a clone
+// never receives it. **So the gate built after the amending incident would not have caught the
+// amending incident.**
+//
+// **And its poison could not have shown that.** `0000000` exists nowhere, so it lands where
+// both predicates agree; the region where they differ - exists locally, reachable from
+// nothing - is the only one that mattered and the one the poison never entered.
+//
+// **`tools/outbox/tests/citations.rs` already checks both**, over `docs/notes/proposals.md`,
+// `docs/notes/decisions.md` and every release - the same three files, with `is_reachable`
+// driven against an orphan commit and a separate message for each half. So this added no file
+// and subtracted a predicate, which is *a fact is stated once* applied to a check: two
+// instruments over one population, and the weaker one goes.
