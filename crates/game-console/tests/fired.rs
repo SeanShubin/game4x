@@ -346,3 +346,75 @@ fn every_turn_the_scenario_labels_is_the_turn_it_is_on() {
         "and the last turn a command runs in is the last one labelled"
     );
 }
+
+/// Every recipe the release declares fires at least once while the scenario runs.
+///
+/// **`R-6`'s *vetted when*, since `P-422`**: the scenario takes a first territory from orbit,
+/// takes a second by land, launches an Ark, and **every recipe in the release fires at least
+/// once while it runs**, *measured by what fired rather than by what the file says*.
+///
+/// # Why this exists beside the two tests that already cover the halves
+///
+/// `every_player_recipe_the_release_declares_is_actually_fired` covers the ten the release
+/// owns to the player, and `ending_a_turn_runs_exactly_the_recipes_the_release_calls_the_worlds`
+/// covers the world's eleven. **Neither asks whether ten and eleven are all of them.** A
+/// recipe whose Owner cell said anything else would be in neither population, both tests
+/// would stay green, and the clause `R-6` now turns on would be false with nothing saying so.
+///
+/// **That is the partition failure this repository has already paid for once** - a coverage
+/// check satisfied for `move` by the line that founds, nine of nine and green for weeks. So
+/// this counts the whole declared set against what ran, and asserts the size of both.
+///
+/// **Read from the outcome.** `fired::ran` flattens the run and reports the recipes each
+/// command actually fired; nothing here reads the scenario file's text.
+#[test]
+fn every_recipe_the_release_declares_fires_while_the_scenario_runs() {
+    let all: Vec<String> = declared().into_iter().map(|(name, _)| name).collect();
+    let mut distinct: Vec<String> = all.clone();
+    distinct.sort();
+    distinct.dedup();
+    assert_eq!(
+        distinct.len(),
+        21,
+        "twenty-one recipes by name when this was written; the release declares {} \
+         ({distinct:?})",
+        distinct.len()
+    );
+
+    // **The two halves are the whole**, which is the question neither of the other tests
+    // asks. Counted by Owner, from the same rows.
+    let owners = declared();
+    let players = owners.iter().filter(|(_, o)| o == "player").count();
+    let worlds = owners.iter().filter(|(_, o)| o == "world").count();
+    assert_eq!(
+        players + worlds,
+        owners.len(),
+        "{} recipe blocks are owned by neither `player` nor `world`, so they are in no \
+         population any test covers",
+        owners.len() - players - worlds
+    );
+
+    let ran = ran();
+    let mut fired: Vec<&str> = ran
+        .iter()
+        .flat_map(|one| one.recipes.iter().copied())
+        .collect();
+    fired.sort_unstable();
+    fired.dedup();
+    assert!(
+        fired.len() > 15,
+        "only {} distinct recipes fired, which is too few for this to be about the scenario \
+         rather than about a run that failed",
+        fired.len()
+    );
+
+    let missing: Vec<&String> = distinct
+        .iter()
+        .filter(|recipe| !fired.contains(&recipe.as_str()))
+        .collect();
+    assert!(
+        missing.is_empty(),
+        "these recipes are declared and never fired while the scenario ran, so `R-6`'s \
+         *vetted when* does not hold: {missing:?}"
+    );
+}

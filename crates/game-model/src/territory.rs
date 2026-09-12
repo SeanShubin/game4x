@@ -753,10 +753,11 @@ impl Territory {
 
     /// The force the territory itself presents, before any unit standing on it.
     ///
-    /// `spec/control.md`: a citizen *can fight but cannot organise. Coordinated, it musters
-    /// its force each turn; uncoordinated it musters none*. A garrison is what coordinates
-    /// them, and it does so *by existing*, so with one every citizen musters and with none
-    /// the territory musters nothing.
+    /// `spec/control.md`, as `P-425` words it: a citizen *can fight but cannot organise*
+    /// and *musters no force unless something coordinates it*. A garrison *coordinates the
+    /// citizens of its territory, so that each of them musters one force each turn*, and *it
+    /// does this by existing* - so with one every citizen musters and with none the
+    /// territory musters nothing.
     pub fn held_force(&self) -> u32 {
         match self.garrison() {
             // **`P-276`: a garrison has no force of its own and nothing has to work it.**
@@ -776,7 +777,8 @@ impl Territory {
             Some(garrison) => garrison.force + self.citizens() * CITIZEN_FORCE,
             // **Nothing, and `P-416` took the other answer out of the game.** This read
             // `CITIZEN_FORCE` - the highest among them - until `spec/control.md` stopped
-            // having a *highest* case at all: *uncoordinated it musters none*. `P-414`
+            // having a *highest* case at all: a citizen *musters no force unless something
+            // coordinates it*. `P-414`
             // states it as a recipe rather than a rule about reading, and the recipe is
             // what makes the difference observable: `muster` **requires a garrison**, so
             // with none it never fires and no force is produced to present.
@@ -948,14 +950,15 @@ mod tests {
         assert_eq!(territory.extractors_for(Resource::Metal).len(), 0);
     }
 
-    /// Coordinated, a citizen musters; uncoordinated it musters none.
+    /// A citizen musters no force unless something coordinates it.
     #[test]
     fn a_garrison_lets_citizens_add_their_force_together() {
         let mut territory = offering(&[]);
         territory.set_count(Kind::Citizen, 4);
         // **Zero, and this line is `P-416` arriving.** It read 1 - *the highest present* -
-        // for as long as the game had a highest case. `spec/control.md` has none now:
-        // *uncoordinated it musters none*, and `muster` requires a garrison, so four
+        // for as long as the game had a highest case. `spec/control.md` has none now: a
+        // citizen *musters no force unless something coordinates it*, and `muster` requires
+        // a garrison, so four
         // citizens with nothing to coordinate them present exactly what one would.
         assert_eq!(
             territory.held_force(),

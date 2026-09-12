@@ -66,10 +66,9 @@
     {extractor resource:food working:1} -> 3
     {extractor resource:metal working:1} -> 3
     {garrison force:0} -> 1
-    {metal} -> 10
     {store resource:energy} -> 2
-    {store resource:food} -> 2
-    {store resource:metal} -> 3
+    {store resource:food} -> 1
+    {store resource:metal} -> 2
     {yard} -> 1
   {territory biome:grassland id:11 nature:1} -> 1
     {deposit density:6 resource:energy total-capacity:5} -> 1
@@ -83,8 +82,6 @@
     {extractor resource:food working:1} -> 1
     {extractor resource:metal working:1} -> 1
     {garrison force:0} -> 1
-    {store resource:food} -> 1
-    {store resource:metal} -> 1
   {territory biome:grassland id:3 nature:1} -> 1
     {deposit density:2 resource:food total-capacity:6} -> 1
     {deposit density:4 resource:energy total-capacity:2} -> 1

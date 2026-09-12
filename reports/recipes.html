@@ -14,7 +14,7 @@
 <p><strong>Generated. Do not edit.</strong> <code>cargo run -p game-console --bin dump-state</code>, or <code>scripts/dump-state.sh</code>.</p>
 <p>Every recipe the release declares, with its own lines gathered under it. The release states these across seven columns, one row per line and the name written only on the first - which is the right shape for a table and the wrong one for answering <em>what does this recipe do</em>.</p>
 <p><strong>Beside each rule is a worked example</strong> - a state, the command that fires the recipe, and the state after - in the notation <code>scenario/expected/play.4x</code> uses, holding only what that recipe touched. Every one is a real command run against a real state: <code>R-7</code>.</p>
-<p>31 recipes, 81 lines between them, 12 worked examples.</p>
+<p>31 recipes, 77 lines between them, 12 worked examples.</p>
 <h2 id="deploy-ark">deploy ark</h2>
 <p>Run by the <strong>player</strong>.</p>
 <ul class="bullets">
@@ -24,8 +24,6 @@
 <li><strong>produce</strong> 2 citizen</li>
 <li><strong>produce</strong> 1 extractor, food</li>
 <li><strong>produce</strong> 1 extractor, metal</li>
-<li><strong>produce</strong> 1 store, food</li>
-<li><strong>produce</strong> 1 store, metal</li>
 </ul>
 <h3 id="an-example">An example</h3>
 <p>Before:</p>
@@ -49,8 +47,6 @@
     {extractor resource:food working:1} -&gt; 1
     {extractor resource:metal working:1} -&gt; 1
     {garrison force:0} -&gt; 1
-    {store resource:food} -&gt; 1
-    {store resource:metal} -&gt; 1
 </pre>
 <h2 id="move">move</h2>
 <p>Run by the <strong>player</strong>.</p>
@@ -94,8 +90,6 @@
 <li><strong>produce</strong> 2 citizen</li>
 <li><strong>produce</strong> 1 extractor, food</li>
 <li><strong>produce</strong> 1 extractor, metal</li>
-<li><strong>produce</strong> 1 store, food</li>
-<li><strong>produce</strong> 1 store, metal</li>
 </ul>
 <h3 id="an-example">An example</h3>
 <p>the pioneer is consumed and the ground it takes is furnished.</p>
@@ -118,8 +112,6 @@
     {extractor resource:food working:1} -&gt; 1
     {extractor resource:metal working:1} -&gt; 1
     {garrison force:0} -&gt; 1
-    {store resource:food} -&gt; 1
-    {store resource:metal} -&gt; 1
 </pre>
 <h2 id="build-extractor">build extractor</h2>
 <p>Run by the <strong>player</strong>.</p>

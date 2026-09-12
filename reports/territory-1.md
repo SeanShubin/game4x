@@ -24,7 +24,7 @@ the links, so that a change to the state is a change to one line here.
 | territory | resource | amount |
 | --------- | -------- | ------ |
 | 1         | food     | 0      |
-| 1         | metal    | 10     |
+| 1         | metal    | 0      |
 | 1         | energy   | 12     |
 
 ## garrison

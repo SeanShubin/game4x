@@ -531,10 +531,15 @@ impl Game {
     /// about this function.
     /// The organised force a player can bring to bear on a territory it does not hold.
     ///
-    /// `spec/control.md`: *a military unit is organised force in itself, so several brought
-    /// to one place sum.* So this is a sum and not a maximum - the coordination rule that
-    /// makes unorganised citizens present only their highest does not apply to units, which
-    /// carry coordination with them.
+    /// `spec/control.md`, as `P-425` words it: *a unit is organised force in itself*, and
+    /// *several units brought to one place sum their force*. So this is a sum and not a
+    /// maximum - and a unit *musters its own force needing nothing to coordinate it*, where
+    /// a citizen musters none unless a garrison does.
+    ///
+    /// **`P-425` also took *military* out of the word.** There were two units in the release
+    /// and neither was declared military, so the qualifier named a class with no members -
+    /// which is `C-94`, resolved in the release's favour: only a garrison coordinates
+    /// citizens, and a unit coordinates nobody but itself.
     ///
     /// **What counts as brought is *able to arrive*** - adjacent, with a cell to spend. A
     /// unit two territories away is not at the battle, and one with no fuel cannot cross.
@@ -576,9 +581,9 @@ impl Game {
             return Err(Rejection::CannotClaimOcean(territory));
         }
         // **`P-275`: taking uses the organised force *brought*, not the force of the one
-        // unit consumed.** *A military unit is organised force in itself, so several brought
-        // to one place sum. Taking a territory uses the organised force brought to it, and
-        // several units may take together.*
+        // unit consumed.** *A unit is organised force in itself*, and *several units brought
+        // to one place sum their force. Taking a territory uses the organised force brought
+        // to it, and several units may take together.*
         //
         // Two numbers, and they are different: `brought` is what the attack presents, and
         // the unit at `unit_at` is the one the recipe consumes and whose force the garrison
@@ -598,18 +603,20 @@ impl Game {
             if place.has_room_for_extractor(*resource) {
                 place.add_extractor(*resource);
             }
-            // **`P-261`: a food store and a metal store, and no energy store.** Deliberate -
-            // *the three resources are supposed to feel different*, and energy is the one a
-            // player must build somewhere to keep before any of it survives a turn. It is
-            // also what makes an Ark expensive in a way a Yard is not: twelve energy, on
-            // ground that starts with nowhere to put a single unit of it.
-            //
-            // The same two resources as the extractors, so a founding leaves each of them
-            // somewhere to produce into. An extractor holds nothing - `P-260` - so a
-            // founding leaving a mine and no metal store would produce metal it could not
-            // keep past the turn it was dug.
-            place.add_store(*resource);
         }
+        // **`P-427` deleted the two `produce 1 store` rows from both founding recipes**, and
+        // this followed them. A founded territory now has an extractor for food and one for
+        // metal and **nowhere to put what they produce** until a store is built, at 1 labor
+        // and 1 metal each.
+        //
+        // **The reason is metal, not stores.** A store's binding is 1 metal, so founding
+        // created 5 metal of binding while consuming 3 - it was a metal source, and
+        // `spec/invariants.md` licenses only the planet, the star and time. Both recipes now
+        // consume 3 and create 3.
+        //
+        // **`P-261`'s rule is not repealed by this and is now about `build store`.** *The
+        // three resources are supposed to feel different*, and energy was the one a player
+        // had to build for before any of it survived a turn. All three are that now.
         Ok(())
     }
 
@@ -1583,13 +1590,24 @@ mod tests {
     #[test]
     fn food_expires_at_the_end_of_a_turn_and_metal_carries() {
         let mut game = founded();
-        // **A founding leaves a metal store** - `P-261` - so five metal has somewhere to be.
+        // **The store is built here because `P-427` stopped founding from leaving one.**
         // Before `P-258` a territory kept twenty of everything by declaration and this
-        // fixture needed nothing; now what it keeps is what its stores hold.
+        // fixture needed nothing; then founding left a food store and a metal store and it
+        // needed nothing again; now what it keeps is what its stores hold and a founding
+        // leaves none, because two `produce 1 store` rows made founding a metal source.
+        //
+        // **The subject is unchanged** - food expires and metal carries - so the store is
+        // set up rather than asserted, and the assertion below is about the expiry.
+        assert_eq!(
+            game.territories[0].capacity(Resource::Metal),
+            0,
+            "a founding leaves no store since `P-427`"
+        );
+        game.territories[0].add_store(Resource::Metal);
         assert_eq!(
             game.territories[0].capacity(Resource::Metal),
             10,
-            "one store from founding, holding ten"
+            "one store, holding ten"
         );
         game.territories[0].add(Resource::Metal, 5);
         game.territories[0].add(Resource::Food, 9);
@@ -1609,8 +1627,10 @@ mod tests {
     #[test]
     fn what_is_over_the_bound_is_lost_when_the_turn_ends() {
         let mut game = founded();
-        // One store comes with the founding; this is the second, so the bound is twenty and
-        // the arithmetic below is the one this test was written for.
+        // **Both stores are built here since `P-427`**; one used to come with the founding.
+        // Twenty is the bound the arithmetic below was written for, so the fixture makes it
+        // rather than the release handing it over.
+        game.territories[0].add_store(Resource::Metal);
         game.territories[0].add_store(Resource::Metal);
         assert_eq!(game.territories[0].capacity(Resource::Metal), 20);
         game.territories[0].add(Resource::Metal, 25);

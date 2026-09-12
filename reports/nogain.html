@@ -14,7 +14,8 @@
 <p><strong>Generated. Do not edit.</strong> Read out of the release's <em>Recipes</em> table by <code>crates/game-console/src/nogain.rs</code>.</p>
 <p><code>spec/invariants.md</code> says there is a weighting of the kinds under which no sequence of rules ends holding more than it began with, and that <strong>whether this holds is decided mechanically, from the rules alone</strong>. This is that decision. <code>S-93</code>.</p>
 <p><strong>Nothing here is declared.</strong> The weighting below is solved for, not read from anywhere: the only inputs are the release's rules. So a number that looks wrong is a fact about the rules rather than about somebody's judgement of them - and one that is sound but says something you would reject is visible for that reason.</p>
-<p><strong>What this does not decide, because the title reads wider than the check.</strong> The invariant is over the <strong>kinds</strong>, and the places below are kinds and the counts a thing carries. <strong>A derived trait is not among them</strong> - <code>metal in it</code> is <em>its binding plus the metal in its parts</em>, it appears in no recipe row, and nothing here reads it. So the metal bound up in what a recipe builds is invisible to this page, and a green run is not evidence that the release's <em>conserved</em> holds of it. <code>P-426</code> and <code>P-427</code> are where that question is being asked.</p>
+<p><strong>What this does not decide, because the title reads wider than the check.</strong> The invariant is over the <strong>kinds</strong>, and the places below are kinds and the counts a thing carries. <strong>A derived trait is not among them</strong> - <code>metal in it</code> is <em>its binding plus the metal in its parts</em>, it appears in no recipe row, and nothing here reads it. So the metal bound up in what a recipe builds is invisible to this page, and a green run is not evidence about metal being <em>conserved once above ground</em>.</p>
+<p><strong><code>P-426</code> and <code>P-427</code> have since decided that question elsewhere</strong>, which is what the gap looks like when somebody closes it by hand: the Kinds row now says metal is <em>drawn from the planet, and conserved once above ground</em>, reconciling it with the planet being an endless source, and the four <code>produce 1 store</code> rows are gone from both founding recipes - which were creating five metal of binding while consuming three. <strong>Both were found by re-deriving from the Binding column, not here.</strong></p>
 <p><strong>50 rules</strong>, ground from <strong>31</strong> blocks of recipe rows: a family becomes its members, a density becomes its cases. <strong>24 of them draw on a source</strong> - the planet, the star or time - and a source is a place they take from rather than an exemption from the arithmetic. That is what keeps them in the check instead of out of it.</p>
 <h2 id="a-weighting-exists-so-nothing-comes-back-round-with-more">A weighting exists, so nothing comes back round with more</h2>
 <p>Every rule is non-increasing under the weighting below, so any sequence of them is too - a cycle included. <strong>It may end with less</strong>, which is disorder and is meant.</p>
@@ -23,13 +24,13 @@
 <tr><th>Place</th><th>Weight</th><th>What it is</th></tr>
 </thead>
 <tbody>
-<tr><td>ark</td><td>21</td><td>a thing</td></tr>
-<tr><td>pioneer</td><td>21</td><td>a thing</td></tr>
 <tr><td>ark, defending</td><td>18</td><td>a count, spent by acting</td></tr>
 <tr><td>citizen, laboring</td><td>18</td><td>a count, spent by acting</td></tr>
 <tr><td>extractor, working</td><td>18</td><td>a count, spent by acting</td></tr>
 <tr><td>pioneer, defending</td><td>18</td><td>a count, spent by acting</td></tr>
 <tr><td>time</td><td>18</td><td>an endless well</td></tr>
+<tr><td>ark</td><td>15</td><td>a thing</td></tr>
+<tr><td>pioneer</td><td>15</td><td>a thing</td></tr>
 <tr><td>citizen, defending</td><td>9</td><td>a count, spent by acting</td></tr>
 <tr><td>force</td><td>9</td><td>a thing</td></tr>
 <tr><td>food</td><td>4</td><td>a thing</td></tr>
@@ -60,15 +61,15 @@
 <tr><th>Rule</th><th>Nets</th><th>Worth</th></tr>
 </thead>
 <tbody>
-<tr><td>deploy ark</td><td>+1 garrison · +2 citizen · +2 extractor · +2 store · -1 ark</td><td>0</td></tr>
+<tr><td>deploy ark</td><td>+1 garrison · +2 citizen · +2 extractor · -1 ark</td><td>0</td></tr>
 <tr><td>move (ark moving)</td><td>-1 ark, moving · -1 energy</td><td>-6</td></tr>
 <tr><td>move (pioneer moving)</td><td>-1 energy · -1 pioneer, moving</td><td>-6</td></tr>
-<tr><td>found by land</td><td>+1 garrison · +2 citizen · +2 extractor · +2 store · -1 pioneer</td><td>0</td></tr>
+<tr><td>found by land</td><td>+1 garrison · +2 citizen · +2 extractor · -1 pioneer</td><td>0</td></tr>
 <tr><td>build extractor</td><td>+1 extractor · -1 labor · -1 metal</td><td>-3</td></tr>
 <tr><td>build store</td><td>+1 store · -1 labor · -1 metal</td><td>-3</td></tr>
 <tr><td>build yard</td><td>+1 yard · -1 labor · -15 metal</td><td>-45</td></tr>
-<tr><td>produce pioneer</td><td>+1 pioneer · -2 citizen · -3 metal · -6 energy</td><td>-12</td></tr>
-<tr><td>launch ark</td><td>+1 ark · -12 energy · -2 citizen · -3 metal</td><td>-30</td></tr>
+<tr><td>produce pioneer</td><td>+1 pioneer · -2 citizen · -3 metal · -6 energy</td><td>-18</td></tr>
+<tr><td>launch ark</td><td>+1 ark · -12 energy · -2 citizen · -3 metal</td><td>-36</td></tr>
 <tr><td>create labor (citizen laboring)</td><td>+1 labor · -1 citizen, laboring</td><td>-15</td></tr>
 <tr><td>work (energy x2)</td><td>+2 energy · -1 extractor, working · -1 labor · -1 the star</td><td>-18</td></tr>
 <tr><td>work (energy x4)</td><td>+4 energy · -1 extractor, working · -1 labor · -1 the star</td><td>-12</td></tr>

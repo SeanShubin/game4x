@@ -50,7 +50,7 @@ this is the same tree with nothing collapsed, so that a change to it is one line
     - {deposit density:3 resource:food total-capacity:3}
     - {deposit density:3 resource:metal total-capacity:1}
     - {deposit density:8 resource:energy total-capacity:6}
-  - {territory biome:grassland id:1 nature:1} - garrison&nbsp;1/1 yard&nbsp;1/1 extractor&nbsp;resource:food&nbsp;3/3 store&nbsp;resource:food&nbsp;2/3 food&nbsp;0/20 extractor&nbsp;resource:metal&nbsp;3/3 store&nbsp;resource:metal&nbsp;3/3 metal&nbsp;10/30 extractor&nbsp;resource:energy&nbsp;3/3 store&nbsp;resource:energy&nbsp;2/3 energy&nbsp;12/20
+  - {territory biome:grassland id:1 nature:1} - garrison&nbsp;1/1 yard&nbsp;1/1 extractor&nbsp;resource:food&nbsp;3/3 store&nbsp;resource:food&nbsp;1/3 food&nbsp;0/10 extractor&nbsp;resource:metal&nbsp;3/3 store&nbsp;resource:metal&nbsp;2/3 metal&nbsp;0/20 extractor&nbsp;resource:energy&nbsp;3/3 store&nbsp;resource:energy&nbsp;2/3 energy&nbsp;12/20
     - {citizen bearing:1 defending:1 laboring:1} x 8
     - {deposit density:4 resource:energy total-capacity:3}
     - {deposit density:4 resource:food total-capacity:3}
@@ -60,16 +60,15 @@ this is the same tree with nothing collapsed, so that a change to it is one line
     - {extractor resource:food working:1} x 3
     - {extractor resource:metal working:1} x 3
     - {garrison force:0}
-    - {metal} x 10
     - {store resource:energy} x 2
-    - {store resource:food} x 2
-    - {store resource:metal} x 3
+    - {store resource:food}
+    - {store resource:metal} x 2
     - {yard}
   - {territory biome:grassland id:11 nature:1} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/5 store&nbsp;resource:food&nbsp;0/5 extractor&nbsp;resource:metal&nbsp;0/5 store&nbsp;resource:metal&nbsp;0/5 extractor&nbsp;resource:energy&nbsp;0/5 store&nbsp;resource:energy&nbsp;0/5
     - {deposit density:6 resource:energy total-capacity:5}
     - {deposit density:6 resource:food total-capacity:5}
     - {deposit density:6 resource:metal total-capacity:5}
-  - {territory biome:grassland id:2 nature:1} - garrison&nbsp;1/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;1/2 store&nbsp;resource:food&nbsp;1/2 food&nbsp;0/10 extractor&nbsp;resource:metal&nbsp;1/2 store&nbsp;resource:metal&nbsp;1/2 metal&nbsp;0/10 extractor&nbsp;resource:energy&nbsp;0/2 store&nbsp;resource:energy&nbsp;0/2
+  - {territory biome:grassland id:2 nature:1} - garrison&nbsp;1/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;1/2 store&nbsp;resource:food&nbsp;0/2 extractor&nbsp;resource:metal&nbsp;1/2 store&nbsp;resource:metal&nbsp;0/2 extractor&nbsp;resource:energy&nbsp;0/2 store&nbsp;resource:energy&nbsp;0/2
     - {citizen bearing:1 defending:1 laboring:1} x 6
     - {deposit density:4 resource:energy total-capacity:2}
     - {deposit density:4 resource:metal total-capacity:2}
@@ -77,8 +76,6 @@ this is the same tree with nothing collapsed, so that a change to it is one line
     - {extractor resource:food working:1}
     - {extractor resource:metal working:1}
     - {garrison force:0}
-    - {store resource:food}
-    - {store resource:metal}
   - {territory biome:grassland id:3 nature:1} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/6 store&nbsp;resource:food&nbsp;0/6 extractor&nbsp;resource:metal&nbsp;0/2 store&nbsp;resource:metal&nbsp;0/2 extractor&nbsp;resource:energy&nbsp;0/2 store&nbsp;resource:energy&nbsp;0/2
     - {deposit density:2 resource:food total-capacity:6}
     - {deposit density:4 resource:energy total-capacity:2}
@@ -110,4 +107,4 @@ this is the same tree with nothing collapsed, so that a change to it is one line
     - {deposit density:3 resource:food total-capacity:2}
     - {deposit density:8 resource:metal total-capacity:6}
 
-106 things, counting every container and everything in one.
+103 things, counting every container and everything in one.

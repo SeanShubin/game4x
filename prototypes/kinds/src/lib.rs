@@ -102,7 +102,12 @@ impl Kind {
             Kind::Ark => "carries a landing, and can invade from orbit",
             Kind::Pioneer => "founds a territory",
             Kind::Food => "eaten by citizens; expires",
-            Kind::Metal => "what things are built from; conserved",
+            // **`P-426` reconciled this with the planet being a source.** It read
+            // *conserved*, unqualified, while `spec/invariants.md` makes the planet's
+            // material endless and `work` mines metal out of it every firing.
+            Kind::Metal => {
+                "what things are built from; drawn from the planet, and conserved once above ground"
+            }
             Kind::Energy => "what moves things; neither conserved nor expiring",
             Kind::Labor => "what working a machine takes; a citizen provides it each turn",
             Kind::Territory => concat!(
@@ -871,8 +876,6 @@ pub const RECIPES: &[Recipe] = &[
             just(Produce, 2, Noun::Of(Citizen)),
             traited(Produce, 1, Noun::Of(Extractor), &FOR_FOOD),
             traited(Produce, 1, Noun::Of(Extractor), &FOR_METAL),
-            traited(Produce, 1, Noun::Of(Store), &FOR_FOOD),
-            traited(Produce, 1, Noun::Of(Store), &FOR_METAL),
         ],
     },
     Recipe {
@@ -904,8 +907,6 @@ pub const RECIPES: &[Recipe] = &[
             just(Produce, 2, Noun::Of(Citizen)),
             traited(Produce, 1, Noun::Of(Extractor), &FOR_FOOD),
             traited(Produce, 1, Noun::Of(Extractor), &FOR_METAL),
-            traited(Produce, 1, Noun::Of(Store), &FOR_FOOD),
-            traited(Produce, 1, Noun::Of(Store), &FOR_METAL),
         ],
     },
     Recipe {

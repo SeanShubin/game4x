@@ -129,10 +129,50 @@ question is older than this item and is Sean's.
 
 ---
 
+**Answered 2026-09-12 by `P-422`, and the answer is that `R-6` now holds.** This item said
+`R-6` was not built and measured the gap. `P-422` changed the target rather than the scenario:
+the *vetted when* no longer asks for a fully exploited planet.
+
+**Every clause of the new one, measured the same way the old one was.**
+
+- **Takes a first territory from orbit** - `{deploy-ark territory:1}`, `play.4x:19`
+- **Takes a second by land** - `{found-by-land territory:2}`, `play.4x:154`
+- **Launches an Ark** - `{launch-ark territory:1}`, `play.4x:164`
+- **Every recipe in the release fires at least once while it runs** - all **21**, held by
+  `every_recipe_the_release_declares_fires_while_the_scenario_runs`
+- **It does not win** - `has_won` false, and `spec/control.md` gives victory only from a fully
+  exploited planet, which this is not
+
+**The fourth clause is the one that needed building and it is the one `R-6` says how to
+measure**: *by what fired rather than by what the file says*. The check reads `fired::ran`,
+which flattens the run and reports what each command actually fired; nothing in it reads the
+scenario's text. **`CLAUDE.md` records why that wording is there** - a coverage check asking
+whether a line *begins with* each recipe's command was satisfied for `move` by the line that
+founds, nine of nine, green for weeks, and `move` had never fired.
+
+**Two tests already covered the halves and neither asked whether the halves are the whole.**
+Ten player recipes and eleven world ones, in separate populations - so a recipe whose Owner
+cell said anything else would be in neither, both would stay green, and the clause would be
+false with nothing saying so. The new check counts the declared set entire, asserts the two
+owners partition it, and **poisons**: dropping `muster` from what fires reports
+`["muster"]` rather than passing.
+
+**The numbers in `C-95` are unchanged and their meaning is inverted.** Twelve claimable, two
+founded, none at maximum output was the distance from done; it is the shape of done now, and
+`fully_exploited.rs` says so rather than being deleted for having been about a superseded
+rule. **Two founded of twelve is deliberate** - a smaller target was one of the three ways
+this item's question was put to Sean, and it is the one he took.
+
+**This lane does not mark a capability `built`.** The evidence is here and `R-6` is the
+specification lane's row to move.
+
+---
+
 ### C-94 - A unit coordinates citizens in `spec/control.md` and does not in the release's `muster`
 
-**to** spec · **status** answered · **raised** 2026-09-11 · **answered** 2026-09-11 by `P-420`,
-which carries it to Sean as two open questions · **cited** `52657f2` · **source** building `P-414`'s
+**to** spec · **status** answered · **raised** 2026-09-11 · **answered** 2026-09-11 by `P-425`,
+which replaced the section the disagreement lived in · **cited** `52657f2`, `1bde1d9` · **source**
+building `P-414`'s
 `muster` and `stand` into the model, and finding the two documents disagree about a territory with a
 unit on it and no garrison
 
@@ -141,6 +181,14 @@ before accepting it: `military` appears **twice in `spec/control.md` and nowhere
 over the 20 files of `spec/` and `releases/`, and `army`, `soldier`, `warrior` and `troop` are 0.
 `spec/unit-types.md` declares exactly two units, Ark and Pioneer, and calls neither military.
 Re-counted here rather than taken on report, and both counts hold.
+
+**Answered by `P-425` rather than by `P-420`, which was withdrawn.** This item cited `P-420`
+until 2026-09-12 and that id names something nobody decided to drop - `P-425` is what carried
+out its instruction. **`spec/control.md` now settles it in the release's favour**: a citizen
+*musters no force unless something coordinates it*, a garrison is what coordinates, and a unit
+*is organised force in itself* and *musters its own force needing nothing to coordinate it* -
+so a unit coordinates nobody, and `muster` requiring a garrison was never narrower than the
+spec. **Nothing in the code changed**: `held_force` and `force_in` were built this way.
 
 **So this is not a release narrower than the specification**, which is what the last paragraph
 below says and it is wrong. The spec's alternative coordinator has a rule and no instance, so the

@@ -22,15 +22,12 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 - {orbit id:1} {ark defending:1 id:1 moving:1} -> 1
 
-**new** (7)
+**new** (4)
 
 - {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} -> 4
 - {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} -> 1
 - {territory biome:grassland id:1 nature:1} {extractor resource:metal working:1} -> 1
 - {territory biome:grassland id:1 nature:1} {garrison force:0} -> 1
-- {territory biome:grassland id:1 nature:1} {metal} -> 4
-- {territory biome:grassland id:1 nature:1} {store resource:food} -> 1
-- {territory biome:grassland id:1 nature:1} {store resource:metal} -> 1
 
 ## what is there now
 
@@ -109,7 +106,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | territory | resource | amount |
 | --------- | -------- | ------ |
 | 1         | food     | 0      |
-| 1         | metal    | 4      |
+| 1         | metal    | 0      |
 | 1         | energy   | 0      |
 | 2         | food     | 0      |
 | 2         | metal    | 0      |
@@ -277,7 +274,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | citizen   | 4       |
 | labor     | 0       |
 | food      | 0       |
-| metal     | 4       |
+| metal     | 0       |
 | energy    | 0       |
 | extractor | 2       |
 | garrison  | 1       |
@@ -310,11 +307,13 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 ## what changed
 
-**changed** (3)
+**new** (1)
+
+- {territory biome:grassland id:1 nature:1} {store resource:food} -> 1
+
+**changed** (1)
 
 - {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} · 1 → 2
-- {territory biome:grassland id:1 nature:1} {metal} · 4 → 6
-- {territory biome:grassland id:1 nature:1} {store resource:food} · 1 → 2
 
 ## what is there now
 
@@ -393,7 +392,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | territory | resource | amount |
 | --------- | -------- | ------ |
 | 1         | food     | 0      |
-| 1         | metal    | 6      |
+| 1         | metal    | 0      |
 | 1         | energy   | 0      |
 | 2         | food     | 0      |
 | 2         | metal    | 0      |
@@ -562,7 +561,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | citizen   | 4       |
 | labor     | 0       |
 | food      | 0       |
-| metal     | 6       |
+| metal     | 0       |
 | energy    | 0       |
 | extractor | 3       |
 | garrison  | 1       |
@@ -595,11 +594,14 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 ## what changed
 
-**changed** (3)
+**new** (2)
+
+- {territory biome:grassland id:1 nature:1} {metal} -> 3
+- {territory biome:grassland id:1 nature:1} {store resource:metal} -> 1
+
+**changed** (1)
 
 - {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} · 4 → 8
-- {territory biome:grassland id:1 nature:1} {metal} · 6 → 9
-- {territory biome:grassland id:1 nature:1} {store resource:metal} · 1 → 2
 
 ## what is there now
 
@@ -678,7 +680,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | territory | resource | amount |
 | --------- | -------- | ------ |
 | 1         | food     | 0      |
-| 1         | metal    | 9      |
+| 1         | metal    | 3      |
 | 1         | energy   | 0      |
 | 2         | food     | 0      |
 | 2         | metal    | 0      |
@@ -847,7 +849,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | citizen   | 8       |
 | labor     | 0       |
 | food      | 0       |
-| metal     | 9       |
+| metal     | 3       |
 | energy    | 0       |
 | extractor | 3       |
 | garrison  | 1       |
@@ -973,7 +975,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | territory | resource | amount |
 | --------- | -------- | ------ |
 | 1         | food     | 0      |
-| 1         | metal    | 9      |
+| 1         | metal    | 3      |
 | 1         | energy   | 0      |
 | 2         | food     | 0      |
 | 2         | metal    | 0      |
@@ -1145,7 +1147,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | citizen   | 8       |
 | labor     | 0       |
 | food      | 0       |
-| metal     | 9       |
+| metal     | 3       |
 | energy    | 0       |
 | extractor | 6       |
 | garrison  | 1       |
@@ -1195,7 +1197,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 - {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} · 8 → 12
 - {territory biome:grassland id:1 nature:1} {extractor resource:energy working:1} · 1 → 2
 - {territory biome:grassland id:1 nature:1} {extractor resource:metal working:1} · 2 → 3
-- {territory biome:grassland id:1 nature:1} {metal} · 9 → 15
+- {territory biome:grassland id:1 nature:1} {metal} · 3 → 9
 
 ## what is there now
 
@@ -1274,7 +1276,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | territory | resource | amount |
 | --------- | -------- | ------ |
 | 1         | food     | 0      |
-| 1         | metal    | 15     |
+| 1         | metal    | 9      |
 | 1         | energy   | 4      |
 | 2         | food     | 0      |
 | 2         | metal    | 0      |
@@ -1448,7 +1450,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | citizen   | 12      |
 | labor     | 0       |
 | food      | 0       |
-| metal     | 15      |
+| metal     | 9       |
 | energy    | 4       |
 | extractor | 8       |
 | garrison  | 1       |
@@ -1497,7 +1499,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 - {territory biome:grassland id:1 nature:1} {energy} · 4 → 12
 - {territory biome:grassland id:1 nature:1} {extractor resource:energy working:1} · 2 → 3
-- {territory biome:grassland id:1 nature:1} {metal} · 15 → 20
+- {territory biome:grassland id:1 nature:1} {metal} · 9 → 10
 - {territory biome:grassland id:1 nature:1} {store resource:energy} · 1 → 2
 
 ## what is there now
@@ -1577,7 +1579,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | territory | resource | amount |
 | --------- | -------- | ------ |
 | 1         | food     | 0      |
-| 1         | metal    | 20     |
+| 1         | metal    | 10     |
 | 1         | energy   | 12     |
 | 2         | food     | 0      |
 | 2         | metal    | 0      |
@@ -1752,7 +1754,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | citizen   | 12      |
 | labor     | 0       |
 | food      | 0       |
-| metal     | 20      |
+| metal     | 10      |
 | energy    | 12      |
 | extractor | 9       |
 | garrison  | 1       |
@@ -1806,8 +1808,8 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 **changed** (3)
 
 - {territory biome:grassland id:1 nature:1} {energy} · 12 → 18
-- {territory biome:grassland id:1 nature:1} {metal} · 20 → 28
-- {territory biome:grassland id:1 nature:1} {store resource:metal} · 2 → 3
+- {territory biome:grassland id:1 nature:1} {metal} · 10 → 18
+- {territory biome:grassland id:1 nature:1} {store resource:metal} · 1 → 2
 
 ## what is there now
 
@@ -1886,7 +1888,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | territory | resource | amount |
 | --------- | -------- | ------ |
 | 1         | food     | 0      |
-| 1         | metal    | 28     |
+| 1         | metal    | 18     |
 | 1         | energy   | 18     |
 | 2         | food     | 0      |
 | 2         | metal    | 0      |
@@ -2062,7 +2064,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | citizen   | 12      |
 | labor     | 0       |
 | food      | 0       |
-| metal     | 28      |
+| metal     | 18      |
 | energy    | 18      |
 | extractor | 9       |
 | garrison  | 1       |
@@ -2110,7 +2112,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 **changed** (2)
 
 - {territory biome:grassland id:1 nature:1} {energy} · 18 → 20
-- {territory biome:grassland id:1 nature:1} {metal} · 28 → 13
+- {territory biome:grassland id:1 nature:1} {metal} · 18 → 3
 
 ## what is there now
 
@@ -2189,7 +2191,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | territory | resource | amount |
 | --------- | -------- | ------ |
 | 1         | food     | 0      |
-| 1         | metal    | 13     |
+| 1         | metal    | 3      |
 | 1         | energy   | 20     |
 | 2         | food     | 0      |
 | 2         | metal    | 0      |
@@ -2365,7 +2367,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | citizen   | 12      |
 | labor     | 0       |
 | food      | 0       |
-| metal     | 13      |
+| metal     | 3       |
 | energy    | 20      |
 | extractor | 9       |
 | garrison  | 1       |
@@ -2403,23 +2405,21 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 ## what changed
 
-**gone** (1)
+**gone** (2)
 
+- {territory biome:grassland id:1 nature:1} {metal} -> 3
 - {territory biome:grassland id:2 nature:1} {pioneer defending:1 id:1 moving:1} -> 1
 
-**new** (6)
+**new** (4)
 
 - {territory biome:grassland id:2 nature:1} {citizen bearing:1 defending:1 laboring:1} -> 4
 - {territory biome:grassland id:2 nature:1} {extractor resource:food working:1} -> 1
 - {territory biome:grassland id:2 nature:1} {extractor resource:metal working:1} -> 1
 - {territory biome:grassland id:2 nature:1} {garrison force:0} -> 1
-- {territory biome:grassland id:2 nature:1} {store resource:food} -> 1
-- {territory biome:grassland id:2 nature:1} {store resource:metal} -> 1
 
-**changed** (2)
+**changed** (1)
 
 - {territory biome:grassland id:1 nature:1} {energy} · 20 → 12
-- {territory biome:grassland id:1 nature:1} {metal} · 13 → 10
 
 ## what is there now
 
@@ -2498,7 +2498,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | territory | resource | amount |
 | --------- | -------- | ------ |
 | 1         | food     | 0      |
-| 1         | metal    | 10     |
+| 1         | metal    | 0      |
 | 1         | energy   | 12     |
 | 2         | food     | 0      |
 | 2         | metal    | 0      |
@@ -2676,7 +2676,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | citizen   | 16      |
 | labor     | 0       |
 | food      | 0       |
-| metal     | 10      |
+| metal     | 0       |
 | energy    | 12      |
 | extractor | 11      |
 | garrison  | 2       |
@@ -2789,7 +2789,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | territory | resource | amount |
 | --------- | -------- | ------ |
 | 1         | food     | 0      |
-| 1         | metal    | 10     |
+| 1         | metal    | 0      |
 | 1         | energy   | 12     |
 | 2         | food     | 0      |
 | 2         | metal    | 0      |
@@ -2967,7 +2967,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | citizen   | 14      |
 | labor     | 0       |
 | food      | 0       |
-| metal     | 10      |
+| metal     | 0       |
 | energy    | 12      |
 | extractor | 11      |
 | garrison  | 2       |

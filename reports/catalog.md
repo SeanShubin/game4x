@@ -53,7 +53,7 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 **Traits** `keeps`, `resource`
 
-**Named by** `age consume`, `age produce`, `build store produce`, `deploy ark produce`, `found by land produce`, `spoil consume`, `stow produce`
+**Named by** `age consume`, `age produce`, `build store produce`, `spoil consume`, `stow produce`
 
 ### `s-6` - ark
 
@@ -254,10 +254,6 @@ built to hold one resource, and holds nothing else.
 
 **In recipes**
 
-- `deploy ark` produces 1, food
-- `deploy ark` produces 1, metal
-- `found by land` produces 1, food
-- `found by land` produces 1, metal
 - `build store` produces 1, `$resource`
 - `age` consumes 1 (as a thing), keeps at least 1
 - `age` produces 1 (as a thing), keeps one less
@@ -348,7 +344,7 @@ eaten by citizens; expires.
 
 ## metal
 
-what things are built from; conserved.
+what things are built from; drawn from the planet, and conserved once above ground.
 
 **In families** thing, resource
 

@@ -32,7 +32,7 @@
 <p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>build yard produce</code>, <code>launch ark require</code>, <code>spoil consume</code></p>
 <h3 id="s-5-store"><code>s-5</code> - store</h3>
 <p><strong>Traits</strong> <code>keeps</code>, <code>resource</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>build store produce</code>, <code>deploy ark produce</code>, <code>found by land produce</code>, <code>spoil consume</code>, <code>stow produce</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>build store produce</code>, <code>spoil consume</code>, <code>stow produce</code></p>
 <h3 id="s-6-ark"><code>s-6</code> - ark</h3>
 <p><strong>Traits</strong> <code>force</code>, <code>fuel</code>, <code>keeps</code>, <code>moving</code></p>
 <p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>deploy ark consume</code>, <code>launch ark produce</code>, <code>move put</code>, <code>move require</code>, <code>refresh put</code>, <code>spoil consume</code>, <code>stand put</code>, <code>stand require</code></p>
@@ -160,10 +160,6 @@
 <p><strong>Holds</strong> the resource it was built for, up to 10 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
-<li><code>deploy ark</code> produces 1, food</li>
-<li><code>deploy ark</code> produces 1, metal</li>
-<li><code>found by land</code> produces 1, food</li>
-<li><code>found by land</code> produces 1, metal</li>
 <li><code>build store</code> produces 1, <code>$resource</code></li>
 <li><code>age</code> consumes 1 (as a thing), keeps at least 1</li>
 <li><code>age</code> produces 1 (as a thing), keeps one less</li>
@@ -231,7 +227,7 @@
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
 </ul>
 <h2 id="metal">metal</h2>
-<p>what things are built from; conserved.</p>
+<p>what things are built from; drawn from the planet, and conserved once above ground.</p>
 <p><strong>In families</strong> thing, resource</p>
 <p><strong>Traits of it</strong> <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-9</code></p>

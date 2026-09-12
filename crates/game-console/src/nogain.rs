@@ -1047,8 +1047,13 @@ pub fn markdown(document: &str) -> String {
          thing carries. **A derived trait is not among them** - `metal in it` is *its binding \
          plus the metal in its parts*, it appears in no recipe row, and nothing here reads \
          it. So the metal bound up in what a recipe builds is invisible to this page, and a \
-         green run is not evidence that the release's *conserved* holds of it. `P-426` and \
-         `P-427` are where that question is being asked.\n\n",
+         green run is not evidence about metal being *conserved once above ground*.\n\n\
+         **`P-426` and `P-427` have since decided that question elsewhere**, which is what \
+         the gap looks like when somebody closes it by hand: the Kinds row now says metal is \
+         *drawn from the planet, and conserved once above ground*, reconciling it with the \
+         planet being an endless source, and the four `produce 1 store` rows are gone from \
+         both founding recipes - which were creating five metal of binding while consuming \
+         three. **Both were found by re-deriving from the Binding column, not here.**\n\n",
     );
 
     let sources: Vec<&Rule> = rules
