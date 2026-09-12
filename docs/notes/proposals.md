@@ -105,9 +105,36 @@ what makes the choice a decision rather than a habit.
 with the rest of the vocabulary rather than here - **a list of one is data, and this is the
 relationship.**
 
-**And whether `thing` should be a family at all is still open.** If *any kind* turns out not to be a
-family, this sentence describes a case with no instances and comes out. **It costs nothing
-meanwhile**, and `P-445` has the argument.
+## And whether `thing` should be a family at all is still open, which is two files apart
+
+**If it is a family**, `families.4x` has eight lines and the recipes are unchanged:
+
+```
+{family name:thing rule:every-kind}
+
+| **age** | world | require | 1 | thing | keeps at least 1 |
+```
+
+**If it is not**, `families.4x` has seven, and the three rows that name `thing` say *any kind* by
+leaving the cell empty:
+
+```
+(no line for thing)
+
+| **age** | world | require | 1 |  | keeps at least 1 |
+```
+
+**Both work, and they differ in where *any kind* is written down** - as a family with a rule, or as
+an empty cell the notation gives a meaning to.
+
+**This sentence describes the first.** If the second wins it has no instances left and comes out -
+so **approving it now costs nothing if that question later goes the other way**, which is why it is
+not held.
+
+**And the three rows are already qualified**, which is what makes the second possible at all: `age`
+requires *`keeps` at least 1* and `spoil` consumes *`keeps` 0*. **The trait does the selecting and
+`thing` only says the kind is not restricted.**
+
 
 ### P-444 - the first data file, and the directory it goes in
 
@@ -226,10 +253,28 @@ eight tables.
 that is named costs less than a uniformity that is false.** **Worth reading before the next cell**,
 because it is the rule this lane will be applying to them.
 
-**One thing still open and it is smaller than it sounds.** Whether `thing` should be a family at all -
-`unit` and `resource` are sets somebody chose, and `thing` is the absence of a restriction. **Three
-of your recipe rows name it**, so it cannot simply go. **D costs nothing if the answer is yes**, so
-do not wait on it.
+## One thing still open, and it is two files apart rather than vague
+
+**If `thing` is a family**, you write eight lines and your recipe rows do not change:
+
+```
+{family name:thing rule:every-kind}          | **age** | ... | 1 | thing | keeps at least 1 |
+```
+
+**If it is not**, you write seven, and the three rows say *any kind* by leaving the Kind cell empty:
+
+```
+(no line for thing)                          | **age** | ... | 1 |  | keeps at least 1 |
+```
+
+**The three rows are already qualified by a trait**, which is what makes the second possible: `age`
+requires *`keeps` at least 1* and puts *`keeps` one less*, `spoil` consumes *`keeps` 0*. **The trait
+does the selecting; `thing` only says the kind is unrestricted.**
+
+**Build the first.** It is what `P-447` offers and what Sean chose, and **if the second ever wins,
+what you lose is one line from `families.4x` and one word from three cells** - so nothing you write
+now is wasted either way.
+
 
 
 
