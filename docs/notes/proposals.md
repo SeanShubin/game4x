@@ -64,7 +64,7 @@ Two limits Claude holds itself to:
 
 ### P-459 - a number beside a stored trait's name is its maximum
 
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** answered, by you, 2026-09-12 · **shape** text and rows · **asks** approval · **into** `spec/console.md` -> The language, and `releases/first-release.md` -> Units and structures
+**to** sean · **status** open · **cited** `544ca72`, `b0ecbe7` · **raised** 2026-09-12 · **kind** answered, by you, 2026-09-12 · **shape** text and rows · **asks** approval · **into** `spec/console.md` -> The language, and `releases/first-release.md` -> Units and structures
 
 **You took `B2`, so `kept` stays three and a kind's line carries the bound.** A citizen reads
 `{kind name:citizen bearing:1 defending:1 laboring:1}`, and `refresh` has a number to read.

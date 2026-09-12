@@ -20,3 +20,5 @@ Every item carries the same four fields as a proposal, and says `asks a decision
 here without first becoming a proposal.
 
 ## Open
+
+*Nothing is undecided. Every question filed here has been answered.*

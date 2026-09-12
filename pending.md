@@ -25,7 +25,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-459** - `544ca72` P-459: Sean's reading rules out C, which this lane recommended · still open in `docs/notes/proposals.md`
+- **P-459** - `a18e94b` P-456 and P-457 re-worked against the invariants, and P-459 filed · still open in `docs/notes/proposals.md`
 - **P-456** - `cd392c2` P-456 records the commit that cited it while leaving it open · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
