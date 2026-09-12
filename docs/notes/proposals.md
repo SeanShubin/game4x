@@ -93,17 +93,40 @@ must hold; a normalized relational model is the shape in which it holds by const
 > - **The notation is a text form of that model, written for convenience.** It is how a person reads
 >   and writes the relations; **it is not a second model**, and anything said in it is said about a
 >   relation.
-> - **How the data is actually held is an implementation detail.** It is chosen for production, and
->   **it is exposed only for debugging**.
-> - **Everything above the store behaves as though the logical model is all there is.** A rule, a
->   recipe, a command and a report each read relations; none of them reads a layout.
+> - **How the data is actually held is an implementation detail**, chosen for production.
+> - **One thing knows how it is held, and everything else asks it.** It can answer any question about
+>   the data, so **nothing else has a reason to know a layout and nothing else may**. A rule, a
+>   recipe, a command and a report each read relations.
+> - **The layout has one other reader and it is a view for debugging**, which shows it on purpose.
+>   **Nothing reads through it**: it is an output and not a path, so no rule and no report depends on
+>   it.
 
-## One word that is this lane's and not yours
+## Your shape rather than this lane's paraphrase
 
-**You said *most of the app behaves as if it only knows about the logical model* and the bullet says
-*everything above the store*.** That names the exception rather than leaving it as *most*, which a
-specification cannot check. **If the store is not the only thing that knows, say so and the word goes
-back** - this lane chose the reading that makes the sentence testable and may have narrowed it.
+**This lane wrote *everything above the store* for your *most of the app*, and you replaced it with
+something sharper:** *an abstraction that allows any data question to be answered while shielding the
+rest of the app from the physical model*, and *a view the app exposes that uses the physical model
+for debugging*.
+
+**That is checkable and *most of the app* was not.** The layout has **exactly two readers** - the one
+that mediates and the one that displays - and **everything else reaching for it is a defect a person
+can find by looking**. The bullets say it that way.
+
+**The second reader is a view rather than a path**, which is the part that makes the first bullet
+hold: a debugging view that something else read through would be a second way to the layout wearing a
+surface's name.
+
+## One question it raises, which this lane is not answering
+
+**Which surface is that view?** `spec/interface.md` says **the game presents four surfaces** and
+names them, and the data browser is *the game's own data, read directly, in two views: every entity
+with its components, and the same facts normalized into a table for each relation*. **Both of those
+are logical** - an entity view and a relational one - so **none of the four is a view of the
+layout**.
+
+**So it is a fifth surface, or a third view of the data browser, or something not reachable from the
+front end at all** - and the difference matters, because *all reachable from the front end, in every
+build* is a promise the other four carry. **Filed as the next proposal rather than guessed at here.**
 
 ## What it settles that was open, and what it does not
 

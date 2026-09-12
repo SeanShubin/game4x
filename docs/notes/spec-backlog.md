@@ -3299,3 +3299,24 @@ must hold; a normalized relational model is the shape in which it holds by const
 **One word is this lane's**: *most of the app* became *everything above the store*, which names the
 exception rather than leaving a word a specification cannot check. Flagged in the item as possibly a
 narrowing.
+
+## Said 2026-09-12, what shields the app from the physical model
+
+Sean, on this lane's phrase *everything above the store*:
+
+> I imagine an abstraction that allows any data question to be answered while shielding the rest of
+> the app from the physical model. Then there is a view the app exposes that uses the physical model
+> for debugging purposes.
+
+**That is checkable and *most of the app* was not.** The layout has **exactly two readers** - the one
+that mediates and the one that displays - and anything else reaching for it is a defect a person can
+find by looking. **The second is a view rather than a path**, which is what makes the first hold: a
+debugging view something else read through would be a second way to the layout wearing a surface's
+name.
+
+**And it raises a question `P-471` does not answer.** `spec/interface.md` says the game presents
+**four** surfaces and the data browser's two views are both logical - an entity view and a relational
+one. **None of the four is a view of the layout.** So the debugging view is a fifth surface, a third
+view of the data browser, or something not reachable from the front end at all - and the difference
+matters, because *all reachable from the front end, in every build* is a promise the other four
+carry.
