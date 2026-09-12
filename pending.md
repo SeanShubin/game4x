@@ -10,6 +10,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 - **P-456** - which kinds carry an `id`, which is the one thing `traits.4x` cannot read · `docs/notes/decisions.md`
 - **P-457** - what a trait's own line says, which is the other thing `traits.4x` waits on · `docs/notes/decisions.md`
+- **P-459** - `refresh` reads a maximum that nothing declares · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`

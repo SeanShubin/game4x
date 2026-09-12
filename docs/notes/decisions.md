@@ -61,16 +61,54 @@ rather than rewritten**, because the kinds carry the answer.
 **The second is what `P-451` already decided for every other trait**, so this is really the question
 of **which kinds**, not of where to write it.
 
-## Which kinds, and this lane will not guess
+## Which kinds, and the running game answers it
 
-**`spec/logistics.md` gives the test** - *there is never a quantity of a thing with an `id`* - so a
-kind carries one exactly when two of them must be told apart. **A territory and an orbit must.** An
-ark and a pioneer must, because `move` names one and leaves the other where it was. **A citizen, a
-store and a unit of food need not**, which is why the dump counts them.
+**The scenario plays through and only places carry an `id`** - twelve territories and twelve orbits,
+counted in `scenario/expected/play.4x`, and nothing else in the file has one. **Everything else is
+counted instead**: `{citizen bearing:1 defending:1 laboring:1} -> 8`, `{extractor resource:food
+working:1} -> 3`, `{store resource:metal} -> 2`.
 
-**That reading is a reading**, and the code lane declined to make it for `C-49`'s reason. **This lane
-declines for the same one**, and offers it as the shape of the answer rather than the answer.
+**And the command language is what makes that work.** The scenario moves a unit like this:
 
+```
+{move unit:pioneer territory:2}
+```
+
+**A unit is named by its kind and a place by its `id`.** That is `P-356` - a field's value may name a
+kind rather than a thing - and it means nothing in this release ever has to tell two units apart.
+
+**So `place` is the answer**, and it is a family the game already declares:
+
+```
+{kind name:territory trait:id}
+{kind name:orbit trait:id}
+```
+
+## The honest caveat, which is the reason this is still yours
+
+**The evidence for units is a population of one.** The scenario has one pioneer and no Ark in its
+final state, so *naming a unit by its kind was never ambiguous* is true and proves nothing about two.
+**A count over nothing is the same failure with the sign flipped**, and this is the version of it
+that matters here.
+
+**What would decide it empirically is your own test**, from `P-445`: *if I never notice I need it, I
+don't need it.* Two Arks in one orbit is the case that would notice, and this release cannot build
+it - the scenario's second Ark never launches.
+
+**What is not a caveat**: giving a kind an `id` is not free. `spec/logistics.md` - *there is never a
+quantity of a thing with an `id`* - so a kind that carries one stops being counted and becomes a row
+per thing in every dump. Eight citizens would be eight lines.
+
+## What the new invariant settles, and what it does not
+
+**It settles the shape and not the membership.** *A field that cannot be offered as a choice is the
+data asking for a primitive... it is never left as a sentence.* So `a thing that must be named
+individually` cannot stay in the *Traits* table's `Of` cell whatever you decide: it becomes kinds
+declaring the trait, in words the game already has.
+
+**The membership is still yours**, and this lane recommends **territory and orbit** - the smallest
+answer the running game supports, revisable the first time you notice wanting two of something told
+apart.
 
 ---
 
@@ -84,11 +122,11 @@ shape. This is `traits.4x`, whole, with the one open cell written `???`:
 
 ```
 {trait admits:number kept:thing name:id}
-{trait admits:??? kept:thing name:moving}
-{trait admits:??? kept:thing name:laboring}
-{trait admits:??? kept:thing name:working}
-{trait admits:??? kept:thing name:bearing}
-{trait admits:??? kept:thing name:defending}
+{trait admits:number kept:thing name:moving}
+{trait admits:number kept:thing name:laboring}
+{trait admits:number kept:thing name:working}
+{trait admits:number kept:thing name:bearing}
+{trait admits:number kept:thing name:defending}
 {trait admits:resource kept:thing name:resource}
 {trait admits:number kept:kind name:strength}
 {trait admits:number kept:kind name:fuel}
@@ -108,8 +146,7 @@ shape. This is `traits.4x`, whole, with the one open cell written `???`:
 **Twenty lines, and the release's table has twenty-three.** `metal in it`, `control` and `surplus`
 are the three missing: all derived, and none of the three named by any recipe row, which is the rule
 you took last - a derived trait is declared when a recipe names it. **Entries follow the release's
-table and the traits inside a line sort**, which is `P-452` and what `kinds.4x` already does. **`id` is here whatever `P-456` decides**, because
-which kinds carry it is on their lines and not on this one.
+table and the traits inside a line sort**, which is `P-452` and what `kinds.4x` already does.
 
 ## `kept` says where the value lives, and it has three values because the release does
 
@@ -122,51 +159,159 @@ admits a closed set of values* - and `kept` is this lane's, chosen over the code
 because in this game `held` is containment and a store holds metal. Say the word if you want
 another.
 
-## The question: seven traits admit two values, and the release writes the set two ways
+## The question was seven cells and it is two, and `spec/turn.md` is what shrank it
 
-`0 or 1` five times - `moving`, `laboring`, `working`, `bearing`, `defending` - and `yes or no`
-twice - `unpaid`, `movable`. Nothing distinguishes them; they are the same set spelled
-twice. **The other thirteen lines are settled and none of the three options touches them.**
+**Five of the seven are not two-valued at all. They are counts, and the release's `0 or 1` is this
+release's maxima showing through.** `spec/turn.md` -> *Order of operations*: **what a thing can do is
+a count it carries as a trait** - *an action is named, and each kind declares **how many** of each
+action a thing of it may take in a turn. A recipe names the action it spends, and firing it lowers
+that count by one.*
 
-**A** - **`flag` is a word of the notation, beside `number`:**
+**`moving`, `laboring`, `working`, `bearing` and `defending` are those counts**, and the release
+says so three ways: each is guarded *at least 1*, each is lowered by one, and each is restored by
+`refresh` **at its maximum** - six rows, checked. **A trait that has a maximum admits a number**, and
+`0 or 1` is what you get when every maximum in this release is one.
+
+**So they are `admits:number`, and that is read from the specification rather than chosen.** It also
+means nothing is lost: a unit that one day gets two moves needs no change to `traits.4x`.
+
+**What is genuinely two-valued is `unpaid` and `movable`** - one derived, one of the kind, neither a
+count of anything.
+
+## Which leaves two cells, and the new invariant decides the shape of the answer
+
+**`flag` as a word of the notation is out, and the invariant you promoted this morning is what
+removes it.** *When a primitive earns its place* gives two branches and `flag` fails both:
+
+- **Does removing it multiply what has to be authored?** No. Two `value` lines per two-valued trait
+  is **four lines**, and it grows by two for each one added. The invariant's own calibration is one
+  rule with four optional parts becoming sixteen - **that is a multiplication and this is an
+  addition**
+- **Is the removal exact and a contortion?** No. `{value name:yes of:unpaid}` says exactly what is
+  true and reads as what it is
+
+**And the third bullet finishes it**: a list is the right length when every primitive is a thing
+rather than a point on an axis that already exists. `admits` already has three points - a number, a
+family, a trait whose values declare themselves - and `flag` is the third one with sharing.
+
+**This lane recommended `flag` yesterday and the rule overrules it.** Worth saying plainly, because
+it is the rule working rather than this lane changing its mind.
+
+## So the two cells, and the choice is small
+
+**A** - **they are numbers, like the five counts:**
 
 ```
-{trait admits:flag kept:thing name:defending}
-{trait admits:flag kept:kind name:movable}
-```
-
-One new word. `yes or no` becomes `0 or 1`, so an Ark's line reads `movable:1`, matching
-`{citizen defending:1}`, which `spec/console.md` already writes. **The two-valued set is in the data**,
-so the editor that offers you a value for `defending` can refuse `7`.
-
-**B** - **they are numbers, and being two-valued is a rule in prose:**
-
-```
-{trait admits:number kept:thing name:defending}
+{trait admits:number kept:nothing name:unpaid}
 {trait admits:number kept:kind name:movable}
 ```
 
-Nothing is added to the notation, and fifteen of the twenty lines then say `number`. **The file
-stops telling a flag from a strength**, so nothing an editor reads says `defending:7` is wrong.
+Then **every trait in the file admits a number, a family, or its own values**, and the words `yes`
+and `no` never appear in the game's data at all. An Ark's line reads `movable:1`, matching
+`{citizen defending:1}`, which `spec/console.md` already writes. **Nothing is two-valued anywhere**,
+so the category stops existing.
 
-**C** - **the values declare themselves, as a biome's do:**
+**B** - **they are values, declared the way a biome is:**
 
 ```
-{trait admits:defending kept:thing name:defending}
-{value name:0 of:defending}
-{value name:1 of:defending}
+{trait admits:unpaid kept:nothing name:unpaid}
+{value name:no of:unpaid}
+{value name:yes of:unpaid}
+{trait admits:movable kept:kind name:movable}
+{value name:no of:movable}
+{value name:yes of:movable}
 ```
 
-Uniform with `biome` and `phase`, and adds no word. **Fourteen extra lines, two per flag**, saying the
-same two words seven times - and two more for every flag the game ever grows.
+Six lines rather than two, and **the data says a thing that `A` leaves unsaid**: that `movable:7` is
+not a value. The release's own word is `yes`, and the *Units and structures* table spells it that
+way in two columns.
 
-## What this lane would take, and the reason
+## What this lane would take, and it is `A`
 
-**A.** *Least expressive yet complete* is the test you set, and its form is that **a primitive earns
-its place when removing it moves the combinatorial explosion from the generated space into the
-authored space.** Removing `flag` gives C, which authors two lines per flag forever, or B, which
-authors nothing and loses the constraint. **A authors one word, once.**
+**`A`, and the reason is that `B`'s advantage is smaller than it looks.** Under `A` nothing can say
+`movable:7` either, because **what an editor offers is derived from what the game holds** - the
+invariant's sixth bullet - and what the game holds for `movable` is what the kinds declare, which is
+`0` and `1`. **The constraint is in the kinds' lines rather than in the trait's**, which is where
+`P-451` put every other fact about which kinds carry what.
 
-**The shared set is what makes it worth a word at all.** Were it one trait, C would be two lines and
-the better answer; it is seven, and the release already spells the same set two ways because nothing
-named it.
+**And it removes a category rather than shrinking one.** After `A` there is no closed set of bare
+words in the game except `biome` and `phase`, and both of those are genuinely sets of words with
+names - `ocean`, `design` - rather than a two-valued flag wearing them.
+
+## Two small things inside it, said rather than resolved
+
+**What a self-declaring trait's `admits` says.** The block above writes `admits:biome` and
+`admits:phase` - the trait naming itself. `admits:value` would say the same thing in one word for
+both, and would not state the name twice. **This lane would take `admits:value`**; the block keeps
+the longer form so you can see which it is.
+
+**And `unpaid` is `kept:nothing` while being the only one.** `surplus` left with the row count this
+morning, so exactly one derived trait is in the file. That is the rule working and not a smell, but
+it means a check over `kept:nothing` runs over one case.
+
+---
+
+### P-459 - `refresh` reads a maximum that nothing declares
+
+**to** sean - **status** open - **raised** 2026-09-12 - **kind** contradiction, found working `P-457` - **asks** a decision - **into** `releases/first-release.md` -> Units and structures, and `spec/console.md` -> The language
+
+**`spec/turn.md` says a kind declares a number and the release declares a `yes`:**
+
+```
+spec/turn.md    "each kind declares HOW MANY of each action a thing of
+                 it may take in a turn"
+
+the release     | **citizen** | ... | Readies: yes |     one cell, three actions
+                | **ark**     | ... | Readies: yes |     one cell, two actions
+```
+
+**A citizen has three actions** - `laboring`, `bearing`, `defending` - and one `Readies` cell for all
+three. **`refresh` puts each of them *at its maximum*, six rows**, so the maximum is read by a
+recipe and declared by nothing.
+
+**It agrees today only because every maximum is one**, which is the shape `CLAUDE.md` warns about: a
+right answer about a narrower question. Give a unit two moves and there is nowhere to write it.
+
+## The three shapes
+
+**A** - **the `Readies` cell holds the actions and their counts**, and the data file writes one line
+per action:
+
+```
+| **citizen** | ... | laboring 1, bearing 1, defending 1 |
+```
+
+Says exactly what `spec/turn.md` says. **Costs a second name per action** in the data file, because a
+kind's line already writes `laboring` to mean *this kind has a stored `laboring`* and cannot also
+write `laboring:1` to mean its maximum.
+
+**B** - **an action count is of the kind and stored at once**, and the kind's line gives the maximum:
+
+```
+{kind name:citizen bearing:1 defending:1 laboring:1}
+```
+
+One name, and the number is both the maximum and where a new thing starts. **Costs a fourth value of
+`kept`** - today it is `thing`, `kind` or `nothing`, and this is a thing's value with the kind's
+number behind it.
+
+**C** - **the maximum is one, said once, and a number arrives when something needs two:**
+
+```
+Every action's maximum is one. Nothing in this release takes an action twice in a turn.
+```
+
+Costs nothing and leaves `refresh`'s *at its maximum* reading a constant. **This is your own test** -
+`P-445`: *I want to decide this empirically. If I never notice I need it, I don't need it.*
+
+## What this lane would take
+
+**`C` now and `B` when it stops being true.** `B` is the shape that will be right - one name, and the
+maximum where every other of-the-kind number already is - but it buys a fourth `kept` value for a
+distinction no rule in this release can see. **`C` is not a deferral of the decision, it is the
+answer while every number is one**, and the sentence it adds is what makes the constant honest rather
+than implied.
+
+**This blocks nothing.** `traits.4x` is unaffected either way: an action count admits a number under
+all three, which is what `P-457` now says and reads from `spec/turn.md` rather than from the
+release's `0 or 1`.

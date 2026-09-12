@@ -3023,3 +3023,23 @@ grammar and costs a person reading `garrison-slots-free` in a specification*. **
 point, written as a footnote to a recommendation rather than as a rule.**
 
 `P-458` now offers both as a second section.
+
+## Said 2026-09-12, work the decisions with the invariants in mind
+
+Sean: *Lets work through the decisions. Be sure to take the new invariants in mind, some of these
+decisions may be forced by them.*
+
+**And one was, against this lane's own recommendation.** `P-458` landed at 126c41f; *When a
+primitive earns its place* then removed `flag`, which this lane had recommended the day before.
+Neither branch fires: two `value` lines per two-valued trait is an addition and not a
+multiplication, and `{value name:yes of:unpaid}` is not a contortion. **The rule overruled the lane
+that wrote it**, which is the strongest evidence available that it says something.
+
+**The bigger shrink came from `spec/turn.md` rather than from the invariant.** Five of `P-457`'s
+seven open cells are action counts - *each kind declares how many of each action a thing of it may
+take in a turn* - so they admit a number, and the release's `0 or 1` is this release's maxima
+showing through. The question is two cells now.
+
+**And that turned up a contradiction, filed as `P-459`**: `refresh` puts six counts *at its
+maximum* and nothing declares one. The release's `Readies` column says `yes`, one cell for a
+citizen's three actions, where the specification says a number.
