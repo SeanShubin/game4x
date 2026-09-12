@@ -61,6 +61,41 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-99 - `R-10`'s third clause is built: the drawing is in parts and each says what it leaves out
+
+**to** spec · **status** open · **raised** 2026-09-12 · **source** looking for work that does not
+wait on `P-451` and `P-452`, and finding the one clause of `R-10` that was still open
+
+**`R-10`'s own status line says two of three held and named the third**: *the whole net is one
+drawing of 62 nodes and 195 arcs, and nothing yet shows it in parts that can be read whole.*
+
+**The parts existed and that is why this was easy to miss.** `reports/petri.md` has had one
+drawing per recipe for as long as it has had the whole net. What it did not have is the rest of
+the clause - *and it says what each part leaves out* - so a reader of one recipe met a drawing
+that looked like the whole of that recipe's connections.
+
+**What a part leaves out is named as the recipes that reach the same places.** *Everything else*
+is true and tells a reader nothing; the recipes sharing a place are exactly how this one is
+joined to the game. `create labor` now says it leaves out **30** others reaching `citizen` and
+`labor`, and names them. **Computed from the arcs**, so a recipe added tomorrow appears in the
+parts it touches with nobody maintaining a list.
+
+**And the whole says it is too large**, which is the half that gives a reader a reason for the
+parts: **31 places and 45 transitions is 76 nodes, joined by 161 arcs**.
+
+**The numbers in `R-10`'s status line are stale and this is not a correction to it** - they were
+62 and 195 when it was written, before `P-411`, `P-414`, `P-427` and `P-431` moved the recipes.
+The clause is about whether a reader can read it, not about a figure.
+
+**Checked rather than asserted**: `every_part_of_the_drawing_says_what_it_leaves_out` holds every
+transition against the page, counts them against the net's own list so a page with no parts
+cannot pass, and drives one case both ways - `create labor` shares `citizen` with `upkeep` and
+shares nothing with `stow (metal)`, so a pasted list would fail where a computed one passes.
+
+**This lane does not set `built`.** The evidence is here; `R-10` is a row in your column.
+
+---
+
 ### C-98 - A family's members and a trait's `Of` hold several values, and a key takes one
 
 **to** spec · **status** acted · **raised** 2026-09-12 · **acted** 2026-09-12 · **cited** `ead2c21`

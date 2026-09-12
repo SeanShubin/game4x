@@ -828,3 +828,74 @@ fn a_block_that_names_a_count_carries_it_in_its_label() {
         net.transitions
     );
 }
+
+/// Every part says what it leaves out, which is `R-10`'s third clause.
+///
+/// **The first two clauses held and this one did not.** Every label declares a fill and every
+/// node carries its own name; what was open was *where a drawing is too large to satisfy that
+/// whole, it is shown in parts that do, **and it says what each part leaves out***. The parts
+/// existed - one per recipe - and none of them said.
+///
+/// **What a part leaves out is named as the recipes reaching the same places**, not as
+/// "everything else". Everything else is true and tells a reader nothing; the recipes that
+/// share a place are exactly how this one is joined to the game, and are what a reader of a
+/// part cannot see.
+///
+/// # Over every part, and the count with it
+///
+/// A run that found no parts would satisfy *each says what it leaves out* for the wrong
+/// reason, so the number of parts is asserted against the number of transitions - the same
+/// thing the page draws.
+#[test]
+fn every_part_of_the_drawing_says_what_it_leaves_out() {
+    let document = release();
+    let net = net(&document);
+    let page = game_console::petri_page::markdown(&document);
+
+    // The whole is declared too large, which is the half that explains why parts exist.
+    assert!(
+        page.contains("too large to read whole"),
+        "the page does not say the whole net is too large, so a reader meets the parts with \
+         no reason for them"
+    );
+
+    let mut said = 0;
+    for name in &net.transitions {
+        let heading = format!("\n### {name}\n");
+        let at = page
+            .find(&heading)
+            .unwrap_or_else(|| panic!("`{name}` has no part on the page"));
+        let part = &page[at + heading.len()..];
+        let part = part.split("\n### ").next().unwrap_or(part);
+        assert!(
+            part.contains("Leaves out"),
+            "`{name}`'s part does not say what it leaves out"
+        );
+        said += 1;
+    }
+    assert_eq!(
+        said,
+        net.transitions.len(),
+        "every part says, and the count is here so that a page with no parts cannot pass"
+    );
+    assert!(
+        said > 30,
+        "only {said} parts, which is too few for this to be about the release"
+    );
+
+    // **The claim is true of a part, not merely present.** `create labor` shares `citizen`
+    // and `labor` with a great many recipes and shares nothing with `stow (metal)`, so the
+    // list is computed rather than pasted.
+    let heading = "\n### create labor\n";
+    let at = page.find(heading).expect("`create labor` is drawn");
+    let part = page[at..].split("\n### ").nth(1).unwrap_or_default();
+    assert!(
+        part.contains("upkeep"),
+        "`create labor` and `upkeep` both touch `citizen`, and the part does not say so: {part}"
+    );
+    assert!(
+        !part.contains("stow (metal)"),
+        "`create labor` touches no place `stow (metal)` does, so naming it would be a list \
+         that was pasted rather than computed: {part}"
+    );
+}

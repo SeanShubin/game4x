@@ -240,10 +240,20 @@ pub fn markdown(document: &str) -> String {
     );
 
     out.push_str("## The whole net\n\n");
-    out.push_str(
+    out.push_str(&format!(
         "The drawing is on the page beside this file; what follows is the same net in the form \
-         a diff can show.\n\n",
-    );
+         a diff can show.\n\n\
+         **It is too large to read whole, and saying so is half of what `R-10` asks.** {} \
+         places and {} transitions is {} nodes, joined by {} arcs - past the point where the \
+         eye follows one transition out of the bundle. **So the parts below are the drawing \
+         that can be read**: one per recipe, each with its own arcs written out, **and each \
+         saying which other recipes reach the same places**. A part that did not say that \
+         would read as the whole of a recipe's connections rather than as a part.\n\n",
+        net.places.len(),
+        net.transitions.len(),
+        net.places.len() + net.transitions.len(),
+        net.arcs.len()
+    ));
 
     out.push_str("## What is not drawn\n\n");
     out.push_str(&table(&excluded_table(&net)));
@@ -300,8 +310,60 @@ pub fn markdown(document: &str) -> String {
         if arcs.is_empty() {
             out.push_str("- touches no place at all, which no recipe in this release does\n");
         }
+        // **What this part leaves out** - `R-10`'s third clause. Named rather than implied,
+        // and named as the recipes that reach the same places rather than as everything else,
+        // because "everything else" is true and useless: what a reader of one part cannot see
+        // is how this recipe is connected to the rest of the game, and that is this list.
+        let also = also_touching(&net, at);
+        if also.is_empty() {
+            out.push_str(
+                "\nLeaves out nothing a reader of this part needs: no other recipe touches any of these places.\n",
+            );
+        } else {
+            out.push_str(&format!(
+                "\nLeaves out {} other recipes that reach these same places: {}.\n",
+                also.len(),
+                also.join(", ")
+            ));
+        }
         out.push('\n');
     }
+    out
+}
+
+/// The recipes a part leaves out: the others that touch the places it draws.
+///
+/// **`R-10`'s third clause is the one that was open**: *where a drawing is too large to
+/// satisfy that whole, it is shown in parts that do, **and it says what each part leaves
+/// out***. The parts existed - one drawing per recipe - and none of them said.
+///
+/// **What a part leaves out is not "everything else".** That is true and useless. What a
+/// reader of one recipe cannot see, and needs, is **which other recipes reach the same
+/// places** - because that is the whole of how this recipe is connected to the game. A part
+/// that names them can be read on its own and still be honest about being a part.
+///
+/// **Computed from the arcs rather than listed**, so a recipe added tomorrow appears in the
+/// parts it touches without anyone maintaining a second list.
+fn also_touching(net: &Net, transition: usize) -> Vec<String> {
+    let mine: std::collections::BTreeSet<usize> = net
+        .arcs_of(transition)
+        .iter()
+        .map(|arc| arc.place)
+        .collect();
+    let mut out: Vec<String> = net
+        .transitions
+        .iter()
+        .enumerate()
+        .filter(|(other, _)| *other != transition)
+        .filter(|(other, _)| {
+            net.arcs_of(*other)
+                .iter()
+                .any(|arc| mine.contains(&arc.place))
+        })
+        .map(|(_, name)| name.clone())
+        .collect();
+    out.sort();
+    out.dedup();
     out
 }
 

@@ -8,7 +8,8 @@
 //! > entry, and an entry is never zero.** A thing carrying an `id` has a description no
 //! > other thing shares, so **its quantity is always one**. **Where a thing is, is where it
 //! > appears**; nothing states its container. **Entries are in the order their descriptions
-//! > sort in**, so the same state is always the same bytes.
+//! > sort in, and the traits inside a description sort too**, so the same state is always the
+//! > same bytes and a description is one string however it was built.
 //!
 //! # What replaced what
 //!
