@@ -23,7 +23,7 @@ here without first becoming a proposal.
 
 ### P-456 - which kinds carry an `id`, which is the one thing `traits.4x` cannot read
 
-**to** sean - **status** open - **raised** 2026-09-12 - **kind** entailed, from the code lane declining to interpret a predicate - **asks** a decision - **into** `releases/first-release.md` -> Traits, or `spec/logistics.md` -> Containment
+**to** sean - **status** open - **cited** `036a305` - **raised** 2026-09-12 - **kind** entailed, from the code lane declining to interpret a predicate - **asks** a decision - **into** `releases/first-release.md` -> Traits, or `spec/logistics.md` -> Containment
 
 **`P-451` turned the *Traits* table's `Of` column onto the kinds**, and four of its cells are prose
 predicates rather than kind lists. **Three of the four resolve from the release's own columns and one
