@@ -481,7 +481,19 @@ that used to be kept is lost at a turn's end. `scenario/expected/play.4x` was re
 
 ### R-10 - I can read a generated drawing in the theme I use
 
-**to** code - **status** open - **raised** 2026-09-11 - **cited** `7b4761f` - **two of its three clauses already hold**: every label in `reports/petri.html` declares a fill as of `7b4761f`, counted at 295 of 295, and every node in the net carries its own name. **What is open is the third** - the whole net is one drawing of 62 nodes and 195 arcs, and nothing yet shows it in parts that can be read whole
+**to** sean - **status** **built** 2026-09-12 - **cited** `7b4761f`, `8fd18d9` - **evidence reported by the code lane and recorded here rather than by the lane that built it.** All three clauses hold. **Colour**: every label in `reports/petri.html` declares a fill, counted at 295 of 295. **Names**: every node in the net carries its own. **Parts**: `reports/petri.md` has had one drawing per recipe since it had the whole net - **what was missing was the rest of the clause**, *and it says what each part leaves out*, so a reader of one recipe met a drawing that looked like the whole of that recipe's connections.
+
+**A part now names the recipes that reach the same places**, rather than *everything else*, which is
+true and tells a reader nothing - `create labor` leaves out 30 others reaching `citizen` and `labor`,
+and names them. **Computed from the arcs**, so a recipe added tomorrow appears in the parts it
+touches with nobody maintaining a list. Checked over every part with the count, and **driven both
+ways on one case so a pasted list fails where a computed one passes** - `C-99`.
+
+**And the numbers in this line were stale.** It said 62 nodes and 195 arcs; the net is **31 places
+and 45 transitions, 76 nodes, joined by 161 arcs** - `P-411`, `P-414`, `P-427` and `P-431` each moved
+it and nothing re-counted. **The clause was never about the figure**, which is why the staleness cost
+nothing here: it asks whether a reader can read it.
+
 
 - **In** - `docs/process.md`, *I reject AI responses that do not read clearly and unambiguously to
   a human*, applied to a drawing rather than to prose
