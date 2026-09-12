@@ -104,16 +104,19 @@ fn the_release_tables_are_the_ones_in_this_crate() {
 /// `RECIPES` holds blocks, and a check on blocks alone would pass a version that had
 /// forgotten `stow` was one recipe stated twice.
 #[test]
-fn there_are_twenty_three_recipe_blocks_under_nineteen_names() {
-    assert_eq!(kinds::RECIPES.len(), 23);
+fn there_are_thirty_one_recipe_blocks_under_twenty_one_names() {
+    assert_eq!(kinds::RECIPES.len(), 31);
 
     let mut names: Vec<&str> = kinds::RECIPES.iter().map(|recipe| recipe.name).collect();
     names.sort_unstable();
     names.dedup();
+    // **Twenty-one since `P-411` and `P-414`.** `refresh` is six blocks rather than one -
+    // one per action, because readiness is a count a thing carries again - and `muster` and
+    // `stand` are new. Eight names are stated more than once.
     assert_eq!(
         names.len(),
-        19,
-        "nineteen distinct names, and these are {names:?}"
+        21,
+        "twenty-one distinct names, and these are {names:?}"
     );
 
     assert!(
@@ -135,19 +138,30 @@ fn there_are_twenty_three_recipe_blocks_under_nineteen_names() {
 /// make the bug unwritable, which is worth having and is not a check: a type stops this
 /// crate from disagreeing with itself, and the defect was the release disagreeing with
 /// itself. Only the document can answer that, so only the document is read.
+///
+/// # One name is excepted, and the exception is the finding
+///
+/// **`force` is used as a kind by three rows and declared by no table** - `C-93`, filed before
+/// this lane built against it. `P-414` gave `muster` and `stand` a force to produce and
+/// `discard` a force to sweep, and *Kinds* still declares seventeen without it.
+///
+/// **Named rather than allowed**, so the day `force` is declared - or the rows change - this
+/// fails and the exception goes. That is what an exception is for, and `C-61` is the precedent:
+/// an excused case that cannot outlive its excuse.
 #[test]
 fn every_kind_a_recipe_names_is_declared() {
     let document = release();
     let (used, undeclared) = undeclared_kinds(&document);
-    assert!(
-        undeclared.is_empty(),
-        "the recipes name {undeclared:?}, which the Kinds and Families tables do not declare"
+    assert_eq!(
+        undeclared,
+        ["force"],
+        "the recipes name {undeclared:?}, which the Kinds and Families tables do not declare.          `force` is `C-93` and is expected here until the release declares it or drops the          rows; anything else is new"
     );
 
     // Over every case, and how many cases there were. A column that stopped being the fifth
     // would leave this checking an empty set and passing.
-    // Seventeen since `fertility` arrived - thirteen kinds and the four families, counted
-    // from the failure that named them.
+    // Eighteen: thirteen kinds, the four families, and `force`, which is the one this does
+    // not find a declaration for.
     assert_eq!(
         used.len(),
         18,
@@ -379,13 +393,25 @@ fn a_role_says_what_becomes_of_what_a_recipe_names() {
             // extractor whose readiness is spent. That is the list growing because the
             // release got more honest about what survives a rule, not because anything here
             // changed.
+            // **`P-411` made every readiness rule require-and-put**, so each one keeps the
+            // thing whose count it spends: a `put` is not a consumption and the thing is
+            // still there afterwards. `refresh` keeps what it refreshes for the same reason,
+            // and `muster` keeps both the garrison it needs and the citizen it musters.
             "deploy ark",
             "move",
             "launch ark",
             "create labor",
             "work",
             "upkeep",
-            "bear"
+            "bear",
+            "refresh",
+            "refresh",
+            "refresh",
+            "refresh",
+            "muster",
+            "stand",
+            "refresh",
+            "refresh"
         ]
     );
 
@@ -514,10 +540,12 @@ fn what_a_trait_says_its_values_are_is_borne_out_by_the_table() {
     let document = release();
 
     // The traits that name a closed set, and the table each set is written out in.
-    let counted: [(&str, &str, &str); 2] = [
-        ("kind", "## Kinds", "kinds"),
-        ("biome", "## Biomes", "biomes"),
-    ];
+    //
+    // **`kind` left this list when `P-417` deleted its row**, because a kind is not a trait:
+    // `spec/console.md` lists them as different categories and no recipe writes `kind:`. So
+    // one trait names a closed set in a table, and the population below says so - a check over
+    // one case is thin, and saying it is thin is better than pretending otherwise.
+    let counted: [(&str, &str, &str); 1] = [("biome", "## Biomes", "biomes")];
 
     let after_of_the = |said: &str| -> Option<String> {
         let at = said.find("of the ")? + "of the ".len();
@@ -562,6 +590,10 @@ fn what_a_trait_says_its_values_are_is_borne_out_by_the_table() {
 
     let mut named = 0usize;
     let mut with_a_count = 0usize;
+    assert!(
+        !counted.is_empty(),
+        "no trait names a set written out in a table, so everything below runs over nothing"
+    );
 
     for (trait_name, heading, set) in counted {
         let row = table_under(&document, "## Traits")
@@ -606,10 +638,14 @@ fn what_a_trait_says_its_values_are_is_borne_out_by_the_table() {
 
     // Both arms are real code and only one of them runs today, so this says which - a run
     // where neither fired would be a run over no traits at all.
+    // **One since `P-417` deleted the `kind` row.** The counting arm is now unexercised and
+    // says so, rather than reading as though it holds: `biome` names its set without stating
+    // a number, so nothing today compares a stated count with a row count. The arm stays
+    // because a trait may state one again, and this is what would notice.
     assert_eq!(
-        named + with_a_count,
-        2,
-        "two traits name a closed set; {named} named one and {with_a_count} counted one"
+        (named, with_a_count),
+        (1, 0),
+        "one trait names a closed set; {named} named one and {with_a_count} counted one"
     );
 }
 

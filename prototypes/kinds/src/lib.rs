@@ -28,7 +28,7 @@ pub mod release;
 // Kinds
 // ---------------------------------------------------------------------------------------
 
-/// The seventeen kinds the release declares.
+/// The seventeen kinds the release declares, and one it uses without declaring.
 ///
 /// **`fertility` is the seventeenth**, arriving with the saturating rewrite: `grow` consumed
 /// *the lesser of the surplus food and the citizens here*, and `bear`, `breed` and `renew`
@@ -59,12 +59,13 @@ pub enum Kind {
     Adjacency,
     Game,
     Fertility,
-    /// **`P-399`: what a thing spends to act, drawn from time and refilled each turn.**
+    /// **`P-414`: what a citizen or a unit musters, and what nature is measured against.**
     ///
-    /// The token model. Readiness was a yes-or-no trait of whatever readies; it is a thing a
-    /// thing holds, one per action, and `refresh` puts them back. Two recipes naming the same
-    /// action draw on the same tokens, which is how the release says a thing must choose.
-    Readiness,
+    /// **Declared by no Kinds table and used as one by three rows**, which is `C-93`. `muster`
+    /// and `stand` produce it, `discard` sweeps it at a turn's end, and a produce row's Kind
+    /// column admits a kind or a family and nothing else - so this is the assumption that item
+    /// states rather than a reading of the table.
+    Force,
 }
 
 impl Kind {
@@ -87,7 +88,7 @@ impl Kind {
             Kind::Adjacency => "adjacency",
             Kind::Game => "game",
             Kind::Fertility => "fertility",
-            Kind::Readiness => "readiness",
+            Kind::Force => "force",
         }
     }
 
@@ -116,7 +117,7 @@ impl Kind {
                 "a citizen's capacity to raise one more, spent by raising one ",
                 "and renewed each turn"
             ),
-            Kind::Readiness => "what a thing spends to act, drawn from time and refilled each turn",
+            Kind::Force => "what a citizen or a unit musters, and what nature is measured against",
         }
     }
 
@@ -160,16 +161,15 @@ impl Kind {
             // **`P-351`: `game` is in nothing**, so *what bounds a kind in a territory* cannot
             // be about it at all - it is not in a territory, it holds them. That is a stronger
             // reason than the four above have, and it lands in the same arm.
-            // **`readiness` is bounded and not by a territory**, which is why it is here
-            // rather than in the list above. *Where things are* gives it *a thing, per
-            // action*, holding 1 - so what bounds it is the thing that holds it, and *What
-            // bounds a kind in a territory* is not the table that says so.
+            // **`force` is bounded by nothing the release states.** It is mustered from the
+            // citizens and units that are there and swept at a turn's end, so what bounds it
+            // is how many of them there are rather than a capacity a territory declares.
             Kind::Territory
             | Kind::Orbit
             | Kind::Deposit
             | Kind::Adjacency
             | Kind::Game
-            | Kind::Readiness => {
+            | Kind::Force => {
                 return None;
             }
         })
@@ -177,7 +177,7 @@ impl Kind {
 }
 
 /// In the order the Kinds table lists them.
-pub const KINDS: [Kind; 18] = [
+pub const KINDS: [Kind; 17] = [
     Kind::Citizen,
     Kind::Garrison,
     Kind::Extractor,
@@ -195,7 +195,11 @@ pub const KINDS: [Kind; 18] = [
     Kind::Adjacency,
     Kind::Game,
     Kind::Fertility,
-    Kind::Readiness,
+    // **`Kind::Force` is deliberately not here** - `C-93`. `KINDS` renders the release's
+    // *Kinds* table back and is compared to it cell for cell, and the release declares
+    // seventeen kinds without `force`. The variant exists because three recipe rows use
+    // `force` in the Kind column and a row has nowhere else to put it; the table says what
+    // the release says. **The two disagree, and that is the finding rather than a bug here.**
 ];
 
 /// In the order the bounds table lists them, which is not the Kinds order.
@@ -285,7 +289,7 @@ pub struct Capacity {
     pub up_to: &'static str,
 }
 
-pub const CAPACITIES: [Capacity; 4] = [
+pub const CAPACITIES: [Capacity; 3] = [
     Capacity {
         what: "a territory's total capacity for a kind",
         holds: "that kind",
@@ -306,15 +310,9 @@ pub const CAPACITIES: [Capacity; 4] = [
         holds: "energy",
         up_to: "the unit's fuel",
     },
-    // **`P-399`: a thing holds one readiness per action.** The token model's whole bound -
-    // *two recipes naming the same action draw on the same tokens*, and one token is what
-    // makes a thing choose. Readiness is a kind now, so what limits it is containment like
-    // everything else rather than a yes-or-no trait.
-    Capacity {
-        what: "a thing, per action",
-        holds: "readiness for that action",
-        up_to: "1",
-    },
+    // **`P-411` took the fourth row out.** Readiness is a count a thing carries again, so
+    // what bounds it is the trait's own values - `0 or 1` - rather than a capacity to hold
+    // something. Three sorts of capacity, as before `P-399`.
 ];
 
 // ---------------------------------------------------------------------------------------
@@ -325,6 +323,13 @@ pub const CAPACITIES: [Capacity; 4] = [
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Held {
     Stored,
+    /// **`P-407`: a fact about the kind rather than about any one of them.**
+    ///
+    /// `force`, `fuel`, `upkeep`, `keeps` and `movable`. Every citizen's force is the same
+    /// number, so it is not something one citizen carries - and `P-417` follows from it: a
+    /// description carries the traits of the thing and not those of its kind, which is why
+    /// `{garrison force:0}` lost its word.
+    OfTheKind,
     /// Worked out from other things, with the release's own account of how.
     Derived(&'static str),
 }
@@ -333,6 +338,7 @@ impl Held {
     pub fn written(self) -> String {
         match self {
             Held::Stored => "stored".to_string(),
+            Held::OfTheKind => "of the kind".to_string(),
             Held::Derived(how) => format!("derived: {how}"),
         }
     }
@@ -347,13 +353,9 @@ pub struct TraitRow {
     pub held: Held,
 }
 
-pub const TRAITS: [TraitRow; 20] = [
-    TraitRow {
-        name: "kind",
-        of: "every thing",
-        values: "one of the kinds",
-        held: Held::Stored,
-    },
+pub const TRAITS: [TraitRow; 23] = [
+    // **`P-417` deleted the `kind` row**, because a kind is not a trait: `spec/console.md`
+    // lists them as different categories and no recipe writes `kind:`.
     // **`P-285` and `P-286`: a thing is not located by a trait.** `place` said *the thing it
     // is in*, which made location something a thing carries rather than something its
     // container says. What holds it is what says where it is - so the trait is gone and
@@ -365,14 +367,40 @@ pub const TRAITS: [TraitRow; 20] = [
         values: "a number, unique among things of its kind",
         held: Held::Stored,
     },
-    // **`P-399` replaced `ready` with this.** Readiness was a yes-or-no trait of whatever
-    // readies; it is a kind now, and what a reader needs of one is which action it is for.
-    // Two recipes naming the same action draw on the same tokens, which is Sean declaring
-    // fungibility deliberately rather than a consequence of anything.
+    // **`P-411` undid `P-399` and `C-90` is why.** Readiness was a kind a thing held, and
+    // two citizens differing only in it had the same description - so the map form could not
+    // tell them apart. It is a count the thing carries again, one per action, and the actions
+    // are separate traits rather than values of one.
     TraitRow {
-        name: "for",
-        of: "a readiness",
-        values: "`move`, `labor`, `work` or `bearing`",
+        name: "moving",
+        of: "a unit",
+        values: "0 or 1",
+        held: Held::Stored,
+    },
+    TraitRow {
+        name: "laboring",
+        of: "a citizen",
+        values: "0 or 1",
+        held: Held::Stored,
+    },
+    TraitRow {
+        name: "working",
+        of: "an extractor",
+        values: "0 or 1",
+        held: Held::Stored,
+    },
+    TraitRow {
+        name: "bearing",
+        of: "a citizen",
+        values: "0 or 1",
+        held: Held::Stored,
+    },
+    // **`P-414`: force is mustered rather than computed**, and this is what a thing spends to
+    // muster it. `spec/control.md` has no *highest* case any more.
+    TraitRow {
+        name: "defending",
+        of: "a citizen or a unit",
+        values: "0 or 1",
         held: Held::Stored,
     },
     TraitRow {
@@ -385,19 +413,19 @@ pub const TRAITS: [TraitRow; 20] = [
         name: "force",
         of: "citizen, garrison, ark, pioneer",
         values: "a number",
-        held: Held::Stored,
+        held: Held::OfTheKind,
     },
     TraitRow {
         name: "fuel",
         of: "a unit",
         values: "how much energy its tank holds",
-        held: Held::Stored,
+        held: Held::OfTheKind,
     },
     TraitRow {
         name: "upkeep",
         of: "a thing with upkeep",
         values: "food per turn",
-        held: Held::Stored,
+        held: Held::OfTheKind,
     },
     TraitRow {
         name: "metal in it",
@@ -454,7 +482,7 @@ pub const TRAITS: [TraitRow; 20] = [
         name: "keeps",
         of: "thing",
         values: "the number of turns it will last",
-        held: Held::Stored,
+        held: Held::OfTheKind,
     },
     TraitRow {
         name: "surplus",
@@ -489,7 +517,7 @@ pub const TRAITS: [TraitRow; 20] = [
         name: "movable",
         of: "whatever moves",
         values: "yes or no",
-        held: Held::Stored,
+        held: Held::OfTheKind,
     },
 ];
 
@@ -750,6 +778,20 @@ const fn placed(
     }
 }
 
+/// A `put` row: the thing stays, with one of its counts changed.
+///
+/// **`P-411`'s shape, and the quantity is blank rather than zero.** The release says a blank is
+/// not a zero - it says the row has no such number - and a named thing is not a quantity.
+const fn put(noun: Noun, traits: &'static [Qualifier]) -> Line {
+    Line {
+        role: Role::Put,
+        quantity: Quantity::None,
+        noun,
+        traits,
+        place: None,
+    }
+}
+
 const fn measured(role: Role, quantity: Quantity, noun: Noun) -> Line {
     Line {
         role,
@@ -783,14 +825,25 @@ const OF_RESOURCE: [Qualifier; 1] = [by("`$resource`", "resource")];
 // **`P-399`: a readiness names the action it is for.** These replace `ready`, `not ready`,
 // `fertile` and `spent`, which were four qualifiers over two yes-or-no traits; there is one
 // trait now and its value is the action.
-const FOR_MOVE: [Qualifier; 1] = [by("for `move`", "for")];
-const FOR_LABOR: [Qualifier; 1] = [by("for `labor`", "for")];
-const FOR_WORK: [Qualifier; 1] = [by("for `work`", "for")];
-const FOR_BEARING: [Qualifier; 1] = [by("for `bearing`", "for")];
-// `refresh` names every action at once rather than one, which is one row where it was two.
-const FOR_EACH: [Qualifier; 1] = [by("for each action, in whatever declares room", "for")];
-// `put` says which thing moves by where it is, not by a state it is in.
-const IN_FROM: [Qualifier; 1] = [by("in `$from`", "for")];
+// **`P-411`: a count a thing carries, one trait per action.** A rule requires at least one and
+// puts the thing back with one less; `refresh` puts it back at its maximum. Four rows where the
+// token model had one, and two citizens differing only in readiness are two descriptions again
+// - which is `C-90`, and why `P-399` was undone.
+const MOVING_SOME: [Qualifier; 1] = [by("moving at least 1", "moving")];
+const MOVING_LESS: [Qualifier; 1] = [by("moving one less", "moving")];
+const MOVING_FULL: [Qualifier; 1] = [by("moving at its maximum", "moving")];
+const LABORING_SOME: [Qualifier; 1] = [by("laboring at least 1", "laboring")];
+const LABORING_LESS: [Qualifier; 1] = [by("laboring one less", "laboring")];
+const LABORING_FULL: [Qualifier; 1] = [by("laboring at its maximum", "laboring")];
+const WORKING_SOME: [Qualifier; 1] = [by("working at least 1", "working")];
+const WORKING_LESS: [Qualifier; 1] = [by("working one less", "working")];
+const WORKING_FULL: [Qualifier; 1] = [by("working at its maximum", "working")];
+const BEARING_SOME: [Qualifier; 1] = [by("bearing at least 1", "bearing")];
+const BEARING_LESS: [Qualifier; 1] = [by("bearing one less", "bearing")];
+const BEARING_FULL: [Qualifier; 1] = [by("bearing at its maximum", "bearing")];
+const DEFENDING_SOME: [Qualifier; 1] = [by("defending at least 1", "defending")];
+const DEFENDING_LESS: [Qualifier; 1] = [by("defending one less", "defending")];
+const DEFENDING_FULL: [Qualifier; 1] = [by("defending at its maximum", "defending")];
 // **`fertile` and `spent` are one trait read both ways** - `spent`, yes or no. `bear` takes a
 // citizen that is not spent and leaves one that is; `renew` does the reverse, once per turn.
 
@@ -831,14 +884,14 @@ pub const RECIPES: &[Recipe] = &[
             // **Put, not consumed and produced** - `P-399`, and `P-396` is the reason: a
             // created thing arrives holding its tokens, so a produced unit would arrive able
             // to move again.
+            placed(Require, 1, UNIT, &MOVING_SOME, "`$from`"),
             Line {
                 role: Role::Put,
                 quantity: Quantity::None,
                 noun: UNIT,
-                traits: &IN_FROM,
+                traits: &MOVING_LESS,
                 place: Some("`$to`"),
             },
-            placed(Consume, 1, Noun::Of(Readiness), &FOR_MOVE, "that unit"),
             placed(Consume, 1, Noun::Of(Energy), &[], "that unit"),
         ],
     },
@@ -916,8 +969,8 @@ pub const RECIPES: &[Recipe] = &[
         name: "create labor",
         owner: Player,
         lines: &[
-            just(Require, 1, Noun::Of(Citizen)),
-            placed(Consume, 1, Noun::Of(Readiness), &FOR_LABOR, "that citizen"),
+            traited(Require, 1, Noun::Of(Citizen), &LABORING_SOME),
+            put(Noun::Of(Citizen), &LABORING_LESS),
             just(Produce, 1, Noun::Of(Labor)),
         ],
     },
@@ -926,8 +979,8 @@ pub const RECIPES: &[Recipe] = &[
         owner: Player,
         lines: &[
             placed(Require, 1, TERRITORY, &[], "`$where`"),
-            just(Require, 1, EXTRACTOR),
-            placed(Consume, 1, Noun::Of(Readiness), &FOR_WORK, "that extractor"),
+            traited(Require, 1, EXTRACTOR, &WORKING_SOME),
+            put(EXTRACTOR, &WORKING_LESS),
             just(Consume, 1, Noun::Of(Labor)),
             measured(
                 Produce,
@@ -963,14 +1016,8 @@ pub const RECIPES: &[Recipe] = &[
         name: "bear",
         owner: World,
         lines: &[
-            just(Require, 1, Noun::Of(Citizen)),
-            placed(
-                Consume,
-                1,
-                Noun::Of(Readiness),
-                &FOR_BEARING,
-                "that citizen",
-            ),
+            traited(Require, 1, Noun::Of(Citizen), &BEARING_SOME),
+            put(Noun::Of(Citizen), &BEARING_LESS),
             just(Produce, 1, Noun::Of(Fertility)),
         ],
     },
@@ -1057,14 +1104,68 @@ pub const RECIPES: &[Recipe] = &[
         lines: &[just(Consume, 1, Noun::Of(Fertility))],
     },
     Recipe {
-        // **One row, and it was two.** `refresh` no longer moves a thing between two states;
-        // it makes readiness, which is a kind. **And it carries no soft marking because it
-        // needs none** - `P-386` makes what a rule makes soft, and *Where things are* bounds a
-        // thing at one readiness per action, so the line can be short and therefore is soft. A
-        // thing already holding its readiness gets nothing; a thing with room is topped up.
+        // **One block per action, not one block of four rows** - `P-411`. `refresh` puts each
+        // thing back at its maximum rather than making a readiness, because readiness is a
+        // count the thing carries again and there is nothing to make. A repeated name is one
+        // rule applied to several kinds, which is `stow` and `discard`'s shape already.
         name: "refresh",
         owner: World,
-        lines: &[traited(Produce, 1, Noun::Of(Readiness), &FOR_EACH)],
+        lines: &[put(UNIT, &MOVING_FULL)],
+    },
+    Recipe {
+        name: "refresh",
+        owner: World,
+        lines: &[put(Noun::Of(Citizen), &LABORING_FULL)],
+    },
+    Recipe {
+        name: "refresh",
+        owner: World,
+        lines: &[put(Noun::Of(Citizen), &BEARING_FULL)],
+    },
+    Recipe {
+        name: "refresh",
+        owner: World,
+        lines: &[put(EXTRACTOR, &WORKING_FULL)],
+    },
+    // **`P-414`: force is mustered rather than computed**, and `P-416` removed the *highest*
+    // case from `spec/control.md` entirely. A citizen musters only where a garrison stands; a
+    // unit stands wherever it is. **A territory with no garrison presents no force at all**,
+    // where the model takes the maximum today.
+    Recipe {
+        name: "muster",
+        owner: World,
+        lines: &[
+            just(Require, 1, Noun::Of(Garrison)),
+            traited(Require, 1, Noun::Of(Citizen), &DEFENDING_SOME),
+            put(Noun::Of(Citizen), &DEFENDING_LESS),
+            measured(Produce, OfATrait("that citizen's force"), Noun::Of(Force)),
+        ],
+    },
+    Recipe {
+        name: "stand",
+        owner: World,
+        lines: &[
+            traited(Require, 1, UNIT, &DEFENDING_SOME),
+            put(UNIT, &DEFENDING_LESS),
+            measured(Produce, OfATrait("that unit's force"), Noun::Of(Force)),
+        ],
+    },
+    Recipe {
+        name: "refresh",
+        owner: World,
+        lines: &[put(Noun::Of(Citizen), &DEFENDING_FULL)],
+    },
+    Recipe {
+        name: "refresh",
+        owner: World,
+        lines: &[put(UNIT, &DEFENDING_FULL)],
+    },
+    // Force is swept at a turn's end like the other transients, so what a territory presents
+    // is what it mustered this turn rather than what it has ever mustered.
+    Recipe {
+        name: "discard",
+        owner: World,
+        lines: &[just(Consume, 1, Noun::Of(Force))],
     },
 ];
 

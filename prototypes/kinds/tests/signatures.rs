@@ -29,8 +29,8 @@ fn the_groups_partition_the_kinds() {
     let kinds = every_kind(&document);
     assert_eq!(
         kinds.len(),
-        18,
-        "the release declares eighteen kinds; every count below is against that population"
+        17,
+        "the release declares seventeen kinds; every count below is against that population"
     );
 
     let mut grouped: Vec<String> = signatures(&document)
@@ -96,8 +96,8 @@ fn a_pair_shares_a_group_exactly_when_it_shares_a_signature() {
     }
     assert_eq!(
         pairs,
-        18 * 17 / 2,
-        "every pair of the eighteen kinds is compared, and there are 153 of them"
+        17 * 16 / 2,
+        "every pair of the seventeen kinds is compared, and there are 136 of them"
     );
 
     // **The population this check ran against, said out loud.** Every assertion above is
@@ -106,7 +106,7 @@ fn a_pair_shares_a_group_exactly_when_it_shares_a_signature() {
     // not a pass**, it is the check reporting what it could not test, which is `C-64`.
     assert_eq!(
         agreeing, 0,
-        "no two of the eighteen kinds share a signature, so nothing above tested two kinds \
+        "no two of the seventeen kinds share a signature, so nothing above tested two kinds \
          grouping together. If this fails, two kinds now collide - which is `C-64` answered, \
          and the catalog's paragraph about there being nothing to scan goes with it"
     );
@@ -321,11 +321,8 @@ fn two_kinds_the_release_says_the_same_things_about_share_a_signature() {
     // because leaving it out would be asserting the bug.
     assert_eq!(
         a.traits,
-        vec![
-            String::from("keeps"),
-            String::from("kind"),
-            String::from("pairing")
-        ]
+        // **`kind` left when `P-417` deleted its row**, because a kind is not a trait.
+        vec![String::from("keeps"), String::from("pairing")]
     );
 
     // The world recipes that name `thing` reach every kind - and they reached none until
@@ -404,7 +401,7 @@ fn two_kinds_the_release_says_the_same_things_about_share_a_signature() {
     assert_eq!(
         distinct.len(),
         real.len(),
-        "the eighteen real kinds are still in eighteen groups, so the pair grouping is the \
+        "the seventeen real kinds are still in seventeen groups, so the pair grouping is the \
          signature agreeing rather than the signature collapsing"
     );
 }

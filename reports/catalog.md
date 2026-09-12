@@ -7,7 +7,7 @@ Every kind the release declares, with everything it says about that kind gathere
 and generated rather than written; this is one such form. It is a view and not a copy - each
 section is a join across six tables that the document does not perform anywhere.
 
-18 kinds, 4 families, 20 traits, 23 recipes.
+17 kinds, 4 families, 23 traits, 31 recipes.
 
 ## Signatures
 
@@ -17,121 +17,115 @@ when the release says the same things about them. Quantities are not part of it:
 are produced in different numbers by the same recipe still behave alike. **Being named through a
 family counts**, because a family is how the release addresses several kinds at once.
 
-**No two of the 18 kinds behave alike**, over all 153 pairs of them.
+**No two of the 17 kinds behave alike**, over all 136 pairs of them.
 
 **Every group below holds one kind**, which is what that sentence means when
-you reach them. **The traits alone do collide** - 12 of the kinds carry exactly
+you reach them. **The traits alone do collide** - 8 of the kinds carry exactly
 the traits another one carries - and every such pair is then separated by the recipes
 that name it. So the release has no two kinds it says *the same things* about, and Sean
 has accepted that as the answer: he expects a small number of distinct things.
 
 ### `s-1` - citizen
 
-**Traits** `force`, `keeps`, `kind`
+**Traits** `bearing`, `defending`, `force`, `keeps`, `laboring`
 
-**Named by** `age consume`, `age produce`, `bear consume`, `bear require`, `breed produce`, `create labor consume`, `create labor require`, `deploy ark produce`, `found by land produce`, `launch ark consume`, `perish consume`, `produce pioneer consume`, `spoil consume`, `upkeep require`
+**Named by** `age consume`, `age produce`, `bear put`, `bear require`, `breed produce`, `create labor put`, `create labor require`, `deploy ark produce`, `found by land produce`, `launch ark consume`, `muster put`, `muster require`, `perish consume`, `produce pioneer consume`, `refresh put`, `spoil consume`, `upkeep require`
 
 ### `s-2` - garrison
 
-**Traits** `force`, `keeps`, `kind`
+**Traits** `force`, `keeps`
 
-**Named by** `age consume`, `age produce`, `deploy ark produce`, `found by land produce`, `spoil consume`
+**Named by** `age consume`, `age produce`, `deploy ark produce`, `found by land produce`, `muster require`, `spoil consume`
 
 ### `s-3` - extractor
 
-**Traits** `keeps`, `kind`, `resource`
+**Traits** `keeps`, `resource`, `working`
 
-**Named by** `age consume`, `age produce`, `build extractor produce`, `deploy ark produce`, `found by land produce`, `spoil consume`, `work consume`, `work require`
+**Named by** `age consume`, `age produce`, `build extractor produce`, `deploy ark produce`, `found by land produce`, `refresh put`, `spoil consume`, `work put`, `work require`
 
 ### `s-4` - yard
 
-**Traits** `keeps`, `kind`
+**Traits** `keeps`
 
 **Named by** `age consume`, `age produce`, `build yard produce`, `launch ark require`, `spoil consume`
 
 ### `s-5` - store
 
-**Traits** `keeps`, `kind`, `resource`
+**Traits** `keeps`, `resource`
 
 **Named by** `age consume`, `age produce`, `build store produce`, `deploy ark produce`, `found by land produce`, `spoil consume`, `stow produce`
 
 ### `s-6` - ark
 
-**Traits** `force`, `fuel`, `keeps`, `kind`
+**Traits** `force`, `fuel`, `keeps`, `moving`
 
-**Named by** `age consume`, `age produce`, `deploy ark consume`, `launch ark produce`, `move put`, `spoil consume`
+**Named by** `age consume`, `age produce`, `deploy ark consume`, `launch ark produce`, `move put`, `move require`, `refresh put`, `spoil consume`, `stand put`, `stand require`
 
 ### `s-7` - pioneer
 
-**Traits** `force`, `fuel`, `keeps`, `kind`
+**Traits** `force`, `fuel`, `keeps`, `moving`
 
-**Named by** `age consume`, `age produce`, `found by land consume`, `move put`, `produce pioneer produce`, `spoil consume`
+**Named by** `age consume`, `age produce`, `found by land consume`, `move put`, `move require`, `produce pioneer produce`, `refresh put`, `spoil consume`, `stand put`, `stand require`
 
 ### `s-8` - food
 
-**Traits** `keeps`, `kind`, `surplus`
+**Traits** `keeps`, `surplus`
 
 **Named by** `age consume`, `age produce`, `breed consume`, `spoil consume`, `upkeep consume`, `work produce`
 
 ### `s-9` - metal
 
-**Traits** `keeps`, `kind`
+**Traits** `keeps`
 
 **Named by** `age consume`, `age produce`, `build extractor consume`, `build store consume`, `build yard consume`, `discard consume`, `launch ark consume`, `produce pioneer consume`, `spoil consume`, `stow consume`, `stow produce`, `work produce`
 
 ### `s-10` - energy
 
-**Traits** `keeps`, `kind`
+**Traits** `keeps`
 
 **Named by** `age consume`, `age produce`, `discard consume`, `launch ark consume`, `move consume`, `produce pioneer consume`, `spoil consume`, `stow consume`, `stow produce`, `work produce`
 
 ### `s-11` - labor
 
-**Traits** `keeps`, `kind`
+**Traits** `keeps`
 
 **Named by** `age consume`, `age produce`, `build extractor consume`, `build store consume`, `build yard consume`, `create labor produce`, `discard consume`, `spoil consume`, `work consume`
 
 ### `s-12` - territory
 
-**Traits** `biome`, `control`, `keeps`, `kind`, `nature`
+**Traits** `biome`, `control`, `keeps`, `nature`
 
 **Named by** `age consume`, `age produce`, `deploy ark require`, `launch ark require`, `move require`, `spoil consume`, `work require`
 
 ### `s-13` - orbit
 
-**Traits** `keeps`, `kind`
+**Traits** `keeps`
 
 **Named by** `age consume`, `age produce`, `deploy ark consume`, `launch ark produce`, `move require`, `spoil consume`
 
 ### `s-14` - deposit
 
-**Traits** `density`, `keeps`, `kind`, `total capacity`
+**Traits** `density`, `keeps`, `total capacity`
 
 **Named by** `age consume`, `age produce`, `spoil consume`
 
 ### `s-15` - adjacency
 
-**Traits** `from`, `keeps`, `kind`, `to`
+**Traits** `from`, `keeps`, `to`
 
 **Named by** `age consume`, `age produce`, `spoil consume`
 
 ### `s-16` - game
 
-**Traits** `keeps`, `kind`, `phase`
+**Traits** `keeps`, `phase`
 
 **Named by** `age consume`, `age produce`, `spoil consume`
 
 ### `s-17` - fertility
 
-**Traits** `keeps`, `kind`
+**Traits** `keeps`
 
 **Named by** `age consume`, `age produce`, `bear produce`, `breed consume`, `discard consume`, `spoil consume`
-
-### `s-18` - readiness
-
-**Traits** `for`, `keeps`, `kind`
-
-**Named by** `age consume`, `age produce`, `bear consume`, `create labor consume`, `move consume`, `refresh produce`, `spoil consume`, `work consume`
 
 ## citizen
 
@@ -139,7 +133,7 @@ a person: provides labor, eats, and grows on surplus.
 
 **In families** thing
 
-**Traits of it** `kind` (one of the kinds), `force` (a number), `keeps` (the number of turns it will last)
+**Traits of it** `laboring` (0 or 1), `bearing` (0 or 1), `defending` (0 or 1), `force` (a number), `keeps` (the number of turns it will last)
 
 **Signature** `s-1`
 
@@ -147,24 +141,27 @@ a person: provides labor, eats, and grows on surplus.
 
 **As a thing** Force: 1 · Upkeep: 1 food per turn · Readies: yes
 
-**Holds** readiness for that action, up to 1 - *a fact about the kind, so every one of them holds that many*
-
 **In recipes**
 
 - `deploy ark` produces 2
 - `found by land` produces 2
 - `produce pioneer` consumes 2
 - `launch ark` consumes 2
-- `create labor` requires 1
-- `create labor` consumes 1 (as the place holding readiness), for `labor`, in that citizen
+- `create labor` requires 1, laboring at least 1
+- `create labor` puts , laboring one less
 - `upkeep` requires 1
-- `bear` requires 1
-- `bear` consumes 1 (as the place holding readiness), for `bearing`, in that citizen
+- `bear` requires 1, bearing at least 1
+- `bear` puts , bearing one less
 - `breed` produces 1
 - `perish` consumes 1, whose upkeep is unpaid
 - `age` consumes 1 (as a thing), keeps at least 1
 - `age` produces 1 (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
+- `refresh` puts , laboring at its maximum
+- `refresh` puts , bearing at its maximum
+- `muster` requires 1, defending at least 1
+- `muster` puts , defending one less
+- `refresh` puts , defending at its maximum
 
 ## garrison
 
@@ -172,15 +169,13 @@ what holds a territory; a territory has at most one.
 
 **In families** thing
 
-**Traits of it** `kind` (one of the kinds), `force` (a number), `keeps` (the number of turns it will last)
+**Traits of it** `force` (a number), `keeps` (the number of turns it will last)
 
 **Signature** `s-2`
 
 **Bounded by** a capacity of 1
 
 **As a thing** Force: 0 · Costs to produce: 1 labor, 1 metal · Binding: 1
-
-**Holds** readiness for that action, up to 1 - *a fact about the kind, so every one of them holds that many*
 
 **In recipes**
 
@@ -189,6 +184,7 @@ what holds a territory; a territory has at most one.
 - `age` consumes 1 (as a thing), keeps at least 1
 - `age` produces 1 (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
+- `muster` requires 1
 
 ## extractor
 
@@ -196,15 +192,13 @@ built for one resource, and worked to produce it.
 
 **In families** thing
 
-**Traits of it** `kind` (one of the kinds), `resource` (one of the resources), `keeps` (the number of turns it will last)
+**Traits of it** `working` (0 or 1), `resource` (one of the resources), `keeps` (the number of turns it will last)
 
 **Signature** `s-3`
 
 **Bounded by** a capacity, from *Territory resources*
 
 **As a thing** Costs to produce: 1 labor, 1 metal · Binding: 1 · Readies: yes
-
-**Holds** readiness for that action, up to 1 - *a fact about the kind, so every one of them holds that many*
 
 **In recipes**
 
@@ -213,11 +207,12 @@ built for one resource, and worked to produce it.
 - `found by land` produces 1, food
 - `found by land` produces 1, metal
 - `build extractor` produces 1, `$resource`
-- `work` requires 1
-- `work` consumes 1 (as the place holding readiness), for `work`, in that extractor
+- `work` requires 1, working at least 1
+- `work` puts , working one less
 - `age` consumes 1 (as a thing), keeps at least 1
 - `age` produces 1 (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
+- `refresh` puts , working at its maximum
 
 ## yard
 
@@ -225,15 +220,13 @@ where an Ark is produced.
 
 **In families** thing
 
-**Traits of it** `kind` (one of the kinds), `keeps` (the number of turns it will last)
+**Traits of it** `keeps` (the number of turns it will last)
 
 **Signature** `s-4`
 
 **Bounded by** a capacity of 1
 
 **As a thing** Costs to produce: 1 labor, 15 metal · Binding: 15
-
-**Holds** readiness for that action, up to 1 - *a fact about the kind, so every one of them holds that many*
 
 **In recipes**
 
@@ -249,7 +242,7 @@ built to hold one resource, and holds nothing else.
 
 **In families** thing
 
-**Traits of it** `kind` (one of the kinds), `resource` (one of the resources), `keeps` (the number of turns it will last)
+**Traits of it** `resource` (one of the resources), `keeps` (the number of turns it will last)
 
 **Signature** `s-5`
 
@@ -258,8 +251,6 @@ built to hold one resource, and holds nothing else.
 **As a thing** Costs to produce: 1 labor, 1 metal · Binding: 1
 
 **Holds** the resource it was built for, up to 10 - *a fact about the kind, so every one of them holds that many*
-
-**Holds** readiness for that action, up to 1 - *a fact about the kind, so every one of them holds that many*
 
 **In recipes**
 
@@ -280,7 +271,7 @@ carries a landing, and can invade from orbit.
 
 **In families** thing, unit
 
-**Traits of it** `kind` (one of the kinds), `force` (a number), `fuel` (how much energy its tank holds), `keeps` (the number of turns it will last)
+**Traits of it** `moving` (0 or 1), `force` (a number), `fuel` (how much energy its tank holds), `keeps` (the number of turns it will last)
 
 **Signature** `s-6`
 
@@ -290,16 +281,19 @@ carries a landing, and can invade from orbit.
 
 **Holds** energy, up to the unit's fuel - *a fact about each one rather than about the kind*
 
-**Holds** readiness for that action, up to 1 - *a fact about the kind, so every one of them holds that many*
-
 **In recipes**
 
 - `deploy ark` consumes 1, in the orbit above `$where`
-- `move` puts  (as a unit), in `$from`, in `$to`
+- `move` requires 1 (as a unit), moving at least 1, in `$from`
+- `move` puts  (as a unit), moving one less, in `$to`
 - `launch ark` produces 1, in the orbit above `$where`
 - `age` consumes 1 (as a thing), keeps at least 1
 - `age` produces 1 (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
+- `refresh` puts  (as a unit), moving at its maximum
+- `stand` requires 1 (as a unit), defending at least 1
+- `stand` puts  (as a unit), defending one less
+- `refresh` puts  (as a unit), defending at its maximum
 
 ## pioneer
 
@@ -307,7 +301,7 @@ founds a territory.
 
 **In families** thing, unit
 
-**Traits of it** `kind` (one of the kinds), `force` (a number), `fuel` (how much energy its tank holds), `keeps` (the number of turns it will last)
+**Traits of it** `moving` (0 or 1), `force` (a number), `fuel` (how much energy its tank holds), `keeps` (the number of turns it will last)
 
 **Signature** `s-7`
 
@@ -317,16 +311,19 @@ founds a territory.
 
 **Holds** energy, up to the unit's fuel - *a fact about each one rather than about the kind*
 
-**Holds** readiness for that action, up to 1 - *a fact about the kind, so every one of them holds that many*
-
 **In recipes**
 
-- `move` puts  (as a unit), in `$from`, in `$to`
+- `move` requires 1 (as a unit), moving at least 1, in `$from`
+- `move` puts  (as a unit), moving one less, in `$to`
 - `found by land` consumes 1
 - `produce pioneer` produces 1
 - `age` consumes 1 (as a thing), keeps at least 1
 - `age` produces 1 (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
+- `refresh` puts  (as a unit), moving at its maximum
+- `stand` requires 1 (as a unit), defending at least 1
+- `stand` puts  (as a unit), defending one less
+- `refresh` puts  (as a unit), defending at its maximum
 
 ## food
 
@@ -334,13 +331,11 @@ eaten by citizens; expires.
 
 **In families** thing, resource
 
-**Traits of it** `kind` (one of the kinds), `keeps` (the number of turns it will last), `surplus` (yes or no)
+**Traits of it** `keeps` (the number of turns it will last), `surplus` (yes or no)
 
 **Signature** `s-8`
 
 **Bounded by** the things in it that hold it, and it keeps for one turn
-
-**Holds** readiness for that action, up to 1 - *a fact about the kind, so every one of them holds that many*
 
 **In recipes**
 
@@ -357,13 +352,11 @@ what things are built from; conserved.
 
 **In families** thing, resource
 
-**Traits of it** `kind` (one of the kinds), `keeps` (the number of turns it will last)
+**Traits of it** `keeps` (the number of turns it will last)
 
 **Signature** `s-9`
 
 **Bounded by** the things in it that hold it
-
-**Holds** readiness for that action, up to 1 - *a fact about the kind, so every one of them holds that many*
 
 **In recipes**
 
@@ -386,13 +379,11 @@ what moves things; neither conserved nor expiring.
 
 **In families** thing, resource
 
-**Traits of it** `kind` (one of the kinds), `keeps` (the number of turns it will last)
+**Traits of it** `keeps` (the number of turns it will last)
 
 **Signature** `s-10`
 
 **Bounded by** the things in it that hold it
-
-**Holds** readiness for that action, up to 1 - *a fact about the kind, so every one of them holds that many*
 
 **In recipes**
 
@@ -413,13 +404,11 @@ what working a machine takes; a citizen provides it each turn.
 
 **In families** thing
 
-**Traits of it** `kind` (one of the kinds), `keeps` (the number of turns it will last)
+**Traits of it** `keeps` (the number of turns it will last)
 
 **Signature** `s-11`
 
 **Bounded by** the citizens that make it, one each per turn
-
-**Holds** readiness for that action, up to 1 - *a fact about the kind, so every one of them holds that many*
 
 **In recipes**
 
@@ -439,13 +428,11 @@ a place things are in, which has a biome, a force of nature, and a density and a
 
 **In families** thing, place
 
-**Traits of it** `kind` (one of the kinds), `control` (held by a player, or unclaimed), `biome` (one of the biomes), `nature` (a number), `keeps` (the number of turns it will last)
+**Traits of it** `control` (held by a player, or unclaimed), `biome` (one of the biomes), `nature` (a number), `keeps` (the number of turns it will last)
 
 **Signature** `s-12`
 
 **Holds** that kind, up to its total capacity for that kind - *a fact about each one rather than about the kind*
-
-**Holds** readiness for that action, up to 1 - *a fact about the kind, so every one of them holds that many*
 
 **In recipes**
 
@@ -464,11 +451,9 @@ a place above one territory, which holds units and nothing else.
 
 **In families** thing, place
 
-**Traits of it** `kind` (one of the kinds), `keeps` (the number of turns it will last)
+**Traits of it** `keeps` (the number of turns it will last)
 
 **Signature** `s-13`
-
-**Holds** readiness for that action, up to 1 - *a fact about the kind, so every one of them holds that many*
 
 **In recipes**
 
@@ -486,11 +471,9 @@ what a territory's ground offers of one resource, and how richly.
 
 **In families** thing
 
-**Traits of it** `kind` (one of the kinds), `density` (a number), `total capacity` (a number), `keeps` (the number of turns it will last)
+**Traits of it** `density` (a number), `total capacity` (a number), `keeps` (the number of turns it will last)
 
 **Signature** `s-14`
-
-**Holds** readiness for that action, up to 1 - *a fact about the kind, so every one of them holds that many*
 
 **In recipes**
 
@@ -504,11 +487,9 @@ two places that share an edge, held by the thing that holds them.
 
 **In families** thing
 
-**Traits of it** `kind` (one of the kinds), `from` (a place), `to` (a place), `keeps` (the number of turns it will last)
+**Traits of it** `from` (a place), `to` (a place), `keeps` (the number of turns it will last)
 
 **Signature** `s-15`
-
-**Holds** readiness for that action, up to 1 - *a fact about the kind, so every one of them holds that many*
 
 **In recipes**
 
@@ -522,11 +503,9 @@ every thing is in it, and it is the one thing that is in nothing.
 
 **In families** thing
 
-**Traits of it** `kind` (one of the kinds), `keeps` (the number of turns it will last), `phase` (design or play)
+**Traits of it** `keeps` (the number of turns it will last), `phase` (design or play)
 
 **Signature** `s-16`
-
-**Holds** readiness for that action, up to 1 - *a fact about the kind, so every one of them holds that many*
 
 **In recipes**
 
@@ -540,13 +519,11 @@ a citizen's capacity to raise one more, spent by raising one and renewed each tu
 
 **In families** thing
 
-**Traits of it** `kind` (one of the kinds), `keeps` (the number of turns it will last)
+**Traits of it** `keeps` (the number of turns it will last)
 
 **Signature** `s-17`
 
 **Bounded by** the citizens that make it, one each per turn
-
-**Holds** readiness for that action, up to 1 - *a fact about the kind, so every one of them holds that many*
 
 **In recipes**
 
@@ -556,27 +533,4 @@ a citizen's capacity to raise one more, spent by raising one and renewed each tu
 - `age` produces 1 (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 - `discard` consumes 1
-
-## readiness
-
-what a thing spends to act, drawn from time and refilled each turn.
-
-**In families** thing
-
-**Traits of it** `kind` (one of the kinds), `for` (`move`, `labor`, `work` or `bearing`), `keeps` (the number of turns it will last)
-
-**Signature** `s-18`
-
-**Holds** readiness for that action, up to 1 - *a fact about the kind, so every one of them holds that many*
-
-**In recipes**
-
-- `move` consumes 1, for `move`, in that unit
-- `create labor` consumes 1, for `labor`, in that citizen
-- `work` consumes 1, for `work`, in that extractor
-- `bear` consumes 1, for `bearing`, in that citizen
-- `age` consumes 1 (as a thing), keeps at least 1
-- `age` produces 1 (as a thing), keeps one less
-- `spoil` consumes 1 (as a thing), keeps 0
-- `refresh` produces 1, for each action, in whatever declares room
 

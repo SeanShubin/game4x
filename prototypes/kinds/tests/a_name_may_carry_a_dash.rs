@@ -79,8 +79,8 @@ fn every_kind_keeps_its_signature_when_its_name_carries_a_dash() {
         .collect();
     assert_eq!(
         kinds.len(),
-        18,
-        "the release declares eighteen kinds; the count below is against that population"
+        17,
+        "the release declares seventeen kinds; the count below is against that population"
     );
 
     let mut checked = 0;
@@ -120,7 +120,7 @@ fn every_kind_keeps_its_signature_when_its_name_carries_a_dash() {
     }
 
     assert_eq!(
-        checked, 18,
+        checked, 17,
         "a kind was skipped, so the rule is unchecked on it"
     );
     assert!(
@@ -154,8 +154,8 @@ fn hyphenating_every_kind_merges_none_of_them() {
     let before = signatures(&document).len();
     assert_eq!(
         (kinds.len(), before),
-        (18, 18),
-        "eighteen kinds in eighteen groups is the baseline this compares against"
+        (17, 17),
+        "seventeen kinds in seventeen groups is the baseline this compares against"
     );
 
     let mut hyphenated = document.clone();
