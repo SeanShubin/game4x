@@ -127,6 +127,13 @@ bounded pump, and what bounds the pump has to be in the rules for the check to r
 **A list in a cell is not `C-98` here.** That item was a key taking several values in a **data
 file**; this is a rendering, and the kind's line gives each action its own key -
 `bearing:1 defending:1 laboring:1`, three keys rather than one key with three values.
+
+**The gate goes red when this lands, and the lane that has to fix it is not the only lane it
+stops.** `crates/game-console` reads the *Readies* column as a yes, and its own tripwire -
+`the_readies_column_states_no_maximum_for_the_constant_to_read` - fails the day the column carries
+a number and cites this proposal by name. **That is the notice working rather than a defect left
+behind**, and it is said here because `CLAUDE.md` requires a promotion that reddens a generated
+table to say so in the same breath as the rule.
 ### P-461 - `metal in it` is defined by a name the Traits table does not declare
 
 **to** sean · **status** open · **raised** 2026-09-12 · **kind** contradiction, found counting the four tables with no data file and verified by the code lane as `C-102` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Traits
@@ -177,11 +184,11 @@ is a contradiction, and both are named in `S-30` as part of what *Units and stru
 undeclared can wait for the proposal that settles that whole table.
 ### P-457 - `traits.4x`, the last file in `spec/data/`
 
-**to** sean · **status** open · **cited** `036a305`, `a18e94b` · **raised** 2026-09-12 · **kind** answered, by you, 2026-09-12 · **shape** an instruction and text · **asks** approval · **into** `spec/data/traits.4x`, and `spec/console.md` -> The language
+**to** sean · **status** open · **cited** `036a305`, `a18e94b`, `3f2a017` · **raised** 2026-09-12 · **kind** answered, by you, 2026-09-12 · **shape** an instruction and text · **asks** approval · **into** `spec/data/traits.4x`, and `spec/console.md` -> The language
 
 **You took `A`, so `unpaid` and `movable` admit a number like the five counts, and nothing in the
-game is two-valued anywhere.** The file, twenty lines, entries in the release's table order and the
-traits inside each line sorted:
+game is two-valued anywhere.** The file, entries in the release's table order and the traits inside
+each line sorted:
 
 ```
 {trait admits:number kept:thing name:id}
@@ -194,6 +201,7 @@ traits inside each line sorted:
 {trait admits:number kept:kind name:strength}
 {trait admits:number kept:kind name:fuel}
 {trait admits:number kept:kind name:upkeep}
+{trait admits:number kept:kind name:binding}
 {trait admits:number kept:thing name:density}
 {trait admits:number kept:thing name:total-capacity}
 {trait admits:value kept:thing name:biome}
@@ -206,42 +214,56 @@ traits inside each line sorted:
 {trait admits:number kept:kind name:movable}
 ```
 
-**Fifteen admit a number, two a family, two their own values, and one is `id`** - which is
-`admits:number` whatever `P-456` settles, because which kinds carry it is on their lines.
+**Twenty-one lines, and the eleventh is `binding`, which is there because `P-461` lands with it.**
+Without `P-461` the file is twenty and the same rule produces it - **the instruction derives the
+file from the release rather than being told a count**, so the two proposals can land in either
+order or one without the other.
 
-**The instruction: write that file into `spec/data/`.** The check the promoting commit runs, and
-this lane has run: twenty lines against the release's twenty-three traits, the three left out being
-`metal in it`, `control` and `surplus` - each derived and each named by no recipe row - and every
-line's `kept` derived from the release's *Stored or derived* column rather than typed.
+**The rule the file is derived by, which is what the promoting commit runs:** one line per trait the
+*Traits* table declares, **except a derived trait no recipe row names** - `metal in it`, `control`
+and `surplus` today. `admits` is `number`, or the family whose kinds are its values, or `value`
+where its values declare themselves. `kept` is read from the *Stored or derived* column. **The count
+is whatever that gives**, asserted against the table at promotion rather than against this text.
 
-## The sentence, into `spec/console.md` -> The language
+## The text, replacing one paragraph of `spec/console.md`
 
-**`P-451` says a trait *says what it admits and whether it is stored* and gives no written form.**
-This is the form, and it goes directly under that paragraph.
+**`P-451`'s paragraph says a trait tells *whether it is stored*, which reads as a yes-or-no and is
+three.** `kept` is `thing`, `kind` or `nothing`, so the paragraph is offered whole with that clause
+corrected and the written form added under it.
 
-> **A trait says what it admits and where its value lives, as two keys.** **`admits`** is `number`,
-> or a **family** whose kinds are its values, or **`value`** where its values declare themselves.
-> **`kept`** is **`thing`** where each thing of a kind carries the value, **`kind`** where the kind
-> carries it once, and **`nothing`** where it is derived and nothing carries it.
+> **A kind declares which traits it has, and a value declares which trait it is one of.** So a trait
+> says what it admits and where its value lives, and says nothing about which kinds carry it; and a
+> trait whose values are kinds names their family instead, because they are already declared. **The
+> thing that belongs to something says so, and the something says only what is true of itself.**
+>
+> **A trait says those two things with two keys.** **`admits`** is `number`, or a **family** whose
+> kinds are its values, or **`value`** where its values declare themselves. **`kept`** is
+> **`thing`** where each thing of a kind carries the value, **`kind`** where the kind carries it
+> once, and **`nothing`** where it is derived and nothing carries it.
+
+**The only word that changes in the first paragraph is *whether it is stored* becoming *where its
+value lives*.** `P-458` is why: **a rule the specification can state twice is one two readers can
+disagree about**, and a binary beside a three-valued key is that.
 
 ## One thing entailed rather than chosen, so you can overrule it
 
-**`biome` and `phase` say `admits:value` rather than naming themselves.** The block this lane showed
-you wrote `admits:biome` - the trait repeating its own name - and `P-458` is what changes it: **a
-rule the specification can state twice is one two readers can disagree about**, and `name:biome`
-already says which set it is. A value carries `of:biome`, so the link exists in one direction and
-does not need writing in the other.
+**`biome` and `phase` say `admits:value` rather than naming themselves.** The block this lane first
+showed you wrote `admits:biome` - the trait repeating its own name - and `P-458` is what changes it:
+`name:biome` already says which set it is. A value carries `of:biome`, so the link exists in one
+direction and does not need writing in the other.
 
 ## What follows, and it is not a question here
 
 **`phase`'s two values need a file, as a biome's did.** `{value name:design of:phase}` and
-`{value name:play of:phase}` - **`phases.4x`**, two lines, the shape `biomes.4x` set. A short file is
-not a cost; it is one set with one home. **That is a line of the next proposal rather than something
-to settle now**, and nothing reads `phase`'s values before the editor does.
+`{value name:play of:phase}` - **`phases.4x`**, two lines, the shape `biomes.4x` set. **That is a
+line of the next proposal rather than something to settle now**, and nothing reads `phase`'s values
+before the editor does.
 
-**And `traits.4x` is the last file `spec/data/` waits on.** After it, what has no file is the
-capacity relation, four undeclared columns of *Units and structures*, and `Recipes` - all three
-recorded in `S-30` and none of them blocking.
+**The gate goes red when this lands and the code lane has said so.** `crates/game-console` asserts
+`spec/data/traits.4x` is absent, deliberately, so that the day it arrives they are told rather than
+having to remember. **That failure is the notice working**, not a defect this promotion leaves
+behind.
+
 ### P-460 - a command binds every place a recipe leaves open
 
 **to** sean · **status** open · **cited** `161a056`, `bb9bba4` · **raised** 2026-09-12 · **kind** entailed, from `P-456` · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
