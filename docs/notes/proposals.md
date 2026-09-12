@@ -62,69 +62,8 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-467 - a garrison costs nothing and binds nothing
+*Nothing is open. Everything filed has been decided.*
 
-**to** sean · **status** **withdrawn** 2026-09-12 · **cited** `6392650` · **raised** 2026-09-12 · **kind** answered by you and then subsumed · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Units and structures
-
-**Withdrawn because `P-466` deletes the two cells this edits, and your answer is kept.** This
-blanks the garrison's `Costs to produce` and `Binding`; `A` removes both columns. **The two
-cannot be promoted at once** - this one would be editing cells that no longer exist - and landing
-it first makes it a no-op that `P-466` erases a moment later.
-
-**Nothing is lost, checked rather than assumed.** After `P-466` no file says a garrison costs
-anything: the columns are gone, no recipe ever charged labor or metal for one, and `binding` is
-**derived from the metal the recipe charges**, which for a garrison is none. **Your answer - a
-garrison costs nothing and binds nothing - is what the files then say**, reached by the number
-never arriving rather than by a cell being emptied.
-
-**`P-466` carries the reasoning**, so the decision is recorded where it is acted on. What follows
-is the item as it stood when you answered it.
-
-**Your answer decides it, and by your own test rather than this lane's preference.** *At this point
-I don't have any strong opinions about costs, they are a means to the end of getting our first
-release playable* - which is `P-445`: **I want to decide this empirically. If I never notice I need
-it, I don't need it.**
-
-**A garrison's cost is a number nothing reads.** No recipe charges it, no recipe consumes a
-garrison, and nothing in `crates/` reads a garrison's binding - checked rather than assumed. **You
-have not noticed needing it because nothing has ever asked.**
-
-## The cells
-
-| Thing        | Costs to produce | Binding |
-| ------------ | ---------------- | ------- |
-| **garrison** |                  |         |
-
-**Both empty, which is a blank and not a zero** - the file already draws that distinction, and every
-other row of those two columns that does not apply is blank the same way.
-
-## What it changes, which is nothing that runs
-
-**Checked rather than asserted:**
-
-- **No recipe charges labor or metal for a garrison.** Three rows in the release name one: `deploy
-  ark` and `found by land` produce it, `muster` requires it
-- **Nothing consumes a garrison**, so the metal was never recovered and nothing gains
-- **`metal in it` is derived and in no data file**, being named by no recipe row - so nothing reads
-  the binding it would have read
-- **The scenario's two garrisons are `{garrison}` with no traits**, in territories 1 and 2, and the
-  expected state does not change
-
-**So `spec/invariants.md` -> *nothing in the game appears or disappears without a cause inside the
-model* holds again**, and it holds by the metal never arriving rather than by founding paying for
-it.
-
-## What this deliberately does not do
-
-**It deletes a number rather than deciding what the number was for**, and this lane could find no
-note saying why a garrison was given a cost. **If the intent was that holding ground costs
-something, this loses it** - and the way back is `A` from the earlier draft: `found by land` and
-`deploy ark` each gain a `consume 1 metal` and a `consume 1 labor`. **That is a balance decision and
-you have said balance is not what you are deciding today.**
-
-**And it makes `P-466` cleaner.** That proposal shows five of six columns agreeing with the recipes
-and the garrison row disagreeing; after this the row agrees, and **the disagreement stays as the
-argument for `P-466` rather than as a live defect** - it happened, which is what the case was for.
 ## Addressed to other perspectives
 
 ### S-120 - `P-455` landed: the three files are in `spec/data/`, and three of your checks are red by design
@@ -5057,6 +4996,7 @@ again in a later session.
 
 | Proposal                                                                              | Why                                                                                                                                                                                                                                                                                                                                                         |            |
 | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |            |
+| P-467, "a garrison costs nothing and binds nothing" | Answered by Sean - *I don't have any strong opinions about costs* - and then subsumed. `P-466` removes the two cells this would have blanked, so the two could not be promoted at once and landing this first made it a no-op. **The answer is kept**: after `P-466` no file says a garrison costs anything, and `binding` is derived from the metal the recipe charges, which for a garrison is none. |  |
 | P-2, "twenty planet sizes are available below 500"                                    | Superseded by Sean's edit fixing the game at five named sizes.                                                                                                                                                                                                                                                                                              |            |
 | P-3, "no two territories are more than `3m` apart"                                    | Superseded by the per-size statement, and incomplete: `3m` holds for class I only, while the large planet is class III where the measured distance is 7.                                                                                                                                                                                                    |            |
 | P-4, "the twelve five-neighbour territories sit in six antipodal pairs"               | Derivable from the Goldberg choice, and no rule leans on it.                                                                                                                                                                                                                                                                                                |            |
