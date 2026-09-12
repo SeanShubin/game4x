@@ -324,6 +324,85 @@ fn touching(root: &Path, what: &str) -> Result<String, String> {
     ))
 }
 
+/// The cells of every table in a markdown text, as header rows only.
+fn header_rows(text: &str) -> Vec<Vec<String>> {
+    let lines: Vec<&str> = text.lines().collect();
+    let mut out = Vec::new();
+    for (at, line) in lines.iter().enumerate() {
+        if !line.trim_start().starts_with('|') {
+            continue;
+        }
+        let next = lines.get(at + 1).map(|l| l.trim()).unwrap_or("");
+        if !next.starts_with("| -") && !next.starts_with("|-") {
+            continue;
+        }
+        out.push(
+            line.trim()
+                .trim_matches('|')
+                .split('|')
+                .map(|c| c.trim().trim_matches('*').to_string())
+                .filter(|c| !c.is_empty())
+                .collect(),
+        );
+    }
+    out
+}
+
+/// **A proposal saying `shape rows` offers cells that land. A before-and-after table does not.**
+///
+/// `CLAUDE.md`: *if it will say something these words only described, that is an instruction*. A
+/// table headed `Values now | Values after` describes a change - no cell of it ever appears in
+/// the destination, and the rows check correctly looks for `Values now` there and does not find
+/// it.
+///
+/// **The check is that every column the proposal's table names exists in a table of the file it
+/// names.** `Values now` exists nowhere, which is what makes it findable.
+///
+/// **This has happened four times and the label was wrong every time** - `P-236`, `C-19`, and
+/// `P-465` and `P-466` on 2026-09-12, the last two adding named exceptions to a test in another
+/// lane's column. **The exception list was accumulating instances of one labelling error made
+/// here**, which is why the check is here rather than there. Reported by the quality lens.
+fn shape_is_rows_only_if_the_cells_land(root: &Path, id: &str, draft: &str) -> Result<(), String> {
+    if !draft.contains("**shape** rows") {
+        return Ok(());
+    }
+    let offered = header_rows(draft);
+    if offered.is_empty() {
+        return Ok(());
+    }
+    let fields = draft.lines().nth(2).unwrap_or("");
+    let mut known: Vec<String> = Vec::new();
+    let mut looked = 0;
+    for piece in fields.split('`').skip(1).step_by(2) {
+        if !piece.ends_with(".md") {
+            continue;
+        }
+        let Ok(text) = read(&root.join(piece)) else {
+            continue;
+        };
+        looked += 1;
+        for row in header_rows(&text) {
+            known.extend(row);
+        }
+    }
+    if looked == 0 {
+        return Ok(());
+    }
+    for row in &offered {
+        for column in row {
+            if !known.contains(column) {
+                return Err(format!(
+                    "{id} says `shape rows` and offers a column {column:?} that no table in the \
+                     files it names has. A table describing a change is an instruction - \
+                     CLAUDE.md: if it will say something these words only described, that is an \
+                     instruction"
+                ));
+            }
+        }
+    }
+    Ok(())
+}
+
 /// Put a drafted item at the top of `## Open`, and make the sentinel agree afterwards.
 ///
 /// **Filing was the one step still done by a script written fresh each time**, and
@@ -371,6 +450,8 @@ fn file(root: &Path, path: &str) -> Result<String, String> {
     } else {
         "docs/notes/proposals.md"
     };
+    shape_is_rows_only_if_the_cells_land(root, &id, &draft)?;
+
     let at = root.join(into);
     let before = read(&at)?;
     if before.contains(&format!("### {id} - ")) {
