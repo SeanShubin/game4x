@@ -3760,6 +3760,56 @@ to generate it from.
 **Not a decision and not urgent.** It is filed so the gap is visible while it is open, rather than
 discovered when somebody edits a table by hand and nothing objects.
 
+
+**Counted 2026-09-12, after `C-102` offered a reading of the four.** Their three-of-four holds for
+two, and the third is one relation rather than one number.
+
+**`Where things are` is three rows and `What bounds a kind` is twelve, and five numbers across the
+two are the same relation.** A maximum of a contained kind per container kind:
+
+```
+territory -> garrison   1        What bounds a kind
+territory -> yard       1
+territory -> ark        2
+territory -> pioneer    2
+store     -> its resource  10    Where things are
+```
+
+**`C-102` calls the store's 10 *one number nothing has claimed* and the four capacities data that
+`P-451`'s fourth sentence already places.** They are the same shape: *a territory holds at most one
+garrison* is not a fact about a garrison, it is a fact about the pair. **A trait on the kind's line
+cannot say it**, because the line has no room for which container it is talking about. This is
+`C-47`'s capacity relation, and it is the one of the four tables that genuinely wants a file.
+
+**The other two rows of `Where things are` are trait references and need nothing** - *its total
+capacity for that kind* and *the unit's fuel* are `total capacity` and `fuel`, both declared. **And
+eight of the twelve bounds are relationships** - *the food produced here, through upkeep*, *as many
+as the extractors of its resource* - which rule 7 leaves in prose, correctly.
+
+**`Units and structures` does not fold as cleanly as `C-102` says.** Ten columns, and five of them
+are declared traits - `Strength`, `Fuel`, `Upkeep`, `Movable`, and `Readies` once `P-459` is
+answered. **The other five are not:**
+
+- **`Costs to produce`** is a list, which is `C-98`'s cell one table over - correct in `C-102`
+- **`Binding`** is an of-the-kind number and **no trait declares it**, though `metal in it` is
+  defined as *its binding plus the metal in its parts*, so a derived trait reads a name the Traits
+  table does not have
+- **`Crosses`** is `orbit border` or `border`, which is neither a kind nor a declared trait
+- **`Requires`** is *a Yard*, a kind, and nothing declares the trait that would hold it
+
+**So the four tables are: one relation with a file, one table mostly folded with four undeclared
+names, one that needs nothing, and `Recipes`.**
+
+**`Recipes` is 77 body rows and not 78** - `C-102` says 78, and 77 is the figure
+`docs/designing-rules.md` states and `tools/spec/tests/stated_numbers.rs` re-derives at every gate.
+A small number and the third one today that was right about a slightly different population.
+
+**And `C-102`'s refusal to draft `Recipes` is the right call rather than a gap.** They read that
+table three times over and say the shape is this lane's, because a shape invented there and
+transcribed here is the promotion by the wrong lane `C-49` was about. **What they offered instead is
+to say whether a proposed shape carries everything their three readers need**, which is worth more
+than a draft.
+
 ### S-29 - Input and expected are data files; the dumps are neither
 
 **to** code - **status** **acted** 2026-09-07 - `c37de2e` - **raised** 2026-09-03 - **revised** 2026-09-04 - **source** Sean, on
