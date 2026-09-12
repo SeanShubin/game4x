@@ -868,6 +868,73 @@ def ours_by_effect():
     return out
 
 
+def release_arcs():
+    """Check 17. Every arc of the RELEASE's recipes, classified before it is counted.
+
+    **This exists because check 16 answers a narrower question than `X-29` asks.** Check 16
+    classifies this lane's own re-encoding, whose recipes are `grow`, `refuel` and
+    `end-of-turn losses` - names the release does not have. The item's claim is about the
+    release, so the count has to be too.
+
+    **The classification, stated before counting, because choosing it afterwards is how a
+    number gets the answer that was wanted.** A place is a kind or a trait counter, and an
+    arc's weight is how many tokens move:
+
+    - **ordinary** - the weight is written in the row, or read from a trait *of the kind*,
+      which is one constant per case and is what grounding spells out. `consume 1 ark`,
+      `produce 2 citizen`, `produce that citizen's force`.
+    - **a threshold** - a read arc that tests and moves nothing. `require 1 territory`,
+      and the *at least 1* half of a counter.
+    - **reads a marking** - the weight depends on how many tokens the place holds *now*.
+
+    **Only one form in the release does the last**, and it is not the one this lane first
+    guessed. `put ... at its maximum` has to move *the difference between the maximum and
+    what is there*, so its weight is marking-dependent - a reset arc. `put ... one less` is
+    a decrement of exactly one and reads nothing. This lane had those the wrong way round in
+    a message on 2026-09-11; the code lane's `C-85` reply is what corrected it, and the
+    correction is the reason the rule is written down here rather than applied by eye.
+    """
+    rows, owner, name = [], None, None
+    inside = False
+    for line in RELEASE.read_text(encoding="utf-8").splitlines():
+        if line.startswith("| Recipe "):
+            inside = True
+            continue
+        if not inside:
+            continue
+        if not line.startswith("|"):
+            break
+        cells = [c.strip() for c in line.strip("|").split("|")]
+        if len(cells) < 6 or (cells[0] and set(cells[0]) <= set("-")):
+            continue
+        if cells[0].strip("*").strip():
+            name = cells[0].strip("*").strip()
+        if cells[1]:
+            owner = cells[1]
+        role, kind, traits = cells[2], cells[4].strip("`"), cells[5]
+        if not role or not kind:
+            continue
+        rows.append((name, owner, role, kind, traits))
+    assert rows, "parsed no recipe rows from the release, so this check knows nothing"
+    return rows
+
+
+def classify_arcs(rows):
+    """Sort parsed release rows into the three kinds above. Returns (counts, marking)."""
+    counts, marking = {}, []
+    for name, owner, role, kind, traits in rows:
+        if role == "require":
+            kindof = "a threshold"
+        elif "at its maximum" in traits:
+            kindof = "reads a marking"
+        else:
+            kindof = "ordinary"
+        counts[kindof] = counts.get(kindof, 0) + 1
+        if kindof == "reads a marking":
+            marking.append((owner, name, kind, traits))
+    return counts, marking
+
+
 def check_recipe_drift():
     """Check 12. Where this lane's recipes and the release's disagree, by (role, kind)."""
     theirs, ours = release_recipes(), ours_by_effect()
@@ -1062,6 +1129,34 @@ def self_test():
             f" ({_name}, of {len(_shared)} traits in both)"
         )
     _row[2] = _was
+
+    # Check 17 poison: move an arc across the line in BOTH directions, because a classifier
+    # that can only be made to over-count is half a check.
+    #
+    # **Poisoned on the parsed rows rather than on the release**, which this lane may not
+    # edit - so the mutation is applied to what `release_arcs()` returned. That means the
+    # parse itself is not under poison, which is why the count is also asserted against a
+    # non-empty population above.
+    _rows17 = release_arcs()
+    _base17 = len(classify_arcs(_rows17)[1])
+    _up = [
+        (n, o, r, k, "at its maximum") if "one less" in t else (n, o, r, k, t)
+        for n, o, r, k, t in _rows17
+    ]
+    _down = [
+        (n, o, r, k, t.replace("at its maximum", "one less")) for n, o, r, k, t in _rows17
+    ]
+    _n_up, _n_down = len(classify_arcs(_up)[1]), len(classify_arcs(_down)[1])
+    if _n_up <= _base17:
+        print("  POISON FAILED: check 17 did not grow when a decrement became a reset")
+        ok = False
+    elif _n_down >= _base17:
+        print("  POISON FAILED: check 17 did not shrink when a reset became a decrement")
+        ok = False
+    else:
+        print(
+            f"  poison ok: check 17 moves both ways ({_n_down} <- {_base17} -> {_n_up})"
+        )
 
     # Check 8 poison: declare a pairing nothing could reach, and it must be named.
     _saved8 = list(DATA["containment_declared"])
@@ -1474,6 +1569,27 @@ def main():
         print(f"    {name:<22} colours {colours:<3} soft {soft:<3} -> {total:<4} "
               f"({', '.join(fams) or 'no family'})")
     print(f"  {colour16} transitions by colour, {both16} by colour and softness together")
+
+    rows17 = release_arcs()
+    counts17, marking17 = classify_arcs(rows17)
+    owners17 = sorted({o for o, _n, _k, _t in marking17})
+    recipes17 = sorted({n for _o, n, _k, _t in marking17})
+    print()
+    print("CHECK 17 - every arc of the RELEASE's recipes, by its Petri-net kind")
+    print(f"  {len(rows17)} arcs over {len({r[0] for r in rows17})} recipes, parsed from "
+          f"releases/first-release.md")
+    for k, v in sorted(counts17.items(), key=lambda kv: -kv[1]):
+        print(f"  {v:4}  {k}")
+    for owner, name, kind, traits in marking17:
+        print(f"    reads a marking: {owner}/{name} - {kind}, {traits}")
+    if marking17:
+        print(f"  every marking-reading arc is owned by: {', '.join(owners17)}")
+        print(f"  and they are all in: {', '.join(recipes17)}")
+    else:
+        # A zero here would satisfy `X-29` for the wrong reason, so it is named rather than
+        # reported as a pass. A count over nothing proves nothing.
+        print("  NONE - which is a claim about a population, so check the parse before "
+              "believing it")
 
     print("Every green above means nothing unless the poison at the top went red.")
     return 0 if poisoned else 1

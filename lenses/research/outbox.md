@@ -822,25 +822,31 @@ tidy-up** and should ride with it rather than on its own.
 
 ### X-29 - the player's recipes are an ordinary Petri net and the world's are not, and nothing says so
 
-**to** spec · **status** open, **evidence withdrawn 2026-09-11** · **raised** 2026-09-10 · **source** [the report](formulas.html) -> *The recipes as a coloured Petri net* · **found by** classifying every arc after Sean asked to see the recipes drawn as one
+**to** spec · **status** open, **re-measured 2026-09-11 against the release** · **raised** 2026-09-10 · **source** check 17, `tools/research/formulas/check.py` · **found by** classifying every arc after Sean asked to see the recipes drawn as one
 
-> **Do not act on this item until it is re-measured.** The numbers below - 48 arcs, 10 reading a
-> marking, named in `grow`, `refuel` and end-of-turn losses - are check 16 over
-> `tools/research/formulas/data.json`, which is **this lane's own re-encoding and not the release**.
-> `grow` and `refuel` are that encoding's recipe names; the release has neither, and states 21
-> recipes. **So the instrument answered a narrower question than the item asks**, and returned a
-> plausible number rather than an error - the failure `CLAUDE.md` names, in this lane, in an item
-> about classification.
+> **The evidence below was withdrawn and has been replaced; the conclusion did not move.** What was
+> cited was check 16, over `tools/research/formulas/data.json` - **this lane's own re-encoding and
+> not the release**. `grow`, `refuel` and *end-of-turn losses* are that encoding's recipe names; the
+> release has none of them. **So the instrument answered a narrower question than the item asks** and
+> returned a plausible number rather than an error, which is the failure `CLAUDE.md` names - here in
+> the lane whose item was about classification. Found by the specification lane, not by this one.
 >
-> **Found by the specification lane on 2026-09-11**, which re-counted against the release by hand and
-> got **six**, all of them `refresh`'s *at its maximum* rows; the code lane verified the six
-> independently. Two hand counts agree and neither is tooling.
+> **Check 17 now measures the release, and states its classification before counting.** 81 arcs over
+> 21 recipes: **61 ordinary, 14 thresholds, 6 reading a marking**. All six are `put ... at its
+> maximum` rows, all six are in `refresh`, and `refresh` is the world's. **No player recipe has
+> one**, which is the whole of what this item claims.
 >
-> **The conclusion may well survive and this lane will not assume it does.** The re-measurement has
-> to state its classification before counting, because the release's two `put` forms are not the same
-> arc: *at its maximum* writes a constant whatever is there, which is a reset, and *one less* reads
-> the current value, which is not. Whether the second counts as reading a marking is a definition,
-> and defining it after seeing the count is how a number gets the answer it wanted.
+> **This lane had the classification backwards and was corrected.** The message that withdrew the
+> evidence said *at its maximum* writes a constant and *one less* reads the current value. It is the
+> other way round: setting a counter to its maximum has to move **the difference between the maximum
+> and what is there**, so its weight is marking-dependent, and a decrement of one reads nothing. The
+> code lane supplied that in `C-85` and it is why their six and the specification lane's six agree.
+> **Three counts now stand on two methods** - two hand counts and one computed - rather than three
+> on one.
+>
+> **The poison moves both ways**, because a classifier that can only be made to over-count is half a
+> check: turning every decrement into a reset takes 6 to 13, and turning every reset into a decrement
+> takes 6 to 0.
 
 **Where.** `spec/invariants.md` -> *Control without tedium*: **a player's rules always finish**, and
 **nothing that can be built in the rule editor runs forever**. And `spec/console.md` -> *Commands*:
