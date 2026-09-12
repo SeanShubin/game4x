@@ -31,6 +31,7 @@ releases/
 docs/
   README.md ....................... this file: the map and the rules
   process.md ...................... how Sean runs several instances, and what he requires of them
+  designing-rules.md .............. what the recipe net buys, and how to tell if a formula is allowed
   vision.md ....................... what the game is and what it must not become
   architecture.md ................. module boundaries and dependency rules
   layers.md ....................... old world + events -> new world, and what that demands
@@ -83,20 +84,21 @@ Crate READMEs cover how a crate works internally and are linked from
 
 ## What goes where
 
-| Kind of content                                                | Home                                                                                |
-| -------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| What the game **is**, normatively                              | `spec/<name>.md` - Sean's words only, see [CLAUDE.md](../CLAUDE.md)                 |
-| A record of analysis or a rejected path                        | `docs/notes/<name>.md` - derived, dated, not binding                                |
-| A movement the design expects but has not made                 | [vision.md](vision.md) - *Directions*. Informs a decision, binds nothing            |
-| A generated report I browse                                    | `reports/<name>.md` and `.html`, reached from `reports/index.html`                  |
-| The scenario's input, and what it should produce               | `scenario/commands/` and `scenario/expected/`                                       |
-| What the game is, and why                                      | [vision.md](vision.md)                                                              |
-| How the code is split up                                       | [architecture.md](architecture.md)                                                  |
-| Why it is split that way, and what must be reproducible        | [layers.md](layers.md)                                                              |
-| A thing we are building to learn something                     | `prototypes/<name>.md`                                                              |
-| How to actually run one                                        | `scripts/<name>.ps1` and `.sh`, listed in [scripts/README.md](../scripts/README.md) |
-| Background that would be true even if we used another language | `theory/<name>.md`                                                                  |
-| How a specific crate works internally                          | that crate's own `README.md`, linked from `architecture.md`                         |
+| Kind of content                                                | Home                                                                                 |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| What the game **is**, normatively                              | `spec/<name>.md` - Sean's words only, see [CLAUDE.md](../CLAUDE.md)                  |
+| A record of analysis or a rejected path                        | `docs/notes/<name>.md` - derived, dated, not binding                                 |
+| A movement the design expects but has not made                 | [vision.md](vision.md) - *Directions*. Informs a decision, binds nothing             |
+| Whether a rule I want to write is expressible at all           | [designing-rules.md](designing-rules.md) - the constraints, before I design into one |
+| A generated report I browse                                    | `reports/<name>.md` and `.html`, reached from `reports/index.html`                   |
+| The scenario's input, and what it should produce               | `scenario/commands/` and `scenario/expected/`                                        |
+| What the game is, and why                                      | [vision.md](vision.md)                                                               |
+| How the code is split up                                       | [architecture.md](architecture.md)                                                   |
+| Why it is split that way, and what must be reproducible        | [layers.md](layers.md)                                                               |
+| A thing we are building to learn something                     | `prototypes/<name>.md`                                                               |
+| How to actually run one                                        | `scripts/<name>.ps1` and `.sh`, listed in [scripts/README.md](../scripts/README.md)  |
+| Background that would be true even if we used another language | `theory/<name>.md`                                                                   |
+| How a specific crate works internally                          | that crate's own `README.md`, linked from `architecture.md`                          |
 
 A document that restates what another document says **links to it instead of listing it**. Where
 the list is worth having in both places, the second one is generated rather than written.
