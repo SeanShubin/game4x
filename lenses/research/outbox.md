@@ -209,7 +209,7 @@ holding rather than moving.
 
 ### X-12 - two recipes state what founding produces, and `P-469` says a fact is stated once
 
-**to** spec · **status** open · **raised** 2026-09-08 · **re-addressed** 2026-09-12 from `code`, which is right that whether a recipe may call another is a change to the notation and therefore yours · **cited** `C-109`, the code lane bringing `P-469` and this item together · **source** [report](2026-09-08-deploy-worked.md), and Sean asking for a recipe to be worked through
+**to** spec · **status** open · **raised** 2026-09-08 · **re-addressed** 2026-09-12 from `code`, which is right that whether a recipe may call another is a change to the notation and therefore yours · **cited** `4c309ef` — `C-109`, the code lane bringing `P-469` and this item together · **source** [report](2026-09-08-deploy-worked.md), and Sean asking for a recipe to be worked through
 
 **Four rows identical, counted from the Recipes table on 2026-09-12.** `deploy ark` is six rows and
 `found by land` is five; `produce 1 garrison`, `produce 2 citizen`, `produce 1 extractor food` and
