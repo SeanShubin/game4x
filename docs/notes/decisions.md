@@ -152,7 +152,60 @@ under C cannot drift because it is not stored.
 a `rule` trait, which keeps the word rule intact; whatever reads the file has to know what
 `every-kind` means, which is one function.
 
+## You chose C, and writing it up found where it stops
+
+**Two of the four families have a rule and two do not**, checked against the tables rather than
+assumed:
+
+```
+{family name:thing rule:every-kind}     computable from kinds.4x
+{family name:unit rule:movable}         computable - the movable trait is yes for ark and pioneer and blank for the other sixteen
+{family name:resource rule:?}           nothing distinguishes food, metal and energy but being listed
+{family name:place rule:?}              nothing distinguishes territory and orbit but being listed
+```
+
+**`place` and `resource` are named as families and marked by no trait.** Checked over every trait's
+`Of` column: none is *of* a place or *of* a resource in a way that selects them.
+
+## And a trait's `Of` does not terminate
+
+**This proposal's own C line hinted at it and did not say it.** It read
+`{trait name:strength of:has-strength} - a family, which is option A one level up.`
+
+**Write the next line and the problem is visible:**
+
+```
+{trait name:strength of:has-strength}
+{family name:has-strength rule:???}
+```
+
+**The rule would be *kinds that have a strength*, which is the thing being declared.** Checked in the
+data: `strength` is of citizen, garrison, ark and pioneer, and the only column that separates those
+four from extractor, yard and store **is the strength column itself.**
+
+**So under C a list becomes a rule, a rule needs something to compute from, and that something is
+eventually a list.** It terminates for `thing` and `unit` because `kinds.4x` and the `movable` trait
+already exist. **Elsewhere it either regresses or bottoms out in whatever reads the file** - which
+`spec/invariants.md` forbids: *what the game is made of lives in a data file, not in code.*
+
+## So the question is narrower than it was, and it is still yours
+
+**C for the two that have a rule is free and this lane would do it without asking.** What C cannot do
+is the other two and every trait's `Of`.
+
+- **Declare the missing traits**, so `place` and `resource` become computable like `unit` is. **Then
+  a trait's `Of` still has no answer**, because its rule is itself
+- **Take C where it terminates and a list where it does not**, which is what `D` is. **Not a
+  compromise but a description**: `thing` and `unit` have rules and the others are enumerations
+- **Let a rule bottom out in code** for the cases with no data to compute from, which buys the small
+  file and pays with `spec/invariants.md`
+
+**This lane is not choosing**, and it would have written C up without noticing any of this if it had
+not gone to write the `has-strength` line out. **Which is your instruction from yesterday doing its
+work**: the example showed what the abstraction hid, this time from the author's side.
+
 ## Why this is yours and not the code lane's
+
 
 **They refused to pick and said why**, which is `C-49`'s rule working: *a shape invented here and
 transcribed into the specification is the promotion by the wrong lane that item was about.*
