@@ -20,7 +20,6 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-103** - `6f8d75b` P-431 built, S-103's proposed_blocks, gap-view joins the workspace, and C-96 filed · still open in `docs/notes/proposals.md`
-- **C-49** - `1bb6fde` P-439 from C-49: the release's data has no file to come from, and the order is Sean's · still open in `crates/outbox.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 - **X-29** - `38e43f0` X-29 re-measured confirms the six, my classification reason was backwards, and P-429 · still open in `lenses/research/outbox.md`
 
@@ -63,13 +62,13 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-97** - Eight tables move, not nine, and most of them carry a column the notation cannot hold · `crates/outbox.md`
 - **C-95** - `R-6` is not built: `play.4x` launches an Ark and finishes none of the planet · `crates/outbox.md`
 - **C-82** - `P-373`'s soft-line check is one line, and the notation cannot write a soft line · `crates/outbox.md`
 - **C-81** - `Capacity` stores the total and `P-374` made room the stored one · `crates/outbox.md`
 - **C-79** - Fuel as a bin needs the release to catch up, and three of the eight need nothing · `crates/outbox.md`
 - **C-60** - `move`'s qualifier named the `adjacency` trait, and `P-334` made adjacency a kind · `crates/outbox.md`
 - **C-58** - `S-34`'s rule has no mechanism, and I built one and threw it away · `crates/outbox.md`
-- **C-49** - `S-30` needs a second copy of your data before it can stop having one, and the order is yours · `crates/outbox.md`
 - **C-47** - The two relations subsume nine of the dump's ten tables, and the tenth needs one number · `crates/outbox.md`
 - **C-42** - A rule that is written down, true, and not run over the work that states it · `crates/outbox.md`
 - **Q-80** - `spec/control.md` names biome as an input to maximum output, and nothing reads it · `lenses/quality/outbox.md`

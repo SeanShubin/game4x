@@ -61,6 +61,47 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-97 - Eight tables move, not nine, and most of them carry a column the notation cannot hold
+
+**to** spec · **status** open · **raised** 2026-09-12 · **source** rule 7 and `S-110`, working out
+how the release's tables split across files before writing a loader for them
+
+**Counted, not taken.** Nine sections of `releases/first-release.md` contain a table. **One of
+them is not the game's data**: the table under *Scope* -> *Territory resources* is **this
+planet's** - territory 1 is 3 x 4 food - which `S-110` itself says to keep apart from the game's
+own. And **`## Controls` is prose**, six bullets about keys and buttons, not a table at all. So
+the set that moves is **eight**: *Kinds*, *Families*, *Where things are*, *Traits*, *What bounds a
+kind in a territory*, *Units and structures*, *Recipes*, *Biomes*.
+
+**The bigger half: rule 7 splits these tables, it does not move them.** *Relationships in prose,
+data in data files* - so a table's prose column stays prose and its data becomes a file, and
+almost every one of the eight has both.
+
+- **Data-shaped throughout, and these are the two to start with.** *Biomes* - 7 rows of a name and
+  four numbers. *Units and structures* - 8 rows of numbers and closed values.
+- **Structured, with one column that is neither prose nor a value.** *Recipes*, 78 rows: `Role`
+  and `Kind` are vocabulary, `Qty` is a number or an expression, and `Traits` carries phrases -
+  *keeps at least 1*, *defending at its maximum* - which this lane already parses.
+- **A prose column each, which rule 7 keeps as prose.** *Kinds* - `What it is` is a sentence per
+  kind. *What bounds a kind in a territory* - `Bounded by` is a sentence. *Where things are* -
+  `Container` is a phrase. *Traits* - `Of` and `Values` are both.
+
+**The question this lane will not guess at.** `spec/console.md` says *every word in a data file is
+a kind, a trait, or one of a trait's values*. That is a rule about a file that **uses** the
+vocabulary. Six of the eight **declare** it - what kinds there are, what a trait admits - and a
+declaration is not a thing in a game state. **Whether the notation admits a declaration as it
+stands, or gains a form for one, is the specification lane's and not this lane's.**
+
+**Proceeding on what does not depend on it**, which is most of it. The comparison comes first, as
+`S-110` says: cell for cell, both directions, so *go with the data we have been using* is checked
+rather than trusted. `Biomes` and `Units and structures` need no new form and can be first. The
+split across files and the loader are this lane's, and nothing there waits on the answer.
+
+**What this lane is not doing**: writing into the specification directory, or folding the
+planet's table in with the game's.
+
+---
+
 ### C-96 - `age` puts `keeps one less` on one thing, and `keeps` is declared of the kind
 
 **to** spec · **status** answered · **raised** 2026-09-12 · **answered** 2026-09-12 by `P-434` ·
@@ -2382,8 +2423,38 @@ to `P-284` was backwards - is the reason no release row was proposed.
 
 ### C-49 - `S-30` needs a second copy of your data before it can stop having one, and the order is yours
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** reaching `S-30` after
+**to** spec · **status** answered · **answered** 2026-09-12 by rule 7 and `P-439` · **cited**
+`1bb6fde` · **raised** 2026-09-06 · **source** reaching `S-30` after
 `S-47` and `S-54`, and declining to start it
+
+**Answered by Sean in a way neither order this item offered would have reached.** Both of them
+ended with the game's data in a file **outside** the specification, and differed only in when the
+release was emptied. He put the file **inside** it. Rule 7 now reads *state the game's data in
+several files in a directory of their own, in the notation rather than in a table*, and **what
+the specification states is the default** - `spec/README.md`.
+
+**So the window this item was about does not exist.** There is no moment when the data is a
+source in two places, because the specification owns it throughout and a release copies from it.
+
+**And the deeper objection is answered by his third sentence rather than sequenced around.** This
+item said the content of a data file would be *this lane's ideas transcribed by the specification
+lane, and a transcription that becomes canonical is a promotion done by the wrong lane*. He said
+**go with the data we have been using** - so the data is not this lane's proposal, it is the
+release's own tables moving into the notation. Nothing is invented, which makes the transcription
+mechanical and leaves nothing for a promotion to launder.
+
+**What this lane does about it, since the answer changes the order rather than only unblocking
+it.** The comparison comes first: cell for cell, failing in both directions, so *go with the data
+we have been using* is verifiable rather than trusted. The measured half of this item already
+holds - the checks that read the release do not go green when its tables leave.
+
+**One thing this lane has not settled and is not guessing at**, recorded here rather than in a
+reply: the notation describes **things**, and the nine tables declare **vocabulary** - what kinds
+exist, what a trait admits, what a recipe is. `spec/console.md` says *every word in a data file is
+a kind, a trait, or one of a trait's values*, which is a rule about a file that uses the
+vocabulary rather than one that declares it. Whether a declaration is writable in the notation as
+it stands is the first thing to find out, and it is measured in `C-97` rather than assumed either
+way.
 
 **derived from** a release does not contain the game's data; it links to the generated view -
 `P-224`
