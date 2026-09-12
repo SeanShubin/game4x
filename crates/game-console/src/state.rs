@@ -26,10 +26,18 @@
 //! ```text
 //! {game phase:play}
 //!   {orbit id:1} -> 1
-//!     {ark id:1 fuel:1 ready:yes} -> 1
+//!     {ark defending:1 id:1 moving:1} -> 1
 //!   {territory biome:grassland id:1 nature:1} -> 1
-//!     {citizen ready:yes} -> 8
+//!     {citizen bearing:1 defending:1 laboring:1} -> 8
 //! ```
+//!
+//! **Written the way the file writes it, and both entries moved twice this week.** `ready:yes`
+//! was the trait `P-399` replaced with a held kind and `P-411` replaced again with a count per
+//! action, so a citizen carries three and a unit two - each `0 or 1`, none of them omitted,
+//! because *no trait of the thing may be left out*. `fuel` left the description with `P-407`,
+//! which marks it **of the kind**: naming `ark` has already said it. The traits are in sorted
+//! order for the reason the form gives - *entries are in the order their descriptions sort
+//! in*, so the same state is always the same bytes.
 //!
 //! **`spec/console.md` gives the entry and not the nesting.** It says a thing appears inside
 //! what holds it and never states its container, which fixes what the file may say and
@@ -438,9 +446,15 @@ mod tests {
     }
 
     #[test]
+    /// **The descriptions are ones the game writes**, which a round trip does not require
+    /// and which is worth the two minutes anyway. This fixture read `{ark fuel:2 id:1
+    /// ready:yes}` and `{citizen ready:yes}` until today: `ready` is a trait the game has not
+    /// had since `P-399`, and `fuel` left a description with `P-407`, which marks it of the
+    /// kind. **The property holds over any traits at all** - so nothing failed, and the one
+    /// place a reader looks to see what a tree looks like showed a shape the game cannot emit.
     fn a_tree_is_written_and_read_back_as_itself() {
-        let text = "{game phase:play}\n  {orbit id:1} -> 1\n    {ark fuel:2 id:1 ready:yes} -> 1\n  \
-                    {territory biome:ice id:1 nature:1} -> 1\n    {citizen ready:yes} -> 8\n";
+        let text = "{game phase:play}\n  {orbit id:1} -> 1\n    {ark defending:1 id:1 moving:1} -> 1\n  \
+                    {territory biome:ice id:1 nature:1} -> 1\n    {citizen bearing:1 defending:1 laboring:1} -> 8\n";
         let tree = root(text);
         assert_eq!(written(&tree), text, "the same bytes, both ways");
         assert_eq!(tree.contents.len(), 2, "an orbit and a territory");
@@ -534,9 +548,12 @@ mod tests {
             ("{game}\n  {citizen}\n", "an entry has a quantity"),
             ("{game}\n  {citizen} -> 0\n", "an entry is never zero"),
             ("{game}\n  {citizen} -> many\n", "is not a quantity"),
-            ("{game}\n  {citizen ready} -> 1\n", "is not `trait:value`"),
             (
-                "{game}\n  {citizen ready:yes ready:no} -> 1\n",
+                "{game}\n  {citizen laboring} -> 1\n",
+                "is not `trait:value`",
+            ),
+            (
+                "{game}\n  {citizen laboring:1 laboring:0} -> 1\n",
                 "twice in one description",
             ),
             ("{game}\n      {citizen} -> 1\n", "inside a thing at depth"),

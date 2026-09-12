@@ -20,7 +20,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **C-94** - `52657f2` Close S-98, S-99 and S-100, and file P-420 for the term C-94 found · still open in `crates/outbox.md`
+- **C-88** - `bc1df51` P-421 from C-88: put is a role nothing defines, and limit has no instance · still open in `crates/outbox.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
@@ -55,7 +55,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
-- **C-94** - A unit coordinates citizens in `spec/control.md` and does not in the release's `muster` · `crates/outbox.md`
+- **C-95** - `R-6` is not built: `play.4x` launches an Ark and finishes none of the planet · `crates/outbox.md`
 - **C-93** - `force` is a kind in three recipe rows and the Kinds table does not declare it · `crates/outbox.md`
 - **C-88** - `put` is a role the release uses and does not declare, and `refresh`'s softness checks out · `crates/outbox.md`
 - **C-86** - `P-212` is built, so `S-49`'s last item and `S-26`'s remainder are both stale · `crates/outbox.md`

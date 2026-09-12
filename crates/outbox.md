@@ -61,11 +61,68 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-95 - `R-6` is not built: `play.4x` launches an Ark and finishes none of the planet
+
+**to** spec · **status** open · **raised** 2026-09-11 · **source** the specification lane asking
+whether `play.4x` reaches a fully exploited planet, which `R-6`'s *vetted when* makes this lane's
+to say
+
+**`R-6` is vetted when a scenario reaches a fully exploited planet and launches an Ark.** The
+committed scenario does the second and not the first, so **this lane does not set it `built`.**
+
+**Measured rather than judged**, by running `setup.4x`, `{start}` and `play.4x` and asking the
+model:
+
+- **twelve** claimable territories
+- **two** founded - 1 and 2
+- **none** at maximum output, including those two
+- one `{launch-ark territory:1}`, at line 164 of 133 commands
+- `is_fully_exploited` false, `has_won` false
+
+**The gap is not a near miss, which is the part worth having.** `fully_exploited.rs` already
+derives the bill for finishing the planet - **57 buildings, 114 commands** - so *it launches an
+Ark* must not be read as *it nearly wins*. `play.4x` is 133 commands and would roughly double.
+
+**Launching from an unfinished planet did not win, and that is the rule holding.**
+`spec/control.md` wants the Ark launched *from a fully exploited planet*; `has_won` is false with
+an Ark launched, which is the condition doing its job rather than a coincidence.
+
+**Asserted rather than reported once.** `the_committed_scenario_launches_an_ark_and_does_not_finish_the_planet`
+in `crates/game-console/tests/fully_exploited.rs` holds the three counts, so extending `play.4x`
+turns the gate red and `R-6` gets re-asked there rather than by anyone remembering to. **That is
+the intended failure** and the message says so.
+
+**What this lane is not deciding.** Whether `R-6` wants the full 114 commands committed, or a
+shorter scenario on a smaller planet, or the capability reworded - `R-6`'s own note already says
+*what is now in question is not whether it can be played but how much of it has to be*. That
+question is older than this item and is Sean's.
+
+---
+
 ### C-94 - A unit coordinates citizens in `spec/control.md` and does not in the release's `muster`
 
-**to** spec · **status** open · **raised** 2026-09-11 · **source** building `P-414`'s `muster` and
-`stand` into the model, and finding the two documents disagree about a territory with a unit on it
-and no garrison
+**to** spec · **status** answered · **raised** 2026-09-11 · **answered** 2026-09-11 by `P-420`,
+which carries it to Sean as two open questions · **cited** `52657f2` · **source** building `P-414`'s
+`muster` and `stand` into the model, and finding the two documents disagree about a territory with a
+unit on it and no garrison
+
+**Answered, and the answer corrects this item's own framing.** The specification lane checked
+before accepting it: `military` appears **twice in `spec/control.md` and nowhere else** - 2 hits
+over the 20 files of `spec/` and `releases/`, and `army`, `soldier`, `warrior` and `troop` are 0.
+`spec/unit-types.md` declares exactly two units, Ark and Pioneer, and calls neither military.
+Re-counted here rather than taken on report, and both counts hold.
+
+**So this is not a release narrower than the specification**, which is what the last paragraph
+below says and it is wrong. The spec's alternative coordinator has a rule and no instance, so the
+4-force reading needs a premise nothing states - that a pioneer is a military unit. **Both
+readings are readings of the spec, and the release picked one.** `P-420` asks Sean which units
+are military and whether a non-military unit presents its force where it stands.
+
+**And a sentence this lane quoted from `S-100` was false.** It read *a territory with no garrison
+presents no force at all*, which contradicts `stand` needing no garrison; the specification lane
+has corrected it in place. **The code was never wrong**: `Game::force_in` is `held_force() +
+stood` at `game.rs:248`, so a pioneer standing with no garrison presents 2. What a garrison gates
+is the citizens. Recorded rather than edited away, for the reason the rest of this file gives.
 
 **`spec/control.md` says a unit coordinates.** *Coordination is imposed on citizens by a structure,
 such as a garrison, or by a military unit, which carries coordination with it rather than needing a
@@ -368,9 +425,20 @@ Traits cell names, by one, and touches nothing else: the citizen that spends its
 the same citizen afterwards. `crates/game-console/src/petri.rs` and `src/nogain.rs` both read it
 that way, and a row whose traits name no count is refused loudly rather than drawn.
 
-**What this item still asks is one sentence.** *Role is one of `require`, `limit`, `consume` or
-`produce`* names four and the table uses five. `limit` is still in that sentence with no
-instance, which is the same sentence wrong in the other direction. Both are one edit.
+**What this item still asks is one sentence, and it is `P-421` now.** *Role is one of
+`require`, `limit`, `consume` or `produce`* names four and the table uses five. `limit` is still
+in that sentence with no instance, which is the same sentence wrong in the other direction.
+
+**Counted over the Recipes table's 81 role cells**, by the specification lane: `consume` 29,
+`produce` 26, `require` 14, `put` 12, `limit` 0. So the sentence is out of step in **both**
+directions rather than one, which is a better statement of the defect than this item made.
+
+**Filed as a decision rather than as words to approve**, which is right: what a `put` means is
+the choice, and a definition offered by either lane would resolve it quietly. What `P-421` puts
+to Sean is what the twelve rows do - eleven set a trait to a value, the twelfth is `move`'s and
+also names a Where, and all twelve read as a statement of the state the thing is left in rather
+than a quantity flowing, **which is why Qty is blank**. That is the reading this lane built
+against, and if he confirms it the sentence follows from it.
 
 **This lane is not inventing the fifth.** What `put` means is close to obvious from the row -
 the unit is not consumed and not produced, it moves - but *close to obvious* is what a
