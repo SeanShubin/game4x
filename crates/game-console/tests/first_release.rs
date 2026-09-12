@@ -872,3 +872,76 @@ fn every_way_the_state_can_change_is_a_command() {
          orbit. `produce` stopped being one when `P-342` made `produce ark` into `launch ark`"
     );
 }
+
+/// Every recipe the player may fire has exactly one command named for it.
+///
+/// **`spec/console.md`: *a command is named for the recipe it fires, and there is one command
+/// for each recipe the player may fire*.** A stated rule with nothing holding the two lists
+/// together until now - `every_way_the_state_can_change_is_a_command` compares the grammar to
+/// the **model's** transitions, which is a different pair.
+///
+/// # What it guards, and it has happened
+///
+/// **One command doing two recipes' work is the defect `P-214` split apart.** The scenario's
+/// one `move` line founded, so it fired `found by land` and the recipe `move` had never once
+/// run - and the coverage check was green for weeks, because a command existed and something
+/// fired. **Nothing compared the command's name to the recipe's.**
+///
+/// **It passes today**, so this is a guard rather than a repair, and `docs/process.md` is
+/// right that a passing test proves nothing on its own. What makes it worth having is that
+/// the rule is stated and was unheld: a command renamed, or a second one added for one recipe,
+/// would be invisible.
+///
+/// # One direction, deliberately
+///
+/// **Recipe to command, and not the reverse.** Five design commands fire no recipe at all -
+/// `create-planet` and its four - which is `C-79` and `P-364`, open and not this lane's to
+/// settle. Checking the other way would need those five as exceptions, and an exemption list
+/// that size stops being a guard and becomes the list written twice.
+#[test]
+fn every_player_recipe_has_one_command_named_for_it() {
+    let document = std::fs::read_to_string(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../releases/first-release.md"),
+    )
+    .expect("the release");
+
+    let recipes: Vec<String> = game_console::recipes::body_under(&document, "## Recipes")
+        .iter()
+        .filter(|row| row.get(1).map(String::as_str) == Some("player"))
+        .filter_map(|row| row.first())
+        .map(|cell| cell.trim().trim_matches('*').trim().replace(' ', "-"))
+        .filter(|name| !name.is_empty())
+        .collect();
+    let mut distinct = recipes.clone();
+    distinct.sort();
+    distinct.dedup();
+    assert_eq!(
+        distinct.len(),
+        10,
+        "ten recipes the player may fire when this was written; the release has {} \
+         ({distinct:?})",
+        distinct.len()
+    );
+
+    let grammar = game_console::command_grammar();
+    let mut checked = 0;
+    for recipe in &distinct {
+        let named = grammar
+            .forms()
+            .iter()
+            .filter(|form| form.opening() == *recipe)
+            .count();
+        assert_eq!(
+            named, 1,
+            "`{recipe}` is a recipe the player may fire and {named} commands are named for it \
+             - one is the rule, and none of them is the `P-214` shape where a command fires a \
+             recipe it is not named for"
+        );
+        checked += 1;
+    }
+    assert_eq!(
+        checked,
+        distinct.len(),
+        "every player recipe, and the count so that an empty table cannot pass"
+    );
+}
