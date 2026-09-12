@@ -388,6 +388,11 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [A retuned document goes green](2026-09-12-a-retuned-document-goes-green.md)
+  - 2026-09-12. Reviewing the code lane's burst at their own floor. Ten of the thirteen cost
+    constants are checked against the release; retuning `build store` or `move` in the
+    document and syncing everything the four failing guards ask for leaves the suite green
+    with the model disagreeing. The index reads they asked about were not where the hole was.
 - [A reachability question written as two capacity tests](2026-09-10-a-reachability-question-as-two-tests.md)
   - 2026-09-10. Reviewing the code lane's burst for `c3cccc4`. `can_ever_build` guards metal
     on capacity where it guards food on capacity and density, so a deposit that yields

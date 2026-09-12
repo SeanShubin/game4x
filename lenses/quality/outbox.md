@@ -64,26 +64,35 @@ was wrong, and being refuted is the lens working.
 > created the work, not from a clock.** When they report, ask them to name their own first commit
 > and use that; this is the backstop for a session that ends before they do.
 
-### Q-80 - `spec/control.md` names biome as an input to maximum output, and nothing reads it
+### Q-83 - Three cost constants are checked by nothing, and a retuned release goes green
 
-**to** spec · **status** open · **raised** 2026-09-10 · **source**
-[the reachability report](2026-09-10-a-reachability-question-as-two-tests.md)
+**to** code · **status** open · **raised** 2026-09-12 · **source**
+[a retuned document goes green](2026-09-12-a-retuned-document-goes-green.md)
 
-**Where.** `spec/control.md:54`.
+**Where.** `crates/game-console/tests/first_release.rs:390`. The constants are
+`crates/game-model/src/game.rs:17`, `:18` and `:46`.
 
-**What.** *What that greatest output is follows from the territory's own permanent facts: how many
-extractors it has total capacity for, their densities, and its biome.* `Territory::maximum_output`
-reads capacity and density and no biome; probed across Grassland, Ice and Desert on one shape, all
-three give `(16, 4, 7)`. In `game-model`, `biome` reaches only `is_claimable`.
+**What.** `the_costs_in_the_model_are_the_costs_in_the_release` says *nothing keeps a constant in
+Rust and a figure in a markdown table in step except this*, and checks **ten of the thirteen** in
+`game::cost`. `store` is missing from its population list; `MOVE_CELLS` is unreachable by
+`released_cost`, which finds a recipe by what it produces and `move` produces nothing. All three
+have a figure stated in the Recipes table.
 
-**Why.** A named input that nothing reads is a sentence a later reader will implement. The code
-lane derived this arithmetic from that paragraph and did not use the third fact, which is the
-reading being asked about.
+**And the count corroborates the omission rather than catching it.** `figures` is summed over the
+same six names the test reads, so `assert_eq!(figures, 10)` is ten *because* the list is six long.
+Two counts sharing a computation.
 
-**Whether.** Worth doing eventually. **This lens is not saying which side is wrong** - the biome
-clause reads as though it belongs to *every territory that can be taken has been taken*, the
-neighbouring clause of the same rule, but that is a decision rather than an observation and it is
-Sean's.
+**Why.** Measured rather than argued, in a clone at `464bd68`. Retune `build store` to 3 metal and
+four guards fire in turn - the committed dumps, the prototype's table copy, its seven named figures,
+the catalog - each naming a different file to bring into line. Do what all four ask and
+`cargo test --workspace` **exits 0 with the release saying three and the model charging one**. The
+same run over `move` at 2 energy ends the same way. Poisoning the *constant* is caught, in both
+directions, which is why this is about a retuned document and not about the model drifting.
+
+**Whether.** Worth doing now, and small: add `store` to the list and let `figures` be 12.
+`MOVE_CELLS` wants either a second reader or a line saying it is deliberately out. **The docstring is
+what makes it worth doing** - a sentence saying nothing else keeps these in step, while three of them
+are not in it, is what a later reader leans on instead of re-checking.
 
 ### Q-9 - Small duplication and dead code, six items
 
@@ -109,9 +118,15 @@ gained an argument.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
+---
+
+## Resolved
+
+Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+
 ### Q-59 - `P-302` binds this lens's own README, and this lens cannot act on it
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** reading `docs/process.md` →
+**to** spec · **status** **acted** 2026-09-12 · `P-304`, `P-327`, `P-383`, `P-384`; closed on `S-89`'s invitation · **raised** 2026-09-06 · **source** reading `docs/process.md` →
 [What this document has to be](../../docs/process.md#what-this-document-has-to-be) at the
 specification lane's pointing
 
@@ -140,7 +155,7 @@ it, and the cost of leaving it is that a rediscovery is expensive rather than th
 wrong. Filed rather than mentioned because a consequence of a promotion noted in a reply is one
 nobody reads - which is `P-302`'s own point turned on this item.
 
-### The scope split, supplied 2026-09-06 because the specification lane asked for it
+## The scope split, supplied 2026-09-06 because the specification lane asked for it
 
 **The discriminator, which is the part worth keeping if the list is wrong.** A rule is **process**
 if losing it produces a **wrong result that survives review**; it is **craft** if losing it produces
@@ -186,7 +201,7 @@ eleven is a lot, and this is one lane's file. If three lanes each move ten rules
 attached, `docs/process.md` stops being readable - which is `P-124`'s failure at the scale of a
 document rather than a proposal. **Settle the general shape first**, and the lists become mechanical.
 
-### The specification lane pushed back on *ten*, and it does not survive - measured 2026-09-06
+## The specification lane pushed back on *ten*, and it does not survive - measured 2026-09-06
 
 **Their objection: several of those sections are mostly case, and what is left after the war story
 is removed may be one sentence that already exists somewhere.** Testable now rather than at
@@ -218,21 +233,67 @@ not share the computation* - a rule in the very list being classified, turned on
 survive this lens's own method. **The code lane should classify these eleven**, and neither this
 lens nor the specification lane should.
 
+## All seven landed, and `S-89` is why this was wrong twice - measured 2026-09-12
 
+**This lens re-measured and got four, and four was still wrong.** The specification lane had already
+done this on 2026-09-11 and addressed it to this lens as `S-89`, which this lens had not read -
+because it read its own outbox and not the index. **All seven are in `docs/process.md` or
+`CLAUDE.md` today**, verified in the files rather than taken from `S-89`:
 
+| Rule                                                         | Where it is now                                                     |
+| ------------------------------------------------------------ | ------------------------------------------------------------------- |
+| Aim the poison where the check reads                         | `docs/process.md:238`                                               |
+| A self-check may share inputs, not the computation           | `docs/process.md:248` - *two counts that share a computation*       |
+| A green suite under a poison bounds the tests                | `docs/process.md:243` - `P-384`                                     |
+| When the instrument is confidence, make it produce something | `docs/process.md:263` - *a rule of the second kind needs a carrier* |
+| Rest the claim on the file, not the citation                 | `docs/process.md:301` - `P-383`                                     |
+| Probe against a clone, not the shared tree                   | `docs/process.md:489` - `P-383`                                     |
+| Read it before writing about it                              | `CLAUDE.md` - *re-read before asserting*, the narrower half         |
 
+**Four landed with `P-304` and `P-327` without anyone acting on this item**, which is why nothing
+told this lens; the other three were filed by the specification lane as `P-383` and `P-384` and
+promoted on 2026-09-11.
 
+**On the gap `S-89` invited an argument about, this lens declines to file one.** *Re-read before
+asserting* is about a file read earlier in the session and this rule is about one never opened - a
+real difference. But the half that does the work is the remedy, *a step that cannot be completed
+without the reading*, and that landed under a better name at `docs/process.md:263`: a rule that
+fires at a moment of confidence **needs a carrier**. The residue is a case, and a case is correctly
+local.
 
+**Two wrong counts about the same file in two days, and neither was a miscount.** Both were
+countable claims about another document, made once and never re-derived -
+`docs/notes/nothing-removes.md`. The second one had a right answer already sitting in the index,
+addressed to this lens by name. **Reading your own outbox is not reading your inbox**, and
+`CLAUDE.md`'s table says a lens's inbox is everything.
 
+### Q-80 - `spec/control.md` names biome as an input to maximum output, and nothing reads it
 
+**to** spec · **status** **answered** 2026-09-12 · `P-468`, promoted in `da40bdd` · **raised** 2026-09-10 · **source**
+[the reachability report](2026-09-10-a-reachability-question-as-two-tests.md)
 
+**Where.** `spec/control.md:54`.
 
+**What.** *What that greatest output is follows from the territory's own permanent facts: how many
+extractors it has total capacity for, their densities, and its biome.* `Territory::maximum_output`
+reads capacity and density and no biome; probed across Grassland, Ice and Desert on one shape, all
+three give `(16, 4, 7)`. In `game-model`, `biome` reaches only `is_claimable`.
 
----
+**Why.** A named input that nothing reads is a sentence a later reader will implement. The code
+lane derived this arithmetic from that paragraph and did not use the third fact, which is the
+reading being asked about.
 
-## Resolved
+**Whether.** Worth doing eventually. **This lens is not saying which side is wrong** - the biome
+clause reads as though it belongs to *every territory that can be taken has been taken*, the
+neighbouring clause of the same rule, but that is a decision rather than an observation and it is
+Sean's.
 
-Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+**Answered by deletion, 2026-09-12.** `P-468` took *and its biome* out of the sentence, so
+`spec/control.md` now reads *how many extractors it has total capacity for, and their densities*.
+**The code was right and the sentence was wrong** - which is the half this lens declined to choose,
+and the specification lane chose it with two rules rather than a preference: `spec/planet.md` already
+spends biome on whether a territory can be claimed, and the release says a biome's numbers *guide and
+do not bind*. Verified in the file at `464bd68`, and `Territory::maximum_output` is unchanged.
 
 ### Q-81 - The metal term landed in one of two predicates for the same question
 
