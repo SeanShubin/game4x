@@ -3722,11 +3722,23 @@ rows in both directions. **Seven are left**, and `P-448` gives the shape for the
 declares which family it is in, so `families.4x` holds names and `kinds.4x` gains a `family` trait on
 seven of its lines.
 
-**Three are done and five are left, re-derived 2026-09-12.** `P-455` landed `kinds.4x` at
-twenty-two lines, `families.4x` and `biomes.4x` - each compared against the release's table in both
-directions, and the code lane's generator now compared as bytes against all three rather than
-against itself. **What is left is Traits, Where things are, What bounds a kind in a territory,
-Units and structures, and Recipes.**
+**Four are done and four are left, and the way to know is `ls spec/data/` rather than this
+sentence.** Kinds, Families, Biomes and Traits have files; **Where things are, What bounds a kind
+in a territory, Units and structures and Recipes do not.**
+
+**This number has been wrong twice in one day.** The heading says seven of eight, which was true on
+2026-09-04. A correction written here at 2026-09-12 said *three are done and five are left*, and
+`traits.4x` landed hours later the same evening - **so the correction went stale before the day it
+was written ended.** Found by the code lane reading its own inbox rather than by anything failing.
+
+**Which is why this one names the rule instead of only the count**: a table is done when a file in
+`spec/data/` states it, and four files are on disk.
+
+**And `C-102` answered what to do with the four that are left**, which this item does not know:
+three of them fold, because their data is of-the-kind traits belonging on a kind's line, and
+**`Recipes` is the one that is genuinely different** and needs a shape decided rather than a fold.
+`P-466` has since taken three columns out of *Units and structures* on exactly that reasoning, and
+`P-473` is the capacity relation's half of it.
 
 **`traits.4x` waits on `P-457` and nothing else**, now that `P-456` is answered. **The other four
 have no proposal**, and the reason is the same for all of them: rule 7 sends relationships to prose
