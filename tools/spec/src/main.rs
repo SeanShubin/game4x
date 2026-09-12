@@ -6,7 +6,12 @@
 //! spec replacing <id>[:n] <file> <old>   put it in where those lines are, and assert it landed
 //! spec land <id> <after>                 ledger row from the item's own `into`, then remove it
 //! spec file <path>                       put a drafted item at the top of Open
+//! spec touching <file>                   every open item in every outbox that names it
 //! ```
+//!
+//! **`touching` is the promotion rule's other half**, which `CLAUDE.md` calls reading the
+//! index: a rule that moves under an open item makes it wrong without touching it, and
+//! nothing else will notice.
 //!
 //! **`file` was the last step still done by a script written fresh each time**, and it routes
 //! by the item's own `asks`: a decision goes to `docs/notes/decisions.md` and approval to the
