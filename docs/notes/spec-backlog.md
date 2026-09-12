@@ -3203,3 +3203,18 @@ has said he is not making today.
 by nothing, and expresses an intent nobody can find recorded, **the empirical test deletes it** -
 and the deletion is cheaper to undo than the number was to keep, because the way back is one row of
 one recipe.
+
+## Said 2026-09-12, does the cost answer settle anything else
+
+Sean: *Given this, any other decisions remaining?*
+
+**One, and it is `Q-80` rather than a cost.** `spec/control.md` names biome as an input to a
+territory's greatest output and nothing reads it - the same shape as the garrison's cost, a named
+thing nothing consults. **Filed as `P-468`, and it is a deletion rather than a choice**: biome
+already does its job in the neighbouring clause, `spec/planet.md` says no territory can be claimed
+whose biome is ocean, and the release says a biome's resource numbers *guide and do not bind*, so
+making biome an input to output would contradict a rule that is already there.
+
+**And the honest answer to the question is that very little is left for him.** Two proposals to
+approve, one to decide, five capabilities at `built` that only he can vet - and twenty-two items
+open to this lane, which are this lane's work rather than his decisions.

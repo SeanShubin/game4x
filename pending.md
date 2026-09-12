@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-468** - biome is named as an input to output and reaches nothing · `docs/notes/proposals.md`
 - **P-467** - a garrison costs nothing and binds nothing · `docs/notes/proposals.md`
 - **P-465** - ten cells still say `yes` where `traits.4x` says a number · `docs/notes/proposals.md`
 - **P-466** - three columns of *Units and structures* are the Recipes table said twice · `docs/notes/decisions.md`

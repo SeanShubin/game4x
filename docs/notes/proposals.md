@@ -62,6 +62,56 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-468 - biome is named as an input to output and reaches nothing
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed, from your answer to `P-467` applied to `Q-80` · **shape** text · **asks** approval · **into** `spec/control.md` -> Winning
+
+**The same shape as the garrison's cost: a named input nothing reads.**
+
+```
+spec/control.md   What that greatest output is follows from the territory's own permanent
+                  facts: how many extractors it has total capacity for, their densities,
+                  and ITS BIOME.
+
+the code          Territory::maximum_output reads capacity and density. Biome reaches only
+                  is_claimable.
+```
+
+**Probed by the quality lens across Grassland, Ice and Desert on one shape - all three give
+`(16, 4, 7)`** - and confirmed here by reading the function rather than the report.
+
+## Why this is a deletion and not a choice
+
+**Biome already does its job in the sentence next to it.** *A planet is fully exploited when **every
+territory that can be taken has been taken**...* - and `spec/planet.md` says **no territory can be
+claimed whose biome is ocean**. **The code does exactly that**: biome reaches `is_claimable` and
+nothing else.
+
+**And the release says biome must not bind output.** *Biomes*: **the numbers here guide and do not
+bind; a territory's own are in *Territory resources*. Force of nature is the one column that binds.**
+So a biome's resource columns are advice to whoever picks a territory's numbers, and the numbers
+that bind are the densities the sentence already names. **Making biome an input to output would
+contradict that**, so the two readings are not balanced - one of them is already excluded.
+
+## The words
+
+> - What that greatest output is follows from the territory's own permanent facts: how many
+>   extractors it has total capacity for, and their densities. Not whether the player can afford it
+>   this turn, and not whether any particular game happened to reach it.
+
+**Three words out and nothing else in the bullet touched.** The clause about biome is not moved
+anywhere, because where it would move to already says it.
+
+## What it does and does not settle
+
+**`Q-80` closes with it.** The quality lens said *this lens is not saying which side is wrong*, and
+named the reading it suspected - that the biome clause belongs to the neighbouring one. **It does,
+and that clause already has it.**
+
+**`X-19` is not settled by this** and is adjacent enough to name: no territory is given a biome in
+any document, and the code assigns them from the planet's geometry. **That is probably correct
+rather than a gap** - `R-4` is vetted on `biomes_of` giving every territory one - but it is a
+separate proposal and this one does not make it.
 ### P-467 - a garrison costs nothing and binds nothing
 
 **to** sean · **status** open · **raised** 2026-09-12 · **kind** answered, by you, 2026-09-12 · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Units and structures
