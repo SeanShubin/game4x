@@ -8,6 +8,9 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-465** - ten cells still say `yes` where `traits.4x` says a number · `docs/notes/proposals.md`
+- **P-467** - a garrison's metal comes from nowhere · `docs/notes/decisions.md`
+- **P-466** - three columns of *Units and structures* are the Recipes table said twice · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -20,6 +23,8 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-467** - `fd3659c` P-465, P-466 and P-467: the cleanup P-457 owed, and what deriving found · still open in `docs/notes/decisions.md`
+- **P-466** - `fd3659c` P-465, P-466 and P-467: the cleanup P-457 owed, and what deriving found · still open in `docs/notes/decisions.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
