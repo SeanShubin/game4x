@@ -776,6 +776,23 @@ rather than repaired: **the repair is a parser guessing at nesting in prose**, w
 be wrong than this has. This lane quotes `spec/` far more often than the code lane does, which is why
 it is written here.
 
+
+**The class is that an artifact says more than its author meant, because quoting a thing and doing
+it are the same bytes.** Named by the quality lens on 2026-09-12 after four instances in one
+evening: a hash quoted inside a sentence *about* a malformed citation field, read as a citation by
+two different checks; two more inside an item explaining the first; and then a third failure on the
+sentence written to explain those two.
+
+**It is the twin of *the instrument answers a narrower question than the one asked*.** That one is
+about the reader; this one is about the text. **Nothing distinguishes a hash an item is *about* from
+a hash it *cites*** except a convention someone remembers at the moment of writing - which is a rule
+firing at a moment of confidence, and `docs/process.md` says those need a carrier.
+
+**The carrier is structure rather than memory, and both halves of it already exist.** `cited()` in
+`tools/outbox` drops double-backticked spans - *drop what is being shown rather than said, then read
+the rest* - and `tools/spec` reads a `cited` field only on a line opening `**to**`. **Both worked
+the instant they were used**, which is what distinguishes a carrier from a reminder.
+
 ## Writing notes
 
 - Date the note in its header line.
