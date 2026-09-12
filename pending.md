@@ -11,6 +11,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **P-468** - biome is named as an input to output and reaches nothing · `docs/notes/proposals.md`
 - **P-467** - a garrison costs nothing and binds nothing · `docs/notes/proposals.md`
 - **P-465** - ten cells still say `yes` where `traits.4x` says a number · `docs/notes/proposals.md`
+- **P-470** - a kind's line gains its trait names, and two of twenty-four do not invert · `docs/notes/decisions.md`
 - **P-466** - three columns of *Units and structures* are the Recipes table said twice · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`

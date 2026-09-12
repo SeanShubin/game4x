@@ -21,6 +21,88 @@ here without first becoming a proposal.
 
 ## Open
 
+### P-470 - a kind's line gains its trait names, and two of twenty-four do not invert
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed, from `P-462`'s form and the code lane's `C-104` · **asks** a decision · **into** `spec/data/kinds.4x`, and `spec/console.md` -> The language if either question needs a rule
+
+**`P-462` promoted the form this evening and nothing uses it yet:**
+
+```
+{kind family:place name:territory}                            kinds.4x today
+{kind biome control family:place id name:territory nature}    with its traits named
+```
+
+**`P-451` says a kind declares which traits it has, and `spec/data/kinds.4x` does not.** Until it
+does, the release's *Of* column cannot be derived from anything - it is the one column of *Traits*
+that `traits.4x` is **forbidden** to carry, because a trait *says nothing about which kinds carry
+it*. **That is why this is the first of the three the code lane's `C-104` names**, before the four
+tables can be rendered rather than written.
+
+## Twenty-three of the twenty-four invert mechanically
+
+**Each *Of* cell resolved to kinds, computed rather than read:**
+
+```
+citizen     bearing defending laboring strength unpaid upkeep
+garrison    binding metal-in-it strength
+extractor   binding metal-in-it resource working
+yard        binding metal-in-it
+store       binding metal-in-it resource
+ark         binding defending fuel metal-in-it movable moving strength
+pioneer     binding defending fuel metal-in-it movable moving strength
+food        surplus
+territory   biome control id nature
+orbit       id
+deposit     density total-capacity
+adjacency   from to
+game        phase
+metal energy labor fertility force      (no trait)
+```
+
+**Five kinds carry no trait at all and that is fine** - a line naming none is still a declaration.
+
+## The first question: `keeps` is of every kind
+
+**Its *Of* cell is `thing`, and the recipes mean it.** `age` requires `thing` *keeps at least 1* and
+`spoil` consumes `thing` *keeps 0* - **any thing, not food**. Only food is ever **made** with one.
+
+**A** - **every kind's line names it**, eighteen times.
+
+**B** - **no kind's line names it**, the way `thing` is the family every kind is in and **no line says
+so kind by kind** - `P-448`'s precedent, and `P-469`'s *a fact is stated once*: naming it eighteen
+times states one fact eighteen ways.
+
+**`B` is what both rules point at and it has a cost neither anticipated**: a trait no kind names
+would mean *of every kind* **by absence**, and a generator reading `kinds.4x` cannot tell that from a
+trait nothing carries. **A family declares only its name**, so there is nowhere to hang it either.
+
+**This lane has no recommendation.** `A` is ugly and readable; `B` is right and unreadable; and the
+third way - **a trait says it is of every kind, on its own line in `traits.4x`** - puts back on the
+trait a thing `P-451` took off it, which is a rule to change rather than a gap to fill.
+
+## The second question: does a kind name its derived traits
+
+**Four of the inverted names are derived** - `metal-in-it`, `control`, `surplus`, `unpaid` - and
+**`Of` cannot be derived without them.**
+
+**`spec/console.md` says a derived trait is never part of a description**, and a kind's declaration
+**is** a description - `{kind name:citizen}` is a description whose kind is `kind`. **So the sentence
+reads two ways** and neither is silly:
+
+- **it is about a thing's description in a state**, where a derived trait would be recomputed, and
+  says nothing about a declaration - so a kind names its derived traits and `Of` derives
+- **it is about any description**, so a kind may not name them, and the *Of* cells for those four
+  come from somewhere else or not at all
+
+**This lane leans to the first**, because the sentence's reason - *nothing writes one* - is about a
+value being stored, and a declaration stores no value. **But it is a reading of his words and not
+mine to make**, which is `C-49`'s line.
+
+## What is not in question
+
+**The other twenty-two names**, and the form - `P-462` promoted it and the code lane has a reader
+that round-trips it byte-identical. **Nothing here waits on the four tables being rendered**; that is
+the third proposal of the three, and this is the first.
 ### P-466 - three columns of *Units and structures* are the Recipes table said twice
 
 **to** sean · **status** open · **raised** 2026-09-12 · **kind** simplification, found deriving each column from the recipes rather than reading it · **asks** a decision · **into** `releases/first-release.md` -> Units and structures

@@ -227,19 +227,36 @@ is that nothing downstream shifts.
 **And `surplus` is in no data file**, being derived and named by no recipe row, so its cell is
 corrected for the reader rather than for any generator.
 
-## What `P-469` says about this, which is larger than ten cells
+## What is larger than ten cells, and two things this lane got wrong about it
 
-**`P-469` landed after this was filed**: *a fact is stated once and every other form of it is
-derived.* **The release's *Traits* table and `spec/data/traits.4x` are two forms of one fact**, and
-the data file is the canonical one - *nothing states by hand what a data file says*.
+**The rule predates `P-469` and this item said it arrived with it.** `spec/invariants.md` -> *The
+game is data* has said it since long before today: **nothing states by hand what a data file says;
+every other form of it is derived, and a derived form is generated rather than written.** So the
+four hand-written tables have been in breach **since `P-444` put the first data file on disk**, not
+since this evening. `P-469` generalised the rule; it did not create this case. Found by the code
+lane as `C-104`.
 
-**So the real repair is that the table is generated from the file**, and these ten cells are what
-its absence cost. **Four tables are in that position now** - Kinds, Families, Biomes and Traits all
-have data files and all are still hand-written - and **that is a proposal this lane owes rather than
-one this item makes.**
+**And the release's *Traits* table and `traits.4x` are not two forms of one fact yet**, which this
+item asserted:
 
-**This one still stands on its own.** It costs ten cells, it can land today, and it makes the two
-files agree while the larger repair is written.
+```
+release        24 rows, columns Trait | Of | Values | Stored or derived
+traits.4x      21 lines - `metal in it`, `control` and `surplus` are in no data file
+```
+
+**Generating the table from the file today would drop three rows and a whole column** and return a
+plausible *Traits* table - **a right answer about a narrower question**, which is the failure this
+repository has recorded three times.
+
+**The `Of` column is the harder half and it is not a defect.** `spec/console.md`: a trait **says
+nothing about which kinds carry it**. So `Of` can never come from `traits.4x` - **it comes from
+`kinds.4x` read the other way**, once a kind's line names its traits, which is what `P-462`
+promoted the form for this evening.
+
+**So there is an order, and it is three proposals rather than this one:** a kind's line gains its
+trait names; the three derived traits gain lines; and only then can the four tables be rendered from
+the two files. **None of that changes what this item asks** - ten cells, landable today, making the
+two files agree while the larger repair is written.
 
 ## Addressed to other perspectives
 
