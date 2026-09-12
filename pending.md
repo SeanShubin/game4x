@@ -8,13 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-417** - A description carries the traits of the thing, and not the traits of its kind · `docs/notes/proposals.md`
-- **P-407** - Five traits are of the kind, and `kind` is not a trait at all · `docs/notes/proposals.md`
-- **P-415** - `P-406` left a count four lines above the sentence that says there is no count · `docs/notes/proposals.md`
-- **P-416** - Force is mustered rather than presented, and there is no highest case left · `docs/notes/proposals.md`
-- **P-414** - A garrison lets each citizen muster its force, and force is mustered afresh each turn · `docs/notes/proposals.md`
-- **P-412** - The release's `In` line quotes the sentence `P-408` replaced, for the second time today · `docs/notes/proposals.md`
-- **P-413** - `readiness` now names nothing, and `spec/invariants.md` uses it three times · `docs/notes/proposals.md`
+- **P-418** - A second paragraph of `spec/console.md` says what `P-417` just replaced, in the deleted trait · `docs/notes/proposals.md`
+- **P-419** - `P-413` replaced one sentence of a two-sentence bullet, and `readiness` is in the other · `docs/notes/proposals.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
@@ -25,7 +20,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-407** - `e2a9cfb` P-407 from C-92: is a trait that never varies stored · still open in `docs/notes/proposals.md`
 - **S-99** - `29e993c` S-98 and S-99: the model follows P-399 into the token model, and the gate is green · still open in `docs/notes/proposals.md`
 - **S-98** - `29e993c` S-98 and S-99: the model follows P-399 into the token model, and the gate is green · still open in `docs/notes/proposals.md`
 - **C-92** - `e2a9cfb` P-407 from C-92: is a trait that never varies stored · still open in `crates/outbox.md`
@@ -99,10 +93,10 @@ Not a defect list. Several proposals in one section is what working on one topic
 like; what this cannot tell you is whether they all still hold together, which is the question
 it exists to ask.
 
-- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310, P-342, P-362, P-375, P-379, P-382, P-385, P-397, P-400
-- `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229, P-230, P-250, P-251, P-263, P-266, P-283, P-404, P-406, P-403
-- `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210, P-286, P-288, P-308, P-312, P-314, P-331
-- `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366, P-378, P-396
+- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310, P-342, P-362, P-375, P-379, P-382, P-385, P-397, P-412, P-400
+- `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229, P-230, P-250, P-251, P-263, P-266, P-283, P-404, P-406, P-415, P-403
+- `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210, P-286, P-288, P-308, P-312, P-314, P-331, P-407
+- `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366, P-378, P-396, P-417
 - `spec/planet.md` -> Presentation - P-10, P-11, P-53, P-88, P-96, P-97, P-98, P-107, P-104, P-105
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122, P-330, P-333, P-335, P-395, P-398
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119, P-172, P-392
@@ -117,6 +111,7 @@ it exists to ask.
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
 - `docs/process.md` -> Outboxes and the index - P-242, P-299, P-305, P-325
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
+- `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233, P-414
 - `releases/first-release.md` -> What bounds a kind in a territory - P-207, P-372, P-381, P-393
 - `releases/first-release.md` -> Where things are - P-265, P-311, P-320, P-358
 - `spec/control.md` -> Winning - P-77, P-81, P-125, P-361
@@ -128,7 +123,6 @@ it exists to ask.
 - `docs/process.md`, a new section - P-204, P-211, P-401
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Kinds, Traits - P-192, P-322, P-334
-- `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
 - `spec/invariants.md` -> The game is one function - P-75, P-115, P-363
 - `spec/narrative.md` -> Violence and order - P-39, P-278, P-394
 - `docs/process.md` - P-289, P-291

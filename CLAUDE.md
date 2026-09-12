@@ -488,8 +488,8 @@ choice rather than resolving it.
 
 **The indented quotation is reserved for what is being offered.** Anything else a proposal
 quotes - the words being replaced, an existing rule, a line of code - is shown some other way.
-So a proposal asking for approval carries exactly one quotation, and a proposal asking for a
-decision carries none until it becomes the other kind. **An instruction may carry no quotation
+So a proposal asking for approval carries a quotation for each block of text it offers, and a
+proposal asking for a decision carries none until it becomes the other kind. **An instruction may carry no quotation
 at all**, because what it offers is a change described rather than words that land. What it
 must carry instead is the check that says it was made. **Each indented quotation is one block
 of text being offered, and the proposal says where that one goes.** There is no count: two

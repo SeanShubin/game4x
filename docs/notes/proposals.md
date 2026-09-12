@@ -62,257 +62,58 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-417 - A description carries the traits of the thing, and not the traits of its kind
+### P-418 - A second paragraph of `spec/console.md` says what `P-417` just replaced, in the deleted trait
 
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/console.md` -> The language · from `P-407` · needs `P-414` first, for the trait its example names
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/console.md` -> The language · from `P-417`
 
-**Sean, 2026-09-11**, choosing between inferring the distinction and declaring it: *it is the third.*
-**So each trait says whether it belongs to the kind or to the thing, and the rule reads that rather
-than measuring the data.**
+**Found by the promotion's own assertion**, which asked whether the old words were gone from the
+whole file rather than from the sentence it had just replaced. **They were not.**
 
-**Replacing the sentence beginning *What a thing contains is a map*, down to *never `{citizen} ->
-14`*:**
+**Six paragraphs below, *the same form is a selector* says it twice over**: a selector *may leave
+stored traits out* - `{extractor ready:yes}` - and *a description may do neither: it names one kind
+and carries **every stored trait that thing has***.
 
-> **What a thing contains is a map from a description to a quantity.** A description is a kind and
-> **every trait of that thing**; a trait **of its kind** is not part of one, because naming the kind
-> has already said it, and a derived trait is never part of one. **No trait of the thing may be left
-> out** - `{citizen defending:1} -> 8` and `{citizen defending:0} -> 6`, never `{citizen} -> 14`.
+**Two things are wrong with it now.** `ready` is the trait `P-399` deleted, so the example names
+something the game does not have. And **every stored trait** is the phrase `P-417` replaced, because
+a description carries the traits **of the thing** and not those of its kind.
 
-**Three changes and the rest of the paragraph is untouched.**
+**Replacing the paragraph beginning *In a recipe the same form is a selector*:**
 
-| Was                                            | Is                                                  |
-| ---------------------------------------------- | --------------------------------------------------- |
-| every **stored** trait that thing has          | every trait **of that thing**                       |
-| *(nothing said about a trait of the kind)*     | a trait of its kind is not part of one              |
-| `{citizen ready:yes}` and `{citizen ready:no}` | `{citizen defending:1}` and `{citizen defending:0}` |
+> **In a recipe the same form is a selector, not a description.** A selector may name a **family**
+> rather than a kind, and it may **leave traits out** - `{extractor resource:food}` selects every
+> extractor built for food, whatever else is true of it. **A description may do neither**: it names
+> one kind and carries every trait of that thing. **Where the form stands is what says which it is**
+> - a selector in a recipe, a description in a state.
 
-**The third is a repair rather than a change.** `P-399` deleted the `ready` trait, so the sentence
-forbidding `{citizen} -> 14` has been illustrating itself with a trait the game does not have.
-**`defending` is the same shape and exists** - `P-414` declares it, so that proposal lands first or
-this example names something not yet there.
+**Three changes and the paragraph's claim is unaltered.** *Leave stored traits out* becomes *leave
+traits out*, because a selector was never leaving out a trait of the kind either. The example becomes
+`{extractor resource:food}`, which is a trait the game has and which every extractor in the dump
+already carries. And *every stored trait that thing has* becomes *every trait of that thing*, which
+is `P-417`'s wording.
 
-**Why the rule reads a declaration rather than the data.** *A trait that never varies* is a fact
-about today's twelve territories. The day a damaged ark has less force the rule flips and every
-description gains a field, **with nothing to announce it** - which is how a count goes stale without
-anybody editing it. **A declaration changes when somebody edits a cell.**
+### P-419 - `P-413` replaced one sentence of a two-sentence bullet, and `readiness` is in the other
 
-### P-407 - Five traits are of the kind, and `kind` is not a trait at all
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/invariants.md` -> Nothing comes back round with more · from `P-413`
 
-**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, when Sean chose to declare the distinction rather than infer it · **kind** entailed, from the code lane's `C-92` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Traits · needs `P-417` first
+**Found by the promotion asserting that `readiness` was gone from the whole file** rather than from
+the sentence it had just replaced. **One occurrence survived.**
 
-**`C-92` found this about `force` and it is about five traits.** Counted over the release's *Traits*
-table against `scenario/expected/play.4x`: **nineteen are declared `stored`, and eight appear in no
-description.** Four of the eight are the counts `P-411` landed and the code has not followed. One is
-`kind`. **The other five are one number per kind**, and `force` was only the visible case because
-`{garrison force:0}` writes it while `{citizen}` does not.
+**`P-413`'s quotation covered *anything that exhausts draws on time for a turn ... spent doing it*
+and stopped there.** The bullet has one more sentence: *So **readiness** is gathered rather than
+made, and what bounds the gathering is the count of things that exhaust.*
 
-**`P-417` states the rule and lands first.** This marks which traits it applies to.
+**Replacing that last sentence of the bullet:**
 
-**Into *Traits*, replacing five rows:**
+> So what a thing can do is gathered rather than made, and what bounds the gathering is the number
+> of things that exhaust.
 
-> | **force** | citizen, garrison, ark, pioneer | a number | of the kind |
-> | **fuel** | a unit | how much energy its tank holds | of the kind |
-> | **upkeep** | a thing with upkeep | food per turn | of the kind |
-> | **keeps** | thing | the number of turns it will last | of the kind |
-> | **movable** | whatever moves | yes or no | of the kind |
+**Two words change.** *Readiness* becomes *what a thing can do*, which is `P-408`'s own phrase for
+it; and *the count of things* becomes *the number of things*, because **count** now means the thing
+a trait carries and using it here for a tally would be the collision `P-410` was promoted to prevent.
 
-**Only the last cell changes in each.** Every other cell is the one already there.
-
-## And the `kind` row is deleted, because `kind` is not a trait
-
-**`spec/console.md` lists them as different categories**: *every word in a data file is a kind, **a
-trait**, or one of a trait's values.* **A description is a kind and its traits** - so the kind is the
-head of a description rather than a field in one, and no recipe ever writes `kind:` as a qualifier,
-counted over the whole *Recipes* table.
-
-**So it needs no fourth value in that column.** It was never in the category the column is about.
-**The check for this half is that no row of *Traits* is named `kind`.**
-
-## What this does not do
-
-**It does not touch the five values themselves.** A citizen's force is still 1, an ark's fuel still
-2. **What changes is only whether a description repeats them**, and four of the five were never being
-repeated anyway - so this makes the file correct rather than changing it.
-
-**`{garrison force:0}` is the one line that loses a word**, and the code lane will see it when the
-dump is regenerated.
-
-### P-415 - `P-406` left a count four lines above the sentence that says there is no count
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `CLAUDE.md` -> Promotion · from `P-406`
-
-**Filed the moment `P-406` landed**, because that paragraph now contradicts itself. It says *a
-proposal asking for approval carries **exactly one quotation***, and four lines later *there is no
-count*.
-
-**`P-406` replaced the sentence about landing in more than one place and left the earlier one
-standing.** This lane wrote *drops the count* in the proposal and then dropped only one of the two
-places the count is stated.
-
-**Replacing the sentence beginning *So a proposal asking for approval*:**
-
-> So a proposal asking for approval carries a quotation for each block of text it offers, and a
-> proposal asking for a decision carries none until it becomes the other kind.
-
-**Nothing else in the paragraph changes**, and the two halves now say one thing: a quotation is an
-offer, and there are as many as there are offers.
-
-### P-416 - Force is mustered rather than presented, and there is no highest case left
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Producing force, then Coordination · from `P-414`
-
-**Sean, 2026-09-11**: *let's just have a garrison to allow citizens to provide 1 force each.* **That
-is a change to `spec/control.md` and it has to land before `P-414`**, because a release never states
-a rule the specification lacks.
-
-**Three lines say the thing that stops being true.** A citizen has a force *coordinated or not*; a
-garrison lets citizens *sum their force instead of presenting only the highest*; and *unorganised
-force is the highest present*. **Under your rule there is no highest case** - an uncoordinated
-citizen musters nothing at all.
-
-**Replacing the second and third bullets of *Producing force*:**
-
-> - A citizen can fight but cannot organise. **Coordinated, it musters its force each turn;
->   uncoordinated it musters none**
-> - A garrison has no force of its own. It does one thing: it coordinates the citizens of that
->   territory, so that each of them musters. **It does this by existing, and nothing has to work
->   it.**
-
-**Replacing the first and second bullets of *Coordination*:**
-
-> - **Force is mustered each turn and does not outlast it.** What a territory presents is what it
->   mustered this turn, and nothing accumulates
-> - Citizens are capable of violence but not of coordination. **Without something to coordinate
->   them they muster nothing**
-
-**Four bullets change and two survive untouched** - *a territory has at most one garrison*, and
-*coordination is imposed on citizens by a structure, such as a garrison, or by a military unit,
-which carries coordination with it rather than needing a place*. **The second is what lets `P-414`
-give a unit a `stand` that needs no garrison.**
-
-## Why *organised force sums* goes rather than staying
-
-**It is now true by construction rather than by rule.** Force is a count in a place, and a count is
-a sum - `docs/designing-rules.md`: *sum is free; it is the marking of a place.* **A rule saying that
-force sums would be describing the notation rather than the game**, which `CLAUDE.md` warns against:
-a consequence belongs in the spec only where another rule leans on it.
-
-## What it costs, said plainly
-
-**A territory with citizens and no garrison presents nothing**, where today it presents one force.
-**Holding therefore requires a garrison everywhere**, which is 1 labor and 1 metal - and the purpose
-you gave is preserved, because an ark is 3 metal, 12 energy and 2 citizens.
-
-### P-414 - A garrison lets each citizen muster its force, and force is mustered afresh each turn
-
-**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, to read force from the kind rather than writing 2 in a cell · **kind** recovered · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Traits, then Recipes · needs `P-416` first
-
-**Sean, 2026-09-11**: *let's just have a garrison to allow citizens to provide 1 force each, without
-consuming any resource they use for something else.*
-
-**The second clause decides the shape.** A citizen's `laboring` and `bearing` are already separate
-counts, and `P-408` says **two recipes naming different actions never compete**. So defending is a
-third count, and a citizen that defends can still labor and still bear.
-
-**`P-416` rewrites `spec/control.md` and must land first**, because these rows contradict three
-lines of it and a release never states a rule the specification lacks.
-
-**Into *Traits*, after `bearing`:**
-
-> | **defending** | a citizen or a unit | 0 or 1 | stored |
-
-**Into *Recipes*, after `refresh`:**
-
-> | **muster** | world | require | 1 | garrison | | |
-> | | | require | 1 | citizen | defending at least 1 | |
-> | | | put | | citizen | defending one less | |
-> | | | produce | that citizen's force | force | | |
-> | **stand** | world | require | 1 | unit | defending at least 1 | |
-> | | | put | | unit | defending one less | |
-> | | | produce | that unit's force | force | | |
-> | **refresh** | world | put | | citizen | defending at its maximum | |
-> | **refresh** | world | put | | unit | defending at its maximum | |
-> | **discard** | world | consume | 1 | force | | |
-
-## What each row is doing
-
-**`muster` fires once per citizen**, because each carries one `defending`, and **only where a
-garrison is present** - a `require`, not a branch on absence. **No garrison and it cannot fire at
-all.**
-
-**`stand` needs no garrison**, which is `spec/control.md` already: *a military unit is organised
-force in itself, so several brought to one place sum.*
-
-**Both read the force from the kind rather than writing a number in the cell.** *That citizen's
-force* and *that unit's force* are amounts read from a trait, which `P-376` allows - *one rule with
-a number per case*. **So the Force column of *Units and structures* stays and is where those numbers
-live**, and one row covers the ark and the pioneer without repeating either.
-
-**`discard` makes force transient**, like labor and fertility. Without it a territory grows
-invincible by sitting still, since `muster` runs every turn and nothing removes what it made.
-
-## What this changes about the game, stated rather than buried
-
-**A territory with no garrison presents no force at all**, where today one citizen presents one.
-**So every held territory needs a garrison** - 1 labor and 1 metal, against an ark at 3 metal, 12
-energy and 2 citizens. **Holding stays far cheaper than conquering**, which is the purpose you named.
-
-**And a jungle needs two citizens rather than one**, since nature's force there is 2 and each citizen
-now musters 1.
-
-## What it does not settle
-
-**`P-407` is wider than this and is unaffected.** `force` stays a trait either way; what `P-407`
-decides is whether a trait that never varies appears in a **description**, and it turns out to cover
-five traits rather than one. **This proposal was first written claiming to settle it, which was
-wrong.**
-
-### P-412 - The release's `In` line quotes the sentence `P-408` replaced, for the second time today
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `releases/first-release.md` -> Recipes · from `P-408`
-
-**`P-397` fixed this line four hours ago and `P-408` has broken it again.** The *Recipes* preamble
-quotes `spec/turn.md`; the sentence it quotes changed; the quotation did not.
-
-**Replacing the *In* line above the recipe table:**
-
-> **In** - `spec/turn.md`, *ending a turn: everything with upkeep pays it; then a population grows
-> on surplus food or starves for want of it; what expires expires, and what was not kept in order
-> is lost; and time restores every count to the number that thing's kind declares*.
-
-**Only the last clause changes**, as last time. **Twice in one day is the argument for `S-96`**, the
-check this lane asked the code lane for: every `In` line's quotation present in the file it cites,
-compared with emphasis and case normalized. **It would have caught both**, and both were found by a
-sweep that happened to be run rather than by anything that runs every time.
-
-### P-413 - `readiness` now names nothing, and `spec/invariants.md` uses it three times
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/invariants.md` -> The game is one function, and Nothing comes back round with more · from `P-408`
-
-**`P-411` took `readiness` out of the release**, where it had been a kind. **It survives in
-`spec/invariants.md` three times, naming something that no longer exists**, and `P-410` - promoted an
-hour ago - says a term that means something particular here says what it means in the same breath.
-
-**Into *The game is one function*, replacing the bullet beginning *Every cycle among recipes*:**
-
-> - Every cycle among recipes must spend, somewhere along it, a count that only the turn's end
->   restores
-
-**Into *Nothing comes back round with more*, replacing the sentence beginning *Anything that
-exhausts*:**
-
-> **Anything that exhausts draws on time for a turn**: it spends a count it carries, and only the
-> turn's end restores that count, the way an extractor draws material out of the planet and is spent
-> doing it.
-
-**The idea is unchanged in both.** A cycle still has to spend something that only time gives back,
-and a thing that exhausts still draws on time. **What goes is the word for a thing that is no longer
-a thing**, and what replaces it says what it is - *a count that only the turn's end restores*.
-
-**`readiness` may be worth keeping as the name of the whole family of counts**, the way *resource*
-names three kinds. **This lane is not proposing that**, because a word that names a family needs the
-family declared and nothing declares it; if you want it, it is a row in *Traits* rather than a
-sentence here.
+**This lane should have caught it when `P-413` was written.** The proposal quoted one sentence of a
+bullet it had read whole, which is the same failure as replacing one row of a table and leaving the
+rest.
 
 
 ## Addressed to other perspectives
@@ -3925,6 +3726,13 @@ work the release exists to order.
 | P-410, a word I have to look up is a reference I cannot resolve                                                              | `docs/process.md` -> What I read, and what I do                                                                                                                                                          | 2026-09-11 |
 | P-411, the release follows: a count per action, carried as a trait                                                           | `releases/first-release.md` -> Kinds, Traits, Where things are, Recipes                                                                                                                                  | 2026-09-11 |
 | P-406, each quotation is one block offered, and there is no count                                                            | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
+| P-416, force is mustered rather than presented, and there is no highest case                                                 | `spec/control.md` -> Producing force, Coordination                                                                                                                                                       | 2026-09-11 |
+| P-414, a garrison lets each citizen muster its force, mustered afresh each turn                                              | `releases/first-release.md` -> Traits, Recipes                                                                                                                                                           | 2026-09-11 |
+| P-417, a description carries the traits of the thing, not those of its kind                                                  | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-11 |
+| P-407, five traits are of the kind, and `kind` is not a trait at all                                                         | `releases/first-release.md` -> Traits                                                                                                                                                                    | 2026-09-11 |
+| P-415, a quotation for each block offered, in both places the count was stated                                               | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
+| P-412, the release's `In` line follows `P-408`                                                                               | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-11 |
+| P-413, `readiness` named nothing, and says what it is instead                                                                | `spec/invariants.md` -> two sections                                                                                                                                                                     | 2026-09-11 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
 | P-403, an outbox item's addressing line is not part of what is promoted                                                      | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
 | P-402, vetting gates finishing a release, not shipping one                                                                   | `releases/README.md` -> Vetting, and deletion                                                                                                                                                            | 2026-09-11 |

@@ -97,7 +97,8 @@ specific rule.
 - A recipe belongs to the player or to the world. The player's are offered wherever their inputs
   are present, to take or to leave. The world's are not offered: a population eats, food spoils, an
   unpaid unit is lost
-- Every cycle among recipes must spend readiness somewhere along it
+- Every cycle among recipes must spend, somewhere along it, a count that only the turn's end
+  restores
 - The definitions are part of the game state. Defining one is a transition like any other, so a
   game's history is a complete account of it, including what its rules were
 - A definition arrives in one transition. There is no state in which a kind or a recipe is half
@@ -121,8 +122,8 @@ specific rule.
   finite number of turns - so an endless well behind a bounded pump takes nothing away from the
   rule above. **Outside what is named this way, nothing increases**
 - **There are three sources: the planet, the star, and time.** The planet's material and the
-  star's energy are endless, and so are time's turns. **Anything that exhausts is a readiness
-  extractor for a turn**: it draws one readiness out of time and is spent doing it, the way an
+  star's energy are endless, and so are time's turns. **Anything that exhausts draws on time for a
+  turn**: it spends a count it carries, and only the turn's end restores that count, the way an
   extractor draws material out of the planet and is spent doing it. So readiness is gathered
   rather than made, and what bounds the gathering is the count of things that exhaust
 - **Whether this holds is decided mechanically, from the rules alone**, and stays so however many

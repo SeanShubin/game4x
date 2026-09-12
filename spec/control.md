@@ -20,16 +20,18 @@ How a territory is claimed and held. Weapons and their ranges are in [combat](co
 
 - A territory has at most one garrison, because it represents the organisation of the whole
   territory rather than a presence in one part of it.
-- A citizen has a force of its own, coordinated or not
-- A garrison has no force of its own. It does one thing: it lets the citizens of that territory
-  sum their force instead of presenting only the highest among them. **It does this by existing,
-  and nothing has to work it.**
+- A citizen can fight but cannot organise. **Coordinated, it musters its force each turn;
+  uncoordinated it musters none**
+- A garrison has no force of its own. It does one thing: it coordinates the citizens of that
+  territory, so that each of them musters. **It does this by existing, and nothing has to work
+  it.**
 
 ## Coordination
 
-- Organised force **sums**. Unorganised force is the **highest** present, not the total.
-- Citizens are capable of violence but not of coordination. Without something to coordinate
-  them, the force they present is the highest among them rather than the total.
+- **Force is mustered each turn and does not outlast it.** What a territory presents is what it
+  mustered this turn, and nothing accumulates
+- Citizens are capable of violence but not of coordination. **Without something to coordinate them
+  they muster nothing**
 - Coordination is imposed on citizens by a structure, such as a garrison, or by a military unit,
   which carries coordination with it rather than needing a place.
 

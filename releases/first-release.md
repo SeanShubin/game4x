@@ -111,16 +111,16 @@ are listed.
 
 | Trait              | Of                                      | Values                                    | Stored or derived                                |
 | ------------------ | --------------------------------------- | ----------------------------------------- | ------------------------------------------------ |
-| **kind**           | every thing                             | one of the kinds                          | stored                                           |
 | **id**             | a thing that must be named individually | a number, unique among things of its kind | stored                                           |
 | **moving**         | a unit                                  | 0 or 1                                    | stored                                           |
 | **laboring**       | a citizen                               | 0 or 1                                    | stored                                           |
 | **working**        | an extractor                            | 0 or 1                                    | stored                                           |
 | **bearing**        | a citizen                               | 0 or 1                                    | stored                                           |
+| **defending**      | a citizen or a unit                     | 0 or 1                                    | stored                                           |
 | **resource**       | an extractor or a store                 | one of the resources                      | stored                                           |
-| **force**          | citizen, garrison, ark, pioneer         | a number                                  | stored                                           |
-| **fuel**           | a unit                                  | how much energy its tank holds            | stored                                           |
-| **upkeep**         | a thing with upkeep                     | food per turn                             | stored                                           |
+| **force**          | citizen, garrison, ark, pioneer         | a number                                  | of the kind                                      |
+| **fuel**           | a unit                                  | how much energy its tank holds            | of the kind                                      |
+| **upkeep**         | a thing with upkeep                     | food per turn                             | of the kind                                      |
 | **metal in it**    | whatever is built                       | a number                                  | derived: its binding plus the metal in its parts |
 | **density**        | a deposit                               | a number                                  | stored                                           |
 | **total capacity** | a deposit                               | a number                                  | stored                                           |
@@ -129,11 +129,11 @@ are listed.
 | **nature**         | a territory                             | a number                                  | stored                                           |
 | **from**           | an adjacency                            | a place                                   | stored                                           |
 | **to**             | an adjacency                            | a place                                   | stored                                           |
-| **keeps**          | thing                                   | the number of turns it will last          | stored                                           |
+| **keeps**          | thing                                   | the number of turns it will last          | of the kind                                      |
 | **surplus**        | food                                    | yes or no                                 | derived: left after every upkeep was paid        |
 | **unpaid**         | a thing with upkeep                     | yes or no                                 | derived: its upkeep was not met                  |
 | **phase**          | the game                                | design or play                            | stored                                           |
-| **movable**        | whatever moves                          | yes or no                                 | stored                                           |
+| **movable**        | whatever moves                          | yes or no                                 | of the kind                                      |
 
 Food is made with `keeps` 1. The force nature holds a territory with.
 
@@ -201,7 +201,7 @@ nothing.
 
 **In** - `spec/turn.md`, *ending a turn: everything with upkeep pays it; then a population grows
 on surplus food or starves for want of it; what expires expires, and what was not kept in order is
-lost; and time refills every thing's tokens to the number its kind declares*.
+lost; and time restores every count to the number that thing's kind declares*.
 
 The player's recipes fire when the player chooses them. The world's fire when the turn ends, in
 that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `spoil`, then
@@ -280,6 +280,16 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 | **refresh**         | world  | put     |                                      | citizen   | laboring at its maximum                       |                          |
 | **refresh**         | world  | put     |                                      | citizen   | bearing at its maximum                        |                          |
 | **refresh**         | world  | put     |                                      | extractor | working at its maximum                        |                          |
+| **muster**          | world  | require | 1                                    | garrison  |                                               |                          |
+|                     |        | require | 1                                    | citizen   | defending at least 1                          |                          |
+|                     |        | put     |                                      | citizen   | defending one less                            |                          |
+|                     |        | produce | that citizen's force                 | force     |                                               |                          |
+| **stand**           | world  | require | 1                                    | unit      | defending at least 1                          |                          |
+|                     |        | put     |                                      | unit      | defending one less                            |                          |
+|                     |        | produce | that unit's force                    | force     |                                               |                          |
+| **refresh**         | world  | put     |                                      | citizen   | defending at its maximum                      |                          |
+| **refresh**         | world  | put     |                                      | unit      | defending at its maximum                      |                          |
+| **discard**         | world  | consume | 1                                    | force     |                                               |                          |
 
 ## Biomes
 

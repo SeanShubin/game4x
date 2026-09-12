@@ -54,10 +54,11 @@ player may fire.
 recipe; it is a count of firings, and a command without one fires once.
 
 **What a thing contains is a map from a description to a quantity.** A description is a kind and
-**every stored trait that thing has**; a derived trait is never part of one, and **no trait may be
-left out** - `{citizen ready:yes} -> 8` and `{citizen ready:no} -> 6`, never `{citizen} ->
-14`. **Each distinct description is its own entry, and an entry is never zero.** A thing carrying
-an `id` has a description no other thing shares, so **its quantity is always one**. **Where a thing
+**every trait of that thing**; a trait **of its kind** is not part of one, because naming the kind
+has already said it, and a derived trait is never part of one. **No trait of the thing may be left
+out** - `{citizen defending:1} -> 8` and `{citizen defending:0} -> 6`, never `{citizen} -> 14`.
+**Each distinct description is its own entry, and an entry is never zero.** A thing carrying an
+`id` has a description no other thing shares, so **its quantity is always one**. **Where a thing
 is, is where it appears**; nothing states its container. **Entries are in the order their
 descriptions sort in**, so the same state is always the same bytes.
 
