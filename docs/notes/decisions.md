@@ -21,4 +21,37 @@ here without first becoming a proposal.
 
 ## Open
 
-*Nothing is open. A question only Sean can answer lives here while it is unanswered.*
+### P-421 - `put` is a role in twelve rows that no document defines, and `limit` is defined and used nowhere
+
+**to** sean - **status** open - **raised** 2026-09-11 - **kind** entailed, from the code lane's `C-88` - **asks** a decision - **into** `releases/first-release.md` -> Recipes
+
+**One sentence declares the roles and it is out of step with the table under it in both
+directions.** `releases/first-release.md:186` reads *`Role` is one of `require`, `limit`, `consume`
+or `produce`*, and then defines each of the four. Counted over the table's 81 role cells: `consume`
+29, `produce` 26, `require` 14, **`put` 12**, **`limit` 0**.
+
+**`put` arrived twice without a definition.** `P-399` gave it to `move`; `P-411` undid the rest of
+`P-399` and left `put` behind on the readiness rows. Neither promotion said what the word means, so
+twelve rows are read by inference - which the code lane did, and `C-88` states the assumption it
+built under.
+
+**What the twelve rows do, so the question is cheap to answer.** Eleven name a trait and a value -
+*laboring one less*, *defending at its maximum* - and set it. The twelfth is `move`'s, which names
+the trait **and** a `Where` of `$to`, so the unit ends at `$to` with `moving` one less. **All twelve
+read as one thing**: a statement about the state the thing is left in, rather than a quantity
+flowing anywhere. That is why its `Qty` cell is blank, and it is what distinguishes `put` from
+`consume` and `produce`, which move quantities.
+
+**Two questions, and the second is smaller.**
+
+1. **Is that what `put` means** - the row states the state the thing is left in, its `Qty` always
+   blank - and if so, what sentence declares it beside the other four?
+2. **Does `limit` stay?** It is declared and defined in that sentence and no row uses it. Keeping a
+   role with no instance is a reasonable thing to do deliberately, and nothing says it was.
+
+**This lane has not written the sentence**, because what `put` means is the choice and a definition
+offered here would resolve it quietly. **Nothing is blocked**: the code lane is built and green
+under its stated assumption, and `reports/petri.md` and `reports/nogain.md` both read the `put` rows
+rather than refusing them.
+
+
