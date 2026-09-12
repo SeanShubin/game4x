@@ -617,7 +617,7 @@ const KNOWN: &[(&str, &str)] = &[
     ),
     (
         "P-465",
-        "the same shape one proposal later, and clearer because the header says it: `| Trait | Values now | Values after |`. A column headed *Values now* is a description of what the file said before, and `rows` means every cell lands. Eight cells changed and the release carries the eight; the four this check cannot find are the header of a before-and-after table and the values it replaced. `C-107`.",
+        "declared `shape rows` and its table describes a change rather than being one: `| Trait | Values now | Values after |`. A column headed *Values now* is a description of what the file said before, and `rows` means every cell lands - so this correctly looks for `Values now` in the release and does not find it. `CLAUDE.md`'s own test says which shape that is: *if it will say something these words only described, that is an instruction*. **The promotion is correct and only the label is wrong**, and a label is what this check reads. `C-107`, and `b8cd150` is the carrier that refuses this at filing time. **It said `the same shape one proposal later` and `P-466` is not that shape** - the item overstated its own population, and is corrected.",
     ),
     (
         "P-456",
