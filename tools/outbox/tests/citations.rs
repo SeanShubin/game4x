@@ -19,6 +19,19 @@ fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..")
 }
 
+/// The all-zero object id, which names nothing by convention rather than by accident.
+///
+/// **git's own null id**, written when a ref points at no object - the old value in a
+/// `pre-receive` line for a branch being created, and what a reader means by *a hash that
+/// exists nowhere*. Nobody cites it; an outbox that contains one is describing the absence.
+///
+/// **Exempted because it is a convention and not because it is inconvenient.** Every other
+/// unreachable hash stays a finding, including one an author is only showing - see
+/// [`cited`], which drops what is inside double backticks and reads everything else.
+fn names_nothing(hash: &str) -> bool {
+    hash.chars().all(|c| c == '0')
+}
+
 /// Every backticked hex run of seven or more, which is how a hash is written here.
 ///
 /// **Except inside a double-backtick span, which is how this repository shows markup
@@ -58,7 +71,39 @@ fn cited(text: &str) -> Vec<String> {
 
 #[cfg(test)]
 mod tests {
-    use super::cited;
+    use super::{cited, names_nothing};
+
+    /// The all-zero id names nothing by convention, and every other absent hash still counts.
+    ///
+    /// **Written after an outbox described one.** The quality lens explained why a poison could
+    /// not have exercised the reachability arm - *repointing a citation at `0000000` is a hash
+    /// that exists nowhere* - and this reported it as an outbox citing a missing commit, which
+    /// is a defect found in a sentence about that defect.
+    ///
+    /// **The exemption is the convention and not the inconvenience.** `0000000` is git's own
+    /// null object id; a hash that merely happens not to resolve is still a finding, because
+    /// the reader of an outbox cannot tell a hash that was wrong from one that has stopped
+    /// existing - which is the whole of why this check exists.
+    #[test]
+    fn the_null_object_id_is_not_a_citation_and_nothing_else_is_excused() {
+        assert!(names_nothing("0000000"));
+        assert!(names_nothing("0000000000000000000000000000000000000000"));
+
+        let mut refused = 0;
+        for hash in ["abc1234", "69ae559", "0000001", "1000000", "deadbee"] {
+            assert!(
+                !names_nothing(hash),
+                "`{hash}` is not the null id and must be checked like any other"
+            );
+            refused += 1;
+        }
+        assert_eq!(refused, 5, "five hashes that are not the null id");
+
+        // And it is still read out of the text, so the exemption is at the question rather
+        // than at the reader - a citation of it is found and then excused, which is what lets
+        // the doc comment above be about a convention instead of about a parser.
+        assert_eq!(cited("filed at `0000000` for now"), ["0000000"]);
+    }
 
     /// A hash being shown is not a hash being cited.
     #[test]
@@ -203,6 +248,9 @@ fn every_hash_an_outbox_cites_is_a_commit() {
             continue;
         };
         for hash in cited(&text) {
+            if names_nothing(&hash) {
+                continue;
+            }
             checked += 1;
             if !is_a_commit(&root, &hash) {
                 missing.push(format!("{}: {hash} is not a commit here", at.display()));
