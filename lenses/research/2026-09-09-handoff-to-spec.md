@@ -6,6 +6,12 @@ and what would be expensive to learn the way this lane learned it.
 
 [Research](README.md) · [The recipe report](formulas.html) · [Outbox](outbox.md)
 
+> **Two items on the priority list below have moved since this was written, 2026-09-11.** `X-20` is
+> **written**: `P-372` landed it in `708a9f7`, so only `X-14` is still a taken decision waiting for
+> words. And the primitive set is **no longer the whole rewrite this describes** - `P-421` adopted
+> `set` as `put`, so the release has five roles rather than the four this report compares against,
+> and one of the six is already in. The rest of the vocabulary stands as described.
+
 ## Read this before trusting anything on the page
 
 **Ten checks run against the data, and each is poisoned** — made to fail on demand — because a green

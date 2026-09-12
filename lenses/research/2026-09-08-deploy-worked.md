@@ -6,6 +6,13 @@ wants the engine minimal and **the recipes editable inside the game itself**.
 **Worked against `releases/first-release.md:202` as it stands**, read for this report rather than
 recalled. Everything below is a reading of his sketch, not a proposal.
 
+> **Superseded in one respect, 2026-09-11.** `P-385` deleted both `limit 0 garrison` rows in
+> `795f053`, so the duplication this report counts is **six** rows rather than seven, and all six are
+> productions. **The call site for nesting stands and the title's number does not.** The report's
+> third finding - that a soft garrison threshold would silently decide five other rows - was answered
+> by deleting the gate rather than softening it, which leaves those five rows with no individual
+> answer and nothing in the table to hang the question on. `X-12` carries both.
+
 ## What is there now
 
 `deploy ark` is nine rows:

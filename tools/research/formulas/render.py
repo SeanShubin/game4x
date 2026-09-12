@@ -2582,4 +2582,10 @@ computed by <code>render.py</code> from <code>data.json</code>; no number is wri
 
 
 if __name__ == "__main__":
+    # **The documented command silently mangled the output before this line existed.** A
+    # redirect gives stdout the console's encoding, which on Windows is not UTF-8, and every
+    # `…` in the data came out as a replacement character - a regeneration that changed 22
+    # lines of a file whose data had changed in one. It does not fail: the bytes are written
+    # and the page still renders, which is why a diff was the only thing that said so.
+    sys.stdout.reconfigure(encoding="utf-8", newline="\n")
     main()

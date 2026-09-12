@@ -3182,10 +3182,10 @@
   ],
   "divergence": [
     [
-      "The four roles",
+      "The four roles the release had",
       "require, consume, produce, limit",
       "<code>change</code> (signed), <code>require</code>, <code>set</code>, <code>each</code>, <code>some</code>, <code>call</code>, plus <code>attach</code>",
-      "guard and spend are one line; owner is the quantifier; a capacity belongs to its container",
+      "guard and spend are one line; owner is the quantifier; a capacity belongs to its container. <strong>The <code>set</code> half has since landed</strong>: <code>P-421</code> declared <code>put</code> in the release on 2026-09-11, with the two properties <code>X-11</code> argued it by &mdash; one identified thing that stays itself, and no quantity. And <code>P-385</code> deleted the <code>limit</code> rows, so the release is five roles too.",
       "Sean, 2026-09-09"
     ],
     [

@@ -108,11 +108,18 @@ Newest first.
   - 2026-09-08. Carries `X-12`. `deploy ark` and `found by land` share seven rows verbatim, which
     is the first real call site for nesting; deriving the territory deletes a row and a `Where`;
     and a soft garrison threshold silently decides five other rows.
+  - **Superseded in one respect, 2026-09-11**: `P-385` deleted both `limit 0 garrison` rows, so the
+    shared block is **six** rows and all six are productions. The call site stands; the number in
+    the report does not.
 
 - [Least expressive yet complete, and the test for whether a primitive earns its place](2026-09-08-least-expressive-yet-complete.md)
   - 2026-09-08. Carries `X-11`. A primitive earns its place when removing it moves the explosion
-    from the generated space into the authored one; the four roles are two dimensions, a change
-    and a threshold, and `create-if-missing` is a cell the grid always had.
+    from the generated space into the authored one; the roles that carry a quantity are two
+    dimensions, a change and a threshold, and `create-if-missing` is a cell the grid always had.
+  - **The release caught up on 2026-09-11.** `P-421` declared `put`, which is this report's `set`,
+    and `P-385` deleted the `limit` rows - so the four roles the report decomposes are no longer the
+    release's roles. **The decomposition holds and the count does not**: it was always a grid of the
+    roles that carry a quantity, and `put` carries none.
 
 - [The menu is an information channel](2026-09-08-the-menu-leaks.md)
   - 2026-09-08. Carries `X-10`, **whose main claim Sean refuted the same day** - the information-set

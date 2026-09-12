@@ -5,6 +5,14 @@ prototypes. **He does not want the present structure presumed, so nothing here p
 follows is what the literature already settles, what it warns about, and the names - so that the
 choice is made with them rather than rediscovered.
 
+> **Superseded in one respect, 2026-09-11.** The worked example below is a row the release no longer
+> has: `P-385` deleted both `limit 0 garrison` rows in `795f053`, and `P-421` added a fifth role,
+> `put`. **Both halves of the argument survive the deletion** - a guard sits somewhere a precondition
+> does not, and that difference is invisible in a console and visible in a selection interface - and
+> the example has to be read as *the rule the release had on 2026-09-08*. `create-if-missing` is
+> still a cell no role names: a `put` names a thing **that is already there**, so it says nothing
+> about the case where it is not.
+
 **Every citation was checked against a source in the session that wrote this**, not recalled. Where a
 claim is this lane's own inference from the sources, it says so.
 

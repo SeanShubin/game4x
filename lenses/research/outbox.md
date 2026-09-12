@@ -46,15 +46,15 @@ operator rather than two designs to keep in agreement.
 
 **`create-if-missing` is a conditional effect** - ADL, Pednault 1989; PDDL's `(when ...)` behind
 `:conditional-effects`. It is not a fifth role, it is an effect with a guard, and **the guard sits
-somewhere a precondition does not**. Today's `limit 0` is a precondition, so a garrison present makes
-`deploy ark` inapplicable; his keeps it applicable and skips one effect. **In a selection-only
+somewhere a precondition does not**. The release's `limit 0` was a precondition, so a garrison present
+made `deploy ark` inapplicable; his keeps it applicable and skips one effect. **In a selection-only
 interface that is the difference between the player seeing the option and not seeing it**, which is
 this lane's own inference and the reason it is worth Sean's attention: the two are equivalent in a
 console and are not equivalent in an interface.
 
 **And there is a second half.** In STRIPS an effect is a fact and adding one that holds is a no-op,
-so create-if-missing is free. **The four roles are quantities** - the numeric-fluent world of PDDL
-2.1, Fox and Long 2003 - where no increase is idempotent. So a garrison and a citizen are **different
+so create-if-missing is free. **The roles that carry a `Qty` are quantities** - the numeric-fluent
+world of PDDL 2.1, Fox and Long 2003 - where no increase is idempotent. So a garrison and a citizen are **different
 kinds of thing sharing one Qty column**: one is a fact, at most one, and the other is a count.
 **Object creation is where the analogy stops** - classical planning assumes a fixed universe of
 objects, and `create citizen 2` does not.
@@ -86,9 +86,9 @@ inside this vocabulary at all.
 yours**, and this lane has deliberately drafted no text: the vocabulary is the route and not the
 destination, which `CLAUDE.md` names as the trap for exactly this kind of finding.
 
-### X-11 - the four roles are two dimensions, and `create-if-missing` is a cell the grid always had
+### X-11 - the quantity roles are two dimensions, and `create-if-missing` is a cell the grid always had
 
-**to** code · **status** open · **raised** 2026-09-08 · **source** [report](2026-09-08-least-expressive-yet-complete.md), and Sean sketching four candidate primitives
+**to** code · **status** **acted** 2026-09-11 · `917804e` — `P-421` declared `put`, which is this item's `set`; the two properties it argued the primitive by are the two the rule states. See the closing note at the end of the item · **raised** 2026-09-08 · **source** [report](2026-09-08-least-expressive-yet-complete.md), and Sean sketching four candidate primitives
 
 **Sean is choosing a primitive set** - composition, subtract, fail-behavior, constraints on
 parameters - and expects some to be subsumed. **His judgement is the measure and this does not argue
@@ -107,8 +107,9 @@ removal only enlarges the generated space is sugar.
 
 **The decomposition, and the part worth checking today.** Two of his four are one thing - a
 *constraint* is a guard and *fail-behavior* is where the guard attaches. And `subtract` has no
-counterpart, which a **signed** amount repairs. Then the present four roles are **two independent
-dimensions**, a **change** and a **threshold**:
+counterpart, which a **signed** amount repairs. Then the four roles that carried a quantity when this
+was written - `require`, `consume`, `produce`, `limit`, before `P-385` deleted the `limit` rows and
+`P-421` added `put` - are **two independent dimensions**, a **change** and a **threshold**:
 
 - `consume 3 food` - change **-3**, threshold at least 3
 - `require 3 workers` - change **0**, threshold at least 3
@@ -184,15 +185,42 @@ composition, whether a change and a threshold share a line, and whether upper th
 kept `open` only because the primitive set is yours to build against and this is where its shape is
 recorded; close it when you have read it.
 
-### X-12 - `deploy ark` and `found by land` share seven rows verbatim, and that is the first call site for nesting
+**Closed 2026-09-11, and `set` landed as `put`.** `P-421` declared a fifth role in
+`releases/first-release.md:185-190`: *a put names a thing that is already there and says what is true
+of it afterwards - the same thing and not a new one, so what has an identity keeps it. A put has no
+quantity, because nothing is made or taken.* **Those are the two properties this item argued `set`
+by** - one identified thing that stays itself, and no quantity because a trait is a value rather
+than a counted thing. Reported by the code lane as `C-85` in `917804e` and checked here against the
+release, not taken on report.
 
-**to** code · **status** open · **raised** 2026-09-08 · **source** [report](2026-09-08-deploy-worked.md), and Sean asking for a recipe to be worked through
+**Four of the five call sites took it and one did not.** `refresh`, `create labor`, `work` and
+`move` each carry a `put` row where they carried a destroy-and-recreate pair. `age` still carries the
+pair, which the code lane flagged and did not claim - and the answer is **not deliberate**, for a
+reason neither lane had: `age` borrows the action-spending idiom for a counter that is not an action.
+That is `X-30`, filed above.
 
-**Counted from `releases/first-release.md:202` rather than recalled.** `deploy ark` is nine rows and
-`found by land` is eight. **Seven of them are identical** - `limit 0 garrison`, `produce 1 garrison`,
+**What did not land, and this lane checked rather than assuming it fell with the rest.**
+`create-if-missing` is still a cell no role names. A put names a thing **that is already there**, so
+it says nothing about the case where it is not - the code lane reached the same conclusion
+independently in `C-74`. The grid itself is untouched: it decomposes the roles that carry a
+**quantity**, and `put` is the other axis of this item's own fact-versus-count split becoming a role.
+The release now has roles on both sides of that split rather than on one, which is the decomposition
+holding rather than moving.
+
+### X-12 - `deploy ark` and `found by land` share six rows verbatim, and that is the first call site for nesting
+
+**to** code · **status** open · **raised** 2026-09-08 · **re-counted** 2026-09-11, seven to six, after `P-385` deleted the `limit 0 garrison` row this item counted as one of them · **source** [report](2026-09-08-deploy-worked.md), and Sean asking for a recipe to be worked through
+
+**Counted from the Recipes table rather than recalled, and re-counted on 2026-09-11.** `deploy ark` is
+eight rows and `found by land` is seven. **Six of them are identical** - `produce 1 garrison`,
 `produce 2 citizen`, `produce 1 extractor food`, `produce 1 extractor metal`, `produce 1 store food`,
 `produce 1 store metal` - differing in nothing. The two recipes differ only in what is spent: an ark
 from the orbit above, or a pioneer.
+
+**It was seven, and the seventh was `limit 0 garrison`**, which `P-385` deleted from both recipes in
+`795f053`. **The finding survives the deletion and the shared block got cleaner**: what the two
+recipes have in common is now nothing but production, so a `found-colony` sub-recipe would take no
+guard with it. Nine and eight became eight and seven for the same reason.
 
 **Why it costs something.** *What a new colony starts with* is **two edits today, and one of them can
 be forgotten.** Sean intends the recipes to be editable by players inside the game, which makes a
@@ -210,12 +238,17 @@ lands. **Not a request to extract it** - whether to is Sean's, and the item is t
   declare once the territory is `ark.location.below`; row 2's *orbit above `$where`* goes with it,
   because two things that cannot disagree need no constraint keeping them agreed. **Nine rows to
   seven, two `Where` expressions to none.**
-- **A soft garrison threshold silently decides five other rows.** Today `limit 0 garrison` is hard and
-  gates the whole recipe, so nothing fires twice. Make it soft, as `create-if-missing` does, and
-  deploying onto an existing colony succeeds and adds **two more citizens, two more extractors and two
-  more stores**. Each remaining line then needs its own answer and they are not the same answer.
-  **The current table hides that question**; splitting the gate is what shows those rows were never
-  individually considered.
+- **A soft garrison threshold silently decides five other rows.** When this was written
+  `limit 0 garrison` was hard and gated the whole recipe, so nothing fired twice. Make it soft, as
+  `create-if-missing` does, and deploying onto an existing colony succeeds and adds **two more
+  citizens, two more extractors and two more stores**. Each remaining line then needs its own answer
+  and they are not the same answer. **The table hid that question**; splitting the gate is what shows
+  those rows were never individually considered.
+
+  **`P-385` deleted the gate rather than softening it**, which is the third option this item did not
+  put: repeated deployment is now the player's to avoid, and the five rows still have no individual
+  answer. The question this raised is therefore open in exactly the form it was, with nothing left in
+  the table to hang it on.
 
 **And his sketch omits both stores**, which the specification produces. Flagged rather than
 reconciled - dropping them is a change to the game.
@@ -501,7 +534,11 @@ or a one-in-sixty-six coincidence, and this lane cannot tell which.
 
 ### X-20 - *declares no capacity* and *declares no limit* are opposites, and the release means the second
 
-**to** spec · **status** open · **decided** 2026-09-09 by Sean, **unwritten** in `releases/first-release.md` · **raised** 2026-09-09 · **source** [the report](formulas.html) -> *Capacity, in four questions rather than one* · **found by** mapping Sean's capacity taxonomy onto the rules that already exist
+**to** spec · **status** **acted** 2026-09-10 · `708a9f7` — `P-372` wrote the decision: `releases/first-release.md:153` now reads *A territory declares **no limit** for a resource*, and the third statement became *What a territory holds directly is in disorder*, which is the *in nothing* reading this item said could not hold. Verified in the file · **raised** 2026-09-09 · **source** [the report](formulas.html) -> *Capacity, in four questions rather than one* · **found by** mapping Sean's capacity taxonomy onto the rules that already exist
+
+**This lane did not notice it closing**, and the item sat open for a day against a rule that had
+already moved. What found it was re-reading the file before reporting what was open, rather than
+reporting the outbox.
 
 **Three statements, and they cannot all hold.**
 
@@ -826,6 +863,64 @@ checkable instead of accidental - and this lane takes no position on the wording
 restriction belongs to the editor or to the notation, or on whether Sean would rather have the
 expressive power and drop the invariant. **What is not open is that the two sets differ today and
 no document notices.**
+
+### X-30 - `age` is written in the action-spending idiom, and `keeps` is not an action
+
+**to** spec · **status** open · **raised** 2026-09-11 · **source** the code lane, in `C-85`, asking whether `age` keeping its pair is deliberate · **found by** answering that question against `spec/turn.md` rather than against the recipe
+
+**Where.** `releases/first-release.md:270-271`, the only recipe `P-421` left as a destroy-and-recreate
+pair:
+
+- `age` · consume 1 `thing` *keeps at least 1* · produce 1 `thing` *keeps one less*
+
+**What.** That is the shape `spec/turn.md` -> *Order of operations* gives an **action**: *each kind
+declares how many of each action a thing of it may take in a turn. A recipe names the action it
+spends, and firing it lowers that count by one.* Every other counter in the release is one -
+`moving`, `laboring`, `bearing`, `working`, `defending` - and each is guarded at *at least 1*,
+lowered by one, and **restored by `refresh`**. The counter is how many times its recipe may fire
+this turn.
+
+**`keeps` is not one.** *Traits* declares it *the number of turns it will last*, and no `refresh`
+row names it. So the two counters mean opposite things about firing: an action count says **this
+many times this turn**, and `keeps` says **once a turn, for this many turns**.
+
+**Why it costs something.** `spec/invariants.md` -> *What a rule may cost*: *where a rule would need
+a quantity that varies, it is written as a smaller rule that fires as many times as it can - the
+quantity is then how often it fired.* `age`'s produce row satisfies its own consume row whenever
+keeps was at least 2, so `age` fires until keeps reaches 0 and `spoil` takes it in the same
+end-of-turn. **A thing declared to last n turns lasts one.**
+
+**Counted, and the count corrected this lane.** Over the release's 21 recipes, **two** have a produce
+row naming a kind their own consume row names - `age` and `stow` - computed by parsing the table to
+stripped cells rather than read off it. This item first said *the only one*, on an eyeball that
+dismissed `stow` on a containment argument it had not checked; the script is what caught it, which is
+the whole of why the number is computed.
+
+**The two are not the same, and the second is a question rather than a defect.** `stow` consumes 1
+metal with a blank `Where` and produces 1 metal in *a store for metal*. It re-enables itself if the
+metal in a store is metal the territory has, and does not if a blank `Where` means **held directly**.
+`P-372` gave the release the words for that distinction - *what a territory holds directly is in
+disorder* - and did not say it of `stow`. Noted, not filed: it is one reading of one cell, and
+`X-20`'s promotion is recent enough that asking now is asking twice.
+
+**The denominator is why nobody has seen `age`.** Over the 16 kinds, **`keeps` has exactly one stated
+value: food, 1** - one case, and it is the fixed point where firing once and firing to exhaustion
+agree.
+`crates/game-console/src/nogain.rs:525-531` grounds `age` and `spoil` to food alone for that reason,
+so the code is correct today and correct by the population rather than by the rule.
+
+**This lane's own encoding already wrote it the other way**, which is what makes this a reading
+rather than a preference: `tools/research/formulas/data.json` -> `world` -> `age` is
+`each thing: {thing keeps:any}` then `change thing.keeps -1`, with the note *both rows were one
+decrement; the guard `keeps at least 1` is now the operation*. The quantifier is what bounds the
+firing, and `put` is the release's name for the same thing.
+
+**Whether.** **Worth doing now, and it is one row.** `P-421` declared the role this needs and four of
+the five call sites took it; this is the fifth. The repair is the pair at `:270-271` becoming `put` ·
+`thing` · *keeps one less*, with no `require` row, which is the form the four `refresh` rows already
+use for a once-per-thing sweep. **What this lane does not decide** is whether `keeps` should instead
+be refreshed like the action counts - that would make the present rows correct and is a different
+game - and which of the two Sean wants is the only open question here.
 
 ## Resolved
 

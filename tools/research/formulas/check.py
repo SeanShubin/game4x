@@ -1036,16 +1036,32 @@ def self_test():
     else:
         print(f"  poison ok: check 6 goes red on X-20's state, over {len(bad20)} lines")
 
-    # Check 7 poison: claim a stored trait is derived and it must notice.
-    _t = {r[0]: r[2] for r in DATA["traits"]}
-    _row = next(r for r in DATA["traits"] if r[0] == "ready")
-    _row[2] = "derived"
-    if "ready" not in check_drift()[3]:
+    # Check 7 poison: claim a trait is stored where the release says otherwise, and it must
+    # notice.
+    #
+    # **The anchor is chosen rather than named, because a named one goes stale.** This poison
+    # named `ready`, and the release later split readiness into `moving`, `laboring`, `bearing`,
+    # `working` and `defending` - so `ready` became a trait only this copy has, the mutation
+    # landed in `only_ours`, and the poison went red for a reason that had nothing to do with
+    # check 7. Only a trait **both** copies have can demonstrate `differ` at all, so the anchor
+    # is drawn from the intersection and the intersection is asserted non-empty: a poison that
+    # silently had nothing to mutate would pass for the same reason a count over nothing does.
+    _theirs = release_traits()
+    _shared = sorted(set(_theirs) & {r[0] for r in DATA["traits"]})
+    assert _shared, "no trait is in both copies, so check 7's poison has nothing to mutate"
+    _name = _shared[0]
+    _row = next(r for r in DATA["traits"] if r[0] == _name)
+    _was = _row[2]
+    _row[2] = "derived" if _theirs[_name] != "derived" else "stored"
+    if _name not in check_drift()[3]:
         print("  POISON FAILED: check 7 did not notice a copy that disagrees with the release")
         ok = False
     else:
-        print("  poison ok: check 7 notices a copy that disagrees with the release")
-    _row[2] = _t["ready"]
+        print(
+            f"  poison ok: check 7 notices a copy that disagrees with the release"
+            f" ({_name}, of {len(_shared)} traits in both)"
+        )
+    _row[2] = _was
 
     # Check 8 poison: declare a pairing nothing could reach, and it must be named.
     _saved8 = list(DATA["containment_declared"])

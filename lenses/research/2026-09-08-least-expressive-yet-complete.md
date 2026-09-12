@@ -7,6 +7,13 @@ fail-behavior, and constraints on parameters - and expects some to be subsumed b
 place where the literature supplies a *decision procedure* rather than a taste, and a decomposition
 of his four that he can check against his own specification in an afternoon.
 
+> **Superseded in one respect, 2026-09-11.** The release no longer has the four roles this report
+> decomposes: `P-421` declared a fifth, `put`, and `P-385` deleted both `limit` rows. **The
+> decomposition is unaffected and the count is wrong** - the grid was always over the roles that
+> carry a quantity, and a `put` carries none, so `put` is the other axis of this report's own
+> fact-versus-count split rather than a fifth cell in the grid. `X-11` carries the argument and is
+> closed.
+
 Citations checked against sources in the session that wrote this.
 
 ## The test for a primitive, which is not a matter of taste
