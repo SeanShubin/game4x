@@ -112,14 +112,18 @@ research lens re-ran the check on 2026-09-11 and it still says ten - because it 
 and returns a plausible number rather than an error**, which is the failure `CLAUDE.md` names. Six
 and ten never disagreed; they are two populations, and only the six is about the release.
 
-**So `X-29`'s evidence is withdrawn by its own author** and the six above is a hand count, stated
-with its method so it can be refuted. The code lane counted the release independently and got six,
-naming the six rows - **two hand counts and no tooling.**
+**Re-measured on 2026-09-11, against the release, and the six holds.** The research lens's check 17
+parses the *Recipes* table rather than any copy of it: **81 arcs over 21 recipes - 61 ordinary, 14
+thresholds, and 6 reading a marking**, all six `put ... at its maximum`, all six in `refresh`, all
+world. **Three methods now agree** - two hand counts and one computed, by different routes.
 
-**And the classification has to be stated before the next count, not after.** The release's two
-`put` forms are not the same arc: *at its maximum* writes a constant whatever is there, and *one
-less* is a fixed decrement. **Whether the conclusion survives depends on which of those counts as
-reading a marking** - which is a definition, not a measurement.
+**The classification was settled the opposite way from this document's first attempt at it**, and
+the correction is worth carrying because the wrong version is the intuitive one. *At its maximum*
+does **not** write a constant: reaching a maximum has to move **the difference between the maximum
+and what is there**, so the weight depends on the marking. *One less* reads nothing. **The rule of
+thumb is the amount, never the phrasing** - which is the same test stated above, arrived at twice
+from opposite directions.
+
 
 
 
@@ -292,9 +296,11 @@ question the state cannot answer, and the rule wants a different shape.
 **Nothing states that the player's sublanguage is the ordinary one.** Every marking-reading arc in
 the game is in a **world** recipe and none is in a player's, so the property holds **by accident**.
 Until a rule says so and a check enforces it, the first player-authored recipe that empties a place
-moves the editor into a class where none of this is decidable. **`X-29` is open and its evidence is
-withdrawn by its author** - it measured that lane's own encoding rather than the release - so the
-property above rests on two hand counts and no tooling until it is re-derived.
+moves the editor into a class where none of this is decidable. **`X-29` is open with its evidence
+re-derived from the release**, and the property now has three independent measurements rather than
+a claim. **What is still missing is the rule and the check** - nothing states that a player's
+recipes must stay ordinary, and nothing refuses one that does not.
+
 
 
 **Nothing says which kinds may be zero-tested.** The boundedness split above is a finding and not a

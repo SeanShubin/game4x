@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-429** - a check that reads a copy of the population cannot fail · `docs/notes/proposals.md`
 - **P-422** - `R-6` is rewritten: two territories and a launch, and every recipe fires · `docs/notes/proposals.md`
 - **P-425** - force, rewritten under unification, and `Coordination` folds into `Producing force` · `docs/notes/proposals.md`
 - **P-428** - unification first, until there is a reason not to · `docs/notes/proposals.md`
@@ -26,8 +27,6 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **P-422** - `21deef5` R-6 is not built, recorded with the numbers, and P-422 for the question it pointed at · still open in `docs/notes/proposals.md`
-- **P-426** - `4461445` X-14 closed into P-426 and P-427, and two citations recorded · still open in `docs/notes/proposals.md`
-- **P-427** - `4461445` X-14 closed into P-426 and P-427, and two citations recorded · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
