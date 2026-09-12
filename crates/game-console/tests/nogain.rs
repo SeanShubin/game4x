@@ -571,21 +571,37 @@ fn every_recipe_row_names_a_count_rather_than_readiness() {
 
 /// The two tables this crate reads by position, and the order it assumes.
 ///
-/// **Three readers went wrong this way in one day and each was green.** `P-346` moved *Costs to
-/// produce* and a reader of cell 5 said a pioneer has no metal cost. `P-466` moved *Readies* to
-/// cell 5 and a reader of cell 8 said four things ready nothing. The same removal left
-/// `nogain::readies` reading cell 8 of a seven-column table, returning an empty list, with its
-/// only caller a branch that had been dead since `P-411`.
+/// **This documents an assumption. It does not search for code that violates one.** That
+/// distinction cost four readers on the evening it was written: `P-473` deleted the release's
+/// *Of* column, this test went on passing - correctly, the release matched the list below -
+/// and four readers elsewhere held a different list and reported plausible nonsense. A trait
+/// table with no derived trait in it, three closed sets that became zero, a catalog printing
+/// `(stored)` beside every trait, and a prototype saying `biome` names no set of values.
 ///
-/// **`recipes::column_of` is the repair and it is not everywhere yet.** Twenty-odd sites in
-/// `nogain.rs` and `petri.rs` index the Recipes table, which is correct today and silent
-/// tomorrow. This is the guard that makes tomorrow loud **in the crate that does the
-/// indexing** - `prototypes/kinds` already compares both headers with the release, so a change
-/// is caught there, but it is caught in a crate that renders rather than one that reads, and
-/// whoever repairs it has no reason to look here.
+/// **A guard that asserts an assumption cannot find the code that disagrees with it.** It
+/// fires when the release moves away from what is written here; it is blind to a reader that
+/// was never reading what is written here. **Only taking the index out finds those** -
+/// `recipes::column_of`, and the readers that call it.
+///
+/// **So read this as a record of what the positional readers that remain assume**, and not as
+/// coverage of them. The next person to reach for it will take it for coverage; the lane that
+/// wrote it did.
+///
+/// # What it is still for
+///
+/// **The release moving is the half it does catch**, and it catches it in the crate that does
+/// the indexing. `prototypes/kinds` compares both headers with the release already, so a moved
+/// column fails there too - but it fails in a crate that renders rather than one that reads,
+/// and whoever repairs it there has no reason to look at a `row.get(n)` three files away.
 ///
 /// **A header, not a count.** Asserting seven columns would pass a rename and a reorder, which
 /// are the two changes that break a positional read.
+///
+/// Three readers went wrong this way before the four above, and each was green: `P-346` moved
+/// *Costs to produce* and a reader of cell 5 said a pioneer has no metal cost; `P-466` moved
+/// *Readies* to cell 5 and a reader of cell 8 said four things ready nothing; the same removal
+/// left `nogain::readies` reading cell 8 of a seven-column table, returning an empty list, with
+/// its only caller a branch dead since `P-411`.
 #[test]
 fn the_tables_this_crate_reads_by_position_are_in_the_order_it_assumes() {
     let document = release();
