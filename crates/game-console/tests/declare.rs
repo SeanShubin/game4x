@@ -739,3 +739,74 @@ fn whatever_is_built_no_longer_derives_from_the_release() {
          `binding`, and no recipe consuming metal produces one"
     );
 }
+
+/// Every *Of* cell reaches at least one kind, and the whole column reaches forty-three.
+///
+/// **The byte comparison cannot see a cell reaching too few.** `declare::kinds` inverts the
+/// release's *Of* column onto the kinds' lines and the test above asserts the result equals
+/// `spec/data/kinds.4x` - so a cell that resolved to nothing would fail there today, loudly.
+/// **It would stop failing the moment the file is regenerated from the same reader**, which is
+/// what `P-473` proposes: `kinds.4x` becomes the source and there is nothing to diff against.
+///
+/// **So this counts instead, per cell and in total.** A cell reaching no kind is a trait that
+/// silently belongs to nothing; the column reaching fewer kinds than it does today is the same
+/// failure spread out. `C-105` is why both numbers are here rather than one: six phrasings, and
+/// the three predicates are the ones a new phrasing would join.
+///
+/// **Forty-three, and the arithmetic is stated so a reader can re-derive it.** Twenty-four
+/// traits; `keeps` is `of:thing` and reaches no line, and the other twenty-three reach between
+/// one and six kinds each.
+#[test]
+fn every_of_cell_reaches_a_kind_and_the_column_reaches_forty_three() {
+    let document = release();
+    let file = declare::kinds(&document);
+    let read = state::declarations(&file).expect("the generated file parses");
+
+    let mentions: usize = read
+        .iter()
+        .map(|row| {
+            row.traits
+                .iter()
+                .filter(|(name, value)| value.is_empty() && name.as_str() != "name")
+                .count()
+        })
+        .sum();
+    assert_eq!(
+        mentions, 43,
+        "forty-three trait names across the kinds' lines; this wrote {mentions}. A cell of the \
+         release's *Of* column has stopped reaching a kind it names"
+    );
+
+    // **And no trait is declared and carried by nothing**, which is the per-cell half: a total
+    // can stay right while one cell empties and another gains.
+    let carried: std::collections::BTreeSet<String> = read
+        .iter()
+        .flat_map(|row| row.traits.keys())
+        .filter(|name| name.as_str() != "name" && name.as_str() != "family")
+        .cloned()
+        .collect();
+    let declared: Vec<String> = game_console::recipes::body_under(&document, "## Traits")
+        .iter()
+        .map(|row| {
+            row.first()
+                .map(String::as_str)
+                .unwrap_or_default()
+                .trim()
+                .trim_matches('*')
+                .trim()
+                .replace(' ', "-")
+        })
+        .collect();
+    let unreached: Vec<&String> = declared
+        .iter()
+        .filter(|name| !carried.contains(*name))
+        .collect();
+    assert_eq!(
+        unreached,
+        [&"keeps".to_string()],
+        "`keeps` is `of:thing` and belongs to every kind without any line saying so - anything \
+         else here is a trait the release declares and no kind carries, which is a cell that \
+         reached nothing"
+    );
+    assert_eq!(declared.len(), 24, "the Traits table is the population");
+}
