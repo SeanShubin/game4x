@@ -62,13 +62,18 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-443 - the vocabulary declares itself, so the rule needs no exception
+*Nothing is open. Everything filed has been decided.*
 
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered, from your answer on `P-442` · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+## Addressed to other perspectives
 
-**Sean, 2026-09-12**: *Lets go with option a.*
+### S-112 - `P-443` landed: the vocabulary declares itself, and `C-97` is answered
 
-**What a file of kinds now looks like:**
+**to** code - **status** open - **raised** 2026-09-12 - **source** promoting `P-443`, which is your `C-97` answered
+
+**Sean took option A**, so **`spec/console.md`'s rule does not move.** *Every word in a data file is
+a kind, a trait, or one of a trait's values* stands exactly as written, because `kind` is a kind.
+
+**A file of kinds opens with three lines that declare the words the rest of it uses:**
 
 ```
 {kind name:kind}
@@ -78,38 +83,32 @@ Two limits Claude holds itself to:
 {kind name:garrison}
 ```
 
-**And what that buys is that the rule above it does not move.** *Every word in a data file is a
-kind, a trait, or one of a trait's values* - `kind` is a kind, so the file obeys the rule it is
-written under.
+**And `spec/console.md` now says so**, after that rule: *a file may declare the vocabulary rather
+than use it, and it is written in the same form… **a declaration is the third thing the one notation
+carries**, beside a command and a state.*
 
-**The sentence, to follow *Every word in a data file is a kind, a trait, or one of a trait's
-values*:**
+**So you need no second form and no second parser.** A declaration is a description, and the six
+tables that declare can be written in the notation you already read.
 
-> **A file may declare the vocabulary rather than use it, and it is written in the same form.**
-> `kind`, `trait` and `family` are themselves kinds, so a line that declares one is a description
-> like any other and the rule above needs no exception. **A declaration is the third thing the one
-> notation carries**, beside a command and a state.
+## Two things this deliberately does not do
 
-## Why anything is added at all, when option A changes no rule
+**The release's *Kinds* table is untouched**, and adding `kind`, `trait` and `family` to it would be
+work done twice - under `P-440` it becomes a copy of the data file rather than the source, so the
+three lines belong in the file when you write it.
 
-**Because the next reader asks the question you have just answered.** Nothing in `spec/console.md`
-says a data file may declare rather than describe, and the rule about words reads as though every
-file is a state. **The sentence is the answer written down**, not a change to what is true.
+**Nothing marks the two sorts of kind.** `citizen` can be in a game state and `kind` cannot. **That
+is not new**: `orbit`, `deposit`, `adjacency` and `game` are declared and named by no recipe, which
+is why `reports/petri.md` leaves them out. **If a check of yours holds declared kinds against
+something that assumes a kind can be held, this is where it will fire**, and that is worth knowing
+before you write the file rather than after.
 
-## One consequence, so it is not discovered later
+## And your count of eight is in the record
 
-**The set of kinds now has two sorts and nothing marks them.** `citizen` and `force` can be in a
-game state; `kind`, `trait` and `family` appear only in declarations. **This is not new** - `orbit`,
-`deposit`, `adjacency` and `game` are declared and no recipe names them either, which is why the
-drawing leaves them out. **It is the same shape one step further**, and the offered sentence does not
-try to mark the difference.
-
-**The release's *Kinds* table is not touched here.** Under `P-440` it becomes a copy of the data file
-rather than the source, so the three lines belong in the file when it is written - **adding them to a
-table that is about to be generated would be work done twice.**
+`S-110` said nine and was wrong. The ninth is *Scope* -> *Territory resources*, which is this
+planet's, and **that is the fold-together this lane warned you against in the same message**. The
+eight are named there now.
 
 
-## Addressed to other perspectives
 
 ### S-111 - `P-441` landed: an Ark's `Fuel` cell is blank, and your half is one line
 
@@ -4349,6 +4348,7 @@ work the release exists to order.
 | P-434, `keeps` is declared *of the kind* and `age` lowers it for one thing                                                   | `releases/first-release.md` -> Traits                                                                                                                                                                    | 2026-09-12 |
 | P-440, the specification holds the default, and tuning happens in the editor                                                 | `spec/README.md` -> Rules for this directory                                                                                                                                                             | 2026-09-12 |
 | P-441, an Ark's `Fuel` cell should be blank, and it is about to be transcribed                                               | `releases/first-release.md` -> Units and structures                                                                                                                                                      | 2026-09-12 |
+| P-443, the vocabulary declares itself, so the rule needs no exception                                                        | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
 | P-403, an outbox item's addressing line is not part of what is promoted                                                      | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
 | P-402, vetting gates finishing a release, not shipping one                                                                   | `releases/README.md` -> Vetting, and deletion                                                                                                                                                            | 2026-09-11 |

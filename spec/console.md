@@ -65,6 +65,11 @@ descriptions sort in**, so the same state is always the same bytes.
 **Every word in a data file is a kind, a trait, or one of a trait's values.** A file that uses any
 other word is wrong about the game rather than describing it.
 
+**A file may declare the vocabulary rather than use it, and it is written in the same form.**
+`kind`, `trait` and `family` are themselves kinds, so a line that declares one is a description
+like any other and the rule above needs no exception. **A declaration is the third thing the one
+notation carries**, beside a command and a state.
+
 **In a recipe the same form is a selector, not a description.** A selector may name a **family**
 rather than a kind, and it may **leave traits out** - `{extractor resource:food}` selects every
 extractor built for food, whatever else is true of it. **A description may do neither**: it names

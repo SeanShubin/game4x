@@ -168,8 +168,21 @@ pub fn insert_after(text: &str, anchor: &str, inserted: &str) -> Result<String, 
         [] => problem(format!("no line equals the anchor {anchor:?}")),
         [_] => {
             let mut out: Vec<&str> = lines.clone();
-            for (offset, line) in inserted.lines().enumerate() {
-                out.insert(at[0] + 1 + offset, line);
+            // **If the anchor ends a block, what follows it starts one.** `P-443` went in
+            // directly under the last line of a paragraph and ran into it, because this
+            // inserted on the next line whatever was there. The line after the anchor says
+            // which case it is: blank means the anchor closed a block, and a new block then
+            // needs its own blank line before it.
+            let mut offset = 1;
+            if lines
+                .get(at[0] + 1)
+                .is_some_and(|next| next.trim().is_empty())
+            {
+                out.insert(at[0] + 1, "");
+                offset = 2;
+            }
+            for (index, line) in inserted.lines().enumerate() {
+                out.insert(at[0] + offset + index, line);
             }
             Ok(join(&out))
         }
@@ -421,6 +434,50 @@ Some reasoning, which belongs to P-1.
         let text = "one\ntwo\nthree\n";
         let out = insert_after(text, "two", "TWO AND A HALF").expect("inserted");
         assert_eq!(out, "one\ntwo\nTWO AND A HALF\nthree\n", "{out:?}");
+    }
+
+    /// A block inserted after a line that ends one gets its own blank line.
+    ///
+    /// **`P-443` needed this and did not have it.** It went in directly under the last line
+    /// of a paragraph in `spec/console.md` and ran into it, and the assertion passed because
+    /// the approved text was all there - `docs/process.md`'s point about a check answering a
+    /// narrower question than the one asked.
+    #[test]
+    fn a_block_after_a_paragraph_gets_a_blank_line_before_it() {
+        let text = "a paragraph.
+
+another one.
+";
+        let out = insert_after(text, "a paragraph.", "**new block.**").expect("inserted");
+        assert_eq!(
+            out,
+            "a paragraph.
+
+**new block.**
+
+another one.
+",
+            "{out:?}"
+        );
+    }
+
+    /// And a line inserted inside a block does not gain one.
+    #[test]
+    fn a_line_inside_a_block_gets_no_blank_line() {
+        let text = "- one
+- two
+- three
+";
+        let out = insert_after(text, "- two", "- two and a half").expect("inserted");
+        assert_eq!(
+            out,
+            "- one
+- two
+- two and a half
+- three
+",
+            "{out:?}"
+        );
     }
 
     /// Two anchors is a guess, not a first match.
