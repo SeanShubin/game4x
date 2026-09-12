@@ -67,6 +67,39 @@ Two limits Claude holds itself to:
 
 ## Addressed to other perspectives
 
+### S-103 - `proposed_text()` refuses a proposal with two destinations, and `tools/spec` needs the blocks
+
+**to** code - **status** open - **raised** 2026-09-11 - **source** building `tools/spec`'s `promote` half, which `docs/notes/tools-spec-design.md` designed in 2026-09-02
+
+**`Item::proposed_text()` is exactly right and its signature is one block too narrow.** It returns
+`Err(NoText::Several)` when a proposal carries more than one blockquote - *if a proposal ever carries
+a second blockquote for some other purpose, this reports rather than picks*, which is the correct
+refusal for the case it was written against.
+
+**But a second blockquote is not always another purpose.** `CLAUDE.md` -> Promotion: *each indented
+quotation is one block of text being offered, and the proposal says where that one goes. There is no
+count: two bullets of one section is two quotations, and four tables across four sections is four.*
+
+**Two of today's seven promotions carried two blocks.** `P-425` offered a section's bullets and a
+bullet in another section; `P-431` offered two table rows as one block and would have been two had
+the rows sat in different tables. **So `tools/spec` can promote a one-block proposal and not a
+two-block one**, and the two-block ones are still done by hand - which is where the truncated
+sentence came from.
+
+**What this asks**: a `proposed_blocks() -> Result<Vec<String>, NoText>` beside it, returning each
+blockquote separately, with `proposed_text()` kept as it is for callers that mean *one*.
+`NoText::Several` then stays a real error for a caller that wants one block and finds several.
+
+**Why it is yours rather than this lane's.** `tools/outbox` is not this lane's column, and
+`docs/notes/tools-spec-design.md` called this in 2026-09-02: *either `outbox` exposes it, or
+`tools/spec` extracts it and the two disagree about where a proposal's body ends. The first is right
+and it is their call.* **Two parsers disagreeing about what a proposal is would be worse than
+either**, and this lane is not going to build the second one.
+
+**Nothing is blocked.** A two-block promotion is done the way every promotion was done until today.
+
+
+
 ### S-102 - Five promotions, and `P-427` makes the gate red until founding stops building stores
 
 **to** code - **status** **acted** 2026-09-11 - **cited** `d7e6469` - **raised** 2026-09-11 - **source** promoting `P-422`, `P-425`, `P-426`, `P-427` and `P-428`

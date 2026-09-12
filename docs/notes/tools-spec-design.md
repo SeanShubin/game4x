@@ -1,8 +1,10 @@
 # `tools/spec`, designed
 
-**Derived, 2026-09-02.** Written by Claude after Sean approved porting the specification lane's
-editing script to Rust and called the cross-lane dependency justified. Not binding, and **nothing is
-built** - `P-182` has to land first, since `tools/spec/` is not yet anyone's to write.
+**Derived, 2026-09-02. Part of it is built, 2026-09-11** - see *What is built* at the bottom, which
+is the only part of this note that is not a design. Written by Claude after Sean approved porting the
+specification lane's editing script to Rust and called the cross-lane dependency justified. Not
+binding.
+
 
 [Notes index](README.md) · [Documentation map](../README.md) · [Root README](../../README.md)
 
@@ -107,3 +109,45 @@ warns about, arriving in a measurement rather than an edit, and it means any che
 commit that added this row* is reading the wrong parent most of the time. `promote` writing the row
 avoids the question entirely.
 
+
+## What is built, 2026-09-11
+
+**Three verbs and the module under them**, built after this lane made the same class of mistake
+three times in one session - a structural markdown edit, hand-rolled, with the boundary or the
+newline decided anew each time.
+
+| Verb                            | What it does                                                         |
+| ------------------------------- | -------------------------------------------------------------------- |
+| `spec show <id>`                | the approved text, from `outbox`'s parser, with its quoting stripped |
+| `spec after <id> <file> <line>` | puts it in after that line, then **reads the file back** and asserts |
+| `spec land <id> <after-id>`     | a ledger row **from the item's own `into` field**, then removes it   |
+
+**Each is a defect that happened.** The boundary between one item and the next is the next `###`
+heading or one of the file's named sections - never a `##`, because a proposal's body uses `##` for
+its own sub-headings, and cutting there left sixty-eight lines of two proposals in the `Open`
+section **after the same defect had been found and fixed two hours earlier**. Every write goes
+through one function that writes `\n`, because the default put six carriage returns into
+`spec/invariants.md`. Text is inserted line by line rather than pasted, because a replacement ending
+in a newline after an anchor ending in a newline gives a blank line, which had been repaired by hand
+after nearly every edit that day.
+
+**The assertion reads the file back from disk.** That is the whole difference between this and what
+it replaces: the promotion that failed on 2026-09-11 asserted its destination against the
+intermediate file the script had just written, so a truncated sentence passed. `docs/process.md`
+now carries the rule - *a check that reads a copy of the population is checking the copy.*
+
+**Verified by breaking rather than by passing.** Debris in the `Open` section, a carriage return in
+`spec/control.md`, and the boundary changed back to cutting at any `##` each turn a test red; all
+three went green again when undone. The integration tests read `docs/notes/proposals.md` itself
+rather than a fixture, and each says what it counted over.
+
+**What is not built**: `replace-once`, `set-cell`, `replace-rows`, `reorder` and `commit`, and
+`promote` as one composite. `after` and `land` are the two halves of `promote` that this session
+actually needed.
+
+**And one thing blocks the rest**, filed as `S-103`: `Item::proposed_text()` returns an error when a
+proposal carries more than one blockquote, and a proposal with two destinations carries two -
+`P-425` and `P-431` both did. Until `outbox` exposes the blocks rather than the block, `show` and
+`after` handle only single-block proposals, and a two-block promotion is still done by hand. **That
+is `outbox`'s call and not this lane's**, which is what this note said in 2026-09-02 and is still
+right.

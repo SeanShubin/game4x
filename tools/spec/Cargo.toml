@@ -11,3 +11,8 @@ name = "spec"
 path = "src/lib.rs"
 
 [dependencies]
+outbox = { path = "../outbox" }
+
+[[bin]]
+name = "spec"
+path = "src/main.rs"

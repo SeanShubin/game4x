@@ -1,0 +1,232 @@
+//! The queue operations, run over the real `docs/notes/proposals.md`.
+//!
+//! **The population is the file rather than a fixture**, which is the rule this tool was
+//! built to keep: `docs/process.md`, *a check that reads a copy of the population is checking
+//! the copy.* A fixture written by the same hand as the parser agrees with the parser.
+//!
+//! Every count below is asserted rather than printed, and each says what it counted over -
+//! `CLAUDE.md`: *a count over nothing is the same failure with the sign flipped.*
+
+use std::path::{Path, PathBuf};
+
+use spec::queue::{FILE_SECTIONS, block_of, remove_block};
+
+fn root() -> PathBuf {
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .parent()
+        .and_then(Path::parent)
+        .expect("tools/spec sits two below the root")
+        .to_path_buf()
+}
+
+fn queue() -> String {
+    std::fs::read_to_string(root().join("docs/notes/proposals.md")).expect("the queue is readable")
+}
+
+fn ids(text: &str) -> Vec<String> {
+    text.lines()
+        .filter_map(|line| line.strip_prefix("### "))
+        .filter_map(|rest| rest.split_once(" - "))
+        .map(|(id, _)| id.trim().to_string())
+        .collect()
+}
+
+/// Every item in the queue has a block, and no block swallows the next item.
+///
+/// **This is the shape the hand-written removal got wrong twice on 2026-09-11**, in opposite
+/// directions on the same day: once it stopped short at a `##` sub-heading and left sixty-eight
+/// lines behind, and the guard against the other direction is what `CLAUDE.md` records two
+/// proposals being destroyed by.
+#[test]
+fn every_item_has_a_block_that_holds_itself_and_nothing_else() {
+    let text = queue();
+    let all = ids(&text);
+    assert!(
+        all.len() >= 10,
+        "the queue holds {} items, which is too few for this to be measuring anything",
+        all.len()
+    );
+    let lines: Vec<&str> = text.lines().collect();
+    for id in &all {
+        let (start, end) = block_of(&text, id).unwrap_or_else(|why| panic!("{id}: {why}"));
+        assert!(
+            lines[start].starts_with(&format!("### {id} - ")),
+            "{id} starts at its heading"
+        );
+        let inside = &lines[start + 1..end];
+        let others: Vec<&&str> = inside.iter().filter(|l| l.starts_with("### ")).collect();
+        assert!(others.is_empty(), "{id}'s block swallowed {others:?}");
+    }
+}
+
+/// A block that carries `##` sub-headings keeps them, and removing it takes them with it.
+///
+/// **Measured rather than assumed to exist**: if no item in the queue has a sub-heading, this
+/// test proves nothing, so it says how many did.
+#[test]
+fn sub_headings_belong_to_their_item_and_leave_with_it() {
+    let text = queue();
+    let lines: Vec<&str> = text.lines().collect();
+    let mut with_sub_headings = 0;
+    for id in ids(&text) {
+        let (start, end) = block_of(&text, &id).expect("a block");
+        let subs: Vec<&&str> = lines[start + 1..end]
+            .iter()
+            .filter(|l| l.starts_with("## ") && !FILE_SECTIONS.contains(&l.trim()))
+            .collect();
+        if subs.is_empty() {
+            continue;
+        }
+        with_sub_headings += 1;
+        let left = remove_block(&text, &id).expect("removable");
+        for sub in subs {
+            assert!(
+                !left.contains(sub.trim()),
+                "{id} left its sub-heading {sub:?} behind, which is the 2026-09-11 defect"
+            );
+        }
+    }
+    assert!(
+        with_sub_headings > 0,
+        "no item in the queue carries a sub-heading, so this test is passing over nothing"
+    );
+}
+
+/// The queue's own sections are the ones the tool knows about.
+///
+/// **The boundary is a list, so the list going stale is the way this tool fails.** A section
+/// added to the file and not to `FILE_SECTIONS` would read as an item's sub-heading, and the
+/// item before it would swallow the rest of the file. This is what notices.
+#[test]
+fn the_files_sections_are_the_ones_the_tool_names() {
+    let text = queue();
+    let present: Vec<&str> = text
+        .lines()
+        .filter(|line| line.starts_with("## "))
+        .collect();
+    let unknown: Vec<&&str> = present
+        .iter()
+        .filter(|line| !FILE_SECTIONS.contains(&line.trim()))
+        .collect();
+    let known: Vec<&&str> = present
+        .iter()
+        .filter(|line| FILE_SECTIONS.contains(&line.trim()))
+        .collect();
+    assert_eq!(
+        known.len(),
+        FILE_SECTIONS.len(),
+        "every named section is in the file exactly once: found {known:?}"
+    );
+    // The rest are items' own sub-headings, and each must sit inside some item's block.
+    let lines: Vec<&str> = text.lines().collect();
+    let blocks: Vec<(usize, usize)> = ids(&text)
+        .iter()
+        .map(|id| block_of(&text, id).expect("a block"))
+        .collect();
+    for sub in &unknown {
+        let at = lines
+            .iter()
+            .position(|line| *line == **sub)
+            .expect("the line is in the file");
+        assert!(
+            blocks.iter().any(|(start, end)| at > *start && at < *end),
+            "{sub:?} is at line {} and belongs to no item, so it is a section the tool does not know",
+            at + 1
+        );
+    }
+}
+
+/// Nothing is left in `Open` when it says it is empty.
+///
+/// **This is the one that would have failed on 2026-09-11**, twice: the `Open` section said
+/// *Nothing is open* while sixty-eight lines of two removed proposals sat under it.
+#[test]
+fn the_open_section_holds_only_items_or_says_it_is_empty() {
+    let text = queue();
+    let lines: Vec<&str> = text.lines().collect();
+    let start = lines
+        .iter()
+        .position(|line| line.trim() == "## Open")
+        .expect("the queue has an Open section");
+    let end = lines
+        .iter()
+        .enumerate()
+        .skip(start + 1)
+        .find(|(_, line)| FILE_SECTIONS.contains(&line.trim()))
+        .map(|(at, _)| at)
+        .expect("a section follows Open");
+    let inside: Vec<&&str> = lines[start + 1..end]
+        .iter()
+        .filter(|line| !line.trim().is_empty())
+        .collect();
+    let items = inside.iter().filter(|l| l.starts_with("### ")).count();
+    if items == 0 {
+        assert_eq!(
+            inside.len(),
+            1,
+            "an empty Open section holds one sentence and nothing else, and holds {inside:?}"
+        );
+        assert!(
+            inside[0].starts_with('*'),
+            "and that sentence says it is empty: {:?}",
+            inside[0]
+        );
+    } else {
+        let orphans: Vec<&&&str> = inside
+            .iter()
+            .filter(|l| l.starts_with("## ") && !FILE_SECTIONS.contains(&l.trim()))
+            .collect();
+        let blocks: Vec<(usize, usize)> = ids(&text)
+            .iter()
+            .map(|id| block_of(&text, id).expect("a block"))
+            .collect();
+        for orphan in orphans {
+            let at = lines
+                .iter()
+                .position(|l| *l == **orphan)
+                .expect("in the file");
+            assert!(
+                blocks.iter().any(|(s, e)| at > *s && at < *e),
+                "{orphan:?} sits in Open under no item"
+            );
+        }
+    }
+}
+
+/// No specification file this lane writes carries a carriage return.
+///
+/// **The defect the whitespace check could not see.** A comparison that collapses whitespace
+/// treats `\r` as whitespace, so six of them sat in `spec/invariants.md` while the promotion's
+/// own assertion passed.
+#[test]
+fn the_files_this_lane_writes_hold_no_carriage_return() {
+    let root = root();
+    let mut checked = 0;
+    let mut dirty: Vec<String> = Vec::new();
+    for directory in ["spec", "releases", "docs"] {
+        let mut stack = vec![root.join(directory)];
+        while let Some(at) = stack.pop() {
+            for entry in std::fs::read_dir(&at).expect("readable") {
+                let path = entry.expect("an entry").path();
+                if path.is_dir() {
+                    stack.push(path);
+                } else if path.extension().is_some_and(|it| it == "md") {
+                    let text = std::fs::read_to_string(&path).expect("readable");
+                    checked += 1;
+                    if text.contains('\r') {
+                        dirty.push(path.display().to_string());
+                    }
+                }
+            }
+        }
+    }
+    assert!(
+        checked > 20,
+        "only {checked} files checked, which is too few to mean anything"
+    );
+    assert!(
+        dirty.is_empty(),
+        "{} of {checked} files hold a carriage return: {dirty:?}",
+        dirty.len()
+    );
+}

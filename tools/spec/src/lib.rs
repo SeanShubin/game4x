@@ -9,6 +9,12 @@
 //! expressible**. A cell cannot be addressed by its position, so it cannot be written to the
 //! neighbouring column; a replacement that matches nothing is an error rather than a no-op.
 
+/// Moving a proposal out of the queue, as named operations.
+///
+/// Split out because the failures it answers are this lane's own from 2026-09-11
+/// rather than 2026-09-01's, and the module says which is which.
+pub mod queue;
+
 use std::fmt;
 
 /// What went wrong, in words a person can act on rather than a code.
@@ -348,10 +354,11 @@ pub fn proposals_without_text(proposals: &str) -> Vec<String> {
     let mut quoted = false;
     for line in proposals[open..end].lines().chain(["### P-0 "]) {
         if line.starts_with("### P-") {
-            if let Some(previous) = id.take() {
-                if to_sean && !quoted {
-                    without.push(previous);
-                }
+            if let Some(previous) = id.take()
+                && to_sean
+                && !quoted
+            {
+                without.push(previous);
             }
             id = line.split_whitespace().nth(1).map(str::to_string);
             to_sean = false;
