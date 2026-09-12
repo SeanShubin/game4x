@@ -248,15 +248,17 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
         4,
         "four families; the release lists {families:?}"
     );
-    // **Twenty-three, and the counts are why.** `P-399` made readiness a kind and took
-    // `ready` and `spent` out; `P-411` undid that and put five counts in - `moving`,
-    // `laboring`, `working`, `bearing` and `defending`, one per action, each `0 or 1`, where
-    // the two it replaced were one flag between them. `P-417` took `kind` out in the same
-    // pass, because a kind is not a trait.
+    // **Twenty-four, and the counts are why.** `P-399` made readiness a kind and took `ready`
+    // and `spent` out; `P-411` undid that and put five counts in - `moving`, `laboring`,
+    // `working`, `bearing` and `defending`, one per action, each `0 or 1`, where the two it
+    // replaced were one flag between them. `P-417` took `kind` out in the same pass, because a
+    // kind is not a trait. `P-461` added `binding` for the twenty-fourth: the *Binding* column
+    // of *Units and structures* had been a number `metal in it` referred to and no trait
+    // declared, which is the dangling reference this lane reported.
     assert_eq!(
         traits.len(),
-        23,
-        "twenty-three traits; the release lists {:?}",
+        24,
+        "twenty-four traits; the release lists {:?}",
         traits.keys().collect::<Vec<_>>()
     );
     let closed = traits

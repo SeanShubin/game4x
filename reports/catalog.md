@@ -7,7 +7,7 @@ Every kind the release declares, with everything it says about that kind gathere
 and generated rather than written; this is one such form. It is a view and not a copy - each
 section is a join across six tables that the document does not perform anywhere.
 
-18 kinds, 4 families, 23 traits, 31 recipes.
+18 kinds, 4 families, 24 traits, 31 recipes.
 
 ## Signatures
 
@@ -20,7 +20,7 @@ family counts**, because a family is how the release addresses several kinds at 
 **No two of the 18 kinds behave alike**, over all 153 pairs of them.
 
 **Every group below holds one kind**, which is what that sentence means when
-you reach them. **The traits alone do collide** - 9 of the kinds carry exactly
+you reach them. **The traits alone do collide** - 8 of the kinds carry exactly
 the traits another one carries - and every such pair is then separated by the recipes
 that name it. So the release has no two kinds it says *the same things* about, and Sean
 has accepted that as the answer: he expects a small number of distinct things.
@@ -93,13 +93,13 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 ### `s-12` - territory
 
-**Traits** `biome`, `control`, `keeps`, `nature`
+**Traits** `biome`, `control`, `id`, `keeps`, `nature`
 
 **Named by** `age put`, `age require`, `deploy ark require`, `launch ark require`, `move require`, `spoil consume`, `work require`
 
 ### `s-13` - orbit
 
-**Traits** `keeps`
+**Traits** `id`, `keeps`
 
 **Named by** `age put`, `age require`, `deploy ark consume`, `launch ark produce`, `move require`, `spoil consume`
 
@@ -145,7 +145,7 @@ a person: provides labor, eats, and grows on surplus.
 
 **Bounded by** the food produced here, through upkeep
 
-**As a thing** Strength: 1 · Upkeep: 1 food per turn · Readies: yes
+**As a thing** Strength: 1 · Upkeep: 1 food per turn · Readies: bearing 1, defending 1, laboring 1
 
 **In recipes**
 
@@ -204,7 +204,7 @@ built for one resource, and worked to produce it.
 
 **Bounded by** a capacity, from *Territory resources*
 
-**As a thing** Costs to produce: 1 labor, 1 metal · Binding: 1 · Readies: yes
+**As a thing** Costs to produce: 1 labor, 1 metal · Binding: 1 · Readies: working 1
 
 **In recipes**
 
@@ -279,7 +279,7 @@ carries a landing, and can invade from orbit.
 
 **Bounded by** a capacity of 2
 
-**As a thing** Strength: 2 · Costs to produce: 3 metal, 12 energy, 2 citizens · Binding: 3 · Crosses: orbit border · Requires: a Yard · Readies: yes · Movable: yes
+**As a thing** Strength: 2 · Costs to produce: 3 metal, 12 energy, 2 citizens · Binding: 3 · Crosses: orbit border · Requires: a Yard · Readies: defending 1, moving 1 · Movable: yes
 
 **Holds** energy, up to the unit's fuel - *a fact about each one rather than about the kind*
 
@@ -309,7 +309,7 @@ founds a territory.
 
 **Bounded by** a capacity of 2
 
-**As a thing** Strength: 2 · Fuel: 2 · Costs to produce: 3 metal, 6 energy, 2 citizens · Binding: 3 · Crosses: border · Readies: yes · Movable: yes
+**As a thing** Strength: 2 · Fuel: 2 · Costs to produce: 3 metal, 6 energy, 2 citizens · Binding: 3 · Crosses: border · Readies: defending 1, moving 1 · Movable: yes
 
 **Holds** energy, up to the unit's fuel - *a fact about each one rather than about the kind*
 
@@ -430,7 +430,7 @@ a place things are in, which has a biome, a force of nature, and a density and a
 
 **In families** thing, place
 
-**Traits of it** `control` (held by a player, or unclaimed), `biome` (one of the biomes), `nature` (a number), `keeps` (the number of turns it will last)
+**Traits of it** `id` (an identity), `control` (held by a player, or unclaimed), `biome` (one of the biomes), `nature` (a number), `keeps` (the number of turns it will last)
 
 **Signature** `s-12`
 
@@ -453,7 +453,7 @@ a place above one territory, which holds units and nothing else.
 
 **In families** thing, place
 
-**Traits of it** `keeps` (the number of turns it will last)
+**Traits of it** `id` (an identity), `keeps` (the number of turns it will last)
 
 **Signature** `s-13`
 

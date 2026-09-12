@@ -145,6 +145,24 @@ fn a_trait_of_a_family_reaches_its_members() {
         );
     }
 
+    // `id` is *of a place* since `P-462`, and the place family is territory and orbit. It was
+    // in the describing-cell test below until that landed: *a thing that must be named
+    // individually* is a predicate, and *a place* is a family.
+    for kind in ["territory", "orbit"] {
+        let carried = signature(&document, kind).traits;
+        assert!(
+            carried.contains(&"id".to_string()),
+            "`{kind}` is a place and `id` is declared of a place: {carried:?}"
+        );
+    }
+    for kind in ["citizen", "food", "ark"] {
+        let carried = signature(&document, kind).traits;
+        assert!(
+            !carried.contains(&"id".to_string()),
+            "`{kind}` is not a place and should not carry `id`: {carried:?}"
+        );
+    }
+
     // `keeps` is *of thing*, and the thing family is written `every kind above` - a membership
     // rather than a list, which is the form both joins used to split on commas and miss.
     let kinds: Vec<String> = body_under(&document, "## Kinds")
@@ -170,12 +188,17 @@ fn a_trait_of_a_family_reaches_its_members() {
 /// all sixteen kinds - which is the first attempt at `C-71`, caught by regenerating the report
 /// and reading it.
 ///
+/// **`id` has left this list, and it left by the release changing rather than by this test
+/// weakening.** `P-462` made it *of a place*, which is a family the Families table lists, so it
+/// is now checked by `a_trait_of_a_family_reaches_its_members` above - a stronger assertion than
+/// the one it was under here, not a dropped one.
+///
 /// Whether these should be resolved from *Units and structures*, which has a column for
 /// `Readies` and one for `Movable`, is a design decision and not this repair.
 #[test]
 fn a_cell_that_describes_rather_than_names_reaches_nothing() {
     let document = release();
-    let described = ["upkeep", "unpaid", "id", "ready", "movable"];
+    let described = ["upkeep", "unpaid", "ready", "movable"];
     let kinds: Vec<String> = body_under(&document, "## Kinds")
         .iter()
         .map(|row| plain(&row[0]))

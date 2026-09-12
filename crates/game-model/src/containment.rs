@@ -312,22 +312,24 @@ pub fn trait_name(name: Trait) -> &'static str {
 
 /// The counts a thing of this kind carries, under the names `P-411` gives them.
 ///
-/// The maximum an action count is restored to, which nothing declares.
+/// How many of each action a thing may take in a turn, which every kind declares as one.
 ///
-/// **`refresh` reads *at its maximum* six times and the release states no maximum** - `P-459`.
-/// `spec/turn.md` says *each kind declares how many of each action a thing of it may take in a
-/// turn*, and the *Units and structures* **Readies** column says `yes`: one cell for a
-/// citizen's three actions, where the rule asks for a number.
+/// **The release declares it now, and this constant is checked against it rather than
+/// standing in for it.** `P-459` was the gap: `refresh` read *at its maximum* six times and
+/// the *Readies* column said `yes`, one cell for a citizen's three actions, where
+/// `spec/turn.md` asks for a number. The column is the count per action now - *bearing 1,
+/// defending 1, laboring 1* - so there is a declared maximum to read.
 ///
-/// **The two agree today only because every maximum is one**, which is the shape this
-/// repository keeps finding - correct by the population rather than by the rule, the way
-/// `keeps` was correct while food was the only kind that had one.
+/// **It is one for all eight pairs**, and `the_readies_column_declares_the_maximum_this_reads`
+/// in `game-console` holds this constant against the column. **That check is why this stays a
+/// constant**: the model does not read the release, deliberately, so what keeps the two in
+/// step is a check rather than a lookup - and the day a kind declares two of an action, the
+/// check fails and names this.
 ///
-/// **So the constant is named rather than spelled `1` at the point of use.** It was
-/// `unwrap_or(1)`, a bare literal standing for a fact the release does not state; naming it
-/// gives `P-459` one place to change and a reader one place to find out that nothing declares
-/// it. **The behaviour is identical** - this is not a fix, it is the assumption made findable.
-pub const UNDECLARED_MAXIMUM: u32 = 1;
+/// **It was `MAXIMUM_PER_ACTION` until `P-459` landed.** The name was true and stopped being
+/// true, which is the thing a doc comment cannot notice about itself - so the check that
+/// noticed is the one that mattered rather than the comment that described.
+pub const MAXIMUM_PER_ACTION: u32 = 1;
 
 /// **One trait per action, and the name depends on the kind.** `spec/console.md`: a
 /// description is a kind and **every trait of that thing**, and **no trait of the thing may be
@@ -338,7 +340,7 @@ pub const UNDECLARED_MAXIMUM: u32 = 1;
 /// made this turn needs no trait to be able to act. That is storage; what a data file says is
 /// the number either way.
 fn counts(kind: Kind, thing: &Thing) -> Vec<(&'static str, u32)> {
-    let held = |name: Trait| thing.trait_of(name).unwrap_or(UNDECLARED_MAXIMUM);
+    let held = |name: Trait| thing.trait_of(name).unwrap_or(MAXIMUM_PER_ACTION);
     match kind {
         Kind::Citizen => vec![
             ("bearing", held(Trait::Spent)),

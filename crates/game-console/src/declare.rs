@@ -280,26 +280,32 @@ fn names_it(document: &str, name: &str) -> bool {
 
 /// What a trait admits, read from its Values cell.
 ///
-/// **`0 or 1` is a maximum showing through, not the trait's shape.** `spec/turn.md`: *an action
-/// is named, and each kind declares how many of each action a thing of it may take in a turn.*
-/// So an action count admits a **number**, bounded by a maximum the kind declares, and `0 or 1`
-/// is what that range looks like in a release where every maximum is one.
+/// **Four things a trait may admit**, and the release's own cell says which.
 ///
-/// **That is read from a promoted rule rather than chosen here**, which is why it is not
-/// `???`: a unit that one day takes two moves needs no change to this file. `P-457` carries
-/// the same reading to Sean, and if he reads it the other way this function changes and
-/// nothing else does.
+/// **A number**, however the cell describes what it counts. `a number` outright; `0 or 1` and
+/// `yes or no`, which are a maximum showing through rather than the trait's shape - `P-457`,
+/// and `spec/turn.md` is why: *each kind declares how many of each action a thing of it may
+/// take in a turn*; and four cells that are a number with a sentence about what it counts.
 ///
-/// **`yes or no` is still open.** `unpaid` and `movable` are not action counts and have no
-/// maximum behind them - either numbers like the counts, or values declared the way a biome
-/// is. Two cells, and `P-457` is where they are decided.
+/// **An identity**, which is `id` alone. `P-462`: two are equal or they are not, nothing
+/// orders or sums or aggregates one, and a guard compares with `=`. Sean's reason is the third
+/// test in *When a primitive earns its place* and it outranks the two that were there -
+/// *unifying it would create a lie*. `max id of {territory}` was well-formed and meaningless.
+///
+/// **A family**, where the values are kinds and the family already declares them -
+/// `one of the resources` is `resource`, `a place` is `place`.
+///
+/// **`value`**, where they are declared values rather than kinds. Not the trait's own name:
+/// `{value name:ice of:biome}` already says which set it is, so repeating it on the trait's
+/// line would be a rule stated twice - `P-458`, and the specification lane applied it to its
+/// own draft.
 fn admits(values: &str) -> String {
     let said = values.trim();
-    if said == "yes or no" {
-        return "???".to_string();
+    if said == "an identity" {
+        return "identity".to_string();
     }
-    if said == "design or play" {
-        return "phase".to_string();
+    if said == "one of the biomes" || said == "design or play" {
+        return "value".to_string();
     }
     if let Some(rest) = said.strip_prefix("one of the ") {
         return rest.trim_end_matches('s').to_string();
@@ -307,10 +313,9 @@ fn admits(values: &str) -> String {
     if said == "a place" {
         return "place".to_string();
     }
-    // Everything left is a number: `0 or 1` by the rule above, `a number` outright, and four
-    // cells that are a number with a sentence about what it counts.
     assert!(
         said == "0 or 1"
+            || said == "yes or no"
             || said.contains("number")
             || said.contains("how much")
             || said.contains("per turn"),

@@ -442,6 +442,103 @@ pub fn shape_of(said: &str) -> Option<&'static str> {
     }
 }
 
+/// Every shape a proposal declares, in the order it names them.
+///
+/// **A proposal offers one block per destination and a shape describes a block, so a proposal
+/// landing in two files may name two shapes.** `P-459` is the case: a paragraph into
+/// `spec/console.md` and a table into `releases/first-release.md`, declared `text and rows`.
+/// `CLAUDE.md` says as much - *each indented quotation is one block of text being offered, and
+/// the proposal says where that one goes. There is no count* - so the field was always plural
+/// and this read it as singular.
+///
+/// **Four correct promotions were reported wrong for it**, which is the same failure `S-68`
+/// recorded one field earlier: a check accepting a narrower spelling than the governing
+/// document uses catches a lane that did nothing wrong. The repair is the same too - read the
+/// form that is written rather than ask for the form that is convenient.
+///
+/// **The count is not the destinations' count.** `P-463` names three files and two shapes,
+/// because a shape says what kind of thing lands rather than where it goes. So these are a
+/// set to check blocks against, not a list to pair with `into`.
+pub fn shapes_of(said: &str) -> Option<Vec<&'static str>> {
+    let mut found = Vec::new();
+    for part in said.split(" and ").flat_map(|part| part.split(',')) {
+        let part = part.trim();
+        if part.is_empty() {
+            continue;
+        }
+        let shape = shape_of(part)?;
+        if !found.contains(&shape) {
+            found.push(shape);
+        }
+    }
+    (!found.is_empty()).then_some(found)
+}
+
+/// The blocks a proposal offers, in the order they appear, each with the shape its own form
+/// implies.
+///
+/// **Only a compound shape needs this, and that is deliberate.** A single-shape proposal is
+/// read exactly as it was before - `blocks`, falling back to `tables` for `rows` - so nothing
+/// that passes today is re-judged by a new rule. What a compound needs and that path cannot
+/// give is **order**: two blocks of different kinds have to reach the two files in the order
+/// `into` names them, and `blocks` and `tables` each read the whole body separately.
+///
+/// **A block's form decides its shape rather than the declaration.** A table is `rows` and
+/// anything else is `text`, which is the same distinction `CLAUDE.md` draws - *if the file
+/// will say these words, that is text; if it will say them as cells in a table, that is rows*.
+/// The declared set is then a claim about which forms appear, and a form outside it is context
+/// rather than an offer.
+fn offered(body: &str) -> Vec<(&'static str, String)> {
+    let mut found = Vec::new();
+    let mut quotation: Vec<String> = Vec::new();
+    let mut table: Vec<String> = Vec::new();
+
+    fn shut(found: &mut Vec<(&'static str, String)>, quotation: &mut Vec<String>) {
+        let block = quotation.join("\n").trim().to_string();
+        quotation.clear();
+        if block.split_whitespace().count() < 3 {
+            return;
+        }
+        let rows = block.lines().all(|line| line.trim().starts_with('|'));
+        found.push((if rows { "rows" } else { "text" }, block));
+    }
+
+    for line in body.lines() {
+        let trimmed = line.trim();
+        let quoted = trimmed.starts_with('>');
+        if trimmed.starts_with('|') && !quoted {
+            if !quotation.is_empty() {
+                shut(&mut found, &mut quotation);
+            }
+            table.push(trimmed.to_string());
+            continue;
+        }
+        if !table.is_empty() {
+            // A table is a header, its rule, and at least one row; fewer is a fragment.
+            if table.len() >= 3 {
+                found.push(("rows", table.join("\n")));
+            }
+            table.clear();
+        }
+        if let Some(rest) = trimmed.strip_prefix('>') {
+            quotation.push(rest.trim().to_string());
+        } else if trimmed.is_empty() {
+            if !quotation.is_empty() && !quotation.last().is_some_and(|l| l.is_empty()) {
+                quotation.push(String::new());
+            }
+        } else if !quotation.is_empty() {
+            shut(&mut found, &mut quotation);
+        }
+    }
+    if !quotation.is_empty() {
+        shut(&mut found, &mut quotation);
+    }
+    if table.len() >= 3 {
+        found.push(("rows", table.join("\n")));
+    }
+    found
+}
+
 pub fn check(shape: &str, block: &str, destination: &str) -> Verdict {
     match shape {
         "text" => {
@@ -514,6 +611,10 @@ pub fn check(shape: &str, block: &str, destination: &str) -> Verdict {
 /// firing**, which is the same defect as `C-35` one function over, so it is stated here
 /// instead of asserted.
 const KNOWN: &[(&str, &str)] = &[
+    (
+        "P-456",
+        "its `Values` cell was superseded inside its own promoting commit. `b7fc6a6` landed six proposals in the order the message gives them, and `P-463` - the first of the six - had already made `id` admit *an identity*, so the cell `P-456` offered, *a number, unique among things of its kind*, is not in the file the commit produced. **Both promotions are correct**: the later one supersedes a cell of the earlier, and the message says so. What cannot be judged is a promotion against a commit that also contains the promotion that replaced it, which is the same shape as `P-214` and `P-216` a week apart rather than a commit apart. Its text block landed and is checked; only the row is excepted.",
+    ),
     (
         "P-214",
         "dropped its quotation's emphasis, was repaired in `3fba321`, and the passage has since been superseded - a later promotion made `$` name a trait value as well as an ingredient. **`Repaired` is recomputed against `HEAD`, so it is not stable**: once the destination moves on for an unrelated reason, a settled deviation starts failing again. Judged at its own commit it deviated; judged today it cannot be judged at all, because the approved text is no longer what the file should say.",
@@ -679,7 +780,7 @@ fn a_promotion_lands_what_was_approved() {
                 older += 1;
                 continue;
             };
-            let Some(shape) = shape_of(&said) else {
+            let Some(shapes) = shapes_of(&said) else {
                 wrong.push(format!(
                     "{}: declares shape {said:?}, which is not text, rows or an instruction. \
                      The article is accepted; the word is not one of the three",
@@ -687,6 +788,7 @@ fn a_promotion_lands_what_was_approved() {
                 ));
                 continue;
             };
+            let shape = shapes.join(" and ");
             let files = field(&item.body, "into")
                 .map(|i| destinations(&i))
                 .unwrap_or_default();
@@ -698,14 +800,31 @@ fn a_promotion_lands_what_was_approved() {
             // `P-222` had none and `P-220` had a before and an after. The destination check
             // below already declines to ask anything of an instruction; requiring a block
             // first meant refusing to read the ones that were correct.
-            let mut quoted = blocks(&item.body);
-            if shape == "rows" && quoted.is_empty() {
-                quoted = tables(&item.body);
+            //
+            // **A compound shape reads its blocks in document order instead**, because the
+            // order is what pairs them with the files `into` names, and each block is
+            // checked under the shape its own form implies.
+            let compound = shapes.len() > 1;
+            let mut forms: Vec<(&'static str, String)> = if compound {
+                offered(&item.body)
+                    .into_iter()
+                    .filter(|(form, _)| shapes.contains(form))
+                    .collect()
+            } else {
+                let mut quoted = blocks(&item.body);
+                if shapes[0] == "rows" && quoted.is_empty() {
+                    quoted = tables(&item.body);
+                }
+                quoted.into_iter().map(|b| (shapes[0], b)).collect()
+            };
+            if shapes == ["instruction"] {
+                forms.clear();
             }
-            if shape != "instruction" && quoted.is_empty() {
+            if !shapes.contains(&"instruction") && forms.is_empty() {
                 wrong.push(format!("{}: shape {shape} and no block to land", item.id));
                 continue;
             }
+            let quoted: Vec<String> = forms.iter().map(|(_, block)| block.clone()).collect();
             let Some(destination) = git(&root, &["show", &format!("{commit}:{into}")]) else {
                 wrong.push(format!("{}: {into} is not in {}", item.id, &commit[..7]));
                 continue;
@@ -720,10 +839,38 @@ fn a_promotion_lands_what_was_approved() {
             // blocks it could not place. Anything else with more blocks than destinations is
             // still `Ambiguous`, which is what left the other five in the list - and those
             // turned out to be irregular rather than unread, which is `P-404`.
-            let mut verdict = if quoted.is_empty() {
+            let mut verdict = if forms.is_empty() {
                 Verdict::Landed // an instruction; nothing lands verbatim
+            } else if compound {
+                // **A compound shape asks each block to have landed in one of the files the
+                // proposal names, rather than in the one its position picks out.** The
+                // shapes do not pair with the destinations - `P-463` names three files and
+                // two shapes - and `P-457` names two files where only one of them receives
+                // anything verbatim, because the other is an instruction. So position is not
+                // available, and what is left is still a real question: these words are in
+                // one of the places this proposal said they would be.
+                let mut all = Verdict::Landed;
+                for (form, block) in &forms {
+                    let mut anywhere = Verdict::Missing {
+                        what: format!("no destination holds this {form} block"),
+                    };
+                    for file in &files {
+                        let Some(text) = git(&root, &["show", &format!("{commit}:{file}")]) else {
+                            continue;
+                        };
+                        if matches!(check(form, block, &text), Verdict::Landed) {
+                            anywhere = Verdict::Landed;
+                            break;
+                        }
+                    }
+                    if anywhere != Verdict::Landed {
+                        all = anywhere;
+                        break;
+                    }
+                }
+                all
             } else if quoted.len() == 1 {
-                check(shape, &quoted[0], &destination)
+                check(&shape, &quoted[0], &destination)
             } else if quoted.len() == files.len() {
                 let mut all = Verdict::Landed;
                 for (block, file) in quoted.iter().zip(&files) {
@@ -733,7 +880,7 @@ fn a_promotion_lands_what_was_approved() {
                         };
                         break;
                     };
-                    match check(shape, block, &text) {
+                    match check(&shape, block, &text) {
                         Verdict::Landed => {}
                         other => {
                             all = other;
@@ -749,9 +896,9 @@ fn a_promotion_lands_what_was_approved() {
             // worth re-asking: an unknown shape is unknown at every commit.
             if matches!(verdict, Verdict::Missing { .. })
                 && let Some(now) = git(&root, &["show", &format!("HEAD:{into}")])
-                && quoted
+                && forms
                     .iter()
-                    .all(|block| matches!(check(shape, block, &now), Verdict::Landed))
+                    .all(|(form, block)| matches!(check(form, block, &now), Verdict::Landed))
             {
                 verdict = Verdict::Repaired;
             }
@@ -837,6 +984,139 @@ fn a_promotion_lands_what_was_approved() {
         "a promotion did not land what was approved:\n  {}\n\n\
          The proposal is in the promoting commit's parent. Read it there.",
         wrong.join("\n  ")
+    );
+}
+
+/// A proposal that offers two kinds of block declares two shapes, and both are read.
+///
+/// **This is the check that did not exist**, and the four promotions it was written for were
+/// green the moment it was added rather than before. `P-456`, `P-459` and `P-463` declared
+/// `text and rows` and `P-457` declared `an instruction and text`; `shape_of` read the whole
+/// field as one word, found none of the three, and reported four correct promotions as having
+/// declared a shape that is not a shape. **The old spelling still has to work**, so the
+/// single-shape cases are here beside the compound ones and the count covers both.
+#[test]
+fn a_compound_shape_is_every_shape_it_names() {
+    let mut read = 0;
+    for (said, want) in [
+        ("text", vec!["text"]),
+        ("an instruction", vec!["instruction"]),
+        ("text and rows", vec!["text", "rows"]),
+        ("rows and text", vec!["rows", "text"]),
+        ("an instruction and text", vec!["instruction", "text"]),
+        (
+            "text, rows and an instruction",
+            vec!["text", "rows", "instruction"],
+        ),
+        // A word repeated says nothing twice.
+        ("text and text", vec!["text"]),
+    ] {
+        assert_eq!(
+            shapes_of(said),
+            Some(want.clone()),
+            "{said:?} names the shapes {want:?}, in the order it names them"
+        );
+        read += 1;
+    }
+    assert_eq!(
+        read, 7,
+        "seven fields across the three shapes and their pairs"
+    );
+
+    // **One word outside the three refuses the whole field**, rather than the field being
+    // read as whatever part of it happened to parse. A shape nobody defined is the typo this
+    // check exists to name, and a compound is where one is easiest to hide.
+    let mut refused = 0;
+    for said in ["text and prose", "and", "", "a row and text", "text and"] {
+        assert_eq!(
+            shapes_of(said),
+            None,
+            "{said:?} contains something that is not a shape, so the field is not readable"
+        );
+        refused += 1;
+    }
+    assert_eq!(refused, 5, "five unreadable fields, and none was accepted");
+
+    // **What the check before this one did, still here and still doing it.** `shape_of` reads
+    // one word and refuses `text and rows`, which is correct of a word and wrong of the
+    // field. So this is the deviation named rather than a behaviour quietly replaced: the
+    // single-word reader is unchanged, and what is new is that nothing asks it the plural
+    // question any more.
+    assert_eq!(
+        shape_of("text and rows"),
+        None,
+        "the single-word reader refuses a compound, which is what reported four promotions wrong"
+    );
+}
+
+/// The blocks a compound proposal offers come back in the order they were written, each under
+/// the shape its own form implies.
+///
+/// **Order is the whole reason this exists.** `blocks` and `tables` each read the body from
+/// the top, so asking both gives every quotation and then every table - which says nothing
+/// about which came first, and a compound proposal's blocks have to reach the files `into`
+/// names in the order it names them.
+///
+/// **Written as a fixture rather than run against the queue**, because a proposal that
+/// exercises a case today is deleted when it lands.
+#[test]
+fn a_compound_proposal_offers_its_blocks_in_order() {
+    let body = "\
+Some prose introducing the first thing.
+
+> A paragraph of text that lands in the specification, long enough to count.
+
+## The rows, into the release
+
+| Trait  | Of      |
+| ------ | ------- |
+| **id** | a place |
+
+And a closing paragraph, which offers nothing.
+";
+    let found = offered(body);
+    assert_eq!(
+        found.iter().map(|(form, _)| *form).collect::<Vec<_>>(),
+        vec!["text", "rows"],
+        "the quotation is first and the table second, which is how they were written"
+    );
+    assert!(found[0].1.starts_with("A paragraph of text"));
+    assert!(
+        found[1].1.lines().count() == 3,
+        "a header, a rule and a row"
+    );
+
+    // **The other order, so this is not one example.** A check shown on one arrangement stops
+    // meaning anything the moment the arrangement changes.
+    let flipped = "\
+| Trait  | Of      |
+| ------ | ------- |
+| **id** | a place |
+
+> A paragraph of text that lands in the specification, long enough to count.
+";
+    assert_eq!(
+        offered(flipped)
+            .iter()
+            .map(|(form, _)| *form)
+            .collect::<Vec<_>>(),
+        vec!["rows", "text"],
+        "the table is first here, and the reader follows the document rather than a habit"
+    );
+
+    // A quoted table is rows too - `P-286` and `P-288` wrote them that way - and a two-line
+    // table is a fragment rather than an offer.
+    assert_eq!(
+        offered("> | Trait  | Of      |\n> | ------ | ------- |\n> | **id** | a place |\n")
+            .iter()
+            .map(|(form, _)| *form)
+            .collect::<Vec<_>>(),
+        vec!["rows"],
+        "a table inside a blockquote is still a table"
+    );
+    assert!(
+        offered("| Trait | Of |\n| ----- | -- |\n").is_empty(),
+        "a header and its rule with no row is a fragment quoted inline"
     );
 }
 

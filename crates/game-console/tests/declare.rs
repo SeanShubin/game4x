@@ -406,28 +406,30 @@ fn the_biomes_file_carries_nature_and_leaves_the_guiding_numbers_out() {
 /// written by hand; this reads the release. Where they differ, one of them is wrong, and that
 /// is worth more than either alone.
 ///
-/// **`spec/data/traits.4x` does not exist yet**, so this holds the generator against the
-/// release and asserts the file's absence, the way its two siblings do.
+/// **It reads `spec/data/traits.4x`, which `P-457` and `P-461` landed.** Until then it held the
+/// generator against the release and asserted the file's absence, so that the day the file
+/// arrived this failed and had to be pointed at it - which is what happened.
 #[test]
 fn the_traits_file_declares_what_a_data_file_needs() {
     let document = release();
     let at = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/traits.4x");
-    assert!(
-        !at.exists(),
-        "`spec/data/traits.4x` exists now, so this must read it instead of the generator"
-    );
+    let file = std::fs::read_to_string(&at)
+        .unwrap_or_else(|why| panic!("cannot read {}: {why}", at.display()));
+    let read = state::declarations(&file)
+        .unwrap_or_else(|why| panic!("{} does not parse: {why}", at.display()));
 
-    let file = declare::traits(&document);
-    let read = state::declarations(&file).expect("the file it writes is a file it can read");
-
-    // **Twenty of the twenty-three, and which three is the whole of the arithmetic.** Four
+    // **Twenty-one of twenty-four, and which three is the whole of the arithmetic.** Four
     // traits are derived; a derived trait is declared only where a recipe names it, because
     // every word in a data file is a kind, a trait or one of a trait's values. `unpaid` is
     // named by `perish`; `surplus`, `metal in it` and `control` are named by no recipe row.
+    //
+    // **Twenty-four rather than twenty-three since `P-461`**, which declared `binding` - the
+    // dangling reference this lane verified and the specification lane filed: `metal in it` is
+    // *derived: its binding plus the metal in its parts*, and nothing declared `binding`.
     assert_eq!(
         read.len(),
-        20,
-        "twenty traits belong in a data file; this wrote {}",
+        21,
+        "twenty-one traits belong in a data file; this wrote {}",
         read.len()
     );
     let named: Vec<&str> = read
@@ -482,28 +484,27 @@ fn the_traits_file_declares_what_a_data_file_needs() {
             open += 1;
         }
     }
-    // **Two open cells, and `spec/turn.md` is what took it from seven.** The five action
-    // counts admit a **number**: *each kind declares how many of each action a thing of it may
-    // take in a turn*, so `0 or 1` is this release's maxima showing through rather than the
-    // trait's shape, and a unit that one day takes two moves needs no change to this file.
+    // **Nothing is open any more, and `P-457` is what closed it.** Seven cells waited on what
+    // the notation calls a two-valued set, then two after `spec/turn.md` settled the five
+    // action counts. Sean's answer was that nothing in the game is two-valued anywhere: `yes`
+    // and `no` appear in no data file, and `movable:1` matches `{citizen defending:1}` which
+    // the map form already writes.
     //
-    // **What is left is `unpaid` and `movable`**, which are not action counts and have no
-    // maximum behind them - either numbers like the counts, or values declared the way a biome
-    // is. `P-457` is where that is decided.
+    // **Asserted at zero rather than deleted**, so a `???` reaching the specification's file
+    // would be caught rather than written. The generator has no other placeholder, so this is
+    // also what says it never invented one.
     assert_eq!(
-        open, 2,
-        "two cells wait on what the notation calls a two-valued set; {open} do"
+        open, 0,
+        "{open} cell(s) in `spec/data/traits.4x` say `???`, which is a placeholder reaching \
+         the specification rather than an answer"
     );
-    let waiting: Vec<&str> = read
-        .iter()
-        .filter(|row| row.traits.get("admits").map(String::as_str) == Some("???"))
-        .filter_map(|row| row.traits.get("name"))
-        .map(String::as_str)
-        .collect();
+
+    // **And the generator writes the file, byte for byte**, which is the third of the four
+    // and the last one to arrive.
     assert_eq!(
-        waiting,
-        ["unpaid", "movable"],
-        "the two open cells are not the two that have no maximum behind them"
+        declare::traits(&document),
+        file,
+        "`declare::traits` and `spec/data/traits.4x` have parted"
     );
 
     // **The counts the release's own column gives**, so a generator inventing a `kept` would
@@ -515,7 +516,7 @@ fn the_traits_file_declares_what_a_data_file_needs() {
     };
     assert_eq!(
         (kept_by("thing"), kept_by("kind"), kept_by("nothing")),
-        (15, 4, 1),
-        "fifteen stored, four of the kind, and one derived that a recipe names"
+        (15, 5, 1),
+        "fifteen stored, five of the kind, and one derived that a recipe names"
     );
 }

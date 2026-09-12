@@ -115,8 +115,8 @@ fn write_entry(out: &mut String, entry: &Entry, depth: usize) {
 ///
 /// **`P-443` made this the same form rather than a second one.** `spec/console.md`: *a file
 /// may declare the vocabulary rather than use it, and it is written in the same form. `kind`,
-/// `trait` and `family` are themselves kinds, so a line that declares one is a description
-/// like any other and the rule above needs no exception. **A declaration is the third thing
+/// `trait`, `family` and `value` are themselves kinds, so a line that declares one is a
+/// description like any other and the rule above needs no exception. **A declaration is the third thing
 /// the one notation carries**, beside a command and a state.*
 ///
 /// # Why this is a sibling of [`read`] and not a second reader

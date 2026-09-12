@@ -1746,10 +1746,16 @@ mod tests {
 
     /// Two pioneers that could both make the move, and the command names neither.
     ///
-    /// **`spec/console.md`: a command *binds what that recipe leaves open: the place it acts
-    /// in, and any ingredient or trait value it names with a `$`*.** `move` names two places
-    /// with a `$` - `require 1 place ... $from` and `require 1 place, joined to $from ... $to`
-    /// - and the command binds one territory. So `$from` is not bound by anything.
+    /// **`spec/console.md`: a command *binds what that recipe leaves open: every place it
+    /// leaves open, and any ingredient or trait value it names with a `$`*.** `move` names two
+    /// places with a `$` - `require 1 place ... $from` and `require 1 place, joined to $from
+    /// ... $to` - and the command binds one territory. So `$from` is not bound by anything.
+    ///
+    /// **That sentence moved under this test, and the model has not caught up.** When this was
+    /// written the rule bound only the place a recipe acts in, and a command naming one place
+    /// was inside it; `C-101` reported the gap and `P-460` closed it by binding every open
+    /// place. So the command below is now wrong rather than merely ambiguous, and what follows
+    /// describes what the model does rather than what the specification asks for.
     ///
     /// **This is what that costs.** Two pioneers stand in different territories, both adjacent
     /// to the same third, both with a move left. One command is a correct description of two

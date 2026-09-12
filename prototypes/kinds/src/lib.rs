@@ -360,7 +360,7 @@ pub struct TraitRow {
     pub held: Held,
 }
 
-pub const TRAITS: [TraitRow; 23] = [
+pub const TRAITS: [TraitRow; 24] = [
     // **`P-417` deleted the `kind` row**, because a kind is not a trait: `spec/console.md`
     // lists them as different categories and no recipe writes `kind:`.
     // **`P-285` and `P-286`: a thing is not located by a trait.** `place` said *the thing it
@@ -368,10 +368,14 @@ pub const TRAITS: [TraitRow; 23] = [
     // container says. What holds it is what says where it is - so the trait is gone and
     // nothing replaces it. The `place` **family** - territory, orbit - is untouched, and a
     // search for the word finds both; only one of them went.
+    // **`P-462` narrowed this to a place.** Sean: *it seems to me that id is a sufficiently
+    // distinct concept that unifying it would create a lie* - so the value is an identity
+    // rather than a number, and the only thing that carries one is a place. `P-456` had
+    // already settled that a unit has none.
     TraitRow {
         name: "id",
-        of: "a thing that must be named individually",
-        values: "a number, unique among things of its kind",
+        of: "a place",
+        values: "an identity",
         held: Held::Stored,
     },
     // **`P-411` undid `P-399` and `C-90` is why.** Readiness was a kind a thing held, and
@@ -435,6 +439,15 @@ pub const TRAITS: [TraitRow; 23] = [
         name: "upkeep",
         of: "a thing with upkeep",
         values: "food per turn",
+        held: Held::OfTheKind,
+    },
+    // **`P-461` declared the column that was already being read.** *Units and structures* has
+    // a **Binding** column and `metal in it` refers to *its binding*, and until this landed
+    // no row said what a binding was.
+    TraitRow {
+        name: "binding",
+        of: "whatever is built",
+        values: "a number",
         held: Held::OfTheKind,
     },
     TraitRow {
@@ -1221,7 +1234,15 @@ pub struct Producible {
     /// nothing crosses it.
     pub crosses: Option<&'static str>,
     pub requires: Option<&'static str>,
-    pub readies: bool,
+    /// The **Readies** column: which actions a turn's `refresh` returns to this thing, and
+    /// how many of each.
+    ///
+    /// **`P-459` made this a list of counts where it had been `yes`.** The trait table has
+    /// carried one count per action since `P-411` - `moving`, `laboring`, `working`,
+    /// `bearing`, `defending`, each *0 or 1* - and until this landed the column said only
+    /// that something readied, so the maximum a `refresh` restores was a constant in the
+    /// code and not a number anything declared.
+    pub readies: &'static [(&'static str, u32)],
 }
 
 impl Producible {
@@ -1230,6 +1251,18 @@ impl Producible {
     ///
     /// Derived here rather than stored, so that the two cannot disagree - which is what the
     /// trait table says it is.
+    /// The **Readies** cell, `trait count` per action and comma-separated.
+    ///
+    /// Blank for a thing that readies nothing, which is what the release writes rather than
+    /// an empty list rendered as something.
+    pub fn readies_written(&self) -> String {
+        self.readies
+            .iter()
+            .map(|(action, count)| format!("{action} {count}"))
+            .collect::<Vec<_>>()
+            .join(", ")
+    }
+
     pub fn metal_in_it(&self) -> Option<u32> {
         let binding = self.binding?;
         let parts: u32 = self
@@ -1277,7 +1310,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         binding: None,
         crosses: None,
         requires: None,
-        readies: true,
+        readies: &[("bearing", 1), ("defending", 1), ("laboring", 1)],
     },
     Producible {
         kind: Garrison,
@@ -1292,7 +1325,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         binding: Some(1),
         crosses: None,
         requires: None,
-        readies: false,
+        readies: &[],
     },
     Producible {
         kind: Extractor,
@@ -1304,7 +1337,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         binding: Some(1),
         crosses: None,
         requires: None,
-        readies: true,
+        readies: &[("working", 1)],
     },
     Producible {
         kind: Yard,
@@ -1316,7 +1349,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         binding: Some(15),
         crosses: None,
         requires: None,
-        readies: false,
+        readies: &[],
     },
     // **`P-260`: one kind with a `resource` trait, not three that differ in one word.**
     // A store costs a labor and a metal and holds ten of what it was built for, which is
@@ -1331,7 +1364,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         binding: Some(1),
         crosses: None,
         requires: None,
-        readies: false,
+        readies: &[],
     },
     Producible {
         kind: Ark,
@@ -1346,7 +1379,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         binding: Some(3),
         crosses: Some("orbit border"),
         requires: Some("a Yard"),
-        readies: true,
+        readies: &[("defending", 1), ("moving", 1)],
     },
     Producible {
         kind: Pioneer,
@@ -1360,7 +1393,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         binding: Some(3),
         crosses: Some("border"),
         requires: None,
-        readies: true,
+        readies: &[("defending", 1), ("moving", 1)],
     },
 ];
 
@@ -1453,7 +1486,7 @@ pub fn units_table() -> Vec<Vec<String>> {
             thing.binding.map(|n| n.to_string()).unwrap_or_default(),
             thing.crosses.unwrap_or_default().to_string(),
             thing.requires.unwrap_or_default().to_string(),
-            if thing.readies { "yes" } else { "" }.to_string(),
+            thing.readies_written(),
             if thing.movable { "yes" } else { "" }.to_string(),
         ]);
     }

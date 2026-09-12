@@ -168,7 +168,8 @@ carries it to Sean · **source** the specification lane asking this lane to conf
 confident enough to file, after `P-456` settled that a unit carries no id
 
 **derived from** a command names a recipe and binds what that recipe leaves open: the place it acts
-in, and any ingredient or trait value it names with a `$` - `spec/console.md`
+in, and any ingredient or trait value it names with a `$` - `spec/console.md` as it read before
+`P-460`
 
 **Carried as `P-460`, and the two exclusions this item made are in it.** Two ways are offered and
 only one survives `P-456`: naming both places, `{move unit:pioneer from:1 to:2}`. Deriving `$from`
@@ -179,9 +180,11 @@ not a smaller change, it is a different rule needing a thing the game will not h
 game this release can play. The test is a game the release cannot reach, built to show the rule
 rather than a failure - which is the difference between a gap and a defect.
 
-**Confirmed, and demonstrated rather than argued.** `spec/console.md`: **a command names a recipe
-and binds what that recipe leaves open: the place it acts in, and any ingredient or trait value it
-names with a `$`.**
+**Confirmed, and demonstrated rather than argued.** `P-460` has since replaced the sentence this
+item was filed against, so what the file says now is what it asked for. `spec/console.md` says:
+**a command names a recipe and binds what that recipe leaves open: every place it leaves open, and
+any ingredient or trait value it names with a `$`.** When this was filed it bound only the place a
+recipe acts in, which is the wording the rest of this item argues against.
 
 **`move` names two places with a `$`** - `require 1 place` in `$from`, and `require 1 place,
 joined to `$from` by an edge the unit crosses` in `$to`. **The command binds one**:

@@ -946,42 +946,36 @@ fn every_player_recipe_has_one_command_named_for_it() {
     );
 }
 
-/// Nothing declares a maximum, which is why `UNDECLARED_MAXIMUM` is a constant - `P-459`.
+/// The *Readies* column declares the maximum the model reads, and every one of them is one.
 ///
-/// **`refresh` reads *at its maximum* six times and the release states no maximum.**
-/// `spec/turn.md`: *each kind declares how many of each action a thing of it may take in a
-/// turn*. The *Units and structures* **Readies** column says `yes` - one cell for a citizen's
-/// three actions - where the rule asks for a number. The two agree today only because every
-/// maximum is one.
+/// **`P-459` closed the gap this was built to watch.** It read: the *Readies* column said
+/// `yes` where `spec/turn.md` asks for a number, so the `at its maximum` the release's
+/// `refresh` rows carry had nothing behind it but a constant. The column is the count per action now - *bearing 1, defending 1, laboring 1* -
+/// and the constant is checked against it rather than standing in for it.
 ///
-/// # This is a tripwire, not a description
+/// # The tripwire fired, and not through the door it was built with
 ///
-/// **`game_model::containment::UNDECLARED_MAXIMUM` carries a doc comment saying nothing
-/// declares it, and a doc comment is a thing only ever written.** It would go on saying so
-/// after the release began declaring maxima, and nobody would be told - which is the
-/// `nothing removes` shape: the write is cheap and automatic, the removal expensive and manual.
+/// **The first assertion missed and the catch-all caught it.** This asked whether the cell
+/// parses as a number, expecting the column to become `1`; it became `bearing 1, defending 1,
+/// laboring 1`, which parses as nothing. What fired was the second assertion - *a third value
+/// is the column changing shape* - which was written as belt and braces.
 ///
-/// **So this fails when the removal is due.** The day the Readies column carries a number, the
-/// constant has something to read and this says so. Not a reminder to remove it - a thing that
-/// breaks when it should be removed, which is the only version of this that has worked here.
+/// **So the predicate was narrower than the thing it guarded**, which is this repository's
+/// recurring shape and was mine this time. What saved it is that the guard refused **anything
+/// it did not recognise** rather than only the case it predicted. That is the part worth
+/// copying: a tripwire should fail on the unfamiliar, not on the expected.
 ///
-/// **Over every row, with the count**, because a column that parsed to nothing would satisfy
-/// *none of them is a number* for the wrong reason.
+/// **Over all eight pairs, with the count**, because a column that parsed to nothing would
+/// satisfy *every maximum is one* for the wrong reason.
 #[test]
-fn the_readies_column_states_no_maximum_for_the_constant_to_read() {
+fn the_readies_column_declares_the_maximum_this_reads() {
     let document = std::fs::read_to_string(
         std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../releases/first-release.md"),
     )
     .expect("the release");
 
     let rows = game_console::recipes::body_under(&document, "## Units and structures");
-    assert_eq!(
-        rows.len(),
-        7,
-        "seven things in *Units and structures*; the release has {}",
-        rows.len()
-    );
-
+    let mut pairs = 0;
     let mut readying = 0;
     for row in &rows {
         let thing = row[0].trim().trim_matches('*').trim();
@@ -990,30 +984,36 @@ fn the_readies_column_states_no_maximum_for_the_constant_to_read() {
             continue;
         }
         readying += 1;
-        assert!(
-            said.parse::<u32>().is_err(),
-            "`{thing}` readies `{said}`, which is a number - so the release states a maximum \
-             now, and `game_model::containment::UNDECLARED_MAXIMUM` has something to read \
-             instead of standing for a fact nothing states. `P-459`."
-        );
-        assert_eq!(
-            said, "yes",
-            "`{thing}` readies `{said}`, which this check does not know - it reads `yes` or \
-             nothing, and a third value is the column changing shape"
-        );
+        for part in said.split(',') {
+            let part = part.trim();
+            let (action, count) = part.split_once(' ').unwrap_or_else(|| {
+                panic!(
+                    "`{thing}` readies `{part}`, which is not an action and a number - the \
+                     column has changed shape and `MAXIMUM_PER_ACTION` may no longer be what \
+                     it reads"
+                )
+            });
+            let count: u32 = count.trim().parse().unwrap_or_else(|_| {
+                panic!("`{thing}` readies `{action}` `{count}`, which is not a number")
+            });
+            assert_eq!(
+                count,
+                game_model::containment::MAXIMUM_PER_ACTION,
+                "`{thing}` may take {count} of `{action}` in a turn and the model restores \
+                 `MAXIMUM_PER_ACTION`, which is {} - so the model would refill the wrong \
+                 number. `P-459`.",
+                game_model::containment::MAXIMUM_PER_ACTION
+            );
+            pairs += 1;
+        }
     }
     assert_eq!(
         readying, 4,
         "four things ready - a citizen, an extractor and the two units - and {readying} do"
     );
-
-    // **And the constant is still one**, which is the other half of *they agree today*. If it
-    // ever stops being one without the release declaring a maximum, that is the model choosing
-    // a rule rather than reading one.
     assert_eq!(
-        game_model::containment::UNDECLARED_MAXIMUM,
-        1,
-        "the constant moved without the release stating a maximum, which is the model deciding \
-         a rule rather than standing in for one"
+        pairs, 8,
+        "eight kind-and-action pairs declare a maximum - a citizen's three, an extractor's \
+         one, and two each for the two units - and {pairs} do"
     );
 }
