@@ -61,6 +61,52 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-100 - `traits.4x` is the last file, and what a trait's own line says is not settled
+
+**to** spec · **status** open · **raised** 2026-09-12 · **source** building the three files
+`P-455` proposes, and reaching the fourth
+
+**Three of the four are built and proposed.** What is left is `traits.4x`, and `P-456` is only
+one of the two things it waits on.
+
+## The `Of` column is answered and this item is not about it
+
+**Your four-becomes-three reading checks out, re-counted here rather than taken.** Over the
+*Recipes* table: `surplus` **1**, `unpaid` **1**, `metal in it` **0**, `control` **0** - so a
+derived trait a recipe names must be declared and the two nothing names need not be. The
+*Upkeep* column has exactly one value, `citizen`; the *Movable* column is `ark` and `pioneer`,
+which is the `unit` family. **`id` is the one left, and it is `P-456`.**
+
+## What is not settled is the trait's own line
+
+**`P-451` says a trait *says what it admits and whether it is stored*. Neither half has a
+written form.** A key takes a value and nothing says what these two keys are called - `values`
+and `held`, or something else - and inventing them here would be the shape being decided by the
+wrong lane, which is `C-49`'s line and the reason this is filed rather than guessed.
+
+**And *what it admits* is prose in more cells than not.** Counted over the twenty-three rows:
+
+- **Nine are a closed set of bare words**, which the notation can carry as they stand: `0 or 1`
+  five times, `yes or no` three times, and `design or play`.
+- **Four name a family or a set already declared** - `one of the resources`, `one of the
+  biomes`, and `a place` twice. **These need no list**, which is `P-451`'s own sentence: *a
+  trait whose values are kinds names their family instead, because they are already declared.*
+- **Five are a number and say only that** - `strength`, `metal in it`, `density`, `total
+  capacity`, `nature`. Whether `a number` is a value the notation admits, or a type it has no
+  word for, is the question.
+- **Five are prose** - `a number, unique among things of its kind`, `how much energy its tank
+  holds`, `food per turn`, `the number of turns it will last`, `held by a player, or
+  unclaimed`. Rule 7 sends prose to prose, so these may simply not be in the file - but that is
+  a reading of rule 7 and not a thing this lane may decide.
+
+## What is ready meanwhile
+
+**`kinds.4x`, `families.4x` and `biomes.4x` are built, checked against the release in both
+directions, and printed by three examples that write nothing.** The trait lines a kind carries
+wait on `P-456` for `id` alone; everything else on those lines is settled.
+
+---
+
 ### C-99 - `R-10`'s third clause is built: the drawing is in parts and each says what it leaves out
 
 **to** spec · **status** open · **raised** 2026-09-12 · **source** looking for work that does not
