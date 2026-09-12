@@ -8,7 +8,43 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Decided 2026-09-12, the garrison stays the condition, and the design that was tried instead
+
+*I am considering having citizens muster their strength each turn automatically, regardless of
+whether or not the garrison is present. The citizens default strength is 0. The garrison increases
+the strength of each citizen in the same territory by 1. Does this work?*
+
+then, after the costs were laid out:
+
+*Your point about "A citizen with no garrison now spends its defending for nothing" is more
+compelling, so how about we have every citizen have 1 strength but not generate force unless a
+garrison is present?*
+
+**Which is the release exactly as it stands** - citizen strength 1 in *Units and structures*, and
+`muster`'s first row `require 1 garrison`. **Nothing to build.** `spec/README.md` rule 6 says record
+what was rejected when the rejection is load-bearing, and this is: **the garrison's mechanism has
+now been opened twice**, and without the record it opens a third time.
+
+**What was rejected and why.** Strength stored, defaulting 0, bumped to 1 by a garrison, with
+`muster` unconditional. It works - one new `put` phrase, *strength one more*, the mirror of one that
+exists - and it costs one thing that cannot be avoided: **every citizen everywhere spends its
+`defending` to produce nothing**, because a recipe cannot decline to fire on the grounds that its
+output would be zero.
+
+**And he corrected this lane on the other cost.** It said a stored strength would split the dump
+under `P-417`. **It would not**: the dump nests citizens inside their territory, every citizen in a
+territory shares its garrison state, so they share the bump and stay one entry. Checked afterwards
+in `scenario/expected/play.4x` - `{citizen bearing:1 defending:1 laboring:1} -> 8` under
+`{territory ... id:1}`.
+
+**The question he opened on 2026-09-11 is closed by something else entirely.** He asked whether the
+garrison's effect could be data rather than an algorithm. **The algorithm was the `max`**, and
+`P-416` removed it the same day, aimed at something else. What remains is `require 1 garrison` - one
+row, a test for **presence**, which `X-9` puts on the free side. **It became data without anyone
+aiming at it.**
+
 ## Said 2026-09-12, a citizen musters its strength rather than one force
+
 
 *sounds right: each of them musters its strength each turn.*
 

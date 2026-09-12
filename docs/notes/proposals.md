@@ -62,6 +62,50 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-438 - `spec/economy.md` says mustering competes with labor, and `spec/control.md` says it does not
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** entailed · **shape** instruction · **asks** approval · **into** `spec/economy.md` -> Structures and labor · from the garrison sweep
+
+**Found sweeping for anything that contradicts *citizens muster only with a garrison, at strength
+1*, which is what you asked for.** This is the third, and unlike the other two it is not about the
+garrison at all - it is about what mustering costs.
+
+**`spec/economy.md` -> Structures and labor:**
+
+*Structures that produce force and structures that extract resources are alike in this: **a citizen
+at one is not at the other**.*
+
+**`spec/control.md` -> Producing force**, from your own words this morning - *separate from any of
+its other exhaustion tracks*:
+
+*What a citizen spends to muster is its own, and is not what it spends to labor or to bear.*
+
+**They cannot both hold.** The first makes mustering compete with working; the second makes them
+independent. **The release agrees with the second**: `muster` spends `defending`, `create labor`
+spends `laboring`, and `refresh` restores both - so a citizen working at an extractor musters as
+well, every turn.
+
+**And its first clause is stale twice over.** *Structures that produce force* - **no structure
+produces force.** A garrison has no strength of its own; citizens muster, and `muster` does not ask
+where in the territory a citizen is.
+
+**The instruction: delete the bullet.** It begins *Structures that produce force* and is the second
+of three under *Structures and labor*. **Nothing replaces it** - `spec/control.md` states the true
+relationship, and `spec/README.md` rule 4 says state the rule once.
+
+**The check the promoting commit runs**: `spec/economy.md` contains **0** occurrences of *force*,
+counted at **1** today, and *Structures and labor* holds **two** bullets where it holds three.
+
+## Why deleting rather than correcting
+
+**The bullet exists to say that force and resources compete for a citizen, and they do not.** Once
+that is gone there is nothing left of it: *a citizen works at one structure and cannot be in two
+places at once* is the bullet above it and already says the part that survives.
+
+**If you would rather it said the true thing**, the sentence is *mustering is not working, and a
+citizen does both* - and that is `spec/control.md`'s bullet in other words, which is the duplication
+rule 4 exists to stop.
+
 ### P-437 - the number 1 leaves `spec/control.md`, and a citizen musters its strength
 
 **to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Producing force

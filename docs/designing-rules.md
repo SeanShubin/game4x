@@ -245,32 +245,62 @@ It fires as many times as it can, which is **min(fertility, food)**. `P-379` rep
 
 ### A worked example: force is `2 + min(guns, citizens)`
 
-| Recipe    | Auto  | Role    | Qty | Kind     | Traits              |
-| --------- | ----- | ------- | --- | -------- | ------------------- |
-| **stand** | world | require | 1   | garrison | standing at least 1 |
-|           |       | put     |     | garrison | standing one less   |
-|           |       | produce | 2   | force    |                     |
-| **arm**   | world | require | 1   | citizen  | arming at least 1   |
-|           |       | put     |     | citizen  | arming one less     |
-|           |       | require | 1   | gun      | arming at least 1   |
-|           |       | put     |     | gun      | arming one less     |
-|           |       | produce | 1   | force    |                     |
+**Every kind here is invented for the example.** A `keep` is not a garrison and a `gun` is not in
+this game - the point is the shape of the arithmetic, and borrowing a real name would make a reader
+check it against the release and find a rule that is not there.
 
-`stand` fires once per garrison, making **2**. `arm` fires once per pair it can make, making
+| Recipe   | Auto  | Role    | Qty | Kind    | Traits             |
+| -------- | ----- | ------- | --- | ------- | ------------------ |
+| **hold** | world | require | 1   | keep    | holding at least 1 |
+|          |       | put     |     | keep    | holding one less   |
+|          |       | produce | 2   | force   |                    |
+| **arm**  | world | require | 1   | citizen | arming at least 1  |
+|          |       | put     |     | citizen | arming one less    |
+|          |       | require | 1   | gun     | arming at least 1  |
+|          |       | put     |     | gun     | arming one less    |
+|          |       | produce | 1   | force   |                    |
+
+`hold` fires once per keep, making **2**. `arm` fires once per pair it can make, making
 **min(guns, citizens)**. Every arc carries a constant weight. **The formula is expressible exactly as
 written, and nothing about it strains the net.**
 
-### A worked counter-example: a garrison that makes citizens sum instead of max
+**What the real game does is different and is not this example.** A garrison has **no strength of
+its own**; it is what lets the citizens of its territory muster theirs. The numbers here are chosen
+to show a `min`, not to describe a rule.
 
-This is the shape that cannot be had, and it is worth knowing why, because it looks harmless.
 
-**Sum is free** - it is what a marking is. **And max here is degenerate**: every citizen has force
-1, so *the highest among them* is *1 if any citizen is present*, which is an ordinary threshold.
-**Both halves are individually legal.**
+### A worked counter-example, and the game has already left it behind
+
+**The shape that cannot be had is a rule that picks between two folds.** Suppose force were *the sum
+of the citizens' where a garrison stands, and the highest among them where none does.*
+
+**Sum is free** - it is what a marking is. **And max here is degenerate**: every citizen has
+strength 1, so *the highest among them* is *1 if any citizen is present*, which is an ordinary
+threshold. **Both halves are individually legal.**
 
 **What is not legal is choosing between them.** Two behaviours selected by whether a garrison exists
 means two rules: one requiring a garrison, and one requiring that there is **none**. The second is a
 zero test. **The fold was never the problem; the branch was.**
+
+## And this is no longer what the game does, which is the part to read
+
+**`P-416` took the *highest* case out of the game entirely**, so there is no second fold to choose
+between. What is left is one rule: **`muster` requires a garrison**, fires once per citizen, and
+produces that citizen's strength. **A territory with no garrison musters nothing from its citizens,
+and no rule has to ask whether a garrison is absent to arrive there** - the rule simply does not
+fire.
+
+**So the garrison's behaviour is data and always could have been.** A `require` row is a test for
+**presence**, which is an ordinary arc; it is `limit 0`, a test for **absence**, that costs
+decidability. **The condition was never the dangerous shape - the fold was**, and the fold is gone.
+
+**This is written down because the question keeps coming back.** Sean raised it on 2026-09-11 -
+*garrison has an effect that allows citizen force to be summed instead of using the max; this is an
+algorithm, not data* - and that was true of the design as it then stood. **It stopped being true the
+same day**, by a change aimed at something else, and this document went on holding the garrison up
+as the example of the illegal shape. **A counter-example naming a live part of the game reads as a
+verdict on it.**
+
 
 ## How to rewrite a formula that fails the test
 
@@ -313,9 +343,13 @@ adopt it**, and the three ways out are stated there.
 and they differ only in whether identity survives - which is invisible while nothing that ages has
 an id. **`P-424` asks it.**
 
-**One worked example below uses a name the release has since taken.** *A worked example: force is
-`2 + min(guns, citizens)`* writes a hypothetical `stand` over a garrison with a `standing` trait.
-The release now has a real `stand` - over a **unit**, with `defending`, producing *that unit's
-force* - and a real `muster` for the garrison case. **The example's arithmetic is unaffected and its
-names collide**, which is worth fixing when someone next edits this section.
+**The worked example and the counter-example were both rewritten on 2026-09-12**, and the reason is
+worth keeping. The example borrowed `stand` and `garrison` from the release and had a garrison
+producing 2 force, which `spec/control.md` flatly denies - *it has no strength of its own*. The
+counter-example held the garrison up as *the shape that cannot be had*, which stopped being true
+when `P-416` removed the *highest* case. **Both now invent their kinds**, and the counter-example
+says what the game does instead. **A document about what cannot be expressed must not use a live
+rule as its example of the forbidden**, because a reader cannot tell the illustration from the
+verdict - and Sean twice asked whether the garrison was an algorithm, reading this.
+
 
