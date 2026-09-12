@@ -36,8 +36,9 @@ dangling for six days. It now points here.
 committed scenario on 2026-09-11: **twelve claimable territories, two founded, none at maximum
 output**, `is_fully_exploited` and `has_won` both false. It launches an Ark at line 164 of 133
 commands, so the *vetted when*'s second half holds and its first does not. `tests/fully_exploited.rs`
-derives the remaining bill as **57 buildings and 114 commands**. **This is not a near miss**, and
-`R-6` cannot be vetted as it stands.
+derives **57 buildings**, which is 114 commands and **counts nothing but the buildings**. **This is
+not a near miss**, and `R-6` cannot be vetted as it stands.
+
 
 **Three ways out, and the choice is which you want to look at.**
 

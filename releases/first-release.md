@@ -394,8 +394,14 @@ only one who can move them.
   half holds. **The code lane does not set this `built` and this lane has not recorded it as
   such.**
 - **The gap is not a near miss**, which is the part a summary loses. `tests/fully_exploited.rs:410`
-  derives the bill for finishing the planet as **57 buildings and 114 commands**, against a scenario
-  that is 133 commands and has founded two of twelve. **Re-run by this lane rather than taken from
+  derives **57 buildings**, which is **114 commands and counts nothing else** - each building is the
+  labor that pays for it and the building, read off the predicate at `:404`. **It is a floor.** On
+  top of it: ten territories to found, each wanting a pioneer produced, moved and landed at 3 metal
+  and 6 energy; **144 citizens** sustained across the twelve, arriving by `breed` at a turn's end -
+  summed from the per-territory figures the test derives by hand; and the turns themselves, where
+  `play.4x` spends **10** reaching two founded territories. **No total is estimated here**, against
+  a scenario that is 133 commands and has founded two of twelve.
+ **Re-run by this lane rather than taken from
   the report**: `the_committed_scenario_launches_an_ark_and_does_not_finish_the_planet` passes on
   `(12, 2, 0)`.
 - **One thing this proved that nothing had asserted.** Launching from an unfinished planet did not
