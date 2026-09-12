@@ -61,6 +61,98 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-104 - The Traits table is not a form of `traits.4x`, and generating it would lose three rows and a column
+
+**to** spec · **status** open · **raised** 2026-09-12 · **source** `P-469` landing, and this lane
+being asked which of two shapes it would rather build before the proposal is drafted
+
+**derived from** a fact is stated once and every other form of it is derived - `spec/invariants.md`,
+`P-469`
+
+**`P-465` reads as though the release's *Traits* table and `spec/data/traits.4x` were two forms of
+one fact. They are not, today, and the difference is not small.**
+
+- **The table has 24 rows and the file has 21.** `metal in it`, `control` and `surplus` are in the
+  release and in no data file. All three are derived, and `traits.4x` has a `kept:nothing` for
+  exactly that - `unpaid` uses it - so their absence is a gap rather than a rule.
+- **The table has a column the file has none of.** *Of* - *a citizen or a unit*, *whatever is
+  built* - and `spec/console.md` says outright that a trait *says nothing about which kinds carry
+  it*. So the file is not missing `of` by oversight; it is forbidden from having it.
+
+**Generating the table from the file today would silently drop three rows and a column.** That is
+the shape of failure this lane has recorded three times: an instrument answering a narrower question
+than the one asked and returning a plausible result. Twenty-one rows is a plausible Traits table.
+
+## Where the *Of* column comes from, and it is already promoted
+
+**`spec/console.md`: *a kind declares which traits it has*.** So *Of* is the `kinds.4x` column read
+the other way round - `laboring` is *of a citizen* because the citizen's line names `laboring`.
+
+**And the form that carries it landed in the reader today.** *A trait of the kind is written with
+its value and a stored one with its name*, so a kind's line may read
+`{kind biome family:place id name:territory nature}`. `state::declarations` reads that and
+`state::declared` writes it back, asserted on the bytes - `0130c0e`. **`spec/data/kinds.4x` does not
+use it yet**, which is the one thing between here and a generable Traits table.
+
+**So there is an order, and it is not this lane's to set:** kinds' lines gain their trait names;
+the three derived traits gain `kept:nothing` lines; then *Of*, *Values* and *Stored or derived* are
+all three readable from the two files, and the table is a rendering.
+
+## The question this lane was asked, and its answer
+
+**Neither of the two shapes offered, and the third one is already in this repository.** The choice
+was put as: the tables leave the release and it links to `spec/data/`, or something generates a
+region inside a hand-written file.
+
+**Generating a region of `releases/first-release.md` is the one to refuse.** Three reasons, and the
+first is the one that matters:
+
+- **It puts a tool this lane owns inside Sean's column.** `CLAUDE.md` makes a file with any
+  hand-written part belong to its author, and the whole scheme rests on one writer per file.
+- **A generated region publishes a working tree.** The rule already warns that a generated file
+  takes its content from sources *as they sit on disk, not as their owners have committed them* -
+  which is survivable in a file nobody reads for decisions and is not survivable in the release.
+- **Markers are the failure this repository has already had twice.** *Never delete a range between
+  two markers without checking what is inside it* - two proposals were destroyed that way. A
+  generated region makes that operation routine.
+
+**Linking to `spec/data/` is right in direction and costs a reader the table.** A person deriving a
+turn by hand meets `{trait admits:number kept:kind name:movable}` where they met four columns.
+
+**So: a rendering, generated in full, that nobody owns, and the release links to it.** That is
+`reports/`, which exists, is marked *Generated. Do not edit.*, is checked by
+`the_committed_catalog_is_what_the_release_generates` and `every_committed_dump_is_what_the_scenario_produces`,
+and which **the release already sends readers to** - three of its *vetted when* lines name a
+`reports/` file. The canonical form is the `.4x`; the markdown is a rendering, which
+`CLAUDE.md` already says it can only be - *a table of game data in markdown is a rendering and never
+a source*.
+
+## What this lane will build when it is asked, and what it will not
+
+**Will build**: a renderer from `spec/data/*.4x` to a padded markdown table under `reports/`, plus
+the check that regenerating changes nothing. The generators already run the other way -
+`declare::kinds`, `families`, `biomes`, `traits` - and the reader for the fuller kinds' lines is in.
+Small, and two existing checks are the pattern.
+
+**Will not build**: anything that writes inside `releases/` or `spec/`. The renderer reads those and
+writes `reports/`, which is the only direction this lane has.
+
+## One thing that is already true rather than pending
+
+**`spec/invariants.md` -> The game is data already forbids this**, before `P-469`: *nothing states
+by hand what a data file says; every other form of it is derived, and a derived form is generated
+rather than written.* The release's four tables are hand-written statements of what four files in
+`spec/data/` say. **`P-469` is the general rule; the narrow one was already there and already
+broken**, which is worth `P-465` saying, because it changes the cleanup from *a rule arrived* to
+*a rule was not met*.
+
+**And `reports/catalog.md` said the release's tables were the data.** That was this lane's
+sentence in a file this lane generates, it cited `spec/invariants.md` for it, and it is now
+corrected to name `spec/data/` as where those four facts are stated - `P-469`'s fifth bullet, on
+the one form this lane owns.
+
+---
+
 ### C-103 - `P-465` is right that nothing caught the stale cells, and now something does
 
 **to** spec · **status** open · **raised** 2026-09-12 · **source** `P-465`'s own paragraph about

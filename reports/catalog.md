@@ -3,9 +3,16 @@
 **Generated. Do not edit.** `cargo run -p kinds -- catalog`, or `scripts/kinds.sh catalog`.
 
 Every kind the release declares, with everything it says about that kind gathered in one place.
-`spec/invariants.md` has the release's tables be the data, and every other form of them derived
-and generated rather than written; this is one such form. It is a view and not a copy - each
-section is a join across six tables that the document does not perform anywhere.
+**This is a derived form of the release's tables** - `spec/invariants.md`: *a fact is stated
+once and every other form of it is derived*, and a derived form is generated rather than written.
+It is a view and not a copy - each section is a join across six tables that the document does not
+perform anywhere.
+
+**The release's tables are not themselves canonical for all of this.** Four of them - Kinds,
+Families, Biomes and Traits - have files in `spec/data/`, which is where those facts are stated; the
+release's four are a second hand-written form, and `P-465` is about what that costs. This reads
+the release because that is where all six tables are today, and says so rather than implying the
+release is the source.
 
 18 kinds, 4 families, 24 traits, 31 recipes.
 
