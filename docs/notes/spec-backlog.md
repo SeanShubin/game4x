@@ -8,7 +8,27 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-11, `age` is rewritten and `spoil` is not
+
+*Yes, do this: P-428 answers it outright and my answer is way 1 - rewrite it, with spoil untouched
+because it genuinely destroys.*
+
+**Answering `P-424`, and the second clause is the one that generalises.** *Spoil genuinely destroys*
+is the reason it keeps `consume`, and it is the same reason `age` does not: `age` changes what is
+true of a thing that stays.
+
+**Surveying for the pattern before offering the rows found a second recipe**, and it is not the same
+defect. `stow` also consumes and produces one kind - metal, and energy - but it **moves a quantity
+between two places**, where what arrives is indistinguishable from what left. That is what a plain
+net's token is for.
+
+**So his distinction decides every case without one being read individually**: a trait changing on a
+thing that stays is `require` and `put`; a quantity moving or being spent is `consume` and
+`produce`. **That is `P-424`'s third way arriving free with its first** - he asked for way 1, and
+the survey turned way 1 into a rule. `P-431` carries both.
+
 ## Said 2026-09-11, `limit` stays and the constraint is declared
+
 
 *Keep it, and declare the constraint: a limit row may name only a capacity-bounded kind. Checkable
 over the whole recipe set.*

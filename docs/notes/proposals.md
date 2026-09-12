@@ -62,6 +62,52 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-431 - `age` becomes `require` and `put`, and `stow` is right as it is
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered, from your answer on `P-424` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes · from `C-88` and `P-428`
+
+**Sean, 2026-09-11**: *do this... way 1 - rewrite it, with `spoil` untouched because it genuinely
+destroys.*
+
+**The two rows, replacing `age`'s cell for cell:**
+
+> | **age** | world | require | 1 | thing | keeps at least 1 | |
+> | | | put | | thing | keeps one less | |
+
+**Only the `Role` cells change, and the `put` row's `Qty` becomes blank** - which is `P-421`'s
+sentence, already promoted: *a put has no quantity, because nothing is made or taken.*
+
+## Surveying for the pattern found a second recipe, and it is not the same defect
+
+**Two recipes consume and produce the same kind**, counted over every row of the *Recipes* table:
+`age` on `thing`, and **`stow` on `metal` and on `energy`**.
+
+**`stow` is correct as it stands and must not be swept up with `age`.** It consumes a resource loose
+in the territory and produces one *in a store* - **a quantity moving between two places**, where the
+metal that arrives is indistinguishable from any other metal. **That is exactly what a plain net's
+token is for**, and consume-and-produce is the faithful writing of it.
+
+**So the distinction you named decides both, and neither needs a case-by-case reading:**
+
+- **A trait changing on a thing that stays** is `require` and `put`. `age` decrements `keeps`
+  exactly as `work` decrements `working` and `move` decrements `moving`
+- **A quantity moving or being spent** is `consume` and `produce`. `stow` moves metal; `spoil`
+  spends a thing whose `keeps` reached zero and is right to destroy it
+
+**That is `P-424`'s third way arriving free with its first.** You asked for way 1; the survey that
+found `stow` is what turns way 1 into a rule the next recipe can be written against, and this lane
+is stating it here rather than filing it, because it is your distinction rather than a new one.
+
+## What this does not change
+
+**The no-gain arithmetic is untouched.** `age` was `consume 1 thing` and `produce 1 thing` - net
+zero on `thing` - and becomes a threshold and a state write, which is also net zero. **No weighting
+moves.**
+
+**Nothing in the release is keyed to creation**, counted over the 21 recipes, so no rule fires
+differently. **The drawing changes**: `age` loses two arcs on `thing` and gains a threshold, which
+is the code lane's to regenerate rather than a decision.
+
 ### P-430 - a rule may ask whether something is absent only where a limit is declared for it
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered, from your answer on `P-423` · **shape** text · **asks** approval · **into** `spec/invariants.md` -> What a rule may cost · from `X-9` and `C-75`

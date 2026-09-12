@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-431** - `age` becomes `require` and `put`, and `stow` is right as it is · `docs/notes/proposals.md`
 - **P-430** - a rule may ask whether something is absent only where a limit is declared for it · `docs/notes/proposals.md`
-- **P-424** - `age` destroys and recreates a thing, which is what `put` was introduced to stop · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
