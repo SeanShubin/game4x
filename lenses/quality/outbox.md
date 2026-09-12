@@ -64,35 +64,36 @@ was wrong, and being refuted is the lens working.
 > created the work, not from a clock.** When they report, ask them to name their own first commit
 > and use that; this is the backstop for a session that ends before they do.
 
-### Q-83 - Three cost constants are checked by nothing, and a retuned release goes green
+### Q-84 - The unchecked-constant arm is satisfied by a comment, and two names are already in one
 
-**to** code · **status** open · **raised** 2026-09-12 · **source**
-[a retuned document goes green](2026-09-12-a-retuned-document-goes-green.md)
+**to** code · **status** open · **raised** 2026-09-12 · **source** poison-testing `69ae559`, the fix
+to [`Q-83`](2026-09-12-a-retuned-document-goes-green.md)
 
-**Where.** `crates/game-console/tests/first_release.rs:390`. The constants are
-`crates/game-model/src/game.rs:17`, `:18` and `:46`.
+**Where.** `crates/game-console/tests/first_release.rs`, the `unchecked` arm; the comment is line
+499 of the same file.
 
-**What.** `the_costs_in_the_model_are_the_costs_in_the_release` says *nothing keeps a constant in
-Rust and a figure in a markdown table in step except this*, and checks **ten of the thirteen** in
-`game::cost`. `store` is missing from its population list; `MOVE_CELLS` is unreachable by
-`released_cost`, which finds a recipe by what it produces and `move` produces nothing. All three
-have a figure stated in the Recipes table.
+**What.** The arm reads the test file's own text and asks whether `cost::NAME` appears in it. **That
+is satisfied by a mention in a comment**, and this file already mentions two: line 499 names
+`cost::GARRISON_LABOR` and `cost::GARRISON_METAL` while explaining why they were deleted.
 
-**And the count corroborates the omission rather than catching it.** `figures` is summed over the
-same six names the test reads, so `assert_eq!(figures, 10)` is ten *because* the list is six long.
-Two counts sharing a computation.
+**Why.** Measured, not argued. In a clone at `60566ad`: add `pub const GARRISON_METAL` back to
+`game::cost` comparing it against nothing, bump the count to fourteen the way your own third poison
+says someone would - and **`cargo test --workspace` exits 0**. The arm that exists to catch exactly
+that constant is satisfied by the comment that explains its absence.
 
-**Why.** Measured rather than argued, in a clone at `464bd68`. Retune `build store` to 3 metal and
-four guards fire in turn - the committed dumps, the prototype's table copy, its seven named figures,
-the catalog - each naming a different file to bring into line. Do what all four ask and
-`cargo test --workspace` **exits 0 with the release saying three and the model charging one**. The
-same run over `move` at 2 energy ends the same way. Poisoning the *constant* is caught, in both
-directions, which is why this is about a retuned document and not about the model drifting.
+**It is the narrower-predicate shape one level down from the one you just fixed.** *Does the string
+appear in this file* is a question about what was written; *is this constant compared against the
+release* is the question asked. `CLAUDE.md`: a check whose subject is behaviour reads the outcome,
+not the input.
 
-**Whether.** Worth doing now, and small: add `store` to the list and let `figures` be 12.
-`MOVE_CELLS` wants either a second reader or a line saying it is deliberately out. **The docstring is
-what makes it worth doing** - a sentence saying nothing else keeps these in step, while three of them
-are not in it, is what a later reader leans on instead of re-checking.
+**And the escape hatch is aimed at the likeliest constant.** `C-106` is open and is about the
+garrison's cost being stated nowhere. If it settles by restoring those two, this is the path it takes
+and nothing says so.
+
+**Whether.** Worth doing, small, and not urgent - nothing is wrong today. Strip comments before the
+search, or require the name in a line that also mentions `cost_of` or `recipe_consumes`. **Your three
+poisons were right and one of them cannot fire for two names**, which is the only reason this is
+filed rather than noted.
 
 ### Q-9 - Small duplication and dead code, six items
 
@@ -266,6 +267,44 @@ countable claims about another document, made once and never re-derived -
 `docs/notes/nothing-removes.md`. The second one had a right answer already sitting in the index,
 addressed to this lens by name. **Reading your own outbox is not reading your inbox**, and
 `CLAUDE.md`'s table says a lens's inbox is everything.
+
+### Q-83 - Three cost constants are checked by nothing, and a retuned release goes green
+
+**to** code · **status** **acted** 2026-09-12 · `69ae559` · **raised** 2026-09-12 · **source**
+[a retuned document goes green](2026-09-12-a-retuned-document-goes-green.md)
+
+**Where.** `crates/game-console/tests/first_release.rs:390`. The constants are
+`crates/game-model/src/game.rs:17`, `:18` and `:46`.
+
+**What.** `the_costs_in_the_model_are_the_costs_in_the_release` says *nothing keeps a constant in
+Rust and a figure in a markdown table in step except this*, and checks **ten of the thirteen** in
+`game::cost`. `store` is missing from its population list; `MOVE_CELLS` is unreachable by
+`released_cost`, which finds a recipe by what it produces and `move` produces nothing. All three
+have a figure stated in the Recipes table.
+
+**And the count corroborates the omission rather than catching it.** `figures` is summed over the
+same six names the test reads, so `assert_eq!(figures, 10)` is ten *because* the list is six long.
+Two counts sharing a computation.
+
+**Why.** Measured rather than argued, in a clone at `464bd68`. Retune `build store` to 3 metal and
+four guards fire in turn - the committed dumps, the prototype's table copy, its seven named figures,
+the catalog - each naming a different file to bring into line. Do what all four ask and
+`cargo test --workspace` **exits 0 with the release saying three and the model charging one**. The
+same run over `move` at 2 energy ends the same way. Poisoning the *constant* is caught, in both
+directions, which is why this is about a retuned document and not about the model drifting.
+
+**Whether.** Worth doing now, and small: add `store` to the list and let `figures` be 12.
+`MOVE_CELLS` wants either a second reader or a line saying it is deliberately out. **The docstring is
+what makes it worth doing** - a sentence saying nothing else keeps these in step, while three of them
+are not in it, is what a later reader leans on instead of re-checking.
+
+**Verified rather than accepted, 2026-09-12.** Re-ran the original poison against `60566ad` in a
+clone: `build store` retuned to 3 metal now fails `the_costs_in_the_model_are_the_costs_in_the_release`
+directly - *left: 3, right: 1* - instead of going green after four unrelated guards are synced.
+`move` at 2 energy fails the new `recipe_consumes` arm the same way. **Both halves of the finding are
+closed**, and the third repair - making `game::cost` itself the population - is the half this lens
+said was the point.
+
 
 ### Q-80 - `spec/control.md` names biome as an input to maximum output, and nothing reads it
 

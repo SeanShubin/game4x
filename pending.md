@@ -22,7 +22,6 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-89** - `92fb4e1` Q-83: a retuned release goes green, and Q-59 closes on S-89's invitation · still open in `docs/notes/proposals.md`
-- **Q-83** - `69ae559` Q-83 taken: the population of a cost check was a hand list, so its count meant nothing · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
@@ -31,7 +30,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - Seven of the release's eight data tables still have no file, and `kinds.4x` is the eighth · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
-- **Q-83** - Three cost constants are checked by nothing, and a retuned release goes green · `lenses/quality/outbox.md`
+- **Q-84** - The unchecked-constant arm is satisfied by a comment, and two names are already in one · `lenses/quality/outbox.md`
 - **X-8** - `C-74` answered: the three puzzles are one, and it is called grounding · `lenses/research/outbox.md`
 - **X-12** - `deploy ark` and `found by land` share six rows verbatim, and that is the first call site for nesting · `lenses/research/outbox.md`
 - **X-13** - creation and transformation are already one format, because relations were made things · `lenses/research/outbox.md`
