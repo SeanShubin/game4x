@@ -62,6 +62,121 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-461 - `metal in it` is defined by a name the Traits table does not declare
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** contradiction, found counting the four tables with no data file and verified by the code lane as `C-102` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Traits
+
+**One row of the *Traits* table defines itself with a word the same table never declares:**
+
+```
+| **metal in it** | whatever is built | a number | derived: ITS BINDING plus the metal in its parts |
+```
+
+**`binding` is a column of *Units and structures* and no trait declares it.** Counted: zero rows of
+the twenty-three name it. **`Crosses` and `Requires` are the same** - columns of that table that no
+trait declares - but neither of those is read by a definition inside the Traits table, which is what
+makes this one a contradiction rather than a gap.
+
+**Both lanes have read this table repeatedly and neither noticed.** The code lane reads it in
+`petri.rs`, `nogain.rs` and `prototypes/kinds`; this lane has derived numbers from it four times
+today. **A derived trait reading an undeclared name is invisible to every reader who already knows
+what binding means.**
+
+## The row
+
+**`binding` becomes a trait, which is what it already behaves as** - a number, of the kind, the
+metal bound into one thing of it. The row is added to *Traits* in the order the table has, directly
+before `metal in it`:
+
+| Trait       | Of                | Values   | Stored or derived |
+| ----------- | ----------------- | -------- | ----------------- |
+| **binding** | whatever is built | a number | of the kind       |
+
+**`Of` is `whatever is built`, which is `metal in it`'s own cell** - the same seven things, and the
+same phrase rather than a new one.
+
+## What it changes and what it does not
+
+**Nothing in the game changes.** The number was always there, on the *Units and structures* row for
+each kind - garrison 1, extractor 1, yard 15, store 1, ark 3, pioneer 3, and a citizen none. This
+makes the table declare the name it was already using.
+
+**`traits.4x` gains a line if `P-457` lands first**, which it should:
+`{trait admits:number kept:kind name:binding}`. **Twenty-one lines rather than twenty**, and this
+proposal says so rather than leaving `P-457`'s count to go quietly wrong - which is the failure
+`docs/notes/nothing-removes.md` is about.
+
+**`Crosses` and `Requires` stay as they are for now.** Neither is read by a definition, so neither
+is a contradiction, and both are named in `S-30` as part of what *Units and structures* still owes.
+**Making all three traits at once would be tidying rather than fixing**, and the two that are only
+undeclared can wait for the proposal that settles that whole table.
+### P-457 - `traits.4x`, the last file in `spec/data/`
+
+**to** sean · **status** open · **cited** `036a305`, `a18e94b` · **raised** 2026-09-12 · **kind** answered, by you, 2026-09-12 · **shape** an instruction and text · **asks** approval · **into** `spec/data/traits.4x`, and `spec/console.md` -> The language
+
+**You took `A`, so `unpaid` and `movable` admit a number like the five counts, and nothing in the
+game is two-valued anywhere.** The file, twenty lines, entries in the release's table order and the
+traits inside each line sorted:
+
+```
+{trait admits:number kept:thing name:id}
+{trait admits:number kept:thing name:moving}
+{trait admits:number kept:thing name:laboring}
+{trait admits:number kept:thing name:working}
+{trait admits:number kept:thing name:bearing}
+{trait admits:number kept:thing name:defending}
+{trait admits:resource kept:thing name:resource}
+{trait admits:number kept:kind name:strength}
+{trait admits:number kept:kind name:fuel}
+{trait admits:number kept:kind name:upkeep}
+{trait admits:number kept:thing name:density}
+{trait admits:number kept:thing name:total-capacity}
+{trait admits:value kept:thing name:biome}
+{trait admits:number kept:thing name:nature}
+{trait admits:place kept:thing name:from}
+{trait admits:place kept:thing name:to}
+{trait admits:number kept:thing name:keeps}
+{trait admits:number kept:nothing name:unpaid}
+{trait admits:value kept:thing name:phase}
+{trait admits:number kept:kind name:movable}
+```
+
+**Fifteen admit a number, two a family, two their own values, and one is `id`** - which is
+`admits:number` whatever `P-456` settles, because which kinds carry it is on their lines.
+
+**The instruction: write that file into `spec/data/`.** The check the promoting commit runs, and
+this lane has run: twenty lines against the release's twenty-three traits, the three left out being
+`metal in it`, `control` and `surplus` - each derived and each named by no recipe row - and every
+line's `kept` derived from the release's *Stored or derived* column rather than typed.
+
+## The sentence, into `spec/console.md` -> The language
+
+**`P-451` says a trait *says what it admits and whether it is stored* and gives no written form.**
+This is the form, and it goes directly under that paragraph.
+
+> **A trait says what it admits and where its value lives, as two keys.** **`admits`** is `number`,
+> or a **family** whose kinds are its values, or **`value`** where its values declare themselves.
+> **`kept`** is **`thing`** where each thing of a kind carries the value, **`kind`** where the kind
+> carries it once, and **`nothing`** where it is derived and nothing carries it.
+
+## One thing entailed rather than chosen, so you can overrule it
+
+**`biome` and `phase` say `admits:value` rather than naming themselves.** The block this lane showed
+you wrote `admits:biome` - the trait repeating its own name - and `P-458` is what changes it: **a
+rule the specification can state twice is one two readers can disagree about**, and `name:biome`
+already says which set it is. A value carries `of:biome`, so the link exists in one direction and
+does not need writing in the other.
+
+## What follows, and it is not a question here
+
+**`phase`'s two values need a file, as a biome's did.** `{value name:design of:phase}` and
+`{value name:play of:phase}` - **`phases.4x`**, two lines, the shape `biomes.4x` set. A short file is
+not a cost; it is one set with one home. **That is a line of the next proposal rather than something
+to settle now**, and nothing reads `phase`'s values before the editor does.
+
+**And `traits.4x` is the last file `spec/data/` waits on.** After it, what has no file is the
+capacity relation, four undeclared columns of *Units and structures*, and `Recipes` - all three
+recorded in `S-30` and none of them blocking.
 ### P-460 - a command binds every place a recipe leaves open
 
 **to** sean · **status** open · **cited** `161a056`, `bb9bba4` · **raised** 2026-09-12 · **kind** entailed, from `P-456` · **shape** text · **asks** approval · **into** `spec/console.md` -> The language

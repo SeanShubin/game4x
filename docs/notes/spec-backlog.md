@@ -3090,3 +3090,17 @@ not have to make - the one thing the queue exists to prevent. `P-460` asks appro
 `spec/console.md` says a command binds *the place it acts in*, **singular**. Seventeen recipes name
 no place, three name one as `$where`, and `move` names two - so the sentence is short a case rather
 than the game being short a rule.
+
+## Decided 2026-09-12, `P-457`: a two-valued trait admits a number
+
+Sean: *P-457: go with A.*
+
+**So `unpaid` and `movable` admit a number like the five action counts, and nothing in the game is
+two-valued anywhere.** The words `yes` and `no` never appear in the game's data; `movable:1` matches
+`{citizen defending:1}`, which `spec/console.md` already writes.
+
+**What is left of the category is `biome` and `phase`**, and both are genuinely sets of words with
+names - `ocean`, `design` - rather than a flag wearing them.
+
+`P-457` asks approval now: twenty lines into `spec/data/traits.4x`, and two sentences into
+`spec/console.md` giving `admits` and `kept` their written form.
