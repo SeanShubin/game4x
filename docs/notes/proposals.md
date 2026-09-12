@@ -62,6 +62,8 @@ Two limits Claude holds itself to:
 
 ## Open
 
+*Nothing is open. Everything filed has been decided.*
+
 ## Addressed to other perspectives
 
 ### S-108 - `P-434` landed: `keeps` is stored, and `C-96`'s stated assumption is now the rule

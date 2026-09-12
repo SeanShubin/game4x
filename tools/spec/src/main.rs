@@ -3,6 +3,7 @@
 //! ```text
 //! spec show <id>                     the approved text, exactly as it will land
 //! spec after <id> <file> <anchor>    put it in after that line, and assert it landed
+//! spec replacing <id> <file> <old>   put it in where those lines are, and assert it landed
 //! spec land <id> <after>             ledger row from the item's own `into`, then remove it
 //! ```
 //!
@@ -26,6 +27,7 @@ fn main() -> ExitCode {
     let outcome = match borrowed.as_slice() {
         ["show", id] => show(&root, id),
         ["after", id, file, anchor] => after(&root, id, file, anchor),
+        ["replacing", id, file, old] => replacing(&root, id, file, old),
         ["land", id, previous] => land(&root, id, previous),
         _ => Err(usage()),
     };
@@ -45,6 +47,7 @@ fn usage() -> String {
     [
         "spec show <id>                     the approved text, exactly as it will land",
         "spec after <id> <file> <anchor>    put it in after that line, and assert it landed",
+        "spec replacing <id> <file> <old>   put it in where those lines are, and assert it landed",
         "spec land <id> <after-id>          ledger row from the item's own `into`, then remove it",
     ]
     .join("\n")
@@ -113,6 +116,36 @@ fn after(root: &Path, id: &str, file: &str, anchor: &str) -> Result<String, Stri
     ))
 }
 
+/// Put the approved text in where some existing lines are, then assert it is there.
+///
+/// **Every promotion today was a replacement and there was no verb for it**, so each went
+/// through the anchor tool with a hand-written replacement file - and both of the day's
+/// hygiene slips were in that path.
+///
+/// `old` is matched with whitespace collapsed, so the caller may give it on one line however
+/// the file wrapped it.
+fn replacing(root: &Path, id: &str, file: &str, old: &str) -> Result<String, String> {
+    let item = proposal(root, id)?;
+    let text = approved(&item)?;
+    let path = root.join(file);
+    let before = read(&path)?;
+    let written = queue::replace_run(&before, old, &text).map_err(|why| why.to_string())?;
+    write(&path, &written)?;
+
+    let back = read(&path)?;
+    queue::lands_once(&back, &text).map_err(|why| format!("{id} did not land: {why}"))?;
+    if back.contains('\r') {
+        return Err(format!("{file} holds a carriage return after the write"));
+    }
+    if queue::collapse(&back).contains(&queue::collapse(old)) {
+        return Err(format!("{file} still holds the text {id} replaced"));
+    }
+    Ok(format!(
+        "{id}: {} line(s) into {file}, present exactly once, the replaced text gone, no carriage return",
+        text.lines().count()
+    ))
+}
+
 /// The `**into**` field, which is where the ledger row's destination comes from.
 ///
 /// **Read from the field rather than typed again.** `docs/notes/tools-spec-design.md`: the
@@ -142,7 +175,8 @@ fn land(root: &Path, id: &str, previous: &str) -> Result<String, String> {
     let text = read(&path)?;
     let with_row = queue::insert_ledger_row(&text, previous, &row).map_err(|w| w.to_string())?;
     let without = queue::remove_block(&with_row, id).map_err(|why| why.to_string())?;
-    write(&path, &without)?;
+    let settled = queue::say_if_empty(&without).map_err(|why| why.to_string())?;
+    write(&path, &settled)?;
 
     let back = read(&path)?;
     if back.contains(&format!("### {id} - ")) {

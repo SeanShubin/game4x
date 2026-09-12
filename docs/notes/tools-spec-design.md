@@ -151,3 +151,25 @@ proposal carries more than one blockquote, and a proposal with two destinations 
 `after` handle only single-block proposals, and a two-block promotion is still done by hand. **That
 is `outbox`'s call and not this lane's**, which is what this note said in 2026-09-02 and is still
 right.
+
+## What was added on 2026-09-12, and what found it
+
+**`spec replacing <id> <file> <old>`**, because **every promotion on 2026-09-11 and 2026-09-12 was a
+replacement and there was no verb for it.** Each went through `tools/anchor` with a hand-written
+replacement file, and both of the two days' hygiene slips were in that path - a trailing newline kept
+twice, leaving a blank line to find by reading the diff.
+
+**`old` is matched with whitespace collapsed on both sides, over a run of any length.** A sentence
+offered on one line and wrapped onto two in the file is the case the verb exists for, and the first
+implementation could not do it: it matched a run of exactly as many lines as the pattern had.
+**A test caught that before the verb was used once.**
+
+**`land` now says so when it empties the queue.** `## Open` followed by nothing reads as *this has
+not been looked at*; `*Nothing is open. Everything filed has been decided.*` reads as *there is
+nothing here*, and only the second is a claim. **The integration test found this on the live file
+after `P-434` landed** - the first defect this lane has had reported to it by a check rather than by
+its own re-reading.
+
+**Three of the four verbs now refuse rather than guess**, and every refusal is a defect that
+happened: two runs matching, two ledger rows with the same prefix, a block whose range holds another
+item, a replacement carrying a carriage return.

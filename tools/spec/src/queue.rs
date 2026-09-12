@@ -180,6 +180,108 @@ pub fn insert_after(text: &str, anchor: &str, inserted: &str) -> Result<String, 
     }
 }
 
+/// Replace a contiguous run of lines with `text`, matching on their collapsed whitespace.
+///
+/// **Every promotion on 2026-09-11 and 2026-09-12 was a replacement and this verb did not
+/// exist**, so each went through the anchor tool with a hand-written replacement file - and
+/// both of the day's hygiene slips were in that path, a trailing newline kept twice and a
+/// blank line left behind twice.
+///
+/// **The run is matched with whitespace collapsed on both sides**, so a wrap can hide
+/// nothing. `CLAUDE.md`, from Sean: *I typically resolve this by normalizing things before I
+/// compare them.* A match string drafted as one sentence, meeting a file that broke it across
+/// two lines, is the failure this removes rather than asks the caller to avoid.
+pub fn replace_run(text: &str, old: &str, new: &str) -> Result<String, Problem> {
+    if new.contains('\r') {
+        return problem("the replacement holds a carriage return");
+    }
+    let lines: Vec<&str> = text.lines().collect();
+    let wanted: Vec<&str> = old.lines().filter(|line| !line.trim().is_empty()).collect();
+    if wanted.is_empty() {
+        return problem("nothing to replace: the text to match is blank");
+    }
+    let target = collapse(&wanted.join(" "));
+
+    // **How many lines the run takes in the file is not how many it takes in the proposal.**
+    // A sentence offered on one line and wrapped onto two is the case this verb exists for,
+    // so the run is grown a line at a time until its collapsed text matches - and abandoned
+    // once it is longer than the target, which it can never shrink back under.
+    let mut found: Vec<(usize, usize)> = Vec::new();
+    for start in 0..lines.len() {
+        for end in start + 1..=lines.len() {
+            let run = collapse(&lines[start..end].join(" "));
+            if run == target {
+                found.push((start, end));
+                break;
+            }
+            if run.len() >= target.len() {
+                break;
+            }
+        }
+    }
+    match found.as_slice() {
+        [] => problem(format!(
+            "no run of lines matches the {} offered, with whitespace collapsed",
+            wanted.len()
+        )),
+        [(start, end)] => {
+            let mut out: Vec<&str> = Vec::with_capacity(lines.len());
+            out.extend_from_slice(&lines[..*start]);
+            out.extend(new.lines());
+            out.extend_from_slice(&lines[*end..]);
+            Ok(join(&out))
+        }
+        several => problem(format!(
+            "{} runs match, so which one to replace is a guess",
+            several.len()
+        )),
+    }
+}
+
+/// What an empty `Open` section says, so that emptiness is stated rather than inferred.
+pub const NOTHING_OPEN: &str = "*Nothing is open. Everything filed has been decided.*";
+
+/// Put the sentence back when landing the last item empties the queue.
+///
+/// **The section saying nothing and the section saying it is empty are different claims**,
+/// and only the second one a reader can act on. Landing `P-434` left `## Open` followed by a
+/// blank line and the next section, which reads as *this has not been looked at* rather than
+/// *there is nothing here*.
+///
+/// **Found by the integration test rather than by reading the file**, which is the first time
+/// that has happened to this lane today.
+pub fn say_if_empty(text: &str) -> Result<String, Problem> {
+    let lines: Vec<&str> = text.lines().collect();
+    let Some(open) = lines.iter().position(|line| line.trim() == "## Open") else {
+        return problem("this file has no Open section");
+    };
+    let Some(next) = lines
+        .iter()
+        .enumerate()
+        .skip(open + 1)
+        .find(|(_, line)| FILE_SECTIONS.contains(&line.trim()))
+        .map(|(at, _)| at)
+    else {
+        return problem("no section follows Open");
+    };
+    let inside: Vec<&&str> = lines[open + 1..next]
+        .iter()
+        .filter(|line| !line.trim().is_empty())
+        .collect();
+    if !inside.is_empty() {
+        return Ok(text.to_string());
+    }
+    let mut out: Vec<&str> = Vec::with_capacity(lines.len() + 3);
+    out.extend_from_slice(&lines[..open + 1]);
+    out.push("");
+    out.push(NOTHING_OPEN);
+    out.push("");
+    // From `next`, not `next - 1`: the blank line before the following section is the one
+    // just pushed, and keeping both is how this verb would put back the defect it removes.
+    out.extend_from_slice(&lines[next..]);
+    Ok(join(&out))
+}
+
 /// Whether the approved text is in the destination, compared with whitespace collapsed.
 ///
 /// **Normalized on both sides rather than matched carefully.** `CLAUDE.md`, from Sean:
@@ -348,12 +450,134 @@ Some reasoning, which belongs to P-1.
         );
     }
 
+    /// An emptied queue says so, rather than falling silent.
+    ///
+    /// **This is the one the integration test found**, on the live file, after landing the
+    /// last proposal left `## Open` followed by nothing at all.
+    #[test]
+    fn landing_the_last_item_leaves_the_section_saying_it_is_empty() {
+        let emptied = "## Open
+
+## Accepted
+";
+        let said = say_if_empty(emptied).expect("a section");
+        assert!(said.contains(NOTHING_OPEN), "{said:?}");
+        assert_eq!(
+            said,
+            format!(
+                "## Open
+
+{NOTHING_OPEN}
+
+## Accepted
+"
+            ),
+            "{said:?}"
+        );
+    }
+
+    /// And a section with something in it is left exactly alone.
+    #[test]
+    fn a_queue_with_an_item_in_it_is_untouched() {
+        let held = "## Open
+
+### P-1 - a title
+
+## Accepted
+";
+        assert_eq!(say_if_empty(held).expect("unchanged"), held);
+    }
+
     /// Approved text is found however the destination wrapped it.
     #[test]
     fn a_wrap_cannot_hide_the_approved_text() {
         let approved = "a sentence that will be wrapped somewhere";
         let destination = "before\na sentence that will be\nwrapped somewhere\nafter\n";
         assert!(lands_once(destination, approved).is_ok());
+    }
+
+    /// A replacement leaves no blank line behind, which is what `after` had to be taught.
+    ///
+    /// **Both of 2026-09-12's hygiene slips were this**, in a path that had no verb: a
+    /// trailing newline kept after the bullet, and another before `### Yard`.
+    #[test]
+    fn replacing_a_run_leaves_no_blank_line() {
+        let text = "before
+- old first
+  old second
+after
+";
+        let out = replace_run(
+            text,
+            "- old first
+  old second",
+            "- new one line",
+        )
+        .expect("replaced");
+        assert_eq!(
+            out,
+            "before
+- new one line
+after
+",
+            "{out:?}"
+        );
+    }
+
+    /// A wrap cannot stop a run being found, because both sides are collapsed.
+    #[test]
+    fn a_run_wrapped_differently_is_still_matched() {
+        let text = "a
+- one sentence that
+  wrapped here
+b
+";
+        let out = replace_run(text, "- one sentence that wrapped here", "- gone").expect("matched");
+        assert_eq!(
+            out,
+            "a
+- gone
+b
+",
+            "{out:?}"
+        );
+    }
+
+    /// Two matching runs is a guess, and a guess is refused.
+    #[test]
+    fn a_run_matching_twice_is_refused() {
+        assert!(
+            replace_run(
+                "x
+x
+", "x", "y"
+            )
+            .is_err()
+        );
+    }
+
+    /// A run that is not there fails loudly rather than doing nothing.
+    ///
+    /// **`CLAUDE.md`: a `str.replace` with no match is a no-op rather than an error**, and
+    /// thirteen rows went missing that way.
+    #[test]
+    fn a_run_that_is_absent_is_an_error_rather_than_a_no_op() {
+        assert!(
+            replace_run(
+                "a
+b
+", "not here", "z"
+            )
+            .is_err()
+        );
+    }
+
+    /// And a carriage return never reaches a specification file through this verb either.
+    #[test]
+    fn a_replacement_carrying_a_carriage_return_is_refused() {
+        let dirty = concat!("one", "\r\n", "two");
+        assert!(dirty.contains('\r'), "the fixture really holds one");
+        assert!(replace_run("a\nb\n", "a", dirty).is_err());
     }
 
     /// And text that is not there fails loudly rather than quietly.
