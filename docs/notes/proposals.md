@@ -132,6 +132,25 @@ does not.** Deleting the column deletes that. **Rule 7 sends a relationship to p
 reason earns a sentence it can have one - and this proposal writes none, because none of the four
 has been missed by anyone in the weeks the column has been read.
 
+## What it costs the code lane, which is more than it costs the specification
+
+**The specification loses one column of twenty-four rows. The code loses up to thirteen hundred
+lines**, counted rather than estimated:
+
+```
+crates/game-console/src/declare.rs          537   the four generators
+crates/game-console/tests/declare.rs        741   and their checks
+crates/game-console/examples/declared-*.rs   67   four examples that print the files
+```
+
+**Not all of it goes and the code lane will say which**, but `declare::kinds` and `declare::traits`
+have nothing left to read once the column is deleted and `kinds.4x` is the source - **a generator
+with no input is not a smaller generator.** This is said because a reader of *one column goes* would
+think the code is unaffected, and it is affected far more than the specification is.
+
+**That is the right deletion rather than a cost to weigh against the change.** Two hand-maintained
+forms agreeing is worth something only while both exist, and this removes one of them.
+
 ## Two consequences this lane had not written, one of which is larger than the proposal
 
 **The direction of derivation reverses, and that is the bigger half.** `spec/data/kinds.4x` is
@@ -141,9 +160,12 @@ relational model and the notation is a text form of it - but it is a change to w
 it is not this proposal.
 
 **So this one lands and the inversion goes with the column**, leaving `kinds.4x` authored and the
-release's tables projections of it. **The proposal that says so, and says what checks it instead of
-a byte comparison against a generator, is the next one.** Named here so it is not discovered
-afterwards.
+release's tables projections of it. **The proposal that says so is the next one**, and the code lane
+has answered what replaces the byte comparison: **it never made the file right, it made the file
+agree with the release's table.** What replaces it is the game running - *every word in a data file
+is a kind, a trait, or one of a trait's values*, checked against a played state rather than against
+another document. `CLAUDE.md`: **a check whose subject is behaviour reads the outcome, not the
+input** - and a diff between two documents is the input twice.
 
 **And `keeps` still appears on every kind, which needs one correction to how it would be read.**
 `kinds.4x` puts it on no line, because `P-470` gave the trait `of:thing`. **A signature read from
