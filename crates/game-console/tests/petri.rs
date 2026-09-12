@@ -63,9 +63,12 @@ fn every_recipe_is_either_drawn_or_named_as_not_drawn() {
 
     // **One block is excluded and it is `stand`** - its produce row is *that unit's force*,
     // and `unit` is a family with two members, so there is no single number for the arc.
-    // `move` was the excluded one until `P-411`: it has a `put` row, and the release's column
-    // description still names four roles without that one - `C-88`, which stays open on the
-    // word. What a `put` moves is now read from its Traits cell rather than guessed.
+    //
+    // **`move` was the excluded one until `P-411`, and `C-88` is answered rather than
+    // outstanding.** `P-421` added `put` to the release's roles and defined it: a put *names
+    // a thing that is already there and says what is true of it afterwards*, and *has no
+    // quantity, because nothing is made or taken*. So what a put moves is read from the row
+    // rather than assumed, and the reading this file was built on is the rule.
     assert_eq!(
         net.excluded.iter().map(|one| &one.name).collect::<Vec<_>>(),
         [&"stand".to_string()],
@@ -397,7 +400,9 @@ fn the_limit_role_is_declared_and_no_row_carries_it() {
     let net = net(&document);
 
     // **Counted over the table, not over the whole document**, so the column description -
-    // which still lists `limit` among the four roles - is not mistaken for a row.
+    // which still lists `limit`, now among five roles rather than four - is not mistaken for
+    // a row. **`P-421` added `put` and deliberately left `limit` alone**; whether it stays is
+    // `P-423`, and this test says nothing about that either way.
     let rows = document
         .lines()
         .filter(|line| line.trim_start().starts_with('|'))

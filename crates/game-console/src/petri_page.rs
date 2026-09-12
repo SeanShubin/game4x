@@ -219,8 +219,14 @@ pub fn markdown(document: &str) -> String {
     out.push_str(
         "`S-87`, and the formalism is the research lens's: \
          `lenses/research/2026-09-08-simple-finite-and-decidable.md` establishes that a recipe \
-         network **is** a Petri net rather than resembling one. The release's four roles are \
-         the four arc kinds and nothing had to be invented to get from one to the other.\n\n",
+         network **is** a Petri net rather than resembling one. Four of the release's five \
+         roles are arc kinds and nothing had to be invented to get from one to the other.\n\n\
+         **The fifth is `put`, and this drawing is a projection rather than the whole of the \
+         release.** `P-421`: a put *names a thing that is already there and says what is true \
+         of it afterwards - the same thing and not a new one, so what has an identity keeps \
+         it*. A token in a plain Petri net has no identity, so what is drawn below is the \
+         count a put names - an arc into or out of `citizen laboring`, and the like - which \
+         is faithful about the state and silent about the thing whose state it is.\n\n",
     );
     out.push_str(&accounting(&net, document));
 

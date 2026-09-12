@@ -7,8 +7,8 @@
 //!
 //! The research lens established the formalism in
 //! `lenses/research/2026-09-08-simple-finite-and-decidable.md`: **a recipe network is a Petri
-//! net.** The release's four roles are the four arc kinds, and nothing has to be invented to
-//! get from one to the other:
+//! net.** Four of the release's five roles are arc kinds and nothing has to be invented to get
+//! from one to the other:
 //!
 //! | Release role | Petri net | In this release |
 //! | ------------ | --------- | --------------- |
@@ -16,6 +16,24 @@
 //! | `produce n`  | output arc of weight n    | made |
 //! | `require n`  | read arc - present, not taken | 7 of them |
 //! | `limit 0`    | **inhibitor arc** - a zero test | declared, and no row has it |
+//!
+//! **The fifth is `put`, and it is the one the table above cannot hold** - `P-421`, which
+//! answered `C-88`. A put *names a thing that is already there and says what is true of it
+//! afterwards - the same thing and not a new one, so what has an identity keeps it*, and it
+//! *has no quantity, because nothing is made or taken*.
+//!
+//! **A token has no identity, so a plain net cannot say that.** What this file draws is the
+//! count the put names - an input arc on `citizen laboring` for *laboring one less*, an output
+//! arc for *at its maximum* - which is faithful about the state and silent about the thing
+//! whose state it is. The twelve `put` rows leave the kind's own place untouched, which is
+//! what stops `create labor` reading as a rule that eats a citizen.
+//!
+//! **Sean's reason for the role says what is missing rather than this file guessing**:
+//! *`put` was there so we could move things with an identity without destroying, then
+//! creating them.* Identity preserved across a transition is a **coloured** net, and
+//! `docs/designing-rules.md` is where that is taken up. **The drawing is a projection**: it
+//! keeps what a plain net can check and drops what it cannot, and says so here rather than
+//! letting a reader infer that the release has nothing more in it.
 //!
 //! **There are no inhibitor arcs, and the reason changed under this file.** Reachability in a
 //! plain Petri net is decidable; with inhibitor arcs the net is Turing-complete. This release

@@ -428,12 +428,24 @@ here rather than left to be discovered.
 
 ### C-88 - `put` is a role the release uses and does not declare, and `refresh`'s softness checks out
 
-**to** spec · **status** open · **raised** 2026-09-11 · **cited** `bc1df51` · **source** reading
-`P-399`'s tables before building against them
+**to** spec · **status** answered · **raised** 2026-09-11 · **answered** 2026-09-11 by `P-421`,
+promoted in `62be740` · **cited** `bc1df51` · **source** reading `P-399`'s tables before building
+against them
 
-**Still open, and `bc1df51` is `P-421` carrying it to Sean rather than answering it.** The
-question is his - what a `put` means is a choice, not a definition either lane may supply - so
-this item stays outstanding until the decision comes back as words to approve.
+**Answered, and the role is declared.** `releases/first-release.md` now reads *`Role` is one of
+`require`, `limit`, `consume`, `produce` or `put`*, and defines the fifth: **a put names a thing
+that is already there and says what is true of it afterwards - the same thing and not a new one,
+so what has an identity keeps it**, and *a put has no quantity, because nothing is made or taken*.
+
+**The assumption this lane stated is the rule**, so nothing built against it has to change. What
+it could not have derived is Sean's reason, and it is sharper than the reading: *`put` was there
+so we could move things with an identity without destroying, then creating them.* **Identity, not
+state** - which is the thing a plain Petri net cannot express, and which is now said in
+`petri.rs` and on the generated page rather than left for a reader to notice.
+
+**`limit` is deliberately untouched and is `P-423`**, open to Sean, carrying this lane's `C-75`
+and the research lens's `X-9`. So the count of roles may go to four or stay at five with a
+constraint, and this item does not wait on that.
 
 **The *Recipes* column description still names four roles and the table now uses five.** It
 reads: *Role is one of `require`, `limit`, `consume` or `produce`*. `move`'s third row is
@@ -1115,7 +1127,9 @@ acts*. `deploy ark` is nine such rows. A command is written `{deploy-ark territo
 
 - **`create-if-missing` has no role.** The garrison is `limit 0` **and** `produce 1` today, which
   **refuses** the recipe if a garrison is there. His **succeeds and skips**. Different rule,
-  and none of the four roles says it.
+  and none of the roles says it - four when this was written, and **five since `P-421` added
+  `put`, which does not say it either**: a put *names a thing that is already there*, so it is
+  the case where the thing exists and says nothing about the case where it does not.
 - **The subject moves.** His territory is derived from the ark - `ark.location.below` - where the
   table names the territory and reaches up to the orbit. Whichever place the blank Where means
   decides which thing a person selects.
