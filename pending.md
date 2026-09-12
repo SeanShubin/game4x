@@ -21,7 +21,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **R-8** - `d617b9a` P-473: the Of column goes, and R-8's signature is computed from spec/data/ · still open in `releases/first-release.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
