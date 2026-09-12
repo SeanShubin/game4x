@@ -634,3 +634,179 @@ fn every_quotation_of_the_specification_says_what_it_says_now() {
         "quotations of only {documents:?}; expected several spec documents"
     );
 }
+
+/// Every capability's `In` line quotes the file it cites, and the file is there - `S-96`.
+///
+/// **A capability says what rule it is delivering**: `- **In** - `spec/planet.md`, *the quote*`.
+/// Nothing checked that the quote is in the file, and two of the twelve were wrong when this
+/// lane ran it by hand - one because `P-390` replaced the rule and the release did not follow,
+/// one **wrong since it was written and vetted in that state**.
+///
+/// **Neither is a defect a reader would see**, which is why neither was found by reading.
+///
+/// # The three things it asserts, and two of them are not the equality
+///
+/// **How many `In` lines it found**, because a pattern that matches none passes every equality
+/// it never makes - the count-over-nothing failure `docs/process.md` names.
+///
+/// **That each cited file exists**, because a moved file would otherwise read as a quotation
+/// failure and send somebody to rewrite a quote that was right.
+///
+/// **And then the quotations themselves**, normalized by the same [`bare`] the rest of this
+/// file uses - one normalizer, because two would come to disagree about what a `*` is worth
+/// and only one of them would be run against the specification.
+#[test]
+fn every_in_line_quotes_the_file_it_cites() {
+    let release =
+        std::fs::read_to_string(root().join("releases/first-release.md")).expect("the release");
+
+    let mut lines = release.lines().peekable();
+    let mut found = 0;
+    let mut checked = 0;
+    let mut wrong: Vec<String> = Vec::new();
+    while let Some(line) = lines.next() {
+        let Some(rest) = line.trim_start().strip_prefix("- **In** - ") else {
+            continue;
+        };
+        found += 1;
+        // **The line may wrap**, and a wrapped quotation is one quotation. Continuations are
+        // indented and do not open a new bullet.
+        let mut whole = rest.to_string();
+        while let Some(next) = lines.peek() {
+            if next.starts_with("  ") && !next.trim_start().starts_with("- ") {
+                whole.push(' ');
+                whole.push_str(next.trim());
+                lines.next();
+            } else {
+                break;
+            }
+        }
+
+        let Some(cited) = whole.split('`').nth(1) else {
+            wrong.push(format!("an `In` line names no file: {whole}"));
+            continue;
+        };
+        let at = root().join(cited);
+        let Ok(document) = std::fs::read_to_string(&at) else {
+            wrong.push(format!(
+                "`{cited}` is cited by an `In` line and is not a file - a moved file reads as a \
+                 quotation failure, which would send somebody to rewrite a quote that is right"
+            ));
+            continue;
+        };
+        // **Every italic span, because a line may carry more than one** - `R-4` quotes two
+        // sentences of `spec/planet.md` and both have to be there.
+        let (counted, missing) = quotes_missing_from(&whole, &document);
+        checked += counted;
+        for quoted in missing {
+            wrong.push(format!("`{cited}` does not say: {quoted}"));
+        }
+    }
+
+    assert!(
+        wrong.is_empty(),
+        "{} `In` line quotation(s) are of wording the cited file does not have:\n  {}",
+        wrong.len(),
+        wrong.join("\n  ")
+    );
+    // The two counts, so that a pattern matching nothing cannot pass.
+    assert_eq!(
+        found, 10,
+        "ten capabilities carry an `In` line; this found {found}"
+    );
+    assert!(
+        checked >= found,
+        "only {checked} quotations over {found} lines, so a line was read and not compared"
+    );
+}
+
+/// Every single-asterisk span in this text, with the bold markers stepped over.
+///
+/// **`**In**` is not a quotation**, and a scanner that treated every `*` alike would read the
+/// bold label as an italic span and compare the word `In` against the specification.
+fn italics(text: &str) -> Vec<String> {
+    let bytes: Vec<char> = text.chars().collect();
+    let mut out = Vec::new();
+    let mut at = 0;
+    let mut open: Option<usize> = None;
+    while at < bytes.len() {
+        if bytes[at] == '*' {
+            if bytes.get(at + 1) == Some(&'*') {
+                at += 2;
+                continue;
+            }
+            match open {
+                Some(from) => {
+                    out.push(bytes[from..at].iter().collect::<String>());
+                    open = None;
+                }
+                None => open = Some(at + 1),
+            }
+        }
+        at += 1;
+    }
+    out
+}
+
+/// How many quotations an `In` line carries, and which of them the document does not have.
+///
+/// **Lifted out so both arms can be driven against a document written here** - `closed_sets.rs`
+/// says why: the release is Sean's file and this lane does not edit it, so a check that it
+/// catches a wrong quotation is demonstrated on a document written to carry one.
+fn quotes_missing_from(whole: &str, document: &str) -> (usize, Vec<String>) {
+    let flat = bare(document);
+    let mut counted = 0;
+    let mut missing = Vec::new();
+    for quoted in italics(whole) {
+        let want = bare(&quoted);
+        if want.is_empty() {
+            continue;
+        }
+        counted += 1;
+        if !flat.contains(&want) {
+            missing.push(quoted);
+        }
+    }
+    (counted, missing)
+}
+
+/// A quotation the cited file does not have is reported, and one it has is not.
+///
+/// **Both arms, and a control.** A test that only showed the failure would pass with a
+/// comparison that reported everything; one that only showed the success would pass with a
+/// comparison that reported nothing.
+#[test]
+fn a_wrong_in_line_quotation_is_caught_and_a_right_one_is_not() {
+    let document = "A rule that is **written** here, and another one after it.\n";
+
+    let right = "`spec/made-up.md`, *a rule that is written here*";
+    assert_eq!(
+        quotes_missing_from(right, document),
+        (1, Vec::new()),
+        "the control: a quotation the document has must not be reported, or the arm below \
+         means nothing"
+    );
+
+    let wrong = "`spec/made-up.md`, *a rule that is written elsewhere*";
+    assert_eq!(
+        quotes_missing_from(wrong, document).1,
+        vec!["a rule that is written elsewhere".to_string()],
+        "a quotation the document does not have must be reported"
+    );
+
+    // **Two quotations on one line, one of each**, because a capability may cite two sentences
+    // and reporting only the first would hide the second.
+    let both = "`spec/made-up.md`, *a rule that is written here*, and *a rule that is not*";
+    let (counted, missing) = quotes_missing_from(both, document);
+    assert_eq!(counted, 2, "both spans are compared");
+    assert_eq!(missing, vec!["a rule that is not".to_string()]);
+
+    // **The bold label is not a quotation.** `- **In** - ` opens every one of these lines, and
+    // a scanner treating every `*` alike would compare the word `In` against the document.
+    let labelled = "**In** - `spec/made-up.md`, *a rule that is written here*";
+    assert_eq!(
+        quotes_missing_from(labelled, document),
+        (1, Vec::new()),
+        "the bold label was read as an italic span"
+    );
+}

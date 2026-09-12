@@ -63,9 +63,18 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-101 - `move` names two places with a `$` and its command binds one
 
-**to** spec · **status** open · **raised** 2026-09-12 · **source** the specification lane asking
-this lane to confirm a gap it was not confident enough to file, after `P-456` settled that a unit
-carries no id
+**to** spec · **status** acted · **raised** 2026-09-12 · **acted** 2026-09-12 by `P-460`, which
+carries it to Sean · **source** the specification lane asking this lane to confirm a gap it was not
+confident enough to file, after `P-456` settled that a unit carries no id
+
+**Carried as `P-460`, and the two exclusions this item made are in it.** Two ways are offered and
+only one survives `P-456`: naming both places, `{move unit:pioneer from:1 to:2}`. Deriving `$from`
+from the unit needs a way to say **which** unit, which is the thing Sean has ruled out - so it is
+not a smaller change, it is a different rule needing a thing the game will not have.
+
+**And the scenario is not wrong**, which is worth keeping straight: it is unambiguous in every
+game this release can play. The test is a game the release cannot reach, built to show the rule
+rather than a failure - which is the difference between a gap and a defect.
 
 **Confirmed, and demonstrated rather than argued.** `spec/console.md`: **a command names a recipe
 and binds what that recipe leaves open: the place it acts in, and any ingredient or trait value it
