@@ -64,7 +64,7 @@ Two limits Claude holds itself to:
 
 ### P-479 - a description's traits rank by relevance, with an alphabetical middle
 
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered, from your choice of `B` with the middle left open · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+**to** sean · **status** open · **cited** `15ebf12`, `ee93b95` · **raised** 2026-09-13 · **kind** recovered, from your choice of `B` with the middle left open · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
 
 You chose `B`: state the top and the bottom, leave the middle alphabetical and deterministic, and
 place a trait explicitly when one annoys you enough.
