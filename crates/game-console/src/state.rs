@@ -119,8 +119,15 @@ fn write_entry(out: &mut String, entry: &Entry, depth: usize) {
 /// **`P-443` made this the same form rather than a second one.** `spec/console.md`: *a file
 /// may declare the vocabulary rather than use it, and it is written in the same form. `kind`,
 /// `trait`, `family` and `value` are themselves kinds, so a line that declares one is a
-/// description like any other and the rule above needs no exception. **A declaration is the third thing
-/// the one notation carries**, beside a command and a state.*
+/// description like any other and **needs no exception for being one**. **A declaration is the
+/// third thing the one notation carries**, beside a command and a state.*
+///
+/// **`P-484`, and the words barely moved for a reason worth keeping.** It read *the rule above
+/// needs no exception* until `P-482` gave the every-word rule an exception four lines higher.
+/// Both sentences stayed true and the pair misled: *needs no exception* is about these four
+/// words being kinds, and `P-482`'s exception is about five different words - `name`, `of`,
+/// `family`, `admits`, `kept`. A reader had to work out they were about different things, and
+/// nothing on the page said so.
 ///
 /// # Why this is a sibling of [`read`] and not a second reader
 ///
