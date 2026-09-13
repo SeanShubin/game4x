@@ -62,32 +62,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-482 - the rule that every word is a kind, a trait or a value does not mention its exceptions
-
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction, found by re-reading The language after `P-479` and `P-481` landed in it · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
-
-**Two sentences sixty-three lines apart now disagree**, and `P-481` widened the gap rather than
-creating it:
-
-```
-line  68  Every word in a data file is a kind, a trait, or one of a trait's values.
-          A file that uses any other word is wrong about the game rather than describing it.
-
-line 131  ... These are the two things in a data file that are not a kind, a trait,
-          or one of a trait's values.
-```
-
-**A reader meets the absolute form first**, and `spec/data/` uses `name` fifty-eight times.
-
-## The words, replacing the sentence at line 68
-
-> **Every word in a data file is a kind, a trait, or one of a trait's values, except the words the
-> notation reserves for itself.** A file that uses any other word is wrong about the game rather
-> than describing it.
-
-**Six words added and nothing else moves.** It does not name the two sets, because the sentence
-that does is in the same section and naming them twice is the thing this section has spent the
-evening removing.
+*Nothing is open. Everything filed has been decided.*
 
 ## Addressed to other perspectives
 
@@ -5258,6 +5233,7 @@ work the release exists to order.
 | P-480, nature's reclaim is the fourth of five things ending a turn does                                                      | `spec/turn.md` -> Order of operations                                                                                                                                                                    | 2026-09-13 |
 | P-481, the words a declaration is built from are the notation's own                                                          | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-13 |
 | P-483, a declaration leads with which thing it declares                                                                      | `spec/console.md` -> The language, and `spec/data/`                                                                                                                                                      | 2026-09-13 |
+| P-482, the rule that every word is a kind, a trait or a value does not mention its exceptions                                | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-13 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |

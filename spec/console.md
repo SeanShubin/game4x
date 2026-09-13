@@ -71,8 +71,9 @@ which say what that thing belongs to; then the notation's other words; then its 
 order above. **`name` is to a declaration what `id` is to a thing** - the difference is that an
 `id` tells one thing from its siblings and a `name` puts a word into the language.
 
-**Every word in a data file is a kind, a trait, or one of a trait's values.** A file that uses any
-other word is wrong about the game rather than describing it.
+**Every word in a data file is a kind, a trait, or one of a trait's values, except the words the
+notation reserves for itself.** A file that uses any other word is wrong about the game rather
+than describing it.
 
 **A file may declare the vocabulary rather than use it, and it is written in the same form.**
 `kind`, `trait`, `family` and `value` are themselves kinds, so a line that declares one is a
