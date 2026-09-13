@@ -13,6 +13,7 @@ use graph_coloring::color_graph;
 pub fn page() -> String {
     let mut groups = String::new();
     let mut frames = Vec::new();
+    let mut turned = Vec::new();
     let mut rows = String::new();
     // **Both families, folded first**, because which of them the game should use is Sean's and
     // the question he asked is answered by seeing them against each other. The colour count is
@@ -26,8 +27,10 @@ pub fn page() -> String {
             &coloured.colors,
             partner_of(&worlds, at),
         ));
-        let (x, y, w, h) = draw::extent(torus);
+        let (x, y, w, h) = draw::extent_turned(torus, false);
         frames.push(format!("[{x:.1},{y:.1},{w:.1},{h:.1}]"));
+        let (x, y, w, h) = draw::extent_turned(torus, true);
+        turned.push(format!("[{x:.1},{y:.1},{w:.1},{h:.1}]"));
         rows.push_str(&format!(
             "<tr><td>{}</td><td>{}</td><td>{}</td><td>{:?}</td><td>{}</td></tr>\n",
             torus.family.name(),
@@ -45,6 +48,8 @@ pub fn page() -> String {
     TEMPLATE
         .replace("{{groups}}", &groups)
         .replace("{{frames}}", &frames.join(","))
+        .replace("{{turned}}", &turned.join(","))
+        .replace("{{turn}}", &format!("{:.0}", draw::TURN))
         .replace("{{rows}}", &rows)
 }
 
@@ -112,6 +117,13 @@ const TEMPLATE: &str = r##"<!doctype html>
  text.id.lit { font-weight: 700; fill: #8f2626; }
  svg.no-ids text.id.lit { display: inline; }
  #reach { color: #8f2626; font-weight: 600; margin-left: 10px; }
+ /* **Flat-top is the pointy-top drawing turned thirty degrees, exactly.** `X-37` asks for the
+    toggle because Sean's *twelve up* and *twelve right* are flat-top readings, and neither is
+    a straight walk in a pointy-top picture. Nothing in the lattice moves - every adjacency,
+    every id and every wrap is identical - so this is one rotation and not a second geometry.
+    The ids are turned back so they stay upright, which is the only thing that should not
+    rotate with the drawing. */
+ #stage.flat text.id { transform-box: fill-box; transform-origin: center; transform: rotate(-30deg); }
 </style>
 <header>
  <h1>hex torus view &mdash; <span id="where"></span><span id="reach"></span></h1>
@@ -126,7 +138,10 @@ const TEMPLATE: &str = r##"<!doctype html>
  folded, ten axis-aligned and ten offset, labelled by how many territories each has.
  <kbd>T</kbd> jumps to the world with the same circumference in the other family, where there
  is one &mdash; same distance around, three times the territories, which is the folding itself.
- <kbd>[</kbd> <kbd>]</kbd> step &middot; <kbd>I</kbd> ids &middot; drag or
+ <kbd>[</kbd> <kbd>]</kbd> step &middot; <kbd>O</kbd> turns the drawing thirty degrees between pointy-top
+ and flat-top, which changes nothing in the lattice and everything about which walks read as
+ straight &mdash; Sean's <em>twelve up</em> and <em>twelve right</em> are flat-top readings
+ &middot; <kbd>I</kbd> ids &middot; drag or
  <kbd>&larr;&uarr;&darr;&rarr;</kbd> pan &middot; wheel zooms &middot; <kbd>R</kbd> resets.
  <strong>This settles whether the wrapping is legible and nothing about whether a torus should
  be the world's shape.</strong></p>
@@ -144,6 +159,9 @@ const TEMPLATE: &str = r##"<!doctype html>
 <svg id="stage">{{groups}}</svg>
 <script>
 const frames = [{{frames}}];
+const turned = [{{turned}}];
+const TURN = {{turn}};
+let flat = false;
 const stage = document.getElementById('stage');
 const groups = [...stage.querySelectorAll('.size')];
 let at = 0, zoom = 1, panX = 0, panY = 0, ids = true;
@@ -180,6 +198,14 @@ fold.addEventListener('click', () => { const other = partner(); if (other !== nu
 pick.appendChild(document.createElement('b')).textContent = 'same circumference';
 pick.appendChild(fold);
 
+// **The orientation is a button as well as a key**, for the reason every other control here is:
+// `X-35`, a control nobody can see is a control nobody uses.
+const turn = document.createElement('button');
+turn.id = 'turn';
+turn.addEventListener('click', () => { flat = !flat; show(); });
+pick.appendChild(document.createElement('b')).textContent = 'orientation';
+pick.appendChild(turn);
+
 function show() {
   groups.forEach((g, i) => g.classList.toggle('showing', i === at));
   buttons.forEach((b, i) => b.classList.toggle('here', i === at));
@@ -191,7 +217,12 @@ function show() {
     ? 'no partner at this circumference'
     : `${groups[other].dataset.family}, ${groups[other].dataset.cells} (T)`;
   light(null);
-  const [x, y, w, h] = frames[at];
+  // **One rotation, and the frame that matches it.** Turning the drawing changes which
+  // rectangle contains it, which is the only thing the orientation needs said twice.
+  groups.forEach(g => g.setAttribute('transform', flat ? `rotate(${TURN})` : ''));
+  stage.classList.toggle('flat', flat);
+  turn.textContent = flat ? 'flat-top (O)' : 'pointy-top (O)';
+  const [x, y, w, h] = (flat ? turned : frames)[at];
   const cx = x + w / 2, cy = y + h / 2;
   const vw = w / zoom, vh = h / zoom;
   stage.setAttribute('viewBox',
@@ -234,10 +265,11 @@ stage.addEventListener('pointerover', e => {
 stage.addEventListener('pointerleave', () => light(null));
 
 addEventListener('keydown', e => {
-  const step = frames[at][2] / 20;
+  const step = (flat ? turned : frames)[at][2] / 20;
   if (e.key === ']') at = Math.min(at + 1, groups.length - 1);
   else if (e.key === '[') at = Math.max(at - 1, 0);
   else if (e.key === 't' || e.key === 'T') { const other = partner(); if (other === null) return; at = other; e.preventDefault(); return reset(); }
+  else if (e.key === 'o' || e.key === 'O') flat = !flat;
   else if (e.key === 'i' || e.key === 'I') ids = !ids;
   else if (e.key === 'r' || e.key === 'R') return reset();
   else if (e.key === 'ArrowLeft') panX -= step;
@@ -261,7 +293,7 @@ stage.addEventListener('pointerdown', e => {
 });
 stage.addEventListener('pointermove', e => {
   if (!dragging) return;
-  const scale = frames[at][2] / zoom / stage.clientWidth;
+  const scale = (flat ? turned : frames)[at][2] / zoom / stage.clientWidth;
   panX -= (e.clientX - dragging.x) * scale;
   panY -= (e.clientY - dragging.y) * scale;
   dragging = { x: e.clientX, y: e.clientY };

@@ -158,13 +158,41 @@ pub fn group(torus: &Torus, colours: &[u8], partner: Option<usize>) -> String {
     out
 }
 
-/// How wide and tall the seven copies reach, so the page can frame them.
+/// How wide and tall the copies reach, so the page can frame them.
 pub fn extent(torus: &Torus) -> (f64, f64, f64, f64) {
+    extent_turned(torus, false)
+}
+
+/// **A flat-top drawing of this grid is the pointy-top one turned thirty degrees.** Exactly,
+/// with no scale: taking the pointy-top placement `x = √3(q + r/2), y = 1.5r` into the flat-top
+/// one `x = 1.5q, y = √3(r + q/2)` is left-multiplication by a matrix whose determinant is 1
+/// and whose angle is 30°, measured rather than reasoned.
+///
+/// **So the orientation toggle `X-37` asks for needs no second copy of any geometry.** One SVG
+/// `rotate(30)` on the group turns the whole drawing, and nothing in the lattice moves - every
+/// adjacency, every id and every wrap is identical. What changes is which walks read as
+/// natural, which is why it is not merely cosmetic to Sean even though nothing abstract moves:
+/// **his *twelve up* and *twelve right* are flat-top readings**, and neither is a straight walk
+/// in a pointy-top picture.
+///
+/// The one thing that does need saying twice is the frame, because turning the drawing changes
+/// what rectangle contains it.
+pub const TURN: f64 = 30.0;
+
+/// The frame, in whichever orientation the page is showing.
+pub fn extent_turned(torus: &Torus, turned: bool) -> (f64, f64, f64, f64) {
     let domain = torus.domain();
+    let angle = if turned {
+        std::f64::consts::PI / 180.0 * TURN
+    } else {
+        0.0
+    };
+    let (cos, sin) = (angle.cos(), angle.sin());
     let (mut left, mut right, mut top, mut bottom) = (f64::MAX, f64::MIN, f64::MAX, f64::MIN);
     for (shift, _) in copies(torus) {
         for (q, r) in &domain {
             let (x, y) = centre(q + shift.0, r + shift.1);
+            let (x, y) = (x * cos - y * sin, x * sin + y * cos);
             left = left.min(x - SIZE);
             right = right.max(x + SIZE);
             top = top.min(y - SIZE);

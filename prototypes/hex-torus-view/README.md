@@ -37,6 +37,13 @@ The offset family is that lattice, at ten sizes. **`W` must be even**, because t
 `(W, −W/2)` and half a cell is not a cell; that is the standard offset-coordinate constraint
 and is probably why the map he measured is twelve wide.
 
+**The bright world is the `W × H` array itself**, indexed by column and offset row. The axial
+rectangle `0..W × 0..H` is an equally valid set of representatives and draws as a
+parallelogram - the lattice is identical either way and only which copy is called bright
+moves - but the picture would then say *sheared lattice* where the whole claim is *the
+rectangle a 2D array holds*. **Found by drawing it and looking**, which is what the prototype
+is for.
+
 |                       | at 144 territories           | isotropic |
 | --------------------- | ---------------------------- | --------- |
 | offset `12 × 12`      | closes in 24, 12, 24         | no        |
@@ -89,6 +96,18 @@ from ten to twenty and the numerator did not: three is the number of *pairs*, an
 worlds. `partner_of`'s docstring says *three of the ten pair today* and is exactly right. A fact
 restated over a larger population without rescaling is a new shape, and worth a second's
 attention next time a count in this repository changes its denominator.
+
+**`O` turns the drawing thirty degrees, between pointy-top and flat-top.** It is drawing
+only: the lattice, every adjacency, every id and every wrap are identical, and what changes is
+which walks read as straight. **That is why it is not merely cosmetic** - Sean's *twelve up*
+and *twelve right* are flat-top readings, and neither is a straight walk in a pointy-top
+picture, so the measurement `X-37` rests on is unreadable in the other orientation.
+
+**Flat-top is the pointy-top drawing rotated by exactly thirty degrees**, measured rather than
+assumed: taking `x = √3(q + r/2), y = 1.5r` into `x = 1.5q, y = √3(r + q/2)` is a matrix of
+determinant 1 at 30°. So the page does it with one SVG `rotate(30)` and no second copy of any
+geometry. The ids are turned back so they stay upright, and each world carries a second frame,
+because turning the drawing changes which rectangle contains it.
 
 `I` toggles the ids, drag or the arrows pan, the wheel zooms, `R` resets.
 
@@ -238,6 +257,16 @@ that goes.
   read as a clean result
 - **`no_size_is_two_colourable`** - the folded ten, by finding an actual triangle at each,
   because `Exact(3)` alone is satisfied by a graph that only ever needed two
+- **`turning_thirty_degrees_is_the_flat_top_layout`** - 169 cells of a patch, asserting that
+  the rotation the page applies *is* the flat-top placement rather than something that looks
+  like it. The flat-top formula is written in the test and not in `draw`, because `draw` does
+  not need it - two routes to one point
+- **`the_page_can_turn_the_drawing`** - one frame per world in each orientation, and **that the
+  two frame arrays differ**, because a rotation that framed identically would mean the rotation
+  is not happening and the count alone would pass against a copy
+- **`the_offset_domain_is_the_array_a_game_would_store`** - the ten offset sizes, both
+  directions: every column and offset row of the `W × H` array appears exactly once, and every
+  cell of a patch four times the map reduces onto it
 - **`the_copies_tile_without_overlap_or_gap`** - all thirty, and **the gap half was missing
   for the whole life of the axis-aligned family**. Six echoes close round a hexagonal domain
   and leave the corners of a parallelogram open, so that family shipped with two notched

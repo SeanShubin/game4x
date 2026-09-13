@@ -383,3 +383,58 @@ fn the_three_families_meet_where_they_can() {
     );
     assert_eq!(folded.cells(), 48, "what it has at circumference 12 is 48");
 }
+
+/// The offset domain is the `W × H` array, indexed by column and offset row.
+///
+/// **The claim of this family is *the wrap you get free from storing a hex map as a 2D array***,
+/// so the bright world has to be that array. The axial rectangle `0..W × 0..H` is an equally
+/// valid set of representatives and draws as a **parallelogram** - the lattice is identical
+/// either way and only which copy is called bright moves, but the picture would then say
+/// *sheared lattice* where the point is *the rectangle the array holds*. Found by drawing it.
+#[test]
+fn the_offset_domain_is_the_array_a_game_would_store() {
+    let mut checked = 0;
+    for torus in offset_sizes() {
+        let (wide, tall) = (torus.k, torus.tall());
+        let domain = torus.domain();
+        assert_eq!(
+            domain.len(),
+            (wide * tall) as usize,
+            "W = {wide}: W·H cells"
+        );
+
+        // Every (column, offset row) of the array appears exactly once.
+        let mut seen: std::collections::BTreeSet<(i32, i32)> = std::collections::BTreeSet::new();
+        for (q, r) in &domain {
+            let row = r + q.div_euclid(2);
+            assert!(
+                (0..wide).contains(q) && (0..tall).contains(&row),
+                "W = {wide}: ({q}, {r}) is column {q} row {row}, outside the {wide} by {tall} \
+                 array"
+            );
+            assert!(
+                seen.insert((*q, row)),
+                "W = {wide}: column {q} row {row} is in the domain twice"
+            );
+        }
+        assert_eq!(
+            seen.len(),
+            (wide * tall) as usize,
+            "W = {wide}: the domain is not every cell of the array exactly once"
+        );
+
+        // **And reducing lands in it**, which is the half a set-of-cells claim does not make.
+        for q in -2 * wide..=2 * wide {
+            for r in -2 * tall..=2 * tall {
+                let (cq, cr) = torus.reduce(q, r);
+                let row = cr + cq.div_euclid(2);
+                assert!(
+                    (0..wide).contains(&cq) && (0..tall).contains(&row),
+                    "W = {wide}: ({q}, {r}) reduces to column {cq} row {row}, off the array"
+                );
+            }
+        }
+        checked += 1;
+    }
+    assert_eq!(checked, 10, "ten offset sizes");
+}

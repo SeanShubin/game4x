@@ -455,3 +455,93 @@ fn the_page_carries_the_hover_and_the_pairing() {
         "the header does not say what the toggle pairs"
     );
 }
+
+/// Turning the drawing thirty degrees is the flat-top layout, and changes nothing else.
+///
+/// **`X-37`'s second half.** Sean asked for a pointy-top against flat-top toggle, and it is
+/// drawing only: the abstract grid and every adjacency are identical, and what changes is which
+/// walks read as natural to a reader. **That is why it is not merely cosmetic even though
+/// nothing in the lattice moves** - his *twelve up* and *twelve right* are flat-top readings,
+/// and neither is a straight walk in a pointy-top picture.
+///
+/// The check is that the rotation is the flat-top placement exactly, which is what lets the
+/// page do it with one `rotate(30)` instead of a second copy of the geometry.
+#[test]
+fn turning_thirty_degrees_is_the_flat_top_layout() {
+    let turn = std::f64::consts::PI / 180.0 * draw::TURN;
+    let (cos, sin) = (turn.cos(), turn.sin());
+    let mut checked = 0;
+    for q in -6..=6 {
+        for r in -6..=6 {
+            let (px, py) = draw::centre(q, r);
+            let spun = (px * cos - py * sin, px * sin + py * cos);
+            // The flat-top placement, written here rather than in `draw` because `draw` does
+            // not need it - the page rotates instead. Two routes to one point.
+            let size = draw::centre(1, 0).0 / 3.0_f64.sqrt();
+            let flat = (
+                size * 1.5 * q as f64,
+                size * 3.0_f64.sqrt() * (r as f64 + q as f64 / 2.0),
+            );
+            assert!(
+                (spun.0 - flat.0).abs() < 1e-9 && (spun.1 - flat.1).abs() < 1e-9,
+                "({q}, {r}): turning the pointy-top placement gives {spun:?} and flat-top is \
+                 {flat:?}"
+            );
+            checked += 1;
+        }
+    }
+    assert_eq!(checked, 13 * 13, "every cell of the patch swept");
+}
+
+/// The page carries the orientation toggle, and a frame for each orientation.
+///
+/// **Two frames per world is the only thing the orientation needs said twice**, because turning
+/// the drawing changes which rectangle contains it. A page with one frame array would show the
+/// turned drawing through the unturned viewBox, which reads as a drawing that has drifted off
+/// centre rather than as a missing feature.
+#[test]
+fn the_page_can_turn_the_drawing() {
+    let page = hex_torus_view::page::page();
+    let worlds = hex_torus_view::both_families();
+    for (name, opens) in [("const frames = [", 16), ("const turned = [", 16)] {
+        let from = page
+            .find(name)
+            .unwrap_or_else(|| panic!("the page has no `{name}`"))
+            + opens;
+        let to = from + page[from..].find("];").expect("the array closes");
+        assert_eq!(
+            page[from..to].matches('[').count(),
+            worlds.len(),
+            "`{name}` does not carry one frame for each of the {} worlds",
+            worlds.len()
+        );
+    }
+    // **The two frames differ**, because a rotation that framed identically would mean the
+    // rotation is not happening - and this check would otherwise pass against a copy.
+    let grab = |name: &str| {
+        let from = page.find(name).expect("present") + 16;
+        let to = from + page[from..].find("];").expect("closes");
+        page[from..to].to_string()
+    };
+    assert_ne!(
+        grab("const frames = ["),
+        grab("const turned = ["),
+        "the turned frames are a copy of the unturned ones"
+    );
+    for what in [
+        "id = 'turn'",
+        "e.key === 'O'",
+        "rotate(${TURN})",
+        "#stage.flat text.id",
+    ] {
+        assert!(
+            page.contains(what),
+            "the orientation toggle is missing `{what}`"
+        );
+    }
+    let said = page.split_whitespace().collect::<Vec<_>>().join(" ");
+    assert!(
+        said.contains("between pointy-top and flat-top"),
+        "the header does not say what the orientation key does"
+    );
+}

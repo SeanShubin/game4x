@@ -264,9 +264,17 @@ impl Torus {
         // `−W/2`, which is the only thing that makes this a hex wrap rather than a square one,
         // and it is what makes the three axis pairs 2W, H, 2W rather than all equal.
         if let Family::Offset { tall } = self.family {
+            // **The representative is the cell of the `W × H` array**, which is the whole claim
+            // of this family: `col mod W`, `row mod H`, where *row* is the offset row and not
+            // the axial one. Taking the axial rectangle instead is a valid set of
+            // representatives and draws as a **parallelogram**, so the picture would say
+            // *sheared lattice* where the point is *the rectangle a 2D array holds*. The lattice
+            // is identical either way - only which copy is called bright moves.
             let columns = q.div_euclid(self.k);
-            let rows = (r + columns * self.k / 2).div_euclid(tall);
-            return (q - columns * self.k, r + columns * self.k / 2 - rows * tall);
+            let unshifted = r + columns * (self.k / 2);
+            let column = q - columns * self.k;
+            let rows = (unshifted + column.div_euclid(2)).div_euclid(tall);
+            return (column, unshifted - rows * tall);
         }
         let [a, b] = self.generators();
         // Three periods either way is more than enough for anything the viewer draws, and the
@@ -308,12 +316,13 @@ impl Torus {
             return square;
         }
         if let Family::Offset { tall } = self.family {
+            // Column `q`, offset row `row`, the way a 2D array is indexed - and the axial `r`
+            // that names the same hex is `row - floor(q/2)`. Ordered by row then column, so an
+            // id reads across the array the way a person would read the screen.
             let wide = self.k;
-            let mut grid: Vec<Cell> = (0..tall)
-                .flat_map(|r| (0..wide).map(move |q| (q, r)))
+            return (0..tall)
+                .flat_map(|row| (0..wide).map(move |q| (q, row - q.div_euclid(2))))
                 .collect();
-            grid.sort_by_key(|(q, r)| (*r, *q));
-            return grid;
         }
         let reach = 2 * self.k;
         let mut found: Vec<Cell> = Vec::new();
