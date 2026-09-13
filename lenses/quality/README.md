@@ -216,6 +216,11 @@ territory pays exactly the bin, and the bin it paid for is full.
 prefer the second, because the first is escaped by an ordinary refactor that nothing about the check
 will notice.
 
+**And the escape did not look like one**, which the code lane added and is the half that makes this
+a rule rather than a caution. They deleted a constant and called the fill and the payment one
+number - **which is true**. The cost left `game::cost` as a side effect of a correct sentence.
+A population defined by location is not escaped by carelessness; it is escaped by tidying.
+
 ## When a check compares two objects, the poison has two directions and they are not the same
 
 **2026-09-12, and the code lane found it after this lens had already poisoned the same check.**
