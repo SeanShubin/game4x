@@ -64,7 +64,7 @@ Two limits Claude holds itself to:
 
 ### P-476 - nothing outside the debug view says which of a set is held
 
-**to** sean · **status** open · **cited** `9baf0a2`, `1bbf7f7` · **raised** 2026-09-12 · **kind** contradiction, from your rule that only the debug report knows what is derived · **shape** text, rows and an instruction · **asks** approval · **into** `spec/console.md` -> The language, `spec/logistics.md` -> Containment, `spec/data/`, and `releases/first-release.md` -> Traits
+**to** sean · **status** open · **cited** `9baf0a2`, `1bbf7f7`, `cf1308e`, `2b677ac` · **raised** 2026-09-12 · **kind** contradiction, from your rule that only the debug report knows what is derived · **shape** text, rows and an instruction · **asks** approval · **into** `spec/console.md` -> The language, `spec/logistics.md` -> Containment, `spec/data/`, and `releases/first-release.md` -> Traits
 
 **You killed `A`**: a deposit's entry carries one number and two unknowns, and the count that
 resolves it sits in sibling entries joined by a rule the notation never states. It holds today only
