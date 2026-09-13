@@ -1,4 +1,10 @@
-//! The check `X-32` asks for, over all ten sizes with the count asserted.
+//! The check `X-32` asks for, over every case with the count asserted.
+//!
+//! **The population is per check and is stated by each.** Two of these run over both families,
+//! twenty worlds; the rest are properties of the `3k²` lattice and run over its ten. The
+//! axis-aligned family's own properties are in `tests/families.rs`. The two that were widened
+//! were narrow only because they were written when there was one family - `Q-87` is the same
+//! shape in the README, and neither was found by anything failing.
 //!
 //! **A person looking is the vetted-when and this is not a substitute for it.** What it
 //! catches is the thing a picture cannot be trusted about: whether *exactly N bright* is true
@@ -6,7 +12,7 @@
 //! over a population of one, which is why every assertion here is followed by how many cases
 //! there were.
 
-use hex_torus_view::{NEIGHBOURS, norm, sizes};
+use hex_torus_view::{NEIGHBOURS, both_families, norm, sizes};
 
 /// Exactly `N` cells are bright, and every cell in the plane is an echo of exactly one.
 ///
@@ -16,12 +22,19 @@ use hex_torus_view::{NEIGHBOURS, norm, sizes};
 #[test]
 fn exactly_n_cells_are_bright_and_every_cell_echoes_one_of_them() {
     let mut checked = 0;
-    for torus in sizes() {
+    // **Both families, because nothing here is about which lattice it is.** It ran over the
+    // folded ten for as long as there was one family, and the axis-aligned family landed under
+    // it without the loop being re-read - the same shape as `Q-87`, one file over. The quality
+    // lens found the narrowness, poisoned it, and withdrew the finding because the drawing
+    // tests already redden; the population is widened here anyway, because *covered somewhere
+    // else* and *checked here* are different claims and only one of them is this file's.
+    for torus in both_families() {
         let domain = torus.domain();
         assert_eq!(
             domain.len(),
             torus.cells(),
-            "k = {}: the fundamental domain holds {} cells and the family says 3k^2 = {}",
+            "{:?} k = {}: the fundamental domain holds {} cells and the family says {}",
+            torus.family,
             torus.k,
             domain.len(),
             torus.cells()
@@ -32,9 +45,11 @@ fn exactly_n_cells_are_bright_and_every_cell_echoes_one_of_them() {
         // makes *bright* a property of the cell rather than of the order they were visited in.
         let reach = 3 * torus.k;
         let mut seen = 0;
+        let mut reached: std::collections::BTreeSet<(i32, i32)> = std::collections::BTreeSet::new();
         for q in -reach..=reach {
             for r in -reach..=reach {
                 let cell = torus.reduce(q, r);
+                reached.insert(cell);
                 assert!(
                     domain.contains(&cell),
                     "k = {}: ({q}, {r}) reduces to {cell:?}, which is not a bright cell",
@@ -58,14 +73,45 @@ fn exactly_n_cells_are_bright_and_every_cell_echoes_one_of_them() {
         assert_eq!(
             seen,
             (2 * reach + 1) * (2 * reach + 1),
-            "k = {}: the sweep skipped a cell",
+            "{:?} k = {}: the sweep skipped a cell",
+            torus.family,
             torus.k
         );
+
+        // **And the other direction: every cell of the domain is reached.** The two halves
+        // above are *the domain is the right size* and *nothing reduces outside it*, and
+        // together they still allow a domain cell that nothing ever reduces to - a bright hex
+        // that is drawn and is not any territory.
+        //
+        // **For the folded family this could not fail**, because `domain` is built by
+        // reducing; for the axis-aligned family it can, because `domain` is the square
+        // `0..C x 0..C` written down independently of `reduce`. Found by poisoning the
+        // axis-aligned reduction to `r mod (C-1)` while widening this test to both families:
+        // six tests reddened elsewhere and this one stayed green, which is what a check with
+        // one direction missing looks like from the inside.
+        assert_eq!(
+            reached.len(),
+            domain.len(),
+            "{:?} k = {}: {} cells are reduced to and the domain has {} - a bright hex that is \
+             no territory",
+            torus.family,
+            torus.k,
+            reached.len(),
+            domain.len()
+        );
+        for cell in &domain {
+            assert!(
+                reached.contains(cell),
+                "{:?} k = {}: {cell:?} is drawn bright and nothing reduces to it",
+                torus.family,
+                torus.k
+            );
+        }
         checked += 1;
     }
     assert_eq!(
-        checked, 10,
-        "ten sizes, and the count so one cannot become ten"
+        checked, 20,
+        "both families, ten sizes each, and the count so one cannot become twenty"
     );
 }
 
@@ -300,7 +346,9 @@ fn every_direction_wraps_in_the_same_number_of_steps() {
 #[test]
 fn every_cell_has_six_distinct_neighbours() {
     let mut checked = 0;
-    for torus in sizes() {
+    // Both families: a cell neighbouring itself is a wrap folded onto itself whichever lattice
+    // did the folding.
+    for torus in both_families() {
         for (at, neighbours) in torus.adjacency().iter().enumerate() {
             let mut sorted = neighbours.clone();
             sorted.sort();
@@ -308,13 +356,15 @@ fn every_cell_has_six_distinct_neighbours() {
             assert_eq!(
                 sorted.len(),
                 6,
-                "k = {}: cell {at} has {:?} for neighbours",
+                "{:?} k = {}: cell {at} has {:?} for neighbours",
+                torus.family,
                 torus.k,
                 neighbours
             );
             assert!(
                 !neighbours.contains(&(at as u32)),
-                "k = {}: cell {at} is its own neighbour, so the wrap has folded it onto itself",
+                "{:?} k = {}: cell {at} is its own neighbour, so the wrap folded it onto itself",
+                torus.family,
                 torus.k
             );
             checked += 1;
@@ -322,8 +372,8 @@ fn every_cell_has_six_distinct_neighbours() {
     }
     assert_eq!(
         checked,
-        sizes().iter().map(|t| t.cells()).sum::<usize>(),
-        "every cell of every size"
+        both_families().iter().map(|t| t.cells()).sum::<usize>(),
+        "every cell of every size in both families"
     );
 }
 
