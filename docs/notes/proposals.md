@@ -62,43 +62,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-484 - one sentence says *except* and the next says *needs no exception*
-
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction, found by re-reading The language after its fourth proposal of the day · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
-
-**`P-482` gave the every-word rule an exception, and the sentence four lines below it says there is
-none.** They are consecutive paragraphs:
-
-```
-**Every word in a data file is a kind, a trait, or one of a trait's values, except the words the
-notation reserves for itself.** A file that uses any other word is wrong about the game rather
-than describing it.
-
-**A file may declare the vocabulary rather than use it, and it is written in the same form.**
-`kind`, `trait`, `family` and `value` are themselves kinds, so a line that declares one is a
-description like any other and the rule above needs no exception.
-```
-
-**Both are true and the pair misleads.** *Needs no exception* was written when the rule had none,
-and it is about **the four leading words** - `kind`, `trait`, `family`, `value` are kinds, so a
-declaring line is an ordinary description. `P-482`'s exception is about **five different words** -
-`name`, `admits`, `kept`, `of`, `family`. **A reader meeting *except* and then *no exception* four
-lines later has to work out that they are about different words**, and nothing on the page says so.
-
-## The words, replacing the second paragraph's last clause
-
-> `kind`, `trait`, `family` and `value` are themselves kinds, so a line that declares one is a
-> description like any other and **needs no exception for being one**.
-
-**Five words changed and the claim is unchanged.** It said the declaring *line* needs no exception
-and it still does; what it no longer does is appear to say the rule above has none.
-
-## Why this is filed rather than tidied
-
-**Resolving an ambiguity is choosing a reading**, and `CLAUDE.md` says a move that would change
-what a line claims is raised rather than made. This lane is confident the original meaning is *the
-line needs no exception* - but the sentence became ambiguous only an hour ago, and the lane that
-made it ambiguous is not the one that should settle what it always meant.
+*Nothing is open. Everything filed has been decided.*
 
 ## Addressed to other perspectives
 
@@ -5270,6 +5234,7 @@ work the release exists to order.
 | P-481, the words a declaration is built from are the notation's own                                                          | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-13 |
 | P-483, a declaration leads with which thing it declares                                                                      | `spec/console.md` -> The language, and `spec/data/`                                                                                                                                                      | 2026-09-13 |
 | P-482, the rule that every word is a kind, a trait or a value does not mention its exceptions                                | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-13 |
+| P-484, one sentence says *except* and the next says *needs no exception*                                                     | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-13 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |

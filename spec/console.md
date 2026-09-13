@@ -77,7 +77,7 @@ than describing it.
 
 **A file may declare the vocabulary rather than use it, and it is written in the same form.**
 `kind`, `trait`, `family` and `value` are themselves kinds, so a line that declares one is a
-description like any other and the rule above needs no exception. **A declaration is the third
+description like any other and **needs no exception for being one**. **A declaration is the third
 thing the one notation carries**, beside a command and a state.
 
 **A kind declares which family it is in; a family declares only its name.** **`thing` is the
