@@ -63,7 +63,6 @@ is, is where it appears**; nothing states its container. **Entries are in the or
 descriptions sort in, and the traits inside a description sort too**, so the same state is always
 the same bytes and a description is one string however it was built.
 
-
 **Every word in a data file is a kind, a trait, or one of a trait's values.** A file that uses any
 other word is wrong about the game rather than describing it.
 

@@ -62,6 +62,71 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-478 - three sentences in `spec/console.md` still say `a stored trait`, and five files still say `total capacity`
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** contradiction, found by the rule that a section taking a second proposal is re-read whole · **shape** text and an instruction · **asks** approval · **into** `spec/console.md` -> The language, and five files by rename
+
+**`P-476` made `kept` say where a value belongs and never whether one is held.** Three sentences
+in the same section still divide traits into *stored* and not:
+
+```
+spec/console.md:95   A trait of the kind is written with its value and a stored one with its name
+spec/console.md:99   A stored trait's name may carry a number on a kind's line
+spec/console.md:103  A stored trait with no number on the kind's line has no maximum
+```
+
+**They are not wrong, they are unsayable.** *Stored* used to mean `kept:thing`, and the word that
+meant it is gone - so a reader has three sentences using vocabulary the paragraph above them
+removed. **This is the first thing the re-read found**, and it is the `P-100` against `P-109`
+shape: both proposals passed the staleness check and the section still did not agree with itself.
+
+## The words, replacing the three
+
+> **A trait of the kind is written with its value and a trait of the thing with its name**, because
+> one is a fact about the kind and the other is a fact about each thing of it. So an Ark's
+> `strength` is `2` on the Ark's own line, and a citizen's `laboring` is named there and valued on
+> each citizen.
+
+> **A trait of the thing may carry a number on a kind's line, and that number is its maximum** -
+> where a thing of that kind begins, and the most it may hold. So a citizen's line reads
+> `laboring:1`. **`kept` still says `thing`**, because that is where the value belongs; what the
+> kind adds is a bound rather than a second home. **Which a number is, is read from the trait**:
+> `kept:kind` makes it the value and `kept:thing` makes it the maximum. **A trait of the thing with
+> no number on the kind's line has no maximum.**
+
+## The instruction: `total capacity` is now `capacity`
+
+**`P-475` renamed the trait and left the prose.** Ten sentences in six files still name the total
+*total capacity*, which is no longer the name of anything:
+
+```
+spec/console.md:178              set resource ... its total capacity and its density
+spec/control.md:53               extractors it has total capacity for, and their densities
+spec/economy.md:16               a territory with total capacity for three food extractors
+spec/orbit.md:11                 an orbit ... has total capacity
+spec/planet.md:47                a territory has total capacity for some number of extractors
+releases/first-release.md:20     quoting spec/planet.md
+releases/first-release.md:24     every territory has total capacity for at least one
+releases/first-release.md:66     a density and a total capacity per resource
+releases/first-release.md:311    `5 x 6` is total capacity for five extractors
+releases/first-release.md:312    total capacity for at least one food extractor
+```
+
+**Each becomes `capacity`**, and nothing else in those sentences changes.
+
+**The check**: `total capacity` and `total-capacity` appear nowhere in `spec/` or `releases/`
+except in the *Accepted* ledger and in an item's own history, where they are records of what was
+decided and not statements about the game.
+
+## What this lane has already fixed without asking, and reports
+
+- **The second Containment bullet was re-wrapped** after `P-476` landed a shorter sentence into a
+  longer one's lines. Whitespace only; the words are the approved ones
+- **`docs/designing-rules.md` quotes `P-374`'s *what is stored is the room left* twice**, which
+  `P-476` withdrew. `docs/` is the shared layer, so this lane will correct both to *at most* is
+  *there is free capacity* unless you say otherwise
+- **`S-30` said `binding` is declared by no trait and that `total capacity` is a declared trait.**
+  Both were true when written and neither is now. Corrected in this lane's own outbox
 ## Addressed to other perspectives
 
 ### S-122 - `P-475` and `P-476` landed, and between them they change every deposit entry
@@ -104,6 +169,21 @@ specification is now silent on it by design - the debug view is the one place it
 **`R-6`'s evidence line said every deposit entry carries `room`.** It is corrected in the same
 commit as this item, and it is the third time a status line in `releases/` has gone stale without
 anybody editing it - `docs/notes/nothing-removes.md` is the shape.
+
+## One thing to leave alone, because it is not settled yet
+
+**Ten sentences in `spec/` and `releases/` still say `total capacity`**, which is no longer the
+name of anything - `spec/console.md`, `spec/control.md`, `spec/economy.md`, `spec/orbit.md`,
+`spec/planet.md` and five lines of `releases/first-release.md`. **`P-478` is open with Sean and
+renames all ten to `capacity`.**
+
+**Build against the data files and the *Traits* table, which are current**, and not against those
+sentences. This lane is naming them so you do not spend the time discovering them and then
+discover they were already filed.
+
+**And three sentences in `spec/console.md` -> The language still say *a stored trait*** where
+`kept` no longer divides traits that way. Same proposal. They mean `kept:thing`, which is what the
+data file says, so nothing you build from `traits.4x` is affected.
 
 ### S-121 - `P-473` landed, and the column had four readers rather than one
 
@@ -3763,8 +3843,8 @@ garrison* is not a fact about a garrison, it is a fact about the pair. **A trait
 cannot say it**, because the line has no room for which container it is talking about. This is
 `C-47`'s capacity relation, and it is the one of the four tables that genuinely wants a file.
 
-**The other two rows of `Where things are` are trait references and need nothing** - *its total
-capacity for that kind* and *the unit's fuel* are `total capacity` and `fuel`, both declared. **And
+**The other two rows of `Where things are` are trait references and need nothing** - *its free
+capacity for that kind* and *the unit's fuel* are `free` and `fuel`, both declared. **And
 eight of the twelve bounds are relationships** - *the food produced here, through upkeep*, *as many
 as the extractors of its resource* - which rule 7 leaves in prose, correctly.
 
@@ -3773,9 +3853,8 @@ are declared traits - `Strength`, `Fuel`, `Upkeep`, `Movable`, and `Readies` onc
 answered. **The other five are not:**
 
 - **`Costs to produce`** is a list, which is `C-98`'s cell one table over - correct in `C-102`
-- **`Binding`** is an of-the-kind number and **no trait declares it**, though `metal in it` is
-  defined as *its binding plus the metal in its parts*, so a derived trait reads a name the Traits
-  table does not have
+- **`Binding`** is a declared trait of the kind - `{trait admits:number kept:kind name:binding}` -
+  which `P-476` settled, and the *Traits* table carries its definition in the **Values** cell
 - **`Crosses`** is `orbit border` or `border`, which is neither a kind nor a declared trait
 - **`Requires`** is *a Yard*, a kind, and nothing declares the trait that would hold it
 

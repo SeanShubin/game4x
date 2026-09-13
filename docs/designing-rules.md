@@ -226,15 +226,15 @@ place**, because the contents are a count and finding the greatest means proving
 
 ## The folds, and what to do with each
 
-| Fold                    | Allowed        | How it is written                                                                    |
-| ----------------------- | -------------- | ------------------------------------------------------------------------------------ |
-| **sum**                 | **free**       | it is the marking of a place. You never compute it                                   |
-| **min**                 | **yes**        | a pairing - one rule that spends one of each, fired as many times as it can          |
-| **at least n**          | **yes**        | an input arc of weight `n` - a `require` or a `consume` of `n`                       |
-| **at most n**           | **yes**        | a capacity. `P-374`: what is stored is the room left, so *at most* is *room remains* |
-| **a number per kind**   | **yes**        | an amount read from a trait - `P-376`                                                |
-| **max**                 | **no**         | *nothing is greater* is a zero test. Over things you have named it is allowed        |
-| **a branch on absence** | **it depends** | an inhibitor arc on an unbounded place. On a capacity-bounded one it is free         |
+| Fold                    | Allowed        | How it is written                                                                        |
+| ----------------------- | -------------- | ---------------------------------------------------------------------------------------- |
+| **sum**                 | **free**       | it is the marking of a place. You never compute it                                       |
+| **min**                 | **yes**        | a pairing - one rule that spends one of each, fired as many times as it can              |
+| **at least n**          | **yes**        | an input arc of weight `n` - a `require` or a `consume` of `n`                           |
+| **at most n**           | **yes**        | a capacity. `P-476`: three names and two facts, so *at most* is *there is free capacity* |
+| **a number per kind**   | **yes**        | an amount read from a trait - `P-376`                                                    |
+| **max**                 | **no**         | *nothing is greater* is a zero test. Over things you have named it is allowed            |
+| **a branch on absence** | **it depends** | an inhibitor arc on an unbounded place. On a capacity-bounded one it is free             |
 
 
 ### `min` is a pairing, and the game already contains one
@@ -317,8 +317,8 @@ times as its inputs allow.
 *that* instead. A rule that should fire only without a garrison is usually a rule that should fire
 when something else is there.
 
-**Absence is sometimes a capacity, and sometimes only looks like one.** `P-374` makes *room for a
-garrison* a count, so *there is no garrison* and *there is room for one* coincide - **but only where
+**Absence is sometimes a capacity, and sometimes only looks like one.** `P-476` makes *free capacity for a
+garrison* a count, so *there is no garrison* and *there is free capacity for one* coincide - **but only where
 the capacity is exactly one.** `spec/invariants.md` states the trap: *those differ wherever a
 capacity is more than one, and agree only by accident where it is one.* Use it knowing which case
 you are in.
