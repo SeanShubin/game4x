@@ -97,6 +97,26 @@ restoring counts - checked against all eleven of the world's recipes at turn 9, 
 fires and everything fits. **None of them is the world gathering**, so solar would be the first
 world recipe producing something that is neither population nor a restored count.
 
+**Both of those were answered.** Collecting is a **player** action, not an end-turn phase, so the
+five stand untouched. And the tank does empty - this lane's *never empties* assumed collection was
+automatic, and a player who moves twice without collecting empties it.
+
+**And the ark may collect and move in the same turn, giving three spaces on the first.** Two
+things follow that have not been said:
+
+- **The release gives the ark `moving 1`**, and `move` requires *moving at least 1* and leaves
+  *moving one less*. Three spaces in one turn needs **`moving 3`** - and 3 is exactly 2 stored
+  plus 1 collected, so it is the most fuel an ark can hold in one turn rather than a number
+  chosen. Every turn after is 1 collected and 1 spent, which is the *difference on the first
+  turn* exactly
+- **Collecting needs a count of its own and nothing has named one.** Without it, move, collect,
+  move, collect is unbounded: each collect refills what the last move spent. **`collecting 1` on
+  the ark's line** closes it, and with `moving 3` gives exactly three
+
+**One thing to avoid**: making the ark's `moving` *be* its fuel. The two numbers would be one for
+an ark and two for a pioneer, so one trait would mean different things for different kinds - the
+lie `spec/invariants.md` warns about. Keep them separate and let fuel bind in practice.
+
 ## Said 2026-09-13: the turn report shows each of end-turn's five phases
 
 *I want to break down `reports/turns.html` even further. Right now we have 2 sections, "what your
