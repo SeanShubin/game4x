@@ -137,6 +137,27 @@ to hold more fuel than it can spend in a turn.
 
 **And Sean has said the *stores no fuel* sentence in `spec/units.md` has to go.**
 
+**A third option, said 2026-09-13.** `moving` is the number of moves in a turn; each move covers
+**up to** a certain number of spaces; each move costs energy. For this release: an ark moves once,
+for 1 energy, up to 2 spaces; a pioneer moves twice, 1 energy each, 1 space each.
+
+**Both cover two spaces a turn and the ratios differ.** The ark gets two spaces per energy and
+cannot stop halfway; the pioneer gets one space per energy and can. **Orbital travel is twice as
+efficient and ground travel twice as flexible** - harnessing against fighting gravity said as a
+ratio rather than a flag. And the ark collecting 1 and spending 1 is self-sufficient forever,
+while the pioneer spends 2 a turn and stays tethered to supply.
+
+**The cost is not the third number, it is that the notation cannot say *up to 2 spaces*.** All
+eight expressions are about one thing, one trait, or a count of things matching a description, and
+`move` says *a place joined to `$from` by an edge the unit crosses* - one edge. `spec/planet.md`
+says distance *can be computed by adjacency*, which is true of the world and not offered to a
+recipe.
+
+**So this needs the language's first expression about paths** - a distance, or reachable-within-n.
+Without it, *up to 2 spaces* has to be written as two one-space moves, which is the pioneer, and
+the ark's distinctness disappears. **The whole value of the idea is that cost attaches to the move
+rather than to the distance**, and nothing else in the language can express that.
+
 ## Said 2026-09-13: the turn report shows each of end-turn's five phases
 
 *I want to break down `reports/turns.html` even further. Right now we have 2 sections, "what your
