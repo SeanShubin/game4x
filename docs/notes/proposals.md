@@ -92,6 +92,19 @@ in prose instead of code.
 > nothing* said about a sentence. **So a habit is written as where to look until it has caught
 > something it did not come from**, and says which it is.
 
+## Why this needed you rather than being a `CLAUDE.md` fix this lane makes
+
+**That file leaves wording, paths, broken links and consistency to this lane, and reserves the
+columns, the addresses and the promotion protocol for you.** This is none of those: it is a new
+rule, and it is a rule about **how work is judged** - which sits against the file's self-governing
+core, the part that says an approval for it comes from you directly.
+
+**The test is what the rule touches and not where it came from.** This lane first wrote that a
+producer should not carry a lens's finding into that file at all, and the research lane refused
+it: applied generally, provenance would route a broken link to you because a lens happened to spot
+it, and would let any lane promote a typo into a proposal by being the one to see it. **The origin
+of a finding does not change whether the change is substance.**
+
 ## What this rests on, stated because it is the whole point
 
 **One instance, and the lane it is about found it in itself.** The argument is not from a count -
