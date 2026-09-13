@@ -62,9 +62,109 @@ Two limits Claude holds itself to:
 
 ## Open
 
-*Nothing is open. Everything filed has been decided.*
+### P-488 - `CLAUDE.md`'s column table omits two paths that `hooks/pre-commit` already assigns
+
+**to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction, found by you asking who owns the scenario · **shape** rows · **asks** approval · **into** `CLAUDE.md` -> Perspectives
+
+**You asked who owns the scenario. Two things answer it and `CLAUDE.md` is not one of them.**
+
+```
+docs/process.md   "From the coding lane, I read and verify the input and the expected data
+                   from the scenario test"
+                  "the scenario's commands and expected data. The coding instance's job is
+                   to follow the specification"
+
+hooks/pre-commit  crates/*|web/*|commands/*|prototypes/*|scenario/*|reports/*) echo "code"
+
+CLAUDE.md         | **Code** | `crates/`, `web/`, `commands/`, `prototypes/`, cargo |
+```
+
+**All twenty-seven commits to `scenario/` are the code lane's.** So the practice, your document and
+the hook agree, and the one table a lane actually reads to learn its column does not list it.
+
+**This matters because the hook is the thing with teeth.** It refuses a commit spanning two
+columns, and it can only do that by classifying every path - so a path missing from the table is
+not missing from the mechanism, it is silently assigned by a file nobody reads.
+
+## The row
+
+| Perspective | Writes                                                                        | Reads      |
+| ----------- | ----------------------------------------------------------------------------- | ---------- |
+| **Code**    | `crates/`, `web/`, `commands/`, `prototypes/`, `scenario/`, `reports/`, cargo | everything |
+
+**Your approval is needed rather than reported**, because this is what the file says about who may
+write what.
+
+## One thing this does not settle, and it is about you rather than a lane
+
+**`scenario/expected/play.4x` is written by the code lane and vetted by you** - its own header says
+so, and `docs/process.md` says *that is what I vet*. **Being in the code lane's column is about who
+may edit the file, not about who decides whether it is right.** The row above says the first and
+nothing about the second, which is already true of `releases/` in the other direction.
 
 ## Addressed to other perspectives
+
+### S-128 - a pioneer's bin: three promotions, and the dump has to start showing what a unit holds
+
+**to** code · **status** open · **raised** 2026-09-13 · **source** promoting all three, then running the arithmetic against the scenario
+
+**`39a42c6`.** `P-486`, `P-487` and `P-485`, in that order, and the third depends on the first two.
+
+## The rules
+
+```
+spec/units.md      A mobile unit that moves over the ground has a bin for fuel. **It is built
+                   with that bin full, and the energy is paid where it is built.**
+
+spec/logistics.md  **When a thing that contains things is consumed, what it held falls loose
+                   where it stood.** It is not destroyed with its container: it goes into
+                   disorder, and at the turn's end what there is room for is kept and the rest
+                   is lost.
+```
+
+**`P-486` restores what `P-66` promoted and `0aca92d` lost on 2026-09-01.** The six energy in
+`produce pioneer` was its last trace - a fill for a bin the specification had stopped saying gets
+filled.
+
+## The rows
+
+```
+| **produce pioneer** | player | consume | 3 | metal   |                      |              |
+|                     |        | consume | 2 | citizen |                      |              |
+|                     |        | put     | 2 | energy  |                      | that pioneer |
+|                     |        | produce | 1 | pioneer |                      |              |
+| **refuel**          | player | require | 1 | unit    | with room for energy | `$where`     |
+|                     |        | put     | 1 | energy  |                      | that unit    |
+```
+
+**`produce pioneer` no longer consumes energy at all.** Three metal and two citizens, as `P-67` had
+it, and two energy **put** rather than consumed.
+
+## What this asks of the dump, and it is the point
+
+**A bin is containment**, so `spec/logistics.md`'s *a thing appears inside what holds it* means a
+full pioneer reads:
+
+```
+{pioneer id:1 defending:1 moving:1} -> 1
+  {energy} -> 2
+```
+
+**It shows nothing inside a pioneer today while the entity view says `fuel 2`, falling to 1 after
+the move.** Those two views disagree, and this is the change that makes them agree. **`P-485` began
+as the report of that disagreement**, so closing it is closing the finding.
+
+## What moves in the scenario, derived rather than guessed
+
+**Turn 7 produces the pioneer and turn 8 moves it.** Under these rules turn 7's territory keeps six
+energy it used to spend and gives two to the pioneer, so **territory 1 ends turn 7 four energy
+better off**, and the pioneer carries two where the state showed none. Turn 8's move takes one of
+them. **Turn 9 founds, and `P-487` says the remaining one falls loose in territory 2** - to be
+stowed if there is room and lost if there is not.
+
+**Check that last one rather than assume it**: territory 2 is founded in the same act, so whether
+it has a store for energy at the moment the pioneer dissolves is a question about ordering within
+`found by land`, and this lane cannot answer it from the release.
 
 ### S-127 - `P-484` moves a sentence your doc comment quotes, and you are green right now
 
