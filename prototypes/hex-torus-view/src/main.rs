@@ -1,4 +1,4 @@
-//! Writes `drawing/index.html` - ten worlds to step through, and the numbers beside them.
+//! Writes `drawing/index.html` - twenty worlds to step through, and the numbers beside them.
 //!
 //! **A page rather than a window**, which is `gap-view`'s shape and not `goldberg-view`'s. The
 //! deliverable is the answer to a question, and a file Sean can open without a build reaches
@@ -8,7 +8,7 @@
 //! Pass a directory to write somewhere else.
 
 use graph_coloring::color_graph;
-use hex_torus_view::{draw, sizes};
+use hex_torus_view::{Family, both_families, draw};
 
 fn main() {
     let mut arguments = std::env::args().skip(1);
@@ -20,19 +20,21 @@ fn main() {
     let mut groups = String::new();
     let mut frames = Vec::new();
     let mut rows = String::new();
-    for torus in sizes() {
+    // **Both families, folded first**, because which of them the game should use is Sean's and
+    // the question he asked is answered by seeing them against each other. The colour count is
+    // no longer asserted here: the axis-aligned family needs four unless three divides `C`,
+    // which is a real difference between them and something the page should show.
+    for torus in both_families() {
         let coloured = color_graph(&torus.adjacency());
-        assert_eq!(
-            coloured.color_count, 3,
-            "k = {}: {} colours, and this page says three",
-            torus.k, coloured.color_count
-        );
         groups.push_str(&draw::group(&torus, &coloured.colors));
         let (x, y, w, h) = draw::extent(&torus);
         frames.push(format!("[{x:.1},{y:.1},{w:.1},{h:.1}]"));
         rows.push_str(&format!(
             "<tr><td>{}</td><td>{}</td><td>{}</td><td>{:?}</td></tr>\n",
-            torus.k,
+            match torus.family {
+                Family::Folded => "folded",
+                Family::AxisAligned => "axis-aligned",
+            },
             torus.cells(),
             torus.circumference(),
             coloured.method
@@ -50,8 +52,8 @@ fn main() {
     println!("Open it. At each size, zoomed out: exactly N hexes are undimmed, and every");
     println!("dimmed hex shows the id of an undimmed one. That is what `X-32` asks you to see.");
     println!();
-    println!("[ and ] step the sizes, I toggles ids, drag or the arrows pan, the wheel zooms,");
-    println!("R resets.");
+    println!("[ and ] step the twenty - ten folded, then ten axis-aligned - I toggles ids,");
+    println!("drag or the arrows pan, the wheel zooms, R resets.");
 }
 
 const PAGE: &str = r##"<!doctype html>
@@ -78,7 +80,7 @@ const PAGE: &str = r##"<!doctype html>
  <p>One complete world is drawn bright and every other hex is an echo of it. <strong>Turn the
  ids on and watch the same number appear in every direction</strong> &mdash; that is the same
  territory again, not more world.</p>
- <p><kbd>[</kbd> <kbd>]</kbd> step the ten sizes &middot; <kbd>I</kbd> ids &middot; drag or
+ <p><kbd>[</kbd> <kbd>]</kbd> step the twenty &mdash; ten folded, then ten axis-aligned &middot; <kbd>I</kbd> ids &middot; drag or
  <kbd>&larr;&uarr;&darr;&rarr;</kbd> pan &middot; wheel zooms &middot; <kbd>R</kbd> resets.
  <strong>This settles whether the wrapping is legible and nothing about whether a torus should
  be the world's shape.</strong></p>
@@ -100,7 +102,7 @@ function show() {
   stage.classList.toggle('no-ids', !ids);
   const g = groups[at];
   document.getElementById('where').textContent =
-    `${g.dataset.cells} territories, k = ${g.dataset.k}, ${g.dataset.cells / 1} bright and six echoes`;
+    `${g.dataset.family} — ${g.dataset.cells} territories, circumference ${g.dataset.around}, one bright world and six echoes`;
 }
 function reset() { zoom = 1; panX = 0; panY = 0; show(); }
 
@@ -142,7 +144,7 @@ show();
 </script>
 <div style="padding: 8px 16px">
 <table>
-<tr><th>k</th><th>territories</th><th>circumference</th><th>colouring</th></tr>
+<tr><th>family</th><th>territories</th><th>circumference</th><th>colouring</th></tr>
 {{rows}}
 </table>
 </div>

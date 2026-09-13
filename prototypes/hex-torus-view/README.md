@@ -24,9 +24,35 @@ as the same territory rather than as more world. Ids are on by default here, unl
 [`crates/graph-coloring`](../../crates/graph-coloring/) climbs 2, then 3, then 4 and reports
 which succeeded; it comes back three at every size.
 
+## Two families, because Sean asked what a square grid has that a hex grid cannot
+
+**Nothing.** Wrap each axial coordinate on its own - `q mod C`, `r mod C` - and the shifts are
+`(±C, 0)`, `(0, ±C)`, `(±C, ∓C)`. The wrap is **coordinate-wise**, which is the whole of why
+square-grid pathing is easy, and it is isotropic: all six directions close in `C`.
+
+**And it is the `3k²` lattice unfolded.** The axis-aligned lattice at `C = 3k` sits inside the
+`3k²` one with index exactly **three** - same circumference, a third of the territories. So
+`3k²` is this torus folded into three, **and the folding is what destroys the coordinate-wise
+wrap. Hexes were never the cause.**
+
+|                        | circumnavigates            | wraps at C=6 | colours                             |
+| ---------------------- | -------------------------- | ------------ | ----------------------------------- |
+| folded, `N = 3k²`      | 105% of a sphere that size | 33% of steps | three, always                       |
+| axis-aligned, `N = C²` | 61%, at every size         | 21% of steps | three where `3 ∣ C`, four otherwise |
+
+**The axis-aligned family wins on pathing and on wrap frequency and loses one row**, and that
+row is the one the `3k²` family was chosen for. Which the game should use is not settled here.
+**Both are drawn**, folded first, because seeing them against each other is what answers the
+question - and deleting a mode later is one line where deciding for him is not.
+
+The colour count is an output rather than a setting, so the page reports the difference without
+being told: four colours at `C = 4, 5, 7, 8, 10, 11`.
+
 ## The ten sizes
 
-`N = 3k²` territories with a circumference of `3k`, for `k = 2..=11`.
+The folded family: `N = 3k²` territories with a circumference of `3k`, for `k = 2..=11`.
+The axis-aligned family is `N = C²` for `C = 3..=12` - 9, 16, 25, 36, 49, 64, 81, 100, 121, 144.
+**`C = 1` and `2` are dropped as degenerate**, the way `k = 1` is.
 
 |     | territories | circumference | a sphere that size |
 | --- | ----------- | ------------- | ------------------ |

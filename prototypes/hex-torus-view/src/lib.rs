@@ -27,9 +27,35 @@
 
 pub mod draw;
 
-/// A hex torus: the plane quotiented by the `3k^2` lattice.
+/// Which wrapping, because there are two and they are the same lattice at two foldings.
+///
+/// **Sean asked what a wrapping square grid has that a hex grid cannot, and the answer is
+/// nothing.** Wrap each axial coordinate on its own - `q mod C`, `r mod C` - and the shifts
+/// are `(±C, 0)`, `(0, ±C)`, `(±C, ∓C)`. The wrap is **coordinate-wise**, which is the whole
+/// of why square-grid pathing is easy, and it is isotropic: all six directions close in `C`.
+///
+/// **And it is the `3k²` lattice unfolded.** The axis-aligned lattice at `C = 3k` sits inside
+/// the `3k²` lattice with index exactly **3** - measured at `k = 2, 3, 4` and asserted in
+/// `tests/families.rs`. So `3k²` is this torus folded into three: same circumference, a third
+/// of the territories, **and the folding is what destroys the coordinate-wise wrap.** Hexes
+/// were never the cause.
+///
+/// **Both are built rather than one chosen**, because which of them the game should use is
+/// Sean's and showing them against each other is what answers the question he asked. Deleting
+/// a mode later is one line; deciding for him is not.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Family {
+    /// `N = 3k²`, circumference `3k`. Circumnavigates at 105% of a sphere that size.
+    Folded,
+    /// `N = C²`, circumference `C`. Coordinate-wise, and 61% of a sphere at every size.
+    AxisAligned,
+}
+
+/// A hex torus: the plane quotiented by one of the two lattices.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Torus {
+    pub family: Family,
+    /// `k` for [`Family::Folded`] and `C` for [`Family::AxisAligned`].
     pub k: i32,
 }
 
@@ -46,13 +72,36 @@ pub fn norm(q: i32, r: i32) -> i32 {
 
 impl Torus {
     pub fn new(k: i32) -> Self {
-        assert!(k >= 1, "a torus needs k >= 1");
-        Torus { k }
+        Torus::folded(k)
     }
 
-    /// How many territories: `3k^2`.
+    /// The `3k²` family, which is what `X-32` specified and Sean first looked at.
+    pub fn folded(k: i32) -> Self {
+        assert!(k >= 1, "a torus needs k >= 1");
+        Torus {
+            family: Family::Folded,
+            k,
+        }
+    }
+
+    /// The axis-aligned family, which wraps each coordinate on its own.
+    pub fn axis_aligned(circumference: i32) -> Self {
+        assert!(
+            circumference >= 3,
+            "C = 1 and 2 are degenerate, as k = 1 is"
+        );
+        Torus {
+            family: Family::AxisAligned,
+            k: circumference,
+        }
+    }
+
+    /// How many territories: `3k²` folded, `C²` axis-aligned.
     pub fn cells(&self) -> usize {
-        (3 * self.k * self.k) as usize
+        match self.family {
+            Family::Folded => (3 * self.k * self.k) as usize,
+            Family::AxisAligned => (self.k * self.k) as usize,
+        }
     }
 
     /// How many steps to go all the way round, in any of the six directions: `3k`.
@@ -60,12 +109,18 @@ impl Torus {
     /// **The same in all six, which is what isotropic means here** and what
     /// [`Torus::circumnavigations_agree`] asserts rather than assumes.
     pub fn circumference(&self) -> i32 {
-        3 * self.k
+        match self.family {
+            Family::Folded => 3 * self.k,
+            Family::AxisAligned => self.k,
+        }
     }
 
     /// The two generators of the wrapping lattice.
     pub fn generators(&self) -> [Cell; 2] {
-        [(self.k, self.k), (-self.k, 2 * self.k)]
+        match self.family {
+            Family::Folded => [(self.k, self.k), (-self.k, 2 * self.k)],
+            Family::AxisAligned => [(self.k, 0), (0, self.k)],
+        }
     }
 
     /// The canonical cell of the copy `(q, r)` belongs to.
@@ -87,6 +142,15 @@ impl Torus {
     /// *nearest, then largest `r`, then largest `q`* - arbitrary, and the only thing that
     /// matters is that it is a function of the class rather than of the route in.
     pub fn reduce(&self, q: i32, r: i32) -> Cell {
+        // **The axis-aligned family reduces each coordinate on its own**, which is the whole
+        // of the point: `q mod C` and `r mod C` independently is what makes square-grid
+        // pathing easy, and a nearest-translate reduction would throw it away for a hexagonal
+        // region that wraps exactly as often. Measured: the wrap rate is identical either way
+        // - 41%, 31%, 25% at C = 3, 4, 5 - and only the square region uses each of its six
+        // edges the same number of times.
+        if let Family::AxisAligned = self.family {
+            return (q.rem_euclid(self.k), r.rem_euclid(self.k));
+        }
         let [a, b] = self.generators();
         // Three periods either way is more than enough for anything the viewer draws, and the
         // assertion below says so rather than trusting it.
@@ -119,6 +183,13 @@ impl Torus {
     /// **Enumerated from a region big enough to contain the domain, then reduced** - so the
     /// domain is whatever the reduction says it is rather than a shape written here twice.
     pub fn domain(&self) -> Vec<Cell> {
+        if let Family::AxisAligned = self.family {
+            let mut square: Vec<Cell> = (0..self.k)
+                .flat_map(|r| (0..self.k).map(move |q| (q, r)))
+                .collect();
+            square.sort_by_key(|(q, r)| (*r, *q));
+            return square;
+        }
         let reach = 2 * self.k;
         let mut found: Vec<Cell> = Vec::new();
         for q in -reach..=reach {
@@ -181,7 +252,20 @@ impl Torus {
     }
 }
 
-/// The ten sizes `X-32` names, which are `k = 2..=11`.
+/// The ten `3k²` sizes `X-32` names, which are `k = 2..=11`.
 pub fn sizes() -> Vec<Torus> {
-    (2..=11).map(Torus::new).collect()
+    (2..=11).map(Torus::folded).collect()
+}
+
+/// The ten axis-aligned sizes, which are `C = 3..=12`.
+///
+/// **`C = 1` and `2` are dropped as degenerate**, the way `k = 1` is dropped from the other
+/// family.
+pub fn axis_aligned_sizes() -> Vec<Torus> {
+    (3..=12).map(Torus::axis_aligned).collect()
+}
+
+/// Both families, folded first, which is the order the viewer steps through.
+pub fn both_families() -> Vec<Torus> {
+    sizes().into_iter().chain(axis_aligned_sizes()).collect()
 }

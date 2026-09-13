@@ -66,9 +66,13 @@ pub fn group(torus: &Torus, colours: &[u8]) -> String {
     let domain = torus.domain();
     let mut out = String::new();
     out.push_str(&format!(
-        "<g class=\"size\" data-k=\"{}\" data-cells=\"{}\">\n",
-        torus.k,
-        torus.cells()
+        "<g class=\"size\" data-cells=\"{}\" data-around=\"{}\" data-family=\"{}\">\n",
+        torus.cells(),
+        torus.circumference(),
+        match torus.family {
+            crate::Family::Folded => "folded",
+            crate::Family::AxisAligned => "axis-aligned",
+        }
     ));
     for (shift, bright) in copies(torus) {
         for (at, (q, r)) in domain.iter().enumerate() {
