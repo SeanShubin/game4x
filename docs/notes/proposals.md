@@ -62,6 +62,53 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-477 - the derived-trait guarantee moves to where the layout lives
+
+**to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered, from your choice of `C` · **shape** text and an instruction · **asks** approval · **into** `spec/invariants.md` -> The data is a normalized relational model, and The game is data
+
+You chose `C`. **The guarantee is kept and said next to the rule that makes it true**, instead of
+standing four sections earlier as a free-standing claim about storage.
+
+## The words, added as the last bullet of `## The data is a normalized relational model`
+
+> - **The one thing that knows how the data is held is the only thing that writes it**, so a value
+>   computed from others cannot be left wrong - there is nowhere to write it wrong from.
+
+**It goes after the debug-view bullet**, so the section reads: the model is normalized, the
+notation is a text form of it, the layout is an implementation detail, one thing knows it,
+the debug view is the layout's other reader - and then this, which is what having exactly one
+writer buys.
+
+## The instruction: the old bullet goes
+
+**`## The game is data` loses its last bullet**, which is the one `P-476` left behind:
+
+```
+- A trait may be derived rather than stored, computed from what is there. Nothing can leave a
+  derived trait wrong, because nothing writes one
+```
+
+**That section then ends at *Nothing in the state is special to a kind*.**
+
+**The check**: `derived rather than stored` appears nowhere in `spec/`, `## The game is data` has
+one fewer bullet, and `spec/invariants.md` is one line longer than it was - the old bullet is two
+lines and the new one is two.
+
+## Why the words changed rather than moved
+
+**The old bullet said two things and only one of them survives.** *A trait may be derived rather
+than stored* is the half `P-476` removed everywhere else, and it is not in the new bullet. *Nothing
+can leave a derived trait wrong* is the half worth keeping, and it is stated as a consequence of
+one writer rather than as a fact about traits.
+
+**So this is not a move and does not claim to be.** It is a deletion and an addition, which is why
+the instruction and the words are listed apart.
+
+## What this does not touch
+
+`## A fact is stated once` is untouched. Its second bullet - *a fact is stated once and every other
+form of it is derived* - is the rule this guarantee protects, and saying it again there was
+alternative `B`, which you did not take.
 ### P-478 - three sentences in `spec/console.md` still say `a stored trait`, and five files still say `total capacity`
 
 **to** sean · **status** open · **raised** 2026-09-12 · **kind** contradiction, found by the rule that a section taking a second proposal is re-read whole · **shape** text and an instruction · **asks** approval · **into** `spec/console.md` -> The language, and five files by rename
