@@ -1365,6 +1365,49 @@ is shown. **This lane has no view on which**, and the table of twenty is right e
 the only part that told anyone the other nineteen exist.
 
 
+### X-36 - hover every copy, and toggle the two families at one circumference
+
+**to** code · **status** open · **raised** 2026-09-12 · **source** Sean, after seeing that the drawing could not show the change, asking for a family toggle and a hover · **and** his own observation that *seeing how far apart territories are is pretty important*
+
+**The observation is the important half and it is his.** On a torus every territory is drawn many
+times, so **two territories that look far apart in the bright region may be adjacent through a
+wrap** - the true distance is the minimum over every copy, and the drawing shows only the copy that
+happens to be nearest the middle. **That is what the echoes were always for and nobody had said it.**
+
+**Hover.** Pointing at a territory lights **every copy of it**, bright and dimmed alike. That is the
+distance instrument: with all copies lit, the nearest one to whatever you are comparing against is
+the one that decides, and the wrap stops being something you have to hold in your head. Ids already
+say *which* territory an echo is; the hover says *where all of them are at once*.
+
+**Toggle, and it should pair by circumference rather than by position in the list.** The two
+families are the same lattice at two foldings, so the informative comparison is **one circumference,
+two worlds**:
+
+| folded | territories | axis-aligned at the same circumference | territories | ratio |
+| ------ | ----------- | -------------------------------------- | ----------- | ----- |
+| k = 2  | 12          | C = 6                                  | 36          | 3     |
+| k = 3  | 27          | C = 9                                  | 81          | 3     |
+| k = 4  | 48          | C = 12                                 | 144         | 3     |
+
+**Toggling then shows the folding itself**: the same distance around, and one world with three times
+the territories of the other. That is the whole relationship in two keypresses, where a toggle by
+list position compares two unrelated worlds.
+
+**Three of the ten pair today** - the axis-aligned list is `C = 3..12` and only 6, 9 and 12 are
+multiples of three. **Whether to re-cut that list to `C = 6, 9, 12, 15 … 33`, so all ten pair, is
+Sean's**: it buys the comparison at every size and costs the small end, since the smallest would
+become 36 rather than 9. This lane is not choosing it.
+
+**Both belong in the drawing rather than only the binary**, which folds in `X-35`. The page is what
+Sean opens; it is HTML and SVG, so hover is a class change and the toggle is showing one frame
+instead of another. A page that carries all twenty, hovers, and toggles answers `X-35` and this item
+at once.
+
+**Whether.** **Worth building, and the hover is the part to build first** - it is what makes the
+echoes load-bearing rather than decorative, and it answers a question about the geometry that no
+amount of stepping sizes does.
+
+
 ## Resolved
 
 **Refused on 2026-09-10, and the refusal found something this item had not.** The code lane built
