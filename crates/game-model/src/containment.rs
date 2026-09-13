@@ -35,10 +35,10 @@
 //! the file as the two numbers it always meant.
 //!
 //! **That is what `C-53` was about and it is answered.** Territory 3 offered six food
-//! extractors and had built none, so nothing in its file said six; both numbers are there
-//! now. [`Capacity`] below is still computed rather than written, and is now a *derived* view
+//! extractors and had built none, so nothing in its file said six; all three are there now -
+//! `P-478`. [`Capacity`] below is still computed rather than written, and is a view
 //! of what a deposit states plus what the territory holds - which is what
-//! `spec/logistics.md` calls used and available.
+//! `spec/logistics.md` calls occupied and free.
 
 use std::collections::BTreeMap;
 
@@ -200,8 +200,8 @@ pub struct Entry {
     /// Never zero. `spec/console.md`: *an entry is never zero.*
     pub quantity: u32,
     pub contents: Vec<Entry>,
-    /// Not in the data file. `used` is derived and `total` is stored - see [`Capacity`] for
-    /// why each is absent, because the reasons are not the same one.
+    /// Not in the data file: `used` is not a number anything holds - it is how many are
+    /// there - and `capacity()` is their sum. See [`Capacity`]; the reasons differ.
     pub capacity: Vec<Capacity>,
 }
 
@@ -610,9 +610,12 @@ impl Entry {
 
     /// The same tree with every capacity dropped.
     ///
-    /// **A tree read back from a data file has no capacity**, because the file states none -
-    /// `used` by the rule that keeps derived traits out, and `total` because the map form
-    /// cannot hold a stored trait a thing has one of per kind. See [`Capacity`].
+    /// **A tree read back from a data file has no capacity**, because the file states none.
+    /// `used` is not a number anything holds, and a capacity per kind is a thing a flat map
+    /// cannot write. See [`Capacity`].
+    ///
+    /// **A deposit's own three are in the file** and this is about a territory's capacities,
+    /// which are a different bound and still unwritten.
     ///
     /// So a round trip is compared against this rather than against the tree the model built,
     /// **and what that concedes is the second of those two.** The comparison is text against
