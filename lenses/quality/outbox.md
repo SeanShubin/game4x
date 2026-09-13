@@ -152,6 +152,34 @@ accepted 2026-08-26**, so the one known instance sits inside the blind spot and 
 not have found it either way. **Nothing is claimed about `spec/` being intact** - only that in the
 part that can be read, nothing is missing that a later promotion did not deliberately change.
 
+## The blind era has its own instrument, and it is a different one - added 2026-09-13
+
+**The specification lane answered the question this report could not**: there is no earlier home for
+those 106 texts. They searched all **817** commits that have touched the queue for a `### P-66 `
+block and it has never existed; `### P-n` items go back to the file's first commit, so the shape did
+not change and those proposals simply never had one. The promoting commit is `4c6f2dd`, a bulk
+commit covering five documents with no per-proposal text. **The approved words are gone rather than
+mislaid.**
+
+**What survives for all 441 is the ledger row**, and for `P-66` it would have been enough:
+
+```
+| P-66, a mobile unit carries energy cells, filled where it is built | `spec/units.md` -> What a unit is |
+```
+
+*Filled where it is built* was absent from `spec/units.md` from `0aca92d` until `P-486` restored it.
+**A check asking whether the distinctive words of a title still have a referent in the file it names
+would have been red for those twelve days.**
+
+**It is not a weaker version of the sweep above; it is a different instrument.** That one compares
+approved text, this one compares a summary someone wrote against a destination - so it **verifies
+nothing**, every hit needs a person, and it will fire on legitimate rewordings at about the rate the
+naive sweep did. **This lens thinks it is worth building anyway**, for the reason the lane that
+proposed it gave: it needs nothing that does not exist, and it covers the era that cannot otherwise
+be covered at all. A smoke alarm verifies nothing either.
+
+**Still eventually rather than now**, and it is the same item and the same work.
+
 ### Q-9 - Small duplication and dead code, six items
 
 **to** code · **status** noted · **raised** 2026-08-28 · **source**
