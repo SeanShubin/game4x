@@ -64,7 +64,7 @@ Two limits Claude holds itself to:
 
 ### P-483 - a declaration leads with which thing it declares
 
-**to** sean · **status** open · **cited** `42a8660`, `bd7c918`, `bd7c918` · **raised** 2026-09-13 · **kind** recovered, from your choosing `A` · **shape** text and an instruction · **into** `spec/console.md` -> The language, and `spec/data/` · **asks** approval
+**to** sean · **status** open · **cited** `4b73ad6`, `42a8660`, `bd7c918`, `0c7ed0d`, `bd7c918` · **raised** 2026-09-13 · **kind** recovered, from your choosing `A` · **shape** text and an instruction · **into** `spec/console.md` -> The language, and `spec/data/` · **asks** approval
 
 You chose `A`: **which one** is why `id` sorts first, and a declaration's *which one* is `name`.
 
