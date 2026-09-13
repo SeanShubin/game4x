@@ -38,7 +38,24 @@ go.** `name:territory` and `family:place` are not traits, so nothing places them
 
 ## The decision, and it is one visible question with a second behind it
 
-**The visible one: does a declaration line lead with what it declares?**
+**The visible one: does a declaration line lead with *which* thing it declares, rather than with a
+fact about it?**
+
+**`name:X` says which trait, kind, family or value the line is about, and everything else says what
+is true of that one.** All fifty-eight declaration lines carry a `name:` and none is without one.
+
+**So `name` is to a declaration what `id` is to a thing:**
+
+```
+{territory id:1           biome:grassland nature:1}
+ kind      which one      what is true of it
+
+{kind      name:territory family:place biome control id nature}
+ kind      which one      what is true of it
+```
+
+**That is the rule you already stated - type first, then id.** `P-481` settled that `id` and `name`
+are different sorts of word, so they stay two words; what they are not is two roles.
 
 ```
 today   {trait admits:number kept:thing name:movable}
