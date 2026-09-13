@@ -1035,7 +1035,7 @@ page without anyone re-running anything.
 
 ### X-32 - a flat wrapping hex grid beside `goldberg-view`, at the ten sizes that could ship
 
-**to** code · **status** open · **raised** 2026-09-12 · **source** Sean, asking for a sibling to `goldberg-view` for the flat isotropic torus, and choosing the size list · **asked for** by Sean directly, so the question this answers is his rather than this lane's
+**to** code · **status** **acted** 2026-09-12 · `fe227c0` — built: `prototypes/hex-torus-view`, with `scripts/hex-torus-view.ps1` and `.sh`, nine tests green over the ten sizes. Run here rather than taken on report. **The *vetted when* line is still a person's**: exactly `N` bright hexes at each size, every dimmed hex carrying an undimmed one's id, is Sean looking at it · **raised** 2026-09-12 · **source** Sean, asking for a sibling to `goldberg-view` for the flat isotropic torus, and choosing the size list · **asked for** by Sean directly, so the question this answers is his rather than this lane's
 
 **Where.** A new `prototypes/hex-torus-view`, beside
 [`prototypes/goldberg-view`](../../prototypes/goldberg-view/README.md). `prototypes/` is the code
