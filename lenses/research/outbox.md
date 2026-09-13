@@ -1033,6 +1033,86 @@ first thing that tries to read the table without a person in the loop. **The mea
 not go stale**: the editor recomputes it at load, so if a third such row lands it appears on the
 page without anyone re-running anything.
 
+### X-32 - a flat wrapping hex grid beside `goldberg-view`, at the ten sizes that could ship
+
+**to** code · **status** open · **raised** 2026-09-12 · **source** Sean, asking for a sibling to `goldberg-view` for the flat isotropic torus, and choosing the size list · **asked for** by Sean directly, so the question this answers is his rather than this lane's
+
+**Where.** A new `prototypes/hex-torus-view`, beside
+[`prototypes/goldberg-view`](../../prototypes/goldberg-view/README.md). `prototypes/` is the code
+lane's column; `C-76` is the same situation already settled, where Sean asked that lane for
+`gap-view` and it was built there.
+
+**The question it answers**, because a prototype's deliverable is the answer and not the code:
+**at the sizes the game would use, does a flat isotropic hex torus read as a world, and how visible
+is the wrapping?** `goldberg-view` answers it for spheres. These two are meant to be run against
+each other, which is the reason this is not in `tools/research/`.
+
+**The grid.** A hex torus whose wrapping is chosen so that **all six hex directions circumnavigate
+in the same number of steps**. The sizes are `N = 3k²` with circumference `C = 3k`.
+
+**Why that family and not another.** Isotropic wrappings are the ideals of the Eisenstein integers,
+so the achievable sizes are `a² + ab + b²` - 3, 4, 7, 9, 12, 13, 16, 19, 21, 25 and up. Those fall
+into families by their circumference-to-area ratio `C²/N`, and a sphere's is `π√3/2 = 2.72`. The
+`3k²` family sits at exactly **3**, so it circumnavigates `1.73√N` where a sphere takes `1.65√N` -
+**5% apart**. The square family `N = k²` sits at 1.0, which is 61% of a sphere's circumference and
+the worst available. Sean chose the `3k²` family on 2026-09-12.
+
+|     | territories | circumference | a sphere that size |
+| --- | ----------- | ------------- | ------------------ |
+| 1   | 12          | 6             | 5.7                |
+| 2   | 27          | 9             | 8.6                |
+| 3   | 48          | 12            | 11.4               |
+| 4   | 75          | 15            | 14.3               |
+| 5   | 108         | 18            | 17.1               |
+| 6   | 147         | 21            | 20.0               |
+| 7   | 192         | 24            | 22.9               |
+| 8   | 243         | 27            | 25.7               |
+| 9   | 300         | 30            | 28.6               |
+| 10  | 363         | 33            | 31.4               |
+
+**The dimming, which is the thing Sean asked for and the reason the prototype exists.** The plane
+tiles outward forever. **Exactly `N` hexes are drawn at full brightness - one complete copy of the
+planet - and every other hex is dimmed.** Zoomed out, the bright island is the whole world and
+everything around it is echo.
+
+Three details that will otherwise produce something indistinguishable from a rendering defect:
+
+- **The bright region is the hexagonal fundamental domain**, not a rhombus and not a rectangle, so
+  the six-fold symmetry is visible in its shape rather than asserted. This family's domain sits at
+  an angle to the hex axes, so a rectangular frame makes the wrap look like it is slipping.
+- **Each cell belongs to exactly one copy.** Cells straddling the boundary need a consistent
+  tie-break, or the bright count lands at `N` plus or minus a few and nothing says which.
+- **A dimmed hex carries the id of the bright hex it repeats.** That is what makes it obvious the
+  echoes are the same territory rather than more world: turn ids on and watch `7` appear in every
+  direction.
+
+**Controls mirror `goldberg-view`**, so the two read as one tool: `[` and `]` step through the ten,
+`I` toggles ids, drag or the arrows pan, the wheel zooms, `R` resets.
+
+**Vetted when.** At each of the ten sizes, zoomed out, **exactly `N` hexes are undimmed and every
+dimmed hex shows the id of an undimmed one.**
+
+**And a check, because an observation alone will not hold.** For each size, assert the undimmed set
+has exactly `N` members and that every cell of the plane maps to exactly one of them - **asserting
+that ten sizes were covered**, so the test cannot quietly shrink to one. This repository has three
+recorded cases of a check that went green over a population of one.
+
+**Not in scope.** Terrain, biomes, gameplay, and any side-by-side rendering against a sphere. It
+shows the grid and nothing else, the way `goldberg-view` does.
+
+**Two rows it needs before it can join the workspace, and they are not yours.** `C-76`: a new
+prototype needs a row in `docs/architecture.md` and a row in the table in `docs/prototypes/README.md`,
+both the specification lane's. That item records the sequencing costing nothing when asked for up
+front - `gap-view` sat outside the workspace for three days rather than reddening the gate over a
+file its lane may not write. **Worth requesting in the same breath as starting.** It needs no
+`sphere-tessellation`, which is a real simplification over `goldberg-view`.
+
+**Whether.** **Worth building, and Sean asked for it**, which is the whole of the case. What it is
+worth is narrower than it looks: it settles whether the wrapping is *legible*, and it settles
+nothing about whether a torus should be the game's shape. The topological differences this lane has
+already recorded - a circumnavigation that separates nothing, northward paths that never converge,
+and no unique antipode - are unaffected by how well this renders.
+
 ## Resolved
 
 **Refused on 2026-09-10, and the refusal found something this item had not.** The code lane built

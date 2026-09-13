@@ -16,10 +16,11 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What is outstanding
 
-### To code (2)
+### To code (3)
 
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
+- **X-32** - a flat wrapping hex grid beside `goldberg-view`, at the ten sizes that could ship · `lenses/research/outbox.md`
 
 ### To research (2)
 
