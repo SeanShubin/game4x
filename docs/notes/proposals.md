@@ -62,6 +62,53 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-481 - the words a declaration is built from are the notation's own
+
+**to** sean · **status** open · **cited** `2d4dbc3` · **raised** 2026-09-13 · **kind** recovered, from your choosing the exception · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+You chose the exception, by `spec/invariants.md`: **a unification that makes the data say something
+false is not one** - *where two things are sufficiently distinct, giving them one form is a lie
+rather than a saving*, and that outranks the tests about what a person has to author.
+
+**Declaring `name` as a trait would be that lie.** It would put `{trait admits:value kept:kind
+name:name}` in `traits.4x`, make `name` rank in an ordering of a thing's traits, and make the count
+of declared traits twenty-six-plus-five where five of them are about traits rather than about
+anything in a game.
+
+## The words, replacing the sentence at `spec/console.md:132`
+
+> **The words an expression is built from are the notation's own, and so are the words a
+> declaration is built from** - `name`, `admits`, `kept`, `of` and `family`. **These are the two
+> things in a data file that are not a kind, a trait, or one of a trait's values.** One is how the
+> notation computes and the other is how it says what its vocabulary is; neither says anything
+> about a game, and neither is declared.
+
+## What makes the second set a set rather than a list of five
+
+**Measured, not asserted: none of the five ever appears in a state.** Zero occurrences across
+`scenario/expected/play.4x` and `reports/turns.md`, against 124 uses in `spec/data/`. **They are
+the keys of a declaration and nothing else**, which is the line the exception is drawn on - not
+*these five names* but *what a declaration is made of*.
+
+**So a sixth declaration key added tomorrow is covered without editing this sentence**, and a trait
+that starts appearing in states would not be.
+
+## What this settles besides the exception
+
+**`P-479`'s second block is answered by not applying.** `name` is not a trait, so it is not in the
+ordering of a description's traits at all - **it leads a declaration line the way a kind leads a
+state line**, because the notation says so rather than because a rank places it.
+
+**So the code lane's flagged choice goes away rather than being decided.** It ranked `id` first
+only when valued, so that a declaration's bare `id` would not displace `name`. Under these words
+there is nothing to displace: `name` is not competing with `id` for a position, because only one
+of them is a trait.
+
+## What this does not do
+
+**It does not say a declaration is not data**, and `P-471` still holds - the declarations are part
+of the game state and defining one is a transition. **What is exempted is the five keys, not the
+lines.** A declaration is still a description, still sorts, still round-trips.
 ### P-479 - a description's traits rank by relevance, with an alphabetical middle
 
 **to** sean · **status** open · **cited** `15ebf12`, `ee93b95` · **raised** 2026-09-13 · **kind** recovered, from your choice of `B` with the middle left open · **shape** text · **asks** approval · **into** `spec/console.md` -> The language

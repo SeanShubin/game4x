@@ -8,9 +8,9 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-481** - the words a declaration is built from are the notation's own · `docs/notes/proposals.md`
 - **P-479** - a description's traits rank by relevance, with an alphabetical middle · `docs/notes/proposals.md`
 - **P-480** - nature's reclaim is the fourth of five things ending a turn does · `docs/notes/proposals.md`
-- **P-481** - the words that declare the vocabulary are declared nowhere, and one of them is `name` · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
