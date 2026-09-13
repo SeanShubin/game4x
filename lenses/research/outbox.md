@@ -1241,7 +1241,7 @@ be drawn without one**, and that this is a theorem rather than a rendering budge
 
 ### X-34 - `the_bright_region_has_the_six_fold_symmetry_of_the_grid` cannot fail
 
-**to** code · **status** open · **raised** 2026-09-12 · **source** checking why the drawn region looks lopsided when a test says it is symmetric · **found by** `X-33`, and it is the reason that finding took computing rather than reading
+**to** code · **status** **acted** 2026-09-12 · `9340c42` — replaced by two tests rather than one, which is better than either option this lane offered: `reducing_and_turning_a_sixth_commute` asserts the automorphism that made the old check weak, and `the_drawn_region_is_not_six_fold_symmetric_and_cannot_be` asserts the impossibility so the claim cannot be re-added by someone reading the name as a gap. Ten tests run green here, not taken on report · **raised** 2026-09-12 · **source** checking why the drawn region looks lopsided when a test says it is symmetric · **found by** `X-33`, and it is the reason that finding took computing rather than reading
 
 **Where.** `prototypes/hex-torus-view/tests/wrapping.rs:79`.
 
