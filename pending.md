@@ -8,13 +8,22 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-483** - a declaration leads with which thing it declares · `docs/notes/proposals.md`
 - **P-482** - the rule that every word is a kind, a trait or a value does not mention its exceptions · `docs/notes/proposals.md`
-- **P-483** - `P-479`'s order applies to a declaration line and `spec/data/` does not obey it · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
+
+## Open, and a commit says otherwise
+
+An item is closed by whoever filed it and answered by somebody else, so the filer gets
+no signal. These are still marked `open`, and a commit that touched no part of their own
+outbox cites them - which usually means they were settled and nobody went back.
+
+- **P-483** - `42a8660` P-483 says *which* thing a declaration declares, which is the whole argument for A · still open in `docs/notes/proposals.md`
+- **S-124** - `9bc616b` S-124: P-479's check and P-480's line, and C-111 closes · still open in `docs/notes/proposals.md`
 
 ## What is outstanding
 

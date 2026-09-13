@@ -62,6 +62,63 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-483 - a declaration leads with which thing it declares
+
+**to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered, from your choosing `A` · **shape** text and an instruction · **into** `spec/console.md` -> The language, and `spec/data/` · **asks** approval
+
+You chose `A`: **which one** is why `id` sorts first, and a declaration's *which one* is `name`.
+
+## Which words answer *which one*, since you asked
+
+**Two words and one whole description, and they are not the same question.**
+
+- **`id`** asks *which one of these* - which territory, among territories. **It is optional by
+  design**: `P-456` gave a place an `id` and denied a unit one, so that a fleet is one entry with a
+  count
+- **`name`** asks *which one is there ever*. **It is not optional**: all fifty-eight declaration
+  lines carry one, because there is exactly one trait called `movable` and never four of them
+- **A description with no `id` identifies a class rather than a thing.**
+  `{citizen bearing:1 defending:1 laboring:1} -> 8` says which *sort*, and the quantity says how
+  many. **That is why no trait of the thing may be left out** - with no `id`, the description is
+  the identity
+
+**What the two buy differs, and it is why they stay two words.** An `id` tells one thing from its
+siblings inside one game. **A `name` introduces a word into the language**: `name:territory` is
+what makes `territory` writable as the leading word of a description, where `id:1` makes `1` mean
+nothing anywhere else.
+
+## The words, added after the ordering sentence
+
+> **A declaration leads with `name`, which says which thing it declares.** Then `of` and `family`,
+> which say what that thing belongs to; then the notation's other words; then its traits, in the
+> order above. **`name` is to a declaration what `id` is to a thing** - the difference is that an
+> `id` tells one thing from its siblings and a `name` puts a word into the language.
+
+**One choice in that is this lane's and is not yours until you approve it**: that `of` and `family`
+come before `admits` and `kept`. They answer *what sort*, which is the nearest thing to a type
+after the leading word. **`admits` before `kept` is not a choice** - it is alphabetical either way.
+
+## The instruction
+
+**Forty of the fifty-eight lines in `spec/data/` change**; eighteen already lead with `name` by
+alphabetical accident. Every shape that occurs:
+
+```
+{family name:thing}                                          unchanged
+{kind name:territory family:place id biome control nature}   was: biome control family:place id name:territory nature
+{trait name:movable admits:number kept:thing}                was: admits:number kept:thing name:movable
+{trait name:keeps of:thing admits:number kept:thing}         was: admits:number kept:thing name:keeps of:thing
+{value name:mountain of:biome nature:1}                      was: name:mountain nature:1 of:biome
+```
+
+**The check**: every line's second word begins `name:`, over all fifty-eight, and the files are
+still 22, 26, 4 and 6 lines. **The set of words on each line is unchanged** - this reorders and
+never adds or drops.
+
+## What this closes
+
+**`P-479` now reaches a declaration and the answer is not *alphabetically*.** The code lane's
+valued-or-valueless rank goes, and `S-124` told it to build nothing here until this landed.
 ### P-482 - the rule that every word is a kind, a trait or a value does not mention its exceptions
 
 **to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction, found by re-reading The language after `P-479` and `P-481` landed in it · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
