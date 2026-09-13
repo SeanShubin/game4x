@@ -2119,11 +2119,11 @@ a hand-written convenience is no longer one of the ways.** The six entries go, o
 from the recipes and say they are. **Same decision as `P-466` in a different file**, and this item is
 where it is recorded for `spec/console.md`.
 
-**2. An Ark's `Fuel` cell should be blank.** `P-365` says a unit that moves in orbit stores no fuel,
-and `releases/first-release.md` -> *Units and structures* gives an Ark **Fuel 2**. **A blank is not a
-zero**, which that file already says, so blanking it is the faithful edit. **A release change, so a
-proposal rather than an edit**, and nothing breaks meanwhile because no Ark moves between orbits in
-the first release.
+**2. An Ark's `Fuel` cell should be blank - and this half is withdrawn, 2026-09-13.** It said
+`P-365`'s *a unit that moves in orbit stores no fuel* made the release's **Fuel 2** wrong. **Sean
+has since said the ark does store fuel** - capacity 2, collecting 1 a turn as a player action,
+starting full. **So the cell was never wrong and the sentence in `spec/units.md` is what moves.**
+Had this lane acted on the cleanup it would have deleted exactly the cell he then asked for.
 
 **3. A recipe still cannot say that the kind it produces comes from an ingredient.** `work` produces
 **Kind `resource`** with its quantity written in prose as *`$where`'s density for **that
