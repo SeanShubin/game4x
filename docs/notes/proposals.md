@@ -128,20 +128,20 @@ said rather than guessed at.
 from makes the gate red until the code follows* - so a documentation push from any lane is gated on
 it, and only yours may repair it.
 
-## One thing to leave alone, because it is not settled yet
+## The prose has caught up, and this section is what is left of the warning
 
-**Ten sentences in `spec/` and `releases/` still say `total capacity`**, which is no longer the
-name of anything - `spec/console.md`, `spec/control.md`, `spec/economy.md`, `spec/orbit.md`,
-`spec/planet.md` and five lines of `releases/first-release.md`. **`P-478` is open with Sean and
-renames all ten to `capacity`.**
+**`P-478` landed as `506ff08`.** The ten sentences that said `total capacity` now say `capacity`,
+in `spec/console.md`, `spec/control.md`, `spec/economy.md`, `spec/orbit.md`, `spec/planet.md` and
+five lines of `releases/first-release.md`. **`spec/console.md` no longer says *a stored trait***
+either - it says *a trait of the kind* and *a trait of the thing*, which is what `kept` says.
 
-**Build against the data files and the *Traits* table, which are current**, and not against those
-sentences. This lane is naming them so you do not spend the time discovering them and then
-discover they were already filed.
+**One `total-capacity` survives on purpose**, hyphenated, in `R-6`'s record of what the dump used
+to print. It is a record of what happened and not a statement about the game.
 
-**And three sentences in `spec/console.md` -> The language still say *a stored trait*** where
-`kept` no longer divides traits that way. Same proposal. They mean `kept:thing`, which is what the
-data file says, so nothing you build from `traits.4x` is affected.
+**This section said the opposite an hour ago** - *leave those ten alone, `P-478` is open with
+Sean* - and it was true when written. It is here rather than deleted because that is the third
+time today, and `docs/notes/nothing-removes.md` is the shape: the write is cheap and the removal
+is the expensive half.
 
 ### S-121 - `P-473` landed, and the column had four readers rather than one
 
