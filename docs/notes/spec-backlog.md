@@ -82,6 +82,21 @@ time.
 values rather than quantities. And **`free` becomes a guard for the first time**: a `put` into a
 container with no room has to fail.
 
+**Four more, said 2026-09-13.** The ark cannot be on the ground - once it deploys it is no longer
+an ark. No fuel cost to deploy and a fuel cost to launch, the theme being harnessing gravity
+against fighting it. The ark collects 1 fuel per turn and has capacity 2. The initial game starts
+the ark with a full tank.
+
+**Two things this lane raised against them.** With collect 1, capacity 2 and `moving 1`, an ark
+spends exactly what it gathers, so **the tank can never empty and never fills past its start** -
+it binds only on a launched ark, which waits one turn before its first move, and the initial ark
+does not pay that. Capacity 2 means something only if collecting can fail.
+
+**And collecting has no phase.** The turn's five are upkeep, population, expiry, nature and
+restoring counts - checked against all eleven of the world's recipes at turn 9, where every phase
+fires and everything fits. **None of them is the world gathering**, so solar would be the first
+world recipe producing something that is neither population nor a restored count.
+
 ## Said 2026-09-13: the turn report shows each of end-turn's five phases
 
 *I want to break down `reports/turns.html` even further. Right now we have 2 sections, "what your
