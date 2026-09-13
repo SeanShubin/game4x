@@ -66,6 +66,11 @@ state is always the same bytes and a description is one string however it was bu
 is alphabetical because nothing has yet needed placing there**, and a trait leaves it by being
 named at one end or the other.
 
+**A declaration leads with `name`, which says which thing it declares.** Then `of` and `family`,
+which say what that thing belongs to; then the notation's other words; then its traits, in the
+order above. **`name` is to a declaration what `id` is to a thing** - the difference is that an
+`id` tells one thing from its siblings and a `name` puts a word into the language.
+
 **Every word in a data file is a kind, a trait, or one of a trait's values.** A file that uses any
 other word is wrong about the game rather than describing it.
 
