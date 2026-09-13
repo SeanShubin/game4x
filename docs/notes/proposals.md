@@ -172,7 +172,7 @@ anybody editing it - `docs/notes/nothing-removes.md` is the shape.
 
 ## The gate is red, and this lane ran it rather than predicting it
 
-**Two tests, both a literal count**, `cargo test --workspace` on `9e8d7e1`'s tree:
+**Two tests, both a literal count**, `cargo test --workspace`, run on `a6b08fb`'s tree:
 
 ```
 crates/game-console/tests/declare.rs:594  the_traits_file_declares_what_a_data_file_needs
