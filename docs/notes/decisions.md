@@ -36,26 +36,38 @@ P-479   id first, then every other trait alphabetically
 **And `P-481` took the notation's own words out of the trait ordering without saying where they
 go.** `name:territory` and `family:place` are not traits, so nothing places them.
 
-## The decision, and it is one question with three answers
+## The decision, and it is one visible question with a second behind it
 
-**`A` - the notation's own words lead, then the traits rank.**
-`{kind name:territory family:place id biome control nature}`, where today it reads
-`{kind biome control family:place id name:territory nature}`. **A declaration then reads as what
-it declares, then what it is, then what it has** - the shape you asked for when you said the
-type comes first.
+**The visible one: does a declaration line lead with what it declares?**
 
-**`B` - `P-479`'s order applies only where a trait carries a value.** A declaration names traits
-without valuing them, so they stay alphabetical and the notation's own words sort among them -
-which is `spec/data/` exactly as it is, and no file changes. This is the code lane's current
-behaviour, flagged by it as a choice.
+```
+today   {trait admits:number kept:thing name:movable}
+        {kind biome control family:place id name:territory nature}
 
-**`C` - `P-479` does not reach a declaration at all**, because it is about what a thing contains
-and a declaration is not contained. Then a declaration's order is stated separately or left
-alphabetical, and `spec/data/` does not change either.
+yes     {trait name:movable admits:number kept:thing}
+        {kind name:territory family:place biome control id nature}
+```
 
-**`A` is the only one that changes a file**, and it is the only one that makes a declaration line
-lead with the thing it is about. **`B` and `C` differ only in what the specification says**, not in
-any byte on disk.
+**`A` - yes.** The notation's own words lead, `name` first among them, then the traits rank.
+**Forty of the fifty-eight declaration lines in `spec/data/` change**; the other eighteen already
+lead with `name` by alphabetical accident. **It needs a third rule this lane would have to draft**:
+an order among `name`, `admits`, `kept`, `of` and `family`, since alphabetical among them puts
+`admits` first and defeats the point.
+
+**If you answer no, the second question is why, and the two answers differ in what happens next
+rather than in any byte today.**
+
+**`B` - because `P-479` only moves a trait that carries a value**, and a declaration names traits
+without valuing them. One rule with a qualifier. **Nothing changes now**, and this is the code
+lane's current behaviour. **But `{value name:mountain nature:1 of:biome}` already carries a valued
+trait**, so the rule is live on declaration lines - the day one carries a valued `id`, `occupied`,
+`free` or `capacity`, the line moves and nobody decided that it should.
+
+**`C` - because `P-479` is about a state and does not reach a declaration.** Two scopes, no
+qualifier. **Nothing changes now and nothing changes later without a decision**; a declaration's
+order is alphabetical until something states otherwise.
+
+**So the three are: change forty lines, or leave a rule that can move one later, or close it.**
 
 ## What made this findable
 
