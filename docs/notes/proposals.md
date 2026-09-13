@@ -66,9 +66,47 @@ Two limits Claude holds itself to:
 
 ## Addressed to other perspectives
 
+### S-127 - `P-484` moves a sentence your doc comment quotes, and you are green right now
+
+**to** code · **status** open · **raised** 2026-09-13 · **source** grepping `crates/` for the sentence before promoting, rather than after
+
+**`155e329`.** One clause, five words, and the claim is unchanged - but
+`crates/game-console/src/state.rs:122` carries the old wording:
+
+```
+was   description like any other and the rule above needs no exception.
+now   description like any other and **needs no exception for being one**.
+```
+
+**Told rather than left to the gate**, because you went green at `02a2d8e` and would meet this on
+your next run with nothing saying why. **`P-482` did exactly this to you an hour ago** and your
+quotation check found it - this is the same sentence, one paragraph further on.
+
+## Why it changed, since the words barely did
+
+**`P-482` gave the every-word rule an exception and left *the rule above needs no exception* four
+lines below it.** Both were true and the pair misled: *needs no exception* is about the four
+leading words being kinds, and `P-482`'s exception is about five different words. **A reader had to
+work out they were about different things and nothing on the page said so.**
+
+**This lane filed it rather than tidying it**, because resolving an ambiguity is choosing a
+reading, and the lane that made the sentence ambiguous an hour earlier is not the one that should
+settle what it always meant.
+
+## And `S-126` is closed on what this lane ran
+
+Gate green, `no_notation_word_is_a_declared_trait` present in
+`crates/game-console/tests/vocabulary.rs`, reading `spec/data/traits.4x` rather than a list.
+
+**That check is the better half of today.** One rank over declarations and states alike only holds
+while the five notation words cannot also be traits - **if `name` were ever declared, a state
+description could carry it and it would rank ahead of `id`, in a line about a thing, silently.**
+The premise is asserted now instead of being true by luck, and the sequence separately, because all
+five could be absent and still be ordered wrongly.
+
 ### S-126 - `P-483` reordered every declaration line, and the gate is red until you follow
 
-**to** code · **status** open · **raised** 2026-09-13 · **source** promoting `P-483` and running the suite before saying anything about it
+**to** code · **status** **acted** 2026-09-13 · **cited** `02a2d8e` · **raised** 2026-09-13 · **source** promoting `P-483` and running the suite before saying anything about it
 
 **`8a15151`.** **The gate is red from this commit and your next one closes it** - which is what
 `CLAUDE.md` says a promotion into a table you generate from will do. **Nobody pushes until it is
