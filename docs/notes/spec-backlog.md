@@ -33,6 +33,28 @@ state, and `kind`, `trait` and `family`, which appear only in declarations. **Th
 `orbit`, `deposit`, `adjacency` and `game` are declared and named by no recipe, which is why the
 drawing leaves them out. **It is the same shape one step further.**
 
+## Said 2026-09-13: movement is scoped down for the first release
+
+**For the first release**: a pioneer and an ark each get **1 move, 1 space, 1 energy**. **The ark
+takes its energy from the sun, which makes it effectively free, so the mechanical plumbing goes** -
+one move of one space, no energy storage and no solar panels.
+
+**Which restores `spec/units.md` exactly as written**: *a mobile unit that moves in orbit takes its
+energy directly from the sun. It stores no fuel, and moving costs it nothing.* An hour earlier that
+sentence had to go; under this scope it is right. **And the Ark's `Fuel 2` cell is wrong again**,
+which is `S-86`'s second half, withdrawn and restored the same day.
+
+**The pioneer's question is untouched.** `P-485` still stands: `spec/units.md` says fuel moves
+freely between a controlled territory and anything there that can hold it, **the release has no
+recipe for it**, and the implementation gives a new pioneer a full tank, which nothing states.
+
+## Deferred to after the first release, by name
+
+Move cost per terrain, pathing, roads, and different adjacencies per move. **The three options
+explored above are the groundwork**: moves-per-turn against spaces-per-move, cost attaching to the
+move rather than the distance, and the expression about paths that the language does not have and
+would need.
+
 ## Said 2026-09-13: a pioneer's tank, brainstormed not decided
 
 Answering `P-485`, and **explicitly brainstorming rather than deciding**:
