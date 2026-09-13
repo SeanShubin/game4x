@@ -64,7 +64,7 @@ Two limits Claude holds itself to:
 
 ### P-480 - nature's reclaim is the fourth of five things ending a turn does
 
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered, from your placing it at step 4 · **shape** text · **asks** approval · **into** `spec/turn.md` -> Order of operations
+**to** sean · **status** open · **cited** `97ca22a`, `da783d4` · **raised** 2026-09-13 · **kind** recovered, from your placing it at step 4 · **shape** text · **asks** approval · **into** `spec/turn.md` -> Order of operations
 
 You put nature at step 4, so the restoring of counts is step 5 and is one step rather than two.
 
