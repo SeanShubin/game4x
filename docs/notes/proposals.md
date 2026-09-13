@@ -170,6 +170,27 @@ specification is now silent on it by design - the debug view is the one place it
 commit as this item, and it is the third time a status line in `releases/` has gone stale without
 anybody editing it - `docs/notes/nothing-removes.md` is the shape.
 
+## The gate is red, and this lane ran it rather than predicting it
+
+**Two tests, both a literal count**, `cargo test --workspace` on `9e8d7e1`'s tree:
+
+```
+crates/game-console/tests/declare.rs:594  the_traits_file_declares_what_a_data_file_needs
+  twenty-four traits, one per row of the release's table; this read 26
+
+crates/game-console/tests/declare.rs:93   the_file_of_kinds_and_the_release_declare_the_same_words
+  the Traits table is the population here: left 26, right 24
+```
+
+**Nothing disagrees with anything** - `spec/data/traits.4x` is 26 lines and the *Traits* table is
+26 rows, and they agree with each other. **What is stale is three `24`s in the test file**: lines
+95, 209 and 596. The third did not fail in this run and this lane has not worked out why, which is
+said rather than guessed at.
+
+**This is `CLAUDE.md`'s own case** - *a promotion that adds a row to a table the code generates
+from makes the gate red until the code follows* - so a documentation push from any lane is gated on
+it, and only yours may repair it.
+
 ## One thing to leave alone, because it is not settled yet
 
 **Ten sentences in `spec/` and `releases/` still say `total capacity`**, which is no longer the
