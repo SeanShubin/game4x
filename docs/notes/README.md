@@ -11,6 +11,7 @@ disagree, the spec is right and the note needs a superseded marker.
 
 | Note                                                                         | What it records                                                                                                                                     | Date       |
 | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| [Two conventions on one page](two-conventions-on-one-page.md)                | A defect that exists only where two correct halves are joined, why re-reading either finds nothing, and the near-miss that would have hidden it     | 2026-09-12 |
 | [A citation that resolves and is wrong](citations-that-resolve.md)           | Two citations written from confidence rather than read from a source, one per lane in one evening, and why a check catches one of them              | 2026-09-12 |
 | [Nothing removes](nothing-removes.md)                                        | Five statements that were written once and went on being read after they stopped being true, and the one repair that works                          | 2026-09-12 |
 | [Constant amounts](2026-09-10-constant-amounts.md)                           | Why population growth reads a minimum, what resource X replaces it with, and the one hole that turns out to be two                                  | 2026-09-10 |
