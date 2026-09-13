@@ -23,6 +23,9 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - **Capacity is spent and given back.** Making a thing occupies one of the free capacity in
   whatever will hold it; **destroying it frees one**. The two never come apart, because the
   capacity is only ever their sum
+- **When a thing that contains things is consumed, what it held falls loose where it stood.** It
+  is not destroyed with its container: it goes into disorder, and at the turn's end what there is
+  room for is kept and the rest is lost.
 - A thing that contains things takes up capacity in whatever contains it
 - A thing says which of the things in it are next to which. That is a fact about the container
   rather than about its contents

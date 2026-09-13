@@ -8,9 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-487** - what a consumed container held falls loose where it stood · `docs/notes/proposals.md`
-- **P-486** - a unit is built with its bin full, which `P-66` said and a reword lost · `docs/notes/proposals.md`
-- **P-485** - a pioneer is produced with a full tank, and a refuel recipe moves fuel between containers · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -23,7 +20,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-485** - `a54b84e` P-485: nothing fills a unit's tank, and two views disagree about whether one holds anything · still open in `docs/notes/proposals.md`
 - **S-127** - `0f19655` S-127: P-484's clause, and the gate was already red when the message arrived · still open in `docs/notes/proposals.md`
 
 ## What is outstanding
@@ -79,9 +75,9 @@ it exists to ask.
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122, P-330, P-333, P-335, P-395, P-398
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208, P-277, P-346, P-441
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119, P-172, P-392
+- `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290, P-371, P-374, P-391, P-433, P-487
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217, P-364
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147, P-193, P-199, P-213, P-218, P-222
-- `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290, P-371, P-374, P-391, P-433
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185, P-390, P-408, P-480
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223, P-352, P-359
@@ -128,3 +124,4 @@ it exists to ask.
 - `spec/planet.md` -> Shape - P-1, P-6
 - `spec/population.md` -> Citizens - P-37, P-28
 - `spec/resources.md` -> The list, `spec/turn.md` -> Order of operations - P-126, P-138
+- `spec/units.md` -> What a unit is - P-66, P-486

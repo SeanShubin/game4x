@@ -14,8 +14,9 @@ What is true of every unit. Particular units are in [unit types](unit-types.md).
 - Each type of unit has a unique name
 - Each unit has a strength
 - A unit may require upkeep each turn, and is lost if it is not paid
-- A mobile unit that moves over the ground has a bin for fuel. Moving burns a unit of it, and one
-  with an empty bin cannot move
+- A mobile unit that moves over the ground has a bin for fuel. **It is built with that bin full,
+  and the energy is paid where it is built.** Moving burns a unit of it, and one with an empty
+  bin cannot move
 - A mobile unit that moves in orbit takes its energy directly from the sun. It stores no fuel, and
   moving costs it nothing
 - Fuel moves freely between a controlled territory that has it and anything there that can hold it

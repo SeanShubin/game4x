@@ -62,134 +62,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-487 - what a consumed container held falls loose where it stood
-
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered, from your answer about founding · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment
-
-**Nothing says what happens to a container's contents when the container is consumed**, and
-`found by land` consumes a pioneer that may still hold fuel. Your answer: *anything the pioneer was
-containing goes into disorder, to be automatically reallocated to storage in the territory or
-discarded if there is no free space.*
-
-## The words, added to Containment
-
-> - **When a thing that contains things is consumed, what it held falls loose where it stood.** It
->   is not destroyed with its container: it goes into disorder, and at the turn's end what there is
->   room for is kept and the rest is lost.
-
-**It states the rule and no mechanism**, because the mechanism already exists and is not this
-document's to describe. `spec/turn.md` already says *what expires expires, and what was not kept in
-order is lost*, and *disorder* is `spec/invariants.md`'s word - *it may end with less; that is
-disorder, and disorder is meant*.
-
-**In the release this needs nothing new either.** `stow` takes loose energy into a store and
-`discard` consumes what is still loose, both at a turn's end. **A pioneer founding with one fuel
-left delivers one energy to the new territory**, which is stowed if there is a store for it and
-lost if there is not.
-
-## Why it is general rather than about pioneers
-
-**Every container can be consumed.** A store destroyed, a territory lost to nature with stores in
-it - the same question, and the rule that answers it for a pioneer answers it for all of them.
-This is the first time anything has been inside a thing that gets consumed, which is why it has
-not come up.
-### P-486 - a unit is built with its bin full, which `P-66` said and a reword lost
-
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered, and it restores a promoted idea that left the specification · **shape** text · **asks** approval · **into** `spec/units.md` -> What a unit is
-
-**`P-66` promoted *a mobile unit carries energy cells, filled where it is built*.** Neither *filled
-where* nor *energy cell* appears anywhere in `spec/` today.
-
-**It went in `0aca92d`, 2026-09-01, and the reword was deliberate and right about the wrapper.**
-Its own message: *a unit's cells are filled when it is built, and the energy is paid in the
-territory that built it - so the wrapper had a name, a column and two recipe ingredients and no
-rule of its own.* **The wrapper went and the clause went with it**, leaving *has a bin for fuel*,
-which says a bin exists and not that it starts full.
-
-**The last trace of it is a number.** `produce pioneer` consumes 6 energy for a bin that holds 2 -
-a cost nobody could explain, because it is a fill for a rule the specification stopped stating.
-
-## The words, replacing the fuel bullet
-
-> - A mobile unit that moves over the ground has a bin for fuel. **It is built with that bin full,
->   and the energy is paid where it is built.** Moving burns a unit of it, and one with an empty
->   bin cannot move
-
-**One sentence added, in the vocabulary the bullet already uses.** *Paid where it is built* is
-`P-87`'s rule - *a cost is paid in the territory, not at a building site* - said about this case
-rather than restated.
-### P-485 - a pioneer is produced with a full tank, and a refuel recipe moves fuel between containers
-
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered, from your answer to the earlier `P-485` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes, and Units and structures
-
-You said both: **`produce pioneer` fills the tank from where it is produced and cannot fire without
-the energy to fill it, and a refuel recipe exists that costs nothing and moves fuel to a different
-container.** A pioneer stores 2.
-
-**One number in this is a reading rather than your words, and it is called out below.**
-
-## The rules are already promoted; only the recipes are missing
-
-`spec/units.md`, untouched by this:
-
-```
-A mobile unit that moves over the ground has a bin for fuel. Moving burns a unit of it, and one
-with an empty bin cannot move
-A mobile unit that moves in orbit takes its energy directly from the sun. It stores no fuel, and
-moving costs it nothing
-Fuel moves freely between a controlled territory that has it and anything there that can hold it
-```
-
-**The third sentence is your refuel recipe and it already says *freely*.** What the release lacks is
-a row that does it.
-
-## The rows
-
-**`produce pioneer` loses its energy cost and gains a fill.** The six energy was never a
-construction cost - it is the last trace of `P-66`, which `P-486` restores. **A pioneer costs three
-metal and two citizens**, as `P-67` had it before cells were folded in, and the two energy is put
-into the bin rather than consumed:
-
-| Recipe              | Owner  | Role    | Qty | Kind    | Traits | Where        |
-| ------------------- | ------ | ------- | --- | ------- | ------ | ------------ |
-| **produce pioneer** | player | consume | 3   | metal   |        |              |
-| **produce pioneer** | player | consume | 2   | citizen |        |              |
-| **produce pioneer** | player | put     | 2   | energy  |        | that pioneer |
-| **produce pioneer** | player | produce | 1   | pioneer |        |              |
-
-**A new recipe, `refuel`.** It makes nothing and destroys nothing:
-
-| Recipe     | Owner  | Role    | Qty | Kind   | Traits               | Where     |
-| ---------- | ------ | ------- | --- | ------ | -------------------- | --------- |
-| **refuel** | player | require | 1   | unit   | with room for energy | `$where`  |
-| **refuel** | player | put     | 1   | energy |                      | that unit |
-
-**And the Ark's `Fuel` cell is blanked**, which closes `S-86`'s second half:
-
-| Thing   | Strength | Fuel | Upkeep | Crosses      | Readies               | Movable |
-| ------- | -------- | ---- | ------ | ------------ | --------------------- | ------- |
-| **ark** | 2        |      |        | orbit border | defending 1, moving 1 | 1       |
-
-## What this rests on, which lands first
-
-**`P-486`** puts *it is built with that bin full, and the energy is paid where it is built* back in
-`spec/units.md`, where `P-66` had it until a reword lost it. **`P-487`** says what a consumed
-container's contents do. **Neither is invented here** - a release may not invent a rule, and
-without those two these rows would.
-
-## The one thing left for the code lane
-
-**The dump has to start showing the fuel.** A bin is containment, so `spec/logistics.md`'s *a thing
-appears inside what holds it* means a full pioneer reads `{pioneer ...} -> 1` with `{energy} -> 2`
-nested under it. **It shows nothing today** while the entity view says `fuel 2` - the two disagree,
-and this is what makes them agree. `scenario/expected/play.4x` moves again.
-
-## What it gives you in play
-
-**Two fuel is two hops from the last supplied territory**, so a pioneer can pass over one site and
-found on the second. **Refuelling being free and capacity-bounded means a pioneer in a supplied
-territory is always full** - so fuel binds only away from supply, which is the supply line doing
-the work rather than the arithmetic.
+*Nothing is open. Everything filed has been decided.*
 
 ## Addressed to other perspectives
 
@@ -2246,15 +2119,15 @@ a hand-written convenience is no longer one of the ways.** The six entries go, o
 from the recipes and say they are. **Same decision as `P-466` in a different file**, and this item is
 where it is recorded for `spec/console.md`.
 
-**2. An Ark's `Fuel` cell should be blank - withdrawn and then restored, both on 2026-09-13.**
-`P-365` says a unit that moves in orbit stores no fuel, and *Units and structures* gives an Ark
-**Fuel 2**. **A blank is not a zero**, which that file already says, so blanking it is the faithful
-edit. **A release change, so a proposal rather than an edit.**
+**2. An Ark's `Fuel` cell should be blank - done on 2026-09-12 by `da40bdd`, and this lane said
+three more things about it before reading the file.** `P-466` rebuilt *Units and structures*
+without three columns, and the Ark came out of that rebuild with a blank `Fuel`. **Nobody
+noticed, and this item went on saying the file gives an Ark Fuel 2.**
 
-**It was withdrawn for an hour** because Sean said the ark stores fuel - capacity 2, collecting 1
-a turn, starting full. **He then scoped all of that out of the first release**: the ark takes its
-energy from the sun, which is effectively free, so the plumbing goes and the ark is one move of
-one space at no cost. **Which is what `P-365` said, so the cell is wrong again.**
+**On 2026-09-13 this lane withdrew it**, on Sean saying the ark does store fuel; **restored it**,
+when he scoped that out again; and **wrote it into `P-485` as a row to change**. All three were
+about a cell that had been blank for a day. **Caught by an assertion in the script that would
+have written it**, not by any of the three times it was reasoned about.
 
 **3. A recipe still cannot say that the kind it produces comes from an ingredient.** `work` produces
 **Kind `resource`** with its quantity written in prose as *`$where`'s density for **that
@@ -5404,6 +5277,9 @@ work the release exists to order.
 | P-483, a declaration leads with which thing it declares                                                                      | `spec/console.md` -> The language, and `spec/data/`                                                                                                                                                      | 2026-09-13 |
 | P-482, the rule that every word is a kind, a trait or a value does not mention its exceptions                                | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-13 |
 | P-484, one sentence says *except* and the next says *needs no exception*                                                     | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-13 |
+| P-486, a unit is built with its bin full, which `P-66` said and a reword lost                                                | `spec/units.md` -> What a unit is                                                                                                                                                                        | 2026-09-13 |
+| P-487, what a consumed container held falls loose where it stood                                                             | `spec/logistics.md` -> Containment                                                                                                                                                                       | 2026-09-13 |
+| P-485, a pioneer is produced with a full tank, and a refuel recipe moves fuel between containers                             | `releases/first-release.md` -> Recipes, and Units and structures                                                                                                                                         | 2026-09-13 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |

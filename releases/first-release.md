@@ -226,6 +226,8 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 |                     |        | require | 1                                    | unit      | moving at least 1                             | `$from`                  |
 |                     |        | put     |                                      | unit      | moving one less                               | `$to`                    |
 |                     |        | consume | 1                                    | energy    |                                               | that unit                |
+| **refuel**          | player | require | 1                                    | unit      | with room for energy                          | `$where`                 |
+|                     |        | put     | 1                                    | energy    |                                               | that unit                |
 | **found by land**   | player | consume | 1                                    | pioneer   |                                               |                          |
 |                     |        | produce | 1                                    | garrison  |                                               |                          |
 |                     |        | produce | 2                                    | citizen   |                                               |                          |
@@ -241,8 +243,8 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 |                     |        | consume | 15                                   | metal     |                                               |                          |
 |                     |        | produce | 1                                    | yard      |                                               |                          |
 | **produce pioneer** | player | consume | 3                                    | metal     |                                               |                          |
-|                     |        | consume | 6                                    | energy    |                                               |                          |
 |                     |        | consume | 2                                    | citizen   |                                               |                          |
+|                     |        | put     | 2                                    | energy    |                                               | that pioneer             |
 |                     |        | produce | 1                                    | pioneer   |                                               |                          |
 | **launch ark**      | player | require | 1                                    | territory |                                               | `$where`                 |
 |                     |        | consume | 3                                    | metal     |                                               |                          |
