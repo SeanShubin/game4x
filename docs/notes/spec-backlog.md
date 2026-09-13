@@ -51,6 +51,19 @@ its maximum - where a thing of that kind begins, and the most it may hold*. Two 
 **What is unresolved is whether the tank is containment or a count**, because `spec/turn.md` says
 time restores every count at a turn's end, and a fuel that is restored is not fuel.
 
+**Clarified in the same conversation**: fuel is not restored, and **a recipe moves energy from a
+territory into a pioneer at no cost** - safe for the Petri net because the net change is zero.
+That settles the fork: **the tank is containment**, because the energy relocates rather than a
+count being raised.
+
+**The stricter invariant is also satisfied and is the one that actually guards it.** *Every cycle
+among recipes must spend, somewhere along it, a count that only the turn's end restores* - and
+refuelling is in no cycle at all, because `move` destroys the energy and nothing returns it.
+
+**What nothing answers is what happens to a container's contents when the container is
+consumed.** `found by land` consumes the pioneer. Whether its remaining fuel scatters into the
+new territory or goes with it is unstated, and the only nearby sentence is fiction.
+
 ## Said 2026-09-13: the turn report shows each of end-turn's five phases
 
 *I want to break down `reports/turns.html` even further. Right now we have 2 sections, "what your
