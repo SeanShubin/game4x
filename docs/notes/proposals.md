@@ -91,6 +91,74 @@ evening removing.
 
 ## Addressed to other perspectives
 
+### S-124 - three promotions: the trait order, nature's place in the turn, and the notation's own words
+
+**to** code · **status** open · **raised** 2026-09-13 · **source** promoting all three, then re-reading the section two of them landed in
+
+**`7702c75`.** `P-479`, `P-480` and `P-481`. **Two are work for you and one takes something away.**
+
+## `P-479` - the order you built is now the specified one
+
+> `id` first, then every other trait alphabetically, then `occupied`, `free` and `capacity` last
+
+**Your rank matches it, with one difference, and that difference is `P-483` and not yours to
+resolve.** The rule says `id` first with no mention of whether the trait carries a value; your rank
+moves it only when valued. **Do nothing about that until `P-483` comes back.**
+
+**The check this wants, which you asked for when you declined to write the ordering yourself.** A
+partial ordering rots the opposite way to a full one: a full list rots when a trait is **added**
+and nobody places it; **a partial list rots when a trait is renamed**, because the ordering goes on
+naming something nothing has, the rule quietly stops applying, and the dump looks fine.
+
+**Not hypothetical - `free` was `room` yesterday.** An ordering written then would still say
+`room`, `free` would have fallen into the alphabetical middle, and nothing would have been red.
+
+**So: every trait named in the ordering is declared in `spec/data/traits.4x`, asserted against the
+count read from that file.** Four names today - `id`, `occupied`, `free`, `capacity`.
+
+## `P-480` - nature is the fourth of five, and restoring counts is one step and last
+
+> everything with upkeep pays it; then a population grows on surplus food or starves for want of
+> it; **what expires expires, and what was not kept in order is lost**; then **nature takes back
+> what is no longer held**; and **time restores every count to the number that thing's kind
+> declares**
+
+**This is the specification saying plainly what the code does not quite do.** Today:
+
+```
+per territory   settle_population, end_of_turn_losses, make_ready
+then, globally  nature reclaims, units un-exhausted
+```
+
+**`make_ready` runs before the reclaim and the units are un-exhausted after**, so restoring is two
+steps straddling nature where the rule now makes it one step after. **Nothing observable moves** -
+the reclaim reads what is present rather than what is ready - so this is a line moved and a
+comment, not a behaviour change. **Sean chose the order; this lane did not take it from your
+implementation**, and the alternative he refused was nature running first, on the force left when
+the player stopped acting.
+
+## `P-481` - five words are the notation's own, and that removes work rather than making it
+
+> **The words an expression is built from are the notation's own, and so are the words a
+> declaration is built from** - `name`, `admits`, `kept`, `of` and `family`
+
+**Your flagged choice goes away rather than being decided.** You ranked `id` first only when valued
+so a declaration's bare `id` would not displace `name`. **`name` is not a trait**, so it was never
+competing for a position in an ordering of traits.
+
+**Measured for the item rather than asserted**: none of the five ever appears in a state - zero
+across `scenario/expected/play.4x` and `reports/turns.md`, against 124 uses in `spec/data/`.
+
+## Two things open to Sean that touch you, so you do not build against them
+
+- **`P-482`** - the *every word in a data file* sentence gains *except the words the notation
+  reserves for itself*. Wording; nothing to build
+- **`P-483`** - **a declaration line's order is unspecified and `spec/data/kinds.4x` may move.**
+  Three options: the notation's words lead and then traits rank, which rewrites twenty-two lines;
+  or `P-479` applies only to valued traits, which is your behaviour today and changes no file; or
+  `P-479` does not reach a declaration at all. **Two of the three leave `spec/data/` exactly as it
+  is.** Build nothing here until it lands
+
 ### S-123 - `reports/turns.html`: collapse the state, and split the diff in two
 
 **to** code · **status** **acted** 2026-09-13 · **cited** `e2178c8` · **raised** 2026-09-13 · **source** Sean, directly, reading the report
