@@ -1466,14 +1466,22 @@ became wedges, which is the only reason anyone looked. Found by drawing, like ev
 this item.
 
 **And a caution about the check that replaced it, measured rather than assumed.** The new assertion
-is *every neighbour of a bright cell is drawn*. That catches the **wrong** six - the hexagonal set
-`±a, ±b, ±(a+b)` - because two needed translates go missing. It does **not** pin the visual
-completeness: the needed set for a parallelogram domain is `±a, ±b, ±(a−b)`, and **six copies at
-those positions satisfy the check while still leaving both corners open**, because the corner copies
-touch the bright world at a single vertex and no bright cell has a neighbour in them. Computed over
-`C = 4` and `C = 12`. The drawn count is pinned separately by `copies_drawn`, so nothing is loose
-today - but the gap direction is narrower than its name, and this lane would rather say so than let
-it be read as covering the shape.
+was *every neighbour of a bright cell is drawn*. That catches the **wrong** six, because two needed
+translates go missing. It does **not** pin the visual completeness: for each parallelogram family
+there is **exactly one** six-set that satisfies it while leaving both corners open, because the
+corner copies touch the bright world at a single vertex and no bright cell has a neighbour in them.
+
+**Which six survives depends on the shear, and this lane had that wrong.** Enumerating all
+twenty-eight six-subsets of the eight translates at `C = 4`, `C = 12`, `4 × 4` and `12 × 12`:
+**axis-aligned** survives on `±a, ±b, ±(a−b)` and **offset** on `±a, ±b, ±(a+b)` - opposite sets,
+one passing case each. This item named the axis-aligned set as though it were general. **The
+conclusion held and the detail did not**, and the detail mattered: naming the eight translates in
+the assertion was the natural fix and could not have worked, because the set to exclude differs
+between the families.
+
+**Fixed at `2f83c0f` by asking for two steps rather than one.** Verified here: at two steps **no**
+six-set passes in any of the four cases and all eight do, so it separates every family with no
+special case - narrower than the outline property this lane was bracing for, and enough.
 
 **Whether.** **Worth building both toggles, and the sentence is worth more than either.** The
 lattice and the orientation are things to look at; *pole to pole without crossing the equator* is
