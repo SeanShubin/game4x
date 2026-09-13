@@ -910,23 +910,90 @@ impl Game {
 
     // -- ending a turn ------------------------------------------------------
 
-    /// Consume, transform, discard, unspend.
+    /// The five things ending a turn does, in the order `spec/turn.md` gives them.
     ///
-    /// Every territory is settled independently. In this release nothing crosses a
-    /// boundary, so no territory can affect another's outcome and the order they are
-    /// taken in cannot change the result - which is what
-    /// `docs/architecture.md` rule 9 asks for, and what would make this safe to run in
-    /// parallel unchanged.
+    /// > everything with upkeep pays it; then a population grows on surplus food or starves
+    /// > for want of it; **what expires expires, and what was not kept in order is lost**;
+    /// > then **nature takes back what is no longer held**; and **time restores every count to
+    /// > the number that thing's kind declares**
+    ///
+    /// **One list, read by two callers** - `S-125`. `end_turn` runs them and the turn report
+    /// names its sections from them, so a phase added to the rule adds a section and a section
+    /// with no clause behind it is a defect a person can see. Writing the names into the report
+    /// instead would have been a second copy of the specification, free to drift from this one.
+    pub const END_OF_TURN_PHASES: [&'static str; 5] = [
+        "everything with upkeep pays it",
+        "a population grows on surplus food or starves for want of it",
+        "what expires expires, and what was not kept in order is lost",
+        "nature takes back what is no longer held",
+        "time restores every count",
+    ];
+
+    /// Consume, transform, discard, unspend.
     fn end_turn(&mut self) {
+        self.end_turn_observed(&mut |_, _| {});
+    }
+
+    /// Ending a turn, with the state offered up after each of the five phases.
+    ///
+    /// **One code path rather than two** - the observer is how the report sees inside without
+    /// a second implementation of the order. `end_turn` passes a closure that does nothing, so
+    /// ordinary play pays for nothing, and the report's sequence cannot drift from the game's
+    /// because there is only one sequence.
+    ///
+    /// # Phase-major rather than territory-major
+    ///
+    /// Each phase now runs across every territory before the next begins, where `settle` used
+    /// to take one territory through the first three. **The result cannot differ, and the
+    /// reason is the one already written here**: in this release nothing crosses a boundary,
+    /// so no territory can affect another's outcome and the order they are taken in cannot
+    /// change the result - which is what `docs/architecture.md` rule 9 asks for, and what
+    /// would make this safe to run in parallel unchanged. The committed dumps are the check.
+    ///
+    /// **What the phases have to hand each other is one number.** `upkeep` leaves a count of
+    /// citizens it could not feed and `perish` consumes that many; the release calls `unpaid`
+    /// derived, so nothing is written onto a citizen and the seam needs nothing stored.
+    pub fn end_turn_observed(&mut self, seen: &mut dyn FnMut(&Game, &'static str)) {
         let ids: Vec<TerritoryId> = self.territories.iter().map(|t| t.id).collect();
-        for id in ids {
-            self.settle(id);
+
+        // **Nothing but a citizen eats** - `P-339`, and it answers `C-62`. A unit that went
+        // unpaid used to be marked `usable = false` and left where it was: not consumed, no
+        // metal given back, and `usable` a trait the release does not declare - so a pioneer
+        // that had starved read exactly like one that had not in the file Sean derives by
+        // hand. **An ark and a pioneer take no upkeep now**, so there is no unpaid unit and
+        // the twenty lines that shared the food out are gone rather than made unreachable.
+        //
+        // **`usable` is gone too, as of `P-367`.** It survived `P-339` because nature
+        // retaking a territory still wrecked what stood on it - and nature destroys those
+        // units now, so nothing sets it.
+        let unpaid: Vec<u32> = ids
+            .iter()
+            .map(|id| self.territories[id.index()].pay_upkeep())
+            .collect();
+        seen(self, Self::END_OF_TURN_PHASES[0]);
+
+        // `bear`, `breed`, `renew` and `perish`, fired one at a time in `P-379`'s order.
+        //
+        // **It was one call to `population_after` and is five recipes**, which is `P-373`'s
+        // saturating rewrite: `grow` read its quantity from the state and these five do not.
+        // The closed form is still there and is the second derivation now -
+        // `tests/population_two_ways.rs` compares the two at every pair in a range.
+        for (id, unpaid) in ids.iter().zip(unpaid) {
+            self.territories[id.index()].grow_or_starve(unpaid);
         }
+        seen(self, Self::END_OF_TURN_PHASES[1]);
+
+        // What expires expires and what is over the bound is lost; metal and energy carry.
+        // Nothing transforms here: founding happens when a unit arrives, so by the time a
+        // turn ends there is never a unit waiting to become something.
+        for id in &ids {
+            self.territories[id.index()].end_of_turn_losses();
+        }
+        seen(self, Self::END_OF_TURN_PHASES[2]);
 
         // Nature reclaims anything no longer held. Done after every territory has
         // settled, because whether force is enough depends on what settling left behind.
-        let ids: Vec<TerritoryId> = self.controlled();
-        for id in ids {
+        for id in self.controlled() {
             let needed = self.territory(id).map(|t| t.force_of_nature).unwrap_or(0);
             if self.force_in(id) < needed {
                 // **Destroyed, where they used to be marked unusable** - `P-367`.
@@ -934,8 +1001,7 @@ impl Game {
                 // on it is destroyed*; it said *any ark on it becomes unusable*. The old
                 // behaviour left a state the release cannot describe: a unit that is
                 // somewhere, owned, and can never act, reading in a hand derivation exactly
-                // like one that is merely exhausted. That is the confusion `P-339` removed
-                // for `unpaid`, and this is the same one a rule over.
+                // like one that is merely exhausted.
                 //
                 // **Every unit, not every ark.** The code already caught pioneers under a
                 // sentence that named only arks, which `C-77` raised; the new sentence says
@@ -947,58 +1013,27 @@ impl Game {
                 }
             }
         }
+        seen(self, Self::END_OF_TURN_PHASES[3]);
 
-        // **Time restores every count, and it is one step and last** - `P-480`.
-        // `spec/turn.md` lists five things ending a turn does and restoring is the fifth,
-        // after nature's reclaim is the fourth. It used to straddle it: a territory's things
-        // were made ready inside `settle`, before the reclaim, and units were un-exhausted
-        // after - one rule in two places either side of another.
+        // **Time restores every count, and it is one step and last** - `P-480`. It used to
+        // straddle the reclaim: a territory's things were made ready inside `settle`, before
+        // it, and units were un-exhausted after - one rule in two places either side of
+        // another.
         //
         // **Nothing observable moved**, and that is checkable rather than hoped: the reclaim
         // reads `force_in`, which is a territory's held force plus the force of the units
         // standing on it, and `Unit::force` is a constant of the kind. `refresh` clears
         // `Trait::Ready` and nothing else. So no part of what nature decides can see whether
         // a thing has been readied.
-        for id in self.territories.iter().map(|t| t.id).collect::<Vec<_>>() {
+        for id in &ids {
             self.territories[id.index()].make_ready();
         }
         for unit in &mut self.units {
             unit.exhausted = false;
         }
+        seen(self, Self::END_OF_TURN_PHASES[4]);
+
         self.turn += 1;
-    }
-
-    /// One territory's end of turn.
-    fn settle(&mut self, id: TerritoryId) {
-        // **Nothing but a citizen eats** - `P-339`, and it answers `C-62`. A unit that went
-        // unpaid used to be marked `usable = false` and left where it was: not consumed, no
-        // metal given back, and `usable` a trait the release does not declare - so a pioneer
-        // that had starved read exactly like one that had not in the file Sean derives by
-        // hand. **An ark and a pioneer take no upkeep now**, so there is no unpaid unit and
-        // the twenty lines that shared the food out are gone rather than made unreachable.
-        //
-        // **`usable` is gone too, as of `P-367`.** It survived `P-339` because nature
-        // retaking a territory still wrecked what stood on it - and nature destroys those
-        // units now, so nothing sets it. It was a trait the release does not declare and no
-        // artifact could show, which is what made a starved pioneer unreadable in the first
-        // place; that whole class of invisible state is now closed.
-
-        // Then a population grows on surplus food, or starves for want of it - `upkeep`,
-        // `bear`, `breed`, `renew` and `perish`, fired one at a time in `P-379`'s order.
-        //
-        // **It was one call to `population_after` and is five recipes**, which is `P-373`'s
-        // saturating rewrite: `grow` read its quantity from the state and these five do not.
-        // The closed form is still there and is the second derivation now -
-        // `tests/population_two_ways.rs` compares the two at every pair in a range.
-        self.territories[id.index()].settle_population();
-
-        // What expires expires and what is over the bound is lost; metal and energy carry.
-        // Nothing transforms here: founding happens when a unit arrives, so by the time a
-        // turn ends there is never a unit waiting to become something.
-        self.territories[id.index()].end_of_turn_losses();
-        // **Restoring is not here** - `P-480`. It is the fifth and last of the five things
-        // ending a turn does, and nature's reclaim is the fourth, so it happens in `end_turn`
-        // after the reclaim rather than per territory before it.
     }
 }
 
@@ -1685,10 +1720,25 @@ mod tests {
         let game = founded();
         let forwards = game.clone().after(&Transition::EndTurn).unwrap();
 
+        // **The phases run over the territories in reverse**, which is the property: nothing
+        // crosses a boundary, so the order they are taken in cannot change the result. Written
+        // as the five phases since `S-125` made `end_turn` phase-major - it drove `settle`
+        // per territory before, which is the same claim about the three phases that function
+        // used to contain.
         let mut backwards = game;
         let ids: Vec<TerritoryId> = backwards.territories.iter().map(|t| t.id).rev().collect();
-        for id in ids {
-            backwards.settle(id);
+        let unpaid: Vec<u32> = ids
+            .iter()
+            .map(|id| backwards.territories[id.index()].pay_upkeep())
+            .collect();
+        for (id, unpaid) in ids.iter().zip(unpaid) {
+            backwards.territories[id.index()].grow_or_starve(unpaid);
+        }
+        for id in &ids {
+            backwards.territories[id.index()].end_of_turn_losses();
+        }
+        for id in &ids {
+            backwards.territories[id.index()].make_ready();
         }
         for unit in &mut backwards.units {
             unit.exhausted = false;

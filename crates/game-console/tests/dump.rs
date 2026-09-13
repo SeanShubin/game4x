@@ -693,14 +693,24 @@ fn every_turn_splits_the_player_from_the_end_of_the_turn() {
     }
     assert_eq!(checked, sections, "every turn's commands read");
 
-    // **A count over nothing, named.** No turn of the present scenario has an empty half, so
-    // the *Nothing changed.* wording is unexercised by this report - which is why the next
-    // assertion drives it directly rather than looking for it here.
+    // **This said zero yesterday and the assertion caught it saying so.** When the split was
+    // two halves, no turn of the scenario had an empty one, and the *Nothing changed.* wording
+    // was driven directly below because a check over a population of zero proves nothing.
+    // `S-125` broke the world's half into its five phases and the population stopped being
+    // zero the same hour - nature reclaims rarely and expiry only bites where something is
+    // over a bound, so most phases say nothing on most turns.
+    //
+    // **The number is asserted rather than the fact that there is one**, because *some are
+    // empty* would go on passing if fifty became one.
     let empty = turns.matches("*Nothing changed.*").count();
     assert_eq!(
-        empty, 0,
-        "a half of some turn is empty now, which is fine - but this comment says none is, and \
-         a comment that has stopped being true is worse than no comment"
+        empty, 11,
+        "{empty} sections say nothing changed and this was written when 11 did. If a rule or \
+         the scenario moved, that is fine - say so here rather than widening this to `> 0`"
+    );
+    assert!(
+        empty < sections * (1 + game_model::Game::END_OF_TURN_PHASES.len()),
+        "every section of every turn is empty, so the report is saying nothing at all"
     );
     assert_eq!(
         game_console::state::Disagreement::default().as_a_turn(),
@@ -760,4 +770,59 @@ fn the_reports_fold_without_a_script() {
         looked >= 10,
         "only {looked} pages checked; the reports directory has probably moved"
     );
+}
+
+/// The turn report's phase headings are the specification's five, read from one list.
+///
+/// **`S-125`, and the point is that the sections *are* the rule rather than resembling it.**
+/// `spec/turn.md` ends a turn with five things; `Game::END_OF_TURN_PHASES` is that sentence,
+/// and both `end_turn` and this report read it. So **a phase added to the rule adds a section**,
+/// and a section with no clause behind it is a defect a person can see rather than a drift
+/// nobody notices.
+///
+/// **Reading the names from the model rather than retyping them** is what makes that true. A
+/// test carrying its own five strings would pass while the report and the rule disagreed, which
+/// is the failure this whole arrangement exists to make impossible.
+#[test]
+fn the_turn_report_names_the_five_phases_of_ending_a_turn() {
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let turns =
+        std::fs::read_to_string(root.join("reports/turns.md")).expect("turns.md is generated");
+    let sections = turns.lines().filter(|l| l.starts_with("# Turn ")).count();
+    assert!(sections > 1, "a report of one turn tests nothing here");
+
+    let phases = game_model::Game::END_OF_TURN_PHASES;
+    assert_eq!(phases.len(), 5, "`spec/turn.md` names five");
+
+    let mut checked = 0;
+    for phase in phases {
+        let found = turns.matches(&format!("### {phase}\n")).count();
+        assert_eq!(
+            found, sections,
+            "`{phase}` heads {found} sections and there are {sections} turns - every turn runs \
+             every phase, and one that did nothing still gets its heading"
+        );
+        checked += 1;
+    }
+    assert_eq!(checked, phases.len(), "every phase looked for");
+
+    // **In the rule's order, in every turn**, because five headings in the wrong sequence would
+    // read as the specification and describe something else.
+    for (at, turn) in turns.split("\n# Turn ").skip(1).enumerate() {
+        let end_of_turn = turn
+            .split("## what `end-turn` did")
+            .nth(1)
+            .and_then(|rest| rest.split("## what is there now").next())
+            .unwrap_or_else(|| panic!("turn {} has no end-turn section", at + 1));
+        let order: Vec<&str> = end_of_turn
+            .lines()
+            .filter_map(|line| line.strip_prefix("### "))
+            .collect();
+        assert_eq!(
+            order,
+            phases.to_vec(),
+            "turn {}: the phases are not in the order `spec/turn.md` gives them",
+            at + 1
+        );
+    }
 }

@@ -241,14 +241,41 @@ impl Territory {
     /// citizen has nothing left for `breed` - the two can never both happen in one ending.
     /// By the time `perish` runs, `renew` has made every citizen fertile again, so any two
     /// citizens here are the same thing and removing *some* `n` of them is removing *the* `n`.
-    pub fn settle_population(&mut self) {
+    /// **The first of the five, on its own** - `S-125`. `spec/turn.md` ends a turn with
+    /// *everything with upkeep pays it; then a population grows on surplus food or starves for
+    /// want of it*, and the report says those separately now, so the code has to reach the
+    /// seam between them.
+    ///
+    /// **What it hands on is the count, because the release says `unpaid` is derived.** It is
+    /// the number of citizens `upkeep` could not feed, carried to `perish` - see the note
+    /// above. So the seam needs nothing stored and nothing the specification does not say; the
+    /// state between the two phases is this territory with the eaten food gone and nothing
+    /// else moved.
+    pub fn pay_upkeep(&mut self) -> u32 {
         // **upkeep** - `require 1 citizen`, `consume 1 food`. Fires once per citizen while
         // there is food, and the citizens it could not reach are the unpaid ones.
         let citizens = self.citizens();
         let fed = citizens.min(self.store(Resource::Food));
         self.take(Resource::Food, fed);
-        let unpaid = citizens - fed;
+        citizens - fed
+    }
 
+    /// Both halves of the population's ending, which is what the closed form is compared
+    /// against.
+    ///
+    /// **The two are separate for the report and together for the check** - `tests/
+    /// population_two_ways.rs` derives the population a second way and compares, and what it
+    /// compares is the whole settling rather than either half. Splitting that test in two
+    /// would have made it check the seam instead of the arithmetic.
+    pub fn settle_population(&mut self) {
+        let unpaid = self.pay_upkeep();
+        self.grow_or_starve(unpaid);
+    }
+
+    /// The second of the five: a population grows on surplus food, or starves for want of it.
+    ///
+    /// `unpaid` is what [`Territory::pay_upkeep`] could not feed.
+    pub fn grow_or_starve(&mut self, unpaid: u32) {
         // **bear** - `consume 1 citizen fertile`, `produce 1 citizen spent`, `produce 1
         // fertility`. Every citizen that has not borne this turn does, and is spent for it.
         let mut bore = 0;

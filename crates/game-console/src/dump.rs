@@ -1338,8 +1338,14 @@ pub struct Turn {
     pub commands: Vec<String>,
     /// What the player's commands did, before `{end-turn}` ran.
     pub by_player: crate::state::Disagreement,
-    /// What `{end-turn}` did on its own.
-    pub by_end_turn: crate::state::Disagreement,
+    /// What each of the five phases of `{end-turn}` did, named and in order.
+    ///
+    /// **The names come from `game_model::Game::END_OF_TURN_PHASES`** - `S-125`. They are
+    /// `spec/turn.md`'s own sentence, so the report's sections are the specification read left
+    /// to right: a phase added to the rule adds a section, and a section with no clause behind
+    /// it is a defect a person can see. A list written here instead would be a second copy of
+    /// the rule, free to drift.
+    pub by_end_turn: Vec<(&'static str, crate::state::Disagreement)>,
     pub state: String,
 }
 
@@ -1388,8 +1394,11 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(String, String)> {
         // **The snapshot is taken before `{end-turn}` runs, not after**, which is the whole of
         // the split: everything up to here is the player's and everything the next line does is
         // the world's.
-        let midpoint = if line == "{end-turn}" {
-            Some(crate::state::entries(&session.game))
+        // **The snapshot is taken before `{end-turn}` runs, not after**, which is the whole of
+        // the split: everything up to here is the player's and everything the next line does is
+        // the world's.
+        let waiting = if line == "{end-turn}" {
+            Some((crate::state::entries(&session.game), session.game.clone()))
         } else {
             None
         };
@@ -1398,12 +1407,47 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(String, String)> {
             .run(line, commands)
             .unwrap_or_else(|why| panic!("`{line}` failed: {why}"));
         if line == "{end-turn}" {
-            let midpoint = midpoint.expect("taken on the same condition");
+            let (midpoint, shadow) = waiting.expect("taken on the same condition");
             let after = crate::state::entries(&session.game);
+
+            // **The five phases, from a replay of the same transition on a copy.** The console
+            // runs `{end-turn}` as `Game::end_turn` and nothing else, so ending the turn again
+            // on a clone of the state it started from produces the same phases the session
+            // just went through - and **that is asserted rather than relied on** below, which
+            // is what makes a second execution safe to read from.
+            let mut shadow = shadow;
+            let mut seen: Vec<(&'static str, game_model::containment::Entry)> = Vec::new();
+            shadow.end_turn_observed(&mut |game, phase| {
+                seen.push((phase, crate::state::entries(game)))
+            });
+            assert_eq!(
+                crate::state::entries(&shadow),
+                after,
+                "replaying `{{end-turn}}` on a copy of the state it started from reached a \
+                 different place than the session did, so the phases below are not the ones \
+                 that ran"
+            );
+            assert_eq!(
+                seen.len(),
+                game_model::Game::END_OF_TURN_PHASES.len(),
+                "{} phases were observed and `spec/turn.md` names {}",
+                seen.len(),
+                game_model::Game::END_OF_TURN_PHASES.len()
+            );
+
+            // Each phase is the difference from where the one before it left off, the first
+            // measured from the state the player stopped acting in.
+            let mut by_end_turn = Vec::new();
+            let mut from = &midpoint;
+            for (phase, at) in &seen {
+                by_end_turn.push((*phase, crate::state::compare(from, at)));
+                from = at;
+            }
+
             turns.push(Turn {
                 commands: std::mem::take(&mut ran),
                 by_player: crate::state::compare(&before, &midpoint),
-                by_end_turn: crate::state::compare(&midpoint, &after),
+                by_end_turn,
                 state: markdown(&session.game, ""),
             });
             before = after;
@@ -1466,12 +1510,21 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(String, String)> {
         );
         per_turn.push_str(&turn.by_player.as_a_turn());
 
+        // **A heading per phase, and an empty one still gets its heading** - `S-123`'s
+        // discipline, which `S-125` is what finally exercises. Five phases over ten turns
+        // leaves most of them saying nothing on most turns: nature reclaims rarely and expiry
+        // only bites where something is over a bound. **A phase that did nothing and a phase
+        // that was not generated are different facts**, and an absent heading makes them the
+        // same bytes.
         per_turn.push_str(
             "## what `end-turn` did
 
 ",
         );
-        per_turn.push_str(&turn.by_end_turn.as_a_turn());
+        for (phase, changed) in &turn.by_end_turn {
+            per_turn.push_str(&format!("### {phase}\n\n"));
+            per_turn.push_str(&changed.as_a_turn());
+        }
 
         per_turn.push_str("## what is there now\n\n");
         // **Every table demoted, not just the first.** A turn's three parts are `##`, so a
