@@ -150,7 +150,12 @@ number a reader would otherwise assume.
   territory. That third direction could not fail for the folded family, whose domain is built
   by reducing, and can for the axis-aligned family, whose domain is the square `0..C × 0..C`
   written down independently. Found by poisoning the axis-aligned reduction while widening this
-  check from ten worlds to twenty: six tests reddened elsewhere and this one stayed green
+  check from ten worlds to twenty. **Four tests reddened elsewhere and this one stayed green** -
+  three in `tests/families.rs` and one in this file - while `tests/drawing.rs` and
+  `tests/colouring.rs` stayed green too, which is what says the new direction reaches something
+  nothing else does. **The count was first written as six, sourced from nothing**: the quality
+  lens had measured five under a *different* poison, and six was neither number. Re-measured at
+  `5221933` by applying the poison and reading the four suites
 - **`reducing_and_turning_a_sixth_commute`** and
   **`the_drawn_region_is_not_six_fold_symmetric_and_cannot_be`** - the folded ten, because the
   second is a fact about `3k`-squared and the first is checked for the other family by

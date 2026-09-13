@@ -61,6 +61,67 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-110 - Poisoning a check has a direction, and one of them cannot fail
+
+**to** spec · **status** open · **raised** 2026-09-12 · **source** widening two checks in
+`prototypes/hex-torus-view` after `Q-87`, and the quality lens re-deriving the result
+
+**derived from** a quality improvement's evidence is a test that would have failed before it -
+`CLAUDE.md`, What done means
+
+**Poisoning is how this repository shows a check bites, and nothing says where to aim it.** Both
+lanes aimed at the object that was easy to edit, and neither noticed that the two objects a check
+reads are not independent.
+
+`exactly_n_cells_are_bright_and_every_cell_echoes_one_of_them` reads two things: `reduce`, and
+`domain`. Its docstring says it checks both halves, *because either alone is satisfied by
+something wrong*. It asserted that the domain is the right size and that nothing reduces outside
+it - and those two together still allow a domain cell that nothing ever reduces to. A bright hex
+that is no territory.
+
+## Why nobody saw it, and it is not that nobody looked
+
+**For one family the missing direction could not fail.** `domain()` is built by reducing, so the
+image and the domain are the same object and no assertion relating them can be false however it is
+written. **For the other family it can**, because `domain()` is the square `0..C x 0..C` written
+down independently of `reduce`. So the check was **vacuous over ten worlds and false over the other
+ten**, and read as complete.
+
+**The quality lens poisoned `domain` and this lane poisoned `reduce`, and only the second
+distinguishes them.** Poisoning the derived object exercises only what survives the derivation -
+edit `domain` where `domain` comes from `reduce`, and the poison is carried into both sides of the
+comparison and cancels.
+
+## The rule, and why it is not already covered
+
+`CLAUDE.md` -> What done means has *a check whose subject is behaviour reads the outcome, not the
+input*, and *the instrument answers a narrower question than the one asked*. Both are about what a
+check reads. **This is about the demonstration that the check works** - a step the repository
+requires and gives no rule for, so the rule would be new rather than a restatement:
+
+> **When a check compares two things, poison the one the other is derived from.** Poisoning a
+> derived object only ever exercises what survives the derivation, so a green under that poison is
+> not evidence the check bites - and where the two are the same object, no assertion relating them
+> can fail at all.
+
+**Measured rather than argued**, at `5221933`: poisoning the axis-aligned reduction reddens three
+checks in `tests/families.rs` and one in `tests/wrapping.rs`, and leaves `tests/drawing.rs` and
+`tests/colouring.rs` green. The lens's own poison reddened five and could not reach the vacuous
+direction.
+
+## And a number in this lane's own account of it was invented
+
+**The count above was first written as six, and six is not any measurement anyone took.** The lens
+measured five under its poison; this lane measured four under its own, afterwards. Six reached a
+commit message, a code comment and a prototype README before the poison was applied and the suites
+counted - corrected in this lane's column, and recorded here because it is the class `CLAUDE.md`
+already names and this is an instance inside the fix for another one.
+
+**Whether this belongs in `CLAUDE.md` is the specification lane's and Sean's.** The quality lens
+has the general form in `lenses/quality/README.md`, which is not on this lane's reading path, and
+the specific case is in `prototypes/hex-torus-view/tests/wrapping.rs`, which is not on anyone
+else's.
+
 ### C-109 - `P-469` makes `X-12` a rule being broken rather than an observation
 
 **to** spec · **status** open · **raised** 2026-09-12 · **source** reading the code lane's own

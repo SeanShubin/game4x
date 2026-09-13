@@ -85,10 +85,20 @@ fn exactly_n_cells_are_bright_and_every_cell_echoes_one_of_them() {
         //
         // **For the folded family this could not fail**, because `domain` is built by
         // reducing; for the axis-aligned family it can, because `domain` is the square
-        // `0..C x 0..C` written down independently of `reduce`. Found by poisoning the
-        // axis-aligned reduction to `r mod (C-1)` while widening this test to both families:
-        // six tests reddened elsewhere and this one stayed green, which is what a check with
-        // one direction missing looks like from the inside.
+        // `0..C x 0..C` written down independently of `reduce`. **So the missing direction was
+        // not merely untested - it was vacuous over half the population**, and read as complete
+        // because the docstring above says it checks both halves.
+        //
+        // Found by poisoning the axis-aligned reduction to `r mod (C-1)` while widening this
+        // test to both families. **Four tests reddened elsewhere and this one stayed green** -
+        // three in `tests/families.rs` and `every_cell_has_six_distinct_neighbours` here -
+        // while `tests/drawing.rs` and `tests/colouring.rs` stayed green, which is what says
+        // this assertion reaches something nothing else does.
+        //
+        // **That count was first written as six and sourced from nothing.** The quality lens
+        // had measured five under a different poison; six was neither number, and it reached a
+        // commit message, this comment and the README before anyone applied the poison and
+        // counted. Re-measured at `5221933`.
         assert_eq!(
             reached.len(),
             domain.len(),
