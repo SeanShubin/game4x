@@ -1246,6 +1246,54 @@ three-dimensional sphere the user can rotate to be above any point. **That rule 
 preference; it is the thing that makes every territory interior**, and it is available to a sphere
 and to nothing else. A torus world would have to replace it with a rule about where the seam sits.
 
+**The choice Sean reasoned to on 2026-09-12, and it reframes this whole item.** He asked what a
+wrapping *square* grid has that a hex grid does not. The answer is **nothing** - a hex grid has it
+too, and this lane recommended the family that gives it up without saying so.
+
+**Wrap each axial coordinate on its own - `q mod C`, `r mod C`.** The shifts are `(±C, 0)`,
+`(0, ±C)` and `(±C, ∓C)`: the wrap is **coordinate-wise**, which is exactly what makes square-grid
+pathing trivial. It is isotropic - all six directions close in `C` - and the lattice is six-fold
+symmetric, so it meets the original requirement too.
+
+**And it is the same lattice as the `3k²` family, unfolded.** Measured at `k = 2, 3, 4`: the
+axis-aligned lattice at `C = 3k` sits **inside** the `3k²` lattice with index exactly **3**. So
+`3k²` is this torus folded into three - same circumference, a third of the territories - and **the
+folding is what destroys the coordinate-wise wrap.** Nothing about hexes is the cause; which of two
+lattices you take is.
+
+|                           | axis-aligned        | `3k²`        |
+| ------------------------- | ------------------- | ------------ |
+| pathing                   | **coordinate-wise** | three shifts |
+| territories at `C = 6`    | 36                  | 12           |
+| steps that wrap, `C = 6`  | **21%**             | 33%          |
+| circumference vs a sphere | 61%                 | **105%**     |
+
+**Axis-aligned wins on pathing and on wrap frequency, and loses one row.** This lane optimised that
+one row and said nothing about the first, having been told the danger was breaking intuition rather
+than failing arithmetic.
+
+**Its ten sizes**, measured rather than extrapolated:
+
+| C   | territories | circumference | a sphere that size | steps that wrap |
+| --- | ----------- | ------------- | ------------------ | --------------- |
+| 3   | 9           | 3             | 4.9                | 41%             |
+| 4   | 16          | 4             | 6.6                | 31%             |
+| 5   | 25          | 5             | 8.2                | 25%             |
+| 6   | 36          | 6             | 9.9                | 21%             |
+| 7   | 49          | 7             | 11.5               | 18%             |
+| 8   | 64          | 8             | 13.2               | 16%             |
+| 9   | 81          | 9             | 14.8               | 14%             |
+| 10  | 100         | 10            | 16.5               | 13%             |
+| 11  | 121         | 11            | 18.1               | 12%             |
+| 12  | 144         | 12            | 19.8               | 11%             |
+
+`C = 1` and `C = 2` are dropped as degenerate, the way `k = 1` is dropped from the other family.
+**The 61% is constant at every size** - it is `1/√(π√3/2)` and does not depend on `C`.
+
+**And it is probably what Solium Infernum does.** `q mod width, r mod height` is what a hex map
+stored as a two-dimensional array gives for free. **The good pathing is what the obvious
+implementation hands you**, and the folded lattice is something nobody arrives at by accident.
+
 **Whether.** **Worth deciding, and it is the decision rather than a step toward one.** This lane
 takes no position on whether the trade is worth it - a game may be fine with a seam, and centring
 the view on the player's own unit hides it at the cost of never seeing the world whole, which is
