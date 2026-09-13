@@ -21,57 +21,6 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-480 - `spec/turn.md` fixes the order and does not place nature's reclaim
-
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction, found by reading the turn's phases against what is built · **shape** text · **asks** a decision · **into** `spec/turn.md` -> Order of operations
-
-**`spec/turn.md` opens with *the order in which a turn resolves; every other document assumes this
-order*.** Its end-turn sentence names four things:
-
-```
-everything with upkeep pays it; then a population grows on surplus food or starves
-for want of it; what expires expires, and what was not kept in order is lost; and
-time restores every count to the number that thing's kind declares
-```
-
-**The game does five.** `spec/control.md` states the fifth - *should the force in a territory fall
-below its force of nature, nature takes it back; its entire population perishes, and every unit on
-it is destroyed* - and says nothing about when.
-
-## Where it actually runs
-
-```
-per territory   settle_population()      upkeep, bear, breed, renew, perish
-                end_of_turn_losses()     what expires, what is over the bound
-                make_ready()             counts restored
-then, globally  nature reclaims          where force is now below force of nature
-                units un-exhausted       counts restored
-```
-
-**So *time restores every count* happens in two places, straddling the reclaim** - a territory's
-counts before it, a unit's after. Nothing observable turns on that today, because the reclaim reads
-what is present rather than what is ready.
-
-## The decision
-
-**Where does nature's reclaim sit?** The code puts it after the losses and before the units are
-made ready, and the comment gives a reason: *whether force is enough depends on what settling left
-behind*. That reason is real - a population that starved may no longer hold the ground it held at
-the start of the turn.
-
-**The alternative is that it runs first**, before upkeep, so a territory is lost on the force it
-had when the player stopped acting rather than on what ending the turn did to it. That makes
-starvation and dispossession independent instead of sequential.
-
-**This lane will not choose it from the implementation.** `spec/` is the destination and the code
-follows it; picking the built order because it is built inverts that, and the difference is a rule
-about whether nature reacts to the same turn's starvation or the previous one's.
-
-## What this does not ask
-
-**Nothing about what nature does**, which `spec/control.md` already says and this does not touch.
-Only where it falls in the one document that claims to fix the order - and whether *time restores
-every count* is one step or two.
 ### P-479 - the traits in a description no longer sort, and what they do instead is yours
 
 **to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction, from your order of relevance landing at `ed8c1bb` · **shape** text and an instruction · **asks** a decision · **into** `spec/console.md` -> The language, and possibly `spec/data/traits.4x`

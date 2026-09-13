@@ -8,13 +8,21 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-480** - `spec/turn.md` fixes the order and does not place nature's reclaim · `docs/notes/decisions.md`
+- **P-480** - nature's reclaim is the fourth of five things ending a turn does · `docs/notes/proposals.md`
 - **P-479** - the traits in a description no longer sort, and what they do instead is yours · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
+
+## Open, and a commit says otherwise
+
+An item is closed by whoever filed it and answered by somebody else, so the filer gets
+no signal. These are still marked `open`, and a commit that touched no part of their own
+outbox cites them - which usually means they were settled and nobody went back.
+
+- **P-480** - `97ca22a` P-480: the turn's order has five phases and `spec/turn.md` names four · still open in `docs/notes/proposals.md`
 
 ## What is outstanding
 

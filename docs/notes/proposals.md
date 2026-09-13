@@ -62,7 +62,51 @@ Two limits Claude holds itself to:
 
 ## Open
 
-*Nothing is open. Everything filed has been decided.*
+### P-480 - nature's reclaim is the fourth of five things ending a turn does
+
+**to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered, from your placing it at step 4 · **shape** text · **asks** approval · **into** `spec/turn.md` -> Order of operations
+
+You put nature at step 4, so the restoring of counts is step 5 and is one step rather than two.
+
+## The words, replacing the *Ending a turn* bullet
+
+> - Ending a turn: everything with upkeep pays it; then a population grows on surplus food or
+>   starves for want of it; **what expires expires, and what was not kept in order is lost**; then
+>   **nature takes back what is no longer held**; and **time restores every count to the number
+>   that thing's kind declares**
+
+**One clause added and one word changed** - the third *and* becomes *then*, because there are now
+four semicolons rather than three.
+
+**It names the phase and not the rule.** `spec/control.md` says what nature does and when it does
+it - *should the force in a territory fall below its force of nature, nature takes it back; its
+entire population perishes, and every unit on it is destroyed*. Repeating the condition here would
+be a second statement of one fact. *What is no longer held* is that document's own vocabulary,
+because *holding a territory takes force equal to its force of nature*.
+
+## What your answer settles besides the position
+
+**Restoring counts is one step and it is last.** `P-480` asked that as a second question and the
+numbered list you answered against had it as a single step 5, so this is the reading - say so if
+it is not.
+
+**It moves one line of the code and changes nothing observable.** Today a territory's counts are
+restored inside `settle`, before the reclaim, and a unit's after it:
+
+```
+per territory   settle_population, end_of_turn_losses, make_ready
+then, globally  nature reclaims, units un-exhausted
+```
+
+**Nothing turns on it today** because the reclaim reads what is present rather than what is ready -
+so this is the specification saying plainly what the code does not quite do, rather than a defect
+anyone could see. **Filed to the code lane when this lands.**
+
+## Why this order rather than the other
+
+The alternative was that nature runs first, on the force you left when you stopped acting. **You
+chose the one where a population that starves can lose the ground it was holding** - so starvation
+and dispossession are sequential in the same turn rather than a turn apart.
 
 ## Addressed to other perspectives
 
