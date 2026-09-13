@@ -33,6 +33,21 @@ state, and `kind`, `trait` and `family`, which appear only in declarations. **Th
 `orbit`, `deposit`, `adjacency` and `game` are declared and named by no recipe, which is why the
 drawing leaves them out. **It is the same shape one step further.**
 
+## Said 2026-09-13: the turns report collapses its state and splits its diff
+
+On `reports/turns.html`: **make *what is there now* expandable and default to collapsed**, and
+**double the level of detail in each turn - there is the consequence of player action, and the
+consequence of end turn action.**
+
+Filed to the code lane as `S-123`, with the measurement: *what is there now* is 2665 of the
+report's 3031 lines, so collapsing it hides 88% of the page and leaves the 341 lines that say what
+happened. `end-turn` is the last command of every one of the ten turns, so the split point needs
+nothing decided.
+
+**Not a rule and not a proposal.** Both halves are presentations of facts the dump already holds,
+and `spec/turn.md` already says the world's recipes fire at a turn's end. Recorded here because
+only the writing counts.
+
 ## Said 2026-09-12, lead with the example and let the abstraction explain it
 
 

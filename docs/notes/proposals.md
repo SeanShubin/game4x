@@ -66,6 +66,69 @@ Two limits Claude holds itself to:
 
 ## Addressed to other perspectives
 
+### S-123 - `reports/turns.html`: collapse the state, and split the diff in two
+
+**to** code · **status** open · **raised** 2026-09-13 · **source** Sean, directly, reading the report
+
+**His words.** *On this report `reports/turns.html`, lets make the "what is there now" expandable
+and default to collapsed, and lets double the level of detail in each turn, there is the
+consequences of player action, and the consequence of end turn action.*
+
+## Why the first one is worth more than it sounds
+
+**Measured over `reports/turns.md`, which is the same content:**
+
+```
+10 turns, 3031 lines
+  commands             183
+  what changed         158
+  what is there now   2665      88% of the page
+```
+
+**Collapsed by default, the report becomes the 341 lines that say what happened**, and the state is
+one click away per turn. Today a reader scrolls 266 lines of unchanged state to reach the next
+turn's commands.
+
+## The split, and the boundary is unambiguous
+
+**`end-turn` is the last command of every turn** - checked on all ten. So *what changed* today
+merges two different things:
+
+- what the **player's** commands did - `{deploy-ark territory:1}`, `{work territory:1
+  resource:food}`
+- what **`end-turn`** did - the world's recipes firing, which is `spec/turn.md`'s order of
+  operations
+
+**The state after the last pre-`end-turn` command is the split point**, and nothing has to be
+decided to find it.
+
+**Where one half is empty, say so rather than omitting the heading.** A turn where the player did
+nothing and a turn whose section was not generated are different facts, and an absent heading makes
+them the same bytes - which is `docs/notes/nothing-removes.md` in the small.
+
+## Two constraints this must not break, and one is `R-9`
+
+- **`reports/turns.html` contains no `<script>` today**, and `R-9` - *I can browse the reports
+  without a script running* - is `built` and waiting on Sean. **`<details>` and `<summary>` are
+  plain HTML and keep that true**; anything needing JavaScript does not. No report uses `<details>`
+  yet, so this is the first
+- **`reports/turns.md` is the sibling and markdown has no collapse.** The flat file staying flat is
+  fine by this lane - the collapse is a reading affordance and the `.md` is the thing a tool reads.
+  **Your file, so you pick**; what matters is that both keep saying the same thing
+
+## What this changes for Sean, which is why it is worth doing now
+
+**`R-9` and `R-7` both rest on him reading reports**, and both are `built` and waiting on him. This
+makes the one report that is about what the game *does* readable in one screen per turn instead of
+eleven. **If it lands before he vets, he vets the better one.**
+
+## What this lane is not asking for
+
+**Nothing about what the game does, and no new rule.** The split is a presentation of facts the
+dump already has, and `spec/turn.md` already says the world's recipes fire at a turn's end. If
+generating it turns out to need something the specification does not say, that is a proposal and
+this lane will write it.
+
 ### S-122 - `P-475` and `P-476` landed, and between them they change every deposit entry
 
 **to** code · **status** **acted** 2026-09-12 · **cited** `3292266`, `5e97b79` · **raised** 2026-09-12 · **source** promoting both, then re-deriving the dump's shape from `spec/data/` rather than from the proposals
