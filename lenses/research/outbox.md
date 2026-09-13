@@ -1086,6 +1086,44 @@ Three details that will otherwise produce something indistinguishable from a ren
   echoes are the same territory rather than more world: turn ids on and watch `7` appear in every
   direction.
 
+**Numbering and colour, added by Sean on 2026-09-12.** Every hex carries its number, and **ids
+are on by default here** rather than off as in `goldberg-view` - the id is what makes a dimmed hex
+legible as a repeat rather than as more world, so the prototype is not doing its job with them
+hidden.
+
+**Colour by `crates/graph-coloring`, unchanged.** It already climbs a ladder - 2, then 3, then 4 -
+and reports which succeeded as `Method::Exact(n)`. So the colour count is an **output of this
+prototype rather than a setting**, and it will say **3**.
+
+**Three, not four, and the reason is the whole of the geometry.**
+`docs/theory/region-coloring.md` already states it: *the same twelve pentagons that make a perfect
+hex grid impossible are what push the color count from three to four.* A trivalent planar map is
+3-colourable when every face has an even number of sides; a Goldberg has twelve pentagons and is
+not. This grid has none and is.
+
+**It holds at every one of the ten sizes and that is a property of the family rather than of tori.**
+The plane's colouring is `(q + r) mod 3`, which survives the wrap exactly when `3` divides `a + b`
+for the wrapping generator `a + bω`. This family is `α = k(2+ω)`, so `a + b = 3k` and it always
+divides. The square family `α = k` needs `3 | k` and fails otherwise. Each colour takes `k²` of the
+`3k²` cells.
+
+**So assert `Exact(3)` at all ten sizes**, which is a far stronger check than *it coloured
+something*, and it is the one assertion that would notice the wrapping being built wrong - a torus
+whose generator failed the test above would need four.
+
+**One thing to know before reusing the crate.** Its own docstring says *on a genuinely planar input
+the k = 4 step should always succeed*, and calls the greedy fallback a bug detector. **A torus is
+not planar**, and by Heawood a torus map can need up to seven colours. This family never does, so
+nothing misfires here - but the comment's assumption stops being true the moment a non-planar input
+reaches it, and that is worth a line in the crate rather than a surprise later.
+
+**And Sean should know the colouring cuts against him.** A 3-colouring of a hex grid is essentially
+rigid: it comes out as diagonal bands that wrap, where the Goldberg's four-colouring looks
+irregular. **The colouring he asked for will make the repeating structure more visible, not less.**
+That is useful in a prototype meant to show the wrapping and it is the opposite of what a shipped
+map would want. A toggle between the found colouring and a forced four is one key and makes the
+comparison something to look at rather than to argue about.
+
 **Controls mirror `goldberg-view`**, so the two read as one tool: `[` and `]` step through the ten,
 `I` toggles ids, drag or the arrows pan, the wheel zooms, `R` resets.
 
