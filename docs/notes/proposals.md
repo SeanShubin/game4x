@@ -62,6 +62,74 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-489 - two new recipes make energy from nothing, and the table already has the idiom that fixes it
+
+**to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction, found by the quality lens against rows this lane drafted · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes
+
+**This replaces the version you have not yet read.** That one asked you to widen the definition of
+`put`. **The quality lens found the real defect underneath it and it is worse**: neither new recipe
+takes the energy from anywhere.
+
+```
+refuel           require 1 unit, with room for energy, $where
+                 put     1 energy                       that unit      <- from nowhere
+
+produce pioneer  consume 3 metal / consume 2 citizen
+                 put     2 energy                       that pioneer   <- from nowhere
+```
+
+**`refuel` is a player recipe, repeatable, whose whole effect is one energy appearing.**
+`spec/invariants.md`: *no sequence of rules ends holding more than it began with.*
+
+## The table already relocates a quantity, twice, and not with `put`
+
+```
+| **stow** | world | consume | 1 | metal  |  |                   |
+|          |       | produce | 1 | metal  |  | a store for metal |
+| **stow** | world | consume | 1 | energy |  |                   |
+|          |       | produce | 1 | energy |  | a store for energy |
+```
+
+**Consume where it is, produce where it goes, and the two cancel.** Counted over the table:
+**fifteen `put` rows - thirteen name a count trait and carry no quantity, and the two with a
+quantity are the ones this lane wrote.** They are not a narrow case of `put`; they are not `put` at
+all.
+
+## The rows
+
+| Recipe              | Owner  | Role    | Qty | Kind    | Traits               | Where        |
+| ------------------- | ------ | ------- | --- | ------- | -------------------- | ------------ |
+| **produce pioneer** | player | consume | 3   | metal   |                      |              |
+|                     |        | consume | 2   | energy  |                      |              |
+|                     |        | consume | 2   | citizen |                      |              |
+|                     |        | produce | 2   | energy  |                      | that pioneer |
+|                     |        | produce | 1   | pioneer |                      |              |
+| **refuel**          | player | require | 1   | unit    | with room for energy | `$where`     |
+|                     |        | consume | 1   | energy  |                      |              |
+|                     |        | produce | 1   | energy  |                      | that unit    |
+
+**A blank `Where` is the place the recipe acts**, which the table already says - so the energy comes
+from the territory and goes into the unit.
+
+## What this means no longer needs deciding
+
+**`a put has no quantity, because nothing is made or taken` stands exactly as written.** No rule
+changes, no sentence widens, and the code lane's `nogain.rs` stops meeting a shape it was told
+could not exist.
+
+**And `spec/units.md`'s *the energy is paid where it is built* is satisfied rather than strained.**
+The territory gives up two energy; the pioneer holds two. That is what *paid* means, and this
+lane's earlier phrase *a fill rather than a cost* was loose - it is both, and the row that makes it
+a payment was the one missing.
+
+## The prose at line 429, corrected with them
+
+> **A founding unit costs citizens, and that is the cost that matters.** `produce pioneer` consumes
+> **3 metal, 2 energy and 2 citizens**; `launch ark` consumes 3 metal, 12 energy and 2 citizens and
+> requires a Yard.
+
+**Six becomes two, not nothing** - which the version you have not read got wrong, because it was
+written when the energy was going to come from nowhere.
 ### P-490 - `CLAUDE.md` poisons its checks and never its prose
 
 **to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered, from the research lane correcting its own item · **shape** text · **asks** approval · **into** `CLAUDE.md` -> What done means
@@ -125,62 +193,6 @@ week. **Others neither lane knows about.** The research lane named that measurem
 run it as the last thing in a long day, which is the rule being followed before it is written.
 
 **If you would rather have the measurement first, say so and this waits for it.**
-### P-489 - `a put has no quantity`, and `P-485`'s rows have one
-
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction, inside one file, created by a promotion this lane drafted · **shape** text · **asks** approval · **into** `releases/first-release.md` -> Recipes
-
-**The gate is red and this is what it is refusing.** `releases/first-release.md:194` says:
-
-```
-a put names a thing that is already there and says what is true of it afterwards - the same
-thing and not a new one, so what has an identity keeps it. A put has no quantity, because
-nothing is made or taken.
-```
-
-**`P-485`'s rows are `put 2 energy` and `put 1 energy`.** This lane drafted them and did not read
-the role's definition four hundred lines above the table.
-
-## Why the rows are right and the sentence is too narrow
-
-**Every `put` before these names a thing with an identity.** `move` puts a unit; `refresh` puts a
-unit and a citizen. **There is one of each, so no quantity is needed** - which is what the sentence
-noticed.
-
-**`spec/console.md` already draws the line the sentence was reaching for:**
-
-```
-A quantity is for what is interchangeable, and a thing carrying an `id` is never a quantity
-```
-
-**Energy is interchangeable.** So a put of energy needs a quantity for the same reason a put of a
-unit does not - and neither makes nor takes anything, which is the part the sentence got right.
-
-## The words, replacing the sentence at line 194
-
-> **A put of a thing with an identity has no quantity, because there is one of it. A put of a
-> quantity moves that many.** Nothing is made or taken either way.
-
-## Why not the other repair
-
-**The alternative is that these rows want `produce`, and they do not.** `P-486` says the energy is
-**paid** where the unit is built, so it is moved rather than made - and `nogain.rs` weighs the rules
-to decide whether they can come round with more. **A `produce` of energy would be a gain the
-weighting has to account for**, where a put is a relocation that nets to nothing. The code lane's
-check panicked rather than dropping the row, which is it working on a shape it was told could not
-exist.
-
-## The second sentence the promotion left stale
-
-**`releases/first-release.md:429` still says `produce pioneer` consumes *3 metal, 6 energy and 2
-citizens*.** `P-485` removed the six.
-
-> **A founding unit costs citizens, and that is the cost that matters.** `produce pioneer` consumes
-> **3 metal and 2 citizens**; `launch ark` consumes 3 metal, 12 energy and 2 citizens and requires
-> a Yard.
-
-**The paragraph's argument survives and is stronger** - founding competes with the population
-rather than costing resources beside it, and the energy is now a fill rather than a cost at all.
-
 ## Addressed to other perspectives
 
 ### S-128 - a pioneer's bin: three promotions, and the dump has to start showing what a unit holds

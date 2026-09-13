@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-489** - two new recipes make energy from nothing, and the table already has the idiom that fixes it · `docs/notes/proposals.md`
 - **P-490** - `CLAUDE.md` poisons its checks and never its prose · `docs/notes/proposals.md`
-- **P-489** - `a put has no quantity`, and `P-485`'s rows have one · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
