@@ -192,6 +192,30 @@ something and it stayed green* is not, until the first half is established.
 This is `C-28` turned on the instrument used to verify instruments, which is why nothing catches it:
 the poison is the last thing in the chain, and there is nothing behind it to check it.
 
+## A population defined by where a value lives can be escaped by moving the value
+
+**`Q-83`, and this is a limitation of this lens's own finding rather than of the fix.** The item said
+a cost check's population was a hand list, and that a count summed over that list could only confirm
+it. The code lane's repair made the population `game::cost` itself - every `pub const` in the module
+must be compared against the release - which is right and is stronger than a list.
+
+**Then a cost left the module.** `produce pioneer` pays for a pioneer's fuel bin at
+`crates/game-model/src/game.rs:779` as `kind.cells()`, and `PIONEER_ENERGY` was deleted the same day.
+**The set check passes**, because the constant is gone from both sides; the payment it used to
+compare is still made, by code the population no longer reaches. Swept to know the size of it:
+fourteen spend sites, eleven on a `cost::` constant, one on `kind.cells()`, two on a command-supplied
+`count` that matches what `work` states.
+
+**The defect is in how the population was named, and this lens named it.** *Every constant in this
+module* is a claim about **where a value lives**. *Every cost the game charges* is a claim about
+**what it does**, and only the second is closed under someone moving a number. The code lane's
+`a_pioneer_is_paid_for_where_it_is_built` is the right answer because it reads a running game: the
+territory pays exactly the bin, and the bin it paid for is full.
+
+**So when proposing a population, ask whether it is defined by location or by behaviour** - and
+prefer the second, because the first is escaped by an ordinary refactor that nothing about the check
+will notice.
+
 ## When a check compares two objects, the poison has two directions and they are not the same
 
 **2026-09-12, and the code lane found it after this lens had already poisoned the same check.**
