@@ -1342,6 +1342,29 @@ symmetric with the `1 mod 6` reason beside it - or rename it to what it checks, 
 fine: something has to break those ties and nothing symmetric is available.
 
 
+### X-35 - the drawing offers controls it does not have, and shows one of the twenty
+
+**to** code · **status** open · **raised** 2026-09-12 · **source** Sean opening `prototypes/hex-torus-view/drawing/index.html` after the axis-aligned family landed and saying it looks the same · **found by** it looking the same, which it does
+
+**Where.** `prototypes/hex-torus-view/drawing/index.html`.
+
+**What.** The page contains **one** `svg`, and it is `folded, 12 territories` - the first of twenty
+and byte-for-byte the picture Sean had already seen. Its header says *`[` `]` step the twenty - ten
+folded, then ten axis-aligned*, which is true of the interactive binary and **false of the page
+that says it.** The table below the drawing lists all twenty rows, so the page knows about them and
+draws one.
+
+**Why it costs something.** The drawing is the artifact a person can open without a Rust toolchain,
+and it is the one Sean opened. **He concluded the change had not landed, and it had** - `435427f`.
+The cost is not a missing feature; it is that **a correct page reporting one of twenty under a
+promise of twenty reads as *nothing changed*.**
+
+**Whether.** **Worth repairing and it is small.** Either draw all twenty and make `[` `]` work in
+the page, or delete the control line from the generated header and say which single configuration
+is shown. **This lane has no view on which**, and the table of twenty is right either way - it is
+the only part that told anyone the other nineteen exist.
+
+
 ## Resolved
 
 **Refused on 2026-09-10, and the refusal found something this item had not.** The code lane built
