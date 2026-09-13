@@ -33,6 +33,24 @@ state, and `kind`, `trait` and `family`, which appear only in declarations. **Th
 `orbit`, `deposit`, `adjacency` and `game` are declared and named by no recipe, which is why the
 drawing leaves them out. **It is the same shape one step further.**
 
+## Said 2026-09-13: a pioneer's tank, brainstormed not decided
+
+Answering `P-485`, and **explicitly brainstorming rather than deciding**:
+
+- A pioneer is created with a full tank
+- A pioneer can not be created at all without sufficient energy to fill the tank
+- A pioneer is a container for fuel, with the corresponding occupied/free/capacity trio for energy
+- Every space the pioneer moves consumes 1 fuel
+- A pioneer has the capacity for 2 fuel
+
+**Three of the five need no new rule.** One and five are a single number under
+`spec/console.md`'s *a trait of the thing may carry a number on a kind's line, and that number is
+its maximum - where a thing of that kind begins, and the most it may hold*. Two falls out of
+`put`. Four is what `move` already does.
+
+**What is unresolved is whether the tank is containment or a count**, because `spec/turn.md` says
+time restores every count at a turn's end, and a fuel that is restored is not fuel.
+
 ## Said 2026-09-13: the turn report shows each of end-turn's five phases
 
 *I want to break down `reports/turns.html` even further. Right now we have 2 sections, "what your
