@@ -62,6 +62,62 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-479 - a description's traits rank by relevance, with an alphabetical middle
+
+**to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered, from your choice of `B` with the middle left open · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+You chose `B`: state the top and the bottom, leave the middle alphabetical and deterministic, and
+place a trait explicitly when one annoys you enough.
+
+**Two blocks.** The first is your decision written down. **The second is the code lane's choice
+about declaration lines**, which it made and flagged; approving it is you making it, and
+`promote P-479:1` alone lands the first without the second.
+
+## 1. Replacing the *sort* clause
+
+> **Entries are in the order their descriptions sort in, and the traits inside a description are in
+> order of relevance**: `id` first, then every other trait alphabetically, then `occupied`, `free`
+> and `capacity` last. So the same state is always the same bytes and a description is one string
+> however it was built. **The middle is alphabetical because nothing has yet needed placing
+> there**, and a trait leaves it by being named at one end or the other.
+
+## 2. Declaration lines, which name a trait without valuing it
+
+> **On a kind's line a trait is named and not valued, and there it keeps its alphabetical place.**
+> The order of relevance is about a thing and `id:1` identifies one; a declared `id` is a trait the
+> kind has, and ranking it first would put it ahead of `name`, which says which kind the line is
+> about.
+
+## The alternative to alphabetical, and why it is worse
+
+**The only real candidate is the line order of `spec/data/traits.4x`**, which already lists all
+twenty-six. It is deterministic, it needs no second list, and a new trait is placed by where you
+write its line.
+
+**It fails on the thing you are protecting.** That file's order means nothing today - it accreted -
+so adopting it would make an order nobody chose into the specified one, which is what you objected
+to about the alphabet, with the difference that nobody could see it. **And reordering the file would
+silently change every dump**, where today it changes nothing.
+
+**Two others were considered and are not candidates.** Ordering by `kept` yields nothing: every
+trait in a description is `kept:thing`, because a trait of the kind is not part of one. Ordering by
+length or by how often a trait appears is not stable under adding a kind.
+
+**So alphabetical is the best available for a middle nobody has chosen** - arbitrary, visible as
+arbitrary, and free.
+
+## The check this needs, which is the code lane's to build
+
+**`B`'s staleness risk is the opposite of a full list's, and it is checkable.** A full list rots
+when a trait is added and nobody places it. **A partial list rots when a trait is renamed** - the
+ordering goes on naming a trait nothing has, the rule quietly stops applying, and the dump looks
+fine.
+
+**That is not hypothetical: `free` was `room` last night.** Had the ordering existed then, it would
+still say `room` and `free` would have fallen into the alphabetical middle with nothing red.
+
+**So: every trait named in the ordering is declared in `spec/data/traits.4x`, asserted against the
+count read from that file.** Four names today. This lane files it to the code lane when this lands.
 ### P-480 - nature's reclaim is the fourth of five things ending a turn does
 
 **to** sean · **status** open · **cited** `97ca22a`, `da783d4` · **raised** 2026-09-13 · **kind** recovered, from your placing it at step 4 · **shape** text · **asks** approval · **into** `spec/turn.md` -> Order of operations
