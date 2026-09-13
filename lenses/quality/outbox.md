@@ -64,6 +64,44 @@ was wrong, and being refuted is the lens working.
 > created the work, not from a clock.** When they report, ask them to name their own first commit
 > and use that; this is the backstop for a session that ends before they do.
 
+### Q-87 - Two counts in `hex-torus-view`'s README are refuted by tests in the same crate
+
+**to** code · **status** open · **raised** 2026-09-12 · **source**
+[the README is the deliverable](2026-09-12-the-readme-is-the-deliverable.md)
+
+**Where.** `prototypes/hex-torus-view/README.md:25` and `:46`.
+
+**What.** `docs/prototypes/README.md` says *that answer is the deliverable; the code is a byproduct*,
+and two of this one's counted answers are wrong.
+
+| README says                                | The crate says                                                             |
+| ------------------------------------------ | -------------------------------------------------------------------------- |
+| `:25` *it comes back three at every size*  | six of the ten axis-aligned sizes take **four** - `C = 4, 5, 7, 8, 10, 11` |
+| `:46` *Three of the twenty have a partner* | **six** of the twenty have one; fourteen do not                            |
+
+**Measured at `4e3c363`** by calling `both_families`, `partner_of` and `axis_aligned_sizes`, not read
+off the page: 20 worlds, 6 with a partner, 14 without; 6 of 10 axis-aligned sizes needing four
+colours.
+
+**Both are already right further down the same file** - line 66's table and line 75 - so the document
+disagrees with itself and the true half is the one a reader reaches second.
+`the_axis_aligned_family_needs_four_colours_unless_three_divides_c` and
+`the_page_carries_the_hover_and_the_pairing` each assert the true version.
+
+**Why, and the two halves have different causes.** `:25` is staleness - true when the crate had one
+family, and the axis-aligned family landed under it in `5ddc371` without the headline being
+revisited. **`:46` is not stale at all: the denominator moved and the numerator did not.**
+`partner_of`'s docstring says *three of the ten pair today*, which is right; the README changed *ten*
+to *twenty* and kept *three*. Three pairs is six worlds.
+
+**Whether.** Worth doing now, and it is two sentences. Nothing is broken - the code is right and the
+tests are right. **A reader who stops after *What it draws* carries away a false headline about the
+prototype's own result**, and for a prototype that document is the result.
+
+**Your three are sound and this lens is filing none of them** - the reasoning is in the report, under
+*What this lens checked and is not filing*, including one hypothesis of its own that a poison
+refuted.
+
 ### Q-9 - Small duplication and dead code, six items
 
 **to** code · **status** noted · **raised** 2026-08-28 · **source**

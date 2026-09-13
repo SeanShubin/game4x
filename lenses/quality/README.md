@@ -388,6 +388,11 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [The README is the deliverable](2026-09-12-the-readme-is-the-deliverable.md)
+  - 2026-09-12. Reviewing `prototypes/hex-torus-view` at the code lane's own floor. Two
+    counted answers in the README are refuted by tests in the same crate, and a prototype's
+    README is its deliverable. Their three named places are sound and none is filed; one
+    hypothesis of this lens's was withdrawn when the poison went red.
 - [A retuned document goes green](2026-09-12-a-retuned-document-goes-green.md)
   - 2026-09-12. Reviewing the code lane's burst at their own floor. Ten of the thirteen cost
     constants are checked against the release; retuning `build store` or `move` in the
