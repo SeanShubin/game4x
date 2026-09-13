@@ -23,7 +23,7 @@ here without first becoming a proposal.
 
 ### P-476 - nothing outside the debug view says which of a set is held
 
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** contradiction, from your rule that only the debug report knows what is derived · **shape** an instruction · **asks** a decision · **into** `spec/console.md` -> The language, `spec/logistics.md` -> Containment, `spec/data/traits.4x`, and `releases/first-release.md` -> Traits
+**to** sean · **status** open · **cited** `9baf0a2`, `1bbf7f7` · **raised** 2026-09-12 · **kind** contradiction, from your rule that only the debug report knows what is derived · **shape** an instruction · **asks** a decision · **into** `spec/console.md` -> The language, `spec/logistics.md` -> Containment, `spec/data/traits.4x`, and `releases/first-release.md` -> Traits
 
 **Four places say which traits are stored.** All four are outside the debug view.
 
