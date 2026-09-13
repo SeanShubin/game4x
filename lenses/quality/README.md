@@ -192,6 +192,30 @@ something and it stayed green* is not, until the first half is established.
 This is `C-28` turned on the instrument used to verify instruments, which is why nothing catches it:
 the poison is the last thing in the chain, and there is nothing behind it to check it.
 
+## When a check compares two objects, the poison has two directions and they are not the same
+
+**2026-09-12, and the code lane found it after this lens had already poisoned the same check.**
+`exactly_n_cells_are_bright_and_every_cell_echoes_one_of_them` compares a torus's `domain()` with the
+image of its `reduce()`. This lens poisoned `domain` to disagree with `reduce` and it went red, so the
+check was declared sound and a finding was withdrawn. **They poisoned `reduce` to disagree with
+`domain` and found a direction it could not see**: a domain cell that nothing ever reduces to - a
+bright hex that is no territory.
+
+**One direction was vacuous rather than untested, which is why it read as complete.** For the family
+where `domain()` is *built* by reducing, image and domain are the same object and the missing
+assertion cannot fail. For the family where `domain()` is written down independently, it can. **A
+check can be vacuously true over one population and false over another, and the docstring said it
+checked *both halves*.**
+
+**So: poisoning the derived object only ever exercises what survives the derivation.** Before
+believing a red, say which of the two objects was changed, and whether the other one is computed from
+it. Where they are independent, both directions are separate poisons and the cheaper one is usually
+the one that does not find anything.
+
+This is the poison rule one level in. That rule says aim the poison where the check reads; this says
+**that when a check reads two things, where is also a which** - and the answer this lens took was the
+half that happened to be easy to edit.
+
 ## A green suite under a poison bounds the tests, not the code
 
 **`Q-58`, 2026-09-06.** This lens found a `saturating_sub` whose comment gave density zero as its

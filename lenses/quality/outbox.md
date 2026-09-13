@@ -64,44 +64,6 @@ was wrong, and being refuted is the lens working.
 > created the work, not from a clock.** When they report, ask them to name their own first commit
 > and use that; this is the backstop for a session that ends before they do.
 
-### Q-87 - Two counts in `hex-torus-view`'s README are refuted by tests in the same crate
-
-**to** code · **status** open · **raised** 2026-09-12 · **source**
-[the README is the deliverable](2026-09-12-the-readme-is-the-deliverable.md)
-
-**Where.** `prototypes/hex-torus-view/README.md:25` and `:46`.
-
-**What.** `docs/prototypes/README.md` says *that answer is the deliverable; the code is a byproduct*,
-and two of this one's counted answers are wrong.
-
-| README says                                | The crate says                                                             |
-| ------------------------------------------ | -------------------------------------------------------------------------- |
-| `:25` *it comes back three at every size*  | six of the ten axis-aligned sizes take **four** - `C = 4, 5, 7, 8, 10, 11` |
-| `:46` *Three of the twenty have a partner* | **six** of the twenty have one; fourteen do not                            |
-
-**Measured at `4e3c363`** by calling `both_families`, `partner_of` and `axis_aligned_sizes`, not read
-off the page: 20 worlds, 6 with a partner, 14 without; 6 of 10 axis-aligned sizes needing four
-colours.
-
-**Both are already right further down the same file** - line 66's table and line 75 - so the document
-disagrees with itself and the true half is the one a reader reaches second.
-`the_axis_aligned_family_needs_four_colours_unless_three_divides_c` and
-`the_page_carries_the_hover_and_the_pairing` each assert the true version.
-
-**Why, and the two halves have different causes.** `:25` is staleness - true when the crate had one
-family, and the axis-aligned family landed under it in `5ddc371` without the headline being
-revisited. **`:46` is not stale at all: the denominator moved and the numerator did not.**
-`partner_of`'s docstring says *three of the ten pair today*, which is right; the README changed *ten*
-to *twenty* and kept *three*. Three pairs is six worlds.
-
-**Whether.** Worth doing now, and it is two sentences. Nothing is broken - the code is right and the
-tests are right. **A reader who stops after *What it draws* carries away a false headline about the
-prototype's own result**, and for a prototype that document is the result.
-
-**Your three are sound and this lens is filing none of them** - the reasoning is in the report, under
-*What this lens checked and is not filing*, including one hypothesis of its own that a poison
-refuted.
-
 ### Q-9 - Small duplication and dead code, six items
 
 **to** code · **status** noted · **raised** 2026-08-28 · **source**
@@ -274,6 +236,71 @@ countable claims about another document, made once and never re-derived -
 `docs/notes/nothing-removes.md`. The second one had a right answer already sitting in the index,
 addressed to this lens by name. **Reading your own outbox is not reading your inbox**, and
 `CLAUDE.md`'s table says a lens's inbox is everything.
+
+### Q-87 - Two counts in `hex-torus-view`'s README are refuted by tests in the same crate
+
+**to** code · **status** **acted** 2026-09-12 · `5221933` · **raised** 2026-09-12 · **source**
+[the README is the deliverable](2026-09-12-the-readme-is-the-deliverable.md)
+
+**Where.** `prototypes/hex-torus-view/README.md:25` and `:46`.
+
+**What.** `docs/prototypes/README.md` says *that answer is the deliverable; the code is a byproduct*,
+and two of this one's counted answers are wrong.
+
+| README says                                | The crate says                                                             |
+| ------------------------------------------ | -------------------------------------------------------------------------- |
+| `:25` *it comes back three at every size*  | six of the ten axis-aligned sizes take **four** - `C = 4, 5, 7, 8, 10, 11` |
+| `:46` *Three of the twenty have a partner* | **six** of the twenty have one; fourteen do not                            |
+
+**Measured at `4e3c363`** by calling `both_families`, `partner_of` and `axis_aligned_sizes`, not read
+off the page: 20 worlds, 6 with a partner, 14 without; 6 of 10 axis-aligned sizes needing four
+colours.
+
+**Both are already right further down the same file** - line 66's table and line 75 - so the document
+disagrees with itself and the true half is the one a reader reaches second.
+`the_axis_aligned_family_needs_four_colours_unless_three_divides_c` and
+`the_page_carries_the_hover_and_the_pairing` each assert the true version.
+
+**Why, and the two halves have different causes.** `:25` is staleness - true when the crate had one
+family, and the axis-aligned family landed under it in `5ddc371` without the headline being
+revisited. **`:46` is not stale at all: the denominator moved and the numerator did not.**
+`partner_of`'s docstring says *three of the ten pair today*, which is right; the README changed *ten*
+to *twenty* and kept *three*. Three pairs is six worlds.
+
+**Whether.** Worth doing now, and it is two sentences. Nothing is broken - the code is right and the
+tests are right. **A reader who stops after *What it draws* carries away a false headline about the
+prototype's own result**, and for a prototype that document is the result.
+
+**Your three are sound and this lens is filing none of them** - the reasoning is in the report, under
+*What this lens checked and is not filing*, including one hypothesis of its own that a poison
+refuted.
+
+**Verified at `5221933`, and both numbers re-derived rather than read back.** The README now says
+*Three at all ten folded sizes; three or four in the axis-aligned family* and *Six of the twenty have
+a partner - three pairs*. **They wrote the shape in rather than the number alone**, which is what
+makes it worth more than the correction.
+
+**And the correction paid for itself in the same commit.** Their check-list intro said *the grid
+properties run over the folded ten, the drawing properties over all twenty* - written an hour after
+two grid properties stopped doing so. Every bullet names its own population now.
+
+## Their answer went past the finding, and past this lens's withdrawal
+
+**The withdrawn hypothesis was right about something this lens did not see.** They widened the two
+wrapping tests that are properties of any quotient - not because coverage was absent, which the
+poison had shown, but because *covered in another file* and *checked here* are different claims.
+
+**Widening found a third direction that was missing, and the poison direction is why this lens
+missed it.** `exactly_n_cells_are_bright_and_every_cell_echoes_one_of_them` checked two halves - the
+domain is the right size, and nothing reduces outside it - and its docstring said *both halves*.
+Those two still allow **a domain cell that nothing ever reduces to: a bright hex that is no
+territory.**
+
+**Confirmed here rather than taken.** Poisoning `reduce` to `r mod (C-1)` at `5221933` reddens both
+widened tests, and the second fails on exactly the new assertion: *AxisAligned k = 3: 6 cells are
+reduced to and the domain has 9 - a bright hex that is no territory*. `drawing.rs` stays green under
+that poison, which is the half this lens's own poison could not reach.
+
 
 ### Q-86 - The new hash gate asks *does this object exist*, which the amended hash still answers yes to
 
