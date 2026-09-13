@@ -1165,6 +1165,104 @@ nothing about whether a torus should be the game's shape. The topological differ
 already recorded - a circumnavigation that separates nothing, northward paths that never converge,
 and no unique antipode - are unaffected by how well this renders.
 
+### X-33 - the torus is legible as an inventory and not as a space, and no drawing fixes it
+
+**to** spec · **status** open · **raised** 2026-09-12 · **source** Sean looking at `prototypes/hex-torus-view` and saying the pathing makes no sense · **found by** the *vetted when* line of `X-32` being observed by a person, which nine passing tests did not give
+
+**What Sean saw, confirmed here by computing it rather than by reading the picture.** At `k = 2` -
+12 territories - the bright region is a lopsided blob of **2, 3, 4, 3** cells per drawn row, and a
+step east off its boundary lands:
+
+| from id | lands on | offset |
+| ------- | -------- | ------ |
+| 1       | 5        | +4     |
+| 4       | 9        | +5     |
+| 8       | 0        | -8     |
+| 11      | 2        | -9     |
+
+**There is no single wrap rule.** Four boundary cells, four different jumps, and nothing in the
+drawing says which. That is the whole of *the pathing makes no sense*: a player cannot learn where
+a step off the edge goes, because there is nothing to learn.
+
+**The shape is not a rendering choice and cannot be improved into one.** A cell set with six-fold
+symmetry about the origin is the origin plus whole orbits of six, so **its size is 1 mod 6**. A
+fundamental domain must contain the origin. And `3k²` is **0 or 3 mod 6, never 1** - checked at all
+ten sizes. **So at no size in this family can the bright region be six-fold symmetric**, and the
+seam therefore has no symmetric shape available to it at any size the game would ship.
+
+**Nor does a better projection help, and this is the part that decides it.** Any flat drawing of a
+torus has a boundary, and at the boundary adjacency stops being visible. The escape would be to draw
+it as a solid the way `goldberg-view` draws a sphere - and **a flat torus has no such solid**. A
+compact surface in three dimensions must have a point of positive curvature, so no flat torus embeds
+smoothly in `R³`; the isometric embedding exists only in `R⁴`, or in `R³` as the Nash-Kuiper `C¹`
+construction, which is the famous crinkled fractal surface and is no use to anybody. **A doughnut is
+not flat** - its inner rim is shorter than its outer - so drawing one distorts the hexes, which is
+the one thing this whole line of enquiry was avoiding.
+
+**So the asymmetry is exact and it is not about effort.** A sphere can be drawn with no boundary at
+all: every territory is interior, and a path is followed by turning the globe. A flat torus cannot
+be drawn that way in principle. **The seam is not a limitation of the prototype; it is the only way
+a flat torus can be shown.**
+
+**What the prototype did answer.** Its question was *does a flat isotropic hex torus read as a world,
+and how visible is the wrapping*. **The inventory is legible and the space is not.** You can see at a
+glance that there are exactly twelve territories and that the surrounding hexes are echoes carrying
+the same numbers - which is what Sean asked for and it works. What you cannot do is follow a route,
+and a 4X is routes.
+
+**Why it costs something.** `spec/planet.md` -> *Presentation* says the planet is presented as a
+three-dimensional sphere the user can rotate to be above any point. **That rule is not a stylistic
+preference; it is the thing that makes every territory interior**, and it is available to a sphere
+and to nothing else. A torus world would have to replace it with a rule about where the seam sits.
+
+**Whether.** **Worth deciding, and it is the decision rather than a step toward one.** This lane
+takes no position on whether the trade is worth it - a game may be fine with a seam, and centring
+the view on the player's own unit hides it at the cost of never seeing the world whole, which is
+exactly what Sean asked the prototype to show him. **What is not open is that a flat torus cannot
+be drawn without one**, and that this is a theorem rather than a rendering budget.
+
+
+### X-34 - `the_bright_region_has_the_six_fold_symmetry_of_the_grid` cannot fail
+
+**to** code · **status** open · **raised** 2026-09-12 · **source** checking why the drawn region looks lopsided when a test says it is symmetric · **found by** `X-33`, and it is the reason that finding took computing rather than reading
+
+**Where.** `prototypes/hex-torus-view/tests/wrapping.rs:79`.
+
+**What.** The test rotates each cell of `domain()` by a sixth turn and then calls `reduce`, and
+asserts the resulting set equals `domain()`. **`reduce` maps every cell to its canonical
+representative, and `domain()` is by construction the set of all canonical representatives.** A
+sixth turn is a lattice automorphism, so it permutes cosets. **So the rotated-and-reduced set is
+the canonical representative set whatever shape that set has** - the test passes for any fundamental
+domain, symmetric or not, and would fail only if `reduce` stopped being a coset reduction.
+
+**It is testing that `reduce` works, under a name that promises something about the region's shape.**
+
+**Measured rather than argued.** The same rotation applied **without** reducing: at `k = 2` the
+drawn set is not carried to itself - `sorted(map(turn, domain)) != sorted(domain)` - and the rows
+are 2, 3, 4, 3 cells. The test is green over a set that visibly lacks the property its name states.
+
+**And the property is unavailable at every size, which is the sharper half.** A six-fold symmetric
+cell set about the origin is the origin plus whole orbits of six, so its size is `1 mod 6`. A
+fundamental domain contains the origin. `3k²` is `0 or 3 mod 6` at all ten sizes and never `1`. **So
+no implementation could make this test's name true**, and a test whose name states an impossibility
+is worse than one that merely does not check: it is evidence for something that cannot hold.
+
+**What the drawn shape actually is.** `reduce` takes the minimum-norm representative, which is the
+hexagonal Voronoi domain - symmetric in its interior. The asymmetry is entirely in the **tie-break**,
+`(norm, -r, -q)`, which resolves boundary ties in a direction that is not itself six-fold symmetric.
+At `k = 2` most cells are boundary cells, so the blob is what is left.
+
+**Why it costs something, and it is not tidiness.** `X-33` rests on the region's shape, and this
+test is the thing a reader would consult to check it. It says the opposite of the truth, in a file
+whose other six tests are sound, which is the configuration that gets believed.
+
+**Whether.** **Worth repairing, and the repair is smaller than the finding.** Either assert the
+rotation without reducing - which will fail, correctly, and can then be asserted as *not*
+symmetric with the `1 mod 6` reason beside it - or rename it to what it checks, which is that
+`reduce` and the sixth turn commute. **This lane has no view on which**, and the tie-break itself is
+fine: something has to break those ties and nothing symmetric is available.
+
+
 ## Resolved
 
 **Refused on 2026-09-10, and the refusal found something this item had not.** The code lane built
