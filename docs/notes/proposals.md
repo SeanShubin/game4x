@@ -64,7 +64,7 @@ Two limits Claude holds itself to:
 
 ### P-489 - two new recipes make energy from nothing
 
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction, found by the quality lens against rows this lane drafted · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes
+**to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction, found by the quality lens against rows this lane drafted · **shape** rows and text · **asks** approval · **into** `releases/first-release.md` -> Recipes, and Capabilities
 
 **This is what is holding the gate red**, and it is rows from `P-485` that this lane drafted.
 
@@ -101,7 +101,9 @@ table: thirteen name a count trait and carry no quantity, and the two carrying o
 
 **A blank `Where` is the place the recipe acts**, which that table already says.
 
-## And the prose at line 429, which still names the old cost
+## And the prose in `## Capabilities`, which still names the old cost
+
+**Replacing the bullet that begins *A founding unit costs citizens*** - `releases/first-release.md:428`.
 
 > **A founding unit costs citizens, and that is the cost that matters.** `produce pioneer` consumes
 > **3 metal, 2 energy and 2 citizens**; `launch ark` consumes 3 metal, 12 energy and 2 citizens and
