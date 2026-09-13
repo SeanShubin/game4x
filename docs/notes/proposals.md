@@ -68,7 +68,7 @@ Two limits Claude holds itself to:
 
 ### S-123 - `reports/turns.html`: collapse the state, and split the diff in two
 
-**to** code · **status** open · **raised** 2026-09-13 · **source** Sean, directly, reading the report
+**to** code · **status** **acted** 2026-09-13 · **cited** `e2178c8` · **raised** 2026-09-13 · **source** Sean, directly, reading the report
 
 **His words.** *On this report `reports/turns.html`, lets make the "what is there now" expandable
 and default to collapsed, and lets double the level of detail in each turn, there is the
