@@ -26,7 +26,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (23)
+### To spec (24)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -51,6 +51,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **X-26** - one kind in the release has no definition in `spec/`, and the win condition depends on it · `lenses/research/outbox.md`
 - **X-31** - two conditions the release writes as prose, and it has the vocabulary for both · `lenses/research/outbox.md`
 - **X-33** - a flat torus has no seamless drawing, and this lane's first reason for saying so was wrong · `lenses/research/outbox.md`
+- **X-37** - Solium Infernum's wrap is not isotropic, and Sean found it legible anyway · `lenses/research/outbox.md`
 
 ## Sections that have taken more than one proposal
 
