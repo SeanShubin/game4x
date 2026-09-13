@@ -8,6 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-487** - what a consumed container held falls loose where it stood · `docs/notes/proposals.md`
+- **P-486** - a unit is built with its bin full, which `P-66` said and a reword lost · `docs/notes/proposals.md`
 - **P-485** - a pioneer is produced with a full tank, and a refuel recipe moves fuel between containers · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`

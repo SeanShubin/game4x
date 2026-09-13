@@ -62,6 +62,62 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-487 - what a consumed container held falls loose where it stood
+
+**to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered, from your answer about founding · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment
+
+**Nothing says what happens to a container's contents when the container is consumed**, and
+`found by land` consumes a pioneer that may still hold fuel. Your answer: *anything the pioneer was
+containing goes into disorder, to be automatically reallocated to storage in the territory or
+discarded if there is no free space.*
+
+## The words, added to Containment
+
+> - **When a thing that contains things is consumed, what it held falls loose where it stood.** It
+>   is not destroyed with its container: it goes into disorder, and at the turn's end what there is
+>   room for is kept and the rest is lost.
+
+**It states the rule and no mechanism**, because the mechanism already exists and is not this
+document's to describe. `spec/turn.md` already says *what expires expires, and what was not kept in
+order is lost*, and *disorder* is `spec/invariants.md`'s word - *it may end with less; that is
+disorder, and disorder is meant*.
+
+**In the release this needs nothing new either.** `stow` takes loose energy into a store and
+`discard` consumes what is still loose, both at a turn's end. **A pioneer founding with one fuel
+left delivers one energy to the new territory**, which is stowed if there is a store for it and
+lost if there is not.
+
+## Why it is general rather than about pioneers
+
+**Every container can be consumed.** A store destroyed, a territory lost to nature with stores in
+it - the same question, and the rule that answers it for a pioneer answers it for all of them.
+This is the first time anything has been inside a thing that gets consumed, which is why it has
+not come up.
+### P-486 - a unit is built with its bin full, which `P-66` said and a reword lost
+
+**to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered, and it restores a promoted idea that left the specification · **shape** text · **asks** approval · **into** `spec/units.md` -> What a unit is
+
+**`P-66` promoted *a mobile unit carries energy cells, filled where it is built*.** Neither *filled
+where* nor *energy cell* appears anywhere in `spec/` today.
+
+**It went in `0aca92d`, 2026-09-01, and the reword was deliberate and right about the wrapper.**
+Its own message: *a unit's cells are filled when it is built, and the energy is paid in the
+territory that built it - so the wrapper had a name, a column and two recipe ingredients and no
+rule of its own.* **The wrapper went and the clause went with it**, leaving *has a bin for fuel*,
+which says a bin exists and not that it starts full.
+
+**The last trace of it is a number.** `produce pioneer` consumes 6 energy for a bin that holds 2 -
+a cost nobody could explain, because it is a fill for a rule the specification stopped stating.
+
+## The words, replacing the fuel bullet
+
+> - A mobile unit that moves over the ground has a bin for fuel. **It is built with that bin full,
+>   and the energy is paid where it is built.** Moving burns a unit of it, and one with an empty
+>   bin cannot move
+
+**One sentence added, in the vocabulary the bullet already uses.** *Paid where it is built* is
+`P-87`'s rule - *a cost is paid in the territory, not at a building site* - said about this case
+rather than restated.
 ### P-485 - a pioneer is produced with a full tank, and a refuel recipe moves fuel between containers
 
 **to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered, from your answer to the earlier `P-485` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes, and Units and structures
@@ -89,12 +145,17 @@ a row that does it.
 
 ## The rows
 
-**`produce pioneer` gains one line.** `put` rather than `produce`, because the energy already
-exists and is being moved rather than made:
+**`produce pioneer` loses its energy cost and gains a fill.** The six energy was never a
+construction cost - it is the last trace of `P-66`, which `P-486` restores. **A pioneer costs three
+metal and two citizens**, as `P-67` had it before cells were folded in, and the two energy is put
+into the bin rather than consumed:
 
-| Recipe              | Owner  | Role | Qty | Kind   | Traits | Where        |
-| ------------------- | ------ | ---- | --- | ------ | ------ | ------------ |
-| **produce pioneer** | player | put  | 2   | energy |        | that pioneer |
+| Recipe              | Owner  | Role    | Qty | Kind    | Traits | Where        |
+| ------------------- | ------ | ------- | --- | ------- | ------ | ------------ |
+| **produce pioneer** | player | consume | 3   | metal   |        |              |
+| **produce pioneer** | player | consume | 2   | citizen |        |              |
+| **produce pioneer** | player | put     | 2   | energy  |        | that pioneer |
+| **produce pioneer** | player | produce | 1   | pioneer |        |              |
 
 **A new recipe, `refuel`.** It makes nothing and destroys nothing:
 
@@ -109,24 +170,19 @@ exists and is being moved rather than made:
 | ------- | -------- | ---- | ------ | ------------ | --------------------- | ------- |
 | **ark** | 2        |      |        | orbit border | defending 1, moving 1 | 1       |
 
-## The number that is a reading and not your words
+## What this rests on, which lands first
 
-**`produce pioneer` consumes 6 energy today, set before a pioneer had a tank.** *Its cost is taken
-from where it is produced* is written above as **2 more**, so a pioneer costs the territory 8
-energy: six spent and two carried away. **If you meant the two to come out of the six, say so and
-it is one cell.**
+**`P-486`** puts *it is built with that bin full, and the energy is paid where it is built* back in
+`spec/units.md`, where `P-66` had it until a reword lost it. **`P-487`** says what a consumed
+container's contents do. **Neither is invented here** - a release may not invent a rule, and
+without those two these rows would.
 
-## Two things this does not settle, stated rather than left
+## The one thing left for the code lane
 
-- **What happens to a pioneer's remaining fuel when `found by land` consumes it.** With 2 fuel and
-  a single hop, one is left. Nothing anywhere says whether it scatters into the new territory or
-  goes with the pioneer - and the only sentence near it is in `spec/narrative.md`, which says the
-  fiction needs a rule only where it would change what a player does. **This would**: founding
-  would deliver a unit of energy
-- **The dump has to start showing it.** A tank is containment, so `spec/logistics.md`'s *a thing
-  appears inside what holds it* means a full pioneer reads `{pioneer ...} -> 1` with `{energy} -> 2`
-  nested under it. **It shows nothing today**, while the entity view says `fuel 2` - the two
-  disagree, and this is what makes them agree
+**The dump has to start showing the fuel.** A bin is containment, so `spec/logistics.md`'s *a thing
+appears inside what holds it* means a full pioneer reads `{pioneer ...} -> 1` with `{energy} -> 2`
+nested under it. **It shows nothing today** while the entity view says `fuel 2` - the two disagree,
+and this is what makes them agree. `scenario/expected/play.4x` moves again.
 
 ## What it gives you in play
 
