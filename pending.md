@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-488** - `CLAUDE.md`'s column table omits two paths that `hooks/pre-commit` already assigns · `docs/notes/proposals.md`
+- **P-488** - two paths added to the Code row of `CLAUDE.md`'s column table · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`

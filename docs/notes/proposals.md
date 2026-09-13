@@ -62,46 +62,48 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-488 - `CLAUDE.md`'s column table omits two paths that `hooks/pre-commit` already assigns
+### P-488 - two paths added to the Code row of `CLAUDE.md`'s column table
 
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction, found by you asking who owns the scenario · **shape** rows · **asks** approval · **into** `CLAUDE.md` -> Perspectives
+**to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction, between `CLAUDE.md` and `docs/process.md` · **shape** rows · **asks** approval · **into** `CLAUDE.md` -> Perspectives
 
-**You asked who owns the scenario. Two things answer it and `CLAUDE.md` is not one of them.**
+**What you are approving is one cell**, the Code lane's *Writes*:
 
 ```
-docs/process.md   "From the coding lane, I read and verify the input and the expected data
-                   from the scenario test"
-                  "the scenario's commands and expected data. The coding instance's job is
-                   to follow the specification"
-
-hooks/pre-commit  crates/*|web/*|commands/*|prototypes/*|scenario/*|reports/*) echo "code"
-
-CLAUDE.md         | **Code** | `crates/`, `web/`, `commands/`, `prototypes/`, cargo |
+now    `crates/`, `web/`, `commands/`, `prototypes/`, cargo
+after  `crates/`, `web/`, `commands/`, `prototypes/`, `scenario/`, `reports/`, cargo
 ```
-
-**All twenty-seven commits to `scenario/` are the code lane's.** So the practice, your document and
-the hook agree, and the one table a lane actually reads to learn its column does not list it.
-
-**This matters because the hook is the thing with teeth.** It refuses a commit spanning two
-columns, and it can only do that by classifying every path - so a path missing from the table is
-not missing from the mechanism, it is silently assigned by a file nobody reads.
-
-## The row
 
 | Perspective | Writes                                                                        | Reads      |
 | ----------- | ----------------------------------------------------------------------------- | ---------- |
 | **Code**    | `crates/`, `web/`, `commands/`, `prototypes/`, `scenario/`, `reports/`, cargo | everything |
 
-**Your approval is needed rather than reported**, because this is what the file says about who may
-write what.
+## Why this is yours rather than this lane's to settle
 
-## One thing this does not settle, and it is about you rather than a lane
+**`CLAUDE.md` itself says so**: *`docs/process.md` is Sean's statement of what this process is for.
+This file is the operating detail and must not contradict it. **Where the two disagree, raise it
+rather than picking a winner** - a difference may mean this file has drifted, or may mean it
+learned something that document has not caught up with, and which is later is Sean's to say.*
 
-**`scenario/expected/play.4x` is written by the code lane and vetted by you** - its own header says
-so, and `docs/process.md` says *that is what I vet*. **Being in the code lane's column is about who
-may edit the file, not about who decides whether it is right.** The row above says the first and
-nothing about the second, which is already true of `releases/` in the other direction.
+**They disagree.** `docs/process.md` says the scenario's commands and expected data come from the
+coding lane. `CLAUDE.md`'s table does not list `scenario/` at all. **That rule says raise it, and
+it says which is later is yours to say** - so the row above is the reading this lane believes, and
+filing it is the instruction being followed rather than a formality.
 
+## The two facts that make it the right reading
+
+- **`hooks/pre-commit` already assigns both**, and it is the half with teeth:
+  `crates/*|web/*|commands/*|prototypes/*|scenario/*|reports/*) echo "code"`
+- **All twenty-seven commits to `scenario/` are the code lane's**
+
+## What does not change
+
+**Nothing about who writes what** - the hook enforces this already and the code lane already does
+it. **What changes is that the table stops being the only place that omits it**, which matters
+because the table is what a lane reads to learn its column and the hook is not.
+
+**And nothing about who vets.** `scenario/expected/play.4x` is the code lane's to write and yours
+to vet; `docs/process.md` says *that is what I vet*. Being in a column is about editing, not about
+deciding whether a thing is right - the same split `releases/` already has, running the other way.
 ## Addressed to other perspectives
 
 ### S-128 - a pioneer's bin: three promotions, and the dump has to start showing what a unit holds
