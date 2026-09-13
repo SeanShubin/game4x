@@ -91,9 +91,57 @@ evening removing.
 
 ## Addressed to other perspectives
 
+### S-126 - `P-483` reordered every declaration line, and the gate is red until you follow
+
+**to** code · **status** open · **raised** 2026-09-13 · **source** promoting `P-483` and running the suite before saying anything about it
+
+**`8a15151`.** **The gate is red from this commit and your next one closes it** - which is what
+`CLAUDE.md` says a promotion into a table you generate from will do. **Nobody pushes until it is
+green.**
+
+```
+crates/game-console/tests/declare.rs:576  the_biomes_file_carries_nature_and_leaves_the_guiding_numbers_out
+crates/game-console/tests/declare.rs:748  the_traits_file_declares_what_a_data_file_needs
+```
+
+## What moved
+
+**A declaration now leads with `name`**, which says which thing it declares, then `of` and
+`family`, then `admits` and `kept`, then its traits in `P-479`'s order.
+
+```
+{trait name:id admits:identity kept:thing}                   was: admits:identity kept:thing name:id
+{trait name:keeps of:thing admits:number kept:thing}         was: admits:number kept:thing name:keeps of:thing
+{kind name:territory family:place id biome control nature}   was: biome control family:place id name:territory nature
+{value name:ice of:biome nature:1}                           was: name:ice nature:1 of:biome
+```
+
+**Forty-five of fifty-eight lines moved and nothing else did.** Forty gained a new leading word;
+five already led with `name` and still moved below it - the biomes with a `nature`, where
+`of:biome` now precedes it; thirteen are untouched. **`families.4x` did not change at all.**
+
+**Reordered from a declared rank rather than by hand**, with every line's set of words asserted
+unchanged, every second word asserted to begin `name:`, and the four files still 22, 26, 4 and 6
+lines. **This reorders and never adds or drops.**
+
+## Why it is worth the churn, in Sean's own reasoning
+
+**`name` is to a declaration what `id` is to a thing.** He asked how *which one* applies to
+anything but `id`, since `id` exists to answer exactly that - and the answer is that an `id` tells
+one thing from its siblings inside one game, while a `name` puts a word into the language.
+`name:territory` is what makes `territory` writable as a leading word; `id:1` makes `1` mean
+nothing anywhere else.
+
+## And `S-125` is built, which this lane verified rather than took
+
+Five `###` sections carrying `spec/turn.md`'s own clauses, and *Nothing changed.* where a phase did
+nothing rather than the heading vanishing. **`end_turn_observed` is a better answer than the item
+asked for** - one code path with an observer, so the report's sequence cannot drift from the
+game's, where five snapshots taken alongside could.
+
 ### S-125 - `reports/turns.html`: break `what end-turn did` into the five phases
 
-**to** code · **status** open · **raised** 2026-09-13 · **source** Sean, directly, reading the report you built for `S-123`
+**to** code · **status** **acted** 2026-09-13 · **cited** `4371e50` · **raised** 2026-09-13 · **source** Sean, directly, reading the report you built for `S-123`
 
 **His words.** *I want to break down `reports/turns.html` even further. Right now we have 2
 sections, "what your commands did" and "what end-turn did". I want "what end-turn did" broken down
