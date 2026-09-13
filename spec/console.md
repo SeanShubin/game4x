@@ -124,7 +124,7 @@ of these and nothing else:
 - **`count {…}`**, how many things match a description
 - **`sum <trait> of {…}`** and **`max <trait> of {…}`**, that trait aggregated over all of them
 - **`min(a, b)`**, the lesser of two
-- **`available <kind> of x`**, a container's total capacity for that kind less what it holds
+- **`free <kind> of x`**, a container's capacity for that kind less what it holds
 
 **A guard compares two expressions**, with `=`, `<`, `≤`, `>` or `≥`.
 

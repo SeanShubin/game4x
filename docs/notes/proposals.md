@@ -170,100 +170,6 @@ words: *which store holds which unit of a resource is not recorded in this relea
 So *how full is this store* has no answer today, and this proposal does not give it one. **If you
 want stores inside the same three names, that is a second item** and it changes what the dump holds,
 not what it is allowed to say.
-### P-475 - the three capacities are `capacity`, `occupied` and `free`
-
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** recovered, from your choice of `B` · **shape** text, rows and an instruction · **asks** approval · **into** `spec/logistics.md` -> Containment, `spec/console.md` -> The language, `spec/invariants.md` -> What a rule may cost, `releases/first-release.md` -> Traits and Where things are, and `spec/data/`
-
-You chose `B`. `room` landed an hour ago and becomes `free`, and **`available` in the expression
-language becomes `free` too**, so one number has one name rather than two.
-
-## What a deposit reads as
-
-```
-before   {deposit density:4 resource:food room:0}
-after    {deposit density:4 resource:food free:0}
-```
-
-**This says nothing about which of the three is held.** That is `P-476` and is deliberately not
-here - these words still name the same one `P-474` named, in the new vocabulary.
-
-## `spec/logistics.md` -> Containment, replacing the second bullet
-
-> - What a thing may contain is a maximum **per kind, per family of kinds, or per kind carrying a
->   particular value of a trait**. **What is stored is the free capacity**: how much more of that
->   kind it could take. **Occupied capacity** is how much it holds, which is simply what is there,
->   and **capacity** is the two added. **Nothing records the capacity**, so nothing can disagree
->   with it. A capacity of four extractors is a maximum of four, so nothing a player builds ever
->   crowds out something of another kind
-
-## `spec/logistics.md` -> Containment, replacing the third bullet
-
-> - **Capacity is spent and given back.** Making a thing occupies one of the free capacity in
->   whatever will hold it; **destroying it frees one**. The two never come apart, because the
->   capacity is only ever their sum
-
-## `spec/logistics.md` -> Containment, replacing the tail of the three-declarations bullet
-
-> Or it may declare **no limit**, and then it holds any number, and there is no free capacity to
-> record because nothing can be short of it
-
-## `spec/logistics.md` -> Containment, replacing the game bullet
-
-> - **The game declares no limit, for every kind.** It contains everything, there is no free
->   capacity to record because nothing can be short of it, and it is the one thing that is in
->   nothing - so the tree has a root that no rule has to except.
-
-## `spec/console.md` -> The language, replacing the last expression bullet
-
-> - **`free <kind> of x`**, a container's capacity for that kind less what it holds
-
-## `spec/invariants.md`, replacing the last two bullets of the soft-line section
-
-> - **A soft line names something with a finite capacity.** Where nothing bounds it there is no
->   free capacity to be short of, so such a line either does nothing at all or asks whether a place
->   is empty - and a rule able to ask that of an unbounded place puts every check above it out of
->   reach
-> - **A rule may ask whether something is absent only where what would hold it declares a limit for
->   it.** Where a limit is declared there is free capacity to record, and *none is present* is read
->   from it rather than measured. Where **no limit** is declared there is no free capacity to be
->   short of, so the question can be answered only by measuring, and a rule able to ask it of such
->   a thing puts every check above out of reach. **Which kinds declare a limit is already written
->   down, so whether a rule may ask is decided from the declarations and not from the rule.**
-
-## The rows
-
-| Trait    | Values   | Stored or derived |
-| -------- | -------- | ----------------- |
-| **free** | a number | stored            |
-
-**`room` leaves the *Traits* table and `free` takes its place**, in the same position.
-
-And *Where things are*, row one:
-
-| Container   | Holds     | Up to                           |
-| ----------- | --------- | ------------------------------- |
-| a territory | that kind | its free capacity for that kind |
-
-## The instruction
-
-**`room` becomes `free` in both data files**, and nothing else in them changes.
-`spec/data/traits.4x` line 14 reads `{trait admits:number kept:thing name:free}` and
-`spec/data/kinds.4x` line 18 reads `{kind density free name:deposit}` - the traits on a kind's
-line sort, so `free` sits before `name` where `room` sat after it.
-
-**The check**: `grep -c 'room' spec/data/` is `0` and `grep -rc 'name:free' spec/data/traits.4x` is
-`1`, and the two files still have 24 and 22 lines.
-
-## What this leaves for the code lane
-
-**Thirty-four lines of `scenario/expected/play.4x` say `room:0`** and will say `free:0`. That is the
-same thirty-four `P-474` moved, and no others - `R-6` records the count.
-
-## What this does not do
-
-**It does not decide which of the three the store holds.** `P-476` does, and it withdraws the
-sentence *Nothing records the capacity* that this proposal only renames.
-
 ## Addressed to other perspectives
 
 ### S-121 - `P-473` landed, and the column had four readers rather than one
@@ -5225,6 +5131,7 @@ work the release exists to order.
 | P-468, biome is named as an input to output and reaches nothing                                                              | `spec/control.md` -> Winning                                                                                                                                                                             | 2026-09-12 |
 | P-473, the *Of* column goes, and `R-8`'s signature is computed from `spec/data/`                                             | `releases/first-release.md` -> Traits, and the `R-8` capability                                                                                                                                          | 2026-09-12 |
 | P-474, the dump stores the total, and `spec/logistics.md` says nothing records it                                            | `releases/first-release.md` -> Traits, and Where things are                                                                                                                                              | 2026-09-12 |
+| P-475, the three capacities are `capacity`, `occupied` and `free`                                                            | `spec/logistics.md` -> Containment, `spec/console.md` -> The language, `spec/invariants.md` -> What a rule may cost, `releases/first-release.md` -> Traits and Where things are, and `spec/data/`        | 2026-09-13 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |

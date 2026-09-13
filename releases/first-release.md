@@ -84,11 +84,11 @@ Every territory has total capacity for at least one food extractor.
 
 Every thing but the game is in another thing, and this release has three sorts of capacity.
 
-| Container     | Holds                         | Up to                  |
-| ------------- | ----------------------------- | ---------------------- |
-| a territory   | that kind                     | its room for that kind |
-| a store       | the resource it was built for | 10                     |
-| a unit's tank | energy                        | the unit's fuel        |
+| Container     | Holds                         | Up to                           |
+| ------------- | ----------------------------- | ------------------------------- |
+| a territory   | that kind                     | its free capacity for that kind |
+| a store       | the resource it was built for | 10                              |
+| a unit's tank | energy                        | the unit's fuel                 |
 
 There are twelve territories and twelve orbits. An orbit holds units and nothing else.
 
@@ -125,7 +125,7 @@ are listed.
 | **binding**     | a number                         | derived: the metal the recipe that makes it consumes |
 | **metal in it** | a number                         | derived: its binding plus the metal in its parts     |
 | **density**     | a number                         | stored                                               |
-| **room**        | a number                         | stored                                               |
+| **free**        | a number                         | stored                                               |
 | **control**     | held by a player, or unclaimed   | derived: a citizen of that player is there           |
 | **biome**       | one of the biomes                | stored                                               |
 | **nature**      | a number                         | stored                                               |

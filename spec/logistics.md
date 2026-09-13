@@ -15,13 +15,14 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - A thing may contain things, and is itself in at most one other thing. Nothing else holds
   anything
 - What a thing may contain is a maximum **per kind, per family of kinds, or per kind carrying a
-  particular value of a trait**. **What is stored is the room left**: how many more of that kind it
-  could take. **Used capacity** is how many it holds, which is simply what is there, and **total
-  capacity** is the two added. **Nothing records the total**, so nothing can disagree with it. A
-  total capacity of four extractors is a maximum of four, so nothing a player builds ever crowds
-  out something of another kind
-- **Room is spent and given back.** Making a thing takes one of the room in whatever will hold it;
-  **destroying it returns one**. The two never come apart, because the total is only ever their sum
+  particular value of a trait**. **What is stored is the free capacity**: how much more of that
+  kind it could take. **Occupied capacity** is how much it holds, which is simply what is there,
+  and **capacity** is the two added. **Nothing records the capacity**, so nothing can disagree
+  with it. A capacity of four extractors is a maximum of four, so nothing a player builds ever
+  crowds out something of another kind
+- **Capacity is spent and given back.** Making a thing occupies one of the free capacity in
+  whatever will hold it; **destroying it frees one**. The two never come apart, because the
+  capacity is only ever their sum
 - A thing that contains things takes up capacity in whatever contains it
 - A thing says which of the things in it are next to which. That is a fact about the container
   rather than about its contents
@@ -32,10 +33,10 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
   and then it holds nothing of that sort and never can. It may declare a **limit**, and then it
   holds up to that many and may happen to be empty - so a thing holding nothing today is not
   thereby a thing that never could. Or it may declare **no limit**, and then it holds any number,
-  and there is no room to record because nothing can be short of it
-- **The game declares no limit, for every kind.** It contains everything, there is no room to
-  record because nothing can be short of it, and it is the one thing that is in nothing - so the
-  tree has a root that no rule has to except.
+  and there is no free capacity to record because nothing can be short of it
+- **The game declares no limit, for every kind.** It contains everything, there is no free
+  capacity to record because nothing can be short of it, and it is the one thing that is in
+  nothing - so the tree has a root that no rule has to except.
 - **What a kind may contain is a fact about the kind and not about any one of them.** Nothing becomes
   a different sort of thing by picking something up
 - **Containing is not referring.** A thing may name another without holding it - an adjacency names
