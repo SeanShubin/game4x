@@ -93,9 +93,26 @@ fn the_page_draws_one_bright_world_and_six_echoes() {
 /// through a quality review and several screenshots. `X-37`'s offset family is sheared far
 /// enough that the gaps are wedges, which is what made it visible.
 ///
-/// **The gap direction is stated as *every neighbour of a bright cell is drawn***, because
-/// that is what a person sees: the bright world with drawn hexes all the way round it. A count
-/// of copies cannot say it, and neither can no-overlap.
+/// **The gap direction is *every cell within two steps of the bright world is drawn***, and two
+/// rather than one is the whole of whether this pins anything.
+///
+/// It said *every neighbour of a bright cell* first, and the research lens measured that rather
+/// than accepting it. **One step does not pin the corners.** A corner copy meets the bright
+/// world at a single vertex, so no bright cell has a neighbour inside it - draw six of the eight
+/// translates and every bright cell still has all six neighbours drawn while both corners of the
+/// block stand open. Measured at `C = 4`, `C = 12`, `W = 4` and `W = 12`.
+///
+/// **Which six survives depends on the shear, which is why naming them is the wrong instrument.**
+/// For the axis-aligned family both `±a, ±b, ±(a−b)` and `±a, ±b, ±(b−a)` pass a one-step check;
+/// for the offset family it is `±a, ±b, ±(a+b)` instead. The lens named the first pair, which
+/// holds for one family and not the other - the conclusion was right and the particular six was
+/// not.
+///
+/// **Two steps separates them at every family with no special case.** The folded family's seven
+/// copies pass it, each parallelogram family's nine pass it, and every six-copy set fails it.
+/// That is a property of the picture - a ring of drawn hexes two deep around the bright world -
+/// rather than a restatement of how many copies the code draws, which `copies_drawn` already
+/// says and cannot check.
 #[test]
 fn the_copies_tile_without_overlap_or_gap() {
     let mut checked = 0;
@@ -137,21 +154,29 @@ fn the_copies_tile_without_overlap_or_gap() {
             torus.cells()
         );
 
-        // **And no gap round the bright world.** Every neighbour of every bright cell has to
-        // be a hex that is actually drawn, or the picture has a hole against the edge a person
-        // is being asked to read the wrapping from.
-        for (q, r) in &domain {
-            for (dq, dr) in hex_torus_view::NEIGHBOURS {
-                assert!(
-                    placed.contains(&(q + dq, r + dr)),
-                    "{:?} k = {}: ({}, {}) touches the bright world and nothing draws it, so \
-                     the copies leave a gap",
-                    torus.family,
-                    torus.k,
-                    q + dq,
-                    r + dr
-                );
-            }
+        // **And no gap round the bright world, two cells deep.** One cell deep is satisfied by
+        // six copies with both corners of the block missing, because a corner copy meets the
+        // bright world at a vertex and not at an edge - see the note above the test.
+        let mut ring: std::collections::BTreeSet<(i32, i32)> = domain.iter().copied().collect();
+        for _ in 0..2 {
+            let grown: Vec<(i32, i32)> = ring
+                .iter()
+                .flat_map(|(q, r)| {
+                    hex_torus_view::NEIGHBOURS
+                        .iter()
+                        .map(move |(dq, dr)| (q + dq, r + dr))
+                })
+                .collect();
+            ring.extend(grown);
+        }
+        for cell in &ring {
+            assert!(
+                placed.contains(cell),
+                "{:?} k = {}: {cell:?} is within two steps of the bright world and nothing \
+                 draws it, so the copies leave a gap",
+                torus.family,
+                torus.k
+            );
         }
         checked += 1;
     }

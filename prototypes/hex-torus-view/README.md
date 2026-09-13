@@ -273,8 +273,15 @@ that goes.
   corners at all ten of its sizes, through a quality review and several screenshots sent to
   Sean. `X-37`'s offset lattice is sheared far enough that the notches became wedges, which is
   what made it visible. The parallelogram families draw **nine** copies now - `±a`, `±b`,
-  `±(a+b)`, `±(a−b)` - and the check is *every neighbour of a bright cell is drawn*, which is
-  what a person actually sees. No count of copies can say it and neither can no-overlap
+  `±(a+b)`, `±(a−b)` - and the check is *every cell within **two** steps of the bright world is
+  drawn*. **One step does not pin the corners**, which the research lens found by measuring the
+  first version rather than accepting it: a corner copy meets the bright world at a vertex and
+  not at an edge, so six copies can leave both corners of the block open while every bright cell
+  still has all six neighbours drawn. **Which six survives depends on the shear** - `±(a−b)` for
+  the axis-aligned family, `±(a+b)` for the offset one - so naming the translates is the wrong
+  instrument and two steps separates them at every family with no special case. Poisoned to each
+  family's surviving six, with `copies_drawn` moved to seven in step so the count could not
+  object either, and it fails
 - **`the_page_states_the_number_of_worlds_it_draws`** - the whole page. The header's spelled
   number against the
   groups actually in the page, and the per-family counts besides. Those are two independent
