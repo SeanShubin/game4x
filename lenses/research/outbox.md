@@ -1102,10 +1102,24 @@ hex grid impossible are what push the color count from three to four.* A trivale
 not. This grid has none and is.
 
 **It holds at every one of the ten sizes and that is a property of the family rather than of tori.**
-The plane's colouring is `(q + r) mod 3`, which survives the wrap exactly when `3` divides `a + b`
-for the wrapping generator `a + bω`. This family is `α = k(2+ω)`, so `a + b = 3k` and it always
-divides. The square family `α = k` needs `3 | k` and fails otherwise. Each colour takes `k²` of the
-`3k²` cells.
+In **axial hex coordinates** - neighbours `(1,0) (0,1) (-1,1) (-1,0) (0,-1) (1,-1)`, norm
+`q² + qr + r²`, sixty-degree turn `(q,r) -> (-r, q+r)` - the wrapping generators are **`(k, k)` and
+`(-k, 2k)`**, the colouring is **`(q - r) mod 3`**, and it survives the wrap when both generators
+have `q - r` divisible by 3. `(k,k)` gives 0 and `(-k,2k)` gives `-3k`: **both, for every k.** Each
+colour takes `k²` of the `3k²` cells.
+
+**Corrected 2026-09-12, and the error was in this item rather than in the reading of it.** This
+first stated the generator as `α = k(2+ω)` with the test `3 | (a+b)`, which is the **Eisenstein**
+convention where the norm is `a² - ab + b²` - true there, and stated on the same page as the size
+set `a² + ab + b²`, which is the other one. **Two conventions in one item, in the two places a
+reader joins them.** Carried into axial coordinates literally, `(2k, k)` generates `7k²` rather than
+`3k²`: 28 cells at `k=2` instead of 12, and a grid that does not wrap evenly. Found by the code lane
+building it, poisoned there to prove it, and re-derived here by determinant rather than taken on
+report.
+
+**The ten sizes were never affected**, because `a² - ab + b²` and `a² + ab + b²` represent the same
+integers - send `b` to `-b`. Only the generator is convention-dependent, and only the generator was
+wrong.
 
 **So assert `Exact(3)` at all ten sizes**, which is a far stronger check than *it coloured
 something*, and it is the one assertion that would notice the wrapping being built wrong - a torus
