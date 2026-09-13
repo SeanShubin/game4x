@@ -416,7 +416,7 @@ impl Game {
     /// because `crates/game-console/tests/quotations.rs` checks a quotation only where it can
     /// see which document it belongs to. Attributed to *the same section* it reads as prose,
     /// and this comment misquoted the sentence for a whole session under exactly that cover -
-    /// `its nodes` where the specification says `how many it has total capacity for`. `C-11`
+    /// `its nodes` where the specification says `how many it has capacity for`. `C-11`
     /// recorded the limitation; this is what it looks like when it bites.
     ///
     /// *Every storage structure is full* holds because there are none. No structure in

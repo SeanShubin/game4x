@@ -429,7 +429,8 @@ fn every_place_is_a_kind_or_a_count_and_never_a_derived_trait() {
 
     // **The half above consults `COUNTERS`, which is this file's own list, so on its own it
     // would pass for a state added to that list.** What follows does not: the derived traits
-    // are read from the release's *Stored or derived* column, and no place may use one.
+    // are read from the release's *Values* cells - the ones that say how the value is arrived
+    // at - and no place may use one.
     // **That is the page's claim stated against the release rather than against a constant
     // here**, and it is what catches the way this check would actually start covering
     // conservation - a derived trait becoming a place.
@@ -451,12 +452,15 @@ fn every_place_is_a_kind_or_a_count_and_never_a_derived_trait() {
 
     // **And the derived trait the page names by hand is really derived and really absent.**
     // Naming it keeps the page's example honest rather than only its general claim.
+    //
+    // **Asserted on the derivation rather than on the word `derived`** - `P-478` removed the
+    // column that carried that word, and the release says how instead of saying that.
     let derived = document
         .lines()
         .find(|line| line.contains("**metal in it**"))
         .expect("the Traits table declares `metal in it`");
     assert!(
-        derived.contains("derived"),
+        derived.contains(": its binding plus the metal in its parts"),
         "`metal in it` is not declared derived any more, so the page's example is wrong: \
          {derived}"
     );
@@ -469,42 +473,35 @@ fn every_place_is_a_kind_or_a_count_and_never_a_derived_trait() {
     );
 }
 
-/// Every trait the release's *Traits* table marks with this word, by name.
+/// Every trait the release declares, or only those whose *Values* cell states a derivation.
 ///
-/// **Read from the table rather than listed**, so that a trait becoming derived tomorrow is
-/// covered without anyone editing this file - which is the whole point of the sweep that uses
-/// it.
+/// **`P-478` deleted the *Stored or derived* column and derivation did not go with it.** The
+/// release says how a derived trait is arrived at in its *Values* cell, after a colon - *a
+/// number: its binding plus the metal in its parts* - and `spec/console.md` no longer divides
+/// traits into stored and not, because `kept` says where a value belongs and never whether one
+/// is held.
+///
+/// **So `derived` is read from where the derivation is written**, which is a stronger reading
+/// than the one it replaces: the old column said a trait was derived and this says how, so a
+/// row that claimed to be derived and named no derivation would no longer count.
+///
+/// **This read the column by position and then by name, and both stopped working** - `P-473`
+/// moved it from 3 to 2 and `P-478` removed it. Fourth and fifth time for one reader.
 fn traits_marked(document: &str, word: &str) -> Vec<String> {
-    // An empty `word` matches every row, which is how the whole Traits table is read.
-    //
-    // **Read by name since `P-473`.** This took `cells.get(3)`, and deleting the *Of* column
-    // moved *Stored or derived* from 3 to 2 - so it read the *Values* cell, found no row
-    // marked `derived`, and reported a place whose state was a trait the release declares.
-    // **Fourth time in one evening**, and the guard below now covers this table too.
-    let at = game_console::recipes::column_of(document, "## Traits", "Stored or derived");
-    let mut out = Vec::new();
-    let mut inside = false;
-    for line in document.lines() {
-        if line.starts_with("## ") {
-            if inside {
-                break;
-            }
-            inside = line.trim() == "## Traits";
-            continue;
-        }
-        let line = line.trim();
-        if !inside || !line.starts_with('|') {
-            continue;
-        }
-        let cells: Vec<&str> = line.trim_matches('|').split('|').map(str::trim).collect();
-        let (Some(name), Some(kept)) = (cells.first(), cells.get(at)) else {
-            continue;
-        };
-        if kept.contains(word) {
-            out.push(name.trim_matches('*').trim().to_string());
-        }
-    }
-    out
+    let at = game_console::recipes::column_of(document, "## Traits", "Values");
+    game_console::recipes::body_under(document, "## Traits")
+        .iter()
+        .filter(|row| {
+            word.is_empty()
+                || row
+                    .get(at)
+                    .map(|values| values.contains(": "))
+                    .unwrap_or(false)
+        })
+        .filter_map(|row| row.first())
+        .map(|cell| game_console::recipes::plain(cell))
+        .filter(|name| !name.is_empty())
+        .collect()
 }
 
 /// No recipe row says `ready`, which is what let a dead branch and a rotted reader hide each
@@ -620,7 +617,7 @@ fn the_tables_this_crate_reads_by_position_are_in_the_order_it_assumes() {
         // **Added after `P-473` moved *Stored or derived* from 3 to 2** by deleting *Of*,
         // and `traits_marked` read cell 3 - the fourth positional read this evening to
         // survive a column going and report something plausible.
-        ("## Traits", &["Trait", "Values", "Stored or derived"][..]),
+        ("## Traits", &["Trait", "Values", "Belongs to"][..]),
     ] {
         for (at, column) in columns.iter().enumerate() {
             assert_eq!(

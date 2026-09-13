@@ -261,7 +261,12 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
         4,
         "four families; the release lists {families:?}"
     );
-    // **Twenty-four, and the counts are why.** `P-399` made readiness a kind and took `ready`
+    // **Twenty-six since `P-478`, and `room` becoming three is why.** `P-474` made the
+    // deposit's bound the room left; `P-477` and `P-478` name all three - `capacity`,
+    // `occupied` and `free` - because `spec/logistics.md` says **three names describe it and
+    // there are two facts**, and any two give the third.
+    //
+    // **`P-399` made readiness a kind and took `ready`
     // and `spent` out; `P-411` undid that and put five counts in - `moving`, `laboring`,
     // `working`, `bearing` and `defending`, one per action, each `0 or 1`, where the two it
     // replaced were one flag between them. `P-417` took `kind` out in the same pass, because a
@@ -270,8 +275,8 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
     // declared, which is the dangling reference this lane reported.
     assert_eq!(
         traits.len(),
-        24,
-        "twenty-four traits; the release lists {:?}",
+        26,
+        "twenty-six traits; the release lists {:?}",
         traits.keys().collect::<Vec<_>>()
     );
     let closed = traits

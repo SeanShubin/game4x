@@ -254,7 +254,7 @@ pub enum Trait {
     /// How many more extractors this deposit has room for.
     ///
     /// **`P-474` made it the room rather than the total**, and `spec/logistics.md` had said so
-    /// since before this release: *what is stored is the room left*, used is what is there,
+    /// since before this release: *three names describe it and there are two facts*, used is what is there,
     /// and **nothing records the total**. It was `TotalCapacity`, and a dump printing the one
     /// number the specification says nothing records is what `C-81` reported and what Sean
     /// found by reading `reports/recipes.md`.
@@ -262,7 +262,11 @@ pub enum Trait {
     /// **`P-331` put it beside `density`.** It read *a territory, per kind*, which a
     /// description could not hold - a territory has one per kind and a description is a flat
     /// map. On the deposit there is one of each per deposit.
-    Room,
+    Capacity,
+    /// How much of that capacity is taken.
+    Occupied,
+    /// How much of it is not - its capacity less what it holds.
+    Free,
     /// How much one extractor working this deposit yields.
     ///
     /// **`P-322` moved it here from the territory**, and it is read by

@@ -64,7 +64,7 @@ pub struct Description {
     ///
     /// **An empty value is a trait named and not valued**, which `spec/console.md` allows on
     /// a declaration and nowhere else: *a trait of the kind is written with its value and a
-    /// stored one with its name*. A state always values what it names, because a state is
+    /// trait of the thing with its name*. A state always values what it names, because a state is
     /// about things rather than about kinds - so an empty value here is a declaration's, and
     /// [`state::declarations`] is the only reader that will produce one.
     pub traits: BTreeMap<String, String>,
@@ -127,37 +127,36 @@ impl Description {
 /// `spec/logistics.md`:
 ///
 /// > What a thing may contain is a maximum **per kind, per family of kinds, or per kind
-/// > carrying a particular value of a trait**. **What is stored is the room left**: how many
-/// > more of that kind it could take. **Used capacity** is how many it holds, which is simply
-/// > what is there, and **total capacity** is the two added. **Nothing records the total**, so
-/// > nothing can disagree with it.
+/// > carrying a particular value of a trait**. **Three names describe it and there are two
+/// > facts**: its **capacity** for that kind, how much of that capacity is **occupied**, and
+/// > how much is **free**. **Any two give the third, so only two are ever held** and nothing
+/// > can disagree with anything. A capacity of four extractors is a maximum of four, so
+/// > nothing a player builds ever crowds out something of another kind
 ///
-/// # `P-374` swapped which of the three is the stored one
+/// # Which two are held, and why this type holds those two
 ///
-/// **It used to be the total**, with used and available derived from it, and this type still
-/// stores `total`. That is now the derived quantity and `room` is the stored one - the same
-/// three numbers with a different one of them written down.
+/// **`P-478` named the three and the rule chose none of them**, which is deliberate: any two
+/// give the third. This holds `free` and `used`, so `capacity()` is their sum.
 ///
-/// **The swap answers `C-46` rather than leaving it open.** That item said a total capacity
-/// per kind cannot be written into a description, because a description is a flat map and a
-/// territory has one total per kind. Room has exactly the same shape, so the difficulty does
-/// not go away by itself - but `P-374` adds the half that does: **room is spent and given
-/// back**, so it moves by the same rules as anything else a thing holds, and a thing that
-/// holds room is a thing a description can carry.
+/// **`P-374` and `P-474` are where that choice was made and `C-81` is what it cost.** It held
+/// the total, with used and available derived - and the total is the one number the release
+/// then said nothing records, so this printed a figure the specification had stopped having.
+/// Sean found it reading `reports/recipes.md` while `C-81` sat in an outbox saying the same
+/// thing.
 ///
-/// **This type has not followed yet.** `C-81` carries what it costs to make it, and nothing
-/// in the game is wrong meanwhile: the total and the room are each derivable from the other
-/// wherever both ends are known, which is everywhere the model looks today.
+/// **Two written numbers can disagree and these cannot**, because `used` is not a number this
+/// holds at all: it is how many are there. That is the whole of why the choice matters.
 ///
 /// **Neither field is in the data file, and they are absent for different reasons.** Saying
 /// so is `Q-66`: one account made the omission sound like a rule being obeyed, and the other
 /// half of it - the half that is a limitation - is the one a reader has to know.
 ///
-/// - **`used` is derived**, so `spec/console.md` keeps it out: *a derived trait is never part
-///   of one*. That is the rule working.
-/// - **`total` was the stored one** when this was written, so nothing excused its absence.
-///   It is out because a description is a flat map and a territory has a total capacity per
-///   kind, which the map form has no way to write. `C-46`.
+/// - **`used` is not a number this holds** - it is how many are there - so there was never
+///   anything to leave out. `P-477` took the rule that said so out of `spec/console.md` and
+///   `P-478` took the word `derived` with it, and the fact is unchanged.
+/// - **`capacity` was the held one** when this was written, so nothing excused its absence.
+///   It is out because a description is a flat map and a territory has a capacity per kind,
+///   which the map form has no way to write. `C-46`.
 ///
 /// Both are here because `S-54` asks for `used/total` on a collapsed summary line, and a
 /// container that cannot say whether it is full defeats the reason for collapsing it.
@@ -328,7 +327,9 @@ pub fn trait_name(name: Trait) -> &'static str {
         // this applies to a trait. **`C-25` dissolves with it** - it reported the dump
         // printing `capacity` where the release declared `total capacity`, and there is one
         // name spelled one way now.
-        Trait::Room => "room",
+        Trait::Capacity => "capacity",
+        Trait::Occupied => "occupied",
+        Trait::Free => "free",
         Trait::From => "from",
         Trait::To => "to",
         // **These three are never written through here** - [`counts`] writes them under the
@@ -389,8 +390,8 @@ fn counts(kind: Kind, thing: &Thing) -> Vec<(&'static str, u32)> {
 /// > capacity**, and then it holds nothing of that sort and never can. It may declare a
 /// > **limit**, and then it holds up to that many and may happen to be empty - so a thing
 /// > holding nothing today is not thereby a thing that never could. Or it may declare **no
-/// > limit**, and then it holds any number, and there is no room to record because nothing can
-/// > be short of it
+/// > limit**, and then it holds any number, and there is no free capacity to record because
+/// > nothing can be short of it
 ///
 /// **So this is a fact about the kind and not a count of what is there.** A reader who
 /// cannot tell *empty* from *never* is being shown the opposite of the rule, and the only
@@ -491,19 +492,18 @@ pub fn tree(game: &Game) -> Entry {
             if offered.capacity == 0 && offered.density == 0 {
                 continue;
             }
+            let occupied = place.extractors_for(resource).len() as u32;
             held.push(Entry::leaf(
                 Description::of(Kind::Deposit)
                     .with("resource", resource.name())
                     .with("density", offered.density)
-                    // **The room left, not the total** - `P-474`. Used is how many extractors
-                    // are here, which is not a number anything keeps, and the total is the
-                    // two added.
-                    .with(
-                        "room",
-                        offered
-                            .capacity
-                            .saturating_sub(place.extractors_for(resource).len() as u32),
-                    ),
+                    // **Three names and two facts** - `spec/logistics.md`, `P-478`. Any two
+                    // give the third, so the model holds the free capacity and how many are
+                    // there; all three are written, because a description carries every trait
+                    // of the thing and `P-477` removed the rule that kept a derived one out.
+                    .with("capacity", offered.capacity)
+                    .with("occupied", occupied)
+                    .with("free", offered.capacity.saturating_sub(occupied)),
             ));
         }
         held.extend(

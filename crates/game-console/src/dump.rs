@@ -127,7 +127,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
     //
     // **`built` is derived and stays**, because this is the presentation. The data file
     // carries `{deposit resource:food density:4} -> 1` and nothing else, since `capacity` is
-    // a `total capacity` and `built` is a used one - `C-53`.
+    // a `capacity` and `built` is a used one - `C-53`.
     let mut node = Table::new(
         "deposit",
         &["territory", "resource", "capacity", "density", "built"],

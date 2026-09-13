@@ -112,7 +112,7 @@ impl Kind {
             Kind::Labor => "what working a machine takes; a citizen provides it each turn",
             Kind::Territory => concat!(
                 "a place things are in, which has a biome, a force of nature, ",
-                "and a density and a total capacity per resource"
+                "and a density and a capacity per resource"
             ),
             Kind::Orbit => "a place above one territory, which holds units and nothing else",
             Kind::Deposit => "what a territory's ground offers of one resource, and how richly",
@@ -298,13 +298,13 @@ pub struct Capacity {
 
 pub const CAPACITIES: [Capacity; 3] = [
     // **`P-474` made the bound the room rather than the total**, and the container with it:
-    // `spec/logistics.md` says *what is stored is the room left*, used is what is there, and
+    // `spec/logistics.md` says *three names describe it and there are two facts*, used is what is there, and
     // nothing records the total. A territory bounded by its own total capacity was the total
     // written twice - once as the container and once as the bound.
     Capacity {
         what: "a territory",
         holds: "that kind",
-        up_to: "its room for that kind",
+        up_to: "its free capacity for that kind",
     },
     // **`P-260` and `P-265`.** This row said *an extractor's catch*, holding up to the
     // territory's density - and the same document said four lines later that an extractor
@@ -332,25 +332,27 @@ pub const CAPACITIES: [Capacity; 3] = [
 
 /// Whether a trait is held or worked out.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum Held {
-    Stored,
+pub enum BelongsTo {
+    /// **`P-478`: a value belongs to each thing of a kind, or to the kind.**
+    ///
+    /// It replaced *Stored or derived*, which said whether a value was held rather than where
+    /// it belongs. How a derived value is arrived at is in the *Values* cell now, after a
+    /// colon.
+    EachThing,
     /// **`P-407`: a fact about the kind rather than about any one of them.**
     ///
     /// `force`, `fuel`, `upkeep`, `keeps` and `movable`. Every citizen's force is the same
     /// number, so it is not something one citizen carries - and `P-417` follows from it: a
     /// description carries the traits of the thing and not those of its kind, which is why
     /// `{garrison force:0}` lost its word.
-    OfTheKind,
-    /// Worked out from other things, with the release's own account of how.
-    Derived(&'static str),
+    TheKind,
 }
 
-impl Held {
+impl BelongsTo {
     pub fn written(self) -> String {
         match self {
-            Held::Stored => "stored".to_string(),
-            Held::OfTheKind => "of the kind".to_string(),
-            Held::Derived(how) => format!("derived: {how}"),
+            BelongsTo::EachThing => "each thing".to_string(),
+            BelongsTo::TheKind => "the kind".to_string(),
         }
     }
 }
@@ -360,10 +362,10 @@ impl Held {
 pub struct TraitRow {
     pub name: &'static str,
     pub values: &'static str,
-    pub held: Held,
+    pub belongs: BelongsTo,
 }
 
-pub const TRAITS: [TraitRow; 24] = [
+pub const TRAITS: [TraitRow; 26] = [
     // **`P-417` deleted the `kind` row**, because a kind is not a trait: `spec/console.md`
     // lists them as different categories and no recipe writes `kind:`.
     // **`P-285` and `P-286`: a thing is not located by a trait.** `place` said *the thing it
@@ -378,7 +380,7 @@ pub const TRAITS: [TraitRow; 24] = [
     TraitRow {
         name: "id",
         values: "an identity",
-        held: Held::Stored,
+        belongs: BelongsTo::EachThing,
     },
     // **`P-411` undid `P-399` and `C-90` is why.** Readiness was a kind a thing held, and
     // two citizens differing only in it had the same description - so the map form could not
@@ -387,34 +389,34 @@ pub const TRAITS: [TraitRow; 24] = [
     TraitRow {
         name: "moving",
         values: "a number",
-        held: Held::Stored,
+        belongs: BelongsTo::EachThing,
     },
     TraitRow {
         name: "laboring",
         values: "a number",
-        held: Held::Stored,
+        belongs: BelongsTo::EachThing,
     },
     TraitRow {
         name: "working",
         values: "a number",
-        held: Held::Stored,
+        belongs: BelongsTo::EachThing,
     },
     TraitRow {
         name: "bearing",
         values: "a number",
-        held: Held::Stored,
+        belongs: BelongsTo::EachThing,
     },
     // **`P-414`: force is mustered rather than computed**, and this is what a thing spends to
     // muster it. `spec/control.md` has no *highest* case any more.
     TraitRow {
         name: "defending",
         values: "a number",
-        held: Held::Stored,
+        belongs: BelongsTo::EachThing,
     },
     TraitRow {
         name: "resource",
         values: "one of the resources",
-        held: Held::Stored,
+        belongs: BelongsTo::EachThing,
     },
     TraitRow {
         // **`P-435` renamed this from `force`**, answering `C-93`: the word named a trait and
@@ -422,17 +424,17 @@ pub const TRAITS: [TraitRow; 24] = [
         // musters; a `force` is what `muster` makes of it.
         name: "strength",
         values: "a number",
-        held: Held::OfTheKind,
+        belongs: BelongsTo::TheKind,
     },
     TraitRow {
         name: "fuel",
         values: "how much energy its tank holds",
-        held: Held::OfTheKind,
+        belongs: BelongsTo::TheKind,
     },
     TraitRow {
         name: "upkeep",
         values: "food per turn",
-        held: Held::OfTheKind,
+        belongs: BelongsTo::TheKind,
     },
     // **`P-461` declared the column that was already being read.** *Units and structures* has
     // a **Binding** column and `metal in it` refers to *its binding*, and until this landed
@@ -443,41 +445,52 @@ pub const TRAITS: [TraitRow; 24] = [
     // was the Recipes table said twice.
     TraitRow {
         name: "binding",
-        values: "a number",
-        held: Held::Derived("the metal the recipe that makes it consumes"),
+        values: "a number: the metal the recipe that makes it consumes",
+        belongs: BelongsTo::TheKind,
     },
     TraitRow {
         name: "metal in it",
-        values: "a number",
-        held: Held::Derived("its binding plus the metal in its parts"),
+        values: "a number: its binding plus the metal in its parts",
+        belongs: BelongsTo::TheKind,
     },
     TraitRow {
         name: "density",
         values: "a number",
-        held: Held::Stored,
+        belongs: BelongsTo::EachThing,
+    },
+    // **`P-478` made one name three.** `spec/logistics.md`: *three names describe it and there
+    // are two facts* - a container's capacity for a kind, how much is occupied, and how much
+    // is free. Any two give the third, so only two are ever held and nothing can disagree.
+    // It was `total capacity`, then `room` for one promotion, and is these three.
+    TraitRow {
+        name: "capacity",
+        values: "a number",
+        belongs: BelongsTo::EachThing,
     },
     TraitRow {
-        // **`P-474`: the room, not the total.** `spec/logistics.md` had said so since before
-        // this release - *what is stored is the room left* - and the release declared the one
-        // number it says nothing records.
-        name: "room",
+        name: "occupied",
         values: "a number",
-        held: Held::Stored,
+        belongs: BelongsTo::EachThing,
+    },
+    TraitRow {
+        name: "free",
+        values: "a number: its capacity less what it holds",
+        belongs: BelongsTo::EachThing,
     },
     TraitRow {
         name: "control",
-        values: "held by a player, or unclaimed",
-        held: Held::Derived("a citizen of that player is there"),
+        values: "held by a player, or unclaimed: a citizen of that player is there",
+        belongs: BelongsTo::EachThing,
     },
     TraitRow {
         name: "biome",
         values: "one of the biomes",
-        held: Held::Stored,
+        belongs: BelongsTo::EachThing,
     },
     TraitRow {
         name: "nature",
         values: "a number",
-        held: Held::Stored,
+        belongs: BelongsTo::EachThing,
     },
     TraitRow {
         // **`P-311`/`P-314`: adjacency is a fact the container holds, not one a place carries.**
@@ -485,12 +498,12 @@ pub const TRAITS: [TraitRow; 24] = [
         // it - so the same edge was stated twice and could disagree with itself.
         name: "from",
         values: "a place",
-        held: Held::Stored,
+        belongs: BelongsTo::EachThing,
     },
     TraitRow {
         name: "to",
         values: "a place",
-        held: Held::Stored,
+        belongs: BelongsTo::EachThing,
     },
     TraitRow {
         // **Stored since `P-434`**, which answers this lane's `C-96`. `P-431` gave `age` a
@@ -498,17 +511,17 @@ pub const TRAITS: [TraitRow; 24] = [
         // kind is the same for every thing of that kind.
         name: "keeps",
         values: "the number of turns it will last",
-        held: Held::Stored,
+        belongs: BelongsTo::EachThing,
     },
     TraitRow {
         name: "surplus",
-        values: "a number",
-        held: Held::Derived("left after every upkeep was paid"),
+        values: "a number: left after every upkeep was paid",
+        belongs: BelongsTo::TheKind,
     },
     TraitRow {
         name: "unpaid",
-        values: "a number",
-        held: Held::Derived("its upkeep was not met"),
+        values: "a number: its upkeep was not met",
+        belongs: BelongsTo::EachThing,
     },
     // **`P-288`: `phase` is a declared trait and `turn` is not.** The release grew this row
     // and the gate went red until this list followed, which is what `P-263` says a promotion
@@ -521,7 +534,7 @@ pub const TRAITS: [TraitRow; 24] = [
     TraitRow {
         name: "phase",
         values: "design or play",
-        held: Held::Stored,
+        belongs: BelongsTo::EachThing,
     },
     // **`P-355`.** It replaces nothing: the `A move` column `P-346` deleted was a cost in
     // fuel, and this is whether the thing moves at all. `move` still consumes a literal 1
@@ -529,7 +542,7 @@ pub const TRAITS: [TraitRow; 24] = [
     TraitRow {
         name: "movable",
         values: "a number",
-        held: Held::OfTheKind,
+        belongs: BelongsTo::TheKind,
     },
 ];
 
@@ -1453,12 +1466,12 @@ pub fn traits_table() -> Vec<Vec<String>> {
     // **`P-473` deleted the *Of* column**: a kind declares which traits it has, and a
     // trait says nothing about which kinds carry it. What it said is on the kinds' lines in
     // `spec/data/kinds.4x` now.
-    let mut rows = vec![header(&["Trait", "Values", "Stored or derived"])];
+    let mut rows = vec![header(&["Trait", "Values", "Belongs to"])];
     for row in TRAITS {
         rows.push(vec![
             format!("**{}**", row.name),
             row.values.to_string(),
-            row.held.written(),
+            row.belongs.written(),
         ]);
     }
     rows

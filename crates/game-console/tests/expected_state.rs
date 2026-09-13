@@ -353,19 +353,24 @@ fn every_territorys_own_numbers_survive_the_round_trip() {
                                 panic!("territory {}'s {resource} states no {name}", place.id)
                             })
                     };
-                    // **The file states the room and the release states the total** - `P-474`,
-                    // and `spec/logistics.md`: *what is stored is the room left*, used is what
-                    // is there, and **nothing records the total**. So the round trip is
-                    // `room + extractors present` against the release's figure, which is the
-                    // derivation stated rather than a second number compared.
+                    // **Three names and two facts** - `spec/logistics.md`, `P-478`: a
+                    // container's capacity for a kind, how much is occupied, and how much is
+                    // free. Any two give the third.
                     //
-                    // **That makes this a stronger check than it was.** It compared two copies
-                    // of one number; it now compares a number against a sum, so a room that
-                    // drifted from what is standing there fails here as well as a capacity
-                    // that drifted from the release.
+                    // **So all three are checked against each other and against the
+                    // release.** `capacity` must be the release's figure, `occupied` must be
+                    // what is standing there, and `free` must be the difference - which is
+                    // three numbers held to two facts, where this once compared two copies of
+                    // one number and could not have noticed either drifting.
                     let standing = place.extractors_for(resource).len() as u32;
                     assert_eq!(
-                        (has("room") + standing, has("density")),
+                        (has("occupied"), has("free")),
+                        (standing, offered.capacity.saturating_sub(standing)),
+                        "territory {}'s {resource} is occupied by what stands there and free                          by the rest",
+                        place.id
+                    );
+                    assert_eq!(
+                        (has("capacity"), has("density")),
                         (offered.capacity, offered.density),
                         "territory {}'s {resource}, which the release writes `{} x {}`",
                         place.id,

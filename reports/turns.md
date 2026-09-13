@@ -21,14 +21,14 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 **gone** (3)
 
 - {orbit id:1} {ark defending:1 id:1 moving:1} -> 1
-- {territory biome:grassland id:1 nature:1} {deposit density:4 resource:food room:3} -> 1
-- {territory biome:grassland id:1 nature:1} {deposit density:4 resource:metal room:3} -> 1
+- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:3 occupied:0 resource:food} -> 1
+- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:3 occupied:0 resource:metal} -> 1
 
 **new** (6)
 
 - {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} -> 4
-- {territory biome:grassland id:1 nature:1} {deposit density:4 resource:food room:2} -> 1
-- {territory biome:grassland id:1 nature:1} {deposit density:4 resource:metal room:2} -> 1
+- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:2 occupied:1 resource:metal} -> 1
 - {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} -> 1
 - {territory biome:grassland id:1 nature:1} {extractor resource:metal working:1} -> 1
 - {territory biome:grassland id:1 nature:1} {garrison} -> 1
@@ -314,11 +314,11 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 **gone** (1)
 
-- {territory biome:grassland id:1 nature:1} {deposit density:4 resource:food room:2} -> 1
+- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
 
 **new** (2)
 
-- {territory biome:grassland id:1 nature:1} {deposit density:4 resource:food room:1} -> 1
+- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:1 occupied:2 resource:food} -> 1
 - {territory biome:grassland id:1 nature:1} {store resource:food} -> 1
 
 **changed** (1)
@@ -902,15 +902,15 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 **gone** (3)
 
-- {territory biome:grassland id:1 nature:1} {deposit density:4 resource:energy room:3} -> 1
-- {territory biome:grassland id:1 nature:1} {deposit density:4 resource:food room:1} -> 1
-- {territory biome:grassland id:1 nature:1} {deposit density:4 resource:metal room:2} -> 1
+- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:1 occupied:2 resource:food} -> 1
+- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:2 occupied:1 resource:metal} -> 1
+- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:3 occupied:0 resource:energy} -> 1
 
 **new** (5)
 
-- {territory biome:grassland id:1 nature:1} {deposit density:4 resource:energy room:2} -> 1
-- {territory biome:grassland id:1 nature:1} {deposit density:4 resource:food room:0} -> 1
-- {territory biome:grassland id:1 nature:1} {deposit density:4 resource:metal room:1} -> 1
+- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:0 occupied:3 resource:food} -> 1
+- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:1 occupied:2 resource:metal} -> 1
+- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:2 occupied:1 resource:energy} -> 1
 - {territory biome:grassland id:1 nature:1} {extractor resource:energy working:1} -> 1
 - {territory biome:grassland id:1 nature:1} {store resource:energy} -> 1
 
@@ -1212,13 +1212,13 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 **gone** (2)
 
-- {territory biome:grassland id:1 nature:1} {deposit density:4 resource:energy room:2} -> 1
-- {territory biome:grassland id:1 nature:1} {deposit density:4 resource:metal room:1} -> 1
+- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:1 occupied:2 resource:metal} -> 1
+- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:2 occupied:1 resource:energy} -> 1
 
 **new** (3)
 
-- {territory biome:grassland id:1 nature:1} {deposit density:4 resource:energy room:1} -> 1
-- {territory biome:grassland id:1 nature:1} {deposit density:4 resource:metal room:0} -> 1
+- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:0 occupied:3 resource:metal} -> 1
+- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:1 occupied:2 resource:energy} -> 1
 - {territory biome:grassland id:1 nature:1} {energy} -> 4
 
 **changed** (4)
@@ -1527,11 +1527,11 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 **gone** (1)
 
-- {territory biome:grassland id:1 nature:1} {deposit density:4 resource:energy room:1} -> 1
+- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:1 occupied:2 resource:energy} -> 1
 
 **new** (1)
 
-- {territory biome:grassland id:1 nature:1} {deposit density:4 resource:energy room:0} -> 1
+- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:0 occupied:3 resource:energy} -> 1
 
 **changed** (4)
 
@@ -2449,15 +2449,15 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 **gone** (4)
 
 - {territory biome:grassland id:1 nature:1} {metal} -> 3
-- {territory biome:grassland id:2 nature:1} {deposit density:4 resource:metal room:2} -> 1
-- {territory biome:grassland id:2 nature:1} {deposit density:6 resource:food room:2} -> 1
+- {territory biome:grassland id:2 nature:1} {deposit capacity:2 density:4 free:2 occupied:0 resource:metal} -> 1
+- {territory biome:grassland id:2 nature:1} {deposit capacity:2 density:6 free:2 occupied:0 resource:food} -> 1
 - {territory biome:grassland id:2 nature:1} {pioneer defending:1 id:1 moving:1} -> 1
 
 **new** (6)
 
 - {territory biome:grassland id:2 nature:1} {citizen bearing:1 defending:1 laboring:1} -> 4
-- {territory biome:grassland id:2 nature:1} {deposit density:4 resource:metal room:1} -> 1
-- {territory biome:grassland id:2 nature:1} {deposit density:6 resource:food room:1} -> 1
+- {territory biome:grassland id:2 nature:1} {deposit capacity:2 density:4 free:1 occupied:1 resource:metal} -> 1
+- {territory biome:grassland id:2 nature:1} {deposit capacity:2 density:6 free:1 occupied:1 resource:food} -> 1
 - {territory biome:grassland id:2 nature:1} {extractor resource:food working:1} -> 1
 - {territory biome:grassland id:2 nature:1} {extractor resource:metal working:1} -> 1
 - {territory biome:grassland id:2 nature:1} {garrison} -> 1

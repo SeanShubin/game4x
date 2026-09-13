@@ -2,7 +2,7 @@
 //!
 //! > **What a thing contains is a map from a description to a quantity.** A description is a
 //! > kind and **every trait of that thing**; a trait **of its kind** is not part of one,
-//! > because naming the kind has already said it, and a derived trait is never part of one.
+//! > because naming the kind has already said it.
 //! > **No trait of the thing may be left out** - `{citizen defending:1} -> 8` and `{citizen
 //! > defending:0} -> 6`, never `{citizen} -> 14`. **Each distinct description is its own
 //! > entry, and an entry is never zero.** A thing carrying an `id` has a description no
@@ -189,7 +189,7 @@ pub fn declared(rows: &[Description]) -> String {
 /// passes it.
 ///
 /// **What it recovers is the containment tree and not the [`game_model::Game`].** Those are
-/// the same information only once a territory's `density` and `total capacity` are in the
+/// the same information only once a territory's `density` and `capacity` are in the
 /// file, and they are not - see [`game_model::containment`]. So the round trip proved here is
 /// text against tree, and saying which half is proved is the whole of `S-29`'s warning about
 /// reporting half a rule as met.
@@ -304,7 +304,7 @@ fn close(stack: &mut Vec<Entry>) {
 /// One line of the notation: a description, and the quantity after `->` if there is one.
 ///
 /// **`named` is whether a trait may be written with no value.** `spec/console.md`: *a trait of
-/// the kind is written with its value and a stored one with its name* - which is a rule about
+/// the kind is written with its value and a trait of the thing with its name* - which is a rule about
 /// a kind's line in a declaration, and about nothing else. A state values everything it names,
 /// because a state is about things and a thing has the value; so `read` passes `false` and
 /// `declarations` passes `true`, and the two readers go on sharing one line.

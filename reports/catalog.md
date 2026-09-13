@@ -14,7 +14,7 @@ release's four are a second hand-written form, and `P-465` is about what that co
 the release because that is where all six tables are today, and says so rather than implying the
 release is the source.
 
-18 kinds, 4 families, 24 traits, 31 recipes.
+18 kinds, 4 families, 26 traits, 31 recipes.
 
 ## Signatures
 
@@ -112,7 +112,7 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 ### `s-14` - deposit
 
-**Traits** `density`, `keeps`, `room`
+**Traits** `capacity`, `density`, `free`, `keeps`, `occupied`
 
 **Named by** `age put`, `age require`, `spoil consume`
 
@@ -146,7 +146,7 @@ a person: provides labor, eats, and grows on surplus.
 
 **In families** thing
 
-**Traits of it** `laboring` (a number), `bearing` (a number), `defending` (a number), `strength` (a number), `upkeep` (food per turn), `keeps` (the number of turns it will last), `unpaid` (a number)
+**Traits of it** `laboring` (a number), `bearing` (a number), `defending` (a number), `strength` (a number), `upkeep` (food per turn), `keeps` (the number of turns it will last), `unpaid` (a number: its upkeep was not met)
 
 **Signature** `s-1`
 
@@ -182,7 +182,7 @@ what holds a territory; a territory has at most one.
 
 **In families** thing
 
-**Traits of it** `strength` (a number), `binding` (a number), `metal in it` (a number), `keeps` (the number of turns it will last)
+**Traits of it** `strength` (a number), `binding` (a number: the metal the recipe that makes it consumes), `metal in it` (a number: its binding plus the metal in its parts), `keeps` (the number of turns it will last)
 
 **Signature** `s-2`
 
@@ -205,7 +205,7 @@ built for one resource, and worked to produce it.
 
 **In families** thing
 
-**Traits of it** `working` (a number), `resource` (one of the resources), `binding` (a number), `metal in it` (a number), `keeps` (the number of turns it will last)
+**Traits of it** `working` (a number), `resource` (one of the resources), `binding` (a number: the metal the recipe that makes it consumes), `metal in it` (a number: its binding plus the metal in its parts), `keeps` (the number of turns it will last)
 
 **Signature** `s-3`
 
@@ -233,7 +233,7 @@ where an Ark is produced.
 
 **In families** thing
 
-**Traits of it** `binding` (a number), `metal in it` (a number), `keeps` (the number of turns it will last)
+**Traits of it** `binding` (a number: the metal the recipe that makes it consumes), `metal in it` (a number: its binding plus the metal in its parts), `keeps` (the number of turns it will last)
 
 **Signature** `s-4`
 
@@ -253,7 +253,7 @@ built to hold one resource, and holds nothing else.
 
 **In families** thing
 
-**Traits of it** `resource` (one of the resources), `binding` (a number), `metal in it` (a number), `keeps` (the number of turns it will last)
+**Traits of it** `resource` (one of the resources), `binding` (a number: the metal the recipe that makes it consumes), `metal in it` (a number: its binding plus the metal in its parts), `keeps` (the number of turns it will last)
 
 **Signature** `s-5`
 
@@ -276,7 +276,7 @@ carries a landing, and can invade from orbit.
 
 **In families** thing, unit
 
-**Traits of it** `moving` (a number), `defending` (a number), `strength` (a number), `fuel` (how much energy its tank holds), `binding` (a number), `metal in it` (a number), `keeps` (the number of turns it will last), `movable` (a number)
+**Traits of it** `moving` (a number), `defending` (a number), `strength` (a number), `fuel` (how much energy its tank holds), `binding` (a number: the metal the recipe that makes it consumes), `metal in it` (a number: its binding plus the metal in its parts), `keeps` (the number of turns it will last), `movable` (a number)
 
 **Signature** `s-6`
 
@@ -306,7 +306,7 @@ founds a territory.
 
 **In families** thing, unit
 
-**Traits of it** `moving` (a number), `defending` (a number), `strength` (a number), `fuel` (how much energy its tank holds), `binding` (a number), `metal in it` (a number), `keeps` (the number of turns it will last), `movable` (a number)
+**Traits of it** `moving` (a number), `defending` (a number), `strength` (a number), `fuel` (how much energy its tank holds), `binding` (a number: the metal the recipe that makes it consumes), `metal in it` (a number: its binding plus the metal in its parts), `keeps` (the number of turns it will last), `movable` (a number)
 
 **Signature** `s-7`
 
@@ -336,7 +336,7 @@ eaten by citizens; expires.
 
 **In families** thing, resource
 
-**Traits of it** `keeps` (the number of turns it will last), `surplus` (a number)
+**Traits of it** `keeps` (the number of turns it will last), `surplus` (a number: left after every upkeep was paid)
 
 **Signature** `s-8`
 
@@ -429,15 +429,15 @@ what working a machine takes; a citizen provides it each turn.
 
 ## territory
 
-a place things are in, which has a biome, a force of nature, and a density and a total capacity per resource.
+a place things are in, which has a biome, a force of nature, and a density and a capacity per resource.
 
 **In families** thing, place
 
-**Traits of it** `id` (an identity), `control` (held by a player, or unclaimed), `biome` (one of the biomes), `nature` (a number), `keeps` (the number of turns it will last)
+**Traits of it** `id` (an identity), `control` (held by a player, or unclaimed: a citizen of that player is there), `biome` (one of the biomes), `nature` (a number), `keeps` (the number of turns it will last)
 
 **Signature** `s-12`
 
-**Holds** that kind, up to its room for that kind - *a fact about each one rather than about the kind*
+**Holds** that kind, up to its free capacity for that kind - *a fact about each one rather than about the kind*
 
 **In recipes**
 
@@ -476,7 +476,7 @@ what a territory's ground offers of one resource, and how richly.
 
 **In families** thing
 
-**Traits of it** `density` (a number), `room` (a number), `keeps` (the number of turns it will last)
+**Traits of it** `density` (a number), `capacity` (a number), `occupied` (a number), `free` (a number: its capacity less what it holds), `keeps` (the number of turns it will last)
 
 **Signature** `s-14`
 

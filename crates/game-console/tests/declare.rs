@@ -92,7 +92,7 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
                 .collect();
         assert_eq!(
             declared.len(),
-            24,
+            26,
             "the Traits table is the population here"
         );
         for key in row.traits.keys() {
@@ -111,7 +111,7 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
                 valued,
                 !value.is_empty(),
                 "`{name}` writes `{key}` {}, and a trait of the kind is written with its value \
-                 while a stored one is written with its name",
+                 while a trait of the thing is written with its name",
                 if value.is_empty() { "bare" } else { "valued" }
             );
         }
@@ -206,7 +206,7 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
         .iter()
         .filter_map(|row| row.traits.get("name").cloned())
         .collect();
-    assert_eq!(declared_traits.len(), 24, "twenty-four traits are declared");
+    assert_eq!(declared_traits.len(), 26, "twenty-six traits are declared");
 
     let mut mentions = 0;
     for row in &read {
@@ -222,13 +222,16 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
             mentions += 1;
         }
     }
-    // **Forty-three, and the arithmetic is stated so a reader can re-derive it.** Twenty-four
-    // traits; `keeps` is `of:thing` and is on no kind's line; the other twenty-three are
-    // carried by between one and six kinds each. **A count, because every name being declared
-    // is satisfied by a file that names none.**
+    // **Forty-five since `P-478`, and the deposit is where the two arrived.** Twenty-six
+    // traits; `keeps` is `of:thing` and is on no kind's line; the other twenty-five are
+    // carried by between one and six kinds each. **The deposit names four where it named
+    // two** - `capacity`, `density`, `free`, `occupied` - because `room` became the three
+    // that `spec/logistics.md` says describe one bound.
+    //
+    // **A count, because every name being declared is satisfied by a file that names none.**
     assert_eq!(
-        mentions, 43,
-        "forty-three trait names across the kinds' lines; this read {mentions}"
+        mentions, 45,
+        "forty-five trait names across the kinds' lines; this read {mentions}"
     );
     assert_eq!(
         file.matches("family:").count(),
@@ -268,10 +271,10 @@ fn a_declaration_carries_no_quantity_and_is_in_nothing() {
     }
 }
 
-/// A kind's line may name a stored trait and not value it, and the file round-trips.
+/// A kind's line may name a trait of the thing and not value it, and the file round-trips.
 ///
-/// **`spec/console.md`: *a trait of the kind is written with its value and a stored one with
-/// its name*.** So a territory's line reads `{kind biome family:place id name:territory
+/// **`spec/console.md`: *a trait of the kind is written with its value and a trait of the
+/// thing with its name*.** So a territory's line reads `{kind biome family:place id name:territory
 /// nature}` - `family` and `name` valued, `biome`, `id` and `nature` named - and the sort is
 /// over the trait names whether a value follows or not.
 ///
@@ -582,19 +585,18 @@ fn the_traits_file_declares_what_a_data_file_needs() {
     let read = state::declarations(&file)
         .unwrap_or_else(|why| panic!("{} does not parse: {why}", at.display()));
 
-    // **Twenty-four, and `P-470` is why it is no longer twenty-one.** `P-457` declared a
-    // derived trait only where a recipe named it, which left `metal in it`, `control` and
-    // `surplus` out. Then a kind's line gained the traits it carries, and **a kind may only
-    // name a declared trait** - `spec/console.md`: *every word in a data file is a kind, a
-    // trait, or one of a trait's values*. So all three had to be declared, `kept:nothing`.
+    // **Twenty-six since `P-478`, and `room` becoming three is why.** `P-474` made the
+    // deposit's bound the room left; `P-477` and `P-478` name all three - `capacity`,
+    // `occupied` and `free` - because `spec/logistics.md` says **three names describe it and
+    // there are two facts**, and any two give the third.
     //
-    // **The exception is superseded rather than broken.** It was right while nothing named
-    // them, which is the difference between a rule that was wrong and a rule whose premise
-    // moved.
+    // **`P-470` is why it was twenty-four rather than twenty-one.** `P-457` declared a derived
+    // trait only where a recipe named it, which left three out; then a kind's line gained the
+    // traits it carries, and a kind may only name a declared trait.
     assert_eq!(
         read.len(),
-        24,
-        "twenty-four traits, one per row of the release's table; this read {}",
+        26,
+        "twenty-six traits, one per row of the release's table; this read {}",
         read.len()
     );
     assert_eq!(
@@ -607,8 +609,13 @@ fn the_traits_file_declares_what_a_data_file_needs() {
         .filter_map(|row| row.traits.get("name"))
         .map(String::as_str)
         .collect();
-    // **The three `P-457` left out are in, and each is `kept:nothing`.** Named rather than
-    // counted, because three arriving and one leaving is the same count.
+    // **`kept:nothing` is gone and these five are why it was there.** They were the derived
+    // traits, and `P-478` removed the distinction: `kept` says where a value belongs and never
+    // whether one is held. So each of them now belongs somewhere, and the assertion is that
+    // none of them is excused from saying where.
+    //
+    // **Named rather than counted**, because the point is which five stopped being a category
+    // rather than how many there are.
     let mut arrived = 0;
     for derived in ["surplus", "metal-in-it", "control", "binding", "unpaid"] {
         assert!(
@@ -620,16 +627,17 @@ fn the_traits_file_declares_what_a_data_file_needs() {
             .iter()
             .find(|row| row.traits.get("name").map(String::as_str) == Some(derived))
             .expect("just asserted present");
-        assert_eq!(
-            row.traits.get("kept").map(String::as_str),
-            Some("nothing"),
-            "`{derived}` is derived, so nothing carries its value"
+        let kept = row.traits.get("kept").map(String::as_str);
+        assert!(
+            kept == Some("thing") || kept == Some("kind"),
+            "`{derived}` says `kept` {kept:?}, and `P-478` left two: a value belongs to each \
+             thing or to the kind"
         );
         arrived += 1;
     }
     assert_eq!(
         arrived, 5,
-        "the five derived traits, each checked for both things"
+        "the five that were `kept:nothing`, each checked for both things"
     );
 
     // **`surplus` is the one the two derivations disagreed about, so it is asserted by the
@@ -743,7 +751,7 @@ fn the_traits_file_declares_what_a_data_file_needs() {
     };
     assert_eq!(
         (kept_by("thing"), kept_by("kind"), kept_by("nothing")),
-        (15, 4, 5),
-        "fifteen stored, four of the kind, and five derived - and `binding` moved from the          second to the third, which is `P-472`: it is *derived: the metal the recipe that          makes it consumes* rather than a number the kind carries"
+        (19, 7, 0),
+        "nineteen belong to each thing, seven to the kind, and **none to nothing** - `P-478`          removed the third, because `kept` says where a value belongs and never whether one          is held. The zero is asserted rather than dropped, so a `nothing` reaching the          file fails here"
     );
 }

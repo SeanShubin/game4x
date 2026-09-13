@@ -20,7 +20,7 @@ The release states **31 blocks of recipe rows** under **21 names**. **30 of the 
 
 **31 places and 161 arcs** between them: 74 `consume`, 43 `produce`, 44 `require`.
 
-**6 of those places are room rather than a count** - `P-374`. What a container stores is the room left, not the total: used capacity is what is there, total capacity is the two added, and nothing records the total so nothing can disagree with it. Making a thing takes one of the room and destroying it gives one back. Room is stored, so room is state, so it is drawn - a diagram showing the count and hiding the room would be leaving out half of what containment is.
+**6 of those places are free capacity rather than a count** - `P-478`. Three names describe one bound and there are two facts: a container's **capacity** for a kind, how much of it is **occupied**, and how much is **free**. Any two give the third, so only two are ever held and nothing can disagree with anything. Making a thing occupies one of the free capacity and destroying it frees one. Free capacity is held, so it is state, so it is drawn - a diagram showing the count and hiding the free capacity would be leaving out half of what containment is.
 
 **0 of these arcs are zero tests, and that number used to be two.** Reachability in a plain Petri net is decidable and an inhibitor arc makes the net Turing-complete; the release had two, both `limit 0 garrison`. **`P-385` deleted both rows.** Sean, 2026-09-11: *repeated deployments are player choice, safe because they are not capable of causing an infinite resource glitch* - so a second landing on a colony you already hold is allowed, and nothing in the rules refuses it. The `limit` role is still one of the four the release names and no row carries it.
 

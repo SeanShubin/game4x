@@ -103,7 +103,7 @@ pub enum Rejection {
         above: TerritoryId,
         asked: TerritoryId,
     },
-    /// The territory's total capacity for extractors of that resource is already used.
+    /// The territory's capacity for extractors of that resource is already used.
     NoRoomForExtractor {
         territory: TerritoryId,
         resource: Resource,

@@ -213,7 +213,7 @@ fn the_check_catches_a_value_missing_from_the_table_and_one_missing_from_the_mod
 /// broad version of that cannot be built.** Measured: of 25 non-key columns in the dump, 8
 /// are declared traits and 17 are not - and the 17 are four unrelated kinds. Counts of
 /// things (`citizens`, `yards`, `built`, `count`), quantities (`amount`, `made`, `spent`,
-/// `left`), names that differ from the trait they show (`capacity` for *total capacity*,
+/// `left`), names that differ from the trait they show (`capacity` for *capacity*,
 /// `readiness` for *ready*), and fields that are simply not traits (`phase`, `turn`,
 /// `in-play`). An exemption list of seventeen against a population of twenty-five is the
 /// column list written twice, and the second copy is what goes stale.
@@ -231,7 +231,7 @@ fn the_check_catches_a_value_missing_from_the_table_and_one_missing_from_the_mod
 /// notice when reviewing*. So this is a decision, not a defect, and it is named here so that
 /// the check does not have to be weakened to accommodate it.
 ///
-/// **`total capacity` is shown as `capacity`.** Not a decision - nobody chose it, and it is
+/// **`capacity` is shown as `capacity`.** Not a decision - nobody chose it, and it is
 /// the same shape as `founded`: the dump naming a thing differently from the release, with
 /// nothing comparing them. `C-25`, and this lane does not rename a field Sean is reading
 /// without asking.
@@ -246,10 +246,10 @@ fn every_trait_of_a_territory_is_shown_in_the_dump() {
     // an exemption list of seventeen against a population of twenty-five is not a check,
     // it is a second copy of the thing being checked, and the second copy is what rots.
     // If a third is wanted here, that is the signal to fix the rule rather than the list.
-    // **One since `P-331`, and the one that went is the pattern working.** `total capacity`
+    // **One since `P-331`, and the one that went is the pattern working.** `capacity`
     // was excepted because the dump printed it as `capacity` - the dump naming a thing
     // differently from the release, which is `founded`'s shape. The row moved to the deposit
-    // and the name is `total-capacity` in one place now, so the exception is gone rather than
+    // and the name is `capacity` in one place now, so the exception is gone rather than
     // repaired: `C-25` dissolved with the row it was about.
     const NOT_SHOWN: [(&str, &str); 1] = [(
         "control",
@@ -285,7 +285,7 @@ fn every_trait_of_a_territory_is_shown_in_the_dump() {
     // `biome`, `nature` - read from the release's *Of* column, where `id` said *a place* and
     // so was not counted as of a territory. `P-462` made `id` a place's trait and `P-470`
     // put it on the territory's own line, so reading the line rather than the column finds
-    // it. **`density` and `total capacity` left for the deposit** in `P-322` and `P-331`,
+    // it. **`density` and `capacity` left for the deposit** in `P-322` and `P-331`,
     // because a description is a flat map and a territory had one of each per resource.
     //
     // **Named as well as counted**, because four is four whichever four they are, and this

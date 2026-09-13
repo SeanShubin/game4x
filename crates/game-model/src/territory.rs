@@ -40,7 +40,7 @@ pub const GARRISON_STRENGTH: u32 = 0;
 
 /// What a territory offers for one resource.
 ///
-/// `spec/planet.md`: *for each resource, a territory has total capacity for some number of
+/// `spec/planet.md`: *for each resource, a territory has capacity for some number of
 /// extractors, and a density that each of them yields.* Two numbers, which is what the
 /// release's *Territory resources* table writes as `3 x 4`.
 ///
@@ -52,7 +52,7 @@ pub const GARRISON_STRENGTH: u32 = 0;
 /// the list was `capacity` copies of one fact. `S-48`.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub struct Deposit {
-    /// How many extractors of this resource the territory has total capacity for.
+    /// How many extractors of this resource the territory has capacity for.
     pub capacity: u32,
     /// What each of them yields when worked.
     pub density: u32,
@@ -386,11 +386,17 @@ impl Territory {
 
     /// Whether a player holds this ground.
     ///
-    /// **`S-19`: derived, not stored.** `releases/first-release.md` gives `control` as
-    /// *derived: a citizen of that player is there*, and `spec/invariants.md` says a derived
-    /// trait cannot be left wrong **because nothing writes one**. `founded: bool` was
-    /// written in four places and cleared in one, and every one of them was a chance for it
-    /// to disagree with the citizens it was meant to describe.
+    /// **`S-19`: computed, not kept.** `releases/first-release.md` gives `control` as
+    /// *held by a player, or unclaimed: a citizen of that player is there*, and
+    /// `spec/invariants.md` says **the one thing that knows how the data is held is the only
+    /// thing that writes it**, so a value computed from others cannot be left wrong - there
+    /// is nowhere to write it wrong from. `founded: bool` was written in four places and
+    /// cleared in one, and every one of them was a chance for it to disagree with the
+    /// citizens it was meant to describe.
+    ///
+    /// **`P-477` moved that guarantee and `P-478` took the word `derived` out.** The release
+    /// says how a value is arrived at in its *Values* cell now, rather than declaring a trait
+    /// derived in a column of its own.
     ///
     /// A population that starves to nothing therefore loses the ground, without anybody
     /// remembering to say so.
@@ -495,7 +501,7 @@ impl Territory {
         self.deposit(resource).density
     }
 
-    /// How many extractors this territory has total capacity for, for a resource.
+    /// How many extractors this territory has capacity for, for a resource.
     ///
     /// **`P-290`: capacity is per kind carrying a particular value of a trait**, so this
     /// bounds *extractors of this resource* directly. It used to be the number of nodes,
@@ -539,7 +545,7 @@ impl Territory {
     ///
     /// # Why it is not simply capacity times density
     ///
-    /// `spec/control.md` says the answer follows from *how many extractors it has total
+    /// `spec/control.md` says the answer follows from *how many extractors it has
     /// capacity for, and their densities* - and two of the release's twelve territories reach
     /// a ceiling below that, for reasons that are themselves permanent facts rather than
     /// history.
@@ -642,7 +648,7 @@ impl Territory {
             && others >= elsewhere
     }
 
-    /// Every extractor this territory has total capacity for, across every resource.
+    /// Every extractor this territory has capacity for, across every resource.
     ///
     /// What *fully exploited* is measured against: it used to be `nodes.len()`, and the
     /// nodes were one per unit of capacity, so this is the same number stated directly.
@@ -657,7 +663,7 @@ impl Territory {
     ///
     /// **The bookkeeping that stopped two extractors sharing a node is gone with the
     /// nodes.** Capacity is the whole of the rule now: an extractor fits while the ones
-    /// already here are fewer than the territory has total capacity for.
+    /// already here are fewer than the territory has capacity for.
     pub fn has_room_for_extractor(&self, resource: Resource) -> bool {
         self.extractors_for(resource).len() < self.capacity_for(resource)
     }
@@ -665,7 +671,7 @@ impl Territory {
     /// Whether this territory can ever build an extractor, from its nodes alone.
     ///
     /// `spec/control.md`: *what that greatest output is follows from the territory's own
-    /// permanent facts: how many extractors it has total capacity for, and their densities.
+    /// permanent facts: how many extractors it has capacity for, and their densities.
     /// Not whether the player can afford it this turn, and not whether any particular game
     /// happened to reach it.*
     ///

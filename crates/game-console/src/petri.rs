@@ -153,11 +153,14 @@ pub struct Place {
     pub kind: String,
     /// Whether this is the room left for that kind rather than the count of it.
     ///
-    /// **`P-374`: what is stored is the room left.** Used capacity is what is there and total
-    /// capacity is the two added, recorded nowhere so that nothing can disagree with it. Room
-    /// is therefore state, and state is a place - drawing the count and leaving the room out
-    /// would be the diagram omitting part of the state, which is the thing its own accounting
-    /// paragraph exists to prevent.
+    /// `spec/logistics.md` says *three names describe it and there are two facts*: a
+    /// container's capacity for a kind, how much of it is occupied, and how much is free.
+    /// Any two give the third, so only two are ever held and nothing can disagree.
+    ///
+    /// **The free capacity is therefore state, and state is a place** - drawing the count and
+    /// leaving the free capacity out would be the diagram omitting part of the state, which
+    /// is the thing its own accounting paragraph exists to prevent. `P-478` named the three;
+    /// `P-374` and `P-474` are where the choice of which two to hold was made.
     pub room: bool,
 }
 
@@ -907,7 +910,7 @@ pub fn densities(document: &str) -> Vec<(String, u32)> {
             continue;
         }
         for (at, resource) in ["food", "metal", "energy"].iter().enumerate() {
-            // `3 x 4` is total capacity for three extractors each yielding four, so the
+            // `3 x 4` is capacity for three extractors each yielding four, so the
             // density is the second number. `none` is no case at all.
             let Some((_, density)) = cells[at + 1].split_once('x') else {
                 continue;

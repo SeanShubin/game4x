@@ -32,8 +32,8 @@ Before:
   {orbit id:1} -> 1
     {ark defending:1 id:1 moving:1} -> 1
   {territory biome:grassland id:1 nature:0} -> 1
-    {deposit density:4 resource:food room:3} -> 1
-    {deposit density:4 resource:metal room:3} -> 1
+    {deposit capacity:3 density:4 free:3 occupied:0 resource:food} -> 1
+    {deposit capacity:3 density:4 free:3 occupied:0 resource:metal} -> 1
 ```
 
 `{deploy-ark territory:1}`
@@ -45,8 +45,8 @@ After:
   {orbit id:1} -> 1
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
-    {deposit density:4 resource:metal room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:metal} -> 1
     {extractor resource:food working:1} -> 1
     {extractor resource:metal working:1} -> 1
     {garrison} -> 1
@@ -113,8 +113,8 @@ Before:
 ```
 {game phase:play}
   {territory biome:grassland id:2 nature:0} -> 1
-    {deposit density:4 resource:food room:3} -> 1
-    {deposit density:4 resource:metal room:3} -> 1
+    {deposit capacity:3 density:4 free:3 occupied:0 resource:food} -> 1
+    {deposit capacity:3 density:4 free:3 occupied:0 resource:metal} -> 1
     {pioneer defending:1 id:1 moving:1} -> 1
 ```
 
@@ -126,8 +126,8 @@ After:
 {game phase:play}
   {territory biome:grassland id:2 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
-    {deposit density:4 resource:metal room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:metal} -> 1
     {extractor resource:food working:1} -> 1
     {extractor resource:metal working:1} -> 1
     {garrison} -> 1
@@ -149,7 +149,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
-    {deposit density:4 resource:metal room:3} -> 1
+    {deposit capacity:3 density:4 free:3 occupied:0 resource:metal} -> 1
     {garrison} -> 1
     {labor} -> 1
     {metal} -> 1
@@ -163,7 +163,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
-    {deposit density:4 resource:metal room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:metal} -> 1
     {extractor resource:metal working:1} -> 1
     {garrison} -> 1
 ```
@@ -184,7 +184,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
-    {deposit density:4 resource:metal room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:metal} -> 1
     {extractor resource:metal working:1} -> 1
     {garrison} -> 1
     {labor} -> 1
@@ -199,7 +199,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
-    {deposit density:4 resource:metal room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:metal} -> 1
     {extractor resource:metal working:1} -> 1
     {garrison} -> 1
     {store resource:metal} -> 1
@@ -358,7 +358,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {labor} -> 1
@@ -373,7 +373,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 4
     {garrison} -> 1
@@ -399,7 +399,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -418,7 +418,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -447,7 +447,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -466,7 +466,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -495,7 +495,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -514,7 +514,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -533,7 +533,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:3} -> 1
+    {deposit capacity:3 density:4 free:3 occupied:0 resource:food} -> 1
     {food} -> 8
     {garrison} -> 1
     {store resource:food} -> 1
@@ -547,7 +547,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 4
-    {deposit density:4 resource:food room:3} -> 1
+    {deposit capacity:3 density:4 free:3 occupied:0 resource:food} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
 ```
@@ -570,7 +570,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -589,7 +589,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -617,7 +617,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -636,7 +636,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -663,7 +663,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -682,7 +682,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -710,7 +710,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -729,7 +729,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -757,7 +757,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -776,7 +776,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -803,7 +803,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -822,7 +822,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -849,7 +849,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -868,7 +868,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -895,7 +895,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -914,7 +914,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -941,7 +941,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -960,7 +960,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -987,7 +987,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -1006,7 +1006,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -1033,7 +1033,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -1052,7 +1052,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -1079,7 +1079,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -1098,7 +1098,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -1125,7 +1125,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -1144,7 +1144,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -1174,7 +1174,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -1193,7 +1193,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -1222,7 +1222,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -1241,7 +1241,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -1268,7 +1268,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -1287,7 +1287,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -1314,7 +1314,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -1333,7 +1333,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -1360,7 +1360,7 @@ Before:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
@@ -1379,7 +1379,7 @@ After:
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit density:4 resource:food room:2} -> 1
+    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1

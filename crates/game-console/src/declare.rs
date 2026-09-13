@@ -231,22 +231,29 @@ pub fn biomes(document: &str) -> String {
 /// `unpaid` are named once each. **`metal in it` and `control` are named by nothing**, counted
 /// over the *Recipes* table, so they are in no data file at all.
 pub fn traits(document: &str) -> String {
+    // **Found by name, because `P-478` renamed one of these and moved the other.** *Stored or
+    // derived* is *Belongs to*, and it says where a value belongs rather than whether one is
+    // held - `spec/console.md`: *it says where a value belongs and never whether one is held,
+    // which is the layout and has one reader.*
+    let values_at = crate::recipes::column_of(document, "## Traits", "Values");
+    let belongs_at = crate::recipes::column_of(document, "## Traits", "Belongs to");
     let mut rows: Vec<Description> = Vec::new();
     for row in body_under(document, "## Traits") {
         let name = plain(row.first().map(String::as_str).unwrap_or_default()).replace(' ', "-");
-        let values = plain(row.get(1).map(String::as_str).unwrap_or_default());
-        let kept = plain(row.get(2).map(String::as_str).unwrap_or_default());
+        let values = plain(row.get(values_at).map(String::as_str).unwrap_or_default());
+        let belongs = plain(row.get(belongs_at).map(String::as_str).unwrap_or_default());
         assert!(
-            !name.is_empty() && !values.is_empty() && !kept.is_empty(),
+            !name.is_empty() && !values.is_empty() && !belongs.is_empty(),
             "a row of the Traits table is missing a cell, so the line would be short a fact"
         );
-        let kept = match kept.split(':').next().unwrap_or_default().trim() {
-            "stored" => "thing",
-            "of the kind" => "kind",
-            "derived" => "nothing",
+        // **Two where there were three.** `nothing` is gone with the distinction between a
+        // stored trait and a derived one: a derived trait's value still belongs somewhere,
+        // and `P-477` moved the guarantee about deriving to where the one writer is stated.
+        let kept = match belongs.as_str() {
+            "each thing" => "thing",
+            "the kind" => "kind",
             other => panic!(
-                "`{name}` is kept `{other}`, and the release has three: stored, of the kind, \
-                 derived"
+                "`{name}` belongs to `{other}`, and the release has two: each thing, the kind"
             ),
         };
         let mut traits = std::collections::BTreeMap::new();
@@ -299,7 +306,13 @@ pub fn traits(document: &str) -> String {
 /// line would be a rule stated twice - `P-458`, and the specification lane applied it to its
 /// own draft.
 fn admits(values: &str) -> String {
-    let said = values.trim();
+    // **A *Values* cell may carry its derivation after a colon** since `P-478` - *a number:
+    // its capacity less what it holds*. What a trait admits is the part before it; how a
+    // value is arrived at is not something a data file says.
+    let said = values
+        .split_once(": ")
+        .map_or(values, |(what, _)| what)
+        .trim();
     if said == "an identity" {
         return "identity".to_string();
     }

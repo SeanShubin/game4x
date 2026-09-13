@@ -188,12 +188,13 @@ fn accounting(net: &Net, document: &str) -> String {
     ));
     let rooms = net.places.iter().filter(|place| place.room).count();
     out.push_str(&format!(
-        "**{rooms} of those places are room rather than a count** - `P-374`. What a container \
-         stores is the room left, not the total: used capacity is what is there, total \
-         capacity is the two added, and nothing records the total so nothing can disagree \
-         with it. Making a thing takes one of the room and destroying it gives one back. Room \
-         is stored, so room is state, so it is drawn - a diagram showing the count and hiding \
-         the room would be leaving out half of what containment is.\n\n"
+        "**{rooms} of those places are free capacity rather than a count** - `P-478`. Three \
+         names describe one bound and there are two facts: a container's **capacity** for a \
+         kind, how much of it is **occupied**, and how much is **free**. Any two give the \
+         third, so only two are ever held and nothing can disagree with anything. Making a \
+         thing occupies one of the free capacity and destroying it frees one. Free capacity \
+         is held, so it is state, so it is drawn - a diagram showing the count and hiding the \
+         free capacity would be leaving out half of what containment is.\n\n"
     ));
     out.push_str(&format!(
         "**{} of these arcs are zero tests, and that number used to be two.** Reachability in \
