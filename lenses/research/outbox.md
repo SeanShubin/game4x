@@ -824,6 +824,26 @@ rather than this lane's - recorded here so the count and the instance sit togeth
 into `spec/structures.md`, which has three structures and would have four; or the win condition
 stops referring to storage; or the release stops having stores. **This lane takes none** - and notes
 only that the third would make `X-21` moot and the first would make it urgent.
+
+**The denominator is narrower than the class, and `P-486` is the proof.** This item counted
+**kinds** - sixteen of them, two gaps - because a kind was the example it was handed. The class is
+*the release says something `spec/` does not support*, and a kind is one way to say something.
+
+On 2026-09-13 `P-486` restored a clause `P-66` had promoted and a reword deleted on 2026-09-01: **a
+unit is built with its fuel bin full.** For twelve days the specification did not say bins get
+filled, and the release went on charging six energy for a pioneer - **a number whose only
+justification was the deleted clause.** Nobody could explain the six, which is how it was found.
+
+**Check 13 could not have seen it.** It searches for each kind's own word, and no kind was missing;
+what was missing was a *rule* behind a *quantity*. So this lane measured the population it was given
+rather than the population the finding is about - the same narrowing it has spent a week documenting
+in other people's instruments.
+
+**And it does not mechanise, which is why this is a note rather than a second check.** Asking
+whether a number in the release still has a rule behind it is asking whether one statement is
+*about* another, which is the wall `P-245` names. What is available is the habit: **a number nobody
+can explain is a rule that has gone missing**, and that is the tell `P-486` was found by.
+
 ### X-27 - losing a territory to nature does not delete the units on it, and one line above it is dead
 
 **to** code · **status** **acted in part** 2026-09-10 · `e570e94` — the dead `retain` is gone, and the test that hid it now asserts the territory holds **nothing at all** rather than four named kinds. **The first half is refused, and rightly**: `spec/control.md:42` says *any ark on it becomes unusable* where Sean said *we just delete the units*, so building it would be the code lane choosing between two rules. It is `C-77` now · **raised** 2026-09-10 · **source** refuting `X-22` against `crates/` · **found by** reading the force contest this lane had claimed did not exist
