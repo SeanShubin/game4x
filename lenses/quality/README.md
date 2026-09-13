@@ -412,6 +412,11 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [*Did it land* is not *is it still there*](2026-09-13-did-it-land-is-not-is-it-still-there.md)
+  - 2026-09-13. `P-486` restored a clause `P-66` promoted and a reword lost. Nothing checks
+    that approved text survives, by design. The obvious sweep is noise at forty per cent
+    because the spec is meant to change; the instrument that works asks what changed it, and
+    finds nothing - over a population that excludes `P-66`'s whole era.
 - [The README is the deliverable](2026-09-12-the-readme-is-the-deliverable.md)
   - 2026-09-12. Reviewing `prototypes/hex-torus-view` at the code lane's own floor. Two
     counted answers in the README are refuted by tests in the same crate, and a prototype's

@@ -64,6 +64,40 @@ was wrong, and being refuted is the lens working.
 > created the work, not from a clock.** When they report, ask them to name their own first commit
 > and use that; this is the backstop for a session that ends before they do.
 
+### Q-88 - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here
+
+**to** code · **status** open · **raised** 2026-09-13 · **source**
+[*did it land* is not *is it still there*](2026-09-13-did-it-land-is-not-is-it-still-there.md)
+
+**Where.** `tools/outbox/tests/promotions.rs`, `Verdict::Repaired`'s doc comment.
+
+**What.** `CLAUDE.md` states the guarantee in the present tense - *approved text is byte-identical to
+shipped text* - and `a_promotion_lands_what_was_approved` answers *did it land*, against the
+destination **as it stood in the promoting commit**. Its own comment says so, and the reasoning is
+right: a repaired deviation would otherwise stay red forever. **The consequence is that nothing asks
+whether the text is still there**, and `P-66` is twelve days of what that costs.
+
+**Why, and the obvious check is not the answer.** **78 of 192** checkable promotions no longer match
+at `HEAD` - and that is the specification working, not failing. `P-468` stopped matching because
+`506ff08` promoted `P-478`, which renamed `total capacity`. A check reporting that would be noise at
+forty per cent.
+
+**The instrument that works asks what changed it**: the newest version of the destination that still
+held the text, and whether the next commit to touch that file promoted anything. **78 becomes 4, and
+all four are explained** - three are addressing lines, which `CLAUDE.md` says are not promoted text,
+and one is a supersession in Sean's own words. **Excluding addressing lines cuts it to one.**
+
+**Whether. Eventually, not now**, and take the measurement rather than re-deriving it. The era this
+can see is clean; what argues for building it is the cost when it does happen - twelve days, found
+by a number nobody could explain rather than by anything looking.
+
+**And the zero is smaller than it reads, which is the half worth carrying.** 441 accepted, 335 with a
+recoverable body, **192 checked**. The 106 without one are **every proposal accepted on or before
+2026-08-29** and no others - the queue began writing `### P-n` items around then. **`P-66` was
+accepted 2026-08-26**, so the one known instance sits inside the blind spot and this method could
+not have found it either way. **Nothing is claimed about `spec/` being intact** - only that in the
+part that can be read, nothing is missing that a later promotion did not deliberately change.
+
 ### Q-9 - Small duplication and dead code, six items
 
 **to** code · **status** noted · **raised** 2026-08-28 · **source**
