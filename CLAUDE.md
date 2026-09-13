@@ -53,11 +53,11 @@ Sean, 2026-09-04, choosing between the code lane, the quality lane and a new lan
 something stops being independent evidence, and a new lane costs an instance he has to run. **The
 code lane was the only one that cost nothing already being paid.**
 
-| Perspective                     | Writes                                                               | Reads      |
-| ------------------------------- | -------------------------------------------------------------------- | ---------- |
-| **Specification**               | `spec/`, `releases/`, `docs/`, `README.md`, `tools/spec/`, this file | everything |
-| **Code**                        | `crates/`, `web/`, `commands/`, `prototypes/`, cargo                 | everything |
-| **Quality**, and any other lens | its own directory under `lenses/`, and `tools/<its name>/`           | everything |
+| Perspective                     | Writes                                                                        | Reads      |
+| ------------------------------- | ----------------------------------------------------------------------------- | ---------- |
+| **Specification**               | `spec/`, `releases/`, `docs/`, `README.md`, `tools/spec/`, this file          | everything |
+| **Code**                        | `crates/`, `web/`, `commands/`, `prototypes/`, `scenario/`, `reports/`, cargo | everything |
+| **Quality**, and any other lens | its own directory under `lenses/`, and `tools/<its name>/`                    | everything |
 
 **`temporary-notes/` is Sean's and no instance writes there**, except to create a file he has
 asked for by name. It is not tracked - the files in it are transient, which is what the name says -

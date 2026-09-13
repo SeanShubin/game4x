@@ -62,48 +62,8 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-488 - two paths added to the Code row of `CLAUDE.md`'s column table
+*Nothing is open. Everything filed has been decided.*
 
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction, between `CLAUDE.md` and `docs/process.md` · **shape** rows · **asks** approval · **into** `CLAUDE.md` -> Perspectives
-
-**What you are approving is one cell**, the Code lane's *Writes*:
-
-```
-now    `crates/`, `web/`, `commands/`, `prototypes/`, cargo
-after  `crates/`, `web/`, `commands/`, `prototypes/`, `scenario/`, `reports/`, cargo
-```
-
-| Perspective | Writes                                                                        | Reads      |
-| ----------- | ----------------------------------------------------------------------------- | ---------- |
-| **Code**    | `crates/`, `web/`, `commands/`, `prototypes/`, `scenario/`, `reports/`, cargo | everything |
-
-## Why this is yours rather than this lane's to settle
-
-**`CLAUDE.md` itself says so**: *`docs/process.md` is Sean's statement of what this process is for.
-This file is the operating detail and must not contradict it. **Where the two disagree, raise it
-rather than picking a winner** - a difference may mean this file has drifted, or may mean it
-learned something that document has not caught up with, and which is later is Sean's to say.*
-
-**They disagree.** `docs/process.md` says the scenario's commands and expected data come from the
-coding lane. `CLAUDE.md`'s table does not list `scenario/` at all. **That rule says raise it, and
-it says which is later is yours to say** - so the row above is the reading this lane believes, and
-filing it is the instruction being followed rather than a formality.
-
-## The two facts that make it the right reading
-
-- **`hooks/pre-commit` already assigns both**, and it is the half with teeth:
-  `crates/*|web/*|commands/*|prototypes/*|scenario/*|reports/*) echo "code"`
-- **All twenty-seven commits to `scenario/` are the code lane's**
-
-## What does not change
-
-**Nothing about who writes what** - the hook enforces this already and the code lane already does
-it. **What changes is that the table stops being the only place that omits it**, which matters
-because the table is what a lane reads to learn its column and the hook is not.
-
-**And nothing about who vets.** `scenario/expected/play.4x` is the code lane's to write and yours
-to vet; `docs/process.md` says *that is what I vet*. Being in a column is about editing, not about
-deciding whether a thing is right - the same split `releases/` already has, running the other way.
 ## Addressed to other perspectives
 
 ### S-128 - a pioneer's bin: three promotions, and the dump has to start showing what a unit holds
@@ -5382,6 +5342,7 @@ work the release exists to order.
 | P-486, a unit is built with its bin full, which `P-66` said and a reword lost                                                | `spec/units.md` -> What a unit is                                                                                                                                                                        | 2026-09-13 |
 | P-487, what a consumed container held falls loose where it stood                                                             | `spec/logistics.md` -> Containment                                                                                                                                                                       | 2026-09-13 |
 | P-485, a pioneer is produced with a full tank, and a refuel recipe moves fuel between containers                             | `releases/first-release.md` -> Recipes, and Units and structures                                                                                                                                         | 2026-09-13 |
+| P-488, two paths added to the Code row of `CLAUDE.md`'s column table                                                         | `CLAUDE.md` -> Perspectives                                                                                                                                                                              | 2026-09-13 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
