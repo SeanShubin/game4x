@@ -3695,139 +3695,34 @@ passes over nothing, so **assert how many traits it examined** - two today. And 
 are free text rather than a set has no table to check against, so the list of which traits are
 checked is written out rather than discovered.
 
-### S-30 - Seven of the release's eight data tables still have no file, and `kinds.4x` is the eighth
+### S-30 - withdrawn: two corrections, a contradiction, and a live half that lives elsewhere
 
-**to** code - **status** open - **cited** `0e5f8f4` - **raised** 2026-09-04 - **source** `P-218`, and `P-220` when it lands
+**to** code · **status** **withdrawn** 2026-09-12 · **cited** `bc7fce8` · **raised** 2026-09-04 · **source** the code lane re-reading it on request and finding three things stale, two of which this lane had already corrected in place
 
-**`P-218` made these a replication and nothing generates them.** **Kinds**, Families, Traits, Where
-things are, What bounds a kind in a territory, Units and structures, Recipes and Biomes in
-`releases/first-release.md` are hand-written data, and **a replication that is written rather than
-generated is the thing the rule forbids.**
+**Withdrawn by this lane, not refuted.** The code lane says nothing in it is work for it, and
+having asked them to check, taking the answer is the whole point of having asked.
 
-**`Kinds` is done.** `spec/data/kinds.4x` landed by `P-444` on 2026-09-12 - twenty-one lines,
-compared as bytes against what the code lane's generator prints, and holding the release's eighteen
-rows in both directions. **Seven are left**, and `P-448` gives the shape for the next: a kind
-declares which family it is in, so `families.4x` holds names and `kinds.4x` gains a `family` trait on
-seven of its lines.
+## What had gone stale, and none of it by anybody editing it
 
-**Four are done and four are left, and the way to know is `ls spec/data/` rather than this
-sentence.** Kinds, Families, Biomes and Traits have files; **Where things are, What bounds a kind
-in a territory, Units and structures and Recipes do not.**
+- **The heading counted seven of eight tables with no file.** Four have one - `kinds.4x`,
+  `traits.4x`, `families.4x`, `biomes.4x` - so it is four
+- **A paragraph said `traits.4x` waits on `P-457` and nothing else.** `P-457` landed, and the
+  item's own corrected paragraph two above it already said four files are on disk. **It
+  contradicted itself within its own body**
+- **The *measured and disproved* paragraph is still true and its evidence has moved.** It names
+  five checks that fail when the tables are stripped, measured 2026-09-04.
+  `the_costs_in_the_model_are_the_costs_in_the_release` no longer reads *Units and structures* -
+  `P-466` removed the column it read - and reads the recipes' costs instead. All five still exist
+  by name; **the claim survives and one of its five measurements is of something else**
 
-**This number has been wrong twice in one day.** The heading says seven of eight, which was true on
-2026-09-04. A correction written here at 2026-09-12 said *three are done and five are left*, and
-`traits.4x` landed hours later the same evening - **so the correction went stale before the day it
-was written ended.** Found by the code lane reading its own inbox rather than by anything failing.
+**The third is the shape both lanes have been hitting all day**: the sentence is still true and
+the reason it was true has moved, and nothing edits a sentence when its reason changes.
 
-**Which is why this one names the rule instead of only the count**: a table is done when a file in
-`spec/data/` states it, and four files are on disk.
+## Where the live half is
 
-**And `C-102` answered what to do with the four that are left**, which this item does not know:
-three of them fold, because their data is of-the-kind traits belonging on a kind's line, and
-**`Recipes` is the one that is genuinely different** and needs a shape decided rather than a fold.
-`P-466` has since taken three columns out of *Units and structures* on exactly that reasoning, and
-`P-473` is the capacity relation's half of it.
-
-**`traits.4x` waits on `P-457` and nothing else**, now that `P-456` is answered. **The other four
-have no proposal**, and the reason is the same for all of them: rule 7 sends relationships to prose
-and data to a data file, and nobody has yet said which half of those four tables is which. That is
-this lane's next piece of work rather than yours.
-
-**Corrected twice and this is the second, 2026-09-12.** The count was **eight**, then *corrected* to
-**nine**, and it is eight - **but not the eight it started as.**
-
-- **The first list was eight and had the wrong members**: it counted *Territory resources*, which is
-  **this planet's** - twelve territories and their deposits - rather than the game's, and it missed
-  *Where things are*
-- **The 2026-09-11 correction fixed the second and kept the first**, so it read nine
-- **The code lane caught it on 2026-09-12**, in the same message where this lane had warned it not to
-  fold the two layers together
-
-**So the number was right the first time by accident and the membership was wrong both times.** The
-list above is now the eight the game owns, and the checking method is the one that would have caught
-it: **a table is the game's data if every scenario shares it**, rather than if it is a table.
-
-
-**`S-29` and `S-23` ask for the machinery and neither names these tables.** `S-29` is the scenario
-test's input and expected; `S-23` is `recipes.md`, a new view. **The release's own tables are a
-third consumer of the same data file** and would otherwise stay hand-written while everything
-around them moved.
-
-**`crates/game-console/tests/first_release.rs` is what holds them today**, by parsing the release -
-*read from the release rather than copied out of it, which is the only way the two stay honest about
-each other*. **That comment is correct about two copies and becomes wrong about one source**: when
-the data file exists, the release is generated from it and the parse is a currency check, not a
-reconciliation.
-
-**Measured and disproved, 2026-09-04: the checks reading the release do not go green when the
-tables leave.** The code lane raised it, **this lane confirmed it by naming the failure shape rather
-than by measuring**, and then the code lane tested it: with every table row stripped from the
-release, `the_release_tables_are_the_ones_in_this_crate`, `every_kind_a_recipe_names_is_declared`,
-`what_a_trait_says_its_values_are_is_borne_out_by_the_table`, `the_costs_in_the_model_are_the_costs_in_the_release`
-and `released_table` **all fail**. Every one already asserts a count and every count fails on zero.
-The release was restored byte-identical. **Recorded so it is not raised a third time**, and because
-recognising a shape is not the same as finding it.
-
-**Its first appearance needs no reviewed expectation, and you say so when you make it.** Sean, 2026-09-04: a new artifact's first appearance is the same memorable one-off as the first seed, so **mention it in the report rather than guarding it with a check**.
-
-**Unblocked by `P-224`, 2026-09-04, which named the destination.** A release does not contain the
-game's data; it links to the generated view, which is a file of its own. **So these eight tables
-leave `releases/first-release.md` entirely** rather than becoming generated regions inside it -
-`releases/first-release.md` stays hand-written prose and links out, the way `README.md` links to
-`catalog.md`. **The data file is still first**; nothing can be generated before there is something
-to generate it from.
-
-**Not a decision and not urgent.** It is filed so the gap is visible while it is open, rather than
-discovered when somebody edits a table by hand and nothing objects.
-
-
-**Counted 2026-09-12, after `C-102` offered a reading of the four.** Their three-of-four holds for
-two, and the third is one relation rather than one number.
-
-**`Where things are` is three rows and `What bounds a kind` is twelve, and five numbers across the
-two are the same relation.** A maximum of a contained kind per container kind:
-
-```
-territory -> garrison   1        What bounds a kind
-territory -> yard       1
-territory -> ark        2
-territory -> pioneer    2
-store     -> its resource  10    Where things are
-```
-
-**`C-102` calls the store's 10 *one number nothing has claimed* and the four capacities data that
-`P-451`'s fourth sentence already places.** They are the same shape: *a territory holds at most one
-garrison* is not a fact about a garrison, it is a fact about the pair. **A trait on the kind's line
-cannot say it**, because the line has no room for which container it is talking about. This is
-`C-47`'s capacity relation, and it is the one of the four tables that genuinely wants a file.
-
-**The other two rows of `Where things are` are trait references and need nothing** - *its free
-capacity for that kind* and *the unit's fuel* are `free` and `fuel`, both declared. **And
-eight of the twelve bounds are relationships** - *the food produced here, through upkeep*, *as many
-as the extractors of its resource* - which rule 7 leaves in prose, correctly.
-
-**`Units and structures` does not fold as cleanly as `C-102` says.** Ten columns, and five of them
-are declared traits - `Strength`, `Fuel`, `Upkeep`, `Movable`, and `Readies` once `P-459` is
-answered. **The other five are not:**
-
-- **`Costs to produce`** is a list, which is `C-98`'s cell one table over - correct in `C-102`
-- **`Binding`** is a declared trait of the kind - `{trait admits:number kept:kind name:binding}` -
-  which `P-476` settled, and the *Traits* table carries its definition in the **Values** cell
-- **`Crosses`** is `orbit border` or `border`, which is neither a kind nor a declared trait
-- **`Requires`** is *a Yard*, a kind, and nothing declares the trait that would hold it
-
-**So the four tables are: one relation with a file, one table mostly folded with four undeclared
-names, one that needs nothing, and `Recipes`.**
-
-**`Recipes` is 77 body rows and not 78** - `C-102` says 78, and 77 is the figure
-`docs/designing-rules.md` states and `tools/spec/tests/stated_numbers.rs` re-derives at every gate.
-A small number and the third one today that was right about a slightly different population.
-
-**And `C-102`'s refusal to draft `Recipes` is the right call rather than a gap.** They read that
-table three times over and say the shape is this lane's, because a shape invented there and
-transcribed here is the promotion by the wrong lane `C-49` was about. **What they offered instead is
-to say whether a proposed shape carries everything their three readers need**, which is worth more
-than a draft.
+**Which of the four remaining tables is data and which is a relationship** is `C-102`, open to
+this lane, and it answers it table by table over the cells rather than by judgement. Nothing is
+lost by this withdrawal; the full text is in the history.
 
 ### S-29 - Input and expected are data files; the dumps are neither
 
