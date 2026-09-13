@@ -92,16 +92,17 @@ one reader.
 **no expression orders, sums or aggregates one**, and a guard on one compares with `=` and nothing
 else.
 
-**A trait of the kind is written with its value and a stored one with its name**, because one is a
-fact about the kind and the other is a fact about each thing of it. So an Ark's `strength` is `2`
-on the Ark's own line, and a citizen's `laboring` is named there and valued on each citizen.
+**A trait of the kind is written with its value and a trait of the thing with its name**, because
+one is a fact about the kind and the other is a fact about each thing of it. So an Ark's
+`strength` is `2` on the Ark's own line, and a citizen's `laboring` is named there and valued on
+each citizen.
 
-**A stored trait's name may carry a number on a kind's line, and that number is its maximum** -
+**A trait of the thing may carry a number on a kind's line, and that number is its maximum** -
 where a thing of that kind begins, and the most it may hold. So a citizen's line reads
-`laboring:1`. **`kept` still says `thing`**, because that is where the value lives; what the kind
-adds is a bound rather than a second home. **Which a number is, is read from the trait**:
-`kept:kind` makes it the value and `kept:thing` makes it the maximum. **A stored trait with no
-number on the kind's line has no maximum.**
+`laboring:1`. **`kept` still says `thing`**, because that is where the value belongs; what the
+kind adds is a bound rather than a second home. **Which a number is, is read from the trait**:
+`kept:kind` makes it the value and `kept:thing` makes it the maximum. **A trait of the thing with
+no number on the kind's line has no maximum.**
 
 **On a kind's line a trait may be named with no value**, which says the kind has it and nothing
 more. **That is a declaration's form and not a state's**: in a state every trait of a thing
@@ -174,7 +175,7 @@ Available only before `start`:
 
 - `create planet <size>` - make a planet and its territories
 - `set resource <territory> <resource> <extractors> <density>` - give a territory its
-  total capacity and its density for one resource
+  capacity and its density for one resource
 - `set force <territory> <force>` - set a territory's force of nature
 - `set biome <territory> <biome>` - give a territory its biome
 - `add <unit> orbit` - place a unit in orbit before play begins

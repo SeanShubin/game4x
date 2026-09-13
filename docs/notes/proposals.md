@@ -62,71 +62,8 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-478 - three sentences in `spec/console.md` still say `a stored trait`, and five files still say `total capacity`
+*Nothing is open. Everything filed has been decided.*
 
-**to** sean · **status** open · **raised** 2026-09-12 · **kind** contradiction, found by the rule that a section taking a second proposal is re-read whole · **shape** text and an instruction · **asks** approval · **into** `spec/console.md` -> The language, and five files by rename
-
-**`P-476` made `kept` say where a value belongs and never whether one is held.** Three sentences
-in the same section still divide traits into *stored* and not:
-
-```
-spec/console.md:95   A trait of the kind is written with its value and a stored one with its name
-spec/console.md:99   A stored trait's name may carry a number on a kind's line
-spec/console.md:103  A stored trait with no number on the kind's line has no maximum
-```
-
-**They are not wrong, they are unsayable.** *Stored* used to mean `kept:thing`, and the word that
-meant it is gone - so a reader has three sentences using vocabulary the paragraph above them
-removed. **This is the first thing the re-read found**, and it is the `P-100` against `P-109`
-shape: both proposals passed the staleness check and the section still did not agree with itself.
-
-## The words, replacing the three
-
-> **A trait of the kind is written with its value and a trait of the thing with its name**, because
-> one is a fact about the kind and the other is a fact about each thing of it. So an Ark's
-> `strength` is `2` on the Ark's own line, and a citizen's `laboring` is named there and valued on
-> each citizen.
-
-> **A trait of the thing may carry a number on a kind's line, and that number is its maximum** -
-> where a thing of that kind begins, and the most it may hold. So a citizen's line reads
-> `laboring:1`. **`kept` still says `thing`**, because that is where the value belongs; what the
-> kind adds is a bound rather than a second home. **Which a number is, is read from the trait**:
-> `kept:kind` makes it the value and `kept:thing` makes it the maximum. **A trait of the thing with
-> no number on the kind's line has no maximum.**
-
-## The instruction: `total capacity` is now `capacity`
-
-**`P-475` renamed the trait and left the prose.** Ten sentences in six files still name the total
-*total capacity*, which is no longer the name of anything:
-
-```
-spec/console.md:178              set resource ... its total capacity and its density
-spec/control.md:53               extractors it has total capacity for, and their densities
-spec/economy.md:16               a territory with total capacity for three food extractors
-spec/orbit.md:11                 an orbit ... has total capacity
-spec/planet.md:47                a territory has total capacity for some number of extractors
-releases/first-release.md:20     quoting spec/planet.md
-releases/first-release.md:24     every territory has total capacity for at least one
-releases/first-release.md:66     a density and a total capacity per resource
-releases/first-release.md:311    `5 x 6` is total capacity for five extractors
-releases/first-release.md:312    total capacity for at least one food extractor
-```
-
-**Each becomes `capacity`**, and nothing else in those sentences changes.
-
-**The check**: `total capacity` and `total-capacity` appear nowhere in `spec/` or `releases/`
-except in the *Accepted* ledger and in an item's own history, where they are records of what was
-decided and not statements about the game.
-
-## What this lane has already fixed without asking, and reports
-
-- **The second Containment bullet was re-wrapped** after `P-476` landed a shorter sentence into a
-  longer one's lines. Whitespace only; the words are the approved ones
-- **`docs/designing-rules.md` quotes `P-374`'s *what is stored is the room left* twice**, which
-  `P-476` withdrew. `docs/` is the shared layer, so this lane will correct both to *at most* is
-  *there is free capacity* unless you say otherwise
-- **`S-30` said `binding` is declared by no trait and that `total capacity` is a declared trait.**
-  Both were true when written and neither is now. Corrected in this lane's own outbox
 ## Addressed to other perspectives
 
 ### S-122 - `P-475` and `P-476` landed, and between them they change every deposit entry
@@ -5167,6 +5104,7 @@ work the release exists to order.
 | P-475, the three capacities are `capacity`, `occupied` and `free`                                                            | `spec/logistics.md` -> Containment, `spec/console.md` -> The language, `spec/invariants.md` -> What a rule may cost, `releases/first-release.md` -> Traits and Where things are, and `spec/data/`        | 2026-09-13 |
 | P-476, nothing outside the debug view says which of a set is held                                                            | `spec/console.md` -> The language, `spec/logistics.md` -> Containment, `spec/data/`, and `releases/first-release.md` -> Traits                                                                           | 2026-09-13 |
 | P-477, the derived-trait guarantee moves to where the layout lives                                                           | `spec/invariants.md` -> The data is a normalized relational model, and The game is data                                                                                                                  | 2026-09-13 |
+| P-478, three sentences in `spec/console.md` still say `a stored trait`, and five files still say `total capacity`            | `spec/console.md` -> The language, and five files by rename                                                                                                                                              | 2026-09-13 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |

@@ -44,7 +44,7 @@ ones it crosses is a fact about that unit.
 ## What a territory carries
 
 - Each territory has an id, unique within its planet, starting at 1
-- For each resource, a territory has total capacity for some number of extractors, and a density that
+- For each resource, a territory has capacity for some number of extractors, and a density that
   each of them yields.
 - A territory's biome does not determine its numbers. The two are chosen to agree thematically, and
   a territory is free to differ where that shows something the others do not.

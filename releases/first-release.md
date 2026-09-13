@@ -17,11 +17,11 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 ### Territory resources
 
-**In** - `spec/planet.md`, *for each resource, a territory has total capacity for some number
+**In** - `spec/planet.md`, *for each resource, a territory has capacity for some number
 of extractors, and a density that each of them yields*.
 
 The twelve territories are fixed, each chosen to exercise a different consequence of the rules.
-Every territory has total capacity for at least one food extractor.
+Every territory has capacity for at least one food extractor.
 
 | Territory | Food  | Metal | Energy | What it exercises                          |
 | --------- | ----- | ----- | ------ | ------------------------------------------ |
@@ -50,26 +50,26 @@ Every territory has total capacity for at least one food extractor.
 
 ## Kinds
 
-| Kind          | What it is                                                                                                   |
-| ------------- | ------------------------------------------------------------------------------------------------------------ |
-| **citizen**   | a person: provides labor, eats, and grows on surplus                                                         |
-| **garrison**  | what holds a territory; a territory has at most one                                                          |
-| **extractor** | built for one resource, and worked to produce it                                                             |
-| **yard**      | where an Ark is produced                                                                                     |
-| **store**     | built to hold one resource, and holds nothing else                                                           |
-| **ark**       | carries a landing, and can invade from orbit                                                                 |
-| **pioneer**   | founds a territory                                                                                           |
-| **food**      | eaten by citizens; expires                                                                                   |
-| **metal**     | what things are built from; drawn from the planet, and conserved once above ground                           |
-| **energy**    | what moves things; neither conserved nor expiring                                                            |
-| **labor**     | what working a machine takes; a citizen provides it each turn                                                |
-| **territory** | a place things are in, which has a biome, a force of nature, and a density and a total capacity per resource |
-| **orbit**     | a place above one territory, which holds units and nothing else                                              |
-| **deposit**   | what a territory's ground offers of one resource, and how richly                                             |
-| **adjacency** | two places that share an edge, held by the thing that holds them                                             |
-| **game**      | every thing is in it, and it is the one thing that is in nothing                                             |
-| **fertility** | a citizen's capacity to raise one more, spent by raising one and renewed each turn                           |
-| **force**     | what a territory presents to hold or take ground; mustered each turn and swept at its end                    |
+| Kind          | What it is                                                                                             |
+| ------------- | ------------------------------------------------------------------------------------------------------ |
+| **citizen**   | a person: provides labor, eats, and grows on surplus                                                   |
+| **garrison**  | what holds a territory; a territory has at most one                                                    |
+| **extractor** | built for one resource, and worked to produce it                                                       |
+| **yard**      | where an Ark is produced                                                                               |
+| **store**     | built to hold one resource, and holds nothing else                                                     |
+| **ark**       | carries a landing, and can invade from orbit                                                           |
+| **pioneer**   | founds a territory                                                                                     |
+| **food**      | eaten by citizens; expires                                                                             |
+| **metal**     | what things are built from; drawn from the planet, and conserved once above ground                     |
+| **energy**    | what moves things; neither conserved nor expiring                                                      |
+| **labor**     | what working a machine takes; a citizen provides it each turn                                          |
+| **territory** | a place things are in, which has a biome, a force of nature, and a density and a capacity per resource |
+| **orbit**     | a place above one territory, which holds units and nothing else                                        |
+| **deposit**   | what a territory's ground offers of one resource, and how richly                                       |
+| **adjacency** | two places that share an edge, held by the thing that holds them                                       |
+| **game**      | every thing is in it, and it is the one thing that is in nothing                                       |
+| **fertility** | a citizen's capacity to raise one more, spent by raising one and renewed each turn                     |
+| **force**     | what a territory presents to hold or take ground; mustered each turn and swept at its end              |
 
 ## Families
 
@@ -308,8 +308,8 @@ column that binds.** Ocean is not claimable and carries nothing.
 | Jungle    | 6 x 6 | 1 x 2 | 1 x 2  | 2               |
 | Mountain  | 1 x 3 | 5 x 7 | 2 x 3  | 1               |
 
-`5 x 6` is total capacity for five extractors, each yielding six. Every biome except ocean has
-total capacity for at least one food extractor at density two or more.
+`5 x 6` is capacity for five extractors, each yielding six. Every biome except ocean has
+capacity for at least one food extractor at density two or more.
 
 ## Controls
 
