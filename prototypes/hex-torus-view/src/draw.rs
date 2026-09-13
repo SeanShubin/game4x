@@ -47,18 +47,63 @@ pub fn corners(q: i32, r: i32) -> String {
         .join(" ")
 }
 
-/// The seven copies to draw: the domain itself, and one translate in each of the six
-/// directions of the *lattice*.
+/// The copies to draw: the domain itself, and the translates that surround it without a gap.
 ///
-/// **The lattice's own six neighbours, not the grid's.** Stepping one lattice vector moves a
-/// whole world, so these are where the six echoes sit.
+/// **How many echoes it takes depends on the shape of the domain, and it is not always six.**
+/// Six is right for a hexagonal domain - the folded family reduces to the lattice's Voronoi
+/// cell, and its six nearest translates close round it. **It is wrong for a parallelogram.**
+/// The axis-aligned family's domain is the square `0..C × 0..C` and the offset family's is
+/// `0..W × 0..H`, and a parallelogram is surrounded by the **eight** translates of a three by
+/// three block: `±a`, `±b`, `±(a+b)` and `±(a−b)`. Take the six and the corners are left open.
+///
+/// **Nobody noticed for the whole life of the axis-aligned family.** It landed on 2026-09-12
+/// drawing six echoes round a square, and the picture had two notched corners in every one of
+/// its ten sizes - visible in every screenshot taken of it, including the ones sent to Sean.
+/// `X-37`'s offset family made it obvious rather than new: that lattice is sheared far enough
+/// that the gaps are wedges rather than notches.
+///
+/// **No check could have caught it and none was missing.** `the_copies_do_not_overlap` asserts
+/// that no two copies draw the same cell, which was true; *and leave no gap* is the other
+/// direction, and is asserted now. This is `Q-87`'s shape again - the one direction that could
+/// not fail was the one nobody wrote.
 pub fn copies(torus: &Torus) -> Vec<(Cell, bool)> {
     let [a, b] = torus.generators();
+    let around: Vec<(i32, i32)> = match torus.family {
+        crate::Family::Folded => NEIGHBOURS.to_vec(),
+        crate::Family::AxisAligned | crate::Family::Offset { .. } => (-1..=1)
+            .flat_map(|m| (-1..=1).map(move |n| (m, n)))
+            .filter(|step| *step != (0, 0))
+            .collect(),
+    };
     let mut out = vec![((0, 0), true)];
-    for (m, n) in NEIGHBOURS {
+    for (m, n) in around {
         out.push(((m * a.0 + n * b.0, m * a.1 + n * b.1), false));
     }
     out
+}
+
+/// How many copies this family draws - one bright and the rest echoes.
+///
+/// **Stated here so a check can read it rather than assume seven**, which is what every count
+/// in `tests/drawing.rs` did until the offset family arrived.
+pub fn copies_drawn(torus: &Torus) -> usize {
+    match torus.family {
+        crate::Family::Folded => 7,
+        crate::Family::AxisAligned | crate::Family::Offset { .. } => 9,
+    }
+}
+
+/// How far round, said in the shortest way that is still true.
+///
+/// **One number where the six agree and three where they do not.** Two families are isotropic
+/// and the third is not - `X-37` - so a single figure would be a claim rather than a reading.
+pub fn around(torus: &Torus) -> String {
+    let closes = torus.circumferences();
+    if closes.iter().all(|n| *n == closes[0]) {
+        return closes[0].to_string();
+    }
+    // The six come in opposite pairs, so three numbers say all of it.
+    format!("{}, {}, {}", closes[0], closes[1], closes[2])
 }
 
 /// One size, as an SVG group: every hex of all seven copies, with its id and colour.
@@ -77,11 +122,12 @@ pub fn group(torus: &Torus, colours: &[u8], partner: Option<usize>) -> String {
     out.push_str(&format!(
         "<g class=\"size\" data-cells=\"{}\" data-around=\"{}\" data-family=\"{}\" data-partner=\"{}\">\n",
         torus.cells(),
-        torus.circumference(),
-        match torus.family {
-            crate::Family::Folded => "folded",
-            crate::Family::AxisAligned => "axis-aligned",
-        },
+        // **All six, because one of the three families does not have one number.** `X-37`:
+        // the offset family closes in `2W`, `H`, `2W`, and a page that showed the shortest
+        // would say `12` about a world where half the walks take 24 - which is the claim the
+        // measurement overturned, restated by the drawing.
+        around(torus),
+        torus.family.name(),
         // **`-1` rather than an absent attribute**, so the page reads one thing in both cases
         // and nothing has to tell *no partner* from *a partner at index zero*.
         partner.map_or(-1, |which| which as i64)

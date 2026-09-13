@@ -20,6 +20,33 @@ work: turn the ids on and `7` appears in every direction, which is what makes an
 as the same territory rather than as more world. Ids are on by default here, unlike
 `goldberg-view`, because the prototype does not do its job with them hidden.
 
+## The requirement that produced two of the three families is refuted
+
+**Sean asked for equal circumference in all six directions** on 2026-09-12, and the folded and
+axis-aligned families were built to satisfy it. On 2026-09-13 he measured Solium Infernum
+instead of reasoning about it: *twelve up returns to start; twelve right - alternating
+up-right, down-right - returns to start.* Those two walks are `(0, 12)` and `(12, −6)`, which
+generate a lattice of 144 cells that closes in **24, 12, 24**. One axis takes twice as long as
+another, and **he did not notice until he went looking.**
+
+So isotropy was never what made the pathing sensible. **What does is that the wrap happens in
+the coordinates a person thinks in** - rows and columns - so *twelve up* and *twelve right* are
+both twelve while the straight axes are 24 and 12 and 24. `X-37`, filed by the research lane.
+
+The offset family is that lattice, at ten sizes. **`W` must be even**, because the generator is
+`(W, −W/2)` and half a cell is not a cell; that is the standard offset-coordinate constraint
+and is probably why the map he measured is twelve wide.
+
+|                       | at 144 territories           | isotropic |
+| --------------------- | ---------------------------- | --------- |
+| offset `12 × 12`      | closes in 24, 12, 24         | no        |
+| axis-aligned `C = 12` | closes in 12                 | yes       |
+| folded `k = 4`        | 48 territories, closes in 12 | yes       |
+
+**Folded has no world at 144** - `3k² = 144` wants `k² = 48` and 48 is not a square - so the
+three-way comparison is two at 144 and the third at the same circumference. Asserted in
+`the_three_families_meet_where_they_can` rather than left for a reader to work out.
+
 **The colour count is an output rather than a setting.**
 [`crates/graph-coloring`](../../crates/graph-coloring/) climbs 2, then 3, then 4 and reports
 which succeeded. **Three at all ten folded sizes; three or four in the axis-aligned family**,
@@ -39,7 +66,7 @@ bright region may be adjacent through a wrap**. The drawing can only place each 
 so without this it does not merely fail to show distance - **it misleads about it**. With every
 copy lit, the nearest one is the one that decides. Sean's observation, `X-36`.
 
-**All twenty are buttons under the heading**, grouped by family and labelled by how many
+**All thirty are buttons under the heading**, grouped by family and labelled by how many
 territories each has. They were reachable only by `[` and `]` for one commit, and in that
 commit Sean opened the page, saw `folded, 12 territories`, and concluded the axis-aligned
 family had not landed - when it had. **A correct page showing one of twenty under a header
@@ -49,8 +76,11 @@ is a false report. `X-35`.
 **`T` jumps to the world at the same circumference in the other family.** That pairing is the
 only informative comparison the two families support - same distance around, three times the
 territories - so **the toggle shows the folding itself**, where a toggle by list position would
-compare two unrelated worlds. **Six of the twenty have a partner - three pairs**: 12↔36, 27↔81,
-48↔144. The other fourteen disable the control and say so. **Whether to re-cut the axis-aligned
+compare two unrelated worlds. **Six of the thirty have a partner - three pairs**: 12↔36,
+27↔81, 48↔144. The other twenty-four disable the control and say so. **The offset family has no
+partner and should not**: it shares a shortest circumference with both of the others and is a
+folding of neither, and matching on the number alone paired sixteen of the thirty and taught
+nothing about any of them. **Whether to re-cut the axis-aligned
 ladder to `C = 6, 9 … 33` so all ten pair is Sean's** - it buys the comparison at every size and
 costs the small end, since the smallest world becomes 36 territories rather than 9.
 
@@ -64,7 +94,7 @@ attention next time a count in this repository changes its denominator.
 
 **The drawing gets the window and everything else is one line or folded away.** Sean,
 2026-09-12: the picture was wedged between a block of prose above it and a table below. Both are
-still there - the prose says what the page is for and the table is the twenty as numbers - each
+still there - the prose says what the page is for and the table is the thirty as numbers - each
 behind a one-line `<details>`, and the stage takes whatever is left. **The picker does not
 fold**, because a control nobody can see is `X-35` again.
 
@@ -92,11 +122,14 @@ question - and deleting a mode later is one line where deciding for him is not.
 The colour count is an output rather than a setting, so the page reports the difference without
 being told: four colours at `C = 4, 5, 7, 8, 10, 11`.
 
-## The sizes, ten in each family and twenty in all
+## The sizes, ten in each family and thirty in all
 
 The folded family: `N = 3k²` territories with a circumference of `3k`, for `k = 2..=11`.
 The axis-aligned family is `N = C²` for `C = 3..=12` - 9, 16, 25, 36, 49, 64, 81, 100, 121, 144.
-**`C = 1` and `2` are dropped as degenerate**, the way `k = 1` is.
+The offset family is `N = W·H` for `W = H = 4, 6 .. 22` - 16, 36, 64, 100, **144**, 196, 256,
+324, 400, 484. **`C = 1` and `2` are dropped as degenerate**, the way `k = 1` is, and the
+offset ladder is square because Sean's measurement was `12 × 12` and a second free dimension
+would multiply the page without answering anything he asked.
 
 **The table below is the folded ten**, which is the ladder Sean chose; the axis-aligned ten are
 the ten squares listed in the line above.
@@ -145,11 +178,17 @@ replaces it.
 The checks are what a picture cannot be trusted about - whether *exactly N bright* is true or
 merely looks true. **Each runs over every case and asserts how many cases there were.** The
 population is not the same for all of them - some are properties of any quotient and run over
-all twenty, some are properties of the `3k²` lattice and run over its ten, and the axis-aligned
-family's own are in `tests/families.rs` - so **each bullet says which**, because that is the
+all thirty, some are properties of the `3k²` lattice and run over its ten, and the other two
+families' own are in `tests/families.rs` - so **each bullet says which**, because that is the
 number a reader would otherwise assume.
 
-- **`exactly_n_cells_are_bright_and_every_cell_echoes_one_of_them`** - all twenty. **Three
+**This paragraph has now been wrong twice**, both times because a count outlived its
+denominator: it said the grid properties run over the folded ten an hour after two of them
+stopped doing so, and it said twenty the day a third family landed. The numbers in the checks
+are asserted and could not drift; prose has no such carrier, which is why it is always the half
+that goes.
+
+- **`exactly_n_cells_are_bright_and_every_cell_echoes_one_of_them`** - all thirty. **Three
   directions**: a domain of the right size proves nothing if a cell reduces outside it, every
   cell reducing into the domain proves nothing if the domain is the whole plane, and **both of
   those together still allow a domain cell nothing ever reduces to** - a bright hex that is no
@@ -175,9 +214,22 @@ number a reader would otherwise assume.
 - **`every_direction_wraps_in_the_same_number_of_steps`** - the folded ten. The definition of
   the family, and the thing a wrong generator breaks quietly.
   **`the_axis_aligned_family_is_isotropic`** asserts the same of the other ten
-- **`every_cell_has_six_distinct_neighbours`** - all twenty. The wrap is what makes this true at
-  the edge, and a cell neighbouring itself is a wrap folded onto itself whichever lattice folded
-  it
+- **`every_cell_has_six_distinct_neighbours`** - all thirty. The wrap is what makes this true
+  at the edge, and a cell neighbouring itself is a wrap folded onto itself whichever lattice
+  folded it
+- **`the_two_walks_sean_measured_are_the_offset_generators`** - the ten offset sizes, **walked
+  rather than summed**: the alternating rightward walk is stepped one hex at a time and the sum
+  is compared against `(W, −W/2)`, because writing it as `6a + 6b` is already half the
+  conversion the check exists to verify
+- **`the_offset_family_closes_in_two_w_h_two_w_and_is_not_isotropic`** - the ten offset sizes,
+  and **it asserts the family fails the property the other two were built for**. A family that
+  quietly became isotropic would delete `X-37`'s finding without deleting a line of it. The
+  other twenty are asserted still isotropic in the same test, so a red there is about this
+  family rather than about the instrument
+- **`the_two_routes_to_a_circumference_agree`** - six directions at each of thirty worlds.
+  `circumferences` solves `n·d = αa + βb` over the integers and never calls `reduce`;
+  `circumnavigations_agree` steps and reduces. **Independent routes to one fact**, which is the
+  habit that re-derived `X-37` rather than taking it
 - **`three_colours_suffice_at_every_size`** - the folded ten. `Exact(3)`, and the colouring
   checked proper besides, because a method reporting success while leaving two neighbours
   matching would pass the first assertion.
@@ -186,13 +238,21 @@ number a reader would otherwise assume.
   read as a clean result
 - **`no_size_is_two_colourable`** - the folded ten, by finding an actual triangle at each,
   because `Exact(3)` alone is satisfied by a graph that only ever needed two
+- **`the_copies_tile_without_overlap_or_gap`** - all thirty, and **the gap half was missing
+  for the whole life of the axis-aligned family**. Six echoes close round a hexagonal domain
+  and leave the corners of a parallelogram open, so that family shipped with two notched
+  corners at all ten of its sizes, through a quality review and several screenshots sent to
+  Sean. `X-37`'s offset lattice is sheared far enough that the notches became wedges, which is
+  what made it visible. The parallelogram families draw **nine** copies now - `±a`, `±b`,
+  `±(a+b)`, `±(a−b)` - and the check is *every neighbour of a bright cell is drawn*, which is
+  what a person actually sees. No count of copies can say it and neither can no-overlap
 - **`the_page_states_the_number_of_worlds_it_draws`** - the whole page. The header's spelled
   number against the
   groups actually in the page, and the per-family counts besides. Those are two independent
   things in one artifact, and `X-35` was exactly that they disagreed
-- **`every_copy_of_a_territory_carries_the_same_cell_id`** - all twenty. Fourteen marks per
-  territory at each, seven hexes and seven ids, which is what the hover selects on
-- **`the_toggle_pairs_one_circumference_across_the_two_families`** - all twenty. Six of them have a
+- **`every_copy_of_a_territory_carries_the_same_cell_id`** - all thirty. Two marks per copy
+  at each, a hex and an id, seven hexes and seven ids, which is what the hover selects on
+- **`the_toggle_pairs_one_circumference_across_the_two_families`** - all thirty. Six of them have a
   partner, the pairing is mutual, and the bigger world has exactly three times the territories.
   A run where every size paired would fail here rather than read as a clean result
 

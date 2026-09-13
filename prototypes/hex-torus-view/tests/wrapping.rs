@@ -1,10 +1,15 @@
 //! The check `X-32` asks for, over every case with the count asserted.
 //!
-//! **The population is per check and is stated by each.** Two of these run over both families,
-//! twenty worlds; the rest are properties of the `3k²` lattice and run over its ten. The
-//! axis-aligned family's own properties are in `tests/families.rs`. The two that were widened
-//! were narrow only because they were written when there was one family - `Q-87` is the same
-//! shape in the README, and neither was found by anything failing.
+//! **The population is per check and is stated by each.** Two of these run over every family,
+//! thirty worlds; the rest are properties of the `3k²` lattice and run over its ten. The other
+//! families' own properties are in `tests/families.rs`. The two that were widened were narrow
+//! only because they were written when there was one family - `Q-87` is the same shape in the
+//! README, and neither was found by anything failing.
+//!
+//! **This sentence said twenty until `X-37` added a third family**, which is the third time a
+//! count in this crate has outlived its denominator. The number is asserted in the check below,
+//! so the code could not drift; prose has no such carrier, which is why it keeps being the half
+//! that goes wrong.
 //!
 //! **A person looking is the vetted-when and this is not a substitute for it.** What it
 //! catches is the thing a picture cannot be trusted about: whether *exactly N bright* is true
@@ -120,8 +125,8 @@ fn exactly_n_cells_are_bright_and_every_cell_echoes_one_of_them() {
         checked += 1;
     }
     assert_eq!(
-        checked, 20,
-        "both families, ten sizes each, and the count so one cannot become twenty"
+        checked, 30,
+        "every family, ten sizes each, and the count so one cannot become thirty"
     );
 }
 

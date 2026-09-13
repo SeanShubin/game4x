@@ -1,4 +1,10 @@
-//! The two families, and the fact that they are one lattice at two foldings.
+//! The families against each other: two that are one lattice at two foldings, and one that
+//! refutes the requirement both were built to satisfy.
+//!
+//! **`X-37` is the third.** Sean measured Solium Infernum rather than reasoning about it, and a
+//! shipped game he finds perfectly legible closes in `2W`, `H`, `2W` - one axis twice another.
+//! So isotropy was never what made the pathing sensible; what does is that the wrap happens in
+//! the coordinates a person thinks in, rows and columns.
 //!
 //! **Sean asked what a wrapping square grid has that a hex grid cannot.** The answer is
 //! nothing, and this is where that is checked rather than asserted: wrapping each axial
@@ -10,7 +16,7 @@
 //! territories, and the folding is what destroys the coordinate-wise wrap. Hexes were never
 //! the cause.
 
-use hex_torus_view::{Family, NEIGHBOURS, Torus, axis_aligned_sizes, sizes};
+use hex_torus_view::{Family, NEIGHBOURS, Torus, axis_aligned_sizes, offset_sizes, sizes};
 
 /// Every size of the axis-aligned family wraps by subtracting `C` from one coordinate or both.
 #[test]
@@ -184,8 +190,196 @@ fn a_torus_says_which_family_it_is() {
         "`new` is the folded family"
     );
     assert_eq!(
-        hex_torus_view::both_families().len(),
-        20,
-        "ten of each, folded first"
+        Torus::offset(12, 12).family,
+        Family::Offset { tall: 12 },
+        "the offset family carries its own height, which the other two do not have"
     );
+    assert_eq!(
+        hex_torus_view::both_families().len(),
+        30,
+        "ten of each of the three, folded first"
+    );
+    assert_eq!(
+        [
+            Family::Folded,
+            Family::AxisAligned,
+            Family::Offset { tall: 4 }
+        ]
+        .map(|it| it.name()),
+        ["folded", "axis-aligned", "offset"],
+        "the names the page reads off a group come from here and from nowhere else"
+    );
+}
+
+/// Sean's two walks generate the offset lattice, and nothing was fitted to them.
+///
+/// **`X-37`, and this is the derivation rather than a restatement of it.** He measured a
+/// shipped game: *twelve up returns to start; twelve right - alternating up-right, down-right -
+/// returns to start.* Twelve alternating rightward steps is `6·(1,0) + 6·(1,-1) = (12, -6)` and
+/// twelve up is `(0, 12)`. The claim is that those two walks and the offset generators are the
+/// same pair, so the measurement and the conversion agree without either being fitted to the
+/// other.
+#[test]
+fn the_two_walks_sean_measured_are_the_offset_generators() {
+    let mut checked = 0;
+    for torus in offset_sizes() {
+        let (wide, tall) = (torus.k, torus.tall());
+        // **Walked rather than summed**, because *alternating up-right and down-right* is a
+        // walk and writing it as `6a + 6b` is already half the conversion this test exists to
+        // check. `NEIGHBOURS[5]` and `NEIGHBOURS[0]` are the two the walk alternates between -
+        // in a flat-top drawing they are up-right and down-right, which is the orientation
+        // Sean was reading.
+        let mut rightward = (0, 0);
+        for step in 0..wide {
+            let (dq, dr) = NEIGHBOURS[if step % 2 == 0 { 5 } else { 0 }];
+            rightward = (rightward.0 + dq, rightward.1 + dr);
+        }
+        let mut upward = (0, 0);
+        for _ in 0..tall {
+            let (dq, dr) = NEIGHBOURS[1];
+            upward = (upward.0 + dq, upward.1 + dr);
+        }
+        assert_eq!(
+            rightward,
+            (wide, -wide / 2),
+            "W = {wide}: the alternating walk is not (W, -W/2)"
+        );
+        assert_eq!(
+            upward,
+            (0, tall),
+            "H = {tall}: the straight walk is not (0, H)"
+        );
+        assert_eq!(
+            torus.generators(),
+            [rightward, upward],
+            "W = {wide}: the generators are not the two walks"
+        );
+        // **And each walk is genuinely a round trip of that many steps**, which is the half a
+        // pair of vectors does not say.
+        assert_eq!(
+            torus.reduce(rightward.0, rightward.1),
+            (0, 0),
+            "W = {wide}: {wide} alternating rightward steps do not come back"
+        );
+        assert_eq!(
+            torus.reduce(upward.0, upward.1),
+            (0, 0),
+            "W = {wide}: {tall} steps up do not come back"
+        );
+        assert_eq!(
+            torus.cells(),
+            (wide * tall) as usize,
+            "W = {wide}: N is W·H"
+        );
+        checked += 1;
+    }
+    assert_eq!(checked, 10, "ten offset sizes");
+
+    // The rung that matters, stated on its own so a ladder that stopped short would fail here.
+    let sean = Torus::offset(12, 12);
+    assert_eq!(sean.generators(), [(12, -6), (0, 12)]);
+    assert_eq!(
+        sean.cells(),
+        144,
+        "Solium Infernum's map is 144 territories"
+    );
+}
+
+/// The offset family is not isotropic, which is the whole of why `X-37` overturns a requirement.
+///
+/// **Sean asked for equal circumference in all six directions and two families were built to
+/// satisfy it.** A game he finds perfectly legible does not have it: one axis takes twice as
+/// long as another, and he did not notice until he went looking. So the check is that this
+/// family fails the property the other two were built for - **asserted, because a family that
+/// quietly became isotropic would delete the finding without deleting a line of it.**
+#[test]
+fn the_offset_family_closes_in_two_w_h_two_w_and_is_not_isotropic() {
+    let mut checked = 0;
+    for torus in offset_sizes() {
+        let (wide, tall) = (torus.k, torus.tall());
+        assert_eq!(
+            torus.circumferences(),
+            [2 * wide, tall, 2 * wide, 2 * wide, tall, 2 * wide],
+            "W = {wide}, H = {tall}: the six do not close in 2W, H, 2W"
+        );
+        assert!(
+            !torus.circumnavigations_agree(),
+            "W = {wide}: this family is isotropic, and X-37 is the finding that it is not"
+        );
+        checked += 1;
+    }
+    assert_eq!(checked, 10, "ten offset sizes");
+
+    // **And the other two families still are**, so the assertion above is about this family
+    // rather than about the instrument having broken.
+    let mut isotropic = 0;
+    for torus in sizes().into_iter().chain(axis_aligned_sizes()) {
+        assert!(
+            torus.circumnavigations_agree(),
+            "{:?} k = {}: an isotropic family stopped being isotropic",
+            torus.family,
+            torus.k
+        );
+        isotropic += 1;
+    }
+    assert_eq!(isotropic, 20, "the folded ten and the axis-aligned ten");
+}
+
+/// The two routes to a circumference agree, at every size of every family.
+///
+/// **One solves over the generators and one walks the reduction.** `circumferences` does
+/// Cramer over the integers and never calls `reduce`; `circumnavigations_agree` steps and
+/// reduces. They are independent, which is what makes agreeing worth asserting - and it is the
+/// habit that caught `X-37`'s arithmetic being right rather than taking it.
+#[test]
+fn the_two_routes_to_a_circumference_agree() {
+    let mut checked = 0;
+    for torus in hex_torus_view::both_families() {
+        for (at, (dq, dr)) in NEIGHBOURS.iter().enumerate() {
+            let solved = torus.circumferences()[at];
+            assert_eq!(
+                torus.reduce(dq * solved, dr * solved),
+                (0, 0),
+                "{:?} k = {}: solving says ({dq}, {dr}) closes in {solved} and reducing says no",
+                torus.family,
+                torus.k
+            );
+            assert!(
+                (1..solved).all(|n| torus.reduce(dq * n, dr * n) != (0, 0)),
+                "{:?} k = {}: ({dq}, {dr}) comes back sooner than the {solved} solved for",
+                torus.family,
+                torus.k
+            );
+            checked += 1;
+        }
+    }
+    assert_eq!(checked, 30 * 6, "six directions at each of thirty worlds");
+}
+
+/// At 144 cells the three families can be held against each other, which is the comparison asked for.
+#[test]
+fn the_three_families_meet_where_they_can() {
+    let offset = Torus::offset(12, 12);
+    let aligned = Torus::axis_aligned(12);
+    let folded = Torus::folded(4);
+    assert_eq!(offset.cells(), aligned.cells(), "both are 144 territories");
+    assert_eq!(offset.cells(), 144);
+    assert_eq!(
+        [
+            offset.circumferences()[0],
+            offset.circumferences()[1],
+            offset.circumferences()[2]
+        ],
+        [24, 12, 24],
+        "the offset world at 144 is the one Sean measured"
+    );
+    assert_eq!(aligned.circumferences(), [12; 6]);
+    assert_eq!(folded.circumferences(), [12; 6]);
+    // **Folded has no world at 144 and this says so rather than leaving a reader to wonder**:
+    // `3k² = 144` wants `k² = 48`, and 48 is not a square.
+    assert!(
+        sizes().iter().all(|it| it.cells() != 144),
+        "the folded family has a 144 and the comment says it cannot"
+    );
+    assert_eq!(folded.cells(), 48, "what it has at circumference 12 is 48");
 }

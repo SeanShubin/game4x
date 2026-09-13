@@ -1,9 +1,15 @@
-//! A flat hex grid that wraps in all six directions equally, at the ten sizes that could ship.
+//! A flat hex grid that wraps, at thirty sizes across three families that could ship.
 //!
 //! **The question**, which is the deliverable and not the code: at the sizes the game would
-//! use, does a flat isotropic hex torus read as a world, and how visible is the wrapping?
-//! `X-32`, asked for by Sean. `prototypes/goldberg-view` answers it for spheres, and the two
-//! are meant to be run against each other.
+//! use, does a flat hex torus read as a world, and how visible is the wrapping? `X-32`, asked
+//! for by Sean. `prototypes/goldberg-view` answers it for spheres, and the two are meant to be
+//! run against each other.
+//!
+//! **This crate said *wraps in all six directions equally* until `X-37`**, because that was
+//! the requirement the first two families were built to satisfy. Sean then measured a shipped
+//! game - Solium Infernum - and found it closes in 24, 12, 24 and is perfectly legible anyway.
+//! The third family is that lattice, and the word *isotropic* is gone from this line because
+//! it was a premise rather than a description.
 //!
 //! # The grid, and why this family
 //!
@@ -50,13 +56,43 @@ pub enum Family {
     Folded,
     /// `N = C²`, circumference `C`. Coordinate-wise, and 61% of a sphere at every size.
     AxisAligned,
+    /// `N = W·H`, and **not isotropic**: `2W`, `H`, `2W` in the three axis pairs.
+    ///
+    /// **The wrap a hex map gets free from being stored as a 2D array** - `col mod W`,
+    /// `row mod H` in offset coordinates. `X-37`, and it is here because **Sean measured a
+    /// shipped game instead of reasoning about it**: in Solium Infernum twelve up returns to
+    /// the start and twelve right - alternating up-right and down-right - also returns to the
+    /// start. Those two walks are `(0, H)` and `(W, −W/2)`, which generate this lattice and
+    /// nothing else, and at `12 × 12` they give 144 cells closing in 24, 12, 24.
+    ///
+    /// **So it is a counterexample to the requirement that produced the other two.** He asked
+    /// for equal circumference in all six directions on 2026-09-12; a game he finds perfectly
+    /// legible does not have it, and he did not notice until he went looking. What makes the
+    /// pathing sensible is not isotropy - it is that the wrap happens in the coordinates a
+    /// person thinks in.
+    Offset {
+        /// How many rows, `H`. The width is [`Torus::k`], and **must be even**, because
+        /// `−W/2` has to be a whole number of cells.
+        tall: i32,
+    },
 }
 
-/// A hex torus: the plane quotiented by one of the two lattices.
+impl Family {
+    /// What to call it on the page, in one place, so two renderings cannot disagree.
+    pub fn name(&self) -> &'static str {
+        match self {
+            Family::Folded => "folded",
+            Family::AxisAligned => "axis-aligned",
+            Family::Offset { .. } => "offset",
+        }
+    }
+}
+
+/// A hex torus: the plane quotiented by one of the three lattices.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Torus {
     pub family: Family,
-    /// `k` for [`Family::Folded`] and `C` for [`Family::AxisAligned`].
+    /// `k` for [`Family::Folded`], `C` for [`Family::AxisAligned`], `W` for [`Family::Offset`].
     pub k: i32,
 }
 
@@ -97,23 +133,91 @@ impl Torus {
         }
     }
 
-    /// How many territories: `3k²` folded, `C²` axis-aligned.
+    /// The offset family, `W` wide and `H` tall, which is `X-37` and Sean's measurement.
+    ///
+    /// **`W` must be even**, because the generator is `(W, −W/2)` and half a cell is not a
+    /// cell. That is the standard offset-coordinate constraint, and is probably why the map
+    /// Sean measured is twelve wide rather than eleven or thirteen.
+    pub fn offset(wide: i32, tall: i32) -> Self {
+        assert!(
+            wide >= 2 && wide % 2 == 0,
+            "W = {wide} is not an even number of columns, and the generator (W, -W/2) needs \
+             half of it to be a whole cell"
+        );
+        assert!(tall >= 2, "H = {tall} is degenerate");
+        Torus {
+            family: Family::Offset { tall },
+            k: wide,
+        }
+    }
+
+    /// How many rows, which is `H` for the offset family and the circumference otherwise.
+    pub fn tall(&self) -> i32 {
+        match self.family {
+            Family::Offset { tall } => tall,
+            _ => self.circumference(),
+        }
+    }
+
+    /// How many territories: `3k²` folded, `C²` axis-aligned, `W·H` offset.
     pub fn cells(&self) -> usize {
         match self.family {
             Family::Folded => (3 * self.k * self.k) as usize,
             Family::AxisAligned => (self.k * self.k) as usize,
+            Family::Offset { tall } => (self.k * tall) as usize,
         }
     }
 
-    /// How many steps to go all the way round, in any of the six directions: `3k`.
+    /// **The shortest way round.** Two of the three families close in the same number of steps
+    /// in all six directions and this is that number; the offset family does not, and
+    /// [`Torus::circumferences`] is the honest answer for it.
     ///
-    /// **The same in all six, which is what isotropic means here** and what
-    /// [`Torus::circumnavigations_agree`] asserts rather than assumes.
+    /// **This used to be documented as *the* circumference, in all six directions.** `X-37`
+    /// is the counterexample: a shipped game whose wrap takes twice as long along one axis as
+    /// another, which Sean finds legible. [`Torus::circumnavigations_agree`] reports which
+    /// kind a torus is rather than assuming.
     pub fn circumference(&self) -> i32 {
         match self.family {
             Family::Folded => 3 * self.k,
             Family::AxisAligned => self.k,
+            // Derived rather than stated, so a generator that moved cannot leave this behind.
+            Family::Offset { .. } => *self
+                .circumferences()
+                .iter()
+                .min()
+                .expect("there are six directions"),
         }
+    }
+
+    /// How many steps each of the six directions takes to come back, in [`NEIGHBOURS`] order.
+    ///
+    /// **Computed from the generators rather than from [`Torus::reduce`]**, which is not
+    /// tidiness: `reduce` calls [`Torus::circumference`] to bound its own search window, so
+    /// deriving these from `reduce` would be circular. Solving `n·d = αa + βb` over the
+    /// integers is also a second route to the same fact, which is what caught `X-37`'s
+    /// arithmetic being right.
+    pub fn circumferences(&self) -> [i32; 6] {
+        let [a, b] = self.generators();
+        let det = a.0 * b.1 - a.1 * b.0;
+        assert!(
+            det != 0,
+            "the generators are parallel, so this is not a torus"
+        );
+        let mut out = [0; 6];
+        for (at, (dq, dr)) in NEIGHBOURS.iter().enumerate() {
+            // Cramer over the integers: `n·d` is in the lattice exactly when both solutions
+            // divide the determinant exactly.
+            let found = (1..)
+                .take(4 * self.k.abs().max(self.tall().abs()) as usize + 12)
+                .find(|n| {
+                    let (x, y) = (n * dq, n * dr);
+                    (x * b.1 - y * b.0) % det == 0 && (a.0 * y - a.1 * x) % det == 0
+                });
+            out[at] = found.unwrap_or_else(|| {
+                panic!("direction ({dq}, {dr}) does not close within the window searched")
+            });
+        }
+        out
     }
 
     /// The two generators of the wrapping lattice.
@@ -121,6 +225,9 @@ impl Torus {
         match self.family {
             Family::Folded => [(self.k, self.k), (-self.k, 2 * self.k)],
             Family::AxisAligned => [(self.k, 0), (0, self.k)],
+            // **Sean's two walks, and nothing fitted to them.** `(0, H)` is twelve up and
+            // `(W, -W/2)` is twelve alternating rightward steps - `6·(1,0) + 6·(1,-1)`.
+            Family::Offset { tall } => [(self.k, -self.k / 2), (0, tall)],
         }
     }
 
@@ -151,6 +258,15 @@ impl Torus {
         // edges the same number of times.
         if let Family::AxisAligned = self.family {
             return (q.rem_euclid(self.k), r.rem_euclid(self.k));
+        }
+        // **The offset family reduces the way a 2D array does**, which is the whole of `X-37`:
+        // subtract whole columns, then whole rows. Stepping `W` columns also shifts the row by
+        // `−W/2`, which is the only thing that makes this a hex wrap rather than a square one,
+        // and it is what makes the three axis pairs 2W, H, 2W rather than all equal.
+        if let Family::Offset { tall } = self.family {
+            let columns = q.div_euclid(self.k);
+            let rows = (r + columns * self.k / 2).div_euclid(tall);
+            return (q - columns * self.k, r + columns * self.k / 2 - rows * tall);
         }
         let [a, b] = self.generators();
         // Three periods either way is more than enough for anything the viewer draws, and the
@@ -190,6 +306,14 @@ impl Torus {
                 .collect();
             square.sort_by_key(|(q, r)| (*r, *q));
             return square;
+        }
+        if let Family::Offset { tall } = self.family {
+            let wide = self.k;
+            let mut grid: Vec<Cell> = (0..tall)
+                .flat_map(|r| (0..wide).map(move |q| (q, r)))
+                .collect();
+            grid.sort_by_key(|(q, r)| (*r, *q));
+            return grid;
         }
         let reach = 2 * self.k;
         let mut found: Vec<Cell> = Vec::new();
@@ -243,6 +367,12 @@ impl Torus {
     /// **Asserted rather than assumed, because it is the definition of the family.** A
     /// generator from the other coordinate convention gives `7k^2` cells and six
     /// circumnavigations that do not agree, and the picture would look almost right.
+    /// **Whether this torus is isotropic at all**, which two of the three families are and
+    /// the third is not.
+    ///
+    /// This reads [`Torus::reduce`] where [`Torus::circumferences`] solves over the
+    /// generators, so the two are independent routes to one fact and
+    /// `the_two_routes_to_a_circumference_agree` holds them against each other.
     pub fn circumnavigations_agree(&self) -> bool {
         let steps = self.circumference();
         NEIGHBOURS.iter().all(|(dq, dr)| {
@@ -266,9 +396,26 @@ pub fn axis_aligned_sizes() -> Vec<Torus> {
     (3..=12).map(Torus::axis_aligned).collect()
 }
 
-/// Both families, folded first, which is the order the viewer steps through.
+/// The ten offset sizes, square maps `W = H = 4, 6 .. 22`.
+///
+/// **Even widths only**, which the family requires rather than this ladder choosing. Square
+/// because Sean's measurement was `12 × 12` and a second free dimension would multiply the
+/// page without answering anything he asked - **`W = 12` is the rung that matters** and is the
+/// one that lines up at 144 cells with `axis_aligned(12)`.
+pub fn offset_sizes() -> Vec<Torus> {
+    (2..=11).map(|n| Torus::offset(2 * n, 2 * n)).collect()
+}
+
+/// Every family, folded first, which is the order the viewer steps through.
+///
+/// **Named `both_families` when there were two.** `X-37` made a third, and the name is left
+/// rather than churned through every caller; what it means is *all of them*.
 pub fn both_families() -> Vec<Torus> {
-    sizes().into_iter().chain(axis_aligned_sizes()).collect()
+    sizes()
+        .into_iter()
+        .chain(axis_aligned_sizes())
+        .chain(offset_sizes())
+        .collect()
 }
 
 /// The world at the same circumference in the *other* family, where there is one.
@@ -285,8 +432,19 @@ pub fn both_families() -> Vec<Torus> {
 /// Sean's**: it buys the comparison at every size and costs the small end, since the smallest
 /// world becomes 36 territories rather than 9. `X-36`, and this lane has not chosen.
 pub fn partner_of(worlds: &[Torus], at: usize) -> Option<usize> {
+    // **The relation is the folding, not *the same number*.** `X-37`'s offset family shares a
+    // shortest circumference with both of the others - `offset(12, 12)` closes in 12 the short
+    // way, as `axis_aligned(12)` and `folded(4)` do - and it is not a folding of either. Left
+    // to match on the number alone it paired sixteen of the thirty worlds and taught nothing
+    // about any of them, which is the *toggle by list position* failure wearing arithmetic.
+    let folding = |it: &Torus| matches!(it.family, Family::Folded | Family::AxisAligned);
     let mine = &worlds[at];
+    if !folding(mine) {
+        return None;
+    }
     worlds.iter().position(|other| {
-        other.family != mine.family && other.circumference() == mine.circumference()
+        folding(other)
+            && other.family != mine.family
+            && other.circumference() == mine.circumference()
     })
 }

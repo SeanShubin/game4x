@@ -27,6 +27,7 @@ fn the_page_draws_one_bright_world_and_six_echoes() {
         let coloured = color_graph(&torus.adjacency());
         let svg = draw::group(&torus, &coloured.colors, None);
         let want = torus.cells();
+        let copies = draw::copies_drawn(&torus);
 
         // **The leading space is load-bearing**: `data-fill="` ends in `fill="` too, and the
         // hover needs it. Without the space this counted 252 where 168 was right - the kind of
@@ -39,11 +40,11 @@ fn the_page_draws_one_bright_world_and_six_echoes() {
         // Every polygon carries a fill and so does every id, so the polygons are half of them.
         assert_eq!(
             fills.len(),
-            2 * 7 * want,
-            "k = {}: {} fills where seven copies of {want} hexes and their ids is {}",
+            2 * copies * want,
+            "k = {}: {} fills where {copies} copies of {want} hexes and their ids is {}",
             torus.k,
             fills.len(),
-            2 * 7 * want
+            2 * copies * want
         );
         assert_eq!(
             full, want,
@@ -69,8 +70,8 @@ fn the_page_draws_one_bright_world_and_six_echoes() {
             seen.len()
         );
         assert!(
-            seen.values().all(|times| *times == 7),
-            "k = {}: an id is drawn {:?} times rather than seven - once bright and six echoes",
+            seen.values().all(|times| *times == copies),
+            "k = {}: an id is drawn {:?} times rather than {copies} - once bright and the echoes",
             torus.k,
             seen.values().collect::<Vec<_>>()
         );
@@ -82,18 +83,34 @@ fn the_page_draws_one_bright_world_and_six_echoes() {
     );
 }
 
-/// The seven copies are one world and its six lattice neighbours, and no copy overlaps another.
+/// The copies tile the neighbourhood of the bright world: no overlap, and no gap.
 ///
-/// **Overlap is the failure this picture would hide.** Two copies drawn on top of each other
-/// look like one copy with a strange edge, and the bright count would still be right.
+/// **Two directions, and only one of them was ever checked.** Overlap is the failure a picture
+/// hides - two copies drawn on top of each other look like one copy with a strange edge, and
+/// the bright count is still right. **Gap is the other, and it was live for a whole family.**
+/// The axis-aligned family landed drawing six echoes round a square domain, which leaves the
+/// corners open; it shipped with two notched corners at all ten sizes and nobody named it,
+/// through a quality review and several screenshots. `X-37`'s offset family is sheared far
+/// enough that the gaps are wedges, which is what made it visible.
+///
+/// **The gap direction is stated as *every neighbour of a bright cell is drawn***, because
+/// that is what a person sees: the bright world with drawn hexes all the way round it. A count
+/// of copies cannot say it, and neither can no-overlap.
 #[test]
-fn the_seven_copies_do_not_overlap() {
+fn the_copies_tile_without_overlap_or_gap() {
     let mut checked = 0;
-    for torus in sizes() {
+    // **Every family**, because this ran over the folded ten while the family it would have
+    // failed for sat beside it.
+    for torus in hex_torus_view::both_families() {
         let domain = torus.domain();
         let mut placed: std::collections::BTreeSet<(i32, i32)> = std::collections::BTreeSet::new();
         let copies = draw::copies(&torus);
-        assert_eq!(copies.len(), 7, "k = {}: one world and six echoes", torus.k);
+        assert_eq!(
+            copies.len(),
+            draw::copies_drawn(&torus),
+            "k = {}: the copies drawn are not the number this family says",
+            torus.k
+        );
         assert_eq!(
             copies.iter().filter(|(_, bright)| *bright).count(),
             1,
@@ -113,14 +130,32 @@ fn the_seven_copies_do_not_overlap() {
         }
         assert_eq!(
             placed.len(),
-            7 * torus.cells(),
-            "k = {}: seven copies of {} cells",
+            copies.len() * torus.cells(),
+            "k = {}: {} copies of {} cells",
             torus.k,
+            copies.len(),
             torus.cells()
         );
+
+        // **And no gap round the bright world.** Every neighbour of every bright cell has to
+        // be a hex that is actually drawn, or the picture has a hole against the edge a person
+        // is being asked to read the wrapping from.
+        for (q, r) in &domain {
+            for (dq, dr) in hex_torus_view::NEIGHBOURS {
+                assert!(
+                    placed.contains(&(q + dq, r + dr)),
+                    "{:?} k = {}: ({}, {}) touches the bright world and nothing draws it, so \
+                     the copies leave a gap",
+                    torus.family,
+                    torus.k,
+                    q + dq,
+                    r + dr
+                );
+            }
+        }
         checked += 1;
     }
-    assert_eq!(checked, 10, "ten sizes");
+    assert_eq!(checked, 30, "every family, ten sizes each");
 }
 
 /// The page says how many worlds it draws, and it draws that many.
@@ -157,6 +192,7 @@ fn the_page_states_the_number_of_worlds_it_draws() {
         (20, "Twenty"),
         (24, "Twenty-four"),
         (30, "Thirty"),
+        (40, "Forty"),
     ];
     let word = spelled
         .iter()
@@ -173,6 +209,7 @@ fn the_page_states_the_number_of_worlds_it_draws() {
     for (family, count) in [
         ("folded", hex_torus_view::sizes().len()),
         ("axis-aligned", hex_torus_view::axis_aligned_sizes().len()),
+        ("offset", hex_torus_view::offset_sizes().len()),
     ] {
         let labelled = page.matches(&format!("data-family=\"{family}\"")).count();
         assert_eq!(
@@ -181,8 +218,8 @@ fn the_page_states_the_number_of_worlds_it_draws() {
         );
     }
     assert!(
-        said.contains("ten folded and ten axis-aligned"),
-        "the header does not name the two families and how many of each"
+        said.contains("ten folded, ten axis-aligned and ten offset"),
+        "the header does not name the three families and how many of each"
     );
 }
 
@@ -195,7 +232,7 @@ fn the_page_states_the_number_of_worlds_it_draws() {
 fn every_world_is_drawn_framed_and_listed() {
     let page = hex_torus_view::page::page();
     let worlds = hex_torus_view::both_families();
-    assert_eq!(worlds.len(), 20, "ten of each family");
+    assert_eq!(worlds.len(), 30, "ten of each of the three families");
 
     let from = page
         .find("const frames = [")
@@ -283,32 +320,36 @@ fn every_copy_of_a_territory_carries_the_same_cell_id() {
             "{}: every territory is looked for",
             torus.cells()
         );
-        // Seven polygons and seven ids - the hover lights both, so the number appears on every
-        // copy even with the ids turned off.
+        // One polygon and one id per copy - the hover lights both, so the number appears on
+        // every copy even with the ids turned off. **Two per copy rather than fourteen**,
+        // because how many copies a family draws is a property of its domain's shape, and the
+        // two parallelogram families draw nine where the folded one draws seven.
+        let marks_each = 2 * draw::copies_drawn(&torus);
         assert!(
-            copies.values().all(|marks| *marks == 14),
-            "{}: a territory is marked {:?} times rather than fourteen - seven hexes and \
-             seven ids",
+            copies.values().all(|marks| *marks == marks_each),
+            "{}: a territory is marked {:?} times rather than {marks_each} - a hex and an id \
+             in each of {} copies",
             torus.cells(),
-            copies.values().collect::<Vec<_>>()
+            copies.values().collect::<Vec<_>>(),
+            draw::copies_drawn(&torus)
         );
         // **The resting fill and the bright fill are both on every hex**, because letting go of
         // a lit echo has to put it back to dim rather than to bright.
         assert_eq!(
             svg.matches("data-fill=\"").count(),
-            7 * torus.cells(),
+            draw::copies_drawn(&torus) * torus.cells(),
             "{}: not every hex carries the colour it rests at",
             torus.cells()
         );
         assert_eq!(
             svg.matches("data-full=\"").count(),
-            7 * torus.cells(),
+            draw::copies_drawn(&torus) * torus.cells(),
             "{}: not every hex carries the colour it lights to",
             torus.cells()
         );
         checked += 1;
     }
-    assert_eq!(checked, 20, "both families, ten sizes each");
+    assert_eq!(checked, 30, "every family, ten sizes each");
 }
 
 /// The toggle pairs by circumference, and the pairing is mutual and threefold.
@@ -330,7 +371,7 @@ fn the_toggle_pairs_one_circumference_across_the_two_families() {
     assert_eq!(
         paired.len(),
         6,
-        "six of the twenty have a partner and these do: {paired:?}"
+        "six of the thirty have a partner and these do: {paired:?}"
     );
     assert!(
         !paired.is_empty(),
@@ -388,7 +429,8 @@ fn the_page_carries_the_hover_and_the_pairing() {
     assert_eq!(
         page.matches("data-partner=\"-1\"").count(),
         worlds.len() - 6,
-        "the worlds with no partner are the fourteen that share no circumference"
+        "the worlds with no partner are the {} that are not one of the three foldings",
+        worlds.len() - 6
     );
     for what in [
         "pointerover",

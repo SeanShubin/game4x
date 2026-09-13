@@ -1,4 +1,4 @@
-//! The page itself, assembled from the twenty worlds.
+//! The page itself, assembled from the thirty worlds.
 //!
 //! **Assembling the page is a function of the library so that a test can read what it
 //! produced.** `X-35`: the page drew the first of twenty under a header that promised twenty,
@@ -6,7 +6,7 @@
 //! missing. `tests/drawing.rs` now reads the page a person would open, which is where that
 //! was invisible.
 
-use crate::{Family, both_families, draw, partner_of};
+use crate::{both_families, draw, partner_of};
 use graph_coloring::color_graph;
 
 /// The whole page, as the bytes that go on disk.
@@ -30,15 +30,12 @@ pub fn page() -> String {
         frames.push(format!("[{x:.1},{y:.1},{w:.1},{h:.1}]"));
         rows.push_str(&format!(
             "<tr><td>{}</td><td>{}</td><td>{}</td><td>{:?}</td><td>{}</td></tr>\n",
-            match torus.family {
-                Family::Folded => "folded",
-                Family::AxisAligned => "axis-aligned",
-            },
+            torus.family.name(),
             torus.cells(),
-            torus.circumference(),
+            draw::around(torus),
             coloured.method,
             // **The pairing is in the table too**, so a reader can see which three of the
-            // twenty the toggle joins without pressing anything.
+            // thirty the toggle joins without pressing anything.
             match partner_of(&worlds, at) {
                 Some(which) => format!("{} territories", worlds[which].cells()),
                 None => "-".to_string(),
@@ -62,7 +59,7 @@ const TEMPLATE: &str = r##"<!doctype html>
  /* **The drawing gets the space and everything else is one line or folded away.** Sean,
     2026-09-12: the picture was wedged between a block of prose above it and a table below.
     Both are still here - the prose is what says what the page is for and the table is the
-    twenty as numbers - but a `<details>` costs one line each until somebody wants them, and
+    thirty as numbers - but a `<details>` costs one line each until somebody wants them, and
     the stage takes the rest. **The picker does not fold**, because a control nobody can see
     is `X-35` again. */
  header {
@@ -91,7 +88,7 @@ const TEMPLATE: &str = r##"<!doctype html>
  td, th { padding: 1px 10px 1px 0; text-align: right; }
  kbd { background: #eef1f5; border: 1px solid #cfd6de; border-radius: 3px; padding: 0 4px; }
  #where { font-weight: 600; }
- /* **The twenty are listed and clickable, because a control nobody can see is a control
+ /* **All thirty are listed and clickable, because a control nobody can see is a control
     nobody uses.** `X-35`: the page drew the first of twenty under a header promising twenty,
     and the other nineteen were ten keypresses away behind a picture that reframes to look
     similar - so it read as *nothing changed* and a correct build was reported as missing. */
@@ -125,14 +122,23 @@ const TEMPLATE: &str = r##"<!doctype html>
  hex and every copy of that territory lights up</strong> &mdash; the nearest lit copy to
  whatever you are measuring from is the one that decides the distance, because two territories
  that look far apart here may be adjacent through a wrap.</p>
- <p><strong>Twenty worlds are drawn, and the buttons above pick one</strong> &mdash; ten
- folded and ten axis-aligned, labelled by how many territories each has. <kbd>T</kbd> jumps to
- the world with the same circumference in the other family, where there is one &mdash; same
- distance around, three times the territories, which is the folding itself. <kbd>[</kbd>
- <kbd>]</kbd> step &middot; <kbd>I</kbd> ids &middot; drag or
+ <p><strong>Thirty worlds are drawn, and the buttons above pick one</strong> &mdash; ten
+ folded, ten axis-aligned and ten offset, labelled by how many territories each has.
+ <kbd>T</kbd> jumps to the world with the same circumference in the other family, where there
+ is one &mdash; same distance around, three times the territories, which is the folding itself.
+ <kbd>[</kbd> <kbd>]</kbd> step &middot; <kbd>I</kbd> ids &middot; drag or
  <kbd>&larr;&uarr;&darr;&rarr;</kbd> pan &middot; wheel zooms &middot; <kbd>R</kbd> resets.
  <strong>This settles whether the wrapping is legible and nothing about whether a torus should
  be the world's shape.</strong></p>
+ <p><strong>The offset family is not isotropic, and that is the point of it.</strong> It closes
+ in <em>2W</em>, <em>H</em>, <em>2W</em> &mdash; one axis takes twice as long as another
+ &mdash; and it is the wrap a hex map gets free from being stored as a 2D array. Sean measured
+ it in Solium Infernum rather than reasoning about it: twelve up returns to the start, and so
+ do twelve alternating rightward steps. <strong>A shipped game he finds perfectly legible does
+ not have the equal circumference the other two families were built to satisfy</strong>, so
+ what makes the pathing sensible is not isotropy &mdash; it is that the wrap happens in the
+ coordinates a person thinks in. <code>offset 144</code> and <code>axis-aligned 144</code> are
+ the two to hold against each other. <kbd>X-37</kbd>.</p>
  </details>
 </header>
 <svg id="stage">{{groups}}</svg>
@@ -162,7 +168,7 @@ const buttons = groups.map((g, i) => {
 // **The toggle pairs by circumference, never by list position.** The two families are one
 // lattice at two foldings, so one circumference and two worlds shows the folding: same
 // distance around, three times the territories. Two adjacent list entries are unrelated worlds
-// and teach nothing. Three of the twenty have a partner; the rest disable the control rather
+// and teach nothing. Six of the thirty have a partner; the rest disable the control rather
 // than silently doing nothing.
 function partner() {
   const which = Number(groups[at].dataset.partner);
@@ -266,7 +272,7 @@ show();
 </script>
 <footer>
 <details id="numbers">
-<summary>the twenty as numbers &mdash; territories, circumference, colours, and what each pairs with</summary>
+<summary>the thirty as numbers &mdash; territories, circumference, colours, and what each pairs with</summary>
 <table>
 <tr><th>family</th><th>territories</th><th>circumference</th><th>colouring</th><th>same circumference</th></tr>
 {{rows}}
