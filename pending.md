@@ -8,11 +8,20 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-485** - nothing ever puts energy in a unit's tank, and two views disagree about whether there is any · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
+
+## Open, and a commit says otherwise
+
+An item is closed by whoever filed it and answered by somebody else, so the filer gets
+no signal. These are still marked `open`, and a commit that touched no part of their own
+outbox cites them - which usually means they were settled and nobody went back.
+
+- **S-127** - `0f19655` S-127: P-484's clause, and the gate was already red when the message arrived · still open in `docs/notes/proposals.md`
 
 ## What is outstanding
 
