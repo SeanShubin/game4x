@@ -62,31 +62,47 @@ pub fn copies(torus: &Torus) -> Vec<(Cell, bool)> {
 }
 
 /// One size, as an SVG group: every hex of all seven copies, with its id and colour.
-pub fn group(torus: &Torus, colours: &[u8]) -> String {
+///
+/// **Every polygon says which territory it is, and all seven copies of one say the same
+/// thing.** That is what makes `X-36`'s hover possible, and the hover is a distance
+/// instrument: a territory is drawn in seven places and only one of them is near the middle,
+/// so two that look far apart in the bright region may be adjacent through a wrap. **A page
+/// without this does not merely fail to show distance, it misleads about it** - Sean's
+/// observation, and the reason the echoes are load-bearing rather than decorative.
+///
+/// `partner` is the world at the same circumference in the other family, if there is one.
+pub fn group(torus: &Torus, colours: &[u8], partner: Option<usize>) -> String {
     let domain = torus.domain();
     let mut out = String::new();
     out.push_str(&format!(
-        "<g class=\"size\" data-cells=\"{}\" data-around=\"{}\" data-family=\"{}\">\n",
+        "<g class=\"size\" data-cells=\"{}\" data-around=\"{}\" data-family=\"{}\" data-partner=\"{}\">\n",
         torus.cells(),
         torus.circumference(),
         match torus.family {
             crate::Family::Folded => "folded",
             crate::Family::AxisAligned => "axis-aligned",
-        }
+        },
+        // **`-1` rather than an absent attribute**, so the page reads one thing in both cases
+        // and nothing has to tell *no partner* from *a partner at index zero*.
+        partner.map_or(-1, |which| which as i64)
     ));
     for (shift, bright) in copies(torus) {
         for (at, (q, r)) in domain.iter().enumerate() {
             let (q, r) = (q + shift.0, r + shift.1);
             let (full, dim) = COLOURS[colours[at] as usize % COLOURS.len()];
+            let fill = if bright { full } else { dim };
             let (cx, cy) = centre(q, r);
+            // **The resting fill travels with the hex** - lighting one sets `fill` to the
+            // bright colour and letting go sets it back to this, so a dimmed echo returns to
+            // dim and the bright copy returns to bright without the page tracking which was
+            // which.
             out.push_str(&format!(
-                "<polygon points=\"{}\" fill=\"{}\" stroke=\"{}\" stroke-width=\"0.6\"/>\n",
+                "<polygon data-cell=\"{at}\" data-fill=\"{fill}\" data-full=\"{full}\" points=\"{}\" fill=\"{fill}\" stroke=\"{}\" stroke-width=\"0.6\"/>\n",
                 corners(q, r),
-                if bright { full } else { dim },
                 if bright { "#22303f" } else { "#b8c3ce" }
             ));
             out.push_str(&format!(
-                "<text class=\"id\" x=\"{cx:.2}\" y=\"{:.2}\" fill=\"{}\">{at}</text>\n",
+                "<text class=\"id\" data-cell=\"{at}\" x=\"{cx:.2}\" y=\"{:.2}\" fill=\"{}\">{at}</text>\n",
                 cy + 3.0,
                 if bright { "#ffffff" } else { "#7d8a96" }
             ));

@@ -24,6 +24,32 @@ as the same territory rather than as more world. Ids are on by default here, unl
 [`crates/graph-coloring`](../../crates/graph-coloring/) climbs 2, then 3, then 4 and reports
 which succeeded; it comes back three at every size.
 
+## Using the page
+
+**Pointing at a hex lights every copy of that territory**, bright and dimmed alike, and the
+heading says how many places it was drawn in. That is a distance instrument rather than a
+decoration: a territory appears seven times, and **two territories that look far apart in the
+bright region may be adjacent through a wrap**. The drawing can only place each one somewhere,
+so without this it does not merely fail to show distance - **it misleads about it**. With every
+copy lit, the nearest one is the one that decides. Sean's observation, `X-36`.
+
+**All twenty are buttons under the heading**, grouped by family and labelled by how many
+territories each has. They were reachable only by `[` and `]` for one commit, and in that
+commit Sean opened the page, saw `folded, 12 territories`, and concluded the axis-aligned
+family had not landed - when it had. **A correct page showing one of twenty under a header
+promising twenty reads as *nothing changed***, which is worse than a missing feature because it
+is a false report. `X-35`.
+
+**`T` jumps to the world at the same circumference in the other family.** That pairing is the
+only informative comparison the two families support - same distance around, three times the
+territories - so **the toggle shows the folding itself**, where a toggle by list position would
+compare two unrelated worlds. Three of the twenty have a partner: 12↔36, 27↔81, 48↔144. The
+rest disable the control and say so. **Whether to re-cut the axis-aligned ladder to
+`C = 6, 9 … 33` so all ten pair is Sean's** - it buys the comparison at every size and costs the
+small end, since the smallest world becomes 36 territories rather than 9.
+
+`I` toggles the ids, drag or the arrows pan, the wheel zooms, `R` resets.
+
 ## Two families, because Sean asked what a square grid has that a hex grid cannot
 
 **Nothing.** Wrap each axial coordinate on its own - `q mod C`, `r mod C` - and the shifts are
@@ -117,6 +143,20 @@ merely looks true. Each runs over all ten sizes and asserts how many there were:
   the first assertion
 - **`no_size_is_two_colourable`** - by finding an actual triangle at every size, because
   `Exact(3)` alone is satisfied by a graph that only ever needed two
+- **`the_page_states_the_number_of_worlds_it_draws`** - the header's spelled number against the
+  groups actually in the page, and the per-family counts besides. Those are two independent
+  things in one artifact, and `X-35` was exactly that they disagreed
+- **`every_copy_of_a_territory_carries_the_same_cell_id`** - fourteen marks per territory at all
+  twenty sizes, seven hexes and seven ids, which is what the hover selects on
+- **`the_toggle_pairs_one_circumference_across_the_two_families`** - six of the twenty have a
+  partner, the pairing is mutual, and the bigger world has exactly three times the territories.
+  A run where every size paired would fail here rather than read as a clean result
+
+**Three of these read the page and not the grid, and two of them read the script text**, which
+is a weaker claim than it sounds: whether a browser runs the script is what the *vetted when*
+above asks a person to look at. What they catch is a control being dropped, or its handler
+removed while the element stays - the shape of `X-35`, because the keys went on working the
+whole time and nothing looked broken.
 
 ## How the wrapping actually works
 

@@ -26,6 +26,7 @@
 //! wrap evenly. Written down because the two look alike on the page.
 
 pub mod draw;
+pub mod page;
 
 /// Which wrapping, because there are two and they are the same lattice at two foldings.
 ///
@@ -268,4 +269,24 @@ pub fn axis_aligned_sizes() -> Vec<Torus> {
 /// Both families, folded first, which is the order the viewer steps through.
 pub fn both_families() -> Vec<Torus> {
     sizes().into_iter().chain(axis_aligned_sizes()).collect()
+}
+
+/// The world at the same circumference in the *other* family, where there is one.
+///
+/// **Pairing by circumference is the whole of what makes a toggle informative**, because the
+/// two families are one lattice at two foldings: same distance around, and one of them has
+/// three times the territories. Toggling between them shows the folding itself. **Toggling by
+/// list position compares two unrelated worlds and teaches nothing**, which is what a naive
+/// *next in the list* would do.
+///
+/// Three of the ten pair today - the folded ladder is `k = 2..=11`, so its circumferences are
+/// `6..=33` in threes, and the axis-aligned ladder is `C = 3..=12`, which meets it at 6, 9 and
+/// 12. **Whether to re-cut the axis-aligned ladder to `C = 6, 9 .. 33` so all ten pair is
+/// Sean's**: it buys the comparison at every size and costs the small end, since the smallest
+/// world becomes 36 territories rather than 9. `X-36`, and this lane has not chosen.
+pub fn partner_of(worlds: &[Torus], at: usize) -> Option<usize> {
+    let mine = &worlds[at];
+    worlds.iter().position(|other| {
+        other.family != mine.family && other.circumference() == mine.circumference()
+    })
 }
