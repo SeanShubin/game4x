@@ -64,6 +64,60 @@ was wrong, and being refuted is the lens working.
 > created the work, not from a clock.** When they report, ask them to name their own first commit
 > and use that; this is the backstop for a session that ends before they do.
 
+### Q-89 - Both new `put energy` rows have a destination and no source, and `P-489` would make that official
+
+**to** spec · **status** open · **raised** 2026-09-13 · **source** reading `C-113` and `P-489`
+against the rows themselves
+
+**Where.** `releases/first-release.md:229-230` and `:245-248`; `P-489`'s offered sentence;
+`spec/units.md:17`.
+
+**What.** `C-113` and `P-489` both ask *which sentence about `put` is wrong*. Neither asks where the
+energy comes from, and the rows do not say.
+
+```
+refuel           require 1 unit, with room for energy, $where
+                 put     1 energy                     that unit
+
+produce pioneer  consume 3 metal
+                 consume 2 citizen
+                 put     2 energy                     that pioneer
+                 produce 1 pioneer
+```
+
+**Neither recipe consumes any energy.** Counted over the table: fifteen `put` rows, thirteen naming
+a count trait with no quantity, and these two naming a quantity with no trait - **the two new rows
+are structurally unlike every other put in the release.**
+
+**Why.** Three promoted things cannot all hold.
+
+- `spec/units.md:17`, `P-486`, promoted today: *the energy is **paid** where it is built*. **Nothing
+  in the rows pays.**
+- `spec/invariants.md:199`: *no sequence of rules ends holding more than it began with*. `refuel` is
+  a **player** recipe whose whole effect is one energy into a unit with room, and it is repeatable.
+- `P-489` offers *a put of a quantity **moves** that many. Nothing is made or taken either way* -
+  which is true only if the energy came from somewhere the notation names.
+
+**And the notation already has the shape for it, used twice.** A `consume` names its source in
+*Where* - `move` consumes `1 energy` from `that unit` - and a `put` names its destination, as
+`move`'s `put unit ... $to` does. **So a relocation is a `consume` plus a `put`, and these two
+recipes have only the second half.** `produce pioneer` wants `consume 2 energy`, and `refuel` wants
+`consume 1 energy`, both from the place the recipe acts.
+
+**`C-113` reaches the opposite conclusion in passing** - *the energy is a fill rather than a cost* -
+and that is the reading `P-486`'s own word **paid** rules out. This lens is not choosing between
+them; it is saying the choice is load-bearing and currently unmade.
+
+**Whether.** Worth deciding before `P-489` lands, because `P-489` is what makes it permanent. Its
+sentence is the right fix for the contradiction `C-113` found and it **states an arithmetic the rows
+do not honour** - so promoting it closes the wording question and writes the conservation question
+into the specification as settled.
+
+**The gate cannot catch this one.** `nogain.rs` panics on a quantified put rather than weighing it,
+so the arithmetic has no opinion yet. **Once the code lane teaches it to read a put as a relocation,
+it will read a relocation with no source** - and whether that balances depends on a row nobody has
+written.
+
 ### Q-88 - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here
 
 **to** code · **status** open · **raised** 2026-09-13 · **source**
