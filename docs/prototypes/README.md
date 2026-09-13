@@ -6,12 +6,13 @@ Each prototype is a standalone program demonstrating **one** aspect of the game 
 isolation. Prototypes exist to answer a question, and a prototype is finished when its
 question is answered — not when it is polished.
 
-| Prototype                                                 | Question it answers                                                                                     | Status                                                 |
-| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| [Planet view](planet-view.md)                             | Can we divide a sphere into hex-like regions and show them so the world reads as a world?               | Built ([code](../../prototypes/planet-view/README.md)) |
-| [Goldberg view](../../prototypes/goldberg-view/README.md) | Which territory counts read as a planet rather than a die or a fog of small cells?                      | **Answered** 2026-08-30, below                         |
-| [Kinds](../../prototypes/kinds/README.md)                 | What do the inputs to the gameplay logic actually look like?                                            | **Answered** 2026-08-31, below                         |
-| [Gap view](../../prototypes/gap-view/README.md)           | Can a player set a destination anywhere on the world with one mouse gesture, without rotating anything? | Built ([code](../../prototypes/gap-view/README.md))    |
+| Prototype                                                   | Question it answers                                                                                                                                                   | Status                                                          |
+| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| [Planet view](planet-view.md)                               | Can we divide a sphere into hex-like regions and show them so the world reads as a world?                                                                             | Built ([code](../../prototypes/planet-view/README.md))          |
+| [Goldberg view](../../prototypes/goldberg-view/README.md)   | Which territory counts read as a planet rather than a die or a fog of small cells?                                                                                    | **Answered** 2026-08-30, below                                  |
+| [Kinds](../../prototypes/kinds/README.md)                   | What do the inputs to the gameplay logic actually look like?                                                                                                          | **Answered** 2026-08-31, below                                  |
+| [Gap view](../../prototypes/gap-view/README.md)             | Can a player set a destination anywhere on the world with one mouse gesture, without rotating anything?                                                               | Built ([code](../../prototypes/gap-view/README.md))             |
+| [Hex torus view](../../prototypes/hex-torus-view/README.md) | At the sizes the game would use, does a flat isotropic hex torus read as a world, and how visible is the wrapping? **Not whether a torus should be the game's shape** | Being built ([code](../../prototypes/hex-torus-view/README.md)) |
 
 ## Conventions
 
