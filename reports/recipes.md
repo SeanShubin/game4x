@@ -30,10 +30,10 @@ Before:
 ```
 {game phase:play}
   {orbit id:1} -> 1
-    {ark defending:1 id:1 moving:1} -> 1
-  {territory biome:grassland id:1 nature:0} -> 1
-    {deposit capacity:3 density:4 free:3 occupied:0 resource:food} -> 1
-    {deposit capacity:3 density:4 free:3 occupied:0 resource:metal} -> 1
+    {ark id:1 defending:1 moving:1} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
+    {deposit density:4 resource:food occupied:0 free:3 capacity:3} -> 1
+    {deposit density:4 resource:metal occupied:0 free:3 capacity:3} -> 1
 ```
 
 `{deploy-ark territory:1}`
@@ -43,10 +43,10 @@ After:
 ```
 {game phase:play}
   {orbit id:1} -> 1
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:metal} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
+    {deposit density:4 resource:metal occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {extractor resource:metal working:1} -> 1
     {garrison} -> 1
@@ -70,11 +70,11 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
 ```
@@ -85,13 +85,13 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:0} -> 1
+    {pioneer id:1 defending:1 moving:0} -> 1
 ```
 
 ## found by land
@@ -112,10 +112,10 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:2 nature:0} -> 1
-    {deposit capacity:3 density:4 free:3 occupied:0 resource:food} -> 1
-    {deposit capacity:3 density:4 free:3 occupied:0 resource:metal} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
+    {deposit density:4 resource:food occupied:0 free:3 capacity:3} -> 1
+    {deposit density:4 resource:metal occupied:0 free:3 capacity:3} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{found-by-land territory:2}`
@@ -124,10 +124,10 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:metal} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
+    {deposit density:4 resource:metal occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {extractor resource:metal working:1} -> 1
     {garrison} -> 1
@@ -147,9 +147,9 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
-    {deposit capacity:3 density:4 free:3 occupied:0 resource:metal} -> 1
+    {deposit density:4 resource:metal occupied:0 free:3 capacity:3} -> 1
     {garrison} -> 1
     {labor} -> 1
     {metal} -> 1
@@ -161,9 +161,9 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:metal} -> 1
+    {deposit density:4 resource:metal occupied:1 free:2 capacity:3} -> 1
     {extractor resource:metal working:1} -> 1
     {garrison} -> 1
 ```
@@ -182,9 +182,9 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:metal} -> 1
+    {deposit density:4 resource:metal occupied:1 free:2 capacity:3} -> 1
     {extractor resource:metal working:1} -> 1
     {garrison} -> 1
     {labor} -> 1
@@ -197,9 +197,9 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:metal} -> 1
+    {deposit density:4 resource:metal occupied:1 free:2 capacity:3} -> 1
     {extractor resource:metal working:1} -> 1
     {garrison} -> 1
     {store resource:metal} -> 1
@@ -219,7 +219,7 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
     {labor} -> 1
@@ -232,7 +232,7 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
     {yard} -> 1
@@ -253,7 +253,7 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
     {energy} -> 6
     {garrison} -> 1
@@ -266,9 +266,9 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ## launch ark
@@ -288,7 +288,7 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
     {energy} -> 12
     {garrison} -> 1
@@ -302,7 +302,7 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {garrison} -> 1
     {yard} -> 1
 ```
@@ -321,7 +321,7 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
 ```
@@ -332,7 +332,7 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:0} -> 1
     {garrison} -> 1
     {labor} -> 1
@@ -356,9 +356,9 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {labor} -> 1
@@ -371,9 +371,9 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 4
     {garrison} -> 1
@@ -397,17 +397,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -416,15 +416,15 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ## bear
@@ -445,17 +445,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -464,15 +464,15 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ## breed
@@ -493,17 +493,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -512,15 +512,15 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ### An example
@@ -531,9 +531,9 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:3 occupied:0 resource:food} -> 1
+    {deposit density:4 resource:food occupied:0 free:3 capacity:3} -> 1
     {food} -> 8
     {garrison} -> 1
     {store resource:food} -> 1
@@ -545,9 +545,9 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 4
-    {deposit capacity:3 density:4 free:3 occupied:0 resource:food} -> 1
+    {deposit density:4 resource:food occupied:0 free:3 capacity:3} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
 ```
@@ -568,17 +568,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -587,15 +587,15 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ## age
@@ -615,17 +615,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -634,15 +634,15 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ## spoil
@@ -661,17 +661,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -680,15 +680,15 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ## stow
@@ -708,17 +708,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -727,15 +727,15 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ## stow
@@ -755,17 +755,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -774,15 +774,15 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ## discard
@@ -801,17 +801,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -820,15 +820,15 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ## discard
@@ -847,17 +847,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -866,15 +866,15 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ## discard
@@ -893,17 +893,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -912,15 +912,15 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ## discard
@@ -939,17 +939,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -958,15 +958,15 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ## refresh
@@ -985,17 +985,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -1004,15 +1004,15 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ## refresh
@@ -1031,17 +1031,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -1050,15 +1050,15 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ## refresh
@@ -1077,17 +1077,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -1096,15 +1096,15 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ## refresh
@@ -1123,17 +1123,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -1142,15 +1142,15 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ## muster
@@ -1172,17 +1172,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -1191,15 +1191,15 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ## stand
@@ -1220,17 +1220,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -1239,15 +1239,15 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ## refresh
@@ -1266,17 +1266,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -1285,15 +1285,15 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ## refresh
@@ -1312,17 +1312,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -1331,15 +1331,15 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 ## discard
@@ -1358,17 +1358,17 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 2
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```
 
 `{end-turn}`
@@ -1377,13 +1377,13 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
+  {territory id:1 biome:grassland nature:0} -> 1
     {citizen bearing:1 defending:1 laboring:1} -> 3
-    {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory biome:grassland id:2 nature:0} -> 1
+  {territory id:2 biome:grassland nature:0} -> 1
     {garrison} -> 1
-    {pioneer defending:1 id:1 moving:1} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
 ```

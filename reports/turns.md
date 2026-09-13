@@ -20,36 +20,36 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 **gone** (3)
 
-- {orbit id:1} {ark defending:1 id:1 moving:1} -> 1
-- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:3 occupied:0 resource:food} -> 1
-- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:3 occupied:0 resource:metal} -> 1
+- {orbit id:1} {ark id:1 defending:1 moving:1} -> 1
+- {territory id:1 biome:grassland nature:1} {deposit density:4 resource:food occupied:0 free:3 capacity:3} -> 1
+- {territory id:1 biome:grassland nature:1} {deposit density:4 resource:metal occupied:0 free:3 capacity:3} -> 1
 
 **new** (8)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 2
-- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
-- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:2 occupied:1 resource:metal} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:0} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:0} -> 1
-- {territory biome:grassland id:1 nature:1} {food} -> 4
-- {territory biome:grassland id:1 nature:1} {garrison} -> 1
-- {territory biome:grassland id:1 nature:1} {metal} -> 4
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 2
+- {territory id:1 biome:grassland nature:1} {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
+- {territory id:1 biome:grassland nature:1} {deposit density:4 resource:metal occupied:1 free:2 capacity:3} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:0} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:0} -> 1
+- {territory id:1 biome:grassland nature:1} {food} -> 4
+- {territory id:1 biome:grassland nature:1} {garrison} -> 1
+- {territory id:1 biome:grassland nature:1} {metal} -> 4
 
 ## what `end-turn` did
 
 **gone** (5)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 2
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:0} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:0} -> 1
-- {territory biome:grassland id:1 nature:1} {food} -> 4
-- {territory biome:grassland id:1 nature:1} {metal} -> 4
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 2
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:0} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:0} -> 1
+- {territory id:1 biome:grassland nature:1} {food} -> 4
+- {territory id:1 biome:grassland nature:1} {metal} -> 4
 
 **new** (3)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} -> 4
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:1} -> 1
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} -> 4
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:1} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:1} -> 1
 
 ## what is there now
 
@@ -332,38 +332,38 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 **gone** (3)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} -> 4
-- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:1} -> 1
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} -> 4
+- {territory id:1 biome:grassland nature:1} {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:1} -> 1
 
 **new** (7)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 4
-- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:1 occupied:2 resource:food} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:0} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:0} -> 1
-- {territory biome:grassland id:1 nature:1} {food} -> 4
-- {territory biome:grassland id:1 nature:1} {metal} -> 2
-- {territory biome:grassland id:1 nature:1} {store resource:food} -> 1
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 4
+- {territory id:1 biome:grassland nature:1} {deposit density:4 resource:food occupied:2 free:1 capacity:3} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:0} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:0} -> 1
+- {territory id:1 biome:grassland nature:1} {food} -> 4
+- {territory id:1 biome:grassland nature:1} {metal} -> 2
+- {territory id:1 biome:grassland nature:1} {store resource:food} -> 1
 
 ## what `end-turn` did
 
 **gone** (5)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 4
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:0} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:0} -> 1
-- {territory biome:grassland id:1 nature:1} {food} -> 4
-- {territory biome:grassland id:1 nature:1} {metal} -> 2
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 4
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:0} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:0} -> 1
+- {territory id:1 biome:grassland nature:1} {food} -> 4
+- {territory id:1 biome:grassland nature:1} {metal} -> 2
 
 **new** (2)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} -> 4
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:1} -> 1
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} -> 4
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:1} -> 1
 
 **changed** (1)
 
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} · 1 → 2
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:1} · 1 → 2
 
 ## what is there now
 
@@ -647,33 +647,33 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 **gone** (3)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} -> 4
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} -> 2
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:1} -> 1
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} -> 4
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:1} -> 2
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:1} -> 1
 
 **new** (6)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 4
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:0} -> 2
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:0} -> 1
-- {territory biome:grassland id:1 nature:1} {food} -> 8
-- {territory biome:grassland id:1 nature:1} {metal} -> 3
-- {territory biome:grassland id:1 nature:1} {store resource:metal} -> 1
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 4
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:0} -> 2
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:0} -> 1
+- {territory id:1 biome:grassland nature:1} {food} -> 8
+- {territory id:1 biome:grassland nature:1} {metal} -> 3
+- {territory id:1 biome:grassland nature:1} {store resource:metal} -> 1
 
 ## what `end-turn` did
 
 **gone** (4)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 4
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:0} -> 2
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:0} -> 1
-- {territory biome:grassland id:1 nature:1} {food} -> 8
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 4
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:0} -> 2
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:0} -> 1
+- {territory id:1 biome:grassland nature:1} {food} -> 8
 
 **new** (3)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} -> 8
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} -> 2
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:1} -> 1
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} -> 8
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:1} -> 2
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:1} -> 1
 
 ## what is there now
 
@@ -963,41 +963,41 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 **gone** (3)
 
-- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:1 occupied:2 resource:food} -> 1
-- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:2 occupied:1 resource:metal} -> 1
-- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:3 occupied:0 resource:energy} -> 1
+- {territory id:1 biome:grassland nature:1} {deposit density:4 resource:energy occupied:0 free:3 capacity:3} -> 1
+- {territory id:1 biome:grassland nature:1} {deposit density:4 resource:food occupied:2 free:1 capacity:3} -> 1
+- {territory id:1 biome:grassland nature:1} {deposit density:4 resource:metal occupied:1 free:2 capacity:3} -> 1
 
 **new** (9)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 7
-- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:0 occupied:3 resource:food} -> 1
-- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:1 occupied:2 resource:metal} -> 1
-- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:2 occupied:1 resource:energy} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:1} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:0} -> 2
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:0} -> 1
-- {territory biome:grassland id:1 nature:1} {food} -> 8
-- {territory biome:grassland id:1 nature:1} {store resource:energy} -> 1
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 7
+- {territory id:1 biome:grassland nature:1} {deposit density:4 resource:energy occupied:1 free:2 capacity:3} -> 1
+- {territory id:1 biome:grassland nature:1} {deposit density:4 resource:food occupied:3 free:0 capacity:3} -> 1
+- {territory id:1 biome:grassland nature:1} {deposit density:4 resource:metal occupied:2 free:1 capacity:3} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:energy working:1} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:0} -> 2
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:0} -> 1
+- {territory id:1 biome:grassland nature:1} {food} -> 8
+- {territory id:1 biome:grassland nature:1} {store resource:energy} -> 1
 
 **changed** (2)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} · 8 → 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} · 2 → 1
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} · 8 → 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:1} · 2 → 1
 
 ## what `end-turn` did
 
 **gone** (4)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 7
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:0} -> 2
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:0} -> 1
-- {territory biome:grassland id:1 nature:1} {food} -> 8
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 7
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:0} -> 2
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:0} -> 1
+- {territory id:1 biome:grassland nature:1} {food} -> 8
 
 **changed** (3)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} · 1 → 8
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} · 1 → 3
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:1} · 1 → 2
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} · 1 → 8
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:1} · 1 → 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:1} · 1 → 2
 
 ## what is there now
 
@@ -1292,46 +1292,46 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 **gone** (4)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} -> 8
-- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:1 occupied:2 resource:metal} -> 1
-- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:2 occupied:1 resource:energy} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} -> 3
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} -> 8
+- {territory id:1 biome:grassland nature:1} {deposit density:4 resource:energy occupied:1 free:2 capacity:3} -> 1
+- {territory id:1 biome:grassland nature:1} {deposit density:4 resource:metal occupied:2 free:1 capacity:3} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:1} -> 3
 
 **new** (8)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 8
-- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:0 occupied:3 resource:metal} -> 1
-- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:1 occupied:2 resource:energy} -> 1
-- {territory biome:grassland id:1 nature:1} {energy} -> 4
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:0} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:0} -> 3
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:0} -> 2
-- {territory biome:grassland id:1 nature:1} {food} -> 12
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 8
+- {territory id:1 biome:grassland nature:1} {deposit density:4 resource:energy occupied:2 free:1 capacity:3} -> 1
+- {territory id:1 biome:grassland nature:1} {deposit density:4 resource:metal occupied:3 free:0 capacity:3} -> 1
+- {territory id:1 biome:grassland nature:1} {energy} -> 4
+- {territory id:1 biome:grassland nature:1} {extractor resource:energy working:0} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:0} -> 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:0} -> 2
+- {territory id:1 biome:grassland nature:1} {food} -> 12
 
 **changed** (2)
 
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:1} · 2 → 1
-- {territory biome:grassland id:1 nature:1} {metal} · 3 → 9
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:1} · 2 → 1
+- {territory id:1 biome:grassland nature:1} {metal} · 3 → 9
 
 ## what `end-turn` did
 
 **gone** (5)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 8
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:0} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:0} -> 3
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:0} -> 2
-- {territory biome:grassland id:1 nature:1} {food} -> 12
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 8
+- {territory id:1 biome:grassland nature:1} {extractor resource:energy working:0} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:0} -> 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:0} -> 2
+- {territory id:1 biome:grassland nature:1} {food} -> 12
 
 **new** (2)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} -> 12
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} -> 3
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} -> 12
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:1} -> 3
 
 **changed** (2)
 
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:1} · 1 → 2
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:1} · 1 → 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:energy working:1} · 1 → 2
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:1} · 1 → 3
 
 ## what is there now
 
@@ -1632,47 +1632,47 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 **gone** (3)
 
-- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:1 occupied:2 resource:energy} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} -> 3
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:1} -> 3
+- {territory id:1 biome:grassland nature:1} {deposit density:4 resource:energy occupied:2 free:1 capacity:3} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:1} -> 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:1} -> 3
 
 **new** (6)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 10
-- {territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:0 occupied:3 resource:energy} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:0} -> 2
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:0} -> 3
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:0} -> 3
-- {territory biome:grassland id:1 nature:1} {food} -> 12
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 10
+- {territory id:1 biome:grassland nature:1} {deposit density:4 resource:energy occupied:3 free:0 capacity:3} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:energy working:0} -> 2
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:0} -> 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:0} -> 3
+- {territory id:1 biome:grassland nature:1} {food} -> 12
 
 **changed** (5)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} · 12 → 2
-- {territory biome:grassland id:1 nature:1} {energy} · 4 → 12
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:1} · 2 → 1
-- {territory biome:grassland id:1 nature:1} {metal} · 9 → 19
-- {territory biome:grassland id:1 nature:1} {store resource:energy} · 1 → 2
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} · 12 → 2
+- {territory id:1 biome:grassland nature:1} {energy} · 4 → 12
+- {territory id:1 biome:grassland nature:1} {extractor resource:energy working:1} · 2 → 1
+- {territory id:1 biome:grassland nature:1} {metal} · 9 → 19
+- {territory id:1 biome:grassland nature:1} {store resource:energy} · 1 → 2
 
 ## what `end-turn` did
 
 **gone** (5)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 10
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:0} -> 2
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:0} -> 3
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:0} -> 3
-- {territory biome:grassland id:1 nature:1} {food} -> 12
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 10
+- {territory id:1 biome:grassland nature:1} {extractor resource:energy working:0} -> 2
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:0} -> 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:0} -> 3
+- {territory id:1 biome:grassland nature:1} {food} -> 12
 
 **new** (2)
 
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} -> 3
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:1} -> 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:1} -> 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:1} -> 3
 
 **changed** (3)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} · 2 → 12
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:1} · 1 → 3
-- {territory biome:grassland id:1 nature:1} {metal} · 19 → 10
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} · 2 → 12
+- {territory id:1 biome:grassland nature:1} {extractor resource:energy working:1} · 1 → 3
+- {territory id:1 biome:grassland nature:1} {metal} · 19 → 10
 
 ## what is there now
 
@@ -1976,47 +1976,47 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 **gone** (3)
 
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:1} -> 3
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} -> 3
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:1} -> 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:energy working:1} -> 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:1} -> 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:1} -> 3
 
 **new** (7)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 9
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:0} -> 3
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:0} -> 3
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:0} -> 3
-- {territory biome:grassland id:1 nature:1} {food} -> 12
-- {territory biome:grassland id:1 nature:1} {labor} -> 1
-- {territory biome:grassland id:1 nature:1} {pioneer defending:1 id:1 moving:1} -> 1
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 9
+- {territory id:1 biome:grassland nature:1} {extractor resource:energy working:0} -> 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:0} -> 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:0} -> 3
+- {territory id:1 biome:grassland nature:1} {food} -> 12
+- {territory id:1 biome:grassland nature:1} {labor} -> 1
+- {territory id:1 biome:grassland nature:1} {pioneer id:1 defending:1 moving:1} -> 1
 
 **changed** (4)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} · 12 → 1
-- {territory biome:grassland id:1 nature:1} {energy} · 12 → 18
-- {territory biome:grassland id:1 nature:1} {metal} · 10 → 18
-- {territory biome:grassland id:1 nature:1} {store resource:metal} · 1 → 2
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} · 12 → 1
+- {territory id:1 biome:grassland nature:1} {energy} · 12 → 18
+- {territory id:1 biome:grassland nature:1} {metal} · 10 → 18
+- {territory id:1 biome:grassland nature:1} {store resource:metal} · 1 → 2
 
 ## what `end-turn` did
 
 **gone** (6)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 9
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:0} -> 3
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:0} -> 3
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:0} -> 3
-- {territory biome:grassland id:1 nature:1} {food} -> 12
-- {territory biome:grassland id:1 nature:1} {labor} -> 1
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 9
+- {territory id:1 biome:grassland nature:1} {extractor resource:energy working:0} -> 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:0} -> 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:0} -> 3
+- {territory id:1 biome:grassland nature:1} {food} -> 12
+- {territory id:1 biome:grassland nature:1} {labor} -> 1
 
 **new** (3)
 
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:1} -> 3
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} -> 3
-- {territory biome:grassland id:1 nature:1} {extractor resource:metal working:1} -> 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:energy working:1} -> 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:1} -> 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:metal working:1} -> 3
 
 **changed** (1)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} · 1 → 12
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} · 1 → 12
 
 ## what is there now
 
@@ -2310,45 +2310,45 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 **gone** (2)
 
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} -> 3
-- {territory biome:grassland id:1 nature:1} {pioneer defending:1 id:1 moving:1} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:1} -> 3
+- {territory id:1 biome:grassland nature:1} {pioneer id:1 defending:1 moving:1} -> 1
 
 **new** (6)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 5
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:0} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:0} -> 3
-- {territory biome:grassland id:1 nature:1} {food} -> 12
-- {territory biome:grassland id:1 nature:1} {yard} -> 1
-- {territory biome:grassland id:2 nature:1} {pioneer defending:1 id:1 moving:0} -> 1
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 5
+- {territory id:1 biome:grassland nature:1} {extractor resource:energy working:0} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:0} -> 3
+- {territory id:1 biome:grassland nature:1} {food} -> 12
+- {territory id:1 biome:grassland nature:1} {yard} -> 1
+- {territory id:2 biome:grassland nature:1} {pioneer id:1 defending:1 moving:0} -> 1
 
 **changed** (4)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} · 12 → 7
-- {territory biome:grassland id:1 nature:1} {energy} · 18 → 22
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:1} · 3 → 2
-- {territory biome:grassland id:1 nature:1} {metal} · 18 → 3
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} · 12 → 7
+- {territory id:1 biome:grassland nature:1} {energy} · 18 → 22
+- {territory id:1 biome:grassland nature:1} {extractor resource:energy working:1} · 3 → 2
+- {territory id:1 biome:grassland nature:1} {metal} · 18 → 3
 
 ## what `end-turn` did
 
 **gone** (5)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 5
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:0} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:0} -> 3
-- {territory biome:grassland id:1 nature:1} {food} -> 12
-- {territory biome:grassland id:2 nature:1} {pioneer defending:1 id:1 moving:0} -> 1
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 5
+- {territory id:1 biome:grassland nature:1} {extractor resource:energy working:0} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:0} -> 3
+- {territory id:1 biome:grassland nature:1} {food} -> 12
+- {territory id:2 biome:grassland nature:1} {pioneer id:1 defending:1 moving:0} -> 1
 
 **new** (2)
 
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} -> 3
-- {territory biome:grassland id:2 nature:1} {pioneer defending:1 id:1 moving:1} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:1} -> 3
+- {territory id:2 biome:grassland nature:1} {pioneer id:1 defending:1 moving:1} -> 1
 
 **changed** (3)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} · 7 → 12
-- {territory biome:grassland id:1 nature:1} {energy} · 22 → 20
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:1} · 2 → 3
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} · 7 → 12
+- {territory id:1 biome:grassland nature:1} {energy} · 22 → 20
+- {territory id:1 biome:grassland nature:1} {extractor resource:energy working:1} · 2 → 3
 
 ## what is there now
 
@@ -2644,57 +2644,57 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 **gone** (5)
 
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} -> 3
-- {territory biome:grassland id:1 nature:1} {metal} -> 3
-- {territory biome:grassland id:2 nature:1} {deposit capacity:2 density:4 free:2 occupied:0 resource:metal} -> 1
-- {territory biome:grassland id:2 nature:1} {deposit capacity:2 density:6 free:2 occupied:0 resource:food} -> 1
-- {territory biome:grassland id:2 nature:1} {pioneer defending:1 id:1 moving:1} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:1} -> 3
+- {territory id:1 biome:grassland nature:1} {metal} -> 3
+- {territory id:2 biome:grassland nature:1} {deposit density:4 resource:metal occupied:0 free:2 capacity:2} -> 1
+- {territory id:2 biome:grassland nature:1} {deposit density:6 resource:food occupied:0 free:2 capacity:2} -> 1
+- {territory id:2 biome:grassland nature:1} {pioneer id:1 defending:1 moving:1} -> 1
 
 **new** (13)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 3
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:0} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:0} -> 3
-- {territory biome:grassland id:1 nature:1} {food} -> 12
-- {territory biome:grassland id:1 nature:1} {labor} -> 1
-- {territory biome:grassland id:2 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 1
-- {territory biome:grassland id:2 nature:1} {citizen bearing:1 defending:1 laboring:1} -> 1
-- {territory biome:grassland id:2 nature:1} {deposit capacity:2 density:4 free:1 occupied:1 resource:metal} -> 1
-- {territory biome:grassland id:2 nature:1} {deposit capacity:2 density:6 free:1 occupied:1 resource:food} -> 1
-- {territory biome:grassland id:2 nature:1} {extractor resource:food working:0} -> 1
-- {territory biome:grassland id:2 nature:1} {extractor resource:metal working:1} -> 1
-- {territory biome:grassland id:2 nature:1} {food} -> 6
-- {territory biome:grassland id:2 nature:1} {garrison} -> 1
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:energy working:0} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:0} -> 3
+- {territory id:1 biome:grassland nature:1} {food} -> 12
+- {territory id:1 biome:grassland nature:1} {labor} -> 1
+- {territory id:2 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 1
+- {territory id:2 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} -> 1
+- {territory id:2 biome:grassland nature:1} {deposit density:4 resource:metal occupied:1 free:1 capacity:2} -> 1
+- {territory id:2 biome:grassland nature:1} {deposit density:6 resource:food occupied:1 free:1 capacity:2} -> 1
+- {territory id:2 biome:grassland nature:1} {extractor resource:food working:0} -> 1
+- {territory id:2 biome:grassland nature:1} {extractor resource:metal working:1} -> 1
+- {territory id:2 biome:grassland nature:1} {food} -> 6
+- {territory id:2 biome:grassland nature:1} {garrison} -> 1
 
 **changed** (3)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} · 12 → 7
-- {territory biome:grassland id:1 nature:1} {energy} · 20 → 12
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:1} · 3 → 2
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} · 12 → 7
+- {territory id:1 biome:grassland nature:1} {energy} · 20 → 12
+- {territory id:1 biome:grassland nature:1} {extractor resource:energy working:1} · 3 → 2
 
 ## what `end-turn` did
 
 **gone** (8)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 3
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:0} -> 1
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:0} -> 3
-- {territory biome:grassland id:1 nature:1} {food} -> 12
-- {territory biome:grassland id:1 nature:1} {labor} -> 1
-- {territory biome:grassland id:2 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 1
-- {territory biome:grassland id:2 nature:1} {extractor resource:food working:0} -> 1
-- {territory biome:grassland id:2 nature:1} {food} -> 6
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 3
+- {territory id:1 biome:grassland nature:1} {extractor resource:energy working:0} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:0} -> 3
+- {territory id:1 biome:grassland nature:1} {food} -> 12
+- {territory id:1 biome:grassland nature:1} {labor} -> 1
+- {territory id:2 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 1
+- {territory id:2 biome:grassland nature:1} {extractor resource:food working:0} -> 1
+- {territory id:2 biome:grassland nature:1} {food} -> 6
 
 **new** (2)
 
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} -> 3
-- {territory biome:grassland id:2 nature:1} {extractor resource:food working:1} -> 1
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:1} -> 3
+- {territory id:2 biome:grassland nature:1} {extractor resource:food working:1} -> 1
 
 **changed** (3)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} · 7 → 12
-- {territory biome:grassland id:1 nature:1} {extractor resource:energy working:1} · 2 → 3
-- {territory biome:grassland id:2 nature:1} {citizen bearing:1 defending:1 laboring:1} · 1 → 4
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} · 7 → 12
+- {territory id:1 biome:grassland nature:1} {extractor resource:energy working:1} · 2 → 3
+- {territory id:2 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} · 1 → 4
 
 ## what is there now
 
@@ -2985,43 +2985,43 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 **gone** (1)
 
-- {territory biome:grassland id:2 nature:1} {extractor resource:food working:1} -> 1
+- {territory id:2 biome:grassland nature:1} {extractor resource:food working:1} -> 1
 
 **new** (6)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 2
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:0} -> 2
-- {territory biome:grassland id:1 nature:1} {food} -> 8
-- {territory biome:grassland id:2 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 1
-- {territory biome:grassland id:2 nature:1} {extractor resource:food working:0} -> 1
-- {territory biome:grassland id:2 nature:1} {food} -> 6
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 2
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:0} -> 2
+- {territory id:1 biome:grassland nature:1} {food} -> 8
+- {territory id:2 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 1
+- {territory id:2 biome:grassland nature:1} {extractor resource:food working:0} -> 1
+- {territory id:2 biome:grassland nature:1} {food} -> 6
 
 **changed** (3)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} · 12 → 10
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} · 3 → 1
-- {territory biome:grassland id:2 nature:1} {citizen bearing:1 defending:1 laboring:1} · 4 → 3
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} · 12 → 10
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:1} · 3 → 1
+- {territory id:2 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} · 4 → 3
 
 ## what `end-turn` did
 
 **gone** (6)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 2
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:0} -> 2
-- {territory biome:grassland id:1 nature:1} {food} -> 8
-- {territory biome:grassland id:2 nature:1} {citizen bearing:1 defending:1 laboring:0} -> 1
-- {territory biome:grassland id:2 nature:1} {extractor resource:food working:0} -> 1
-- {territory biome:grassland id:2 nature:1} {food} -> 6
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 2
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:0} -> 2
+- {territory id:1 biome:grassland nature:1} {food} -> 8
+- {territory id:2 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:0} -> 1
+- {territory id:2 biome:grassland nature:1} {extractor resource:food working:0} -> 1
+- {territory id:2 biome:grassland nature:1} {food} -> 6
 
 **new** (1)
 
-- {territory biome:grassland id:2 nature:1} {extractor resource:food working:1} -> 1
+- {territory id:2 biome:grassland nature:1} {extractor resource:food working:1} -> 1
 
 **changed** (3)
 
-- {territory biome:grassland id:1 nature:1} {citizen bearing:1 defending:1 laboring:1} · 10 → 8
-- {territory biome:grassland id:1 nature:1} {extractor resource:food working:1} · 1 → 3
-- {territory biome:grassland id:2 nature:1} {citizen bearing:1 defending:1 laboring:1} · 3 → 6
+- {territory id:1 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} · 10 → 8
+- {territory id:1 biome:grassland nature:1} {extractor resource:food working:1} · 1 → 3
+- {territory id:2 biome:grassland nature:1} {citizen bearing:1 defending:1 laboring:1} · 3 → 6
 
 ## what is there now
 

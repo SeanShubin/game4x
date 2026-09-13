@@ -82,19 +82,12 @@
 <li><details><summary>{orbit id:9}</summary>
 <p class="nothing">nothing in it</p>
 </details></li>
-<li><details><summary>{territory biome:desert id:10 nature:1} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/3</span> <span class="bound">store&nbsp;resource:food&nbsp;0/3</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;0/1</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/6</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/6</span></span></summary>
-<ul>
-<li class="leaf">{deposit capacity:1 density:3 free:1 occupied:0 resource:metal}</li>
-<li class="leaf">{deposit capacity:3 density:3 free:3 occupied:0 resource:food}</li>
-<li class="leaf">{deposit capacity:6 density:8 free:6 occupied:0 resource:energy}</li>
-</ul>
-</details></li>
-<li><details><summary>{territory biome:grassland id:1 nature:1} <span class="bounds"><span class="bound full">garrison&nbsp;1/1</span> <span class="bound full">yard&nbsp;1/1</span> <span class="bound full">extractor&nbsp;resource:food&nbsp;3/3</span> <span class="bound">store&nbsp;resource:food&nbsp;1/3</span> <span class="bound">food&nbsp;0/10</span> <span class="bound full">extractor&nbsp;resource:metal&nbsp;3/3</span> <span class="bound">store&nbsp;resource:metal&nbsp;2/3</span> <span class="bound">metal&nbsp;0/20</span> <span class="bound full">extractor&nbsp;resource:energy&nbsp;3/3</span> <span class="bound">store&nbsp;resource:energy&nbsp;2/3</span> <span class="bound">energy&nbsp;12/20</span></span></summary>
+<li><details><summary>{territory id:1 biome:grassland nature:1} <span class="bounds"><span class="bound full">garrison&nbsp;1/1</span> <span class="bound full">yard&nbsp;1/1</span> <span class="bound full">extractor&nbsp;resource:food&nbsp;3/3</span> <span class="bound">store&nbsp;resource:food&nbsp;1/3</span> <span class="bound">food&nbsp;0/10</span> <span class="bound full">extractor&nbsp;resource:metal&nbsp;3/3</span> <span class="bound">store&nbsp;resource:metal&nbsp;2/3</span> <span class="bound">metal&nbsp;0/20</span> <span class="bound full">extractor&nbsp;resource:energy&nbsp;3/3</span> <span class="bound">store&nbsp;resource:energy&nbsp;2/3</span> <span class="bound">energy&nbsp;12/20</span></span></summary>
 <ul>
 <li class="leaf">{citizen bearing:1 defending:1 laboring:1} <span class="many">&times; 8</span></li>
-<li class="leaf">{deposit capacity:3 density:4 free:0 occupied:3 resource:energy}</li>
-<li class="leaf">{deposit capacity:3 density:4 free:0 occupied:3 resource:food}</li>
-<li class="leaf">{deposit capacity:3 density:4 free:0 occupied:3 resource:metal}</li>
+<li class="leaf">{deposit density:4 resource:energy occupied:3 free:0 capacity:3}</li>
+<li class="leaf">{deposit density:4 resource:food occupied:3 free:0 capacity:3}</li>
+<li class="leaf">{deposit density:4 resource:metal occupied:3 free:0 capacity:3}</li>
 <li class="leaf">{energy} <span class="many">&times; 12</span></li>
 <li class="leaf">{extractor resource:energy working:1} <span class="many">&times; 3</span></li>
 <li class="leaf">{extractor resource:food working:1} <span class="many">&times; 3</span></li>
@@ -112,76 +105,83 @@
 <li class="leaf">{yard}</li>
 </ul>
 </details></li>
-<li><details><summary>{territory biome:grassland id:11 nature:1} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/5</span> <span class="bound">store&nbsp;resource:food&nbsp;0/5</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;0/5</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/5</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/5</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/5</span></span></summary>
+<li><details><summary>{territory id:10 biome:desert nature:1} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/3</span> <span class="bound">store&nbsp;resource:food&nbsp;0/3</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;0/1</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/6</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/6</span></span></summary>
 <ul>
-<li class="leaf">{deposit capacity:5 density:6 free:5 occupied:0 resource:energy}</li>
-<li class="leaf">{deposit capacity:5 density:6 free:5 occupied:0 resource:food}</li>
-<li class="leaf">{deposit capacity:5 density:6 free:5 occupied:0 resource:metal}</li>
+<li class="leaf">{deposit density:3 resource:food occupied:0 free:3 capacity:3}</li>
+<li class="leaf">{deposit density:3 resource:metal occupied:0 free:1 capacity:1}</li>
+<li class="leaf">{deposit density:8 resource:energy occupied:0 free:6 capacity:6}</li>
 </ul>
 </details></li>
-<li><details><summary>{territory biome:grassland id:2 nature:1} <span class="bounds"><span class="bound full">garrison&nbsp;1/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;1/2</span> <span class="bound">store&nbsp;resource:food&nbsp;0/2</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;1/2</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/2</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/2</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/2</span></span></summary>
+<li><details><summary>{territory id:11 biome:grassland nature:1} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/5</span> <span class="bound">store&nbsp;resource:food&nbsp;0/5</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;0/5</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/5</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/5</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/5</span></span></summary>
+<ul>
+<li class="leaf">{deposit density:6 resource:energy occupied:0 free:5 capacity:5}</li>
+<li class="leaf">{deposit density:6 resource:food occupied:0 free:5 capacity:5}</li>
+<li class="leaf">{deposit density:6 resource:metal occupied:0 free:5 capacity:5}</li>
+</ul>
+</details></li>
+<li><details><summary>{territory id:12 biome:ice nature:1} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/2</span> <span class="bound">store&nbsp;resource:food&nbsp;0/2</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;0/8</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/8</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/8</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/8</span></span></summary>
+<ul>
+<li class="leaf">{deposit density:2 resource:food occupied:0 free:2 capacity:2}</li>
+<li class="leaf">{deposit density:8 resource:energy occupied:0 free:8 capacity:8}</li>
+<li class="leaf">{deposit density:8 resource:metal occupied:0 free:8 capacity:8}</li>
+</ul>
+</details></li>
+<li><details><summary>{territory id:2 biome:grassland nature:1} <span class="bounds"><span class="bound full">garrison&nbsp;1/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;1/2</span> <span class="bound">store&nbsp;resource:food&nbsp;0/2</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;1/2</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/2</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/2</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/2</span></span></summary>
 <ul>
 <li class="leaf">{citizen bearing:1 defending:1 laboring:1} <span class="many">&times; 6</span></li>
-<li class="leaf">{deposit capacity:2 density:4 free:1 occupied:1 resource:metal}</li>
-<li class="leaf">{deposit capacity:2 density:4 free:2 occupied:0 resource:energy}</li>
-<li class="leaf">{deposit capacity:2 density:6 free:1 occupied:1 resource:food}</li>
+<li class="leaf">{deposit density:4 resource:energy occupied:0 free:2 capacity:2}</li>
+<li class="leaf">{deposit density:4 resource:metal occupied:1 free:1 capacity:2}</li>
+<li class="leaf">{deposit density:6 resource:food occupied:1 free:1 capacity:2}</li>
 <li class="leaf">{extractor resource:food working:1}</li>
 <li class="leaf">{extractor resource:metal working:1}</li>
 <li class="leaf">{garrison}</li>
 </ul>
 </details></li>
-<li><details><summary>{territory biome:grassland id:3 nature:1} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/6</span> <span class="bound">store&nbsp;resource:food&nbsp;0/6</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;0/2</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/2</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/2</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/2</span></span></summary>
+<li><details><summary>{territory id:3 biome:grassland nature:1} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/6</span> <span class="bound">store&nbsp;resource:food&nbsp;0/6</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;0/2</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/2</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/2</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/2</span></span></summary>
 <ul>
-<li class="leaf">{deposit capacity:2 density:4 free:2 occupied:0 resource:energy}</li>
-<li class="leaf">{deposit capacity:2 density:4 free:2 occupied:0 resource:metal}</li>
-<li class="leaf">{deposit capacity:6 density:2 free:6 occupied:0 resource:food}</li>
+<li class="leaf">{deposit density:2 resource:food occupied:0 free:6 capacity:6}</li>
+<li class="leaf">{deposit density:4 resource:energy occupied:0 free:2 capacity:2}</li>
+<li class="leaf">{deposit density:4 resource:metal occupied:0 free:2 capacity:2}</li>
 </ul>
 </details></li>
-<li><details><summary>{territory biome:grassland id:8 nature:1} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/6</span> <span class="bound">store&nbsp;resource:food&nbsp;0/6</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;0/1</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/1</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/1</span></span></summary>
+<li><details><summary>{territory id:4 biome:mountain nature:1} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/1</span> <span class="bound">store&nbsp;resource:food&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;0/4</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/4</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/4</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/4</span></span></summary>
 <ul>
-<li class="leaf">{deposit capacity:1 density:2 free:1 occupied:0 resource:energy}</li>
-<li class="leaf">{deposit capacity:1 density:2 free:1 occupied:0 resource:metal}</li>
-<li class="leaf">{deposit capacity:6 density:6 free:6 occupied:0 resource:food}</li>
+<li class="leaf">{deposit density:2 resource:food occupied:0 free:1 capacity:1}</li>
+<li class="leaf">{deposit density:5 resource:energy occupied:0 free:4 capacity:4}</li>
+<li class="leaf">{deposit density:5 resource:metal occupied:0 free:4 capacity:4}</li>
 </ul>
 </details></li>
-<li><details><summary>{territory biome:ice id:12 nature:1} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/2</span> <span class="bound">store&nbsp;resource:food&nbsp;0/2</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;0/8</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/8</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/8</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/8</span></span></summary>
+<li><details><summary>{territory id:5 biome:mountain nature:1} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/3</span> <span class="bound">store&nbsp;resource:food&nbsp;0/3</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;0/8</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/8</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/8</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/8</span></span></summary>
 <ul>
-<li class="leaf">{deposit capacity:2 density:2 free:2 occupied:0 resource:food}</li>
-<li class="leaf">{deposit capacity:8 density:8 free:8 occupied:0 resource:energy}</li>
-<li class="leaf">{deposit capacity:8 density:8 free:8 occupied:0 resource:metal}</li>
+<li class="leaf">{deposit density:1 resource:food occupied:0 free:3 capacity:3}</li>
+<li class="leaf">{deposit density:8 resource:energy occupied:0 free:8 capacity:8}</li>
+<li class="leaf">{deposit density:8 resource:metal occupied:0 free:8 capacity:8}</li>
 </ul>
 </details></li>
-<li><details><summary>{territory biome:jungle id:6 nature:2} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/4</span> <span class="bound">store&nbsp;resource:food&nbsp;0/4</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/4</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/4</span></span></summary>
+<li><details><summary>{territory id:6 biome:jungle nature:2} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/4</span> <span class="bound">store&nbsp;resource:food&nbsp;0/4</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/4</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/4</span></span></summary>
 <ul>
-<li class="leaf">{deposit capacity:4 density:4 free:4 occupied:0 resource:food}</li>
-<li class="leaf">{deposit capacity:4 density:5 free:4 occupied:0 resource:energy}</li>
+<li class="leaf">{deposit density:4 resource:food occupied:0 free:4 capacity:4}</li>
+<li class="leaf">{deposit density:5 resource:energy occupied:0 free:4 capacity:4}</li>
 </ul>
 </details></li>
-<li><details><summary>{territory biome:jungle id:7 nature:2} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/4</span> <span class="bound">store&nbsp;resource:food&nbsp;0/4</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;0/4</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/4</span></span></summary>
+<li><details><summary>{territory id:7 biome:jungle nature:2} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/4</span> <span class="bound">store&nbsp;resource:food&nbsp;0/4</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;0/4</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/4</span></span></summary>
 <ul>
-<li class="leaf">{deposit capacity:4 density:4 free:4 occupied:0 resource:food}</li>
-<li class="leaf">{deposit capacity:4 density:5 free:4 occupied:0 resource:metal}</li>
+<li class="leaf">{deposit density:4 resource:food occupied:0 free:4 capacity:4}</li>
+<li class="leaf">{deposit density:5 resource:metal occupied:0 free:4 capacity:4}</li>
 </ul>
 </details></li>
-<li><details><summary>{territory biome:mountain id:4 nature:1} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/1</span> <span class="bound">store&nbsp;resource:food&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;0/4</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/4</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/4</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/4</span></span></summary>
+<li><details><summary>{territory id:8 biome:grassland nature:1} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/6</span> <span class="bound">store&nbsp;resource:food&nbsp;0/6</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;0/1</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/1</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/1</span></span></summary>
 <ul>
-<li class="leaf">{deposit capacity:1 density:2 free:1 occupied:0 resource:food}</li>
-<li class="leaf">{deposit capacity:4 density:5 free:4 occupied:0 resource:energy}</li>
-<li class="leaf">{deposit capacity:4 density:5 free:4 occupied:0 resource:metal}</li>
+<li class="leaf">{deposit density:2 resource:energy occupied:0 free:1 capacity:1}</li>
+<li class="leaf">{deposit density:2 resource:metal occupied:0 free:1 capacity:1}</li>
+<li class="leaf">{deposit density:6 resource:food occupied:0 free:6 capacity:6}</li>
 </ul>
 </details></li>
-<li><details><summary>{territory biome:mountain id:5 nature:1} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/3</span> <span class="bound">store&nbsp;resource:food&nbsp;0/3</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;0/8</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/8</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/8</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/8</span></span></summary>
+<li><details><summary>{territory id:9 biome:mountain nature:1} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/2</span> <span class="bound">store&nbsp;resource:food&nbsp;0/2</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;0/6</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/6</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/1</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/1</span></span></summary>
 <ul>
-<li class="leaf">{deposit capacity:3 density:1 free:3 occupied:0 resource:food}</li>
-<li class="leaf">{deposit capacity:8 density:8 free:8 occupied:0 resource:energy}</li>
-<li class="leaf">{deposit capacity:8 density:8 free:8 occupied:0 resource:metal}</li>
-</ul>
-</details></li>
-<li><details><summary>{territory biome:mountain id:9 nature:1} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/2</span> <span class="bound">store&nbsp;resource:food&nbsp;0/2</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;0/6</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/6</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/1</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/1</span></span></summary>
-<ul>
-<li class="leaf">{deposit capacity:1 density:2 free:1 occupied:0 resource:energy}</li>
-<li class="leaf">{deposit capacity:2 density:3 free:2 occupied:0 resource:food}</li>
-<li class="leaf">{deposit capacity:6 density:8 free:6 occupied:0 resource:metal}</li>
+<li class="leaf">{deposit density:2 resource:energy occupied:0 free:1 capacity:1}</li>
+<li class="leaf">{deposit density:3 resource:food occupied:0 free:2 capacity:2}</li>
+<li class="leaf">{deposit density:8 resource:metal occupied:0 free:6 capacity:6}</li>
 </ul>
 </details></li>
 </ul>

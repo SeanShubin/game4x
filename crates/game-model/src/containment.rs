@@ -83,6 +83,67 @@ impl Description {
         self
     }
 
+    /// The traits in the order a reader wants to meet them, which is not the order the map
+    /// holds them in.
+    ///
+    /// **Sean, 2026-09-13, stating the order of relevance:** *the most important is the type,
+    /// second most important is id, the least important is capacity, second least is free,
+    /// third least is occupied.* The kind is already first because it names the thing; `id`
+    /// follows it, because which one it is, is the next question anybody has. What is left
+    /// sorts by name in the middle, and the three that describe how full something is fall to
+    /// the end in the order he gave.
+    ///
+    /// **Why those three are last is worth keeping.** `occupied`, `free` and `capacity` are
+    /// one fact said three ways - the two derived from the third - so they are the part of a
+    /// line a reader checks rather than reads. Alphabetically they led:
+    /// `{deposit capacity:3 density:4 free:2 occupied:1 resource:food}` opened on the least
+    /// interesting number and buried what the deposit is *of*.
+    ///
+    /// **The determinism `spec/console.md` asks for is untouched.** This is still a total
+    /// order and still a function of the description alone, so the same state is still the
+    /// same bytes and a description is still one string however it was built. What changes is
+    /// which order, and that sentence says *the traits inside a description sort too* - `C-111`
+    /// is filed against it, because the specification is not this lane's to edit.
+    pub fn ordered(&self) -> Vec<(&String, &String)> {
+        // **A rank rather than a list of every trait**, because the middle is everything the
+        // release declares and a list here would go stale the moment a trait is added -
+        // silently, since an unlisted name would simply fall somewhere. **A fixed global
+        // order over all twenty-six is Sean's question and the specification lane's to
+        // propose** - `C-111`. What makes one safe is a check that every declared trait is
+        // placed exactly once, which is this lane's and is not written yet.
+        //
+        // **The rank reads the value as well as the name, and that is not a detail.** On a
+        // declaration a trait is *named and not valued* - `{kind biome family:place id
+        // name:territory nature}` is a kind declaring `biome`, `id` and `nature`, and there
+        // the word `id` is a trait being declared rather than this line's identity. Ranking
+        // it first pulled it ahead of `name:territory`, which is what actually says which
+        // kind the line is about. **Sean's order is about a thing**: *the most important is
+        // the type, second most important is id* - `id:1`, identifying one. So a valueless
+        // trait keeps its place in the alphabet and only a valued one moves.
+        //
+        // **This is a narrowing this lane chose and it is open**, because what a declaration
+        // line should lead with is the same question as the global order and is his.
+        fn rank(name: &str, value: &str) -> u8 {
+            if value.is_empty() {
+                return 1;
+            }
+            match name {
+                "id" => 0,
+                "occupied" => 2,
+                "free" => 3,
+                "capacity" => 4,
+                _ => 1,
+            }
+        }
+        let mut out: Vec<(&String, &String)> = self.traits.iter().collect();
+        out.sort_by(|(left, left_value), (right, right_value)| {
+            rank(left, left_value)
+                .cmp(&rank(right, right_value))
+                .then_with(|| left.cmp(right))
+        });
+        out
+    }
+
     /// The description as one word-per-field form: `{kind trait:value ...}`.
     ///
     /// **This is what entries sort on.** `spec/console.md` says entries are in the order
@@ -92,7 +153,7 @@ impl Description {
     pub fn written(&self) -> String {
         let mut out = String::from("{");
         out.push_str(self.kind);
-        for (name, value) in &self.traits {
+        for (name, value) in self.ordered() {
             out.push(' ');
             out.push_str(name);
             // **A named trait with no value writes as its name**, which is the form it was
@@ -108,9 +169,12 @@ impl Description {
     }
 
     /// Every word this description uses, which is what `P-284` is a rule about.
+    ///
+    /// In the same order as [`Description::written`], so that a vocabulary failure names the
+    /// words in the order the reader will find them on the line.
     pub fn words(&self) -> Vec<String> {
         let mut out = vec![self.kind.to_string()];
-        for (name, value) in &self.traits {
+        for (name, value) in self.ordered() {
             out.push(name.clone());
             // A trait named and not valued contributes its name and no value, rather than
             // an empty string that every vocabulary check would then have to admit.
@@ -892,7 +956,9 @@ mod tests {
             .map(|entry| entry.description.written())
             .map(|w| Box::leak(w.into_boxed_str()) as &str)
             .collect();
-        assert_eq!(holder, vec!["{territory biome:ice id:2 nature:0}"]);
+        // `id` leads, which is Sean's order of relevance and not the alphabet - see
+        // [`Description::ordered`].
+        assert_eq!(holder, vec!["{territory id:2 biome:ice nature:0}"]);
     }
 
     /// Capacity is the total and the used, and the used is counted rather than kept.

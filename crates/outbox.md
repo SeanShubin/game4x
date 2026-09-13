@@ -61,6 +61,64 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-111 - The traits in a description no longer sort, and `spec/console.md` says they do
+
+**to** spec · **status** open · **raised** 2026-09-13 · **source** Sean, stating an order of
+relevance for rendering, and this lane building it
+
+**derived from** entries are in the order their descriptions sort in, and the traits inside a
+description sort too - `spec/console.md`
+
+**Sean, 2026-09-13:** *There is a certain order of relevance when rendering things as text. The
+most important is the type, second most important is id, the least important is capacity, second
+least is free, third least is occupied.* He gave the before and after:
+
+```
+{territory biome:grassland id:1 nature:1} {deposit capacity:3 density:4 free:2 occupied:1 resource:food} -> 1
+{territory id:1 biome:grassland nature:1} {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
+```
+
+**Built, and the reports say the second line exactly.** What it cost: one rendering function, two
+fixtures, and four generated reports. `spec/data/` did not move, for the reason below.
+
+## The sentence that is now false
+
+**`spec/console.md` says *the traits inside a description sort too*.** They no longer sort; they
+rank. **The guarantee that sentence exists to give is untouched** - the order is still total,
+still a function of the description alone, so the same state is still the same bytes and a
+description is still one string however it was built. Only *which* order is wrong now, and this
+lane may not edit that file.
+
+**Sean asked whether a global ordering belongs to this lane or yours**, on being told the traits
+had been alphabetical: *I had never even noticed. Perhaps we should define a global ordering, as
+the number of traits is fixed.* It is yours. The count is **26**, declared in
+`spec/data/traits.4x` and generated from the release's *Traits* table, so a stated order is a
+fact about those rows and reaches `spec/` by promotion like any other.
+
+## What this lane built instead, and why it is a narrowing rather than the answer
+
+**A rank with an open middle**: `id` first, then everything else alphabetically, then `occupied`,
+`free`, `capacity`. A fixed list of all 26 would have gone stale silently the first time a trait
+was added - an unlisted name simply falling somewhere - and **the check that makes a global
+ordering safe is this lane's and is not written**: every declared trait placed exactly once,
+asserted against the 26, so adding one without placing it reddens the gate.
+
+**If you propose the global order, file the check with it** and this lane will build both.
+
+## One decision inside it that is not this lane's
+
+**The rank reads the value as well as the name.** On a declaration a trait is named and not
+valued - `{kind biome family:place id name:territory nature}` declares `biome`, `id` and
+`nature` - and there the word `id` is a trait being declared rather than that line's identity.
+Ranking it first pulled it ahead of `name:territory`, which is what says which kind the line is
+about.
+
+So **a valueless trait keeps its place in the alphabet and only a valued one moves**, which is
+why `spec/data/` did not change at all. That reading is defensible - his order is about a thing,
+and `id:1` identifies one - **and it is a choice this lane made quietly**, which is the shape
+`CLAUDE.md` says a proposal must not contain. What a declaration line should lead with is the
+same question as the global order, and both are his.
+
 ### C-110 - Poisoning a check has a direction, and a repair is where nobody looks
 
 **to** spec · **status** open · **raised** 2026-09-12 · **source** widening two checks in

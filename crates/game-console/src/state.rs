@@ -542,10 +542,22 @@ mod tests {
     /// kind. **The property holds over any traits at all** - so nothing failed, and the one
     /// place a reader looks to see what a tree looks like showed a shape the game cannot emit.
     fn a_tree_is_written_and_read_back_as_itself() {
-        let text = "{game phase:play}\n  {orbit id:1} -> 1\n    {ark defending:1 id:1 moving:1} -> 1\n  \
-                    {territory biome:ice id:1 nature:1} -> 1\n    {citizen bearing:1 defending:1 laboring:1} -> 8\n";
+        // **`id` leads and the alphabet does not** - Sean's order of relevance, 2026-09-13.
+        // This fixture read `{ark defending:1 id:1 moving:1}` until today, which was the
+        // alphabet rather than a decision anybody had made.
+        let text = "{game phase:play}\n  {orbit id:1} -> 1\n    {ark id:1 defending:1 moving:1} -> 1\n  \
+                    {territory id:1 biome:ice nature:1} -> 1\n    {citizen bearing:1 defending:1 laboring:1} -> 8\n";
         let tree = root(text);
         assert_eq!(written(&tree), text, "the same bytes, both ways");
+        // **Reading is order-blind and writing is not**, which is what makes the order a
+        // rendering decision rather than a change to the notation: the same description
+        // written the old way still reads back as itself, and comes out in the new order.
+        let alphabetical = "{game phase:play}\n  {territory biome:ice id:1 nature:1} -> 1\n";
+        assert_eq!(
+            written(&root(alphabetical)),
+            "{game phase:play}\n  {territory id:1 biome:ice nature:1} -> 1\n",
+            "a description written in the old order has to read back the same thing"
+        );
         assert_eq!(tree.contents.len(), 2, "an orbit and a territory");
         assert_eq!(tree.contents[0].contents[0].quantity, 1);
         assert_eq!(tree.contents[1].contents[0].quantity, 8);
