@@ -443,7 +443,12 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
     // `MOVE_CELLS` is what a move consumes and `move` produces nothing, so a reader that finds
     // a recipe by what it makes cannot reach it. A recipe that produces nothing is an ordinary
     // shape - every one of the world's is - rather than an exception.
-    let checked: [(&str, u32, &str, &str); 13] = [
+    // **`PIONEER_ENERGY` is gone and its absence is the point** - `P-486`. The pioneer's
+    // energy is no longer a cost beside the bin: *it is built with that bin full, and the
+    // energy is paid where it is built*, so the figure paid is the Units table's `Fuel` and a
+    // second constant could only ever disagree with it. The row it compared against -
+    // `consume 6 energy` - is not in the release any more either.
+    let checked: [(&str, u32, &str, &str); 12] = [
         ("STORE_LABOR", cost::STORE_LABOR, "store", "labor"),
         ("STORE_METAL", cost::STORE_METAL, "store", "metal"),
         ("YARD_LABOR", cost::YARD_LABOR, "yard", "labor"),
@@ -452,7 +457,6 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
         ("ARK_ENERGY", cost::ARK_ENERGY, "ark", "energy"),
         ("ARK_CITIZENS", cost::ARK_CITIZENS, "ark", "citizen"),
         ("PIONEER_METAL", cost::PIONEER_METAL, "pioneer", "metal"),
-        ("PIONEER_ENERGY", cost::PIONEER_ENERGY, "pioneer", "energy"),
         (
             "PIONEER_CITIZENS",
             cost::PIONEER_CITIZENS,

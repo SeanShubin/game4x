@@ -29,7 +29,6 @@ pub mod cost {
     /// extractors at one metal each, so a unit that deploys one has to bind with three. At
     /// four an Ark wasted a metal every landing; at two a Pioneer made one from nothing.
     pub const PIONEER_METAL: u32 = 3;
-    pub const PIONEER_ENERGY: u32 = 6;
     pub const PIONEER_CITIZENS: u32 = 2;
     /// An Extractor costs 1 labor and 1 metal.
     ///
@@ -608,7 +607,23 @@ impl Game {
         // model so much as a rule nobody had written.
         self.take(territory, brought)?;
         let force = self.units[unit_at].kind.force();
+        // **What was in its bin falls loose here** - `P-487`. `spec/logistics.md`: *when a
+        // thing that contains things is consumed, what it held falls loose where it stood. It
+        // is not destroyed with its container: it goes into disorder, and at the turn's end
+        // what there is room for is kept and the rest is lost.*
+        //
+        // **Loose is what a territory holds directly**, so this is an `add` and not a store:
+        // a store is a container, and the rule says the energy is in disorder rather than in
+        // one. Whether the territory has a store for energy at this moment therefore does not
+        // decide where the energy goes - it only decides what survives, and
+        // `end_of_turn_losses` is already what decides that. The specification lane raised the
+        // ordering inside founding as a question it could not settle; it does not arise,
+        // because both answers put the energy in the same place.
+        let spare = self.units[unit_at].cells;
         self.units.remove(unit_at);
+        if spare > 0 {
+            self.territories[territory.index()].add(Resource::Energy, spare);
+        }
 
         let place = &mut self.territories[territory.index()];
         // `spec/unit-types.md`: the structure a founding unit becomes has one less force
@@ -751,7 +766,17 @@ impl Game {
                     });
                 }
                 self.spend(territory, Resource::Metal, cost::PIONEER_METAL)?;
-                self.spend(territory, Resource::Energy, cost::PIONEER_ENERGY)?;
+                // **The fill and the payment are one number** - `P-486`: *it is built with
+                // that bin full, and the energy is paid where it is built.* So this is the
+                // bin's size read from the kind rather than a `PIONEER_ENERGY` beside it,
+                // which is the constant that could drift from the Units table's `Fuel`.
+                //
+                // **It was six and it is two, and the six was the last trace of a rule the
+                // specification had stopped saying.** `P-66` promoted the fill; `0aca92d`
+                // lost the sentence on 2026-09-01 and left the number, so a pioneer went on
+                // paying for a bin nothing said got filled. Sean found it by asking why a
+                // pioneer costs energy at all.
+                self.spend(territory, Resource::Energy, kind.cells())?;
                 self.territory_mut(territory)?
                     .remove(Kind::Citizen, cost::PIONEER_CITIZENS);
             }

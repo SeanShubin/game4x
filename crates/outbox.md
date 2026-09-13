@@ -61,6 +61,85 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-113 - `P-486`'s rows contradict two sentences the release still states
+
+**to** spec · **status** open · **raised** 2026-09-13 · **source** building `S-128`, and the gate
+refusing the rows before this lane had read them
+
+**derived from** a put names a thing that is already there and says what is true of it afterwards
+... a put has no quantity, because nothing is made or taken - `releases/first-release.md`, Recipes
+
+**`39a42c6` changed two rows and left two sentences about them.** Both are inside the release, and
+this lane cannot edit either.
+
+## One - a put now carries a quantity, and the release says it cannot
+
+The promoted rows are `put 2 energy ... that pioneer` and `put 1 energy ... that unit`. Four
+hundred lines above them the release defines the role:
+
+> a put names a thing that is already there and says what is true of it afterwards - the same
+> thing and not a new one, so what has an identity keeps it. **A put has no quantity, because
+> nothing is made or taken.**
+
+**The rows have a quantity. Two and one.**
+
+**The reading that makes them agree is available and is not this lane's to choose.** *The thing
+already there* can be the pioneer, and *what is true of it afterwards* can be that it holds two
+energy - a put whose effect is containment rather than a trait, with the quantity saying how much.
+Under that reading only the last sentence is wrong. Under the other reading the rows want
+`produce`, which makes energy rather than moving it, and `P-486` says the energy is **paid** where
+the unit is built - so something is moved and `produce` would be the wrong verb. **This lane
+believes the first reading and has not built on it.**
+
+**It is the gate that refuses them, not this lane's judgement.** `nogain.rs` weighs every row to
+decide whether the rules can come back round with more, and it reads a `put` as spending a count a
+thing carries - `laboring`, `moving`. A `put` naming no count is a rule moving something the
+arithmetic never saw, so it panics rather than dropping the row and leaving the weighting
+balancing a game with one fewer cost in it. **That panic is the check working**; the row is a
+shape it was told could not exist.
+
+## Two - the prose still states the cost the rows stopped stating
+
+> **A founding unit costs citizens, and that is the cost that matters.** `produce pioneer`
+> consumes **3 metal, 6 energy and 2 citizens**
+
+The row consumes 3 metal and 2 citizens and **puts** 2 energy. The six was the number `P-486`
+removed, and this sentence is where it still lives. **The paragraph's argument is untouched** -
+founding competes with the population rather than costing resources beside it - and is if anything
+stronger now, since the energy is a fill rather than a cost.
+
+**Verified from the promotion rather than by reading around it**: `git show 39a42c6 --
+releases/first-release.md` changes the table and nothing else, so both sentences are the half that
+did not move.
+
+---
+
+### C-112 - `refuel` is a recipe no command fires
+
+**to** spec · **status** open · **raised** 2026-09-13 · **source** `S-128`, and the worked-example
+check refusing to let it pass silently
+
+**derived from** a command names a recipe and binds what it leaves open, so the command list is
+the recipe list - `P-214`
+
+**`P-485` promotes `refuel` into the Recipes table and `spec/console.md`'s command vocabulary has
+no `refuel`.** So nothing fires it, and a worked example - *a state, the command, and the state
+after* - cannot be written rather than has not been.
+
+**The binding is the open question and not the name.** The row is `require 1 unit with room for
+energy` at `$where` and `put 1 energy` into `that unit`. `$where` is a territory, so a command
+naming a territory has to choose when two units standing there both have room. Naming the unit
+instead makes the choice the player's. **Both are defensible and neither is this lane's to
+invent**, which is the whole of why this is filed rather than built.
+
+## The gate says so rather than a comment saying so
+
+`recipes.rs` asserts that every declared recipe has a worked example. **The exception for
+`refuel` is a condition and not a name in a list**: it holds only while
+`grammar().form_names()` contains no `refuel`, so the moment a command exists the exception stops
+applying and the assertion bites. `C-61`'s shape - a named exception that cannot outlive its
+excuse - and the excuse here is measured at every run rather than remembered.
+
 ### C-111 - The traits in a description no longer sort, and `spec/console.md` says they do
 
 **to** spec · **status** acted 2026-09-13 · **cited** `7702c75` · **raised** 2026-09-13 ·

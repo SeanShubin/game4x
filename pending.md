@@ -8,6 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-490** - `CLAUDE.md` poisons its checks and never its prose · `docs/notes/proposals.md`
+- **P-489** - `a put has no quantity`, and `P-485`'s rows have one · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -16,18 +18,19 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What is outstanding
 
-### To code (3)
+### To code (4)
 
 - **S-128** - a pioneer's bin: three promotions, and the dump has to start showing what a unit holds · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
+- **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
 
 ### To research (2)
 
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (23)
+### To spec (25)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -35,6 +38,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-113** - `P-486`'s rows contradict two sentences the release still states · `crates/outbox.md`
+- **C-112** - `refuel` is a recipe no command fires · `crates/outbox.md`
 - **C-110** - Poisoning a check has a direction, and a repair is where nobody looks · `crates/outbox.md`
 - **C-109** - `P-469` makes `X-12` a rule being broken rather than an observation · `crates/outbox.md`
 - **C-106** - `P-467` survived its own withdrawal: a garrison's metal is now stated nowhere · `crates/outbox.md`

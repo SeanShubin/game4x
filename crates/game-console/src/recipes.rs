@@ -70,8 +70,21 @@ pub fn recipes(document: &str) -> String {
         // **Every declared recipe has one**, and `tests/worked.rs` is what says so first.
         // This asserts rather than writing a notice, because there is no longer a recipe that
         // can honestly carry one - `C-61` closed when `P-340` put `age` before `spoil`.
+        //
+        // **One exception, and it cannot outlive its excuse.** `P-485` promoted `refuel` into
+        // the Recipes table and no command fires it: `spec/console.md`'s command vocabulary
+        // has no `refuel`, and a worked example is *a state, the command, and the state
+        // after* - so one cannot be written rather than has not been. **The excuse is
+        // measured, not asserted**: the moment the grammar carries a form named `refuel` this
+        // exception stops applying and the assertion below bites, which is `C-61`'s shape and
+        // the reason this is a condition rather than a name in a list.
+        //
+        // Filed as `C-112`. Which command fires it, and what it binds when two units in a
+        // territory both have room, is `spec/`'s to say and not this lane's to invent.
+        let fires_nothing =
+            recipe.name == "refuel" && !crate::grammar::grammar().form_names().contains(&"refuel");
         assert!(
-            !mine.is_empty(),
+            !mine.is_empty() || fires_nothing,
             "`{}` is declared and has no worked example - `tests/worked.rs` should have said \
              so first",
             recipe.name

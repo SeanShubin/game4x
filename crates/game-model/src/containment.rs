@@ -601,11 +601,7 @@ pub fn tree(game: &Game) -> Entry {
                     .with("free", offered.capacity.saturating_sub(occupied)),
             ));
         }
-        held.extend(
-            game.units_on(place.id)
-                .into_iter()
-                .map(|unit| Entry::leaf(describe_unit(unit))),
-        );
+        held.extend(game.units_on(place.id).into_iter().map(entry_for_unit));
         entry.contents = group(held);
         entry.capacity = capacities_of(game, place);
         children.push(entry);
@@ -624,7 +620,7 @@ pub fn tree(game: &Game) -> Entry {
             game.units
                 .iter()
                 .filter(|unit| unit.location == crate::Location::Orbit(place.id))
-                .map(|unit| Entry::leaf(describe_unit(unit)))
+                .map(entry_for_unit)
                 .collect(),
         );
         children.push(above);
@@ -752,6 +748,35 @@ fn describe_unit(unit: &crate::Unit) -> Description {
     // spends to stand. `fuel` left the description with `P-407`: it is a trait of the kind.
     .with("moving", u32::from(!unit.exhausted))
     .with("defending", u32::from(!unit.stood))
+}
+
+/// A unit, with what is in its bin.
+///
+/// **A bin is containment, so the fuel is an entry rather than a trait** - `P-485`, which began
+/// as the report that this dump showed nothing inside a pioneer while the entity view said
+/// `fuel 2`. One of the two was wrong about a thing that holds something, and it was this one.
+///
+/// > A mobile unit that moves over the ground has a bin for fuel. **It is built with that bin
+/// > full, and the energy is paid where it is built.** Moving burns a unit of it, and one with
+/// > an empty bin cannot move
+///
+/// **`fuel` stays a trait of the kind and is a different fact.** The Units table's `Fuel` is how
+/// big the bin is - a pioneer's is 2 - and what is written here is what is in it now. A unit
+/// that has moved once reads `{energy} -> 1` under a kind whose `fuel` is still 2.
+///
+/// **An empty bin writes nothing**, because `spec/console.md` says an entry is never zero. So a
+/// pioneer that cannot move holds nothing, which is the same shape as a territory with no food.
+fn entry_for_unit(unit: &crate::Unit) -> Entry {
+    let mut entry = Entry::leaf(describe_unit(unit));
+    if unit.cells > 0 {
+        entry.contents = vec![Entry {
+            description: Description::of(Kind::Energy),
+            quantity: unit.cells,
+            contents: Vec::new(),
+            capacity: Vec::new(),
+        }];
+    }
+    entry
 }
 
 /// What a territory may contain, per kind, with what it holds now.
