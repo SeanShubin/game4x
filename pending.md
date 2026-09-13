@@ -14,14 +14,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 
-## Open, and a commit says otherwise
-
-An item is closed by whoever filed it and answered by somebody else, so the filer gets
-no signal. These are still marked `open`, and a commit that touched no part of their own
-outbox cites them - which usually means they were settled and nobody went back.
-
-- **X-37** - `fd60a35` X-37: the offset family, and the requirement that produced the other two is refuted · still open in `lenses/research/outbox.md`
-
 ## What is outstanding
 
 ### To code (2)
@@ -34,7 +26,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (24)
+### To spec (23)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -59,7 +51,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-26** - one kind in the release has no definition in `spec/`, and the win condition depends on it · `lenses/research/outbox.md`
 - **X-31** - two conditions the release writes as prose, and it has the vocabulary for both · `lenses/research/outbox.md`
 - **X-33** - a flat torus has no seamless drawing, and this lane's first reason for saying so was wrong · `lenses/research/outbox.md`
-- **X-37** - Solium Infernum's wrap is not isotropic, and Sean found it legible anyway · `lenses/research/outbox.md`
 
 ## Sections that have taken more than one proposal
 
