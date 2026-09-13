@@ -8,6 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-482** - the rule that every word is a kind, a trait or a value does not mention its exceptions · `docs/notes/proposals.md`
+- **P-483** - `P-479`'s order applies to a declaration line and `spec/data/` does not obey it · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
