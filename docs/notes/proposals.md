@@ -62,38 +62,29 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-489 - two new recipes make energy from nothing, and the table already has the idiom that fixes it
+### P-489 - two new recipes make energy from nothing
 
 **to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction, found by the quality lens against rows this lane drafted · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes
 
-**This replaces the version you have not yet read.** That one asked you to widen the definition of
-`put`. **The quality lens found the real defect underneath it and it is worse**: neither new recipe
-takes the energy from anywhere.
+**This is what is holding the gate red**, and it is rows from `P-485` that this lane drafted.
 
 ```
-refuel           require 1 unit, with room for energy, $where
-                 put     1 energy                       that unit      <- from nowhere
-
-produce pioneer  consume 3 metal / consume 2 citizen
-                 put     2 energy                       that pioneer   <- from nowhere
+refuel           put 1 energy   that unit       <- and nothing takes it from anywhere
+produce pioneer  put 2 energy   that pioneer    <- the same
 ```
 
 **`refuel` is a player recipe, repeatable, whose whole effect is one energy appearing.**
 `spec/invariants.md`: *no sequence of rules ends holding more than it began with.*
 
-## The table already relocates a quantity, twice, and not with `put`
+## The table already relocates a quantity, and not with `put`
 
 ```
-| **stow** | world | consume | 1 | metal  |  |                   |
-|          |       | produce | 1 | metal  |  | a store for metal |
-| **stow** | world | consume | 1 | energy |  |                   |
+| **stow** | world | consume | 1 | energy |  |                    |
 |          |       | produce | 1 | energy |  | a store for energy |
 ```
 
-**Consume where it is, produce where it goes, and the two cancel.** Counted over the table:
-**fifteen `put` rows - thirteen name a count trait and carry no quantity, and the two with a
-quantity are the ones this lane wrote.** They are not a narrow case of `put`; they are not `put` at
-all.
+**Consume where it is, produce where it goes, and the two cancel.** Fifteen `put` rows in the
+table: thirteen name a count trait and carry no quantity, and the two carrying one are these.
 
 ## The rows
 
@@ -108,96 +99,64 @@ all.
 |                     |        | consume | 1   | energy  |                      |              |
 |                     |        | produce | 1   | energy  |                      | that unit    |
 
-**A blank `Where` is the place the recipe acts**, which the table already says - so the energy comes
-from the territory and goes into the unit.
+**A blank `Where` is the place the recipe acts**, which that table already says.
 
-## What this means no longer needs deciding
-
-**`a put has no quantity, because nothing is made or taken` stands exactly as written.** No rule
-changes, no sentence widens, and the code lane's `nogain.rs` stops meeting a shape it was told
-could not exist.
-
-**And `spec/units.md`'s *the energy is paid where it is built* is satisfied rather than strained.**
-The territory gives up two energy; the pioneer holds two. That is what *paid* means, and this
-lane's earlier phrase *a fill rather than a cost* was loose - it is both, and the row that makes it
-a payment was the one missing.
-
-## The prose at line 429, corrected with them
+## And the prose at line 429, which still names the old cost
 
 > **A founding unit costs citizens, and that is the cost that matters.** `produce pioneer` consumes
 > **3 metal, 2 energy and 2 citizens**; `launch ark` consumes 3 metal, 12 energy and 2 citizens and
 > requires a Yard.
 
-**Six becomes two, not nothing** - which the version you have not read got wrong, because it was
-written when the energy was going to come from nowhere.
+## What this does not ask
+
+**No rule changes.** *A put has no quantity, because nothing is made or taken* stands as written,
+and `spec/units.md`'s *the energy is paid where it is built* is satisfied rather than strained -
+the territory gives up two and the pioneer holds two.
 ### P-490 - `CLAUDE.md` poisons its checks and never its prose
 
 **to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered, from the research lane correcting its own item · **shape** text · **asks** approval · **into** `CLAUDE.md` -> What done means
 
-**`CLAUDE.md` already says this about checks:** *A quality improvement's evidence is a check that
-did not exist before. Passing tests prove nothing here - they passed beforehand too.* `Q-8`'s
-second test, the one showing the old path diverged, is named as the verification.
-
-**It says nothing about the rules in its own prose, and they have the same failure available.**
-
-## The case, and it is the research lane's against itself
-
-`X-26` recorded *a number nobody can explain is a rule that has gone missing* as the tell that
-found `P-486`. **Neither half was true.** You remembered `P-67` from weeks back and asked why a
-pioneer costs energy at all; the trail to `P-66` and `0aca92d` was this lane's. The heuristic was
-read off the instance afterwards and then written as the mechanism.
-
-**A heuristic fitted to the case it explains could not have come out the other way.** It explains
-that instance by construction. That is `passing tests prove nothing - they passed beforehand too`,
-in prose instead of code.
+**That file already says this about checks**: *A quality improvement's evidence is a check that did
+not exist before. Passing tests prove nothing here - they passed beforehand too.* **It says nothing
+about the rules in its own prose, and they have the same failure available.**
 
 ## The words, added after the `Q-1` paragraph
 
-> **A rule written from an incident has the same failure available, and nothing poisons prose.**
-> A check earns its place by a failure it could have produced; **a habit earns its place by a case
-> it caught, not a case it explains.** One read off the incident that produced it explains that
+> **A rule written from an incident has the same failure available, and nothing poisons prose.** A
+> check earns its place by a failure it could have produced; **a habit earns its place by a case it
+> caught, not a case it explains.** One read off the incident that produced it explains that
 > incident by construction and could not have come out otherwise - which is *passing tests prove
 > nothing* said about a sentence. **So a habit is written as where to look until it has caught
 > something it did not come from**, and says which it is.
 
-## Why this needed you rather than being a `CLAUDE.md` fix this lane makes
+## The two cases, one per lane
 
-**That file leaves wording, paths, broken links and consistency to this lane, and reserves the
-columns, the addresses and the promotion protocol for you.** This is none of those: it is a new
-rule, and it is a rule about **how work is judged** - which sits against the file's self-governing
-core, the part that says an approval for it comes from you directly.
+- **The research lane's.** `X-26` recorded *a number nobody can explain is a rule that has gone
+  missing* as the tell that found `P-486`. **You** remembered `P-67` and asked why a pioneer costs
+  energy; the trail was this lane's. The heuristic was read off the instance afterwards
+- **This lane's, and it is this item's own filing.** It first argued that a producer must not carry
+  a lens's finding into `CLAUDE.md` - which explains this case exactly and is wrong in every other,
+  since it would route a broken link to you because a lens spotted it
 
-**The test is what the rule touches and not where it came from.** This lane first wrote that a
-producer should not carry a lens's finding into that file at all, and the research lane refused
-it: applied generally, provenance would route a broken link to you because a lens happened to spot
-it, and would let any lane promote a typo into a proposal by being the one to see it. **The origin
-of a finding does not change whether the change is substance.**
+## Why you rather than this lane
 
-## What this rests on, stated because it is the whole point
+**That file leaves wording, paths and consistency to this lane and reserves the columns, the
+addresses and the promotion protocol for you.** This is none of those: it is new, and it is a rule
+about **how work is judged**, which sits against the file's self-governing core.
 
-**Two instances, in two lanes, and each lane found its own.** The research lane's heuristic is
-the first. **The second is this lane's reason for filing this very item**: it first argued that a
-producer must not carry a lens's finding into `CLAUDE.md`, which explained this case exactly and
-is wrong in every other - it would route a broken link to you because a lens spotted it. **A
-reason read off the case it justifies**, which is this item's subject one layer up, in a
-justification rather than a heuristic.
+## What it rests on, which is the point
 
-**The argument is still not from a count.** Two is not a record either; what it rests on is that
-the structure is identical to a rule already in this file with a worked example, and `Q-8`'s
-evidence is borrowed rather than matched.
+**Two cases is not a record.** The argument is that the structure is identical to a rule already in
+this file with a worked example - `Q-8`'s evidence borrowed rather than matched.
 
 **The measurement that would give it a record has not been run**: does any rule in `CLAUDE.md`
-derived from an incident have a case it caught *other* than the one that produced it? Some plainly
-do - *check the rule over every case and assert how many cases there were* has caught several this
-week. **Others neither lane knows about.** The research lane named that measurement and declined to
-run it as the last thing in a long day, which is the rule being followed before it is written.
-
-**If you would rather have the measurement first, say so and this waits for it.**
+derived from an incident have a case it caught *other* than the one that produced it? **Say so and
+this waits for it.**
 ## Addressed to other perspectives
 
 ### S-128 - a pioneer's bin: three promotions, and the dump has to start showing what a unit holds
 
-**to** code · **status** open · **raised** 2026-09-13 · **source** promoting all three, then running the arithmetic against the scenario
+**to** code · **status** open · **cited** `df150d4` · **raised** 2026-09-13 · **source** promoting all three, then running the arithmetic against the scenario
 
 **`39a42c6`.** `P-486`, `P-487` and `P-485`, in that order, and the third depends on the first two.
 
