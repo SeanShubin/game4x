@@ -135,6 +135,102 @@ fn reducing_and_turning_a_sixth_commute() {
     assert_eq!(checked, 10, "ten sizes");
 }
 
+/// Leaving the region subtracts one of six vectors, each the same number of times.
+///
+/// **This is why the wrapping is learnable, and it is the reason the region is a hexagon.**
+/// A step that leaves the drawn region comes back translated by `±a`, `±b` or `±(a−b)` - the
+/// six shortest lattice vectors, all of norm `2k` - and each is used exactly `2k` times. Three
+/// opposite edge-pairs, each a constant translation, the same everywhere along its edge.
+///
+/// # The reason the hexagon was chosen did not exist, and this is the one that does
+///
+/// `X-32` specified a hexagonal domain for its six-fold symmetry, which `X-34` then proved
+/// unavailable at every size. **Right answer, wrong reason.** The reason measured afterwards:
+/// a rhombic domain over the same lattice subtracts `±a`, `±b`, `±(a+b)` instead, uses its
+/// diagonal pair **once** and the other four `4k−1` times each, and wraps `(16k−2)/18k²`
+/// against the hexagon's `2/(3k)` - about a third more often at every size.
+///
+/// So the hexagon wraps less and wraps evenly, and the rhombus has two seams a player would
+/// meet once in a game and four they would meet constantly.
+///
+/// **`X-33` first reported this as *no single wrap rule, nothing for a player to learn*, from
+/// id offsets** - indices into a list sorted by position, which say nothing about geometry.
+/// Both lanes repeated it before anybody measured it. What is true is the opposite: six
+/// constant translations, and the only reason the seam is hard to see is that the region is a
+/// blob rather than that the rule varies.
+#[test]
+fn leaving_the_region_subtracts_one_of_six_vectors_evenly() {
+    let mut checked = 0;
+    for torus in sizes() {
+        let domain = torus.domain();
+        assert_eq!(
+            domain.len(),
+            torus.cells(),
+            "k = {}: the population, first, because a count that does not state one is how \
+             three wrong numbers got out of this prototype in one evening",
+            torus.k
+        );
+        let [a, b] = torus.generators();
+        let mut shifts: std::collections::BTreeMap<(i32, i32), usize> =
+            std::collections::BTreeMap::new();
+        for (q, r) in &domain {
+            for (dq, dr) in NEIGHBOURS {
+                let (tq, tr) = (q + dq, r + dr);
+                let back = torus.reduce(tq, tr);
+                let shift = (tq - back.0, tr - back.1);
+                if shift != (0, 0) {
+                    *shifts.entry(shift).or_default() += 1;
+                }
+            }
+        }
+
+        let want: std::collections::BTreeSet<(i32, i32)> = [
+            a,
+            (-a.0, -a.1),
+            b,
+            (-b.0, -b.1),
+            (a.0 - b.0, a.1 - b.1),
+            (b.0 - a.0, b.1 - a.1),
+        ]
+        .into_iter()
+        .collect();
+        assert_eq!(
+            shifts
+                .keys()
+                .copied()
+                .collect::<std::collections::BTreeSet<_>>(),
+            want,
+            "k = {}: the wrap does not subtract the six shortest lattice vectors",
+            torus.k
+        );
+        // **`a + b` is not among them and is not one of the shortest** - it has norm `3k`
+        // where these six have `2k`. Named because it is the vector the first account of this
+        // said was used, and nothing else here would notice its absence.
+        assert!(
+            !shifts.contains_key(&(a.0 + b.0, a.1 + b.1)),
+            "k = {}: the wrap subtracts a+b, which is the rhombic domain's diagonal",
+            torus.k
+        );
+        assert!(
+            shifts.values().all(|times| *times == 2 * torus.k as usize),
+            "k = {}: the six shifts are used {:?} times rather than {} each - evenly is what \
+             makes each edge one rule",
+            torus.k,
+            shifts.values().collect::<Vec<_>>(),
+            2 * torus.k
+        );
+        // And how often a step wraps at all: `6 * 2k` of `6N`, which is `2/(3k)`.
+        assert_eq!(
+            shifts.values().sum::<usize>() * 3 * torus.k as usize,
+            2 * 6 * torus.cells(),
+            "k = {}: the share of steps that wrap is not 2/(3k)",
+            torus.k
+        );
+        checked += 1;
+    }
+    assert_eq!(checked, 10, "ten sizes");
+}
+
 /// The drawn region is **not** six-fold symmetric, and no choice of tie-break could make it so.
 ///
 /// **Asserted as the impossibility, so the claim cannot be re-added.** `X-34` found it stated

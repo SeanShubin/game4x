@@ -92,6 +92,26 @@ merely looks true. Each runs over all ten sizes and asserts how many there were:
 - **`no_size_is_two_colourable`** - by finding an actual triangle at every size, because
   `Exact(3)` alone is satisfied by a graph that only ever needed two
 
+## How the wrapping actually works
+
+**A step that leaves the drawn region comes back translated by one of six vectors** - `±a`,
+`±b`, `±(a−b)`, the six shortest in the lattice - and each is used exactly `2k` times. Three
+opposite edge-pairs, each a **constant translation**, the same everywhere along its edge. The
+share of steps that wrap at all is `2/(3k)`: a third at `k = 2`, 13% at `k = 5`.
+
+**That is a rule, and it is learnable.** The seam is hard to *see* because the drawn region is
+a blob, not because the rule varies.
+
+**It was first reported as the opposite** - *no single wrap rule, nothing for a player to
+learn* - from id offsets, which are indices into a list sorted by position and say nothing
+about geometry. Both lanes repeated it before anyone measured it. `X-33`, corrected.
+
+**And it is why the region is a hexagon**, which is not the reason the hexagon was chosen. A
+rhombic domain over the same lattice subtracts `±a`, `±b`, `±(a+b)`, uses its diagonal pair
+**once** and the other four `4k−1` times each, and wraps about a third more often at every
+size. So the hexagon wraps less and wraps evenly; the rhombus would give a player two seams
+they meet once in a game and four they meet constantly.
+
 ## What this settles, and what it does not
 
 **It settles whether the wrapping is legible. It settles nothing about whether a torus should
