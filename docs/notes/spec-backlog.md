@@ -33,6 +33,19 @@ state, and `kind`, `trait` and `family`, which appear only in declarations. **Th
 `orbit`, `deposit`, `adjacency` and `game` are declared and named by no recipe, which is why the
 drawing leaves them out. **It is the same shape one step further.**
 
+## Said 2026-09-13: the turn report shows each of end-turn's five phases
+
+*I want to break down `reports/turns.html` even further. Right now we have 2 sections, "what your
+commands did" and "what end-turn did". I want "what end-turn did" broken down into each of its 5
+phases.*
+
+Filed to the code lane as `S-125`. **The five are `spec/turn.md`'s own sentence**, promoted an hour
+earlier as `P-480`, so the report's sections become the specification read left to right - a phase
+added to the rule adds a section.
+
+Not a rule. Three of the five are already separated in the code; phases one and two are both inside
+`settle_population`, so that seam needs a snapshot that does not exist yet.
+
 ## Said 2026-09-13: the turns report collapses its state and splits its diff
 
 On `reports/turns.html`: **make *what is there now* expandable and default to collapsed**, and

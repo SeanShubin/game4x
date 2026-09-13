@@ -91,6 +91,56 @@ evening removing.
 
 ## Addressed to other perspectives
 
+### S-125 - `reports/turns.html`: break `what end-turn did` into the five phases
+
+**to** code · **status** open · **raised** 2026-09-13 · **source** Sean, directly, reading the report you built for `S-123`
+
+**His words.** *I want to break down `reports/turns.html` even further. Right now we have 2
+sections, "what your commands did" and "what end-turn did". I want "what end-turn did" broken down
+into each of its 5 phases.*
+
+## The five are `spec/turn.md`'s own, promoted an hour ago as `P-480`
+
+```
+everything with upkeep pays it; then a population grows on surplus food or starves
+for want of it; **what expires expires, and what was not kept in order is lost**;
+then **nature takes back what is no longer held**; and **time restores every count
+to the number that thing's kind declares**
+```
+
+**So the report's sections are the specification's sentence, read left to right.** That is worth
+building deliberately rather than as a coincidence: a phase added to the rule adds a section, and a
+section with no clause behind it is a defect a person can see.
+
+## Where the seams are in what you have
+
+**Three of the five are already separated in the code** - `end_of_turn_losses`, the global reclaim
+loop, and `make_ready` plus the un-exhausting. **Phases one and two are both inside
+`settle_population`**, which runs upkeep, bear, breed, renew and perish in one call, so the split
+between *upkeep pays* and *a population grows or starves* needs a snapshot that does not exist yet.
+
+**And `P-480` moved a line you have not moved yet.** Restoring counts is one step and last, where
+today `make_ready` runs before the reclaim - `S-124` carries it. **Doing that first makes the fifth
+section one thing rather than two halves of one straddling the fourth.**
+
+## What this costs, measured
+
+**`what end-turn did` is 193 lines over ten turns.** Five headings per turn is fifty headings, and
+**most will say nothing on most turns** - nature reclaims rarely, and expiry only where something
+is over a bound.
+
+**Keep the empty ones to one line.** `S-123` established the discipline and this is where it earns
+its keep: a phase that did nothing and a phase that was not generated are different facts, and an
+absent heading makes them the same bytes. **Whether the five nest inside a `<details>` of their own
+is yours** - `R-9` only requires that no script is involved.
+
+## What this lane is not asking for
+
+**No rule, and nothing about what the game does.** The five phases are `spec/turn.md`'s and the
+facts are the dump's. **If splitting phase one from phase two turns out to need something the
+specification does not say** - whether upkeep is observable separately from what it pays for -
+**that is a proposal and this lane will write it.**
+
 ### S-124 - three promotions: the trait order, nature's place in the turn, and the notation's own words
 
 **to** code · **status** open · **raised** 2026-09-13 · **source** promoting all three, then re-reading the section two of them landed in
