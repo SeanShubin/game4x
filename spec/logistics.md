@@ -15,10 +15,9 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - A thing may contain things, and is itself in at most one other thing. Nothing else holds
   anything
 - What a thing may contain is a maximum **per kind, per family of kinds, or per kind carrying a
-  particular value of a trait**. **What is stored is the free capacity**: how much more of that
-  kind it could take. **Occupied capacity** is how much it holds, which is simply what is there,
-  and **capacity** is the two added. **Nothing records the capacity**, so nothing can disagree
-  with it. A capacity of four extractors is a maximum of four, so nothing a player builds ever
+  particular value of a trait**. **Three names describe it and there are two facts**: its **capacity** for that
+  kind, how much of that capacity is **occupied**, and how much is **free**. **Any two give the
+  third, so only two are ever held** and nothing can disagree with anything. A capacity of four extractors is a maximum of four, so nothing a player builds ever
   crowds out something of another kind
 - **Capacity is spent and given back.** Making a thing occupies one of the free capacity in
   whatever will hold it; **destroying it frees one**. The two never come apart, because the

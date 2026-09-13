@@ -110,32 +110,34 @@ because a plausible subset passes it.
 Where a trait admits a closed set of values, its **Values** cell names them, or says where they
 are listed.
 
-| Trait           | Values                           | Stored or derived                                    |
-| --------------- | -------------------------------- | ---------------------------------------------------- |
-| **id**          | an identity                      | stored                                               |
-| **moving**      | a number                         | stored                                               |
-| **laboring**    | a number                         | stored                                               |
-| **working**     | a number                         | stored                                               |
-| **bearing**     | a number                         | stored                                               |
-| **defending**   | a number                         | stored                                               |
-| **resource**    | one of the resources             | stored                                               |
-| **strength**    | a number                         | of the kind                                          |
-| **fuel**        | how much energy its tank holds   | of the kind                                          |
-| **upkeep**      | food per turn                    | of the kind                                          |
-| **binding**     | a number                         | derived: the metal the recipe that makes it consumes |
-| **metal in it** | a number                         | derived: its binding plus the metal in its parts     |
-| **density**     | a number                         | stored                                               |
-| **free**        | a number                         | stored                                               |
-| **control**     | held by a player, or unclaimed   | derived: a citizen of that player is there           |
-| **biome**       | one of the biomes                | stored                                               |
-| **nature**      | a number                         | stored                                               |
-| **from**        | a place                          | stored                                               |
-| **to**          | a place                          | stored                                               |
-| **keeps**       | the number of turns it will last | stored                                               |
-| **surplus**     | a number                         | derived: left after every upkeep was paid            |
-| **unpaid**      | a number                         | derived: its upkeep was not met                      |
-| **phase**       | design or play                   | stored                                               |
-| **movable**     | a number                         | of the kind                                          |
+| Trait           | Values                                                            | Belongs to |
+| --------------- | ----------------------------------------------------------------- | ---------- |
+| **id**          | an identity                                                       | each thing |
+| **moving**      | a number                                                          | each thing |
+| **laboring**    | a number                                                          | each thing |
+| **working**     | a number                                                          | each thing |
+| **bearing**     | a number                                                          | each thing |
+| **defending**   | a number                                                          | each thing |
+| **resource**    | one of the resources                                              | each thing |
+| **strength**    | a number                                                          | the kind   |
+| **fuel**        | how much energy its tank holds                                    | the kind   |
+| **upkeep**      | food per turn                                                     | the kind   |
+| **binding**     | a number: the metal the recipe that makes it consumes             | the kind   |
+| **metal in it** | a number: its binding plus the metal in its parts                 | the kind   |
+| **density**     | a number                                                          | each thing |
+| **capacity**    | a number                                                          | each thing |
+| **occupied**    | a number                                                          | each thing |
+| **free**        | a number: its capacity less what it holds                         | each thing |
+| **control**     | held by a player, or unclaimed: a citizen of that player is there | each thing |
+| **biome**       | one of the biomes                                                 | each thing |
+| **nature**      | a number                                                          | each thing |
+| **from**        | a place                                                           | each thing |
+| **to**          | a place                                                           | each thing |
+| **keeps**       | the number of turns it will last                                  | each thing |
+| **surplus**     | a number: left after every upkeep was paid                        | the kind   |
+| **unpaid**      | a number: its upkeep was not met                                  | each thing |
+| **phase**       | design or play                                                    | each thing |
+| **movable**     | a number                                                          | the kind   |
 
 Food is made with `keeps` 1. The force nature holds a territory with.
 

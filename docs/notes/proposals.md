@@ -62,114 +62,8 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-476 - nothing outside the debug view says which of a set is held
+*Nothing is open. Everything filed has been decided.*
 
-**to** sean · **status** open · **cited** `9baf0a2`, `1bbf7f7`, `cf1308e`, `2b677ac` · **raised** 2026-09-12 · **kind** contradiction, from your rule that only the debug report knows what is derived · **shape** text, rows and an instruction · **asks** approval · **into** `spec/console.md` -> The language, `spec/logistics.md` -> Containment, `spec/data/`, and `releases/first-release.md` -> Traits
-
-**You killed `A`**: a deposit's entry carries one number and two unknowns, and the count that
-resolves it sits in sibling entries joined by a rule the notation never states. It holds today only
-because exactly one kind consumes a deposit's capacity, and `spec/logistics.md` already permits a
-maximum *per family of kinds*. **So all three are traits**, and this is `B` written out.
-
-**Four places outside the debug view say which trait is held**, and all four go:
-
-```
-spec/console.md:58    "and a derived trait is never part of one"
-spec/console.md:89    "`nothing` where it is derived and nothing carries it"
-spec/logistics.md:18  "Nothing records the capacity"   (as `P-475` renames it)
-first-release.md:113  column heading: "Stored or derived"
-```
-
-**What replaces them is one distinction.** A **definition** is logical and stays - *`free` is
-capacity less what it holds*, *`binding` is the metal the recipe consumes*. **Which of an
-interdependent set is held** is the layout, and `spec/invariants.md` already gives the layout one
-reader. Today the single word *derived* does both jobs, which is why the rule reads as incoherent.
-
-## What a deposit entry becomes
-
-```
-before   {deposit density:4 resource:food room:0}
-after    {deposit capacity:3 density:4 free:0 occupied:3 resource:food}
-```
-
-**Thirty-four entries gain two fields**, and no other entry in the release changes.
-
-## `spec/console.md` -> The language, replacing the description sentence
-
-> **What a thing contains is a map from a description to a quantity.** A description is a kind and
-> **every trait of that thing**; a trait **of its kind** is not part of one, because naming the kind
-> has already said it. **No trait of the thing may be left out** - `{citizen defending:1} -> 8` and
-> `{citizen defending:0} -> 6`, never `{citizen} -> 14`.
-
-**The clause that leaves is *and a derived trait is never part of one***. The clause before it then
-decides a description's contents alone, and it is logical. **The two select the same traits** once
-`kept:nothing` is gone, so nothing but the capacity entries changes length.
-
-## `spec/console.md` -> The language, replacing the `kept` sentence
-
-> **A trait says those two things with two keys.** **`admits`** is `number`, or a **family** whose
-> kinds are its values, or **`value`** where its values declare themselves. **`kept`** is
-> **`thing`** where each thing of a kind carries the value, and **`kind`** where the kind carries it
-> once. **It says where a value belongs and never whether one is held**, which is the layout and has
-> one reader.
-
-## `spec/logistics.md` -> Containment, replacing the capacity sentences
-
-> **Three names describe it and there are two facts**: its **capacity** for that kind, how much of
-> that capacity is **occupied**, and how much is **free**. **Any two give the third, so only two are
-> ever held** and nothing can disagree with anything.
-
-**This lands after `P-475`**, which renames the same bullet without touching what it claims.
-**It withdraws `P-474`'s *Nothing records the total***, promoted tonight - *only two are held* is
-what makes disagreement impossible, and *which two* was never needed for it.
-
-## The rows
-
-The **Stored or derived** column becomes **Belongs to**, and each definition moves into the trait's
-**Values** cell, where it is a definition rather than a storage claim.
-
-| Trait           | Values                                                            | Belongs to |
-| --------------- | ----------------------------------------------------------------- | ---------- |
-| **capacity**    | a number                                                          | each thing |
-| **occupied**    | a number                                                          | each thing |
-| **free**        | a number: its capacity less what it holds                         | each thing |
-| **binding**     | a number: the metal the recipe that makes it consumes             | the kind   |
-| **metal in it** | a number: its binding plus the metal in its parts                 | the kind   |
-| **control**     | held by a player, or unclaimed: a citizen of that player is there | each thing |
-
-**Every other row's third cell becomes `each thing` or `the kind`**, saying what `stored` and `of
-the kind` say today.
-
-## The instruction
-
-**`spec/data/traits.4x` gains two lines and changes five**, ending at 26 lines:
-
-```
-{trait admits:number kept:thing name:capacity}
-{trait admits:number kept:thing name:occupied}
-{trait admits:number kept:kind name:binding}
-{trait admits:number kept:kind name:metal-in-it}
-{trait admits:number kept:kind name:surplus}
-{trait admits:number kept:thing name:control}
-{trait admits:number kept:thing name:unpaid}
-```
-
-**`spec/data/kinds.4x` line 18 becomes `{kind capacity density free name:deposit occupied}`**, and
-no other line changes.
-
-**The check**: `grep -c 'kept:nothing' spec/data/traits.4x` is `0`, `traits.4x` has 26 lines,
-`kinds.4x` has 22, and every trait named on a kind's line is declared in `traits.4x`.
-
-## The one thing this leaves open, stated rather than noted
-
-**The three names are traits of `deposit` and of nothing else.** A deposit is the capacity relation
-made into a thing - one per territory per resource - and a **store**'s capacity is `10` on the kind,
-like a unit's `fuel`. **A store records no occupancy**, which the release already says in its own
-words: *which store holds which unit of a resource is not recorded in this release*.
-
-So *how full is this store* has no answer today, and this proposal does not give it one. **If you
-want stores inside the same three names, that is a second item** and it changes what the dump holds,
-not what it is allowed to say.
 ## Addressed to other perspectives
 
 ### S-121 - `P-473` landed, and the column had four readers rather than one
@@ -5132,6 +5026,7 @@ work the release exists to order.
 | P-473, the *Of* column goes, and `R-8`'s signature is computed from `spec/data/`                                             | `releases/first-release.md` -> Traits, and the `R-8` capability                                                                                                                                          | 2026-09-12 |
 | P-474, the dump stores the total, and `spec/logistics.md` says nothing records it                                            | `releases/first-release.md` -> Traits, and Where things are                                                                                                                                              | 2026-09-12 |
 | P-475, the three capacities are `capacity`, `occupied` and `free`                                                            | `spec/logistics.md` -> Containment, `spec/console.md` -> The language, `spec/invariants.md` -> What a rule may cost, `releases/first-release.md` -> Traits and Where things are, and `spec/data/`        | 2026-09-13 |
+| P-476, nothing outside the debug view says which of a set is held                                                            | `spec/console.md` -> The language, `spec/logistics.md` -> Containment, `spec/data/`, and `releases/first-release.md` -> Traits                                                                           | 2026-09-13 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |

@@ -55,8 +55,8 @@ recipe; it is a count of firings, and a command without one fires once.
 
 **What a thing contains is a map from a description to a quantity.** A description is a kind and
 **every trait of that thing**; a trait **of its kind** is not part of one, because naming the kind
-has already said it, and a derived trait is never part of one. **No trait of the thing may be left
-out** - `{citizen defending:1} -> 8` and `{citizen defending:0} -> 6`, never `{citizen} -> 14`.
+has already said it. **No trait of the thing may be left out** - `{citizen defending:1} -> 8` and
+`{citizen defending:0} -> 6`, never `{citizen} -> 14`.
 **Each distinct description is its own entry, and an entry is never zero.** A thing carrying an
 `id` has a description no other thing shares, so **its quantity is always one**. **Where a thing
 is, is where it appears**; nothing states its container. **Entries are in the order their
@@ -85,8 +85,9 @@ kind for it to belong to and no family that could hold it.
 
 **A trait says those two things with two keys.** **`admits`** is `number`, or a **family** whose
 kinds are its values, or **`value`** where its values declare themselves. **`kept`** is
-**`thing`** where each thing of a kind carries the value, **`kind`** where the kind carries it
-once, and **`nothing`** where it is derived and nothing carries it.
+**`thing`** where each thing of a kind carries the value, and **`kind`** where the kind carries it
+once. **It says where a value belongs and never whether one is held**, which is the layout and has
+one reader.
 
 **`identity` is a fourth thing a trait may admit.** Two identities are equal or they are not:
 **no expression orders, sums or aggregates one**, and a guard on one compares with `=` and nothing
