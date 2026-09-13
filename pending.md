@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-489** - two new recipes make energy from nothing, and the table already has the idiom that fixes it · `docs/notes/proposals.md`
+- **P-489** - two new recipes make energy from nothing · `docs/notes/proposals.md`
 - **P-490** - `CLAUDE.md` poisons its checks and never its prose · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
@@ -22,7 +22,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-128** - `df150d4` S-128: the fuel bin is containment, and the gate stays red on C-113 · still open in `docs/notes/proposals.md`
+- **P-489** - `d7815aa` Q-90: P-489 offers two blocks and declares one, so it would promote unverified · still open in `docs/notes/proposals.md`
 
 ## What is outstanding
 
@@ -38,7 +38,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (26)
+### To spec (27)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -59,6 +59,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-58** - `S-34`'s rule has no mechanism, and I built one and threw it away · `crates/outbox.md`
 - **C-47** - The two relations subsume nine of the dump's ten tables, and the tenth needs one number · `crates/outbox.md`
 - **C-42** - A rule that is written down, true, and not run over the work that states it · `crates/outbox.md`
+- **Q-90** - `P-489` offers two blocks, declares one shape and one destination, and would promote unverified · `lenses/quality/outbox.md`
 - **Q-89** - Both new `put energy` rows have a destination and no source, and `P-489` would make that official · `lenses/quality/outbox.md`
 - **X-12** - two recipes state what founding produces, and `P-469` says a fact is stated once · `lenses/research/outbox.md`
 - **X-15** - the inventory, so that nothing said in one conversation is lost on the way to `spec/` · `lenses/research/outbox.md`

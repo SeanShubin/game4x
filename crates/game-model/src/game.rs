@@ -1338,6 +1338,69 @@ mod tests {
             .unwrap()
     }
 
+    /// Producing a pioneer takes the bin's worth of energy out of the territory.
+    ///
+    /// **This is the check `P-486` left with nothing reading it, and its absence was this
+    /// lane's doing.** `the_costs_in_the_model_are_the_costs_in_the_release` compared
+    /// `PIONEER_ENERGY` against a `consume 6 energy` row. The promotion deleted the row and
+    /// this lane deleted the constant, calling the fill and the payment one number - which is
+    /// true, and left the payment itself compared with nothing. **The cost did not go away;
+    /// only the comparison did.**
+    ///
+    /// **What it rests on, stated because no row in the release states the cost.**
+    /// `spec/units.md`: *it is built with that bin full, and **the energy is paid where it is
+    /// built**.* Something pays, and this asserts that the territory is what pays and that it
+    /// pays exactly the bin. The Recipes table has no `consume` row for it - the quality lens
+    /// counted fifteen `put` rows, thirteen naming a count and two naming a quantity, and the
+    /// two are this pair, alone in the release in having a destination and no source. `C-113`
+    /// and `Q-89` are open on where the energy comes from.
+    ///
+    /// **So this will fail if that question is answered differently**, which is the point of
+    /// writing it now rather than waiting: a cost the code pays, no document states and no
+    /// check reads is exactly the shape that survives for twelve days. `P-486` restored a
+    /// clause lost on 2026-09-01 and the six energy was its last trace.
+    #[test]
+    fn a_pioneer_is_paid_for_where_it_is_built() {
+        let before = founded();
+        let bin = UnitKind::Pioneer.cells();
+        assert!(bin > 0, "a pioneer with no bin makes this check vacuous");
+
+        let place = TerritoryId(1);
+        let held = |game: &Game| game.territory(place).unwrap().store(Resource::Energy);
+        let stocked = {
+            let mut game = before.clone();
+            game.territories[place.index()].add(Resource::Energy, bin + 3);
+            game.territories[place.index()].add(Resource::Metal, cost::PIONEER_METAL);
+            game.territories[place.index()].put(Kind::Citizen, cost::PIONEER_CITIZENS);
+            game
+        };
+        let energy_before = held(&stocked);
+
+        let after = stocked
+            .after(&Transition::Produce {
+                kind: UnitKind::Pioneer,
+                territory: place,
+            })
+            .expect("a stocked territory can produce a pioneer");
+
+        assert_eq!(
+            held(&after),
+            energy_before - bin,
+            "the territory paid {} energy and a pioneer's bin is {bin}",
+            energy_before - held(&after)
+        );
+
+        // **And the bin it paid for is full**, which is the other half of the same sentence.
+        // Paying without filling would satisfy the line above and leave a pioneer that cannot
+        // move, which is what the number alone cannot tell apart.
+        let made = after
+            .units
+            .iter()
+            .find(|unit| unit.kind == UnitKind::Pioneer)
+            .expect("the pioneer was produced");
+        assert_eq!(made.cells, bin, "it is built with that bin full");
+    }
+
     #[test]
     fn a_game_begins_with_nothing_in_the_design_phase() {
         let game = Game::new();

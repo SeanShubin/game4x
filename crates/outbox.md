@@ -105,8 +105,53 @@ shape it was told could not exist.
 
 The row consumes 3 metal and 2 citizens and **puts** 2 energy. The six was the number `P-486`
 removed, and this sentence is where it still lives. **The paragraph's argument is untouched** -
-founding competes with the population rather than costing resources beside it - and is if anything
-stronger now, since the energy is a fill rather than a cost.
+founding competes with the population rather than costing resources beside it.
+
+**This item said the energy is *a fill rather than a cost* and that was wrong** - corrected
+2026-09-13, the quality lens having refused it. `P-486`'s own word is **paid**: *it is built with
+that bin full, and the energy is paid where it is built.* Something pays. A fill that costs
+nothing is the reading the promoted sentence rules out, and it was this lane reaching for a phrase
+that made the two halves agree instead of noticing they do not.
+
+## And the thing neither this item nor `P-489` asked - re-measured here
+
+**Both ask which sentence about `put` is wrong. Neither asks where the energy comes from.** The
+quality lens asked it, and the count is the argument rather than the shape of the rows:
+
+| the fifteen `put` rows     | how many |
+| -------------------------- | -------- |
+| a count trait, no quantity | 13       |
+| a quantity, no count trait | **2**    |
+
+**The two are the pair `39a42c6` added.** Re-derived here by parsing the Recipes table rather than
+by reading the lens's number back: fifteen puts, and the only two carrying a quantity are `put 1
+energy -> that unit` and `put 2 energy -> that pioneer`. So they are not an old shape stated more
+widely - **they are structurally unlike every other put in the release**, which is a stronger
+statement than the sentence being too narrow, and a different one.
+
+**`refuel` consumes nothing.** Its whole row set is `require 1 unit, with room for energy` at
+`$where` and `put 1 energy` into `that unit`. A player recipe whose entire effect is one energy
+from nowhere, repeatable - and `spec/invariants.md` says no sequence ends holding more than it
+began with.
+
+## What this lane has already built, and why it is not the answer either
+
+**`produce pioneer` spends the energy from the territory**, on the authority of `spec/units.md`
+saying it is *paid where it is built*. `game.rs` -> `self.spend(territory, Resource::Energy,
+kind.cells())`. **No row in the release says to.**
+
+**And nothing checks it any more, because this lane removed the check with the constant.**
+`the_costs_in_the_model_are_the_costs_in_the_release` compared `PIONEER_ENERGY` against a
+`consume 6 energy` row; `P-486` deleted the row and this lane deleted the constant, calling the
+two one number. The payment did not go away - **only the comparison did.** That is a cost the code
+pays which no document states and no check reads, which is the shape this repository keeps finding
+and this time it is in code rather than in prose.
+
+**Not repaired here**, because the repair is a row naming a source and that row is `spec/`'s. The
+notation already has the shape and uses it twice: a `consume` names its source in *Where* - `move`
+consumes 1 energy from `that unit` - and a `put` names its destination, so a relocation is a
+consume and a put. These two recipes have only the second half. `Q-89` puts it to you.
+
 
 **Verified from the promotion rather than by reading around it**: `git show 39a42c6 --
 releases/first-release.md` changes the table and nothing else, so both sentences are the half that
