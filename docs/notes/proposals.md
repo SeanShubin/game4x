@@ -64,7 +64,7 @@ Two limits Claude holds itself to:
 
 ### P-489 - two new recipes make energy from nothing
 
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction, found by the quality lens against rows this lane drafted · **shape** rows and text · **asks** approval · **into** `releases/first-release.md` -> Recipes, and Capabilities
+**to** sean · **status** open · **cited** `d7815aa`, `402576e` · **raised** 2026-09-13 · **kind** contradiction, found by the quality lens against rows this lane drafted · **shape** rows and text · **asks** approval · **into** `releases/first-release.md` -> Recipes, and Capabilities
 
 **This is what is holding the gate red**, and it is rows from `P-485` that this lane drafted.
 
