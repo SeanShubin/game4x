@@ -90,6 +90,19 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
                         .replace(' ', "-")
                 })
                 .collect();
+        // **This test holds two of the three population counts, and that is worth knowing when
+        // a promotion moves them.** `P-478` took the Traits table from twenty-four rows to
+        // twenty-six; three literal `24`s had to move, two of them in this test - here, and at
+        // the cross-check against `spec/data/traits.4x` below.
+        //
+        // **Only two failures were reported and there were three wrong numbers.** An assertion
+        // after a failing one in the same test is not a check that passed: it is a check that
+        // did not run. Demonstrated rather than reasoned - set both back to twenty-four and
+        // only this one reports; fix this one and the other appears.
+        //
+        // **So a count of failing assertions is not a count of wrong assertions**, which is
+        // the same shape as a reader nobody calls: absence of a failure is not evidence, and
+        // the gate cannot tell the two apart.
         assert_eq!(
             declared.len(),
             26,
