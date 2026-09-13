@@ -60,5 +60,12 @@ a class rather than an incident, because each had only its own half of it.
 ## Sources
 
 `943c87f` (the research lane's correction, re-derived by determinant), `fe227c0` (the prototype
-built and the workspace joined), and the messages between the three sessions on the evening of
-2026-09-12. The 123-value equality above was computed for this note.
+built and the workspace joined), `5c0a3b6` (`X-32` closed), and the messages between the three
+sessions on the evening of 2026-09-12. The 123-value equality above was computed for this note.
+
+**Both of this note's load-bearing numbers were then derived a second time by the lane the note
+is about.** The research lane recomputed the 123 values - identical sets rather than equal
+counts - and checked the near-miss it had not made, getting **12** from the generator at
+`k = 2` in the 120-degree convention. So the claim that a correct picture was one coin-flip
+away rests on two independent derivations rather than on the builder's account of what it
+nearly did.

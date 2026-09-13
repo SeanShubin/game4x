@@ -49,6 +49,12 @@ the day the statement stops being true a gate goes red and names it.
   one could not be mechanized** - *a person deciding to look IS the mechanism* - and the mechanism
   was already nagging both lanes about `P-456` and `Q-59` on the day it said so
 
+**And it was watched working, later the same day.** `X-32` was built at `fe227c0` and stayed
+`open`; the hook then named it on every commit any lane made, until the research lane closed
+it at `5c0a3b6` - and that lane's own account of why is the thing worth keeping: **it had
+read the item's closing note and not the fact that leaving it open was charging the other
+lanes.** The nag is what carried the cost back to the only lane that could pay it.
+
 ## What is left, and why it is not a mechanism's job
 
 **The blind spot in all of them is an item that describes its subject instead of naming it.**
