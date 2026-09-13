@@ -36,6 +36,19 @@ pub struct Coloring {
 
 /// The largest number of colors the exact search will attempt before giving up and
 /// falling back. Four is a theorem for planar graphs; there is no point trying five.
+///
+/// **That reason stops holding the moment a non-planar graph reaches here**, and one has:
+/// `prototypes/hex-torus-view` colours a torus, where Heawood's bound is seven rather than
+/// four and a hexagonal torus is where seven is achieved. **Nothing misfires today** - the
+/// `3k^2` family this prototype draws is 3-colourable at every size, asserted there - but a
+/// torus that needed five would not be reported as needing five. It would come back
+/// [`Method::GreedyFallback`], which reads as *the budget ran out* and would be *four is not
+/// enough*.
+///
+/// **Said rather than changed**, because raising the ceiling would slow every planar caller
+/// for a case none of them has, and because the honest fix is for a caller that knows its
+/// graph is not planar to say so. Flagged by the research lane as it built the first such
+/// caller, which is the moment the assumption became reachable rather than merely narrow.
 const MAXIMUM_EXACT: usize = 4;
 
 /// Default search effort, in backtracking steps. Generous: a few hundred planar

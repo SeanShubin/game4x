@@ -1,0 +1,20 @@
+# **A workspace member since 2026-09-12**, which is what the two rows were waiting for.
+#
+# It stayed out deliberately and briefly: `tools/outbox/tests/architecture.rs` requires every
+# member to have a row in `docs/architecture.md`, and `docs/` is the specification lane's
+# column. `C-76` settled the sequence once already for `gap-view`.
+#
+# **There is no order that is never red**, which that item had one way round and the
+# specification lane measured: `every_crate_has_a_row_and_every_row_has_a_crate` is symmetric,
+# so a member with no row is `missing` and a row with no member is `extra`. Rows first, then
+# this line, and the window between them is the same length either way - three minutes for
+# `gap-view`, and nobody pushed through it.
+
+[package]
+name = "hex-torus-view"
+version = "0.1.0"
+edition = "2024"
+description = "Prototype: at the sizes the game would use, does a flat isotropic hex torus read as a world, and how visible is the wrapping?"
+
+[dependencies]
+graph-coloring = { path = "../../crates/graph-coloring" }
