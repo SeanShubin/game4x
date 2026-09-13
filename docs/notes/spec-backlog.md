@@ -64,6 +64,24 @@ refuelling is in no cycle at all, because `move` destroys the energy and nothing
 consumed.** `found by land` consumes the pioneer. Whether its remaining fuel scatters into the
 new territory or goes with it is unstated, and the only nearby sentence is fiction.
 
+**Two more clarifications.** The ark makes its own fuel from solar panels rather than taking it
+from a territory. And refuelling is a player's choice of how much goes where - two pioneers and
+two energy is one each or both in one - so a pioneer is not automatically full.
+
+**The ark's solar needs no new invariant.** *A star's energy and a planet's material are endless.
+What is finite is the gathering - bounded by the finite things that do it, in a finite number of
+turns - so an endless well behind a bounded pump takes nothing away from the rule above.* The ark
+is the bounded pump, and **the bound has to be stated or it is not one**.
+
+**So the two units draw on two of the three named sources**: a pioneer on the planet through a
+territory's energy, an ark on the star. A pioneer's range is bounded by supply and an ark's by
+time.
+
+**The allocation needs no new mechanism.** `repeat` already counts firings, so
+`{refuel unit:pioneer repeat:2}` is two energy into one pioneer - `$` binds ingredients and trait
+values rather than quantities. And **`free` becomes a guard for the first time**: a `put` into a
+container with no room has to fail.
+
 ## Said 2026-09-13: the turn report shows each of end-turn's five phases
 
 *I want to break down `reports/turns.html` even further. Right now we have 2 sections, "what your
