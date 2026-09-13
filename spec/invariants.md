@@ -154,8 +154,6 @@ specific rule.
   them names its kind
 - Nothing in the state is special to a kind. Adding a kind adds no field and no case, and whatever
   reads the state reads it the same way whatever kind it holds
-- A trait may be derived rather than stored, computed from what is there. Nothing can leave a
-  derived trait wrong, because nothing writes one
 
 ## A fact is stated once
 
@@ -193,6 +191,8 @@ specific rule.
 - **The layout has one other reader and it is a view for debugging**, which shows it on purpose.
   **Nothing reads through it**: it is an output and not a path, so no rule and no report depends on
   it.
+- **The one thing that knows how the data is held is the only thing that writes it**, so a value
+  computed from others cannot be left wrong - there is nowhere to write it wrong from.
 
 ## Nothing comes back round with more
 

@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-477** - the derived-trait guarantee moves to where the layout lives · `docs/notes/proposals.md`
 - **P-478** - three sentences in `spec/console.md` still say `a stored trait`, and five files still say `total capacity` · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
