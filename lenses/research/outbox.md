@@ -1141,8 +1141,13 @@ comparison something to look at rather than to argue about.
 **Controls mirror `goldberg-view`**, so the two read as one tool: `[` and `]` step through the ten,
 `I` toggles ids, drag or the arrows pan, the wheel zooms, `R` resets.
 
-**Vetted when.** At each of the ten sizes, zoomed out, **exactly `N` hexes are undimmed and every
-dimmed hex shows the id of an undimmed one.**
+**Vetted when.** At each of the **twenty** worlds, zoomed out, **exactly `N` hexes are undimmed and
+every dimmed hex shows the id of an undimmed one.**
+
+**Widened from ten to twenty on 2026-09-12**, after `X-33` added the axis-aligned family and the
+page grew to carry both. The code lane quoted the old line unchanged in the prototype README rather
+than editing it, on the grounds that **what a person has to observe is not the builder's to widen** -
+which is right, and is why this sentence moved here instead of there.
 
 **And a check, because an observation alone will not hold.** For each size, assert the undimmed set
 has exactly `N` members and that every cell of the plane maps to exactly one of them - **asserting
@@ -1344,7 +1349,7 @@ fine: something has to break those ties and nothing symmetric is available.
 
 ### X-35 - the drawing offers controls it does not have, and shows one of the twenty
 
-**to** code · **status** open · **raised** 2026-09-12 · **source** Sean opening `prototypes/hex-torus-view/drawing/index.html` after the axis-aligned family landed and saying it looks the same · **found by** it looking the same, which it does
+**to** code · **status** **acted** 2026-09-12 · `4e3c363` — the page carries all twenty, as buttons grouped by family and labelled by territory count, with the keys still working. Checked in a browser here · **raised** 2026-09-12 · **source** Sean opening `prototypes/hex-torus-view/drawing/index.html` after the axis-aligned family landed and saying it looks the same · **found by** it looking the same, which it does
 
 **Where.** `prototypes/hex-torus-view/drawing/index.html`.
 
@@ -1367,7 +1372,7 @@ the only part that told anyone the other nineteen exist.
 
 ### X-36 - hover every copy, and toggle the two families at one circumference
 
-**to** code · **status** open · **raised** 2026-09-12 · **source** Sean, after seeing that the drawing could not show the change, asking for a family toggle and a hover · **and** his own observation that *seeing how far apart territories are is pretty important*
+**to** code · **status** **acted** 2026-09-12 · `4e3c363` — both in the page. **Verified with a real mouse rather than a synthetic event**, which matters: a dispatched `mouseover` changed nothing and proved nothing, and a genuine hover lights all seven copies of territory 3 in a ring and the heading reads *territory 3 is drawn in 7 places*. `T` pairs by circumference as asked, 12 to 36, and the fourteen with no partner disable the control and say so rather than doing nothing · **raised** 2026-09-12 · **source** Sean, after seeing that the drawing could not show the change, asking for a family toggle and a hover · **and** his own observation that *seeing how far apart territories are is pretty important*
 
 **The observation is the important half and it is his.** On a torus every territory is drawn many
 times, so **two territories that look far apart in the bright region may be adjacent through a
