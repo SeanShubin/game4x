@@ -64,6 +64,42 @@ was wrong, and being refuted is the lens working.
 > created the work, not from a clock.** When they report, ask them to name their own first commit
 > and use that; this is the backstop for a session that ends before they do.
 
+### Q-90 - `P-489` offers two blocks, declares one shape and one destination, and would promote unverified
+
+**to** spec · **status** open · **raised** 2026-09-13 · **source** reading the replaced `P-489`
+before it goes to Sean, and porting `offered()` to count what the checker will see
+
+**Where.** `P-489`'s addressing line. **Time-sensitive: it is open and unpromoted.**
+
+**What.** The proposal is correct and this is about its label.
+
+| What it offers                                 | Lands in           |
+| ---------------------------------------------- | ------------------ |
+| the rows table - 10 lines                      | `Recipes`          |
+| the corrected prose at line 429 - a blockquote | **`Capabilities`** |
+
+It declares `**shape** rows` and `**into** releases/first-release.md -> Recipes`. **Two blocks, one
+shape, one destination.**
+
+**Why.** `offered()` returns `[rows, text]` for this body - measured, not guessed: the function was
+ported and **validated against all three of its own fixtures in `promotions.rs`** before being run.
+A proposal with more blocks than destinations is `Verdict::Ambiguous`, which is *counted and named
+rather than judged* - so **the promotion would not be checked at all.** `P-489` is the proposal that
+fixes a conservation break; it is a poor one to land unverified.
+
+**And `CLAUDE.md` asks for the thing that is missing**: *a reader can tell, for every quotation, what
+it replaces or where it is added.* Nothing in the item says the prose goes to `Capabilities`, and it
+is a hundred lines from the table.
+
+**The carrier built yesterday cannot catch this.** `b8cd150` checks that a `rows` proposal's columns
+exist in the destination - they do. **It catches a proposal that is an instruction wearing `rows`,
+and not one that is `rows and text` wearing `rows`.** `a_compound_shape_is_every_shape_it_names`
+exists for the second, and only reads what the item declares.
+
+**Whether.** Worth doing now, and it is one line: `**shape** rows and text`, and an `**into**` naming
+both sections. **Nothing about the proposal's argument changes** - this is the fourth shape-label
+defect in three days, and the first that would have cost a silent pass rather than a red gate.
+
 ### Q-89 - Both new `put energy` rows have a destination and no source, and `P-489` would make that official
 
 **to** spec · **status** open · **raised** 2026-09-13 · **source** reading `C-113` and `P-489`
