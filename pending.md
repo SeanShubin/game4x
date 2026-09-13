@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-485** - nothing ever puts energy in a unit's tank, and two views disagree about whether there is any · `docs/notes/decisions.md`
+- **P-485** - a pioneer is produced with a full tank, and a refuel recipe moves fuel between containers · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -21,6 +21,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-485** - `a54b84e` P-485: nothing fills a unit's tank, and two views disagree about whether one holds anything · still open in `docs/notes/proposals.md`
 - **S-127** - `0f19655` S-127: P-484's clause, and the gate was already red when the message arrived · still open in `docs/notes/proposals.md`
 
 ## What is outstanding

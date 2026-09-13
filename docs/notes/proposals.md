@@ -62,7 +62,78 @@ Two limits Claude holds itself to:
 
 ## Open
 
-*Nothing is open. Everything filed has been decided.*
+### P-485 - a pioneer is produced with a full tank, and a refuel recipe moves fuel between containers
+
+**to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered, from your answer to the earlier `P-485` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes, and Units and structures
+
+You said both: **`produce pioneer` fills the tank from where it is produced and cannot fire without
+the energy to fill it, and a refuel recipe exists that costs nothing and moves fuel to a different
+container.** A pioneer stores 2.
+
+**One number in this is a reading rather than your words, and it is called out below.**
+
+## The rules are already promoted; only the recipes are missing
+
+`spec/units.md`, untouched by this:
+
+```
+A mobile unit that moves over the ground has a bin for fuel. Moving burns a unit of it, and one
+with an empty bin cannot move
+A mobile unit that moves in orbit takes its energy directly from the sun. It stores no fuel, and
+moving costs it nothing
+Fuel moves freely between a controlled territory that has it and anything there that can hold it
+```
+
+**The third sentence is your refuel recipe and it already says *freely*.** What the release lacks is
+a row that does it.
+
+## The rows
+
+**`produce pioneer` gains one line.** `put` rather than `produce`, because the energy already
+exists and is being moved rather than made:
+
+| Recipe              | Owner  | Role | Qty | Kind   | Traits | Where        |
+| ------------------- | ------ | ---- | --- | ------ | ------ | ------------ |
+| **produce pioneer** | player | put  | 2   | energy |        | that pioneer |
+
+**A new recipe, `refuel`.** It makes nothing and destroys nothing:
+
+| Recipe     | Owner  | Role    | Qty | Kind   | Traits               | Where     |
+| ---------- | ------ | ------- | --- | ------ | -------------------- | --------- |
+| **refuel** | player | require | 1   | unit   | with room for energy | `$where`  |
+| **refuel** | player | put     | 1   | energy |                      | that unit |
+
+**And the Ark's `Fuel` cell is blanked**, which closes `S-86`'s second half:
+
+| Thing   | Strength | Fuel | Upkeep | Crosses      | Readies               | Movable |
+| ------- | -------- | ---- | ------ | ------------ | --------------------- | ------- |
+| **ark** | 2        |      |        | orbit border | defending 1, moving 1 | 1       |
+
+## The number that is a reading and not your words
+
+**`produce pioneer` consumes 6 energy today, set before a pioneer had a tank.** *Its cost is taken
+from where it is produced* is written above as **2 more**, so a pioneer costs the territory 8
+energy: six spent and two carried away. **If you meant the two to come out of the six, say so and
+it is one cell.**
+
+## Two things this does not settle, stated rather than left
+
+- **What happens to a pioneer's remaining fuel when `found by land` consumes it.** With 2 fuel and
+  a single hop, one is left. Nothing anywhere says whether it scatters into the new territory or
+  goes with the pioneer - and the only sentence near it is in `spec/narrative.md`, which says the
+  fiction needs a rule only where it would change what a player does. **This would**: founding
+  would deliver a unit of energy
+- **The dump has to start showing it.** A tank is containment, so `spec/logistics.md`'s *a thing
+  appears inside what holds it* means a full pioneer reads `{pioneer ...} -> 1` with `{energy} -> 2`
+  nested under it. **It shows nothing today**, while the entity view says `fuel 2` - the two
+  disagree, and this is what makes them agree
+
+## What it gives you in play
+
+**Two fuel is two hops from the last supplied territory**, so a pioneer can pass over one site and
+found on the second. **Refuelling being free and capacity-bounded means a pioneer in a supplied
+territory is always full** - so fuel binds only away from supply, which is the supply line doing
+the work rather than the arithmetic.
 
 ## Addressed to other perspectives
 
