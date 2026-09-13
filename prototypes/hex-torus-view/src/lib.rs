@@ -70,10 +70,16 @@ impl Torus {
 
     /// The canonical cell of the copy `(q, r)` belongs to.
     ///
-    /// **The fundamental domain is the Voronoi cell of the lattice, which is a hexagon** - so
-    /// the representative is the translate nearest the origin, and the bright region shows its
-    /// six-fold symmetry in its shape rather than asserting it. `X-32`: a rectangular frame
-    /// makes the wrap look like it is slipping.
+    /// **The representative is the translate nearest the origin**, so the bright region is the
+    /// lattice's Voronoi cell as nearly as a cell set can be. `X-32`: a rectangular frame makes
+    /// the wrap look like it is slipping.
+    ///
+    /// **It is not six-fold symmetric and cannot be** - `X-34`. A symmetric set about the
+    /// origin is the origin plus whole orbits of six, so its size is `1 mod 6`, and `3k^2` is
+    /// `0 or 3 mod 6` at all ten sizes. The continuous Voronoi cell is a hexagon; the cells
+    /// whose centres fall in it are not a symmetric set, and no tie-break could make them one.
+    /// `the_drawn_region_is_not_six_fold_symmetric_and_cannot_be` asserts the impossibility so
+    /// the claim cannot come back.
     ///
     /// **Ties are broken by a total order and not by whichever came first.** A cell on the
     /// boundary is equidistant from two lattice points, and without a rule the bright count

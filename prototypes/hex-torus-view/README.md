@@ -75,9 +75,14 @@ merely looks true. Each runs over all ten sizes and asserts how many there were:
 - **`exactly_n_cells_are_bright_and_every_cell_echoes_one_of_them`** - both halves, because a
   domain of the right size proves nothing if a cell reduces outside it, and every cell reducing
   into the domain proves nothing if the domain is the whole plane
-- **`the_bright_region_has_the_six_fold_symmetry_of_the_grid`** - asserted as *carried to
-  itself by a sixth turn* rather than matched against a written shape, because a shape written
-  in a test is the domain stated twice and the second copy is what rots
+- **`reducing_and_turning_a_sixth_commute`** and
+  **`the_drawn_region_is_not_six_fold_symmetric_and_cannot_be`** - these replace a test called
+  `the_bright_region_has_the_six_fold_symmetry_of_the_grid`, which **could not fail and named
+  something impossible**. It rotated each cell and reduced the result, and a reduction maps
+  every cell to its canonical representative, so the set came back whatever shape it had. And
+  a set symmetric about the origin has size `1 mod 6`, which `3k²` never is. `X-34`, found by
+  the research lane while asking why the picture looked lopsided when a green test said
+  otherwise
 - **`every_direction_wraps_in_the_same_number_of_steps`** - the definition of the family, and
   the thing a wrong generator breaks quietly
 - **`every_cell_has_six_distinct_neighbours`** - the wrap is what makes this true at the edge

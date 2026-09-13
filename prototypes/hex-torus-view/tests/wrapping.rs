@@ -69,38 +69,100 @@ fn exactly_n_cells_are_bright_and_every_cell_echoes_one_of_them() {
     );
 }
 
-/// The bright region is a hexagon, which is what makes the six-fold symmetry visible.
+/// Reducing and turning a sixth commute, which is a fact about `reduce` and not about a shape.
 ///
-/// **Asserted as symmetry rather than as a shape**, because a shape written here would be the
-/// domain stated twice and the second copy is what rots. A Voronoi cell of this lattice is
-/// symmetric under 60-degree rotation, so rotating every bright cell gives the bright set
-/// back - which a rhombus or a rectangle would not do.
+/// # This replaces a test that could not fail, under a name that promised something impossible
+///
+/// **It was called `the_bright_region_has_the_six_fold_symmetry_of_the_grid`** and it rotated
+/// every cell of the domain, reduced the result, and asserted the set came back. `X-34`:
+/// `reduce` maps every cell to its canonical representative and the domain **is** the set of
+/// canonical representatives, so the rotated-and-reduced set is that set whatever shape it
+/// has. The sixth turn carries `(k, k)` to `(-k, 2k)` exactly and `(-k, 2k)` back into the
+/// lattice, so it permutes cosets - verified, not assumed. **The assertion was about `reduce`
+/// and was named for the region.**
+///
+/// **And the property it named is unavailable at every size.** A set symmetric under a sixth
+/// turn about the origin is the origin plus whole orbits of six, so its size is `1 mod 6`. A
+/// fundamental domain contains the origin, and `3k²` is `0 or 3 mod 6` at all ten sizes -
+/// never `1`. So no implementation could have made that name true, which is worse than a test
+/// that merely does not check: it is evidence for something that cannot hold, in a file whose
+/// other tests are sound.
+///
+/// **The tie-break is not the defect.** Something has to break the ties on the boundary and
+/// nothing symmetric is available, which is exactly what the arithmetic says.
+///
+/// Found by the research lane at `X-34`, while trying to work out why the picture looked
+/// lopsided when a green test said otherwise. **It cost them the time and would have cost the
+/// next reader more**, because `X-33` rests on the region's shape and this is the test they
+/// would have consulted.
 #[test]
-fn the_bright_region_has_the_six_fold_symmetry_of_the_grid() {
+fn reducing_and_turning_a_sixth_commute() {
     // Rotating a hex 60 degrees about the origin, in axial coordinates.
     let turn = |(q, r): (i32, i32)| (-r, q + r);
     let mut checked = 0;
     for torus in sizes() {
-        let domain = torus.domain();
-        let rotated: Vec<(i32, i32)> = domain
-            .iter()
-            .map(|cell| torus.reduce(turn(*cell).0, turn(*cell).1))
-            .collect();
-        let mut sorted = rotated.clone();
-        sorted.sort();
-        sorted.dedup();
+        // **The turn is an automorphism of the lattice**, which is what makes it permute
+        // cosets - asserted here rather than left as the reason the assertion below is weak.
+        let [a, b] = torus.generators();
         assert_eq!(
-            sorted.len(),
-            domain.len(),
-            "k = {}: rotating the bright set sends two cells to one",
+            turn(a),
+            b,
+            "k = {}: a sixth turn does not carry A to B",
             torus.k
         );
-        let mut want = domain.clone();
-        want.sort();
         assert_eq!(
-            sorted, want,
-            "k = {}: the bright set is not carried to itself by a sixth turn, so it is not the \
-             hexagonal domain",
+            torus.reduce(turn(b).0, turn(b).1),
+            (0, 0),
+            "k = {}: a sixth turn takes B out of the lattice",
+            torus.k
+        );
+
+        let domain = torus.domain();
+        for cell in &domain {
+            let turned = turn(*cell);
+            assert_eq!(
+                torus.reduce(turned.0, turned.1),
+                torus.reduce(
+                    turn(torus.reduce(cell.0, cell.1)).0,
+                    turn(torus.reduce(cell.0, cell.1)).1
+                ),
+                "k = {}: reducing {cell:?} and turning it do not commute",
+                torus.k
+            );
+        }
+        checked += 1;
+    }
+    assert_eq!(checked, 10, "ten sizes");
+}
+
+/// The drawn region is **not** six-fold symmetric, and no choice of tie-break could make it so.
+///
+/// **Asserted as the impossibility, so the claim cannot be re-added.** `X-34` found it stated
+/// as a passing test; what stops that recurring is a check that fails if the region ever does
+/// come back symmetric, with the arithmetic beside it.
+#[test]
+fn the_drawn_region_is_not_six_fold_symmetric_and_cannot_be() {
+    let turn = |(q, r): (i32, i32)| (-r, q + r);
+    let mut checked = 0;
+    for torus in sizes() {
+        // A symmetric set about the origin is the origin plus orbits of six, so `1 mod 6`.
+        assert_ne!(
+            torus.cells() % 6,
+            1,
+            "k = {}: {} cells is 1 mod 6, so a symmetric domain is arithmetically possible \
+             after all and this test's reason has gone",
+            torus.k,
+            torus.cells()
+        );
+
+        let mut domain = torus.domain();
+        domain.sort();
+        let mut turned: Vec<(i32, i32)> = domain.iter().map(|cell| turn(*cell)).collect();
+        turned.sort();
+        assert_ne!(
+            turned, domain,
+            "k = {}: the drawn region is carried to itself by a sixth turn, which the `1 mod 6` \
+             count says is impossible - so one of the two is wrong",
             torus.k
         );
         checked += 1;
