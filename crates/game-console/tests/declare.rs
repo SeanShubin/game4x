@@ -304,7 +304,10 @@ fn a_declaration_carries_no_quantity_and_is_in_nothing() {
 /// caller is only a permission if the other one still refuses.
 #[test]
 fn a_kind_may_name_a_trait_without_valuing_it() {
-    let file = "{kind biome family:place id name:territory nature}\n";
+    // **`name` leads, then `family`, then the traits with `id` first** - `P-483`. It read
+    // `{kind biome family:place id name:territory nature}` until that landed, which was the
+    // alphabet: `biome` led a line about `territory`.
+    let file = "{kind name:territory family:place id biome nature}\n";
     let read = state::declarations(file).expect("a kind naming three traits and valuing two");
     assert_eq!(read.len(), 1);
 
@@ -748,8 +751,8 @@ fn the_traits_file_declares_what_a_data_file_needs() {
     assert_eq!(
         differing,
         [(
-            "{trait admits:number kept:thing name:keeps}",
-            "{trait admits:number kept:thing name:keeps of:thing}"
+            "{trait name:keeps admits:number kept:thing}",
+            "{trait name:keeps of:thing admits:number kept:thing}"
         )],
         "`spec/data/traits.4x` and what the release still states differ in more than `keeps`'s \
          `of:thing`, which is the one fact `P-473` left the release unable to say"

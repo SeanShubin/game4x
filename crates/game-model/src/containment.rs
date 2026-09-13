@@ -73,6 +73,24 @@ pub struct Description {
     pub traits: BTreeMap<String, String>,
 }
 
+/// The notation's own words, in the order a declaration leads with them.
+///
+/// > **A declaration leads with `name`, which says which thing it declares.** Then `of` and
+/// > `family`, which say what that thing belongs to; then the notation's other words; then its
+/// > traits, in the order above. **`name` is to a declaration what `id` is to a thing** - the
+/// > difference is that an `id` tells one thing from its siblings and a `name` puts a word into
+/// > the language.
+///
+/// `P-483`, and Sean's reasoning is what made it more than a preference: he asked how *which
+/// one* applies to anything but `id`, since `id` exists to answer exactly that. `name:territory`
+/// is what makes `territory` writable as a leading word anywhere; `id:1` makes `1` mean nothing
+/// outside its own game.
+///
+/// **These are not traits and are never declared as any** - `P-481`. So they cannot collide
+/// with the trait order below, and `no_notation_word_is_a_declared_trait` asserts that rather
+/// than leaving it to be true by luck.
+pub const NOTATION_WORDS: [&str; 5] = ["name", "of", "family", "admits", "kept"];
+
 /// The traits the order names before the alphabetical middle, in order.
 ///
 /// **Named here rather than written into the comparison**, so that
@@ -112,50 +130,47 @@ impl Description {
     /// `{deposit capacity:3 density:4 free:2 occupied:1 resource:food}` opened on the least
     /// interesting number and buried what the deposit is *of*.
     ///
-    /// **The determinism `spec/console.md` asks for is untouched.** This is still a total
-    /// order and still a function of the description alone, so the same state is still the
-    /// same bytes and a description is still one string however it was built. What changes is
-    /// which order, and that sentence says *the traits inside a description sort too* - `C-111`
-    /// is filed against it, because the specification is not this lane's to edit.
+    /// **A declaration's own words come first, ahead of any trait** - `P-483`. `name`, then
+    /// `of` and `family`, then `admits` and `kept`, then the traits in the order above. A
+    /// declaration is a description like any other, so this is one order over both rather than
+    /// a second rule for declarations.
+    ///
+    /// **The determinism `spec/console.md` asks for is untouched.** This is a total order and a
+    /// function of the description alone, so the same state is the same bytes and a description
+    /// is one string however it was built.
     pub fn ordered(&self) -> Vec<(&String, &String)> {
         /// Where the alphabetical middle sits, so the two named ends fall either side of it.
         const MIDDLE: u8 = ORDERED_FIRST.len() as u8;
 
         // **A rank rather than a list of every trait**, because the middle is everything the
         // release declares and a list here would go stale the moment a trait is added -
-        // silently, since an unlisted name would simply fall somewhere. **A fixed global
-        // order over all twenty-six is Sean's question and the specification lane's to
-        // propose** - `C-111`. What makes one safe is a check that every declared trait is
-        // placed exactly once, which is this lane's and is not written yet.
+        // silently, since an unlisted name would simply fall somewhere.
+        // `every_trait_the_ordering_names_is_declared` guards the other direction, which is the
+        // one a partial list is exposed to: a trait renamed, and an end of the order quietly
+        // naming nothing.
         //
-        // **The rank reads the value as well as the name, and that is not a detail.** On a
-        // declaration a trait is *named and not valued* - `{kind biome family:place id
-        // name:territory nature}` is a kind declaring `biome`, `id` and `nature`, and there
-        // the word `id` is a trait being declared rather than this line's identity. Ranking
-        // it first pulled it ahead of `name:territory`, which is what actually says which
-        // kind the line is about. **Sean's order is about a thing**: *the most important is
-        // the type, second most important is id* - `id:1`, identifying one. So a valueless
-        // trait keeps its place in the alphabet and only a valued one moves.
-        //
-        // **This is a narrowing this lane chose and it is open**, because what a declaration
-        // line should lead with is the same question as the global order and is his.
-        fn rank(name: &str, value: &str) -> u8 {
-            if value.is_empty() {
-                return MIDDLE;
-            }
-            if let Some(at) = ORDERED_FIRST.iter().position(|it| *it == name) {
+        // **It reads the name alone now.** It used to read the value too, so that a valueless
+        // `id` on a declaration would not displace `name:territory`. `P-481` established that
+        // `name` is not a trait at all and `P-483` put it first outright, so the narrowing
+        // stood on nothing and is gone: `{kind name:territory family:place id biome control
+        // nature}` leads with `name` because `name` ranks ahead of every trait, not because
+        // `id` was held back.
+        fn rank(name: &str) -> u8 {
+            if let Some(at) = NOTATION_WORDS.iter().position(|it| *it == name) {
                 return at as u8;
             }
+            let traits = NOTATION_WORDS.len() as u8;
+            if let Some(at) = ORDERED_FIRST.iter().position(|it| *it == name) {
+                return traits + at as u8;
+            }
             match ORDERED_LAST.iter().position(|it| *it == name) {
-                Some(at) => MIDDLE + 1 + at as u8,
-                None => MIDDLE,
+                Some(at) => traits + MIDDLE + 1 + at as u8,
+                None => traits + MIDDLE,
             }
         }
         let mut out: Vec<(&String, &String)> = self.traits.iter().collect();
-        out.sort_by(|(left, left_value), (right, right_value)| {
-            rank(left, left_value)
-                .cmp(&rank(right, right_value))
-                .then_with(|| left.cmp(right))
+        out.sort_by(|(left, _), (right, _)| {
+            rank(left).cmp(&rank(right)).then_with(|| left.cmp(right))
         });
         out
     }

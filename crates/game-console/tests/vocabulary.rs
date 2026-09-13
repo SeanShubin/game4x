@@ -1,8 +1,13 @@
 //! Every word in a data file is a kind, a family, a trait, or one of a trait's values.
 //!
 //! **`P-284`, and `S-47`'s second half.** `spec/console.md`: *Every word in a data file is a
-//! kind, a trait, or one of a trait's values. A file that uses any other word is wrong about
-//! the game rather than describing it.*
+//! kind, a trait, or one of a trait's values, except the words the notation reserves for
+//! itself. A file that uses any other word is wrong about the game rather than describing it.*
+//!
+//! **The exception is `P-482`'s and it is a clarification rather than a change.** The sentence
+//! sat sixty-three lines above the one naming `name`, `admits`, `kept`, `of` and `family` as
+//! the notation's own, so read alone it condemned every declaration in `spec/data/`. This test
+//! has always admitted them; the rule says so now too.
 //!
 //! # What is checked, and why it is not `P-284`'s literal words
 //!
@@ -580,4 +585,48 @@ fn every_trait_the_ordering_names_is_declared() {
             "`{name}` is named at both ends of the order"
         );
     }
+}
+
+/// The notation's own words are not traits, which is what lets one order cover both.
+///
+/// **`P-481`:** *`name`, `admits`, `kept`, `of` and `family` are the notation's own words...
+/// These are the two things in a data file that are not a kind, a trait, or one of a trait's
+/// values... neither says anything about a game, and neither is declared.*
+///
+/// **`P-483` puts them ahead of every trait in one order over both**, and that only works while
+/// they cannot also *be* traits. If `name` were ever declared, a state description could carry
+/// it and it would rank first there - ahead of `id`, in a line about a thing, silently. So this
+/// is the premise the single order rests on, asserted rather than left true by luck.
+#[test]
+fn no_notation_word_is_a_declared_trait() {
+    let text = std::fs::read_to_string(root().join("spec/data/traits.4x"))
+        .expect("spec/data/traits.4x is generated");
+    let declared: BTreeSet<String> = state::declarations(&text)
+        .expect("the declarations parse")
+        .iter()
+        .filter_map(|it| it.traits.get("name").cloned())
+        .collect();
+    assert!(
+        !declared.is_empty(),
+        "a count against nothing proves nothing"
+    );
+
+    let mut checked = 0;
+    for word in game_model::containment::NOTATION_WORDS {
+        assert!(
+            !declared.contains(word),
+            "`{word}` is one of the notation's own words and `spec/data/traits.4x` declares it \
+             as a trait, so one word would rank in two places"
+        );
+        checked += 1;
+    }
+    assert_eq!(checked, 5, "`name`, `of`, `family`, `admits` and `kept`");
+
+    // **And the order is the one `P-483` states**, which the check above cannot say: all five
+    // could be absent from the traits and still be sequenced wrongly.
+    assert_eq!(
+        game_model::containment::NOTATION_WORDS.to_vec(),
+        vec!["name", "of", "family", "admits", "kept"],
+        "a declaration leads with `name`, then `of` and `family`, then the notation's others"
+    );
 }
