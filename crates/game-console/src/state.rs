@@ -8,8 +8,11 @@
 //! > entry, and an entry is never zero.** A thing carrying an `id` has a description no
 //! > other thing shares, so **its quantity is always one**. **Where a thing is, is where it
 //! > appears**; nothing states its container. **Entries are in the order their descriptions
-//! > sort in, and the traits inside a description sort too**, so the same state is always the
-//! > same bytes and a description is one string however it was built.
+//! > sort in, and the traits inside a description are in order of relevance**: `id` first,
+//! > then every other trait alphabetically, then `occupied`, `free` and `capacity` last. So
+//! > the same state is always the same bytes and a description is one string however it was
+//! > built. **The middle is alphabetical because nothing has yet needed placing there**, and
+//! > a trait leaves it by being named at one end or the other.
 //!
 //! # What replaced what
 //!

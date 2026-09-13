@@ -507,3 +507,77 @@ fn turn_is_neither_a_kind_nor_a_trait_nor_a_value_and_is_not_in_the_file() {
         "`turn` is still in the data file: {carrying:?}"
     );
 }
+
+/// Every trait the render order names is a trait the game actually declares.
+///
+/// **`P-479` states the order and `S-124` asks for this check**, and the reason it gives is the
+/// mirror of the one that would guard a full list. A list of all twenty-six rots when a trait is
+/// **added** and nobody places it. **This list rots when a trait is renamed**: the ordering goes
+/// on naming something nothing has, that name simply never matches, the rule quietly stops
+/// applying to anything, and every dump still looks fine.
+///
+/// **Not hypothetical.** `free` was called `room` the day before `P-479` landed. An ordering
+/// written then would still say `room` today, `room` would rank in the middle with everything
+/// else, `free` would sit wherever the alphabet put it, and nothing would be red.
+///
+/// **The names are read from `containment` rather than retyped here**, because a check holding
+/// its own copy of the list is checking the copy - and the population is read from
+/// `spec/data/traits.4x`, which is generated from the release, so this compares the ordering
+/// against what the game declares rather than against a second opinion about it.
+#[test]
+fn every_trait_the_ordering_names_is_declared() {
+    let text = std::fs::read_to_string(root().join("spec/data/traits.4x"))
+        .expect("spec/data/traits.4x is generated");
+    let declared: BTreeSet<String> = state::declarations(&text)
+        .expect("the declarations parse")
+        .iter()
+        .filter_map(|it| it.traits.get("name").cloned())
+        .collect();
+
+    // **The population, named.** A check that every name is in an empty set passes for the
+    // wrong reason, which is the failure with the sign flipped.
+    assert_eq!(
+        declared.len(),
+        26,
+        "spec/data/traits.4x declares {} traits and this check was written against 26. If the \
+         release gained or lost one, that is fine - say so here.",
+        declared.len()
+    );
+
+    let named: Vec<&str> = game_model::containment::ORDERED_FIRST
+        .iter()
+        .chain(game_model::containment::ORDERED_LAST.iter())
+        .copied()
+        .collect();
+    // **The rename guard first, because it is what this check is for.** It was written after
+    // the restatement below and failed behind it: poisoning `free` to `room` tripped the
+    // restatement, which is a second copy of the list, and the assertion that reads
+    // `spec/data/traits.4x` was never reached. **A guard that shadows the check it guards is
+    // the check having its own copy after all** - `C-110`, inside the test written to avoid it.
+    for name in &named {
+        assert!(
+            declared.contains(*name),
+            "the render order names `{name}` and `spec/data/traits.4x` declares no such trait, \
+             so that end of the order applies to nothing and no dump would look wrong"
+        );
+    }
+
+    // **And the order agrees with the sentence**, which the check above cannot say: every name
+    // could be declared and still be in the wrong sequence. This one is a second copy of the
+    // list deliberately, and it is a copy of `P-479`'s words rather than of the code's.
+    assert_eq!(
+        named,
+        vec!["id", "occupied", "free", "capacity"],
+        "the order `P-479` states is `id` first and `occupied`, `free`, `capacity` last"
+    );
+
+    // **And each is named once**, because a name at both ends would rank by whichever branch
+    // ran first and the order would depend on the code rather than on the rule.
+    let mut seen = BTreeSet::new();
+    for name in &named {
+        assert!(
+            seen.insert(*name),
+            "`{name}` is named at both ends of the order"
+        );
+    }
+}

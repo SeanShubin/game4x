@@ -63,11 +63,11 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-111 - The traits in a description no longer sort, and `spec/console.md` says they do
 
-**to** spec · **status** open · **raised** 2026-09-13 · **source** Sean, stating an order of
-relevance for rendering, and this lane building it
+**to** spec · **status** acted 2026-09-13 · **cited** `7702c75` · **raised** 2026-09-13 ·
+**source** Sean, stating an order of relevance for rendering, and this lane building it
 
 **derived from** entries are in the order their descriptions sort in, and the traits inside a
-description sort too - `spec/console.md`
+description are in order of relevance - `spec/console.md`, as `P-479` now states it
 
 **Sean, 2026-09-13:** *There is a certain order of relevance when rendering things as text. The
 most important is the type, second most important is id, the least important is capacity, second
@@ -81,13 +81,16 @@ least is free, third least is occupied.* He gave the before and after:
 **Built, and the reports say the second line exactly.** What it cost: one rendering function, two
 fixtures, and four generated reports. `spec/data/` did not move, for the reason below.
 
-## The sentence that is now false
+## The sentence that was false, and is not now
 
-**`spec/console.md` says *the traits inside a description sort too*.** They no longer sort; they
-rank. **The guarantee that sentence exists to give is untouched** - the order is still total,
-still a function of the description alone, so the same state is still the same bytes and a
-description is still one string however it was built. Only *which* order is wrong now, and this
-lane may not edit that file.
+**Answered by `P-479` in `7702c75`, an hour after this was filed.** `spec/console.md` said the
+traits inside a description *sort too*; it says they are *in order of relevance* and names the
+ends. The guarantee the old sentence existed to give was never in question - the order is total
+and a function of the description alone either way - and only which order it was had gone wrong.
+
+**Sean chose to state the ends and leave the middle alphabetical** until something needs placing,
+which is the shape this lane built rather than the full list of twenty-six, and the sentence says
+so rather than implying it.
 
 **Sean asked whether a global ordering belongs to this lane or yours**, on being told the traits
 had been alphabetical: *I had never even noticed. Perhaps we should define a global ordering, as
@@ -103,7 +106,12 @@ was added - an unlisted name simply falling somewhere - and **the check that mak
 ordering safe is this lane's and is not written**: every declared trait placed exactly once,
 asserted against the 26, so adding one without placing it reddens the gate.
 
-**If you propose the global order, file the check with it** and this lane will build both.
+**`S-124` files the check, and its reason is the mirror of the one this lane gave.** A full list
+rots when a trait is **added** and nobody places it. **A partial list rots when a trait is
+renamed** - the ordering goes on naming something nothing has, the rule stops applying, and the
+dump looks fine. `free` was `room` the day before, so an ordering written then would still say
+`room` with nothing red. The check is therefore *every trait the ordering names is declared in
+`spec/data/traits.4x`*, asserted against the count read from that file.
 
 ## One decision inside it that is not this lane's
 
@@ -114,10 +122,14 @@ Ranking it first pulled it ahead of `name:territory`, which is what says which k
 about.
 
 So **a valueless trait keeps its place in the alphabet and only a valued one moves**, which is
-why `spec/data/` did not change at all. That reading is defensible - his order is about a thing,
-and `id:1` identifies one - **and it is a choice this lane made quietly**, which is the shape
-`CLAUDE.md` says a proposal must not contain. What a declaration line should lead with is the
-same question as the global order, and both are his.
+why `spec/data/` did not change at all.
+
+**The reason given above is wrong now and the behaviour is still open.** `P-481` establishes that
+`name` is not a trait at all - it is one of the notation's own words, beside `admits`, `kept`,
+`of` and `family` - so a bare `id` was never competing with `name:territory` for a position in an
+ordering of traits. **The narrowing stands on nothing, and is left in place anyway**, because
+`P-483` is open to Sean with three options and two of them leave `spec/data/` exactly as it is -
+one of those two being this behaviour. Changing it now would be choosing his answer for him.
 
 ### C-110 - Poisoning a check has a direction, and a repair is where nobody looks
 

@@ -948,6 +948,20 @@ impl Game {
             }
         }
 
+        // **Time restores every count, and it is one step and last** - `P-480`.
+        // `spec/turn.md` lists five things ending a turn does and restoring is the fifth,
+        // after nature's reclaim is the fourth. It used to straddle it: a territory's things
+        // were made ready inside `settle`, before the reclaim, and units were un-exhausted
+        // after - one rule in two places either side of another.
+        //
+        // **Nothing observable moved**, and that is checkable rather than hoped: the reclaim
+        // reads `force_in`, which is a territory's held force plus the force of the units
+        // standing on it, and `Unit::force` is a constant of the kind. `refresh` clears
+        // `Trait::Ready` and nothing else. So no part of what nature decides can see whether
+        // a thing has been readied.
+        for id in self.territories.iter().map(|t| t.id).collect::<Vec<_>>() {
+            self.territories[id.index()].make_ready();
+        }
         for unit in &mut self.units {
             unit.exhausted = false;
         }
@@ -982,7 +996,9 @@ impl Game {
         // Nothing transforms here: founding happens when a unit arrives, so by the time a
         // turn ends there is never a unit waiting to become something.
         self.territories[id.index()].end_of_turn_losses();
-        self.territories[id.index()].make_ready();
+        // **Restoring is not here** - `P-480`. It is the fifth and last of the five things
+        // ending a turn does, and nature's reclaim is the fourth, so it happens in `end_turn`
+        // after the reclaim rather than per territory before it.
     }
 }
 

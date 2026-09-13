@@ -8,9 +8,12 @@
 //! > **Each distinct description is its own entry, and an entry is never zero.** A thing
 //! > carrying an `id` has a description no other thing shares, so **its quantity is always
 //! > one**. **Where a thing is, is where it appears**; nothing states its container.
-//! > **Entries are in the order their descriptions sort in, and the traits inside a
-//! > description sort too**, so the same state is always the same bytes and a description is
-//! > one string however it was built.
+//! > **Entries are in the order their descriptions sort in, and the traits
+//! > inside a description are in order of relevance**: `id` first, then every other trait
+//! > alphabetically, then `occupied`, `free` and `capacity` last. So the same state is always
+//! > the same bytes and a description is one string however it was built. **The middle is
+//! > alphabetical because nothing has yet needed placing there**, and a trait leaves it by
+//! > being named at one end or the other.
 //!
 //! # Why this is in the model and not in the console
 //!
@@ -70,6 +73,16 @@ pub struct Description {
     pub traits: BTreeMap<String, String>,
 }
 
+/// The traits the order names before the alphabetical middle, in order.
+///
+/// **Named here rather than written into the comparison**, so that
+/// `every_trait_the_ordering_names_is_declared` can read them instead of carrying its own copy
+/// of the list - a check against a second copy is checking the copy.
+pub const ORDERED_FIRST: [&str; 1] = ["id"];
+
+/// The traits the order names after the alphabetical middle, in order.
+pub const ORDERED_LAST: [&str; 3] = ["occupied", "free", "capacity"];
+
 impl Description {
     pub fn of(kind: Kind) -> Self {
         Description {
@@ -105,6 +118,9 @@ impl Description {
     /// which order, and that sentence says *the traits inside a description sort too* - `C-111`
     /// is filed against it, because the specification is not this lane's to edit.
     pub fn ordered(&self) -> Vec<(&String, &String)> {
+        /// Where the alphabetical middle sits, so the two named ends fall either side of it.
+        const MIDDLE: u8 = ORDERED_FIRST.len() as u8;
+
         // **A rank rather than a list of every trait**, because the middle is everything the
         // release declares and a list here would go stale the moment a trait is added -
         // silently, since an unlisted name would simply fall somewhere. **A fixed global
@@ -125,14 +141,14 @@ impl Description {
         // line should lead with is the same question as the global order and is his.
         fn rank(name: &str, value: &str) -> u8 {
             if value.is_empty() {
-                return 1;
+                return MIDDLE;
             }
-            match name {
-                "id" => 0,
-                "occupied" => 2,
-                "free" => 3,
-                "capacity" => 4,
-                _ => 1,
+            if let Some(at) = ORDERED_FIRST.iter().position(|it| *it == name) {
+                return at as u8;
+            }
+            match ORDERED_LAST.iter().position(|it| *it == name) {
+                Some(at) => MIDDLE + 1 + at as u8,
+                None => MIDDLE,
             }
         }
         let mut out: Vec<(&String, &String)> = self.traits.iter().collect();
