@@ -1165,24 +1165,41 @@ nothing about whether a torus should be the game's shape. The topological differ
 already recorded - a circumnavigation that separates nothing, northward paths that never converge,
 and no unique antipode - are unaffected by how well this renders.
 
-### X-33 - the torus is legible as an inventory and not as a space, and no drawing fixes it
+### X-33 - a flat torus has no seamless drawing, and this lane's first reason for saying so was wrong
 
 **to** spec · **status** open · **raised** 2026-09-12 · **source** Sean looking at `prototypes/hex-torus-view` and saying the pathing makes no sense · **found by** the *vetted when* line of `X-32` being observed by a person, which nine passing tests did not give
 
-**What Sean saw, confirmed here by computing it rather than by reading the picture.** At `k = 2` -
-12 territories - the bright region is a lopsided blob of **2, 3, 4, 3** cells per drawn row, and a
-step east off its boundary lands:
+**CORRECTED 2026-09-12, and the correction is this lane committing the failure it keeps
+documenting.** This item first reported that a step east off the boundary lands on four different
+offsets - `1→5`, `4→9`, `8→0`, `11→2` - and concluded **there is no single wrap rule, so there is
+nothing for a player to learn**. That is false.
 
-| from id | lands on | offset |
-| ------- | -------- | ------ |
-| 1       | 5        | +4     |
-| 4       | 9        | +5     |
-| 8       | 0        | -8     |
-| 11      | 2        | -9     |
+**Those are `id` offsets, and an id is an index into a list sorted by `(r, q)`.** It says nothing
+about geometry. Re-measured in lattice terms - which vector is actually subtracted when a step
+leaves the domain - the answer is **six shifts, and they are exactly the lattice's six shortest
+vectors**: `±a`, `±b`, `±(a+b)`. Three opposite edge-pairs, each a **constant translation**. That is
+a rule, it is the same rule everywhere on each edge, and it is learnable.
 
-**There is no single wrap rule.** Four boundary cells, four different jumps, and nothing in the
-drawing says which. That is the whole of *the pathing makes no sense*: a player cannot learn where
-a step off the edge goes, because there is nothing to learn.
+**So the instrument answered a narrower question than the one asked and returned a plausible
+number** - `docs/notes/two-conventions-on-one-page.md` names two classes and this is the first of
+them, committed here, in the item this lane wrote about looking rather than counting. Sean is what
+caught it, by remembering a game whose wrapping did not bother him.
+
+**And the domain's shape does not change it.** Measured rather than assumed, because the obvious
+repair was to swap the hexagonal domain for a rhombus: a rhombic fundamental domain over the same
+lattice gives **the same six shifts**, `±a`, `±b`, `±(a+b)`. The shape this lane specified is not
+what produced the wrap structure and changing it would not have helped.
+
+**What is left of the observation, and it is less than this item claimed.** Sean looked and said the
+pathing made no sense; that is real and the explanation offered was wrong. What can be said:
+
+- **At `k = 2` there are 12 cells and most of them are on the boundary**, so nearly every step
+  wraps. It is the worst size in the family to judge this at, and it is the one that was drawn.
+- **The drawn region is a blob** - 2, 3, 4, 3 - so a reader cannot see *where* the seam is even
+  though the rule at each edge is constant.
+- **Three seam-pairs is more than a cylinder's one**, which is what most wrapping games use.
+
+**This lane does not know which of those Sean was reacting to**, and will not guess a second time.
 
 **The shape is not a rendering choice and cannot be improved into one.** A cell set with six-fold
 symmetry about the origin is the origin plus whole orbits of six, so **its size is 1 mod 6**. A
