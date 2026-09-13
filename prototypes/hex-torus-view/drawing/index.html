@@ -6,11 +6,24 @@
    margin: 0; font: 14px system-ui, sans-serif; background: #f7f8fa; color: #22303f;
    height: 100vh; display: flex; flex-direction: column;
  }
+ /* **The drawing gets the space and everything else is one line or folded away.** Sean,
+    2026-09-12: the picture was wedged between a block of prose above it and a table below.
+    Both are still here - the prose is what says what the page is for and the table is the
+    twenty as numbers - but a `<details>` costs one line each until somebody wants them, and
+    the stage takes the rest. **The picker does not fold**, because a control nobody can see
+    is `X-35` again. */
  header {
-   padding: 12px 16px; border-bottom: 1px solid #dde2e8; background: #fff; flex: none;
+   padding: 6px 12px 5px; border-bottom: 1px solid #dde2e8; background: #fff; flex: none;
  }
- h1 { font-size: 16px; margin: 0 0 4px; }
+ h1 { font-size: 14px; font-weight: 600; margin: 0; }
  p { margin: 4px 0; max-width: 62em; }
+ details { font-size: 12px; }
+ details summary { cursor: pointer; color: #5a6a7a; padding: 1px 0; }
+ details[open] summary { margin-bottom: 2px; }
+ footer {
+   flex: none; padding: 3px 12px 5px; border-top: 1px solid #dde2e8; background: #fff;
+   max-height: 40vh; overflow: auto;
+ }
  /* **The stage takes whatever the header and the table leave**, rather than a constant
     that was right for one header. It was `calc(100vh - 190px)`, and adding the picker
     made that number wrong - a height that has to be re-derived whenever the text above it
@@ -29,7 +42,7 @@
     nobody uses.** `X-35`: the page drew the first of twenty under a header promising twenty,
     and the other nineteen were ten keypresses away behind a picture that reframes to look
     similar - so it read as *nothing changed* and a correct build was reported as missing. */
- #pick { margin-top: 8px; display: flex; gap: 4px; flex-wrap: wrap; align-items: baseline; }
+ #pick { margin-top: 4px; display: flex; gap: 4px; flex-wrap: wrap; align-items: baseline; }
  #pick b { font-weight: 600; margin: 0 4px 0 10px; }
  #pick b:first-child { margin-left: 0; }
  #pick button {
@@ -48,15 +61,18 @@
  polygon.lit { stroke: #d13b3b; stroke-width: 2; }
  text.id.lit { font-weight: 700; fill: #8f2626; }
  svg.no-ids text.id.lit { display: inline; }
- #reach { color: #8f2626; font-weight: 600; }
+ #reach { color: #8f2626; font-weight: 600; margin-left: 10px; }
 </style>
 <header>
- <h1>hex torus view &mdash; <span id="where"></span></h1>
+ <h1>hex torus view &mdash; <span id="where"></span><span id="reach"></span></h1>
+ <nav id="pick"></nav>
+ <details id="about">
+ <summary>what this shows, and how to drive it</summary>
  <p>One complete world is drawn bright and every other hex is an echo of it. <strong>Point at a
  hex and every copy of that territory lights up</strong> &mdash; the nearest lit copy to
  whatever you are measuring from is the one that decides the distance, because two territories
- that look far apart here may be adjacent through a wrap. <span id="reach"></span></p>
- <p><strong>Twenty worlds are drawn, and the buttons below pick one</strong> &mdash; ten
+ that look far apart here may be adjacent through a wrap.</p>
+ <p><strong>Twenty worlds are drawn, and the buttons above pick one</strong> &mdash; ten
  folded and ten axis-aligned, labelled by how many territories each has. <kbd>T</kbd> jumps to
  the world with the same circumference in the other family, where there is one &mdash; same
  distance around, three times the territories, which is the folding itself. <kbd>[</kbd>
@@ -64,7 +80,7 @@
  <kbd>&larr;&uarr;&darr;&rarr;</kbd> pan &middot; wheel zooms &middot; <kbd>R</kbd> resets.
  <strong>This settles whether the wrapping is legible and nothing about whether a torus should
  be the world's shape.</strong></p>
- <nav id="pick"></nav>
+ </details>
 </header>
 <svg id="stage"><g class="size" data-cells="12" data-around="6" data-family="folded" data-partner="13">
 <polygon data-cell="0" data-fill="#3d6b9c" data-full="#3d6b9c" points="0.00,-20.00 0.00,-10.00 -8.66,-5.00 -17.32,-10.00 -17.32,-20.00 -8.66,-25.00" fill="#3d6b9c" stroke="#22303f" stroke-width="0.6"/>
@@ -30403,8 +30419,10 @@ function show() {
     `${cx - vw / 2 + panX} ${cy - vh / 2 + panY} ${vw} ${vh}`);
   stage.classList.toggle('no-ids', !ids);
   const g = groups[at];
+  // **One line, because the drawing gets the space.** What this used to spell out - one bright
+  // world and six echoes - is in the folded note below and does not change between worlds.
   document.getElementById('where').textContent =
-    `${g.dataset.family} — ${g.dataset.cells} territories, circumference ${g.dataset.around}, one bright world and six echoes`;
+    `${g.dataset.family}, ${g.dataset.cells} territories, ${g.dataset.around} around`;
 }
 function reset() { zoom = 1; panX = 0; panY = 0; show(); }
 
@@ -30427,7 +30445,7 @@ function light(cell) {
     if (el.dataset.full) el.setAttribute('fill', el.dataset.full);
   }
   const places = lit.filter(el => el.tagName === 'polygon').length;
-  reach.textContent = `territory ${cell} is drawn in ${places} places — the nearest one decides the distance`;
+  reach.textContent = `— territory ${cell}, lit in ${places} places`;
 }
 stage.addEventListener('pointerover', e => {
   if (dragging) return;
@@ -30473,7 +30491,9 @@ stage.addEventListener('pointermove', e => {
 addEventListener('pointerup', () => { dragging = null; stage.classList.remove('dragging'); });
 show();
 </script>
-<div style="padding: 8px 16px; flex: none; overflow: auto">
+<footer>
+<details id="numbers">
+<summary>the twenty as numbers &mdash; territories, circumference, colours, and what each pairs with</summary>
 <table>
 <tr><th>family</th><th>territories</th><th>circumference</th><th>colouring</th><th>same circumference</th></tr>
 <tr><td>folded</td><td>12</td><td>6</td><td>Exact(3)</td><td>36 territories</td></tr>
@@ -30498,4 +30518,5 @@ show();
 <tr><td>axis-aligned</td><td>144</td><td>12</td><td>Exact(3)</td><td>48 territories</td></tr>
 
 </table>
-</div>
+</details>
+</footer>

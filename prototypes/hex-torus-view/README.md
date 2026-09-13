@@ -62,6 +62,12 @@ attention next time a count in this repository changes its denominator.
 
 `I` toggles the ids, drag or the arrows pan, the wheel zooms, `R` resets.
 
+**The drawing gets the window and everything else is one line or folded away.** Sean,
+2026-09-12: the picture was wedged between a block of prose above it and a table below. Both are
+still there - the prose says what the page is for and the table is the twenty as numbers - each
+behind a one-line `<details>`, and the stage takes whatever is left. **The picker does not
+fold**, because a control nobody can see is `X-35` again.
+
 ## Two families, because Sean asked what a square grid has that a hex grid cannot
 
 **Nothing.** Wrap each axial coordinate on its own - `q mod C`, `r mod C` - and the shifts are
