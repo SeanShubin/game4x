@@ -1185,16 +1185,30 @@ number** - `docs/notes/two-conventions-on-one-page.md` names two classes and thi
 them, committed here, in the item this lane wrote about looking rather than counting. Sean is what
 caught it, by remembering a game whose wrapping did not bother him.
 
-**And the domain's shape does not change it.** Measured rather than assumed, because the obvious
-repair was to swap the hexagonal domain for a rhombus: a rhombic fundamental domain over the same
-lattice gives **the same six shifts**, `±a`, `±b`, `±(a+b)`. The shape this lane specified is not
-what produced the wrap structure and changing it would not have helped.
+**Corrected again, 2026-09-12, by the code lane measuring what this lane named.** The hexagonal
+domain's six shifts are `±a`, `±b`, **`±(a−b)`** - not `±(a+b)`, which never occurs and is not among
+the shortest. A detail named without measuring, inside a correction about a detail named without
+measuring.
+
+**And the rhombus is not the same and is worse, which reverses what this item implied.** Measured
+over `k = 2, 3, 5`:
+
+| domain      | the six shifts       | how often each        | steps that wrap |
+| ----------- | -------------------- | --------------------- | --------------- |
+| **hexagon** | `±a`, `±b`, `±(a−b)` | **`2k` each, evenly** | `2/(3k)`        |
+| rhombus     | `±a`, `±b`, `±(a+b)` | `1, 1, 4k−1` × 4      | `(16k−2)/18k²`  |
+
+**So the hexagonal domain this lane specified is the better of the two** - every edge-pair used
+equally, and about a third fewer wrapping steps than the rhombus. It was specified for a six-fold
+symmetry that is provably unavailable, and it is right for a reason nobody had until it was
+measured.
 
 **What is left of the observation, and it is less than this item claimed.** Sean looked and said the
 pathing made no sense; that is real and the explanation offered was wrong. What can be said:
 
-- **At `k = 2` there are 12 cells and most of them are on the boundary**, so nearly every step
-  wraps. It is the worst size in the family to judge this at, and it is the one that was drawn.
+- **At `k = 2`, one step in three wraps** - `2/(3k)`, so 33% at `k=2`, 22% at `k=3`, 13% at
+  `k=5`. The size instinct was right and *nearly every* was wrong: it is a third, not nearly all,
+  and it thins out fast. `k = 2` is still the worst size in the family and it is the one drawn.
 - **The drawn region is a blob** - 2, 3, 4, 3 - so a reader cannot see *where* the seam is even
   though the rule at each edge is constant.
 - **Three seam-pairs is more than a cylinder's one**, which is what most wrapping games use.
