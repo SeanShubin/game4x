@@ -832,7 +832,9 @@ only that the third would make `X-21` moot and the first would make it urgent.
 On 2026-09-13 `P-486` restored a clause `P-66` had promoted and a reword deleted on 2026-09-01: **a
 unit is built with its fuel bin full.** For twelve days the specification did not say bins get
 filled, and the release went on charging six energy for a pioneer - **a number whose only
-justification was the deleted clause.** Nobody could explain the six, which is how it was found.
+justification was the deleted clause.** **Sean found it**, by remembering `P-67`
+from weeks earlier and asking why a pioneer costs energy at all; the trail back to `P-66` and
+`0aca92d` was the specification lane's.
 
 **Check 13 could not have seen it.** It searches for each kind's own word, and no kind was missing;
 what was missing was a *rule* behind a *quantity*. So this lane measured the population it was given
@@ -842,7 +844,10 @@ in other people's instruments.
 **And it does not mechanise, which is why this is a note rather than a second check.** Asking
 whether a number in the release still has a rule behind it is asking whether one statement is
 *about* another, which is the wall `P-245` names. What is available is the habit: **a number nobody
-can explain is a rule that has gone missing**, and that is the tell `P-486` was found by.
+can explain is a rule that has gone missing** - offered as a tell, and **not the one that caught
+`P-486`**. That was a person recalling a rule from weeks back, which is not a habit anyone can be
+asked for. **The heuristic is worth more for that reason and has still never caught anything**, so
+it is a proposal about where to look rather than a method with a record.
 
 ### X-27 - losing a territory to nature does not delete the units on it, and one line above it is dead
 
