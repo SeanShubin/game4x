@@ -107,9 +107,16 @@ of a finding does not change whether the change is substance.**
 
 ## What this rests on, stated because it is the whole point
 
-**One instance, and the lane it is about found it in itself.** The argument is not from a count -
-it is that the structure is identical to a rule already in this file with a worked example, and
-`Q-8`'s evidence is borrowed rather than matched.
+**Two instances, in two lanes, and each lane found its own.** The research lane's heuristic is
+the first. **The second is this lane's reason for filing this very item**: it first argued that a
+producer must not carry a lens's finding into `CLAUDE.md`, which explained this case exactly and
+is wrong in every other - it would route a broken link to you because a lens spotted it. **A
+reason read off the case it justifies**, which is this item's subject one layer up, in a
+justification rather than a heuristic.
+
+**The argument is still not from a count.** Two is not a record either; what it rests on is that
+the structure is identical to a rule already in this file with a worked example, and `Q-8`'s
+evidence is borrowed rather than matched.
 
 **The measurement that would give it a record has not been run**: does any rule in `CLAUDE.md`
 derived from an incident have a case it caught *other* than the one that produced it? Some plainly
