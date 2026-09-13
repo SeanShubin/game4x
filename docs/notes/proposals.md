@@ -62,7 +62,61 @@ Two limits Claude holds itself to:
 
 ## Open
 
-*Nothing is open. Everything filed has been decided.*
+### P-489 - `a put has no quantity`, and `P-485`'s rows have one
+
+**to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction, inside one file, created by a promotion this lane drafted · **shape** text · **asks** approval · **into** `releases/first-release.md` -> Recipes
+
+**The gate is red and this is what it is refusing.** `releases/first-release.md:194` says:
+
+```
+a put names a thing that is already there and says what is true of it afterwards - the same
+thing and not a new one, so what has an identity keeps it. A put has no quantity, because
+nothing is made or taken.
+```
+
+**`P-485`'s rows are `put 2 energy` and `put 1 energy`.** This lane drafted them and did not read
+the role's definition four hundred lines above the table.
+
+## Why the rows are right and the sentence is too narrow
+
+**Every `put` before these names a thing with an identity.** `move` puts a unit; `refresh` puts a
+unit and a citizen. **There is one of each, so no quantity is needed** - which is what the sentence
+noticed.
+
+**`spec/console.md` already draws the line the sentence was reaching for:**
+
+```
+A quantity is for what is interchangeable, and a thing carrying an `id` is never a quantity
+```
+
+**Energy is interchangeable.** So a put of energy needs a quantity for the same reason a put of a
+unit does not - and neither makes nor takes anything, which is the part the sentence got right.
+
+## The words, replacing the sentence at line 194
+
+> **A put of a thing with an identity has no quantity, because there is one of it. A put of a
+> quantity moves that many.** Nothing is made or taken either way.
+
+## Why not the other repair
+
+**The alternative is that these rows want `produce`, and they do not.** `P-486` says the energy is
+**paid** where the unit is built, so it is moved rather than made - and `nogain.rs` weighs the rules
+to decide whether they can come round with more. **A `produce` of energy would be a gain the
+weighting has to account for**, where a put is a relocation that nets to nothing. The code lane's
+check panicked rather than dropping the row, which is it working on a shape it was told could not
+exist.
+
+## The second sentence the promotion left stale
+
+**`releases/first-release.md:429` still says `produce pioneer` consumes *3 metal, 6 energy and 2
+citizens*.** `P-485` removed the six.
+
+> **A founding unit costs citizens, and that is the cost that matters.** `produce pioneer` consumes
+> **3 metal and 2 citizens**; `launch ark` consumes 3 metal, 12 energy and 2 citizens and requires
+> a Yard.
+
+**The paragraph's argument survives and is stronger** - founding competes with the population
+rather than costing resources beside it, and the energy is now a fill rather than a cost at all.
 
 ## Addressed to other perspectives
 
