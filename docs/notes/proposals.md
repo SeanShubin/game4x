@@ -62,6 +62,49 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-490 - `CLAUDE.md` poisons its checks and never its prose
+
+**to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered, from the research lane correcting its own item · **shape** text · **asks** approval · **into** `CLAUDE.md` -> What done means
+
+**`CLAUDE.md` already says this about checks:** *A quality improvement's evidence is a check that
+did not exist before. Passing tests prove nothing here - they passed beforehand too.* `Q-8`'s
+second test, the one showing the old path diverged, is named as the verification.
+
+**It says nothing about the rules in its own prose, and they have the same failure available.**
+
+## The case, and it is the research lane's against itself
+
+`X-26` recorded *a number nobody can explain is a rule that has gone missing* as the tell that
+found `P-486`. **Neither half was true.** You remembered `P-67` from weeks back and asked why a
+pioneer costs energy at all; the trail to `P-66` and `0aca92d` was this lane's. The heuristic was
+read off the instance afterwards and then written as the mechanism.
+
+**A heuristic fitted to the case it explains could not have come out the other way.** It explains
+that instance by construction. That is `passing tests prove nothing - they passed beforehand too`,
+in prose instead of code.
+
+## The words, added after the `Q-1` paragraph
+
+> **A rule written from an incident has the same failure available, and nothing poisons prose.**
+> A check earns its place by a failure it could have produced; **a habit earns its place by a case
+> it caught, not a case it explains.** One read off the incident that produced it explains that
+> incident by construction and could not have come out otherwise - which is *passing tests prove
+> nothing* said about a sentence. **So a habit is written as where to look until it has caught
+> something it did not come from**, and says which it is.
+
+## What this rests on, stated because it is the whole point
+
+**One instance, and the lane it is about found it in itself.** The argument is not from a count -
+it is that the structure is identical to a rule already in this file with a worked example, and
+`Q-8`'s evidence is borrowed rather than matched.
+
+**The measurement that would give it a record has not been run**: does any rule in `CLAUDE.md`
+derived from an incident have a case it caught *other* than the one that produced it? Some plainly
+do - *check the rule over every case and assert how many cases there were* has caught several this
+week. **Others neither lane knows about.** The research lane named that measurement and declined to
+run it as the last thing in a long day, which is the rule being followed before it is written.
+
+**If you would rather have the measurement first, say so and this waits for it.**
 ### P-489 - `a put has no quantity`, and `P-485`'s rows have one
 
 **to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction, inside one file, created by a promotion this lane drafted · **shape** text · **asks** approval · **into** `releases/first-release.md` -> Recipes
