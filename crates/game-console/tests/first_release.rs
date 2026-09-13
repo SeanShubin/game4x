@@ -519,10 +519,23 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
         "`game::cost` and the table above name different constants - anything in the first and \
          not the second is a figure in the model that nothing compares with the release"
     );
-    assert_eq!(
-        declared.len(),
-        13,
-        "thirteen constants is the population here"
+    // **A floor rather than a count, and the quality lens is why.** This said `13`, `P-486`
+    // took `PIONEER_ENERGY` out, and the number beside the set stayed - **the only
+    // hand-maintained figure left in a check whose whole point was to stop depending on one.**
+    // `Q-84` replaced a count with a set precisely because a count can be bumped to hide a
+    // deletion; this one could not hide anything, and it could be forgotten, and it was.
+    //
+    // **What it is here for is the parse returning nothing.** `declared` is read out of
+    // `game.rs`, so a module renamed or a `pub const` spelled differently would leave both
+    // sides empty and the set comparison would pass on two empty sets - a count over nothing,
+    // which is the same failure with the sign flipped. A floor catches that and needs no edit
+    // when a constant is legitimately added or removed, because the set above is what says
+    // *which*.
+    assert!(
+        declared.len() >= 10,
+        "only {} constants parsed out of `game::cost`, so the set compared above is probably \
+         two empty sets rather than an agreement",
+        declared.len()
     );
 
     // **A garrison had two figures here and has none** - `C-106`. The *Costs to produce*
@@ -549,10 +562,14 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
     .into_iter()
     .map(|thing| released_cost(thing).len())
     .sum();
+    // **Eleven since `P-486`.** `produce pioneer` consumed metal, energy and citizens and now
+    // consumes metal and citizens - the energy is a `put` into the pioneer, and `C-113` is
+    // open on where it comes from. So one figure left the recipes and `PIONEER_ENERGY` left
+    // the constants with it.
     assert_eq!(
-        figures, 12,
-        "twelve figures across the recipes named for a thing, and twelve of the thirteen \
-         constants read them - the thirteenth is `MOVE_CELLS`, which is a consumption rather \
+        figures, 11,
+        "eleven figures across the recipes named for a thing, and eleven of the twelve \
+         constants read them - the twelfth is `MOVE_CELLS`, which is a consumption rather \
          than a cost"
     );
 }
@@ -1074,6 +1091,15 @@ fn every_way_the_state_can_change_is_a_command() {
 /// `create-planet` and its four - which is `C-79` and `P-364`, open and not this lane's to
 /// settle. Checking the other way would need those five as exceptions, and an exemption list
 /// that size stops being a guard and becomes the list written twice.
+/// **`refuel` is exempt while no command exists, and the exemption is measured.** `P-485`
+/// promoted it into the Recipes table and `spec/console.md`'s vocabulary has no `refuel`, so
+/// this check would otherwise demand a command the specification has not named. `C-112` puts
+/// the binding to `spec/` - a command naming the territory has to choose when two units
+/// standing there both have room, and one naming the unit makes it the player's choice.
+///
+/// **A condition rather than a name in a list**: it holds only while the grammar carries no
+/// form opening with `refuel`, so the moment a command exists the exemption stops applying and
+/// this bites. `C-61`'s shape, with the excuse read at every run rather than remembered.
 #[test]
 fn every_player_recipe_has_one_command_named_for_it() {
     let document = std::fs::read_to_string(
@@ -1091,17 +1117,30 @@ fn every_player_recipe_has_one_command_named_for_it() {
     let mut distinct = recipes.clone();
     distinct.sort();
     distinct.dedup();
+    // **Eleven since `39a42c6` added `refuel`**, and the tripwire firing is what told this
+    // lane the release had moved. A count over a document is worth keeping hand-maintained
+    // for exactly that: it is the number changing that carries the news.
     assert_eq!(
         distinct.len(),
-        10,
-        "ten recipes the player may fire when this was written; the release has {} \
+        11,
+        "eleven recipes the player may fire when this was written; the release has {} \
          ({distinct:?})",
         distinct.len()
     );
 
     let grammar = game_console::command_grammar();
+    let fires_nothing = |recipe: &str| {
+        recipe == "refuel"
+            && !grammar
+                .forms()
+                .iter()
+                .any(|form| form.opening() == "refuel")
+    };
     let mut checked = 0;
     for recipe in &distinct {
+        if fires_nothing(recipe) {
+            continue;
+        }
         let named = grammar
             .forms()
             .iter()
@@ -1115,10 +1154,18 @@ fn every_player_recipe_has_one_command_named_for_it() {
         );
         checked += 1;
     }
+    // **The exemption is counted rather than subtracted as a literal**, so this stays a count
+    // over the population and cannot quietly cover a second recipe losing its command.
+    let exempt = distinct.iter().filter(|it| fires_nothing(it)).count();
+    assert!(
+        exempt <= 1,
+        "{exempt} recipes are exempt from having a command and only `refuel` should be - \
+         `C-112`"
+    );
     assert_eq!(
         checked,
-        distinct.len(),
-        "every player recipe, and the count so that an empty table cannot pass"
+        distinct.len() - exempt,
+        "every player recipe a command fires, and the count so that an empty table cannot pass"
     );
 }
 
@@ -1186,14 +1233,26 @@ fn every_place_a_recipe_leaves_open_is_a_field_of_its_command() {
     }
     assert_eq!(
         order.len(),
-        10,
-        "ten recipes the player may fire when this was written; the release has {} ({order:?})",
+        11,
+        "eleven recipes the player may fire when this was written; the release has {} \
+         ({order:?})",
         order.len()
     );
 
     let grammar = game_console::command_grammar();
     let mut checked = 0;
     for recipe in &order {
+        // **`refuel` is exempt while no command exists** - see the note on
+        // `every_player_recipe_has_one_command_named_for_it`, and `C-112`. Measured the same
+        // way, so it stops applying the moment the grammar carries the form.
+        if recipe == "refuel"
+            && !grammar
+                .forms()
+                .iter()
+                .any(|form| form.opening() == "refuel")
+        {
+            continue;
+        }
         // A recipe that names no place still acts in one, and the command names that one.
         let places = players[recipe].len().max(1);
         let form = grammar
@@ -1219,7 +1278,8 @@ fn every_place_a_recipe_leaves_open_is_a_field_of_its_command() {
     }
     assert_eq!(
         checked, 10,
-        "every player recipe, and the count so that an empty table cannot pass"
+        "every player recipe that a command fires, and the count so that an empty table cannot \
+         pass. Ten of the eleven: `refuel` has no command yet - `C-112`"
     );
 }
 
