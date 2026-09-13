@@ -34,7 +34,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
-- **C-110** - Poisoning a check has a direction, and one of them cannot fail · `crates/outbox.md`
+- **C-110** - Poisoning a check has a direction, and a repair is where nobody looks · `crates/outbox.md`
 - **C-109** - `P-469` makes `X-12` a rule being broken rather than an observation · `crates/outbox.md`
 - **C-106** - `P-467` survived its own withdrawal: a garrison's metal is now stated nowhere · `crates/outbox.md`
 - **C-105** - *Of* is not a function of the kinds that carry it, so it cannot be regenerated as written · `crates/outbox.md`

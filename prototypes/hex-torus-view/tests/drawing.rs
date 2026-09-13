@@ -570,3 +570,124 @@ fn the_page_can_turn_the_drawing() {
         "the header does not say what the orientation key does"
     );
 }
+
+/// Two steps is the least depth that pins the corners, enumerated rather than argued.
+///
+/// **This is the evidence for the `2` in `the_copies_tile_without_overlap_or_gap`**, which is
+/// otherwise a constant somebody chose. The gap check said *one* step first and the research
+/// lens found that it pinned nothing; the repair was to deepen it, and a deeper check is only
+/// worth its cost if the shallower one really does let something through.
+///
+/// **So both halves are counted over every six-subset of the eight translates.** At one step
+/// exactly one of the twenty-eight passes, in each parallelogram family - and **they are
+/// opposite sets**: the axis-aligned family survives without `±(a+b)` and the offset family
+/// without `±(a−b)`. At two steps none of the twenty-eight passes and all eight do.
+///
+/// **The opposite-sets half is why naming the translates could not have been the fix.** The
+/// natural repair was to assert the eight by name; the set that has to be excluded is not the
+/// same set in the two families, so that assertion would have passed in one and failed in the
+/// other. Found because the lens named one family's answer as general and this lane measured
+/// the other.
+#[test]
+fn two_steps_is_the_least_depth_that_pins_the_corners() {
+    let eight: Vec<(i32, i32)> = (-1..=1)
+        .flat_map(|m| (-1..=1).map(move |n| (m, n)))
+        .filter(|step| *step != (0, 0))
+        .collect();
+    assert_eq!(eight.len(), 8, "the three by three block, less the middle");
+
+    let covers = |torus: &hex_torus_view::Torus, steps: &[(i32, i32)], depth: i32| {
+        let [a, b] = torus.generators();
+        let domain = torus.domain();
+        let mut have = std::collections::BTreeSet::new();
+        for (m, n) in std::iter::once(&(0, 0)).chain(steps.iter()) {
+            for (q, r) in &domain {
+                have.insert((q + m * a.0 + n * b.0, r + m * a.1 + n * b.1));
+            }
+        }
+        let mut ring: std::collections::BTreeSet<(i32, i32)> = domain.iter().copied().collect();
+        for _ in 0..depth {
+            let grown: Vec<(i32, i32)> = ring
+                .iter()
+                .flat_map(|(q, r)| {
+                    hex_torus_view::NEIGHBOURS
+                        .iter()
+                        .map(move |(dq, dr)| (q + dq, r + dr))
+                })
+                .collect();
+            ring.extend(grown);
+        }
+        ring.iter().all(|cell| have.contains(cell))
+    };
+
+    let mut checked = 0;
+    for (torus, omitted) in [
+        (hex_torus_view::Torus::axis_aligned(4), (1, 1)),
+        (hex_torus_view::Torus::axis_aligned(12), (1, 1)),
+        (hex_torus_view::Torus::offset(4, 4), (1, -1)),
+        (hex_torus_view::Torus::offset(12, 12), (1, -1)),
+    ] {
+        let mut subsets = 0;
+        let mut passing_at_one = Vec::new();
+        let mut passing_at_two = 0;
+        for left in 0..eight.len() {
+            for right in (left + 1)..eight.len() {
+                let six: Vec<(i32, i32)> = eight
+                    .iter()
+                    .enumerate()
+                    .filter(|(at, _)| *at != left && *at != right)
+                    .map(|(_, step)| *step)
+                    .collect();
+                subsets += 1;
+                if covers(&torus, &six, 1) {
+                    passing_at_one.push((eight[left], eight[right]));
+                }
+                if covers(&torus, &six, 2) {
+                    passing_at_two += 1;
+                }
+            }
+        }
+        assert_eq!(subsets, 28, "every six of the eight");
+        assert_eq!(
+            passing_at_one.len(),
+            1,
+            "{:?} k = {}: {} six-subsets pass a one-step check and exactly one should",
+            torus.family,
+            torus.k,
+            passing_at_one.len()
+        );
+        let (first, second) = passing_at_one[0];
+        assert_eq!(
+            (first.0 + second.0, first.1 + second.1),
+            (0, 0),
+            "the two omitted translates are not opposite"
+        );
+        // **Normalised by sign and not by `abs`**, which is the whole distinction: `|±(a+b)|`
+        // and `|±(a−b)|` are both `(1, 1)`, so taking absolute values collapses exactly the two
+        // sets this check exists to tell apart. Written that way first and it failed loudly,
+        // which is the cheap version of a predicate narrower than its subject.
+        let facing = if first.0 > 0 || (first.0 == 0 && first.1 > 0) {
+            first
+        } else {
+            second
+        };
+        assert_eq!(
+            facing, omitted,
+            "{:?} k = {}: the surviving six omits ±{facing:?}, not ±{omitted:?}",
+            torus.family, torus.k
+        );
+        assert_eq!(
+            passing_at_two, 0,
+            "{:?} k = {}: a six-subset passes at two steps, so the depth is not doing the work",
+            torus.family, torus.k
+        );
+        assert!(
+            covers(&torus, &eight, 2),
+            "{:?} k = {}: all eight do not cover two steps, so the check is impossible",
+            torus.family,
+            torus.k
+        );
+        checked += 1;
+    }
+    assert_eq!(checked, 4, "two sizes of each parallelogram family");
+}

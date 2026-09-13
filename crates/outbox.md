@@ -61,7 +61,7 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
-### C-110 - Poisoning a check has a direction, and one of them cannot fail
+### C-110 - Poisoning a check has a direction, and a repair is where nobody looks
 
 **to** spec · **status** open · **raised** 2026-09-12 · **source** widening two checks in
 `prototypes/hex-torus-view` after `Q-87`, and the quality lens re-deriving the result
@@ -117,10 +117,38 @@ commit message, a code comment and a prototype README before the poison was appl
 counted - corrected in this lane's column, and recorded here because it is the class `CLAUDE.md`
 already names and this is an instance inside the fix for another one.
 
+## And the cheap half is a moment rather than a technique
+
+**Added 2026-09-13, from the research lens, and it is the narrower and more useful half.** Both
+times that lens caught something this week it was by **re-deriving work that had just been handed
+over finished** - once a conversion it had written itself, once a check this lane had written to
+close one of its own findings. That is not diligence. It is **the one moment when everyone
+involved believes the question is closed**, which is exactly when nobody looks again.
+
+`CLAUDE.md` already says *a claim that arrives finished is the one to re-derive, and the cheapest
+moment is while acting on it*. What this adds is **where the moment sits**: not when a claim
+arrives, but when one is **retired** - the commit that closes a finding, the fix that answers a
+review, the check written to cover the hole somebody just named. Three of this week's instances
+were inside a repair rather than inside new work, and one of them was **a fix shipping with a
+weaker version of the defect it was fixing**.
+
+**Measured rather than asserted, which is why it is here and not in a note.** The gap check
+landed on 2026-09-13 as *every neighbour of a bright cell is drawn*. The research lens measured
+it and found it pinned nothing; enumerating all twenty-eight six-subsets of the eight translates
+confirms **exactly one passes a one-step check in each parallelogram family, and the two families
+survive on opposite sets** - axis-aligned without `±(a+b)`, offset without `±(a−b)`. Two steps is
+the least depth at which none of the twenty-eight passes, and
+`two_steps_is_the_least_depth_that_pins_the_corners` is that enumeration standing as the evidence
+for the constant.
+
+**The opposite-sets half is what makes it more than a near miss.** The natural repair was to
+assert the eight translates by name, and it **could not have worked**: the set to exclude is not
+the same set in the two families, so it would have passed in one and failed in the other.
+
 **Whether this belongs in `CLAUDE.md` is the specification lane's and Sean's.** The quality lens
-has the general form in `lenses/quality/README.md`, which is not on this lane's reading path, and
-the specific case is in `prototypes/hex-torus-view/tests/wrapping.rs`, which is not on anyone
-else's.
+has the poison-direction form in `lenses/quality/README.md`, which is not on this lane's reading
+path, and the specific cases are in `prototypes/hex-torus-view/tests/wrapping.rs` and
+`tests/drawing.rs`, which are not on anyone else's.
 
 ### C-109 - `P-469` makes `X-12` a rule being broken rather than an observation
 

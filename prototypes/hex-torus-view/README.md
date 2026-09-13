@@ -282,6 +282,12 @@ that goes.
   instrument and two steps separates them at every family with no special case. Poisoned to each
   family's surviving six, with `copies_drawn` moved to seven in step so the count could not
   object either, and it fails
+- **`two_steps_is_the_least_depth_that_pins_the_corners`** - **the evidence for that `2`**, which
+  is otherwise a constant somebody chose. All twenty-eight six-subsets of the eight translates, at
+  two sizes of each parallelogram family: exactly one passes at one step and none at two, and
+  **the two families survive on opposite sets**. That last half is why asserting the eight
+  translates by name could not have been the repair - it would have passed in one family and
+  failed in the other
 - **`the_page_states_the_number_of_worlds_it_draws`** - the whole page. The header's spelled
   number against the
   groups actually in the page, and the per-family counts besides. Those are two independent
