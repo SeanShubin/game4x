@@ -22,15 +22,13 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-483** - `42a8660` P-483 says *which* thing a declaration declares, which is the whole argument for A · still open in `docs/notes/proposals.md`
-- **S-124** - `9bc616b` S-124: P-479's check and P-480's line, and C-111 closes · still open in `docs/notes/proposals.md`
+- **P-483** - `4b73ad6` P-483's options were vague and one number in them was wrong · still open in `docs/notes/proposals.md`
 
 ## What is outstanding
 
-### To code (4)
+### To code (3)
 
 - **S-125** - `reports/turns.html`: break `what end-turn did` into the five phases · `docs/notes/proposals.md`
-- **S-124** - three promotions: the trait order, nature's place in the turn, and the notation's own words · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 

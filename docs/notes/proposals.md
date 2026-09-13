@@ -64,7 +64,7 @@ Two limits Claude holds itself to:
 
 ### P-483 - a declaration leads with which thing it declares
 
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered, from your choosing `A` · **shape** text and an instruction · **into** `spec/console.md` -> The language, and `spec/data/` · **asks** approval
+**to** sean · **status** open · **cited** `42a8660`, `bd7c918`, `bd7c918` · **raised** 2026-09-13 · **kind** recovered, from your choosing `A` · **shape** text and an instruction · **into** `spec/console.md` -> The language, and `spec/data/` · **asks** approval
 
 You chose `A`: **which one** is why `id` sorts first, and a declaration's *which one* is `name`.
 
@@ -200,7 +200,7 @@ specification does not say** - whether upkeep is observable separately from what
 
 ### S-124 - three promotions: the trait order, nature's place in the turn, and the notation's own words
 
-**to** code · **status** open · **raised** 2026-09-13 · **source** promoting all three, then re-reading the section two of them landed in
+**to** code · **status** **acted** 2026-09-13 · **cited** `9bc616b` · **raised** 2026-09-13 · **source** promoting all three, then re-reading the section two of them landed in
 
 **`7702c75`.** `P-479`, `P-480` and `P-481`. **Two are work for you and one takes something away.**
 
