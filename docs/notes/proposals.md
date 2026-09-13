@@ -62,146 +62,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-481 - the words a declaration is built from are the notation's own
-
-**to** sean · **status** open · **cited** `2d4dbc3` · **raised** 2026-09-13 · **kind** recovered, from your choosing the exception · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
-
-You chose the exception, by `spec/invariants.md`: **a unification that makes the data say something
-false is not one** - *where two things are sufficiently distinct, giving them one form is a lie
-rather than a saving*, and that outranks the tests about what a person has to author.
-
-**Declaring `name` as a trait would be that lie.** It would put `{trait admits:value kept:kind
-name:name}` in `traits.4x`, make `name` rank in an ordering of a thing's traits, and make the count
-of declared traits twenty-six-plus-five where five of them are about traits rather than about
-anything in a game.
-
-## The words, replacing the sentence at `spec/console.md:132`
-
-> **The words an expression is built from are the notation's own, and so are the words a
-> declaration is built from** - `name`, `admits`, `kept`, `of` and `family`. **These are the two
-> things in a data file that are not a kind, a trait, or one of a trait's values.** One is how the
-> notation computes and the other is how it says what its vocabulary is; neither says anything
-> about a game, and neither is declared.
-
-## What makes the second set a set rather than a list of five
-
-**Measured, not asserted: none of the five ever appears in a state.** Zero occurrences across
-`scenario/expected/play.4x` and `reports/turns.md`, against 124 uses in `spec/data/`. **They are
-the keys of a declaration and nothing else**, which is the line the exception is drawn on - not
-*these five names* but *what a declaration is made of*.
-
-**So a sixth declaration key added tomorrow is covered without editing this sentence**, and a trait
-that starts appearing in states would not be.
-
-## What this settles besides the exception
-
-**`P-479`'s second block is answered by not applying.** `name` is not a trait, so it is not in the
-ordering of a description's traits at all - **it leads a declaration line the way a kind leads a
-state line**, because the notation says so rather than because a rank places it.
-
-**So the code lane's flagged choice goes away rather than being decided.** It ranked `id` first
-only when valued, so that a declaration's bare `id` would not displace `name`. Under these words
-there is nothing to displace: `name` is not competing with `id` for a position, because only one
-of them is a trait.
-
-## What this does not do
-
-**It does not say a declaration is not data**, and `P-471` still holds - the declarations are part
-of the game state and defining one is a transition. **What is exempted is the five keys, not the
-lines.** A declaration is still a description, still sorts, still round-trips.
-### P-479 - a description's traits rank by relevance, with an alphabetical middle
-
-**to** sean · **status** open · **cited** `15ebf12`, `ee93b95` · **raised** 2026-09-13 · **kind** recovered, from your choice of `B` with the middle left open · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
-
-You chose `B`: state the top and the bottom, leave the middle alphabetical and deterministic, and
-place a trait explicitly when one annoys you enough.
-
-**One block.** The declaration-line half of this has moved to `P-481`, because your question
-about `name` showed it rests on something unsettled.
-
-## Replacing the *sort* clause
-
-> **Entries are in the order their descriptions sort in, and the traits inside a description are in
-> order of relevance**: `id` first, then every other trait alphabetically, then `occupied`, `free`
-> and `capacity` last. So the same state is always the same bytes and a description is one string
-> however it was built. **The middle is alphabetical because nothing has yet needed placing
-> there**, and a trait leaves it by being named at one end or the other.
-
-## The alternative to alphabetical, and why it is worse
-
-**The only real candidate is the line order of `spec/data/traits.4x`**, which already lists all
-twenty-six. It is deterministic, it needs no second list, and a new trait is placed by where you
-write its line.
-
-**It fails on the thing you are protecting.** That file's order means nothing today - it accreted -
-so adopting it would make an order nobody chose into the specified one, which is what you objected
-to about the alphabet, with the difference that nobody could see it. **And reordering the file would
-silently change every dump**, where today it changes nothing.
-
-**Two others were considered and are not candidates.** Ordering by `kept` yields nothing: every
-trait in a description is `kept:thing`, because a trait of the kind is not part of one. Ordering by
-length or by how often a trait appears is not stable under adding a kind.
-
-**So alphabetical is the best available for a middle nobody has chosen** - arbitrary, visible as
-arbitrary, and free.
-
-## The check this needs, which is the code lane's to build
-
-**`B`'s staleness risk is the opposite of a full list's, and it is checkable.** A full list rots
-when a trait is added and nobody places it. **A partial list rots when a trait is renamed** - the
-ordering goes on naming a trait nothing has, the rule quietly stops applying, and the dump looks
-fine.
-
-**That is not hypothetical: `free` was `room` last night.** Had the ordering existed then, it would
-still say `room` and `free` would have fallen into the alphabetical middle with nothing red.
-
-**So: every trait named in the ordering is declared in `spec/data/traits.4x`, asserted against the
-count read from that file.** Four names today. This lane files it to the code lane when this lands.
-### P-480 - nature's reclaim is the fourth of five things ending a turn does
-
-**to** sean · **status** open · **cited** `97ca22a`, `da783d4` · **raised** 2026-09-13 · **kind** recovered, from your placing it at step 4 · **shape** text · **asks** approval · **into** `spec/turn.md` -> Order of operations
-
-You put nature at step 4, so the restoring of counts is step 5 and is one step rather than two.
-
-## The words, replacing the *Ending a turn* bullet
-
-> - Ending a turn: everything with upkeep pays it; then a population grows on surplus food or
->   starves for want of it; **what expires expires, and what was not kept in order is lost**; then
->   **nature takes back what is no longer held**; and **time restores every count to the number
->   that thing's kind declares**
-
-**One clause added and one word changed** - the third *and* becomes *then*, because there are now
-four semicolons rather than three.
-
-**It names the phase and not the rule.** `spec/control.md` says what nature does and when it does
-it - *should the force in a territory fall below its force of nature, nature takes it back; its
-entire population perishes, and every unit on it is destroyed*. Repeating the condition here would
-be a second statement of one fact. *What is no longer held* is that document's own vocabulary,
-because *holding a territory takes force equal to its force of nature*.
-
-## What your answer settles besides the position
-
-**Restoring counts is one step and it is last.** `P-480` asked that as a second question and the
-numbered list you answered against had it as a single step 5, so this is the reading - say so if
-it is not.
-
-**It moves one line of the code and changes nothing observable.** Today a territory's counts are
-restored inside `settle`, before the reclaim, and a unit's after it:
-
-```
-per territory   settle_population, end_of_turn_losses, make_ready
-then, globally  nature reclaims, units un-exhausted
-```
-
-**Nothing turns on it today** because the reclaim reads what is present rather than what is ready -
-so this is the specification saying plainly what the code does not quite do, rather than a defect
-anyone could see. **Filed to the code lane when this lands.**
-
-## Why this order rather than the other
-
-The alternative was that nature runs first, on the force you left when you stopped acting. **You
-chose the one where a population that starves can lose the ground it was holding** - so starvation
-and dispossession are sequential in the same turn rather than a turn apart.
+*Nothing is open. Everything filed has been decided.*
 
 ## Addressed to other perspectives
 
@@ -5202,6 +5063,9 @@ work the release exists to order.
 | P-476, nothing outside the debug view says which of a set is held                                                            | `spec/console.md` -> The language, `spec/logistics.md` -> Containment, `spec/data/`, and `releases/first-release.md` -> Traits                                                                           | 2026-09-13 |
 | P-477, the derived-trait guarantee moves to where the layout lives                                                           | `spec/invariants.md` -> The data is a normalized relational model, and The game is data                                                                                                                  | 2026-09-13 |
 | P-478, three sentences in `spec/console.md` still say `a stored trait`, and five files still say `total capacity`            | `spec/console.md` -> The language, and five files by rename                                                                                                                                              | 2026-09-13 |
+| P-479, a description's traits rank by relevance, with an alphabetical middle                                                 | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-13 |
+| P-480, nature's reclaim is the fourth of five things ending a turn does                                                      | `spec/turn.md` -> Order of operations                                                                                                                                                                    | 2026-09-13 |
+| P-481, the words a declaration is built from are the notation's own                                                          | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-13 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |

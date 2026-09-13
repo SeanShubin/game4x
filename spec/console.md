@@ -60,8 +60,11 @@ has already said it. **No trait of the thing may be left out** - `{citizen defen
 **Each distinct description is its own entry, and an entry is never zero.** A thing carrying an
 `id` has a description no other thing shares, so **its quantity is always one**. **Where a thing
 is, is where it appears**; nothing states its container. **Entries are in the order their
-descriptions sort in, and the traits inside a description sort too**, so the same state is always
-the same bytes and a description is one string however it was built.
+descriptions sort in, and the traits inside a description are in order of relevance**: `id` first,
+then every other trait alphabetically, then `occupied`, `free` and `capacity` last. So the same
+state is always the same bytes and a description is one string however it was built. **The middle
+is alphabetical because nothing has yet needed placing there**, and a trait leaves it by being
+named at one end or the other.
 
 **Every word in a data file is a kind, a trait, or one of a trait's values.** A file that uses any
 other word is wrong about the game rather than describing it.
@@ -129,8 +132,11 @@ of these and nothing else:
 
 **A guard compares two expressions**, with `=`, `<`, `≤`, `>` or `≥`.
 
-**The words an expression is built from are the notation's own.** They are the one thing in a data
-file that is not a kind, a trait, or one of a trait's values.
+**The words an expression is built from are the notation's own, and so are the words a
+declaration is built from** - `name`, `admits`, `kept`, `of` and `family`. **These are the two
+things in a data file that are not a kind, a trait, or one of a trait's values.** One is how the
+notation computes and the other is how it says what its vocabulary is; neither says anything
+about a game, and neither is declared.
 
 **A line may carry an attachment, written in brackets after its amount** - `-1 [soft]`. It says what
 to do when the line cannot do all of what it says, and it is a fact about the operation rather than
