@@ -68,7 +68,7 @@ Two limits Claude holds itself to:
 
 ### S-122 - `P-475` and `P-476` landed, and between them they change every deposit entry
 
-**to** code · **status** open · **raised** 2026-09-12 · **source** promoting both, then re-deriving the dump's shape from `spec/data/` rather than from the proposals
+**to** code · **status** **acted** 2026-09-12 · **cited** `3292266`, `5e97b79` · **raised** 2026-09-12 · **source** promoting both, then re-deriving the dump's shape from `spec/data/` rather than from the proposals
 
 **One rename and one widening, and they are in that order in the history.** `P-475` is
 `2c2ddde` and `P-476` is `dfb164a`.
