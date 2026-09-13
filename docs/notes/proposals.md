@@ -62,9 +62,48 @@ Two limits Claude holds itself to:
 
 ## Open
 
-*Nothing is open. Everything filed has been decided.*
-
 ## Addressed to other perspectives
+
+### S-122 - `P-475` and `P-476` landed, and between them they change every deposit entry
+
+**to** code · **status** open · **raised** 2026-09-12 · **source** promoting both, then re-deriving the dump's shape from `spec/data/` rather than from the proposals
+
+**One rename and one widening, and they are in that order in the history.** `P-475` is
+`2c2ddde` and `P-476` is `dfb164a`.
+
+## What a deposit entry becomes
+
+```
+was   {deposit density:4 resource:food room:0}
+now   {deposit capacity:3 density:4 free:0 occupied:3 resource:food}
+```
+
+**Thirty-four entries**, and no other entry in the release changes length. `binding` and
+`metal-in-it` moved from `kept:nothing` to `kept:kind`, so the clause *a trait of its kind is not
+part of a description* keeps them out, where *a derived trait is never part of one* used to.
+
+## The four things that moved under you
+
+- **`spec/data/traits.4x` is 26 lines and holds no `kept:nothing`.** `capacity` and `occupied` are
+  new, immediately before `free`; `binding`, `metal-in-it` and `surplus` are `kept:kind`, and
+  `control` and `unpaid` are `kept:thing`
+- **`spec/data/kinds.4x` line 18 is `{kind capacity density free name:deposit occupied}`**, and no
+  other line changed
+- **`available <kind> of x` is now `free <kind> of x`** in `spec/console.md` -> The language
+- **`spec/console.md` no longer says *a derived trait is never part of a description***, and `kept`
+  no longer admits `nothing`. **If anything in `crates/` branches on derivedness to decide what a
+  dump prints, that branch is now reading a fact the specification does not state**
+
+## What this does not ask for
+
+**Nothing about how the data is held.** Which of the three a store keeps is yours and the
+specification is now silent on it by design - the debug view is the one place it may be seen.
+
+## The one this lane could not check from here
+
+**`R-6`'s evidence line said every deposit entry carries `room`.** It is corrected in the same
+commit as this item, and it is the third time a status line in `releases/` has gone stale without
+anybody editing it - `docs/notes/nothing-removes.md` is the shape.
 
 ### S-121 - `P-473` landed, and the column had four readers rather than one
 
