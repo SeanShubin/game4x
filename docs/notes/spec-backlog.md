@@ -117,6 +117,26 @@ things follow that have not been said:
 an ark and two for a pioneer, so one trait would mean different things for different kinds - the
 lie `spec/invariants.md` warns about. Keep them separate and let fuel bind in practice.
 
+**Sean then asked to explore two options**: movement limited only by energy, or limited by a move
+count as well. **The first is already decided against, three times over.**
+
+- `spec/turn.md`: **What a thing can do is a count it carries as a trait, rather than something it
+  contains** - written to draw exactly this distinction, about something else
+- `spec/turn.md`: **When no thing has a count left, there is nothing left to do** - false if a unit
+  with fuel and no count can still act, so the turn's end stops being defined
+- `spec/invariants.md`: **Anything that exhausts draws on time for a turn**: it spends a count it
+  carries, and only the turn's end restores that count
+
+**And the count does not go away under the first option, it relocates.** Refuelling has to be
+bounded or movement is unbounded, so the per-turn count reappears on the refuel.
+
+**For the ark as specified the two options are the same game.** `moving 3` allows exactly what
+energy alone allows, because 3 is already the most fuel obtainable in a turn. **They diverge only
+where a unit's tank exceeds its speed** - so the real question is whether any unit should be able
+to hold more fuel than it can spend in a turn.
+
+**And Sean has said the *stores no fuel* sentence in `spec/units.md` has to go.**
+
 ## Said 2026-09-13: the turn report shows each of end-turn's five phases
 
 *I want to break down `reports/turns.html` even further. Right now we have 2 sections, "what your
