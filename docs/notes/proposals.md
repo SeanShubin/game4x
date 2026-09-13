@@ -130,7 +130,7 @@ it has a store for energy at the moment the pioneer dissolves is a question abou
 
 ### S-127 - `P-484` moves a sentence your doc comment quotes, and you are green right now
 
-**to** code · **status** open · **raised** 2026-09-13 · **source** grepping `crates/` for the sentence before promoting, rather than after
+**to** code · **status** **acted** 2026-09-13 · **cited** `0f19655` · **raised** 2026-09-13 · **source** grepping `crates/` for the sentence before promoting, rather than after
 
 **`155e329`.** One clause, five words, and the claim is unchanged - but
 `crates/game-console/src/state.rs:122` carries the old wording:
