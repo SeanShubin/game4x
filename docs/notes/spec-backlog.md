@@ -33,6 +33,25 @@ state, and `kind`, `trait` and `family`, which appear only in declarations. **Th
 `orbit`, `deposit`, `adjacency` and `game` are declared and named by no recipe, which is why the
 drawing leaves them out. **It is the same shape one step further.**
 
+## Said 2026-09-13: an addressing scheme for where a thing is
+
+**Wanted as a longer conversation, after the open proposals.** *It seems like we might need an
+addressing scheme to differentiate resources in disorder, in a territory container, or in a unit
+container.*
+
+**`P-489` sharpens it rather than raising it.** That item's rows already use two ways of saying
+where, and the release's own sentence supplies a third:
+
+- **`that pioneer`, `that unit`, `a store for energy`** - a container named by the row
+- **a blank `Where`** - *the place the recipe acts*, which is the territory
+- **and disorder**, which `P-487` just gave a rule - *what it held falls loose where it stood* -
+  and which nothing addresses, because loose is what a territory holds directly
+
+**So a territory already holds resources two ways** - loose, and inside a store it contains - and
+the notation distinguishes them only by naming the store. What it has no way to say is *the loose
+ones specifically*, which is what `stow` and `discard` operate on and what a dissolving container
+adds to.
+
 ## Said 2026-09-13: movement is scoped down for the first release
 
 **For the first release**: a pioneer and an ark each get **1 move, 1 space, 1 energy**. **The ark
