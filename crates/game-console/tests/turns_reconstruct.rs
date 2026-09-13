@@ -245,11 +245,23 @@ fn the_delta_accounts_for_every_thing_the_states_gained_or_lost() {
         );
 
         if let Some(before) = previous {
+            // **Both halves of the split, deliberately.** `S-123` divided *what changed* into
+            // what the player's commands did and what `end-turn` did, and this slices from the
+            // first heading to the state - so it spans both. That makes it the check that the
+            // split loses nothing: the two halves together still have to account for every
+            // thing the printed states gained or lost across the turn, and a split that
+            // dropped a change into the seam between them would fail here.
             let delta = turn
-                .split("## what changed")
+                .split("## what your commands did")
                 .nth(1)
                 .and_then(|rest| rest.split("## what is there now").next())
                 .unwrap_or("");
+            assert!(
+                delta.contains("## what `end-turn` did"),
+                "turn {}: the slice does not reach the second half of the split, so this is \
+                 accounting for the player's changes alone",
+                at + 1
+            );
 
             // What the delta says each kind gained, net. `new` and `gone` carry a quantity
             // after `->`; `changed` carries the two quantities either side of an arrow.

@@ -773,6 +773,18 @@ pub fn head(title: &str) -> String {
     out
 }
 
+/// The `##` sections a page renders folded, closed, rather than as a heading.
+///
+/// **`S-123`, and the number is why it is worth a mechanism.** Measured over `reports/turns.md`:
+/// 2665 of its 3031 lines are *what is there now* - **88% of the report** - so a reader scrolls
+/// 266 lines of mostly unchanged state to reach the next turn's commands. Folded, what is left
+/// is the 341 lines that say what happened.
+///
+/// **A list here rather than a rule about long sections**, because *long* is not the property:
+/// this section is the state of the world repeated in full after every turn, which is reference
+/// beside a narrative, and a section being long is not evidence that it is one.
+const FOLDED_SECTIONS: [&str; 1] = ["what is there now"];
+
 /// A markdown report as a page.
 ///
 /// **`S-40`.** Five reports had markdown and only two had HTML, so three of the index's
@@ -791,6 +803,11 @@ pub fn page(markdown: &str, title: &str) -> String {
     let mut lines = markdown.lines().peekable();
     let mut fenced = false;
     let mut list = false;
+    // **One `<details>` at a time, and it is plain HTML on purpose.** `R-9` - *I can browse
+    // the reports without a script running* - is built and waiting on Sean, so a collapse
+    // that needed JavaScript would redden a capability he has not vetted yet. `<details>` and
+    // `<summary>` need none.
+    let mut folded = false;
 
     while let Some(line) = lines.next() {
         let trimmed = line.trim();
@@ -838,6 +855,15 @@ pub fn page(markdown: &str, title: &str) -> String {
             list = false;
         }
 
+        // A fold runs until the next heading of its own level or higher, or the end.
+        if folded && (trimmed.starts_with("## ") || trimmed.starts_with("# ")) {
+            out.push_str(
+                "</details>
+",
+            );
+            folded = false;
+        }
+
         if let Some(rest) = trimmed.strip_prefix("### ") {
             out.push_str(&format!(
                 "<h3 id=\"{1}\">{0}</h3>
@@ -846,12 +872,25 @@ pub fn page(markdown: &str, title: &str) -> String {
                 crate::browse::slug(rest)
             ));
         } else if let Some(rest) = trimmed.strip_prefix("## ") {
-            out.push_str(&format!(
-                "<h2 id=\"{1}\">{0}</h2>
+            if FOLDED_SECTIONS.contains(&rest) {
+                // **The id stays on the fold**, so a link into the section still lands - and
+                // a browser opens a closed `<details>` to reach an anchor inside it.
+                out.push_str(&format!(
+                    "<details id=\"{1}\">
+<summary>{0}</summary>
 ",
-                inline(rest),
-                crate::browse::slug(rest)
-            ));
+                    inline(rest),
+                    crate::browse::slug(rest)
+                ));
+                folded = true;
+            } else {
+                out.push_str(&format!(
+                    "<h2 id=\"{1}\">{0}</h2>
+",
+                    inline(rest),
+                    crate::browse::slug(rest)
+                ));
+            }
         } else if let Some(rest) = trimmed.strip_prefix("# ") {
             out.push_str(&format!(
                 "<h1>{}</h1>
@@ -934,6 +973,10 @@ pub fn page(markdown: &str, title: &str) -> String {
             "</ul>
 ",
         );
+    }
+    // The last fold has no heading after it to close it, so the end of the document does.
+    if folded {
+        out.push_str("</details>\n");
     }
     out.push_str(
         "</body>
@@ -1280,9 +1323,23 @@ pub fn index(generated: &[(String, String)]) -> String {
 }
 
 /// One turn: what ran, what it changed, and what was there afterwards.
+///
+/// **The change is split in two, and the split point needs nothing decided.** `S-123`, from
+/// Sean: *there is the consequences of player action, and the consequence of end turn action.*
+/// `{end-turn}` is the last command of every turn - by construction here, since a turn is
+/// closed by that line and `dumps_are_current` asserts it of the emitted report as well - so
+/// the state after the command before it is where the player stops and the world starts.
+///
+/// **Merged, they were one list that answered neither question.** A citizen appearing because
+/// a recipe the player fired produced it and a citizen appearing because upkeep ran at the
+/// turn's end are different facts about the game, and the reader had to know the rules to
+/// tell them apart.
 pub struct Turn {
     pub commands: Vec<String>,
-    pub changed: crate::state::Disagreement,
+    /// What the player's commands did, before `{end-turn}` ran.
+    pub by_player: crate::state::Disagreement,
+    /// What `{end-turn}` did on its own.
+    pub by_end_turn: crate::state::Disagreement,
     pub state: String,
 }
 
@@ -1328,15 +1385,25 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(String, String)> {
         if line.is_empty() || line.starts_with('#') {
             continue;
         }
+        // **The snapshot is taken before `{end-turn}` runs, not after**, which is the whole of
+        // the split: everything up to here is the player's and everything the next line does is
+        // the world's.
+        let midpoint = if line == "{end-turn}" {
+            Some(crate::state::entries(&session.game))
+        } else {
+            None
+        };
         ran.push(line.to_string());
         session
             .run(line, commands)
             .unwrap_or_else(|why| panic!("`{line}` failed: {why}"));
         if line == "{end-turn}" {
+            let midpoint = midpoint.expect("taken on the same condition");
             let after = crate::state::entries(&session.game);
             turns.push(Turn {
                 commands: std::mem::take(&mut ran),
-                changed: crate::state::compare(&before, &after),
+                by_player: crate::state::compare(&before, &midpoint),
+                by_end_turn: crate::state::compare(&midpoint, &after),
                 state: markdown(&session.game, ""),
             });
             before = after;
@@ -1387,12 +1454,24 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(String, String)> {
 ",
         );
 
+        // **Both headings are written even where one half is empty**, which is a discipline
+        // rather than a saving. A turn where the player changed nothing and a turn whose
+        // section was not generated are different facts, and an absent heading makes them the
+        // same bytes. `as_a_turn` says *Nothing changed.* rather than nothing at all, for the
+        // same reason.
         per_turn.push_str(
-            "## what changed
+            "## what your commands did
 
 ",
         );
-        per_turn.push_str(&turn.changed.as_a_turn());
+        per_turn.push_str(&turn.by_player.as_a_turn());
+
+        per_turn.push_str(
+            "## what `end-turn` did
+
+",
+        );
+        per_turn.push_str(&turn.by_end_turn.as_a_turn());
 
         per_turn.push_str("## what is there now\n\n");
         // **Every table demoted, not just the first.** A turn's three parts are `##`, so a

@@ -626,3 +626,138 @@ fn every_kind_is_named_and_only_two_namings_depend_on_the_scenario() {
          less than it did",
     );
 }
+
+/// Every turn splits what changed in two, and says so even where a half is empty.
+///
+/// **`S-123`, from Sean:** *double the level of detail in each turn, there is the consequences
+/// of player action, and the consequence of end turn action.* The split point needs nothing
+/// decided because `{end-turn}` is the last command of every turn - asserted here of the
+/// emitted report rather than assumed of the loop that writes it, since the loop's structure
+/// and the file's contents are two different claims.
+///
+/// **Both headings are written even where a half is empty.** A turn where the player changed
+/// nothing and a turn whose section was not generated are different facts, and an absent
+/// heading makes them the same bytes.
+#[test]
+fn every_turn_splits_the_player_from_the_end_of_the_turn() {
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let turns =
+        std::fs::read_to_string(root.join("reports/turns.md")).expect("turns.md is generated");
+    let sections = turns.lines().filter(|l| l.starts_with("# Turn ")).count();
+    assert!(sections > 1, "a report of one turn tests nothing here");
+
+    for (heading, what) in [
+        ("## what your commands did", "the player's half"),
+        ("## what `end-turn` did", "the world's half"),
+    ] {
+        let found = turns.matches(heading).count();
+        assert_eq!(
+            found, sections,
+            "{what} appears {found} times and there are {sections} turns - an absent heading \
+             and an empty one are different facts"
+        );
+    }
+    assert!(
+        !turns.contains("## what changed"),
+        "the merged heading is still there, so the split is additive rather than a split"
+    );
+
+    // **The premise, read off the report.** Every turn's command block ends with `{end-turn}`
+    // and contains exactly one, which is what makes *before the last command* a split point
+    // rather than a guess.
+    let blocks: Vec<&str> = turns.split("## commands\n\n```\n").skip(1).collect();
+    assert_eq!(blocks.len(), sections, "one command block per turn");
+    let mut checked = 0;
+    for (at, block) in blocks.iter().enumerate() {
+        let commands: Vec<&str> = block
+            .split("```")
+            .next()
+            .expect("a fenced block closes")
+            .lines()
+            .filter(|line| !line.trim().is_empty())
+            .collect();
+        assert_eq!(
+            commands.last().map(|line| line.trim()),
+            Some("{end-turn}"),
+            "turn {} does not end with `{{end-turn}}`, so the split point is not where this \
+             report says it is",
+            at + 1
+        );
+        assert_eq!(
+            commands.iter().filter(|l| l.trim() == "{end-turn}").count(),
+            1,
+            "turn {} has more than one `{{end-turn}}`",
+            at + 1
+        );
+        checked += 1;
+    }
+    assert_eq!(checked, sections, "every turn's commands read");
+
+    // **A count over nothing, named.** No turn of the present scenario has an empty half, so
+    // the *Nothing changed.* wording is unexercised by this report - which is why the next
+    // assertion drives it directly rather than looking for it here.
+    let empty = turns.matches("*Nothing changed.*").count();
+    assert_eq!(
+        empty, 0,
+        "a half of some turn is empty now, which is fine - but this comment says none is, and \
+         a comment that has stopped being true is worse than no comment"
+    );
+    assert_eq!(
+        game_console::state::Disagreement::default().as_a_turn(),
+        "*Nothing changed.*\n\n",
+        "an empty half has to say so, and no turn of this scenario makes one"
+    );
+}
+
+/// The folded section is plain HTML, which is what keeps `R-9` true.
+///
+/// **`R-9` - *I can browse the reports without a script running* - is built and waiting on
+/// Sean.** A collapse that needed JavaScript would redden a capability he has not vetted, so
+/// this asserts what the page is made of rather than trusting that nobody adds one.
+#[test]
+fn the_reports_fold_without_a_script() {
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let page = std::fs::read_to_string(root.join("reports/turns.html")).expect("turns.html");
+    let turns =
+        std::fs::read_to_string(root.join("reports/turns.md")).expect("turns.md is generated");
+    let sections = turns.lines().filter(|l| l.starts_with("# Turn ")).count();
+
+    assert_eq!(
+        page.matches("<details").count(),
+        sections,
+        "one fold per turn"
+    );
+    assert_eq!(
+        page.matches("</details>").count(),
+        page.matches("<details").count(),
+        "the folds are not balanced"
+    );
+    assert_eq!(
+        page.matches("<summary>what is there now</summary>").count(),
+        sections,
+        "the fold does not carry the heading it replaced, so the outline reads differently \
+         open and closed"
+    );
+
+    // **Every report, not only this one.** The capability is about browsing the reports, so a
+    // script anywhere in the directory costs it - and a check over the one file just edited
+    // would be a count over the wrong population.
+    let mut looked = 0;
+    for entry in std::fs::read_dir(root.join("reports")).expect("reports/ is generated") {
+        let path = entry.expect("a directory entry").path();
+        if path.extension().is_none_or(|it| it != "html") {
+            continue;
+        }
+        let text = std::fs::read_to_string(&path).expect("a generated page");
+        assert!(
+            !text.contains("<script"),
+            "{} carries a script, and `R-9` says the reports browse without one",
+            path.display()
+        );
+        looked += 1;
+    }
+    assert!(
+        looked >= 10,
+        "only {looked} pages checked; the reports directory has probably moved"
+    );
+}

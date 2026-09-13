@@ -46,6 +46,12 @@ a:hover { text-decoration-style: solid }
   background: rgba(127,127,127,.18);
 }
 
+/* A folded `##` section - `S-123`. The summary stands where the heading stood, so a reader
+   sees the same outline whether a section is open or closed. `<details>` is plain HTML and
+   needs no script, which is what keeps `R-9` true. */
+details > summary { margin: 2rem 0 .25rem; font-size: 1.1rem; font-weight: 600 }
+details[open] > summary { margin-bottom: .75rem }
+
 /* containment.html */
 ul.tree, ul.tree ul { padding-left: 1.1rem; margin: .1rem 0 }
 ul.tree > li { margin: .1rem 0 }
