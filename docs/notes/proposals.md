@@ -69,24 +69,16 @@ Two limits Claude holds itself to:
 You chose `B`: state the top and the bottom, leave the middle alphabetical and deterministic, and
 place a trait explicitly when one annoys you enough.
 
-**Two blocks.** The first is your decision written down. **The second is the code lane's choice
-about declaration lines**, which it made and flagged; approving it is you making it, and
-`promote P-479:1` alone lands the first without the second.
+**One block.** The declaration-line half of this has moved to `P-481`, because your question
+about `name` showed it rests on something unsettled.
 
-## 1. Replacing the *sort* clause
+## Replacing the *sort* clause
 
 > **Entries are in the order their descriptions sort in, and the traits inside a description are in
 > order of relevance**: `id` first, then every other trait alphabetically, then `occupied`, `free`
 > and `capacity` last. So the same state is always the same bytes and a description is one string
 > however it was built. **The middle is alphabetical because nothing has yet needed placing
 > there**, and a trait leaves it by being named at one end or the other.
-
-## 2. Declaration lines, which name a trait without valuing it
-
-> **On a kind's line a trait is named and not valued, and there it keeps its alphabetical place.**
-> The order of relevance is about a thing and `id:1` identifies one; a declared `id` is a trait the
-> kind has, and ranking it first would put it ahead of `name`, which says which kind the line is
-> about.
 
 ## The alternative to alphabetical, and why it is worse
 
