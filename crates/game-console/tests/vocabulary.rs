@@ -261,8 +261,8 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
         4,
         "four families; the release lists {families:?}"
     );
-    // **Twenty-six since `P-478`, and `room` becoming three is why.** `P-474` made the
-    // deposit's bound the room left; `P-477` and `P-478` name all three - `capacity`,
+    // **Twenty-six since `P-476`, and `room` becoming three is why.** `P-474` made the
+    // deposit's bound the room left; `P-477` and `P-476` name all three - `capacity`,
     // `occupied` and `free` - because `spec/logistics.md` says **three names describe it and
     // there are two facts**, and any two give the third.
     //

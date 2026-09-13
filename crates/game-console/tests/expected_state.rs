@@ -353,7 +353,7 @@ fn every_territorys_own_numbers_survive_the_round_trip() {
                                 panic!("territory {}'s {resource} states no {name}", place.id)
                             })
                     };
-                    // **Three names and two facts** - `spec/logistics.md`, `P-478`: a
+                    // **Three names and two facts** - `spec/logistics.md`, `P-476`: a
                     // container's capacity for a kind, how much is occupied, and how much is
                     // free. Any two give the third.
                     //

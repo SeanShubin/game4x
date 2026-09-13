@@ -159,7 +159,7 @@ pub struct Place {
     ///
     /// **The free capacity is therefore state, and state is a place** - drawing the count and
     /// leaving the free capacity out would be the diagram omitting part of the state, which
-    /// is the thing its own accounting paragraph exists to prevent. `P-478` named the three;
+    /// is the thing its own accounting paragraph exists to prevent. `P-476` named the three;
     /// `P-374` and `P-474` are where the choice of which two to hold was made.
     pub room: bool,
 }

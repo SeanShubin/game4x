@@ -91,7 +91,7 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
                 })
                 .collect();
         // **This test holds two of the three population counts, and that is worth knowing when
-        // a promotion moves them.** `P-478` took the Traits table from twenty-four rows to
+        // a promotion moves them.** `P-476` took the Traits table from twenty-four rows to
         // twenty-six; three literal `24`s had to move, two of them in this test - here, and at
         // the cross-check against `spec/data/traits.4x` below.
         //
@@ -235,7 +235,7 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
             mentions += 1;
         }
     }
-    // **Forty-five since `P-478`, and the deposit is where the two arrived.** Twenty-six
+    // **Forty-five since `P-476`, and the deposit is where the two arrived.** Twenty-six
     // traits; `keeps` is `of:thing` and is on no kind's line; the other twenty-five are
     // carried by between one and six kinds each. **The deposit names four where it named
     // two** - `capacity`, `density`, `free`, `occupied` - because `room` became the three
@@ -598,8 +598,8 @@ fn the_traits_file_declares_what_a_data_file_needs() {
     let read = state::declarations(&file)
         .unwrap_or_else(|why| panic!("{} does not parse: {why}", at.display()));
 
-    // **Twenty-six since `P-478`, and `room` becoming three is why.** `P-474` made the
-    // deposit's bound the room left; `P-477` and `P-478` name all three - `capacity`,
+    // **Twenty-six since `P-476`, and `room` becoming three is why.** `P-474` made the
+    // deposit's bound the room left; `P-477` and `P-476` name all three - `capacity`,
     // `occupied` and `free` - because `spec/logistics.md` says **three names describe it and
     // there are two facts**, and any two give the third.
     //
@@ -623,7 +623,7 @@ fn the_traits_file_declares_what_a_data_file_needs() {
         .map(String::as_str)
         .collect();
     // **`kept:nothing` is gone and these five are why it was there.** They were the derived
-    // traits, and `P-478` removed the distinction: `kept` says where a value belongs and never
+    // traits, and `P-476` removed the distinction: `kept` says where a value belongs and never
     // whether one is held. So each of them now belongs somewhere, and the assertion is that
     // none of them is excused from saying where.
     //
@@ -643,7 +643,7 @@ fn the_traits_file_declares_what_a_data_file_needs() {
         let kept = row.traits.get("kept").map(String::as_str);
         assert!(
             kept == Some("thing") || kept == Some("kind"),
-            "`{derived}` says `kept` {kept:?}, and `P-478` left two: a value belongs to each \
+            "`{derived}` says `kept` {kept:?}, and `P-476` left two: a value belongs to each \
              thing or to the kind"
         );
         arrived += 1;
@@ -765,6 +765,6 @@ fn the_traits_file_declares_what_a_data_file_needs() {
     assert_eq!(
         (kept_by("thing"), kept_by("kind"), kept_by("nothing")),
         (19, 7, 0),
-        "nineteen belong to each thing, seven to the kind, and **none to nothing** - `P-478`          removed the third, because `kept` says where a value belongs and never whether one          is held. The zero is asserted rather than dropped, so a `nothing` reaching the          file fails here"
+        "nineteen belong to each thing, seven to the kind, and **none to nothing** - `P-476`          removed the third, because `kept` says where a value belongs and never whether one          is held. The zero is asserted rather than dropped, so a `nothing` reaching the          file fails here"
     );
 }

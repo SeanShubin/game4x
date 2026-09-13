@@ -394,7 +394,7 @@ impl Territory {
     /// cleared in one, and every one of them was a chance for it to disagree with the
     /// citizens it was meant to describe.
     ///
-    /// **`P-477` moved that guarantee and `P-478` took the word `derived` out.** The release
+    /// **`P-476` took the word `derived` out and `P-477` moved that guarantee.** The release
     /// says how a value is arrived at in its *Values* cell now, rather than declaring a trait
     /// derived in a column of its own.
     ///

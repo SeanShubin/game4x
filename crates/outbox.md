@@ -542,8 +542,14 @@ line.
 
 ## *Where things are* - three rows, and not one number
 
-- *a territory's total capacity for a kind* holds *that kind*, up to *its total capacity for that
-  kind*. **That is a rule about every kind, not a row of data.**
+**Quotations refreshed 2026-09-12**, after `P-474` and `P-476`: the container cell read *a
+territory's total capacity for a kind* and reads *a territory*, and the bound read *its total
+capacity for that kind* and reads *its free capacity for that kind*. **The argument is untouched** -
+two of the three `Up to` cells are trait references and the third is the store's `10` - which is
+why this is a quotation refreshed rather than a finding re-run.
+
+- *a territory* holds *that kind*, up to *its free capacity for that kind*. **That is a rule about
+  every kind, not a row of data.**
 - *a store* holds *the resource it was built for*, up to **10**.
 - *a unit's tank* holds *energy*, up to *the unit's fuel* - a reference to the `fuel` trait.
 
@@ -601,7 +607,7 @@ relation, and **`C-47` already called it the capacity relation** - this item the
 five numbers as of-the-kind traits, which is the thing that item says they are not.
 
 **So *Where things are* is the one of the four that genuinely wants a file**, and the
-recommendation above is wrong about it. What stands is the rest of that table: *its total capacity
+recommendation above is wrong about it. What stands is the rest of that table: *its free capacity
 for that kind* and *the unit's fuel* are declared traits and need nothing, and eight of the twelve
 bounds are relationships rule 7 leaves in prose.
 

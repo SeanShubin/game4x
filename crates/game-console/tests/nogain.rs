@@ -453,7 +453,7 @@ fn every_place_is_a_kind_or_a_count_and_never_a_derived_trait() {
     // **And the derived trait the page names by hand is really derived and really absent.**
     // Naming it keeps the page's example honest rather than only its general claim.
     //
-    // **Asserted on the derivation rather than on the word `derived`** - `P-478` removed the
+    // **Asserted on the derivation rather than on the word `derived`** - `P-476` removed the
     // column that carried that word, and the release says how instead of saying that.
     let derived = document
         .lines()
@@ -475,7 +475,7 @@ fn every_place_is_a_kind_or_a_count_and_never_a_derived_trait() {
 
 /// Every trait the release declares, or only those whose *Values* cell states a derivation.
 ///
-/// **`P-478` deleted the *Stored or derived* column and derivation did not go with it.** The
+/// **`P-476` deleted the *Stored or derived* column and derivation did not go with it.** The
 /// release says how a derived trait is arrived at in its *Values* cell, after a colon - *a
 /// number: its binding plus the metal in its parts* - and `spec/console.md` no longer divides
 /// traits into stored and not, because `kept` says where a value belongs and never whether one
@@ -486,7 +486,7 @@ fn every_place_is_a_kind_or_a_count_and_never_a_derived_trait() {
 /// row that claimed to be derived and named no derivation would no longer count.
 ///
 /// **This read the column by position and then by name, and both stopped working** - `P-473`
-/// moved it from 3 to 2 and `P-478` removed it. Fourth and fifth time for one reader.
+/// moved it from 3 to 2 and `P-476` removed it. Fourth and fifth time for one reader.
 fn traits_marked(document: &str, word: &str) -> Vec<String> {
     let at = game_console::recipes::column_of(document, "## Traits", "Values");
     game_console::recipes::body_under(document, "## Traits")

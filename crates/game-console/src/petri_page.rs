@@ -188,7 +188,7 @@ fn accounting(net: &Net, document: &str) -> String {
     ));
     let rooms = net.places.iter().filter(|place| place.room).count();
     out.push_str(&format!(
-        "**{rooms} of those places are free capacity rather than a count** - `P-478`. Three \
+        "**{rooms} of those places are free capacity rather than a count** - `P-476`. Three \
          names describe one bound and there are two facts: a container's **capacity** for a \
          kind, how much of it is **occupied**, and how much is **free**. Any two give the \
          third, so only two are ever held and nothing can disagree with anything. Making a \

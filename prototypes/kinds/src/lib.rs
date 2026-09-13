@@ -333,7 +333,7 @@ pub const CAPACITIES: [Capacity; 3] = [
 /// Whether a trait is held or worked out.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum BelongsTo {
-    /// **`P-478`: a value belongs to each thing of a kind, or to the kind.**
+    /// **`P-476`: a value belongs to each thing of a kind, or to the kind.**
     ///
     /// It replaced *Stored or derived*, which said whether a value was held rather than where
     /// it belongs. How a derived value is arrived at is in the *Values* cell now, after a
@@ -458,7 +458,7 @@ pub const TRAITS: [TraitRow; 26] = [
         values: "a number",
         belongs: BelongsTo::EachThing,
     },
-    // **`P-478` made one name three.** `spec/logistics.md`: *three names describe it and there
+    // **`P-476` made one name three.** `spec/logistics.md`: *three names describe it and there
     // are two facts* - a container's capacity for a kind, how much is occupied, and how much
     // is free. Any two give the third, so only two are ever held and nothing can disagree.
     // It was `total capacity`, then `room` for one promotion, and is these three.

@@ -231,7 +231,7 @@ pub fn biomes(document: &str) -> String {
 /// `unpaid` are named once each. **`metal in it` and `control` are named by nothing**, counted
 /// over the *Recipes* table, so they are in no data file at all.
 pub fn traits(document: &str) -> String {
-    // **Found by name, because `P-478` renamed one of these and moved the other.** *Stored or
+    // **Found by name, because `P-476` renamed one of these and moved the other.** *Stored or
     // derived* is *Belongs to*, and it says where a value belongs rather than whether one is
     // held - `spec/console.md`: *it says where a value belongs and never whether one is held,
     // which is the layout and has one reader.*
@@ -306,7 +306,7 @@ pub fn traits(document: &str) -> String {
 /// line would be a rule stated twice - `P-458`, and the specification lane applied it to its
 /// own draft.
 fn admits(values: &str) -> String {
-    // **A *Values* cell may carry its derivation after a colon** since `P-478` - *a number:
+    // **A *Values* cell may carry its derivation after a colon** since `P-476` - *a number:
     // its capacity less what it holds*. What a trait admits is the part before it; how a
     // value is arrived at is not something a data file says.
     let said = values

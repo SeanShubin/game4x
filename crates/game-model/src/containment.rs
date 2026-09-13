@@ -36,7 +36,7 @@
 //!
 //! **That is what `C-53` was about and it is answered.** Territory 3 offered six food
 //! extractors and had built none, so nothing in its file said six; all three are there now -
-//! `P-478`. [`Capacity`] below is still computed rather than written, and is a view
+//! `P-476`. [`Capacity`] below is still computed rather than written, and is a view
 //! of what a deposit states plus what the territory holds - which is what
 //! `spec/logistics.md` calls occupied and free.
 
@@ -135,7 +135,7 @@ impl Description {
 ///
 /// # Which two are held, and why this type holds those two
 ///
-/// **`P-478` named the three and the rule chose none of them**, which is deliberate: any two
+/// **`P-476` named the three and the rule chose none of them**, which is deliberate: any two
 /// give the third. This holds `free` and `used`, so `capacity()` is their sum.
 ///
 /// **`P-374` and `P-474` are where that choice was made and `C-81` is what it cost.** It held
@@ -152,8 +152,8 @@ impl Description {
 /// half of it - the half that is a limitation - is the one a reader has to know.
 ///
 /// - **`used` is not a number this holds** - it is how many are there - so there was never
-///   anything to leave out. `P-477` took the rule that said so out of `spec/console.md` and
-///   `P-478` took the word `derived` with it, and the fact is unchanged.
+///   anything to leave out. `P-476` took the word `derived` out of the release's column and
+///   `P-477` took the rule that said so out of `spec/console.md`; the fact is unchanged.
 /// - **`capacity` was the held one** when this was written, so nothing excused its absence.
 ///   It is out because a description is a flat map and a territory has a capacity per kind,
 ///   which the map form has no way to write. `C-46`.
@@ -497,7 +497,7 @@ pub fn tree(game: &Game) -> Entry {
                 Description::of(Kind::Deposit)
                     .with("resource", resource.name())
                     .with("density", offered.density)
-                    // **Three names and two facts** - `spec/logistics.md`, `P-478`. Any two
+                    // **Three names and two facts** - `spec/logistics.md`, `P-476`. Any two
                     // give the third, so the model holds the free capacity and how many are
                     // there; all three are written, because a description carries every trait
                     // of the thing and `P-477` removed the rule that kept a derived one out.
