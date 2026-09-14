@@ -62,126 +62,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-495 - Taking a territory, by the same trick that just removed holding's zero test
-
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** entailed · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes
-
-**You asked for the taking half worked up now.** `spec/control.md` states two rules about force and
-`C-115` answered one:
-
-```
-Taking a territory takes force greater than the existing force, be that nature, a player, or
-another player's units
-Holding a territory takes force equal to its force of nature
-```
-
-**Holding is landed. Taking is the harder of the two** - a strict inequality between two variable
-quantities, where holding compared a variable against a per-territory constant.
-
-## What lands, added to `## Recipes` after `renew`
-
-| Recipe   | Owner | Role    | Qty | Kind   | Traits | Where |
-| -------- | ----- | ------- | --- | ------ | ------ | ----- |
-| **take** | world | require | 1   | nature |        |       |
-|          |       | consume | 1   | nature |        |       |
-|          |       | consume | 1   | force  |        |       |
-
-## Why this is the whole of it, and the inequality is never written
-
-**`take` fires `min(force, nature)` times**, because that is when a transition with two inputs
-stops being enabled - the same firing rule `upkeep` leans on and `hold` now leans on. **Nothing
-computes the minimum and nothing compares the two.**
-
-**Then the strict inequality falls out of what is left over.** Force *greater than* nature leaves at
-least one force standing; force *equal to* nature leaves none. **A rule that requires one force
-afterwards is exactly the rule that fires only when force was greater** - a presence test, which is
-an ordinary input arc.
-
-**So the release's own distinction between taking and holding arrives for free rather than being
-stated twice**, which is `spec/invariants.md` -> *a fact is stated once* holding of a rule that had
-been stated as two comparisons.
-
-## The one thing this changes that holding did not, and it is why this is a proposal
-
-**`found by land` and `deploy ark` gain a requirement.** Founding is what taking enables, so each
-gains one row:
-
-| Recipe            | Owner  | Role    | Qty | Kind  | Traits | Where |
-| ----------------- | ------ | ------- | --- | ----- | ------ | ----- |
-| **found by land** | player | require | 1   | force |        |       |
-
-| Recipe         | Owner  | Role    | Qty | Kind  | Traits | Where |
-| -------------- | ------ | ------- | --- | ----- | ------ | ----- |
-| **deploy ark** | player | require | 1   | force |        |       |
-
-**`C-115` filed this half as a shape and not as rows for exactly this reason** - *it changes what
-founding requires, and that is a rule.* The rows above are this lane's writing of that shape, so
-**this is the cell that wants your eye**: whether founding should require force left standing, or
-whether taking and founding stay separate and the leftover force is read some other way.
-
-## What is certain even if you change the rows
-
-**Whatever answers taking has to answer it in this form.** `C-115`'s words, and the reason is a
-number rather than a preference: the alternative is a genuine inhibitor arc on an unbounded place,
-and **reachability survives one inhibitor arc and dies at two.** Holding's is gone; if taking's
-comes back, the net loses the property the whole reformulation was for.
-
-## What this rests on that is not yet landed
-
-**`P-494`**, which makes `nature` a kind in the Kinds table and retires the trait. These rows name
-that kind, so this one lands after it or not at all.
-### P-494 - `nature` is now a kind in the Recipes table and a trait everywhere else
-
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** entailed · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Kinds, Traits, and Biomes
-
-**Filed the moment `C-115`'s rows landed, which is what the staleness rule requires.** `hold`,
-`reclaim` and `renew` name `nature` in the Kind column. **Three other tables in the same file still
-call it a trait**, and one of them is the list the generated `spec/data/` is built from - so the
-release currently contradicts itself and the gate reads the contradiction rather than the intent.
-
-**No choice is made here.** Every cell below follows from `nature` being a held kind rather than a
-number a territory carries, which is the thing you already said to go with.
-
-## One - `## Kinds` gains a row, after **fertility** and before **force**
-
-| Kind       | What it is                                                                                |
-| ---------- | ----------------------------------------------------------------------------------------- |
-| **nature** | what a territory's ground resists with; held by the territory, and met by force each turn |
-
-## Two - `## Traits` loses **nature** and gains **met**, in the same position
-
-| Trait   | Values                                    | Belongs to |
-| ------- | ----------------------------------------- | ---------- |
-| **met** | a number: force was spent on it this turn | each thing |
-
-**`met` is the fifth trait of a shape the release already has four of** - `defending`, `bearing`,
-`laboring` and `working` are each `0 or 1`, spent by a recipe and restored by `refresh`. `renew` is
-`refresh`'s shape under another name, and `C-115` says this is the strongest evidence the
-formulation is right rather than clever: **nothing new is invented.**
-
-## Three - the sentence under the Traits table
-
-The line *Food is made with `keeps` 1. The force nature holds a territory with.* loses its second
-sentence, which described the trait being removed. **It becomes** *Food is made with `keeps` 1.*
-
-## Four - `## Biomes`, the *Force of nature* column keeps every number and changes what it means
-
-**No cell changes.** Ice, desert, grassland and mountain stay **1** and jungle stays **2**. What
-moves is the column's meaning: it was the number a territory's `nature` trait carried, and it is now
-**how many `nature` a territory starts holding**. The paragraph above the table gains a sentence
-saying so:
-
-> **Force of nature is how many `nature` the territory holds at the start.** A territory with two
-> needs two force to hold it, and each one force meets is marked until the turn ends.
-
-## What this does not cover, deliberately
-
-**Taking.** `spec/control.md` states two rules and `C-115` answers one; the other is `P-495`, filed
-beside this.
-
-**The generated files.** `spec/data/kinds.4x` and `spec/data/traits.4x` are written by a generator
-from these tables, so they follow rather than being edited - **and the gate is red until the code
-lane regenerates them.** `C-115` is already open to them; this says which tables moved.
+*Nothing is open. Everything filed has been decided.*
 
 ## Addressed to other perspectives
 
@@ -5556,6 +5437,8 @@ work the release exists to order.
 | P-490, a habit earns its place by a case it caught, not a case it explains                                                   | `CLAUDE.md` -> What done means                                                                                                                                                                           | 2026-09-14 |
 | P-491, a recipe naming a family leaves the kind open, and `refuel` gains the place row it refers to                          | `spec/console.md` -> Commands, and `releases/first-release.md` -> Recipes                                                                                                                                | 2026-09-14 |
 | P-493, Your reason for a thin engine, into the invariants                                                                    | `spec/invariants.md` -> The game is data                                                                                                                                                                 | 2026-09-14 |
+| P-494, `nature` is now a kind in the Recipes table and a trait everywhere else                                               | `releases/first-release.md` -> Kinds, Traits, and Biomes                                                                                                                                                 | 2026-09-14 |
+| P-495, Taking a territory, by the same trick that just removed holding's zero test                                           | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-14 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |

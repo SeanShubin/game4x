@@ -69,6 +69,7 @@ Every territory has capacity for at least one food extractor.
 | **adjacency** | two places that share an edge, held by the thing that holds them                                       |
 | **game**      | every thing is in it, and it is the one thing that is in nothing                                       |
 | **fertility** | a citizen's capacity to raise one more, spent by raising one and renewed each turn                     |
+| **nature**    | what a territory's ground resists with; held by the territory, and met by force each turn              |
 | **force**     | what a territory presents to hold or take ground; mustered each turn and swept at its end              |
 
 ## Families
@@ -130,7 +131,7 @@ are listed.
 | **free**        | a number: its capacity less what it holds                         | each thing |
 | **control**     | held by a player, or unclaimed: a citizen of that player is there | each thing |
 | **biome**       | one of the biomes                                                 | each thing |
-| **nature**      | a number                                                          | each thing |
+| **met**         | a number: force was spent on it this turn                         | each thing |
 | **from**        | a place                                                           | each thing |
 | **to**          | a place                                                           | each thing |
 | **keeps**       | the number of turns it will last                                  | each thing |
@@ -139,7 +140,7 @@ are listed.
 | **phase**       | design or play                                                    | each thing |
 | **movable**     | a number                                                          | the kind   |
 
-Food is made with `keeps` 1. The force nature holds a territory with.
+Food is made with `keeps` 1.
 
 ## What bounds a kind in a territory
 
@@ -216,6 +217,7 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 | Recipe              | Owner  | Role    | Qty                                  | Kind      | Traits                                        | Where                    |
 | ------------------- | ------ | ------- | ------------------------------------ | --------- | --------------------------------------------- | ------------------------ |
 | **deploy ark**      | player | require | 1                                    | territory |                                               | `$where`                 |
+|                     |        | require | 1                                    | force     |                                               |                          |
 |                     |        | consume | 1                                    | ark       |                                               | the orbit above `$where` |
 |                     |        | produce | 1                                    | garrison  |                                               |                          |
 |                     |        | produce | 2                                    | citizen   |                                               |                          |
@@ -231,6 +233,7 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 |                     |        | consume | 1                                    | energy    |                                               |                          |
 |                     |        | produce | 1                                    | energy    |                                               | that unit                |
 | **found by land**   | player | consume | 1                                    | pioneer   |                                               |                          |
+|                     |        | require | 1                                    | force     |                                               |                          |
 |                     |        | produce | 1                                    | garrison  |                                               |                          |
 |                     |        | produce | 2                                    | citizen   |                                               |                          |
 |                     |        | produce | 1                                    | extractor | food                                          |                          |
@@ -302,6 +305,9 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 |                     |        | consume | 1                                    | citizen   |                                               |                          |
 | **renew**           | world  | require | 1                                    | nature    |                                               |                          |
 |                     |        | put     |                                      | nature    | met at least 0                                |                          |
+| **take**            | world  | require | 1                                    | nature    |                                               |                          |
+|                     |        | consume | 1                                    | nature    |                                               |                          |
+|                     |        | consume | 1                                    | force     |                                               |                          |
 | **discard**         | world  | consume | 1                                    | force     |                                               |                          |
 
 ## Biomes
@@ -309,6 +315,9 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 What a biome is like, so that a territory's numbers can be chosen to suit it. **The numbers here
 guide and do not bind; a territory's own are in *Territory resources*. Force of nature is the one
 column that binds.** Ocean is not claimable and carries nothing.
+
+**Force of nature is how many `nature` the territory holds at the start.** A territory with two
+needs two force to hold it, and each one force meets is marked until the turn ends.
 
 | Biome     | Food  | Metal | Energy | Force of nature |
 | --------- | ----- | ----- | ------ | --------------- |
