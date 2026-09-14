@@ -39,9 +39,9 @@ data; the words are not.
 {carries      kind:pioneer  trait:fuel}                       45 rows
 {member       kind:ark      family:unit}                       7 rows
 {limit        container:territory contained:garrison n:1}      5 rows
-{block        id:refresh-1  recipe:refresh  owner:world}      36 rows
-{line         block:refresh-1 seq:1 role:put qty: kind:unit place:}   93 rows
-{constraint   block:refresh-1 seq:1 trait:moving compare:at-its-maximum}   26 rows
+{block        id:refresh-moving  recipe:refresh  owner:world}      36 rows
+{line         block:refresh-moving seq:1 role:put qty: kind:unit place:}   93 rows
+{constraint   block:refresh-moving seq:1 trait:moving compare:at-its-maximum}   26 rows
 {for          block:build-extractor-1 seq:4 kind:food}         7 rows
 ```
 
