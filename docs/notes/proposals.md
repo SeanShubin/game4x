@@ -69,6 +69,191 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### P-502 - withdrawn: its surviving half is `P-509`, and the rest pooling makes moot
+
+**to** sean · **status** **withdrawn** 2026-09-14 · **raised** 2026-09-14 · **kind** invented · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment
+
+**Withdrawn on Sean choosing `G3`**, and it is two rules of which pooling keeps one and deletes one.
+
+**Kept, in `P-509`**: *a bin is a store* - a store is a thing, declares a capacity, and a thing with
+two bins holds two stores.
+
+**Deleted**: *what it holds is what it contains*. Under pooling a store **holds nothing** and only
+contributes capacity, so there is nothing for the trio to be about.
+
+**And its entry rule is moot.** *Each distinct description and contents is its own entry* was needed
+because two alike things could hold different things. Under pooling **only a place holds anything,
+and every place carries an `id`** - so no two entries ever share a description, and neither the rule
+nor the contents tie-break it gained on 2026-09-14 has a case. **Both are withdrawn with it.**
+
+**Your transport definition is this proposal.** `1 * storage[fuel] capacity 2` and `1 *
+storage[$resource] capacity 10` - two bins in one thing, each a container in its own right.
+
+> A bin is a thing. **What holds a kind is a store for that kind**, and a thing with two bins holds
+> two stores. A store's capacity is what its kind declares; what it holds is what it contains; and
+> how much is free is the difference. **None of the three is a trait of the store**, because any two
+> give the third and the third is then a second statement of the same fact.
+
+> **Each distinct description and contents is its own entry.** Two things alike in every trait but
+> holding different things are two entries, not one entry of two. **Where two entries share a
+> description they sort by their contents, by this same rule, and by quantity where the contents'
+> descriptions are equal too** - which is total, because a thing holds finitely many entries and
+> each is shorter than what holds it.
+
+## What this removes, which is the test of it
+
+**Nothing gains a field when a resource is added.** `spec/invariants.md` requires that - *adding a
+kind adds no field and no case* - and it is what rules out the obvious alternative of naming the
+trio per kind, `free-metal` beside `free-energy`. **That alternative is not rejected on taste; it is
+already forbidden.**
+
+**And a unit's tank stops being its own idea.** `releases/first-release.md` has a *unit's tank*
+listed as one of three sorts of capacity, with its own row and its own rules. Under this it is a
+store inside a unit, and there are not three sorts of capacity - there is one.
+
+## The uniformity you asked for, and what it costs
+
+**Every bin is the same kind of thing, everywhere.** A territory's three metal stores, a transport's
+cargo hold and its fuel tank are four stores, differing only in what they are for and how much they
+take. There is no second vocabulary for *a capacity a thing has* beside *a container a thing holds*.
+
+**What it over-specifies** is that a thing's own capacity now has a container to live in even where
+only one bin will ever exist. `store` gains no complexity from this - it is the kind that was
+already there - but a reader meets a store where they might have expected a number.
+
+## A defect this item had until 2026-09-14, found by Sean asking about position
+
+**`Entries are in the order their descriptions sort in`** - `spec/console.md`. This item says two
+things alike in every trait but holding different things are **two entries**, and it did not say how
+they sort. **They have the same description, so the order between them is undefined**, and *the same
+state is always the same bytes* stops being true the moment a container holds two.
+
+**The rule needs one more clause, and it is offered above rather than left implied:**
+
+> **Where two entries share a description they sort by their contents, by this same rule.** The
+> order is total because a thing holds finitely many entries and each is shorter than what holds it.
+
+**It matters beyond tidiness**: a position is an index into that order, and an index into an order
+that is not total names nothing. **Nothing in the item warned of this** - it was found by a question
+about a user interface.
+
+## One thing this lane checked and one it did not
+
+**Checked**: `store` already carries a `resource` trait, so `storage[metal]` is `{store
+resource:metal}` today and needs nothing invented. Your parameterised notation is expressible now.
+
+**Not checked, and it is the risk**: `free` becomes derived under this, and `P-496` deleted a
+constraint that named a derived trait because the Petri net materialises free capacity as tokens.
+**The data model would derive what the net holds.** This lane has not measured whether that bites,
+and says so rather than discovering it during a promotion.
+
+### P-508 - withdrawn: under pooling nothing without an `id` holds anything
+
+**to** sean · **status** **withdrawn** 2026-09-14 · **raised** 2026-09-14 · **kind** invented · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**Withdrawn on Sean choosing `G3`.** A position existed to say **which** of two alike things, and
+under pooling there is never a which: **nothing without an `id` holds anything**, so two transports
+in a place are one entry and stay one until one of them leaves. The flaw this item wrote out - a
+listing re-sorting under a sequence of positional commands - stops being a cost because there is no
+listing to index.
+
+**What it found survives in `P-509`**: that the game was being asked where each metal sits while
+nothing is moving, and that nothing in the game can tell those arrangements apart.
+
+**This picks `E4` and stops offering options**, on your *something concrete that can't possibly work
+can be adapted*. It replaces `P-501` and answers `P-507`. **Two things it cannot do are written out
+at the bottom rather than left to be discovered.**
+
+> **A container's contents are a listing, and an entry's place in it is its position.** The first
+> entry is at 1. **A command names a thing by position**, and the position is read against the state
+> the command is applied to.
+>
+> **A position names an entry, and an entry may be several things.** A command acts on **one** of
+> them, and which one is not a choice: the things in an entry are alike in every respect the game
+> records, so each gives the same state afterwards.
+>
+> **A position is not an identity.** An `id` names one thing for ever; a position names whatever is
+> at that place in a listing now, and the same thing is at different positions as the listing
+> changes.
+
+## Your first three scenarios, against a real listing
+
+```
+{territory id:1}
+  1  {energy} -> 5
+  2  {metal} -> 25
+  3  {store resource:metal} -> 3
+  4  {transport resource:metal} -> 2
+```
+
+```
+25 in storage       {stow into:3 kind:metal repeat:10}
+                    {stow into:3 kind:metal repeat:10}
+                    {stow into:3 kind:metal repeat:5}
+
+15, and 3 and 7     {stow into:4 kind:metal repeat:3}
+                    {stow into:5 kind:metal repeat:7}
+                    {stow into:3 kind:metal repeat:5}   three times
+
+5, and 10 each      {stow into:4 kind:metal repeat:10}
+                    {stow into:4 kind:metal repeat:10}
+                    {stow into:3 kind:metal repeat:5}
+```
+
+**`into:3` three times is three different stores**, because the first command takes one of the three
+out of that entry and into one of its own.
+
+## Your fourth, which is the one the other three hid
+
+**One transport holding 1 metal, one holding 2; two into the first and five into the second.**
+
+```
+{territory id:1}
+  4  {transport resource:metal}  {metal} -> 1
+  5  {transport resource:metal}  {metal} -> 2
+```
+
+```
+{stow into:4 kind:metal repeat:2}
+{stow into:4 kind:metal repeat:5}
+```
+
+**Both are `into:4`, and that is the flaw rather than a typo.** After the first command that
+transport holds 3, so the listing re-sorts: the one holding 2 is now at 4 and the one holding 3 at
+5. **A position is read against the state it is applied to, so the second command's 4 is a different
+transport from the first command's 4.**
+
+## What that costs, said plainly
+
+**A written sequence of positional commands is fragile.** Insert a command, or change a `repeat`, and
+every position after it may mean something else. `scenario/commands/play.4x` is a file you derive by
+hand, and this makes a hand edit in the middle of it dangerous in a way it is not today.
+
+**It is the cost of the thing being concrete.** The alternative was three ways of writing contents
+inline, each of which grows with what a thing holds. **This one is wrong in a way that shows up
+immediately** - a mis-positioned command puts metal somewhere visible - rather than in a way that
+shows up as a notation nobody can read.
+
+## Two holes this lane found writing it out, and neither is closed here
+
+**The tie-break needed the quantity, and `P-502` now says so.** Two transports holding `{metal} -> 1`
+and `{metal} -> 2` have contents whose **descriptions are equal** and whose quantities differ, so
+sorting by description alone did not separate them - and a position into an order that is not total
+names nothing. **Corrected in `P-502` rather than left here**, because that is the item the rule is
+in. It was found by writing this one's fourth scenario out.
+
+**A stack cannot be split by position.** `{transport resource:metal} -> 2` is one entry, so `into:4`
+twice fills the same transport unless the first command made them differ. Your *fill up each
+transport and move the ones that are full* works because filling one makes it differ; **a command
+that had to act on a particular one of two still-identical things could not say so.** Nothing in
+your four scenarios needs that, and this lane does not know whether something later will.
+
+## What it withdraws
+
+**`P-501`.** Its *a description names a set* is replaced by a position, and its *a command acts on
+one of them* survives here, applied to an entry rather than to a set. **One way to name a thing
+rather than two**, which is the uniformity you asked for.
+
 ### P-501 - withdrawn: a position names an entry, so a description does not have to
 
 **to** sean · **status** **withdrawn** 2026-09-14 · superseded by `P-508`, which replaces naming-by-description with naming-by-position · **raised** 2026-09-14 · **rewritten** 2026-09-14, after working your three scenarios through the first version · **kind** invented · **shape** text · **asks** approval · **into** `spec/console.md` -> The language

@@ -13,7 +13,7 @@ of it needs you.
 
 ### P-509 - Resources sit in the territory, and are allocated only when something leaves
 
-**to** sean · **status** open, **held** 2026-09-14 pending `P-510` · **raised** 2026-09-14 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment
+**to** sean · **status** open · **G3** chosen 2026-09-14, and the text follows it · **raised** 2026-09-14 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment
 
 **This dissolves the problem the last four proposals were solving.** Your three scenarios were hard
 to express because the game was being asked **where each metal sits while nothing is moving**, and
@@ -23,10 +23,16 @@ nothing in the game can tell those arrangements apart.
 > kind is one number. **The things in it that can hold that kind contribute capacity and hold
 > nothing**, and at the turn's end what the place holds beyond that capacity is lost.
 >
+> **A place's capacity for a kind is the sum of what is in it that can hold that kind**, and a
+> place declares none of its own. **This holds of every place**: an orbit has room for the fuel its
+> units carry and for nothing else, because that is what is in it.
+>
+> **A bin is a thing.** What holds a kind is a store for that kind, and a thing with two bins holds
+> two stores. **A store's capacity is what its kind declares**, and it holds nothing.
+>
 > **A thing that leaves takes what it hauls.** A unit moving out of a place is given an amount of
-> each kind, no more than its own capacity for that kind, and it holds that amount until it arrives
-> - where the amount rejoins the number the new place holds. **Allocation happens at the moment of
-> leaving and at no other.**
+> each kind, no more than its own capacity for that kind, and that amount joins the number the new
+> place holds. **Allocation happens at the moment of leaving and at no other.**
 
 ## Your three scenarios stop being three
 
@@ -92,106 +98,26 @@ the capacity in it is lost, and that capacity is a number the place has. **So a 
 declare a limit for a resource** - derived from what is in it - and *a rule may ask whether something
 is absent only where what would hold it declares a limit* is satisfied rather than strained.
 
-**What `P-510` does carry is a different hole, and a measured one**: an orbit holds units and
-nothing else, and `move` burns energy the unit carries, so an ark in orbit has nothing to pool with.
-**Pooling cannot be universal without deciding that**, and it is a decision rather than a defect.
-### P-508 - Storage, concretely: a position names an entry and a command acts on one of it
+**And `P-510` is answered: `G3`, 2026-09-14.** An orbit holds units and nothing else, and `move`
+burns energy the unit carries, so an ark in orbit had nothing to pool with. **The answer costs no
+rule**: a place's capacity is already the sum of what is in it, so an orbit holding an ark whose fuel
+store is 2 has room for 2 **without anything declaring it**, and an empty orbit has room for nothing.
+The sentence that changes is the release's *an orbit holds units and nothing else*, and
+`spec/orbit.md` never said it - it forbids extraction and is silent about holding.
 
-**to** sean · **status** open, **held** 2026-09-14 pending `P-509`, which removes the need for a position · **raised** 2026-09-14 · **kind** invented · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+**So pooling has no exception**, which is the whole of what `G3` bought over `G2`: under `G2` an ark
+in orbit would hold its own contents, and everything `P-507` and `P-508` were built to solve would
+come back inside orbits.
 
-**This picks `E4` and stops offering options**, on your *something concrete that can't possibly work
-can be adapted*. It replaces `P-501` and answers `P-507`. **Two things it cannot do are written out
-at the bottom rather than left to be discovered.**
+## What it absorbs, so these can land together
 
-> **A container's contents are a listing, and an entry's place in it is its position.** The first
-> entry is at 1. **A command names a thing by position**, and the position is read against the state
-> the command is applied to.
->
-> **A position names an entry, and an entry may be several things.** A command acts on **one** of
-> them, and which one is not a choice: the things in an entry are alike in every respect the game
-> records, so each gives the same state afterwards.
->
-> **A position is not an identity.** An `id` names one thing for ever; a position names whatever is
-> at that place in a listing now, and the same thing is at different positions as the listing
-> changes.
+**`P-502`'s surviving half is in the text above** - *a bin is a thing* - and the rest of that item is
+withdrawn: a store holds nothing, so there is nothing for capacity, occupied and free to be about on
+one, and no two entries ever share a description because **only a place holds anything and every
+place carries an `id`**.
 
-## Your first three scenarios, against a real listing
-
-```
-{territory id:1}
-  1  {energy} -> 5
-  2  {metal} -> 25
-  3  {store resource:metal} -> 3
-  4  {transport resource:metal} -> 2
-```
-
-```
-25 in storage       {stow into:3 kind:metal repeat:10}
-                    {stow into:3 kind:metal repeat:10}
-                    {stow into:3 kind:metal repeat:5}
-
-15, and 3 and 7     {stow into:4 kind:metal repeat:3}
-                    {stow into:5 kind:metal repeat:7}
-                    {stow into:3 kind:metal repeat:5}   three times
-
-5, and 10 each      {stow into:4 kind:metal repeat:10}
-                    {stow into:4 kind:metal repeat:10}
-                    {stow into:3 kind:metal repeat:5}
-```
-
-**`into:3` three times is three different stores**, because the first command takes one of the three
-out of that entry and into one of its own.
-
-## Your fourth, which is the one the other three hid
-
-**One transport holding 1 metal, one holding 2; two into the first and five into the second.**
-
-```
-{territory id:1}
-  4  {transport resource:metal}  {metal} -> 1
-  5  {transport resource:metal}  {metal} -> 2
-```
-
-```
-{stow into:4 kind:metal repeat:2}
-{stow into:4 kind:metal repeat:5}
-```
-
-**Both are `into:4`, and that is the flaw rather than a typo.** After the first command that
-transport holds 3, so the listing re-sorts: the one holding 2 is now at 4 and the one holding 3 at
-5. **A position is read against the state it is applied to, so the second command's 4 is a different
-transport from the first command's 4.**
-
-## What that costs, said plainly
-
-**A written sequence of positional commands is fragile.** Insert a command, or change a `repeat`, and
-every position after it may mean something else. `scenario/commands/play.4x` is a file you derive by
-hand, and this makes a hand edit in the middle of it dangerous in a way it is not today.
-
-**It is the cost of the thing being concrete.** The alternative was three ways of writing contents
-inline, each of which grows with what a thing holds. **This one is wrong in a way that shows up
-immediately** - a mis-positioned command puts metal somewhere visible - rather than in a way that
-shows up as a notation nobody can read.
-
-## Two holes this lane found writing it out, and neither is closed here
-
-**The tie-break needed the quantity, and `P-502` now says so.** Two transports holding `{metal} -> 1`
-and `{metal} -> 2` have contents whose **descriptions are equal** and whose quantities differ, so
-sorting by description alone did not separate them - and a position into an order that is not total
-names nothing. **Corrected in `P-502` rather than left here**, because that is the item the rule is
-in. It was found by writing this one's fourth scenario out.
-
-**A stack cannot be split by position.** `{transport resource:metal} -> 2` is one entry, so `into:4`
-twice fills the same transport unless the first command made them differ. Your *fill up each
-transport and move the ones that are full* works because filling one makes it differ; **a command
-that had to act on a particular one of two still-identical things could not say so.** Nothing in
-your four scenarios needs that, and this lane does not know whether something later will.
-
-## What it withdraws
-
-**`P-501`.** Its *a description names a set* is replaced by a position, and its *a command acts on
-one of them* survives here, applied to an entry rather than to a set. **One way to name a thing
-rather than two**, which is the uniformity you asked for.
+**`P-508` is withdrawn with it.** A position said *which of two alike things*, and there is never a
+which.
 ### P-506 - The notation and the two models get their names
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
@@ -234,12 +160,16 @@ something else by physical, this is the line to change.
 proposals would never have been created in the first place, only to be rejected.* **A thing with no
 name gets described instead of used**, and a described notation is prose, which is what let `P-501`
 and `P-503` be written vaguely enough to need withdrawing.
-### P-505 - Nothing is stored without being asked, and one sentence says so
+### P-505 - Nothing spills, because nothing was inside anything
 
-**to** sean · **status** open · **raised** 2026-09-14 · **kind** recovered · **shape** an instruction · **asks** approval · **into** `spec/logistics.md` -> Containment
+**to** sean · **status** open · **raised** 2026-09-14 · **rewritten** 2026-09-14, because pooling reversed it · **kind** entailed · **shape** an instruction · **asks** approval · **into** `spec/logistics.md` -> Containment
 
-**One sentence changes, and it is the half of a rule that stores without being asked.**
-`spec/logistics.md` line 26 to 28 reads:
+**This item said the opposite yesterday and was wrong in the light of `P-509`.** It wanted to delete
+*at the turn's end what there is room for is kept and the rest is lost*, on the grounds that nothing
+should be stored without being asked. **Under pooling that sentence is simply true** - what a place
+holds beyond its capacity is lost - so it is not the half that has to go.
+
+**What has to go is the half above it.** `spec/logistics.md` lines 26 to 28 read:
 
 ```
 - **When a thing that contains things is consumed, what it held falls loose where it stood.** It
@@ -250,153 +180,69 @@ and `P-503` be written vaguely enough to need withdrawing.
 **It becomes:**
 
 ```
-- **When a thing that contains things is consumed, what it held falls loose where it stood.** It
-  is not destroyed with its container: it goes into disorder, and what is in disorder at the
-  turn's end is lost.
+- **When a thing that holds capacity is consumed, the place it stood in has that much less room.**
+  Nothing falls loose, because nothing was inside it: what a place holds is the place's, and
+  destroying a store leaves the resources where they already were.
 ```
 
-## What that is, in one line
+## Why the whole bullet changes rather than one clause
 
-**`and at the turn's end what there is room for is kept and the rest is lost` becomes `and what is
-in disorder at the turn's end is lost`.** Nothing else in the bullet moves.
+**Under `P-509` a store holds nothing**, so *what it held falls loose* has no referent. Destroying a
+store does not move anything - it lowers the place's capacity, and **the excess is lost at the
+turn's end by the rule that was already there**, which is the clause this item previously wanted to
+delete.
 
-## Why
+## What that makes of disorder
 
-**Sean, 2026-09-14**: *we don't need to automatically store excess that we have capacity for, we
-need to be able to detect if we do have excess we would lose.*
-
-**And the storing half takes a choice away rather than saving work.** Filling every container with
-room means a transport is loaded whether or not the player wanted cargo in it, and *twenty-five in
-storage and none in the transports* becomes unsayable. `P-503` proposed making that sweep even-handed
-and was withdrawn for the same reason.
+**Disorder stops being a place things are.** It was the state of a resource that was in no
+container; under pooling a resource is in the **place**, always, and either the place has room for it
+or it is lost at the turn's end. **The word can go from `releases/first-release.md` too**, which is a
+cleanup this does not do and `P-509` landing will make findable.
 
 ## How to tell it was carried out
 
-**`spec/logistics.md` no longer contains the phrase `what there is room for is kept`**, and contains
-`what is in disorder at the turn's end is lost` exactly once. The rest of the bullet is byte for
-byte what it was.
+**`spec/logistics.md` no longer contains `falls loose`**, and contains `has that much less room`
+exactly once. **And the clause this item used to attack is still there**, in the bullet below, which
+is the check that this rewrite reversed the right half.
 
-## What it leaves consistent rather than changing
+### P-504 - Waste is free capacity gone negative, and one sentence allows it
 
-**`releases/first-release.md` already says the surviving half** - *what is in disorder may be spent
-the turn it is made and does not survive that turn's end*. The two said different things about the
-same moment and now say one.
-### P-504 - Waste is what could have been kept and was not, and one word is missing to say it
+**to** sean · **status** open · **raised** 2026-09-14 · **rewritten** 2026-09-14, and pooling shrank it to one sentence · **kind** entailed · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
 
-**to** sean · **status** open, **held** 2026-09-14 pending `P-509`, which makes the guard one comparison and needs no new word · **raised** 2026-09-14 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+**You asked for a way to detect waste so a player can be warned.** Yesterday this needed a new word
+in the expression language. **Under `P-509` it needs none** - only permission for a number that was
+assumed non-negative to go below zero.
 
-**You asked for a way to detect waste so a player can be warned.** The expression language already
-has three of the four pieces, and this adds the fourth.
+> **`free <kind> of x` may be less than zero.** A place holds what it holds whatever room there is,
+> so where what it holds exceeds the capacity in it, its free capacity for that kind is the
+> shortfall written as a negative number. **That is the amount the turn's end will take.**
 
-## What is already there
-
-```
-count {metal}                how many match a description
-free metal of {store metal}  one container's capacity for a kind, less what it holds
-min(a, b)                    the lesser of two
-```
-
-**`free <kind> of x` is already the right idea and already promoted**, and it takes one container.
-
-## What is missing, and it is one word
+## What it lets a player be warned with, and it is one guard
 
 ```
-sum free metal of {store metal}     every store's free metal, added up
+free metal of {territory id:1} < 0
 ```
 
-**`sum` takes a trait today** - *`sum <trait> of {…}`, that trait aggregated over all of them* - and
-`free <kind> of` is an expression rather than a trait, so it cannot be the thing summed.
+**Nothing else is added.** `free <kind> of x` is already promoted, and `<` is already how a guard
+compares.
 
-> **`sum` aggregates an expression over the things a description names**, not only a trait. Where
-> that expression is a trait it reads as before.
+## Why it goes negative rather than something else being invented
 
-## Then waste is a guard and needs nothing else
+**Because it is the same number.** Free capacity is `capacity - held`, and the case being detected is
+`held > capacity`. **A second expression for the same subtraction with the sign flipped would be one
+fact stated twice**, which `spec/invariants.md` forbids.
 
-```
-min(count {metal}, sum free metal of {store metal}) > 0
-```
-
-**What is loose, against what there is room for, whichever is smaller.** Greater than zero means
-ending the turn loses metal that a container could have held - which is the warning you want, and a
-user interface may refuse the turn on it or merely say so.
-
-**It is one guard per resource**, and the guard is the same shape each time, because `metal` is the
-only word in it that changes.
-
-## Why this is entailed rather than invented
-
-**`P-491` already made a recipe over a family one rule per member**, and this is the same move in an
-expression: one form, one word varying. **Nothing new is being said about the game** - only that an
-aggregate may aggregate the thing the language already computes.
+**And it is reachable in ordinary play, not just by mistake.** A territory with 500 fixed storage and
+a transport standing in it has room for 510; the transport leaves and the room goes with it. **The
+place did not change what it holds, and its free capacity went negative.**
 
 ## What it does not do
 
-**It does not decide what the interface does about waste.** You said that is a user interface
-concern and this stops where you stopped: the guard is expressible, so refusing the turn is
-implementable, and the specification says nothing about whether it should be.
+**It does not decide what happens about waste.** You said refusing the turn is a user interface
+concern; this stops exactly where you stopped, by making the guard writable so that refusing is
+implementable.
 
-**And it does not sweep anything.** Nothing is stored without being asked - that is `P-505`.
-### P-502 - A bin is a store, and what a thing holds is what it holds
-
-**to** sean · **status** open, **held** 2026-09-14 pending `P-509`, which keeps *a bin is a store* and drops *what it holds is what it contains* · **raised** 2026-09-14 · **kind** invented · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment
-
-**Your transport definition is this proposal.** `1 * storage[fuel] capacity 2` and `1 *
-storage[$resource] capacity 10` - two bins in one thing, each a container in its own right.
-
-> A bin is a thing. **What holds a kind is a store for that kind**, and a thing with two bins holds
-> two stores. A store's capacity is what its kind declares; what it holds is what it contains; and
-> how much is free is the difference. **None of the three is a trait of the store**, because any two
-> give the third and the third is then a second statement of the same fact.
-
-> **Each distinct description and contents is its own entry.** Two things alike in every trait but
-> holding different things are two entries, not one entry of two. **Where two entries share a
-> description they sort by their contents, by this same rule, and by quantity where the contents'
-> descriptions are equal too** - which is total, because a thing holds finitely many entries and
-> each is shorter than what holds it.
-
-## What this removes, which is the test of it
-
-**Nothing gains a field when a resource is added.** `spec/invariants.md` requires that - *adding a
-kind adds no field and no case* - and it is what rules out the obvious alternative of naming the
-trio per kind, `free-metal` beside `free-energy`. **That alternative is not rejected on taste; it is
-already forbidden.**
-
-**And a unit's tank stops being its own idea.** `releases/first-release.md` has a *unit's tank*
-listed as one of three sorts of capacity, with its own row and its own rules. Under this it is a
-store inside a unit, and there are not three sorts of capacity - there is one.
-
-## The uniformity you asked for, and what it costs
-
-**Every bin is the same kind of thing, everywhere.** A territory's three metal stores, a transport's
-cargo hold and its fuel tank are four stores, differing only in what they are for and how much they
-take. There is no second vocabulary for *a capacity a thing has* beside *a container a thing holds*.
-
-**What it over-specifies** is that a thing's own capacity now has a container to live in even where
-only one bin will ever exist. `store` gains no complexity from this - it is the kind that was
-already there - but a reader meets a store where they might have expected a number.
-
-## A defect this item had until 2026-09-14, found by Sean asking about position
-
-**`Entries are in the order their descriptions sort in`** - `spec/console.md`. This item says two
-things alike in every trait but holding different things are **two entries**, and it did not say how
-they sort. **They have the same description, so the order between them is undefined**, and *the same
-state is always the same bytes* stops being true the moment a container holds two.
-
-**The rule needs one more clause, and it is offered above rather than left implied:**
-
-> **Where two entries share a description they sort by their contents, by this same rule.** The
-> order is total because a thing holds finitely many entries and each is shorter than what holds it.
-
-**It matters beyond tidiness**: a position is an index into that order, and an index into an order
-that is not total names nothing. **Nothing in the item warned of this** - it was found by a question
-about a user interface.
-
-## One thing this lane checked and one it did not
-
-**Checked**: `store` already carries a `resource` trait, so `storage[metal]` is `{store
-resource:metal}` today and needs nothing invented. Your parameterised notation is expressible now.
-
-**Not checked, and it is the risk**: `free` becomes derived under this, and `P-496` deleted a
-constraint that named a derived trait because the Petri net materialises free capacity as tokens.
-**The data model would derive what the net holds.** This lane has not measured whether that bites,
-and says so rather than discovering it during a promotion.
+**And it does not need `sum`.** The earlier version of this item added *`sum` aggregates an
+expression rather than only a trait*, so that free capacity could be added up across containers.
+**Under pooling a place's capacity is one number already**, so there is nothing to add up and that
+sentence is withdrawn with the rest of the old item.
