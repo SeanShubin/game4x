@@ -11,6 +11,48 @@ of it needs you.
 
 ## Open
 
+### P-506 - The notation and the two models get their names
+
+**to** sean · **status** open · **raised** 2026-09-14 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**`spec/console.md` says *there is one notation* and never names it.** Three things get named here,
+and the third is this lane's reading of your words rather than a transcription - say so if it is
+wrong and it changes before it lands.
+
+> **The notation is the game notation.** A command, a state and a data file are written in it, and
+> there is nothing else to write them in. **The game notation is the source**: what is stated is
+> stated in it, and every other form of the same facts is a presentation, generated and never
+> canonical.
+>
+> **A presentation has a name too.** The **relational model** shows the game as relations - one
+> table per relation, each fact stated once, nothing derived shown beside what it came from. The
+> **physical model** shows it as the game holds it: every thing inside the thing that holds it, a
+> tree from the game down.
+>
+> **The two show the same facts and neither is the game.** A reader chooses by what they are
+> checking: whether a fact is stated once, or where a thing actually is.
+
+## What each name already points at
+
+| Name                 | What it is today                                                                                                    |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| **game notation**    | `spec/data/*.4x`, `scenario/commands/*.4x`, `scenario/expected/*.4x`                                                |
+| **relational model** | `reports/state.md` - *the scenario's result as one table per relation, fully normalized*                            |
+| **physical model**   | `reports/entities.md` - *every thing with its components* - and the containment tree the dump writes by indentation |
+
+## The one this lane is least sure of
+
+**`physical model`.** You named three and this lane matched two to things that exist and inferred the
+third. **The reading taken is *how the game actually holds it* - the containment tree** - because
+that is the presentation the dump writes and the only one of the three with no name. If you meant
+something else by physical, this is the line to change.
+
+## Why it is worth naming at all, and it is your own argument
+
+**You said it in the same message**: *if you communicate specifics in game notation, I suspect these
+proposals would never have been created in the first place, only to be rejected.* **A thing with no
+name gets described instead of used**, and a described notation is prose, which is what let `P-501`
+and `P-503` be written vaguely enough to need withdrawing.
 ### P-505 - Nothing is stored without being asked, and one sentence says so
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** recovered · **shape** an instruction · **asks** approval · **into** `spec/logistics.md` -> Containment
@@ -160,7 +202,7 @@ constraint that named a derived trait because the Petri net materialises free ca
 and says so rather than discovering it during a promotion.
 ### P-501 - A description names a set, and a command acts on one of it
 
-**to** sean · **status** open · **raised** 2026-09-14 · **rewritten** 2026-09-14, after working your three scenarios through the first version · **kind** invented · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+**to** sean · **status** open, **held** 2026-09-14 pending `P-507` · **raised** 2026-09-14 · **rewritten** 2026-09-14, after working your three scenarios through the first version · **kind** invented · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
 
 **The first version said *names the things*, plural, and your first scenario cannot be written with
 it.** Two identical transports, and one command naming both loads 3 into each. Three and seven is
