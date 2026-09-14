@@ -73,6 +73,13 @@ back - `spec/control.md`
 `min` and does not now. The same trick removes the inhibitor arc from holding, and this item is
 what it would look like in rows.
 
+**He has since said to go with it** - *lets go with that*, to this lane, 2026-09-13, on being shown
+the rows below. **Recorded as a relay and not as a promotion**: the rows still reach
+`releases/first-release.md` the way every row does, and this line exists so the queue is not
+waiting on a question he has already answered. **This lane wrote none of it into the release**, and
+the specification lane was offline when he said it, which is why it is here rather than in a
+message.
+
 ## What `P-373` actually did, because the trick is not *avoid `min`*
 
 |          |                                               |
@@ -130,6 +137,37 @@ this is the right formulation rather than a clever one.
 **`reclaim` saturates too.** `consume 1 citizen` against an unmet `nature` fires once per citizen
 until the population is gone - the same way `discard` empties a place one token at a time. The
 release's *its entire population perishes* needs no quantity.
+
+## Taking has the same shape and this item does not cover it
+
+**`spec/control.md` states two rules and the rows above answer one.**
+
+> Taking a territory takes force **greater than** the existing force ... Holding a territory takes
+> force **equal to** its force of nature
+
+**Taking is a strict inequality between two variable quantities**, which is worse than the one just
+removed: `Game::take` rejects when `force <= defending`, and `defending_force` is nature's only
+while a territory is unfounded.
+
+**The same trick appears to reach it, and this lane is not deciding that it does.** Where `hold`
+*marks* a nature, `take` would **consume** one:
+
+| Recipe    | Role    | Qty | Kind   |
+| --------- | ------- | --- | ------ |
+| **take**  | require | 1   | nature |
+|           | consume | 1   | nature |
+|           | consume | 1   | force  |
+| **found** | require | 1   | force  |
+
+`take` fires `min(force, nature)` times. **Then the strict inequality falls out of what is left
+over**: force greater than nature leaves at least one force, and `found` requires one - a presence
+test. Force *equal* to nature leaves none and founding cannot happen, which is the release's own
+distinction between taking and holding arriving for free rather than being stated twice.
+
+**Filed as the shape rather than as rows to promote**, because it changes what founding requires
+and that is a rule. The point for the redesign is narrower and is certain: **whatever answers
+taking has to answer it in this form too**, or the inhibitor comes back through the other rule and
+the arc count goes from zero to one - and reachability survives one and dies at two.
 
 ## What it costs, and the one thing this lane cannot settle
 
