@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-490** - a habit earns its place by a case it caught, not a case it explains · `docs/notes/proposals.md`
 - **P-491** - `refuel` has no command, and the rule that would give it one does not cover `move` either · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`

@@ -293,6 +293,13 @@ quietly. **`Q-1` is the rule doing both halves of its job**: it stayed open whil
 checked, because deleting blind proves nothing either way, and it closed on 2026-08-30 once a
 harness - `--shot`, `--settle` and `--renderer` - made the second half checkable.
 
+**A rule written from an incident has the same failure available, and nothing poisons prose.** A
+check earns its place by a failure it could have produced; **a habit earns its place by a case it
+caught, not a case it explains.** One read off the incident that produced it explains that
+incident by construction and could not have come out otherwise - which is *passing tests prove
+nothing* said about a sentence. **So a habit is written as where to look until it has caught
+something it did not come from**, and says which it is.
+
 **Check the rule over every case, not on one case, and assert how many cases there were.** A test
 that shows a rule on one example stops showing anything the moment that example is edited away, and
 goes on passing. A test over every case does not - except where there are no cases, and then it

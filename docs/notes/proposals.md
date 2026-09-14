@@ -62,50 +62,8 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-490 - a habit earns its place by a case it caught, not a case it explains
+*Nothing is open. Everything filed has been decided.*
 
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered · **shape** text · **asks** approval · **into** `CLAUDE.md` -> What done means
-
-## The words, added after the `Q-1` paragraph
-
-> **A rule written from an incident has the same failure available, and nothing poisons prose.** A
-> check earns its place by a failure it could have produced; **a habit earns its place by a case it
-> caught, not a case it explains.** One read off the incident that produced it explains that
-> incident by construction and could not have come out otherwise - which is *passing tests prove
-> nothing* said about a sentence. **So a habit is written as where to look until it has caught
-> something it did not come from**, and says which it is.
-
-## Why
-
-**That file already says this about checks** - *passing tests prove nothing here, they passed
-beforehand too* - and applies it thoroughly: poison the check, a green that cannot be turned red
-means nothing, `Q-8`'s second test is the verification. **It says nothing about the rules in its own
-prose, and they have the same failure available.**
-
-Two cases, one per lane, both from today:
-
-- **The research lane's.** `X-26` recorded *a number nobody can explain is a rule that has gone
-  missing* as the tell that found `P-486`. **You** remembered `P-67` and asked why a pioneer costs
-  energy. The heuristic was read off the instance afterwards
-- **This lane's.** It first argued a producer must not carry a lens's finding into `CLAUDE.md` -
-  which explains that one case exactly and is wrong in every other, since it would route a broken
-  link to you because a lens spotted it
-
-## What it rests on, which is the point
-
-**Two cases is not a record**, and the argument is not from a count: the structure is identical to a
-rule already in that file with a worked example, and `Q-8`'s evidence is borrowed rather than
-matched.
-
-**The measurement that would give it a record has not been run**: does any rule in `CLAUDE.md`
-derived from an incident have a case it caught *other* than the one that produced it? **Say so and
-this waits for it.**
-
-## Why you rather than this lane
-
-**That file leaves wording, paths and consistency here and reserves the columns, the addresses and
-the promotion protocol for you.** This is none of those: it is new, and it is a rule about how work
-is judged.
 ## Addressed to other perspectives
 
 ### S-128 - a pioneer's bin: three promotions, and the dump has to start showing what a unit holds
@@ -5386,6 +5344,7 @@ work the release exists to order.
 | P-485, a pioneer is produced with a full tank, and a refuel recipe moves fuel between containers                             | `releases/first-release.md` -> Recipes, and Units and structures                                                                                                                                         | 2026-09-13 |
 | P-488, two paths added to the Code row of `CLAUDE.md`'s column table                                                         | `CLAUDE.md` -> Perspectives                                                                                                                                                                              | 2026-09-13 |
 | P-489, a pioneer's energy is a cost, and refuelling is `stow` aimed at a bin                                                 | `releases/first-release.md` -> Recipes, and Capabilities                                                                                                                                                 | 2026-09-14 |
+| P-490, a habit earns its place by a case it caught, not a case it explains                                                   | `CLAUDE.md` -> What done means                                                                                                                                                                           | 2026-09-14 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
