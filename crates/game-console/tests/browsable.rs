@@ -275,7 +275,15 @@ fn every_column_is_either_a_reference_or_declared_not_to_be() {
 #[test]
 fn the_reports_point_outward_only_at_what_the_pipeline_publishes() {
     /// Directories the pipeline copies whole beside `reports/`.
-    const PUBLISHED_WHOLE: [&str; 1] = ["scenario"];
+    ///
+    /// **`spec/data` since `R-11`**, and the directory rather than its files because
+    /// that capability asks for *nothing the engine reads* to be missing - a fifth data
+    /// file is published by the same line that publishes the four.
+    ///
+    /// **`spec/data` and not `spec`.** What is published is what a reader of the reports
+    /// needs to follow a link; the rest of the specification is prose with no link
+    /// pointing at it, and a prefix of `spec` would publish it by accident.
+    const PUBLISHED_WHOLE: [&str; 2] = ["scenario", "spec/data"];
 
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
     let files = everything();
@@ -335,6 +343,23 @@ fn the_reports_point_outward_only_at_what_the_pipeline_publishes() {
         "the pipeline copies nothing into the artifact, so either it changed shape or this \
          no longer reads it"
     );
+
+    // **And the whole-directory half is read from the pipeline too, which it was not.**
+    // `PUBLISHED_WHOLE` was a constant nothing compared against anything: every link
+    // under `scenario/` passed because this file said `scenario` was published, and a
+    // deleted `cp -r` line would have left that true here and false on the site. The
+    // by-name half beside it has been read from the pipeline since `X-16` - **the two
+    // halves made the same promise and only one of them was checked.**
+    for directory in PUBLISHED_WHOLE {
+        assert!(
+            copied
+                .iter()
+                .any(|target| *target == format!("crates/game4x/dist/{directory}")),
+            "`{directory}` is treated here as published whole and the pipeline has no \
+             `cp` putting it at `crates/game4x/dist/{directory}` - so every link into it \
+             would 404 on the published page and pass here"
+        );
+    }
 
     // **A path is under a directory published whole, or it is not.** The two halves are
     // checked differently because they are different promises: a directory published whole
@@ -406,5 +431,86 @@ fn the_reports_point_outward_only_at_what_the_pipeline_publishes() {
         !linked_by_name.is_empty() && outward.len() > linked_by_name.len(),
         "both halves have to be exercised or one of the two rules was never asked: \
          {outward:?} outward, of which {linked_by_name:?} are published by name"
+    );
+}
+
+/// `R-11`: every file the engine reads as input is reachable from the index.
+///
+/// **Asked of the directory, not of a list** - the capability says so in as many words:
+/// *nothing the engine reads is missing from that page, which is checked by listing the
+/// inputs rather than by anybody remembering to add one.* So the population is whatever is
+/// in `spec/data/` when this runs, and a file added to it fails here until the page names it.
+///
+/// **Both directions, because one of them is the one that rots.** That every listed link
+/// exists catches a file being renamed; that every file on disk is listed catches one being
+/// added, which is the direction a hand list cannot cover.
+#[test]
+fn every_file_the_engine_reads_as_input_is_reachable_from_the_index() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+
+    let on_disk: BTreeSet<String> = std::fs::read_dir(root.join("spec/data"))
+        .expect("spec/data")
+        .filter_map(|entry| entry.ok())
+        .map(|entry| entry.path())
+        .filter(|path| path.extension().map(|it| it == "4x").unwrap_or(false))
+        .filter_map(|path| {
+            path.file_name()
+                .and_then(|it| it.to_str())
+                .map(String::from)
+        })
+        .collect();
+    assert!(
+        on_disk.len() >= 4,
+        "spec/data holds {} files, which is too few for this to be a check: {on_disk:?}",
+        on_disk.len()
+    );
+
+    let page = dump::index(&everything());
+    let listed: BTreeSet<String> = dump::engine_inputs()
+        .into_iter()
+        .map(|(path, _)| path)
+        .collect();
+
+    for name in &on_disk {
+        let href = format!("../spec/data/{name}");
+        assert!(
+            listed.contains(&href),
+            "`spec/data/{name}` is an input the engine reads and `engine_inputs` does not \
+             name it"
+        );
+        assert!(
+            page.contains(&format!("href=\"{href}\"")),
+            "`index.html` does not link `{href}`, so a reader cannot reach it"
+        );
+    }
+
+    for href in &listed {
+        let path = root.join(href.trim_start_matches("../"));
+        assert!(
+            path.exists(),
+            "`index.html` links `{href}` and there is no such file - a link a reader follows \
+             to nothing, which is what `R-9` forbids"
+        );
+    }
+
+    assert_eq!(
+        listed.len(),
+        on_disk.len(),
+        "the page names {} inputs and `spec/data/` holds {}",
+        listed.len(),
+        on_disk.len()
+    );
+
+    // **And the page says what each one declares**, read from the file rather than written
+    // beside it: `kinds.4x` says `kind`, `traits.4x` says `trait`, and a file declaring
+    // something new describes itself. Checked on one, because the mechanism is one.
+    let kinds = dump::engine_inputs()
+        .into_iter()
+        .find(|(path, _)| path.ends_with("kinds.4x"))
+        .expect("kinds.4x among the inputs");
+    assert!(
+        kinds.1.contains("kind"),
+        "`kinds.4x` is described as `{}`, which does not say what it declares",
+        kinds.1
     );
 }

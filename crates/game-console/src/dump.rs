@@ -1078,6 +1078,62 @@ pub fn view_of(text: &str) -> &'static str {
     }
 }
 
+/// Every file the engine reads as input, as a link from `reports/` and what it declares.
+///
+/// **Read from the directory rather than listed here** - `R-11`, whose *vetted when* says
+/// nothing the engine reads may be missing from the index and that this is *checked by
+/// listing the inputs rather than by anybody remembering to add one*. A name in this file
+/// would be the remembering.
+///
+/// **What each one is comes from the file's own first word.** Every line of a data file opens
+/// with the sort of thing it declares - `{kind ...}`, `{trait ...}`, `{value ...}` - so the
+/// description is read from the bytes like everything else here, and a file declaring
+/// something new describes itself without this function being touched.
+pub fn engine_inputs() -> Vec<(String, String)> {
+    let at = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data");
+    let mut found: Vec<(String, String)> = std::fs::read_dir(&at)
+        .unwrap_or_else(|why| panic!("{} is not readable: {why}", at.display()))
+        .filter_map(|entry| entry.ok())
+        .map(|entry| entry.path())
+        .filter(|path| path.extension().map(|it| it == "4x").unwrap_or(false))
+        .map(|path| {
+            let name = path
+                .file_name()
+                .and_then(|it| it.to_str())
+                .unwrap_or_default()
+                .to_string();
+            let text = std::fs::read_to_string(&path)
+                .unwrap_or_else(|why| panic!("{} is not readable: {why}", path.display()));
+            let mut sorts: Vec<&str> = text
+                .lines()
+                .filter_map(|line| line.trim().strip_prefix('{'))
+                .filter_map(|line| line.split_whitespace().next())
+                .collect();
+            sorts.sort_unstable();
+            sorts.dedup();
+            // **A count with the sort, because an empty file would otherwise describe itself
+            // as declaring nothing and read like a file that declares nothing in
+            // particular.** `spec/console.md` is what makes this readable at all: every line
+            // of a data file opens with what it declares.
+            let lines = text
+                .lines()
+                .filter(|line| line.trim().starts_with('{'))
+                .count();
+            (
+                format!("../spec/data/{name}"),
+                format!("{lines} lines, each declaring a {}", sorts.join(" or a ")),
+            )
+        })
+        .collect();
+    found.sort();
+    assert!(
+        !found.is_empty(),
+        "`spec/data/` holds no `.4x` file, so this section would be empty and say nothing \
+         about it - which is the count-over-nothing failure `CLAUDE.md` names"
+    );
+    found
+}
+
 pub fn index(generated: &[(String, String)]) -> String {
     let described = |name: &str| -> &str {
         match name {
@@ -1151,6 +1207,42 @@ pub fn index(generated: &[(String, String)]) -> String {
             "what the scenario should produce, reviewed by hand",
         ),
     ] {
+        out.push_str(&format!(
+            "<li><a href=\"{path}\">{path}</a> <span class=\"what\">- {what}</span></li>
+"
+        ));
+    }
+    out.push_str(
+        "</ul>
+",
+    );
+
+    // **`R-11`: every file the engine reads as input, reachable from here.**
+    //
+    // **Links rather than generated copies**, which the capability leaves to this lane and
+    // `spec/invariants.md` decides: the data that runs the game lives in a data file, and a
+    // replication *may* exist and is never canonical. A link shows the canonical bytes and
+    // has nothing to go stale, and the section above it already takes that form for the
+    // scenario - so this is one rule applied twice rather than two presentations.
+    //
+    // **Listed by reading the directory, never by a name in this file.** The capability asks
+    // for exactly that: *checked by listing the inputs rather than by anybody remembering to
+    // add one*. A fifth data file appears here the moment it exists.
+    //
+    // **And the reason it is worth a section rather than a line.** `P-493` makes complexity
+    // in the data a reading - if the data itself explodes, that tells us something needs
+    // unifying - and a reading nobody can see is not a reading. Fifty-eight lines today, and
+    // the instrument only becomes useful as they grow.
+    out.push_str("<h2>The engine's inputs</h2>\n");
+    out.push_str(
+        "<p class=\"note\">Source, not a rendering, for the same reason the scenario above \
+         is. <strong>The data that runs the game is what these say</strong> - \
+         `spec/invariants.md`: the data may be replicated in the presentation layer, and no \
+         replication is canonical. Listed by reading `spec/data/`, so a file added to it \
+         appears here without this page being edited.</p>\n",
+    );
+    out.push_str("<ul class=\"reports\">\n");
+    for (path, what) in engine_inputs() {
         out.push_str(&format!(
             "<li><a href=\"{path}\">{path}</a> <span class=\"what\">- {what}</span></li>
 "

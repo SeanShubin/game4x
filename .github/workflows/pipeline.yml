@@ -224,12 +224,15 @@ jobs:
         run: |
           cp -r reports crates/game4x/dist/reports
           cp -r scenario crates/game4x/dist/scenario
+          mkdir -p crates/game4x/dist/spec
+          cp -r spec/data crates/game4x/dist/spec/data
           mkdir -p crates/game4x/dist/lenses/research crates/game4x/dist/tools/research/formulas
           cp lenses/research/formulas.html crates/game4x/dist/lenses/research/formulas.html
           cp tools/research/formulas/data.json crates/game4x/dist/tools/research/formulas/data.json
           cp tools/research/formulas/results.json crates/game4x/dist/tools/research/formulas/results.json
           test -f crates/game4x/dist/reports/index.html
           test -f crates/game4x/dist/scenario/expected/play.4x
+          test -f crates/game4x/dist/spec/data/kinds.4x
           test -f crates/game4x/dist/lenses/research/formulas.html
           test -f crates/game4x/dist/tools/research/formulas/data.json
           test -f crates/game4x/dist/tools/research/formulas/results.json
