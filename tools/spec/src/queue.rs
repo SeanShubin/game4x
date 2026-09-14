@@ -306,15 +306,16 @@ pub fn say_if_empty(text: &str) -> Result<String, Problem> {
     let Some(open) = lines.iter().position(|line| line.trim() == "## Open") else {
         return problem("this file has no Open section");
     };
-    let Some(next) = lines
+    // **`decide/proposals.md` ends at `## Open`**, since it holds what waits on Sean and nothing
+    // else, so the end of the file closes the section. In the record it left behind there was
+    // always another heading below.
+    let next = lines
         .iter()
         .enumerate()
         .skip(open + 1)
         .find(|(_, line)| FILE_SECTIONS.contains(&line.trim()))
         .map(|(at, _)| at)
-    else {
-        return problem("no section follows Open");
-    };
+        .unwrap_or(lines.len());
     let inside: Vec<&&str> = lines[open + 1..next]
         .iter()
         .filter(|line| !line.trim().is_empty())

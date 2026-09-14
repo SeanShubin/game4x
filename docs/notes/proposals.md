@@ -69,6 +69,32 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### P-503 - withdrawn: the sweep should not store anything at all
+
+**to** sean · **status** **withdrawn** 2026-09-14 · **raised** 2026-09-14 · **withdrawn** the same day, on working Sean's own three scenarios through it
+
+**Withdrawn by this lane, and the reason is one of the three scenarios it cannot express.**
+
+An even sweep fills every container with room, transports included:
+
+```
+25 metal, 3 stores of 10 and 2 transports of 10  ->  5 5 5 5 5
+```
+
+**So *25 in storage and none in the transports* has no expression.** The sweep takes the choice
+rather than offering it. `P-503` made the sweep fair and thereby made it unavoidable.
+
+**Sean, 2026-09-14, which is the narrower rule**: *we don't need to automatically store excess that
+we have capacity for, we need to be able to detect if we do have excess we would lose.*
+
+**What replaces it is nothing** - the release already says *what is in disorder does not survive that
+turn's end*. What has to go is the half-sweep in `spec/logistics.md` line 28, *at the turn's end what
+there is room for is kept and the rest is lost*, which stores without being asked. That is `P-505`.
+
+**And one figure this lane gave Sean was wrong before this was withdrawn**: 25 metal into three
+stores of ten is **9, 8, 8** under even division, not *ten, ten and five*. Said before `P-503`
+existed and never re-derived against it.
+
 ### S-132 - The open queue moved to `decide/`, and `tools/outbox` still reads the old path
 
 **to** code · **status** open · **raised** 2026-09-14 · **source** Sean, 2026-09-14: *move the documents I need to make decisions on or approve to a directory not mixed in with what is currently settled or historical*

@@ -11,50 +11,108 @@ of it needs you.
 
 ## Open
 
-### P-503 - The sweep is even-handed, which is why nothing has to merge
+### P-505 - Nothing is stored without being asked, and one sentence says so
 
-**to** sean · **status** open · **raised** 2026-09-14 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment
+**to** sean · **status** open · **raised** 2026-09-14 · **kind** recovered · **shape** an instruction · **asks** approval · **into** `spec/logistics.md` -> Containment
 
-**This is the proposal your steer changed.** It was going to say that containers which cannot be
-separated share one bin - three metal stores in a territory being one number of 15, because they
-never move. **That is a second way of talking about storage**, and you said you would rather
-over-specify than have two.
+**One sentence changes, and it is the half of a rule that stores without being asked.**
+`spec/logistics.md` line 26 to 28 reads:
 
-**So it says the opposite, and gets the same result.**
+```
+- **When a thing that contains things is consumed, what it held falls loose where it stood.** It
+  is not destroyed with its container: it goes into disorder, and at the turn's end what there is
+  room for is kept and the rest is lost.
+```
 
-> **Nothing merges.** Every store is its own bin, and a sweep that has a choice divides what it
-> sweeps as evenly as the capacities allow. **Stores alike in what they hold stay alike**, so
-> containers nobody has distinguished appear as one entry of several rather than as several
-> entries.
+**It becomes:**
 
-## Why the appearance you wanted falls out rather than being arranged
+```
+- **When a thing that contains things is consumed, what it held falls loose where it stood.** It
+  is not destroyed with its container: it goes into disorder, and what is in disorder at the
+  turn's end is lost.
+```
 
-**Your fifteen metal into three stores of ten is five, five and five** - one entry, `{store
-resource:metal} -> 3`, each holding five, and no story about which store. Not because the stores
-were merged, but because **nothing distinguished them and an even sweep keeps it that way.**
+## What that is, in one line
 
-**Twenty-five into the same three is ten, ten and five** - two entries. That is honest rather than
-awkward: the capacities could not take it evenly, so the state says so.
+**`and at the turn's end what there is room for is kept and the rest is lost` becomes `and what is
+in disorder at the turn's end is lost`.** Nothing else in the bullet moves.
 
-## It is entailed rather than invented, and `spec/turn.md` is where
+## Why
 
-> Where two effects cannot both happen, they compete. **Competing effects are gathered and resolved
-> together, so nothing gains an advantage by being considered first.**
+**Sean, 2026-09-14**: *we don't need to automatically store excess that we have capacity for, we
+need to be able to detect if we do have excess we would lose.*
 
-**A first-fit sweep is precisely one thing gaining an advantage by being considered first.** Filling
-store one to ten before store two sees anything is the order deciding the outcome, which that
-sentence forbids. **Even division is not a preference here; it is the only rule that obeys what is
-already promoted.**
+**And the storing half takes a choice away rather than saving work.** Filling every container with
+room means a transport is loaded whether or not the player wanted cargo in it, and *twenty-five in
+storage and none in the transports* becomes unsayable. `P-503` proposed making that sweep even-handed
+and was withdrawn for the same reason.
 
-## What it means for your two reasons
+## How to tell it was carried out
 
-**You said you both do and do not care which store holds the metal.** This says you never have to
-care and may always specify: the sweep leaves them alike unless you have made them unalike, and
-`P-501` lets you name one when you have.
+**`spec/logistics.md` no longer contains the phrase `what there is room for is kept`**, and contains
+`what is in disorder at the turn's end is lost` exactly once. The rest of the bullet is byte for
+byte what it was.
 
-**And the transports are not an exception to it.** Two transports get an even sweep too - the reason
-your example fills them three and seven is that you *said so*, with two commands, not that they obey
-a different rule. **One rule, and the difference is only whether you spoke.**
+## What it leaves consistent rather than changing
+
+**`releases/first-release.md` already says the surviving half** - *what is in disorder may be spent
+the turn it is made and does not survive that turn's end*. The two said different things about the
+same moment and now say one.
+### P-504 - Waste is what could have been kept and was not, and one word is missing to say it
+
+**to** sean · **status** open · **raised** 2026-09-14 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**You asked for a way to detect waste so a player can be warned.** The expression language already
+has three of the four pieces, and this adds the fourth.
+
+## What is already there
+
+```
+count {metal}                how many match a description
+free metal of {store metal}  one container's capacity for a kind, less what it holds
+min(a, b)                    the lesser of two
+```
+
+**`free <kind> of x` is already the right idea and already promoted**, and it takes one container.
+
+## What is missing, and it is one word
+
+```
+sum free metal of {store metal}     every store's free metal, added up
+```
+
+**`sum` takes a trait today** - *`sum <trait> of {…}`, that trait aggregated over all of them* - and
+`free <kind> of` is an expression rather than a trait, so it cannot be the thing summed.
+
+> **`sum` aggregates an expression over the things a description names**, not only a trait. Where
+> that expression is a trait it reads as before.
+
+## Then waste is a guard and needs nothing else
+
+```
+min(count {metal}, sum free metal of {store metal}) > 0
+```
+
+**What is loose, against what there is room for, whichever is smaller.** Greater than zero means
+ending the turn loses metal that a container could have held - which is the warning you want, and a
+user interface may refuse the turn on it or merely say so.
+
+**It is one guard per resource**, and the guard is the same shape each time, because `metal` is the
+only word in it that changes.
+
+## Why this is entailed rather than invented
+
+**`P-491` already made a recipe over a family one rule per member**, and this is the same move in an
+expression: one form, one word varying. **Nothing new is being said about the game** - only that an
+aggregate may aggregate the thing the language already computes.
+
+## What it does not do
+
+**It does not decide what the interface does about waste.** You said that is a user interface
+concern and this stops where you stopped: the guard is expressible, so refusing the turn is
+implementable, and the specification says nothing about whether it should be.
+
+**And it does not sweep anything.** Nothing is stored without being asked - that is `P-505`.
 ### P-502 - A bin is a store, and what a thing holds is what it holds
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** invented · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment
@@ -100,38 +158,53 @@ resource:metal}` today and needs nothing invented. Your parameterised notation i
 constraint that named a derived trait because the Petri net materialises free capacity as tokens.
 **The data model would derive what the net holds.** This lane has not measured whether that bites,
 and says so rather than discovering it during a promotion.
-### P-501 - A description names a thing wherever it appears, and leaves nothing out
+### P-501 - A description names a set, and a command acts on one of it
 
-**to** sean · **status** open · **raised** 2026-09-14 · **kind** invented · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+**to** sean · **status** open · **raised** 2026-09-14 · **rewritten** 2026-09-14, after working your three scenarios through the first version · **kind** invented · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
 
-**This is the one rule your scenario needs that nothing supplies.** Two transports, one holding 3
-metal and one holding none, and a command that has to say which. Today a description states a thing;
-nothing says what one **names**.
+**The first version said *names the things*, plural, and your first scenario cannot be written with
+it.** Two identical transports, and one command naming both loads 3 into each. Three and seven is
+then unreachable.
 
-> A description names a thing as well as stating one. **A description used to name is exact**: it
-> leaves out no trait and no content, and it names the things whose description and contents are
-> exactly it. There is no second form that names some of them.
+> A description names as well as states. **A description used to name is exact** - it leaves out no
+> trait and no content - and it names every thing whose description and contents are exactly it.
+> **A command acts on one of them**, and which one is not a choice: things a description names are
+> alike in every respect the game can see, so every one of them gives the same state afterwards.
 
-## Why exact rather than partial, and it is your rule rather than this lane's
+## Your first scenario, in the notation
 
-**A partial description would be the second way of expressing a thing.** `{transport}` meaning *any
-transport* reads identically to `{transport}` meaning *the one holding nothing*, and which it meant
-would depend on where it stood. **One form that over-specifies beats two forms that each
-under-specify**, which is what you asked for in as many words.
+```
+{stow into:{store metal} kind:metal repeat:10}
+{stow into:{store metal} kind:metal repeat:10}
+{stow into:{store metal} kind:metal repeat:5}
+```
 
-The cost is real and worth stating: **naming the empty transport means writing that it holds
-nothing**, and naming a full one means writing its contents. You say more than you care about. **In
-exchange there is one thing to learn and one thing to check.**
+**Each command names a store holding nothing, and there is one fewer of them each time.** After the
+first, one store holds ten and is no longer named by `{store metal}` - its contents differ - so the
+second names one of the two that are left.
 
-## What it leans on, already promoted
+**That is the whole mechanism**: a set that shrinks as you fill it, and no need to tell apart things
+that are still alike.
 
-`spec/console.md` already says a description leaves nothing out - *no trait of the thing may be left
-out* - and already allows a description as an argument, since **a value may be another command in
-the same form**. This says the first of those holds when the description is doing the naming, which
-is the case neither sentence covers.
+## And the transports
 
-## What it does not decide
+```
+{stow into:{transport metal} kind:metal repeat:3}
+{stow into:{transport metal} kind:metal repeat:7}
+```
 
-**Nothing about matching several things at once.** If a command should ever act on every transport
-holding metal, that is a second idea and this rule does not smuggle it in - it would arrive as a
-description that is explicitly a pattern, and it would say so.
+Three into either transport; then the empty one is the only thing `{transport metal}` names, so the
+seven has one destination and the command does not have to say which.
+
+## Why *one of them* rather than a tie-break
+
+`spec/turn.md` requires *a deterministic mechanic*, and this is stronger than a tie-break rather than
+weaker: **there is nothing to break.** Two things a description names differ in nothing the game
+records, so a rule that picks either produces the same game. A tie-break would be machinery for
+distinguishing things that are the same.
+
+## What it still does not do
+
+**It cannot act on several at once.** `{stow into:{store metal} repeat:10}` fills one store, not
+three. If a command should ever mean *every one of these*, that is a second idea and this does not
+smuggle it in.
