@@ -69,6 +69,51 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-134 - Twenty `.4x` files download instead of rendering, and `R-11` now says they must render
+
+**to** code · **status** open · **cited** `287e67f` · **raised** 2026-09-14 · **source** Sean, 2026-09-14: *`https://seanshubin.github.io/game4x/spec/data/above.4x` does not render, it attempts to download. I want to be able to view these pages from the website without downloading them*
+
+**`R-11` is built and does not deliver what it was for.** Every link on `reports/index.html` to a
+`.4x` file downloads it. **Its *vetted when* has gained a clause saying so** - reading it is what
+following the link does - and this lane changed that criterion under you rather than filing it
+first, which is why this says so in its first paragraph.
+
+## Why, and it is not fixable where you would look first
+
+**GitHub Pages picks `Content-Type` from the extension and does not know `.4x`**, so it serves
+`application/octet-stream` and the browser saves the file. **Pages offers no way to say otherwise** -
+no `.htaccess`, no `_headers`, nothing in Jekyll. **So the URL has to end in something Pages knows,
+or the bytes have to be inside a page.**
+
+**Twenty files, not twelve.** `spec/data/*.4x` is twelve and `scenario/` is eight, and the two in
+`scenario/` are the ones Sean derives by hand - `commands/play.4x` and `expected/play.4x` - so this
+bites the file he reads most.
+
+## Three ways, and this lane would take the first
+
+**`A` - publish a `.txt` twin.** The pipeline already does `cp -r spec/data crates/game4x/dist/spec/data`;
+one more step writes `above.4x.txt` beside each. **`reports/index.html` links the twin and still
+prints `above.4x` as the text.** Renders everywhere, no new machinery, and `R-11` already permits it:
+*direct links or non-canonical generated copies.* The cost is two URLs for one file.
+
+**`B` - an HTML rendering per file**, the contents in a `<pre>`, linking back to the source. Reads
+better and matches `R-9`'s every-view-has-a-sibling. The cost is a generator and twenty more pages.
+
+**`C` - one page with all of them inlined.** One click, everything. **It fails `R-11`'s own clause**
+about reaching *every file*, so it is listed to be dismissed rather than considered.
+
+## What this lane is not deciding
+
+**Where the twin is written and what the step looks like** - `.github/workflows/`, the dist
+assembly and `reports/index.html`'s generator are all yours. **`A` is a recommendation and the
+capability only asks that following a link reads the file.**
+
+## One thing this lane could not check
+
+**The `Content-Type` is inferred rather than measured.** Sean observed the download; this lane has
+not fetched the URL and is not claiming to know what header came back, only what would explain it.
+**If it turns out to be something else, the recommendation changes and the clause does not.**
+
 ### S-133 - The two follow-ons from pooling, which this lane owed you and did not file
 
 **to** code · **status** open, **half built** 2026-09-14 · `free` may be negative is done in `8b12484`, over `i64` with the clamp poisoned to prove it; a unit holding no fuel waits on `P-512` · **cited** `4714fac` · **raised** 2026-09-14 · **source** `C-124`, which had to find them itself

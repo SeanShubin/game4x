@@ -26,6 +26,19 @@ can check it himself. `C-114` is the measurement; this is what it is for.
 largest structural choice in the repository and leaves to him. Recorded here so that when that choice
 is made, the reason it was wanted is not reconstructed from the code lane's measurements alone.
 
+## Said 2026-09-14: the published data must be readable in the browser
+
+*`https://seanshubin.github.io/game4x/spec/data/above.4x` does not render, it attempts to download. I
+want to be able to view these pages from the website without downloading them.*
+
+**Landed the same day**, as a clause in `R-11`'s *vetted when* and as `S-134` to the code lane, so it
+is here as the record of it being said rather than as something waiting.
+
+**What it exposes is more general than the fix.** `R-11` asked that the engine's inputs be
+*reachable*, and they are - the links resolve, nothing 404s, and the capability was built correctly
+against what it said. **Reachable and readable are different**, and only one of them was written
+down. A capability can be delivered exactly as specified and still not be the thing that was wanted.
+
 ## Said 2026-09-14: concrete first, because abstractions cannot be fleshed out
 
 *We are not at user interface yet, and something concrete that can't possibly work can be adapted,

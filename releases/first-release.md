@@ -560,9 +560,15 @@ generated view does.
 - **In** - `spec/invariants.md`, *The data may be replicated in the presentation layer, and no
   replication is canonical.*
 - **Vetted when** - from `reports/index.html` I can reach **every file the engine reads as input**,
-  in as many clicks as it takes to reach any other view, without knowing the paths beforehand. A
-  copy rather than a link **says on the page that it is generated and not canonical**, and says
-  which file it came from. **Nothing the engine reads is missing from that page**, which is
-  checked by listing the inputs rather than by anybody remembering to add one
+  in as many clicks as it takes to reach any other view, without knowing the paths beforehand, and
+  **reading it is what following the link does** - it renders in the browser rather than
+  downloading. A copy rather than a link **says on the page that it is generated and not
+  canonical**, and says which file it came from. **Nothing the engine reads is missing from that
+  page**, which is checked by listing the inputs rather than by anybody remembering to add one
+
+  **The rendering clause is Sean's, 2026-09-14**, on finding that
+  `seanshubin.github.io/game4x/spec/data/above.4x` downloads: *I want to be able to view these
+  pages from the website without downloading them.* **It was always the intent and was not
+  written**, which is why the capability could be built and still not deliver it.
 
 ## Open questions
