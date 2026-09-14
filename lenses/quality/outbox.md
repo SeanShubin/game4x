@@ -118,6 +118,37 @@ so the arithmetic has no opinion yet. **Once the code lane teaches it to read a 
 it will read a relocation with no source** - and whether that balances depends on a row nobody has
 written.
 
+## `P-489` was rewritten and it does not clear the red - measured 2026-09-13
+
+**The proposal moved from `consume` plus `produce` to `require` plus a quantity-less `put`**, citing
+`move`'s pattern, so that *a put has no quantity* stands untouched. **The reading is sound** - `move`
+relocates a unit the same way, and *not taken* there means *not destroyed* rather than *not moved*.
+
+**But the gate does not go green on it.** Applied its rows in a clone at `ca14484` and ran
+`cargo test -p game-console --lib`:
+
+```
+panicked at crates/game-console/src/nogain.rs:833:13:
+`put` names ``, which is not a count at least 1, one less or at its maximum -
+so this row would move nothing and nothing would say so
+```
+
+**Same guard, same line, a different reason.** The old rows fail because the `put` carries a
+quantity; the new rows fail because its *Traits* cell is empty. `changed()` gives `require` an
+empty delta by design - *`require` takes nothing* - so **the size of the relocation sits on the one
+row the weighting ignores.**
+
+**Which is this item's finding surviving its own fix.** The source end is named now, and the
+arithmetic still cannot see the amount. For it to balance, `nogain` has to pair a `require` with a
+`put` of the same kind and read the quantity across the two - **and that is a design step rather
+than a repair.** Until it is taken, the weighting balances a game in which a pioneer's fuel is free,
+and `move` consuming energy from a unit it never saw filled reads as disorder, which the invariant
+tolerates.
+
+**Whether this changes.** The item still says the choice is Sean's, and **it now also says that
+approving `P-489` leaves the gate where it is.** Anyone expecting promotion to clear it - the code
+lane said it would build and run the gate on promotion - will meet `nogain.rs:833` instead.
+
 ### Q-90 - `P-489` offers two blocks, declares one shape and one destination, and would promote unverified
 
 **to** spec · **status** **acted** 2026-09-13 · `402576e` · **raised** 2026-09-13 · **source** reading the replaced `P-489`
