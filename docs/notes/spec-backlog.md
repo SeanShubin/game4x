@@ -8,6 +8,24 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-13: organise the code so that little of it has to be read
+
+*I also think some of this can be solved by organizing the code so that I don't have to look at much
+of it to spot problems.*
+
+**Said in the same breath as asking for the mechanical defences**, and it is the other half of them:
+a detector says where to look, and this says how much there should be to look at when you get there.
+
+**It is the thin engine argued from the reader's side rather than the designer's.** `P-493`, landed
+the same day, says a thin engine makes inadequacies surface sooner because complexity has nowhere to
+hide. This says the same arrangement makes them **visible to a person** - 58 lines of `spec/data/`
+can be read in full and 6,231 lines of `game-model` cannot, so where a rule lives decides whether he
+can check it himself. `C-114` is the measurement; this is what it is for.
+
+**It is not yet a proposal**, because what follows from it is the restructuring `C-114` calls the
+largest structural choice in the repository and leaves to him. Recorded here so that when that choice
+is made, the reason it was wanted is not reconstructed from the code lane's measurements alone.
+
 ## Said 2026-09-13: a thin engine is an instrument, and complexity is its reading
 
 *A thin engine running a data driven game forces inadequacies in the engine and data structure to

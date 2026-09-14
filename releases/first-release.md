@@ -519,4 +519,35 @@ nothing here: it asks whether a reader can read it.
   name**, and I can say what a node is without looking anything up. Where a drawing is too large
   to satisfy that whole, it is shown in parts that do, and it says what each part leaves out
 
+### R-11 - I can reach the engine's inputs from the reports
+
+**to** code - **status** open - **raised** 2026-09-13 - **source** Sean, 2026-09-13: *I am also going
+to need the inputs to the thin engine to be reachable from `reports/index.html` (direct links or
+non-canonical generated copies).*
+
+**This invents no rule.** `spec/invariants.md` -> *The game is data* already says the data that runs
+the game lives in a data file, and that **the data may be replicated in the presentation layer, and
+no replication is canonical**. `R-9` already requires every reference in a report to be a link a
+reader can follow. This capability is those three sentences applied to `spec/data/`, which today no
+report reaches at all.
+
+**Why it is worth a capability of its own, and it is the thin engine's reason rather than a
+convenience.** `P-493` makes complexity in the data a **reading** - *if the data structure explodes
+in complexity, or the data itself explodes in complexity, that tells us something needs to be
+unified*. A reading nobody can see is not a reading. The inputs are 58 lines today and the instrument
+only becomes useful as they grow, so the time to make them visible is before they do.
+
+**Either form satisfies it and the choice is the code lane's**, because it is a presentation
+question. A direct link to `spec/data/kinds.4x` costs nothing and shows the canonical bytes; a
+generated copy reads better and must then say it is generated and not canonical, as every other
+generated view does.
+
+- **In** - `spec/invariants.md`, *the data may be replicated in the presentation layer, and no
+  replication is canonical*, and `docs/process.md`, *presentations are generated from data*
+- **Vetted when** - from `reports/index.html` I can reach **every file the engine reads as input**,
+  in as many clicks as it takes to reach any other view, without knowing the paths beforehand. A
+  copy rather than a link **says on the page that it is generated and not canonical**, and says
+  which file it came from. **Nothing the engine reads is missing from that page**, which is
+  checked by listing the inputs rather than by anybody remembering to add one
+
 ## Open questions

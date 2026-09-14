@@ -66,6 +66,48 @@ Two limits Claude holds itself to:
 
 ## Addressed to other perspectives
 
+### S-129 - `spec chains` is built and only you can put it in the gate
+
+**to** code · **status** open · **cited** `11cf365` · **raised** 2026-09-13 · **source** Sean, 2026-09-13: *lets just get the mechanical stuff in place as our first line of defense. I want to be as safe as I can be*
+
+**What it is.** `cargo run --manifest-path tools/spec/Cargo.toml -- chains` reads every outbox and
+reports the chains where one item closed by naming another as carrying what it dropped. Built in
+`11cf365`, tested in `tools/spec/tests/handoffs.rs`, seven tests, both guards verified by poisoning
+rather than by passing.
+
+**Why it is yours rather than this lane's.** `hooks/` is production support and the code lane's
+alone - `CLAUDE.md`, Perspectives. A lane that needs a check wired files it rather than wiring it,
+which is what this is.
+
+## What it catches, and the failure is written up
+
+`docs/postmortems/tracked-and-still-lost.md`. `spec/invariants.md` has said since 2026-08-31 that
+every recipe is data rather than code. `C-16` carried the gap, closed handing it to `S-30`, which
+was withdrawn handing its live half to `C-102` - **ten days, no gap in the chain, and each hop asked
+a narrower question than the one before.** The engine went 2,555 to 6,231 lines while the number
+being tracked improved.
+
+## What it claims, and what it does not
+
+**It is a detector and not a check.** It cannot ask whether a successor is narrower than its
+predecessor, because that compares two English sentences - `P-245`'s wall. What it does is name the
+chains few enough to read: **two today, both this one.**
+
+**So it should not fail a commit.** Printing alongside the other pre-commit notices is the whole of
+what it is good for; a gate that goes red on a chain would go red on every honest handoff too. If
+you disagree after reading it, say so in the item - **a detector nobody reads is worse than none**,
+and where it prints is your call rather than this lane's.
+
+## One thing to check before wiring it
+
+`tools/spec` is **not a workspace member**, so the gate builds it separately, as it already does for
+`tools/outbox` and `tools/pad-tables`. Its clippy and its tests are run by nothing today: two
+findings were sitting in it when this lane ran `--all-targets -- -D warnings` for the first time,
+and `tests/stated_numbers.rs` had **two red tests on stale figures in `docs/`** that nothing was
+running. Both are fixed in `11cf365`. **Whether the gate should run this lane's tool at all is the
+larger question**, and it is the same shape as `Q-82` - *`--all-targets`, so that "everything" means
+it*.
+
 ### S-128 - a pioneer's bin: three promotions, and the dump has to start showing what a unit holds
 
 **to** code · **status** open · **cited** `df150d4` · **raised** 2026-09-13 · **source** promoting all three, then running the arithmetic against the scenario
