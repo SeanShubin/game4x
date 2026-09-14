@@ -2,7 +2,7 @@
 {kind name:trait}
 {kind name:family}
 {kind name:value}
-{kind name:citizen bearing defending laboring strength unpaid upkeep}
+{kind name:citizen bearing defending laboring paid strength upkeep}
 {kind name:garrison binding metal-in-it strength}
 {kind name:extractor binding metal-in-it resource working}
 {kind name:yard binding metal-in-it}

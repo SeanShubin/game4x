@@ -21,6 +21,6 @@
 {trait name:to admits:place kept:thing}
 {trait name:keeps of:thing admits:number kept:thing}
 {trait name:surplus admits:number kept:kind}
-{trait name:unpaid admits:number kept:thing}
+{trait name:paid admits:number kept:thing}
 {trait name:phase admits:value kept:thing}
 {trait name:movable admits:number kept:kind}
