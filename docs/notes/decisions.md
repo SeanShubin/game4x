@@ -21,6 +21,10 @@ here without first becoming a proposal.
 
 ## Open
 
+*Nothing is open.*
+
+## Answered, kept for the reasoning
+
 ### P-499 - `P-497` refused: two columns it treats as atomic are not, and the counts passed anyway
 
 **to** sean · **status** **answered** 2026-09-14 · `J1` for the constraint, and `P-500` for the `Where` column · **raised** 2026-09-13 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `P-497`, before it is promoted
