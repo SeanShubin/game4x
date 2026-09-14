@@ -14,7 +14,7 @@
 use game_console::{declare, state};
 use game_model::containment::Description;
 use std::collections::BTreeSet;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 fn release() -> String {
     std::fs::read_to_string(
@@ -773,5 +773,118 @@ fn the_traits_file_declares_what_a_data_file_needs() {
         (kept_by("thing"), kept_by("kind"), kept_by("nothing")),
         (19, 7, 0),
         "nineteen belong to each thing, seven to the kind, and **none to nothing** - `P-476`          removed the third, because `kept` says where a value belongs and never whether one          is held. The zero is asserted rather than dropped, so a `nothing` reaching the          file fails here"
+    );
+}
+
+/// Every word in every data file is a kind, a trait, or one of a trait's values.
+///
+/// **`spec/console.md` states this of a data file and it was only ever asked of one.** The
+/// check beside it reads `spec/data/kinds.4x`, because when it was written that was the file
+/// with bare words on its lines. `P-497` made `spec/data/` twelve relations and the rule did
+/// not follow, so eleven files went unswept - and the sweep finds something in the twelfth.
+///
+/// # What it finds, and why a vocabulary check nearly missed it
+///
+/// Three cells of `line.4x` hold a quantity that is a sentence:
+///
+/// ```text
+/// {line block:muster seq:4 role:produce qty:that citizen's strength kind:force}
+/// ```
+///
+/// **A key takes one token**, so this reads `qty:that` and leaves `citizen's` and `strength`
+/// as bare words. The quantity the release states - *that citizen's strength* - has become the
+/// word `that`, and nothing said so.
+///
+/// **Four of the eight fragments are real trait names.** `strength`, `density` and `resource`
+/// are declared, so a check asking *is this token a declared trait* passes on half of each
+/// sentence and fails on the other half - `for`, `that`, `citizen's`, `unit's`. **Had the
+/// sentences used only words that happen to be traits, this would be green and wrong**, which
+/// is why the count below is of bare words rather than of failures.
+///
+/// `C-120` carries it. The rows are the specification lane's; the sweep is this lane's.
+#[test]
+fn every_bare_word_in_every_data_file_is_a_declared_trait() {
+    let data = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data");
+    let declared: BTreeSet<String> = state::declarations(
+        &std::fs::read_to_string(data.join("traits.4x")).expect("spec/data/traits.4x"),
+    )
+    .expect("the file of traits parses")
+    .iter()
+    .filter_map(|row| row.traits.get("name").cloned())
+    .collect();
+    assert_eq!(
+        declared.len(),
+        26,
+        "twenty-six traits are declared; this read {declared:?}"
+    );
+
+    let mut files: Vec<PathBuf> = std::fs::read_dir(&data)
+        .expect("spec/data")
+        .filter_map(|entry| entry.ok())
+        .map(|entry| entry.path())
+        .filter(|path| path.extension().map(|it| it == "4x").unwrap_or(false))
+        .collect();
+    files.sort();
+    assert_eq!(
+        files.len(),
+        12,
+        "twelve relations since `P-497`; this swept {files:?}"
+    );
+
+    let mut bare = 0;
+    let mut wrong: Vec<String> = Vec::new();
+    for path in &files {
+        let name = path
+            .file_name()
+            .and_then(|it| it.to_str())
+            .unwrap_or_default();
+        let text = std::fs::read_to_string(path).unwrap_or_else(|why| panic!("{name}: {why}"));
+        for row in state::declarations(&text).unwrap_or_else(|why| panic!("{name}: {why}")) {
+            for (word, value) in &row.traits {
+                if !value.is_empty() {
+                    continue;
+                }
+                bare += 1;
+                if !declared.contains(word) {
+                    wrong.push(format!(
+                        "{name}: a `{}` row carries bare `{word}`",
+                        row.kind
+                    ));
+                }
+            }
+        }
+    }
+
+    // **The population is bare words and not files**, because eleven of the twelve have none
+    // and a sweep over them would agree with anything. Eight is what `P-497` left: two in each
+    // of `muster` and `stand`, four in `work`.
+    assert_eq!(
+        bare, 8,
+        "eight bare words across `spec/data/`, which is the population this counted against"
+    );
+    // **The four are excepted by name and the exception is the failing half of the report** -
+    // `C-61`'s pattern, and the reason it is a set rather than a count is that both directions
+    // have to bite. A fifth appearing fails here; the four being repaired fails here too, and
+    // that is when the exception comes out rather than being widened.
+    //
+    // **They are three cells of `line.4x` and not four words of it.** *`$where`'s density for
+    // that resource*, *that citizen's strength*, *that unit's strength* - each is a quantity
+    // the release states as a phrase, and a key takes one token. `C-120` is open on what the
+    // data should say instead, which is a rule and therefore the specification lane's.
+    let excused: BTreeSet<String> = [
+        "line.4x: a `line` row carries bare `citizen's`",
+        "line.4x: a `line` row carries bare `for`",
+        "line.4x: a `line` row carries bare `that`",
+        "line.4x: a `line` row carries bare `unit's`",
+    ]
+    .into_iter()
+    .map(String::from)
+    .collect();
+    let found: BTreeSet<String> = wrong.into_iter().collect();
+    assert_eq!(
+        found, excused,
+        "a word in a data file is neither a kind, a trait, nor a trait's value - \
+         `spec/console.md` says every word is one of the three, and the four in the second set \
+         are `C-120`'s, excused until the rows say a quantity in one token"
     );
 }

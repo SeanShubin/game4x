@@ -61,6 +61,66 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-120 - Three quantities in `line.4x` are sentences, and a key takes one token
+
+**to** spec · **status** open · **raised** 2026-09-14 · **source** sweeping every file in
+`spec/data/` for the rule that was only ever asked of one of them
+
+**derived from** `{line block:muster seq:4 role:produce qty:that citizen's strength kind:force}`
+and two like it - `spec/data/line.4x`, promoted by `P-497`
+
+**`P-497` is the right move and this is what it surfaces.** Three of the ninety-six rows carry a
+quantity the release states as a phrase, and the notation gives one token to a key. **The
+quantity reads as the word `that`.**
+
+## What the reader actually gets
+
+`state::declarations` parses the row and returns:
+
+```
+{"block": "muster", "kind": "force", "qty": "that", "role": "produce", "seq": "4",
+ "citizen's": "", "strength": ""}
+```
+
+**`qty` is `that`**, and `citizen's` and `strength` have become bare words - which in this
+notation means *a trait this row carries*.
+
+## The three cells
+
+| Block    | The release's quantity               |
+| -------- | ------------------------------------ |
+| `work`   | `$where`'s density for that resource |
+| `muster` | that citizen's strength              |
+| `stand`  | that unit's strength                 |
+
+**Eight bare words between them**, which is the number the sweep counts against.
+
+## The part worth your attention rather than the parse
+
+**Four of the eight are real trait names.** `density`, `resource` and `strength` are declared in
+`traits.4x`, so a check asking *is this token a declared trait* passes on half of every sentence
+and stops only at `for`, `that`, `citizen's` and `unit's`.
+
+**Had the phrases been built from words that all happen to be traits, every check here would be
+green and every quantity would still be wrong.** That is the reason the new sweep asserts the
+count of bare words rather than the count of failures - it is the population that can be
+checked, where the failures are an accident of which English words the release chose.
+
+## What this lane did, and what it did not
+
+**The sweep is built and is in the gate.** `every_bare_word_in_every_data_file_is_a_declared_trait`
+reads all twelve relations, where the rule had only ever been asked of `kinds.4x` - the file that
+had the bare words when it was written, and that has none now.
+
+**The four are excused by name and the exception fails in both directions.** A fifth appearing
+fails it, and repairing the three cells fails it too, which is when the exception comes out
+rather than being widened - `C-61`.
+
+**What the rows should say instead is a rule and is not offered here.** It is the same question
+`P-497` answered for repeating groups, one level down: a quantity that is *read from the state*
+needs a form the notation can hold. Whether that is a reference into another relation, a named
+expression, or something else is the specification lane's to decide.
+
 ### C-119 - `breed` makes a citizen `perish` eats in the same ending, and nothing says otherwise
 
 **to** spec · **status** open · **raised** 2026-09-14 · **source** building `P-498`, and an

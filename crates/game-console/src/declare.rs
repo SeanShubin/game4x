@@ -41,24 +41,65 @@ pub const VOCABULARY: [&str; 4] = ["kind", "trait", "family", "value"];
 /// **Read from the release's *Kinds* table**, so this is the same data by a different route
 /// rather than a second copy of it - which is the whole of why it can be compared.
 pub fn kinds(document: &str) -> String {
-    let families = families_of(document);
     let mut rows: Vec<Description> = Vec::new();
     for name in VOCABULARY {
         rows.push(named("kind", name, None));
     }
-    for row in body_under(document, "## Kinds") {
-        let name = plain(row.first().map(String::as_str).unwrap_or_default());
-        assert!(
-            !name.is_empty(),
-            "a row of the Kinds table names no kind, so the file would declare a blank word"
-        );
-        rows.push(named(
-            "kind",
-            &name,
-            families.get(&name).map(String::as_str),
-        ));
+    for name in every_kind(document) {
+        rows.push(named("kind", &name, None));
     }
     crate::state::declared(&rows)
+}
+
+/// Which family each kind is in, one line per membership - `spec/data/member.4x`.
+///
+/// **`P-497` took this off the kind's own line**, and the reason is the shape rather than the
+/// tidiness: a kind's line carried a repeating group - its family and every trait it carries -
+/// and a repeating group is the one thing a relation may not hold. `{kind name:pioneer
+/// family:unit binding defending fuel ...}` is now `{kind name:pioneer}` and one row per fact.
+///
+/// **Membership is a list and a key takes one value**, which is what made the old form
+/// fragile: a kind in two families had nowhere to put the second and this generator refused
+/// rather than picking. **One row per membership cannot have that problem at all** - which is
+/// the normalization doing what it is for, rather than a check being added.
+pub fn members(document: &str) -> String {
+    let families = families_of(document);
+    // **In the Kinds table's order, not the Families table's.** A relation has no order and a
+    // file does, so the file needs one that is derivable rather than chosen - and reading the
+    // kinds in the order they are declared gives the same bytes from the same document.
+    let rows: Vec<Description> = every_kind(document)
+        .into_iter()
+        .filter_map(|kind| {
+            families.get(&kind).map(|family| {
+                let mut traits = std::collections::BTreeMap::new();
+                traits.insert("kind".to_string(), kind.clone());
+                traits.insert("family".to_string(), family.clone());
+                Description {
+                    kind: "member",
+                    traits,
+                }
+            })
+        })
+        .collect();
+    assert!(
+        !rows.is_empty(),
+        "no kind declares a family, so `member.4x` would be empty and say nothing about it"
+    );
+    crate::state::declared(&rows)
+}
+
+/// Every kind the release declares, in the order its table gives them.
+fn every_kind(document: &str) -> Vec<String> {
+    body_under(document, "## Kinds")
+        .iter()
+        .map(|row| plain(row.first().map(String::as_str).unwrap_or_default()))
+        .inspect(|name| {
+            assert!(
+                !name.is_empty(),
+                "a row of the Kinds table names no kind, so the file would declare a blank word"
+            )
+        })
+        .collect()
 }
 
 /// One line: a declaration of `what`, named `name`, optionally in a family.
