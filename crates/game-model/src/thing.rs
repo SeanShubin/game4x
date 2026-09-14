@@ -354,6 +354,21 @@ pub enum Trait {
     /// action draw on the same count, and two naming different actions never compete. A
     /// citizen that has made labor can still defend.
     Defending,
+    /// **`P-498`: this citizen's upkeep was paid this turn.** `0 or 1`.
+    ///
+    /// # The mark that let a seam stop carrying a number
+    ///
+    /// The release called this `unpaid` and marked it **derived**, so nothing stored it: the
+    /// model computed how many citizens `upkeep` could not feed and handed that count to
+    /// `perish`. **`P-498` inverts it into a positive mark**, which is `P-373`'s trick said a
+    /// second time - `met` is the first - and the inversion is what removes the seam. `upkeep`
+    /// puts `paid at its maximum` on each citizen it feeds; `perish` consumes a citizen at
+    /// `paid 0`; `renew` clears it. **Nothing is carried between the two phases any more**,
+    /// where the count used to be.
+    ///
+    /// **Absent means unpaid**, following [`Trait::Met`], because `renew` clears it at the end
+    /// of every turn and a committed state therefore holds none.
+    Paid,
     /// **`P-494`: force was spent on this nature this turn.** `0 or 1`.
     ///
     /// **Absent means unmet**, which is the opposite of every readiness above it and is the

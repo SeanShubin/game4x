@@ -1749,6 +1749,59 @@ mod tests {
         );
     }
 
+    /// A citizen bred in an ending is not eaten by the `perish` in the same ending.
+    ///
+    /// **`P-498` made this askable and the first build of it got it wrong** - `C-119`. `breed`
+    /// produces a citizen and says nothing about `paid`; `perish` fires below it on `paid 0`.
+    /// So on the reading where an unmarked citizen is unpaid, **every newborn dies in the
+    /// ending that made it** - which the assertion inside `grow_or_starve` caught, reporting
+    /// two starved against nought unfed.
+    ///
+    /// **Both halves, because the mark is only right if it still starves somebody.** A rule
+    /// that marked every citizen paid would pass the first assertion here and empty the second
+    /// of meaning, and that is the shape a fix reaches for when a check only looks one way.
+    #[test]
+    fn a_citizen_bred_this_turn_has_had_its_food_and_one_that_was_not_fed_has_not() {
+        // Two citizens and four food: two eaten by `upkeep`, two left for `breed` to spend,
+        // so the population doubles and nobody goes unfed.
+        let mut plenty = crate::Territory::empty(TerritoryId(1), Biome::Grassland);
+        plenty.set_garrison(Some(crate::territory::Garrison { force: 0 }));
+        plenty.put(crate::thing::Kind::Citizen, 2);
+        plenty.add_store(Resource::Food);
+        plenty.add(Resource::Food, 4);
+        plenty.settle_population();
+        assert_eq!(
+            plenty.citizens(),
+            4,
+            "two ate, two were bred from what was left, and `perish` took none of them"
+        );
+
+        // The same two citizens and one food: one eats, one does not, and `breed` has nothing
+        // to spend - so the one nobody fed is the one that goes.
+        let mut lean = crate::Territory::empty(TerritoryId(2), Biome::Grassland);
+        lean.set_garrison(Some(crate::territory::Garrison { force: 0 }));
+        lean.put(crate::thing::Kind::Citizen, 2);
+        lean.add_store(Resource::Food);
+        lean.add(Resource::Food, 1);
+        lean.settle_population();
+        assert_eq!(
+            lean.citizens(),
+            1,
+            "one was fed and kept, and the one `upkeep` could not reach perished"
+        );
+
+        // **And a committed state carries no mark**, which is `renew` and not the absence of
+        // anything having happened - the two are the same bytes in the state and different in
+        // the rule, so this reads the survivor rather than the store.
+        assert!(
+            lean.held
+                .iter()
+                .filter(|thing| thing.kind == crate::thing::Kind::Citizen)
+                .all(|thing| thing.trait_of(crate::thing::Trait::Paid).unwrap_or(0) == 0),
+            "`renew` clears the mark, so nothing carries one overnight"
+        );
+    }
+
     /// A committed state holds no mark, and that is `renew` rather than nothing happening.
     ///
     /// **The distinction is the whole reason this test exists.** After an ending, every

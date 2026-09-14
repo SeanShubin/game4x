@@ -335,11 +335,26 @@ impl Territory {
     /// state between the two phases is this territory with the eaten food gone and nothing
     /// else moved.
     pub fn pay_upkeep(&mut self) -> u32 {
-        // **upkeep** - `require 1 citizen`, `consume 1 food`. Fires once per citizen while
-        // there is food, and the citizens it could not reach are the unpaid ones.
+        // **upkeep** - `require 1 citizen`, `consume 1 food`, `put citizen paid at its
+        // maximum`. Fires once per citizen while there is food, and **marks each citizen it
+        // fed** rather than counting the ones it could not reach.
+        //
+        // **The `min` is the firing rule and not an expression** - `P-373`. Two inputs stop
+        // the transition when either runs out, so `fed` is what it managed rather than a
+        // lesser somebody computed.
         let citizens = self.citizens();
         let fed = citizens.min(self.store(Resource::Food));
         self.take(Resource::Food, fed);
+        let mut left = fed;
+        for thing in &mut self.held {
+            if left == 0 {
+                break;
+            }
+            if thing.kind == Kind::Citizen && !thing.is(Trait::Paid) {
+                thing.set(Trait::Paid, 1);
+                left -= 1;
+            }
+        }
         citizens - fed
     }
 
@@ -378,7 +393,20 @@ impl Territory {
             .min(self.store(Resource::Food));
         self.remove(Kind::Fertility, born);
         self.take(Resource::Food, born);
-        self.put(Kind::Citizen, born);
+        // **A citizen `breed` makes arrives paid, and that is an assumption this lane states
+        // rather than a row it read** - `C-119`. `breed` is `consume 1 fertility`, `consume 1
+        // food`, `produce 1 citizen`, with nothing said about `paid`; `perish` fires below it
+        // on `paid 0`. **So the rows as written have every newborn eaten in the ending that
+        // made it**, which is a rule nobody wrote and which the assertion below caught the
+        // first time this was built the other way.
+        //
+        // **The reading it proceeds under**: `upkeep` spends one food to mark one citizen
+        // paid, and `breed` spends one food to make one - so a newborn has had its food, by
+        // the same coin, and is as paid as anybody `upkeep` reached.
+        for _ in 0..born {
+            self.held
+                .push(Thing::of(Kind::Citizen).with(Trait::Paid, 1));
+        }
 
         // **renew** - `consume 1 citizen spent`, `produce 1 citizen fertile`. Once per turn,
         // so nothing can bear twice in one ending and everything can bear in the next.
@@ -388,9 +416,48 @@ impl Territory {
             }
         }
 
-        // **perish** - `consume 1 citizen whose upkeep is unpaid`. After `renew`, per
-        // `P-379`, which is why the order is stated rather than read off four moments.
-        self.remove(Kind::Citizen, unpaid);
+        // **perish** - `consume 1 citizen, paid 0`. After `renew`, per `P-379`, which is why
+        // the order is stated rather than read off four moments.
+        //
+        // **It fires on the absence of a mark and no longer on a number handed to it** -
+        // `P-498`. The argument is still taken and is now only checked: see below.
+        let starved = self
+            .held
+            .iter()
+            .filter(|thing| thing.kind == Kind::Citizen)
+            .filter(|thing| thing.trait_of(Trait::Paid).unwrap_or(0) == 0)
+            .count() as u32;
+        // **The count and the marks have to agree, and this assertion is here because they
+        // did not.** `breed` runs above and makes citizens nothing has fed, so on the rows'
+        // literal reading a newborn carries `paid 0` and is eaten in the ending that made it.
+        //
+        // **The first build of this argued that it could not happen and was wrong.** The
+        // argument was `upkeep`'s saturation - if food ran short then `upkeep` emptied the
+        // store, so `breed` had nothing to spend - which is true of the *unpaid* and says
+        // nothing about the *newborn*: breeding happens exactly when nobody went unfed, and
+        // every citizen it makes is unmarked. **The assertion reported two starved against
+        // nought unfed within the minute**, which is the whole reason it is an assertion
+        // rather than the paragraph it replaced.
+        //
+        // `breed` marks what it makes now - the assumption is stated where it acts, and
+        // `C-119` carries it to the lane that owns the rows.
+        assert_eq!(
+            starved, unpaid,
+            "`perish` fires on the mark and `upkeep` counted {unpaid} unfed - the difference is \
+             a citizen nothing marked, which is what `breed` makes"
+        );
+        self.held.retain(|thing| {
+            thing.kind != Kind::Citizen || thing.trait_of(Trait::Paid).unwrap_or(0) > 0
+        });
+
+        // **renew** - `require 1 citizen`, `put citizen paid 0`. The second of `P-498`'s two
+        // halves, and it is last for the same reason `perish` is after `bear`: clearing the
+        // marks before `perish` read them would starve the whole population every turn.
+        for thing in &mut self.held {
+            if thing.kind == Kind::Citizen {
+                thing.clear(Trait::Paid);
+            }
+        }
     }
 
     /// The garrison holding this ground, if there is one.

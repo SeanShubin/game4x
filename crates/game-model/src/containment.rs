@@ -380,7 +380,7 @@ fn describe(thing: &Thing) -> Description {
         // write them.
         if matches!(
             name,
-            Trait::Ready | Trait::Spent | Trait::Defending | Trait::Met
+            Trait::Ready | Trait::Spent | Trait::Defending | Trait::Met | Trait::Paid
         ) {
             continue;
         }
@@ -434,7 +434,7 @@ pub fn trait_name(name: Trait) -> &'static str {
         // name the release gives them for the kind carrying them, which is why `readiness`
         // is not one of them: `P-399` made it a kind and `P-411` made it a count again.
         // Kept so the match is total and a new trait cannot be added without a name.
-        Trait::Ready | Trait::Spent | Trait::Defending | Trait::Met => {
+        Trait::Ready | Trait::Spent | Trait::Defending | Trait::Met | Trait::Paid => {
             "a count, written by `counts`"
         }
     }
@@ -490,6 +490,11 @@ fn counts(kind: Kind, thing: &Thing) -> Vec<(&'static str, u32)> {
             ("bearing", held(Trait::Spent)),
             ("defending", held(Trait::Defending)),
             ("laboring", held(Trait::Ready)),
+            // **`paid` defaults to zero and the three above it default to one**, which is the
+            // same split [`Trait::Met`] records: a readiness is absent when it is full and a
+            // mark is absent when it is zero, because the recipe that resets each points the
+            // other way. `spec/data/carries.4x` is what says a citizen carries this at all.
+            ("paid", thing.trait_of(Trait::Paid).unwrap_or(0)),
         ],
         Kind::Extractor => vec![("working", held(Trait::Ready))],
         Kind::Nature => vec![("met", thing.trait_of(Trait::Met).unwrap_or(0))],
@@ -900,7 +905,7 @@ mod tests {
         assert_eq!(territory.contents[0].quantity, 8);
         assert_eq!(
             territory.contents[0].description.written(),
-            "{citizen bearing:1 defending:1 laboring:1}"
+            "{citizen bearing:1 defending:1 laboring:1 paid:0}"
         );
         assert!(
             territory.contents[0].contents.is_empty(),
@@ -940,8 +945,14 @@ mod tests {
         assert_eq!(
             written,
             vec![
-                ("{citizen bearing:1 defending:1 laboring:0}".to_string(), 6),
-                ("{citizen bearing:1 defending:1 laboring:1}".to_string(), 8),
+                (
+                    "{citizen bearing:1 defending:1 laboring:0 paid:0}".to_string(),
+                    6
+                ),
+                (
+                    "{citizen bearing:1 defending:1 laboring:1 paid:0}".to_string(),
+                    8
+                ),
             ],
             "eight that can labor and six that cannot, in the order their descriptions sort in"
         );

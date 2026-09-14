@@ -61,6 +61,70 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-119 - `breed` makes a citizen `perish` eats in the same ending, and nothing says otherwise
+
+**to** spec · **status** open · **raised** 2026-09-14 · **source** building `P-498`, and an
+assertion written to check the seam reporting that it did not hold
+
+**derived from** `{line block:breed seq:3 role:produce qty:1 kind:citizen}` and
+`{constraint block:perish seq:1 trait:paid compare:exactly n:0}` - `spec/data/`
+
+**`P-498` is right and this is the one thing it does not say.** Inverting `unpaid` into a
+positive mark is what lets the seam between `upkeep` and `perish` stop carrying a number, and
+the model now carries nothing across it. **What the rows leave open is what a citizen `breed`
+makes is marked with.**
+
+## The three rows, in the order the world fires them
+
+|          |                                                              |
+| -------- | ------------------------------------------------------------ |
+| `upkeep` | `consume 1 food`, `put citizen paid at its maximum`          |
+| `breed`  | `consume 1 fertility`, `consume 1 food`, `produce 1 citizen` |
+| `perish` | `consume 1 citizen, paid 0`                                  |
+
+**`breed` says nothing about `paid` and `perish` runs after it.** So on the literal reading
+every citizen bred in an ending is eaten by the `perish` in that same ending, and a population
+can never grow.
+
+## How it was found, which is the part worth keeping
+
+**Not by a test.** The seam was rebuilt to fire on the mark, and an assertion was written beside
+it saying the marks and the old count must agree. **The comment above that assertion argued the
+case could not arise** - if food ran short then `upkeep` emptied the store, so `breed` had
+nothing to spend - and that argument is true of the *unfed* and says nothing about the
+*newborn*. Breeding happens exactly when nobody went unfed, and every citizen it makes is
+unmarked.
+
+**The assertion reported two starved against nought unfed within the minute.** `CLAUDE.md`
+asks for a check that could have produced the failure rather than a paragraph that explains
+it; this is that, against its own author, in the same commit.
+
+## What this lane proceeded under, and it is a reading rather than a row
+
+**A citizen `breed` makes arrives paid.** `upkeep` spends one food to mark one citizen paid and
+`breed` spends one food to make one - so a newborn has had its food by the same coin, and is as
+paid as anybody `upkeep` reached.
+
+**Offered as the reading and not as rows**, because which of these it becomes is a rule:
+
+|                        |                                                                   |
+| ---------------------- | ----------------------------------------------------------------- |
+| a row on `breed`       | `put citizen paid at its maximum`, said where the citizen is made |
+| a rule about `produce` | a produced thing arrives with every count at its maximum          |
+
+**The second is already half-written.** `P-396` and `P-399` turned `move` from
+consume-and-produce into require-and-put because *a produced unit would arrive able to move
+again* - which is that rule stated for one trait, in a proposal, as a reason rather than as a
+rule. **If it is general, `breed` needs no row and `move`'s rewrite gets its reason back.**
+
+## What is checked either way
+
+`a_citizen_bred_this_turn_has_had_its_food_and_one_that_was_not_fed_has_not` - two citizens and
+four food doubles to four, two citizens and one food leaves one, and the survivor carries no
+mark because `renew` cleared it. **Both halves, because a rule that marked every citizen paid
+would satisfy the first and empty the second**, and that is the shape a fix reaches for when a
+check only looks one way.
+
 ### C-118 - Five items open to this lane are done, and two of them were done before today
 
 **to** spec · **status** open · **raised** 2026-09-13 · **source** working the whole list of what
