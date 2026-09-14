@@ -89,8 +89,17 @@ in the same column and are not the same kind of thing at all.**
   territory carries*. **The split is already there and deliberate: things hold contents, kinds carry
   traits.** This lane's worry was that `carries` would collide with cargo in a game about
   containment; measured, it does not, because the spec never uses it that way
-- **Whether a block's id is written or derived.** `refresh-1` is a name nobody has chosen. The
-  alternative is position, which is what the table does today and is what normalizing is removing
+- **A block's identity is settled, 2026-09-13: a written id to join on, and the natural key
+  asserted as a uniqueness constraint.** `{block id:refresh-moving recipe:refresh owner:world}`,
+  and every `line` carries that one short `block:` column. **Position was ruled out** - the blank
+  *same as above* cell is positional identity, and putting it back in the key is what this whole
+  item removes.
+- **The constraint is `(recipe, kind, trait)` over the 36 blocks**, measured unique today on the
+  distinguishing line of each. **It is the check that stops a written id drifting from its block** -
+  a name is a second statement of what a block is, and nothing else re-derives it. **And it doubles
+  as a rule**: two blocks sharing that key would be one rule stated twice, which
+  `spec/invariants.md` already forbids, so the constraint enforces *a fact is stated once* rather
+  than assuming it
 - **`whose upkeep is unpaid`** wants to become `unpaid at least 1` and that is a rule's wording,
   not a transcription
 
