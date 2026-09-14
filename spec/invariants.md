@@ -154,6 +154,11 @@ specific rule.
   them names its kind
 - Nothing in the state is special to a kind. Adding a kind adds no field and no case, and whatever
   reads the state reads it the same way whatever kind it holds
+- A thin engine running a data driven game forces inadequacies in the engine and data structure
+  to come to light sooner. The design pressure is the whole point. If the code explodes in
+  complexity, or the data structure explodes in complexity, or the data itself explodes in
+  complexity, that tells us something needs to be unified or redesigned more clearly than
+  anything else could
 
 ## A fact is stated once
 

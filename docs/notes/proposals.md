@@ -62,58 +62,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-493 - Your reason for a thin engine, into the invariants
-
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/invariants.md` -> The game is data
-
-## What lands, at the end of that section's bullets
-
-> A thin engine running a data driven game forces inadequacies in the engine and data structure to
-> come to light sooner. The design pressure is the whole point. If the code explodes in complexity,
-> or the data structure explodes in complexity, or the data itself explodes in complexity, that
-> tells us something needs to be unified or redesigned more clearly than anything else could.
-
-## Your own words, and no emphasis added
-
-Said 2026-09-13 and relayed by the code lane as `C-114`. **Nothing is rephrased and no bold was
-added**, because emphasis is not punctuation and a promotion is a pure move - so what is above is
-what lands, to the byte. Say the word if you want it marked up like its neighbours and this lane
-changes the proposal before it goes anywhere.
-
-## This adds no rule, which is the point
-
-That section already opens with *every kind of thing, and every recipe that turns some things into
-others, is data rather than code*, and closes with *adding a kind adds no field and no case*. **So
-the rule has been there since before the code was written.** What your words add is the reason -
-and the reason is what turns a preference into a reading. A preference cannot be violated by a
-number; an instrument can.
-
-## The instrument is off the end of its scale, re-derived by this lane rather than taken from `C-114`
-
-| What                                         | How much                                                 |
-| -------------------------------------------- | -------------------------------------------------------- |
-| `spec/data/`, every declaration the game has | **58 lines** - 22 kinds, 26 traits, 6 biomes, 4 families |
-| `crates/game-model/src/`                     | **6,231 lines**                                          |
-| recipes read at run time                     | **zero**                                                 |
-
-Two files read `releases/first-release.md` while running, and **both of them generate a report** -
-`crates/game-console/src/dump.rs:1585` and `prototypes/kinds/src/release.rs:21`. Nothing anywhere
-reads a recipe in order to fire one; the twenty-two recipes are hand-written match arms in
-`game-model`. `C-114` says *exactly one* non-test file reads the release, and there are two - **the
-correction strengthens its case rather than weakening it**, because the second reader is also a
-report.
-
-**And nothing depends on `prototypes/kinds`.** No `Cargo.toml` under `crates/` or `prototypes/`
-names it. It is a complete typed encoding of the Recipes table with no interpreter behind it, which
-is `C-114`'s sharpest line: *the validating is extensive and the running does not exist*.
-
-## What this proposal does not ask
-
-**It does not ask you to approve building it.** `C-114` calls the restructuring the largest
-structural choice in the repository and leaves it to you; this lands the reason and nothing else.
-The code lane has offered to measure what it would cost - which match arms reduce cleanly to their
-rows and which carry behaviour the table cannot express - rather than start it. **That measurement
-is not this item**, and nothing about approving these four sentences commissions it.
+*Nothing is open. Everything filed has been decided.*
 
 ## Addressed to other perspectives
 
@@ -5397,6 +5346,7 @@ work the release exists to order.
 | P-489, a pioneer's energy is a cost, and refuelling is `stow` aimed at a bin                                                 | `releases/first-release.md` -> Recipes, and Capabilities                                                                                                                                                 | 2026-09-14 |
 | P-490, a habit earns its place by a case it caught, not a case it explains                                                   | `CLAUDE.md` -> What done means                                                                                                                                                                           | 2026-09-14 |
 | P-491, a recipe naming a family leaves the kind open, and `refuel` gains the place row it refers to                          | `spec/console.md` -> Commands, and `releases/first-release.md` -> Recipes                                                                                                                                | 2026-09-14 |
+| P-493, Your reason for a thin engine, into the invariants                                                                    | `spec/invariants.md` -> The game is data                                                                                                                                                                 | 2026-09-14 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |
