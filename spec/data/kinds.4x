@@ -13,10 +13,11 @@
 {kind name:metal family:resource}
 {kind name:energy family:resource}
 {kind name:labor}
-{kind name:territory family:place id biome control nature}
+{kind name:territory family:place id biome control}
 {kind name:orbit family:place id}
 {kind name:deposit density occupied free capacity}
 {kind name:adjacency from to}
 {kind name:game phase}
 {kind name:fertility}
+{kind name:nature met}
 {kind name:force}

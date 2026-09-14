@@ -100,27 +100,27 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
     let stated = [
         Stated {
             document: "docs/designing-rules.md",
-            says: "81 role cells",
+            says: "93 role cells",
             derived: rows.len(),
         },
         Stated {
             document: "docs/designing-rules.md",
-            says: "13 are blank",
+            says: "15 are blank",
             derived: blank.len(),
         },
         Stated {
             document: "docs/designing-rules.md",
-            says: "thirteen `put` rows",
+            says: "fifteen `put` rows",
             derived: puts.len(),
         },
         Stated {
             document: "docs/designing-rules.md",
-            says: "68 cells carry a quantity",
+            says: "78 cells carry a quantity",
             derived: rows.len() - blank.len(),
         },
         Stated {
             document: "docs/designing-rules.md",
-            says: "22 recipes",
+            says: "26 recipes",
             derived: names.len(),
         },
     ];
@@ -140,6 +140,10 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
             .split_whitespace()
             .find_map(|word| word.parse::<usize>().ok())
             .or(match says {
+                // **Spelled-out numbers, added one at a time as documents use them.** A
+                // missing word fails loudly - *no number in "fifteen `put` rows"* - rather
+                // than reading as zero, which is the only property this list needs.
+                s if s.contains("fifteen") => Some(15),
                 s if s.contains("thirteen") => Some(13),
                 s if s.contains("twelve") => Some(12),
                 _ => None,
@@ -153,9 +157,12 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
 
     // Counted here rather than only in prose, so the two that are not a bare count still move
     // the test when they move.
+    // **Six were `refresh`'s and the seventh is `hold`'s** - `P-494`, `P-495` and `C-115`.
+    // The old message said *all of which should be `refresh`'s*, which stopped being true the
+    // moment the force rule landed, and the count is what said so.
     assert_eq!(
-        maxima, 6,
-        "`put ... at its maximum` rows, all of which should be `refresh`'s"
+        maxima, 7,
+        "`put ... at its maximum` rows: six `refresh`'s and `hold`'s `met`"
     );
     assert_eq!(
         reads_a_trait, 3,

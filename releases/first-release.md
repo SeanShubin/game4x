@@ -131,7 +131,7 @@ are listed.
 | **free**        | a number: its capacity less what it holds                         | each thing |
 | **control**     | held by a player, or unclaimed: a citizen of that player is there | each thing |
 | **biome**       | one of the biomes                                                 | each thing |
-| **met**         | a number: force was spent on it this turn                         | each thing |
+| **met**         | a number                                                          | each thing |
 | **from**        | a place                                                           | each thing |
 | **to**          | a place                                                           | each thing |
 | **keeps**       | the number of turns it will last                                  | each thing |
@@ -298,13 +298,13 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 |                     |        | produce | that unit's strength                 | force     |                                               |                          |
 | **refresh**         | world  | put     |                                      | citizen   | defending at its maximum                      |                          |
 | **refresh**         | world  | put     |                                      | unit      | defending at its maximum                      |                          |
-| **hold**            | world  | require | 1                                    | nature    | met at least 0                                |                          |
+| **hold**            | world  | require | 1                                    | nature    | met 0                                         |                          |
 |                     |        | consume | 1                                    | force     |                                               |                          |
 |                     |        | put     |                                      | nature    | met at its maximum                            |                          |
-| **reclaim**         | world  | require | 1                                    | nature    | met at least 0                                |                          |
+| **reclaim**         | world  | require | 1                                    | nature    | met 0                                         |                          |
 |                     |        | consume | 1                                    | citizen   |                                               |                          |
 | **renew**           | world  | require | 1                                    | nature    |                                               |                          |
-|                     |        | put     |                                      | nature    | met at least 0                                |                          |
+|                     |        | put     |                                      | nature    | met 0                                         |                          |
 | **take**            | world  | require | 1                                    | nature    |                                               |                          |
 |                     |        | consume | 1                                    | nature    |                                               |                          |
 |                     |        | consume | 1                                    | force     |                                               |                          |

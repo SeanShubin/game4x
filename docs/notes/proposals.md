@@ -62,76 +62,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-496 - The four cells between the force rule and a green gate, and one of them is a live defect
-
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** entailed · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes and Traits, and `spec/data/`
-
-**The code lane's half of the force rule is built and committed.** `C-117` measured what is left by
-applying these four cells in its working tree, running the gate and reverting: **37 failures become
-zero.** All four are in files it does not write.
-
-**One of them is a defect this lane promoted.** `C-116`: `met at least 0` is true of every number,
-so `reclaim` requires *any* nature rather than an unmet one - and its other row is `consume 1
-citizen`, saturating. **As promoted, the entire population of the planet dies every turn, whatever
-its force.** It is not live in the game, because the engine does not read recipes; it is live in the
-release, the net, and every generated artifact.
-
-## One - three Traits cells in `## Recipes`
-
-| Recipe      | Role    | Kind   | Traits |
-| ----------- | ------- | ------ | ------ |
-| **hold**    | require | nature | met 0  |
-| **reclaim** | require | nature | met 0  |
-| **renew**   | put     | nature | met 0  |
-
-**Each replaces `met at least 0` in that row and nothing else in the row moves.**
-
-**The form was already in the release and neither lane looked.** `spoil` says **`keeps 0`** on a
-`consume` row - a *this count is zero* qualifier the table has had all along. `C-115` invented a
-phrasing instead, this lane promoted it cell for cell as promised, and the vacuity survived both.
-
-## Two - the `met` row's Values cell in `## Traits`
-
-| Trait   | Values   | Belongs to |
-| ------- | -------- | ---------- |
-| **met** | a number | each thing |
-
-**It reads *a number: force was spent on it this turn* today, and this lane wrote that.** The five
-counts beside it - `moving`, `laboring`, `working`, `bearing`, `defending` - each read `a number` and
-nothing more. **The colon is what a check reads**: `every_place_is_a_kind_or_a_count_and_never_a_derived_trait`
-treats a Values cell containing `": "` as derived, and a place naming a derived trait makes the
-page's account of itself false.
-
-## Three - `spec/data/kinds.4x`, two lines
-
-```
-{kind name:territory family:place id biome control}
-{kind name:nature met}
-```
-
-**`territory` loses `nature` and a `nature` kind is declared.** The first line replaces the existing
-`territory` line; the second is added.
-
-## Four - `spec/data/traits.4x`, one line
-
-```
-{trait name:met admits:number kept:thing}
-```
-
-**Replacing `{trait name:nature admits:number kept:thing}`.**
-
-## Why three and four are hand-written when those files are generated
-
-**`declare::kinds` writes only `name` and `family`.** `C-117` regenerated both files, watched it
-strip every kind's traits, and reverted it uncommitted. **So the generator cannot produce these two
-lines today**, and the alternative to writing them by hand is leaving the gate red until it can.
-That is a defect in the generator and `C-105` already carries it.
-
-## What this does not fix
-
-**Two numbers in `docs/designing-rules.md`** - *81 role cells* against 93, and *51 rules* where
-`reports/nogain.md` now says 55. That file is this lane's and needs no approval; it is corrected in
-the same commit and named here so the count is not mistaken for part of what you are approving.
+*Nothing is open. Everything filed has been decided.*
 
 ## Addressed to other perspectives
 
@@ -5509,6 +5440,7 @@ work the release exists to order.
 | P-494, `nature` is now a kind in the Recipes table and a trait everywhere else                                               | `releases/first-release.md` -> Kinds, Traits, and Biomes                                                                                                                                                 | 2026-09-14 |
 | P-495, Taking a territory, by the same trick that just removed holding's zero test                                           | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-14 |
 | P-492, `refuel`'s qualifier, in the form you chose                                                                           | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-14 |
+| P-496, The four cells between the force rule and a green gate, and one of them is a live defect                              | `releases/first-release.md` -> Recipes and Traits, and `spec/data/`                                                                                                                                      | 2026-09-14 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |

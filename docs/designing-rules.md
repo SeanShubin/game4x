@@ -89,9 +89,9 @@ one of three sources - *anything that exhausts draws on time for a turn: it spen
 carries, and only the turn's end restores that count.* **`refresh` is that sentence written as
 rows**, and it is the only rule in the game that writes a count upward from nothing.
 
-**Counted from the Qty and Traits columns of the *Recipes* table, over its 81 role cells**, so it
-can be re-run: **68 cells carry a quantity and 13 are blank, and the thirteen blanks are exactly the
-thirteen `put` rows.** Of the 64, three read a trait - *that citizen's strength*, *that unit's
+**Counted from the Qty and Traits columns of the *Recipes* table, over its 93 role cells**, so it
+can be re-run: **78 cells carry a quantity and 15 are blank, and the fifteen blanks are exactly the
+fifteen `put` rows.** Of the 78, three read a trait - *that citizen's strength*, *that unit's
 strength*, *`$where`'s density for that resource* - which is a colour rather than a marking read.
 
 **Corrected 2026-09-12, and both numbers went stale from promotions this lane made.** It read 81
@@ -118,10 +118,16 @@ research lens re-ran the check on 2026-09-11 and it still says ten - because it 
 and returns a plausible number rather than an error**, which is the failure `CLAUDE.md` names. Six
 and ten never disagreed; they are two populations, and only the six is about the release.
 
-**Re-measured on 2026-09-11, against the release, and the six holds.** The research lens's check 17
-parses the *Recipes* table rather than any copy of it: **81 arcs over 22 recipes - 61 ordinary, 14
-thresholds, and 6 reading a marking**, all six `put ... at its maximum`, all six in `refresh`, all
-world. **Three methods now agree** - two hand counts and one computed, by different routes.
+**Measured on 2026-09-11, against the release as it then stood: 81 arcs over 22 recipes - 61
+ordinary, 14 thresholds, and 6 reading a marking**, all six `put ... at its maximum`, all six in
+`refresh`, all world, by the research lens's check 17 parsing the *Recipes* table rather than any
+copy of it. **Three methods agreed** - two hand counts and one computed, by different routes.
+
+**The table has moved since and the breakdown is not re-derived here.** `P-494`, `P-495` and `C-115`
+took it to 93 role cells over 26 recipes, and **`put ... at its maximum` is now seven rather than six** - the six `refresh`'s, plus `hold`'s `met`. **The six reading a marking is the half that mattered and
+it is the half this lane cannot recount**, because the classification is check 17's rather than a
+count anything here runs - so it is dated rather than restated, and re-running that check is what
+would make it current.
 
 **The classification was settled the opposite way from this document's first attempt at it**, and
 the correction is worth carrying because the wrong version is the intuitive one. *At its maximum*

@@ -16,7 +16,7 @@
 {trait name:free admits:number kept:thing}
 {trait name:control admits:number kept:thing}
 {trait name:biome admits:value kept:thing}
-{trait name:nature admits:number kept:thing}
+{trait name:met admits:number kept:thing}
 {trait name:from admits:place kept:thing}
 {trait name:to admits:place kept:thing}
 {trait name:keeps of:thing admits:number kept:thing}
