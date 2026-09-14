@@ -23,7 +23,7 @@ here without first becoming a proposal.
 
 ### P-499 - `P-497` refused: two columns it treats as atomic are not, and the counts passed anyway
 
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `P-497`, before it is promoted
+**to** sean · **status** **answered** 2026-09-14 · `J1` for the constraint, and `P-500` for the `Where` column · **raised** 2026-09-13 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `P-497`, before it is promoted
 
 **You said promote `P-497` and this lane refused it rather than landing a mangled migration.**
 `CLAUDE.md` gives two ways out of a promotion that breaks something, and this is the first: say what

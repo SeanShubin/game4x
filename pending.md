@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-500** - The `Where` column loses its last four prose cells, and `above` is stated as data · `docs/notes/proposals.md`
 - **P-497** - `spec/data/` normalized: seven relations, every count re-derived · `docs/notes/proposals.md`
-- **P-499** - `P-497` refused: two columns it treats as atomic are not, and the counts passed anyway · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
