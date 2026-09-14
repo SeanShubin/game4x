@@ -62,74 +62,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-500 - The `Where` column loses its last four prose cells, and `above` is stated as data
-
-**to** sean · **status** open · **raised** 2026-09-14 · **kind** entailed · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes, and `spec/data/above.4x`
-
-**Four cells of ninety-six are prose and these are the four.** After this, every `Where` cell is a
-reference or blank, and nothing in the column has to be read by a person to be resolved.
-
-**One correction to what you said, and it is why this is rows rather than a transcription.** You
-said *drop `a store for metal` to `$where`*. **`stow` never binds `$where`** - only `deploy ark`,
-`launch ark`, `refuel` and `work` do - so `$where` there would dangle. **Blank is what you asked
-for**, because the release already says *a blank means the one place the recipe acts*, and that
-place is the territory. The row's `kind` names the bin, which is the whole of your argument.
-
-## One - `stow`, two cells become blank
-
-| Recipe   | Owner | Role    | Qty | Kind   | Traits | Where |
-| -------- | ----- | ------- | --- | ------ | ------ | ----- |
-| **stow** | world | consume | 1   | metal  |        |       |
-|          |       | produce | 1   | metal  |        |       |
-|          |       | consume | 1   | energy |        |       |
-|          |       | produce | 1   | energy |        |       |
-
-**Replacing `a store for metal` and `a store for energy`.** Nothing else in the block moves.
-
-## Two - `deploy ark` and `launch ark`, the orbit cell
-
-| Recipe         | Owner  | Role    | Qty | Kind | Traits | Where          |
-| -------------- | ------ | ------- | --- | ---- | ------ | -------------- |
-| **deploy ark** | player | consume | 1   | ark  |        | above `$where` |
-
-| Recipe         | Owner  | Role    | Qty | Kind | Traits | Where          |
-| -------------- | ------ | ------- | --- | ---- | ------ | -------------- |
-| **launch ark** | player | produce | 1   | ark  |        | above `$where` |
-
-**Replacing `the orbit above `$where`` in both.** *Above* is a named relation rather than a
-description, so the cell decomposes into a reference and the relation that resolves it.
-
-## Three - `spec/data/above.4x`, twelve rows
-
-```
-{above orbit:1 territory:1}
-```
-
-**One per territory, and the file states all twelve.**
-
-## Why `above` has to be stated, and it replaces something rather than adding it
-
-**Today the pair is a coincidence of numbers.** `crates/game-model/src/containment.rs:636`: *it
-carries the id of the territory it is above, which is derivation rather than a second copy.* An
-orbit is found by taking a territory's id and looking for the orbit with the same one. **Nothing
-anywhere says they are the pair** - two things share a number, and every reader has to know that.
-
-**It is not the second copy the release warns against.** That warning is about orbital **adjacency**:
-*territory adjacency is stated once, and orbital adjacency is derived from it.* `above` is what
-adjacency is derived **from** - *next to the territory below it* is `above`, and *next to the orbits
-above that territory's neighbours* is `above` composed with territory adjacency. **Stating `above`
-is what lets adjacency stay derived.**
-
-`spec/orbit.md` already says it in words - *a planet has an orbit above each of its territories*,
-and *nothing orbits a planet without being above a particular territory*. **Nothing states it as
-data**, which is what this adds.
-
-## What this does not do
-
-**It gives a store no id and tracks nothing new.** Individual stores stay interchangeable, which is
-`spec/logistics.md`'s own rule - *things of a kind are grouped by their state* - and the reason the
-cell was prose was never that a tree is hard to walk. **What is addressed is the bin**, and a bin is
-its container and a kind, both of which the row already carries.
 ### P-497 - `spec/data/` normalized: seven relations, every count re-derived
 
 **to** sean · **status** open, **held** 2026-09-13 pending `P-499` · **raised** 2026-09-13 · **converted** 2026-09-13, once the last question in it was answered · **kind** invented · **shape** an instruction · **asks** approval · **into** `spec/data/`
@@ -5601,6 +5533,7 @@ work the release exists to order.
 | P-492, `refuel`'s qualifier, in the form you chose                                                                           | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-14 |
 | P-496, The four cells between the force rule and a green gate, and one of them is a live defect                              | `releases/first-release.md` -> Recipes and Traits, and `spec/data/`                                                                                                                                      | 2026-09-14 |
 | P-498, `perish` reads a mark nobody writes, and `H2` gives it one                                                            | `releases/first-release.md` -> Recipes and Traits                                                                                                                                                        | 2026-09-14 |
+| P-500, The `Where` column loses its last four prose cells, and `above` is stated as data                                     | `releases/first-release.md` -> Recipes, and `spec/data/above.4x`                                                                                                                                         | 2026-09-14 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |

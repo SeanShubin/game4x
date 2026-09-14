@@ -214,104 +214,104 @@ The player's recipes fire when the player chooses them. The world's fire when th
 that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `spoil`, then
 `stow` and `discard`, then `refresh`. The rows below are in that order.
 
-| Recipe              | Owner  | Role    | Qty                                  | Kind      | Traits                                        | Where                    |
-| ------------------- | ------ | ------- | ------------------------------------ | --------- | --------------------------------------------- | ------------------------ |
-| **deploy ark**      | player | require | 1                                    | territory |                                               | `$where`                 |
-|                     |        | require | 1                                    | force     |                                               |                          |
-|                     |        | consume | 1                                    | ark       |                                               | the orbit above `$where` |
-|                     |        | produce | 1                                    | garrison  |                                               |                          |
-|                     |        | produce | 2                                    | citizen   |                                               |                          |
-|                     |        | produce | 1                                    | extractor | food                                          |                          |
-|                     |        | produce | 1                                    | extractor | metal                                         |                          |
-| **move**            | player | require | 1                                    | place     |                                               | `$from`                  |
-|                     |        | require | 1                                    | place     | joined to `$from` by an edge the unit crosses | `$to`                    |
-|                     |        | require | 1                                    | unit      | moving at least 1                             | `$from`                  |
-|                     |        | put     |                                      | unit      | moving one less                               | `$to`                    |
-|                     |        | consume | 1                                    | energy    |                                               | that unit                |
-| **refuel**          | player | require | 1                                    | territory |                                               | `$where`                 |
-|                     |        | require | 1                                    | unit      | free energy at least 1                        | `$where`                 |
-|                     |        | consume | 1                                    | energy    |                                               |                          |
-|                     |        | produce | 1                                    | energy    |                                               | that unit                |
-| **found by land**   | player | consume | 1                                    | pioneer   |                                               |                          |
-|                     |        | require | 1                                    | force     |                                               |                          |
-|                     |        | produce | 1                                    | garrison  |                                               |                          |
-|                     |        | produce | 2                                    | citizen   |                                               |                          |
-|                     |        | produce | 1                                    | extractor | food                                          |                          |
-|                     |        | produce | 1                                    | extractor | metal                                         |                          |
-| **build extractor** | player | consume | 1                                    | labor     |                                               |                          |
-|                     |        | consume | 1                                    | metal     |                                               |                          |
-|                     |        | produce | 1                                    | extractor | `$resource`                                   |                          |
-| **build store**     | player | consume | 1                                    | labor     |                                               |                          |
-|                     |        | consume | 1                                    | metal     |                                               |                          |
-|                     |        | produce | 1                                    | store     | `$resource`                                   |                          |
-| **build yard**      | player | consume | 1                                    | labor     |                                               |                          |
-|                     |        | consume | 15                                   | metal     |                                               |                          |
-|                     |        | produce | 1                                    | yard      |                                               |                          |
-| **produce pioneer** | player | consume | 3                                    | metal     |                                               |                          |
-|                     |        | consume | 2                                    | energy    |                                               |                          |
-|                     |        | consume | 2                                    | citizen   |                                               |                          |
-|                     |        | produce | 1                                    | pioneer   |                                               |                          |
-| **launch ark**      | player | require | 1                                    | territory |                                               | `$where`                 |
-|                     |        | consume | 3                                    | metal     |                                               |                          |
-|                     |        | consume | 12                                   | energy    |                                               |                          |
-|                     |        | consume | 2                                    | citizen   |                                               |                          |
-|                     |        | require | 1                                    | yard      |                                               |                          |
-|                     |        | produce | 1                                    | ark       |                                               | the orbit above `$where` |
-| **create labor**    | player | require | 1                                    | citizen   | laboring at least 1                           |                          |
-|                     |        | put     |                                      | citizen   | laboring one less                             |                          |
-|                     |        | produce | 1                                    | labor     |                                               |                          |
-| **work**            | player | require | 1                                    | territory |                                               | `$where`                 |
-|                     |        | require | 1                                    | extractor | working at least 1                            |                          |
-|                     |        | put     |                                      | extractor | working one less                              |                          |
-|                     |        | consume | 1                                    | labor     |                                               |                          |
-|                     |        | produce | `$where`'s density for that resource | resource  |                                               |                          |
-| **upkeep**          | world  | require | 1                                    | citizen   |                                               |                          |
-|                     |        | consume | 1                                    | food      |                                               |                          |
-|                     |        | put     |                                      | citizen   | paid at its maximum                           |                          |
-| **bear**            | world  | require | 1                                    | citizen   | bearing at least 1                            |                          |
-|                     |        | put     |                                      | citizen   | bearing one less                              |                          |
-|                     |        | produce | 1                                    | fertility |                                               |                          |
-| **breed**           | world  | consume | 1                                    | fertility |                                               |                          |
-|                     |        | consume | 1                                    | food      |                                               |                          |
-|                     |        | produce | 1                                    | citizen   |                                               |                          |
-| **perish**          | world  | consume | 1                                    | citizen   | paid 0                                        |                          |
-| **age**             | world  | require | 1                                    | thing     | keeps at least 1                              |                          |
-|                     |        | put     |                                      | thing     | keeps one less                                |                          |
-| **spoil**           | world  | consume | 1                                    | thing     | keeps 0                                       |                          |
-| **stow**            | world  | consume | 1                                    | metal     |                                               |                          |
-|                     |        | produce | 1                                    | metal     |                                               | a store for metal        |
-| **stow**            | world  | consume | 1                                    | energy    |                                               |                          |
-|                     |        | produce | 1                                    | energy    |                                               | a store for energy       |
-| **discard**         | world  | consume | 1                                    | metal     |                                               |                          |
-| **discard**         | world  | consume | 1                                    | energy    |                                               |                          |
-| **discard**         | world  | consume | 1                                    | labor     |                                               |                          |
-| **discard**         | world  | consume | 1                                    | fertility |                                               |                          |
-| **refresh**         | world  | put     |                                      | unit      | moving at its maximum                         |                          |
-| **refresh**         | world  | put     |                                      | citizen   | laboring at its maximum                       |                          |
-| **refresh**         | world  | put     |                                      | citizen   | bearing at its maximum                        |                          |
-| **refresh**         | world  | put     |                                      | extractor | working at its maximum                        |                          |
-| **muster**          | world  | require | 1                                    | garrison  |                                               |                          |
-|                     |        | require | 1                                    | citizen   | defending at least 1                          |                          |
-|                     |        | put     |                                      | citizen   | defending one less                            |                          |
-|                     |        | produce | that citizen's strength              | force     |                                               |                          |
-| **stand**           | world  | require | 1                                    | unit      | defending at least 1                          |                          |
-|                     |        | put     |                                      | unit      | defending one less                            |                          |
-|                     |        | produce | that unit's strength                 | force     |                                               |                          |
-| **refresh**         | world  | put     |                                      | citizen   | defending at its maximum                      |                          |
-| **refresh**         | world  | put     |                                      | unit      | defending at its maximum                      |                          |
-| **hold**            | world  | require | 1                                    | nature    | met 0                                         |                          |
-|                     |        | consume | 1                                    | force     |                                               |                          |
-|                     |        | put     |                                      | nature    | met at its maximum                            |                          |
-| **reclaim**         | world  | require | 1                                    | nature    | met 0                                         |                          |
-|                     |        | consume | 1                                    | citizen   |                                               |                          |
-| **renew**           | world  | require | 1                                    | nature    |                                               |                          |
-|                     |        | put     |                                      | nature    | met 0                                         |                          |
-| **renew**           | world  | require | 1                                    | citizen   |                                               |                          |
-|                     |        | put     |                                      | citizen   | paid 0                                        |                          |
-| **take**            | world  | require | 1                                    | nature    |                                               |                          |
-|                     |        | consume | 1                                    | nature    |                                               |                          |
-|                     |        | consume | 1                                    | force     |                                               |                          |
-| **discard**         | world  | consume | 1                                    | force     |                                               |                          |
+| Recipe              | Owner  | Role    | Qty                                  | Kind      | Traits                                        | Where          |
+| ------------------- | ------ | ------- | ------------------------------------ | --------- | --------------------------------------------- | -------------- |
+| **deploy ark**      | player | require | 1                                    | territory |                                               | `$where`       |
+|                     |        | require | 1                                    | force     |                                               |                |
+|                     |        | consume | 1                                    | ark       |                                               | above `$where` |
+|                     |        | produce | 1                                    | garrison  |                                               |                |
+|                     |        | produce | 2                                    | citizen   |                                               |                |
+|                     |        | produce | 1                                    | extractor | food                                          |                |
+|                     |        | produce | 1                                    | extractor | metal                                         |                |
+| **move**            | player | require | 1                                    | place     |                                               | `$from`        |
+|                     |        | require | 1                                    | place     | joined to `$from` by an edge the unit crosses | `$to`          |
+|                     |        | require | 1                                    | unit      | moving at least 1                             | `$from`        |
+|                     |        | put     |                                      | unit      | moving one less                               | `$to`          |
+|                     |        | consume | 1                                    | energy    |                                               | that unit      |
+| **refuel**          | player | require | 1                                    | territory |                                               | `$where`       |
+|                     |        | require | 1                                    | unit      | free energy at least 1                        | `$where`       |
+|                     |        | consume | 1                                    | energy    |                                               |                |
+|                     |        | produce | 1                                    | energy    |                                               | that unit      |
+| **found by land**   | player | consume | 1                                    | pioneer   |                                               |                |
+|                     |        | require | 1                                    | force     |                                               |                |
+|                     |        | produce | 1                                    | garrison  |                                               |                |
+|                     |        | produce | 2                                    | citizen   |                                               |                |
+|                     |        | produce | 1                                    | extractor | food                                          |                |
+|                     |        | produce | 1                                    | extractor | metal                                         |                |
+| **build extractor** | player | consume | 1                                    | labor     |                                               |                |
+|                     |        | consume | 1                                    | metal     |                                               |                |
+|                     |        | produce | 1                                    | extractor | `$resource`                                   |                |
+| **build store**     | player | consume | 1                                    | labor     |                                               |                |
+|                     |        | consume | 1                                    | metal     |                                               |                |
+|                     |        | produce | 1                                    | store     | `$resource`                                   |                |
+| **build yard**      | player | consume | 1                                    | labor     |                                               |                |
+|                     |        | consume | 15                                   | metal     |                                               |                |
+|                     |        | produce | 1                                    | yard      |                                               |                |
+| **produce pioneer** | player | consume | 3                                    | metal     |                                               |                |
+|                     |        | consume | 2                                    | energy    |                                               |                |
+|                     |        | consume | 2                                    | citizen   |                                               |                |
+|                     |        | produce | 1                                    | pioneer   |                                               |                |
+| **launch ark**      | player | require | 1                                    | territory |                                               | `$where`       |
+|                     |        | consume | 3                                    | metal     |                                               |                |
+|                     |        | consume | 12                                   | energy    |                                               |                |
+|                     |        | consume | 2                                    | citizen   |                                               |                |
+|                     |        | require | 1                                    | yard      |                                               |                |
+|                     |        | produce | 1                                    | ark       |                                               | above `$where` |
+| **create labor**    | player | require | 1                                    | citizen   | laboring at least 1                           |                |
+|                     |        | put     |                                      | citizen   | laboring one less                             |                |
+|                     |        | produce | 1                                    | labor     |                                               |                |
+| **work**            | player | require | 1                                    | territory |                                               | `$where`       |
+|                     |        | require | 1                                    | extractor | working at least 1                            |                |
+|                     |        | put     |                                      | extractor | working one less                              |                |
+|                     |        | consume | 1                                    | labor     |                                               |                |
+|                     |        | produce | `$where`'s density for that resource | resource  |                                               |                |
+| **upkeep**          | world  | require | 1                                    | citizen   |                                               |                |
+|                     |        | consume | 1                                    | food      |                                               |                |
+|                     |        | put     |                                      | citizen   | paid at its maximum                           |                |
+| **bear**            | world  | require | 1                                    | citizen   | bearing at least 1                            |                |
+|                     |        | put     |                                      | citizen   | bearing one less                              |                |
+|                     |        | produce | 1                                    | fertility |                                               |                |
+| **breed**           | world  | consume | 1                                    | fertility |                                               |                |
+|                     |        | consume | 1                                    | food      |                                               |                |
+|                     |        | produce | 1                                    | citizen   |                                               |                |
+| **perish**          | world  | consume | 1                                    | citizen   | paid 0                                        |                |
+| **age**             | world  | require | 1                                    | thing     | keeps at least 1                              |                |
+|                     |        | put     |                                      | thing     | keeps one less                                |                |
+| **spoil**           | world  | consume | 1                                    | thing     | keeps 0                                       |                |
+| **stow**            | world  | consume | 1                                    | metal     |                                               |                |
+|                     |        | produce | 1                                    | metal     |                                               |                |
+| **stow**            | world  | consume | 1                                    | energy    |                                               |                |
+|                     |        | produce | 1                                    | energy    |                                               |                |
+| **discard**         | world  | consume | 1                                    | metal     |                                               |                |
+| **discard**         | world  | consume | 1                                    | energy    |                                               |                |
+| **discard**         | world  | consume | 1                                    | labor     |                                               |                |
+| **discard**         | world  | consume | 1                                    | fertility |                                               |                |
+| **refresh**         | world  | put     |                                      | unit      | moving at its maximum                         |                |
+| **refresh**         | world  | put     |                                      | citizen   | laboring at its maximum                       |                |
+| **refresh**         | world  | put     |                                      | citizen   | bearing at its maximum                        |                |
+| **refresh**         | world  | put     |                                      | extractor | working at its maximum                        |                |
+| **muster**          | world  | require | 1                                    | garrison  |                                               |                |
+|                     |        | require | 1                                    | citizen   | defending at least 1                          |                |
+|                     |        | put     |                                      | citizen   | defending one less                            |                |
+|                     |        | produce | that citizen's strength              | force     |                                               |                |
+| **stand**           | world  | require | 1                                    | unit      | defending at least 1                          |                |
+|                     |        | put     |                                      | unit      | defending one less                            |                |
+|                     |        | produce | that unit's strength                 | force     |                                               |                |
+| **refresh**         | world  | put     |                                      | citizen   | defending at its maximum                      |                |
+| **refresh**         | world  | put     |                                      | unit      | defending at its maximum                      |                |
+| **hold**            | world  | require | 1                                    | nature    | met 0                                         |                |
+|                     |        | consume | 1                                    | force     |                                               |                |
+|                     |        | put     |                                      | nature    | met at its maximum                            |                |
+| **reclaim**         | world  | require | 1                                    | nature    | met 0                                         |                |
+|                     |        | consume | 1                                    | citizen   |                                               |                |
+| **renew**           | world  | require | 1                                    | nature    |                                               |                |
+|                     |        | put     |                                      | nature    | met 0                                         |                |
+| **renew**           | world  | require | 1                                    | citizen   |                                               |                |
+|                     |        | put     |                                      | citizen   | paid 0                                        |                |
+| **take**            | world  | require | 1                                    | nature    |                                               |                |
+|                     |        | consume | 1                                    | nature    |                                               |                |
+|                     |        | consume | 1                                    | force     |                                               |                |
+| **discard**         | world  | consume | 1                                    | force     |                                               |                |
 
 ## Biomes
 
