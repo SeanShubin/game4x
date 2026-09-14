@@ -61,6 +61,93 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-117 - Four cells stand between the force rule and a green gate, and all four are spec's
+
+**to** spec · **status** open · **raised** 2026-09-13 · **source** building `P-494` and `P-495`
+into the model and then measuring what was left
+
+**derived from** hold, reclaim, renew and take - `releases/first-release.md` -> Recipes and
+Traits; `spec/data/kinds.4x`; `spec/data/traits.4x`; `docs/designing-rules.md`
+
+**The code lane's half is done and committed.** Nature is a kind the territory holds, `hold`,
+`take`, `reclaim` and `renew` are the end of a turn, and the comparison
+`force_in(id) < needed` is gone. **What is left is four cells in files this lane does not
+write**, measured by applying them in the working tree, running the gate, and reverting.
+
+## What the gate does with them and without them
+
+|                     |                                                         |
+| ------------------- | ------------------------------------------------------- |
+| as committed        | 37 failures, every generated artifact unregenerable     |
+| with the four cells | `cargo test --workspace` green; one failure left, below |
+
+**The one left is two numbers in `docs/designing-rules.md`** - *81 role cells* against 93, and a
+quotation of *51 rules* where `reports/nogain.md` now says 55. Both are that file's to correct,
+and a regenerated report is what makes them wrong.
+
+## The four, exactly
+
+**One.** `releases/first-release.md` -> Recipes, three cells reading `met at least 0`, on `hold`,
+`reclaim` and `renew`. **`at least 0` is true of every number** - `C-116` carries this in full,
+including that `reclaim` as written kills every population every turn. The form the release
+already has is `spoil`'s **`keeps 0`**, so these read **`met 0`**.
+
+**Two.** `releases/first-release.md` -> Traits, the `met` row's **Values** cell. It reads *a
+number: force was spent on it this turn*; the five counts beside it - `moving`, `laboring`,
+`working`, `bearing`, `defending` - all read **`a number`** and nothing else.
+
+**The colon is what a check reads.** `every_place_is_a_kind_or_a_count_and_never_a_derived_trait`
+takes *derived* from the Values cell containing `": "`, measured over seven rows today, and
+`met` is the only one of the six counts that has one. A place naming a derived trait is the check
+declaring the page's account of itself false - correctly, because the cell says `met` is arrived
+at rather than held.
+
+**Three.** `spec/data/kinds.4x`. The `nature` kind is not declared, and `territory` still carries
+`nature` as a trait. Two lines:
+
+```
+{kind name:territory family:place id biome control}
+{kind name:nature met}
+```
+
+**Four.** `spec/data/traits.4x`. `{trait name:nature admits:number kept:thing}` becomes
+`{trait name:met admits:number kept:thing}`.
+
+**This lane regenerated these two files on 2026-09-13 and reverted it uncommitted.** Worth saying
+plainly: `declare::kinds` writes only `name` and `family`, so regenerating stripped every kind's
+traits and destroyed `keeps of:thing`. **The generator cannot produce these files**, which is why
+they are offered as lines rather than as a command to run.
+
+## And two things the promoted rows say that this lane does not believe they mean
+
+**`take` has no `Where`, and as written it erodes ground the player is holding.** Its rows are
+`require 1 nature`, `consume 1 nature`, `consume 1 force`, owned by the world - so at every
+turn's end, on every territory, leftover force consumes resistance. A well-garrisoned territory
+would wear its own force of nature down to zero over a few turns and then be free to hold, which
+contradicts *holding a territory takes force equal to its force of nature* by making that
+quantity fall.
+
+**Proceeded under a stated assumption** - `CLAUDE.md` step 9. The model fires `take` only where
+nothing has been founded, because that is the only ground whose defending force is nature's:
+`Game::defending_force` has read it that way since before any of this.
+
+**What that assumption costs, measured rather than argued.** In the scenario, territory 2's
+resistance is gone permanently after a pioneer stands on it for one turn - 14 natures across the
+planet before, 13 after, and `{nature met:0}` is absent from territory 2 in
+`scenario/expected/play.4x`. **That is the rule the rows describe**, reached on the narrowest
+reading of them, and it is a rule nobody wrote down.
+
+**`reclaim` says only `consume 1 citizen`.** `spec/control.md` says *its entire population
+perishes, and every unit on it is destroyed*, and a founding takes the garrison with it. The
+model does all three and the rows reach one. Not a defect in the game - a gap between the rows
+and the sentence they were written from.
+
+## Why this item exists rather than three
+
+**All four cells block the same thing and none of them can land alone.** A reader who fixed the
+first would find the second, and the two data files are what the first two make stale. The
+measurement above is what says so: four cells, one gate.
+
 ### C-116 - `met at least 0` is vacuous, and `reclaim` as promoted wipes every population
 
 **to** spec · **status** open · **raised** 2026-09-13 · **source** this lane's own rows, caught by
@@ -204,11 +291,13 @@ release's *its entire population perishes* needs no quantity.
 
 **`spec/control.md` states two rules and the rows above answer one.**
 
-> Taking a territory takes force **greater than** the existing force ... Holding a territory takes
-> force **equal to** its force of nature
+> Taking a territory takes force greater than the existing force, be that nature, a player, or
+> anything else not already controlled by you
 
-**Taking is a strict inequality between two variable quantities**, which is worse than the one just
-removed: `Game::take` rejects when `force <= defending`, and `defending_force` is nature's only
+> Holding a territory takes force equal to its force of nature
+
+**Taking is a strict inequality between two variable quantities** - *greater than*, where holding
+is *equal to* - which is worse than the one just removed: `Game::take` rejects when `force <= defending`, and `defending_force` is nature's only
 while a territory is unfounded.
 
 **The same trick appears to reach it, and this lane is not deciding that it does.** Where `hold`
@@ -1305,9 +1394,10 @@ rather than a failure - which is the difference between a gap and a defect.
 
 **Confirmed, and demonstrated rather than argued.** `P-460` has since replaced the sentence this
 item was filed against, so what the file says now is what it asked for. `spec/console.md` says:
-**a command names a recipe and binds what that recipe leaves open: every place it leaves open, and
-any ingredient or trait value it names with a `$`.** When this was filed it bound only the place a
-recipe acts in, which is the wording the rest of this item argues against.
+**a command names a recipe and binds what that recipe leaves open: every place it leaves open,
+every ingredient it names by family rather than by kind, and any ingredient or trait value it
+names with a `$`.** When this was filed it bound only the place a recipe acts in, which is the
+wording the rest of this item argues against.
 
 **`move` names two places with a `$`** - `require 1 place` in `$from`, and `require 1 place,
 joined to `$from` by an edge the unit crosses` in `$to`. **The command binds one**:
