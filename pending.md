@@ -14,15 +14,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 
-## Open, and a commit says otherwise
-
-An item is closed by whoever filed it and answered by somebody else, so the filer gets
-no signal. These are still marked `open`, and a commit that touched no part of their own
-outbox cites them - which usually means they were settled and nobody went back.
-
-- **C-115** - `fa80aa7` C-115's holding rows into the release, and the two halves it left open · still open in `crates/outbox.md`
-- **C-114** - `63736a8` P-493: Sean's reason for a thin engine, recovered from C-114 · still open in `crates/outbox.md`
-
 ## What is outstanding
 
 ### To code (8)
@@ -41,7 +32,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (29)
+### To spec (28)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -50,7 +41,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
 - **C-116** - `met at least 0` is vacuous, and `reclaim` as promoted wipes every population · `crates/outbox.md`
-- **C-115** - Holding a territory without a zero test, by `P-373`'s own trick · `crates/outbox.md`
 - **C-114** - Sean's reason for a thin engine, and it belongs in the invariants · `crates/outbox.md`
 - **C-113** - `P-486`'s rows contradict two sentences the release still states · `crates/outbox.md`
 - **C-112** - `refuel` is a recipe no command fires · `crates/outbox.md`

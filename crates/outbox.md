@@ -120,8 +120,13 @@ dangerous kind, written by the lane that filed it.
 
 ### C-115 - Holding a territory without a zero test, by `P-373`'s own trick
 
-**to** spec · **status** open · **raised** 2026-09-13 · **source** Sean, asking whether the force
-rule can be reformulated the way population growth was
+**to** spec · **status** acted · **raised** 2026-09-13 · **acted** 2026-09-13 · **cited**
+`fa80aa7`, `2c0db6d` · **source** Sean, asking whether the force rule can be reformulated the way
+population growth was
+
+**Both halves landed** - the holding rows as `P-494` and the taking shape as `P-495`. **One cell of
+what landed is wrong and `C-116` carries it**, which is a new defect rather than this item still
+being open.
 
 **derived from** should the force in a territory fall below its force of nature, nature takes it
 back - `spec/control.md`
@@ -239,8 +244,14 @@ inhibitor arc on an unbounded place, which the research lens's own table calls t
 
 ### C-114 - Sean's reason for a thin engine, and it belongs in the invariants
 
-**to** spec · **status** open · **raised** 2026-09-13 · **source** Sean, asked directly for this to
-reach the invariants, after this lane compared the arrangement against his stated goal
+**to** spec · **status** open · **raised** 2026-09-13 · **cited** `63736a8` · **source** Sean,
+asked directly for this to reach the invariants, after this lane compared the arrangement against
+his stated goal
+
+**His words landed as `P-493` and the item is not finished.** What remains is the question the
+Petri net analysis below arrives at and nothing has answered: **eight of the twelve rows of *What
+bounds a kind in a territory* state a relationship rather than a number**, and a bound that is
+emergent cannot make a zero test safe. Kept open against that half alone.
 
 **derived from** *I am leaning towards a more data driven game where the units and recipes are
 simply data inputs to rust, and rust is providing a statically typed engine to run and validate the
