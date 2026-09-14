@@ -11,9 +11,88 @@ of it needs you.
 
 ## Open
 
+### P-509 - Resources sit in the territory, and are allocated only when something leaves
+
+**to** sean · **status** open · **raised** 2026-09-14 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment
+
+**This dissolves the problem the last four proposals were solving.** Your three scenarios were hard
+to express because the game was being asked **where each metal sits while nothing is moving**, and
+nothing in the game can tell those arrangements apart.
+
+> **A resource in a place is in that place, not in a container inside it.** What a place holds of a
+> kind is one number. **The things in it that can hold that kind contribute capacity and hold
+> nothing**, and at the turn's end what the place holds beyond that capacity is lost.
+>
+> **A thing that leaves takes what it hauls.** A unit moving out of a place is given an amount of
+> each kind, no more than its own capacity for that kind, and it holds that amount until it arrives
+> - where the amount rejoins the number the new place holds. **Allocation happens at the moment of
+> leaving and at no other.**
+
+## Your three scenarios stop being three
+
+```
+{territory id:1}
+  {energy} -> 5
+  {metal} -> 25
+  {store resource:metal} -> 3
+  {transport resource:metal} -> 2
+```
+
+**Fifty metal of capacity, twenty-five metal held, and no question about which store or which
+transport.** *15 in storage and 3 and 7 in the transports* is not a state the game can be in while
+all three are standing in territory 1 - **it is a fact about two transports that have not moved
+yet.** It becomes true the moment they do:
+
+```
+{move unit:transport to:2 haul-metal:3}
+{move unit:transport to:5 haul-metal:7}
+```
+
+**And the two transports stay one entry of two until one of them leaves**, which is the stacking you
+said this would conflict with. It does not: **nothing distinguishes them until something does.**
+
+## The three cases you named, and they are the whole interface
+
+|               |                                                                       |
+| ------------- | --------------------------------------------------------------------- |
+| **haul most** | the default - as much as capacity allows, because you were picking up |
+| **haul none** | you were dropping off                                                 |
+| **a number**  | `haul-metal:3`                                                        |
+
+**The command's legality is its own capacity**, which the rule above states and nothing else has to
+check.
+
+## What this withdraws, and it is most of this week
+
+**`P-508`** - positions. They existed to say *which transport*, and there is no which. **`P-507`** is
+already answered and that answer goes with it. **`P-504`** shrinks: waste is `what the place holds`
+against `the capacity in it`, one comparison rather than a `sum` over an expression, so the notation
+needs no new word.
+
+**`P-502` survives in half.** *A bin is a store* stands - a store is a thing and declares a capacity.
+*What it holds is what it contains* does not: **it holds nothing.**
+
+**`P-505` stands and gets easier.** Nothing is stored without being asked, because nothing is stored
+at all - a resource is simply in the place, and the turn's end takes what will not fit.
+
+## The one thing this lane checked and it is a real tension
+
+**`spec/logistics.md`: *a rule may ask whether something is absent only where what would hold it
+declares a limit for it.*** A territory declares **no limit** for a resource - the release says so
+outright - so **a rule may not ask after its free capacity.**
+
+**Detecting waste is a query and not a rule**, which is the distinction that saves it: a user
+interface asking *would ending the turn lose metal* is not a recipe firing. **But `free <kind> of x`
+is listed among the expressions a guard is built from**, and a guard is part of a rule. So the word
+exists on the rule side of a line this leans on being the other side of.
+
+**This lane did not resolve it and is not guessing.** It may want *the capacity in a place* to be a
+different expression from *free capacity of a container*, or it may want the invariant read as
+being about recipes rather than about queries. **That is the question this proposal leaves open**,
+and it is smaller than the four it closes.
 ### P-508 - Storage, concretely: a position names an entry and a command acts on one of it
 
-**to** sean · **status** open · **raised** 2026-09-14 · **kind** invented · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+**to** sean · **status** open, **held** 2026-09-14 pending `P-509`, which removes the need for a position · **raised** 2026-09-14 · **kind** invented · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
 
 **This picks `E4` and stops offering options**, on your *something concrete that can't possibly work
 can be adapted*. It replaces `P-501` and answers `P-507`. **Two things it cannot do are written out
@@ -199,7 +278,7 @@ the turn it is made and does not survive that turn's end*. The two said differen
 same moment and now say one.
 ### P-504 - Waste is what could have been kept and was not, and one word is missing to say it
 
-**to** sean · **status** open · **raised** 2026-09-14 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+**to** sean · **status** open, **held** 2026-09-14 pending `P-509`, which makes the guard one comparison and needs no new word · **raised** 2026-09-14 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
 
 **You asked for a way to detect waste so a player can be warned.** The expression language already
 has three of the four pieces, and this adds the fourth.
@@ -254,7 +333,7 @@ implementable, and the specification says nothing about whether it should be.
 **And it does not sweep anything.** Nothing is stored without being asked - that is `P-505`.
 ### P-502 - A bin is a store, and what a thing holds is what it holds
 
-**to** sean · **status** open · **raised** 2026-09-14 · **kind** invented · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment
+**to** sean · **status** open, **held** 2026-09-14 pending `P-509`, which keeps *a bin is a store* and drops *what it holds is what it contains* · **raised** 2026-09-14 · **kind** invented · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment
 
 **Your transport definition is this proposal.** `1 * storage[fuel] capacity 2` and `1 *
 storage[$resource] capacity 10` - two bins in one thing, each a container in its own right.
