@@ -11,7 +11,7 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
-### P-510 - Pooling cannot be universal, because an orbit holds no energy
+### P-510 - Pooling cannot be universal, and the choice is now two
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `P-509`, before it is promoted
 
@@ -68,12 +68,76 @@ thing reads differently in two places and *when does a unit hold something* has 
 rather than a shape - and `spec/orbit.md` says only that an orbit *has capacity for no extractors,
 and nothing is extracted there*, which does not forbid it.
 
+## `G1` is eliminated, 2026-09-14, by Sean's own constraint
+
+**Sean**: *I don't want the gas tank to be special in mechanics, only in defaults.*
+
+**`G1` is exactly that specialness.** Fuel held and cargo pooled is two mechanics, chosen by which
+resource it is. **Withdrawn**, and not on taste - it is the one thing he ruled out by name.
+
+**`G2` and `G3` both survive it**, because neither is about the resource: `G2` branches on the
+place, `G3` branches on nothing. **A gas tank under either is a store like any other, and the only
+thing left that is fuel-shaped is a default** - *haul most* topping one off because you were picking
+up.
+
+## `G3` needs no capacity declared, which this lane did not see the first time
+
+**Under pooling a place's capacity is the sum of what is in it that can hold the kind.** An orbit
+holding an ark whose fuel store is 2 **already has an energy capacity of 2**, derived, with nothing
+declared:
+
+```
+{orbit id:4}
+  {energy} -> 2
+  {ark} -> 1        its fuel store is what gives the orbit the room
+```
+
+**An empty orbit holds nothing because it can hold nothing** - capacity 0, no rule needed. So the
+release's *an orbit holds units and nothing else* becomes *an orbit holds units, and what they can
+hold*, and **nothing anywhere declares an orbit a store.**
+
+## Sean's 500 / 500 / 10 case, which `P-509` already gets right
+
+```
+{territory id:1}                       {territory id:2}
+  {metal} -> 500                         {metal} -> 0
+  {store resource:metal} -> 50           {store resource:metal} -> 50
+  {transport resource:metal} -> 1
+```
+
+```
+{move unit:transport to:2 haul-metal:10}
+```
+
+**Ten, and only ten, however much room is at either end.** `P-509` bounds a haul by *its own capacity
+for that kind* and by nothing else, so the destination having 500 free changes nothing. **No option
+here affects it** - it is `P-509`'s rule rather than this choice.
+
+## One consequence of pooling worth seeing before you choose
+
+**Capacity can walk away.** A territory with 500 fixed storage and a transport standing in it has a
+capacity of 510. If it holds 505 and the transport leaves carrying nothing:
+
+```
+{territory id:1}
+  {metal} -> 505      capacity is now 500, so five is lost at the turn's end
+```
+
+**That is correct rather than a bug** - the five had nowhere to be - and it is exactly what the
+waste check is for. **It is also a thing a player can do to themselves by accident**, which is the
+argument for warning on it.
+
 ## This lane's reading, and it is not confident
 
-**`G3`.** It is the only one under which *a resource is in the place* has no exceptions, and the
-sentence it changes is a release's rather than the specification's - `spec/orbit.md` forbids
-extraction and says nothing about holding. **But it makes an orbit a place things are stored**, and
-whether that is a game you want is not something this lane can read off a file.
+**`G3`, and more strongly than before.** It is the only one under which *a resource is in the place*
+has no exceptions; the sentence it changes is a release's rather than the specification's; and its
+capacity turns out to be derived rather than declared, so **it adds no rule at all** - it removes
+one.
+
+**`G2` is the live alternative** and its cost is now clearer: an ark in orbit holds its own contents,
+so everything `P-507` and `P-508` were built to solve - describing a container by what it holds,
+telling two alike things apart - **comes back, in orbits only.** One place where the rules differ is
+the whole of what `G2` buys over `G3`.
 
 ## And one smaller thing `P-509` left open, which the same choice settles
 
