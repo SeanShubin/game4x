@@ -34,6 +34,7 @@ separately and says which it is.
 
 ## The postmortems
 
-| What                                                | When       | The failure in one line                                                                                        |
-| --------------------------------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------- |
-| [Tracked and still lost](tracked-and-still-lost.md) | 2026-09-13 | An invariant was tracked by three items for ten days and died at the handoffs, each one narrower than the last |
+| What                                                                | When       | The failure in one line                                                                                        |
+| ------------------------------------------------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------- |
+| [Every option was the same move](every-option-was-the-same-move.md) | 2026-09-11 | Every option in an enumeration was the same move, so the enumeration was inside an assumption nothing examined |
+| [Tracked and still lost](tracked-and-still-lost.md)                 | 2026-09-13 | An invariant was tracked by three items for ten days and died at the handoffs, each one narrower than the last |

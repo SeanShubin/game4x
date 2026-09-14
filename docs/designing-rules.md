@@ -39,7 +39,7 @@ is the same move: `work` makes a territory's density, which is one rule with a n
 **The family and the trait are the colours.**
 
 **What the guarantees are about is the plain net you get by unfolding it.** `reports/nogain.md` says
-so in its own words: *50 rules, ground from 31 blocks of recipe rows - a family becomes its members,
+so in its own words: *51 rules, ground from 32 blocks of recipe rows - a family becomes its members,
 a density becomes its cases.* **Boundedness and termination are decidable for the unfolded net**,
 and that is the net the weighting is solved over.
 
@@ -89,8 +89,8 @@ one of three sources - *anything that exhausts draws on time for a turn: it spen
 carries, and only the turn's end restores that count.* **`refresh` is that sentence written as
 rows**, and it is the only rule in the game that writes a count upward from nothing.
 
-**Counted from the Qty and Traits columns of the *Recipes* table, over its 77 role cells**, so it
-can be re-run: **64 cells carry a quantity and 13 are blank, and the thirteen blanks are exactly the
+**Counted from the Qty and Traits columns of the *Recipes* table, over its 81 role cells**, so it
+can be re-run: **68 cells carry a quantity and 13 are blank, and the thirteen blanks are exactly the
 thirteen `put` rows.** Of the 64, three read a trait - *that citizen's strength*, *that unit's
 strength*, *`$where`'s density for that resource* - which is a colour rather than a marking read.
 
@@ -119,7 +119,7 @@ and returns a plausible number rather than an error**, which is the failure `CLA
 and ten never disagreed; they are two populations, and only the six is about the release.
 
 **Re-measured on 2026-09-11, against the release, and the six holds.** The research lens's check 17
-parses the *Recipes* table rather than any copy of it: **81 arcs over 21 recipes - 61 ordinary, 14
+parses the *Recipes* table rather than any copy of it: **81 arcs over 22 recipes - 61 ordinary, 14
 thresholds, and 6 reading a marking**, all six `put ... at its maximum`, all six in `refresh`, all
 world. **Three methods now agree** - two hand counts and one computed, by different routes.
 

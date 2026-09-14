@@ -49,6 +49,7 @@ fn main() -> ExitCode {
         ["land", id, previous] => land(&root, id, previous),
         ["file", path] => file(&root, path),
         ["touching", what] => touching(&root, what),
+        ["chains"] => chains(&root),
         _ => Err(usage()),
     };
     match outcome {
@@ -71,6 +72,7 @@ fn usage() -> String {
         "spec land <id> <after-id>              ledger row from the item's own `into`, then remove it",
         "spec file <path>                       put a drafted item at the top of Open",
         "spec touching <file>                   every open item in every outbox that names it",
+        "spec chains                            where one item closed by handing off to another",
         "",
         "<id>:n names one of several offered blocks, numbered from 1 in the order they appear.",
     ]
@@ -343,7 +345,7 @@ fn header_rows(text: &str) -> Vec<Vec<String>> {
             .trim_start()
             .to_string()
     };
-    let lines: Vec<String> = text.lines().map(|l| bare(l)).collect();
+    let lines: Vec<String> = text.lines().map(bare).collect();
     let mut out = Vec::new();
     for (at, line) in lines.iter().enumerate() {
         if !line.starts_with('|') {
@@ -628,4 +630,116 @@ fn root() -> PathBuf {
         .and_then(Path::parent)
         .unwrap_or(here)
         .to_path_buf()
+}
+
+/// Where one item closed by naming another as carrying what it dropped.
+///
+/// **The failure is in `docs/postmortems/tracked-and-still-lost.md`.** `C-16` closed saying
+/// *the gap is unchanged and is not being dropped - `S-30` is the item that carries it*;
+/// `S-30` was withdrawn six days later saying *nothing is lost by this withdrawal* and handed
+/// its live half to `C-102`. Each hop was honest and each carried a narrower question, so
+/// *recipes are executed as match arms* fell out on the first hop and no later step could
+/// recover it. The gap was tracked for ten days by an unbroken chain and was lost anyway.
+///
+/// **This is a detector and not a check, and the difference is the whole of what it claims.**
+/// It says a chain exists and where to look. It cannot say whether the successor asks a
+/// narrower question than its predecessor, because that is a comparison between two English
+/// sentences - `P-245`'s wall, that no check can ask whether another check's predicate is
+/// about its subject.
+///
+/// **Two things keep the false edges out, and both were measured rather than guessed.** A
+/// first version counted any id mentioned anywhere in a closed item's body and produced two
+/// false edges: `C-30` names `S-30` inside a table of counts, and `C-87` mentions it in
+/// passing. So a handoff is never read from a table row, and the cue and the id must sit in
+/// the same section. **The section rather than the sentence or the paragraph**, because
+/// `S-30` puts its cue in a `## Where the live half is` heading and the successor's id in the
+/// paragraph under it - a paragraph-scoped version returned a plausible zero and missed the
+/// one chain that matters.
+fn chains(root: &Path) -> Result<String, String> {
+    let all = outbox::read(root);
+    if all.items.is_empty() {
+        return Err("no items in any outbox, so this counted over nothing".to_string());
+    }
+
+    let mut status: Vec<(String, String)> = Vec::new();
+    let mut edges: Vec<(String, String)> = Vec::new();
+    let mut closed = 0;
+    for item in &all.items {
+        status.push((item.id.clone(), item.status.clone()));
+        if item.status == "open" {
+            continue;
+        }
+        closed += 1;
+        for named in spec::handed_to(&item.id, &item.body) {
+            edges.push((item.id.clone(), named));
+        }
+    }
+
+    let state = |id: &str| -> String {
+        status
+            .iter()
+            .find(|(known, _)| known == id)
+            .map(|(_, s)| s.clone())
+            .unwrap_or_else(|| "unknown".to_string())
+    };
+
+    // **Only a chain whose tail is still open, and the narrowing is the point.** A first
+    // version printed every two-hop chain in the history - forty of them, one of which
+    // mattered - which is `CLAUDE.md`'s *a report where everything matters is a report where
+    // nothing does*. A chain that ends in something closed is history; one that ends in
+    // something open is a question somebody may still be answering more narrowly than it was
+    // asked.
+    let mut said: Vec<String> = Vec::new();
+    let mut examined = 0;
+    for (first, second) in &edges {
+        for (from, third) in &edges {
+            if from != second || third == first {
+                continue;
+            }
+            examined += 1;
+            if state(third) != "open" {
+                continue;
+            }
+            let line = format!(
+                "  {first} ({}) -> {second} ({}) -> {third} (OPEN)",
+                state(first),
+                state(second)
+            );
+            if !said.contains(&line) {
+                said.push(line);
+            }
+        }
+    }
+    let hops = said.len();
+    let live: Vec<String> = edges
+        .iter()
+        .filter(|(_, second)| state(second) == "open")
+        .map(|(first, second)| format!("  {first} ({}) -> {second} is still open", state(first)))
+        .collect();
+
+    let mut report = vec![format!(
+        "{} item(s), {closed} closed, {} handoff(s) found",
+        all.items.len(),
+        edges.len()
+    )];
+    report.push(String::new());
+    report.push(format!(
+        "Of {examined} two-hop chain(s), those still ending in an open item. Read the",
+    ));
+    report
+        .push("first and the last together, and ask whether the last still asks what".to_string());
+    report.push("the first one asked:".to_string());
+    if hops == 0 {
+        report.push("  none".to_string());
+    } else {
+        report.extend(said);
+    }
+    report.push(String::new());
+    report.push("Closed items whose successor is still open:".to_string());
+    if live.is_empty() {
+        report.push("  none".to_string());
+    } else {
+        report.extend(live);
+    }
+    Ok(report.join("\n"))
 }

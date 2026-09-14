@@ -3,7 +3,7 @@
 **2026-09-11.** Sean asked why he could see instantly that all three of my answers were wrong, and
 saw the right one as obvious, when I could not see it at all.
 
-[Notes index](README.md) · [Documentation map](../README.md) · [Root README](../../README.md)
+[Postmortems](README.md) · [Documentation map](../README.md) · [Root README](../../README.md)
 
 ## What happened
 

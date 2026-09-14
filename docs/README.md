@@ -55,6 +55,7 @@ docs/
   postmortems/
     README.md ..................... index of postmortems, and what makes one
     tracked-and-still-lost.md ..... an invariant tracked for ten days that died at the handoffs
+    every-option-was-the-same-move.md  an enumeration that was entirely inside one assumption
   theory/
     README.md ..................... index of background research
     region-splitting.md ........... dividing a sphere surface into regions

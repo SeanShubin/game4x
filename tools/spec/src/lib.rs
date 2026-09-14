@@ -372,6 +372,70 @@ pub fn proposals_without_text(proposals: &str) -> Vec<String> {
     without
 }
 
+/// Which items this one's body names as carrying what it dropped.
+///
+/// A section is the item's own opening and each `##` block under it - see [`chains`] for why
+/// the section and not the paragraph. A table row states a count and never a handoff.
+pub fn handed_to(me: &str, body: &str) -> Vec<String> {
+    const CUES: [&str; 10] = [
+        "now tracks",
+        "carries it",
+        "live half",
+        "nothing is lost",
+        "handed to",
+        "covered by",
+        "superseded by",
+        "folded into",
+        "tracked by",
+        "what now carries",
+    ];
+
+    let mut found: Vec<String> = Vec::new();
+    for section in body.split("\n## ") {
+        let prose: String = section
+            .lines()
+            .filter(|line| !line.trim_start().starts_with('|'))
+            .collect::<Vec<&str>>()
+            .join("\n");
+        let lowered = prose.to_lowercase();
+        if !CUES.iter().any(|cue| lowered.contains(cue)) {
+            continue;
+        }
+        for id in ids(&prose) {
+            if id != me && !id.starts_with("P-") && !found.contains(&id) {
+                found.push(id);
+            }
+        }
+    }
+    found
+}
+
+/// Every `X-123` in the text, whether or not it is in backticks.
+pub fn ids(text: &str) -> Vec<String> {
+    let bytes: Vec<char> = text.chars().collect();
+    let mut found = Vec::new();
+    let mut at = 0;
+    while at < bytes.len() {
+        let letter = bytes[at];
+        let starts = letter.is_ascii_uppercase()
+            && at + 2 < bytes.len()
+            && bytes[at + 1] == '-'
+            && bytes[at + 2].is_ascii_digit()
+            && (at == 0 || !bytes[at - 1].is_ascii_alphanumeric());
+        if starts {
+            let mut end = at + 2;
+            while end < bytes.len() && bytes[end].is_ascii_digit() {
+                end += 1;
+            }
+            found.push(bytes[at..end].iter().collect::<String>());
+            at = end;
+        } else {
+            at += 1;
+        }
+    }
+    found
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

@@ -100,7 +100,7 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
     let stated = [
         Stated {
             document: "docs/designing-rules.md",
-            says: "77 role cells",
+            says: "81 role cells",
             derived: rows.len(),
         },
         Stated {
@@ -115,12 +115,12 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
         },
         Stated {
             document: "docs/designing-rules.md",
-            says: "64 cells carry a quantity",
+            says: "68 cells carry a quantity",
             derived: rows.len() - blank.len(),
         },
         Stated {
             document: "docs/designing-rules.md",
-            says: "21 recipes",
+            says: "22 recipes",
             derived: names.len(),
         },
     ];
@@ -178,7 +178,7 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
 fn the_quoted_report_figures_are_the_report_s() {
     let doc = read("docs/designing-rules.md");
     let report = read("reports/nogain.md");
-    for figure in ["50 rules", "31 blocks"] {
+    for figure in ["51 rules", "32 blocks"] {
         assert!(
             doc.contains(figure),
             "designing-rules no longer quotes {figure:?}"
