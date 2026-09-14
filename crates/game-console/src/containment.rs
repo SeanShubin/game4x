@@ -267,19 +267,30 @@ pub struct Capacity {
     /// used count writes two of the three, and two written numbers can disagree; storing the
     /// room alone means nothing can, because used is not a number this holds at all - it is
     /// how many are there.
-    pub room: u32,
+    ///
+    /// **Signed since `P-504`**, which says `free <kind> of x` may be less than zero:
+    /// `spec/console.md` - *its free capacity for that kind is the shortfall written as a
+    /// negative number*, and the same paragraph says that shortfall is what the turn's end
+    /// takes. It was a `u32` clamped by `saturating_sub`, so a place over its capacity read
+    /// as having no room rather than as being short, and **the number the rule is about could
+    /// not be written down at all**.
+    pub room: i64,
     pub used: u32,
 }
 
 impl Capacity {
-    /// How many more will fit, which is what is stored.
-    pub fn available(&self) -> u32 {
+    /// How many more will fit, which is what is stored. Negative where it is over.
+    pub fn available(&self) -> i64 {
         self.room
     }
 
     /// **Derived, because nothing records it** - `spec/logistics.md`. The two added.
-    pub fn total(&self) -> u32 {
-        self.room + self.used
+    ///
+    /// **Still what the container declares, even where the room is negative**: a store for
+    /// ten holds ten whatever is piled in the territory, so `room + used` gives the ten back
+    /// and the shortfall is the part that reads below zero.
+    pub fn total(&self) -> i64 {
+        self.room + self.used as i64
     }
 }
 
@@ -626,7 +637,13 @@ pub fn tree(game: &Game) -> Entry {
                     // of the thing and `P-477` removed the rule that kept a derived one out.
                     .with("capacity", offered.capacity)
                     .with("occupied", occupied)
-                    .with("free", offered.capacity.saturating_sub(occupied)),
+                    // **A deposit's free capacity cannot go below zero and is not clamped
+                    // to say so.** Nothing puts an extractor on a deposit past its capacity -
+                    // `build extractor` refuses with `NoRoomForExtractor` - so the subtraction
+                    // is safe and a negative here would be a defect rather than a shortfall.
+                    // `P-504` is about a place holding more of a kind than there is room for,
+                    // which is what `stores` below can do and this cannot.
+                    .with("free", offered.capacity as i64 - occupied as i64),
             ));
         }
         held.extend(game.units_on(place.id).into_iter().map(entry_for_unit));
@@ -826,7 +843,7 @@ fn capacities_of(game: &Game, place: &game_model::Territory) -> Vec<Capacity> {
     let mut fixed = |kind: Kind, total: u32, used: u32| {
         out.push(Capacity {
             of: Description::of(kind),
-            room: total.saturating_sub(used),
+            room: total as i64 - used as i64,
             used,
         });
     };
@@ -837,22 +854,23 @@ fn capacities_of(game: &Game, place: &game_model::Territory) -> Vec<Capacity> {
         let offered = place.deposit(resource);
         out.push(Capacity {
             of: Description::of(Kind::Extractor).with("resource", resource.name()),
-            room: offered
-                .capacity
-                .saturating_sub(place.extractors_for(resource).len() as u32),
+            room: offered.capacity as i64 - place.extractors_for(resource).len() as i64,
             used: place.extractors_for(resource).len() as u32,
         });
         out.push(Capacity {
             of: Description::of(Kind::Store).with("resource", resource.name()),
-            room: (place.store_capacity(resource) as u32)
-                .saturating_sub(place.stores(resource) as u32),
+            room: place.store_capacity(resource) as i64 - place.stores(resource) as i64,
             used: place.stores(resource) as u32,
         });
         // What the stores of a resource can hold between them. *Where things are*: a store
         // holds the resource it was built for, up to 10.
         out.push(Capacity {
             of: Description::of(Kind::from_resource(resource)),
-            room: (place.stores(resource) as u32 * HOLDS).saturating_sub(place.store(resource)),
+            // **This is the one that goes negative** - `P-504`. A territory holds what it
+            // holds whatever room its stores have: `work` produces into the place and
+            // `end_of_turn_losses` takes the excess at the turn's end, so between the two the
+            // shortfall is real and is exactly what that ending will take.
+            room: (place.stores(resource) as i64 * HOLDS as i64) - place.store(resource) as i64,
             used: place.store(resource),
         });
     }
@@ -1082,6 +1100,62 @@ mod tests {
         // **Room is what is kept and the total is the two added** - `P-474`. Asserted in
         // that order so a reader sees which of the three is stored.
         assert_eq!((food.room, food.used, food.total()), (2, 1, 3));
+    }
+
+    /// A place over its capacity is short by a negative number, not full with none left.
+    ///
+    /// **`P-504`, and it is the one figure the old shape could not write.** `spec/console.md`:
+    /// *its free capacity for that kind is the shortfall written as a negative number*, and
+    /// the same paragraph says that shortfall is what the turn's end takes. `room` was a `u32`
+    /// clamped by `saturating_sub`, so a territory holding thirteen food in one store read as
+    /// having no room - **indistinguishable from a territory holding exactly ten.**
+    ///
+    /// **The scenario never reaches it**, which is why this exists. `work` produces into the
+    /// place and `end_of_turn_losses` takes the excess at the same turn's end, so a committed
+    /// state is never over - the shortfall lives between two phases and appears in no dump.
+    /// A rule that only holds mid-turn needs a test that looks mid-turn.
+    #[test]
+    fn a_place_over_its_capacity_is_short_rather_than_full() {
+        let mut game = a_world();
+        game.territories[0].add_store(Resource::Food);
+        game.territories[0].add(Resource::Food, 13);
+
+        let territory = territory_in(&tree(&game), 1);
+        let food = territory
+            .capacity
+            .iter()
+            .find(|c| c.of.written() == "{food}")
+            .expect("a capacity for the food a territory holds");
+
+        // One store holds ten, thirteen are there, so it is three short.
+        assert_eq!(
+            (food.room, food.used, food.total()),
+            (-3, 13, 10),
+            "one store holds ten and thirteen are here"
+        );
+        // **The total is what the store declares whatever is piled on top of it**, which is
+        // the property that makes the shortfall readable: `13/10` says both numbers, where a
+        // clamped room said `13/13` and named no shortfall at all.
+        assert!(
+            food.available() < 0,
+            "the shortfall is a negative number and not an absence of room"
+        );
+
+        // And the case it must not break: exactly full is zero, not a negative.
+        let mut exact = a_world();
+        exact.territories[0].add_store(Resource::Food);
+        exact.territories[0].add(Resource::Food, 10);
+        let full = territory_in(&tree(&exact), 1);
+        let food = full
+            .capacity
+            .iter()
+            .find(|c| c.of.written() == "{food}")
+            .expect("a capacity for the food a territory holds");
+        assert_eq!(
+            (food.room, food.used),
+            (0, 10),
+            "full is nought free, not short"
+        );
     }
 
     /// A unit in a place the tree cannot reach stops the tree rather than vanishing from it.
