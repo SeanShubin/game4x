@@ -569,6 +569,8 @@ generated view does.
   **The rendering clause is Sean's, 2026-09-14**, on finding that
   `seanshubin.github.io/game4x/spec/data/above.4x` downloads: *I want to be able to view these
   pages from the website without downloading them.* **It was always the intent and was not
-  written**, which is why the capability could be built and still not deliver it.
+  written**, which is why the capability could be built and still not deliver it. **It is about the
+  published site and not the repository view** - *I don't necessarily need it to be rendered when I
+  browse it as source*.
 
 ## Open questions
