@@ -8,6 +8,21 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-13: a thin engine is an instrument, and complexity is its reading
+
+*A thin engine running a data driven game forces inadequacies in the engine and data structure to
+come to light sooner. The design pressure is the whole point. If the code explodes in complexity, or
+the data structure explodes in complexity, or the data itself explodes in complexity, that tells us
+something needs to be unified or redesigned more clearly than anything else could.*
+
+**Relayed by the code lane as `C-114`, and he asked for it to reach the invariants** - so it is
+`P-493` rather than something waiting here. Recorded anyway, because this file is what says a thing
+was said before it was written.
+
+**It is the reason behind the 2026-08-30 leaning** - *rust is providing a statically typed engine to
+run and validate the data*, below - and the reason is the half that makes the leaning checkable. A
+preference cannot be violated by a number; an instrument can.
+
 ## Decided 2026-09-12, the vocabulary declares itself
 
 *Lets go with option a.*
