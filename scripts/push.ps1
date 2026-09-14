@@ -28,6 +28,17 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
+# --- No pager, ever ----------------------------------------------------------------------
+#
+# `git log` below pages when its output is a terminal, and `core.pager` is unset here so the
+# default is `less` - so a push stopped and waited for somebody to press space and then q.
+# A manual step in the middle of a script whose point is running to the end unattended.
+#
+# Set here rather than on the call that pages, so a git command added later is covered by the
+# same line. `gh` has its own pager and is set for the same reason.
+$env:GIT_PAGER = "cat"
+$env:GH_PAGER = "cat"
+
 $site = "https://seanshubin.github.io/game4x"
 $deployJob = "Deploy to GitHub Pages"
 

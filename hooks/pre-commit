@@ -13,6 +13,16 @@
 # Enable once per clone: git config core.hooksPath hooks
 set -e
 
+# **No pager, ever.** Every `git diff` in this file has its output captured or is `--quiet`,
+# so none of them pages today - and that is a property of how each call happens to be
+# written rather than of anything enforced. An uncaptured one added later would page, and a
+# hook that pages hangs the commit waiting for somebody to press q.
+#
+# `scripts/push.sh` is where this actually bit: a bare `git log` paged, and a push stopped in
+# the middle to wait for a keypress. Set here for the same reason it is set there, and
+# `tools/hooks/tests/no_pager.rs` is what says every script in this tree has it.
+export GIT_PAGER=cat
+
 # **`P-352`: refuse a commit whose files span two perspectives' columns.**
 #
 # `CLAUDE.md` -> Perspectives gives each instance a column and says nobody writes outside

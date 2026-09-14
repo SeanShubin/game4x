@@ -25,6 +25,16 @@
 # Enable once per clone: git config core.hooksPath hooks
 set -e
 
+# **No pager, ever.** Every `git diff` in this file has its output captured or is `--quiet`,
+# so none of them pages today - and that is a property of how each call happens to be
+# written rather than of anything enforced. An uncaptured one added later would page, and a
+# hook that pages hangs the commit waiting for somebody to press q.
+#
+# `scripts/push.sh` is where this actually bit: a bare `git log` paged, and a push stopped in
+# the middle to wait for a keypress. Set here for the same reason it is set there, and
+# `tools/hooks/tests/no_pager.rs` is what says every script in this tree has it.
+export GIT_PAGER=cat
+
 if ! git diff --cached --quiet -- pending.md 2>/dev/null; then
     echo "post-commit: pending.md was left staged by a pathspec commit; unstaging it"
     echo "post-commit: the regenerated file stays in the working tree - it is not lost"

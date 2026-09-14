@@ -23,6 +23,24 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 
+# --- No pager, ever ----------------------------------------------------------------------
+#
+# `git log` below pages when its output is a terminal, and `core.pager` is unset here so the
+# default is `less`. **So a push stopped and waited for somebody to press space until the
+# list ran out and then q** - a manual step in the middle of a script whose whole point is
+# that it runs to the end unattended.
+#
+# **Set once at the top rather than on the call that pages**, so a git command added to this
+# file later is covered by the same line. That is the difference between a carrier and a
+# reminder: the fix is invisible and cannot be forgotten, where `--no-pager` on one call has
+# to be remembered at every new one.
+#
+# **`gh` has its own pager and it is set for the same reason.** `gh run view --json jobs`
+# prints the job list straight to the terminal below rather than into a variable, which is
+# the shape that pages.
+export GIT_PAGER=cat
+export GH_PAGER=cat
+
 SITE="https://seanshubin.github.io/game4x"
 DEPLOY_JOB="Deploy to GitHub Pages"
 GATE=1
