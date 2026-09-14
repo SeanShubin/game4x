@@ -583,6 +583,100 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
 /// twelve a turn, with `spec/turn.md` discarding whatever is left - so the cost could
 /// never be met there, and step 5 of the loop was unreachable from where the ark lands.
 /// Halving it to eight put the cost inside one turn's extraction.
+/// Every **Strength** the release states is the strength the model musters.
+///
+/// **Four cells, and nothing compared any of them.** `muster` produces *that citizen's
+/// strength* and `stand` produces *that unit's strength*, so the whole force half of the game
+/// is arithmetic on this column - and the model carried its own four numbers with no reader
+/// joining the two. `the_costs_in_the_model_are_the_costs_in_the_release` above covers the
+/// Recipes table and stops there; this column is in a different table and was outside it.
+///
+/// **Found by asking what a reviewer would have to read**, rather than by anything failing:
+/// the model holds seventeen constants, thirteen are held against the release by the check
+/// above, `HOLDS` and `MAXIMUM_PER_ACTION` by two others, and these four by nothing. That is
+/// the count that located them, and it is why the sweep below is over the column rather than
+/// over a list of names.
+///
+/// **Two of them are zero or one**, which is the reason a check matters more here than it
+/// looks: a garrison's 0 and a citizen's 1 are exactly the values that keep a wrong join
+/// looking right, and `C-31` is what a wrong force total cost the last time.
+#[test]
+fn every_strength_the_release_states_is_the_strength_the_model_musters() {
+    use game_model::UnitKind;
+    use game_model::territory::{CITIZEN_FORCE, GARRISON_STRENGTH};
+
+    let document = std::fs::read_to_string(
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../releases/first-release.md"),
+    )
+    .expect("the release");
+    let at = game_console::recipes::column_of(&document, "## Units and structures", "Strength");
+    let stated: BTreeMap<String, String> =
+        game_console::recipes::body_under(&document, "## Units and structures")
+            .iter()
+            .map(|row| {
+                (
+                    game_console::recipes::plain(&row[0]),
+                    row.get(at).cloned().unwrap_or_default(),
+                )
+            })
+            .collect();
+    assert_eq!(
+        stated.len(),
+        7,
+        "seven things in *Units and structures*; the release lists {stated:?}"
+    );
+
+    // **Every row, and the blank ones are the check as much as the numbered ones.** A thing
+    // with no strength musters nothing, and the model has no number for it - so a cell filling
+    // in would fail here rather than being a rule the model silently does not have.
+    let held = |thing: &str| -> Option<u32> {
+        match thing {
+            "citizen" => Some(CITIZEN_FORCE),
+            "garrison" => Some(GARRISON_STRENGTH),
+            "ark" => Some(UnitKind::Ark.force()),
+            "pioneer" => Some(UnitKind::Pioneer.force()),
+            _ => None,
+        }
+    };
+
+    let mut compared = 0;
+    let mut blank = 0;
+    for (thing, cell) in &stated {
+        match (cell.as_str(), held(thing)) {
+            ("", None) => blank += 1,
+            ("", Some(number)) => panic!(
+                "the release gives `{thing}` no strength and the model musters {number} for it"
+            ),
+            (says, None) => panic!(
+                "the release gives `{thing}` a strength of {says} and the model has no number \
+                 for it, so nothing musters it"
+            ),
+            (says, Some(number)) => {
+                assert_eq!(
+                    says.parse::<u32>().ok(),
+                    Some(number),
+                    "the release gives `{thing}` a strength of {says} and the model musters \
+                     {number}"
+                );
+                compared += 1;
+            }
+        }
+    }
+    assert_eq!(
+        compared, 4,
+        "four things have a strength, and all four are compared"
+    );
+    assert_eq!(
+        blank, 3,
+        "three have none, and their absence is compared too"
+    );
+    assert_eq!(
+        compared + blank,
+        stated.len(),
+        "every row, and the count with it"
+    );
+}
+
 #[test]
 fn the_landing_site_can_send_a_pioneer_out() {
     let ceiling: u32 = {
