@@ -64,7 +64,7 @@ Two limits Claude holds itself to:
 
 ### P-497 - `spec/data/` normalized: seven relations, every count re-derived
 
-**to** sean · **status** open · **raised** 2026-09-13 · **converted** 2026-09-13, once the last question in it was answered · **kind** invented · **shape** an instruction · **asks** approval · **into** `spec/data/`
+**to** sean · **status** open, **held** 2026-09-13 pending `P-499` · **raised** 2026-09-13 · **converted** 2026-09-13, once the last question in it was answered · **kind** invented · **shape** an instruction · **asks** approval · **into** `spec/data/`
 
 **Everything in this item was open and is now settled.** The names, the block's identity, and
 `whose upkeep is unpaid` - the last of which left as `P-498` and landed in `376df69`. **So this
