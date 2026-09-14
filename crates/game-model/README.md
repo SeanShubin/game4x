@@ -35,6 +35,13 @@ it, and terrain is a continuous field of floating point over a sphere, so it is 
 [`planet-terrain`](../planet-terrain/README.md) and handed in. Its dependency list is
 empty.
 
+**And it does not know how a state is written down.** `containment` built the tree that
+`spec/console.md`'s notation renders - `{territory id:1 biome:grassland}` - and lived here
+until 2026-09-14, called by nothing in this crate and by five files in `game-console`.
+[`architecture.md`](../../docs/architecture.md) gives game logic **no knowledge of file
+formats**, and a notation is one, so it moved to the crate that reads it. **The check that
+it was a pure move is that every generated artifact came back byte for byte.**
+
 ## Public surface
 
 | Type                                                             | What it is                                                                                                     |

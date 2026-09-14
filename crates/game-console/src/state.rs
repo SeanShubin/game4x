@@ -23,7 +23,7 @@
 //! `C-37`: the arrow pointing the wrong way. Renaming the columns would have fixed the
 //! symptom by editing the presentation until the data it generated looked right.
 //!
-//! It is built from [`game_model::containment::tree`] now, which is the state itself.
+//! It is built from [`crate::containment::tree`] now, which is the state itself.
 //!
 //! # The form, and the part of it that is an assumption
 //!
@@ -53,8 +53,8 @@
 //! **The root carries no quantity**, because a quantity belongs to an entry in some map and
 //! the game is in no map: `spec/logistics.md` makes it *the one thing that is in nothing*.
 
+use crate::containment::{Description, Entry, tree};
 use command_language::token::{Token, tokenize};
-use game_model::containment::{Description, Entry, tree};
 
 /// What a freshly written file says about whether anybody has looked at it.
 ///
@@ -200,7 +200,7 @@ pub fn declared(rows: &[Description]) -> String {
 ///
 /// **What it recovers is the containment tree and not the [`game_model::Game`].** Those are
 /// the same information only once a territory's `density` and `capacity` are in the
-/// file, and they are not - see [`game_model::containment`]. So the round trip proved here is
+/// file, and they are not - see [`crate::containment`]. So the round trip proved here is
 /// text against tree, and saying which half is proved is the whole of `S-29`'s warning about
 /// reporting half a rule as met.
 pub fn read(text: &str) -> Result<Entry, String> {

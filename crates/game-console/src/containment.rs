@@ -45,10 +45,10 @@
 
 use std::collections::BTreeMap;
 
-use crate::identity::Resource;
-use crate::territory::HOLDS;
-use crate::thing::{Kind, Thing, Trait};
-use crate::{Game, Phase};
+use game_model::identity::Resource;
+use game_model::territory::HOLDS;
+use game_model::thing::{Kind, Thing, Trait};
+use game_model::{Game, Phase};
 
 /// A kind, and every trait of the thing.
 ///
@@ -647,7 +647,7 @@ pub fn tree(game: &Game) -> Entry {
         above.contents = group(
             game.units
                 .iter()
-                .filter(|unit| unit.location == crate::Location::Orbit(place.id))
+                .filter(|unit| unit.location == game_model::Location::Orbit(place.id))
                 .map(entry_for_unit)
                 .collect(),
         );
@@ -667,7 +667,7 @@ pub fn tree(game: &Game) -> Entry {
     // its territory and to the orbits above that territory's neighbours, so stating it would
     // be a second copy that can disagree.*
     for (at, near) in game.adjacency.iter().enumerate() {
-        let from = crate::TerritoryId::from_index(at);
+        let from = game_model::TerritoryId::from_index(at);
         for to in near {
             if from.0 >= to.0 {
                 continue;
@@ -765,10 +765,10 @@ impl Entry {
 /// holds*. So the number is the trait, and the tank is not a separate thing in this
 /// release: *Where things are* gives a unit's tank as one of the three sorts of capacity
 /// rather than as something with a description of its own.
-fn describe_unit(unit: &crate::Unit) -> Description {
+fn describe_unit(unit: &game_model::Unit) -> Description {
     Description::of(match unit.kind {
-        crate::UnitKind::Ark => Kind::Ark,
-        crate::UnitKind::Pioneer => Kind::Pioneer,
+        game_model::UnitKind::Ark => Kind::Ark,
+        game_model::UnitKind::Pioneer => Kind::Pioneer,
     })
     .with("id", unit.id)
     // **A unit's counts, under `P-411`'s names.** `moving` is what the model has stored as
@@ -794,7 +794,7 @@ fn describe_unit(unit: &crate::Unit) -> Description {
 ///
 /// **An empty bin writes nothing**, because `spec/console.md` says an entry is never zero. So a
 /// pioneer that cannot move holds nothing, which is the same shape as a territory with no food.
-fn entry_for_unit(unit: &crate::Unit) -> Entry {
+fn entry_for_unit(unit: &game_model::Unit) -> Entry {
     let mut entry = Entry::leaf(describe_unit(unit));
     if unit.cells > 0 {
         entry.contents = vec![Entry {
@@ -818,7 +818,7 @@ fn entry_for_unit(unit: &crate::Unit) -> Entry {
 /// **The kinds bounded by food are not here**, because a bound through upkeep is not a
 /// containment capacity: `citizen` is bounded by *the food produced here, through upkeep*
 /// and a territory does not declare a number for it.
-fn capacities_of(game: &Game, place: &crate::Territory) -> Vec<Capacity> {
+fn capacities_of(game: &Game, place: &game_model::Territory) -> Vec<Capacity> {
     let _ = game;
     let mut out = Vec::new();
     // **Room rather than total** - `P-474`. The caller states the bound because that is how
@@ -862,14 +862,14 @@ fn capacities_of(game: &Game, place: &crate::Territory) -> Vec<Capacity> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::identity::TerritoryId;
+    use game_model::identity::TerritoryId;
 
     fn a_world() -> Game {
         let mut game = Game::new();
         game.phase = Phase::Play;
-        game.territories.push(crate::Territory::empty(
+        game.territories.push(game_model::Territory::empty(
             TerritoryId(1),
-            crate::Biome::Grassland,
+            game_model::Biome::Grassland,
         ));
         game
     }
@@ -977,14 +977,14 @@ mod tests {
     #[test]
     fn a_thing_with_an_id_is_always_one() {
         let mut game = a_world();
-        game.units.push(crate::Unit::new(
-            crate::UnitId(1),
-            crate::UnitKind::Ark,
+        game.units.push(game_model::Unit::new(
+            game_model::UnitId(1),
+            game_model::UnitKind::Ark,
             TerritoryId(1),
         ));
-        game.units.push(crate::Unit::new(
-            crate::UnitId(2),
-            crate::UnitKind::Ark,
+        game.units.push(game_model::Unit::new(
+            game_model::UnitId(2),
+            game_model::UnitKind::Ark,
             TerritoryId(1),
         ));
         let orbit = tree(&game)
@@ -1014,11 +1014,16 @@ mod tests {
     #[test]
     fn nothing_states_its_container() {
         let mut game = a_world();
-        game.territories
-            .push(crate::Territory::empty(TerritoryId(2), crate::Biome::Ice));
-        let mut landed =
-            crate::Unit::new(crate::UnitId(1), crate::UnitKind::Pioneer, TerritoryId(2));
-        landed.location = crate::Location::On(TerritoryId(2));
+        game.territories.push(game_model::Territory::empty(
+            TerritoryId(2),
+            game_model::Biome::Ice,
+        ));
+        let mut landed = game_model::Unit::new(
+            game_model::UnitId(1),
+            game_model::UnitKind::Pioneer,
+            TerritoryId(2),
+        );
+        landed.location = game_model::Location::On(TerritoryId(2));
         game.units.push(landed);
 
         let tree = tree(&game);
@@ -1062,7 +1067,7 @@ mod tests {
         let mut game = a_world();
         game.territories[0].deposits.insert(
             Resource::Food,
-            crate::Deposit {
+            game_model::Deposit {
                 capacity: 3,
                 density: 4,
             },
@@ -1089,8 +1094,12 @@ mod tests {
     #[should_panic(expected = "cannot reach")]
     fn a_unit_in_a_place_that_is_not_there_has_no_written_form() {
         let mut game = a_world();
-        let mut orphan = crate::Unit::new(crate::UnitId(1), crate::UnitKind::Ark, TerritoryId(99));
-        orphan.location = crate::Location::On(TerritoryId(99));
+        let mut orphan = game_model::Unit::new(
+            game_model::UnitId(1),
+            game_model::UnitKind::Ark,
+            TerritoryId(99),
+        );
+        orphan.location = game_model::Location::On(TerritoryId(99));
         game.units.push(orphan);
         tree(&game);
     }
@@ -1107,9 +1116,9 @@ mod tests {
     fn two_things_sharing_an_id_have_no_written_form() {
         let mut game = a_world();
         for _ in 0..2 {
-            game.units.push(crate::Unit::new(
-                crate::UnitId(1),
-                crate::UnitKind::Ark,
+            game.units.push(game_model::Unit::new(
+                game_model::UnitId(1),
+                game_model::UnitKind::Ark,
                 TerritoryId(1),
             ));
         }

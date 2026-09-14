@@ -1533,7 +1533,7 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(String, String)> {
             // just went through - and **that is asserted rather than relied on** below, which
             // is what makes a second execution safe to read from.
             let mut shadow = shadow;
-            let mut seen: Vec<(&'static str, game_model::containment::Entry)> = Vec::new();
+            let mut seen: Vec<(&'static str, crate::containment::Entry)> = Vec::new();
             shadow.end_turn_observed(&mut |game, phase| {
                 seen.push((phase, crate::state::entries(game)))
             });

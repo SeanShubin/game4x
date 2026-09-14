@@ -39,9 +39,9 @@
 
 use std::path::PathBuf;
 
+use game_console::containment::Entry;
 use game_console::state;
 use game_console::{Library, Session};
-use game_model::containment::Entry;
 
 /// Where the reviewed expectation lives.
 const AT: &str = "scenario/expected/play.4x";
@@ -243,7 +243,7 @@ fn the_comparison_finds_missing_extra_and_different() {
     // Missing: it was expected and did not happen.
     let mut absent = actual.clone();
     absent.contents.push(Entry {
-        description: game_model::containment::Description::of(game_model::thing::Kind::Yard),
+        description: game_console::containment::Description::of(game_model::thing::Kind::Yard),
         quantity: 1,
         contents: Vec::new(),
         capacity: Vec::new(),

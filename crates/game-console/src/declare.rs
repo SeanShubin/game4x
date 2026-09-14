@@ -24,8 +24,8 @@
 //! gives one value to a key. Whether that is several lines, a joined name, or something else
 //! is a decision rather than work, and it is filed rather than guessed at.
 
+use crate::containment::Description;
 use crate::recipes::{body_under, plain};
-use game_model::containment::Description;
 
 /// The three words a file of kinds needs before it can use any of them.
 ///

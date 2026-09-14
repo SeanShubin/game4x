@@ -1439,11 +1439,11 @@ fn the_readies_column_declares_the_maximum_this_reads() {
             });
             assert_eq!(
                 count,
-                game_model::containment::MAXIMUM_PER_ACTION,
+                game_console::containment::MAXIMUM_PER_ACTION,
                 "`{thing}` may take {count} of `{action}` in a turn and the model restores \
                  `MAXIMUM_PER_ACTION`, which is {} - so the model would refill the wrong \
                  number. `P-459`.",
-                game_model::containment::MAXIMUM_PER_ACTION
+                game_console::containment::MAXIMUM_PER_ACTION
             );
             pairs += 1;
         }

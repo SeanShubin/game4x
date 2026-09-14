@@ -25,10 +25,10 @@
 //! compute, `phase` printing a value the release never named. Each was a published artifact
 //! describing behaviour that is not there.
 //!
-//! So this renders [`game_model::containment::tree`], the same projection the data file is
+//! So this renders [`crate::containment::tree`], the same projection the data file is
 //! written from. A generated tree cannot lie about the model.
 
-use game_model::containment::{Capacity, Entry, may_contain};
+use crate::containment::{Capacity, Entry, may_contain};
 
 /// The tree as a page.
 pub fn page(game: &game_model::Game, title: &str) -> String {
@@ -112,7 +112,7 @@ fn walk(out: &mut String, entry: &Entry, depth: usize, lines: &mut usize) {
 }
 
 fn tree_root(game: &game_model::Game) -> Entry {
-    game_model::containment::tree(game)
+    crate::containment::tree(game)
 }
 
 /// Whether a node at this depth is open when the page loads.
@@ -286,7 +286,7 @@ mod tests {
     /// the sixth would be drawn by nothing.
     #[test]
     fn the_fixture_holds_one_of_every_containment_relationship() {
-        let tree = game_model::containment::tree(&every_relationship());
+        let tree = crate::containment::tree(&every_relationship());
         let mut seen: Vec<(String, String)> = Vec::new();
         fn walk(entry: &Entry, seen: &mut Vec<(String, String)>) {
             for held in &entry.contents {
@@ -339,7 +339,7 @@ mod tests {
     #[test]
     fn the_fixture_round_trips_through_the_data_file() {
         let game = every_relationship();
-        let direct = game_model::containment::tree(&game);
+        let direct = crate::containment::tree(&game);
         let written = crate::state::write(&game, "the fixture");
         let read = crate::state::read(&written).unwrap_or_else(|why| panic!("{why}"));
         assert_eq!(
@@ -362,7 +362,7 @@ mod tests {
     /// At least one capacity is at its bound, so the page's *full* marking is exercised.
     #[test]
     fn the_fixture_puts_a_capacity_at_its_bound() {
-        let tree = game_model::containment::tree(&every_relationship());
+        let tree = crate::containment::tree(&every_relationship());
         let at_bound: Vec<String> = tree
             .walk()
             .into_iter()
@@ -481,7 +481,7 @@ mod tests {
     #[test]
     fn a_kind_a_territory_cannot_hold_is_not_drawn_as_an_empty_container() {
         let game = every_relationship();
-        let tree = game_model::containment::tree(&game);
+        let tree = crate::containment::tree(&game);
         let energy: Vec<&Capacity> = tree
             .walk()
             .into_iter()

@@ -28,7 +28,7 @@
 //! about the recipe: a recipe that touched something unexpected would show it, which is the
 //! direction that matters.
 
-use game_model::containment::{Entry, tree};
+use crate::containment::{Entry, tree};
 use game_model::{Game, Resource, TerritoryId};
 
 /// One example: what to fire it in, what fires it, and why this case.

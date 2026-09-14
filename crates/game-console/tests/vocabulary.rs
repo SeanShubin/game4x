@@ -551,9 +551,9 @@ fn every_trait_the_ordering_names_is_declared() {
         declared.len()
     );
 
-    let named: Vec<&str> = game_model::containment::ORDERED_FIRST
+    let named: Vec<&str> = game_console::containment::ORDERED_FIRST
         .iter()
-        .chain(game_model::containment::ORDERED_LAST.iter())
+        .chain(game_console::containment::ORDERED_LAST.iter())
         .copied()
         .collect();
     // **The rename guard first, because it is what this check is for.** It was written after
@@ -614,7 +614,7 @@ fn no_notation_word_is_a_declared_trait() {
     );
 
     let mut checked = 0;
-    for word in game_model::containment::NOTATION_WORDS {
+    for word in game_console::containment::NOTATION_WORDS {
         assert!(
             !declared.contains(word),
             "`{word}` is one of the notation's own words and `spec/data/traits.4x` declares it \
@@ -627,7 +627,7 @@ fn no_notation_word_is_a_declared_trait() {
     // **And the order is the one `P-483` states**, which the check above cannot say: all five
     // could be absent from the traits and still be sequenced wrongly.
     assert_eq!(
-        game_model::containment::NOTATION_WORDS.to_vec(),
+        game_console::containment::NOTATION_WORDS.to_vec(),
         vec!["name", "of", "family", "admits", "kept"],
         "a declaration leads with `name`, then `of` and `family`, then the notation's others"
     );

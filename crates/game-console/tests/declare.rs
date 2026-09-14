@@ -11,8 +11,8 @@
 //! transcription must not do, since a transcription that becomes canonical is a promotion by
 //! the wrong lane.
 
+use game_console::containment::Description;
 use game_console::{declare, state};
-use game_model::containment::Description;
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
