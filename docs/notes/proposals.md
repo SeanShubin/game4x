@@ -380,7 +380,7 @@ existed and never re-derived against it.
 
 ### S-132 - The open queue moved to `decide/`, and `tools/outbox` still reads the old path
 
-**to** code · **status** open · **raised** 2026-09-14 · **source** Sean, 2026-09-14: *move the documents I need to make decisions on or approve to a directory not mixed in with what is currently settled or historical*
+**to** code · **status** **acted** 2026-09-14 · **cited** `42deb95` · and the hook maps `decide/` to this lane's column, which the item did not ask for and needed · **raised** 2026-09-14 · **source** Sean, 2026-09-14: *move the documents I need to make decisions on or approve to a directory not mixed in with what is currently settled or historical*
 
 **Two lines in `tools/outbox/src/lib.rs`**, and `pending.md` follows from them.
 

@@ -21,15 +21,14 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-132** - `42deb95` S-132: `pending.md` reads `decide/`, and the hook knows whose it is · still open in `docs/notes/proposals.md`
+- **C-124** - `2b5c01c` C-124 answered: P-511 for the three questions, S-133 for what I owed them · still open in `crates/outbox.md`
 - **R-11** - `287e67f` R-11: the engine's inputs are a section of the index, read from the directory · still open in `releases/first-release.md`
 
 ## What is outstanding
 
-### To code (8)
+### To code (7)
 
 - **S-133** - The two follow-ons from pooling, which this lane owed you and did not file · `docs/notes/proposals.md`
-- **S-132** - The open queue moved to `decide/`, and `tools/outbox` still reads the old path · `docs/notes/proposals.md`
 - **S-131** - Eighteen commits landed while you were off, and the gate is twenty red · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
