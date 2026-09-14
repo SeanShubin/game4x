@@ -62,7 +62,39 @@ Two limits Claude holds itself to:
 
 ## Open
 
-*Nothing is open. Everything filed has been decided.*
+### P-491 - a recipe naming a family leaves the kind open, and `refuel` gains the place row it refers to
+
+**to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered, from your choice of `A` · **shape** text and rows · **asks** approval · **into** `spec/console.md` -> Commands, and `releases/first-release.md` -> Recipes
+
+## The sentence, replacing the one in Commands
+
+> **A command names a recipe and binds what that recipe leaves open**: every place it leaves open,
+> **every ingredient it names by family rather than by kind**, and any ingredient or trait value it
+> names with a `$`.
+
+**Which makes `{move unit:pioneer from:1 to:2}` legal by the rule rather than by habit** - `move`
+requires *1 unit*, `unit` is a family, so the command picks the kind. And `{refuel unit:pioneer
+where:1}` becomes its command with no row changing for it.
+
+## The row, which `refuel` needs either way
+
+| Recipe     | Owner  | Role    | Qty | Kind      | Traits | Where    |
+| ---------- | ------ | ------- | --- | --------- | ------ | -------- |
+| **refuel** | player | require | 1   | territory |        | `$where` |
+
+**`refuel` refers to `$where` and nothing establishes it.** `deploy ark`, `launch ark` and `work`
+each carry `require 1 territory | $where`; `refuel` carries only a unit at `$where`. Found by the
+code lane encoding the table into `prototypes/kinds`, which asserts that a referred place is bound.
+
+**This is a defect in the rows `P-489` promoted**, not something `A` decides - it is here because it
+is the same recipe and one read.
+
+## What this does not settle
+
+**`refuel`'s qualifier *with room for energy* names no trait a unit has.** A pioneer's kind line
+carries `fuel` and not `free`, and the code lane had to read the qualifier as `free` to encode it at
+all. **That is `P-492`**, filed beside this, because the answer decides whether a unit gets the
+capacity trio and this one should not wait for it.
 
 ## Addressed to other perspectives
 

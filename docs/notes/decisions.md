@@ -21,60 +21,37 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-491 - `refuel` has no command, and the rule that would give it one does not cover `move` either
+### P-492 - `with room for energy` names no trait a unit has
 
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction · **shape** text · **asks** a decision · **into** `spec/console.md` -> Commands
+**to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction · **shape** rows · **asks** a decision · **into** `releases/first-release.md` -> Recipes, and possibly Units and structures
 
-## What a player types to refuel, which is the whole of it
+## The problem in one line
 
-**Nothing can fire `refuel` today**, and the three candidate commands are:
+**`refuel` requires a unit *with room for energy*, and a pioneer has no trait meaning room.** Its
+kind line is `{kind name:pioneer family:unit binding defending fuel metal-in-it movable moving
+strength}` - **`fuel`, which is how big the bin is, and nothing saying how full it is.**
 
-```
-A   {refuel unit:pioneer where:1}     you name which unit
-B   {refuel unit:pioneer where:1}     the same, but `move` and `refuel` both gain a `$unit` row
-C   {refuel where:1}                  you name the territory and the game picks the unit
-```
+`P-476` gave `capacity`, `occupied` and `free` to `deposit` and to nothing else.
 
-**`A` and `B` type the same and differ in whether two rows change. `C` takes the choice away.**
+## Three ways out
 
-## The decision
+- **`A` - drop the qualifier.** `require 1 unit | | $where`. **Containment already refuses to
+  exceed a maximum**, so producing energy into a full bin cannot happen and the recipe simply does
+  not fire. The cost: a player is offered a refuel that then does nothing, where a qualifier would
+  have let `show` say why
+- **`B` - give a unit the trio**, as a deposit has it. `free` becomes a trait of a unit too, the
+  qualifier reads `free at least 1`, and the dump carries `capacity`, `occupied` and `free` on every
+  unit entry
+- **`C` - say it with `fuel` and containment.** The qualifier becomes *holding less energy than its
+  fuel*, which names only traits that exist - but no qualifier in the table compares a thing's
+  contents to a trait today, so it is a new shape
 
-**What lets a command name an ingredient?** Three readings, and they give `refuel` different
-commands:
+## What this lane would pick
 
-- **`A` - a recipe naming a family leaves the kind open.** `move` and `refuel` both require *1
-  unit*, which is a family, so the command picks which kind: `{refuel unit:pioneer where:1}`. **This
-  explains `move` as it already is and needs no row to change**
-- **`B` - only a `$` opens an ingredient**, and `move`'s row should say `$unit`. Then `refuel`'s
-  does too, and both rows change
-- **`C` - the command names the territory and the game chooses the unit.** `{refuel where:1}`, and
-  where two units have room the rule picks. **You called refuelling a distributive decision** - two
-  pioneers and two energy is one each or both in one - which `C` takes away
+**`A`**, on the grounds that the rule it leans on is already promoted and the other two add
+something. **But `A` is the one that makes `show` worse**, and `spec/console.md` says `show` reports
+*whether it is possible now, and when it is not, what is missing* - which `A` can still answer from
+containment rather than from the recipe.
 
-## Why this is a decision and not a typo
-
-**The rule that should say which is `A` or `B` does not explain `move`, which already works.**
-`spec/console.md`:
-
-```
-A command names a recipe and binds what that recipe leaves open: every place it leaves open,
-and any ingredient or trait value it names with a `$`.
-```
-
-**`{move unit:pioneer from:1 to:2}` has been binding a unit for weeks** and `move`'s row is
-`require 1 unit | moving at least 1 | $from` - **no `$unit` anywhere.** So either a family already
-opens the kind, or every recipe with an open ingredient is missing a `$`.
-
-**`P-485` landed `refuel` and `P-489` neither caused nor fixes this.** The gate is red on
-`the_scenario_fires_every_player_recipe_the_release_declares` - eleven declared, ten fired - which
-is the check working.
-
-## What this lane would pick and why it is yours
-
-**`A`.** It is the only reading under which the notation already works, and it keeps the allocation
-a player's choice - `{refuel unit:pioneer where:1 repeat:2}` puts two energy in one pioneer.
-
-**But `A` and `B` differ about a sentence you promoted**, not about `refuel`, and `B` means every
-recipe that leaves an ingredient open is missing a `$` today. That is a bigger claim than this item
-can settle on its own.
-*Nothing is open. Everything filed has been decided.*
+**The code lane encoded it as `free` to make the table parse at all**, and flagged that as a reading
+rather than a reading-off. Whatever you choose, that line is the one that was provisional.
