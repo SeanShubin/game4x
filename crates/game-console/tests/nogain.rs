@@ -533,10 +533,11 @@ fn every_recipe_row_names_a_count_rather_than_readiness() {
         })
         .map(|row| row.get(at).cloned().unwrap_or_default())
         .collect();
+    // Eighty since `P-489`: `refuel` is three rows and `produce pioneer` regained its energy.
     assert_eq!(
         rows.len(),
-        77,
-        "seventy-seven recipe rows is the population this counted against"
+        80,
+        "eighty recipe rows is the population this counted against"
     );
     assert!(
         saying.is_empty(),

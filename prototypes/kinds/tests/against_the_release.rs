@@ -104,8 +104,9 @@ fn the_release_tables_are_the_ones_in_this_crate() {
 /// `RECIPES` holds blocks, and a check on blocks alone would pass a version that had
 /// forgotten `stow` was one recipe stated twice.
 #[test]
-fn there_are_thirty_one_recipe_blocks_under_twenty_one_names() {
-    assert_eq!(kinds::RECIPES.len(), 31);
+fn there_are_thirty_two_recipe_blocks_under_twenty_two_names() {
+    // Thirty-two since `P-489` added `refuel`, which is one block under one new name.
+    assert_eq!(kinds::RECIPES.len(), 32);
 
     let mut names: Vec<&str> = kinds::RECIPES.iter().map(|recipe| recipe.name).collect();
     names.sort_unstable();
@@ -115,7 +116,7 @@ fn there_are_thirty_one_recipe_blocks_under_twenty_one_names() {
     // `stand` are new. Eight names are stated more than once.
     assert_eq!(
         names.len(),
-        21,
+        22,
         "twenty-one distinct names, and these are {names:?}"
     );
 
@@ -403,6 +404,11 @@ fn a_role_says_what_becomes_of_what_a_recipe_names() {
             // and `muster` keeps both the garrison it needs and the citizen it musters.
             "deploy ark",
             "move",
+            // **`refuel` arrived with `P-489` and keeps the unit it fills.** It requires a
+            // unit with room and produces energy into it - the unit is an ingredient it does
+            // not eat, which is the whole of what this list is. The same shape as `move`,
+            // one row along.
+            "refuel",
             "launch ark",
             "create labor",
             "work",

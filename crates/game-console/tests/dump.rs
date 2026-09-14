@@ -477,7 +477,18 @@ fn the_scenario_fires_every_player_recipe_the_release_declares() {
     // before it founds. That is the distinction `C-54` exists to name, arriving as a
     // consequence. An empty list is the claim that every declared recipe is in the
     // scenario, and the count below states it.
-    const NOT_IN_THE_SCENARIO: [(&str, &str); 0] = [];
+    // **One, and `P-489` put it there.** `refuel` is declared and no command fires it, so it
+    // cannot be in the scenario - not *has not been put there*, which is what every other
+    // entry this list has ever held meant. `C-112` is open to spec on what binds it: a command
+    // naming the territory has to choose when two units standing there both have room, and one
+    // naming the unit makes it the player's choice.
+    //
+    // **The assertion below is what makes this expire.** It fails the moment a line in the
+    // scenario begins with the command, so the exception cannot outlive the gap it describes.
+    const NOT_IN_THE_SCENARIO: [(&str, &str); 1] = [(
+        "refuel",
+        "no command fires it - spec/console.md names none, and `C-112` is open on the binding",
+    )];
 
     let mut declared: Vec<String> = Vec::new();
     let mut inside = false;
@@ -502,23 +513,31 @@ fn the_scenario_fires_every_player_recipe_the_release_declares() {
 
     assert_eq!(
         declared.len(),
-        10,
-        "ten player recipes were declared when this was written; the release now has {} \
+        11,
+        "eleven player recipes were declared when this was written; the release now has {} \
          ({declared:?}). If one was added, name what fires it above and make the scenario \
          fire it.",
         declared.len()
     );
 
     for recipe in &declared {
-        let command = fired_by
+        // **The exception is read before the command**, because a recipe nothing fires has no
+        // command to look up and the lookup below panics rather than returning. That ordering
+        // was fine while every entry meant *not put in the scenario yet*; `refuel` is the
+        // first that means *cannot be*.
+        let excepted = NOT_IN_THE_SCENARIO
             .iter()
-            .find(|(name, _)| name == recipe)
-            .unwrap_or_else(|| panic!("nothing here says what fires `{recipe}`"))
-            .1;
-        if let Some((_, why)) = NOT_IN_THE_SCENARIO
-            .iter()
-            .find(|(named, _)| named == recipe)
-        {
+            .find(|(named, _)| *named == recipe.as_str());
+        let named_here = fired_by.iter().find(|(name, _)| name == recipe);
+        let Some((_, command)) = named_here else {
+            assert!(
+                excepted.is_some(),
+                "nothing here says what fires `{recipe}`"
+            );
+            continue;
+        };
+        let command = *command;
+        if let Some((_, why)) = excepted {
             // **An exception that has been repaired is a lie in the other direction.**
             assert!(
                 !scenario

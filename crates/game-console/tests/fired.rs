@@ -148,7 +148,14 @@ fn every_player_recipe_the_release_declares_is_actually_fired() {
     // what put one back was not a case written to exercise it: founding now requires the
     // pioneer to be on the ground, so a pioneer has to cross before it can found. The
     // recipe fires because the game needs it.
-    const NOT_FIRED: [(&str, &str); 0] = [];
+    // **One since `P-489`, and it is a different kind from the ones before it.** Every entry
+    // this list has held meant *the scenario does not happen to do this yet*. `refuel` cannot
+    // be fired at all: no command names it. The two assertions below still expire it - it
+    // fails when the recipe starts firing, and when the release stops declaring it.
+    const NOT_FIRED: [(&str, &str); 1] = [(
+        "refuel",
+        "no command fires it - spec/console.md names none, and `C-112` is open on the binding",
+    )];
 
     let players: Vec<String> = declared()
         .into_iter()
@@ -157,8 +164,8 @@ fn every_player_recipe_the_release_declares_is_actually_fired() {
         .collect();
     assert_eq!(
         players.len(),
-        10,
-        "ten player recipes when this was written; the release has {} ({players:?})",
+        11,
+        "eleven player recipes when this was written; the release has {} ({players:?})",
         players.len()
     );
 
@@ -194,10 +201,16 @@ fn every_player_recipe_the_release_declares_is_actually_fired() {
             "`{name}` is excepted here and the release no longer declares it"
         );
     }
+    // **One exception, and the number is asserted so a second cannot arrive quietly.** This
+    // said zero from `S-76` until `P-489`, and the comment on `NOT_FIRED` says where the
+    // pattern stops working: past about two it is the list written twice rather than a guard.
+    // A third is the signal to fix the rule instead of the list.
     assert_eq!(
         NOT_FIRED.len(),
-        0,
-        "no exceptions: every player recipe the release declares is fired by the scenario,          which `S-76` made true of `move` by making founding need a crossing"
+        1,
+        "one exception - `refuel`, which no command fires. Every other player recipe the \
+         release declares is fired by the scenario, which `S-76` made true of `move` by \
+         making founding need a crossing"
     );
 }
 
@@ -375,8 +388,8 @@ fn every_recipe_the_release_declares_fires_while_the_scenario_runs() {
     distinct.dedup();
     assert_eq!(
         distinct.len(),
-        21,
-        "twenty-one recipes by name when this was written; the release declares {} \
+        22,
+        "twenty-two recipes by name when this was written; the release declares {} \
          ({distinct:?})",
         distinct.len()
     );
@@ -408,10 +421,32 @@ fn every_recipe_the_release_declares_fires_while_the_scenario_runs() {
         fired.len()
     );
 
+    // **`refuel` is declared and cannot fire, and that is `R-6`'s problem rather than this
+    // check's.** *The loop can be played through* is a capability waiting on Sean, and a
+    // recipe no command reaches is a hole in it - so this does not silence the fact, it names
+    // it and says who it belongs to. `C-112` carries it, and the item says `R-6` is affected.
+    //
+    // **Excepted here rather than left red**, because the alternative is a gate nobody can
+    // make green while a specification question is open, and a red that cannot be acted on
+    // stops being read. The exception expires the moment a command exists: `refuel` starts
+    // firing and the assertion below stops finding it missing.
+    const CANNOT_FIRE: [&str; 1] = ["refuel"];
     let missing: Vec<&String> = distinct
         .iter()
         .filter(|recipe| !fired.contains(&recipe.as_str()))
+        .filter(|recipe| !CANNOT_FIRE.contains(&recipe.as_str()))
         .collect();
+    for name in CANNOT_FIRE {
+        assert!(
+            !fired.contains(&name),
+            "`{name}` fires now, so delete its entry in `CANNOT_FIRE` - and `R-6` gains back \
+             what that entry says it is missing"
+        );
+        assert!(
+            distinct.iter().any(|recipe| recipe == name),
+            "`{name}` is excepted here and the release no longer declares it"
+        );
+    }
     assert!(
         missing.is_empty(),
         "these recipes are declared and never fired while the scenario ran, so `R-6`'s \

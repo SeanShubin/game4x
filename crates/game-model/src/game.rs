@@ -29,6 +29,15 @@ pub mod cost {
     /// extractors at one metal each, so a unit that deploys one has to bind with three. At
     /// four an Ark wasted a metal every landing; at two a Pioneer made one from nothing.
     pub const PIONEER_METAL: u32 = 3;
+    /// **A cost again, and it is two rather than the six it was.** `P-486` made the energy a
+    /// `put` into the pioneer's bin and this constant went with it; `P-489` made buying a
+    /// pioneer a purchase again - *a pioneer's energy is a cost* - so the figure is a
+    /// consumption the release states and belongs where the population check can see it.
+    ///
+    /// **Deleting it was right at the time and restoring it is not a reversal.** While the
+    /// energy was a fill, the number was the Units table's `Fuel` and a second copy could only
+    /// disagree with it. As a `consume` row it is the release's own figure again.
+    pub const PIONEER_ENERGY: u32 = 2;
     pub const PIONEER_CITIZENS: u32 = 2;
     /// An Extractor costs 1 labor and 1 metal.
     ///

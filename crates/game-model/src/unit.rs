@@ -35,15 +35,23 @@ pub struct Unit {
     pub location: Location,
     /// What a ground-moving unit has left to move on.
     ///
-    /// `spec/units.md`: *a mobile unit that moves over the ground has a bin for fuel. Moving
-    /// burns a unit of it, and one with an empty bin cannot move.*
+    /// `spec/units.md`: *a mobile unit that moves over the ground has a bin for fuel. **It is
+    /// built with that bin full, and the energy is paid where it is built.** Moving burns a
+    /// unit of it, and one with an empty bin cannot move.*
     ///
-    /// **A counter, where the specification now says a bin** - `P-365`, and `C-79` carries
-    /// why it is still a counter. A bin is filled from the territory it stands in, and no
-    /// recipe in the release fills one, so the refill has no moment to happen at. The Ark's
-    /// half of the same proposal - *a mobile unit that moves in orbit takes its energy
-    /// directly from the sun. It stores no fuel* - waits on the release blanking its Fuel
-    /// cell, which is `S-86`.
+    /// **A counter in storage and a bin in the file** - `P-485`. `containment::entry_for_unit`
+    /// writes what is in here as an entry inside the unit, so a full pioneer reads
+    /// `{pioneer ...} -> 1` over `{energy} -> 2`, which is what a bin being containment means
+    /// to a reader. How it is held in memory is this crate's business; what the dump says is
+    /// the specification's.
+    ///
+    /// **`C-79`'s excuse has half expired.** It said a bin is filled from the territory it
+    /// stands in and no recipe fills one, so the refill had no moment to happen at. `P-486`
+    /// gave it one at the build - the bin is filled and paid for there - and `P-489` gave
+    /// refuelling a recipe. What is still missing is a command to fire that recipe, which is
+    /// `C-112`. The Ark's half - *a mobile unit that moves in orbit takes its energy directly
+    /// from the sun. It stores no fuel* - waits on the release blanking its Fuel cell, which
+    /// is `S-86`.
     ///
     /// **This comment quoted the sentence `P-365` replaced** - *a mobile unit carries energy
     /// cells; moving spends them* - and `quotations.rs` did not catch it, because that check

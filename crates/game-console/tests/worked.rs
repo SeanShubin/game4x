@@ -80,14 +80,14 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
     declared.dedup();
     assert_eq!(
         blocks.len(),
-        31,
-        "the release states thirty-one blocks of recipe rows; it has {} ({blocks:?})",
+        32,
+        "the release states thirty-two blocks of recipe rows; it has {} ({blocks:?})",
         blocks.len()
     );
     assert_eq!(
         declared.len(),
-        21,
-        "those blocks are stated under twenty-one names; there are {} ({declared:?})",
+        22,
+        "those blocks are stated under twenty-two names; there are {} ({declared:?})",
         declared.len()
     );
     assert!(
@@ -101,9 +101,25 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
         .flat_map(|example| std::iter::once(example.recipe).chain(example.also.iter().copied()))
         .collect();
 
+    // **`refuel` is declared and cannot have a worked example**, because an example is *a
+    // state, the command, and the state after* and no command fires it. `C-112`, now `P-491`
+    // with Sean - and the binding is the open half, since one of its three readings changes
+    // `move`'s row too.
+    //
+    // **A measured exception**, as in `recipes.rs`: it holds only while the grammar carries no
+    // form opening with `refuel`, so the moment a command exists this stops applying and the
+    // assertion below bites.
+    let fires_nothing = |name: &str| {
+        name == "refuel"
+            && !game_console::command_grammar()
+                .forms()
+                .iter()
+                .any(|form| form.opening() == "refuel")
+    };
     let missing: Vec<&String> = declared
         .iter()
         .filter(|name| !covered.contains(name.as_str()))
+        .filter(|name| !fires_nothing(name))
         .collect();
     assert!(
         missing.is_empty(),
@@ -113,10 +129,17 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
     // **Every recipe, and one example carries ten of them.** `P-332`: the world's are shown
     // once, together, on `{end-turn}`. So the two counts differ and the difference is the
     // point - twelve examples for twenty recipes.
+    // **The exempted one is counted rather than subtracted as a literal**, so a second recipe
+    // losing its example fails by name instead of being absorbed - the shape `- 1` would hide.
+    let exempt = declared.iter().filter(|name| fires_nothing(name)).count();
+    assert!(
+        exempt <= 1,
+        "{exempt} recipes have no command and only `refuel` should - `C-112`"
+    );
     assert_eq!(
         covered.len(),
-        declared.len(),
-        "every declared recipe has an example; {} covered and {} declared",
+        declared.len() - exempt,
+        "every declared recipe a command fires has an example; {} covered, {} declared,          {exempt} exempt",
         covered.len(),
         declared.len()
     );

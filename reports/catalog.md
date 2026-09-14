@@ -14,7 +14,7 @@ release's four are a second hand-written form, and `P-465` is about what that co
 the release because that is where all six tables are today, and says so rather than implying the
 release is the source.
 
-18 kinds, 4 families, 26 traits, 31 recipes.
+18 kinds, 4 families, 26 traits, 32 recipes.
 
 ## Signatures
 
@@ -66,13 +66,13 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 **Traits** `binding`, `defending`, `fuel`, `keeps`, `metal in it`, `movable`, `moving`, `strength`
 
-**Named by** `age put`, `age require`, `deploy ark consume`, `launch ark produce`, `move put`, `move require`, `refresh put`, `spoil consume`, `stand put`, `stand require`
+**Named by** `age put`, `age require`, `deploy ark consume`, `launch ark produce`, `move put`, `move require`, `refresh put`, `refuel require`, `spoil consume`, `stand put`, `stand require`
 
 ### `s-7` - pioneer
 
 **Traits** `binding`, `defending`, `fuel`, `keeps`, `metal in it`, `movable`, `moving`, `strength`
 
-**Named by** `age put`, `age require`, `found by land consume`, `move put`, `move require`, `produce pioneer produce`, `refresh put`, `spoil consume`, `stand put`, `stand require`
+**Named by** `age put`, `age require`, `found by land consume`, `move put`, `move require`, `produce pioneer produce`, `refresh put`, `refuel require`, `spoil consume`, `stand put`, `stand require`
 
 ### `s-8` - food
 
@@ -90,7 +90,7 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 **Traits** `keeps`
 
-**Named by** `age put`, `age require`, `discard consume`, `launch ark consume`, `move consume`, `produce pioneer consume`, `spoil consume`, `stow consume`, `stow produce`, `work produce`
+**Named by** `age put`, `age require`, `discard consume`, `launch ark consume`, `move consume`, `produce pioneer consume`, `refuel consume`, `refuel produce`, `spoil consume`, `stow consume`, `stow produce`, `work produce`
 
 ### `s-11` - labor
 
@@ -291,6 +291,7 @@ carries a landing, and can invade from orbit.
 - `deploy ark` consumes 1, in the orbit above `$where`
 - `move` requires 1 (as a unit), moving at least 1, in `$from`
 - `move` puts  (as a unit), moving one less, in `$to`
+- `refuel` requires 1 (as a unit), with room for energy, in `$where`
 - `launch ark` produces 1, in the orbit above `$where`
 - `age` requires 1 (as a thing), keeps at least 1
 - `age` puts  (as a thing), keeps one less
@@ -320,6 +321,7 @@ founds a territory.
 
 - `move` requires 1 (as a unit), moving at least 1, in `$from`
 - `move` puts  (as a unit), moving one less, in `$to`
+- `refuel` requires 1 (as a unit), with room for energy, in `$where`
 - `found by land` consumes 1
 - `produce pioneer` produces 1
 - `age` requires 1 (as a thing), keeps at least 1
@@ -393,7 +395,9 @@ what moves things; neither conserved nor expiring.
 **In recipes**
 
 - `move` consumes 1, in that unit
-- `produce pioneer` consumes 6
+- `refuel` consumes 1
+- `refuel` produces 1, in that unit
+- `produce pioneer` consumes 2
 - `launch ark` consumes 12
 - `work` produces `$where`'s density for that resource (as a resource)
 - `age` requires 1 (as a thing), keeps at least 1

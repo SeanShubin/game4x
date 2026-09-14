@@ -33,14 +33,16 @@ fn every_recipe_is_either_drawn_or_named_as_not_drawn() {
     // **Eight more blocks and two more names since `P-414`.** `refresh` became six blocks
     // where it was one, because a count is a trait again and each one is put back by its own
     // row; `muster` and `stand` are the two new names.
+    //
+    // **Thirty-two since `P-489`**, which added `refuel` - one block under one new name.
     assert_eq!(
-        net.recipes, 31,
-        "the release states thirty-one blocks of recipe rows and the parse found {}",
+        net.recipes, 32,
+        "the release states thirty-two blocks of recipe rows and the parse found {}",
         net.recipes
     );
     assert_eq!(
-        net.names, 21,
-        "those blocks are stated under twenty-one distinct names and the parse found {}",
+        net.names, 22,
+        "those blocks are stated under twenty-two distinct names and the parse found {}",
         net.names
     );
     // **The deduplication has to remove something**, or a version that stopped deduplicating

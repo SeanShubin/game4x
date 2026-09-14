@@ -854,6 +854,11 @@ const OF_RESOURCE: [Qualifier; 1] = [by("`$resource`", "resource")];
 // puts the thing back with one less; `refresh` puts it back at its maximum. Four rows where the
 // token model had one, and two citizens differing only in readiness are two descriptions again
 // - which is `C-90`, and why `P-399` was undone.
+// **`P-489`: `refuel` requires a unit that can take more.** *With room for energy* names no
+// trait outright, and `free` is the one it has to mean - the release declares `capacity`,
+// `occupied` and `free`, and room is the last of those. **A reading rather than a reading off**,
+// so if `P-491` says otherwise this is the line that was wrong.
+const ROOM_FOR_ENERGY: [Qualifier; 1] = [by("with room for energy", "free")];
 const MOVING_SOME: [Qualifier; 1] = [by("moving at least 1", "moving")];
 const MOVING_LESS: [Qualifier; 1] = [by("moving one less", "moving")];
 const MOVING_FULL: [Qualifier; 1] = [by("moving at its maximum", "moving")];
@@ -919,6 +924,19 @@ pub const RECIPES: &[Recipe] = &[
         ],
     },
     Recipe {
+        // **`P-489`, and it is `stow` aimed at a bin.** Refuelling moves energy rather than
+        // making it: a consume from the territory and a produce into the unit, which is the
+        // shape the notation already had for a relocation. No command fires it yet - `C-112`,
+        // now `P-491` with Sean - so the row is here and the scenario cannot reach it.
+        name: "refuel",
+        owner: Player,
+        lines: &[
+            placed(Require, 1, UNIT, &ROOM_FOR_ENERGY, "`$where`"),
+            just(Consume, 1, Noun::Of(Energy)),
+            placed(Produce, 1, Noun::Of(Energy), &[], "that unit"),
+        ],
+    },
+    Recipe {
         name: "found by land",
         owner: Player,
         lines: &[
@@ -963,7 +981,7 @@ pub const RECIPES: &[Recipe] = &[
         owner: Player,
         lines: &[
             just(Consume, 3, Noun::Of(Metal)),
-            just(Consume, 6, Noun::Of(Energy)),
+            just(Consume, 2, Noun::Of(Energy)),
             just(Consume, 2, Noun::Of(Citizen)),
             just(Produce, 1, Noun::Of(Pioneer)),
         ],

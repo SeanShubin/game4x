@@ -40,8 +40,21 @@ ENGINE="--exclude planet-ecs --exclude planet-bevy --exclude planet-flat \
 
 # Release for the rest, because the tessellation tests relax hundreds of seeds and are
 # unusably slow unoptimized.
+# **`--no-fail-fast`, because cargo stops at the first failing binary** - `Q-92`. Without it
+# a run reports one failure and hides every other, so *the gate is red on X* was true and
+# incomplete for two days in all three lanes. Measured at `ab33689`: one failure with it off
+# and eleven with it on, reducing to four causes. The count was never the number anybody
+# quoted; it was the first one cargo happened to reach.
+#
+# **A flag rather than a habit.** `CLAUDE.md` prefers a carrier, or better a default path on
+# which a rule cannot be broken, and reading past the first failure is exactly the sort of
+# habit that fires at a moment of confidence and not otherwise.
+#
+# **The other masking is left alone deliberately.** This runs under `set -e`, so a failing
+# `cargo fmt` still hides the tests entirely. That ordering is cheap to remember and is the
+# point of running fmt first; masking *within* one run is neither.
 echo "pre-push: cargo test --release (everything that does not link an engine)"
-cargo test --release --workspace $ENGINE
+cargo test --release --no-fail-fast --workspace $ENGINE
 
 # Debug for the engine-facing ones: clippy above has just compiled them unoptimized, so
 # this reuses that build rather than paying for a release build of Bevy. They used to run
@@ -66,7 +79,7 @@ echo "pre-push: the documentation tools"
 for manifest in tools/*/Cargo.toml; do
     echo "  $manifest"
     cargo fmt --manifest-path "$manifest" -- --check
-    cargo test --manifest-path "$manifest"
+    cargo test --no-fail-fast --manifest-path "$manifest"
     # `tools/spec` is the specification lane's own and this lane may not edit it. It has a
     # live `collapsible_if` today, which is the finding: nothing was linting it. Reported to
     # that lane; when they fix it this exclusion goes, and until then a gate red on a file
@@ -78,5 +91,5 @@ for manifest in tools/*/Cargo.toml; do
 done
 
 echo "pre-push: cargo test (the engine-facing crates)"
-cargo test -p planet-ecs -p planet-bevy -p planet-flat -p game-globe -p game4x \
+cargo test --no-fail-fast -p planet-ecs -p planet-bevy -p planet-flat -p game-globe -p game4x \
   -p planet-view -p goldberg-view

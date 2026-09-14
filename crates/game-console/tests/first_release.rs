@@ -448,7 +448,7 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
     // energy is paid where it is built*, so the figure paid is the Units table's `Fuel` and a
     // second constant could only ever disagree with it. The row it compared against -
     // `consume 6 energy` - is not in the release any more either.
-    let checked: [(&str, u32, &str, &str); 12] = [
+    let checked: [(&str, u32, &str, &str); 13] = [
         ("STORE_LABOR", cost::STORE_LABOR, "store", "labor"),
         ("STORE_METAL", cost::STORE_METAL, "store", "metal"),
         ("YARD_LABOR", cost::YARD_LABOR, "yard", "labor"),
@@ -457,6 +457,10 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
         ("ARK_ENERGY", cost::ARK_ENERGY, "ark", "energy"),
         ("ARK_CITIZENS", cost::ARK_CITIZENS, "ark", "citizen"),
         ("PIONEER_METAL", cost::PIONEER_METAL, "pioneer", "metal"),
+        // **Back, because `P-489` made the energy a cost again.** `P-486` had made it a `put`
+        // into the bin and this row went with it; a purchase takes a `consume`, so the figure
+        // is the release's own again rather than the Units table's `Fuel` said twice.
+        ("PIONEER_ENERGY", cost::PIONEER_ENERGY, "pioneer", "energy"),
         (
             "PIONEER_CITIZENS",
             cost::PIONEER_CITIZENS,
@@ -566,9 +570,9 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
     // open on where it comes from. So one figure left the recipes and `PIONEER_ENERGY` left
     // the constants with it.
     assert_eq!(
-        figures, 11,
-        "eleven figures across the recipes named for a thing, and eleven of the twelve \
-         constants read them - the twelfth is `MOVE_CELLS`, which is a consumption rather \
+        figures, 12,
+        "twelve figures across the recipes named for a thing, and twelve of the thirteen \
+         constants read them - the thirteenth is `MOVE_CELLS`, which is a consumption rather \
          than a cost"
     );
 }

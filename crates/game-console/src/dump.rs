@@ -280,9 +280,25 @@ pub fn tables(game: &Game) -> Vec<Table> {
         total(&|t| t.count_of(game_model::thing::Kind::Labor)).to_string(),
     ]);
     for resource in Resource::ALL {
+        // **A unit's bin counts too, and it did not until `P-485`.** This row says *is there
+        // one anywhere*, and `total` sums territories - so once a pioneer's fuel became an
+        // entry inside the unit rather than a column beside it, two views of one state
+        // disagreed: the containment tree showed `{pioneer ...}` over `{energy} -> 2` and this
+        // said the energy was gone.
+        //
+        // **Found by `the_delta_accounts_for_every_thing_the_states_gained_or_lost`**, which
+        // compared the printed state against the turn's own delta and made the two-energy gap
+        // arithmetic rather than a matter of opinion. That is the same shape `P-485` was filed
+        // about - a dump and an entity view disagreeing about a thing that holds something -
+        // reappearing in a different pair of views, introduced by the fix for the first.
+        let in_bins: u32 = if resource == Resource::Energy {
+            game.units.iter().map(|unit| unit.cells).sum()
+        } else {
+            0
+        };
         kinds.push(vec![
             resource.name().to_string(),
-            total(&|t| t.store(resource)).to_string(),
+            (total(&|t| t.store(resource)) + in_bins).to_string(),
         ]);
     }
     for kind in StructureKind::ALL {
