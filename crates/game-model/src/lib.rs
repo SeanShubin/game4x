@@ -26,6 +26,7 @@
 pub mod game;
 pub mod identity;
 pub mod rejection;
+pub mod rules;
 pub mod territory;
 pub mod thing;
 pub mod transition;
