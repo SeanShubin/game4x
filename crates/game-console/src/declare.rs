@@ -244,6 +244,28 @@ pub const FOR: Relation = Relation {
     columns: &["block", "seq", "kind"],
 };
 
+/// The three quantities that are a sentence rather than a number.
+///
+/// **Named, because the same check one column over was what let them through.** `P-497`
+/// asserted that exactly one cell of the release could not be represented - `move`'s adjacency
+/// qualifier, below - and named it so a second would fail the run. **That assertion read the
+/// Traits column and the quantities went past unclassified**, so three unrepresentable cells
+/// passed a check built to catch exactly that.
+///
+/// **This generator had the same hole.** `lines` writes `qty` verbatim, which reproduces the
+/// file faithfully and says nothing about what it is reproducing. A fourth sentence-quantity
+/// would have been written as silently as these three.
+///
+/// `C-120` is the item, and `P-514` offers a shape for two of them. The third -
+/// `` `$where`'s density for that resource `` - is a density indexed by which resource the
+/// block is for rather than a trait of a row, and that proposal says outright that it does not
+/// fix it.
+const NOT_A_NUMBER: [&str; 3] = [
+    "`$where`'s density for that resource",
+    "that citizen's strength",
+    "that unit's strength",
+];
+
 /// The one *Traits* cell `spec/data/` does not represent.
 ///
 /// **Named rather than skipped**, and `S-131` names it too: *joined to `$from` by an edge the
@@ -263,6 +285,14 @@ pub fn lines(document: &str) -> String {
         ];
         let qty = cell(&row, document, "Qty");
         if !qty.is_empty() {
+            // **A quantity is a number or one of the three the notation cannot hold**, and a
+            // fourth fails here rather than being written as though it were a number. See
+            // [`NOT_A_NUMBER`] for why this guard exists one column over from the one that
+            // did not catch these.
+            assert!(
+                qty.chars().all(|c| c.is_ascii_digit()) || NOT_A_NUMBER.contains(&qty.as_str()),
+                "`{qty}` is neither a number nor one of the three quantities `C-120` names"
+            );
             line.push(("qty", qty));
         }
         line.push(("kind", cell(&row, document, "Kind")));
