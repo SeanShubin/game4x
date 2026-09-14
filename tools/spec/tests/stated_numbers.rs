@@ -186,7 +186,7 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
 fn the_quoted_report_figures_are_the_report_s() {
     let doc = read("docs/designing-rules.md");
     let report = read("reports/nogain.md");
-    for figure in ["51 rules", "32 blocks"] {
+    for figure in ["56 rules", "37 blocks"] {
         assert!(
             doc.contains(figure),
             "designing-rules no longer quotes {figure:?}"

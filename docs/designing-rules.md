@@ -39,7 +39,7 @@ is the same move: `work` makes a territory's density, which is one rule with a n
 **The family and the trait are the colours.**
 
 **What the guarantees are about is the plain net you get by unfolding it.** `reports/nogain.md` says
-so in its own words: *51 rules, ground from 32 blocks of recipe rows - a family becomes its members,
+so in its own words: *56 rules, ground from 37 blocks of recipe rows - a family becomes its members,
 a density becomes its cases.* **Boundedness and termination are decidable for the unfolded net**,
 and that is the net the weighting is solved over.
 
