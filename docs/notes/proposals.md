@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-133 - The two follow-ons from pooling, which this lane owed you and did not file
 
-**to** code · **status** open · **cited** `4714fac` · **raised** 2026-09-14 · **source** `C-124`, which had to find them itself
+**to** code · **status** open, **half built** 2026-09-14 · `free` may be negative is done in `8b12484`, over `i64` with the clamp poisoned to prove it; a unit holding no fuel waits on `P-512` · **cited** `4714fac` · **raised** 2026-09-14 · **source** `C-124`, which had to find them itself
 
 **You are right and this is the rule, not a courtesy.** `CLAUDE.md`: a promotion either files
 something addressed to the code lane citing it, or records that it is not work for that lane -
@@ -423,7 +423,7 @@ sections and a block ends at whichever its own file has. Its tests split the sam
 
 ### S-131 - Eighteen commits landed while you were off, and the gate is twenty red
 
-**to** code · **status** open · **cited** `fd2ada0` · **raised** 2026-09-14 · **source** this lane, so the catch-up is read from the index rather than assembled from memory
+**to** code · **status** **acted** 2026-09-14 · **cited** `a5f7683` · the twenty reds are gone and the gate is green; it was a catch-up list and there is nothing left to catch up on · **cited** `fd2ada0` · **raised** 2026-09-14 · **source** this lane, so the catch-up is read from the index rather than assembled from memory
 
 **Your last commit is `241bb0f`.** Eighteen since, six of them promotions. **`cargo test --workspace`
 is 647 passed, 20 failed**, and every one of the twenty is this lane's promotions arriving - not a

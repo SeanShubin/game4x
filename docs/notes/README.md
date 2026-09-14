@@ -61,3 +61,4 @@ disagree, the spec is right and the note needs a superseded marker.
 - [How this lane fails](how-this-lane-fails.md) - the defects of 2026-09-01, by cause
 - [tools/spec, designed](tools-spec-design.md) - the editing tool as named operations rather than a script
 - [Every option was the same move](../postmortems/every-option-was-the-same-move.md) - **moved to the postmortems**, 2026-09-13
+- [Recording a failure found a second one](2026-09-14-recording-a-failure-found-a-second-one.md) - a habit catching something it did not come from, which is the bar `CLAUDE.md` sets
