@@ -118,36 +118,38 @@ so the arithmetic has no opinion yet. **Once the code lane teaches it to read a 
 it will read a relocation with no source** - and whether that balances depends on a row nobody has
 written.
 
-## `P-489` was rewritten and it does not clear the red - measured 2026-09-13
+## That measurement was against a version that no longer exists - corrected 2026-09-13
 
-**The proposal moved from `consume` plus `produce` to `require` plus a quantity-less `put`**, citing
-`move`'s pattern, so that *a put has no quantity* stands untouched. **The reading is sound** - `move`
-relocates a unit the same way, and *not taken* there means *not destroyed* rather than *not moved*.
+**This item said `P-489` does not clear the red, and it was measured against rows superseded within
+the hour.** That draft was `require 2 energy` plus a quantity-less `put`; `c4ba239` replaced it, and
+the correction is this lens's own rule arriving on its own outbox - a number that goes stale without
+anyone editing it.
 
-**But the gate does not go green on it.** Applied its rows in a clone at `ca14484` and ran
-`cargo test -p game-console --lib`:
+**`P-489` as committed at `c4ba239` uses no `put` at all**, splitting the two cases: building a
+pioneer is a purchase and takes a `consume`, refuelling is a move and takes `stow`'s
+consume-plus-produce.
 
-```
-panicked at crates/game-console/src/nogain.rs:833:13:
-`put` names ``, which is not a count at least 1, one less or at its maximum -
-so this row would move nothing and nothing would say so
-```
+**Re-measured, in a clone at `c4ba239` with those rows applied to the release:**
 
-**Same guard, same line, a different reason.** The old rows fail because the `put` carries a
-quantity; the new rows fail because its *Traits* cell is empty. `changed()` gives `require` an
-empty delta by design - *`require` takes nothing* - so **the size of the relocation sits on the one
-row the weighting ignores.**
+| Check                                                 | With `P-489` applied                         |
+| ----------------------------------------------------- | -------------------------------------------- |
+| `game-console --lib`, the `nogain` panic              | **57 pass, 0 fail** - the red clears         |
+| `the_costs_in_the_model_are_the_costs_in_the_release` | red: `left 12, right 11` - **mechanical**    |
+| `the_scenario_fires_every_player_recipe…`             | red, and **red at `HEAD` without the patch** |
 
-**Which is this item's finding surviving its own fix.** The source end is named now, and the
-arithmetic still cannot see the amount. For it to balance, `nogain` has to pair a `require` with a
-`put` of the same kind and read the quantity across the two - **and that is a design step rather
-than a repair.** Until it is taken, the weighting balances a game in which a pioneer's fuel is free,
-and `move` consuming energy from a unit it never saw filled reads as disorder, which the invariant
-tolerates.
+**So `P-489` clears one of two independent reds.** The figures count going 11 to 12 is the code
+lane's, predicted by them from a parse before anyone ran it, and restoring `PIONEER_ENERGY` with it
+- an energy `consume` is a cost again, which is `Q-83`'s population argument running the useful way
+for once.
 
-**Whether this changes.** The item still says the choice is Sean's, and **it now also says that
-approving `P-489` leaves the gate where it is.** Anyone expecting promotion to clear it - the code
-lane said it would build and run the gate on promotion - will meet `nogain.rs:833` instead.
+**The second red is not `P-489`'s and never was.** `the_scenario_fires_every_player_recipe_the_release_declares`
+fails on `refuel` being an eleventh player recipe with nothing firing it - **`C-112`, already open to
+spec** - and it fails identically at `c4ba239` with the release untouched.
+
+**It was masked, which is the part worth keeping.** `cargo test` stops at the first failing binary
+and `hooks/pre-push` runs under `set -e`, so *the gate is red on the quantified put* was **true and
+incomplete** for as long as the put failed first. **A red hides the reds behind it**, and every lane
+including this one has been quoting the top one as though it were the count.
 
 ### Q-90 - `P-489` offers two blocks, declares one shape and one destination, and would promote unverified
 
