@@ -164,6 +164,71 @@ day one and the gaps would have surfaced then, which is exactly the pressure `C-
   prose in `spec/control.md` and code in `Game::found`, so the central act of the game is outside
   the data entirely.
 
+## Do the three destroy the Petri net - Sean asked, 2026-09-13, and set the win condition aside
+
+**The property being protected is decidable reachability.** The research lens's formalism:
+reachability is decidable for a plain net, an inhibitor arc is a zero test, nets with inhibitor
+arcs are Turing-complete, and **reachability survives one inhibitor arc and dies at two**. `P-385`
+deleted the release's only two - both `limit 0 garrison` - which is why the net is plain today.
+
+The cliff is not the zero test itself. It is a zero test **on an unbounded place**: on a bounded
+one the complementary-place construction expresses it with a read arc and nothing is lost.
+
+## Sequence - safe, and the safe shape is the one already built
+
+A phase token in a place, each phase consuming it and producing the next, is plain P/T.
+
+**The trap is where the token lives.** *Everything with upkeep pays it, then a population grows*
+is exhaustive, and a **global** phase token needs *advance only when no phase-one transition is
+enabled* - a zero test on enabledness, which is an inhibitor. **A per-territory token needs no
+such test**: each territory carries its own phase and advances independently.
+
+**That is what `Game::end_turn_observed` already does**, and `settling_territories_in_any_order_
+gives_the_same_game` is the assertion that it is legitimate. So sequence costs a place per
+container and no expressiveness.
+
+## Which one, when several match - safe, and the debt is already on the books
+
+Identity across a transition is a **coloured** net, which `petri.rs` already says of `put`: *a
+token has no identity, so a plain net cannot say that*, and the drawing is a projection that keeps
+what a plain net can check.
+
+**A coloured net unfolds to a plain one when the colour set is finite**, and the release's
+capacities give that - two arks and two pioneers to a territory. So this is decidable by
+unfolding, and **it is not a new cost**: twelve `put` rows already need it and the net already
+declines to draw them.
+
+## The force rule - the one that bites, and the answer is a number
+
+`spec/control.md` holds a territory when force is at least nature's. **Half of that is free**:
+`force >= nature` is a read arc of weight `nature`, and nature is a per-territory constant.
+
+**The reclaim is the negation.** Nature takes back when force is *less* than nature, and *fires
+when fewer than n are present* cannot be built from input and read arcs. It is a zero test, so it
+is safe exactly when force sits on a bounded place.
+
+**Force is bounded, and nothing declares the bound.** `held_force` is `garrison.force + citizens *
+CITIZEN_FORCE`, the garrison's own force is 0 since `P-276`, and `CITIZEN_FORCE` is 1 - so force in
+a territory **is** its citizens, plus the strength of units standing there, which capacity bounds
+at two arks and two pioneers. **Citizens have no declared capacity**: the release bounds them by
+*the food produced here, through upkeep*, which is a relationship. The ceiling exists and is
+emergent, and the construction that makes a zero test safe needs a stated `k`.
+
+## Where the three lead, which is one place
+
+**Eight of the twelve rows of *What bounds a kind in a territory* are relationships rather than
+numbers**, counted. Every one of those is a place whose boundedness is unstated - and boundedness
+is what decides whether a rule can be written without an inhibitor arc.
+
+**So the redesign question is not whether recipes can be data.** They can: two of the three are
+free and the third costs one declared number. **The question is whether every place can declare a
+bound**, because that is the single property the whole analysis rests on. `C-102` reached the same
+table from the other side, counting cells; this reaches it from decidability.
+
+**And that is the design pressure doing exactly what `P-493` says it does.** Nobody asked whether
+citizens have a capacity. Asking whether the rules could be data made it the load-bearing question
+in the repository.
+
 **And one dead thing found on the way**: `Garrison::from_founding_unit(_unit_force)` ignores its
 argument and returns force 0. `P-276` made a garrison's own force zero and the parameter stayed.
 
