@@ -21,37 +21,58 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-492 - `with room for energy` names no trait a unit has
+### P-492 - A fuel tank, and containment may already be one
 
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction · **shape** rows · **asks** a decision · **into** `releases/first-release.md` -> Recipes, and possibly Units and structures
+**to** sean · **status** open · **raised** 2026-09-13 · **rewritten** 2026-09-13, on your answer · **kind** recovered · **shape** rows · **asks** a decision · **into** `releases/first-release.md` -> Recipes, Kinds, and What bounds a kind in a territory
 
-## The problem in one line
+**Your answer, 2026-09-13**: *what about having the pioneer contain a fuel tank that can contain
+fuel?*
 
-**`refuel` requires a unit *with room for energy*, and a pioneer has no trait meaning room.** Its
-kind line is `{kind name:pioneer family:unit binding defending fuel metal-in-it movable moving
-strength}` - **`fuel`, which is how big the bin is, and nothing saying how full it is.**
+**A, B and C are withdrawn.** All three argued about which trait a qualifier could name. You changed
+the subject to what a pioneer *contains*, and containment already has the vocabulary the qualifier
+was missing.
 
-`P-476` gave `capacity`, `occupied` and `free` to `deposit` and to nothing else.
+## What was checked before writing this, because it changes the size of the answer
 
-## Three ways out
+`spec/logistics.md` -> Containment: **what a thing may contain is a maximum per kind, and the three
+names are its capacity for that kind, how much is occupied, and how much is free.** The trio is
+**per kind contained** rather than a trait of the container - so anything that declares a capacity
+for energy has free energy capacity already, with nothing added.
 
-- **`A` - drop the qualifier.** `require 1 unit | | $where`. **Containment already refuses to
-  exceed a maximum**, so producing energy into a full bin cannot happen and the recipe simply does
-  not fire. The cost: a player is offered a refuel that then does nothing, where a qualifier would
-  have let `show` say why
-- **`B` - give a unit the trio**, as a deposit has it. `free` becomes a trait of a unit too, the
-  qualifier reads `free at least 1`, and the dump carries `capacity`, `occupied` and `free` on every
-  unit entry
-- **`C` - say it with `fuel` and containment.** The qualifier becomes *holding less energy than its
-  fuel*, which names only traits that exist - but no qualifier in the table compares a thing's
-  contents to a trait today, so it is a new shape
+And the release says the same from the other end. *What bounds a kind in a territory* gives
+**energy** as bounded by *the things in it that hold it*, and: **a raw material is in one of three
+states: its source, disorder, or held by something that declares a limit for it.** A store holds
+what it was built to hold. **A fuel bin is that sentence applied to a unit.**
 
-## What this lane would pick
+## So there are two ways to do what you said, and the difference is whether the tank is a thing
 
-**`A`**, on the grounds that the rule it leans on is already promoted and the other two add
-something. **But `A` is the one that makes `show` worse**, and `spec/console.md` says `show` reports
-*whether it is possible now, and when it is not, what is missing* - which `A` can still answer from
-containment rather than from the recipe.
+**`D1` - the pioneer declares a capacity for energy.** No new kind. `refuel` reads `require 1 unit |
+free at least 1 | $where`, naming `free`, which containment defines. The `fuel` trait retires: *how
+big the bin is* becomes the declared capacity, stated once in *What bounds a kind in a territory*
+beside `garrison`'s 1 and `ark`'s 2.
 
-**The code lane encoded it as `free` to make the table parse at all**, and flagged that as a reading
-rather than a reading-off. Whatever you choose, that line is the one that was provisional.
+**`D2` - the pioneer contains a `tank`, and the tank declares the capacity.** A new kind, and the
+first thing in this game to have a part. `refuel` requires a tank with `free at least 1` in the
+unit. **The release already has the word**: `metal in it` is *its binding plus the metal in its
+parts*, and nothing has parts yet.
+
+## What `D2` buys, and it is one thing
+
+**Two units of one kind could hold different amounts of fuel**, because the tank would be what
+carries the capacity and a thing may hold different things. Under `D1` they cannot: *what a kind may
+contain is a fact about the kind and not about any one of them*, so every pioneer has the same bin
+for ever.
+
+**Nothing in the release wants that today** - there is one pioneer kind and one ark kind. It is a
+door rather than a feature, and `D2` is the price of leaving it open.
+
+## What this lane would pick, and the reason is not economy
+
+**`D1`.** Not because it is smaller, but because **`D2` states the same fact twice.** A tank whose
+only property is a capacity for energy *is* the pioneer's capacity for energy, wearing a kind's
+name - and `spec/invariants.md` says a fact is stated once. `D2` earns its place the moment a tank
+can differ, be damaged, be built separately or be counted in metal; until then it is a level of
+containment that holds exactly one thing and decides nothing.
+
+**The question is therefore whether you want the door**, and that is not a thing this lane can read
+off the files.
