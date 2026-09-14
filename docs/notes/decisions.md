@@ -21,58 +21,56 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-492 - A fuel tank, and containment may already be one
+### P-492 - The tank is already there; what `refuel` cannot say is which bin it means
 
-**to** sean · **status** open · **raised** 2026-09-13 · **rewritten** 2026-09-13, on your answer · **kind** recovered · **shape** rows · **asks** a decision · **into** `releases/first-release.md` -> Recipes, Kinds, and What bounds a kind in a territory
+**to** sean · **status** open · **raised** 2026-09-13 · **rewritten** twice on 2026-09-13, on your answer and then on your metal transport · **kind** recovered · **shape** rows · **asks** a decision · **into** `releases/first-release.md` -> Recipes
 
-**Your answer, 2026-09-13**: *what about having the pioneer contain a fuel tank that can contain
-fuel?*
+**Yes, it informs it, and it decides two things.** It also corrected this lane's last answer, which
+called a tank *this game's first part*. It would not have been.
 
-**A, B and C are withdrawn.** All three argued about which trait a qualifier could name. You changed
-the subject to what a pioneer *contains*, and containment already has the vocabulary the qualifier
-was missing.
+## What the release already says, which the previous version of this item missed
 
-## What was checked before writing this, because it changes the size of the answer
+`releases/first-release.md` -> *Where things are* lists three containers, and the third is yours:
 
-`spec/logistics.md` -> Containment: **what a thing may contain is a maximum per kind, and the three
-names are its capacity for that kind, how much is occupied, and how much is free.** The trio is
-**per kind contained** rather than a trait of the container - so anything that declares a capacity
-for energy has free energy capacity already, with nothing added.
+| Container     | Holds                         | Up to                           |
+| ------------- | ----------------------------- | ------------------------------- |
+| a territory   | that kind                     | its free capacity for that kind |
+| a store       | the resource it was built for | 10                              |
+| a unit's tank | energy                        | the unit's fuel                 |
 
-And the release says the same from the other end. *What bounds a kind in a territory* gives
-**energy** as bounded by *the things in it that hold it*, and: **a raw material is in one of three
-states: its source, disorder, or held by something that declares a limit for it.** A store holds
-what it was built to hold. **A fuel bin is that sentence applied to a unit.**
+And `fuel` is defined in the Traits table as **how much energy its tank holds**.
 
-## So there are two ways to do what you said, and the difference is whether the tank is a thing
+**So *the pioneer contains a fuel tank that can contain fuel* is not a change - it is what the
+release says today.** `D2`, making `tank` a kind, is withdrawn: it would replace a container that
+works with a kind that says the same thing, and a fact is stated once.
 
-**`D1` - the pioneer declares a capacity for energy.** No new kind. `refuel` reads `require 1 unit |
-free at least 1 | $where`, naming `free`, which containment defines. The `fuel` trait retires: *how
-big the bin is* becomes the declared capacity, stated once in *What bounds a kind in a territory*
-beside `garrison`'s 1 and `ark`'s 2.
+## What your transport decides, and this is the part no file could have told this lane
 
-**`D2` - the pioneer contains a `tank`, and the tank declares the capacity.** A new kind, and the
-first thing in this game to have a part. `refuel` requires a tank with `free at least 1` in the
-unit. **The release already has the word**: `metal in it` is *its binding plus the metal in its
-parts*, and nothing has parts yet.
+**A pioneer holds one kind, so `free at least 1` is unambiguous. A metal transport holds two, so it
+is not.** *Up to 2 fuel and 10 metal* is two bins in one thing, and a qualifier that says `free`
+without saying free **of what** stops meaning anything the day that unit exists.
 
-## What `D2` buys, and it is one thing
+**This lane was about to write `free at least 1`.** It reads correctly against every unit in this
+release and would have had to be rewritten for the first unit that carries cargo - a right answer
+about the wrong population.
 
-**Two units of one kind could hold different amounts of fuel**, because the tank would be what
-carries the capacity and a thing may hold different things. Under `D1` they cannot: *what a kind may
-contain is a fact about the kind and not about any one of them*, so every pioneer has the same bin
-for ever.
+## So the remaining question is the qualifier's form, and here are three
 
-**Nothing in the release wants that today** - there is one pioneer kind and one ark kind. It is a
-door rather than a feature, and `D2` is the price of leaving it open.
+| Form                     | `refuel`'s Traits cell reads | A transport's cargo check would read |
+| ------------------------ | ---------------------------- | ------------------------------------ |
+| **`E1`** trait then kind | `free energy at least 1`     | `free metal at least 1`              |
+| **`E2`** kind then trait | `energy free at least 1`     | `metal free at least 1`              |
+| **`E3`** prose, as now   | `with room for 1 energy`     | `with room for 1 metal`              |
 
-## What this lane would pick, and the reason is not economy
+**`E1` matches every qualifier already in the table.** All 27 distinct forms in use begin with the
+trait - `moving at least 1`, `keeps 0`, `defending at its maximum`, `met at its maximum` - so `free`
+first is the shape the reader already has. **`E3` is the only one that is not a trait reading**, and
+it is what `with room for energy` was: prose the parser cannot check.
 
-**`D1`.** Not because it is smaller, but because **`D2` states the same fact twice.** A tank whose
-only property is a capacity for energy *is* the pioneer's capacity for energy, wearing a kind's
-name - and `spec/invariants.md` says a fact is stated once. `D2` earns its place the moment a tank
-can differ, be damaged, be built separately or be counted in metal; until then it is a level of
-containment that holds exactly one thing and decides nothing.
+**This lane would pick `E1`**, and the reason is the 27 rather than taste.
 
-**The question is therefore whether you want the door**, and that is not a thing this lane can read
-off the files.
+## What is not being asked
+
+**Nothing about the transport itself.** It is not in this release, and a release never specifies
+what it is not building. What it does is settle the notation now, so the row that adds it later adds
+a row and not a rule.
