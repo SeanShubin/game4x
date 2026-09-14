@@ -123,8 +123,19 @@ pub enum Transition {
         territory: TerritoryId,
         resource: Option<Resource>,
     },
-    Produce {
-        kind: UnitKind,
+    /// Produce a pioneer. `produce pioneer <territory>`.
+    ///
+    /// **Named for the recipe, and it was `Produce { kind }`** until 2026-09-14. The kind
+    /// could be an Ark, and `P-342` deleted `produce ark`: *`launch ark` consumes the cost and
+    /// puts nothing into orbit*, and the only ark in a game is the one design puts there. So
+    /// the variant could say a thing no recipe allows, `rules.rs` carried twenty lines
+    /// answering it, and nothing reached either - not a command in `binding.rs`, not a test.
+    ///
+    /// **Measured in `C-123` and closed by narrowing rather than by deleting.** Taking the arm
+    /// out would have left the transition still able to say it; taking the field out means
+    /// nothing can. The transitions beside it are named for their recipes already -
+    /// `FoundByLand`, `BuildStore`, `CreateLabor` - so this is the shape the set already had.
+    ProducePioneer {
         territory: TerritoryId,
     },
     /// Spend that much labor at a structure this turn.

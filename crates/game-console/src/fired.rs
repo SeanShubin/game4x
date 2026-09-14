@@ -115,17 +115,10 @@ pub fn fired(transition: &Transition) -> (Vec<&'static str>, &'static str) {
             // and is manned, which `found by land` and `deploy ark` already account for.
             StructureKind::Garrison => (Vec::new(), "no recipe builds a garrison"),
         },
-        Transition::Produce { kind, .. } => match kind {
-            UnitKind::Pioneer => (vec!["produce pioneer"], ""),
-            // An ark is produced by no recipe since `P-342`: `produce ark` became
-            // `launch ark` and lost its `produce 1 ark` row. The only ark in a game is the
-            // one design put in orbit.
-            UnitKind::Ark => (
-                Vec::new(),
-                "no recipe produces an ark since `P-342` - `launch ark` consumes the cost \
-                 and puts nothing into orbit",
-            ),
-        },
+        // **One arm, and it was two.** The other said *no recipe produces an ark since
+        // `P-342`* and was unreachable: nothing built a `Produce` naming one. The transition
+        // carries no kind now, so the case it answered cannot be stated - `C-123`.
+        Transition::ProducePioneer { .. } => (vec!["produce pioneer"], ""),
         Transition::CreateLabor { .. } => (vec!["create labor"], ""),
         Transition::Work { .. } => (vec!["work"], ""),
         Transition::EndTurn => (ENDING_A_TURN.to_vec(), ""),

@@ -565,10 +565,7 @@ mod tests {
         let energy_before = held(&stocked);
 
         let after = stocked
-            .after(&Transition::Produce {
-                kind: UnitKind::Pioneer,
-                territory: place,
-            })
+            .after(&Transition::ProducePioneer { territory: place })
             .expect("a stocked territory can produce a pioneer");
 
         assert_eq!(
@@ -1227,8 +1224,7 @@ mod tests {
     fn a_pioneer_needs_a_garrison_to_be_produced_at() {
         let bare = started();
         let rejected = bare
-            .after(&Transition::Produce {
-                kind: UnitKind::Pioneer,
+            .after(&Transition::ProducePioneer {
                 territory: TerritoryId(1),
             })
             .unwrap_err();

@@ -188,8 +188,7 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
             territory: territory("territory")?,
             resource: None,
         }),
-        form::PRODUCE_PIONEER => Meaning::Change(Transition::Produce {
-            kind: UnitKind::Pioneer,
+        form::PRODUCE_PIONEER => Meaning::Change(Transition::ProducePioneer {
             territory: territory("territory")?,
         }),
         // **The count is `repeat` now, and one firing makes one labor.** `P-323`: a repeat

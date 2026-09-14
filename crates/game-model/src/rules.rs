@@ -131,7 +131,7 @@ impl Game {
                 territory,
                 resource,
             } => next.build(*structure, *territory, *resource)?,
-            Transition::Produce { kind, territory } => next.produce(*kind, *territory)?,
+            Transition::ProducePioneer { territory } => next.produce_pioneer(*territory)?,
             Transition::CreateLabor { count, territory } => {
                 next.create_labor(*count, *territory)?
             }
@@ -546,54 +546,39 @@ impl Game {
             }
         }
     }
-    fn produce(&mut self, kind: UnitKind, territory: TerritoryId) -> Result<(), Rejection> {
+    fn produce_pioneer(&mut self, territory: TerritoryId) -> Result<(), Rejection> {
         let place = self.territory(territory)?;
         if !place.founded() {
             return Err(Rejection::NotControlled(territory));
         }
-        match kind {
-            UnitKind::Ark => {
-                if place.yards() == 0 {
-                    return Err(Rejection::NoYard(territory));
-                }
-                if place.citizens() < cost::ARK_CITIZENS {
-                    return Err(Rejection::NotEnoughCitizens {
-                        territory,
-                        held: place.citizens(),
-                        needed: cost::ARK_CITIZENS,
-                    });
-                }
-                self.spend(territory, Resource::Metal, cost::ARK_METAL)?;
-                self.spend(territory, Resource::Energy, cost::ARK_ENERGY)?;
-                self.territory_mut(territory)?
-                    .remove(Kind::Citizen, cost::ARK_CITIZENS);
+        // **The Ark arm stood here and `C-123` measured it dead.** See
+        // [`Transition::ProducePioneer`] for why it is gone and why the field went with it.
+        let kind = UnitKind::Pioneer;
+        {
+            // A garrison is no longer required. It was, and the release's Requires
+            // column is empty for a Pioneer now - what a Pioneer needs is metal,
+            // energy and the people who go with it.
+            if place.citizens() < cost::PIONEER_CITIZENS {
+                return Err(Rejection::NotEnoughCitizens {
+                    territory,
+                    held: place.citizens(),
+                    needed: cost::PIONEER_CITIZENS,
+                });
             }
-            UnitKind::Pioneer => {
-                // A garrison is no longer required. It was, and the release's Requires
-                // column is empty for a Pioneer now - what a Pioneer needs is metal,
-                // energy and the people who go with it.
-                if place.citizens() < cost::PIONEER_CITIZENS {
-                    return Err(Rejection::NotEnoughCitizens {
-                        territory,
-                        held: place.citizens(),
-                        needed: cost::PIONEER_CITIZENS,
-                    });
-                }
-                self.spend(territory, Resource::Metal, cost::PIONEER_METAL)?;
-                // **The fill and the payment are one number** - `P-486`: *it is built with
-                // that bin full, and the energy is paid where it is built.* So this is the
-                // bin's size read from the kind rather than a `PIONEER_ENERGY` beside it,
-                // which is the constant that could drift from the Units table's `Fuel`.
-                //
-                // **It was six and it is two, and the six was the last trace of a rule the
-                // specification had stopped saying.** `P-66` promoted the fill; `0aca92d`
-                // lost the sentence on 2026-09-01 and left the number, so a pioneer went on
-                // paying for a bin nothing said got filled. Sean found it by asking why a
-                // pioneer costs energy at all.
-                self.spend(territory, Resource::Energy, kind.cells())?;
-                self.territory_mut(territory)?
-                    .remove(Kind::Citizen, cost::PIONEER_CITIZENS);
-            }
+            self.spend(territory, Resource::Metal, cost::PIONEER_METAL)?;
+            // **The fill and the payment are one number** - `P-486`: *it is built with
+            // that bin full, and the energy is paid where it is built.* So this is the
+            // bin's size read from the kind rather than a `PIONEER_ENERGY` beside it,
+            // which is the constant that could drift from the Units table's `Fuel`.
+            //
+            // **It was six and it is two, and the six was the last trace of a rule the
+            // specification had stopped saying.** `P-66` promoted the fill; `0aca92d`
+            // lost the sentence on 2026-09-01 and left the number, so a pioneer went on
+            // paying for a bin nothing said got filled. Sean found it by asking why a
+            // pioneer costs energy at all.
+            self.spend(territory, Resource::Energy, kind.cells())?;
+            self.territory_mut(territory)?
+                .remove(Kind::Citizen, cost::PIONEER_CITIZENS);
         }
         let id = UnitId(self.units.len() as u32 + 1);
         // Produced on the ground, so the orbit it is given is the one it would launch into.

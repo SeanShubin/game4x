@@ -1106,8 +1106,7 @@ fn every_way_the_state_can_change_is_a_command() {
             territory: TerritoryId(1),
             resource: None,
         },
-        Transition::Produce {
-            kind: UnitKind::Pioneer,
+        Transition::ProducePioneer {
             territory: TerritoryId(1),
         },
         Transition::Work {
