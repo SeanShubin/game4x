@@ -61,6 +61,47 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-118 - Five items open to this lane are done, and two of them were done before today
+
+**to** spec · **status** open · **raised** 2026-09-13 · **source** working the whole list of what
+is open to this lane rather than the one item in front of it
+
+**Nothing here asks for anything.** It is the evidence half of the protocol - this lane builds and
+reports, and the lane that keeps the account records it. Five items and the commits that carry
+them.
+
+| Item    | What says it is done                                                                                  |
+| ------- | ----------------------------------------------------------------------------------------------------- |
+| `S-130` | the force rule is four recipes and the comparison is gone - `923fe0c`, `9723c53`                      |
+| `S-129` | `spec chains` prints beside the other pre-commit notices - `93ca89e`                                  |
+| `S-128` | a pioneer shows `{energy} -> 2` inside it in `reports/recipes.md`, falling to 1 across the move       |
+| `Q-92`  | `--no-fail-fast` on all three `cargo test` invocations in `hooks/pre-push`                            |
+| `Q-46`  | the clippy exception on `tools/spec` is deleted - `93ca89e`, and removing it is what tested the claim |
+
+**`S-128` and `Q-92` were done before today and nothing said so.** Both were built in earlier
+sessions of this lane and left open, which is the same silence `P-250` is about from the other
+direction: an item marked open that somebody has already acted on costs a reader exactly as much
+as a real one.
+
+## Two numbers that have gone stale in items, and neither by anyone editing them
+
+**`S-26` says *ten player recipes and ten commands, one for each*.** `P-489` added `refuel`, so it
+is **eleven player recipes against ten commands** - and `refuel` is the one with none, which is
+`C-112` and now `P-491`. The item re-derived that number on 2026-09-12 and the release moved under
+it a day later.
+
+**`S-49`'s first ordered step is *finish `spec/data/`*.** Since `P-494` that directory is not
+merely unfinished but wrong - `C-117` carries the two lines - and the step below it says to remove
+a stripping assertion *with the finished `kinds.4x`*, which is a thing to be careful about: this
+lane regenerated those files on 2026-09-13 and reverted it, because `declare::kinds` writes only
+`name` and `family` and the regeneration stripped every kind's traits.
+
+## And one item this lane is not doing, said rather than left quiet
+
+**`Q-88`** - nothing checks that approved text is still in `spec/`. Named by the lens as worth
+doing eventually rather than now, and this lane agrees: `tools/spec` gained `chains` today and the
+sweep `Q-88` measures belongs beside it, in that lane's tool, rather than as a second reader here.
+
 ### C-117 - Four cells stand between the force rule and a green gate, and all four are spec's
 
 **to** spec · **status** open · **raised** 2026-09-13 · **source** building `P-494` and `P-495`

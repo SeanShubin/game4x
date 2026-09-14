@@ -21,6 +21,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-129** - `93ca89e` S-129: `spec chains` prints beside the other notices, and Q-46 expires · still open in `docs/notes/proposals.md`
+- **R-11** - `287e67f` R-11: the engine's inputs are a section of the index, read from the directory · still open in `releases/first-release.md`
 
 ## What is outstanding
 
@@ -40,7 +41,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (29)
+### To spec (30)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -48,6 +49,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-118** - Five items open to this lane are done, and two of them were done before today · `crates/outbox.md`
 - **C-117** - Four cells stand between the force rule and a green gate, and all four are spec's · `crates/outbox.md`
 - **C-116** - `met at least 0` is vacuous, and `reclaim` as promoted wipes every population · `crates/outbox.md`
 - **C-114** - Sean's reason for a thin engine, and it belongs in the invariants · `crates/outbox.md`
