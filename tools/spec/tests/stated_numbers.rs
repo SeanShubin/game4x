@@ -100,22 +100,22 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
     let stated = [
         Stated {
             document: "docs/designing-rules.md",
-            says: "93 role cells",
+            says: "96 role cells",
             derived: rows.len(),
         },
         Stated {
             document: "docs/designing-rules.md",
-            says: "15 are blank",
+            says: "17 are blank",
             derived: blank.len(),
         },
         Stated {
             document: "docs/designing-rules.md",
-            says: "fifteen `put` rows",
+            says: "seventeen `put` rows",
             derived: puts.len(),
         },
         Stated {
             document: "docs/designing-rules.md",
-            says: "78 cells carry a quantity",
+            says: "79 cells carry a quantity",
             derived: rows.len() - blank.len(),
         },
         Stated {
@@ -143,6 +143,7 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
                 // **Spelled-out numbers, added one at a time as documents use them.** A
                 // missing word fails loudly - *no number in "fifteen `put` rows"* - rather
                 // than reading as zero, which is the only property this list needs.
+                s if s.contains("seventeen") => Some(17),
                 s if s.contains("fifteen") => Some(15),
                 s if s.contains("thirteen") => Some(13),
                 s if s.contains("twelve") => Some(12),
@@ -161,8 +162,8 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
     // The old message said *all of which should be `refresh`'s*, which stopped being true the
     // moment the force rule landed, and the count is what said so.
     assert_eq!(
-        maxima, 7,
-        "`put ... at its maximum` rows: six `refresh`'s and `hold`'s `met`"
+        maxima, 8,
+        "`put ... at its maximum` rows: six `refresh`'s, `hold`'s `met`, `upkeep`'s `paid`"
     );
     assert_eq!(
         reads_a_trait, 3,

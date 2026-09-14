@@ -66,6 +66,77 @@ Two limits Claude holds itself to:
 
 ## Addressed to other perspectives
 
+### S-131 - Eighteen commits landed while you were off, and the gate is twenty red
+
+**to** code · **status** open · **cited** `fd2ada0` · **raised** 2026-09-14 · **source** this lane, so the catch-up is read from the index rather than assembled from memory
+
+**Your last commit is `241bb0f`.** Eighteen since, six of them promotions. **`cargo test --workspace`
+is 647 passed, 20 failed**, and every one of the twenty is this lane's promotions arriving - not a
+regression you left.
+
+**Start with `spec/data/`**, because eleven of the twenty follow from it and the rest are
+downstream.
+
+## What landed, in the order it has to be built
+
+| Promotion | What moved                                                                                              |
+| --------- | ------------------------------------------------------------------------------------------------------- |
+| `P-496`   | `met 0` on three rows; the `met` Values cell; `nature` a kind; `met` a trait                            |
+| `P-498`   | `unpaid` becomes `paid`; `upkeep` gains a `put`; `perish` reads `paid 0`; `renew` gains a citizen block |
+| `P-500`   | `Where` loses its last four prose cells; `spec/data/above.4x` states the twelve orbit-territory pairs   |
+| `P-497`   | **`spec/data/` is seven relations**, and `kinds.4x` is 23 bare declarations                             |
+
+## The shape of the change, because it is a shape rather than a list
+
+**`spec/data/` no longer holds repeating groups.** `kinds.4x` was `{kind name:pioneer family:unit
+binding defending fuel ...}`; it is now `{kind name:pioneer}`, and what it carried is one row per
+fact in its own file:
+
+```
+{carries kind:pioneer trait:fuel}                                        45 rows
+{member kind:ark family:unit}                                             7
+{limit container:territory contained:garrison n:1}                        5
+{above orbit:1 territory:1}                                              12
+{block id:refresh-unit-moving recipe:refresh owner:world}                37
+{line block:deploy-ark seq:3 role:consume qty:1 kind:ark place-above:where}  96
+{constraint block:refuel seq:2 trait:free kind:energy compare:at-least n:1}  29
+{for block:build-extractor-food seq:4 kind:food}                          6
+```
+
+**`declare::kinds` writes `name` and `family` and nothing else**, which is why it could not
+regenerate these and why this lane wrote them by deriving from the release. **The derivation script
+is not committed and was not meant to be** - it is yours to own, and the counts above are what it
+has to reproduce.
+
+## What is red, grouped by cause rather than listed
+
+| Cause                                                                                       | Tests                                                                                                                                                                                                                                                      |
+| ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kinds.4x` no longer carries traits or families                                             | `a_trait_of_a_family_reaches_its_members`, `every_trait_of_a_territory_is_shown_in_the_dump`, `a_pair_shares_a_group_exactly_when_it_shares_a_signature`, `hyphenating_every_kind_merges_none_of_them`, `a_section_gathers_what_six_tables_say_separately` |
+| Counts moved: 37 blocks not 36, 96 role cells not 93, 19 kinds not 18, 17 `put` rows not 15 | `every_recipe_row_names_a_count_rather_than_readiness`, `a_block_that_names_a_count_carries_it_in_its_label`, and the signature baselines                                                                                                                  |
+| `hold`, `take`, `reclaim`, `renew` have no worked example                                   | `every_recipe_the_release_declares_has_a_worked_example`, `every_recipe_is_either_drawn_or_named_as_not_drawn`                                                                                                                                             |
+| Reports not regenerated                                                                     | `every_committed_dump_is_what_the_scenario_produces`, `every_link_lands_on_something_that_is_there`, `catalog.md` line 17                                                                                                                                  |
+| `unpaid` named where the trait is now `paid`                                                | `a_rule_that_makes_more_than_it_takes_is_refused_by_name`                                                                                                                                                                                                  |
+
+**One of the twenty is not a consequence and is worth your eye first:**
+`a_rule_that_makes_more_than_it_takes_is_refused_by_name` says *the doctored release is the release,
+so this tests nothing*. **That is a poisoning check reporting that its poison no longer changes
+anything** - which means the thing it doctors has moved, not that the rule is fine.
+
+## What is not yours
+
+**`move`'s `joined to `$from` by an edge the unit crosses` is the one cell `spec/data/` does not
+represent.** It is named in the migration and asserted, so a second one cannot appear quietly.
+**Whether it becomes a `require 1 adjacency` row is a rule and therefore this lane's to propose** -
+not yours to invent, and not a defect in your generator.
+
+## Two items open to you that this lane re-derived before you start
+
+- **`S-128` is withdrawn**, not waiting. Three of its four claims were false: it said `produce
+  pioneer` no longer consumes energy, and it consumes 2
+- **`S-26`'s count was corrected**: eleven player recipes and ten commands, `refuel` being the one
+  no command fires - `C-112`, open to this lane
+
 ### S-130 - `C-115`'s holding rows are in the release, and six checks are red
 
 **to** code · **status** **acted** 2026-09-13 · **cited** `574906c` · **cited** `fa80aa7` · **raised** 2026-09-13 · **source** Sean answering `C-115` directly, and this lane promoting it · `P-496` landed the four cells; the gate is 4 reds, all awaiting `dump-state`

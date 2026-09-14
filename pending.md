@@ -24,8 +24,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (5)
+### To code (6)
 
+- **S-131** - Eighteen commits landed while you were off, and the gate is twenty red · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
