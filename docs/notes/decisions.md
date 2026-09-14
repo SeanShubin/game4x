@@ -25,26 +25,17 @@ here without first becoming a proposal.
 
 **to** sean · **status** open · **raised** 2026-09-13 · **kind** contradiction · **shape** text · **asks** a decision · **into** `spec/console.md` -> Commands
 
-## What is wrong
+## What a player types to refuel, which is the whole of it
 
-**`P-485` landed an eleventh player recipe and nothing can fire it.** The gate is red on
-`the_scenario_fires_every_player_recipe_the_release_declares` - eleven declared, ten fired -
-**which is the check working**: a player recipe nobody can name is a rule with no way in.
-
-**`P-489` did not cause this and does not fix it.** The same test fails with the release as it
-stood before that promotion; `refuel` has had no command since it was declared.
-
-**And the rule that should give it a command does not explain the one recipe that already works.**
-`spec/console.md`:
+**Nothing can fire `refuel` today**, and the three candidate commands are:
 
 ```
-A command names a recipe and binds what that recipe leaves open: every place it leaves open,
-and any ingredient or trait value it names with a `$`.
+A   {refuel unit:pioneer where:1}     you name which unit
+B   {refuel unit:pioneer where:1}     the same, but `move` and `refuel` both gain a `$unit` row
+C   {refuel where:1}                  you name the territory and the game picks the unit
 ```
 
-**`move`'s command is `{move unit:pioneer from:1 to:2}`**, and `move`'s row is
-`require 1 unit | moving at least 1 | $from`. **The unit is not named with a `$`** - so by that
-sentence `unit:pioneer` binds nothing, and it has been working for weeks.
+**`A` and `B` type the same and differ in whether two rows change. `C` takes the choice away.**
 
 ## The decision
 
@@ -59,6 +50,24 @@ commands:
 - **`C` - the command names the territory and the game chooses the unit.** `{refuel where:1}`, and
   where two units have room the rule picks. **You called refuelling a distributive decision** - two
   pioneers and two energy is one each or both in one - which `C` takes away
+
+## Why this is a decision and not a typo
+
+**The rule that should say which is `A` or `B` does not explain `move`, which already works.**
+`spec/console.md`:
+
+```
+A command names a recipe and binds what that recipe leaves open: every place it leaves open,
+and any ingredient or trait value it names with a `$`.
+```
+
+**`{move unit:pioneer from:1 to:2}` has been binding a unit for weeks** and `move`'s row is
+`require 1 unit | moving at least 1 | $from` - **no `$unit` anywhere.** So either a family already
+opens the kind, or every recipe with an open ingredient is missing a `$`.
+
+**`P-485` landed `refuel` and `P-489` neither caused nor fixes this.** The gate is red on
+`the_scenario_fires_every_player_recipe_the_release_declares` - eleven declared, ten fired - which
+is the check working.
 
 ## What this lane would pick and why it is yours
 
