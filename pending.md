@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-489** - two new recipes make energy from nothing · `docs/notes/proposals.md`
-- **P-490** - `CLAUDE.md` poisons its checks and never its prose · `docs/notes/proposals.md`
+- **P-489** - a pioneer's energy is a cost, and refuelling is `stow` aimed at a bin · `docs/notes/proposals.md`
+- **P-490** - a habit earns its place by a case it caught, not a case it explains · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -22,7 +22,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-489** - `4147618` Q-89: P-489 was rewritten and it does not clear the red · still open in `docs/notes/proposals.md`
+- **P-489** - `c4ba239` P-489: refuel is `stow` aimed at a bin, and there was never a `put` that fitted · still open in `docs/notes/proposals.md`
 
 ## What is outstanding
 

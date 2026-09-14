@@ -62,31 +62,11 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-489 - two new recipes make energy from nothing
+### P-489 - a pioneer's energy is a cost, and refuelling is `stow` aimed at a bin
 
-**to** sean · **status** open · **cited** `d7815aa`, `bc4c35f` · **raised** 2026-09-13 · **kind** contradiction, found by the quality lens against rows this lane drafted · **shape** rows and text · **asks** approval · **into** `releases/first-release.md` -> Recipes, and Capabilities
+**to** sean · **status** open · **cited** `d7815aa`, `bc4c35f`, `4147618` · **raised** 2026-09-13 · **kind** contradiction · **shape** rows and text · **asks** approval · **into** `releases/first-release.md` -> Recipes, and Capabilities
 
-**Rows from `P-485` that this lane drafted give the energy a destination and never name it.**
-
-```
-refuel           put 1 energy   that unit       <- nothing says this energy exists
-produce pioneer  put 2 energy   that pioneer    <- the same
-```
-
-**`refuel` is a player recipe, repeatable, whose whole effect is one energy appearing.**
-`spec/invariants.md`: *no sequence of rules ends holding more than it began with.*
-
-## The two are not the same case, and treating them alike was the error
-
-**Building a pioneer is a purchase.** You pay the energy and the thing arrives with a full bin -
-`spec/units.md` already says *it is built with that bin full, and the energy is paid where it is
-built*. **A `consume` is what paying is**, and the bin is part of what the pioneer is.
-
-**Refuelling is a move.** Nothing is bought; energy that is here ends up there, and
-`spec/units.md` says it moves *freely*. **That is `move`'s shape** - a `require` names the thing and
-carries the quantity, a `put` moves it and carries none.
-
-## The rows
+## The rows, replacing `produce pioneer` and `refuel`
 
 | Recipe              | Owner  | Role    | Qty | Kind    | Traits               | Where     |
 | ------------------- | ------ | ------- | --- | ------- | -------------------- | --------- |
@@ -95,35 +75,40 @@ carries the quantity, a `put` moves it and carries none.
 |                     |        | consume | 2   | citizen |                      |           |
 |                     |        | produce | 1   | pioneer |                      |           |
 | **refuel**          | player | require | 1   | unit    | with room for energy | `$where`  |
-|                     |        | require | 1   | energy  |                      |           |
-|                     |        | put     |     | energy  |                      | that unit |
+|                     |        | consume | 1   | energy  |                      |           |
+|                     |        | produce | 1   | energy  |                      | that unit |
 
-**A blank `Where` is the place the recipe acts**, which that table already says.
-
-**`a put has no quantity, because nothing is made or taken` stands untouched**, and so does every
-other rule.
-
-## The prose in `## Capabilities`, which still names the old cost
-
-**Replacing the bullet that begins *A founding unit costs citizens*** - `releases/first-release.md:428`.
+## The prose, replacing the bullet at `releases/first-release.md:428`
 
 > **A founding unit costs citizens, and that is the cost that matters.** `produce pioneer` consumes
 > **3 metal, 2 energy and 2 citizens**; `launch ark` consumes 3 metal, 12 energy and 2 citizens and
 > requires a Yard.
 
+## Why
+
+**As they stand, both recipes make energy from nothing.** Each `put`s energy into a container and no
+row says the energy was ever anywhere. `refuel` is a player recipe, repeatable, whose whole effect
+is one energy appearing - against `spec/invariants.md`'s *no sequence of rules ends holding more
+than it began with*.
+
+**Building a pioneer is a purchase.** You pay and the thing arrives with a full bin, which
+`spec/units.md` already says: *it is built with that bin full, and the energy is paid where it is
+built*. A `consume` is what paying is.
+
+**Refuelling is the same operation as `stow`**, which takes loose energy and puts it in a store for
+energy. This takes loose energy and puts it in a unit's bin - so the same two rows, consume where it
+is and produce where it goes, and the two cancel.
+
+**No rule changes**, and both shapes are already in the table.
+
 ## One thing this lane owes the code lane if you take it
 
 **Nothing in the table says the bin gets filled** - `spec/units.md` does, and the release states
-costs rather than restating rules. **So a produced pioneer has to weigh what it holds**, or the
-game gains two energy per pioneer and `nogain` will not see it. That is a modelling question rather
-than a rule, and this lane files it the moment this lands.
-### P-490 - `CLAUDE.md` poisons its checks and never its prose
+costs rather than restating rules. **So a produced pioneer has to weigh what it holds**, or the game
+gains two energy per pioneer and `nogain` will not see it.
+### P-490 - a habit earns its place by a case it caught, not a case it explains
 
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered, from the research lane correcting its own item · **shape** text · **asks** approval · **into** `CLAUDE.md` -> What done means
-
-**That file already says this about checks**: *A quality improvement's evidence is a check that did
-not exist before. Passing tests prove nothing here - they passed beforehand too.* **It says nothing
-about the rules in its own prose, and they have the same failure available.**
+**to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered · **shape** text · **asks** approval · **into** `CLAUDE.md` -> What done means
 
 ## The words, added after the `Q-1` paragraph
 
@@ -134,29 +119,37 @@ about the rules in its own prose, and they have the same failure available.**
 > nothing* said about a sentence. **So a habit is written as where to look until it has caught
 > something it did not come from**, and says which it is.
 
-## The two cases, one per lane
+## Why
+
+**That file already says this about checks** - *passing tests prove nothing here, they passed
+beforehand too* - and applies it thoroughly: poison the check, a green that cannot be turned red
+means nothing, `Q-8`'s second test is the verification. **It says nothing about the rules in its own
+prose, and they have the same failure available.**
+
+Two cases, one per lane, both from today:
 
 - **The research lane's.** `X-26` recorded *a number nobody can explain is a rule that has gone
   missing* as the tell that found `P-486`. **You** remembered `P-67` and asked why a pioneer costs
-  energy; the trail was this lane's. The heuristic was read off the instance afterwards
-- **This lane's, and it is this item's own filing.** It first argued that a producer must not carry
-  a lens's finding into `CLAUDE.md` - which explains this case exactly and is wrong in every other,
-  since it would route a broken link to you because a lens spotted it
-
-## Why you rather than this lane
-
-**That file leaves wording, paths and consistency to this lane and reserves the columns, the
-addresses and the promotion protocol for you.** This is none of those: it is new, and it is a rule
-about **how work is judged**, which sits against the file's self-governing core.
+  energy. The heuristic was read off the instance afterwards
+- **This lane's.** It first argued a producer must not carry a lens's finding into `CLAUDE.md` -
+  which explains that one case exactly and is wrong in every other, since it would route a broken
+  link to you because a lens spotted it
 
 ## What it rests on, which is the point
 
-**Two cases is not a record.** The argument is that the structure is identical to a rule already in
-this file with a worked example - `Q-8`'s evidence borrowed rather than matched.
+**Two cases is not a record**, and the argument is not from a count: the structure is identical to a
+rule already in that file with a worked example, and `Q-8`'s evidence is borrowed rather than
+matched.
 
 **The measurement that would give it a record has not been run**: does any rule in `CLAUDE.md`
 derived from an incident have a case it caught *other* than the one that produced it? **Say so and
 this waits for it.**
+
+## Why you rather than this lane
+
+**That file leaves wording, paths and consistency here and reserves the columns, the addresses and
+the promotion protocol for you.** This is none of those: it is new, and it is a rule about how work
+is judged.
 ## Addressed to other perspectives
 
 ### S-128 - a pioneer's bin: three promotions, and the dump has to start showing what a unit holds
