@@ -229,7 +229,7 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 |                     |        | put     |                                      | unit      | moving one less                               | `$to`                    |
 |                     |        | consume | 1                                    | energy    |                                               | that unit                |
 | **refuel**          | player | require | 1                                    | territory |                                               | `$where`                 |
-|                     |        | require | 1                                    | unit      | with room for energy                          | `$where`                 |
+|                     |        | require | 1                                    | unit      | free energy at least 1                        | `$where`                 |
 |                     |        | consume | 1                                    | energy    |                                               |                          |
 |                     |        | produce | 1                                    | energy    |                                               | that unit                |
 | **found by land**   | player | consume | 1                                    | pioneer   |                                               |                          |
@@ -558,8 +558,8 @@ question. A direct link to `spec/data/kinds.4x` costs nothing and shows the cano
 generated copy reads better and must then say it is generated and not canonical, as every other
 generated view does.
 
-- **In** - `spec/invariants.md`, *the data may be replicated in the presentation layer, and no
-  replication is canonical*, and `docs/process.md`, *presentations are generated from data*
+- **In** - `spec/invariants.md`, *The data may be replicated in the presentation layer, and no
+  replication is canonical.*
 - **Vetted when** - from `reports/index.html` I can reach **every file the engine reads as input**,
   in as many clicks as it takes to reach any other view, without knowing the paths beforehand. A
   copy rather than a link **says on the page that it is generated and not canonical**, and says
