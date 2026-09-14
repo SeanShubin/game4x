@@ -114,14 +114,26 @@ holds it is the question.
 
 ## And it changes the game, not only the drawing
 
-**A unit could move on its own fuel in a territory with no energy. Under pooling it cannot.**
+**A unit could move on its own fuel in a territory with no energy. Under pooling it cannot** -
 `move` consumes one energy from `$from` since `P-511`, and if the tank holds nothing then the
-place must have the energy. The model refuses with `NoCells` today, reading the unit's own
-number.
+place must have it. The model refuses with `NoCells` today, reading the unit's own number.
 
-**Whether that is intended is a rule.** It is defensible - a unit is fuelled from where it
-stands - and it is not something this lane may decide, because it changes which moves a player
-can make.
+**That was put too strongly here and the specification lane corrected it, rightly.** Re-derived
+rather than taken: *a thing that leaves takes what it hauls*, and **the haul joins the number
+the new place holds**. So a unit that carries two into empty ground leaves that ground holding
+two, and its next move spends from there.
+
+|               |                                                                            |
+| ------------- | -------------------------------------------------------------------------- |
+| today         | a two-cell tank is two moves, wherever it goes                             |
+| under pooling | haul two, arrive; the next hop costs one of that two and hauls the rest on |
+
+**So crossing empty ground still works and still runs to about two hops.** What actually
+changes is whose fuel it is: what a unit brought is the place's the moment it arrives, so
+anything else standing there may spend it, and a unit cannot set out from a place with none.
+
+**Whether that is intended is still a rule and still not this lane's**, but it is a change in
+who may spend the fuel rather than a unit losing its range.
 
 ## What this lane will do
 

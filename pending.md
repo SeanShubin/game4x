@@ -22,6 +22,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-133** - `8b12484` S-133, first half: `free` may be less than zero · still open in `docs/notes/proposals.md`
+- **C-125** - `fdde0bb` P-512 answers C-125: the tank row was right and the column was wrong · still open in `crates/outbox.md`
 - **R-11** - `287e67f` R-11: the engine's inputs are a section of the index, read from the directory · still open in `releases/first-release.md`
 
 ## What is outstanding
