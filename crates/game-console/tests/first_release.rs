@@ -519,24 +519,23 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
         "`game::cost` and the table above name different constants - anything in the first and \
          not the second is a figure in the model that nothing compares with the release"
     );
-    // **A floor rather than a count, and the quality lens is why.** This said `13`, `P-486`
-    // took `PIONEER_ENERGY` out, and the number beside the set stayed - **the only
-    // hand-maintained figure left in a check whose whole point was to stop depending on one.**
-    // `Q-84` replaced a count with a set precisely because a count can be bumped to hide a
-    // deletion; this one could not hide anything, and it could be forgotten, and it was.
+    // **There is no count here, and the set above is why.** This said `declared.len() == 13`
+    // until `P-486` took `PIONEER_ENERGY` out and left the number - the only hand-maintained
+    // figure in a check whose whole point was to stop depending on one. `Q-84` replaced a count
+    // with a set precisely because a count can be bumped to hide a deletion.
     //
-    // **What it is here for is the parse returning nothing.** `declared` is read out of
-    // `game.rs`, so a module renamed or a `pub const` spelled differently would leave both
-    // sides empty and the set comparison would pass on two empty sets - a count over nothing,
-    // which is the same failure with the sign flipped. A floor catches that and needs no edit
-    // when a constant is legitimately added or removed, because the set above is what says
-    // *which*.
-    assert!(
-        declared.len() >= 10,
-        "only {} constants parsed out of `game::cost`, so the set compared above is probably \
-         two empty sets rather than an agreement",
-        declared.len()
-    );
+    // **A floor replaced it and was removed the same evening**, because the reason given for it
+    // was wrong and both of us believed it for an hour. The reason was *the parse returning
+    // nothing would leave both sides empty and the set comparison would pass on two empty
+    // sets*. **`compared` is built from the literal `checked` array and can never be empty**,
+    // so an empty `declared` fails the set assertion above, naming every constant that went
+    // missing. Measured by poisoning the parse to match nothing: line 517 fires, twenty lines
+    // before the floor ever ran.
+    //
+    // **The quality lens suggested the floor and then measured it and withdrew it**; this lane
+    // wrote the confident comment in between without checking it. A guard that cannot be
+    // reached costs nothing to run and costs a reader everything, because the comment on it is
+    // a claim about what is checked here.
 
     // **A garrison had two figures here and has none** - `C-106`. The *Costs to produce*
     // column was the Recipes table said twice for every other thing; no recipe is named for a

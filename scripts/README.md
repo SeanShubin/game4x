@@ -16,6 +16,7 @@ remembering a cargo incantation.
 
 | `shot.ps1` / `.sh` | [the application](../crates/game4x/), by remote control | One frame to a PNG, plus a text dump of what is behind it. `--help` lists the options |
 | `push.ps1` / `.sh` | the gate, then `git push`, then the pipeline | Returns when the published page is serving this commit. See below |
+| `gate.ps1` / `.sh` | `hooks/pre-push` - fmt, clippy, the test suite, the tools, the engine-facing crates | The gate on its own, without pushing. Names what is dirty first, because the tree is shared. `Q-91` |
 | `kinds.ps1` / `.sh` | [the kinds prototype](../prototypes/kinds/README.md) | Prints the release's kinds and transformations from the Rust data that holds them |
 ```
 scripts/planet-view.ps1                       # PowerShell
