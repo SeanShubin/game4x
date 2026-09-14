@@ -27,9 +27,12 @@ here without first becoming a proposal.
 
 ## What is wrong
 
-**`P-489` landed a tenth player recipe and nothing can fire it.** The gate is red on
-`the_scenario_fires_every_player_recipe_the_release_declares` - **which is the check working**:
-a player recipe nobody can name is a rule with no way in.
+**`P-485` landed an eleventh player recipe and nothing can fire it.** The gate is red on
+`the_scenario_fires_every_player_recipe_the_release_declares` - eleven declared, ten fired -
+**which is the check working**: a player recipe nobody can name is a rule with no way in.
+
+**`P-489` did not cause this and does not fix it.** The same test fails with the release as it
+stood before that promotion; `refuel` has had no command since it was declared.
 
 **And the rule that should give it a command does not explain the one recipe that already works.**
 `spec/console.md`:
