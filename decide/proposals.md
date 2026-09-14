@@ -13,7 +13,7 @@ of it needs you.
 
 ### P-509 - Resources sit in the territory, and are allocated only when something leaves
 
-**to** sean · **status** open · **raised** 2026-09-14 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment
+**to** sean · **status** open, **held** 2026-09-14 pending `P-510` · **raised** 2026-09-14 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment
 
 **This dissolves the problem the last four proposals were solving.** Your three scenarios were hard
 to express because the game was being asked **where each metal sits while nothing is moving**, and
@@ -86,10 +86,15 @@ interface asking *would ending the turn lose metal* is not a recipe firing. **Bu
 is listed among the expressions a guard is built from**, and a guard is part of a rule. So the word
 exists on the rule side of a line this leans on being the other side of.
 
-**This lane did not resolve it and is not guessing.** It may want *the capacity in a place* to be a
-different expression from *free capacity of a container*, or it may want the invariant read as
-being about recipes rather than about queries. **That is the question this proposal leaves open**,
-and it is smaller than the four it closes.
+**Answered on 2026-09-14, in `P-510`, and the answer is that it was not a tension.** Under this
+proposal the limit stops being the container's and becomes the **place's**: what a place holds beyond
+the capacity in it is lost, and that capacity is a number the place has. **So a territory does
+declare a limit for a resource** - derived from what is in it - and *a rule may ask whether something
+is absent only where what would hold it declares a limit* is satisfied rather than strained.
+
+**What `P-510` does carry is a different hole, and a measured one**: an orbit holds units and
+nothing else, and `move` burns energy the unit carries, so an ark in orbit has nothing to pool with.
+**Pooling cannot be universal without deciding that**, and it is a decision rather than a defect.
 ### P-508 - Storage, concretely: a position names an entry and a command acts on one of it
 
 **to** sean · **status** open, **held** 2026-09-14 pending `P-509`, which removes the need for a position · **raised** 2026-09-14 · **kind** invented · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
