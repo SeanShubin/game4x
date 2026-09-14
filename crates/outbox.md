@@ -70,8 +70,12 @@ measurement after the rules were gathered into one file
 `crates/game-model/src/rules.rs`
 
 **Nine of twenty-six could run from their rows alone. Seventeen could not.** This is what stands
-between the engine and reading `spec/data/`, and it is eight kinds of thing rather than
+between the engine and reading `spec/data/`, and it is nine kinds of thing rather than
 seventeen.
+
+**The ninth was found after the rest and is the one an interpreter meets first**: the order the
+world's recipes fire in is stated nowhere but by the order rows sit in a file, and the file and
+the engine disagree about where `take` goes.
 
 **How it was made, so it can be re-run rather than trusted.** The rows were read out of the four
 relations by a script; the refusals were read out of `rules.rs` by matching `Rejection::`; the
@@ -135,6 +139,20 @@ message.
 `owner` of `player` or `world` and nothing about design or play, and the engine refuses
 `WrongPhase` and `PlanetAlreadyCreated` out of that distinction.
 
+**Nine - the order the world's recipes fire in, and three sources disagree.** A relation has no
+order, and the only statement of this one is the order the rows happen to sit in.
+
+|                           | the force rule's four                            |
+| ------------------------- | ------------------------------------------------ |
+| `block.4x`, in file order | hold, reclaim, renew, take                       |
+| `Game::end_turn_observed` | hold, take, reclaim, renew                       |
+| the release's sentence    | names nine of the fifteen and stops at `refresh` |
+
+**`take` is second in the engine and fifth in the file**, and nothing compares them - so which is
+right cannot be answered today by any check in this repository. **This is `P-497`'s own argument
+one level up**: a repeating group was not a thing a relation may hold, and neither is an
+implicit order.
+
 ## The twenty-six, one line each
 
 | Recipe          | Runs from its rows?                                                     |
@@ -182,10 +200,11 @@ Measured rather than inferred, and it is this lane's to delete rather than spec'
 
 ## What the shape of the answer looks like from here
 
-**Three of the eight are the notation and five are rules nobody wrote.** Control, phase, ocean,
+**Four of the nine are the notation and five are rules nobody wrote.** Control, phase, ocean,
 the garrison a yard needs, and `stow`'s destination are all sayable in rows that exist today.
-Quantities read from the state, bounds that are relationships, and *which one when several
-qualify* are not - and those three are where a decision is needed rather than a row.
+Quantities read from the state, bounds that are relationships, *which one when several qualify*,
+and the order the world's fire in are not - and those four are where a decision is needed rather
+than a row.
 
 **Nothing here is proposed.** It is the measurement asked for, and what the data should say is
 the specification lane's.
