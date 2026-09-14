@@ -202,8 +202,13 @@ cleanup this does not do and `P-509` landing will make findable.
 ## How to tell it was carried out
 
 **`spec/logistics.md` no longer contains `falls loose`**, and contains `has that much less room`
-exactly once. **And the clause this item used to attack is still there**, in the bullet below, which
-is the check that this rewrite reversed the right half.
+exactly once.
+
+**And the clause this item used to attack survives in `P-509`**, not in the bullet below - which is
+where this lane first wrote it and it was wrong. The clause is **inside** the bullet being replaced,
+so replacing the bullet takes it; what carries it afterwards is `P-509`'s *at the turn's end what the
+place holds beyond that capacity is lost*. **So the check is that `P-509` landed too**, and these two
+are promoted together or neither.
 
 ### P-504 - Waste is free capacity gone negative, and one sentence allows it
 
