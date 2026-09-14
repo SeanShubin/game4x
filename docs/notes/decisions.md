@@ -37,12 +37,12 @@ data; the words are not.
 
 ```
 {carries      kind:pioneer  trait:fuel}                       45 rows
-{in-family    kind:ark      family:unit}                       7 rows
-{capacity     container:territory contained:garrison n:1}      5 rows
+{member       kind:ark      family:unit}                       7 rows
+{limit        container:territory contained:garrison n:1}      5 rows
 {block        id:refresh-1  recipe:refresh  owner:world}      36 rows
 {line         block:refresh-1 seq:1 role:put qty: kind:unit place:}   93 rows
-{qualifier    block:refresh-1 seq:1 trait:moving compare:at-its-maximum}   26 rows
-{discriminator block:build-extractor-1 seq:4 kind:food}        7 rows
+{constraint   block:refresh-1 seq:1 trait:moving compare:at-its-maximum}   26 rows
+{for          block:build-extractor-1 seq:4 kind:food}         7 rows
 ```
 
 **`carries` is the one that answers your own test.** Today `ark` and `pioneer` carry **byte-identical
@@ -66,11 +66,11 @@ thing with a name**, and the id above is the part this lane invented rather than
 **Counted: 34 filled cells, of which 26 decompose into `<trait> <comparison>` and eight do not.**
 The eight are not malformed; they are **different kinds of fact sharing a column**:
 
-| The cell                                         | What it actually is                                                                            |
-| ------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
-| `food`, `metal`, `` `$resource` `` - **7 cells** | which resource the extractor or store is *for* - a discriminator on the kind, not a constraint |
-| `joined to `$from` by an edge the unit crosses`  | a relationship between two places - prose under rule 7                                         |
-| `whose upkeep is unpaid`                         | a trait test in words rather than in the form the other 26 use                                 |
+| The cell                                         | What it actually is                                                                         |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| `food`, `metal`, `` `$resource` `` - **7 cells** | which resource the extractor or store is *for* - hence `for`, and not a `constraint` at all |
+| `joined to `$from` by an edge the unit crosses`  | a relationship between two places - prose under rule 7                                      |
+| `whose upkeep is unpaid`                         | a trait test in words rather than in the form the other 26 use                              |
 
 **This is the finding, and no reader of the table could have had it.** One column, three relations,
 and they read alike because a markdown cell has no type. **`free energy at least 1` and `food` sit
@@ -78,9 +78,17 @@ in the same column and are not the same kind of thing at all.**
 
 ## What it does not settle, and these are the decision
 
-- **The names.** `carries`, `in-family`, `capacity`, `block`, `line`, `qualifier`, `discriminator`
-  are this lane's. Each becomes a kind, since `P-443` says every word in a data file is a kind, a
-  trait or a value
+- **The names are settled, 2026-09-13.** `member`, `limit`, `constraint` and `for` replace this
+  lane's first four; `block`, `line` and `carries` stand. **That each is a kind was never a
+  question** - `P-443` leaves no other option for the first word of a row, and this item previously
+  wrote that consequence as though it were a choice
+- **`carries` was queried and kept, on the specification's own usage.** `spec/logistics.md` uses
+  *contain* and *hold* for contents seventeen times and *carries* twice, both for traits - *per kind
+  carrying a particular value of a trait*, *a place carries an `id`*. `spec/console.md` says *one
+  kind and carries every trait of that thing*, and `spec/planet.md` has a section called *What a
+  territory carries*. **The split is already there and deliberate: things hold contents, kinds carry
+  traits.** This lane's worry was that `carries` would collide with cargo in a game about
+  containment; measured, it does not, because the spec never uses it that way
 - **Whether a block's id is written or derived.** `refresh-1` is a name nobody has chosen. The
   alternative is position, which is what the table does today and is what normalizing is removing
 - **`whose upkeep is unpaid`** wants to become `unpaid at least 1` and that is a rule's wording,
@@ -95,8 +103,8 @@ recipe is data rather than code, and 93 rows of `line` is what that sentence has
 ## How to tell it was carried out
 
 **Every count above is re-derivable, and that is the check.** When this lands, the files in
-`spec/data/` hold **45** `carries` rows, **7** `in-family`, **5** `capacity`, **36** `block`, **93**
-`line`, **26** `qualifier` and **7** `discriminator` - and each one equals what the same relation
+`spec/data/` hold **45** `carries` rows, **7** `member`, **5** `limit`, **36** `block`, **93**
+`line`, **26** `constraint` and **7** `for` - and each one equals what the same relation
 derives from `releases/first-release.md` and today's `kinds.4x`. **A migration that loses a row
 fails a count rather than being noticed later.**
 
