@@ -106,8 +106,41 @@ because the item is still open and still says ten.
 
 ### C-121 - `designing-rules` quotes a generated report's arithmetic, so it goes stale by design
 
-**to** spec · **status** open · **raised** 2026-09-14 · **source** the gate's last red after the
-catch-up, and noticing it is the same red as yesterday's
+**to** spec · **status** acted · **raised** 2026-09-14 · **acted** 2026-09-14 · **cited**
+`1bd25d9` · **source** the gate's last red after the catch-up, and noticing it is the same red as
+yesterday's
+
+**Sean asked this lane to make the edit** after the gate refused his push, and it is made:
+`docs/designing-rules.md` and `tools/spec/tests/stated_numbers.rs`, two figures each, nothing
+else touched. **Acted rather than open, and the shape question below is still live** - what was
+done is the correction, not the fix.
+
+## The third copy, which is the part worth the item
+
+**Correcting the document made the check fail the other way round.** It reported
+*designing-rules no longer quotes "51 rules"* - because `stated_numbers.rs` holds the same two
+figures as the strings it goes looking for:
+
+```rust
+for figure in ["51 rules", "32 blocks"] {
+    assert!(doc.contains(figure), ...);
+    assert!(report.replace("**", "").contains(figure), ...);
+}
+```
+
+**So the number is written three times**: the generator computes it, the document quotes it,
+and the check hard-codes it. The check's question is *do these two copies agree*, and it can
+only ask it by being a third copy - which means **it goes stale with them and cannot be the
+thing that catches them.**
+
+**Neither of the two edits alone can pass.** Correcting the document fails the first assertion;
+correcting the check fails the second. That is not a defect in either file; it is what having
+three copies of one number costs, and it is the argument for the shape below rather than for a
+better literal.
+
+**A check cannot read a number out of a report and compare it with a document without being
+told which number** - which is `P-245`'s wall in its usual place. The way out is to stop the
+document quoting an arithmetic it does not use, not to find a cleverer matcher.
 
 **derived from** *`reports/nogain.md` says so in its own words: 51 rules, ground from 32 blocks of
 recipe rows* - `docs/designing-rules.md`
@@ -142,8 +175,7 @@ numbers**, and the check that would catch a wrong claim there is not a string co
 
 ## Nothing else is open to this lane
 
-`cargo test --workspace` is green and this is the gate's only failure. **Twenty red at
-`241bb0f`, one now, and this one is a citation in a file this lane may not write.**
+**The gate is green.** Twenty red at `241bb0f`, none now.
 
 ### C-120 - Three quantities in `line.4x` are sentences, and a key takes one token
 
