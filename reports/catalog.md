@@ -14,7 +14,7 @@ release's four are a second hand-written form, and `P-465` is about what that co
 the release because that is where all six tables are today, and says so rather than implying the
 release is the source.
 
-18 kinds, 4 families, 26 traits, 32 recipes.
+19 kinds, 4 families, 26 traits, 37 recipes.
 
 ## Signatures
 
@@ -24,7 +24,7 @@ when the release says the same things about them. Quantities are not part of it:
 are produced in different numbers by the same recipe still behave alike. **Being named through a
 family counts**, because a family is how the release addresses several kinds at once.
 
-**No two of the 18 kinds behave alike**, over all 153 pairs of them.
+**No two of the 19 kinds behave alike**, over all 171 pairs of them.
 
 **Every group below holds one kind**, which is what that sentence means when
 you reach them. **The traits alone do collide** - 7 of the kinds carry exactly
@@ -34,9 +34,9 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 ### `s-1` - citizen
 
-**Traits** `bearing`, `defending`, `keeps`, `laboring`, `strength`, `unpaid`, `upkeep`
+**Traits** `bearing`, `defending`, `keeps`, `laboring`, `paid`, `strength`, `upkeep`
 
-**Named by** `age put`, `age require`, `bear put`, `bear require`, `breed produce`, `create labor put`, `create labor require`, `deploy ark produce`, `found by land produce`, `launch ark consume`, `muster put`, `muster require`, `perish consume`, `produce pioneer consume`, `refresh put`, `spoil consume`, `upkeep require`
+**Named by** `age put`, `age require`, `bear put`, `bear require`, `breed produce`, `create labor put`, `create labor require`, `deploy ark produce`, `found by land produce`, `launch ark consume`, `muster put`, `muster require`, `perish consume`, `produce pioneer consume`, `reclaim consume`, `refresh put`, `renew put`, `renew require`, `spoil consume`, `upkeep put`, `upkeep require`
 
 ### `s-2` - garrison
 
@@ -60,7 +60,7 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 **Traits** `binding`, `keeps`, `metal in it`, `resource`
 
-**Named by** `age put`, `age require`, `build store produce`, `spoil consume`, `stow produce`
+**Named by** `age put`, `age require`, `build store produce`, `spoil consume`
 
 ### `s-6` - ark
 
@@ -100,15 +100,15 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 ### `s-12` - territory
 
-**Traits** `biome`, `control`, `id`, `keeps`, `nature`
+**Traits** `biome`, `control`, `id`, `keeps`
 
-**Named by** `age put`, `age require`, `deploy ark require`, `launch ark require`, `move require`, `spoil consume`, `work require`
+**Named by** `age put`, `age require`, `deploy ark require`, `launch ark require`, `move require`, `refuel require`, `spoil consume`, `work require`
 
 ### `s-13` - orbit
 
 **Traits** `id`, `keeps`
 
-**Named by** `age put`, `age require`, `deploy ark consume`, `launch ark produce`, `move require`, `spoil consume`
+**Named by** `age put`, `age require`, `move require`, `spoil consume`
 
 ### `s-14` - deposit
 
@@ -134,11 +134,17 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 **Named by** `age put`, `age require`, `bear produce`, `breed consume`, `discard consume`, `spoil consume`
 
-### `s-18` - force
+### `s-18` - nature
+
+**Traits** `keeps`, `met`
+
+**Named by** `age put`, `age require`, `hold put`, `hold require`, `reclaim require`, `renew put`, `renew require`, `spoil consume`, `take consume`, `take require`
+
+### `s-19` - force
 
 **Traits** `keeps`
 
-**Named by** `age put`, `age require`, `discard consume`, `muster produce`, `spoil consume`, `stand produce`
+**Named by** `age put`, `age require`, `deploy ark require`, `discard consume`, `found by land require`, `hold consume`, `muster produce`, `spoil consume`, `stand produce`, `take consume`
 
 ## citizen
 
@@ -146,7 +152,7 @@ a person: provides labor, eats, and grows on surplus.
 
 **In families** thing
 
-**Traits of it** `laboring` (a number), `bearing` (a number), `defending` (a number), `strength` (a number), `upkeep` (food per turn), `keeps` (the number of turns it will last), `unpaid` (a number: its upkeep was not met)
+**Traits of it** `laboring` (a number), `bearing` (a number), `defending` (a number), `strength` (a number), `upkeep` (food per turn), `keeps` (the number of turns it will last), `paid` (a number)
 
 **Signature** `s-1`
 
@@ -163,10 +169,11 @@ a person: provides labor, eats, and grows on surplus.
 - `create labor` requires 1, laboring at least 1
 - `create labor` puts , laboring one less
 - `upkeep` requires 1
+- `upkeep` puts , paid at its maximum
 - `bear` requires 1, bearing at least 1
 - `bear` puts , bearing one less
 - `breed` produces 1
-- `perish` consumes 1, whose upkeep is unpaid
+- `perish` consumes 1, paid 0
 - `age` requires 1 (as a thing), keeps at least 1
 - `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
@@ -175,6 +182,9 @@ a person: provides labor, eats, and grows on surplus.
 - `muster` requires 1, defending at least 1
 - `muster` puts , defending one less
 - `refresh` puts , defending at its maximum
+- `reclaim` consumes 1
+- `renew` requires 1
+- `renew` puts , paid 0
 
 ## garrison
 
@@ -267,8 +277,6 @@ built to hold one resource, and holds nothing else.
 - `age` requires 1 (as a thing), keeps at least 1
 - `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
-- `stow` produces 1 (as the place holding metal), in a store for metal
-- `stow` produces 1 (as the place holding energy), in a store for energy
 
 ## ark
 
@@ -288,11 +296,11 @@ carries a landing, and can invade from orbit.
 
 **In recipes**
 
-- `deploy ark` consumes 1, in the orbit above `$where`
+- `deploy ark` consumes 1, in above `$where`
 - `move` requires 1 (as a unit), moving at least 1, in `$from`
 - `move` puts  (as a unit), moving one less, in `$to`
-- `refuel` requires 1 (as a unit), with room for energy, in `$where`
-- `launch ark` produces 1, in the orbit above `$where`
+- `refuel` requires 1 (as a unit), free energy at least 1, in `$where`
+- `launch ark` produces 1, in above `$where`
 - `age` requires 1 (as a thing), keeps at least 1
 - `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
@@ -321,7 +329,7 @@ founds a territory.
 
 - `move` requires 1 (as a unit), moving at least 1, in `$from`
 - `move` puts  (as a unit), moving one less, in `$to`
-- `refuel` requires 1 (as a unit), with room for energy, in `$where`
+- `refuel` requires 1 (as a unit), free energy at least 1, in `$where`
 - `found by land` consumes 1
 - `produce pioneer` produces 1
 - `age` requires 1 (as a thing), keeps at least 1
@@ -377,7 +385,7 @@ what things are built from; drawn from the planet, and conserved once above grou
 - `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 - `stow` consumes 1
-- `stow` produces 1, in a store for metal
+- `stow` produces 1
 - `discard` consumes 1
 
 ## energy
@@ -404,7 +412,7 @@ what moves things; neither conserved nor expiring.
 - `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 - `stow` consumes 1
-- `stow` produces 1, in a store for energy
+- `stow` produces 1
 - `discard` consumes 1
 
 ## labor
@@ -437,7 +445,7 @@ a place things are in, which has a biome, a force of nature, and a density and a
 
 **In families** thing, place
 
-**Traits of it** `id` (an identity), `control` (held by a player, or unclaimed: a citizen of that player is there), `biome` (one of the biomes), `nature` (a number), `keeps` (the number of turns it will last)
+**Traits of it** `id` (an identity), `control` (held by a player, or unclaimed: a citizen of that player is there), `biome` (one of the biomes), `keeps` (the number of turns it will last)
 
 **Signature** `s-12`
 
@@ -448,6 +456,7 @@ a place things are in, which has a biome, a force of nature, and a density and a
 - `deploy ark` requires 1, in `$where`
 - `move` requires 1 (as a place), in `$from`
 - `move` requires 1 (as a place), joined to `$from` by an edge the unit crosses, in `$to`
+- `refuel` requires 1, in `$where`
 - `launch ark` requires 1, in `$where`
 - `work` requires 1, in `$where`
 - `age` requires 1 (as a thing), keeps at least 1
@@ -466,10 +475,8 @@ a place above one territory, which holds units and nothing else.
 
 **In recipes**
 
-- `deploy ark` consumes 1 (as the place holding ark), in the orbit above `$where`
 - `move` requires 1 (as a place), in `$from`
 - `move` requires 1 (as a place), joined to `$from` by an edge the unit crosses, in `$to`
-- `launch ark` produces 1 (as the place holding ark), in the orbit above `$where`
 - `age` requires 1 (as a thing), keeps at least 1
 - `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
@@ -543,13 +550,13 @@ a citizen's capacity to raise one more, spent by raising one and renewed each tu
 - `spoil` consumes 1 (as a thing), keeps 0
 - `discard` consumes 1
 
-## force
+## nature
 
-what a territory presents to hold or take ground; mustered each turn and swept at its end.
+what a territory's ground resists with; held by the territory, and met by force each turn.
 
 **In families** thing
 
-**Traits of it** `keeps` (the number of turns it will last)
+**Traits of it** `met` (a number), `keeps` (the number of turns it will last)
 
 **Signature** `s-18`
 
@@ -558,7 +565,34 @@ what a territory presents to hold or take ground; mustered each turn and swept a
 - `age` requires 1 (as a thing), keeps at least 1
 - `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
+- `hold` requires 1, met 0
+- `hold` puts , met at its maximum
+- `reclaim` requires 1, met 0
+- `renew` requires 1
+- `renew` puts , met 0
+- `take` requires 1
+- `take` consumes 1
+
+## force
+
+what a territory presents to hold or take ground; mustered each turn and swept at its end.
+
+**In families** thing
+
+**Traits of it** `keeps` (the number of turns it will last)
+
+**Signature** `s-19`
+
+**In recipes**
+
+- `deploy ark` requires 1
+- `found by land` requires 1
+- `age` requires 1 (as a thing), keeps at least 1
+- `age` puts  (as a thing), keeps one less
+- `spoil` consumes 1 (as a thing), keeps 0
 - `muster` produces that citizen's strength
 - `stand` produces that unit's strength
+- `hold` consumes 1
+- `take` consumes 1
 - `discard` consumes 1
 

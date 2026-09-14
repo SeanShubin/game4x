@@ -10,41 +10,43 @@
 
 **`P-426` and `P-427` have since decided that question elsewhere**, which is what the gap looks like when somebody closes it by hand: the Kinds row now says metal is *drawn from the planet, and conserved once above ground*, reconciling it with the planet being an endless source, and the four `produce 1 store` rows are gone from both founding recipes - which were creating five metal of binding while consuming three. **Both were found by re-deriving from the Binding column, not here.**
 
-**51 rules**, ground from **32** blocks of recipe rows: a family becomes its members, a density becomes its cases. **24 of them draw on a source** - the planet, the star or time - and a source is a place they take from rather than an exemption from the arithmetic. That is what keeps them in the check instead of out of it.
+**56 rules**, ground from **37** blocks of recipe rows: a family becomes its members, a density becomes its cases. **26 of them draw on a source** - the planet, the star or time - and a source is a place they take from rather than an exemption from the arithmetic. That is what keeps them in the check instead of out of it.
 
 ## A weighting exists, so nothing comes back round with more
 
 Every rule is non-increasing under the weighting below, so any sequence of them is too - a cycle included. **It may end with less**, which is disorder and is meant.
 
-| Place                           | Weight | What it is               |
-| ------------------------------- | ------ | ------------------------ |
-| ark, defending                  | 18     | a count, spent by acting |
-| citizen, laboring               | 18     | a count, spent by acting |
-| extractor, working              | 18     | a count, spent by acting |
-| pioneer, defending              | 18     | a count, spent by acting |
-| time                            | 18     | an endless well          |
-| ark                             | 15     | a thing                  |
-| pioneer                         | 15     | a thing                  |
-| citizen, defending              | 9      | a count, spent by acting |
-| force                           | 9      | a thing                  |
-| food                            | 4      | a thing                  |
-| ark, moving                     | 3      | a count, spent by acting |
-| citizen                         | 3      | a thing                  |
-| citizen, bearing                | 3      | a count, spent by acting |
-| citizen, whose upkeep is unpaid | 3      | a state a thing is in    |
-| energy                          | 3      | a thing                  |
-| extractor                       | 3      | a thing                  |
-| fertility                       | 3      | a thing                  |
-| food, keeps                     | 3      | a state a thing is in    |
-| food, keeps 0                   | 3      | a state a thing is in    |
-| garrison                        | 3      | a thing                  |
-| labor                           | 3      | a thing                  |
-| metal                           | 3      | a thing                  |
-| pioneer, moving                 | 3      | a count, spent by acting |
-| store                           | 3      | a thing                  |
-| the planet                      | 3      | an endless well          |
-| the star                        | 3      | an endless well          |
-| yard                            | 3      | a thing                  |
+| Place              | Weight | What it is               |
+| ------------------ | ------ | ------------------------ |
+| ark, defending     | 18     | a count, spent by acting |
+| citizen, laboring  | 18     | a count, spent by acting |
+| extractor, working | 18     | a count, spent by acting |
+| pioneer, defending | 18     | a count, spent by acting |
+| time               | 18     | an endless well          |
+| ark                | 15     | a thing                  |
+| pioneer            | 15     | a thing                  |
+| citizen, defending | 9      | a count, spent by acting |
+| force              | 9      | a thing                  |
+| food               | 4      | a thing                  |
+| ark, moving        | 3      | a count, spent by acting |
+| citizen            | 3      | a thing                  |
+| citizen, bearing   | 3      | a count, spent by acting |
+| citizen, paid      | 3      | a state a thing is in    |
+| energy             | 3      | a thing                  |
+| extractor          | 3      | a thing                  |
+| fertility          | 3      | a thing                  |
+| food, keeps        | 3      | a state a thing is in    |
+| food, keeps 0      | 3      | a state a thing is in    |
+| garrison           | 3      | a thing                  |
+| labor              | 3      | a thing                  |
+| metal              | 3      | a thing                  |
+| nature             | 3      | a thing                  |
+| nature, met        | 3      | a state a thing is in    |
+| pioneer, moving    | 3      | a count, spent by acting |
+| store              | 3      | a thing                  |
+| the planet         | 3      | an endless well          |
+| the star           | 3      | an endless well          |
+| yard               | 3      | a thing                  |
 
 ## Every rule, and what it nets
 
@@ -79,10 +81,10 @@ Made minus taken, per place. A `require` row moves nothing and is absent rather 
 | work (metal x5)                 | +5 metal · -1 extractor, working · -1 labor · -1 the planet | -9    |
 | work (metal x6)                 | +6 metal · -1 extractor, working · -1 labor · -1 the planet | -6    |
 | work (metal x8)                 | +8 metal · -1 extractor, working · -1 labor · -1 the planet | 0     |
-| upkeep                          | -1 food                                                     | -4    |
+| upkeep (citizen paid)           | +1 citizen, paid · -1 food · -1 time                        | -19   |
 | bear (citizen bearing)          | +1 fertility · -1 citizen, bearing                          | 0     |
 | breed                           | +1 citizen · -1 fertility · -1 food                         | -4    |
-| perish                          | -1 citizen · -1 citizen, whose upkeep is unpaid             | -6    |
+| perish                          | -1 citizen                                                  | -3    |
 | age (food keeps)                | -1 food, keeps                                              | -3    |
 | spoil (food)                    | -1 food · -1 food, keeps 0                                  | -7    |
 | stow                            | nothing                                                     | 0     |
@@ -102,6 +104,11 @@ Made minus taken, per place. A `require` row moves nothing and is absent rather 
 | refresh (citizen defending)     | +1 citizen, defending · -1 time                             | -9    |
 | refresh (ark defending)         | +1 ark, defending · -1 time                                 | 0     |
 | refresh (pioneer defending)     | +1 pioneer, defending · -1 time                             | 0     |
+| hold (nature met)               | +1 nature, met · -1 force · -1 time                         | -24   |
+| reclaim                         | -1 citizen                                                  | -3    |
+| renew (nature met)              | -1 nature, met                                              | -3    |
+| renew (citizen paid)            | -1 citizen, paid                                            | -3    |
+| take                            | -1 force · -1 nature                                        | -12   |
 | discard                         | -1 force                                                    | -9    |
 
 **A rule that nets nothing is kept rather than dropped.** `stow` moves a resource into a store, and a store is a container rather than a state - so at this granularity it does nothing, and a reader looking for it should find it saying so rather than find it missing.

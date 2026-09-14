@@ -10,14 +10,15 @@ is the right shape for a table and the wrong one for answering *what does this r
 the state after - in the notation `scenario/expected/play.4x` uses, holding only what that
 recipe touched. Every one is a real command run against a real state: `R-7`.
 
-32 recipes, 80 lines between them, 12 worked examples.
+37 recipes, 96 lines between them, 13 worked examples.
 
 ## deploy ark
 
 Run by the **player**.
 
 - **require** 1 territory, in `$where`
-- **consume** 1 ark, in the orbit above `$where`
+- **require** 1 force
+- **consume** 1 ark, in above `$where`
 - **produce** 1 garrison
 - **produce** 2 citizen
 - **produce** 1 extractor, food
@@ -31,7 +32,7 @@ Before:
 {game phase:play}
   {orbit id:1} -> 1
     {ark id:1 defending:1 moving:1} -> 1
-  {territory id:1 biome:grassland nature:0} -> 1
+  {territory id:1 biome:grassland} -> 1
     {deposit density:4 resource:food occupied:0 free:3 capacity:3} -> 1
     {deposit density:4 resource:metal occupied:0 free:3 capacity:3} -> 1
 ```
@@ -43,8 +44,8 @@ After:
 ```
 {game phase:play}
   {orbit id:1} -> 1
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {deposit density:4 resource:metal occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
@@ -70,13 +71,13 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
 ```
 
@@ -86,11 +87,11 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:0} -> 1
       {energy} -> 1
@@ -100,7 +101,8 @@ After:
 
 Run by the **player**.
 
-- **require** 1 unit, with room for energy, in `$where`
+- **require** 1 territory, in `$where`
+- **require** 1 unit, free energy at least 1, in `$where`
 - **consume** 1 energy
 - **produce** 1 energy, in that unit
 
@@ -109,6 +111,7 @@ Run by the **player**.
 Run by the **player**.
 
 - **consume** 1 pioneer
+- **require** 1 force
 - **produce** 1 garrison
 - **produce** 2 citizen
 - **produce** 1 extractor, food
@@ -122,7 +125,7 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {deposit density:4 resource:food occupied:0 free:3 capacity:3} -> 1
     {deposit density:4 resource:metal occupied:0 free:3 capacity:3} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
@@ -135,8 +138,8 @@ After:
 
 ```
 {game phase:play}
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {deposit density:4 resource:metal occupied:1 free:2 capacity:3} -> 1
     {energy} -> 2
@@ -159,8 +162,8 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {deposit density:4 resource:metal occupied:0 free:3 capacity:3} -> 1
     {garrison} -> 1
     {labor} -> 1
@@ -173,8 +176,8 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {deposit density:4 resource:metal occupied:1 free:2 capacity:3} -> 1
     {extractor resource:metal working:1} -> 1
     {garrison} -> 1
@@ -194,8 +197,8 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {deposit density:4 resource:metal occupied:1 free:2 capacity:3} -> 1
     {extractor resource:metal working:1} -> 1
     {garrison} -> 1
@@ -209,8 +212,8 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {deposit density:4 resource:metal occupied:1 free:2 capacity:3} -> 1
     {extractor resource:metal working:1} -> 1
     {garrison} -> 1
@@ -231,8 +234,8 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {labor} -> 1
     {metal} -> 15
@@ -244,8 +247,8 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {yard} -> 1
 ```
@@ -265,8 +268,8 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {energy} -> 6
     {garrison} -> 1
     {metal} -> 3
@@ -278,7 +281,7 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
+  {territory id:1 biome:grassland} -> 1
     {energy} -> 4
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
@@ -294,7 +297,7 @@ Run by the **player**.
 - **consume** 12 energy
 - **consume** 2 citizen
 - **require** 1 yard
-- **produce** 1 ark, in the orbit above `$where`
+- **produce** 1 ark, in above `$where`
 
 ### An example
 
@@ -302,8 +305,8 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {energy} -> 12
     {garrison} -> 1
     {metal} -> 3
@@ -316,7 +319,7 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
+  {territory id:1 biome:grassland} -> 1
     {garrison} -> 1
     {yard} -> 1
 ```
@@ -335,8 +338,8 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
 ```
 
@@ -346,8 +349,8 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:0} -> 1
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:0 paid:0} -> 1
     {garrison} -> 1
     {labor} -> 1
 ```
@@ -370,8 +373,8 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
@@ -385,8 +388,8 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 4
@@ -400,6 +403,7 @@ Run by the **world**.
 
 - **require** 1 citizen
 - **consume** 1 food
+- **put** citizen — , paid at its maximum
 
 ### An example
 
@@ -411,15 +415,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -431,13 +435,13 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -461,15 +465,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -481,13 +485,13 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -511,15 +515,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -531,13 +535,13 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -551,8 +555,8 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:0 free:3 capacity:3} -> 1
     {food} -> 8
     {garrison} -> 1
@@ -565,8 +569,8 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 4
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 4
     {deposit density:4 resource:food occupied:0 free:3 capacity:3} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
@@ -576,7 +580,7 @@ After:
 
 Run by the **world**.
 
-- **consume** 1 citizen, whose upkeep is unpaid
+- **consume** 1 citizen, paid 0
 
 ### An example
 
@@ -588,15 +592,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -608,13 +612,13 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -637,15 +641,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -657,13 +661,13 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -685,15 +689,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -705,13 +709,13 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -722,7 +726,7 @@ After:
 Run by the **world**.
 
 - **consume** 1 metal
-- **produce** 1 metal, in a store for metal
+- **produce** 1 metal
 
 ### An example
 
@@ -734,15 +738,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -754,13 +758,13 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -771,7 +775,7 @@ After:
 Run by the **world**.
 
 - **consume** 1 energy
-- **produce** 1 energy, in a store for energy
+- **produce** 1 energy
 
 ### An example
 
@@ -783,15 +787,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -803,13 +807,13 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -831,15 +835,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -851,13 +855,13 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -879,15 +883,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -899,13 +903,13 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -927,15 +931,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -947,13 +951,13 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -975,15 +979,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -995,13 +999,13 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -1023,15 +1027,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -1043,13 +1047,13 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -1071,15 +1075,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -1091,13 +1095,13 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -1119,15 +1123,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -1139,13 +1143,13 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -1167,15 +1171,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -1187,13 +1191,13 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -1218,15 +1222,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -1238,13 +1242,13 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -1268,15 +1272,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -1288,13 +1292,13 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -1316,15 +1320,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -1336,13 +1340,13 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -1364,15 +1368,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -1384,14 +1388,266 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
+      {energy} -> 2
+```
+
+## hold
+
+Run by the **world**.
+
+- **require** 1 nature, met 0
+- **consume** 1 force
+- **put** nature — , met at its maximum
+
+### An example
+
+**One ending, 4 recipes.** This same firing is the example for take, reclaim, renew as well - no command fires one of the world's alone.
+
+the force rule, with every case of it in one ending. **Territory 1 resists                  with two and two citizens muster two**, so `hold` spends both to mark both                  natures `met` and `reclaim` finds none unmet - the territory survives, and                  the two food it started with are what `upkeep` ate. **Territory 2 resists                  with three and its one citizen musters one**, so `hold` can mark only one                  and two natures are left unmet: `reclaim` fires on the presence of one and                  takes the population, the garrison and everything held. **Territory 3 is                  founded by nobody**, and the pioneer standing on it musters two through                  `stand` - `take` consumes a nature per force, so its resistance of two is                  gone and `found by land` has ground it can require a force against.                  **`renew` is why territory 1's natures read `met:0` after as well as                  before**: the marks are cleared at the end of every ending, so no committed                  state holds one, and what `hold` did is visible in what `reclaim` did not do                  rather than in a trait. **Nothing here is a comparison** - the whole rule is                  the presence or absence of a token, which is `P-373`'s trick and the reason                  the net has no inhibitor arc in it.
+
+Before:
+
+```
+{game phase:play}
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
+    {food} -> 2
+    {garrison} -> 1
+    {nature met:0} -> 2
+  {territory id:2 biome:jungle} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
+    {food} -> 1
+    {garrison} -> 1
+    {nature met:0} -> 3
+  {territory id:3 biome:grassland} -> 1
+    {nature met:0} -> 2
+    {pioneer id:1 defending:1 moving:1} -> 1
+      {energy} -> 2
+```
+
+`{end-turn}`
+
+After:
+
+```
+{game phase:play}
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
+    {garrison} -> 1
+    {nature met:0} -> 2
+  {territory id:2 biome:jungle} -> 1
+    {nature met:0} -> 3
+  {territory id:3 biome:grassland} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
+      {energy} -> 2
+```
+
+## reclaim
+
+Run by the **world**.
+
+- **require** 1 nature, met 0
+- **consume** 1 citizen
+
+### An example
+
+**One ending, 4 recipes.** This same firing is the example for hold, take, renew as well - no command fires one of the world's alone.
+
+the force rule, with every case of it in one ending. **Territory 1 resists                  with two and two citizens muster two**, so `hold` spends both to mark both                  natures `met` and `reclaim` finds none unmet - the territory survives, and                  the two food it started with are what `upkeep` ate. **Territory 2 resists                  with three and its one citizen musters one**, so `hold` can mark only one                  and two natures are left unmet: `reclaim` fires on the presence of one and                  takes the population, the garrison and everything held. **Territory 3 is                  founded by nobody**, and the pioneer standing on it musters two through                  `stand` - `take` consumes a nature per force, so its resistance of two is                  gone and `found by land` has ground it can require a force against.                  **`renew` is why territory 1's natures read `met:0` after as well as                  before**: the marks are cleared at the end of every ending, so no committed                  state holds one, and what `hold` did is visible in what `reclaim` did not do                  rather than in a trait. **Nothing here is a comparison** - the whole rule is                  the presence or absence of a token, which is `P-373`'s trick and the reason                  the net has no inhibitor arc in it.
+
+Before:
+
+```
+{game phase:play}
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
+    {food} -> 2
+    {garrison} -> 1
+    {nature met:0} -> 2
+  {territory id:2 biome:jungle} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
+    {food} -> 1
+    {garrison} -> 1
+    {nature met:0} -> 3
+  {territory id:3 biome:grassland} -> 1
+    {nature met:0} -> 2
+    {pioneer id:1 defending:1 moving:1} -> 1
+      {energy} -> 2
+```
+
+`{end-turn}`
+
+After:
+
+```
+{game phase:play}
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
+    {garrison} -> 1
+    {nature met:0} -> 2
+  {territory id:2 biome:jungle} -> 1
+    {nature met:0} -> 3
+  {territory id:3 biome:grassland} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
+      {energy} -> 2
+```
+
+## renew
+
+Run by the **world**.
+
+- **require** 1 nature
+- **put** nature — , met 0
+
+### An example
+
+**One ending, 4 recipes.** This same firing is the example for hold, take, reclaim as well - no command fires one of the world's alone.
+
+the force rule, with every case of it in one ending. **Territory 1 resists                  with two and two citizens muster two**, so `hold` spends both to mark both                  natures `met` and `reclaim` finds none unmet - the territory survives, and                  the two food it started with are what `upkeep` ate. **Territory 2 resists                  with three and its one citizen musters one**, so `hold` can mark only one                  and two natures are left unmet: `reclaim` fires on the presence of one and                  takes the population, the garrison and everything held. **Territory 3 is                  founded by nobody**, and the pioneer standing on it musters two through                  `stand` - `take` consumes a nature per force, so its resistance of two is                  gone and `found by land` has ground it can require a force against.                  **`renew` is why territory 1's natures read `met:0` after as well as                  before**: the marks are cleared at the end of every ending, so no committed                  state holds one, and what `hold` did is visible in what `reclaim` did not do                  rather than in a trait. **Nothing here is a comparison** - the whole rule is                  the presence or absence of a token, which is `P-373`'s trick and the reason                  the net has no inhibitor arc in it.
+
+Before:
+
+```
+{game phase:play}
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
+    {food} -> 2
+    {garrison} -> 1
+    {nature met:0} -> 2
+  {territory id:2 biome:jungle} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
+    {food} -> 1
+    {garrison} -> 1
+    {nature met:0} -> 3
+  {territory id:3 biome:grassland} -> 1
+    {nature met:0} -> 2
+    {pioneer id:1 defending:1 moving:1} -> 1
+      {energy} -> 2
+```
+
+`{end-turn}`
+
+After:
+
+```
+{game phase:play}
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
+    {garrison} -> 1
+    {nature met:0} -> 2
+  {territory id:2 biome:jungle} -> 1
+    {nature met:0} -> 3
+  {territory id:3 biome:grassland} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
+      {energy} -> 2
+```
+
+## renew
+
+Run by the **world**.
+
+- **require** 1 citizen
+- **put** citizen — , paid 0
+
+### An example
+
+**One ending, 4 recipes.** This same firing is the example for hold, take, reclaim as well - no command fires one of the world's alone.
+
+the force rule, with every case of it in one ending. **Territory 1 resists                  with two and two citizens muster two**, so `hold` spends both to mark both                  natures `met` and `reclaim` finds none unmet - the territory survives, and                  the two food it started with are what `upkeep` ate. **Territory 2 resists                  with three and its one citizen musters one**, so `hold` can mark only one                  and two natures are left unmet: `reclaim` fires on the presence of one and                  takes the population, the garrison and everything held. **Territory 3 is                  founded by nobody**, and the pioneer standing on it musters two through                  `stand` - `take` consumes a nature per force, so its resistance of two is                  gone and `found by land` has ground it can require a force against.                  **`renew` is why territory 1's natures read `met:0` after as well as                  before**: the marks are cleared at the end of every ending, so no committed                  state holds one, and what `hold` did is visible in what `reclaim` did not do                  rather than in a trait. **Nothing here is a comparison** - the whole rule is                  the presence or absence of a token, which is `P-373`'s trick and the reason                  the net has no inhibitor arc in it.
+
+Before:
+
+```
+{game phase:play}
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
+    {food} -> 2
+    {garrison} -> 1
+    {nature met:0} -> 2
+  {territory id:2 biome:jungle} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
+    {food} -> 1
+    {garrison} -> 1
+    {nature met:0} -> 3
+  {territory id:3 biome:grassland} -> 1
+    {nature met:0} -> 2
+    {pioneer id:1 defending:1 moving:1} -> 1
+      {energy} -> 2
+```
+
+`{end-turn}`
+
+After:
+
+```
+{game phase:play}
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
+    {garrison} -> 1
+    {nature met:0} -> 2
+  {territory id:2 biome:jungle} -> 1
+    {nature met:0} -> 3
+  {territory id:3 biome:grassland} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
+      {energy} -> 2
+```
+
+## take
+
+Run by the **world**.
+
+- **require** 1 nature
+- **consume** 1 nature
+- **consume** 1 force
+
+### An example
+
+**One ending, 4 recipes.** This same firing is the example for hold, reclaim, renew as well - no command fires one of the world's alone.
+
+the force rule, with every case of it in one ending. **Territory 1 resists                  with two and two citizens muster two**, so `hold` spends both to mark both                  natures `met` and `reclaim` finds none unmet - the territory survives, and                  the two food it started with are what `upkeep` ate. **Territory 2 resists                  with three and its one citizen musters one**, so `hold` can mark only one                  and two natures are left unmet: `reclaim` fires on the presence of one and                  takes the population, the garrison and everything held. **Territory 3 is                  founded by nobody**, and the pioneer standing on it musters two through                  `stand` - `take` consumes a nature per force, so its resistance of two is                  gone and `found by land` has ground it can require a force against.                  **`renew` is why territory 1's natures read `met:0` after as well as                  before**: the marks are cleared at the end of every ending, so no committed                  state holds one, and what `hold` did is visible in what `reclaim` did not do                  rather than in a trait. **Nothing here is a comparison** - the whole rule is                  the presence or absence of a token, which is `P-373`'s trick and the reason                  the net has no inhibitor arc in it.
+
+Before:
+
+```
+{game phase:play}
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
+    {food} -> 2
+    {garrison} -> 1
+    {nature met:0} -> 2
+  {territory id:2 biome:jungle} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
+    {food} -> 1
+    {garrison} -> 1
+    {nature met:0} -> 3
+  {territory id:3 biome:grassland} -> 1
+    {nature met:0} -> 2
+    {pioneer id:1 defending:1 moving:1} -> 1
+      {energy} -> 2
+```
+
+`{end-turn}`
+
+After:
+
+```
+{game phase:play}
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
+    {garrison} -> 1
+    {nature met:0} -> 2
+  {territory id:2 biome:jungle} -> 1
+    {nature met:0} -> 3
+  {territory id:3 biome:grassland} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
 ```
@@ -1412,15 +1668,15 @@ Before:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 2
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:0} -> 1
     {food} -> 3
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2
@@ -1432,13 +1688,13 @@ After:
 
 ```
 {game phase:play}
-  {territory id:1 biome:grassland nature:0} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 3
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {extractor resource:food working:1} -> 1
     {garrison} -> 1
     {store resource:food} -> 1
-  {territory id:2 biome:grassland nature:0} -> 1
+  {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
       {energy} -> 2

@@ -81,10 +81,13 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
     // **Thirty-six blocks under twenty-six names since `P-494` and `P-495`**: `hold`,
     // `reclaim`, `renew` and `take` are four new names, and `discard` gains a fifth block for
     // the force it sweeps.
+    //
+    // **Thirty-seven since `P-498`**, and no new name with it: `renew` clears the mark on a
+    // citizen as well as the one on a nature, which is one rule applied to two kinds.
     assert_eq!(
         blocks.len(),
-        36,
-        "the release states thirty-six blocks of recipe rows; it has {} ({blocks:?})",
+        37,
+        "the release states thirty-seven blocks of recipe rows; it has {} ({blocks:?})",
         blocks.len()
     );
     assert_eq!(

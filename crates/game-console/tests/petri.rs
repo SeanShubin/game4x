@@ -797,12 +797,38 @@ fn a_block_that_names_a_count_carries_it_in_its_label() {
     let document = release();
     let net = net(&document);
 
-    // The counts the Traits table declares, which is what a label may carry.
-    let counts = game_console::nogain::counts(&document);
+    // **What a label may carry is a trait the named kind actually carries** - one row of
+    // `spec/data/carries.4x`, which `P-497` made askable.
+    //
+    // **This read the *Readies* column and that is a narrower question than the one asked.**
+    // A label is `refresh (citizen bearing)` or `renew (nature met)`: a kind and one of its
+    // traits. Readiness happens to be what every label named while `refresh` was the only
+    // repeated block, so *is this word readied* and *does this kind carry this trait* gave the
+    // same answer - until `P-494` and `P-498` added two marks that nothing readies, and the
+    // first question started answering no to a correct label.
+    //
+    // **The pair is checked rather than the word**, which is the strengthening the
+    // normalization pays for: a label naming a real trait of the wrong kind used to pass and
+    // now does not.
+    let carries = std::fs::read_to_string(
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/carries.4x"),
+    )
+    .expect("spec/data/carries.4x");
+    let carried: std::collections::BTreeSet<(String, String)> =
+        game_console::state::declarations(&carries)
+            .expect("the file of carries parses")
+            .iter()
+            .filter_map(|row| {
+                Some((
+                    row.traits.get("kind")?.clone(),
+                    row.traits.get("trait")?.clone(),
+                ))
+            })
+            .collect();
     assert!(
-        counts.len() >= 5,
-        "only {} counts read from the release: {counts:?}",
-        counts.len()
+        carried.len() > 30,
+        "only {} carries rows, so this would agree with anything",
+        carried.len()
     );
 
     let mut checked = 0;
@@ -818,20 +844,35 @@ fn a_block_that_names_a_count_carries_it_in_its_label() {
         if inside.contains(" x") {
             continue;
         }
-        let Some((_, last)) = inside.rsplit_once(' ') else {
+        let Some((kind, last)) = inside.rsplit_once(' ') else {
             continue;
         };
-        assert!(
-            counts.iter().any(|count| count == last),
-            "`{name}` carries `{last}` after its kind and that is not a declared count"
-        );
+        // A label naming a family stands for each of its members, and `unit` is the one this
+        // release has - `refresh (unit moving)` is the ark and the pioneer together.
+        let named: Vec<String> = if kind == "unit" {
+            vec!["ark".to_string(), "pioneer".to_string()]
+        } else {
+            vec![kind.to_string()]
+        };
+        for kind in named {
+            assert!(
+                carried.contains(&(kind.clone(), last.to_string())),
+                "`{name}` carries `{last}` after its kind and `spec/data/carries.4x` does not \
+                 say a `{kind}` carries it"
+            );
+        }
         checked += 1;
     }
     assert_eq!(
-        checked, 6,
-        "six blocks carry a count in their label - the six `refresh` rows - and {checked} did"
+        checked, 8,
+        "eight blocks carry a count in their label - the six `refresh` rows and `renew`'s two -          and {checked} did"
     );
 
+    // **Eight since `P-494` and `P-498`**, which is `renew` clearing two marks - `met` on a
+    // nature and `paid` on a citizen. It is the first name other than `refresh` to need a
+    // label at all, and it needing one is what showed that this check's predicate was about
+    // readiness rather than about counts.
+    //
     // **And the extractor's is one of them**, which is the case the rule was written for: it
     // needs no disambiguator and carries the count anyway.
     assert!(

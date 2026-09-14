@@ -16,7 +16,7 @@ is in it, because the names are what this is for.
 | id  | biome     | nature | citizens | labor-spent | yards |
 | --- | --------- | ------ | -------- | ----------- | ----- |
 | 1   | grassland | 1      | 8        | 0           | 1     |
-| 2   | grassland | 1      | 6        | 0           | 0     |
+| 2   | grassland | 0      | 6        | 0           | 0     |
 | 3   | grassland | 1      | 0        | 0           | 0     |
 | 4   | mountain  | 1      | 0        | 0           | 0     |
 | 5   | mountain  | 1      | 0        | 0           | 0     |
@@ -269,6 +269,7 @@ is in it, because the names are what this is for.
 | deposit   | 34      |
 | fertility | 0       |
 | force     | 0       |
+| nature    | 13      |
 
-16 row(s)
+17 row(s)
 

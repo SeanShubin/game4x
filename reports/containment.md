@@ -46,8 +46,8 @@ this is the same tree with nothing collapsed, so that a change to it is one line
   - {orbit id:7}
   - {orbit id:8}
   - {orbit id:9}
-  - {territory id:1 biome:grassland nature:1} - garrison&nbsp;1/1 yard&nbsp;1/1 extractor&nbsp;resource:food&nbsp;3/3 store&nbsp;resource:food&nbsp;1/3 food&nbsp;0/10 extractor&nbsp;resource:metal&nbsp;3/3 store&nbsp;resource:metal&nbsp;2/3 metal&nbsp;0/20 extractor&nbsp;resource:energy&nbsp;3/3 store&nbsp;resource:energy&nbsp;2/3 energy&nbsp;12/20
-    - {citizen bearing:1 defending:1 laboring:1} x 8
+  - {territory id:1 biome:grassland} - garrison&nbsp;1/1 yard&nbsp;1/1 extractor&nbsp;resource:food&nbsp;3/3 store&nbsp;resource:food&nbsp;1/3 food&nbsp;0/10 extractor&nbsp;resource:metal&nbsp;3/3 store&nbsp;resource:metal&nbsp;2/3 metal&nbsp;0/20 extractor&nbsp;resource:energy&nbsp;3/3 store&nbsp;resource:energy&nbsp;2/3 energy&nbsp;12/20
+    - {citizen bearing:1 defending:1 laboring:1 paid:0} x 8
     - {deposit density:4 resource:energy occupied:3 free:0 capacity:3}
     - {deposit density:4 resource:food occupied:3 free:0 capacity:3}
     - {deposit density:4 resource:metal occupied:3 free:0 capacity:3}
@@ -56,55 +56,66 @@ this is the same tree with nothing collapsed, so that a change to it is one line
     - {extractor resource:food working:1} x 3
     - {extractor resource:metal working:1} x 3
     - {garrison}
+    - {nature met:0}
     - {store resource:energy} x 2
     - {store resource:food}
     - {store resource:metal} x 2
     - {yard}
-  - {territory id:10 biome:desert nature:1} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/3 store&nbsp;resource:food&nbsp;0/3 extractor&nbsp;resource:metal&nbsp;0/1 store&nbsp;resource:metal&nbsp;0/1 extractor&nbsp;resource:energy&nbsp;0/6 store&nbsp;resource:energy&nbsp;0/6
+  - {territory id:10 biome:desert} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/3 store&nbsp;resource:food&nbsp;0/3 extractor&nbsp;resource:metal&nbsp;0/1 store&nbsp;resource:metal&nbsp;0/1 extractor&nbsp;resource:energy&nbsp;0/6 store&nbsp;resource:energy&nbsp;0/6
     - {deposit density:3 resource:food occupied:0 free:3 capacity:3}
     - {deposit density:3 resource:metal occupied:0 free:1 capacity:1}
     - {deposit density:8 resource:energy occupied:0 free:6 capacity:6}
-  - {territory id:11 biome:grassland nature:1} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/5 store&nbsp;resource:food&nbsp;0/5 extractor&nbsp;resource:metal&nbsp;0/5 store&nbsp;resource:metal&nbsp;0/5 extractor&nbsp;resource:energy&nbsp;0/5 store&nbsp;resource:energy&nbsp;0/5
+    - {nature met:0}
+  - {territory id:11 biome:grassland} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/5 store&nbsp;resource:food&nbsp;0/5 extractor&nbsp;resource:metal&nbsp;0/5 store&nbsp;resource:metal&nbsp;0/5 extractor&nbsp;resource:energy&nbsp;0/5 store&nbsp;resource:energy&nbsp;0/5
     - {deposit density:6 resource:energy occupied:0 free:5 capacity:5}
     - {deposit density:6 resource:food occupied:0 free:5 capacity:5}
     - {deposit density:6 resource:metal occupied:0 free:5 capacity:5}
-  - {territory id:12 biome:ice nature:1} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/2 store&nbsp;resource:food&nbsp;0/2 extractor&nbsp;resource:metal&nbsp;0/8 store&nbsp;resource:metal&nbsp;0/8 extractor&nbsp;resource:energy&nbsp;0/8 store&nbsp;resource:energy&nbsp;0/8
+    - {nature met:0}
+  - {territory id:12 biome:ice} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/2 store&nbsp;resource:food&nbsp;0/2 extractor&nbsp;resource:metal&nbsp;0/8 store&nbsp;resource:metal&nbsp;0/8 extractor&nbsp;resource:energy&nbsp;0/8 store&nbsp;resource:energy&nbsp;0/8
     - {deposit density:2 resource:food occupied:0 free:2 capacity:2}
     - {deposit density:8 resource:energy occupied:0 free:8 capacity:8}
     - {deposit density:8 resource:metal occupied:0 free:8 capacity:8}
-  - {territory id:2 biome:grassland nature:1} - garrison&nbsp;1/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;1/2 store&nbsp;resource:food&nbsp;0/2 extractor&nbsp;resource:metal&nbsp;1/2 store&nbsp;resource:metal&nbsp;0/2 extractor&nbsp;resource:energy&nbsp;0/2 store&nbsp;resource:energy&nbsp;0/2
-    - {citizen bearing:1 defending:1 laboring:1} x 6
+    - {nature met:0}
+  - {territory id:2 biome:grassland} - garrison&nbsp;1/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;1/2 store&nbsp;resource:food&nbsp;0/2 extractor&nbsp;resource:metal&nbsp;1/2 store&nbsp;resource:metal&nbsp;0/2 extractor&nbsp;resource:energy&nbsp;0/2 store&nbsp;resource:energy&nbsp;0/2
+    - {citizen bearing:1 defending:1 laboring:1 paid:0} x 6
     - {deposit density:4 resource:energy occupied:0 free:2 capacity:2}
     - {deposit density:4 resource:metal occupied:1 free:1 capacity:2}
     - {deposit density:6 resource:food occupied:1 free:1 capacity:2}
     - {extractor resource:food working:1}
     - {extractor resource:metal working:1}
     - {garrison}
-  - {territory id:3 biome:grassland nature:1} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/6 store&nbsp;resource:food&nbsp;0/6 extractor&nbsp;resource:metal&nbsp;0/2 store&nbsp;resource:metal&nbsp;0/2 extractor&nbsp;resource:energy&nbsp;0/2 store&nbsp;resource:energy&nbsp;0/2
+  - {territory id:3 biome:grassland} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/6 store&nbsp;resource:food&nbsp;0/6 extractor&nbsp;resource:metal&nbsp;0/2 store&nbsp;resource:metal&nbsp;0/2 extractor&nbsp;resource:energy&nbsp;0/2 store&nbsp;resource:energy&nbsp;0/2
     - {deposit density:2 resource:food occupied:0 free:6 capacity:6}
     - {deposit density:4 resource:energy occupied:0 free:2 capacity:2}
     - {deposit density:4 resource:metal occupied:0 free:2 capacity:2}
-  - {territory id:4 biome:mountain nature:1} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/1 store&nbsp;resource:food&nbsp;0/1 extractor&nbsp;resource:metal&nbsp;0/4 store&nbsp;resource:metal&nbsp;0/4 extractor&nbsp;resource:energy&nbsp;0/4 store&nbsp;resource:energy&nbsp;0/4
+    - {nature met:0}
+  - {territory id:4 biome:mountain} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/1 store&nbsp;resource:food&nbsp;0/1 extractor&nbsp;resource:metal&nbsp;0/4 store&nbsp;resource:metal&nbsp;0/4 extractor&nbsp;resource:energy&nbsp;0/4 store&nbsp;resource:energy&nbsp;0/4
     - {deposit density:2 resource:food occupied:0 free:1 capacity:1}
     - {deposit density:5 resource:energy occupied:0 free:4 capacity:4}
     - {deposit density:5 resource:metal occupied:0 free:4 capacity:4}
-  - {territory id:5 biome:mountain nature:1} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/3 store&nbsp;resource:food&nbsp;0/3 extractor&nbsp;resource:metal&nbsp;0/8 store&nbsp;resource:metal&nbsp;0/8 extractor&nbsp;resource:energy&nbsp;0/8 store&nbsp;resource:energy&nbsp;0/8
+    - {nature met:0}
+  - {territory id:5 biome:mountain} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/3 store&nbsp;resource:food&nbsp;0/3 extractor&nbsp;resource:metal&nbsp;0/8 store&nbsp;resource:metal&nbsp;0/8 extractor&nbsp;resource:energy&nbsp;0/8 store&nbsp;resource:energy&nbsp;0/8
     - {deposit density:1 resource:food occupied:0 free:3 capacity:3}
     - {deposit density:8 resource:energy occupied:0 free:8 capacity:8}
     - {deposit density:8 resource:metal occupied:0 free:8 capacity:8}
-  - {territory id:6 biome:jungle nature:2} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/4 store&nbsp;resource:food&nbsp;0/4 extractor&nbsp;resource:energy&nbsp;0/4 store&nbsp;resource:energy&nbsp;0/4
+    - {nature met:0}
+  - {territory id:6 biome:jungle} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/4 store&nbsp;resource:food&nbsp;0/4 extractor&nbsp;resource:energy&nbsp;0/4 store&nbsp;resource:energy&nbsp;0/4
     - {deposit density:4 resource:food occupied:0 free:4 capacity:4}
     - {deposit density:5 resource:energy occupied:0 free:4 capacity:4}
-  - {territory id:7 biome:jungle nature:2} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/4 store&nbsp;resource:food&nbsp;0/4 extractor&nbsp;resource:metal&nbsp;0/4 store&nbsp;resource:metal&nbsp;0/4
+    - {nature met:0} x 2
+  - {territory id:7 biome:jungle} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/4 store&nbsp;resource:food&nbsp;0/4 extractor&nbsp;resource:metal&nbsp;0/4 store&nbsp;resource:metal&nbsp;0/4
     - {deposit density:4 resource:food occupied:0 free:4 capacity:4}
     - {deposit density:5 resource:metal occupied:0 free:4 capacity:4}
-  - {territory id:8 biome:grassland nature:1} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/6 store&nbsp;resource:food&nbsp;0/6 extractor&nbsp;resource:metal&nbsp;0/1 store&nbsp;resource:metal&nbsp;0/1 extractor&nbsp;resource:energy&nbsp;0/1 store&nbsp;resource:energy&nbsp;0/1
+    - {nature met:0} x 2
+  - {territory id:8 biome:grassland} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/6 store&nbsp;resource:food&nbsp;0/6 extractor&nbsp;resource:metal&nbsp;0/1 store&nbsp;resource:metal&nbsp;0/1 extractor&nbsp;resource:energy&nbsp;0/1 store&nbsp;resource:energy&nbsp;0/1
     - {deposit density:2 resource:energy occupied:0 free:1 capacity:1}
     - {deposit density:2 resource:metal occupied:0 free:1 capacity:1}
     - {deposit density:6 resource:food occupied:0 free:6 capacity:6}
-  - {territory id:9 biome:mountain nature:1} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/2 store&nbsp;resource:food&nbsp;0/2 extractor&nbsp;resource:metal&nbsp;0/6 store&nbsp;resource:metal&nbsp;0/6 extractor&nbsp;resource:energy&nbsp;0/1 store&nbsp;resource:energy&nbsp;0/1
+    - {nature met:0}
+  - {territory id:9 biome:mountain} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/2 store&nbsp;resource:food&nbsp;0/2 extractor&nbsp;resource:metal&nbsp;0/6 store&nbsp;resource:metal&nbsp;0/6 extractor&nbsp;resource:energy&nbsp;0/1 store&nbsp;resource:energy&nbsp;0/1
     - {deposit density:2 resource:energy occupied:0 free:1 capacity:1}
     - {deposit density:3 resource:food occupied:0 free:2 capacity:2}
     - {deposit density:8 resource:metal occupied:0 free:6 capacity:6}
+    - {nature met:0}
 
-103 things, counting every container and everything in one.
+114 things, counting every container and everything in one.

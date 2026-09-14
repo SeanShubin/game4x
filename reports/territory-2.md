@@ -9,7 +9,7 @@ the links, so that a change to the state is a change to one line here.
 
 | id  | biome     | nature | citizens | labor-spent | yards |
 | --- | --------- | ------ | -------- | ----------- | ----- |
-| 2   | grassland | 1      | 6        | 0           | 0     |
+| 2   | grassland | 0      | 6        | 0           | 0     |
 
 ## deposit
 

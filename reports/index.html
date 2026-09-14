@@ -17,6 +17,22 @@
 <li><a href="../scenario/commands/play.4x">../scenario/commands/play.4x</a> <span class="what">- the commands that ran, in order</span></li>
 <li><a href="../scenario/expected/play.4x">../scenario/expected/play.4x</a> <span class="what">- what the scenario should produce, reviewed by hand</span></li>
 </ul>
+<h2>The engine's inputs</h2>
+<p class="note">Source, not a rendering, for the same reason the scenario above is. <strong>The data that runs the game is what these say</strong> - `spec/invariants.md`: the data may be replicated in the presentation layer, and no replication is canonical. Listed by reading `spec/data/`, so a file added to it appears here without this page being edited.</p>
+<ul class="reports">
+<li><a href="../spec/data/above.4x">../spec/data/above.4x</a> <span class="what">- 12 lines, each declaring a above</span></li>
+<li><a href="../spec/data/biomes.4x">../spec/data/biomes.4x</a> <span class="what">- 6 lines, each declaring a value</span></li>
+<li><a href="../spec/data/block.4x">../spec/data/block.4x</a> <span class="what">- 37 lines, each declaring a block</span></li>
+<li><a href="../spec/data/carries.4x">../spec/data/carries.4x</a> <span class="what">- 45 lines, each declaring a carries</span></li>
+<li><a href="../spec/data/constraint.4x">../spec/data/constraint.4x</a> <span class="what">- 29 lines, each declaring a constraint</span></li>
+<li><a href="../spec/data/families.4x">../spec/data/families.4x</a> <span class="what">- 4 lines, each declaring a family</span></li>
+<li><a href="../spec/data/for.4x">../spec/data/for.4x</a> <span class="what">- 6 lines, each declaring a for</span></li>
+<li><a href="../spec/data/kinds.4x">../spec/data/kinds.4x</a> <span class="what">- 23 lines, each declaring a kind</span></li>
+<li><a href="../spec/data/limit.4x">../spec/data/limit.4x</a> <span class="what">- 5 lines, each declaring a limit</span></li>
+<li><a href="../spec/data/line.4x">../spec/data/line.4x</a> <span class="what">- 96 lines, each declaring a line</span></li>
+<li><a href="../spec/data/member.4x">../spec/data/member.4x</a> <span class="what">- 7 lines, each declaring a member</span></li>
+<li><a href="../spec/data/traits.4x">../spec/data/traits.4x</a> <span class="what">- 26 lines, each declaring a trait</span></li>
+</ul>
 <h2>Reports</h2>
 <p class="note"><strong>Two of the three views he asks for are here.</strong> `docs/process.md`: <em>data is presented to me in both the relational and the physical model</em>, and <em>the console allows both to be inspected and filtered</em>. Every report below says which it is, read from the report rather than from a list beside it. <strong>There is no physical view at all</strong> - the game's state is plain Rust rather than an ECS, so what a physical view of it should show is a decision rather than a build.</p>
 <p class="note">Generated. Every one is derived from the scenario or from the release, and regenerated rather than written. <strong>The page is the link</strong>; the markdown that made it is beside the name, because a change is reviewed as a diff and a diff of HTML is not one.</p>

@@ -14,14 +14,14 @@
 <p><strong>Generated. Do not edit.</strong> <code>cargo run -p kinds -- catalog</code>, or <code>scripts/kinds.sh catalog</code>.</p>
 <p>Every kind the release declares, with everything it says about that kind gathered in one place. <strong>This is a derived form of the release's tables</strong> - <code>spec/invariants.md</code>: <em>a fact is stated once and every other form of it is derived</em>, and a derived form is generated rather than written. It is a view and not a copy - each section is a join across six tables that the document does not perform anywhere.</p>
 <p><strong>The release's tables are not themselves canonical for all of this.</strong> Four of them - Kinds, Families, Biomes and Traits - have files in <code>spec/data/</code>, which is where those facts are stated; the release's four are a second hand-written form, and <code>P-465</code> is about what that costs. This reads the release because that is where all six tables are today, and says so rather than implying the release is the source.</p>
-<p>18 kinds, 4 families, 26 traits, 32 recipes.</p>
+<p>19 kinds, 4 families, 26 traits, 37 recipes.</p>
 <h2 id="signatures">Signatures</h2>
 <p><strong>A kind's signature is the traits it carries and every <em>(recipe, role)</em> pair that names it.</strong> Computed from the tables above rather than written by anyone, so two kinds share one exactly when the release says the same things about them. Quantities are not part of it: two kinds that are produced in different numbers by the same recipe still behave alike. <strong>Being named through a family counts</strong>, because a family is how the release addresses several kinds at once.</p>
-<p><strong>No two of the 18 kinds behave alike</strong>, over all 153 pairs of them.</p>
+<p><strong>No two of the 19 kinds behave alike</strong>, over all 171 pairs of them.</p>
 <p><strong>Every group below holds one kind</strong>, which is what that sentence means when you reach them. <strong>The traits alone do collide</strong> - 7 of the kinds carry exactly the traits another one carries - and every such pair is then separated by the recipes that name it. So the release has no two kinds it says <em>the same things</em> about, and Sean has accepted that as the answer: he expects a small number of distinct things.</p>
 <h3 id="s-1-citizen"><code>s-1</code> - citizen</h3>
-<p><strong>Traits</strong> <code>bearing</code>, <code>defending</code>, <code>keeps</code>, <code>laboring</code>, <code>strength</code>, <code>unpaid</code>, <code>upkeep</code></p>
-<p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>bear put</code>, <code>bear require</code>, <code>breed produce</code>, <code>create labor put</code>, <code>create labor require</code>, <code>deploy ark produce</code>, <code>found by land produce</code>, <code>launch ark consume</code>, <code>muster put</code>, <code>muster require</code>, <code>perish consume</code>, <code>produce pioneer consume</code>, <code>refresh put</code>, <code>spoil consume</code>, <code>upkeep require</code></p>
+<p><strong>Traits</strong> <code>bearing</code>, <code>defending</code>, <code>keeps</code>, <code>laboring</code>, <code>paid</code>, <code>strength</code>, <code>upkeep</code></p>
+<p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>bear put</code>, <code>bear require</code>, <code>breed produce</code>, <code>create labor put</code>, <code>create labor require</code>, <code>deploy ark produce</code>, <code>found by land produce</code>, <code>launch ark consume</code>, <code>muster put</code>, <code>muster require</code>, <code>perish consume</code>, <code>produce pioneer consume</code>, <code>reclaim consume</code>, <code>refresh put</code>, <code>renew put</code>, <code>renew require</code>, <code>spoil consume</code>, <code>upkeep put</code>, <code>upkeep require</code></p>
 <h3 id="s-2-garrison"><code>s-2</code> - garrison</h3>
 <p><strong>Traits</strong> <code>binding</code>, <code>keeps</code>, <code>metal in it</code>, <code>strength</code></p>
 <p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>deploy ark produce</code>, <code>found by land produce</code>, <code>muster require</code>, <code>spoil consume</code></p>
@@ -33,7 +33,7 @@
 <p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>build yard produce</code>, <code>launch ark require</code>, <code>spoil consume</code></p>
 <h3 id="s-5-store"><code>s-5</code> - store</h3>
 <p><strong>Traits</strong> <code>binding</code>, <code>keeps</code>, <code>metal in it</code>, <code>resource</code></p>
-<p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>build store produce</code>, <code>spoil consume</code>, <code>stow produce</code></p>
+<p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>build store produce</code>, <code>spoil consume</code></p>
 <h3 id="s-6-ark"><code>s-6</code> - ark</h3>
 <p><strong>Traits</strong> <code>binding</code>, <code>defending</code>, <code>fuel</code>, <code>keeps</code>, <code>metal in it</code>, <code>movable</code>, <code>moving</code>, <code>strength</code></p>
 <p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>deploy ark consume</code>, <code>launch ark produce</code>, <code>move put</code>, <code>move require</code>, <code>refresh put</code>, <code>refuel require</code>, <code>spoil consume</code>, <code>stand put</code>, <code>stand require</code></p>
@@ -53,11 +53,11 @@
 <p><strong>Traits</strong> <code>keeps</code></p>
 <p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>build extractor consume</code>, <code>build store consume</code>, <code>build yard consume</code>, <code>create labor produce</code>, <code>discard consume</code>, <code>spoil consume</code>, <code>work consume</code></p>
 <h3 id="s-12-territory"><code>s-12</code> - territory</h3>
-<p><strong>Traits</strong> <code>biome</code>, <code>control</code>, <code>id</code>, <code>keeps</code>, <code>nature</code></p>
-<p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>deploy ark require</code>, <code>launch ark require</code>, <code>move require</code>, <code>spoil consume</code>, <code>work require</code></p>
+<p><strong>Traits</strong> <code>biome</code>, <code>control</code>, <code>id</code>, <code>keeps</code></p>
+<p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>deploy ark require</code>, <code>launch ark require</code>, <code>move require</code>, <code>refuel require</code>, <code>spoil consume</code>, <code>work require</code></p>
 <h3 id="s-13-orbit"><code>s-13</code> - orbit</h3>
 <p><strong>Traits</strong> <code>id</code>, <code>keeps</code></p>
-<p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>deploy ark consume</code>, <code>launch ark produce</code>, <code>move require</code>, <code>spoil consume</code></p>
+<p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>move require</code>, <code>spoil consume</code></p>
 <h3 id="s-14-deposit"><code>s-14</code> - deposit</h3>
 <p><strong>Traits</strong> <code>capacity</code>, <code>density</code>, <code>free</code>, <code>keeps</code>, <code>occupied</code></p>
 <p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>spoil consume</code></p>
@@ -70,13 +70,16 @@
 <h3 id="s-17-fertility"><code>s-17</code> - fertility</h3>
 <p><strong>Traits</strong> <code>keeps</code></p>
 <p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>bear produce</code>, <code>breed consume</code>, <code>discard consume</code>, <code>spoil consume</code></p>
-<h3 id="s-18-force"><code>s-18</code> - force</h3>
+<h3 id="s-18-nature"><code>s-18</code> - nature</h3>
+<p><strong>Traits</strong> <code>keeps</code>, <code>met</code></p>
+<p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>hold put</code>, <code>hold require</code>, <code>reclaim require</code>, <code>renew put</code>, <code>renew require</code>, <code>spoil consume</code>, <code>take consume</code>, <code>take require</code></p>
+<h3 id="s-19-force"><code>s-19</code> - force</h3>
 <p><strong>Traits</strong> <code>keeps</code></p>
-<p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>discard consume</code>, <code>muster produce</code>, <code>spoil consume</code>, <code>stand produce</code></p>
+<p><strong>Named by</strong> <code>age put</code>, <code>age require</code>, <code>deploy ark require</code>, <code>discard consume</code>, <code>found by land require</code>, <code>hold consume</code>, <code>muster produce</code>, <code>spoil consume</code>, <code>stand produce</code>, <code>take consume</code></p>
 <h2 id="citizen">citizen</h2>
 <p>a person: provides labor, eats, and grows on surplus.</p>
 <p><strong>In families</strong> thing</p>
-<p><strong>Traits of it</strong> <code>laboring</code> (a number), <code>bearing</code> (a number), <code>defending</code> (a number), <code>strength</code> (a number), <code>upkeep</code> (food per turn), <code>keeps</code> (the number of turns it will last), <code>unpaid</code> (a number: its upkeep was not met)</p>
+<p><strong>Traits of it</strong> <code>laboring</code> (a number), <code>bearing</code> (a number), <code>defending</code> (a number), <code>strength</code> (a number), <code>upkeep</code> (food per turn), <code>keeps</code> (the number of turns it will last), <code>paid</code> (a number)</p>
 <p><strong>Signature</strong> <code>s-1</code></p>
 <p><strong>Bounded by</strong> the food produced here, through upkeep</p>
 <p><strong>As a thing</strong> Strength: 1 · Upkeep: 1 food per turn · Readies: bearing 1, defending 1, laboring 1</p>
@@ -89,10 +92,11 @@
 <li><code>create labor</code> requires 1, laboring at least 1</li>
 <li><code>create labor</code> puts , laboring one less</li>
 <li><code>upkeep</code> requires 1</li>
+<li><code>upkeep</code> puts , paid at its maximum</li>
 <li><code>bear</code> requires 1, bearing at least 1</li>
 <li><code>bear</code> puts , bearing one less</li>
 <li><code>breed</code> produces 1</li>
-<li><code>perish</code> consumes 1, whose upkeep is unpaid</li>
+<li><code>perish</code> consumes 1, paid 0</li>
 <li><code>age</code> requires 1 (as a thing), keeps at least 1</li>
 <li><code>age</code> puts  (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
@@ -101,6 +105,9 @@
 <li><code>muster</code> requires 1, defending at least 1</li>
 <li><code>muster</code> puts , defending one less</li>
 <li><code>refresh</code> puts , defending at its maximum</li>
+<li><code>reclaim</code> consumes 1</li>
+<li><code>renew</code> requires 1</li>
+<li><code>renew</code> puts , paid 0</li>
 </ul>
 <h2 id="garrison">garrison</h2>
 <p>what holds a territory; a territory has at most one.</p>
@@ -166,8 +173,6 @@
 <li><code>age</code> requires 1 (as a thing), keeps at least 1</li>
 <li><code>age</code> puts  (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
-<li><code>stow</code> produces 1 (as the place holding metal), in a store for metal</li>
-<li><code>stow</code> produces 1 (as the place holding energy), in a store for energy</li>
 </ul>
 <h2 id="ark">ark</h2>
 <p>carries a landing, and can invade from orbit.</p>
@@ -179,11 +184,11 @@
 <p><strong>Holds</strong> energy, up to the unit's fuel - <em>a fact about each one rather than about the kind</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
-<li><code>deploy ark</code> consumes 1, in the orbit above <code>$where</code></li>
+<li><code>deploy ark</code> consumes 1, in above <code>$where</code></li>
 <li><code>move</code> requires 1 (as a unit), moving at least 1, in <code>$from</code></li>
 <li><code>move</code> puts  (as a unit), moving one less, in <code>$to</code></li>
-<li><code>refuel</code> requires 1 (as a unit), with room for energy, in <code>$where</code></li>
-<li><code>launch ark</code> produces 1, in the orbit above <code>$where</code></li>
+<li><code>refuel</code> requires 1 (as a unit), free energy at least 1, in <code>$where</code></li>
+<li><code>launch ark</code> produces 1, in above <code>$where</code></li>
 <li><code>age</code> requires 1 (as a thing), keeps at least 1</li>
 <li><code>age</code> puts  (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
@@ -204,7 +209,7 @@
 <ul class="bullets">
 <li><code>move</code> requires 1 (as a unit), moving at least 1, in <code>$from</code></li>
 <li><code>move</code> puts  (as a unit), moving one less, in <code>$to</code></li>
-<li><code>refuel</code> requires 1 (as a unit), with room for energy, in <code>$where</code></li>
+<li><code>refuel</code> requires 1 (as a unit), free energy at least 1, in <code>$where</code></li>
 <li><code>found by land</code> consumes 1</li>
 <li><code>produce pioneer</code> produces 1</li>
 <li><code>age</code> requires 1 (as a thing), keeps at least 1</li>
@@ -248,7 +253,7 @@
 <li><code>age</code> puts  (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
 <li><code>stow</code> consumes 1</li>
-<li><code>stow</code> produces 1, in a store for metal</li>
+<li><code>stow</code> produces 1</li>
 <li><code>discard</code> consumes 1</li>
 </ul>
 <h2 id="energy">energy</h2>
@@ -269,7 +274,7 @@
 <li><code>age</code> puts  (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
 <li><code>stow</code> consumes 1</li>
-<li><code>stow</code> produces 1, in a store for energy</li>
+<li><code>stow</code> produces 1</li>
 <li><code>discard</code> consumes 1</li>
 </ul>
 <h2 id="labor">labor</h2>
@@ -293,7 +298,7 @@
 <h2 id="territory">territory</h2>
 <p>a place things are in, which has a biome, a force of nature, and a density and a capacity per resource.</p>
 <p><strong>In families</strong> thing, place</p>
-<p><strong>Traits of it</strong> <code>id</code> (an identity), <code>control</code> (held by a player, or unclaimed: a citizen of that player is there), <code>biome</code> (one of the biomes), <code>nature</code> (a number), <code>keeps</code> (the number of turns it will last)</p>
+<p><strong>Traits of it</strong> <code>id</code> (an identity), <code>control</code> (held by a player, or unclaimed: a citizen of that player is there), <code>biome</code> (one of the biomes), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-12</code></p>
 <p><strong>Holds</strong> that kind, up to its free capacity for that kind - <em>a fact about each one rather than about the kind</em></p>
 <p><strong>In recipes</strong></p>
@@ -301,6 +306,7 @@
 <li><code>deploy ark</code> requires 1, in <code>$where</code></li>
 <li><code>move</code> requires 1 (as a place), in <code>$from</code></li>
 <li><code>move</code> requires 1 (as a place), joined to <code>$from</code> by an edge the unit crosses, in <code>$to</code></li>
+<li><code>refuel</code> requires 1, in <code>$where</code></li>
 <li><code>launch ark</code> requires 1, in <code>$where</code></li>
 <li><code>work</code> requires 1, in <code>$where</code></li>
 <li><code>age</code> requires 1 (as a thing), keeps at least 1</li>
@@ -314,10 +320,8 @@
 <p><strong>Signature</strong> <code>s-13</code></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
-<li><code>deploy ark</code> consumes 1 (as the place holding ark), in the orbit above <code>$where</code></li>
 <li><code>move</code> requires 1 (as a place), in <code>$from</code></li>
 <li><code>move</code> requires 1 (as a place), joined to <code>$from</code> by an edge the unit crosses, in <code>$to</code></li>
-<li><code>launch ark</code> produces 1 (as the place holding ark), in the orbit above <code>$where</code></li>
 <li><code>age</code> requires 1 (as a thing), keeps at least 1</li>
 <li><code>age</code> puts  (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
@@ -370,18 +374,40 @@
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
 <li><code>discard</code> consumes 1</li>
 </ul>
-<h2 id="force">force</h2>
-<p>what a territory presents to hold or take ground; mustered each turn and swept at its end.</p>
+<h2 id="nature">nature</h2>
+<p>what a territory's ground resists with; held by the territory, and met by force each turn.</p>
 <p><strong>In families</strong> thing</p>
-<p><strong>Traits of it</strong> <code>keeps</code> (the number of turns it will last)</p>
+<p><strong>Traits of it</strong> <code>met</code> (a number), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-18</code></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
 <li><code>age</code> requires 1 (as a thing), keeps at least 1</li>
 <li><code>age</code> puts  (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
+<li><code>hold</code> requires 1, met 0</li>
+<li><code>hold</code> puts , met at its maximum</li>
+<li><code>reclaim</code> requires 1, met 0</li>
+<li><code>renew</code> requires 1</li>
+<li><code>renew</code> puts , met 0</li>
+<li><code>take</code> requires 1</li>
+<li><code>take</code> consumes 1</li>
+</ul>
+<h2 id="force">force</h2>
+<p>what a territory presents to hold or take ground; mustered each turn and swept at its end.</p>
+<p><strong>In families</strong> thing</p>
+<p><strong>Traits of it</strong> <code>keeps</code> (the number of turns it will last)</p>
+<p><strong>Signature</strong> <code>s-19</code></p>
+<p><strong>In recipes</strong></p>
+<ul class="bullets">
+<li><code>deploy ark</code> requires 1</li>
+<li><code>found by land</code> requires 1</li>
+<li><code>age</code> requires 1 (as a thing), keeps at least 1</li>
+<li><code>age</code> puts  (as a thing), keeps one less</li>
+<li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
 <li><code>muster</code> produces that citizen's strength</li>
 <li><code>stand</code> produces that unit's strength</li>
+<li><code>hold</code> consumes 1</li>
+<li><code>take</code> consumes 1</li>
 <li><code>discard</code> consumes 1</li>
 </ul>
 </body>

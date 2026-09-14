@@ -53,7 +53,7 @@
   {orbit id:8} -> 1
   {orbit id:9} -> 1
   {territory id:1 biome:grassland} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 8
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 8
     {deposit density:4 resource:energy occupied:3 free:0 capacity:3} -> 1
     {deposit density:4 resource:food occupied:3 free:0 capacity:3} -> 1
     {deposit density:4 resource:metal occupied:3 free:0 capacity:3} -> 1
@@ -83,7 +83,7 @@
     {deposit density:8 resource:metal occupied:0 free:8 capacity:8} -> 1
     {nature met:0} -> 1
   {territory id:2 biome:grassland} -> 1
-    {citizen bearing:1 defending:1 laboring:1} -> 6
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 6
     {deposit density:4 resource:energy occupied:0 free:2 capacity:2} -> 1
     {deposit density:4 resource:metal occupied:1 free:1 capacity:2} -> 1
     {deposit density:6 resource:food occupied:1 free:1 capacity:2} -> 1
