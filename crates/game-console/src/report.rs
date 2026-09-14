@@ -123,7 +123,7 @@ fn territory(game: &Game, id: TerritoryId) -> String {
         place.citizens(),
         place.labor_available(),
         game.force_in(id),
-        place.force_of_nature
+        place.force_of_nature()
     ));
     for resource in Resource::ALL {
         // Capacity and density, which is what a territory has of a resource. It used to read
@@ -247,7 +247,7 @@ pub fn entities(game: &Game) -> Vec<Entry> {
         let mut components = vec![
             ("citizens".to_string(), place.citizens().to_string()),
             ("labor-spent".to_string(), place.labor_spent().to_string()),
-            ("nature".to_string(), place.force_of_nature.to_string()),
+            ("nature".to_string(), place.force_of_nature().to_string()),
             ("force".to_string(), game.force_in(place.id).to_string()),
         ];
         for resource in Resource::ALL {

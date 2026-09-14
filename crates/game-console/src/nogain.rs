@@ -1013,6 +1013,17 @@ pub(crate) fn count_in(traits: &str) -> Option<(String, i64)> {
         "one less" => -1,
         "at its maximum" => 1,
         "at least 1" => 0,
+        // **A count put to zero is a token leaving its place** - the same movement as *one
+        // less*, said as a destination rather than as a step, which is the form `spoil`
+        // already uses for `keeps 0`.
+        //
+        // **Added for `renew`, which cannot use it yet.** `P-494` promoted `renew`'s row as
+        // `met at least 0`, and `at least 0` is true of every number - so the row states
+        // nothing, the panic below is correct to refuse it, and `C-116` is the item. This arm
+        // is what the reader needs the moment that cell says `met 0`; until then it is
+        // reached only by `a_count_put_to_zero_is_a_token_leaving_its_place`, which is a
+        // caller, and a branch with a caller can fail.
+        "0" => -1,
         _ => return None,
     };
     Some((name.trim_matches('`').to_string(), change))
@@ -1229,4 +1240,37 @@ fn padded(rows: &[Vec<String>]) -> String {
         out.push_str(&line(row));
     }
     out
+}
+
+#[cfg(test)]
+mod tests {
+    use super::count_in;
+
+    /// Every form a `put` row's trait cell may take, and what each moves.
+    ///
+    /// **The population is stated, because a table-driven check over nothing passes.** Four
+    /// forms, and the fourth is the one `renew` needs.
+    #[test]
+    fn a_count_put_to_zero_is_a_token_leaving_its_place() {
+        let cases = [
+            ("bearing one less", Some(("bearing", -1))),
+            ("laboring at its maximum", Some(("laboring", 1))),
+            ("defending at least 1", Some(("defending", 0))),
+            // **`met 0` is what `P-494`'s `renew` row has to say** to be weighable at all.
+            // It moves a token out of the `met` place, the same way `one less` does, and it
+            // says so as a destination because that is the form `spoil`'s `keeps 0` uses.
+            ("met 0", Some(("met", -1))),
+            // **And `at least 0` is refused, which is `C-116`.** It is true of every number,
+            // so it states nothing about the count and there is nothing to weigh. This is the
+            // one case of the five that asserts a `None`, and it is the reason this test
+            // exists rather than a form that reads.
+            ("met at least 0", None),
+        ];
+        for (said, expected) in cases {
+            let read = count_in(said);
+            let expected = expected.map(|(count, change)| (count.to_string(), change));
+            assert_eq!(read, expected, "`{said}`");
+        }
+        assert_eq!(cases.len(), 5, "five forms were compared");
+    }
 }

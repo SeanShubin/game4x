@@ -35,14 +35,17 @@ fn every_recipe_is_either_drawn_or_named_as_not_drawn() {
     // row; `muster` and `stand` are the two new names.
     //
     // **Thirty-two since `P-489`**, which added `refuel` - one block under one new name.
+    //
+    // **Thirty-six since `P-494` and `P-495`**: `hold`, `reclaim`, `renew` and `take` are four
+    // new names, and `discard` gains a fifth block for the force it sweeps.
     assert_eq!(
-        net.recipes, 32,
-        "the release states thirty-two blocks of recipe rows and the parse found {}",
+        net.recipes, 36,
+        "the release states thirty-six blocks of recipe rows and the parse found {}",
         net.recipes
     );
     assert_eq!(
-        net.names, 22,
-        "those blocks are stated under twenty-two distinct names and the parse found {}",
+        net.names, 26,
+        "those blocks are stated under twenty-six distinct names and the parse found {}",
         net.names
     );
     // **The deduplication has to remove something**, or a version that stopped deduplicating
@@ -194,9 +197,12 @@ fn the_density_rule_is_spelled_out_against_the_planet_it_describes() {
     //
     // **Twelve until `P-431`**, which rewrote `age` from consume-and-produce into
     // require-and-put - the thirteenth, and the one that says the thing survives being aged.
+    //
+    // **Fifteen since `P-494`**: `hold` marks a nature met and `renew` clears the mark, which
+    // are the fourteenth and fifteenth.
     assert_eq!(
-        puts, 13,
-        "{puts} `put` rows were skipped; the release states thirteen"
+        puts, 15,
+        "{puts} `put` rows were skipped; the release states fifteen"
     );
 
     let expected: Vec<&String> = names

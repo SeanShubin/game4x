@@ -78,16 +78,19 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
     let mut declared = blocks.clone();
     declared.sort();
     declared.dedup();
+    // **Thirty-six blocks under twenty-six names since `P-494` and `P-495`**: `hold`,
+    // `reclaim`, `renew` and `take` are four new names, and `discard` gains a fifth block for
+    // the force it sweeps.
     assert_eq!(
         blocks.len(),
-        32,
-        "the release states thirty-two blocks of recipe rows; it has {} ({blocks:?})",
+        36,
+        "the release states thirty-six blocks of recipe rows; it has {} ({blocks:?})",
         blocks.len()
     );
     assert_eq!(
         declared.len(),
-        22,
-        "those blocks are stated under twenty-two names; there are {} ({declared:?})",
+        26,
+        "those blocks are stated under twenty-six names; there are {} ({declared:?})",
         declared.len()
     );
     assert!(
@@ -152,9 +155,15 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
     // carries nine recipes besides its own.
     // **Ten since `P-414` added `muster` and `stand`**, so one `{end-turn}` carries the
     // world's eleven.
+    //
+    // **Thirteen since `P-494` and `P-495`, across two examples rather than one.** The force
+    // rule's four are the world's too, and one `{end-turn}` fires them - but they need ground
+    // that resists, ground that is losing and ground nobody has founded, which the first
+    // example does not have. So `hold` carries `take`, `reclaim` and `renew` on a second one,
+    // and the sum is over every example for exactly that reason.
     assert_eq!(
-        shared, 10,
-        "one example carries ten recipes besides its own, which is the world's eleven"
+        shared, 13,
+        "two examples carry thirteen recipes besides their own"
     );
 }
 

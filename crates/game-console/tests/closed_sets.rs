@@ -150,9 +150,11 @@ fn every_value_a_trait_admits_is_a_row_in_the_table_that_lists_them() {
     // back into a count carried as a trait. **The sixth is `force`**, declared by `P-435`
     // answering this lane's `C-93` - the word named a trait and a thing at once, and the
     // trait was renamed to `strength` rather than the kind being dropped.
+    // **The seventh is `nature`**, declared by `P-494`: it was a trait of a territory, and
+    // making it a kind is what took the zero test out of the force rule.
     assert_eq!(
-        compared, 24,
-        "eighteen kinds and six biomes were compared when this was written; {compared} were"
+        compared, 25,
+        "nineteen kinds and six biomes were compared when this was written; {compared} were"
     );
 }
 
@@ -290,9 +292,14 @@ fn every_trait_of_a_territory_is_shown_in_the_dump() {
     //
     // **Named as well as counted**, because four is four whichever four they are, and this
     // moved from one source to another rather than by a trait being added.
+    // **Three again since `P-494`, and it left by becoming a kind rather than by moving to
+    // another thing.** `density` and `capacity` went to the deposit because a description is
+    // a flat map; `nature` went because *force below nature* had to stop being a comparison,
+    // and a territory holds one `nature` per point now. **So the count fell for a third
+    // distinct reason**, which is why this names them as well as counting them.
     assert_eq!(
         of_a_territory,
-        ["biome", "control", "id", "nature"],
+        ["biome", "control", "id"],
         "the territory's line in `spec/data/kinds.4x` names the traits it carries"
     );
 

@@ -234,7 +234,7 @@ mod tests {
             let mut place =
                 game_model::Territory::empty(TerritoryId(id), game_model::Biome::Grassland);
             place.biome = biome;
-            place.force_of_nature = 1;
+            place.set_force_of_nature(1);
             place.deposits.insert(
                 Resource::Food,
                 game_model::Deposit {
@@ -447,10 +447,13 @@ mod tests {
         // `force`. Readiness stopped being a kind a thing contains; `force` became one, and
         // it holds nothing and never could - it is what a territory presents, mustered at a
         // turn's end and swept at the same one, which is `P-391`'s first of three cases.
+        // **Fifteen since `P-494` declared `nature`**, and it is the same case as `force`:
+        // a territory holds one per point of resistance, and a nature holds nothing. The
+        // release's *Where things are* gives it no capacity, which is `P-391`'s first case.
         assert_eq!(
             cannot.len(),
-            14,
-            "four of the eighteen kinds may contain; {} may not",
+            15,
+            "four of the nineteen kinds may contain; {} may not",
             cannot.len()
         );
 

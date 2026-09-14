@@ -582,10 +582,12 @@ fn every_kind_is_named_and_only_two_namings_depend_on_the_scenario() {
     // `P-411` made it a count carried as a trait again, so that one went the way it came;
     // `P-435` declared `force`, answering `C-93`, which asked whether one word naming a
     // trait and a thing at once was deliberate. It was - the trait is `strength` now.
+    // **Nineteen since `P-494` declared `nature`.** It was a trait of a territory, and
+    // making it a thing a territory holds is what took the zero test out of the force rule.
     assert_eq!(
         Kind::ALL.len(),
-        18,
-        "eighteen kinds: `store` from `P-260`, `deposit` from `P-322`, `adjacency` from `P-334`, `game` from `P-351`, `fertility` from the saturating rewrite and `force` from `P-435`; the model has {}",
+        19,
+        "nineteen kinds: `store` from `P-260`, `deposit` from `P-322`, `adjacency` from `P-334`, `game` from `P-351`, `fertility` from the saturating rewrite, `force` from `P-435` and `nature` from `P-494`; the model has {}",
         Kind::ALL.len()
     );
 
@@ -721,10 +723,14 @@ fn every_turn_splits_the_player_from_the_end_of_the_turn() {
     //
     // **The number is asserted rather than the fact that there is one**, because *some are
     // empty* would go on passing if fifty became one.
+    // **Ten since `P-494` and `P-495`.** The nature phase used to do nothing on a turn
+    // when nobody lost a territory; it marks and clears a `met` on every nature every
+    // turn now, and `take` consumes one on the turn a pioneer stands on ground nobody
+    // has founded - so one of the eleven empty sections stopped being empty.
     let empty = turns.matches("*Nothing changed.*").count();
     assert_eq!(
-        empty, 11,
-        "{empty} sections say nothing changed and this was written when 11 did. If a rule or \
+        empty, 10,
+        "{empty} sections say nothing changed and this was written when 10 did. If a rule or \
          the scenario moved, that is fine - say so here rather than widening this to `> 0`"
     );
     assert!(

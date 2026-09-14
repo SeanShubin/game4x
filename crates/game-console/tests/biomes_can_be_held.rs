@@ -134,7 +134,7 @@ fn every_claimable_biome_can_be_taken_by_something_the_release_provides() {
         // standing on it.
         let mut session = planet();
         session.game.territories[1].biome = *kind;
-        session.game.territories[1].force_of_nature = *nature;
+        session.game.territories[1].set_force_of_nature(*nature);
         for line in ["{deploy-ark territory:1}", "{create-labor territory:1}"] {
             session
                 .run(line, &Files(root().join("scenario/commands")))
@@ -287,9 +287,11 @@ fn the_scenario_gives_each_territory_the_force_its_biome_carries() {
             continue;
         };
         assert_eq!(
-            place.force_of_nature, *expected,
+            place.force_of_nature(),
+            *expected,
             "territory {} is {} and the release holds that biome with {expected}",
-            place.id, place.biome
+            place.id,
+            place.biome
         );
         checked += 1;
     }

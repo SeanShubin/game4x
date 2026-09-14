@@ -62,12 +62,18 @@ use game_model::{StructureKind, Transition, UnitKind};
 /// times as it can. `bear`, `breed` and `renew` are that rule, and `stow` and `discard` are
 /// the same treatment of what used to be one capacity clamp.
 ///
+/// **Fifteen since `P-494` and `P-495`**, which made nature a kind and gave the force rule
+/// four recipes where it had a comparison: `hold` spends a force to mark a nature met, `take`
+/// consumes one on ground nobody has founded, `reclaim` fires on a nature nobody met, and
+/// `renew` clears the marks. `Game::end_turn_observed` is where they act, and its comment is
+/// where the reasoning is.
+///
 /// `tests/fired.rs` holds the set against the release's own *Recipes* table, read at test
 /// time, so a world recipe added or renamed fails here rather than quietly dropping out of
 /// the artifact.
-pub const ENDING_A_TURN: [&str; 11] = [
+pub const ENDING_A_TURN: [&str; 15] = [
     "upkeep", "bear", "breed", "perish", "age", "spoil", "stow", "discard", "refresh", "muster",
-    "stand",
+    "stand", "hold", "take", "reclaim", "renew",
 ];
 
 /// What one command fired, if it fired anything.

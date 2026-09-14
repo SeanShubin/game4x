@@ -710,9 +710,12 @@ fn every_in_line_quotes_the_file_it_cites() {
         wrong.join("\n  ")
     );
     // The two counts, so that a pattern matching nothing cannot pass.
+    // **Eleven since `R-11`**, which is the capability that asks for every file the engine
+    // reads as input to be reachable from `reports/index.html`. It cites
+    // `spec/invariants.md` on replication, which is the eleventh.
     assert_eq!(
-        found, 10,
-        "ten capabilities carry an `In` line; this found {found}"
+        found, 11,
+        "eleven capabilities carry an `In` line; this found {found}"
     );
     assert!(
         checked >= found,

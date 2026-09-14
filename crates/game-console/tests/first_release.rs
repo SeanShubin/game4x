@@ -312,7 +312,7 @@ fn the_first_release_plays_from_a_designed_world_through_to_a_working_territory(
         // rather than a number. `tests/biomes_can_be_held.rs` holds every territory to its
         // own biome's force; this only says nature is set at all.
         assert!(
-            place.force_of_nature >= 1,
+            place.force_of_nature() >= 1,
             "territory {} has no force of nature",
             place.id
         );
@@ -905,7 +905,7 @@ fn taking_and_holding_a_territory_follow_the_force_rules() {
         2,
         "its two citizens, summed"
     );
-    assert_eq!(one.force_of_nature, 1);
+    assert_eq!(one.force_of_nature(), 1);
     assert!(one.founded(), "equal force is enough to hold");
 
     // **And it is lost if nobody works it, which is `S-19` correcting this test.**

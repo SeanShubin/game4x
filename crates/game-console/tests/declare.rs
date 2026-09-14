@@ -50,10 +50,13 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
         .iter()
         .map(|row| row[0].trim().trim_matches('*').trim().to_string())
         .collect();
+    // **Nineteen since `P-494` made `nature` a kind**, which is what took the zero test out
+    // of the force rule: a territory holds one per point of resistance, and *force below
+    // nature* became *a nature nobody met*.
     assert_eq!(
         table.len(),
-        18,
-        "eighteen kinds in the release when this was written; it has {} ({table:?})",
+        19,
+        "nineteen kinds in the release when this was written; it has {} ({table:?})",
         table.len()
     );
 
@@ -164,9 +167,10 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
         "the file declares {invented:?} and the release does not - a word this lane invented, \
          which is what `C-49` says a transcription may never do"
     );
+    // **Nineteen since `P-494` declared `nature`.**
     assert_eq!(
         from_file.len(),
-        18,
+        19,
         "eighteen compared, and the count is here so that two empty sets cannot agree"
     );
 

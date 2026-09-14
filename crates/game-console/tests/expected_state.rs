@@ -318,12 +318,18 @@ fn every_territorys_own_numbers_survive_the_round_trip() {
                 .unwrap_or_else(|| panic!("territory {} states no {name}", place.id))
         };
         assert_eq!(says("biome"), place.biome.name(), "territory {}", place.id);
-        assert_eq!(
-            says("nature"),
-            place.force_of_nature.to_string(),
-            "territory {}",
-            place.id
-        );
+        // **Counted rather than read, since `P-494` made nature a kind.** It was
+        // `says("nature")` - a trait on the territory's own description - and a territory
+        // holds one `nature` per point now, so what survives the round trip is how many
+        // entries are there. **An entry is never zero**, so ground that resists with nothing
+        // has none, which is why this counts rather than asking for a number.
+        let natures = described
+            .contents
+            .iter()
+            .filter(|entry| entry.description.kind == "nature")
+            .map(|entry| entry.quantity)
+            .sum::<u32>();
+        assert_eq!(natures, place.force_of_nature(), "territory {}", place.id);
 
         for resource in game_model::Resource::ALL {
             let offered = place.deposit(resource);

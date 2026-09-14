@@ -659,7 +659,7 @@ mod tests {
                 .game
                 .territory(game_model::TerritoryId(2))
                 .unwrap()
-                .force_of_nature,
+                .force_of_nature(),
             1
         );
     }

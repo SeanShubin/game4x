@@ -155,7 +155,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
         territory.push(vec![
             place.id.0.to_string(),
             format!("{:?}", place.biome).to_lowercase(),
-            place.force_of_nature.to_string(),
+            place.force_of_nature().to_string(),
             place.citizens().to_string(),
             place.labor_spent().to_string(),
             place.yards().to_string(),
@@ -372,6 +372,15 @@ pub fn tables(game: &Game) -> Vec<Table> {
     kinds.push(vec![
         "force".into(),
         total(&|t| t.count_of(game_model::thing::Kind::Force)).to_string(),
+    ]);
+    // **`nature`, and unlike the two above it this one is in every committed state** -
+    // `P-494`. A territory holds one per point of resistance and nothing sweeps them, so this
+    // row reads what the planet resists with in total. **It falls when a territory is
+    // taken**, which is `take` consuming a nature per force on ground nobody has founded, and
+    // is the one number here that a rule can lower permanently.
+    kinds.push(vec![
+        "nature".into(),
+        total(&|t| t.count_of(game_model::thing::Kind::Nature)).to_string(),
     ]);
 
     vec![

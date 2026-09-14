@@ -256,10 +256,12 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
     // whether one word naming a trait and a thing at once was deliberate, and the answer was
     // that it was: the trait is `strength` now and the kind is `force`. Seventeen between
     // `P-411` taking `readiness` out and that.
+    // **Nineteen since `P-494` declared `nature`**, which was a trait of a territory and is
+    // a thing a territory holds.
     assert_eq!(
         kinds.len(),
-        18,
-        "eighteen kinds; the release lists {kinds:?}"
+        19,
+        "nineteen kinds; the release lists {kinds:?}"
     );
     assert_eq!(
         families.len(),

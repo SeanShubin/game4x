@@ -102,10 +102,14 @@ fn ending_a_turn_runs_exactly_the_recipes_the_release_calls_the_worlds() {
     // **Eleven since `P-414` added `muster` and `stand`**, which is force becoming something
     // the world does at a turn's end rather than something a reader computes from what is
     // standing there.
+    //
+    // **Fifteen since `P-494` and `P-495`**, which gave the force rule four recipes where it
+    // had a comparison: `hold`, `take`, `reclaim` and `renew`. What that buys is a net with no
+    // inhibitor arc in it - `Game::end_turn_observed` carries the argument.
     assert_eq!(
         worlds.len(),
-        11,
-        "eleven world recipes; the release has {}",
+        15,
+        "fifteen world recipes; the release has {}",
         worlds.len()
     );
 }
@@ -386,10 +390,11 @@ fn every_recipe_the_release_declares_fires_while_the_scenario_runs() {
     let mut distinct: Vec<String> = all.clone();
     distinct.sort();
     distinct.dedup();
+    // **Twenty-six since `P-494` and `P-495`** added `hold`, `reclaim`, `renew` and `take`.
     assert_eq!(
         distinct.len(),
-        22,
-        "twenty-two recipes by name when this was written; the release declares {} \
+        26,
+        "twenty-six recipes by name when this was written; the release declares {} \
          ({distinct:?})",
         distinct.len()
     );
