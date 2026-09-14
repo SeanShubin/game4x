@@ -11,6 +11,53 @@ of it needs you.
 
 ## Open
 
+### P-513 - A relation names its columns, and nothing says so
+
+**to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**`spec/data/` is the source now and nothing states what order its words go in.** `spec/console.md`
+fixes the order for a **description** - *`id` first, then every other trait alphabetically, then
+`occupied`, `free` and `capacity` last* - and **that rule describes none of the eight relations**.
+
+```
+carries      kind trait                          alphabetical would be: kind trait
+member       kind family                                                family kind
+limit        container contained n                                      contained container n
+above        orbit territory                                            orbit territory
+block        id recipe owner                                            id owner recipe
+line         block seq role qty kind place-bound                        block kind place-bound qty role seq
+constraint   block seq trait compare n                                  block compare n seq trait
+for          block seq kind                                             block kind seq
+```
+
+**Three of the eight happen to match and five do not**, which is worse than none matching: the rule
+appears to hold until it is relied on.
+
+> **A relation names its columns, and a row gives them in that order.** The order is the relation's
+> own and is stated where the relation is declared. **A description's order is a different rule** -
+> it ranks traits because a description has no declaration to name them in.
+
+## What this is for, and it is the guarantee that is missing
+
+`spec/console.md` already says **the same state is always the same bytes**. **That covers a
+description and does not reach a relation row**, so two writers of `spec/data/` could disagree about
+column order and both be right. **The code lane hit it building a generator**: `Description::ordered`
+cannot write these files, because no single ranking gives both `carries` and `constraint` their
+order.
+
+## Where the measurement is weaker than the code lane's and stronger overall
+
+**Their example no longer separates the two.** They cited `carries` ordering kind before trait
+against `constraint` ordering trait before kind - and `constraint` has **no** `kind` column today,
+since `P-511` deleted the only row that had one. **The finding survives the example dying**: the
+eight orders above are measured from the files as they stand, and five of them the description rule
+gets wrong.
+
+## What it does not do
+
+**It does not choose the orders.** Each relation's is whatever it is declared to be, and the eight
+above are what the code lane's generator writes. **This says they must be declared**, not what they
+should say.
 ### P-512 - *Where things are* still says a tank holds fuel, and one row of it changes the game
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** entailed · **shape** an instruction · **asks** approval · **into** `releases/first-release.md` -> Where things are

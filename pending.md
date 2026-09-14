@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-513** - A relation names its columns, and nothing says so · `decide/proposals.md`
 - **P-512** - *Where things are* still says a tank holds fuel, and one row of it changes the game · `decide/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
