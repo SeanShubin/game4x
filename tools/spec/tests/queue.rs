@@ -1,4 +1,8 @@
-//! The queue operations, run over the real `docs/notes/proposals.md`.
+//! The queue operations, run over the real `decide/proposals.md`.
+//!
+//! **The queue moved on 2026-09-14** - Sean asked for what needs him to sit apart from what is
+//! settled - so these read `decide/proposals.md`. The record they used to read keeps no open
+//! section at all, which is why pointing them at the old path would now pass over nothing.
 //!
 //! **The population is the file rather than a fixture**, which is the rule this tool was
 //! built to keep: `docs/process.md`, *a check that reads a copy of the population is checking
@@ -9,7 +13,7 @@
 
 use std::path::{Path, PathBuf};
 
-use spec::queue::{FILE_SECTIONS, NOTHING_OPEN, block_of, remove_block};
+use spec::queue::{FILE_SECTIONS, NOTHING_OPEN, RECORD_SECTIONS, block_of, remove_block};
 
 fn root() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR"))
@@ -20,7 +24,16 @@ fn root() -> PathBuf {
 }
 
 fn queue() -> String {
-    std::fs::read_to_string(root().join("docs/notes/proposals.md")).expect("the queue is readable")
+    std::fs::read_to_string(root().join("decide/proposals.md")).expect("the queue is readable")
+}
+
+/// The record the queue left behind: the ledger, the closed items, the notices to other lanes.
+///
+/// **Two files with two invariants.** The queue holds few items and may be empty; the record holds
+/// hundreds and never has an open section. A test asserting *at least ten items* is about the
+/// record, and one asserting *empty says so* is about the queue.
+fn record() -> String {
+    std::fs::read_to_string(root().join("docs/notes/proposals.md")).expect("the record is readable")
 }
 
 fn ids(text: &str) -> Vec<String> {
@@ -39,7 +52,7 @@ fn ids(text: &str) -> Vec<String> {
 /// proposals being destroyed by.
 #[test]
 fn every_item_has_a_block_that_holds_itself_and_nothing_else() {
-    let text = queue();
+    let text = record();
     let all = ids(&text);
     assert!(
         all.len() >= 10,
@@ -113,22 +126,22 @@ fn sub_headings_belong_to_their_item_and_leave_with_it() {
 /// item before it would swallow the rest of the file. This is what notices.
 #[test]
 fn the_files_sections_are_the_ones_the_tool_names() {
-    let text = queue();
+    let text = record();
     let present: Vec<&str> = text
         .lines()
         .filter(|line| line.starts_with("## "))
         .collect();
     let unknown: Vec<&&str> = present
         .iter()
-        .filter(|line| !FILE_SECTIONS.contains(&line.trim()))
+        .filter(|line| !RECORD_SECTIONS.contains(&line.trim()))
         .collect();
     let known: Vec<&&str> = present
         .iter()
-        .filter(|line| FILE_SECTIONS.contains(&line.trim()))
+        .filter(|line| RECORD_SECTIONS.contains(&line.trim()))
         .collect();
     assert_eq!(
         known.len(),
-        FILE_SECTIONS.len(),
+        RECORD_SECTIONS.len(),
         "every named section is in the file exactly once: found {known:?}"
     );
     // The rest are items' own sub-headings, and each must sit inside some item's block.
@@ -168,7 +181,9 @@ fn the_open_section_holds_only_items_or_says_it_is_empty() {
         .skip(start + 1)
         .find(|(_, line)| FILE_SECTIONS.contains(&line.trim()))
         .map(|(at, _)| at)
-        .expect("a section follows Open");
+        // **The queue ends at `## Open`**, since it holds nothing else, so the end of the file
+        // is the end of the section. In the record it was always followed by another heading.
+        .unwrap_or(lines.len());
     let inside: Vec<&&str> = lines[start + 1..end]
         .iter()
         .filter(|line| !line.trim().is_empty())
@@ -270,7 +285,9 @@ fn the_sentinel_says_what_is_true_of_the_open_section() {
         .skip(open + 1)
         .find(|(_, line)| FILE_SECTIONS.contains(&line.trim()) && line.trim() != "## Open")
         .map(|(at, _)| at)
-        .expect("a section follows Open");
+        // **The queue ends at `## Open`**, since it holds nothing else, so the end of the file
+        // is the end of the section. In the record it was always followed by another heading.
+        .unwrap_or(lines.len());
     let inside = &lines[open + 1..next];
     let items: Vec<&&str> = inside
         .iter()

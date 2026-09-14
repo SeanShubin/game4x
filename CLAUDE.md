@@ -10,8 +10,9 @@ by **promotion** - the protocol below - and never by Claude deciding something i
 To pick up where the last session left off, read in this order:
 
 1. [`spec/README.md`](spec/README.md) - what the game is, and the rules for that directory
-2. [`docs/notes/proposals.md`](docs/notes/proposals.md) - the live queue: what is proposed,
-   what has landed, what was withdrawn and why
+2. [`decide/proposals.md`](decide/proposals.md) - the live queue, and nothing else. What has
+   landed, what was withdrawn and why is the record behind it,
+   [`docs/notes/proposals.md`](docs/notes/proposals.md)
 3. [`docs/notes/spec-backlog.md`](docs/notes/spec-backlog.md) - things Sean has said but not
    yet written
 
@@ -174,6 +175,13 @@ Every perspective keeps **one outbox** in its own directory. It is the only thin
 perspective has to read.
 
 - The specification lane's outbox is [`docs/notes/proposals.md`](docs/notes/proposals.md).
+- **`decide/` is not an outbox and no instance files there to be read by another instance.** It
+  holds what waits on a person: [`decide/proposals.md`](decide/proposals.md), the open queue, and
+  [`decide/questions.md`](decide/questions.md), the choices only Sean can make. **An open proposal
+  lives there and a landed one lives in the record**, which is why the outbox above keeps its name
+  and its notices. Sean, 2026-09-14: *move the documents I need to make decisions on or approve to
+  a directory not mixed in with what is currently settled or historical.* The queue was 127 lines
+  of a 5,697-line file.
 - A lens's outbox is `lenses/<name>/outbox.md`.
 - The code lane's outbox is `crates/outbox.md`, and holds the questions that block it.
 - A file in `releases/` is an outbox too: each capability is an item addressed to the code
@@ -666,7 +674,7 @@ outstanding* silently stops covering the queue - which is the one place it most 
 **to** sean · **status** open · **raised** <date> · **kind** <kind> · **shape** <shape> · **into** `file` -> section
 ```
 
-Proposals go in [`docs/notes/proposals.md`](docs/notes/proposals.md), numbered, each labelled
+Proposals go in [`decide/proposals.md`](decide/proposals.md), numbered, each labelled
 with what kind of inference produced it. Record every rejection with Sean's reason, or the
 same proposal will be filed again in a later session.
 

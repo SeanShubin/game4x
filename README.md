@@ -43,6 +43,7 @@ to turn the world, wheel to zoom, `P` to fold it back into a globe, `Esc` to qui
 | [Theory](docs/theory/README.md)           | Background research the design leans on                                                                  |
 | [Documentation map](docs/README.md)       | Every document in the repo, and the rules for adding one                                                 |
 | [Scripts](scripts/README.md)              | How to run each prototype                                                                                |
+| [Decide](decide/README.md)                | **Everything waiting on Sean, and nothing else**: proposals to approve, questions to answer              |
 | [Notes](docs/notes/README.md)             | Derived records of analysis. Not binding                                                                 |
 | [Postmortems](docs/postmortems/README.md) | How a failure happened, and what would have caught it                                                    |
 | [Catalog](reports/catalog.md)             | Every kind, with the families holding it, its traits, its cost and every recipe naming it. **Generated** |

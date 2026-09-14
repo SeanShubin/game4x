@@ -34,10 +34,32 @@ fn problem<T>(message: impl Into<String>) -> Result<T, Problem> {
 /// the word*, *Why this asks you rather than just landing* - so `##` cannot mark where an
 /// item ends. Nothing in the text distinguishes the two, so the file's own sections are
 /// named and everything else at that level belongs to whatever item it sits under.
-pub const FILE_SECTIONS: [&str; 8] = [
+/// The record's own top-level sections - everything that is not the open queue.
+pub const RECORD_SECTIONS: [&str; 8] = [
+    "## The files that need you",
+    "## How this works",
+    "## Where the open queue is",
+    "## Addressed to other perspectives",
+    "## Accepted",
+    "## Forecast cleanups that were checked and not filed",
+    "## Rejected",
+    "## Withdrawn",
+];
+
+/// The queue's, and it has one. **`decide/proposals.md` holds what waits on Sean and nothing
+/// else**, so there is nowhere in it for a section that is not the open list.
+pub const QUEUE_SECTIONS: [&str; 1] = ["## Open"];
+
+/// Both, because an item's block ends at the next top-level section of whichever file it is in.
+///
+/// **A `##` that is not here belongs to an item** - `CLAUDE.md` reserves `###` for an item's own
+/// title and says a sub-heading inside one is written `##`, so the two cannot be told apart by
+/// level alone and this list is what tells them apart.
+pub const FILE_SECTIONS: [&str; 9] = [
     "## The files that need you",
     "## How this works",
     "## Open",
+    "## Where the open queue is",
     "## Addressed to other perspectives",
     "## Accepted",
     "## Forecast cleanups that were checked and not filed",

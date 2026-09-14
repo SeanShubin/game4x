@@ -38,6 +38,20 @@ use std::process::ExitCode;
 
 use spec::queue;
 
+/// Where an item that waits on Sean lives, and where one that waits on an instance does.
+///
+/// **`decide/` holds only what a person is asked to act on** - Sean, 2026-09-14: *move the
+/// documents I need to make decisions on or approve to a directory not mixed in with what is
+/// currently settled or historical*. The open queue was 127 lines of a 5,697-line file, and the
+/// other 5,570 were the ledger, the closed items and the notices to other instances.
+///
+/// **A notice is not addressed to him and does not move.** `docs/notes/proposals.md` stays this
+/// lane's outbox; `decide/` is not an outbox at all, and no instance files there to be read by
+/// another instance.
+const QUEUE: &str = "decide/proposals.md";
+const QUESTIONS: &str = "decide/questions.md";
+const OUTBOX: &str = "docs/notes/proposals.md";
+
 fn main() -> ExitCode {
     let arguments: Vec<String> = std::env::args().skip(1).collect();
     let root = root();
@@ -81,12 +95,12 @@ fn usage() -> String {
 
 /// The one proposal with this id, from the queue that `tools/outbox` reads.
 fn proposal(root: &Path, id: &str) -> Result<outbox::Item, String> {
-    let queue = read(&root.join("docs/notes/proposals.md"))?;
-    let items = outbox::parse(&queue, "docs/notes/proposals.md");
+    let queue = read(&root.join(QUEUE))?;
+    let items = outbox::parse(&queue, QUEUE);
     let mut found: Vec<outbox::Item> = items.into_iter().filter(|item| item.id == id).collect();
     match found.len() {
         1 => Ok(found.remove(0)),
-        0 => Err(format!("{id} is not an item in docs/notes/proposals.md")),
+        0 => Err(format!("{id} is not an item in {QUEUE}")),
         several => Err(format!(
             "{id} appears {several} times, so which one is a guess"
         )),
@@ -245,20 +259,25 @@ fn land(root: &Path, id: &str, previous: &str) -> Result<String, String> {
         .to_string();
     let row = format!("| {id}, {title} | {into} | {} |", today());
 
-    let path = root.join("docs/notes/proposals.md");
-    let text = read(&path)?;
-    let with_row = queue::insert_ledger_row(&text, previous, &row).map_err(|w| w.to_string())?;
-    let without = queue::remove_block(&with_row, id).map_err(|why| why.to_string())?;
+    // **The block and the ledger row are in two files now.** `decide/proposals.md` holds only
+    // what waits on Sean, and the ledger of everything accepted is the record rather than a
+    // queue - so landing removes from the one and writes to the other, and asserts both.
+    let queue_at = root.join(QUEUE);
+    let without = queue::remove_block(&read(&queue_at)?, id).map_err(|why| why.to_string())?;
     let settled = queue::say_if_empty(&without).map_err(|why| why.to_string())?;
-    write(&path, &settled)?;
+    write(&queue_at, &settled)?;
 
-    let back = read(&path)?;
-    if back.contains(&format!("### {id} - ")) {
+    let ledger_at = root.join(OUTBOX);
+    let with_row =
+        queue::insert_ledger_row(&read(&ledger_at)?, previous, &row).map_err(|w| w.to_string())?;
+    write(&ledger_at, &with_row)?;
+
+    if read(&queue_at)?.contains(&format!("### {id} - ")) {
         return Err(format!(
-            "{id}'s block is still in the file after landing it"
+            "{id}'s block is still in the queue after landing it"
         ));
     }
-    let rows = back
+    let rows = read(&ledger_at)?
         .lines()
         .filter(|l| l.starts_with(&format!("| {id},")))
         .count();
@@ -445,7 +464,7 @@ fn shape_is_rows_only_if_the_cells_land(root: &Path, id: &str, draft: &str) -> R
 /// lane writes - `S-121` was refused by a verb that had no case for it. The queue is the only
 /// outbox this lane owns, so there is one destination and no routing to do.
 fn file_notice(root: &Path, id: &str, draft: &str) -> Result<String, String> {
-    let at = root.join("docs/notes/proposals.md");
+    let at = root.join(OUTBOX);
     let before = read(&at)?;
     if before.contains(&format!("### {id} - ")) {
         return Err(format!("{id} is already in the queue"));
@@ -535,11 +554,7 @@ fn file(root: &Path, path: &str) -> Result<String, String> {
         }
         (false, false) => return file_notice(root, &id, &draft),
     };
-    let into = if asks_decision {
-        "docs/notes/decisions.md"
-    } else {
-        "docs/notes/proposals.md"
-    };
+    let into = if asks_decision { QUESTIONS } else { QUEUE };
     shape_is_rows_only_if_the_cells_land(root, &id, &draft)?;
 
     let at = root.join(into);
@@ -572,11 +587,7 @@ fn file(root: &Path, path: &str) -> Result<String, String> {
     if back.contains('\r') {
         return Err(format!("{into} holds a carriage return after the write"));
     }
-    let other = if asks_decision {
-        "docs/notes/proposals.md"
-    } else {
-        "docs/notes/decisions.md"
-    };
+    let other = if asks_decision { QUEUE } else { QUESTIONS };
     if read(&root.join(other))?.contains(&format!("### {id} - ")) {
         return Err(format!(
             "{id} is in {other} too, and an item lives in one at a time"

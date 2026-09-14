@@ -21,7 +21,8 @@ here without first becoming a proposal.
 
 ## Open
 
-*Nothing is open.*
+**They are in [`decide/questions.md`](../../decide/questions.md).** This file keeps the answered
+ones, for their reasoning.
 
 ## Answered, kept for the reasoning
 
