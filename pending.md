@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-497** - `spec/data/` normalized: seven relations, every count re-derived · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -21,7 +20,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-497** - `dd556b2` P-497: the sample rows use the written id too · still open in `docs/notes/proposals.md`
 - **R-11** - `287e67f` R-11: the engine's inputs are a section of the index, read from the directory · still open in `releases/first-release.md`
 
 ## What is outstanding
@@ -126,6 +124,7 @@ it exists to ask.
 - `spec/console.md` -> Phases - P-74, P-309
 - `spec/control.md` -> Gaining and holding ground - P-62, P-275
 - `spec/control.md` -> Producing force - P-84, P-437
+- `spec/data/` - P-497, P-455
 - `spec/economy.md` -> Structures and labor - P-18, P-438
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/invariants.md` -> Everything is expressible - P-12, P-128

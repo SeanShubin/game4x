@@ -62,117 +62,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-497 - `spec/data/` normalized: seven relations, every count re-derived
-
-**to** sean · **status** open, **held** 2026-09-13 pending `P-499` · **raised** 2026-09-13 · **converted** 2026-09-13, once the last question in it was answered · **kind** invented · **shape** an instruction · **asks** approval · **into** `spec/data/`
-
-**Everything in this item was open and is now settled.** The names, the block's identity, and
-`whose upkeep is unpaid` - the last of which left as `P-498` and landed in `376df69`. **So this
-asks approval rather than a decision**, and what is offered is the migration described, because a
-schema is a change to make rather than words that land in a file.
-
-## The seven relations, and every count re-derived after `P-498`
-
-```
-{carries    kind:pioneer  trait:fuel}                              45 rows
-{member     kind:ark      family:unit}                              7 rows
-{limit      container:territory contained:garrison n:1}             5 rows
-{block      id:refresh-moving recipe:refresh owner:world}          37 rows
-{line       block:deploy-ark seq:3 role:consume kind:ark place-above:where}  96 rows
-{constraint block:refuel seq:2 trait:free kind:energy compare:at-least n:1}   29 rows
-{for        block:build-extractor-1 seq:4 kind:food}                6 rows
-```
-
-**These are not the numbers this item was filed with**, and that is the point of re-deriving them:
-`P-498` took blocks from 36 to 37, lines from 93 to 96, constraints from 26 to 29, and **`for` from
-7 to 6** - because `whose upkeep is unpaid` was counted among the cells that do not decompose, and
-it decomposes now.
-
-## Two columns this item first treated as atomic, and `P-499` measured
-
-**`constraint` carries four parts, not two** - `J1`, settled 2026-09-14. `free energy at least 1` is
-a trait, a kind, a comparison and a number, and the first version of this schema had `trait` and
-`compare` and swallowed the kind into the comparison. **`kind` is filled on one row of 29 and `n` on
-about half**: sparse rather than duplicated, which is the shape containment already uses.
-
-**`place` is a reference in three forms and never prose** - `P-500`, filed beside this. A binding
-(`place-bound:where`), a sequence in this same block (`place-line:2`, which is what *that unit*
-means), or a stated relation (`place-above:where`). **The four prose cells go in `P-500`**, so by the
-time this migration runs there are none left to mangle.
-
-## How to tell it was carried out
-
-**Each relation's row count equals what the same relation derives from
-`releases/first-release.md`**, and **each relation's key is unique**. A migration that loses a row
-fails a count rather than being noticed later.
-
-**And one more, which is the one you asked for.** `(recipe, kind, trait)` is unique over the 37
-blocks - measured on the distinguishing line of each, and still true after `P-498` added one.
-**That is what stops a written `block` id drifting from the block it names**, and it doubles as a
-rule: two blocks sharing it would be one rule stated twice.
-
-## One - a recipe name is not a key, and nothing said so
-
-**37 blocks over 26 distinct names**, one more since `P-498`. `refresh` opens **six** blocks, `discard` **five**, `stow`
-**two**. So `recipe -> rows` is not a function and a row cannot be addressed by its recipe name
-alone.
-
-**The release has always worked this way and no artifact named it** until
-`docs/designing-rules.md` wrote *ground from 32 blocks of recipe rows* - a word that exists in a
-report and nowhere in the specification. **Normalizing is what turned an accident of layout into a
-thing with a name**, and the id above is the part this lane invented rather than found.
-
-## Two - the Traits column holds three different relations
-
-**Counted: 34 filled cells, of which 26 decompose into `<trait> <comparison>` and eight do not.**
-The eight are not malformed; they are **different kinds of fact sharing a column**:
-
-| The cell                                         | What it actually is                                                                         |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------- |
-| `food`, `metal`, `` `$resource` `` - **7 cells** | which resource the extractor or store is *for* - hence `for`, and not a `constraint` at all |
-| `joined to `$from` by an edge the unit crosses`  | a relationship between two places - prose under rule 7                                      |
-| `whose upkeep is unpaid`                         | a trait test in words rather than in the form the other 26 use                              |
-
-**This is the finding, and no reader of the table could have had it.** One column, three relations,
-and they read alike because a markdown cell has no type. **`free energy at least 1` and `food` sit
-in the same column and are not the same kind of thing at all.**
-
-## What it does not settle, and these are the decision
-
-- **The names are settled, 2026-09-13.** `member`, `limit`, `constraint` and `for` replace this
-  lane's first four; `block`, `line` and `carries` stand. **That each is a kind was never a
-  question** - `P-443` leaves no other option for the first word of a row, and this item previously
-  wrote that consequence as though it were a choice
-- **`carries` was queried and kept, on the specification's own usage.** `spec/logistics.md` uses
-  *contain* and *hold* for contents seventeen times and *carries* twice, both for traits - *per kind
-  carrying a particular value of a trait*, *a place carries an `id`*. `spec/console.md` says *one
-  kind and carries every trait of that thing*, and `spec/planet.md` has a section called *What a
-  territory carries*. **The split is already there and deliberate: things hold contents, kinds carry
-  traits.** This lane's worry was that `carries` would collide with cargo in a game about
-  containment; measured, it does not, because the spec never uses it that way
-- **A block's identity is settled, 2026-09-13: a written id to join on, and the natural key
-  asserted as a uniqueness constraint.** `{block id:refresh-moving recipe:refresh owner:world}`,
-  and every `line` carries that one short `block:` column. **Position was ruled out** - the blank
-  *same as above* cell is positional identity, and putting it back in the key is what this whole
-  item removes.
-- **The constraint is `(recipe, kind, trait)` over the 36 blocks**, measured unique today on the
-  distinguishing line of each. **It is the check that stops a written id drifting from its block** -
-  a name is a second statement of what a block is, and nothing else re-derives it. **And it doubles
-  as a rule**: two blocks sharing that key would be one rule stated twice, which
-  `spec/invariants.md` already forbids, so the constraint enforces *a fact is stated once* rather
-  than assuming it
-- **`whose upkeep is unpaid` is answered and left this item**, 2026-09-13. Sean chose `H2`: the
-  mark is materialised rather than described, so `upkeep` marks what it paid and `perish` takes
-  `paid 0`. **It is `P-498`**, because it is a rule's wording rather than a data shape and belongs
-  where he approves words. **Nothing in this item waits on it** - the `constraint` relation covers
-  all 27 cells either way, and `P-498` only decides which 27th.
-
-## What this is, said plainly
-
-**This is `C-114`'s restructuring approached from the data side.** `spec/invariants.md` says every
-recipe is data rather than code, and 93 rows of `line` is what that sentence has always meant.
-**The engine reading them is the other half and is not in this item.**
-
+*Nothing is open. Everything filed has been decided.*
 
 ## Addressed to other perspectives
 
@@ -5534,6 +5424,7 @@ work the release exists to order.
 | P-496, The four cells between the force rule and a green gate, and one of them is a live defect                              | `releases/first-release.md` -> Recipes and Traits, and `spec/data/`                                                                                                                                      | 2026-09-14 |
 | P-498, `perish` reads a mark nobody writes, and `H2` gives it one                                                            | `releases/first-release.md` -> Recipes and Traits                                                                                                                                                        | 2026-09-14 |
 | P-500, The `Where` column loses its last four prose cells, and `above` is stated as data                                     | `releases/first-release.md` -> Recipes, and `spec/data/above.4x`                                                                                                                                         | 2026-09-14 |
+| P-497, `spec/data/` normalized: seven relations, every count re-derived                                                      | `spec/data/`                                                                                                                                                                                             | 2026-09-14 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |

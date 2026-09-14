@@ -1,0 +1,29 @@
+{constraint block:move seq:3 trait:moving compare:at-least n:1}
+{constraint block:move seq:4 trait:moving compare:one-less}
+{constraint block:refuel seq:2 trait:free kind:energy compare:at-least n:1}
+{constraint block:create-labor seq:1 trait:laboring compare:at-least n:1}
+{constraint block:create-labor seq:2 trait:laboring compare:one-less}
+{constraint block:work seq:2 trait:working compare:at-least n:1}
+{constraint block:work seq:3 trait:working compare:one-less}
+{constraint block:upkeep seq:3 trait:paid compare:at-maximum}
+{constraint block:bear seq:1 trait:bearing compare:at-least n:1}
+{constraint block:bear seq:2 trait:bearing compare:one-less}
+{constraint block:perish seq:1 trait:paid compare:exactly n:0}
+{constraint block:age seq:1 trait:keeps compare:at-least n:1}
+{constraint block:age seq:2 trait:keeps compare:one-less}
+{constraint block:spoil seq:1 trait:keeps compare:exactly n:0}
+{constraint block:refresh-unit-moving seq:1 trait:moving compare:at-maximum}
+{constraint block:refresh-citizen-laboring seq:1 trait:laboring compare:at-maximum}
+{constraint block:refresh-citizen-bearing seq:1 trait:bearing compare:at-maximum}
+{constraint block:refresh-extractor-working seq:1 trait:working compare:at-maximum}
+{constraint block:muster seq:2 trait:defending compare:at-least n:1}
+{constraint block:muster seq:3 trait:defending compare:one-less}
+{constraint block:stand seq:1 trait:defending compare:at-least n:1}
+{constraint block:stand seq:2 trait:defending compare:one-less}
+{constraint block:refresh-citizen-defending seq:1 trait:defending compare:at-maximum}
+{constraint block:refresh-unit-defending seq:1 trait:defending compare:at-maximum}
+{constraint block:hold seq:1 trait:met compare:exactly n:0}
+{constraint block:hold seq:3 trait:met compare:at-maximum}
+{constraint block:reclaim seq:1 trait:met compare:exactly n:0}
+{constraint block:renew-nature seq:2 trait:met compare:exactly n:0}
+{constraint block:renew-citizen seq:2 trait:paid compare:exactly n:0}

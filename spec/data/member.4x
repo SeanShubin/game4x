@@ -1,0 +1,7 @@
+{member kind:ark family:unit}
+{member kind:pioneer family:unit}
+{member kind:food family:resource}
+{member kind:metal family:resource}
+{member kind:energy family:resource}
+{member kind:territory family:place}
+{member kind:orbit family:place}

@@ -1,0 +1,96 @@
+{line block:deploy-ark seq:1 role:require qty:1 kind:territory place-bound:where}
+{line block:deploy-ark seq:2 role:require qty:1 kind:force}
+{line block:deploy-ark seq:3 role:consume qty:1 kind:ark place-above:where}
+{line block:deploy-ark seq:4 role:produce qty:1 kind:garrison}
+{line block:deploy-ark seq:5 role:produce qty:2 kind:citizen}
+{line block:deploy-ark seq:6 role:produce qty:1 kind:extractor}
+{line block:deploy-ark seq:7 role:produce qty:1 kind:extractor}
+{line block:move seq:1 role:require qty:1 kind:place place-bound:from}
+{line block:move seq:2 role:require qty:1 kind:place place-bound:to}
+{line block:move seq:3 role:require qty:1 kind:unit place-bound:from}
+{line block:move seq:4 role:put kind:unit place-bound:to}
+{line block:move seq:5 role:consume qty:1 kind:energy place-line:3}
+{line block:refuel seq:1 role:require qty:1 kind:territory place-bound:where}
+{line block:refuel seq:2 role:require qty:1 kind:unit place-bound:where}
+{line block:refuel seq:3 role:consume qty:1 kind:energy}
+{line block:refuel seq:4 role:produce qty:1 kind:energy place-line:2}
+{line block:found-by-land seq:1 role:consume qty:1 kind:pioneer}
+{line block:found-by-land seq:2 role:require qty:1 kind:force}
+{line block:found-by-land seq:3 role:produce qty:1 kind:garrison}
+{line block:found-by-land seq:4 role:produce qty:2 kind:citizen}
+{line block:found-by-land seq:5 role:produce qty:1 kind:extractor}
+{line block:found-by-land seq:6 role:produce qty:1 kind:extractor}
+{line block:build-extractor seq:1 role:consume qty:1 kind:labor}
+{line block:build-extractor seq:2 role:consume qty:1 kind:metal}
+{line block:build-extractor seq:3 role:produce qty:1 kind:extractor}
+{line block:build-store seq:1 role:consume qty:1 kind:labor}
+{line block:build-store seq:2 role:consume qty:1 kind:metal}
+{line block:build-store seq:3 role:produce qty:1 kind:store}
+{line block:build-yard seq:1 role:consume qty:1 kind:labor}
+{line block:build-yard seq:2 role:consume qty:15 kind:metal}
+{line block:build-yard seq:3 role:produce qty:1 kind:yard}
+{line block:produce-pioneer seq:1 role:consume qty:3 kind:metal}
+{line block:produce-pioneer seq:2 role:consume qty:2 kind:energy}
+{line block:produce-pioneer seq:3 role:consume qty:2 kind:citizen}
+{line block:produce-pioneer seq:4 role:produce qty:1 kind:pioneer}
+{line block:launch-ark seq:1 role:require qty:1 kind:territory place-bound:where}
+{line block:launch-ark seq:2 role:consume qty:3 kind:metal}
+{line block:launch-ark seq:3 role:consume qty:12 kind:energy}
+{line block:launch-ark seq:4 role:consume qty:2 kind:citizen}
+{line block:launch-ark seq:5 role:require qty:1 kind:yard}
+{line block:launch-ark seq:6 role:produce qty:1 kind:ark place-above:where}
+{line block:create-labor seq:1 role:require qty:1 kind:citizen}
+{line block:create-labor seq:2 role:put kind:citizen}
+{line block:create-labor seq:3 role:produce qty:1 kind:labor}
+{line block:work seq:1 role:require qty:1 kind:territory place-bound:where}
+{line block:work seq:2 role:require qty:1 kind:extractor}
+{line block:work seq:3 role:put kind:extractor}
+{line block:work seq:4 role:consume qty:1 kind:labor}
+{line block:work seq:5 role:produce qty:`$where`'s density for that resource kind:resource}
+{line block:upkeep seq:1 role:require qty:1 kind:citizen}
+{line block:upkeep seq:2 role:consume qty:1 kind:food}
+{line block:upkeep seq:3 role:put kind:citizen}
+{line block:bear seq:1 role:require qty:1 kind:citizen}
+{line block:bear seq:2 role:put kind:citizen}
+{line block:bear seq:3 role:produce qty:1 kind:fertility}
+{line block:breed seq:1 role:consume qty:1 kind:fertility}
+{line block:breed seq:2 role:consume qty:1 kind:food}
+{line block:breed seq:3 role:produce qty:1 kind:citizen}
+{line block:perish seq:1 role:consume qty:1 kind:citizen}
+{line block:age seq:1 role:require qty:1 kind:thing}
+{line block:age seq:2 role:put kind:thing}
+{line block:spoil seq:1 role:consume qty:1 kind:thing}
+{line block:stow-metal seq:1 role:consume qty:1 kind:metal}
+{line block:stow-metal seq:2 role:produce qty:1 kind:metal}
+{line block:stow-energy seq:1 role:consume qty:1 kind:energy}
+{line block:stow-energy seq:2 role:produce qty:1 kind:energy}
+{line block:discard-metal seq:1 role:consume qty:1 kind:metal}
+{line block:discard-energy seq:1 role:consume qty:1 kind:energy}
+{line block:discard-labor seq:1 role:consume qty:1 kind:labor}
+{line block:discard-fertility seq:1 role:consume qty:1 kind:fertility}
+{line block:refresh-unit-moving seq:1 role:put kind:unit}
+{line block:refresh-citizen-laboring seq:1 role:put kind:citizen}
+{line block:refresh-citizen-bearing seq:1 role:put kind:citizen}
+{line block:refresh-extractor-working seq:1 role:put kind:extractor}
+{line block:muster seq:1 role:require qty:1 kind:garrison}
+{line block:muster seq:2 role:require qty:1 kind:citizen}
+{line block:muster seq:3 role:put kind:citizen}
+{line block:muster seq:4 role:produce qty:that citizen's strength kind:force}
+{line block:stand seq:1 role:require qty:1 kind:unit}
+{line block:stand seq:2 role:put kind:unit}
+{line block:stand seq:3 role:produce qty:that unit's strength kind:force}
+{line block:refresh-citizen-defending seq:1 role:put kind:citizen}
+{line block:refresh-unit-defending seq:1 role:put kind:unit}
+{line block:hold seq:1 role:require qty:1 kind:nature}
+{line block:hold seq:2 role:consume qty:1 kind:force}
+{line block:hold seq:3 role:put kind:nature}
+{line block:reclaim seq:1 role:require qty:1 kind:nature}
+{line block:reclaim seq:2 role:consume qty:1 kind:citizen}
+{line block:renew-nature seq:1 role:require qty:1 kind:nature}
+{line block:renew-nature seq:2 role:put kind:nature}
+{line block:renew-citizen seq:1 role:require qty:1 kind:citizen}
+{line block:renew-citizen seq:2 role:put kind:citizen}
+{line block:take seq:1 role:require qty:1 kind:nature}
+{line block:take seq:2 role:consume qty:1 kind:nature}
+{line block:take seq:3 role:consume qty:1 kind:force}
+{line block:discard-force seq:1 role:consume qty:1 kind:force}
