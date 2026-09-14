@@ -23,9 +23,20 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - **Capacity is spent and given back.** Making a thing occupies one of the free capacity in
   whatever will hold it; **destroying it frees one**. The two never come apart, because the
   capacity is only ever their sum
-- **When a thing that contains things is consumed, what it held falls loose where it stood.** It
-  is not destroyed with its container: it goes into disorder, and at the turn's end what there is
-  room for is kept and the rest is lost.
+- **When a thing that holds capacity is consumed, the place it stood in has that much less room.**
+  Nothing falls loose, because nothing was inside it: what a place holds is the place's, and
+  destroying a store leaves the resources where they already were.
+- **A resource in a place is in that place, not in a container inside it.** What a place holds
+  of a kind is one number. **The things in it that can hold that kind contribute capacity and
+  hold nothing**, and at the turn's end what the place holds beyond that capacity is lost
+- **A place's capacity for a kind is the sum of what is in it that can hold that kind**, and a
+  place declares none of its own. **This holds of every place**: an orbit has room for the fuel
+  its units carry and for nothing else, because that is what is in it
+- **A bin is a thing.** What holds a kind is a store for that kind, and a thing with two bins
+  holds two stores. **A store's capacity is what its kind declares**, and it holds nothing
+- **A thing that leaves takes what it hauls.** A unit moving out of a place is given an amount
+  of each kind, no more than its own capacity for that kind, and that amount joins the number
+  the new place holds. **Allocation happens at the moment of leaving and at no other.**
 - A thing that contains things takes up capacity in whatever contains it
 - A thing says which of the things in it are next to which. That is a fact about the container
   rather than about its contents

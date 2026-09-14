@@ -20,6 +20,19 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 **There is one notation.** A command and a description of game state are written in the same form,
 and both carry a tree.
 
+**The notation is the game notation.** A command, a state and a data file are written in it, and
+there is nothing else to write them in. **The game notation is the source**: what is stated is
+stated in it, and every other form of the same facts is a presentation, generated and never
+canonical.
+
+**A presentation has a name too.** The **relational model** shows the game as relations - one
+table per relation, each fact stated once, nothing derived shown beside what it came from. The
+**physical model** shows it as the game holds it: every thing inside the thing that holds it, a
+tree from the game down.
+
+**The two show the same facts and neither is the game.** A reader chooses by what they are
+checking: whether a fact is stated once, or where a thing actually is.
+
 **The language carries the tree whether or not a command uses one today.** Two notations would cost
 more to maintain and more to read than one, and a command that takes a tree is expected rather than
 hypothetical.
@@ -137,6 +150,10 @@ of these and nothing else:
 - **`free <kind> of x`**, a container's capacity for that kind less what it holds
 
 **A guard compares two expressions**, with `=`, `<`, `≤`, `>` or `≥`.
+
+**`free <kind> of x` may be less than zero.** A place holds what it holds whatever room there is,
+so where what it holds exceeds the capacity in it, its free capacity for that kind is the
+shortfall written as a negative number. **That is the amount the turn's end will take.**
 
 **The words an expression is built from are the notation's own, and so are the words a
 declaration is built from** - `name`, `admits`, `kept`, `of` and `family`. **These are the two
