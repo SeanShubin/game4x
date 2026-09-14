@@ -41,9 +41,23 @@ pub const VOCABULARY: [&str; 4] = ["kind", "trait", "family", "value"];
 /// **A relation is an ordered tuple of named attributes**, and the order is the relation's own
 /// rather than a global one. [`game_model::containment::Description::ordered`] ranks a game
 /// thing's traits by Sean's order of relevance - the type, then the id, capacity last - and
-/// **it cannot write these files**: `carries` orders `kind` before `trait` and `constraint`
-/// orders `trait` before `kind`, so no single ranking gives both. `P-497` needed a writer of
-/// its own and this is it.
+/// **it cannot write these files.**
+///
+/// **Measured across the eight relations `P-497` left**, against what sorting their keys would
+/// give: `carries` and `above` happen to agree, and the other six do not - `member` writes
+/// `kind family`, `limit` writes `container contained n`, `block` writes `id recipe owner`,
+/// and `line`, `constraint` and `for` all lead with `block seq`.
+///
+/// **Two of eight agreeing is worse than none**, which is the thing worth seeing: a rule that
+/// held everywhere would be a rule, and a rule that holds twice looks like one until something
+/// leans on it.
+///
+/// **This argument used to be made with one example and the example died.** It was that
+/// `carries` orders `kind` before `trait` while `constraint` ordered `trait` before `kind` -
+/// true until `P-511` deleted `refuel`, whose `free energy at least 1` was the only constraint
+/// row carrying a kind at all. The specification lane caught it. **A finding that rests on one
+/// row is a finding one promotion can take away**, and this one was not: it is about every
+/// relation, and it survived losing its illustration.
 ///
 /// **A column a row does not have is left out**, which is how `qty` is absent from a `put`
 /// line and `n` from a comparison naming no number. A row carrying a column the relation does
@@ -202,6 +216,199 @@ pub fn gathered(document: &str) -> Vec<Block> {
         block.id = id;
     }
     blocks
+}
+
+/// `spec/data/line.4x`: one row per line of a recipe.
+pub const LINE: Relation = Relation {
+    name: "line",
+    columns: &[
+        "block",
+        "seq",
+        "role",
+        "qty",
+        "kind",
+        "place-bound",
+        "place-above",
+    ],
+};
+
+/// `spec/data/constraint.4x`: what a line's `Traits` cell says about a count.
+pub const CONSTRAINT: Relation = Relation {
+    name: "constraint",
+    columns: &["block", "seq", "trait", "compare", "n"],
+};
+
+/// `spec/data/for.4x`: which kind a line's `Traits` cell names, where it names one.
+pub const FOR: Relation = Relation {
+    name: "for",
+    columns: &["block", "seq", "kind"],
+};
+
+/// The one *Traits* cell `spec/data/` does not represent.
+///
+/// **Named rather than skipped**, and `S-131` names it too: *joined to `$from` by an edge the
+/// unit crosses* is a relation between two places and the notation has no form for it. A
+/// second cell arriving here would be a second thing the data cannot say, so this is asserted
+/// to be the only one rather than filtered quietly.
+const NOT_REPRESENTED: &str = "joined to `$from` by an edge the unit crosses";
+
+/// Every line the release states, as `spec/data/line.4x` writes them.
+pub fn lines(document: &str) -> String {
+    let mut rows: Vec<Vec<(&str, String)>> = Vec::new();
+    for (block, seq, row) in numbered(document) {
+        let mut line = vec![
+            ("block", block.clone()),
+            ("seq", seq.to_string()),
+            ("role", cell(&row, document, "Role")),
+        ];
+        let qty = cell(&row, document, "Qty");
+        if !qty.is_empty() {
+            line.push(("qty", qty));
+        }
+        line.push(("kind", cell(&row, document, "Kind")));
+        if let Some((column, named)) = place(&cell(&row, document, "Where")) {
+            line.push((column, named));
+        }
+        rows.push(line);
+    }
+    assert!(
+        !rows.is_empty(),
+        "the Recipes table parsed to no line at all"
+    );
+    LINE.written(&rows)
+}
+
+/// Every constraint the release states, as `spec/data/constraint.4x` writes them.
+pub fn constraints(document: &str) -> String {
+    let mut rows: Vec<Vec<(&str, String)>> = Vec::new();
+    let mut unrepresented = 0;
+    for (block, seq, row) in numbered(document) {
+        let said = cell(&row, document, "Traits");
+        if said.is_empty() || is_a_kind(&said) {
+            continue;
+        }
+        if said == NOT_REPRESENTED {
+            unrepresented += 1;
+            continue;
+        }
+        let (named, compare, n) = comparison(&said);
+        let mut line = vec![
+            ("block", block.clone()),
+            ("seq", seq.to_string()),
+            ("trait", named),
+            ("compare", compare),
+        ];
+        if let Some(n) = n {
+            line.push(("n", n));
+        }
+        rows.push(line);
+    }
+    assert_eq!(
+        unrepresented, 1,
+        "one `Traits` cell has no form in `spec/data/` - `S-131` names it - and this found \
+         {unrepresented}"
+    );
+    assert!(
+        !rows.is_empty(),
+        "the Recipes table parsed to no constraint"
+    );
+    CONSTRAINT.written(&rows)
+}
+
+/// Every `for` the release states, as `spec/data/for.4x` writes them.
+pub fn fors(document: &str) -> String {
+    let rows: Vec<Vec<(&str, String)>> = numbered(document)
+        .into_iter()
+        .filter_map(|(block, seq, row)| {
+            let said = cell(&row, document, "Traits");
+            is_a_kind(&said).then(|| {
+                vec![
+                    ("block", block),
+                    ("seq", seq.to_string()),
+                    ("kind", said.trim_matches('`').to_string()),
+                ]
+            })
+        })
+        .collect();
+    assert!(!rows.is_empty(), "the Recipes table parsed to no `for` row");
+    FOR.written(&rows)
+}
+
+/// Every row of the Recipes table, with the block it belongs to and its place in that block.
+///
+/// **`seq` counts within the block and from one**, which is what makes a constraint and its
+/// line the same row seen twice - the pair `(block, seq)` is how `spec/data/` joins them, and
+/// it is the natural key `P-497` gave those relations.
+fn numbered(document: &str) -> Vec<(String, usize, Vec<String>)> {
+    let mut out = Vec::new();
+    for block in gathered(document) {
+        for (at, row) in block.rows.iter().enumerate() {
+            out.push((block.id.clone(), at + 1, row.clone()));
+        }
+    }
+    out
+}
+
+/// One cell of a row, by the name of its column.
+fn cell(row: &[String], document: &str, column: &str) -> String {
+    let at = crate::recipes::column_of(document, "## Recipes", column);
+    plain(row.get(at).map(String::as_str).unwrap_or_default())
+}
+
+/// Whether a *Traits* cell names a kind rather than constraining a count.
+///
+/// **A kind is one word and a comparison is several**, and the one-word cells are `food`,
+/// `metal` and `` `$resource` `` - the resource a `build` or a landing's extractor is for.
+fn is_a_kind(said: &str) -> bool {
+    !said.is_empty() && !said.contains(char::is_whitespace)
+}
+
+/// A *Traits* cell as a trait, a comparison and the number it names.
+///
+/// **Four forms and no others**, which the release's own vocabulary bears out: *at its
+/// maximum*, *at least n*, *one less*, and a bare number. A fifth fails here rather than
+/// being written as something it is not.
+fn comparison(said: &str) -> (String, String, Option<String>) {
+    let (named, rest) = said
+        .split_once(' ')
+        .unwrap_or_else(|| panic!("`{said}` names no trait"));
+    let named = named.trim_matches('`').to_string();
+    match rest {
+        "at its maximum" => (named, "at-maximum".to_string(), None),
+        "one less" => (named, "one-less".to_string(), None),
+        _ => match rest.strip_prefix("at least ") {
+            Some(n) => (named, "at-least".to_string(), Some(n.to_string())),
+            None => {
+                assert!(
+                    rest.chars().all(|c| c.is_ascii_digit()),
+                    "`{said}` is not `at its maximum`, `one less`, `at least n` or a number"
+                );
+                (named, "exactly".to_string(), Some(rest.to_string()))
+            }
+        },
+    }
+}
+
+/// A *Where* cell as the column and the name it binds.
+///
+/// **Two columns, because a place named and a place worked out from one are different
+/// facts.** `$where` is bound by the command; *above `$where`* is the orbit the release says
+/// is derived - `spec/console.md`: *a place worked out from another is not open*.
+fn place(said: &str) -> Option<(&'static str, String)> {
+    let said = said.trim();
+    if said.is_empty() {
+        return None;
+    }
+    if let Some(rest) = said.strip_prefix("above ") {
+        return Some((
+            "place-above",
+            rest.trim_matches('`').trim_start_matches('$').to_string(),
+        ));
+    }
+    Some((
+        "place-bound",
+        said.trim_matches('`').trim_start_matches('$').to_string(),
+    ))
 }
 
 /// A name as a data file spells it: one word, dashes for the spaces.

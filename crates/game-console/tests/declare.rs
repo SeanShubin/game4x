@@ -940,10 +940,9 @@ fn every_bare_word_in_every_data_file_is_a_declared_trait() {
 /// id, recipe or owner differs fails**, and so does a row in the wrong place, because a
 /// relation's file has an order even though a relation does not.
 ///
-/// **What this does not yet cover**: `line.4x`, `constraint.4x` and `for.4x`. They need the
-/// *Qty*, *Traits* and *Where* columns parsed, where this needs only the name and the owner.
-/// Named rather than left as a silence, because a partial generator that says nothing about
-/// its gaps reads exactly like a whole one.
+/// **The other three are covered by `every_release_derived_relation_round_trips`**, which is
+/// the sentence that used to say they were not. Naming a gap is what closes it: a partial
+/// generator silent about its gaps reads exactly like a whole one.
 #[test]
 fn the_blocks_the_release_implies_are_the_blocks_in_the_file() {
     let document = release();
@@ -986,4 +985,59 @@ fn the_blocks_the_release_implies_are_the_blocks_in_the_file() {
         ids.contains("work"),
         "a name stated once keeps its own name"
     );
+}
+
+/// All four release-derived relations are what the release implies, byte for byte.
+///
+/// **This covers what `the_blocks_the_release_implies_are_the_blocks_in_the_file` named as not
+/// covered**, and that naming is why it got covered: a partial generator silent about its gaps
+/// reads exactly like a whole one, which is the same failure as a count reading like a check.
+///
+/// **Four relations and four counts, asserted before the comparison** - not as the check, but
+/// so that two failures to read cannot agree with each other. The comparison itself is bytes.
+#[test]
+fn every_release_derived_relation_round_trips() {
+    let document = release();
+    let at = |name: &str| {
+        std::fs::read_to_string(
+            Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("../../spec/data")
+                .join(name),
+        )
+        .unwrap_or_else(|why| panic!("cannot read spec/data/{name}: {why}"))
+    };
+
+    // **Thirty-six blocks, ninety-two lines, twenty-eight constraints, six `for`s** - the
+    // shape `P-511` left. Each is the population its relation is derived over.
+    for (name, generated, expected) in [
+        ("block.4x", declare::blocks(&document), 36),
+        ("line.4x", declare::lines(&document), 92),
+        ("constraint.4x", declare::constraints(&document), 28),
+        ("for.4x", declare::fors(&document), 6),
+    ] {
+        assert_eq!(
+            generated.lines().count(),
+            expected,
+            "`{name}` should have {expected} rows and the generator wrote {}",
+            generated.lines().count()
+        );
+        assert_eq!(
+            generated,
+            at(name),
+            "`declare` and `spec/data/{name}` have parted"
+        );
+    }
+
+    // **And the four relations `carries`, `member`, `limit` and `above` are not derived from
+    // the release at all**, which is said here because a reader of this test would otherwise
+    // take `spec/data/` to be generated whole. They state what no table in the release does -
+    // which kinds carry which traits, and which orbit is above which territory - and the
+    // release lost the columns they came from. Nothing here can check them.
+    for name in ["carries.4x", "member.4x", "limit.4x", "above.4x"] {
+        assert!(
+            !at(name).is_empty(),
+            "`spec/data/{name}` is empty, and it is not derived from the release so nothing \
+             here would have noticed"
+        );
+    }
 }
