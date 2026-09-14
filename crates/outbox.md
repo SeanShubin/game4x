@@ -61,6 +61,87 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-115 - Holding a territory without a zero test, by `P-373`'s own trick
+
+**to** spec · **status** open · **raised** 2026-09-13 · **source** Sean, asking whether the force
+rule can be reformulated the way population growth was
+
+**derived from** should the force in a territory fall below its force of nature, nature takes it
+back - `spec/control.md`
+
+**Sean declined to cut force and named the precedent himself**: population growth used to need a
+`min` and does not now. The same trick removes the inhibitor arc from holding, and this item is
+what it would look like in rows.
+
+## What `P-373` actually did, because the trick is not *avoid `min`*
+
+|          |                                               |
+| -------- | --------------------------------------------- |
+| `upkeep` | `require 1 citizen`, `consume 1 food`         |
+| `perish` | `consume 1 citizen`, *whose upkeep is unpaid* |
+
+**Two things, and the second is the one that matters.**
+
+**A transition with two inputs fires `min(a, b)` times because that is when it stops being
+enabled.** The `min` is not computed, it is what the firing rule already does - so `upkeep` feeds
+as many citizens as there is food and no expression says so.
+
+**And the shortfall is materialised as a positive mark rather than detected as a comparison.** The
+citizens `upkeep` could not reach are `unpaid`, and `perish` fires on *the presence of that mark*.
+**Nothing anywhere asks whether food was less than citizens.**
+
+## The same two moves, applied to holding
+
+**The obstacle is that *fall below* is a test from underneath**, and *fires when fewer than n are
+present* cannot be built from input and read arcs. `P-373`'s answer is not to test it.
+
+**Nature's force becomes things a territory holds rather than a number it carries.** A jungle holds
+two `nature`; everything else holds one. Then:
+
+| Recipe      | Auto  | Role    | Qty | Kind    | Traits               | Where |
+| ----------- | ----- | ------- | --- | ------- | -------------------- | ----- |
+| **hold**    | world | require | 1   | nature  | `met at least 0`     |       |
+|             |       | consume | 1   | force   |                      |       |
+|             |       | put     |     | nature  | `met at its maximum` |       |
+| **reclaim** | world | require | 1   | nature  | `met at least 0`     |       |
+|             |       | consume | 1   | citizen |                      |       |
+| **renew**   | world | require | 1   | nature  |                      |       |
+|             |       | put     |     | nature  | `met at least 0`     |       |
+
+**`hold` fires `min(force, nature)` times** and marks each `nature` it paid for. **If force covers
+nature, no unmet `nature` is left and `reclaim` cannot fire.** If force falls short, at least one
+stays unmet and `reclaim` fires - **on the presence of a token, which is an ordinary input arc.**
+
+**The negation is gone.** *Force below nature* has become *a nature nobody met*, exactly as *food
+below citizens* became *a citizen nobody paid*.
+
+## Three things this buys beyond the arc
+
+**The place is bounded as a side effect.** `nature` is 1 or 2 across every biome, so making it a
+held kind puts it on a place with a capacity of two. **The reformulation that removes the zero test
+is the same change that bounds the place it was testing** - which was `C-114`'s open question about
+citizens, answered without needing a capacity on citizens at all.
+
+**`met` is a count of the kind `P-411` already introduced.** `defending`, `bearing`, `laboring`,
+`working` are all `0 or 1`, spent by a recipe and put back by `refresh`. `met` is the fifth and
+`renew` above is `refresh`'s shape. **Nothing new is invented**, which is the strongest evidence
+this is the right formulation rather than a clever one.
+
+**`reclaim` saturates too.** `consume 1 citizen` against an unmet `nature` fires once per citizen
+until the population is gone - the same way `discard` empties a place one token at a time. The
+release's *its entire population perishes* needs no quantity.
+
+## What it costs, and the one thing this lane cannot settle
+
+**`nature` stops being a trait of a territory and becomes a kind it holds.** Every artifact that
+reads `nature:1` changes, `spec/data/biomes.4x` included, and the biome table's *force of nature*
+column becomes how many of the kind a territory starts with.
+
+**Whether that is the right trade is Sean's**, and it is a real one: a trait is one cell and a held
+kind is a row in the containment tree. What this lane can say is that the alternative is a genuine
+inhibitor arc on an unbounded place, which the research lens's own table calls the cliff, and that
+`reachability survives one inhibitor arc and dies at two`.
+
 ### C-114 - Sean's reason for a thin engine, and it belongs in the invariants
 
 **to** spec · **status** open · **raised** 2026-09-13 · **source** Sean, asked directly for this to
