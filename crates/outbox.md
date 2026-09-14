@@ -115,6 +115,58 @@ for; it is synchronisation noise sitting exactly where the reading should be.
 test, and neither `game-model` nor `game-console` depends on that crate. It is most of a reader with
 no interpreter behind it.
 
+## Is it even possible - measured on 2026-09-13, because Sean asked that before the cost
+
+**The notation is far more capable than the data uses.** `spec/console.md` defines paths
+(`t.nature`), `holder of x`, `<trait> of x`, `count {…}`, `sum <trait> of {…}`, `max`, `min(a, b)`,
+`free <kind> of x`, and guards comparing two expressions with `=`, `<`, `≤`, `>`, `≥`.
+
+**Over the eighty-two rows of the Recipes table, none of it is used.**
+
+| Qty column                             | rows  |
+| -------------------------------------- | ----- |
+| a plain number                         | 65    |
+| blank                                  | 13    |
+| an English phrase                      | 3     |
+| **an expression the notation defines** | **0** |
+
+The three are `work`'s *`$where`'s density for that resource*, `muster`'s *that citizen's strength*
+and `stand`'s *that unit's strength*. **All three are `<trait> of x`**, which the notation has. They
+are written as prose instead.
+
+## So the answer splits in three, and only the third is a real unknown
+
+**One - expressible and unexpressed.** The three quantities above, and eight of the twelve rows of
+*What bounds a kind in a territory*: *as many as the extractors of its resource* is `count {…}`,
+*the things in it that hold it* is `free <kind> of x`. Eleven computations written in English where
+the vocabulary already exists. **No redesign needed; these are transcription.**
+
+**Two - specified and never exercised, which is the finding.** The expression language has **zero
+instances** in the release. It is a language feature with no population - so there is no evidence it
+works, nothing for a reader to be tested against, and no way to know which of its eight forms the
+game actually needs. **This is the *count over nothing* failure this repository has been finding in
+checks all week, one level up: at the notation itself.** A thin engine would have had to read it on
+day one and the gaps would have surfaced then, which is exactly the pressure `C-114` is about.
+
+**Three - no vocabulary at all.** Four, and they are the answer to *is it possible*:
+
+- **Sequence.** The table has seven columns and none of them is *when*. `spec/turn.md`'s five
+  phases and `P-379`'s order within the population five are prose. **This is not a missing
+  expression, it is a missing dimension of the table** - the one gap that would force a redesign
+  rather than a transcription.
+- **The end of the game.** No row can say a recipe wins. `launch ark` computes
+  `is_fully_exploited()` and sets `won` in code; `spec/control.md` states the rule in prose.
+- **Which one, when several match.** A selector names a set. `consume 1 pioneer` does not say
+  which of two, and the engine takes the first `pick` returns. It does not matter for
+  interchangeable things and does for a thing carrying an `id` or a part-full bin.
+- **Rules that are not recipes.** **Taking ground by force appears in no row at all** - three rows
+  in the whole table mention force and all three are `muster`, `stand` and `discard`. The rule is
+  prose in `spec/control.md` and code in `Game::found`, so the central act of the game is outside
+  the data entirely.
+
+**And one dead thing found on the way**: `Garrison::from_founding_unit(_unit_force)` ignores its
+argument and returns force 0. `P-276` made a garrison's own force zero and the parameter stayed.
+
 **The missing half is the word `run` in his own sentence.** *An engine to run and validate the
 data*: the validating is extensive and the running does not exist.
 
