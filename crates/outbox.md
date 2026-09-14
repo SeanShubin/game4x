@@ -61,6 +61,63 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-116 - `met at least 0` is vacuous, and `reclaim` as promoted wipes every population
+
+**to** spec · **status** open · **raised** 2026-09-13 · **source** this lane's own rows, caught by
+`nogain` refusing a count it cannot read
+
+**derived from** hold, reclaim and renew - `releases/first-release.md` -> Recipes, promoted in
+`fa80aa7` and `2c0db6d`
+
+**This lane wrote the qualifier and it is wrong.** `C-115` proposed `met at least 0` for *a nature
+nobody has met yet*, the specification lane promoted the rows cell for cell as they said they
+would, and **`at least 0` is true of every number.**
+
+## What it does as written
+
+| Row       | says                               | means                               |
+| --------- | ---------------------------------- | ----------------------------------- |
+| `hold`    | `require 1 nature, met at least 0` | requires **any** nature, met or not |
+| `reclaim` | `require 1 nature, met at least 0` | requires **any** nature, met or not |
+| `renew`   | `put nature, met at least 0`       | puts a count with no value          |
+
+**So `reclaim` fires on every territory every turn.** Its other row is `consume 1 citizen`, and
+saturating, so **the entire population of the planet dies each turn whatever its force is** - which
+is the precise opposite of the rule it was written to express. `hold` is wasteful rather than
+wrong: it spends force marking natures that are already met.
+
+**It is not live in the game** - the engine does not read recipes, so nothing behaves this way
+today. It is live in the release, in the Petri net, and in every artifact generated from the table.
+
+## The form that was already there
+
+**`spoil` says `keeps 0`.** The release has had a *this count is zero* qualifier all along, on a
+`consume` row, and this lane did not look before inventing a phrasing.
+
+|           |                           |
+| --------- | ------------------------- |
+| `hold`    | `require 1 nature, met 0` |
+| `reclaim` | `require 1 nature, met 0` |
+| `renew`   | `put nature, met 0`       |
+
+**Offered as the correction and not promoted by this lane**, which does not write the release.
+
+## How it was caught, and what that says about the check that caught it
+
+**`nogain` panicked on the `put` row** - *`met at least 0` is not a count at least 1, one less or
+at its maximum* - which is the refusal working exactly as `C-113` described it: a row the
+arithmetic cannot weigh is a rule moving something it never saw, so it stops rather than dropping
+it.
+
+**It only sees `put` rows.** `count_in` is called for `role == "put"`, so the two vacuous
+**`require`** rows - the ones that actually break the game - were invisible to it. **The defect was
+found by its least harmful instance.** Had `renew` not existed, `hold` and `reclaim` would have
+shipped vacuous and green.
+
+**And it is this week's lesson against its author.** `keeps 0` was one grep of the Traits column
+away. A cheap-to-check claim reads as already-known, which is exactly what `C-110` says is the
+dangerous kind, written by the lane that filed it.
+
 ### C-115 - Holding a territory without a zero test, by `P-373`'s own trick
 
 **to** spec · **status** open · **raised** 2026-09-13 · **source** Sean, asking whether the force
