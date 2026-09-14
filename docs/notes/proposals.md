@@ -146,8 +146,8 @@ schema is a change to make rather than words that land in a file.
 {member     kind:ark      family:unit}                              7 rows
 {limit      container:territory contained:garrison n:1}             5 rows
 {block      id:refresh-moving recipe:refresh owner:world}          37 rows
-{line       block:refresh-moving seq:1 role:put kind:unit ...}     96 rows
-{constraint block:refresh-moving seq:1 trait:moving compare:...}   29 rows
+{line       block:deploy-ark seq:3 role:consume kind:ark place-above:where}  96 rows
+{constraint block:refuel seq:2 trait:free kind:energy compare:at-least n:1}   29 rows
 {for        block:build-extractor-1 seq:4 kind:food}                6 rows
 ```
 
@@ -155,6 +155,18 @@ schema is a change to make rather than words that land in a file.
 `P-498` took blocks from 36 to 37, lines from 93 to 96, constraints from 26 to 29, and **`for` from
 7 to 6** - because `whose upkeep is unpaid` was counted among the cells that do not decompose, and
 it decomposes now.
+
+## Two columns this item first treated as atomic, and `P-499` measured
+
+**`constraint` carries four parts, not two** - `J1`, settled 2026-09-14. `free energy at least 1` is
+a trait, a kind, a comparison and a number, and the first version of this schema had `trait` and
+`compare` and swallowed the kind into the comparison. **`kind` is filled on one row of 29 and `n` on
+about half**: sparse rather than duplicated, which is the shape containment already uses.
+
+**`place` is a reference in three forms and never prose** - `P-500`, filed beside this. A binding
+(`place-bound:where`), a sequence in this same block (`place-line:2`, which is what *that unit*
+means), or a stated relation (`place-above:where`). **The four prose cells go in `P-500`**, so by the
+time this migration runs there are none left to mangle.
 
 ## How to tell it was carried out
 
@@ -169,7 +181,7 @@ rule: two blocks sharing it would be one rule stated twice.
 
 ## One - a recipe name is not a key, and nothing said so
 
-**36 blocks over 26 distinct names.** `refresh` opens **six** blocks, `discard` **five**, `stow`
+**37 blocks over 26 distinct names**, one more since `P-498`. `refresh` opens **six** blocks, `discard` **five**, `stow`
 **two**. So `recipe -> rows` is not a function and a row cannot be addressed by its recipe name
 alone.
 
@@ -229,19 +241,6 @@ in the same column and are not the same kind of thing at all.**
 recipe is data rather than code, and 93 rows of `line` is what that sentence has always meant.
 **The engine reading them is the other half and is not in this item.**
 
-## How to tell it was carried out
-
-**Every count above is re-derivable, and that is the check.** When this lands, the files in
-`spec/data/` hold **45** `carries` rows, **7** `member`, **5** `limit`, **36** `block`, **93**
-`line`, **26** `constraint` and **7** `for` - and each one equals what the same relation
-derives from `releases/first-release.md` and today's `kinds.4x`. **A migration that loses a row
-fails a count rather than being noticed later.**
-
-**And the stronger half: no fact is stated twice.** `(kind, trait)` appears once for each of the 45
-pairs, where `kinds.4x` today writes `binding` six times and `metal-in-it` six times. **That is the
-property you said you review for**, and it is the one a count of rows does not show - so it is
-asserted separately, as a uniqueness check on every relation's key.
-*Nothing is open.*
 
 ## Addressed to other perspectives
 
