@@ -76,50 +76,47 @@ produce pioneer  put 2 energy   that pioneer    <- the same
 **`refuel` is a player recipe, repeatable, whose whole effect is one energy appearing.**
 `spec/invariants.md`: *no sequence of rules ends holding more than it began with.*
 
-## The pattern that fixes it is `move`'s, and you chose it
+## The two are not the same case, and treating them alike was the error
 
-```
-| **move** | player | require | 1 | unit | moving at least 1 | `$from` |
-|          |        | put     |   | unit | moving one less   | `$to`   |
-```
+**Building a pioneer is a purchase.** You pay the energy and the thing arrives with a full bin -
+`spec/units.md` already says *it is built with that bin full, and the energy is paid where it is
+built*. **A `consume` is what paying is**, and the bin is part of what the pioneer is.
 
-**The `require` names the thing and carries the quantity; the `put` moves it and carries none.** So
-*a put has no quantity, because nothing is made or taken* stands untouched, and the energy is the
-same energy rather than one destroyed here and another made there.
-
-**The pair is one relocation rather than a cost beside a move.** A row carries one `Where` and a
-relocation has two ends, so it takes two rows - which is why `move` spends four rows moving one
-unit. **The `require` is the source end and the `put` is the destination end**, and neither is a
-`consume`: nothing is spent, the territory simply no longer has it.
+**Refuelling is a move.** Nothing is bought; energy that is here ends up there, and
+`spec/units.md` says it moves *freely*. **That is `move`'s shape** - a `require` names the thing and
+carries the quantity, a `put` moves it and carries none.
 
 ## The rows
 
-| Recipe              | Owner  | Role    | Qty | Kind    | Traits               | Where        |
-| ------------------- | ------ | ------- | --- | ------- | -------------------- | ------------ |
-| **produce pioneer** | player | consume | 3   | metal   |                      |              |
-|                     |        | require | 2   | energy  |                      |              |
-|                     |        | consume | 2   | citizen |                      |              |
-|                     |        | put     |     | energy  |                      | that pioneer |
-|                     |        | produce | 1   | pioneer |                      |              |
-| **refuel**          | player | require | 1   | unit    | with room for energy | `$where`     |
-|                     |        | require | 1   | energy  |                      |              |
-|                     |        | put     |     | energy  |                      | that unit    |
+| Recipe              | Owner  | Role    | Qty | Kind    | Traits               | Where     |
+| ------------------- | ------ | ------- | --- | ------- | -------------------- | --------- |
+| **produce pioneer** | player | consume | 3   | metal   |                      |           |
+|                     |        | consume | 2   | energy  |                      |           |
+|                     |        | consume | 2   | citizen |                      |           |
+|                     |        | produce | 1   | pioneer |                      |           |
+| **refuel**          | player | require | 1   | unit    | with room for energy | `$where`  |
+|                     |        | require | 1   | energy  |                      |           |
+|                     |        | put     |     | energy  |                      | that unit |
 
-**A blank `Where` is the place the recipe acts**, which that table already says - so the energy is
-required in the territory and ends in the bin.
+**A blank `Where` is the place the recipe acts**, which that table already says.
+
+**`a put has no quantity, because nothing is made or taken` stands untouched**, and so does every
+other rule.
 
 ## The prose in `## Capabilities`, which still names the old cost
 
 **Replacing the bullet that begins *A founding unit costs citizens*** - `releases/first-release.md:428`.
 
 > **A founding unit costs citizens, and that is the cost that matters.** `produce pioneer` consumes
-> **3 metal and 2 citizens** and takes **2 energy** with it into the pioneer's bin; `launch ark`
-> consumes 3 metal, 12 energy and 2 citizens and requires a Yard.
+> **3 metal, 2 energy and 2 citizens**; `launch ark` consumes 3 metal, 12 energy and 2 citizens and
+> requires a Yard.
 
-## What this does not ask
+## One thing this lane owes the code lane if you take it
 
-**No rule changes.** A `require` is *present and not taken*, and moving is not taking - which is
-already true of the unit `move` requires at `$from` and leaves at `$to`.
+**Nothing in the table says the bin gets filled** - `spec/units.md` does, and the release states
+costs rather than restating rules. **So a produced pioneer has to weigh what it holds**, or the
+game gains two energy per pioneer and `nogain` will not see it. That is a modelling question rather
+than a rule, and this lane files it the moment this lands.
 ### P-490 - `CLAUDE.md` poisons its checks and never its prose
 
 **to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered, from the research lane correcting its own item · **shape** text · **asks** approval · **into** `CLAUDE.md` -> What done means
