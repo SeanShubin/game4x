@@ -100,8 +100,11 @@ in the same column and are not the same kind of thing at all.**
   as a rule**: two blocks sharing that key would be one rule stated twice, which
   `spec/invariants.md` already forbids, so the constraint enforces *a fact is stated once* rather
   than assuming it
-- **`whose upkeep is unpaid`** wants to become `unpaid at least 1` and that is a rule's wording,
-  not a transcription
+- **`whose upkeep is unpaid` is answered and left this item**, 2026-09-13. Sean chose `H2`: the
+  mark is materialised rather than described, so `upkeep` marks what it paid and `perish` takes
+  `paid 0`. **It is `P-498`**, because it is a rule's wording rather than a data shape and belongs
+  where he approves words. **Nothing in this item waits on it** - the `constraint` relation covers
+  all 27 cells either way, and `P-498` only decides which 27th.
 
 ## What this is, said plainly
 

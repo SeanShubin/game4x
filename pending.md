@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-498** - `perish` reads a mark nobody writes, and `H2` gives it one · `docs/notes/proposals.md`
 - **P-497** - `spec/data/` normalized, and two things the normalizing found · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
