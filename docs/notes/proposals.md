@@ -89,7 +89,20 @@ or the bytes have to be inside a page.**
 `scenario/` are the ones Sean derives by hand - `commands/play.4x` and `expected/play.4x` - so this
 bites the file he reads most.
 
-## Three ways, and this lane would take the first
+## `A` is chosen, 2026-09-14, and narrowed
+
+**Sean**: *I just need to render from `https://seanshubin.github.io/game4x/reports/`, I don't
+necessarily need it to be rendered when I browse it as source. Lets go with option A.*
+
+**So the twin is a deploy artifact and nothing is added to the repository.** It is written into
+`crates/game4x/dist` by the step that already copies these files, and no `.txt` is committed.
+**That is smaller than what this item first described**, which left open whether the twin lived in
+the tree.
+
+**And browsing the source is out of scope rather than solved.** He has reported no trouble reading
+`.4x` in the repository view and this item makes no claim about it.
+
+## The three that were offered, kept for what each would have cost
 
 **`A` - publish a `.txt` twin.** The pipeline already does `cp -r spec/data crates/game4x/dist/spec/data`;
 one more step writes `above.4x.txt` beside each. **`reports/index.html` links the twin and still
