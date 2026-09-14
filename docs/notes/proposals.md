@@ -62,79 +62,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-498 - `perish` reads a mark nobody writes, and `H2` gives it one
-
-**to** sean · **status** open · **raised** 2026-09-13 · **kind** entailed · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes and Traits
-
-**You chose `H2`: fix it now.** These are the rows.
-
-**One word changed from the sketch and this lane changed it rather than asking.** The sketch said
-`fed`; these rows say **`paid`**. `spec/turn.md` says *everything with upkeep pays it*, and upkeep is
-not only food - `game.rs` records that an ark and a pioneer took upkeep until recently. **`fed` names
-the one case; `paid` names the rule**, and `unpaid` is the word being retired, so `paid` is that word
-inverted rather than a new idea. Say `fed` and this lane changes it back before anything lands.
-
-## One - `## Traits`, the `unpaid` row becomes
-
-| Trait    | Values   | Belongs to |
-| -------- | -------- | ---------- |
-| **paid** | a number | each thing |
-
-**The colon goes with it.** `unpaid` reads *a number: its upkeep was not met* - and `P-496` settled
-that a Values cell containing `": "` declares a trait **derived**, which is what makes a constraint
-on it a defect rather than a rule.
-
-## Two - `## Recipes`, `upkeep` gains a row
-
-| Recipe     | Owner | Role    | Qty | Kind    | Traits              | Where |
-| ---------- | ----- | ------- | --- | ------- | ------------------- | ----- |
-| **upkeep** | world | require | 1   | citizen |                     |       |
-|            |       | consume | 1   | food    |                     |       |
-|            |       | put     |     | citizen | paid at its maximum |       |
-
-**Only the third row is new.**
-
-## Three - `## Recipes`, `perish`'s qualifier
-
-| Recipe     | Owner | Role    | Qty | Kind    | Traits | Where |
-| ---------- | ----- | ------- | --- | ------- | ------ | ----- |
-| **perish** | world | consume | 1   | citizen | paid 0 |       |
-
-**Replacing `whose upkeep is unpaid`**, and `paid 0` is `spoil`'s `keeps 0` and `reclaim`'s `met 0`.
-
-## Four - `## Recipes`, `renew` gains a block
-
-| Recipe    | Owner | Role    | Qty | Kind    | Traits | Where |
-| --------- | ----- | ------- | --- | ------- | ------ | ----- |
-| **renew** | world | require | 1   | citizen |        |       |
-|           |       | put     |     | citizen | paid 0 |       |
-
-**Because a mark that is never cleared fires once and never again.** `met` needed exactly this and
-has it; `paid` would have gone stale on turn two without it.
-
-## Why this is the same move you already made
-
-**`upkeep` marks the citizens it fed, and `perish` takes the ones it did not.** Identical to `hold`
-marking each `nature` it paid for and `reclaim` firing on `met 0`. **The negation is gone**: *upkeep
-was not met* becomes *a citizen nobody paid*, which is an ordinary input arc rather than a test from
-underneath.
-
-## What it removes, counted
-
-**`unpaid` is named in exactly one row of ninety-three, and that row reads it.** Nothing in the
-table writes it. So `perish` as written can never fire, and the only reason the game starves anyone
-is that the engine computes the number directly - `game.rs:988`, *citizens it could not feed*.
-
-**And it retires a hand-written exemption.** `nogain.rs` keeps `whose upkeep is unpaid` in
-`COUNTERS`, a list of cells the weighting cannot read and steps around. `paid 0` needs no
-exemption, so the list loses an entry rather than gaining one.
-
-## The ordering this leans on, which is already specified
-
-`spec/turn.md`: *everything with upkeep pays it; then a population grows on surplus food or starves
-for want of it;* ... *and time restores every count to the number that thing's kind declares.*
-**Paying, then starving, then restoring** - so `renew` cannot clear a mark before `perish` reads it.
-Nothing new is required of the turn.
+*Nothing is open. Everything filed has been decided.*
 
 ## Addressed to other perspectives
 
@@ -5494,6 +5422,7 @@ work the release exists to order.
 | P-495, Taking a territory, by the same trick that just removed holding's zero test                                           | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-14 |
 | P-492, `refuel`'s qualifier, in the form you chose                                                                           | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-14 |
 | P-496, The four cells between the force rule and a green gate, and one of them is a live defect                              | `releases/first-release.md` -> Recipes and Traits, and `spec/data/`                                                                                                                                      | 2026-09-14 |
+| P-498, `perish` reads a mark nobody writes, and `H2` gives it one                                                            | `releases/first-release.md` -> Recipes and Traits                                                                                                                                                        | 2026-09-14 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |

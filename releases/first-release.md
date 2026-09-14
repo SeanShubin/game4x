@@ -136,7 +136,7 @@ are listed.
 | **to**          | a place                                                           | each thing |
 | **keeps**       | the number of turns it will last                                  | each thing |
 | **surplus**     | a number: left after every upkeep was paid                        | the kind   |
-| **unpaid**      | a number: its upkeep was not met                                  | each thing |
+| **paid**        | a number                                                          | each thing |
 | **phase**       | design or play                                                    | each thing |
 | **movable**     | a number                                                          | the kind   |
 
@@ -267,13 +267,14 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 |                     |        | produce | `$where`'s density for that resource | resource  |                                               |                          |
 | **upkeep**          | world  | require | 1                                    | citizen   |                                               |                          |
 |                     |        | consume | 1                                    | food      |                                               |                          |
+|                     |        | put     |                                      | citizen   | paid at its maximum                           |                          |
 | **bear**            | world  | require | 1                                    | citizen   | bearing at least 1                            |                          |
 |                     |        | put     |                                      | citizen   | bearing one less                              |                          |
 |                     |        | produce | 1                                    | fertility |                                               |                          |
 | **breed**           | world  | consume | 1                                    | fertility |                                               |                          |
 |                     |        | consume | 1                                    | food      |                                               |                          |
 |                     |        | produce | 1                                    | citizen   |                                               |                          |
-| **perish**          | world  | consume | 1                                    | citizen   | whose upkeep is unpaid                        |                          |
+| **perish**          | world  | consume | 1                                    | citizen   | paid 0                                        |                          |
 | **age**             | world  | require | 1                                    | thing     | keeps at least 1                              |                          |
 |                     |        | put     |                                      | thing     | keeps one less                                |                          |
 | **spoil**           | world  | consume | 1                                    | thing     | keeps 0                                       |                          |
@@ -305,6 +306,8 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 |                     |        | consume | 1                                    | citizen   |                                               |                          |
 | **renew**           | world  | require | 1                                    | nature    |                                               |                          |
 |                     |        | put     |                                      | nature    | met 0                                         |                          |
+| **renew**           | world  | require | 1                                    | citizen   |                                               |                          |
+|                     |        | put     |                                      | citizen   | paid 0                                        |                          |
 | **take**            | world  | require | 1                                    | nature    |                                               |                          |
 |                     |        | consume | 1                                    | nature    |                                               |                          |
 |                     |        | consume | 1                                    | force     |                                               |                          |
