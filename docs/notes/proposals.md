@@ -62,50 +62,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-489 - a pioneer's energy is a cost, and refuelling is `stow` aimed at a bin
-
-**to** sean · **status** open · **cited** `d7815aa`, `bc4c35f`, `4147618` · **raised** 2026-09-13 · **kind** contradiction · **shape** rows and text · **asks** approval · **into** `releases/first-release.md` -> Recipes, and Capabilities
-
-## The rows, replacing `produce pioneer` and `refuel`
-
-| Recipe              | Owner  | Role    | Qty | Kind    | Traits               | Where     |
-| ------------------- | ------ | ------- | --- | ------- | -------------------- | --------- |
-| **produce pioneer** | player | consume | 3   | metal   |                      |           |
-|                     |        | consume | 2   | energy  |                      |           |
-|                     |        | consume | 2   | citizen |                      |           |
-|                     |        | produce | 1   | pioneer |                      |           |
-| **refuel**          | player | require | 1   | unit    | with room for energy | `$where`  |
-|                     |        | consume | 1   | energy  |                      |           |
-|                     |        | produce | 1   | energy  |                      | that unit |
-
-## The prose, replacing the bullet at `releases/first-release.md:428`
-
-> **A founding unit costs citizens, and that is the cost that matters.** `produce pioneer` consumes
-> **3 metal, 2 energy and 2 citizens**; `launch ark` consumes 3 metal, 12 energy and 2 citizens and
-> requires a Yard.
-
-## Why
-
-**As they stand, both recipes make energy from nothing.** Each `put`s energy into a container and no
-row says the energy was ever anywhere. `refuel` is a player recipe, repeatable, whose whole effect
-is one energy appearing - against `spec/invariants.md`'s *no sequence of rules ends holding more
-than it began with*.
-
-**Building a pioneer is a purchase.** You pay and the thing arrives with a full bin, which
-`spec/units.md` already says: *it is built with that bin full, and the energy is paid where it is
-built*. A `consume` is what paying is.
-
-**Refuelling is the same operation as `stow`**, which takes loose energy and puts it in a store for
-energy. This takes loose energy and puts it in a unit's bin - so the same two rows, consume where it
-is and produce where it goes, and the two cancel.
-
-**No rule changes**, and both shapes are already in the table.
-
-## One thing this lane owes the code lane if you take it
-
-**Nothing in the table says the bin gets filled** - `spec/units.md` does, and the release states
-costs rather than restating rules. **So a produced pioneer has to weigh what it holds**, or the game
-gains two energy per pioneer and `nogain` will not see it.
 ### P-490 - a habit earns its place by a case it caught, not a case it explains
 
 **to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered · **shape** text · **asks** approval · **into** `CLAUDE.md` -> What done means
@@ -5429,6 +5385,7 @@ work the release exists to order.
 | P-487, what a consumed container held falls loose where it stood                                                             | `spec/logistics.md` -> Containment                                                                                                                                                                       | 2026-09-13 |
 | P-485, a pioneer is produced with a full tank, and a refuel recipe moves fuel between containers                             | `releases/first-release.md` -> Recipes, and Units and structures                                                                                                                                         | 2026-09-13 |
 | P-488, two paths added to the Code row of `CLAUDE.md`'s column table                                                         | `CLAUDE.md` -> Perspectives                                                                                                                                                                              | 2026-09-13 |
+| P-489, a pioneer's energy is a cost, and refuelling is `stow` aimed at a bin                                                 | `releases/first-release.md` -> Recipes, and Capabilities                                                                                                                                                 | 2026-09-14 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |
 | P-409, uniformity is an instrument, not a preference                                                                         | `docs/process.md` -> Three rules for using AI assistants                                                                                                                                                 | 2026-09-11 |

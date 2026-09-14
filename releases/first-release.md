@@ -227,7 +227,8 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 |                     |        | put     |                                      | unit      | moving one less                               | `$to`                    |
 |                     |        | consume | 1                                    | energy    |                                               | that unit                |
 | **refuel**          | player | require | 1                                    | unit      | with room for energy                          | `$where`                 |
-|                     |        | put     | 1                                    | energy    |                                               | that unit                |
+|                     |        | consume | 1                                    | energy    |                                               |                          |
+|                     |        | produce | 1                                    | energy    |                                               | that unit                |
 | **found by land**   | player | consume | 1                                    | pioneer   |                                               |                          |
 |                     |        | produce | 1                                    | garrison  |                                               |                          |
 |                     |        | produce | 2                                    | citizen   |                                               |                          |
@@ -243,8 +244,8 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 |                     |        | consume | 15                                   | metal     |                                               |                          |
 |                     |        | produce | 1                                    | yard      |                                               |                          |
 | **produce pioneer** | player | consume | 3                                    | metal     |                                               |                          |
+|                     |        | consume | 2                                    | energy    |                                               |                          |
 |                     |        | consume | 2                                    | citizen   |                                               |                          |
-|                     |        | put     | 2                                    | energy    |                                               | that pioneer             |
 |                     |        | produce | 1                                    | pioneer   |                                               |                          |
 | **launch ark**      | player | require | 1                                    | territory |                                               | `$where`                 |
 |                     |        | consume | 3                                    | metal     |                                               |                          |
@@ -426,7 +427,7 @@ that used to be kept is lost at a turn's end. `scenario/expected/play.4x` was re
   by ark and territory 2 by pioneer. **Which one is the player's choice and the release leaves it
   open.**
 - **A founding unit costs citizens, and that is the cost that matters.** `produce pioneer` consumes
-  **3 metal, 6 energy and 2 citizens**; `launch ark` consumes 3 metal, 12 energy and 2 citizens and
+  **3 metal, 2 energy and 2 citizens**; `launch ark` consumes 3 metal, 12 energy and 2 citizens and
   requires a Yard. **So founding competes with the population rather than costing resources beside
   it** - ten foundings is twenty citizens spent against a target of **144**, summed from the
   per-territory figures `DERIVED_BY_HAND` states. Read as metal and energy alone it looks like a
