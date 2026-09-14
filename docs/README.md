@@ -52,6 +52,9 @@ docs/
     parser-architecture.md ........ how the predecessor's parser was split
     spec-backlog.md ............... intent Sean has stated but not yet written
     region-schemes.md ............. every scheme for dividing a sphere, measured
+  postmortems/
+    README.md ..................... index of postmortems, and what makes one
+    tracked-and-still-lost.md ..... an invariant tracked for ten days that died at the handoffs
   theory/
     README.md ..................... index of background research
     region-splitting.md ........... dividing a sphere surface into regions
@@ -88,6 +91,7 @@ Crate READMEs cover how a crate works internally and are linked from
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | What the game **is**, normatively                              | `spec/<name>.md` - Sean's words only, see [CLAUDE.md](../CLAUDE.md)                  |
 | A record of analysis or a rejected path                        | `docs/notes/<name>.md` - derived, dated, not binding                                 |
+| How a failure happened, once it is understood                  | `docs/postmortems/<name>.md` - one failure per file, measured                        |
 | A movement the design expects but has not made                 | [vision.md](vision.md) - *Directions*. Informs a decision, binds nothing             |
 | Whether a rule I want to write is expressible at all           | [designing-rules.md](designing-rules.md) - the constraints, before I design into one |
 | A generated report I browse                                    | `reports/<name>.md` and `.html`, reached from `reports/index.html`                   |

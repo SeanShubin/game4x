@@ -33,21 +33,22 @@ to turn the world, wheel to zoom, `P` to fold it back into a globe, `Esc` to qui
 
 ## Start here
 
-| Document                                | What it covers                                                                                           |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| [Specification](spec/README.md)         | What the game **is**, stated normatively. A rule is decided there; the game's data in its data file      |
-| [Vision](docs/vision.md)                | What the game is, the design constraints, and the non-negotiables                                        |
-| [Architecture](docs/architecture.md)    | Module boundaries, the composition root, dependency rules                                                |
-| [Layers](docs/layers.md)                | `(old world, events) -> new world`: what must be reproducible, and how it stays parallel                 |
-| [Prototypes](docs/prototypes/README.md) | Standalone programs demonstrating one aspect of the game each                                            |
-| [Theory](docs/theory/README.md)         | Background research the design leans on                                                                  |
-| [Documentation map](docs/README.md)     | Every document in the repo, and the rules for adding one                                                 |
-| [Scripts](scripts/README.md)            | How to run each prototype                                                                                |
-| [Notes](docs/notes/README.md)           | Derived records of analysis. Not binding                                                                 |
-| [Catalog](reports/catalog.md)           | Every kind, with the families holding it, its traits, its cost and every recipe naming it. **Generated** |
-| [State](reports/state.md)               | The scenario's result as one table per relation, fully normalized. **Generated**                         |
-| [Entities](reports/entities.md)         | The same result as every thing with its components, which is what F3 shows. **Generated**                |
-| [Pending](pending.md)                   | What every outbox has open and who it waits on. **Generated**                                            |
+| Document                                  | What it covers                                                                                           |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| [Specification](spec/README.md)           | What the game **is**, stated normatively. A rule is decided there; the game's data in its data file      |
+| [Vision](docs/vision.md)                  | What the game is, the design constraints, and the non-negotiables                                        |
+| [Architecture](docs/architecture.md)      | Module boundaries, the composition root, dependency rules                                                |
+| [Layers](docs/layers.md)                  | `(old world, events) -> new world`: what must be reproducible, and how it stays parallel                 |
+| [Prototypes](docs/prototypes/README.md)   | Standalone programs demonstrating one aspect of the game each                                            |
+| [Theory](docs/theory/README.md)           | Background research the design leans on                                                                  |
+| [Documentation map](docs/README.md)       | Every document in the repo, and the rules for adding one                                                 |
+| [Scripts](scripts/README.md)              | How to run each prototype                                                                                |
+| [Notes](docs/notes/README.md)             | Derived records of analysis. Not binding                                                                 |
+| [Postmortems](docs/postmortems/README.md) | How a failure happened, and what would have caught it                                                    |
+| [Catalog](reports/catalog.md)             | Every kind, with the families holding it, its traits, its cost and every recipe naming it. **Generated** |
+| [State](reports/state.md)                 | The scenario's result as one table per relation, fully normalized. **Generated**                         |
+| [Entities](reports/entities.md)           | The same result as every thing with its components, which is what F3 shows. **Generated**                |
+| [Pending](pending.md)                     | What every outbox has open and who it waits on. **Generated**                                            |
 
 ## The short version
 
