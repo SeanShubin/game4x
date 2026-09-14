@@ -68,6 +68,68 @@ thing reads differently in two places and *when does a unit hold something* has 
 rather than a shape - and `spec/orbit.md` says only that an orbit *has capacity for no extractors,
 and nothing is extracted there*, which does not forbid it.
 
+## The difference, in the notation, and it is two states and one command
+
+**They agree everywhere a place can hold the kind.** In a territory the two are the same bytes, so
+every example so far has failed to separate them. **An orbit is where they part.**
+
+## One ark in orbit, carrying two energy
+
+```
+G2                          G3
+{orbit id:4}                {orbit id:4}
+  {ark}                       {ark} -> 1
+    {energy} -> 2             {energy} -> 2
+```
+
+**Under `G2` the energy is inside the ark; under `G3` it is in the orbit** and the ark's tank is what
+gave the orbit the room.
+
+## Two arks, one with two energy and one with one
+
+```
+G2                          G3
+{orbit id:4}                {orbit id:4}
+  {ark}                       {ark} -> 2
+    {energy} -> 1             {energy} -> 3
+  {ark}
+    {energy} -> 2
+```
+
+**`G2` has two entries and `G3` has one.** Under `G2` they share a description and are told apart
+only by their contents, which is the whole of what `P-507` could not write and `P-508` needed
+positions for. **Under `G3` there is nothing to tell apart** - two arks, three energy, and a
+capacity of four.
+
+## And the command that cannot be written
+
+```
+G2   {move unit:???  to:5 haul-energy:2}    which ark? both are `{ark}`
+G3   {move unit:ark  to:5 haul-energy:2}    either; they are the same
+```
+
+**That is the cost of `G2` in one line.** Not that orbits are odd, but that **the problem this week
+was spent on comes back inside them.**
+
+## The same ark, before and after landing
+
+```
+G2                                    G3
+{orbit id:4}                          {orbit id:4}
+  {ark}                                 {ark} -> 1
+    {energy} -> 2                       {energy} -> 2
+
+{move unit:ark to:1 haul-energy:2}
+
+{territory id:1}                      {territory id:1}
+  {energy} -> 7                         {energy} -> 7
+  {ark} -> 1                            {ark} -> 1
+```
+
+**Both end in the same place.** Under `G2` the ark's contents emptied into the pool on arrival and
+under `G3` nothing happened, because they were pooled already. **`G2` is a thing that changes shape
+depending on where it stands; `G3` is a thing that never holds anything.**
+
 ## `G1` is eliminated, 2026-09-14, by Sean's own constraint
 
 **Sean**: *I don't want the gas tank to be special in mechanics, only in defaults.*
