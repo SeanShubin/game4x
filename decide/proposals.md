@@ -24,6 +24,18 @@ written as where to look until it has caught something it did not come from.*
 > tool and a fixed number is not** - so when a defect is reported, the report says what the
 > instrument asked, not merely what the right answer turned out to be.
 
+## Promoting this one has an extra rule on it, and it is this file's own
+
+**`CLAUDE.md` is the one file where no instance can carry an approval.** Its own words: *an approval
+for this file comes from Sean directly*, because **a reader has no way to tell a relayed approval
+from an invented one**, and the file being relayed about is the one that says who may write what.
+**Facts relay; authority does not.**
+
+**So *promote P-515* has to arrive from you**, in your own message, and not by way of either lane
+saying you said it. **Written into the item rather than left to be remembered**, because the moment
+it would be easiest to skip is the moment it comes up - which is the code lane's point and it made
+it before the moment rather than during it.
+
 ## The two cases, and neither was found by anything failing
 
 **One, across a column boundary.** `P-514` reported three unwritable rows of `spec/data/line.4x`

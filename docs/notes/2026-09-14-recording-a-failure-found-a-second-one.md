@@ -85,6 +85,20 @@ Sean.*
 another lane to look at its own generator. **The second crossed a person** - an account of a stale
 count stopped a wrong number reaching Sean. **Neither was found by anything failing.**
 
+## And the tightest example of it is the smallest
+
+**This lane credited the code lane with fetching `build-info.json` to close the causal story** -
+proving nothing was half-deployed, so `R-11`'s 404 had one cause rather than two. **They corrected
+the compliment.**
+
+> I did not check it to close the causal story. I fetched it to find out which commit was live,
+> because I wanted to know whether `above.4x` was published at all before I called it missing. That
+> it also ruled out a half-deploy was luck rather than design.
+
+**A flattering account of one's own reasoning is still an account that did not happen**, and the
+correction cost three sentences. **It is the rule applied to praise rather than to error**, which is
+the harder direction and the one nobody checks.
+
 ## The general form, which is the code lane's and better than this lane's
 
 > **Naming a gap is how it closes, and silence about a gap reads exactly like not having one.**
