@@ -33,6 +33,30 @@ state, and `kind`, `trait` and `family`, which appear only in declarations. **Th
 `orbit`, `deposit`, `adjacency` and `game` are declared and named by no recipe, which is why the
 drawing leaves them out. **It is the same shape one step further.**
 
+## Said 2026-09-13: containment is a sparse table of trios
+
+*Everything has an arbitrary yet finite list of occupied/free/capacity containers for everything
+else. The vast majority of these will default to being allowed to contain exactly nothing. A metal
+transport will have a trio for metal and another one for fuel.* **He does not want to specify
+things at their default value**, and wants to model it properly before deciding `P-492`.
+
+**The default is already promoted.** `spec/logistics.md`: *a kind declares one of three things
+about what it may hold. It may declare no capacity, and then it holds nothing of that sort and
+never can.* So the zero is what you do not write.
+
+**And what makes it sparse is that the trios are per kind, not per thing** - *what a kind may
+contain is a fact about the kind and not about any one of them*. Twenty-two kinds each naming a
+few, rather than a matrix per instance.
+
+**The gap is that the notation cannot write it.** No data file declares a container's capacity for
+a kind: `capacity` appears once in `kinds.4x` as the deposit's trait and nowhere as a relation. The
+container-by-kind maximum lives only in the release's prose tables.
+
+**And this reframes the deposit.** A territory's capacity for extractors varies per territory, so
+it is not a fact about the kind - it is the per-thing exception the per-kind default cannot carry.
+So the model is per-kind declarations with per-thing overrides, and a deposit is an override rather
+than an anomaly.
+
 ## Said 2026-09-13: an addressing scheme for where a thing is
 
 **Wanted as a longer conversation, after the open proposals.** *It seems like we might need an
