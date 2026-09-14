@@ -549,8 +549,12 @@ pub const TRAITS: [TraitRow; 26] = [
         belongs: BelongsTo::TheKind,
     },
     TraitRow {
-        name: "unpaid",
-        values: "a number: its upkeep was not met",
+        // **`P-498` inverted it.** It was `unpaid`, derived - the count of citizens `upkeep`
+        // could not feed, carried from one phase to the next. It is `paid` now, a mark
+        // `upkeep` puts and `renew` clears, and that inversion is what let the seam between
+        // the two phases stop carrying anything at all.
+        name: "paid",
+        values: "a number",
         belongs: BelongsTo::EachThing,
     },
     // **`P-288`: `phase` is a declared trait and `turn` is not.** The release grew this row
@@ -911,7 +915,10 @@ const DEFENDING_FULL: [Qualifier; 1] = [by("defending at its maximum", "defendin
 // **`fertile` and `spent` are one trait read both ways** - `spent`, yes or no. `bear` takes a
 // citizen that is not spent and leaves one that is; `renew` does the reverse, once per turn.
 
-const UPKEEP_UNPAID: [Qualifier; 1] = [by("whose upkeep is unpaid", "unpaid")];
+// **`P-498` again**: the qualifier was *whose upkeep is unpaid*, a phrase naming a derived
+// count, and is a count on the thing now - the same form `met 0` takes one rule over.
+const PAID_NONE: [Qualifier; 1] = [by("paid 0", "paid")];
+const PAID_FULL: [Qualifier; 1] = [by("paid at its maximum", "paid")];
 // **`P-494`'s two.** `met 0` is a nature nobody has spent a force on, which is the form
 // `spoil`'s `keeps 0` already uses, and `met at its maximum` is what `hold` leaves.
 const MET_NONE: [Qualifier; 1] = [by("met 0", "met")];
@@ -935,7 +942,7 @@ pub const RECIPES: &[Recipe] = &[
         lines: &[
             placed(Require, 1, TERRITORY, &[], "`$where`"),
             just(Require, 1, Noun::Of(Force)),
-            placed(Consume, 1, Noun::Of(Ark), &[], "the orbit above `$where`"),
+            placed(Consume, 1, Noun::Of(Ark), &[], "above `$where`"),
             just(Produce, 1, Noun::Of(Garrison)),
             just(Produce, 2, Noun::Of(Citizen)),
             traited(Produce, 1, Noun::Of(Extractor), &FOR_FOOD),
@@ -1050,7 +1057,7 @@ pub const RECIPES: &[Recipe] = &[
             just(Consume, 12, Noun::Of(Energy)),
             just(Consume, 2, Noun::Of(Citizen)),
             just(Require, 1, Noun::Of(Yard)),
-            placed(Produce, 1, Noun::Of(Ark), &[], "the orbit above `$where`"),
+            placed(Produce, 1, Noun::Of(Ark), &[], "above `$where`"),
         ],
     },
     Recipe {
@@ -1092,6 +1099,10 @@ pub const RECIPES: &[Recipe] = &[
         lines: &[
             just(Require, 1, Noun::Of(Citizen)),
             just(Consume, 1, Noun::Of(Food)),
+            // **`P-498`: the mark is written where the food is eaten.** Without this row the
+            // rule fed a citizen and recorded nothing, and `perish` below had to be handed a
+            // count - which is the seam that inverting `unpaid` removed.
+            put(Noun::Of(Citizen), &PAID_FULL),
         ],
     },
     // **`grow` is gone and these three replace it.** It consumed *the lesser of the surplus
@@ -1125,7 +1136,7 @@ pub const RECIPES: &[Recipe] = &[
         // expression.
         name: "perish",
         owner: World,
-        lines: &[traited(Consume, 1, Noun::Of(Citizen), &UPKEEP_UNPAID)],
+        lines: &[traited(Consume, 1, Noun::Of(Citizen), &PAID_NONE)],
     },
     Recipe {
         // **`P-340`: `age` fires before `spoil`, and both name `thing`.** Under the old
@@ -1161,7 +1172,7 @@ pub const RECIPES: &[Recipe] = &[
         owner: World,
         lines: &[
             just(Consume, 1, Noun::Of(Metal)),
-            placed(Produce, 1, Noun::Of(Metal), &[], "a store for metal"),
+            just(Produce, 1, Noun::Of(Metal)),
         ],
     },
     Recipe {
@@ -1169,7 +1180,7 @@ pub const RECIPES: &[Recipe] = &[
         owner: World,
         lines: &[
             just(Consume, 1, Noun::Of(Energy)),
-            placed(Produce, 1, Noun::Of(Energy), &[], "a store for energy"),
+            just(Produce, 1, Noun::Of(Energy)),
         ],
     },
     Recipe {
@@ -1285,6 +1296,17 @@ pub const RECIPES: &[Recipe] = &[
         lines: &[
             just(Require, 1, Noun::Of(Nature)),
             put(Noun::Of(Nature), &MET_NONE),
+        ],
+    },
+    Recipe {
+        // **`P-498`'s other half.** `renew` clears the mark `upkeep` put, the same way the
+        // block above it clears the mark `hold` put - one recipe, two kinds, which is `stow`
+        // and `discard`'s shape and the reason a repeated name is one rule rather than two.
+        name: "renew",
+        owner: World,
+        lines: &[
+            just(Require, 1, Noun::Of(Citizen)),
+            put(Noun::Of(Citizen), &PAID_NONE),
         ],
     },
     Recipe {

@@ -270,10 +270,61 @@ fn a_rule_that_makes_more_than_it_takes_is_refused_by_name() {
     );
 
     // One row on, one row off: a rule that turns a metal into two.
+    //
+    // # Located and rebuilt, never matched
+    //
+    // **This held the whole row as a string and the padder killed it** - `CLAUDE.md` names
+    // exactly this: *never put a table row in a match string*, because the padder owns the
+    // column widths and rewrites them whenever anything else in the file changes. `P-500` took
+    // the prose out of the *Where* column, every width moved, and `str::replace` with no match
+    // is a no-op rather than an error.
+    //
+    // **The assertion below is what caught it**, reporting that the doctored release was the
+    // release - a poisoning check saying its own poison no longer does anything, which is the
+    // one failure mode a check like this has and the reason it was written with that
+    // assertion rather than without.
+    //
+    // So the row is found by its cells and the replacement is built from the cells around it.
+    let lines: Vec<&str> = document.lines().collect();
+    let cells = |line: &str| -> Vec<String> {
+        line.trim()
+            .trim_matches('|')
+            .split('|')
+            .map(|cell| cell.trim().to_string())
+            .collect()
+    };
+    let at = lines
+        .iter()
+        .position(|line| {
+            let row = cells(line);
+            line.trim_start().starts_with("| **discard**")
+                && row.get(4).map(String::as_str) == Some("metal")
+        })
+        .expect("the release has a `discard` block whose kind is metal");
+    // **Rebuilt to the same shape as the row it replaces**, so the padder leaves it alone and
+    // the reader that parses it sees the same columns. The widths come from the row on disk
+    // rather than from a literal here, which is the whole of the fix.
+    let width = cells(lines[at]).len();
+    let row = |name: &str, role: &str, qty: &str| -> String {
+        let mut out = vec![
+            name.to_string(),
+            String::new(),
+            role.to_string(),
+            qty.to_string(),
+        ];
+        out.push("metal".to_string());
+        while out.len() < width {
+            out.push(String::new());
+        }
+        format!("| {} |", out.join(" | "))
+    };
     let doctored = document.replace(
-        "| **discard**         | world  | consume | 1                                    | metal     |                                               |                          |",
-        "| **glitch**          | world  | consume | 1                                    | metal     |                                               |                          |\n\
-         |                     |        | produce | 2                                    | metal     |                                               |                          |",
+        lines[at],
+        &format!(
+            "{}\n{}",
+            row("**glitch**", "consume", "1"),
+            row("", "produce", "2")
+        ),
     );
     assert_ne!(
         doctored, document,
@@ -537,10 +588,13 @@ fn every_recipe_row_names_a_count_rather_than_readiness() {
     //
     // **Ninety-three since `P-494` and `P-495`**, which is the force rule becoming four
     // recipes of eleven rows between them, plus the force `found by land` now requires.
+    //
+    // **Ninety-six since `P-498`**: `upkeep` gained the `put` that writes the mark, and
+    // `renew` gained a whole block for the citizen it clears it on.
     assert_eq!(
         rows.len(),
-        93,
-        "ninety-three recipe rows is the population this counted against"
+        96,
+        "ninety-six recipe rows is the population this counted against"
     );
     assert!(
         saying.is_empty(),

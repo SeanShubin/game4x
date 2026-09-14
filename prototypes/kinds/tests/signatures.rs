@@ -202,25 +202,29 @@ fn the_key_moves_with_the_traits_and_with_nothing_else() {
         )
         .unwrap_or_else(|why| panic!("cannot read {file}: {why}"))
     };
-    let (kinds_file, traits_file) = (spec("kinds.4x"), spec("traits.4x"));
-    let key_by = |text: &str, kinds_text: &str| -> Vec<(String, String)> {
-        let declared = kinds::catalog::Declared::from_text(kinds_text, &traits_file);
+    // **`carries.4x` since `P-497`**, which took a kind's traits off its own line and
+    // gave each one a row. The poison below goes on a row rather than on a line.
+    let (carries_file, traits_file) = (spec("carries.4x"), spec("traits.4x"));
+    let key_by = |text: &str, carries_text: &str| -> Vec<(String, String)> {
+        let declared = kinds::catalog::Declared::from_text(carries_text, &traits_file);
         every_kind(text)
             .iter()
             .map(|kind| (kind.clone(), signature(text, &declared, kind).key()))
             .collect()
     };
-    let before = key_by(&document, &kinds_file);
+    let before = key_by(&document, &carries_file);
 
     // **A trait of the yard alone, poisoned where the traits now live** - `P-473`. This added
     // a row to the release's *Traits* table with `yard` in its *Of* cell, and that column is
     // gone: a kind declares which traits it has, so the poison goes on the yard's own line in
     // `spec/data/kinds.4x`. **The old poison would have moved nothing and passed nothing**,
     // which is the shape of a check whose subject moved out from under it.
-    let poisoned_kinds = kinds_file.replace("name:yard", "name:yard shielding");
+    // **A row rather than a bare name on a line**, since `P-497`. The poison is the same
+    // claim - the yard carries a trait nothing else does - said in the shape the file has.
+    let poisoned_kinds = format!("{carries_file}{{carries kind:yard trait:shielding}}\n");
     assert_ne!(
-        poisoned_kinds, kinds_file,
-        "the yard's line did not take the poison"
+        poisoned_kinds, carries_file,
+        "the poisoned carries file is the carries file"
     );
     // **Both halves, because a signature is the two read together.** The kind's line says it
     // carries the trait and the release's table says what the trait admits; a name on a line
@@ -258,7 +262,7 @@ fn the_key_moves_with_the_traits_and_with_nothing_else() {
     assert_ne!(quantities, document, "no quantity moved");
     assert_eq!(
         before,
-        key_by(&quantities, &kinds_file),
+        key_by(&quantities, &carries_file),
         "a quantity is not part of a signature, so changing every one of them moves no key"
     );
 
@@ -271,7 +275,7 @@ fn the_key_moves_with_the_traits_and_with_nothing_else() {
     });
     assert_ne!(
         before,
-        key_by(&roles, &kinds_file),
+        key_by(&roles, &carries_file),
         "a role is part of a signature, so turning every consume into a produce moves a key"
     );
 }
@@ -341,11 +345,11 @@ fn two_kinds_the_release_says_the_same_things_about_share_a_signature() {
     // `pairing` is declared in the traits file so that it is a word a data file may use.
     let declared = kinds::catalog::Declared::from_text(
         &format!(
-            "{}{{kind name:alpha pairing}}\n{{kind name:beta pairing}}\n",
+            "{}{{carries kind:alpha trait:pairing}}\n{{carries kind:beta trait:pairing}}\n",
             std::fs::read_to_string(
-                std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/kinds.4x")
+                std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/carries.4x")
             )
-            .expect("spec/data/kinds.4x")
+            .expect("spec/data/carries.4x")
         ),
         &format!(
             "{}{{trait admits:number kept:thing name:pairing}}\n",

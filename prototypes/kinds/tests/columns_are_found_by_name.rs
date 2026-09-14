@@ -211,7 +211,9 @@ fn the_four_cells_the_old_matcher_could_not_read_now_reach_their_kinds() {
     for (name, carried_by, not_by) in [
         // *a thing with upkeep*, which named a column of another table.
         ("upkeep", &["citizen"][..], &["yard", "territory"][..]),
-        ("unpaid", &["citizen"][..], &["yard", "territory"][..]),
+        // **`paid` since `P-498`**, which inverted the mark: `unpaid` was a derived count
+        // and `paid` is what `upkeep` puts on a citizen it feeds.
+        ("paid", &["citizen"][..], &["yard", "territory"][..]),
         // *whatever is built*, whose column `P-466` had already removed.
         (
             "binding",
@@ -232,7 +234,8 @@ fn the_four_cells_the_old_matcher_could_not_read_now_reach_their_kinds() {
                     .traits
                     .iter()
                     .any(|carried| carried == name),
-                "`{kind}` carries `{name}` in `spec/data/kinds.4x` and its signature omits it"
+                "`{kind}` carries `{name}` in `spec/data/carries.4x` and its signature \
+                 omits it"
             );
             checked += 1;
         }

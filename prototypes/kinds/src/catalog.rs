@@ -420,7 +420,12 @@ fn trait_rows(document: &str, declared: &Declared, kind: &str) -> Vec<Vec<String
 /// reads a file nobody handed it cannot be driven on a document written to be different.
 #[derive(Clone, Debug, Default)]
 pub struct Declared {
-    lines: Vec<std::collections::BTreeMap<String, String>>,
+    /// One row per *(kind, trait)* - `spec/data/carries.4x` since `P-497`.
+    ///
+    /// **It was `kinds.4x`, one line per kind with its traits as bare keys.** That line held a
+    /// repeating group, which is the one thing a relation may not hold, and the normalization
+    /// split it. Nothing about what a signature *is* changed; where it is read from did.
+    carries: Vec<(String, String)>,
     of_every_kind: Vec<String>,
 }
 
@@ -434,12 +439,26 @@ impl Declared {
             std::fs::read_to_string(&path)
                 .unwrap_or_else(|why| panic!("cannot read {}: {why}", path.display()))
         };
-        Self::from_text(&at("kinds.4x"), &at("traits.4x"))
+        Self::from_text(&at("carries.4x"), &at("traits.4x"))
     }
 
     /// The same two files as text, so a test can supply its own.
-    pub fn from_text(kinds: &str, traits: &str) -> Self {
-        let lines = read_lines(kinds);
+    ///
+    /// **The first is `carries.4x` and was `kinds.4x`** - `P-497`. A caller passing the old
+    /// shape gets no traits rather than wrong ones, because the rows it looks for are not
+    /// there; the assertion below is what turns that into a failure instead of a quiet empty
+    /// signature for every kind.
+    pub fn from_text(carries: &str, traits: &str) -> Self {
+        let rows = read_lines(carries);
+        let carries: Vec<(String, String)> = rows
+            .iter()
+            .filter_map(|row| Some((row.get("kind")?.clone(), row.get("trait")?.clone())))
+            .collect();
+        assert!(
+            !carries.is_empty(),
+            "no `{{carries kind:… trait:…}}` row was read, so every signature would be empty \
+             and two kinds that share nothing would look alike"
+        );
         // **`of:thing` is the one thing a trait says about which kinds carry it, and it says
         // *all*** - `spec/console.md`: *a trait of every kind is the one exception, and says
         // so with `of:thing`*. A signature reading only `kinds.4x` would lose it from every
@@ -450,7 +469,7 @@ impl Declared {
             .filter_map(|line| line.get("name").cloned())
             .collect();
         Declared {
-            lines,
+            carries,
             of_every_kind,
         }
     }
@@ -458,16 +477,11 @@ impl Declared {
     /// Every trait a kind carries: the bare names on its own line, and those of every kind.
     pub fn carried_by(&self, kind: &str) -> Vec<String> {
         let mut out: Vec<String> = self
-            .lines
+            .carries
             .iter()
-            .find(|line| line.get("name").map(String::as_str) == Some(kind))
-            .map(|line| {
-                line.iter()
-                    .filter(|(_, value)| value.is_empty())
-                    .map(|(name, _)| name.clone())
-                    .collect()
-            })
-            .unwrap_or_default();
+            .filter(|(carrier, _)| carrier == kind)
+            .map(|(_, carried)| carried.clone())
+            .collect();
         out.extend(self.of_every_kind.iter().cloned());
         out
     }

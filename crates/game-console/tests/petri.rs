@@ -38,9 +38,12 @@ fn every_recipe_is_either_drawn_or_named_as_not_drawn() {
     //
     // **Thirty-six since `P-494` and `P-495`**: `hold`, `reclaim`, `renew` and `take` are four
     // new names, and `discard` gains a fifth block for the force it sweeps.
+    // **Thirty-seven blocks under twenty-six names since `P-498`**, which gave `renew` a
+    // second block: it clears the mark on a citizen as well as the one on a nature, which
+    // is one rule applied to two kinds - `stow` and `discard`'s shape.
     assert_eq!(
-        net.recipes, 36,
-        "the release states thirty-six blocks of recipe rows and the parse found {}",
+        net.recipes, 37,
+        "the release states thirty-seven blocks of recipe rows and the parse found {}",
         net.recipes
     );
     assert_eq!(
@@ -200,9 +203,12 @@ fn the_density_rule_is_spelled_out_against_the_planet_it_describes() {
     //
     // **Fifteen since `P-494`**: `hold` marks a nature met and `renew` clears the mark, which
     // are the fourteenth and fifteenth.
+    //
+    // **Seventeen since `P-498`**, which is the same trick on the other mark: `upkeep` puts
+    // `paid at its maximum` and `renew` clears it.
     assert_eq!(
-        puts, 15,
-        "{puts} `put` rows were skipped; the release states fifteen"
+        puts, 17,
+        "{puts} `put` rows were skipped; the release states seventeen"
     );
 
     let expected: Vec<&String> = names

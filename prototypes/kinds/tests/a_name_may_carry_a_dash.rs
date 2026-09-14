@@ -99,8 +99,11 @@ fn every_kind_keeps_its_signature_when_its_name_carries_a_dash() {
         )
         .unwrap_or_else(|why| panic!("cannot read {file}: {why}"))
     };
-    let (kinds_file, traits_file) = (at("kinds.4x"), at("traits.4x"));
-    let declared = kinds::catalog::Declared::from_text(&kinds_file, &traits_file);
+    // **`carries.4x` rather than `kinds.4x` since `P-497`**, because that is where a
+    // kind's traits are. What is renamed here is the `kind:` end of a carries row, where
+    // it used to be the `name:` on the kind's own line.
+    let (carries_file, traits_file) = (at("carries.4x"), at("traits.4x"));
+    let declared = kinds::catalog::Declared::from_text(&carries_file, &traits_file);
 
     let mut checked = 0;
     let mut traits_seen = 0;
@@ -110,7 +113,7 @@ fn every_kind_keeps_its_signature_when_its_name_carries_a_dash() {
         let hyphenated = format!("{kind}-of-a-kind");
         let renamed = renaming(&document, kind, &hyphenated);
         let renamed_declarations = kinds::catalog::Declared::from_text(
-            &kinds_file.replace(&format!("name:{kind}"), &format!("name:{hyphenated}")),
+            &renamed_carries(&carries_file, kind, &hyphenated),
             &traits_file,
         );
         let after = signature(&renamed, &renamed_declarations, &hyphenated);
@@ -189,24 +192,19 @@ fn hyphenating_every_kind_merges_none_of_them() {
     // `spec/data/kinds.4x` since `P-473`, so renaming only the document would be asking
     // whether eighteen kinds that are not in the file behave alike - and they would, by all
     // eighteen having nothing.
-    let mut kinds_file = std::fs::read_to_string(
-        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/kinds.4x"),
+    let mut carries_file = std::fs::read_to_string(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/carries.4x"),
     )
-    .expect("spec/data/kinds.4x");
+    .expect("spec/data/carries.4x");
     let traits_file = std::fs::read_to_string(
         std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/traits.4x"),
     )
     .expect("spec/data/traits.4x");
     for kind in &kinds {
         hyphenated = renaming(&hyphenated, kind, &format!("{kind}-of-a-kind"));
-        kinds_file = kinds_file.replace(
-            &format!("name:{kind}}}"),
-            &format!("name:{kind}-of-a-kind}}"),
-        );
-        kinds_file =
-            kinds_file.replace(&format!("name:{kind} "), &format!("name:{kind}-of-a-kind "));
+        carries_file = renamed_carries(&carries_file, kind, &format!("{kind}-of-a-kind"));
     }
-    let renamed_all = kinds::catalog::Declared::from_text(&kinds_file, &traits_file);
+    let renamed_all = kinds::catalog::Declared::from_text(&carries_file, &traits_file);
     assert!(
         !hyphenated.contains("| **citizen** |"),
         "the renamed document still holds an un-renamed kind, so it is not the document meant"
@@ -220,4 +218,30 @@ fn hyphenating_every_kind_merges_none_of_them() {
          as behaving alike because a matcher failed on both, not because they resemble each other",
         before - after
     );
+}
+
+/// `carries.4x` with one kind renamed, at the `kind:` end of every row that names it.
+///
+/// **Bounded on both sides, because `metal` is a prefix of `metal-in-it`.** A bare
+/// `replace("kind:metal", …)` would rewrite a row about a different word - which is the
+/// substring failure this whole test exists to find, reappearing in the fixture that looks
+/// for it. So a row ends the name with `}` or a space, and both forms are rewritten.
+fn renamed_carries(text: &str, kind: &str, to: &str) -> String {
+    let out = text
+        .replace(&format!("kind:{kind}}}"), &format!("kind:{to}}}"))
+        .replace(&format!("kind:{kind} "), &format!("kind:{to} "));
+    // **Nothing is asserted about the rename having changed anything**, because five kinds
+    // carry no trait at all - `metal`, `energy`, `labor`, `fertility` and `force` have no row
+    // here, and a kind with no traits is an ordinary kind rather than a fixture that failed.
+    // **The first version of this asserted a change and stopped on `metal`**, which is a check
+    // whose predicate was about the fixture rather than about the rename.
+    //
+    // **What is asserted is that none is left behind**, which is the thing that would be
+    // wrong: a row still naming the old kind after the rename means the bounds above missed a
+    // form, and the comparison would then be one kind against a mixture of two.
+    assert!(
+        !out.contains(&format!("kind:{kind}}}")) && !out.contains(&format!("kind:{kind} ")),
+        "a row of `carries.4x` still names `{kind}` after renaming it to `{to}`"
+    );
+    out
 }

@@ -109,7 +109,10 @@ fn there_are_thirty_two_recipe_blocks_under_twenty_two_names() {
     //
     // **Thirty-six since `P-494` and `P-495`**: `hold`, `reclaim`, `renew` and `take` are
     // four new names, and the force rule is four recipes where it was a comparison.
-    assert_eq!(kinds::RECIPES.len(), 36);
+    // **Thirty-seven blocks under twenty-six names since `P-498`**, which gave `renew` a
+    // second block: it clears the mark on a citizen as well as the one on a nature, which
+    // is one rule applied to two kinds - `stow` and `discard`'s shape.
+    assert_eq!(kinds::RECIPES.len(), 37);
 
     let mut names: Vec<&str> = kinds::RECIPES.iter().map(|recipe| recipe.name).collect();
     names.sort_unstable();
@@ -447,6 +450,9 @@ fn a_role_says_what_becomes_of_what_a_recipe_names() {
             // nature and consumes a nature, which the release states as two rows.
             "hold",
             "reclaim",
+            // **Twice since `P-498`.** `renew` clears the mark on a nature and the mark on a
+            // citizen, and both blocks require the thing they put to - so both keep it.
+            "renew",
             "renew",
             "take"
         ]
