@@ -61,9 +61,82 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-125 - Does a unit's tank hold its fuel, or contribute room for it? Two files now differ
+
+**to** spec · **status** open · **raised** 2026-09-14 · **source** building `S-133`'s second
+half and finding no reading that satisfies both documents
+
+**derived from** `spec/logistics.md` as `4714fac` left it, against
+`releases/first-release.md` -> *Where things are*
+
+**`S-133`'s first half is built** - `free` may be negative, `8b12484`. **The second half cannot
+be, because the two documents disagree about the thing it changes.**
+
+## The two
+
+`spec/logistics.md`, since `P-509`:
+
+> A resource in a place is in that place, not in a container inside it. What a place holds of a
+> kind is one number. The things in it that can hold that kind contribute capacity and hold
+> nothing
+
+> A place's capacity for a kind is the sum of what is in it that can hold that kind, and a place
+> declares none of its own. This holds of every place: an orbit has room for the fuel its units
+> carry and for nothing else, because that is what is in it
+
+`releases/first-release.md` -> *Where things are*, unchanged:
+
+> Every thing but the game is in another thing, and this release has three sorts of capacity.
+
+| Container     | Holds  | Up to           |
+| ------------- | ------ | --------------- |
+| a unit's tank | energy | the unit's fuel |
+
+**The column is headed *Holds*.** Read that way the row says a tank holds energy, which the
+specification now denies. **Read as capacity the row survives** - a tank contributes room for
+energy up to the unit's fuel - and then the heading is the only thing wrong.
+
+## Why this lane cannot pick the reading
+
+**It decides what the containment tree draws, and the two are different states.** `P-485` and
+`S-128` put a pioneer's fuel inside it:
+
+```
+{pioneer id:1 defending:1 moving:1} -> 1
+  {energy} -> 2
+```
+
+Under pooling that energy is the territory's and the pioneer shows nothing inside it. **The
+orbit sentence is what makes this lane read pooling as the stronger claim** - *an orbit has room
+for the fuel its units carry, because that is what is in it* says the orbit holds it and the
+unit does not. But `spec/console.md` says a thing appears inside what holds it, and which thing
+holds it is the question.
+
+## And it changes the game, not only the drawing
+
+**A unit could move on its own fuel in a territory with no energy. Under pooling it cannot.**
+`move` consumes one energy from `$from` since `P-511`, and if the tank holds nothing then the
+place must have the energy. The model refuses with `NoCells` today, reading the unit's own
+number.
+
+**Whether that is intended is a rule.** It is defensible - a unit is fuelled from where it
+stands - and it is not something this lane may decide, because it changes which moves a player
+can make.
+
+## What this lane will do
+
+**Nothing, until this is answered.** `CLAUDE.md` asks for everything that does not depend on the
+answer to be built and the question filed; the first half of `S-133` is built and this half is
+the part that depends. Proceeding under an assumption here would mean rewriting the dump, the
+scenario's reviewed expectation and `Unit` twice if the reading is wrong.
+
+**The reading this lane would take if told to proceed**: a tank contributes capacity and holds
+nothing, the place holds one number per kind, `Unit::cells` becomes the kind's capacity rather
+than a stored amount, and the tree stops drawing energy inside a pioneer.
+
 ### C-124 - Pooling answered three of `C-114`'s eight, and leaves the model three questions
 
-**to** spec · **status** open · **raised** 2026-09-14 · **source** reading `P-501` through
+**to** spec · **status** acted · **acted** 2026-09-14 · **cited** `a0d3c19` · **raised** 2026-09-14 · **source** reading `P-501` through
 `P-510` against what is open to this lane, at Sean's asking
 
 **derived from** `spec/logistics.md` and `spec/console.md` as `4714fac` left them

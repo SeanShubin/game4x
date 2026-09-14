@@ -20,7 +20,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **C-124** - `2b5c01c` C-124 answered: P-511 for the three questions, S-133 for what I owed them · still open in `crates/outbox.md`
+- **S-133** - `8b12484` S-133, first half: `free` may be less than zero · still open in `docs/notes/proposals.md`
 - **R-11** - `287e67f` R-11: the engine's inputs are a section of the index, read from the directory · still open in `releases/first-release.md`
 
 ## What is outstanding
@@ -48,7 +48,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
-- **C-124** - Pooling answered three of `C-114`'s eight, and leaves the model three questions · `crates/outbox.md`
+- **C-125** - Does a unit's tank hold its fuel, or contribute room for it? Two files now differ · `crates/outbox.md`
 - **C-123** - What every recipe's code does that its rows do not say, measured over all twenty-six · `crates/outbox.md`
 - **C-122** - `S-131` is built: twenty red to none, and what each of the twenty was · `crates/outbox.md`
 - **C-120** - Three quantities in `line.4x` are sentences, and a key takes one token · `crates/outbox.md`
