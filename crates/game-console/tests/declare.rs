@@ -920,3 +920,70 @@ fn every_bare_word_in_every_data_file_is_a_declared_trait() {
          are `C-120`'s, excused until the rows say a quantity in one token"
     );
 }
+
+/// `spec/data/block.4x` is what the release implies, byte for byte.
+///
+/// **`P-497` derived the four release-derived relations with a script that cannot be re-run.**
+/// It read a kind's traits from `spec/data/kinds.4x`, and `P-497` itself made that file bare
+/// declarations - so it now derives no `carries` row at all and asserts out. A migration whose
+/// output cannot reproduce its own input is `C-123`'s ninth in a different place: the answer
+/// exists only as the bytes somebody once produced.
+///
+/// # Bytes, because counts cannot ask whether a row is right
+///
+/// **The original asserted that every row arrived and every count matched, and passed in full
+/// while two of the seven relations were wrong** - the specification lane's own account of it.
+/// A count is a statement about how many, and being wrong about a row does not change how many
+/// there are.
+///
+/// So this compares the generated text with the committed file and nothing else. **A row whose
+/// id, recipe or owner differs fails**, and so does a row in the wrong place, because a
+/// relation's file has an order even though a relation does not.
+///
+/// **What this does not yet cover**: `line.4x`, `constraint.4x` and `for.4x`. They need the
+/// *Qty*, *Traits* and *Where* columns parsed, where this needs only the name and the owner.
+/// Named rather than left as a silence, because a partial generator that says nothing about
+/// its gaps reads exactly like a whole one.
+#[test]
+fn the_blocks_the_release_implies_are_the_blocks_in_the_file() {
+    let document = release();
+    let generated = declare::blocks(&document);
+    let committed = std::fs::read_to_string(
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/block.4x"),
+    )
+    .expect("spec/data/block.4x");
+
+    // **Both sides non-empty before comparing**, or two failures to read agree with each other.
+    assert_eq!(
+        generated.lines().count(),
+        36,
+        "thirty-six blocks since `P-511`; the generator wrote {}",
+        generated.lines().count()
+    );
+    assert_eq!(
+        generated, committed,
+        "`declare::blocks` and `spec/data/block.4x` have parted"
+    );
+
+    // **And the ids are unique and derived**, which `gathered` asserts for itself - the repeat
+    // here is deliberate, because that assertion lives in the generator and this is the check
+    // that the generator was run at all.
+    let ids: BTreeSet<String> = declare::gathered(&document)
+        .into_iter()
+        .map(|block| block.id)
+        .collect();
+    assert_eq!(ids.len(), 36, "two blocks share an id");
+    // `refresh` is the name that needs all three parts, and `discard` the one that needs two.
+    assert!(
+        ids.contains("refresh-extractor-working"),
+        "a repeated name is spelled the same way for every one of its blocks"
+    );
+    assert!(
+        ids.contains("discard-force"),
+        "a name repeated over kinds is qualified by the kind"
+    );
+    assert!(
+        ids.contains("work"),
+        "a name stated once keeps its own name"
+    );
+}

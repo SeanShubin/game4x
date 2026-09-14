@@ -36,6 +36,179 @@ use crate::recipes::{body_under, plain};
 /// word.
 pub const VOCABULARY: [&str; 4] = ["kind", "trait", "family", "value"];
 
+/// One relation of `spec/data/`: its name and its columns, in the order it writes them.
+///
+/// **A relation is an ordered tuple of named attributes**, and the order is the relation's own
+/// rather than a global one. [`game_model::containment::Description::ordered`] ranks a game
+/// thing's traits by Sean's order of relevance - the type, then the id, capacity last - and
+/// **it cannot write these files**: `carries` orders `kind` before `trait` and `constraint`
+/// orders `trait` before `kind`, so no single ranking gives both. `P-497` needed a writer of
+/// its own and this is it.
+///
+/// **A column a row does not have is left out**, which is how `qty` is absent from a `put`
+/// line and `n` from a comparison naming no number. A row carrying a column the relation does
+/// not declare fails loudly, because that is a word reaching a data file by a route nothing
+/// checked.
+pub struct Relation {
+    pub name: &'static str,
+    pub columns: &'static [&'static str],
+}
+
+impl Relation {
+    /// The rows as the file writes them, one per line.
+    pub fn written(&self, rows: &[Vec<(&str, String)>]) -> String {
+        let mut out = String::new();
+        for row in rows {
+            for (held, _) in row {
+                assert!(
+                    self.columns.contains(held),
+                    "`{}` has no column `{held}`, so this row would write a word the relation \
+                     does not declare",
+                    self.name
+                );
+            }
+            out.push('{');
+            out.push_str(self.name);
+            for column in self.columns {
+                if let Some((_, value)) = row.iter().find(|(held, _)| held == column) {
+                    out.push_str(&format!(" {column}:{value}"));
+                }
+            }
+            out.push_str("}\n");
+        }
+        out
+    }
+}
+
+/// `spec/data/block.4x`: one row per block of recipe rows.
+pub const BLOCK: Relation = Relation {
+    name: "block",
+    columns: &["id", "recipe", "owner"],
+};
+
+/// Every block the release states, as `spec/data/block.4x` writes them.
+///
+/// **A block is what the release states under one name**, and a name may be stated several
+/// times - `discard` five, `refresh` six - because `P-373` makes a rule whose subject is a
+/// family a rule for each member. So a block needs an id the recipe name cannot give.
+pub fn blocks(document: &str) -> String {
+    let rows: Vec<Vec<(&str, String)>> = gathered(document)
+        .into_iter()
+        .map(|block| {
+            vec![
+                ("id", block.id),
+                ("recipe", slug(&block.name)),
+                ("owner", block.owner),
+            ]
+        })
+        .collect();
+    assert!(
+        !rows.is_empty(),
+        "the Recipes table parsed to no block at all"
+    );
+    BLOCK.written(&rows)
+}
+
+/// One block of the Recipes table: its id, its name, whose it is, and its rows.
+pub struct Block {
+    pub id: String,
+    pub name: String,
+    pub owner: String,
+    /// The table's own cells, one `Vec` per row, in the order the table gives them.
+    pub rows: Vec<Vec<String>>,
+}
+
+/// The Recipes table as blocks, each with the id `spec/data/` gives it.
+///
+/// # The id is derived and not chosen
+///
+/// **The name, slugged; then the kind, where the name repeats; then the trait, where that
+/// still repeats.** `refresh` is what needs all three - six blocks over three kinds - and
+/// `discard` needs two. **Qualified only as far as it has to be**, so a recipe stated once
+/// keeps its own name and a reader can find it.
+///
+/// **Uniqueness is asserted rather than assumed.** A third qualifier would mean the release
+/// states two blocks nothing tells apart, which is a defect in the release rather than
+/// something to invent a suffix for.
+pub fn gathered(document: &str) -> Vec<Block> {
+    let table = body_under(document, "## Recipes");
+    let kind_at = crate::recipes::column_of(document, "## Recipes", "Kind");
+    let traits_at = crate::recipes::column_of(document, "## Recipes", "Traits");
+
+    let mut blocks: Vec<Block> = Vec::new();
+    for row in &table {
+        let name = plain(row.first().map(String::as_str).unwrap_or_default());
+        if !name.is_empty() {
+            blocks.push(Block {
+                id: String::new(),
+                name,
+                owner: row.get(1).cloned().unwrap_or_default(),
+                rows: Vec::new(),
+            });
+        }
+        if let Some(block) = blocks.last_mut() {
+            block.rows.push(row.clone());
+        }
+    }
+
+    let kind_of = |block: &Block| -> String {
+        block
+            .rows
+            .iter()
+            .find_map(|row| row.get(kind_at))
+            .map(|cell| slug(&plain(cell)))
+            .unwrap_or_default()
+    };
+    let trait_of = |block: &Block| -> Option<String> {
+        block
+            .rows
+            .iter()
+            .filter_map(|row| row.get(traits_at))
+            .map(|cell| plain(cell))
+            .find(|cell| !cell.is_empty())
+            .and_then(|cell| cell.split_whitespace().next().map(str::to_string))
+    };
+
+    // **The qualifier is chosen per name, not per block**, so every block of a repeated name is
+    // spelled the same way. `refresh` is what says so: `extractor` is unique among its six and
+    // the file still writes `refresh-extractor-working`, because two of the other five need the
+    // trait and a reader should not have to know which. **One rule for a name beats a shorter
+    // id for one of its blocks.**
+    let mut ids: Vec<String> = Vec::new();
+    for block in &blocks {
+        let same: Vec<&Block> = blocks.iter().filter(|it| it.name == block.name).collect();
+        if same.len() == 1 {
+            ids.push(slug(&block.name));
+            continue;
+        }
+        let kinds: std::collections::BTreeSet<String> = same.iter().map(|it| kind_of(it)).collect();
+        let mut id = format!("{}-{}", slug(&block.name), kind_of(block));
+        if kinds.len() < same.len()
+            && let Some(named) = trait_of(block)
+        {
+            id.push('-');
+            id.push_str(&named);
+        }
+        ids.push(id);
+    }
+
+    let unique: std::collections::BTreeSet<&String> = ids.iter().collect();
+    assert_eq!(
+        unique.len(),
+        ids.len(),
+        "two blocks share an id, so the release states two nothing tells apart: {ids:?}"
+    );
+    for (block, id) in blocks.iter_mut().zip(ids) {
+        block.id = id;
+    }
+    blocks
+}
+
+/// A name as a data file spells it: one word, dashes for the spaces.
+fn slug(name: &str) -> String {
+    name.replace(' ', "-")
+}
+
 /// Every kind the release declares, as the file that would declare them.
 ///
 /// **Read from the release's *Kinds* table**, so this is the same data by a different route
