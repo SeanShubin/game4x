@@ -85,8 +85,13 @@ fn every_item_has_a_block_that_holds_itself_and_nothing_else() {
 /// thing invites none*. Counting whole lines asks the question that was meant: as many
 /// occurrences leave as the block held, and any other occurrence is somebody else's.
 #[test]
+/// **Read over the record rather than the queue, from 2026-09-14.** This is about what
+/// `remove_block` does to a block, not about what is open today - and the queue emptied when four
+/// proposals landed at once, so the count-over-nothing guard fired correctly and the test had
+/// stopped covering anything. The record holds every item that has ever closed, sub-headings and
+/// all. Found by the code lane, in `C-124`.
 fn sub_headings_belong_to_their_item_and_leave_with_it() {
-    let text = queue();
+    let text = record();
     let lines: Vec<&str> = text.lines().collect();
     let occurrences = |body: &str, heading: &str| body.lines().filter(|l| *l == heading).count();
     let mut with_sub_headings = 0;
