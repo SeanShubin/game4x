@@ -241,6 +241,35 @@ else
         echo "$waiting" | sed 's/^/  /'
         echo "pre-commit: lift it, or say in the item what it is waiting on now"
     fi
+
+    # S-129, and the specification lane built the detector and asked this lane to wire it:
+    # `hooks/` is production support and this lane's alone, so a lane that needs a check
+    # files it rather than wiring it.
+    #
+    # What it finds is a chain - one item closed by naming another as carrying what it
+    # dropped - still ending in something open. `docs/postmortems/tracked-and-still-lost.md`
+    # is the failure it exists for: C-16 handed to S-30, withdrawn handing its live half to
+    # C-102, ten days with no gap in the chain, and each hop asked a narrower question than
+    # the one before. The engine went 2,555 to 6,231 lines while the number being tracked
+    # improved.
+    #
+    # **Printed and never gating**, which is what S-129 asks for and what Q-60 settled for
+    # every other notice here: a gate reddens for whichever lane commits next, and that may
+    # be a lane which must not repair it. It cannot ask whether a successor is narrower than
+    # its predecessor either - that compares two English sentences, which is P-245's wall -
+    # so what it is good for is naming the chains few enough to read.
+    #
+    # **Two hops only, which is the whole output that matters.** The tool also lists every
+    # closed item whose successor is open, and that is dozens - an ordinary handoff looks
+    # exactly like a dropped one from there. The two-hop section is where a question has
+    # been passed on twice and is still open, and that is the shape the postmortem records.
+    chains=$(cargo run --quiet --manifest-path tools/spec/Cargo.toml -- chains 2>/dev/null \
+        | sed -n '/two-hop chain/,/^$/p' | grep -- "->" || true)
+    if [ -n "$chains" ]; then
+        echo "pre-commit: a question has been handed on twice and is still open:"
+        echo "$chains" | sed 's/^/  /'
+        echo "pre-commit: read the first and the last together - does the last still ask it?"
+    fi
 fi
 
 # The edition is passed explicitly because rustfmt is invoked directly rather than through
