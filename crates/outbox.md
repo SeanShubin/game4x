@@ -61,6 +61,70 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-114 - Sean's reason for a thin engine, and it belongs in the invariants
+
+**to** spec · **status** open · **raised** 2026-09-13 · **source** Sean, asked directly for this to
+reach the invariants, after this lane compared the arrangement against his stated goal
+
+**derived from** *I am leaning towards a more data driven game where the units and recipes are
+simply data inputs to rust, and rust is providing a statically typed engine to run and validate the
+data* - `docs/notes/spec-backlog.md`, 2026-08-30
+
+## His words, 2026-09-13, and they are the item
+
+> A thin engine running a data driven game forces inadequacies in the engine and data structure to
+> come to light sooner. The design pressure is the whole point. If the code explodes in complexity,
+> or the data structure explodes in complexity, or the data itself explodes in complexity, that
+> tells us something needs to be unified or redesigned more clearly than anything else could.
+
+**He asked for this to be relayed so it can reach the invariants.** It is a reason rather than a
+preference, and the reason is what makes it checkable: a thin engine is an **instrument**, and the
+three explosions are its three readings.
+
+## Why this lane is filing it rather than only passing it on
+
+**The arrangement today does not merely fail the goal - it disables the instrument.** Measured
+before he said any of this, and the measurement is what the reason explains:
+
+|                                                   | data driven at run time                      |
+| ------------------------------------------------- | -------------------------------------------- |
+| the world - territories, biomes, deposits, forces | **yes**, 402 lines of `.4x` the engine reads |
+| the rules - every recipe                          | **no**, zero read from any document          |
+
+Exactly one non-test file reads `releases/first-release.md` and it generates a **report**. Nothing
+reads `spec/data/` at run time. Twenty-two recipe names and thirty-two row-blocks are nine
+hand-written match arms in `game.rs` plus constants in `game::cost`.
+
+**So complexity in a rule cannot show up where he is looking for it.** A rule that is awkward to
+state becomes another match arm, which nothing measures; a rule that is awkward as *data* would
+have shown up as data getting worse, which is the reading he wants. **The engine is 6,231 lines in
+`game-model` against 58 lines of `spec/data/`**, and that ratio is not a cost to be tolerated - by
+his argument it is the instrument reading off the end of its scale and nobody looking.
+
+**And the duplication produces a false signal on top of the missing one.** The recipes are stated
+three times - the release, `spec/data/` via the generator, and `prototypes/kinds`'s typed
+encoding - kept honest by tests rather than by construction. `P-489` changed one table on
+2026-09-13 and the follow-on was twenty-two files, eleven failing checks and four counts moved. **That
+cost says nothing about whether the rule is well designed**, which is the signal the thin engine is
+for; it is synchronisation noise sitting exactly where the reading should be.
+
+## What is already built toward it, so the proposal is not starting from nothing
+
+`prototypes/kinds` is a complete typed encoding of the Recipes table - `Recipe`, `Line`, `Role`,
+`Noun`, `Quantity`, `Qualifier` - and **nothing executes it**: it is referenced by one file, its own
+test, and neither `game-model` nor `game-console` depends on that crate. It is most of a reader with
+no interpreter behind it.
+
+**The missing half is the word `run` in his own sentence.** *An engine to run and validate the
+data*: the validating is extensive and the running does not exist.
+
+## What this lane is not doing
+
+**Not building it.** It is the largest structural choice in the repository, it would delete more
+code than it adds, and it is his. This lane can measure what it would cost - which of the nine arms
+reduce cleanly to their rows and which carry behaviour the table cannot currently express - and has
+offered that rather than started it.
+
 ### C-113 - `P-486`'s rows contradict two sentences the release still states
 
 **to** spec · **status** open · **raised** 2026-09-13 · **source** building `S-128`, and the gate
