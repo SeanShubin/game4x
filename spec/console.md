@@ -159,7 +159,8 @@ more, and its arguments are named. **A value is a word, a number, or another com
 form**, so a command may carry a tree.
 
 **A command names a recipe and binds what that recipe leaves open**: every place it leaves open,
-and any ingredient or trait value it names with a `$`. **A recipe acting in one place need not
+**every ingredient it names by family rather than by kind**, and any ingredient or trait value it
+names with a `$`. **A recipe acting in one place need not
 name it; one acting in two names both, and the command binds both.** **A place worked out from
 another is not open** - the orbit above a territory is named by naming the territory.
 **There is one command for each recipe the player may fire**, and ending a turn fires the world's.

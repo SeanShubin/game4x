@@ -226,7 +226,8 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 |                     |        | require | 1                                    | unit      | moving at least 1                             | `$from`                  |
 |                     |        | put     |                                      | unit      | moving one less                               | `$to`                    |
 |                     |        | consume | 1                                    | energy    |                                               | that unit                |
-| **refuel**          | player | require | 1                                    | unit      | with room for energy                          | `$where`                 |
+| **refuel**          | player | require | 1                                    | territory |                                               | `$where`                 |
+|                     |        | require | 1                                    | unit      | with room for energy                          | `$where`                 |
 |                     |        | consume | 1                                    | energy    |                                               |                          |
 |                     |        | produce | 1                                    | energy    |                                               | that unit                |
 | **found by land**   | player | consume | 1                                    | pioneer   |                                               |                          |
