@@ -311,6 +311,18 @@ correct.
 **So a finding says what is wrong before it says where**, and where there is a sentence to grep for,
 this lens greps before filing rather than leaving that to whoever acts on it.
 
+**And a sentence is the narrow reading of that. 2026-09-13: the same failure, over an idiom.** This
+lens found `sed -n '2,28p'` in `scripts/gate.sh` - a help text reading a hard-coded range of its own
+header, which truncates silently when the header grows - and filed it as a note about that file,
+correct and worth almost nothing. **The code lane grepped the neighbour.** `scripts/push.sh` read
+`2,25p` with comments ending at 22, so `push.sh --help` had been printing `set -uo pipefail` and a
+`cd` as help text, live, in a file neither of us was reviewing.
+
+**The hypothetical was in the file written an hour earlier and the real one was next door.** A
+pattern with a searchable form is a claim about the codebase, and `sed -n '` was one grep. This lens
+read its own rule as being about prose, because the case that produced it was a doc comment - **so
+the rule is stated about a sentence and is true of any shape that can be searched for.**
+
 ## When the instrument is confidence, make it produce something
 
 The general form of the rule above, and the code lane's sentence rather than this lens's: **the
