@@ -168,7 +168,9 @@ storage[$resource] capacity 10` - two bins in one thing, each a container in its
 > give the third and the third is then a second statement of the same fact.
 
 > **Each distinct description and contents is its own entry.** Two things alike in every trait but
-> holding different things are two entries, not one entry of two.
+> holding different things are two entries, not one entry of two. **Where two entries share a
+> description they sort by their contents, by this same rule** - which is total, because a thing
+> holds finitely many entries and each is shorter than what holds it.
 
 ## What this removes, which is the test of it
 
@@ -190,6 +192,22 @@ take. There is no second vocabulary for *a capacity a thing has* beside *a conta
 **What it over-specifies** is that a thing's own capacity now has a container to live in even where
 only one bin will ever exist. `store` gains no complexity from this - it is the kind that was
 already there - but a reader meets a store where they might have expected a number.
+
+## A defect this item had until 2026-09-14, found by Sean asking about position
+
+**`Entries are in the order their descriptions sort in`** - `spec/console.md`. This item says two
+things alike in every trait but holding different things are **two entries**, and it did not say how
+they sort. **They have the same description, so the order between them is undefined**, and *the same
+state is always the same bytes* stops being true the moment a container holds two.
+
+**The rule needs one more clause, and it is offered above rather than left implied:**
+
+> **Where two entries share a description they sort by their contents, by this same rule.** The
+> order is total because a thing holds finitely many entries and each is shorter than what holds it.
+
+**It matters beyond tidiness**: a position is an index into that order, and an index into an order
+that is not total names nothing. **Nothing in the item warned of this** - it was found by a question
+about a user interface.
 
 ## One thing this lane checked and one it did not
 

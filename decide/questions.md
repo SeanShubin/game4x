@@ -81,11 +81,66 @@ kinds needs it twice, which is a map wearing a field's clothes.
 Stays on one line and reuses `->`. The cost: `[` and `]` are punctuation the notation does not have,
 which is a second way of writing containment.
 
+## `E4` - name the entry by its position, and write no contents at all
+
+**Sean, 2026-09-14**: *for manual allocation we will likely be able to select individual transports,
+which implies all we really need is a positional notation, to know what is in each transport, and to
+be able to add/remove from a transport by position.*
+
+```
+{stow into:2 kind:metal repeat:2}
+{stow into:3 kind:metal repeat:5}
+```
+
+**A position is an entry's index in the order the state already puts it in.** `spec/console.md`
+already fixes that order - *entries are in the order their descriptions sort in* - so **nothing is
+invented and no contents are written.** `P-502`, as corrected today, makes the order total where two
+entries share a description.
+
+**It is not a fourth identity, it is the second one indexed.** `id` names a thing for ever; a
+description names a set; **a position names an entry in a container's own listing**, and it changes
+when the state changes because the listing does.
+
+## Why `E4` beats the other three, and it is a different kind of argument
+
+**The other three invent a way to write contents. `E4` writes none.** `E1` makes a command
+multi-line, `E2` adds a word, `E3` adds punctuation - and all three restate what a container already
+displays. **A position points at it instead.**
+
+**It is also the only one that does not grow with what a thing holds.** A transport holding four
+kinds needs four contents clauses under `E2` or `E3`, and one number under `E4`.
+
+## What Sean raised against it, and it is the real limit
+
+**Stacking.** *How are we to have massive fleets if I have to make each one selectable by the user.*
+
+**A position names an entry, not a thing**, so a million identical transports are **one entry at one
+position**. Positions do not grow with the fleet. **They grow with the number of distinct
+(description, contents) combinations**, which is the honest bound and is the one he named: *an
+additional problem when we have more possible combinations of contents than can fit on a user
+interface.*
+
+**This lane has not bounded that number and does not know it.** What can be said is that it is the
+number of distinct states, which `spec/logistics.md` already relies on being small - *a kind has few
+states however many things of it there are.* **That sentence is load-bearing for `E4` and was
+written before anything held cargo**, so it is a premise to check rather than a reassurance.
+
+## And the simple algorithm he named needs no addressing at all
+
+*Fill up each transport and move the ones that are full.* **That is `repeat` against a description
+that names the not-yet-full ones**, and the set shrinks as they fill - `P-501`'s mechanism, no
+position required. **So position is for manual allocation only**, which is the case it was proposed
+for.
+
 ## What this lane would pick and why it is not confident
 
-**`E1`**, because *there is one notation* is the rule it is closest to: a command and a state are
-written in the same form, and a state writes containment by indentation. **Anything inline is a
-second way to say what indentation already says.**
+**`E4`, and this lane changed its mind on being given the position idea.** It argued for `E1` on the
+grounds that *there is one notation* and a state writes containment by indentation. **`E4` is better
+by that same rule**: it writes no containment at all, so there is nothing to write a second way.
+
+`E1` remains the answer if a command should be able to name a thing that is **not** in a listing
+anybody has - a hypothetical container, or one being created. **Nothing in the three scenarios needs
+that.**
 
 **The reason this is a decision and not an approval**: the cost of `E1` falls on files you derive by
 hand this week, and whether a command may stop being one line is a judgement about your own reading

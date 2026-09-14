@@ -26,6 +26,24 @@ can check it himself. `C-114` is the measurement; this is what it is for.
 largest structural choice in the repository and leaves to him. Recorded here so that when that choice
 is made, the reason it was wanted is not reconstructed from the code lane's measurements alone.
 
+## Said 2026-09-14: concrete first, because abstractions cannot be fleshed out
+
+*We are not at user interface yet, and something concrete that can't possibly work can be adapted,
+while abstract ideas alone don't allow progress, they have to be moved into the concrete to be
+fleshed out.*
+
+**Said while puzzling out storage**, and it is the method that produced the day's results rather
+than a preference about them. `P-503` was withdrawn because his three scenarios were written out as
+commands; `P-501` was held because one of them could not be; `P-502`'s ordering defect was found by
+asking what a position would index into. **None of the three was found by reading a proposal.**
+
+**It pairs with what he said in the same message about notation**: *if you communicate specifics in
+game notation, I suspect these proposals would never have been created in the first place, only to
+be rejected.* `P-506` names the notation so that this is sayable.
+
+**Not yet a proposal.** It is a rule about how this lane works rather than about the game, and it
+belongs in `CLAUDE.md` or in `docs/process.md` if anywhere - his to place.
+
 ## Said 2026-09-13: a thin engine is an instrument, and complexity is its reading
 
 *A thin engine running a data driven game forces inadequacies in the engine and data structure to
