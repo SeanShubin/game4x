@@ -62,12 +62,45 @@ about the wrong population.
 | **`E2`** kind then trait | `energy free at least 1`     | `metal free at least 1`              |
 | **`E3`** prose, as now   | `with room for 1 energy`     | `with room for 1 metal`              |
 
-**`E1` matches every qualifier already in the table.** All 27 distinct forms in use begin with the
-trait - `moving at least 1`, `keeps 0`, `defending at its maximum`, `met at its maximum` - so `free`
-first is the shape the reader already has. **`E3` is the only one that is not a trait reading**, and
-it is what `with room for energy` was: prose the parser cannot check.
+**`E1` matches the shape most of the table already uses, and the count this lane first gave was
+wrong.** It said *all 27 distinct forms begin with the trait*. Re-derived: **26 distinct qualifiers,
+of which 18 parse today as `<trait> <phrase>`** - `moving at least 1`, `defending at its maximum` -
+**two more are counters of another shape** - `keeps 0`, `met at least 0` - and **six are neither**:
+`food`, `metal`, `` `$resource` ``, and three written as prose, one of which is the `with room for
+energy` this item exists to replace. The first count included the table's `---` separator as a
+qualifier, which is this repository's own recurring failure committed inside the item describing it.
 
-**This lane would pick `E1`**, and the reason is the 27 rather than taste.
+**This lane would pick `E1`**, and the reason is the 18 rather than taste.
+
+## How each survives the Petri net constraint, measured in `crates/game-console`
+
+**All three fail the parser identically today, and that answer is useless.** `nogain::count_in`
+splits on the first space and matches three fixed phrases, so `free energy at least 1`, `energy free
+at least 1` and `with room for 1 energy` all return `None` - and so does the `with room for energy`
+already in the release.
+
+**It does not currently matter, because the net never reads a qualifier on a `require` row.**
+`petri.rs` builds a non-`put` arc against `Place { container, kind, room: false }`; the qualifier
+rides along in the arc's `traits` field and selects nothing. **`refuel` is drawn as *requires a
+unit*, full stop.** That is conservative rather than wrong - an ignored requirement over-approximates
+what can fire, so the no-gain result still holds - but **the bin is not in the net.**
+
+**So the question that discriminates is which form can become a place**, and there the three differ:
+
+|          | Becomes                      | Costs                                                             |
+| -------- | ---------------------------- | ----------------------------------------------------------------- |
+| **`E1`** | the place `unit free energy` | `count_in` matches the trailing phrase rather than the first word |
+| **`E2`** | the place `unit energy free` | the same one change                                               |
+| **`E3`** | nothing                      | a fourth form in a three-form vocabulary, and it is prose again   |
+
+**And whichever is chosen, the constraint is met for the same reason `met` meets it.** Free capacity
+is held as positive tokens on a **bounded** place - a pioneer's tank is 2, a transport's would be 2
+and 10 - so `free energy at least 1` is an ordinary read arc and **not an inhibitor**.
+`spec/invariants.md` licenses exactly this: *a rule may ask whether something is absent only where
+what would hold it declares a limit for it.* A unit's tank declares one. The same question asked of
+something unbounded is the cliff, and **reachability survives one inhibitor arc and dies at two.**
+
+**`E1` and `E2` tie on the net** - same change, same arc, one place per kind either way.
 
 ## What is not being asked
 
