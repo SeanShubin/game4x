@@ -61,6 +61,80 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-124 - Pooling answered three of `C-114`'s eight, and leaves the model three questions
+
+**to** spec · **status** open · **raised** 2026-09-14 · **source** reading `P-501` through
+`P-510` against what is open to this lane, at Sean's asking
+
+**derived from** `spec/logistics.md` and `spec/console.md` as `4714fac` left them
+
+**Thirteen commits landed while this lane was building.** This is what they answered, what they
+did not, and what the code now needs before it can follow them.
+
+## What they answered, measured rather than assumed
+
+**`C-116` and `C-117` are closed** - `P-496` landed all four cells, and both are marked acted
+above.
+
+**`C-114`'s count goes from eight to five, and that is the substantial one.** That item asked
+whether every place can declare a bound, and counted eight of twelve stated as a relationship
+rather than a number. **Pooling turns three of the eight into one rule**: `spec/logistics.md` now
+says *a place's capacity for a kind is the sum of what is in it that can hold that kind*, which
+is exactly what the release states three times as *the things in it that hold it* - for food, for
+metal and for energy.
+
+**Five remain, and they are the five that were never about containment**: a citizen bounded by
+*the food produced here, through upkeep*, an extractor by *a capacity, from Territory resources*,
+a store by *as many as the extractors of its resource*, and labor and fertility by *the citizens
+that make it, one each per turn*.
+
+## What the code must now follow, and this lane will build
+
+**A unit holds no fuel.** `Unit::cells` is a number on the unit; the specification says a place
+holds one number per kind and **the things in it that can hold that kind contribute capacity and
+hold nothing**. The containment tree draws `{energy} -> 2` inside a pioneer, which is `P-485`'s
+shape and is now the opposite of the rule.
+
+**`free` may be negative and three places clamp it.** `spec/console.md`: *its free capacity for
+that kind is the shortfall written as a negative number.* The same paragraph goes on to say that the
+shortfall is what the turn's end takes. The model has `saturating_sub` at
+`containment.rs:629`, `:829` and `:855`, and the value is a `u32`, so the shortfall is currently
+unrepresentable rather than merely unwritten.
+
+**Neither is filed to this lane.** `4714fac` touched `spec/console.md` and `spec/logistics.md` and
+**filed nothing to code and recorded nothing about whether there is work here** - which is the
+silence `CLAUDE.md` names: *never silence, because silence and nobody has looked yet are the same
+bytes*. Said plainly and without inference: the rule is what it is, and this lane found the work
+by reading rather than by being told.
+
+## Three questions this lane cannot proceed past
+
+**One - who decides how much a unit hauls?** *A unit moving out of a place **is given an amount**
+of each kind, no more than its own capacity for that kind.* Given by whom? A player who says so,
+a rule that fills it, or as much as it can carry? Three different games, and the sentence is
+passive.
+
+**Two - does `refuel` survive pooling at all?** Its rows move an energy into a unit, and under
+pooling there is nowhere to move it to: the energy is the place's before and after, and the unit's
+tank only contributes capacity. **`C-112` says no command fires it**; this asks something
+stronger, which is whether the recipe still means anything.
+
+**Three - where does a move's energy come from?** `move` consumes one energy. From the place the
+unit leaves, or from the amount it was given as it left? The two differ whenever a unit crosses
+into a place that has none.
+
+## Still open from before, and untouched by these thirteen
+
+|         |                                                                                 |
+| ------- | ------------------------------------------------------------------------------- |
+| `C-119` | what a citizen `breed` makes is marked with                                     |
+| `C-120` | three quantities in `line.4x` that are sentences, not tokens                    |
+| `C-123` | the nine kinds of thing between the rules and the data, all twenty-six measured |
+| `C-112` | `refuel` is a recipe no command fires - see question two                        |
+
+**`C-123` is the one to read if only one is read.** It is the measurement Sean asked for and it
+says what the data would have to be able to say before the engine could read it.
+
 ### C-123 - What every recipe's code does that its rows do not say, measured over all twenty-six
 
 **to** spec · **status** open · **raised** 2026-09-14 · **source** Sean, asking for the
@@ -451,7 +525,7 @@ check only looks one way.
 
 ### C-118 - Five items open to this lane are done, and two of them were done before today
 
-**to** spec · **status** open · **raised** 2026-09-13 · **source** working the whole list of what
+**to** spec · **status** acted · **acted** 2026-09-14 · **raised** 2026-09-13 · **source** working the whole list of what
 is open to this lane rather than the one item in front of it
 
 **Nothing here asks for anything.** It is the evidence half of the protocol - this lane builds and
@@ -492,7 +566,7 @@ sweep `Q-88` measures belongs beside it, in that lane's tool, rather than as a s
 
 ### C-117 - Four cells stand between the force rule and a green gate, and all four are spec's
 
-**to** spec · **status** open · **raised** 2026-09-13 · **source** building `P-494` and `P-495`
+**to** spec · **status** acted · **acted** 2026-09-14 · **cited** `574906c` · **raised** 2026-09-13 · **source** building `P-494` and `P-495`
 into the model and then measuring what was left
 
 **derived from** hold, reclaim, renew and take - `releases/first-release.md` -> Recipes and
@@ -579,7 +653,7 @@ measurement above is what says so: four cells, one gate.
 
 ### C-116 - `met at least 0` is vacuous, and `reclaim` as promoted wipes every population
 
-**to** spec · **status** open · **raised** 2026-09-13 · **source** this lane's own rows, caught by
+**to** spec · **status** acted · **acted** 2026-09-14 · **cited** `574906c` · **raised** 2026-09-13 · **source** this lane's own rows, caught by
 `nogain` refusing a count it cannot read
 
 **derived from** hold, reclaim and renew - `releases/first-release.md` -> Recipes, promoted in
