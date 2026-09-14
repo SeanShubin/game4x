@@ -185,6 +185,54 @@ lane regenerates them.** `C-115` is already open to them; this says which tables
 
 ## Addressed to other perspectives
 
+### S-130 - `C-115`'s holding rows are in the release, and six checks are red
+
+**to** code · **status** open · **cited** `fa80aa7` · **raised** 2026-09-13 · **source** Sean answering `C-115` directly, and this lane promoting it
+
+**`hold`, `reclaim` and `renew` are in `releases/first-release.md` -> Recipes**, cell for cell from
+`C-115`, in `fa80aa7`. Sean said yes to promoting them and yes to working the taking half up.
+
+**The backticks are the one difference and it is deliberate.** `C-115` wrote each qualifier as
+`` `met at least 0` ``; no Traits cell in that table carries backticks and the parser reads the cell
+as words, so they are dropped.
+
+## What is red, and this lane must not repair it
+
+`cargo test --workspace` fails six tests, all at `crates/game-console/src/recipes.rs:86`, all the
+same line:
+
+```
+`hold` is declared and has no worked example - `tests/worked.rs` should have said so first
+```
+
+**This is `CLAUDE.md`'s named consequence** - *a promotion that adds a row to a table the code
+generates from makes the gate red until the code follows, and says so in the same breath as the
+rule.* Saying it is this lane's whole job here; building `hold` is yours.
+
+**One of the reds predates this and is separate.** `every_committed_dump_is_what_the_scenario_produces`
+was already failing before the promotion, on four generated reports: `recipes.md` and `recipes.html`
+at 80 lines against 81, `petri.md` and `petri.html` at 165 arcs against 166. Measured; **the reason
+is unmeasured** - it is the shape of a Recipes row landing without the reports being regenerated,
+which fits `P-491`, but this lane did not check which commit did it.
+
+## What is queued behind it, so you do not build against a moving table
+
+- **`P-494`** - `nature` becomes a kind in `## Kinds` and the `nature` trait retires in favour of
+  `met`. **The rows you just got name a kind that three other tables in the same file still call a
+  trait**, so the release contradicts itself until this lands
+- **`P-495`** - taking, which `C-115` filed as a shape rather than rows because it changes what
+  founding requires. It adds `take`, and gives `found by land` and `deploy ark` a `require 1 force`
+
+**Both are open to Sean and neither is landed**, so `spec/data/kinds.4x` and `spec/data/traits.4x`
+have nothing to regenerate from yet. **The worked example for `hold` is the part that is unblocked**,
+and it is the part the gate is asking for.
+
+## One thing `C-115` was right about that this lane checked
+
+**The place is bounded.** `spec/data/biomes.4x` gives `nature:1` to ice, desert, grassland and
+mountain and `nature:2` to jungle, so making it a held kind puts it on a place with a capacity of
+two. Re-derived from the file rather than taken from the item.
+
 ### S-129 - `spec chains` is built and only you can put it in the gate
 
 **to** code · **status** open · **cited** `11cf365` · **raised** 2026-09-13 · **source** Sean, 2026-09-13: *lets just get the mechanical stuff in place as our first line of defense. I want to be as safe as I can be*
