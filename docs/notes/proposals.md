@@ -156,67 +156,43 @@ running. Both are fixed in `11cf365`. **Whether the gate should run this lane's 
 larger question**, and it is the same shape as `Q-82` - *`--all-targets`, so that "everything" means
 it*.
 
-### S-128 - a pioneer's bin: three promotions, and the dump has to start showing what a unit holds
+### S-128 - withdrawn: `P-489` moved every row it quotes
 
-**to** code · **status** open · **cited** `df150d4` · **raised** 2026-09-13 · **source** promoting all three, then running the arithmetic against the scenario
+**to** code · **status** **withdrawn** 2026-09-13 · **cited** `df150d4` · **raised** 2026-09-13 · **withdrawn** the same day, on re-deriving it against the release before the code lane was started
 
-**`39a42c6`.** `P-486`, `P-487` and `P-485`, in that order, and the third depends on the first two.
+**Withdrawn by this lane, not refuted, and nobody had acted on it.** Re-derived from
+`releases/first-release.md` -> Recipes rather than remembered. **Three of its four claims are now
+false**, and a lane building from it would have undone work that has since landed.
 
-## The rules
+## What it said, against what the table says
 
-```
-spec/units.md      A mobile unit that moves over the ground has a bin for fuel. **It is built
-                   with that bin full, and the energy is paid where it is built.**
+| It said                                                  | The release says                                            |
+| -------------------------------------------------------- | ----------------------------------------------------------- |
+| `produce pioneer` **no longer consumes energy**          | it consumes **2 energy**                                    |
+| `produce pioneer` has `put 2 energy` into *that pioneer* | there is no such row                                        |
+| `refuel` requires a unit `with room for energy`          | `free energy at least 1` - `P-492`                          |
+| `refuel` has `put 1 energy` into *that unit*             | `consume 1 energy` then `produce 1 energy` into *that unit* |
 
-spec/logistics.md  **When a thing that contains things is consumed, what it held falls loose
-                   where it stood.** It is not destroyed with its container: it goes into
-                   disorder, and at the turn's end what there is room for is kept and the rest
-                   is lost.
-```
+**`P-489` is what moved them** - *a pioneer's energy is a cost, and refuelling is `stow` aimed at a
+bin*, promoted in `2113dc7` - and `P-492` moved the qualifier this morning. **Nothing edited this
+item when either landed**, and it went on reading exactly as it had.
 
-**`P-486` restores what `P-66` promoted and `0aca92d` lost on 2026-09-01.** The six energy in
-`produce pioneer` was its last trace - a fill for a bin the specification had stopped saying gets
-filled.
+## The one half that was not about rows, and why it is not re-filed
 
-## The rows
+It asked that **the dump show what a unit holds**. That cannot be observed today for a reason that
+has nothing to do with the dump: **no unit survives `scenario/commands/play.4x`.** The expected file
+holds 125 lines and not one names a pioneer or an ark - the ark launches and the pioneer is spent
+founding. **A check over zero units would pass for the wrong reason**, which is the failure this
+repository keeps recording, so it is not re-filed as a check. It re-filed itself the day a scenario
+ends holding a unit.
 
-```
-| **produce pioneer** | player | consume | 3 | metal   |                      |              |
-|                     |        | consume | 2 | citizen |                      |              |
-|                     |        | put     | 2 | energy  |                      | that pioneer |
-|                     |        | produce | 1 | pioneer |                      |              |
-| **refuel**          | player | require | 1 | unit    | with room for energy | `$where`     |
-|                     |        | put     | 1 | energy  |                      | that unit    |
-```
+## Why this is written up rather than deleted quietly
 
-**`produce pioneer` no longer consumes energy at all.** Three metal and two citizens, as `P-67` had
-it, and two energy **put** rather than consumed.
+**It is the failure `docs/postmortems/tracked-and-still-lost.md` is about, caught early instead of
+late.** A rule moved under an open item and nothing noticed: the item still read correctly, its
+quotations were accurate when written, and only its conclusion had stopped being true. What caught it
+was re-deriving it before handing it on, which is a habit rather than a mechanism.
 
-## What this asks of the dump, and it is the point
-
-**A bin is containment**, so `spec/logistics.md`'s *a thing appears inside what holds it* means a
-full pioneer reads:
-
-```
-{pioneer id:1 defending:1 moving:1} -> 1
-  {energy} -> 2
-```
-
-**It shows nothing inside a pioneer today while the entity view says `fuel 2`, falling to 1 after
-the move.** Those two views disagree, and this is the change that makes them agree. **`P-485` began
-as the report of that disagreement**, so closing it is closing the finding.
-
-## What moves in the scenario, derived rather than guessed
-
-**Turn 7 produces the pioneer and turn 8 moves it.** Under these rules turn 7's territory keeps six
-energy it used to spend and gives two to the pioneer, so **territory 1 ends turn 7 four energy
-better off**, and the pioneer carries two where the state showed none. Turn 8's move takes one of
-them. **Turn 9 founds, and `P-487` says the remaining one falls loose in territory 2** - to be
-stowed if there is room and lost if there is not.
-
-**Check that last one rather than assume it**: territory 2 is founded in the same act, so whether
-it has a store for energy at the moment the pioneer dissolves is a question about ordering within
-`found by land`, and this lane cannot answer it from the release.
 
 ### S-127 - `P-484` moves a sentence your doc comment quotes, and you are green right now
 
@@ -4247,9 +4223,14 @@ it was about, not the item.
 - **`P-213`** - a definition arrives in one transition, which cannot be tested until a definition
   can be written at all.
 
-**`P-214` is built and this item went on saying it was not - re-derived 2026-09-12.** There are
+**`P-214` is built and this item went on saying it was not - re-derived 2026-09-12.** There were
 **ten player recipes and ten commands, one for each**, plus `end-turn`: `create labor` has its
 own command, and `move` and `found by land` are two, which is the cost this item said Sean took.
+
+**Re-derived again 2026-09-13, before the code lane was started, and it had moved.** There are
+**eleven player recipes** - `refuel` is the eleventh - **and it is the one no command fires**, which
+`C-112` carries and is open to this lane. **One-for-one no longer holds**, and this is the second
+time this paragraph has gone stale without anybody editing it. The world's are fifteen.
 **The numbers above are the state on 2026-09-03** and are left as written rather than edited,
 because what the item recorded is what was true then.
 
