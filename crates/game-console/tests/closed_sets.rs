@@ -269,18 +269,31 @@ fn every_trait_of_a_territory_is_shown_in_the_dump() {
         "only {} kinds declared, so this would agree with anything",
         declared.len()
     );
-    let territory = declared
+    assert!(
+        declared
+            .iter()
+            .any(|row| row.traits.get("name").map(String::as_str) == Some("territory")),
+        "`territory` is a declared kind"
+    );
+    // **Read from `carries.4x` since `P-497`, where it was the territory's own bare keys.**
+    // A kind's line held the traits it carries as a repeating group and holds its name alone
+    // now, so the same question - *what does a territory carry* - is a join rather than a
+    // read. **The answer has to be the same either way**, which is what makes the move a
+    // normalization rather than a change.
+    let carries = std::fs::read_to_string(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/carries.4x"),
+    )
+    .expect("spec/data/carries.4x");
+    let rows = game_console::state::declarations(&carries).expect("the file of carries parses");
+    assert!(
+        rows.len() > 30,
+        "only {} carries rows, so this would agree with anything",
+        rows.len()
+    );
+    let mut of_a_territory: Vec<String> = rows
         .iter()
-        .find(|row| row.traits.get("name").map(String::as_str) == Some("territory"))
-        .expect("`territory` is a declared kind");
-    // **A trait is named without a value on a kind's line and `name` and `family` carry one**,
-    // which is how `spec/console.md` writes a stored trait. So the traits of a territory are
-    // its bare keys.
-    let mut of_a_territory: Vec<String> = territory
-        .traits
-        .iter()
-        .filter(|(_, value)| value.is_empty())
-        .map(|(name, _)| name.clone())
+        .filter(|row| row.traits.get("kind").map(String::as_str) == Some("territory"))
+        .filter_map(|row| row.traits.get("trait").cloned())
         .collect();
     of_a_territory.sort();
     // **Four, and the fourth arrived with the column going.** It was three - `control`,
@@ -300,7 +313,7 @@ fn every_trait_of_a_territory_is_shown_in_the_dump() {
     assert_eq!(
         of_a_territory,
         ["biome", "control", "id"],
-        "the territory's line in `spec/data/kinds.4x` names the traits it carries"
+        "`spec/data/carries.4x` names the traits a territory carries"
     );
 
     // Every column of every table the dump produces, so a trait shown anywhere counts.

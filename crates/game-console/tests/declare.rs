@@ -225,19 +225,36 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
         .collect();
     assert_eq!(declared_traits.len(), 26, "twenty-six traits are declared");
 
+    // **Read from `carries.4x` since `P-497`, and it is the same join by a different route.**
+    // A kind's line held the traits it carries as bare words; they are one row each now, and
+    // the rule *every word in a data file is a kind, a trait, or one of a trait's values* is
+    // asked of both ends of the row rather than of a word on a kind's line.
+    let carries_file = std::fs::read_to_string(
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/carries.4x"),
+    )
+    .expect("spec/data/carries.4x");
+    let carries = state::declarations(&carries_file).expect("the file of carries parses");
+    let kinds: BTreeSet<String> = read
+        .iter()
+        .filter_map(|row| row.traits.get("name").cloned())
+        .collect();
+
     let mut mentions = 0;
-    for row in &read {
-        let name = row.traits.get("name").expect("a declaration names a word");
-        for (carried, value) in &row.traits {
-            if !value.is_empty() {
-                continue;
-            }
-            assert!(
-                declared_traits.contains(carried),
-                "`{name}` carries `{carried}` and `spec/data/traits.4x` does not declare it"
-            );
-            mentions += 1;
-        }
+    for row in &carries {
+        let kind = row.traits.get("kind").expect("a carries row names a kind");
+        let carried = row
+            .traits
+            .get("trait")
+            .expect("a carries row names a trait");
+        assert!(
+            kinds.contains(kind),
+            "`carries.4x` says `{kind}` carries `{carried}` and `kinds.4x` declares no `{kind}`"
+        );
+        assert!(
+            declared_traits.contains(carried),
+            "`{kind}` carries `{carried}` and `spec/data/traits.4x` does not declare it"
+        );
+        mentions += 1;
     }
     // **Forty-five since `P-476`, and the deposit is where the two arrived.** Twenty-six
     // traits; `keeps` is `of:thing` and is on no kind's line; the other twenty-five are
@@ -246,12 +263,21 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
     // that `spec/logistics.md` says describe one bound.
     //
     // **A count, because every name being declared is satisfied by a file that names none.**
+    // **Still forty-five after `P-497` moved them**, which is the normalization doing what it
+    // claims: the same facts in a shape with no repeating group, and the number that says so
+    // is this one being unchanged by a change that rewrote every line.
     assert_eq!(
         mentions, 45,
-        "forty-five trait names across the kinds' lines; this read {mentions}"
+        "forty-five trait names across `carries.4x`; this read {mentions}"
     );
+    // **Seven memberships, in `member.4x` rather than on a kind's line** - `P-497` again, and
+    // the count is the one that was here when `family:` was a key.
+    let members_file = std::fs::read_to_string(
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/member.4x"),
+    )
+    .expect("spec/data/member.4x");
     assert_eq!(
-        file.matches("family:").count(),
+        members_file.matches("family:").count(),
         7,
         "seven kinds are in a family the release names - two units, three resources and two \
          places - and `thing` is in none of them, because it is a rule rather than a list"
@@ -636,8 +662,14 @@ fn the_traits_file_declares_what_a_data_file_needs() {
     //
     // **Named rather than counted**, because the point is which five stopped being a category
     // rather than how many there are.
+    //
+    // **`unpaid` left and `free` arrived, and the swap is `P-498` rather than a correction
+    // here.** `unpaid` was derived - the count of citizens `upkeep` could not feed - and is
+    // `paid` now, a mark a rule puts, which is the whole of what that promotion did. `free`
+    // was always derived and was missing from this list; the release's own *Values* cells are
+    // where both were read from, and the five below are exactly the cells carrying a colon.
     let mut arrived = 0;
-    for derived in ["surplus", "metal-in-it", "control", "binding", "unpaid"] {
+    for derived in ["surplus", "metal-in-it", "control", "binding", "free"] {
         assert!(
             named.contains(&derived),
             "`{derived}` is derived, a kind's line names it, and a kind may only name a \
