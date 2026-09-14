@@ -28,10 +28,11 @@ fn the_groups_partition_the_kinds() {
     let document = release();
     let declared = kinds::catalog::Declared::from_spec();
     let kinds = every_kind(&document);
+    // **Nineteen since `P-494` declared `nature`.**
     assert_eq!(
         kinds.len(),
-        18,
-        "the release declares eighteen kinds; every count below is against that population"
+        19,
+        "the release declares nineteen kinds; every count below is against that population"
     );
 
     let mut grouped: Vec<String> = signatures(&document, &declared)
@@ -99,8 +100,8 @@ fn a_pair_shares_a_group_exactly_when_it_shares_a_signature() {
     }
     assert_eq!(
         pairs,
-        18 * 17 / 2,
-        "every pair of the eighteen kinds is compared, and there are 153 of them"
+        19 * 18 / 2,
+        "every pair of the nineteen kinds is compared, and there are 171 of them"
     );
 
     // **The population this check ran against, said out loud.** Every assertion above is

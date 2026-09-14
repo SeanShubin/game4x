@@ -106,7 +106,10 @@ fn the_release_tables_are_the_ones_in_this_crate() {
 #[test]
 fn there_are_thirty_two_recipe_blocks_under_twenty_two_names() {
     // Thirty-two since `P-489` added `refuel`, which is one block under one new name.
-    assert_eq!(kinds::RECIPES.len(), 32);
+    //
+    // **Thirty-six since `P-494` and `P-495`**: `hold`, `reclaim`, `renew` and `take` are
+    // four new names, and the force rule is four recipes where it was a comparison.
+    assert_eq!(kinds::RECIPES.len(), 36);
 
     let mut names: Vec<&str> = kinds::RECIPES.iter().map(|recipe| recipe.name).collect();
     names.sort_unstable();
@@ -114,10 +117,11 @@ fn there_are_thirty_two_recipe_blocks_under_twenty_two_names() {
     // **Twenty-one since `P-411` and `P-414`.** `refresh` is six blocks rather than one -
     // one per action, because readiness is a count a thing carries again - and `muster` and
     // `stand` are new. Eight names are stated more than once.
+    // **Twenty-six since `P-494` and `P-495`.**
     assert_eq!(
         names.len(),
-        22,
-        "twenty-one distinct names, and these are {names:?}"
+        26,
+        "twenty-six distinct names, and these are {names:?}"
     );
 
     assert!(
@@ -167,10 +171,13 @@ fn every_kind_a_recipe_names_is_declared() {
     // would leave this checking an empty set and passing.
     // Eighteen: thirteen kinds, the four families, and `force`, which is the one this does
     // not find a declaration for.
+    //
+    // **Nineteen since `P-494`**, which is `nature` - and unlike `force` when it arrived,
+    // this one is declared, so it adds a name here and nothing to `undeclared` above.
     assert_eq!(
         used.len(),
-        18,
-        "eighteen distinct names across the recipes' Kind column, and these are {used:?}"
+        19,
+        "nineteen distinct names across the recipes' Kind column, and these are {used:?}"
     );
 }
 
@@ -409,6 +416,12 @@ fn a_role_says_what_becomes_of_what_a_recipe_names() {
             // not eat, which is the whole of what this list is. The same shape as `move`,
             // one row along.
             "refuel",
+            // **`found by land` is back, and `P-495` is why.** It left this list when
+            // `P-385` deleted its `limit 0 garrison` row - the one ingredient it did not
+            // eat - and it requires a force now, which it also does not eat. **The
+            // comment above records it leaving and this records it returning**, which is
+            // the same list answering the same question about a different release.
+            "found by land",
             "launch ark",
             "create labor",
             "work",
@@ -426,7 +439,16 @@ fn a_role_says_what_becomes_of_what_a_recipe_names() {
             "muster",
             "stand",
             "refresh",
-            "refresh"
+            "refresh",
+            // **The force rule's four, and every one of them keeps what it names** -
+            // `P-494` and `P-495`. `hold` requires a nature and marks it; `reclaim`
+            // requires one and eats a citizen instead; `renew` requires one and puts the
+            // mark back. **`take` is here for the row it does not eat**: it requires a
+            // nature and consumes a nature, which the release states as two rows.
+            "hold",
+            "reclaim",
+            "renew",
+            "take"
         ]
     );
 
@@ -520,6 +542,10 @@ fn a_named_ingredient_is_bound_before_it_is_referred_to() {
         [
             ("deploy ark", vec!["`$where`"]),
             ("move", vec!["`$from`", "`$to`"]),
+            // **Five since `P-491` gave `refuel` its `require 1 territory` row.** That
+            // row is what binds `$where`, and without it the recipe referred to a place
+            // nothing had named - which is what this check is for.
+            ("refuel", vec!["`$where`"]),
             ("launch ark", vec!["`$where`"]),
             ("work", vec!["`$where`"]),
         ]

@@ -59,6 +59,12 @@ pub enum Kind {
     Adjacency,
     Game,
     Fertility,
+    /// **`P-494`: what a territory's ground resists with, and it was a trait.**
+    ///
+    /// The kind that took the zero test out of the force rule. `hold` spends a force to mark
+    /// one `met`, and `reclaim` fires on the presence of one nobody met - so *force below
+    /// nature* stopped being a comparison and became a token.
+    Nature,
     /// **`P-414`: what a citizen or a unit musters, and what nature is measured against.**
     ///
     /// **Declared by no Kinds table and used as one by three rows**, which is `C-93`. `muster`
@@ -88,6 +94,7 @@ impl Kind {
             Kind::Adjacency => "adjacency",
             Kind::Game => "game",
             Kind::Fertility => "fertility",
+            Kind::Nature => "nature",
             Kind::Force => "force",
         }
     }
@@ -121,6 +128,10 @@ impl Kind {
             Kind::Fertility => concat!(
                 "a citizen's capacity to raise one more, spent by raising one ",
                 "and renewed each turn"
+            ),
+            Kind::Nature => concat!(
+                "what a territory's ground resists with; held by the territory, ",
+                "and met by force each turn"
             ),
             Kind::Force => {
                 "what a territory presents to hold or take ground; mustered each turn and swept at its end"
@@ -171,11 +182,19 @@ impl Kind {
             // **`force` is bounded by nothing the release states.** It is mustered from the
             // citizens and units that are there and swept at a turn's end, so what bounds it
             // is how many of them there are rather than a capacity a territory declares.
+            // **`nature` is bounded by nothing the release states, and it is the one place
+            // here whose bound is plainly a number anyway.** Its biome fixes it - one
+            // everywhere and two in a jungle - which is a fact about the ground rather than a
+            // capacity a territory declares, so *What bounds a kind in a territory* has no row
+            // for it. **Worth saying because `C-114` counts those rows**: eight of the twelve
+            // state a relationship rather than a number, and the one bound that is a number
+            // has no row at all.
             Kind::Territory
             | Kind::Orbit
             | Kind::Deposit
             | Kind::Adjacency
             | Kind::Game
+            | Kind::Nature
             | Kind::Force => {
                 return None;
             }
@@ -184,7 +203,7 @@ impl Kind {
 }
 
 /// In the order the Kinds table lists them.
-pub const KINDS: [Kind; 18] = [
+pub const KINDS: [Kind; 19] = [
     Kind::Citizen,
     Kind::Garrison,
     Kind::Extractor,
@@ -206,6 +225,11 @@ pub const KINDS: [Kind; 18] = [
     // exception was written to fail the day the row landed, which is what it did. The two
     // no longer disagree: the release declares eighteen kinds, and the word that named a
     // trait and a thing at once now names only the thing - the trait is `strength`.
+    //
+    // **Nineteen since `P-494`, and `nature` goes before `force` because the table does.** The
+    // order here is the release's, which is what makes the comparison in
+    // `tests/against_the_release.rs` row by row rather than a set test.
+    Kind::Nature,
     Kind::Force,
 ];
 
@@ -488,7 +512,13 @@ pub const TRAITS: [TraitRow; 26] = [
         belongs: BelongsTo::EachThing,
     },
     TraitRow {
-        name: "nature",
+        // **`P-494` renamed it and moved what it is about.** It was `nature`, a number on a
+        // territory; nature is a kind now, and this is the count of `0 or 1` that says a force
+        // was spent on one this turn. **A count like `bearing` and `defending` rather than a
+        // derived number**, which is what its `Values` cell has to say for
+        // `every_place_is_a_kind_or_a_count_and_never_a_derived_trait` to keep meaning what it
+        // says - `C-117`.
+        name: "met",
         values: "a number",
         belongs: BelongsTo::EachThing,
     },
@@ -858,7 +888,11 @@ const OF_RESOURCE: [Qualifier; 1] = [by("`$resource`", "resource")];
 // trait outright, and `free` is the one it has to mean - the release declares `capacity`,
 // `occupied` and `free`, and room is the last of those. **A reading rather than a reading off**,
 // so if `P-491` says otherwise this is the line that was wrong.
-const ROOM_FOR_ENERGY: [Qualifier; 1] = [by("with room for energy", "free")];
+// **`P-492` turned the qualifier round.** It read *with room for energy*, which asks
+// whether the tank has space; the release asks for the energy itself - a tank with at
+// least one free cell is what a unit refuels *into*, and free is a count of the kind the
+// unit is short of rather than a yes-or-no about the unit.
+const FREE_ENERGY_SOME: [Qualifier; 1] = [by("free energy at least 1", "free")];
 const MOVING_SOME: [Qualifier; 1] = [by("moving at least 1", "moving")];
 const MOVING_LESS: [Qualifier; 1] = [by("moving one less", "moving")];
 const MOVING_FULL: [Qualifier; 1] = [by("moving at its maximum", "moving")];
@@ -878,6 +912,10 @@ const DEFENDING_FULL: [Qualifier; 1] = [by("defending at its maximum", "defendin
 // citizen that is not spent and leaves one that is; `renew` does the reverse, once per turn.
 
 const UPKEEP_UNPAID: [Qualifier; 1] = [by("whose upkeep is unpaid", "unpaid")];
+// **`P-494`'s two.** `met 0` is a nature nobody has spent a force on, which is the form
+// `spoil`'s `keeps 0` already uses, and `met at its maximum` is what `hold` leaves.
+const MET_NONE: [Qualifier; 1] = [by("met 0", "met")];
+const MET_FULL: [Qualifier; 1] = [by("met at its maximum", "met")];
 const KEEPS_NONE: [Qualifier; 1] = [by("keeps 0", "keeps")];
 const KEEPS_SOME: [Qualifier; 1] = [by("keeps at least 1", "keeps")];
 const KEEPS_LESS: [Qualifier; 1] = [by("keeps one less", "keeps")];
@@ -896,6 +934,7 @@ pub const RECIPES: &[Recipe] = &[
         owner: Player,
         lines: &[
             placed(Require, 1, TERRITORY, &[], "`$where`"),
+            just(Require, 1, Noun::Of(Force)),
             placed(Consume, 1, Noun::Of(Ark), &[], "the orbit above `$where`"),
             just(Produce, 1, Noun::Of(Garrison)),
             just(Produce, 2, Noun::Of(Citizen)),
@@ -931,7 +970,11 @@ pub const RECIPES: &[Recipe] = &[
         name: "refuel",
         owner: Player,
         lines: &[
-            placed(Require, 1, UNIT, &ROOM_FOR_ENERGY, "`$where`"),
+            // **`P-491` gave it the territory row**, which is what binds `$where`: a
+            // recipe naming a family leaves the kind open, and the place it acts in has
+            // to be named before a later row can refer to it.
+            placed(Require, 1, TERRITORY, &[], "`$where`"),
+            placed(Require, 1, UNIT, &FREE_ENERGY_SOME, "`$where`"),
             just(Consume, 1, Noun::Of(Energy)),
             placed(Produce, 1, Noun::Of(Energy), &[], "that unit"),
         ],
@@ -941,6 +984,12 @@ pub const RECIPES: &[Recipe] = &[
         owner: Player,
         lines: &[
             just(Consume, 1, Noun::Of(Pioneer)),
+            // **`P-495`: founding requires a force, and that is where the strict
+            // inequality went.** `take` consumes a nature per force on ground nobody
+            // has founded, so force greater than nature leaves one over and force equal
+            // to it leaves none - and requiring one is a presence test rather than a
+            // comparison between two variable quantities.
+            just(Require, 1, Noun::Of(Force)),
             just(Produce, 1, Noun::Of(Garrison)),
             just(Produce, 2, Noun::Of(Citizen)),
             traited(Produce, 1, Noun::Of(Extractor), &FOR_FOOD),
@@ -1208,8 +1257,47 @@ pub const RECIPES: &[Recipe] = &[
         owner: World,
         lines: &[put(UNIT, &DEFENDING_FULL)],
     },
-    // Force is swept at a turn's end like the other transients, so what a territory presents
-    // is what it mustered this turn rather than what it has ever mustered.
+    // **The force rule's four** - `P-494` and `P-495`. A territory holds one `nature`
+    // per point of resistance; `hold` spends a force to mark one `met`, `reclaim` fires
+    // on the presence of one nobody met, `renew` clears the marks, and `take` consumes
+    // one outright. **Not one of them is a comparison**, which is what keeps the net
+    // free of inhibitor arcs.
+    Recipe {
+        name: "hold",
+        owner: World,
+        lines: &[
+            traited(Require, 1, Noun::Of(Nature), &MET_NONE),
+            just(Consume, 1, Noun::Of(Force)),
+            put(Noun::Of(Nature), &MET_FULL),
+        ],
+    },
+    Recipe {
+        name: "reclaim",
+        owner: World,
+        lines: &[
+            traited(Require, 1, Noun::Of(Nature), &MET_NONE),
+            just(Consume, 1, Noun::Of(Citizen)),
+        ],
+    },
+    Recipe {
+        name: "renew",
+        owner: World,
+        lines: &[
+            just(Require, 1, Noun::Of(Nature)),
+            put(Noun::Of(Nature), &MET_NONE),
+        ],
+    },
+    Recipe {
+        name: "take",
+        owner: World,
+        lines: &[
+            just(Require, 1, Noun::Of(Nature)),
+            just(Consume, 1, Noun::Of(Nature)),
+            just(Consume, 1, Noun::Of(Force)),
+        ],
+    },
+    // Force is swept at a turn's end like the other transients, so what a territory
+    // presents is what it mustered this turn rather than what it has ever mustered.
     Recipe {
         name: "discard",
         owner: World,
