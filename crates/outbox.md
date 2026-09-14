@@ -61,6 +61,135 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-123 - What every recipe's code does that its rows do not say, measured over all twenty-six
+
+**to** spec · **status** open · **raised** 2026-09-14 · **source** Sean, asking for the
+measurement after the rules were gathered into one file
+
+**derived from** `spec/data/block.4x`, `line.4x`, `constraint.4x`, `for.4x` against
+`crates/game-model/src/rules.rs`
+
+**Nine of twenty-six could run from their rows alone. Seventeen could not.** This is what stands
+between the engine and reading `spec/data/`, and it is eight kinds of thing rather than
+seventeen.
+
+**How it was made, so it can be re-run rather than trusted.** The rows were read out of the four
+relations by a script; the refusals were read out of `rules.rs` by matching `Rejection::`; the
+rest is a reading of each body against its rows, function by function. **The reading is the part
+that is not mechanical**, and every claim below names what would falsify it.
+
+## The eight kinds
+
+**One - who holds the ground.** `control` appears **zero times** in `block.4x`, `line.4x` and
+`constraint.4x`; the engine refuses on it six times. `build extractor`, `build store`, `build
+yard`, `produce pioneer` and `work` all refuse `NotControlled`; `take` refuses
+`AlreadyControlled` and `found by land` refuses `AlreadyFounded`, which is the same fact
+inverted. **`control` is a declared trait** - *held by a player, or unclaimed: a citizen of that
+player is there* - so this is a rule nobody wrote down rather than a thing the notation cannot
+hold.
+
+**Two - a bound stated as a relationship.** `limit.4x` has five rows and *What bounds a kind in a
+territory* has twelve. **The four that are numbers are in the file and the eight that are
+relationships are not**: a citizen bounded by *the food produced here, through upkeep*, a store
+by *as many as the extractors of its resource*, an extractor by *a capacity, from Territory
+resources*. `build store` refuses `NoRoomForAnother` and `build extractor` refuses
+`NoRoomForExtractor` out of exactly these. **This is `C-114`'s count reached from the other
+side**, and it arrives at the same eight.
+
+**Three - a quantity read from the state.** Three cells, and they are the three `C-120` already
+names as unparseable: `work` produces `$where`'s density for that resource, `muster` produces
+that citizen's strength, `stand` that unit's strength. **The data cannot hold these at all
+today** - they parse to the word `that` - so this is the one class where the notation itself is
+the obstacle.
+
+**Four - a trait the engine does not have, with two recipes resting on it.** `keeps` is declared
+in the release and in `spec/data/traits.4x`, and **`Trait` in the model has no such variant.**
+`age` is *require a thing keeps at least 1, put it keeps one less* and `spoil` is *consume a
+thing keeps 0*; the engine implements neither. `end_of_turn_losses` deletes all food, all labor
+and all fertility outright.
+
+**It agrees today by an accident that is written down.** The release says *food is made with
+keeps 1*, and food is the only thing that has the trait - so ageing it once and deleting it are
+the same answer. **A second perishable, or a food with `keeps` 2, and they part.** This is the
+sharpest one here: two recipes, a declared trait, and nothing in the engine that could tell you.
+
+**Five - a destination the rows no longer carry.** `stow` reads `consume 1 metal`, `produce 1
+metal` - which is identity. Its *Where* cells said *a store for metal* and *a store for energy*,
+and `P-500` took the last four prose cells out of that column. **The destination was the whole of
+the rule**: what `stow` does is move loose metal into a store, and what will not fit is what
+`discard` takes. As the rows now stand `stow` says nothing and `discard` would take every metal
+rather than the excess.
+
+**Six - the edge a unit crosses.** `move` refuses `NotAdjacent`, and `S-131` already names *joined
+to `$from` by an edge the unit crosses* as the one *Where* cell `spec/data/` does not represent.
+Repeated here only because it is one of the seventeen.
+
+**Seven - which one, when several qualify.** `work` fired several times **takes the densest
+extractors first**, sorted descending. Nothing in the rows says so, and **it changes the outcome
+rather than the wording** - working two of three extractors yields a different amount depending
+which two. `build store` checks labor before metal for a different reason, so that a territory
+with the metal and no labor is refused for the reason that is true; that one changes only the
+message.
+
+**Eight - phase.** `phase` appears **zero times** in the three relations. `block.4x` carries an
+`owner` of `player` or `world` and nothing about design or play, and the engine refuses
+`WrongPhase` and `PlanetAlreadyCreated` out of that distinction.
+
+## The twenty-six, one line each
+
+| Recipe          | Runs from its rows?                                                     |
+| --------------- | ----------------------------------------------------------------------- |
+| create labor    | yes                                                                     |
+| launch ark      | yes                                                                     |
+| upkeep          | yes                                                                     |
+| bear            | yes                                                                     |
+| perish          | yes                                                                     |
+| discard         | yes                                                                     |
+| refresh         | yes                                                                     |
+| hold            | yes                                                                     |
+| renew           | yes                                                                     |
+| deploy ark      | no - claimable ground, already founded, and which kinds land from orbit |
+| move            | no - the edge a unit crosses                                            |
+| found by land   | no - claimable ground, already founded                                  |
+| build extractor | no - control, and a bound that is a relationship                        |
+| build store     | no - control, and a bound that is a relationship                        |
+| build yard      | no - control, and a garrison that has to be built                       |
+| produce pioneer | no - control                                                            |
+| work            | no - control, the density it yields, and the densest first              |
+| refuel          | no - no command fires it at all, which is `C-112`                       |
+| breed           | no - what a newborn's `paid` is, which is `C-119`                       |
+| age             | no - `keeps`, which the engine does not have                            |
+| spoil           | no - `keeps`, which the engine does not have                            |
+| stow            | no - the store it moves into                                            |
+| muster          | no - the strength it produces                                           |
+| stand           | no - the strength it produces                                           |
+| reclaim         | no - the units destroyed and the garrison lost, which is `C-117`        |
+| take            | no - that it fires only where nothing is founded, which is `C-117`      |
+
+## Two findings that are not gaps in the data
+
+**Ocean is expressible today and is not expressed.** `found` refuses `CannotClaimOcean`, and
+`Biome::is_claimable` is `self != Biome::Ocean` - a kind named in code. **`biomes.4x` already
+tells the two apart**: every biome carries `nature:1` or `nature:2` and ocean carries none. A
+rule requiring a nature would refuse the ocean without naming it. **So this one needs a row
+rather than a notation.**
+
+**And twenty lines of the engine implement a recipe the release deleted.** `produce`'s `Ark` arm
+spends `ARK_METAL`, `ARK_ENERGY` and `ARK_CITIZENS` and makes an ark. `P-342` took `produce ark`
+out - *`launch ark` consumes the cost and puts nothing into orbit* - and **nothing constructs
+`Transition::Produce { kind: Ark }`**: not a command in `binding.rs`, not a test in either crate.
+Measured rather than inferred, and it is this lane's to delete rather than spec's to decide.
+
+## What the shape of the answer looks like from here
+
+**Three of the eight are the notation and five are rules nobody wrote.** Control, phase, ocean,
+the garrison a yard needs, and `stow`'s destination are all sayable in rows that exist today.
+Quantities read from the state, bounds that are relationships, and *which one when several
+qualify* are not - and those three are where a decision is needed rather than a row.
+
+**Nothing here is proposed.** It is the measurement asked for, and what the data should say is
+the specification lane's.
+
 ### C-122 - `S-131` is built: twenty red to none, and what each of the twenty was
 
 **to** spec · **status** open · **raised** 2026-09-14 · **source** working `S-131` to the end
