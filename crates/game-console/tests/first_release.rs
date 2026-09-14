@@ -1217,27 +1217,23 @@ fn every_player_recipe_has_one_command_named_for_it() {
     // **Eleven since `39a42c6` added `refuel`**, and the tripwire firing is what told this
     // lane the release had moved. A count over a document is worth keeping hand-maintained
     // for exactly that: it is the number changing that carries the news.
+    // **Ten since `P-511`**, which deleted `refuel`: pooling left it moving an energy
+    // into a unit with nowhere to move it to, and its qualifier always true. The tripwire
+    // firing is again what told this lane the release had moved.
     assert_eq!(
         distinct.len(),
-        11,
-        "eleven recipes the player may fire when this was written; the release has {} \
+        10,
+        "ten recipes the player may fire when this was written; the release has {} \
          ({distinct:?})",
         distinct.len()
     );
 
+    // **No recipe is exempt from having a command since `P-511`.** `refuel` was the one,
+    // excused while the grammar carried no form opening with its name, and the recipe is gone.
     let grammar = game_console::command_grammar();
-    let fires_nothing = |recipe: &str| {
-        recipe == "refuel"
-            && !grammar
-                .forms()
-                .iter()
-                .any(|form| form.opening() == "refuel")
-    };
+
     let mut checked = 0;
     for recipe in &distinct {
-        if fires_nothing(recipe) {
-            continue;
-        }
         let named = grammar
             .forms()
             .iter()
@@ -1251,17 +1247,12 @@ fn every_player_recipe_has_one_command_named_for_it() {
         );
         checked += 1;
     }
-    // **The exemption is counted rather than subtracted as a literal**, so this stays a count
-    // over the population and cannot quietly cover a second recipe losing its command.
-    let exempt = distinct.iter().filter(|it| fires_nothing(it)).count();
-    assert!(
-        exempt <= 1,
-        "{exempt} recipes are exempt from having a command and only `refuel` should be - \
-         `C-112`"
-    );
+    // **Nothing is subtracted any more.** This read `distinct.len() - exempt` while `refuel`
+    // was excused; the two counts are equal now, which is the stronger statement and the one
+    // the test was always trying to make.
     assert_eq!(
         checked,
-        distinct.len() - exempt,
+        distinct.len(),
         "every player recipe a command fires, and the count so that an empty table cannot pass"
     );
 }
@@ -1328,10 +1319,13 @@ fn every_place_a_recipe_leaves_open_is_a_field_of_its_command() {
             places.insert(name.to_string());
         }
     }
+    // **Ten since `P-511`**, which deleted `refuel`: pooling left it moving an energy
+    // into a unit with nowhere to move it to, and its qualifier always true. The tripwire
+    // firing is again what told this lane the release had moved.
     assert_eq!(
         order.len(),
-        11,
-        "eleven recipes the player may fire when this was written; the release has {} \
+        10,
+        "ten recipes the player may fire when this was written; the release has {} \
          ({order:?})",
         order.len()
     );

@@ -892,11 +892,10 @@ const OF_RESOURCE: [Qualifier; 1] = [by("`$resource`", "resource")];
 // trait outright, and `free` is the one it has to mean - the release declares `capacity`,
 // `occupied` and `free`, and room is the last of those. **A reading rather than a reading off**,
 // so if `P-491` says otherwise this is the line that was wrong.
-// **`P-492` turned the qualifier round.** It read *with room for energy*, which asks
-// whether the tank has space; the release asks for the energy itself - a tank with at
-// least one free cell is what a unit refuels *into*, and free is a count of the kind the
-// unit is short of rather than a yes-or-no about the unit.
-const FREE_ENERGY_SOME: [Qualifier; 1] = [by("free energy at least 1", "free")];
+// **`FREE_ENERGY_SOME` stood here and went with `refuel`** - `P-511`. `P-492` had turned the
+// qualifier round, from *with room for energy* to the free energy itself, and pooling made it
+// always true: a tank contributes capacity and holds nothing, so there is no unit short of a
+// cell. The constant is gone rather than left unused, because the only row that named it is.
 const MOVING_SOME: [Qualifier; 1] = [by("moving at least 1", "moving")];
 const MOVING_LESS: [Qualifier; 1] = [by("moving one less", "moving")];
 const MOVING_FULL: [Qualifier; 1] = [by("moving at its maximum", "moving")];
@@ -966,26 +965,20 @@ pub const RECIPES: &[Recipe] = &[
                 traits: &MOVING_LESS,
                 place: Some("`$to`"),
             },
-            placed(Consume, 1, Noun::Of(Energy), &[], "that unit"),
+            // **`P-511`: the energy comes from `$from`, not from the unit.** Under
+            // pooling a unit holds nothing - the place holds one number per kind and a
+            // tank only contributes capacity to it - so there was no unit to take it
+            // from. The cell was `that unit` until 2026-09-14.
+            placed(Consume, 1, Noun::Of(Energy), &[], "`$from`"),
         ],
     },
-    Recipe {
-        // **`P-489`, and it is `stow` aimed at a bin.** Refuelling moves energy rather than
-        // making it: a consume from the territory and a produce into the unit, which is the
-        // shape the notation already had for a relocation. No command fires it yet - `C-112`,
-        // now `P-491` with Sean - so the row is here and the scenario cannot reach it.
-        name: "refuel",
-        owner: Player,
-        lines: &[
-            // **`P-491` gave it the territory row**, which is what binds `$where`: a
-            // recipe naming a family leaves the kind open, and the place it acts in has
-            // to be named before a later row can refer to it.
-            placed(Require, 1, TERRITORY, &[], "`$where`"),
-            placed(Require, 1, UNIT, &FREE_ENERGY_SOME, "`$where`"),
-            just(Consume, 1, Noun::Of(Energy)),
-            placed(Produce, 1, Noun::Of(Energy), &[], "that unit"),
-        ],
-    },
+    // **`refuel` stood here and `P-511` deleted it.** It moved an energy from the territory
+    // into a unit's bin - `P-489`'s *`stow` aimed at a bin* - and pooling left it with nowhere
+    // to move anything to: the energy is the place's before and after, and the tank only
+    // contributes capacity. Its qualifier, *free energy at least 1*, became always true.
+    //
+    // **It was also the one recipe no command fired**, which is what `C-112` and `P-491` were
+    // about, and both dissolve with it rather than being answered.
     Recipe {
         name: "found by land",
         owner: Player,

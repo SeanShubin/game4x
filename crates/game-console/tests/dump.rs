@@ -513,8 +513,9 @@ fn the_scenario_fires_every_player_recipe_the_release_declares() {
 
     assert_eq!(
         declared.len(),
-        11,
-        "eleven player recipes were declared when this was written; the release now has {} \
+        // **Ten since `P-511`.** P-511 deleted `refuel`: pooling left it moving an energy into a unit with nowhere to move it to, and its qualifier always true.
+        10,
+        "ten player recipes were declared when this was written; the release now has {} \
          ({declared:?}). If one was added, name what fires it above and make the scenario \
          fire it.",
         declared.len()

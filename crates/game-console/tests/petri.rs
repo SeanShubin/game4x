@@ -42,13 +42,16 @@ fn every_recipe_is_either_drawn_or_named_as_not_drawn() {
     // second block: it clears the mark on a citizen as well as the one on a nature, which
     // is one rule applied to two kinds - `stow` and `discard`'s shape.
     assert_eq!(
-        net.recipes, 37,
-        "the release states thirty-seven blocks of recipe rows and the parse found {}",
+        // **Thirty-six under twenty-five names since `P-511`**, which deleted `refuel`:
+        // one block under one name.
+        net.recipes,
+        36,
+        "the release states thirty-six blocks of recipe rows and the parse found {}",
         net.recipes
     );
     assert_eq!(
-        net.names, 26,
-        "those blocks are stated under twenty-six distinct names and the parse found {}",
+        net.names, 25,
+        "those blocks are stated under twenty-five distinct names and the parse found {}",
         net.names
     );
     // **The deduplication has to remove something**, or a version that stopped deduplicating

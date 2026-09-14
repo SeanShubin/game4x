@@ -71,20 +71,15 @@ pub fn recipes(document: &str) -> String {
         // This asserts rather than writing a notice, because there is no longer a recipe that
         // can honestly carry one - `C-61` closed when `P-340` put `age` before `spoil`.
         //
-        // **One exception, and it cannot outlive its excuse.** `P-485` promoted `refuel` into
-        // the Recipes table and no command fires it: `spec/console.md`'s command vocabulary
-        // has no `refuel`, and a worked example is *a state, the command, and the state
-        // after* - so one cannot be written rather than has not been. **The excuse is
-        // measured, not asserted**: the moment the grammar carries a form named `refuel` this
-        // exception stops applying and the assertion below bites, which is `C-61`'s shape and
-        // the reason this is a condition rather than a name in a list.
-        //
-        // Filed as `C-112`. Which command fires it, and what it binds when two units in a
-        // territory both have room, is `spec/`'s to say and not this lane's to invent.
-        let fires_nothing =
-            recipe.name == "refuel" && !crate::grammar::grammar().form_names().contains(&"refuel");
+        // **`refuel`'s exception is gone, and it ended the way the pattern intends.** `P-485`
+        // promoted a recipe no command fires and this excused it, measured rather than named:
+        // the condition held only while the grammar carried no form opening with `refuel`.
+        // **`P-511` deleted the recipe**, so the excuse stopped applying in the other
+        // direction - the thing being excused is not there - and what happens to an exception
+        // that cannot outlive its excuse is that it is deleted rather than widened. `C-112`
+        // dissolves with it.
         assert!(
-            !mine.is_empty() || fires_nothing,
+            !mine.is_empty(),
             "`{}` is declared and has no worked example - `tests/worked.rs` should have said \
              so first",
             recipe.name

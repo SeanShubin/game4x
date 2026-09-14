@@ -85,15 +85,16 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
     // **Thirty-seven since `P-498`**, and no new name with it: `renew` clears the mark on a
     // citizen as well as the one on a nature, which is one rule applied to two kinds.
     assert_eq!(
+        // **Thirty-six under twenty-five names since `P-511`**, which deleted `refuel`.
         blocks.len(),
-        37,
-        "the release states thirty-seven blocks of recipe rows; it has {} ({blocks:?})",
+        36,
+        "the release states thirty-six blocks of recipe rows; it has {} ({blocks:?})",
         blocks.len()
     );
     assert_eq!(
         declared.len(),
-        26,
-        "those blocks are stated under twenty-six names; there are {} ({declared:?})",
+        25,
+        "those blocks are stated under twenty-five names; there are {} ({declared:?})",
         declared.len()
     );
     assert!(
@@ -107,25 +108,14 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
         .flat_map(|example| std::iter::once(example.recipe).chain(example.also.iter().copied()))
         .collect();
 
-    // **`refuel` is declared and cannot have a worked example**, because an example is *a
-    // state, the command, and the state after* and no command fires it. `C-112`, now `P-491`
-    // with Sean - and the binding is the open half, since one of its three readings changes
-    // `move`'s row too.
-    //
-    // **A measured exception**, as in `recipes.rs`: it holds only while the grammar carries no
-    // form opening with `refuel`, so the moment a command exists this stops applying and the
-    // assertion below bites.
-    let fires_nothing = |name: &str| {
-        name == "refuel"
-            && !game_console::command_grammar()
-                .forms()
-                .iter()
-                .any(|form| form.opening() == "refuel")
-    };
+    // **There is no exception here any more.** `refuel` was the one - declared by `P-485`
+    // and fired by no command - and `P-511` deleted the recipe, so every recipe the release
+    // declares has a worked example with nothing excused. **The measured condition is what
+    // made that safe to notice**: it held only while the grammar carried no `refuel`, and it
+    // failed the moment the release stopped declaring one.
     let missing: Vec<&String> = declared
         .iter()
         .filter(|name| !covered.contains(name.as_str()))
-        .filter(|name| !fires_nothing(name))
         .collect();
     assert!(
         missing.is_empty(),
@@ -135,17 +125,14 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
     // **Every recipe, and one example carries ten of them.** `P-332`: the world's are shown
     // once, together, on `{end-turn}`. So the two counts differ and the difference is the
     // point - twelve examples for twenty recipes.
-    // **The exempted one is counted rather than subtracted as a literal**, so a second recipe
-    // losing its example fails by name instead of being absorbed - the shape `- 1` would hide.
-    let exempt = declared.iter().filter(|name| fires_nothing(name)).count();
-    assert!(
-        exempt <= 1,
-        "{exempt} recipes have no command and only `refuel` should - `C-112`"
-    );
+    // **Every declared recipe, with nothing subtracted.** This read `declared.len() -
+    // exempt` while `refuel` was excused, and the subtraction is gone with the exception: the
+    // two counts are equal now, which is the stronger statement and the one this test was
+    // always trying to make.
     assert_eq!(
         covered.len(),
-        declared.len() - exempt,
-        "every declared recipe a command fires has an example; {} covered, {} declared,          {exempt} exempt",
+        declared.len(),
+        "every declared recipe has an example; {} covered, {} declared",
         covered.len(),
         declared.len()
     );

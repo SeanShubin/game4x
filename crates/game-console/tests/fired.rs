@@ -156,10 +156,13 @@ fn every_player_recipe_the_release_declares_is_actually_fired() {
     // this list has held meant *the scenario does not happen to do this yet*. `refuel` cannot
     // be fired at all: no command names it. The two assertions below still expire it - it
     // fails when the recipe starts firing, and when the release stops declaring it.
-    const NOT_FIRED: [(&str, &str); 1] = [(
-        "refuel",
-        "no command fires it - spec/console.md names none, and `C-112` is open on the binding",
-    )];
+    //
+    // **Empty again since `P-511`, and it expired the second way.** That entry was written to
+    // fail either when `refuel` started firing or when the release stopped declaring it, and
+    // it was the second that happened: pooling left the recipe moving an energy into a unit
+    // with nowhere to move it to. **Both exits were named in advance**, which is what made
+    // this a tripwire rather than a note.
+    const NOT_FIRED: [(&str, &str); 0] = [];
 
     let players: Vec<String> = declared()
         .into_iter()
@@ -168,8 +171,9 @@ fn every_player_recipe_the_release_declares_is_actually_fired() {
         .collect();
     assert_eq!(
         players.len(),
-        11,
-        "eleven player recipes when this was written; the release has {} ({players:?})",
+        // **Ten since `P-511`.** P-511 deleted `refuel`: pooling left it moving an energy into a unit with nowhere to move it to, and its qualifier always true.
+        10,
+        "ten player recipes when this was written; the release has {} ({players:?})",
         players.len()
     );
 
@@ -205,16 +209,16 @@ fn every_player_recipe_the_release_declares_is_actually_fired() {
             "`{name}` is excepted here and the release no longer declares it"
         );
     }
-    // **One exception, and the number is asserted so a second cannot arrive quietly.** This
-    // said zero from `S-76` until `P-489`, and the comment on `NOT_FIRED` says where the
-    // pattern stops working: past about two it is the list written twice rather than a guard.
-    // A third is the signal to fix the rule instead of the list.
+    // **No exceptions, and the number is asserted so one cannot arrive quietly.** This said
+    // zero from `S-76` until `P-489` and says zero again since `P-511`: every player recipe
+    // the release declares is fired by the scenario, with nothing excused. The comment on
+    // `NOT_FIRED` says where the pattern stops working - past about two it is the list
+    // written twice rather than a guard, and a third is the signal to fix the rule.
     assert_eq!(
         NOT_FIRED.len(),
-        1,
-        "one exception - `refuel`, which no command fires. Every other player recipe the \
-         release declares is fired by the scenario, which `S-76` made true of `move` by \
-         making founding need a crossing"
+        0,
+        "no exceptions: every player recipe the release declares is fired by the scenario, \
+         which `S-76` made true of `move` by making founding need a crossing"
     );
 }
 
@@ -391,10 +395,12 @@ fn every_recipe_the_release_declares_fires_while_the_scenario_runs() {
     distinct.sort();
     distinct.dedup();
     // **Twenty-six since `P-494` and `P-495`** added `hold`, `reclaim`, `renew` and `take`.
+    //
+    // **Twenty-five since `P-511`.** P-511 deleted `refuel`: pooling left it moving an energy into a unit with nowhere to move it to, and its qualifier always true.
     assert_eq!(
         distinct.len(),
-        26,
-        "twenty-six recipes by name when this was written; the release declares {} \
+        25,
+        "twenty-five recipes by name when this was written; the release declares {} \
          ({distinct:?})",
         distinct.len()
     );
@@ -435,7 +441,10 @@ fn every_recipe_the_release_declares_fires_while_the_scenario_runs() {
     // make green while a specification question is open, and a red that cannot be acted on
     // stops being read. The exception expires the moment a command exists: `refuel` starts
     // firing and the assertion below stops finding it missing.
-    const CANNOT_FIRE: [&str; 1] = ["refuel"];
+    // **Empty since `P-511`**, which deleted `refuel` - the one recipe here that could
+    // not fire because no command named it. The loop below asserts both ways it could
+    // expire, and the release ceasing to declare it is the one that happened.
+    const CANNOT_FIRE: [&str; 0] = [];
     let missing: Vec<&String> = distinct
         .iter()
         .filter(|recipe| !fired.contains(&recipe.as_str()))

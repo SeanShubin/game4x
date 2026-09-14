@@ -591,10 +591,12 @@ fn every_recipe_row_names_a_count_rather_than_readiness() {
     //
     // **Ninety-six since `P-498`**: `upkeep` gained the `put` that writes the mark, and
     // `renew` gained a whole block for the citizen it clears it on.
+    //
+    // **Ninety-two since `P-511`**, which took `refuel`'s four rows out. P-511 deleted `refuel`: pooling left it moving an energy into a unit with nowhere to move it to, and its qualifier always true.
     assert_eq!(
         rows.len(),
-        96,
-        "ninety-six recipe rows is the population this counted against"
+        92,
+        "ninety-two recipe rows is the population this counted against"
     );
     assert!(
         saying.is_empty(),

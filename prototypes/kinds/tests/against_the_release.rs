@@ -112,7 +112,8 @@ fn there_are_thirty_two_recipe_blocks_under_twenty_two_names() {
     // **Thirty-seven blocks under twenty-six names since `P-498`**, which gave `renew` a
     // second block: it clears the mark on a citizen as well as the one on a nature, which
     // is one rule applied to two kinds - `stow` and `discard`'s shape.
-    assert_eq!(kinds::RECIPES.len(), 37);
+    // **Thirty-six since `P-511`**, which deleted `refuel`.
+    assert_eq!(kinds::RECIPES.len(), 36);
 
     let mut names: Vec<&str> = kinds::RECIPES.iter().map(|recipe| recipe.name).collect();
     names.sort_unstable();
@@ -121,10 +122,11 @@ fn there_are_thirty_two_recipe_blocks_under_twenty_two_names() {
     // one per action, because readiness is a count a thing carries again - and `muster` and
     // `stand` are new. Eight names are stated more than once.
     // **Twenty-six since `P-494` and `P-495`.**
+    // **Twenty-five since `P-511`.**
     assert_eq!(
         names.len(),
-        26,
-        "twenty-six distinct names, and these are {names:?}"
+        25,
+        "twenty-five distinct names, and these are {names:?}"
     );
 
     assert!(
@@ -414,11 +416,9 @@ fn a_role_says_what_becomes_of_what_a_recipe_names() {
             // and `muster` keeps both the garrison it needs and the citizen it musters.
             "deploy ark",
             "move",
-            // **`refuel` arrived with `P-489` and keeps the unit it fills.** It requires a
-            // unit with room and produces energy into it - the unit is an ingredient it does
-            // not eat, which is the whole of what this list is. The same shape as `move`,
-            // one row along.
-            "refuel",
+            // **`refuel` was here between `P-489` and `P-511`** and kept the unit it
+            // filled. Pooling deleted the recipe: there is no unit to fill, because a tank
+            // contributes capacity and holds nothing.
             // **`found by land` is back, and `P-495` is why.** It left this list when
             // `P-385` deleted its `limit 0 garrison` row - the one ingredient it did not
             // eat - and it requires a force now, which it also does not eat. **The
@@ -548,10 +548,8 @@ fn a_named_ingredient_is_bound_before_it_is_referred_to() {
         [
             ("deploy ark", vec!["`$where`"]),
             ("move", vec!["`$from`", "`$to`"]),
-            // **Five since `P-491` gave `refuel` its `require 1 territory` row.** That
-            // row is what binds `$where`, and without it the recipe referred to a place
-            // nothing had named - which is what this check is for.
-            ("refuel", vec!["`$where`"]),
+            // **Four again since `P-511` deleted `refuel`.** It was five while that recipe
+            // had the `require 1 territory` row `P-491` gave it to bind `$where`.
             ("launch ark", vec!["`$where`"]),
             ("work", vec!["`$where`"]),
         ]

@@ -14,7 +14,7 @@
 <p><strong>Generated. Do not edit.</strong> <code>cargo run -p game-console --bin dump-state</code>, or <code>scripts/dump-state.sh</code>.</p>
 <p>Every recipe the release declares, with its own lines gathered under it. The release states these across seven columns, one row per line and the name written only on the first - which is the right shape for a table and the wrong one for answering <em>what does this recipe do</em>.</p>
 <p><strong>Beside each rule is a worked example</strong> - a state, the command that fires the recipe, and the state after - in the notation <code>scenario/expected/play.4x</code> uses, holding only what that recipe touched. Every one is a real command run against a real state: <code>R-7</code>.</p>
-<p>37 recipes, 96 lines between them, 13 worked examples.</p>
+<p>36 recipes, 92 lines between them, 13 worked examples.</p>
 <h2 id="deploy-ark">deploy ark</h2>
 <p>Run by the <strong>player</strong>.</p>
 <ul class="bullets">
@@ -56,7 +56,7 @@
 <li><strong>require</strong> 1 place, joined to <code>$from</code> by an edge the unit crosses, in <code>$to</code></li>
 <li><strong>require</strong> 1 unit, moving at least 1, in <code>$from</code></li>
 <li><strong>put</strong> unit — , moving one less, in <code>$to</code></li>
-<li><strong>consume</strong> 1 energy, in that unit</li>
+<li><strong>consume</strong> 1 energy, in <code>$from</code></li>
 </ul>
 <h3 id="an-example">An example</h3>
 <p>moving spends one fuel and leaves the unit not ready.</p>
@@ -85,14 +85,6 @@
     {pioneer id:1 defending:1 moving:0} -&gt; 1
       {energy} -&gt; 1
 </pre>
-<h2 id="refuel">refuel</h2>
-<p>Run by the <strong>player</strong>.</p>
-<ul class="bullets">
-<li><strong>require</strong> 1 territory, in <code>$where</code></li>
-<li><strong>require</strong> 1 unit, free energy at least 1, in <code>$where</code></li>
-<li><strong>consume</strong> 1 energy</li>
-<li><strong>produce</strong> 1 energy, in that unit</li>
-</ul>
 <h2 id="found-by-land">found by land</h2>
 <p>Run by the <strong>player</strong>.</p>
 <ul class="bullets">

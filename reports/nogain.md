@@ -10,7 +10,7 @@
 
 **`P-426` and `P-427` have since decided that question elsewhere**, which is what the gap looks like when somebody closes it by hand: the Kinds row now says metal is *drawn from the planet, and conserved once above ground*, reconciling it with the planet being an endless source, and the four `produce 1 store` rows are gone from both founding recipes - which were creating five metal of binding while consuming three. **Both were found by re-deriving from the Binding column, not here.**
 
-**56 rules**, ground from **37** blocks of recipe rows: a family becomes its members, a density becomes its cases. **26 of them draw on a source** - the planet, the star or time - and a source is a place they take from rather than an exemption from the arithmetic. That is what keeps them in the check instead of out of it.
+**55 rules**, ground from **36** blocks of recipe rows: a family becomes its members, a density becomes its cases. **26 of them draw on a source** - the planet, the star or time - and a source is a place they take from rather than an exemption from the arithmetic. That is what keeps them in the check instead of out of it.
 
 ## A weighting exists, so nothing comes back round with more
 
@@ -57,7 +57,6 @@ Made minus taken, per place. A `require` row moves nothing and is absent rather 
 | deploy ark                      | +1 garrison · +2 citizen · +2 extractor · -1 ark            | 0     |
 | move (ark moving)               | -1 ark, moving · -1 energy                                  | -6    |
 | move (pioneer moving)           | -1 energy · -1 pioneer, moving                              | -6    |
-| refuel                          | nothing                                                     | 0     |
 | found by land                   | +1 garrison · +2 citizen · +2 extractor · -1 pioneer        | 0     |
 | build extractor                 | +1 extractor · -1 labor · -1 metal                          | -3    |
 | build store                     | +1 store · -1 labor · -1 metal                              | -3    |
