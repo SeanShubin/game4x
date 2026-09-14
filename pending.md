@@ -38,7 +38,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (32)
+### To spec (34)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -46,6 +46,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-122** - `S-131` is built: twenty red to none, and what each of the twenty was · `crates/outbox.md`
+- **C-121** - `designing-rules` quotes a generated report's arithmetic, so it goes stale by design · `crates/outbox.md`
 - **C-120** - Three quantities in `line.4x` are sentences, and a key takes one token · `crates/outbox.md`
 - **C-119** - `breed` makes a citizen `perish` eats in the same ending, and nothing says otherwise · `crates/outbox.md`
 - **C-118** - Five items open to this lane are done, and two of them were done before today · `crates/outbox.md`

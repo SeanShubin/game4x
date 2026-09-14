@@ -61,6 +61,90 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-122 - `S-131` is built: twenty red to none, and what each of the twenty was
+
+**to** spec · **status** open · **raised** 2026-09-14 · **source** working `S-131` to the end
+
+**`cargo test --workspace` is green.** The gate has one failure and it is `C-121` - a citation in
+`docs/designing-rules.md`, which this lane may not write.
+
+## What was built, by cause rather than by test
+
+| Cause     | What followed                                                                                      |
+| --------- | -------------------------------------------------------------------------------------------------- |
+| `P-498`   | `Trait::Paid`, and the seam between `upkeep` and `perish` now carries nothing                      |
+| `P-497`   | `declare::kinds` writes bare names, `declare::members` is new, and every reader joins `carries.4x` |
+| `P-500`   | the crate's copy loses its `Where` prose, and `above $where` replaces *the orbit above*            |
+| `P-496`   | already built; its counts moved again under `P-498`                                                |
+| counts    | 37 blocks, 96 role cells, 17 `put` rows, 8 labelled blocks, 45 carries, 7 memberships              |
+| artifacts | `reports/`, `catalog.md`, and the expectation deleted and reseeded                                 |
+
+**`R-11` is `built`**, and this is the report that says so: `reports/index.html` now carries *The
+engine's inputs*, listing every file in `spec/data/` by reading the directory - which is twelve
+entries today and was four when the capability was written. **Only Sean can mark it vetted.**
+
+## Three things found on the way, each with the check that found it
+
+**`C-119`** - `breed` makes a citizen `perish` eats in the same ending. Found by an assertion
+written beside the new seam, contradicting the paragraph written above it in the same minute.
+
+**`C-120`** - three quantities in `line.4x` are sentences. Found by widening a rule that was
+being asked of one file to all twelve; **four of its eight fragments are real trait names**, so
+half of it passes a vocabulary check.
+
+**A poison that had stopped poisoning.** `a_rule_that_makes_more_than_it_takes_is_refused_by_name`
+doctored the release by matching a whole table row; `P-500` moved the column widths and
+`str::replace` with no match is a no-op. **Its own assertion caught it** - *the doctored release
+is the release* - and the row is found by its cells and rebuilt now. `CLAUDE.md` names this
+exactly: *never put a table row in a match string*.
+
+## And one number that moved under an item
+
+**`S-26` says ten player recipes and ten commands.** It is eleven against ten - `refuel` is the
+one no command fires, which is `C-112` and `P-491`. Reported in `C-118` and repeated here
+because the item is still open and still says ten.
+
+### C-121 - `designing-rules` quotes a generated report's arithmetic, so it goes stale by design
+
+**to** spec · **status** open · **raised** 2026-09-14 · **source** the gate's last red after the
+catch-up, and noticing it is the same red as yesterday's
+
+**derived from** *`reports/nogain.md` says so in its own words: 51 rules, ground from 32 blocks of
+recipe rows* - `docs/designing-rules.md`
+
+**The number is wrong and that is not the point.** `reports/nogain.md` now says **56 rules, ground
+from 37 blocks**, and `the_quoted_report_figures_are_the_report_s` is red on the difference.
+Correcting it takes a minute and it will be wrong again at the next promotion that touches the
+Recipes table.
+
+## Why this one cannot be fixed by fixing it
+
+**The sentence quotes an artifact this lane regenerates.** Every figure in `reports/nogain.md` is
+solved for from the release's rows, so **a promotion moves it without anyone editing anything** -
+which is the shape `CLAUDE.md` already names for outbox items and has no rule for yet in `docs/`.
+
+**It has gone stale twice in two days.** `b0f12c7` re-derived the *role cells* figure in the same
+file yesterday and left this one, because `reports/nogain.md` could not be regenerated at all
+while the release carried `met at least 0` - so the second number was not yet knowably wrong.
+**The check is doing its job; the citation is the thing with the defect.**
+
+## Three shapes, and the choice is that lane's
+
+|                             |                                                                                                                                              |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| **fix the number**          | 56 and 37, and it goes stale at the next promotion                                                                                           |
+| **quote the claim**         | drop the figures and keep *a family becomes its members, a density becomes its cases*, which is the sentence the paragraph is actually using |
+| **point rather than quote** | *`reports/nogain.md` states the unfolded counts*, with the link doing the work                                                               |
+
+**The second is what this lane would pick and it is not this lane's to pick.** The paragraph's
+argument is that the guarantees are about the unfolded net; **no step of it needs the two
+numbers**, and the check that would catch a wrong claim there is not a string comparison anyway.
+
+## Nothing else is open to this lane
+
+`cargo test --workspace` is green and this is the gate's only failure. **Twenty red at
+`241bb0f`, one now, and this one is a citation in a file this lane may not write.**
+
 ### C-120 - Three quantities in `line.4x` are sentences, and a key takes one token
 
 **to** spec · **status** open · **raised** 2026-09-14 · **source** sweeping every file in
