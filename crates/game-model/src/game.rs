@@ -161,7 +161,7 @@ impl Game {
                 );
             }
             Transition::SetForceOfNature { territory, force } => {
-                next.territory_mut(*territory)?.force_of_nature = *force;
+                next.territory_mut(*territory)?.set_force_of_nature(*force);
             }
             Transition::SetBiome { territory, biome } => {
                 next.territory_mut(*territory)?.biome = *biome;
@@ -268,7 +268,7 @@ impl Game {
         if territory.founded() {
             self.force_in(id)
         } else {
-            territory.force_of_nature
+            territory.force_of_nature()
         }
     }
 
@@ -1027,25 +1027,71 @@ impl Game {
 
         // Nature reclaims anything no longer held. Done after every territory has
         // settled, because whether force is enough depends on what settling left behind.
-        for id in self.controlled() {
-            let needed = self.territory(id).map(|t| t.force_of_nature).unwrap_or(0);
-            if self.force_in(id) < needed {
-                // **Destroyed, where they used to be marked unusable** - `P-367`.
-                // `spec/control.md` now reads *its entire population perishes, and every unit
-                // on it is destroyed*; it said *any ark on it becomes unusable*. The old
-                // behaviour left a state the release cannot describe: a unit that is
-                // somewhere, owned, and can never act, reading in a hand derivation exactly
-                // like one that is merely exhausted.
-                //
-                // **Every unit, not every ark.** The code already caught pioneers under a
-                // sentence that named only arks, which `C-77` raised; the new sentence says
-                // every unit, so the breadth is now the specified one rather than an
-                // accident that happened to be right.
-                self.units.retain(|unit| !unit.is_on(id));
-                if let Ok(territory) = self.territory_mut(id) {
-                    territory.lost_to_nature();
-                }
+        //
+        // # Four recipes since `P-494`, and not one of them is a comparison
+        //
+        // This was `if self.force_in(id) < needed`, which is a zero test read from
+        // underneath - an inhibitor arc, and `lenses/research` puts a net with two of those
+        // past the point where reachability is decidable. `P-373`'s saturating rewrite is
+        // what took it out, the same way it took the `min` out of population growth:
+        //
+        // - **`hold`** spends one force to mark one nature `met`. It fires `min(force,
+        //   nature)` times **because that is when it stops being enabled**, not because
+        //   anything computes a lesser.
+        // - **`take`** consumes a nature per force on ground nobody has founded, which is
+        //   what wears a territory's resistance down to where it can be taken.
+        // - **`reclaim`** fires on the **presence** of a nature nobody met. That token is the
+        //   shortfall materialised, exactly as `unpaid` is the shortfall of upkeep.
+        // - **`renew`** clears the marks, so a committed state holds none.
+        //
+        // **The condition is the same one, derived a second way.** After `hold`, the natures
+        // left unmet are `nature - min(force, nature)`, which is above zero exactly where
+        // `force < nature`. So nothing about who loses a territory has changed, and
+        // `tests/` says so rather than this comment.
+        //
+        // **Two assumptions are stated here rather than read from the release, and `C-116`
+        // and `C-117` carry them.** The rows say `met at least 0`, which is true of every
+        // number and would make `reclaim` fire on every territory every turn; this reads it
+        // as `met 0`, the form `spoil` already uses. And the rows put no `Where` on `take`,
+        // which as written erodes the nature of ground the player is holding perfectly well;
+        // this fires it only where nothing has been founded, because that is the only ground
+        // whose defending force is nature's - `Game::defending_force`.
+        for id in &ids {
+            let force = self.force_in(*id);
+            let place = &mut self.territories[id.index()];
+            if place.founded() {
+                place.hold_with(force);
+            } else {
+                place.take_natures(force);
             }
+        }
+        for id in self.controlled() {
+            if self.territory(id).map(|t| t.unmet_natures()).unwrap_or(0) == 0 {
+                continue;
+            }
+            // **Destroyed, where they used to be marked unusable** - `P-367`.
+            // `spec/control.md` now reads *its entire population perishes, and every unit
+            // on it is destroyed*; it said *any ark on it becomes unusable*. The old
+            // behaviour left a state the release cannot describe: a unit that is
+            // somewhere, owned, and can never act, reading in a hand derivation exactly
+            // like one that is merely exhausted.
+            //
+            // **Every unit, not every ark.** The code already caught pioneers under a
+            // sentence that named only arks, which `C-77` raised; the new sentence says
+            // every unit, so the breadth is now the specified one rather than an
+            // accident that happened to be right.
+            //
+            // **Neither half is in `reclaim`'s rows**, which say only `consume 1 citizen`.
+            // `spec/control.md` says the population perishes *and every unit on it is
+            // destroyed*, and the garrison goes with the founding; the rows reach the first
+            // and name neither of the others. Reported in `C-117` rather than dropped.
+            self.units.retain(|unit| !unit.is_on(id));
+            if let Ok(territory) = self.territory_mut(id) {
+                territory.lost_to_nature();
+            }
+        }
+        for id in &ids {
+            self.territories[id.index()].renew_natures();
         }
         seen(self, Self::END_OF_TURN_PHASES[3]);
 
@@ -1643,6 +1689,118 @@ mod tests {
         );
     }
 
+    /// The reclaim, over every pair of force and resistance in a range, with the count said.
+    ///
+    /// **`P-494` rewrote the condition and this is the second derivation of it.** It was
+    /// `force_in(id) < needed`; it is now the presence of a `nature` token that no `hold`
+    /// marked. Those two have to agree at every pair, and *agree on one example* is what
+    /// `CLAUDE.md` says stops meaning anything the moment the example is edited away.
+    ///
+    /// **The closed form is the comparison this no longer performs**, which is exactly the
+    /// shape `population_two_ways` takes against `grow`: the rule that was replaced is kept as
+    /// the thing the replacement is checked against, rather than deleted and trusted.
+    #[test]
+    fn a_nature_nobody_met_is_the_condition_the_comparison_used_to_be() {
+        let mut cases = 0;
+        let mut reclaimed = 0;
+        // **From one citizen, because a territory with none is unfounded before the reclaim
+        // reaches it** - `S-19` derives control from a citizen being there. Zero would report
+        // *taken back* for a territory nature never touched, which is the check answering a
+        // narrower question than the one asked.
+        for nature in 0..=4u32 {
+            for citizens in 1..=4u32 {
+                let mut game = founded();
+                game.territories[0].set_force_of_nature(nature);
+                game.territories[0].set_count(crate::thing::Kind::Citizen, citizens);
+                // **Fed exactly, so nothing grows and nothing starves.** A surplus would
+                // breed, and the force the reclaim reads would be the population after
+                // growing rather than the one this loop set.
+                game.territories[0].add(Resource::Food, citizens);
+                let force = game.force_in(TerritoryId(1));
+
+                let after = game.after(&Transition::EndTurn).unwrap();
+                let held = after.territory(TerritoryId(1)).unwrap().founded();
+
+                cases += 1;
+                if !held {
+                    reclaimed += 1;
+                }
+                assert_eq!(
+                    !held,
+                    force < nature,
+                    "force {force} against a resistance of {nature}"
+                );
+
+                // **And the resistance survives being reclaimed**, which is the one kind
+                // `lost_to_nature` keeps: ground that resisted with two still resists with
+                // two when nobody is left on it, and clearing it would leave the next
+                // founding nothing to take.
+                assert_eq!(
+                    after.territory(TerritoryId(1)).unwrap().force_of_nature(),
+                    nature,
+                    "what the ground resists with is not part of what nature takes"
+                );
+            }
+        }
+        assert_eq!(cases, 20, "five resistances against four populations");
+        assert!(
+            reclaimed > 0 && reclaimed < cases,
+            "{reclaimed} of {cases} were reclaimed, so the two outcomes are both represented              and this is not a check that always saw one of them"
+        );
+    }
+
+    /// A committed state holds no mark, and that is `renew` rather than nothing happening.
+    ///
+    /// **The distinction is the whole reason this test exists.** After an ending, every
+    /// `nature` reads `met:0` whether `hold` marked it or not - so the state alone cannot
+    /// tell *nothing was spent* from *what was spent has been cleared*. Firing the phase by
+    /// hand is what separates them.
+    #[test]
+    fn holding_marks_a_nature_and_renewing_clears_the_mark() {
+        let mut place = crate::Territory::empty(TerritoryId(1), Biome::Jungle);
+        place.set_force_of_nature(3);
+        assert_eq!(place.unmet_natures(), 3, "nothing has met any of them");
+
+        assert_eq!(place.hold_with(2), 2, "two force marks two");
+        assert_eq!(
+            place.unmet_natures(),
+            1,
+            "the third is what `reclaim` fires on"
+        );
+
+        assert_eq!(
+            place.hold_with(5),
+            1,
+            "it fires until it stops being enabled"
+        );
+        assert_eq!(
+            place.unmet_natures(),
+            0,
+            "and no force was spent on nothing"
+        );
+
+        place.renew_natures();
+        assert_eq!(place.unmet_natures(), 3, "`renew` clears every mark");
+        assert_eq!(place.force_of_nature(), 3, "and takes none of them away");
+    }
+
+    /// `take` consumes, where `hold` marks - which is what makes ground takeable at all.
+    #[test]
+    fn force_on_ground_nobody_founded_wears_its_resistance_down() {
+        let mut place = crate::Territory::empty(TerritoryId(1), Biome::Jungle);
+        place.set_force_of_nature(2);
+
+        assert_eq!(place.take_natures(1), 1, "one force takes one");
+        assert_eq!(place.force_of_nature(), 1, "and it does not come back");
+
+        assert_eq!(place.take_natures(4), 1, "it stops when there is none left");
+        assert_eq!(
+            place.force_of_nature(),
+            0,
+            "ground that resists with nothing"
+        );
+    }
+
     #[test]
     fn working_an_extractor_produces_its_nodes_density() {
         let game = with_labor(founded(), 1, TerritoryId(1))
@@ -1927,7 +2085,8 @@ mod tests {
     /// Two pioneers that could both make the move, and the command says which.
     ///
     /// **`spec/console.md`: a command *binds what that recipe leaves open: every place it
-    /// leaves open, and any ingredient or trait value it names with a `$`*.** `move` names two
+    /// leaves open, every ingredient it names by family rather than by kind, and any
+    /// ingredient or trait value it names with a `$`*.** `move` names two
     /// places with a `$` - `require 1 place ... $from` and `require 1 place, joined to $from
     /// ... $to` - and since `P-460` the command binds both.
     ///
@@ -2254,7 +2413,7 @@ mod tests {
         // so a territory that starves to nobody stops being controlled and nature never
         // reaches it - which is how the first version of this test passed its setup and
         // failed its assertion.
-        game.territories[doomed.index()].force_of_nature = 5;
+        game.territories[doomed.index()].set_force_of_nature(5);
         game.territories[doomed.index()].set_garrison(None);
         game.territories[doomed.index()].add(Resource::Food, 10);
         assert!(

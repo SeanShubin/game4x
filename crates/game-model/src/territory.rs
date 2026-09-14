@@ -110,8 +110,6 @@ pub struct Territory {
     /// indexed by resource cannot carry a fourth resource, and a map adds nothing when one
     /// arrives.
     pub deposits: BTreeMap<Resource, Deposit>,
-    /// `spec/control.md`: force inherent to the territory, which nature holds it with.
-    pub force_of_nature: u32,
     /// What is here now, as things rather than as fields.
     ///
     /// `spec/logistics.md`: there is no general inventory, so this is per territory and
@@ -137,9 +135,94 @@ impl Territory {
             id,
             biome,
             deposits: BTreeMap::new(),
-            force_of_nature: 0,
-
             held: Vec::new(),
+        }
+    }
+
+    /// How much force this ground resists with - `spec/control.md`.
+    ///
+    /// **Counted rather than carried, since `P-494`.** It was `force_of_nature: u32`, and
+    /// nature is a kind now: a territory holds one `nature` per point, so this is the same
+    /// number derived from the same place every other quantity is derived from. See
+    /// [`crate::Kind::Nature`] for why the release made that move - the short version is that
+    /// *force below nature* had to stop being a comparison.
+    pub fn force_of_nature(&self) -> u32 {
+        self.natures().count() as u32
+    }
+
+    /// Set the ground's resistance, by holding that many natures and no others.
+    ///
+    /// Design only: nothing in play changes what a territory resists with, and `take` is the
+    /// one recipe that consumes a nature.
+    pub fn set_force_of_nature(&mut self, force: u32) {
+        self.held.retain(|thing| thing.kind != Kind::Nature);
+        for _ in 0..force {
+            self.held.push(Thing::of(Kind::Nature));
+        }
+    }
+
+    fn natures(&self) -> impl Iterator<Item = &Thing> {
+        self.held.iter().filter(|thing| thing.kind == Kind::Nature)
+    }
+
+    /// The natures here that no force was spent on this turn.
+    ///
+    /// **This is the whole of the reclaim rule, and it is a count of tokens rather than a
+    /// comparison.** `reclaim` requires a nature with `met 0`; what makes it fire is the
+    /// presence of one, which is an ordinary input arc. Nothing here asks whether force was
+    /// less than anything.
+    pub fn unmet_natures(&self) -> u32 {
+        self.natures()
+            .filter(|thing| thing.trait_of(Trait::Met).unwrap_or(0) == 0)
+            .count() as u32
+    }
+
+    /// `hold`, fired as many times as it can be: one force spent marks one nature met.
+    ///
+    /// **The `min` is the firing rule rather than an expression** - `P-373`. A transition
+    /// with two inputs stops when either runs out, so this returns what it spent and the
+    /// caller takes that much force. Nothing computes a lesser of anything.
+    pub fn hold_with(&mut self, force: u32) -> u32 {
+        let mut spent = 0;
+        for thing in self.held.iter_mut() {
+            if spent == force {
+                break;
+            }
+            if thing.kind != Kind::Nature || thing.trait_of(Trait::Met).unwrap_or(0) > 0 {
+                continue;
+            }
+            thing.set(Trait::Met, 1);
+            spent += 1;
+        }
+        spent
+    }
+
+    /// `take`: force wears the ground's resistance down, one nature per force.
+    ///
+    /// **Fires `min(force, nature)` times, and the strict inequality falls out of what is
+    /// left over.** `spec/control.md` asks for force *greater than* the existing force, which
+    /// is a comparison between two variable quantities and the worse half of the force rule.
+    /// Consuming a nature per force leaves at least one force where it was greater and none
+    /// where it was equal - and `found by land` requires one, which is a presence test.
+    pub fn take_natures(&mut self, force: u32) -> u32 {
+        let taking = force.min(self.force_of_nature());
+        let mut left = taking;
+        self.held.retain(|thing| {
+            if left > 0 && thing.kind == Kind::Nature {
+                left -= 1;
+                return false;
+            }
+            true
+        });
+        taking
+    }
+
+    /// `renew`: every nature is unmet again, which is what a committed state holds.
+    pub fn renew_natures(&mut self) {
+        for thing in self.held.iter_mut() {
+            if thing.kind == Kind::Nature {
+                thing.clear(Trait::Met);
+            }
         }
     }
 
@@ -872,7 +955,14 @@ impl Territory {
         // immediately above the `clear` that made it moot. It did exactly what the comment
         // below it argues against, and cost a reader the question *why is an extractor
         // special here*. It is not.
-        self.held.clear();
+        //
+        // **And a line naming one kind stands here again since `P-494`, for the opposite
+        // reason.** `nature` is what the ground resists with and is held by the territory,
+        // so it is not part of the population nature takes - clearing it would leave a
+        // reclaimed territory with nothing to resist the next founding, which is a rule
+        // nobody wrote. **The argument above still holds**: the exception is one the
+        // specification states, where `Extractor` was one the code invented.
+        self.held.retain(|thing| thing.kind == Kind::Nature);
     }
 }
 

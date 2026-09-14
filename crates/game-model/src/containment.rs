@@ -378,7 +378,10 @@ fn describe(thing: &Thing) -> Description {
         // `P-411` names them apart - `moving` of a unit, `laboring` of a citizen, `working` of
         // an extractor - so one variant cannot carry one name, and the generic loop cannot
         // write them.
-        if matches!(name, Trait::Ready | Trait::Spent | Trait::Defending) {
+        if matches!(
+            name,
+            Trait::Ready | Trait::Spent | Trait::Defending | Trait::Met
+        ) {
             continue;
         }
         let written = match name {
@@ -431,7 +434,9 @@ pub fn trait_name(name: Trait) -> &'static str {
         // name the release gives them for the kind carrying them, which is why `readiness`
         // is not one of them: `P-399` made it a kind and `P-411` made it a count again.
         // Kept so the match is total and a new trait cannot be added without a name.
-        Trait::Ready | Trait::Spent | Trait::Defending => "a count, written by `counts`",
+        Trait::Ready | Trait::Spent | Trait::Defending | Trait::Met => {
+            "a count, written by `counts`"
+        }
     }
 }
 
@@ -464,6 +469,20 @@ pub const MAXIMUM_PER_ACTION: u32 = 1;
 /// **Absent means one**, which is how the model has always stored readiness and is why a thing
 /// made this turn needs no trait to be able to act. That is storage; what a data file says is
 /// the number either way.
+///
+/// # `met` is written here and is not a readiness
+///
+/// **What this function is for is the *always written* half**, and `met` needs exactly that:
+/// `P-494` gives a nature a count of `0 or 1` and `spec/console.md` says no trait of a thing
+/// may be left out, so `{nature met:0}` and `{nature met:1}` are two descriptions and neither
+/// is spelled `{nature}`.
+///
+/// **Its default is the other way round, and that is the difference rather than an
+/// inconsistency.** A readiness is absent when it is *full*, because `refresh` restores it and
+/// a thing at rest can act. A nature is absent when it is *zero*, because `renew` clears it
+/// and a nature at rest has had nothing spent on it. In both cases absent is what a committed
+/// state holds - which is the property that makes a data file short, and it points opposite
+/// ways for the two because the recipe that resets them does.
 fn counts(kind: Kind, thing: &Thing) -> Vec<(&'static str, u32)> {
     let held = |name: Trait| thing.trait_of(name).unwrap_or(MAXIMUM_PER_ACTION);
     match kind {
@@ -473,6 +492,7 @@ fn counts(kind: Kind, thing: &Thing) -> Vec<(&'static str, u32)> {
             ("laboring", held(Trait::Ready)),
         ],
         Kind::Extractor => vec![("working", held(Trait::Ready))],
+        Kind::Nature => vec![("met", thing.trait_of(Trait::Met).unwrap_or(0))],
         _ => Vec::new(),
     }
 }
@@ -564,11 +584,14 @@ pub fn tree(game: &Game) -> Entry {
 
     let mut children = Vec::new();
     for place in &game.territories {
+        // **A territory's force of nature is no longer one of its traits** - `P-494` made
+        // it a kind, so it appears below among the things this territory holds, as
+        // `{nature met:0} -> 1`. The release's *Traits* table declares no `nature`, and a
+        // description writing one would be a word the release does not have.
         let mut entry = Entry::leaf(
             Description::of(Kind::Territory)
                 .with("id", place.id)
-                .with("biome", place.biome.name())
-                .with("nature", place.force_of_nature),
+                .with("biome", place.biome.name()),
         );
         let mut held: Vec<Entry> = place
             .held
@@ -1014,7 +1037,12 @@ mod tests {
             .collect();
         // `id` leads, which is Sean's order of relevance and not the alphabet - see
         // [`Description::ordered`].
-        assert_eq!(holder, vec!["{territory id:2 biome:ice nature:0}"]);
+        //
+        // **And there is no `nature:` here since `P-494`**, which made it a kind: a
+        // territory that resists with nothing holds no `nature` at all, where it used to
+        // carry the number zero. An entry is never zero - `spec/console.md` - and this is
+        // that rule reaching a fact that had been exempt from it by being a trait.
+        assert_eq!(holder, vec!["{territory id:2 biome:ice}"]);
     }
 
     /// Capacity is the total and the used, and the used is counted rather than kept.

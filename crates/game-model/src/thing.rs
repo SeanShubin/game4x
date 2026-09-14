@@ -102,6 +102,29 @@ pub enum Kind {
     /// that starved to nobody banked fertility and repopulated from stock the moment food
     /// arrived, which is `C-83`.
     Fertility,
+    /// **What a territory's ground resists with** - `P-494` declared it, and it was a number
+    /// on the territory until then.
+    ///
+    /// # Why a kind rather than the trait it was
+    ///
+    /// `spec/control.md` takes a territory back when its force falls *below* its force of
+    /// nature, and *fires when fewer than n are present* is a zero test - an inhibitor arc,
+    /// which `lenses/research` puts at the cliff where reachability stops being decidable.
+    ///
+    /// **`P-373`'s trick removes it, and the trick is not *avoid `min`*.** A transition with
+    /// two inputs fires `min(a, b)` times because that is when it stops being enabled, and
+    /// the shortfall is then **materialised as a positive mark** rather than detected as a
+    /// comparison. `upkeep` leaves citizens `unpaid` and `perish` fires on the presence of
+    /// that mark; nothing anywhere asks whether food was less than citizens.
+    ///
+    /// So a territory holds one `nature` per point of resistance, `hold` spends a force to
+    /// mark one `met`, and `reclaim` fires on **a nature nobody met** - an ordinary input
+    /// arc. *Force below nature* has become *a nature left unmet*.
+    ///
+    /// **The place is bounded as a side effect**, which is the second thing this buys:
+    /// nature is one or two across every biome, so the very reformulation that removes the
+    /// zero test bounds the place it was testing.
+    Nature,
     /// **What a territory presents to hold or take ground** - `P-435` declared it, answering
     /// `C-93`. Mustered each turn and swept at its end, so nothing holds one overnight.
     Force,
@@ -127,11 +150,16 @@ impl Kind {
             Kind::Adjacency => "adjacency",
             Kind::Game => "game",
             Kind::Fertility => "fertility",
+            Kind::Nature => "nature",
             Kind::Force => "force",
         }
     }
 
     /// Every kind, so that a reader can name one that is nowhere.
+    ///
+    /// **Nineteen since `P-494` made `nature` a kind**, which is the change that took the
+    /// only zero test out of the force rule. It was a trait of a territory and is a thing a
+    /// territory holds - see [`Kind::Nature`] for why the two are not the same statement.
     ///
     /// **Eighteen since `P-435` declared `force`**, which answers `C-93`. That item asked
     /// whether the word naming a trait and a thing at once was deliberate; it was, and the
@@ -144,7 +172,7 @@ impl Kind {
     /// **A kind is what the release declares, not what a state happens to contain** - which
     /// is the rule `orbit` taught this crate the expensive way, and `fertility` sits here
     /// for the same reason.
-    pub const ALL: [Kind; 18] = [
+    pub const ALL: [Kind; 19] = [
         Kind::Citizen,
         Kind::Garrison,
         Kind::Extractor,
@@ -162,6 +190,7 @@ impl Kind {
         Kind::Adjacency,
         Kind::Game,
         Kind::Fertility,
+        Kind::Nature,
         Kind::Force,
     ];
 
@@ -325,6 +354,13 @@ pub enum Trait {
     /// action draw on the same count, and two naming different actions never compete. A
     /// citizen that has made labor can still defend.
     Defending,
+    /// **`P-494`: force was spent on this nature this turn.** `0 or 1`.
+    ///
+    /// **Absent means unmet**, which is the opposite of every readiness above it and is the
+    /// right way round for the same reason theirs is: the default is what a committed state
+    /// holds, and `renew` clears this at the end of every turn. A readiness is at rest when
+    /// it has not been spent; a nature is at rest when nothing has met it.
+    Met,
 }
 
 /// A thing: its kind and its own traits.
