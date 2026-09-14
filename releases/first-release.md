@@ -536,7 +536,7 @@ nothing here: it asks whether a reader can read it.
 
 ### R-11 - I can reach the engine's inputs from the reports
 
-**to** code - **status** open - **raised** 2026-09-13 - **source** Sean, 2026-09-13: *I am also going
+**to** sean · **status** **built** 2026-09-14 · **cited** `287e67f`, `3b210d8` · **evidence reported by the code lane and recorded here rather than by the lane that built it**, and **the counts re-derived by this lane rather than taken from the report**. **Twenty links over three directories** - twelve in `spec/data/`, seven in `scenario/commands/` and one in `scenario/expected/` - each to a `.txt` twin the pipeline writes into `crates/game4x/dist` and nothing commits, labelled with the `.4x` path the engine actually reads. **The rendering half is measured rather than inferred**, which this lane twice said it could not claim: `spec/data/kinds.4x` and `scenario/expected/play.4x` both answered `200 application/octet-stream`, and `reports/index.html` `text/html`. So GitHub Pages was the cause and the twin is the fix. **And building it found the capability unmet a second way, which the code lane reports against itself.** The inputs section listed `spec/data/` by reading the directory and listed the scenario as a hand-written pair, naming `play.4x` twice - so `setup.4x`, `world.4x`, `biomes.4x`, `nodes.4x`, `forces.4x` and `spread.4x` were reachable from nothing at all. **Half were listed and half were remembered, in the commit that claimed the clause about listing rather than remembering.** Re-derived here: `scenario/commands/` holds seven files and all seven are linked.
 to need the inputs to the thin engine to be reachable from `reports/index.html` (direct links or
 non-canonical generated copies).*
 

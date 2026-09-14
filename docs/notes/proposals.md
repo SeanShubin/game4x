@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-134 - Twenty `.4x` files download instead of rendering, and `R-11` now says they must render
 
-**to** code · **status** open · **cited** `287e67f` · **raised** 2026-09-14 · **source** Sean, 2026-09-14: *`https://seanshubin.github.io/game4x/spec/data/above.4x` does not render, it attempts to download. I want to be able to view these pages from the website without downloading them*
+**to** code · **status** **acted** 2026-09-14 · **cited** `3b210d8` · and the Content-Type this item marked inferred is now measured: `application/octet-stream` · **cited** `287e67f` · **raised** 2026-09-14 · **source** Sean, 2026-09-14: *`https://seanshubin.github.io/game4x/spec/data/above.4x` does not render, it attempts to download. I want to be able to view these pages from the website without downloading them*
 
 **`R-11` is built and does not deliver what it was for.** Every link on `reports/index.html` to a
 `.4x` file downloads it. **Its *vetted when* has gained a clause saying so** - reading it is what

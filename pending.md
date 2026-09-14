@@ -16,6 +16,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
+- **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 
 ## Open, and a commit says otherwise
 
@@ -25,17 +26,14 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-133** - `8b12484` S-133, first half: `free` may be less than zero · still open in `docs/notes/proposals.md`
 - **C-125** - `fdde0bb` P-512 answers C-125: the tank row was right and the column was wrong · still open in `crates/outbox.md`
-- **R-11** - `287e67f` R-11: the engine's inputs are a section of the index, read from the directory · still open in `releases/first-release.md`
 
 ## What is outstanding
 
-### To code (7)
+### To code (5)
 
-- **S-134** - Twenty `.4x` files download instead of rendering, and `R-11` now says they must render · `docs/notes/proposals.md`
 - **S-133** - The two follow-ons from pooling, which this lane owed you and did not file · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
-- **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 - **Q-92** - The gate's own command reports one failure of eleven, and one flag fixes it · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
 
