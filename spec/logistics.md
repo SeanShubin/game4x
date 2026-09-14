@@ -37,6 +37,10 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - **A thing that leaves takes what it hauls.** A unit moving out of a place is given an amount
   of each kind, no more than its own capacity for that kind, and that amount joins the number
   the new place holds. **Allocation happens at the moment of leaving and at no other.**
+- **What a thing hauls is the player's to say.** A command that moves a thing may give an amount
+  for each kind; what it does not name it hauls as much of as it can carry. **The default is to
+  fill**, because a thing that has come to fetch something is the common case and a thing that
+  has come to deliver says so
 - A thing that contains things takes up capacity in whatever contains it
 - A thing says which of the things in it are next to which. That is a fact about the container
   rather than about its contents

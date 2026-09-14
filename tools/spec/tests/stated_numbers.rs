@@ -100,7 +100,7 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
     let stated = [
         Stated {
             document: "docs/designing-rules.md",
-            says: "96 role cells",
+            says: "92 role cells",
             derived: rows.len(),
         },
         Stated {
@@ -115,12 +115,12 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
         },
         Stated {
             document: "docs/designing-rules.md",
-            says: "79 cells carry a quantity",
+            says: "75 cells carry a quantity",
             derived: rows.len() - blank.len(),
         },
         Stated {
             document: "docs/designing-rules.md",
-            says: "26 recipes",
+            says: "25 recipes",
             derived: names.len(),
         },
     ];

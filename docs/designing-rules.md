@@ -89,9 +89,9 @@ one of three sources - *anything that exhausts draws on time for a turn: it spen
 carries, and only the turn's end restores that count.* **`refresh` is that sentence written as
 rows**, and it is the only rule in the game that writes a count upward from nothing.
 
-**Counted from the Qty and Traits columns of the *Recipes* table, over its 96 role cells**, so it
-can be re-run: **79 cells carry a quantity and 17 are blank, and the seventeen blanks are exactly
-the seventeen `put` rows.** Of the 79, three read a trait - *that citizen's strength*, *that unit's
+**Counted from the Qty and Traits columns of the *Recipes* table, over its 92 role cells**, so it
+can be re-run: **75 cells carry a quantity and 17 are blank, and the seventeen blanks are exactly
+the seventeen `put` rows.** Of the 75, three read a trait - *that citizen's strength*, *that unit's
 strength*, *`$where`'s density for that resource* - which is a colour rather than a marking read.
 
 **Corrected 2026-09-12, and both numbers went stale from promotions this lane made.** It read 81
@@ -124,7 +124,7 @@ ordinary, 14 thresholds, and 6 reading a marking**, all six `put ... at its maxi
 copy of it. **Three methods agreed** - two hand counts and one computed, by different routes.
 
 **The table has moved since and the breakdown is not re-derived here.** `P-494`, `P-495` and `C-115`
-took it to 96 role cells over 26 recipes, and **`put ... at its maximum` is now eight rather than six** - the six `refresh`'s, plus `hold`'s `met` and `upkeep`'s `paid`. **The six reading a marking is the half that mattered and
+took it to 92 role cells over 25 recipes, and **`put ... at its maximum` is now eight rather than six** - the six `refresh`'s, plus `hold`'s `met` and `upkeep`'s `paid`. **The six reading a marking is the half that mattered and
 it is the half this lane cannot recount**, because the classification is check 17's rather than a
 count anything here runs - so it is dated rather than restated, and re-running that check is what
 would make it current.

@@ -227,11 +227,7 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 |                     |        | require | 1                                    | place     | joined to `$from` by an edge the unit crosses | `$to`          |
 |                     |        | require | 1                                    | unit      | moving at least 1                             | `$from`        |
 |                     |        | put     |                                      | unit      | moving one less                               | `$to`          |
-|                     |        | consume | 1                                    | energy    |                                               | that unit      |
-| **refuel**          | player | require | 1                                    | territory |                                               | `$where`       |
-|                     |        | require | 1                                    | unit      | free energy at least 1                        | `$where`       |
-|                     |        | consume | 1                                    | energy    |                                               |                |
-|                     |        | produce | 1                                    | energy    |                                               | that unit      |
+|                     |        | consume | 1                                    | energy    |                                               | `$from`        |
 | **found by land**   | player | consume | 1                                    | pioneer   |                                               |                |
 |                     |        | require | 1                                    | force     |                                               |                |
 |                     |        | produce | 1                                    | garrison  |                                               |                |
