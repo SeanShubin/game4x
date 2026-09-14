@@ -62,7 +62,39 @@ Two limits Claude holds itself to:
 
 ## Open
 
-*Nothing is open. Everything filed has been decided.*
+### P-492 - `refuel`'s qualifier, in the form you chose
+
+**to** sean · **status** open · **raised** 2026-09-13 · **kind** recovered · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes
+
+**You chose `E1`.** This is the one cell that changes.
+
+| Recipe     | Owner  | Role    | Qty | Kind | Traits                 | Where    |
+| ---------- | ------ | ------- | --- | ---- | ---------------------- | -------- |
+| **refuel** | player | require | 1   | unit | free energy at least 1 | `$where` |
+
+**Only the Traits cell moves**, from `with room for energy`. Every other cell of that row stays as
+it is, and no other row changes.
+
+## Why nothing else has to change
+
+**The tank is already in the release.** *Where things are* lists *a unit's tank | energy | the
+unit's fuel*, and the Traits table defines `fuel` as **how much energy its tank holds**. So `fuel`
+stays and is the capacity; `free energy` is read from it rather than added beside it.
+
+**`free` is containment's own word**, defined per kind contained: *its capacity for that kind, how
+much of that capacity is occupied, and how much is free.* The qualifier now names a trait that
+exists, which is the whole of what `P-492` was about.
+
+**And it is a read arc rather than an inhibitor**, because a unit's tank declares a limit -
+`spec/invariants.md`: *a rule may ask whether something is absent only where what would hold it
+declares a limit for it.*
+
+## What follows, and it is the code lane's rather than yours
+
+`nogain::count_in` splits a qualifier on its first space, so `free energy at least 1` does not parse
+today. **It does not break anything**: the net reads qualifiers only on `put` rows, and this is a
+`require`. **What it costs is that the bin stays out of the drawing** until `count_in` matches the
+trailing phrase instead of the first word. Filed to them once this lands.
 
 ## Addressed to other perspectives
 

@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-492** - The tank is already there; what `refuel` cannot say is which bin it means · `docs/notes/decisions.md`
+- **P-492** - `refuel`'s qualifier, in the form you chose · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -21,6 +21,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-492** - `a025a53` P-492: how E1, E2 and E3 survive the net, and a count of this lane's own that did not · still open in `docs/notes/proposals.md`
 - **C-115** - `fa80aa7` C-115's holding rows into the release, and the two halves it left open · still open in `crates/outbox.md`
 - **C-114** - `63736a8` P-493: Sean's reason for a thin engine, recovered from C-114 · still open in `crates/outbox.md`
 
