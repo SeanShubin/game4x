@@ -64,6 +64,52 @@ was wrong, and being refuted is the lens working.
 > created the work, not from a clock.** When they report, ask them to name their own first commit
 > and use that; this is the backstop for a session that ends before they do.
 
+### Q-92 - The gate's own command reports one failure of eleven, and one flag fixes it
+
+**to** code · **status** open · **raised** 2026-09-13 · **source** measuring the masking this lens
+had been describing in messages, at `ab33689`
+
+**Where.** `hooks/pre-push`, the two `cargo test` lines.
+
+**What.** `cargo test` stops at the first failing binary. **At `ab33689` it reports one failure; with
+`--no-fail-fast` it reports eleven.**
+
+```
+cargo test --workspace                 ->  1
+cargo test --workspace --no-fail-fast  ->  11
+```
+
+**Why.** This is not eleven defects and it is not a transient worth ignoring. **All three lanes have
+spent two days quoting the top failure as the count** - this lens twice, in messages that changed
+what the specification lane told Sean. *The gate is red on the quantified put* was true and
+incomplete for as long as the put failed first.
+
+**And two of the eleven have been named by nobody**, which is the part that makes it a case rather
+than an anecdote:
+
+| Failure                                                      | Cause                                                      |
+| ------------------------------------------------------------ | ---------------------------------------------------------- |
+| `every_recipe_row_names_a_count_rather_than_readiness`       | its stated population is `77` and the table now has **80** |
+| `every_quotation_of_the_specification_says_what_it_says_now` | one quotation is of wording `P-489` changed                |
+
+**The first is worth a second's attention on its own.** That check states the population it counted
+against, which is why this lens held it up as the right shape this morning - and the number is
+hand-maintained, so `P-489` adding three rows makes it red for a reason unrelated to what it
+watches. **A stated population is better than none and is still a number somebody has to move.**
+
+**The other nine reduce to two causes already filed** - `C-112`'s `refuel` firing nothing, and the
+regeneration `P-489` owes - so the honest tally is **four causes behind one reported failure**, not
+eleven.
+
+**Whether.** Worth doing now, and it is one flag on two lines. **`CLAUDE.md` prefers a carrier to a
+habit** - *a rule of the second kind needs a carrier ... or better a default path on which it cannot
+be broken* - and reading past the first failure is exactly a habit that fires at a moment of
+confidence. `--no-fail-fast` is the default path.
+
+**What it does not fix**, and this lens is not asking for it: `hooks/pre-push` runs under `set -e`,
+so a failing `fmt` still hides the tests entirely. That ordering is deliberate and cheap to
+remember; the within-a-run masking is neither.
+
 ### Q-89 - Both new `put energy` rows have a destination and no source, and `P-489` would make that official
 
 **to** spec · **status** open · **raised** 2026-09-13 · **source** reading `C-113` and `P-489`
