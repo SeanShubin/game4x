@@ -87,6 +87,11 @@ produce pioneer  put 2 energy   that pioneer    <- the same
 *a put has no quantity, because nothing is made or taken* stands untouched, and the energy is the
 same energy rather than one destroyed here and another made there.
 
+**The pair is one relocation rather than a cost beside a move.** A row carries one `Where` and a
+relocation has two ends, so it takes two rows - which is why `move` spends four rows moving one
+unit. **The `require` is the source end and the `put` is the destination end**, and neither is a
+`consume`: nothing is spent, the territory simply no longer has it.
+
 ## The rows
 
 | Recipe              | Owner  | Role    | Qty | Kind    | Traits               | Where        |
