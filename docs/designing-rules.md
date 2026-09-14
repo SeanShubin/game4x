@@ -38,10 +38,15 @@ are. That split is real, unstated, and the subject of this document's open quest
 is the same move: `work` makes a territory's density, which is one rule with a number per case.
 **The family and the trait are the colours.**
 
-**What the guarantees are about is the plain net you get by unfolding it.** `reports/nogain.md` says
-so in its own words: *56 rules, ground from 37 blocks of recipe rows - a family becomes its members,
-a density becomes its cases.* **Boundedness and termination are decidable for the unfolded net**,
-and that is the net the weighting is solved over.
+**What the guarantees are about is the plain net you get by unfolding it.** `reports/nogain.md` does
+that unfolding, and says what it is: **a family becomes its members, a density becomes its cases.**
+**Boundedness and termination are decidable for the unfolded net**, and that is the net the weighting
+is solved over.
+
+**How many rules that comes to is in the report and deliberately not here.** It went stale three
+times in three days - `C-121` - and the cause is provenance rather than care: the report regenerates
+only when the code lane runs, so **this lane cannot see the number to correct it and the code lane
+cannot correct the document, which is not theirs.** No step of the argument above uses the figure.
 
 
 **So every colour set must be finite, and that is a real constraint rather than a formality.** A

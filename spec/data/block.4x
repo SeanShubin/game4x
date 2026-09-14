@@ -1,6 +1,5 @@
 {block id:deploy-ark recipe:deploy-ark owner:player}
 {block id:move recipe:move owner:player}
-{block id:refuel recipe:refuel owner:player}
 {block id:found-by-land recipe:found-by-land owner:player}
 {block id:build-extractor recipe:build-extractor owner:player}
 {block id:build-store recipe:build-store owner:player}

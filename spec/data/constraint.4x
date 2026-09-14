@@ -1,6 +1,5 @@
 {constraint block:move seq:3 trait:moving compare:at-least n:1}
 {constraint block:move seq:4 trait:moving compare:one-less}
-{constraint block:refuel seq:2 trait:free kind:energy compare:at-least n:1}
 {constraint block:create-labor seq:1 trait:laboring compare:at-least n:1}
 {constraint block:create-labor seq:2 trait:laboring compare:one-less}
 {constraint block:work seq:2 trait:working compare:at-least n:1}

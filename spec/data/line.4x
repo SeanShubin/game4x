@@ -9,11 +9,7 @@
 {line block:move seq:2 role:require qty:1 kind:place place-bound:to}
 {line block:move seq:3 role:require qty:1 kind:unit place-bound:from}
 {line block:move seq:4 role:put kind:unit place-bound:to}
-{line block:move seq:5 role:consume qty:1 kind:energy place-line:3}
-{line block:refuel seq:1 role:require qty:1 kind:territory place-bound:where}
-{line block:refuel seq:2 role:require qty:1 kind:unit place-bound:where}
-{line block:refuel seq:3 role:consume qty:1 kind:energy}
-{line block:refuel seq:4 role:produce qty:1 kind:energy place-line:2}
+{line block:move seq:5 role:consume qty:1 kind:energy place-bound:from}
 {line block:found-by-land seq:1 role:consume qty:1 kind:pioneer}
 {line block:found-by-land seq:2 role:require qty:1 kind:force}
 {line block:found-by-land seq:3 role:produce qty:1 kind:garrison}
