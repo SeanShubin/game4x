@@ -372,6 +372,34 @@ pub fn proposals_without_text(proposals: &str) -> Vec<String> {
     without
 }
 
+/// One line with the double-backticked spans dropped: what it says, not what it shows.
+///
+/// **The convention is `tools/outbox`'s and this adopts it rather than inventing one.**
+/// `cited()` there drops the same spans for the same reason - *a displayed hash is not a claim
+/// about a commit* - and `CLAUDE.md` names the class: **nothing distinguishes a hash an item is
+/// about from a hash it cites** except a carrier someone remembers to use.
+///
+/// **It was needed within a minute of the detector entering the gate.** Closing `S-129` - the
+/// item that describes a chain - made the detector report `S-129` as handing off, because the
+/// section explaining the failure carries both the cue and the ids. The item documenting the
+/// defect was reported as committing it.
+fn said(line: &str) -> String {
+    let mut kept = String::new();
+    let mut rest = line;
+    while let Some((before, after)) = rest.split_once("``") {
+        kept.push_str(before);
+        match after.split_once("``") {
+            Some((_shown, tail)) => rest = tail,
+            None => {
+                rest = "";
+                break;
+            }
+        }
+    }
+    kept.push_str(rest);
+    kept
+}
+
 /// Which items this one's body names as carrying what it dropped.
 ///
 /// A section is the item's own opening and each `##` block under it - see [`chains`] for why
@@ -395,7 +423,8 @@ pub fn handed_to(me: &str, body: &str) -> Vec<String> {
         let prose: String = section
             .lines()
             .filter(|line| !line.trim_start().starts_with('|'))
-            .collect::<Vec<&str>>()
+            .map(said)
+            .collect::<Vec<String>>()
             .join("\n");
         let lowered = prose.to_lowercase();
         if !CUES.iter().any(|cue| lowered.contains(cue)) {

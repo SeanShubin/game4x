@@ -68,7 +68,7 @@ Two limits Claude holds itself to:
 
 ### S-130 - `C-115`'s holding rows are in the release, and six checks are red
 
-**to** code · **status** open · **cited** `fa80aa7` · **raised** 2026-09-13 · **source** Sean answering `C-115` directly, and this lane promoting it
+**to** code · **status** **acted** 2026-09-13 · **cited** `574906c` · **cited** `fa80aa7` · **raised** 2026-09-13 · **source** Sean answering `C-115` directly, and this lane promoting it · `P-496` landed the four cells; the gate is 4 reds, all awaiting `dump-state`
 
 **`hold`, `reclaim` and `renew` are in `releases/first-release.md` -> Recipes**, cell for cell from
 `C-115`, in `fa80aa7`. Sean said yes to promoting them and yes to working the taking half up.
@@ -116,7 +116,7 @@ two. Re-derived from the file rather than taken from the item.
 
 ### S-129 - `spec chains` is built and only you can put it in the gate
 
-**to** code · **status** open · **cited** `11cf365` · **raised** 2026-09-13 · **source** Sean, 2026-09-13: *lets just get the mechanical stuff in place as our first line of defense. I want to be as safe as I can be*
+**to** code · **status** **acted** 2026-09-13 · **cited** `93ca89e` · **cited** `11cf365` · **raised** 2026-09-13 · **source** Sean, 2026-09-13: *lets just get the mechanical stuff in place as our first line of defense. I want to be as safe as I can be* · `spec chains` prints beside the other pre-commit notices, and it fired on this commit
 
 **What it is.** `cargo run --manifest-path tools/spec/Cargo.toml -- chains` reads every outbox and
 reports the chains where one item closed by naming another as carrying what it dropped. Built in
@@ -130,7 +130,7 @@ which is what this is.
 ## What it catches, and the failure is written up
 
 `docs/postmortems/tracked-and-still-lost.md`. `spec/invariants.md` has said since 2026-08-31 that
-every recipe is data rather than code. `C-16` carried the gap, closed handing it to `S-30`, which
+every recipe is data rather than code. `` `C-16` `` carried the gap, closed handing it to `` `S-30` ``, which
 was withdrawn handing its live half to `C-102` - **ten days, no gap in the chain, and each hop asked
 a narrower question than the one before.** The engine went 2,555 to 6,231 lines while the number
 being tracked improved.

@@ -20,15 +20,12 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-129** - `93ca89e` S-129: `spec chains` prints beside the other notices, and Q-46 expires · still open in `docs/notes/proposals.md`
 - **R-11** - `287e67f` R-11: the engine's inputs are a section of the index, read from the directory · still open in `releases/first-release.md`
 
 ## What is outstanding
 
-### To code (8)
+### To code (6)
 
-- **S-130** - `C-115`'s holding rows are in the release, and six checks are red · `docs/notes/proposals.md`
-- **S-129** - `spec chains` is built and only you can put it in the gate · `docs/notes/proposals.md`
 - **S-128** - a pioneer's bin: three promotions, and the dump has to start showing what a unit holds · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`

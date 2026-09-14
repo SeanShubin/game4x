@@ -106,3 +106,30 @@ fn a_cue_does_not_reach_across_a_heading() {
         "a cue in one section reached ids in another"
     );
 }
+
+/// **An item that describes a handoff must not be read as making one.**
+///
+/// Found in the gate within a minute of the detector landing there: closing `S-129`, whose body
+/// explains the chain the postmortem is about, made the detector report `S-129` as handing off
+/// to `S-30`. **The item documenting the defect was reported as committing it** - `CLAUDE.md`'s
+/// *quoting a thing and doing it are the same bytes*.
+///
+/// The carrier is `tools/outbox`'s and not a new one: a double-backticked span is shown rather
+/// than said, and is dropped before the rest is read.
+#[test]
+fn an_id_being_shown_is_not_a_successor() {
+    let body = "## What it catches\n\n\
+                `` `C-16` `` carried it, closed handing it to `` `S-30` ``, now tracked by nobody.";
+    assert!(
+        handed_to("S-129", body).is_empty(),
+        "ids being displayed as an example were read as a handoff"
+    );
+}
+
+/// And the carrier must not swallow an ordinary single-backticked successor beside it.
+#[test]
+fn a_shown_id_does_not_hide_a_real_one_on_the_same_line() {
+    let body = "## Closing\n\n\
+                Unlike `` `S-30` ``, this one is tracked by `C-49` and stays open.";
+    assert_eq!(handed_to("C-87", body), vec!["C-49".to_string()]);
+}
