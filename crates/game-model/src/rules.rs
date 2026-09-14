@@ -418,18 +418,25 @@ impl Game {
         // model so much as a rule nobody had written.
         self.take(territory, brought)?;
         let force = self.units[unit_at].kind.force();
-        // **What was in its bin falls loose here** - `P-487`. `spec/logistics.md`: *when a
-        // thing that contains things is consumed, what it held falls loose where it stood. It
-        // is not destroyed with its container: it goes into disorder, and at the turn's end
-        // what there is room for is kept and the rest is lost.*
+        // **The pioneer's remaining fuel stays in the territory.** This quoted `P-487`'s
+        // *what it held falls loose where it stood* until 2026-09-14, and `P-505` replaced
+        // that sentence: `spec/logistics.md` now says **when a thing that holds capacity is
+        // consumed, the place it stood in has that much less room** - *nothing falls loose,
+        // because nothing was inside it: what a place holds is the place's, and destroying a
+        // store leaves the resources where they already were.*
         //
-        // **Loose is what a territory holds directly**, so this is an `add` and not a store:
-        // a store is a container, and the rule says the energy is in disorder rather than in
-        // one. Whether the territory has a store for energy at this moment therefore does not
-        // decide where the energy goes - it only decides what survives, and
-        // `end_of_turn_losses` is already what decides that. The specification lane raised the
-        // ordering inside founding as a question it could not settle; it does not arise,
-        // because both answers put the energy in the same place.
+        // **The line below is unchanged and the reason under it is not.** It was *move what
+        // was inside out*; it is now *the energy was the territory's all along, and consuming
+        // the pioneer only lowers the room*. Both put the same number in the same place, so
+        // nothing observable moved - which is why the gate caught this as a stale quotation
+        // rather than as a wrong answer.
+        //
+        // **What has not followed is the model** - `C-124`. Under pooling a unit holds no
+        // fuel at all: `unit.cells` is still a number on the unit, and the specification says
+        // a place holds one number per kind and a bin only contributes capacity to it. The
+        // two agree on the state after a founding and disagree about where the fuel is before
+        // one, which is a change to `refuel`, to what a move spends, and to what the
+        // containment tree draws inside a pioneer.
         let spare = self.units[unit_at].cells;
         self.units.remove(unit_at);
         if spare > 0 {

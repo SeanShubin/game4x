@@ -48,6 +48,12 @@ column_of() {
     case "$1" in
         pending.md) echo "" ;;
         spec/*|releases/*|docs/*|README.md|CLAUDE.md) echo "spec" ;;
+        # **`decide/` is the specification lane's** - `S-132`. Sean asked for what waits on
+        # him to sit apart from what is settled or historical, so the open queue and the
+        # open questions moved there out of `docs/notes/`. It is not an outbox and no
+        # instance files in it; the lane that writes the queue is the lane that writes
+        # this, which is the same lane it was before the move.
+        decide/*) echo "spec" ;;
         tools/spec|tools/spec/*) echo "spec" ;;
         lenses/*)
             echo "lens:$(printf '%s' "$1" | cut -d/ -f2)" ;;

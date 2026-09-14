@@ -172,6 +172,22 @@ pub fn places(root: &Path) -> Vec<PathBuf> {
         //
         // Cheapest to fix while the file is empty, which it is today.
         root.join("docs/notes/decisions.md"),
+        // **`S-132`: the queue moved and this is where it now lives.** Sean asked for what
+        // waits on him to sit apart from what is settled or historical, so `decide/` holds
+        // the open proposals and the open questions - 127 lines of a 5,697-line file - and
+        // `docs/notes/proposals.md` keeps the ledger and every notice to a producer or a lens.
+        //
+        // **Both are read, and that is not a transition.** The two files are different
+        // things: the ledger is an outbox and `decide/` is not, so nothing files there. What
+        // this reads is every place an *open* item can be, and an item open to Sean is now in
+        // one of these two.
+        //
+        // **`pending.md` is the reason it matters.** It is generated from what this reads, so
+        // until these lines existed its *What must be decided* section listed the release's
+        // capabilities and none of the three open proposals - the one section Sean reads,
+        // quietly short by three.
+        root.join("decide/proposals.md"),
+        root.join("decide/questions.md"),
         root.join("crates/outbox.md"),
     ];
     // A release is an outbox too. Each capability carries an id, a `**to** code` line and
@@ -332,8 +348,11 @@ pub fn misfiled_by_asks(items: &[Item]) -> (usize, Vec<String>) {
     let mut wrong = Vec::new();
     for item in items {
         let home = match item.outbox.as_str() {
-            "docs/notes/proposals.md" => "approval",
-            "docs/notes/decisions.md" => "a decision",
+            "docs/notes/proposals.md" | "decide/proposals.md" => "approval",
+            // **`questions.md` is `decisions.md` under its new name** - `S-132`. What a file
+            // holds decides what its items may ask, and both names hold the same thing: a
+            // choice only Sean can make.
+            "docs/notes/decisions.md" | "decide/questions.md" => "a decision",
             _ => continue,
         };
         // `field` takes one word, and `a decision` is two.
