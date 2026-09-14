@@ -1090,18 +1090,25 @@ pub fn view_of(text: &str) -> &'static str {
 /// description is read from the bytes like everything else here, and a file declaring
 /// something new describes itself without this function being touched.
 pub fn engine_inputs() -> Vec<(String, String)> {
-    let at = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data");
-    let mut found: Vec<(String, String)> = std::fs::read_dir(&at)
-        .unwrap_or_else(|why| panic!("{} is not readable: {why}", at.display()))
-        .filter_map(|entry| entry.ok())
-        .map(|entry| entry.path())
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    // **Three directories, and it was one.** `spec/data/` was read and the scenario's files
+    // were a hand-written pair - `play.4x` twice - so `setup.4x`, `world.4x`, `biomes.4x`,
+    // `nodes.4x`, `forces.4x` and `spread.4x` were reachable from nothing. **Six of the twenty
+    // files the engine reads were missing from the page whose clause is that none are**, and
+    // the clause says why: *checked by listing the inputs rather than by anybody remembering
+    // to add one*. Half of this was listed and half was remembered.
+    let mut found: Vec<(String, String)> = ["spec/data", "scenario/commands", "scenario/expected"]
+        .into_iter()
+        .flat_map(|directory| {
+            let at = root.join(directory);
+            std::fs::read_dir(&at)
+                .unwrap_or_else(|why| panic!("{} is not readable: {why}", at.display()))
+                .filter_map(|entry| entry.ok())
+                .map(|entry| entry.path())
+                .collect::<Vec<_>>()
+        })
         .filter(|path| path.extension().map(|it| it == "4x").unwrap_or(false))
         .map(|path| {
-            let name = path
-                .file_name()
-                .and_then(|it| it.to_str())
-                .unwrap_or_default()
-                .to_string();
             let text = std::fs::read_to_string(&path)
                 .unwrap_or_else(|why| panic!("{} is not readable: {why}", path.display()));
             let mut sorts: Vec<&str> = text
@@ -1119,17 +1126,31 @@ pub fn engine_inputs() -> Vec<(String, String)> {
                 .lines()
                 .filter(|line| line.trim().starts_with('{'))
                 .count();
-            (
-                format!("../spec/data/{name}"),
-                format!("{lines} lines, each declaring a {}", sorts.join(" or a ")),
-            )
+            let from = path
+                .strip_prefix(&root)
+                .unwrap_or(&path)
+                .to_string_lossy()
+                .replace('\\', "/");
+            // **A file of declarations says what it declares; a file of commands says how
+            // many.** `spec/data/` holds one sort per file - kinds, traits, lines - and naming
+            // it is the useful thing. `scenario/commands/play.4x` opens its lines with eleven
+            // different command words, and listing all eleven says less than the count does.
+            //
+            // **Two sorts is the line**, because one or two names a file and eleven describes
+            // nothing.
+            let what = if sorts.len() <= 2 {
+                format!("{lines} lines, each declaring a {}", sorts.join(" or a "))
+            } else {
+                format!("{lines} lines, of {} sorts", sorts.len())
+            };
+            (format!("../{from}.txt"), format!("{from}\t{what}"))
         })
         .collect();
     found.sort();
     assert!(
         !found.is_empty(),
-        "`spec/data/` holds no `.4x` file, so this section would be empty and say nothing \
-         about it - which is the count-over-nothing failure `CLAUDE.md` names"
+        "no `.4x` file was found, so this section would be empty and say nothing about it - \
+         which is the count-over-nothing failure `CLAUDE.md` names"
     );
     found
 }
@@ -1188,34 +1209,11 @@ pub fn index(generated: &[(String, String)]) -> String {
          links, so one added or removed appears here without a second file being \
          edited.</p>\n",
     );
-    out.push_str(
-        "<h2>The scenario</h2>
-",
-    );
-    out.push_str(
-        "<p class=\"note\">Source, not a rendering. These are the files themselves - a view \
-         of either would be one more thing that can drift from it.</p>\n",
-    );
-    out.push_str("<ul class=\"reports\">\n");
-    for (path, what) in [
-        (
-            "../scenario/commands/play.4x",
-            "the commands that ran, in order",
-        ),
-        (
-            "../scenario/expected/play.4x",
-            "what the scenario should produce, reviewed by hand",
-        ),
-    ] {
-        out.push_str(&format!(
-            "<li><a href=\"{path}\">{path}</a> <span class=\"what\">- {what}</span></li>
-"
-        ));
-    }
-    out.push_str(
-        "</ul>
-",
-    );
+    // **The scenario had a section of its own and it named two files by hand** - `play.4x`
+    // twice - while `spec/data/` was listed by reading the directory. Six of the scenario's
+    // eight were therefore reachable from nothing: `setup.4x`, `world.4x`, `biomes.4x`,
+    // `nodes.4x`, `forces.4x` and `spread.4x`. **`R-11` says the inputs are listed rather than
+    // remembered, and half of them were remembered.** One section now, over three directories.
 
     // **`R-11`: every file the engine reads as input, reachable from here.**
     //
@@ -1235,16 +1233,24 @@ pub fn index(generated: &[(String, String)]) -> String {
     // the instrument only becomes useful as they grow.
     out.push_str("<h2>The engine's inputs</h2>\n");
     out.push_str(
-        "<p class=\"note\">Source, not a rendering, for the same reason the scenario above \
-         is. <strong>The data that runs the game is what these say</strong> - \
+        "<p class=\"note\"><strong>Each link is a generated copy and is not canonical.</strong> \
+         The file it came from is named beside it, and that file is what the engine reads - \
          `spec/invariants.md`: the data may be replicated in the presentation layer, and no \
-         replication is canonical. Listed by reading `spec/data/`, so a file added to it \
-         appears here without this page being edited.</p>\n",
+         replication is canonical. <strong>The copy exists because the published site serves \
+         a `.4x` as a download rather than as text</strong>, measured: GitHub Pages picks the \
+         type from the extension and does not know this one. The twin is written at deploy \
+         and is in no clone - `S-134`, scoped by Sean to the published site. Listed by \
+         reading the directories, so a file added to one appears here without this page being \
+         edited.</p>\n",
     );
     out.push_str("<ul class=\"reports\">\n");
-    for (path, what) in engine_inputs() {
+    for (href, said) in engine_inputs() {
+        // **The link text is the file and the href is the twin**, which is the whole of what
+        // `S-134` asks a reader to see: the path named is the one the engine reads, and
+        // following it renders rather than downloads.
+        let (named, what) = said.split_once('\t').unwrap_or((said.as_str(), ""));
         out.push_str(&format!(
-            "<li><a href=\"{path}\">{path}</a> <span class=\"what\">- {what}</span></li>
+            "<li><a href=\"{href}\">{named}</a> <span class=\"what\">- {what}</span></li>
 "
         ));
     }

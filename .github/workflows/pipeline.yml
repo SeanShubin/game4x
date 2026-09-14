@@ -230,9 +230,28 @@ jobs:
           cp lenses/research/formulas.html crates/game4x/dist/lenses/research/formulas.html
           cp tools/research/formulas/data.json crates/game4x/dist/tools/research/formulas/data.json
           cp tools/research/formulas/results.json crates/game4x/dist/tools/research/formulas/results.json
+          # **A `.txt` twin beside every input, because the site serves a `.4x` as a
+          # download.** Measured: `spec/data/kinds.4x` answers 200 with
+          # `application/octet-stream`. Pages picks the type from the extension, does not know
+          # this one, and offers no way to override it - no `.htaccess`, no `_headers`.
+          #
+          # **Nothing `.txt` is committed.** Sean scoped this to the published site: *I don't
+          # necessarily need it to be rendered when I browse it as source*. So the twin is made
+          # here and `reports/index.html` links it, which is why a clone's copy of that page
+          # has links that resolve only once deployed - `S-134`, and `R-11` permits a
+          # non-canonical generated copy so long as the page says it is one.
+          find crates/game4x/dist/spec/data crates/game4x/dist/scenario -name '*.4x' \
+            -exec sh -c 'cp "$1" "$1.txt"' _ {} \;
           test -f crates/game4x/dist/reports/index.html
           test -f crates/game4x/dist/scenario/expected/play.4x
           test -f crates/game4x/dist/spec/data/kinds.4x
+          # **Every twin, counted against every input**, so a copy that silently made none
+          # fails here rather than on the site. Twenty today: twelve in `spec/data` and eight
+          # in `scenario`.
+          inputs=$(find crates/game4x/dist/spec/data crates/game4x/dist/scenario -name '*.4x' | wc -l)
+          twins=$(find crates/game4x/dist/spec/data crates/game4x/dist/scenario -name '*.4x.txt' | wc -l)
+          test "$inputs" -eq 20
+          test "$twins" -eq "$inputs"
           test -f crates/game4x/dist/lenses/research/formulas.html
           test -f crates/game4x/dist/tools/research/formulas/data.json
           test -f crates/game4x/dist/tools/research/formulas/results.json

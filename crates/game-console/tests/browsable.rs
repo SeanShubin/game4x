@@ -448,65 +448,107 @@ fn the_reports_point_outward_only_at_what_the_pipeline_publishes() {
 fn every_file_the_engine_reads_as_input_is_reachable_from_the_index() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
 
-    let on_disk: BTreeSet<String> = std::fs::read_dir(root.join("spec/data"))
-        .expect("spec/data")
-        .filter_map(|entry| entry.ok())
-        .map(|entry| entry.path())
+    // **Three directories, and it read one.** `spec/data/` was listed by reading it and the
+    // scenario's eight were a hand-written pair, so six files the engine reads were reachable
+    // from nothing - `S-134` found it. `R-11` asks for the inputs to be listed rather than
+    // remembered, and half of them were remembered.
+    let on_disk: BTreeSet<String> = ["spec/data", "scenario/commands", "scenario/expected"]
+        .into_iter()
+        .flat_map(|directory| {
+            std::fs::read_dir(root.join(directory))
+                .unwrap_or_else(|why| panic!("{directory}: {why}"))
+                .filter_map(|entry| entry.ok())
+                .map(|entry| entry.path())
+                .collect::<Vec<_>>()
+        })
         .filter(|path| path.extension().map(|it| it == "4x").unwrap_or(false))
-        .filter_map(|path| {
-            path.file_name()
-                .and_then(|it| it.to_str())
-                .map(String::from)
+        .map(|path| {
+            path.strip_prefix(&root)
+                .unwrap_or(&path)
+                .to_string_lossy()
+                .replace('\\', "/")
         })
         .collect();
-    assert!(
-        on_disk.len() >= 4,
-        "spec/data holds {} files, which is too few for this to be a check: {on_disk:?}",
-        on_disk.len()
+    assert_eq!(
+        on_disk.len(),
+        20,
+        "twenty files the engine reads - twelve in `spec/data` and eight in `scenario`; this \
+         found {on_disk:?}"
     );
 
     let page = dump::index(&everything());
     let listed: BTreeSet<String> = dump::engine_inputs()
         .into_iter()
-        .map(|(path, _)| path)
+        .map(|(href, _)| href)
         .collect();
 
     for name in &on_disk {
-        let href = format!("../spec/data/{name}");
+        // **The link is the twin and the label is the file** - `S-134`. The published site
+        // serves a `.4x` as `application/octet-stream`, measured, so a browser saves it; the
+        // twin ends `.txt` and renders. **Nothing `.txt` is in the repository**, because Sean
+        // scoped this to the published site - he does not need it rendered when browsing the
+        // source - so this cannot assert the href exists here, and asserts instead that what
+        // it is a twin of does.
+        let href = format!("../{name}.txt");
         assert!(
             listed.contains(&href),
-            "`spec/data/{name}` is an input the engine reads and `engine_inputs` does not \
-             name it"
+            "`{name}` is an input the engine reads and `engine_inputs` does not name it"
         );
         assert!(
             page.contains(&format!("href=\"{href}\"")),
             "`index.html` does not link `{href}`, so a reader cannot reach it"
         );
+        assert!(
+            page.contains(&format!(">{name}</a>")),
+            "`index.html` links `{name}` under some other name, and the path a reader wants \
+             is the one the engine reads"
+        );
     }
 
     for href in &listed {
-        let path = root.join(href.trim_start_matches("../"));
+        let twin = href.trim_start_matches("../");
+        let source = twin
+            .strip_suffix(".txt")
+            .unwrap_or_else(|| panic!("`{href}` is not a `.txt` twin, so nothing renders it"));
         assert!(
-            path.exists(),
-            "`index.html` links `{href}` and there is no such file - a link a reader follows \
-             to nothing, which is what `R-9` forbids"
+            root.join(source).exists(),
+            "`index.html` links a twin of `{source}` and there is no such file"
         );
     }
 
     assert_eq!(
         listed.len(),
         on_disk.len(),
-        "the page names {} inputs and `spec/data/` holds {}",
+        "the page names {} inputs and the three directories hold {}",
         listed.len(),
         on_disk.len()
+    );
+
+    // **And the twin is only real if the pipeline makes it.** The href resolves nowhere in a
+    // clone by design, so the half a link check cannot see is whether anything creates it at
+    // deploy.
+    let pipeline = std::fs::read_to_string(root.join(".github/workflows/pipeline.yml"))
+        .expect("the pipeline that publishes the artifact");
+    assert!(
+        pipeline.contains(r#"cp "$1" "$1.txt""#),
+        "nothing in the pipeline writes a `.txt` beside each input, so every link in that \
+         section would 404 on the published site"
+    );
+    assert!(
+        pipeline.contains(r#"test "$twins" -eq "$inputs""#),
+        "the pipeline does not count the twins against the inputs, so writing none would \
+         publish quietly"
     );
 
     // **And the page says what each one declares**, read from the file rather than written
     // beside it: `kinds.4x` says `kind`, `traits.4x` says `trait`, and a file declaring
     // something new describes itself. Checked on one, because the mechanism is one.
+    //
+    // **Found by the twin's href since `S-134`**, because that is what the entry is keyed by
+    // now - the label carries the file's own path and the description after it.
     let kinds = dump::engine_inputs()
         .into_iter()
-        .find(|(path, _)| path.ends_with("kinds.4x"))
+        .find(|(href, _)| href.ends_with("kinds.4x.txt"))
         .expect("kinds.4x among the inputs");
     assert!(
         kinds.1.contains("kind"),
