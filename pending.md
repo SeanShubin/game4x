@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-515** - Publish the shape of the error, not only the correction · `decide/proposals.md`
 - **P-514** - Three rows of `spec/data/line.4x` are unwritable, and this lane's own check said there was one · `decide/proposals.md`
 - **P-513** - A relation names its columns, and nothing says so · `decide/proposals.md`
 - **P-512** - *Where things are* still says a tank holds fuel, and one row of it changes the game · `decide/proposals.md`

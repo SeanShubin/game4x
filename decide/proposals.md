@@ -11,6 +11,51 @@ of it needs you.
 
 ## Open
 
+### P-515 - Publish the shape of the error, not only the correction
+
+**to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `CLAUDE.md` -> What done means
+
+**`CLAUDE.md` sets a bar for when a habit becomes a rule and this one has cleared it twice in a
+day.** *A habit earns its place by a case it caught, not a case it explains*, and *a habit is
+written as where to look until it has caught something it did not come from.*
+
+> **Publish the shape of the error, not only the correction.** A reader can apply a shape to their
+> own work; a correction is only something to trust. **An account of how a thing was wrong is a
+> tool and a fixed number is not** - so when a defect is reported, the report says what the
+> instrument asked, not merely what the right answer turned out to be.
+
+## The two cases, and neither was found by anything failing
+
+**One, across a column boundary.** `P-514` reported three unwritable rows of `spec/data/line.4x`
+and said how they got past: `P-497`'s check asserted exactly one unrepresentable cell **and looked
+only at the Traits column.** The code lane read that, looked at its own generator, and found the
+same hole one column over - `lines` wrote `qty` verbatim, so a fourth sentence-quantity would have
+gone in as silently as the three did. **Their words**: *I would not have looked if you had written
+the fix instead.*
+
+**Two, across a person, an hour later.** This lane had been telling you *215 unpushed*, a figure
+measured once and recited, growing by one per commit while somebody pushed in between. It said so
+and named the shape - **a count in prose has no way to notice that it has gone stale.** The code
+lane ran the command rather than quoting the corrected figure, and it was **forty-one, not forty**:
+this lane's own commit had landed between the measurement and the message. **Their words**: *if you
+had sent 40 without the confession I would probably have repeated it to Sean.*
+
+## Why this is not already covered
+
+**`CLAUDE.md` has the diagnosis and not the duty.** It says *a measurement travels with an
+explanation of itself, which is not measured*, and *re-derive what you are told* - both addressed to
+the **reader**. **This is the writer's half**, and the second case is what shows they are different:
+the reader re-derived because the writer had published a shape. **Without the shape there was
+nothing to re-derive against.**
+
+## What it costs, stated because it is the argument against
+
+**Accounts are longer than fixes.** `P-514` is longer than the change it proposes, and a queue of
+accounts is a queue somebody reads. **Two cases in one day is the evidence, and one day is the
+whole of it** - if it stops paying, it is a rule that should come back out.
+
+The working-out is in
+[recording a failure found a second one](docs/notes/2026-09-14-recording-a-failure-found-a-second-one.md).
 ### P-514 - Three rows of `spec/data/line.4x` are unwritable, and this lane's own check said there was one
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `spec/console.md` -> The language

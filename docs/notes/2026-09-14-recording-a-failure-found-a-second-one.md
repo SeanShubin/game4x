@@ -55,8 +55,35 @@ replacing one with `half of what it carries`, which now stops at the guard.
 may not read for defects and did not.
 
 **It does not establish that the habit is cheap.** `P-514` is longer than its own fix, and a queue of
-accounts is a queue somebody has to read. **The case for writing it into `CLAUDE.md` is one case
-strong**, and this note exists so that the second one has something to be the second of.
+accounts is a queue somebody has to read.
+
+## The second case arrived the same day, and it is what this note was waiting for
+
+**This lane had been telling Sean *215 unpushed*.** The figure was measured once and then recited,
+growing by one per commit, while somebody pushed in between. **Measured: forty ahead.**
+
+**It said so rather than quietly correcting the number**, and named the shape - a count in prose has
+no way to notice that it has gone stale.
+
+**The code lane read that and ran the command instead of quoting the figure. It was forty-one.**
+This lane's own commit, the one recording the previous exchange, had landed between the measurement
+and the message. **Second instance of the same drift inside a single exchange**, and the second one
+was caught only because the first was published as a shape rather than as a corrected number.
+
+Their words: *I only caught it because you told me the shape and I ran the command instead of
+quoting your figure. If you had sent 40 without the confession I would probably have repeated it to
+Sean.*
+
+## So the habit has cleared the bar, twice, and the rule it earns is narrower than it looked
+
+**Not *record the failure*.** Both cases share something sharper:
+
+> **Publish the shape of the error, not only the correction.** A reader can apply a shape to their
+> own work; a correction is only something to trust.
+
+**The first case crossed a column boundary** - an account of a check that read one column sent
+another lane to look at its own generator. **The second crossed a person** - an account of a stale
+count stopped a wrong number reaching Sean. **Neither was found by anything failing.**
 
 ## The general form, which is the code lane's and better than this lane's
 
