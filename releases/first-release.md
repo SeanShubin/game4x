@@ -184,10 +184,10 @@ readies.
 
 ## Recipes
 
-The recipe table has seven columns: **Recipe**, **Auto**, **Role**, **Qty**, **Kind**, **Traits**
+The recipe table has seven columns: **Recipe**, **Owner**, **Role**, **Qty**, **Kind**, **Traits**
 and **Where**.
 
-**Auto** is `player` or `world`. **Role** is one of `require`, `limit`, `consume`, `produce` or
+**Owner** is `player` or `world`. **Role** is one of `require`, `limit`, `consume`, `produce` or
 `put`: a requirement must be present and is not taken, a limit is a maximum that must not be
 exceeded, a consumption is taken, a production is made, and **a put names a thing that is already
 there and says what is true of it afterwards - the same thing and not a new one, so what has an
@@ -295,6 +295,13 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 |                     |        | produce | that unit's strength                 | force     |                                               |                          |
 | **refresh**         | world  | put     |                                      | citizen   | defending at its maximum                      |                          |
 | **refresh**         | world  | put     |                                      | unit      | defending at its maximum                      |                          |
+| **hold**            | world  | require | 1                                    | nature    | met at least 0                                |                          |
+|                     |        | consume | 1                                    | force     |                                               |                          |
+|                     |        | put     |                                      | nature    | met at its maximum                            |                          |
+| **reclaim**         | world  | require | 1                                    | nature    | met at least 0                                |                          |
+|                     |        | consume | 1                                    | citizen   |                                               |                          |
+| **renew**           | world  | require | 1                                    | nature    |                                               |                          |
+|                     |        | put     |                                      | nature    | met at least 0                                |                          |
 | **discard**         | world  | consume | 1                                    | force     |                                               |                          |
 
 ## Biomes

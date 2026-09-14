@@ -8,6 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-495** - Taking a territory, by the same trick that just removed holding's zero test · `docs/notes/proposals.md`
+- **P-494** - `nature` is now a kind in the Recipes table and a trait everywhere else · `docs/notes/proposals.md`
 - **P-492** - `with room for energy` names no trait a unit has · `docs/notes/decisions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
