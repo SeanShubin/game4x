@@ -30,7 +30,17 @@ set -eu
 cd "$(dirname "$0")/.."
 
 case "${1:-}" in
-    -h|--help) sed -n '2,28p' "$0" | sed 's|^# \{0,1\}||'; exit 0 ;;
+    -h|--help)
+        # **A terminator rather than a line number.** This read `sed -n '2,28p'`, and the
+        # header ended at 28 - so a line added to it would have truncated the help silently.
+        # A hand-maintained number, inside the script written about hand-maintained numbers,
+        # which the quality lens spotted while poisoning the script itself.
+        #
+        # **And it had already happened next door**: `scripts/push.sh` read `2,25p` with its
+        # comments ending at 22, so `--help` printed `set -uo pipefail` and a `cd` as if they
+        # were help. The prediction was not hypothetical; it was shipping one file over.
+        awk 'NR == 1 { next } /^#/ { sub(/^# ?/, ""); print; next } { exit }' "$0"
+        exit 0 ;;
     "") ;;
     *) echo "unknown option $1" >&2; exit 1 ;;
 esac

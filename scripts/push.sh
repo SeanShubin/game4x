@@ -32,7 +32,12 @@ for argument in "$@"; do
     case "$argument" in
         --no-gate) GATE=0 ;;
         --deploy-only) DEPLOY_ONLY=1 ;;
-        -h|--help) sed -n '2,25p' "$0" | sed 's|^# \{0,1\}||'; exit 0 ;;
+        -h|--help)
+            # A terminator rather than a line number - this read `2,25p` and the comments end
+            # at 22, so `--help` printed `set -uo pipefail` and a `cd` as help text. Found by
+            # the quality lens predicting it for `gate.sh`, where it had not happened yet.
+            awk 'NR == 1 { next } /^#/ { sub(/^# ?/, ""); print; next } { exit }' "$0"
+            exit 0 ;;
         *) echo "unknown option $argument" >&2; exit 1 ;;
     esac
 done
