@@ -64,47 +64,6 @@ was wrong, and being refuted is the lens working.
 > created the work, not from a clock.** When they report, ask them to name their own first commit
 > and use that; this is the backstop for a session that ends before they do.
 
-### Q-91 - *The gate* has no way to be run, so it gets approximated, and the approximation is narrower twice
-
-**to** code · **status** open · **raised** 2026-09-13 · **source** the specification lane reporting
-that it had been calling `cargo test --workspace` in a shared tree *the gate*, and measuring what
-that costs
-
-**Where.** `scripts/`, which has nineteen entries and no way to run `hooks/pre-push`.
-
-**What.** Every lane is asked constantly whether the gate is green, and the only ways to answer are
-to push or to approximate. **The usual approximation is `cargo test --workspace`, and it is narrower
-than the gate in two independent ways.**
-
-| What the gate runs                                     | Reached by `cargo test --workspace`  |
-| ------------------------------------------------------ | ------------------------------------ |
-| `cargo fmt --all -- --check`                           | **no**                               |
-| `cargo clippy --workspace --all-targets -D warnings`   | **no**                               |
-| `cargo test --release --workspace` minus engine crates | in debug, and without the exclusions |
-| `for manifest in tools/*/Cargo.toml` - fmt and test    | **no - none of it**                  |
-| the engine-facing crates by name                       | yes                                  |
-
-**No tool crate is a workspace member** - measured with `cargo metadata`: `outbox`, `spec` and
-`quality` are all absent, by design, each declaring its own `[workspace]`. **So the approximation
-misses `promotions.rs` and `citations.rs` entirely** - the promotion checker and the hash checker,
-which are the two the specification lane leans on hardest.
-
-**And the second narrowing is the tree.** Three lanes share one working tree, so a run measures
-whatever the other two have uncommitted. **Both directions are silent and one of them reads as good
-news**: a neighbour's uncommitted *fix* makes your run greener than `HEAD`, which is what happened -
-the specification lane's tree held the code lane's unpushed repair, so its run saw one failure where
-`HEAD` had two, and Sean was told twice that `P-489` was what held the gate.
-
-**Why.** `scripts/push.sh` already has both halves right - it prints the dirty tree with *another
-instance may be mid-edit*, then runs `sh hooks/pre-push`, with the comment *one list of what the gate
-is, in the file that already owns it*. **The carrier exists on the path that pushes and not on the
-path that asks**, and asking is the common case.
-
-**Whether.** Worth doing now, and it is a short script. `scripts/gate.sh` and `.ps1` running
-`sh hooks/pre-push`, printing what tree it measured first. **The point is not to stop anyone running
-a narrower command** - a lane testing its own work should - **it is that *the gate is green* should
-name what was measured**, so a claim carries its own caveat to whoever receives it.
-
 ### Q-89 - Both new `put energy` rows have a destination and no source, and `P-489` would make that official
 
 **to** spec · **status** open · **raised** 2026-09-13 · **source** reading `C-113` and `P-489`
@@ -198,6 +157,60 @@ defect in three days, and the first that would have cost a silent pass rather th
 **Verified at `c876d67`.** The addressing line now reads `**shape** rows and text` and `**into**
 `releases/first-release.md` -> Recipes, and Capabilities`, and the text block says which bullet it
 replaces - the third thing the item named and the one `CLAUDE.md` asks for.
+
+
+### Q-91 - *The gate* has no way to be run, so it gets approximated, and the approximation is narrower twice
+
+**to** code · **status** **acted** 2026-09-13 · `af4e0de` · **raised** 2026-09-13 · **source** the specification lane reporting
+that it had been calling `cargo test --workspace` in a shared tree *the gate*, and measuring what
+that costs
+
+**Where.** `scripts/`, which has nineteen entries and no way to run `hooks/pre-push`.
+
+**What.** Every lane is asked constantly whether the gate is green, and the only ways to answer are
+to push or to approximate. **The usual approximation is `cargo test --workspace`, and it is narrower
+than the gate in two independent ways.**
+
+| What the gate runs                                     | Reached by `cargo test --workspace`  |
+| ------------------------------------------------------ | ------------------------------------ |
+| `cargo fmt --all -- --check`                           | **no**                               |
+| `cargo clippy --workspace --all-targets -D warnings`   | **no**                               |
+| `cargo test --release --workspace` minus engine crates | in debug, and without the exclusions |
+| `for manifest in tools/*/Cargo.toml` - fmt and test    | **no - none of it**                  |
+| the engine-facing crates by name                       | yes                                  |
+
+**No tool crate is a workspace member** - measured with `cargo metadata`: `outbox`, `spec` and
+`quality` are all absent, by design, each declaring its own `[workspace]`. **So the approximation
+misses `promotions.rs` and `citations.rs` entirely** - the promotion checker and the hash checker,
+which are the two the specification lane leans on hardest.
+
+**And the second narrowing is the tree.** Three lanes share one working tree, so a run measures
+whatever the other two have uncommitted. **Both directions are silent and one of them reads as good
+news**: a neighbour's uncommitted *fix* makes your run greener than `HEAD`, which is what happened -
+the specification lane's tree held the code lane's unpushed repair, so its run saw one failure where
+`HEAD` had two, and Sean was told twice that `P-489` was what held the gate.
+
+**Why.** `scripts/push.sh` already has both halves right - it prints the dirty tree with *another
+instance may be mid-edit*, then runs `sh hooks/pre-push`, with the comment *one list of what the gate
+is, in the file that already owns it*. **The carrier exists on the path that pushes and not on the
+path that asks**, and asking is the common case.
+
+**Whether.** Worth doing now, and it is a short script. `scripts/gate.sh` and `.ps1` running
+`sh hooks/pre-push`, printing what tree it measured first. **The point is not to stop anyone running
+a narrower command** - a lane testing its own work should - **it is that *the gate is green* should
+name what was measured**, so a claim carries its own caveat to whoever receives it.
+
+**Verified at `af4e0de`, by poisoning rather than reading.** `scripts/gate.sh` runs
+`sh hooks/pre-push`, so it reaches the tools loop, `fmt` and `clippy`; it prints what is dirty
+**before** the run rather than after; and its closing line names the five things it measured and
+repeats the shared-tree caveat. Appending a badly formatted function to `graph-coloring` makes it
+exit **1** having printed the dirty-tree banner and **never the word Green** - checked by counting,
+not by looking.
+
+**One thing left, and it is not worth a commit of its own.** `--help` prints `sed -n '2,28p'` of the
+script's own header, which ends at line 28 today. **A line added to that header truncates the help
+silently** - the class the script was written about, in the script, at the smallest possible scale.
+A terminator rather than a number would do it.
 
 
 ### Q-88 - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here

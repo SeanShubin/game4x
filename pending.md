@@ -18,12 +18,11 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What is outstanding
 
-### To code (5)
+### To code (4)
 
 - **S-128** - a pioneer's bin: three promotions, and the dump has to start showing what a unit holds · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
-- **Q-91** - *The gate* has no way to be run, so it gets approximated, and the approximation is narrower twice · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
 
 ### To research (2)
