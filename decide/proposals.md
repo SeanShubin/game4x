@@ -11,6 +11,103 @@ of it needs you.
 
 ## Open
 
+### P-508 - Storage, concretely: a position names an entry and a command acts on one of it
+
+**to** sean · **status** open · **raised** 2026-09-14 · **kind** invented · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**This picks `E4` and stops offering options**, on your *something concrete that can't possibly work
+can be adapted*. It replaces `P-501` and answers `P-507`. **Two things it cannot do are written out
+at the bottom rather than left to be discovered.**
+
+> **A container's contents are a listing, and an entry's place in it is its position.** The first
+> entry is at 1. **A command names a thing by position**, and the position is read against the state
+> the command is applied to.
+>
+> **A position names an entry, and an entry may be several things.** A command acts on **one** of
+> them, and which one is not a choice: the things in an entry are alike in every respect the game
+> records, so each gives the same state afterwards.
+>
+> **A position is not an identity.** An `id` names one thing for ever; a position names whatever is
+> at that place in a listing now, and the same thing is at different positions as the listing
+> changes.
+
+## Your first three scenarios, against a real listing
+
+```
+{territory id:1}
+  1  {energy} -> 5
+  2  {metal} -> 25
+  3  {store resource:metal} -> 3
+  4  {transport resource:metal} -> 2
+```
+
+```
+25 in storage       {stow into:3 kind:metal repeat:10}
+                    {stow into:3 kind:metal repeat:10}
+                    {stow into:3 kind:metal repeat:5}
+
+15, and 3 and 7     {stow into:4 kind:metal repeat:3}
+                    {stow into:5 kind:metal repeat:7}
+                    {stow into:3 kind:metal repeat:5}   three times
+
+5, and 10 each      {stow into:4 kind:metal repeat:10}
+                    {stow into:4 kind:metal repeat:10}
+                    {stow into:3 kind:metal repeat:5}
+```
+
+**`into:3` three times is three different stores**, because the first command takes one of the three
+out of that entry and into one of its own.
+
+## Your fourth, which is the one the other three hid
+
+**One transport holding 1 metal, one holding 2; two into the first and five into the second.**
+
+```
+{territory id:1}
+  4  {transport resource:metal}  {metal} -> 1
+  5  {transport resource:metal}  {metal} -> 2
+```
+
+```
+{stow into:4 kind:metal repeat:2}
+{stow into:4 kind:metal repeat:5}
+```
+
+**Both are `into:4`, and that is the flaw rather than a typo.** After the first command that
+transport holds 3, so the listing re-sorts: the one holding 2 is now at 4 and the one holding 3 at
+5. **A position is read against the state it is applied to, so the second command's 4 is a different
+transport from the first command's 4.**
+
+## What that costs, said plainly
+
+**A written sequence of positional commands is fragile.** Insert a command, or change a `repeat`, and
+every position after it may mean something else. `scenario/commands/play.4x` is a file you derive by
+hand, and this makes a hand edit in the middle of it dangerous in a way it is not today.
+
+**It is the cost of the thing being concrete.** The alternative was three ways of writing contents
+inline, each of which grows with what a thing holds. **This one is wrong in a way that shows up
+immediately** - a mis-positioned command puts metal somewhere visible - rather than in a way that
+shows up as a notation nobody can read.
+
+## Two holes this lane found writing it out, and neither is closed here
+
+**The tie-break needed the quantity, and `P-502` now says so.** Two transports holding `{metal} -> 1`
+and `{metal} -> 2` have contents whose **descriptions are equal** and whose quantities differ, so
+sorting by description alone did not separate them - and a position into an order that is not total
+names nothing. **Corrected in `P-502` rather than left here**, because that is the item the rule is
+in. It was found by writing this one's fourth scenario out.
+
+**A stack cannot be split by position.** `{transport resource:metal} -> 2` is one entry, so `into:4`
+twice fills the same transport unless the first command made them differ. Your *fill up each
+transport and move the ones that are full* works because filling one makes it differ; **a command
+that had to act on a particular one of two still-identical things could not say so.** Nothing in
+your four scenarios needs that, and this lane does not know whether something later will.
+
+## What it withdraws
+
+**`P-501`.** Its *a description names a set* is replaced by a position, and its *a command acts on
+one of them* survives here, applied to an entry rather than to a set. **One way to name a thing
+rather than two**, which is the uniformity you asked for.
 ### P-506 - The notation and the two models get their names
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
@@ -169,8 +266,9 @@ storage[$resource] capacity 10` - two bins in one thing, each a container in its
 
 > **Each distinct description and contents is its own entry.** Two things alike in every trait but
 > holding different things are two entries, not one entry of two. **Where two entries share a
-> description they sort by their contents, by this same rule** - which is total, because a thing
-> holds finitely many entries and each is shorter than what holds it.
+> description they sort by their contents, by this same rule, and by quantity where the contents'
+> descriptions are equal too** - which is total, because a thing holds finitely many entries and
+> each is shorter than what holds it.
 
 ## What this removes, which is the test of it
 
@@ -218,53 +316,3 @@ resource:metal}` today and needs nothing invented. Your parameterised notation i
 constraint that named a derived trait because the Petri net materialises free capacity as tokens.
 **The data model would derive what the net holds.** This lane has not measured whether that bites,
 and says so rather than discovering it during a promotion.
-### P-501 - A description names a set, and a command acts on one of it
-
-**to** sean · **status** open, **held** 2026-09-14 pending `P-507` · **raised** 2026-09-14 · **rewritten** 2026-09-14, after working your three scenarios through the first version · **kind** invented · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
-
-**The first version said *names the things*, plural, and your first scenario cannot be written with
-it.** Two identical transports, and one command naming both loads 3 into each. Three and seven is
-then unreachable.
-
-> A description names as well as states. **A description used to name is exact** - it leaves out no
-> trait and no content - and it names every thing whose description and contents are exactly it.
-> **A command acts on one of them**, and which one is not a choice: things a description names are
-> alike in every respect the game can see, so every one of them gives the same state afterwards.
-
-## Your first scenario, in the notation
-
-```
-{stow into:{store metal} kind:metal repeat:10}
-{stow into:{store metal} kind:metal repeat:10}
-{stow into:{store metal} kind:metal repeat:5}
-```
-
-**Each command names a store holding nothing, and there is one fewer of them each time.** After the
-first, one store holds ten and is no longer named by `{store metal}` - its contents differ - so the
-second names one of the two that are left.
-
-**That is the whole mechanism**: a set that shrinks as you fill it, and no need to tell apart things
-that are still alike.
-
-## And the transports
-
-```
-{stow into:{transport metal} kind:metal repeat:3}
-{stow into:{transport metal} kind:metal repeat:7}
-```
-
-Three into either transport; then the empty one is the only thing `{transport metal}` names, so the
-seven has one destination and the command does not have to say which.
-
-## Why *one of them* rather than a tie-break
-
-`spec/turn.md` requires *a deterministic mechanic*, and this is stronger than a tie-break rather than
-weaker: **there is nothing to break.** Two things a description names differ in nothing the game
-records, so a rule that picks either produces the same game. A tie-break would be machinery for
-distinguishing things that are the same.
-
-## What it still does not do
-
-**It cannot act on several at once.** `{stow into:{store metal} repeat:10}` fills one store, not
-three. If a command should ever mean *every one of these*, that is a second idea and this does not
-smuggle it in.

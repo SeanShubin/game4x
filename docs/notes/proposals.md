@@ -69,6 +69,57 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### P-501 - withdrawn: a position names an entry, so a description does not have to
+
+**to** sean · **status** **withdrawn** 2026-09-14 · superseded by `P-508`, which replaces naming-by-description with naming-by-position · **raised** 2026-09-14 · **rewritten** 2026-09-14, after working your three scenarios through the first version · **kind** invented · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**The first version said *names the things*, plural, and your first scenario cannot be written with
+it.** Two identical transports, and one command naming both loads 3 into each. Three and seven is
+then unreachable.
+
+> A description names as well as states. **A description used to name is exact** - it leaves out no
+> trait and no content - and it names every thing whose description and contents are exactly it.
+> **A command acts on one of them**, and which one is not a choice: things a description names are
+> alike in every respect the game can see, so every one of them gives the same state afterwards.
+
+## Your first scenario, in the notation
+
+```
+{stow into:{store metal} kind:metal repeat:10}
+{stow into:{store metal} kind:metal repeat:10}
+{stow into:{store metal} kind:metal repeat:5}
+```
+
+**Each command names a store holding nothing, and there is one fewer of them each time.** After the
+first, one store holds ten and is no longer named by `{store metal}` - its contents differ - so the
+second names one of the two that are left.
+
+**That is the whole mechanism**: a set that shrinks as you fill it, and no need to tell apart things
+that are still alike.
+
+## And the transports
+
+```
+{stow into:{transport metal} kind:metal repeat:3}
+{stow into:{transport metal} kind:metal repeat:7}
+```
+
+Three into either transport; then the empty one is the only thing `{transport metal}` names, so the
+seven has one destination and the command does not have to say which.
+
+## Why *one of them* rather than a tie-break
+
+`spec/turn.md` requires *a deterministic mechanic*, and this is stronger than a tie-break rather than
+weaker: **there is nothing to break.** Two things a description names differ in nothing the game
+records, so a rule that picks either produces the same game. A tie-break would be machinery for
+distinguishing things that are the same.
+
+## What it still does not do
+
+**It cannot act on several at once.** `{stow into:{store metal} repeat:10}` fills one store, not
+three. If a command should ever mean *every one of these*, that is a second idea and this does not
+smuggle it in.
+
 ### P-503 - withdrawn: the sweep should not store anything at all
 
 **to** sean · **status** **withdrawn** 2026-09-14 · **raised** 2026-09-14 · **withdrawn** the same day, on working Sean's own three scenarios through it
