@@ -1,0 +1,14 @@
+# The world: three territories, two adjacencies, one vehicle.
+
+{territory id:1}
+{territory id:2}
+{territory id:3}
+
+# **Adjacency is stated in one direction and that is visible rather than hidden.** `move` needs
+# `{adjacent from:$from to:$to}`, so the scout can go 1 to 2 and not 2 to 1. Making it symmetric
+# is either a second row per pair or a concept the engine does not have - which is a decision,
+# and nothing here needs it yet.
+{adjacent from:1 to:2}
+{adjacent from:2 to:3}
+
+{at thing:scout place:1}

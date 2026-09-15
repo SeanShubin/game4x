@@ -61,6 +61,68 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-126 - `S-136` is built and has its answer: a rule runs from rows, and the engine names no noun
+
+**to** spec · **status** open · **raised** 2026-09-14 · **source** building the isolated
+prototype Sean asked for, and reaching the point where research is done - a stated question with
+a recorded answer
+
+**What this asks for is one entry.** `docs/prototypes/README.md` is that lane's file and it is
+where a recorded answer becomes findable; `CLAUDE.md` makes reachability the test of existing at
+all. **The answer is written and is in `prototypes/thin-engine/README.md`** - this item exists so
+that the index catches up with it, and carries the one line the index needs.
+
+## The answer, in one line
+
+**Yes for one mechanic, and the reading it was built to take has not been taken.** `move` runs
+from eleven rows of data against 232 lines of code that contain no game noun - checked against a
+word list read out of `data/` rather than written by hand. The two tests are Sean's: the scout
+moves 1 to 2, and does not move 1 to 3.
+
+## Why that is less than it sounds, which the prototype's own README says first
+
+**232 lines runs one mechanic and `crates/game-model/src/` 1662 runs twenty-six**, so *seven times
+smaller* is not a reading anybody may take from it. The claim under test is that **232 does not
+grow when a mechanic is added**, and a second mechanic is what tests it. Recorded as an instrument
+that has been built and taken once.
+
+`C-114`'s three explosions - of the code, of the data structure, of the data - get one reading
+each, and the third is honestly **unknown**: eleven rows is too few to read anything off.
+
+## The one thing that was not expected
+
+**Rules are written in the same structure as facts.** `{needs rule:move relation:at thing:$it
+place:$from}` is a row exactly as `{at thing:scout place:1}` is, so there is one data structure
+rather than two. The engine's whole vocabulary is four words - `rule`, `needs`, `drops`, `adds` -
+and all four are about how a rule is *stated* rather than about what the game *is*.
+
+**Not a decision and not offered as one.** `S-136` says nothing here is normative, and this lane
+agrees: a second mechanic could take it apart.
+
+## Three absences that are the design and would otherwise read as defects
+
+**Territories are stated and read by nothing**, so *not adjacent* and *no such place* refuse
+identically. That is the next concept, and it is first because it is the smallest one needing the
+engine to check a row it was not handed.
+
+**Adjacency is one-directional** - `{adjacent from:1 to:2}` does not let the scout back. Symmetry
+is a second row per pair, which the data can do today, or a property of a relation, which is a
+concept this does not have.
+
+**The notation is re-implemented and `crates/command-language` is unused.** `S-136` required it -
+*no assumptions creeping in from existing code, even the notation* - and the prototype's README
+carries the argument so a reader who finds the duplication finds the reason with it.
+
+## What was checked, since a prototype's checks are the only thing standing behind its answer
+
+Fifteen tests. **Three of them were poisoned before being trusted** - a game noun added to `src/`,
+a file read added to `src/`, and `{adjacent from:1 to:3}` added to the world - and each failed the
+run it should have. The isolation `S-136` asked for is asserted rather than promised: an empty
+`[dependencies]`, no `std::fs` in any line of `src/` that runs, and its own `[workspace]` so a
+half-built intermediate state cannot redden a gate every lane commits against.
+
+---
+
 ### C-125 - Does a unit's tank hold its fuel, or contribute room for it? Two files now differ
 
 **to** spec · **status** open · **raised** 2026-09-14 · **source** building `S-133`'s second

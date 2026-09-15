@@ -1,0 +1,12 @@
+# Every rule the game has, which is one.
+
+{rule name:move}
+
+# **`{territory id:...}` is stated above and read by nothing.** `move` needs an `adjacent` row,
+# so *not adjacent* and *no such place* refuse identically. Distinguishing them is the next
+# concept, not a defect - see `README.md`.
+{needs rule:move relation:at thing:$it place:$from}
+{needs rule:move relation:adjacent from:$from to:$to}
+
+{drops rule:move relation:at thing:$it place:$from}
+{adds rule:move relation:at thing:$it place:$to}

@@ -1,0 +1,26 @@
+# Not a workspace member, and that is the point rather than tidiness - `S-136`.
+#
+# The root `Cargo.toml` lists every other prototype, so `cargo fmt --all`, `clippy --workspace
+# --all-targets -- -D warnings` and the whole suite run over them. **A thing stripped to nothing
+# and grown one concept at a time reddens that gate at every intermediate state**, and every lane
+# commits in this tree.
+#
+# **Its own `[workspace]` rather than a line in the root manifest.** Both keep it out; this one
+# needs no edit to a file the whole tree shares, which is the form `tools/outbox`,
+# `tools/pad-tables` and the three other self-contained tools take. The root manifest's own note
+# says why that is better.
+#
+# **No dependencies, and the empty table is deliberate.** Sean: *I don't want any dependencies or
+# assumptions creeping in from existing code, even the notation.* So there is no
+# `crates/command-language` here and no path dependency of any kind - see `README.md` for why the
+# notation is re-implemented rather than borrowed.
+
+[workspace]
+
+[package]
+name = "thin-engine"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
