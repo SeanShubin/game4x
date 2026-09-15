@@ -96,9 +96,52 @@ cost an invariant:
 a trait and a place** - which is `{move what:scout from:territory-1 to:territory-2}` exactly. The
 prototype's single named scout is the unrepresentative world, not Sean's six.
 
-**What this does not settle** is how the engine picks which scout, when two in `territory-1` both
-match. Today nothing chooses: `require` matches any, `remove` removes every match. **That is the
-next thing to measure and it is not measured here.**
+## Scouts are fungible, so a row carries a quantity
+
+**Sean, 2026-09-15**: *Scouts are fungable, so the id associated with scout refers to the scout
+category. We are going to need to represent quantities, so I could in principle have a million
+scouts in the same territory without having a million rows. If I had a million scouts across 3
+territories, I would need 3 rows to express the only difference between the scouts.*
+
+**This settles what `what:scout` refers to**, which the section above left open. It is not one of
+six things sharing a name - it is **the category**, which has one row and one name. **So invariant 2
+was never in danger**: `scout` is unique among categories, and the six-scout world measured above is
+one the model does not have.
+
+**And `from` stays necessary, for the reason Sean gave rather than the one this lane argued.** A
+million scouts across three territories is three rows, and *a scout* names no one of them. **The
+place is what picks the row**, so `{move what:scout from:territory-1 to:territory-2}` states the
+minimum exactly.
+
+## What quantities need that the engine has not got
+
+**A key over two columns.** Three rows for one category is what is being asked for, and
+`(what, where)` is what tells them apart - so that pair has to be the key. It cannot be:
+
+```text
+two `residency` rows have `what` of `1`, so it names neither
+```
+
+**A key is one column**: `src/schema.rs` returns `columns[0].name`, and the structure check counts
+`(relation, that one value)`. **Keeping the surrogate `id` avoids the refusal and buys the wrong
+thing** - three rows load, and so does a fourth putting scouts in territory 1 a second time, which
+was tried and accepted. **The same fact then has two spellings, which is what a key exists to
+stop.**
+
+**And the three roles do not cover arithmetic.** Moving one scout out of a territory holding two
+leaves one; it does not remove the row. `require`, `remove` and `add` are set operations over whole
+rows, and `remove` removes *every* match. **The release already has the shape this wants**:
+`releases/first-release.md` -> Recipes has a **Qty** column and the roles `consume` and `produce`
+beside `require` and `put`. **The prototype's three are a subset that predates quantities.**
+
+**Three things this does not settle, all Sean's:**
+
+- **Whether a row at quantity zero stays or goes** - a territory the scouts have all left is either
+  a row saying zero or no row at all
+- **What `thing` becomes.** A category is what the release calls a **kind**, and places are the part
+  of this model that stay individuated - territory 5 is not territory 11
+- **Whether a quantity may be omitted when it is one**, which is invariant 1 asked of a number
+
 
 ## The answer
 
@@ -644,27 +687,24 @@ had to be unique it was refused for the key rather than for the territory - it u
 now. And the mutation check's generated violations were a row cloned and broken, which kept the
 original's key; they replace the original instead, which keeps every reference to it resolving.
 
-## Thirteen of twenty-one relations are not keyed by an id
+## Every relation is keyed by an `id`, and `residency` is the one that should not be
 
 **Sean, 2026-09-15**: *I want the truth of the data model to be fully normalized, which I believe
 means always referencing by ids, and a single id at that. The names are decorations, but important
 decorations.*
 
-**The data does not do that yet.** Eight relations have a single-column `id`; thirteen are keyed by
-whatever their first column happens to be:
+**The data does that now, and this section said otherwise until it was re-derived.** It reported
+eight relations keyed by an `id` and thirteen keyed by whatever their first column happened to be,
+with `adjacency` as the sharpest case. **All sixteen are keyed by an `id`**, read out of
+`data/foundation/schema.4x` rather than recalled. **Nothing edited this section when they changed**,
+which is `docs/notes/nothing-removes.md` happening in this lane's own file.
 
-| Keyed by an `id`                                                                    | Keyed by something else                                                                                                                                                                                                              |
-| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `argument`, `binding`, `clause`, `column`, `command`, `input`, `territory`, `thing` | `adjacency` (from), `compare` (seq), `execute` (seq), `load` (seq), `primitive` (word), `reference` (column), `relation` (name), `report` (seq), `residency` (what), `role` (name), `rule` (name), `state` (relation), `test` (name) |
+**A surrogate key is not the end of it.** It admits two rows stating the same fact - two residencies
+for the same thing in the same place, accepted by the structure when it was tried - and once a
+residency carries a quantity that is exactly what must not be admitted. **What `residency` wants is
+a key over `(what, where)`**, which the next section measures and the engine has not got.
 
-**`adjacency` is the sharpest case**: keyed by `from`, so `{adjacency from:1 to:2}` and
-`{adjacency from:1 to:3}` would collide. It is unique today by accident of there being one road
-out of each territory.
 
-**And this is what the 51 unread values are really about.** They are not waste - `input.name` is a
-decoration awaiting the second style, and the surrogate ids are the foundation being what it is
-meant to be. **What is missing is the other half**: the user-facing style that reads those names,
-and the translation between the two.
 
 ## `load` exists and the engine still reads no file
 
