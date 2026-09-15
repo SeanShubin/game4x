@@ -313,6 +313,56 @@ validated against their own declarations, the `{test ...}` row was skipped entir
 `engine.4x` was read from the file rather than from what the script had loaded - so the step
 loading it was dead.
 
+## The user-facing format, which is the same notation
+
+**Sean, 2026-09-15**, giving the target and the constraint: *I need to add the constraint that name
+must be unique, and the user friendly format is:*
+
+```text
+{territory id:1 name:territory-1}
+{thing id:1 name:scout}
+{adjacency id:1 from:territory-1 to:territory-2}
+{residency id:1 what:scout where:territory-1}
+```
+
+**It is the same notation and the same rows**, with two differences and no others: every referenced
+row has a `name`, generated as `<relation>-<id>` where it has none; and every reference is written
+as that name rather than as the id. `before.4x` renders as those seven lines, asserted rather than
+claimed.
+
+**Keeping `id` is what makes the round trip exact.** An earlier rendering here dropped the id
+wherever a row had a name, which is what made minting look like a problem. It is not one: **the
+friendly format carries every id**, so foundation to friendly to foundation invents nothing.
+
+**A name is given only where something references the relation.** That rule is read off the
+example - the territories and the thing are named, the adjacencies and the residency are not, and
+those two are exactly the relations nothing points at. **A name on a row nothing references would
+be a value nothing reads**, which is the thing this prototype is meant not to have.
+
+## The one relation that cannot satisfy the constraint
+
+**`column`.** Forty-six rows, seventeen distinct names, **sixteen of them called `id`**. It shows
+up where it hurts:
+
+```text
+{binding id:1 clause:clause-1 column:id input:it}
+```
+
+`column:id` names sixteen rows, so it names none of them.
+
+**And it is not a renaming away.** `column.name` is not a name for the row - it is **the token a
+row is keyed by**: `{residency id:1 what:1 where:1}` is written with those three words because
+`residency`'s columns are called `id`, `what` and `where`. Change the name and every row of that
+relation is written differently.
+
+**So two different things are wearing the same column.** A *local* token, unique within its
+relation, and a *global* name, unique everywhere. `column.name` is the first and the constraint
+wants the second. **`input.name` is the same shape**: `it`, `what`, `from`, `to` are local to their
+rule, and a second rule with its own `to` would collide.
+
+**The fix is to tell them apart** - a column for the token a row is keyed by, and `name` reserved
+for the unique one - and that is Sean's to make rather than this directory's.
+
 ## The user-facing style, which is not part of the engine
 
 **Sean, 2026-09-15**: *I don't consider the translation between user friendly format and
