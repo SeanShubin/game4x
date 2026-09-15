@@ -173,6 +173,72 @@ checked** rather than here.
 `orbit` are among them, so the release models a place as a kind like any other - which is evidence
 against the split being a rule about kinds and for it being a rule about *roles in a relation*.
 
+## Where a composite key is needed, tried three ways
+
+**Sean, 2026-09-15**: *show me an example of where we need composite keys? And does this need
+manifest in the friendly notation, foundation notation, or both?*
+
+**One relation - a residency carrying a count - and each single-column key in turn:**
+
+| Key              | Rows that break it                            | Outcome                                 |
+| ---------------- | --------------------------------------------- | --------------------------------------- |
+| `what`           | scouts in three territories                   | refused: *two rows have `what` of `1`*  |
+| `where`          | one territory holding scouts **and** pioneers | refused: *two rows have `where` of `1`* |
+| a surrogate `id` | two rows for scouts in territory 1            | **accepted, and that is the defect**    |
+
+**Neither column can be the key alone**, and each fails on a world the game plainly has. The third
+is the one to look at:
+
+```text
+{residency id:1 what:1 where:1 count:2}
+{residency id:4 what:1 where:1 count:3}
+```
+
+**The structure accepted both.** Scouts in territory 1: 2, 3, or 5? Nothing can say. **The only
+complaint came from the rule, after the check had passed.**
+
+## Why quantities are what force it, and nothing before them did
+
+**The store is a set, and that did most of a key's work for free.** Two identical rows collapse -
+`Store::add` will not hold a fact twice. So before a count existed, a duplicate residency was
+*redundant* and the state it described was still unambiguous.
+
+**A count is exactly the column that breaks that.** Two rows differing only in their count are not
+identical, so the set does not collapse them, and they do not agree. **The ambiguity arrives with
+the quantity**, which is why this was not a defect worth fixing until now.
+
+## Foundation, and the friendly notation only inherits it
+
+**A key does two jobs here, and `src/` splits them:** uniqueness, in the structure check; and
+resolving a reference, in `has_key` and in the check that a reference points at a row.
+
+**For `residency` the second job is vacant** - nothing in the schema references a residency,
+verified rather than assumed. **So its key is purely a constraint and never an identifier.**
+
+**A constraint is a schema fact, and the schema is foundation data**, so that is where the need is:
+*first column wins* has to become something declared, which is rows rather than a rule in `src/`.
+
+**The friendly notation does not change where it would be expected to.**
+
+| Where                    | Does it change                                                         |
+| ------------------------ | ---------------------------------------------------------------------- |
+| a state row, `before.4x` | **no** - `{residency what:scout where:territory-1 count:2}` either way |
+| the schema, `schema.4x`  | yes, but only as rows, which it renders like any other                 |
+| the translator           | **it gets smaller**                                                    |
+
+**Smaller because the special case was already redundant.** The renderer leads with the key column
+and then writes the rest in declared order - and the key *is* the first column, so that is declared
+order written twice. **A composite key deletes the special case rather than complicating it.** And
+`Names` only generates a name for a relation something references, so a residency never had one to
+lose.
+
+**One caveat, and it is the thing to watch.** All of that holds *because nothing points at a
+residency*. **If anything ever needs to, the friendly notation needs a way to name a row whose key
+is two columns** - `scout@territory-1`, or whatever it would be - and that is real work on the
+friendly side. It does not arise today and would arrive the first time a rule needs to refer to a
+residency rather than match one.
+
+
 
 
 ## The answer
