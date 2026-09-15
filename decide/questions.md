@@ -140,6 +140,79 @@ move itself, and `move` becomes purely a change of place. **The cost is that it 
 turn's end rather than when you move**, so a unit moves on credit and is charged later - and a unit
 that moved into a place with no energy stops being ready rather than being refused.
 
+## The four, written whole, because the pieces read differently combined
+
+**The command is the same under all four.**
+
+```
+{move unit:transport from:1 to:2 metal:7 energy:2}
+```
+
+**`A` - a place change is a consume and a produce, whatever is moving. `move` pays.**
+
+| Recipe   | Owner  | Role    | Qty | Kind   | Traits                                        | Where   |
+| -------- | ------ | ------- | --- | ------ | --------------------------------------------- | ------- |
+| **move** | player | require | 1   | place  |                                               | `$from` |
+|          |        | require | 1   | place  | joined to `$from` by an edge the unit crosses | `$to`   |
+|          |        | consume | 1   | unit   | moving at least 1                             | `$from` |
+|          |        | produce | 1   | unit   | moving one less                               | `$to`   |
+|          |        | consume | 7   | metal  |                                               | `$from` |
+|          |        | produce | 7   | metal  |                                               | `$to`   |
+|          |        | consume | 1   | energy |                                               | `$from` |
+
+**`B` - `A`, and readiness is what costs rather than distance. RECOMMENDED.**
+
+| Recipe      | Owner  | Role    | Qty | Kind   | Traits                                        | Where   |
+| ----------- | ------ | ------- | --- | ------ | --------------------------------------------- | ------- |
+| **move**    | player | require | 1   | place  |                                               | `$from` |
+|             |        | require | 1   | place  | joined to `$from` by an edge the unit crosses | `$to`   |
+|             |        | consume | 1   | unit   | moving at least 1                             | `$from` |
+|             |        | produce | 1   | unit   | moving one less                               | `$to`   |
+|             |        | consume | 7   | metal  |                                               | `$from` |
+|             |        | produce | 7   | metal  |                                               | `$to`   |
+| **refresh** | world  | require | 1   | unit   |                                               |         |
+|             |        | consume | 1   | energy |                                               |         |
+|             |        | put     |     | unit   | moving at its maximum                         |         |
+
+**`C` - the unit is put and the cargo is not. Closest to today.**
+
+| Recipe   | Owner  | Role    | Qty | Kind   | Traits            | Where   |
+| -------- | ------ | ------- | --- | ------ | ----------------- | ------- |
+| **move** | player | require | 1   | unit   | moving at least 1 | `$from` |
+|          |        | put     |     | unit   | moving one less   | `$to`   |
+|          |        | consume | 7   | metal  |                   | `$from` |
+|          |        | produce | 7   | metal  |                   | `$to`   |
+|          |        | consume | 1   | energy |                   | `$from` |
+
+**`D` - a put may carry a quantity, and everything moving is put.**
+
+| Recipe   | Owner  | Role    | Qty | Kind   | Traits            | Where   |
+| -------- | ------ | ------- | --- | ------ | ----------------- | ------- |
+| **move** | player | require | 1   | unit   | moving at least 1 | `$from` |
+|          |        | put     | 1   | unit   | moving one less   | `$to`   |
+|          |        | put     | 7   | metal  |                   | `$to`   |
+|          |        | consume | 1   | energy |                   | `$from` |
+
+## What separates them, in one line each
+
+|         |                                                                                                                                             |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`A`** | a unit and a resource are the same kind of thing, which is what you said. Energy is still a toll on the move and nothing says who paid      |
+| **`B`** | the same, and the fuel is visibly what a vehicle burns to be ready. **`put` then never names a place**, which a tool can check              |
+| **`C`** | keeps `put` for the unit on a justification the release states and no row satisfies - zero of seventeen puts are on a kind carrying an `id` |
+| **`D`** | one row per thing moved, and it costs the sentence *a put has no quantity*, which is what currently tells a reader that a put makes nothing |
+
+## What `B` costs, said plainly
+
+**The charge lands at the turn's end rather than when you move.** A unit moves on credit; a unit
+that moved into a place with no energy **stops being ready** next turn rather than being refused
+this one. **That is a different game, not a different notation**, and it is the part of `B` that is
+yours rather than this lane's.
+
+**And it does not help with scale.** `consume 1 unit` moves one, so a hundred transports is still
+`repeat:100` under every option here. **Your hundred-transports observation is answered as a
+question about sameness and not as one about firing**, and the second is still open.
+
 ## What this lane would pick
 
 **`M1` and `E3`, and `M1` for a better reason than this lane first gave.** Not *`put` keeps identity
