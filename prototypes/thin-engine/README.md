@@ -356,13 +356,27 @@ whatever the input's `of` says, which is data rather than schema - so no `{refer
 describes it, and the translator follows the input itself. **A translator may know that; the engine
 may not.**
 
-## What is not done, and is the harder half
+## What is not done, and the size of it
 
-**This renders and does not parse.** Friendly to foundation has to mint ids, so it can only
-reproduce the original **up to renaming** - and the first test compares `actual` against
-`expected` including ids. If `expected.4x` were authored in the friendly style and translated, its
-ids need not match, and the comparison would have to be up to isomorphism rather than row for row.
-**That is a separate question from rendering and does not block it.**
+**This renders and does not parse.** An earlier version of this section said going back could only
+reproduce the original *up to renaming*, because ids would have to be minted. **Sean asked why
+minting could not simply be deterministic, and it can** - that was never the difficulty.
+
+**The narrower true statement**: the round trip is the identity only if the foundation's ids were
+assigned by the same rule the minting uses. That is a constraint on how ids are chosen, not an
+obstacle to translating.
+
+**And the exposure is smaller than it reads.** Of 212 rows with an id, **100 already carry it in
+the label** - `territory-1`, `binding-6`, `clause-3` - and need no minting at all. The other 112
+are almost all `column` (73) and `relation` (25): **the schema and the vocabulary, which are the
+stable parts.** The world state carries its own ids.
+
+**The one real cost is what a minting rule does to stability.** Ids derived from content stop being
+stable under an edit: insert a thing and, under a sorted rule, another thing's id moves - which
+matters as soon as anything outside the data cites one. **Three ways out, and which is right
+depends on whether the harness ever authors in the friendly style rather than only reading it**:
+mint deterministically and canonicalise the foundation once; have the friendly form carry every id;
+or never parse it back at all.
 
 ## The foundation style: every relation keyed by one opaque integer
 
