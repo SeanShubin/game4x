@@ -134,13 +134,45 @@ rows, and `remove` removes *every* match. **The release already has the shape th
 `releases/first-release.md` -> Recipes has a **Qty** column and the roles `consume` and `produce`
 beside `require` and `put`. **The prototype's three are a subset that predates quantities.**
 
-**Three things this does not settle, all Sean's:**
+## The three answers, 2026-09-15
 
-- **Whether a row at quantity zero stays or goes** - a territory the scouts have all left is either
-  a row saying zero or no row at all
-- **What `thing` becomes.** A category is what the release calls a **kind**, and places are the part
-  of this model that stay individuated - territory 5 is not territory 11
-- **Whether a quantity may be omitted when it is one**, which is invariant 1 asked of a number
+**A row at zero goes.** Sean: *Definitly goes, the model is a minimal expression of intent.*
+**That is invariant 1 said of the data rather than of the notation** - a row recording that no
+scouts are somewhere expresses no intent, so it is not written. A quantity reaching zero is a
+deletion and not a value.
+
+**A quantity of one is still written.** Sean: *my intuition is that it may not [be omitted], but
+that is not a hard requirement, it is my estimation of what will be forced upon us to keep the
+model and code simple.* **Marked soft by its author**, and it does not collide with invariant 1:
+one scout of five is not derivable from anything, so stating the one *is* the minimum.
+
+## Two sorts of input, which is what `thing` becomes
+
+**Sean, on what the split is for:** *Looking at this from the ability to specify inputs in commands.
+Territories are not fungable, they are unique by id and always have a count of 1, but scouts are
+fungable, don't have an id and may have a count greater than zero. Both kinds of things may need to
+be inputs. I may need to specify territory-2, or 3 scouts.*
+
+| Sort         | Identified by | Count     | Written       |
+| ------------ | ------------- | --------- | ------------- |
+| non-fungible | an id         | always 1  | `territory-2` |
+| fungible     | its category  | 0 or more | `3 scouts`    |
+
+**So an input is one of two things and the `input` relation says which today by accident.** `of`
+names a relation, which is enough to say *a territory*; it is not enough to say *three of the scout
+category*, because the count has nowhere to go. **That is the next thing the model needs and it is
+not built.**
+
+**A reading this lane offers rather than measures**: the split may be *places against contents*.
+A territory is never a `what` and always a `where`; a scout is never a `where`. If that holds it is
+one rule rather than two sorts - **but it is inference, and the release is where it would be
+checked** rather than here.
+
+**What the release does say, counted rather than recalled**: it declares **19 kinds**, and
+`reports/catalog.md` gives them **19 distinct signatures over 171 pairs**. Both `territory` and
+`orbit` are among them, so the release models a place as a kind like any other - which is evidence
+against the split being a rule about kinds and for it being a rule about *roles in a relation*.
+
 
 
 ## The answer
