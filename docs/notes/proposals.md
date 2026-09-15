@@ -69,6 +69,49 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-135 - The relational model has no rendering, and the person it was for cannot read it
+
+**to** code · **status** open · **cited** `87a8fc0` · **raised** 2026-09-14 · **source** Sean, on being shown `{line …}` rows: *I am less familiar with "line", "block", and "constraint". Are these data rows rather than commands?*
+
+**`P-497` normalized `spec/data/` on an argument about reviewing**, in Sean's own words: *I find
+normalized data a lot easier to review because it makes the relationships apparent and has less
+duplication.* **He approved the seven names and has now met the rows and could not place them.**
+
+**That is a defect in what this lane delivered rather than in his familiarity.** The relations
+exist, round-trip, and have a generator - and **nothing anywhere shows them as relations.**
+
+## What exists and what does not
+
+|                                            |                                                                                               |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| the source                                 | `spec/data/*.4x`, twelve files of `{…}` rows - reachable since `R-11` and readable as text    |
+| the release's presentation                 | `releases/first-release.md` -> Recipes, one wide markdown table with blank continuation cells |
+| **the relational model as a presentation** | **nothing**                                                                                   |
+
+**`P-506` named it `the relational model` and `reports/state.md` is the only thing wearing that
+name** - and that is the scenario's *result*, not the game's *rules*. **The rules have a source and a
+denormalized presentation and nothing in between.**
+
+## What would close it
+
+**One table per relation, generated from `spec/data/`**, the way `reports/state.md` is one table per
+relation over the state. Eight tables - `carries`, `member`, `limit`, `above`, `block`, `line`,
+`constraint`, `for` - with their row counts, reachable from `reports/index.html`.
+
+**This lane is not designing it** and would rather not: `reports/` is yours, `state.md` already
+solves the same problem for a different subject, and whatever you did there is what should happen
+here.
+
+## Why it is worth doing rather than waiting
+
+**Every storage question this week was settled by writing rows and looking at them**, and twice the
+notation showed something the release's table could not - `compare:one-less` cannot sit on a produce
+row, and the release's justification for `put` is true of none of its seventeen rows. **Both were
+found by a lane that reads `.4x` fluently.**
+
+**Sean has to read them too, and the item he is deciding right now is written in them.** `P-516`
+offers four alternatives as `{line …}` blocks, which is the form he asked for and cannot yet scan.
+
 ### S-134 - Twenty `.4x` files download instead of rendering, and `R-11` now says they must render
 
 **to** code · **status** **acted** 2026-09-14 · **cited** `3b210d8` · and the Content-Type this item marked inferred is now measured: `application/octet-stream` · **cited** `287e67f` · **raised** 2026-09-14 · **source** Sean, 2026-09-14: *`https://seanshubin.github.io/game4x/spec/data/above.4x` does not render, it attempts to download. I want to be able to view these pages from the website without downloading them*

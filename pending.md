@@ -31,8 +31,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (5)
+### To code (6)
 
+- **S-135** - The relational model has no rendering, and the person it was for cannot read it · `docs/notes/proposals.md`
 - **S-133** - The two follow-ons from pooling, which this lane owed you and did not file · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
