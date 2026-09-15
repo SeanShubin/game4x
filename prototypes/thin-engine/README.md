@@ -266,6 +266,93 @@ stated once and a fact stated twice. **A declared key restates the column list**
 means remembering to add a key row - and forgetting leaves a check that is green and wrong.
 **Declaring which column is the quantity cannot drift**: the key extends itself.
 
+## The quantity declaration, exactly
+
+**Sean asked this lane to be specific, and it had not been.** *One row per relation* named no row.
+Ids continue the game store's own numbering - relations end at 16, columns at 46, references at 19,
+primitives at 35.
+
+**One new relation, declared the way every other one is:**
+
+```text
+{relation id:17 name:quantity}
+
+{column id:47 relation:17 seq:1 name:id}
+{column id:48 relation:17 seq:2 name:relation}
+{column id:49 relation:17 seq:3 name:column}
+
+{reference id:20 column:48 to:1}
+{reference id:21 column:49 to:2}
+```
+
+**`residency` loses its surrogate id and gains a count**, reusing the three ids it already holds:
+
+```text
+{column id:44 relation:16 seq:1 name:what}
+{column id:45 relation:16 seq:2 name:where}
+{column id:46 relation:16 seq:3 name:count}
+
+{reference id:18 column:44 to:14}
+{reference id:19 column:45 to:13}
+```
+
+**And then the declaration itself, which is the whole of it - one row:**
+
+```text
+{quantity id:1 relation:16 column:46}
+```
+
+*The quantity of a `residency` is its `count` column.* **Its key is columns 44 and 45 and nothing
+says so**, which is the point: adding `fuel` as column 50 puts fuel in the key by existing.
+
+**In the friendly notation**, where the state row is what a person writes:
+
+```text
+{quantity id:1 relation:residency column:46}
+{residency what:scout where:territory-1 count:2}
+```
+
+## What changes in `src/`, and it is one word
+
+**`Relation::key` already says this is coming**: *a relation's key is its first column. Said in one
+place so that the day a compound key is needed, there is one thing to change and it is findable.*
+
+**The one thing splits into two**, because its two callers want different things:
+
+| Caller                                                   | Wants                                      |
+| -------------------------------------------------------- | ------------------------------------------ |
+| resolving a reference, and checking one points somewhere | **the identity** - still the first column  |
+| the structure check's uniqueness loop                    | **the key columns** - all but the quantity |
+
+So `Relation` carries the quantity column's name, the uniqueness loop counts a tuple rather than a
+value, and `TwoWithOneKey` widens to say which tuple. **A relation with no quantity is unchanged**,
+which is fifteen of the sixteen.
+
+**The engine learns one word.** `const QUANTITY: &str = "quantity";` in `src/schema.rs`, and
+`{primitive id:36 word:quantity}` in `data/engine.4x` - **and `tests/engine.rs` fails if either
+exists without the other**, reading the constants out of `src/` rather than from a list. **`count`
+never reaches `src/` at all**: the engine learns *that* a relation has a quantity and the data says
+*which column*, which is the line this prototype exists to keep.
+
+## Why `column:46` is an id here, and why that is right rather than a wart
+
+**The friendly row reads `column:46` and not `column:count`**, because `column` is the one relation
+whose names cannot be unique - sixteen of them are called `id` - so every reference to a column is
+an id. Sean settled that already: *binding and column are machinery.*
+
+**And there is a rule underneath it worth keeping.** A relation that something points at needs a
+single value to be pointed at by; a relation nothing points at does not.
+
+| Relation    | Pointed at by                      | Key                      |
+| ----------- | ---------------------------------- | ------------------------ |
+| `column`    | `binding`, `reference`, `quantity` | a surrogate `id`         |
+| `residency` | nothing                            | `(what, where)`, by rule |
+
+**So `residency` drops its id for the same reason `column` keeps one.** That also answers the
+caveat above from the other side: the day something needs to point at a residency, it needs a single
+value to point at, and the composite key is what it would have to give up.
+
+
 **And the same sentence settles two of the three earlier answers, which this lane had recorded as
 Sean's rather than as the specification's:**
 
