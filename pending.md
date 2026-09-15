@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-519** - One clause is stated twice in `spec/console.md`, and the invariants forbid exactly that · `decide/proposals.md`
 - **P-518** - `{name field:value ...}` does not say whether the fields may be none, and seven forms are · `decide/proposals.md`
 - **P-515** - Publish the shape of the error, not only the correction · `decide/proposals.md`
 - **P-514** - Three rows of `spec/data/line.4x` are unwritable, and this lane's own check said there was one · `decide/proposals.md`

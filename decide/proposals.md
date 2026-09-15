@@ -11,9 +11,60 @@ of it needs you.
 
 ## Open
 
-### P-518 - `{name field:value ...}` does not say whether the fields may be none, and seven forms are
+### P-519 - One clause is stated twice in `spec/console.md`, and the invariants forbid exactly that
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**The same clause is written by hand in two sections of one file.** Found while checking a
+quotation the code lane sent in `C-128`, by grepping for the sentence and getting two hits.
+
+```
+spec/console.md:63   **A command is named for the recipe it fires**, and there is one command
+                     for each recipe the player may fire.
+spec/console.md:183  **There is one command for each recipe the player may fire**, and ending
+                     a turn fires the world's.
+```
+
+**Verbatim, two sections apart** - `The language` and `Commands` - and bolded in one of them.
+Neither is derived from the other, so either could be edited without the other noticing.
+
+## The rule it breaks is the specification's own
+
+`spec/invariants.md` -> A fact is stated once: *a second form kept for a reader is generated, and a
+check says the two agree*, and **the shorter specification is the one that says each thing once, so
+removing the second form is better than checking it.*
+
+**No check could be written here anyway**, because neither form is generated. Removing one is the
+only version of the rule available.
+
+## Which one goes is measured rather than chosen
+
+**The `Commands` copy is load-bearing and the other is a trailing clause.** The paragraph directly
+under line 183 opens *The commands are therefore not a list this document keeps* - a `therefore`
+that reaches back to the clause above it. **Nothing leans on the copy at line 63**; it rides on a
+sentence whose subject is how a command is named.
+
+**And a second reader already depends on line 183.** `C-128` quotes it, to say that `owner:world`
+against `owner:player` is exactly the command-or-turn division - 26 blocks against 10, re-derived
+here from `spec/data/block.4x`. **Deleting the other copy leaves that citation standing.**
+
+## What lands
+
+Lines 63 and 64 become one sentence:
+
+> **A command is named for the recipe it fires.**
+
+## What it costs
+
+**A reader of `The language` alone loses the count.** That section defines the notation and
+`Commands` says what the commands are; the clause is a fact about the second. **If you would rather
+the language section keep it, the deletion goes the other way** - and then `C-128`'s citation wants
+telling.
+
+**Nothing about the game changes**, and no generated file reads either line.
+### P-518 - `{name field:value ...}` does not say whether the fields may be none, and seven forms are
+
+**to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `spec/console.md` -> Commands
 
 **One clause, on a case the committed scenario runs fourteen times.**
 
