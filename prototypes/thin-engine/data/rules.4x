@@ -2,11 +2,16 @@
 
 {rule name:move}
 
-# **`{territory id:...}` is stated above and read by nothing.** `move` needs an `adjacent` row,
-# so *not adjacent* and *no such place* refuse identically. Distinguishing them is the next
-# concept, not a defect - see `README.md`.
+# **The order of `needs` rows is the order they are checked**, so it chooses which refusal a
+# reader sees. Destination-is-a-place before destination-is-adjacent, because *there is no
+# territory 9* is a better answer than *1 is not next to 9* when both are true.
 {needs rule:move relation:at thing:$it place:$from}
+{needs rule:move relation:territory id:$to}
 {needs rule:move relation:adjacent from:$from to:$to}
+
+# **`$from` needs no `territory` row of its own.** `{at thing:$it place:$from}` above already
+# says something is there, and a place holding a thing is a place. A second clause would be a
+# row that can never be the one to fail.
 
 {drops rule:move relation:at thing:$it place:$from}
 {adds rule:move relation:at thing:$it place:$to}

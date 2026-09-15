@@ -25,9 +25,9 @@ code. Measured on 2026-09-14:
 | ------------------------------------------- | ------------------------------------------------------------ |
 | Code that runs, in `src/`                   | **232 lines** - notation 77, store 65, engine 87, `lib.rs` 3 |
 | The same engine in `crates/game-model/src/` | **1662 lines**, of which `rules.rs` is 636                   |
-| Rows of data                                | **11** - six of world, five of rule                          |
+| Rows of data                                | **12** - six of world, six of rule                           |
 | Game nouns in code that runs                | **0**, checked against a list read out of `data/`            |
-| Tests                                       | **15**, all passing                                          |
+| Tests                                       | **16**, all passing                                          |
 
 **The two numbers are not comparable and the table says so by being read carefully.** 232 lines run
 one mechanic and 1662 run twenty-six, so the honest reading is not *seven times smaller*. It is
@@ -56,7 +56,7 @@ whose failure is a `Rejection` variant; here a refusal is *the world does not ha
 back to the caller as the row itself. `{adjacent from:1 to:3}` **is** the error message. Every
 refusal this engine has is one of five, none of them about the game.
 
-## The two tests, which are the whole of it
+## The three tests of the game, which are the whole of it
 
 Three territories, two adjacencies, one vehicle - `data/world.4x`. One rule - `data/rules.4x`.
 
@@ -64,6 +64,9 @@ Three territories, two adjacencies, one vehicle - `data/world.4x`. One rule - `d
   scout is at 2 and nowhere else
 - `the_scout_does_not_move_to_a_place_that_is_not_adjacent` - `{move it:scout from:1 to:3}` is
   refused, naming `{adjacent from:1 to:3}`
+- `a_place_that_does_not_exist_and_a_place_that_is_not_adjacent_refuse_differently` -
+  `{move it:scout from:1 to:9}` is refused naming `{territory id:9}`, and the test asserts the two
+  refusals differ rather than only asserting the words of each
 
 **No resources, no turns, no capacity, no combat**, because neither test needs one. Every absence
 below is a concept not yet added rather than a thing left undone.
@@ -87,10 +90,11 @@ The isolation is checked rather than promised, by `tests/moving.rs`:
 
 ## The three things that look like defects and are the design
 
-**Territories are stated and read by nothing.** `{territory id:1}` is in `data/world.4x` and no
-rule mentions it, so *not adjacent* and *no such place* refuse identically - moving to territory 9
-gives the same error as moving to 3. **That is the first concept to add**, and it is first because
-it is the smallest one that needs the engine to check a row it was not handed.
+**Which refusal a reader sees is chosen by the order of rows in a data file.** `move` needs three
+things and `data/rules.4x` states the destination-is-a-place clause before the adjacency one, so
+moving to 9 says *there is no territory 9* rather than *1 is not next to 9*, and both are true.
+**The message is the data's to choose and not the engine's**, which is the same property as a
+refusal being a row: the engine has nothing to say about `move` and so cannot rank its reasons.
 
 **Adjacency is one-directional.** `{adjacent from:1 to:2}` does not let the scout go back. Making
 it symmetric is either a second row per pair, which the data can do today, or a property of a
@@ -102,19 +106,39 @@ hole that matched anything would have to answer *which one, when several match*,
 question a query language exists to answer. The day a rule needs one it arrives as a concept with
 a name.
 
+## The concepts added since, and what each cost
+
+**The cost of a concept is lines of `src/`**, measured the same way every time: lines that are
+neither blank nor `//`, taken before `#[cfg(test)]`, summed over the four modules. The baseline is
+the 232 in the table above.
+
+## 1. A place must exist - `src/` did not change
+
+**Cost: zero lines.** `{territory id:1}` had been stated and read by nothing; one `needs` row
+began reading it:
+
+```text
+{needs rule:move relation:territory id:$to}
+```
+
+**This is weaker evidence than it looks and the difference is worth stating.** A clause is not a
+mechanic. What this shows is that the engine could already check a row the command did not hand
+it - the machinery for *no such place* was the machinery for *not adjacent*, and the only thing
+missing was a row saying so. **The claim that `src/` does not grow when a mechanic is added is
+still untested**, because no mechanic has been added yet. That is concept 2.
+
 ## What comes next, in order
 
 Each is one concept, and each has a test that fails before it:
 
-1. **A place must exist** - distinguishes *not adjacent* from *no such place*
-2. **A second rule** - the first real test of whether the engine grows when the game does; the
+1. **A second rule** - the first real test of whether the engine grows when the game does; the
    claim in the table above is unproven until a rule is added and `src/` does not change
-3. **A number** - everything is a string today, and the first rule that counts anything forces
+2. **A number** - everything is a string today, and the first rule that counts anything forces
    the question `src/notation.rs` records as deliberately open
-4. **A turn** - rules that fire without a command, which is where `block.4x`'s firing order lives
+3. **A turn** - rules that fire without a command, which is where `block.4x`'s firing order lives
    in the main tree and lives nowhere here
 
-**Concepts 2 and 3 are where this is most likely to fail**, and saying so now is the point of
+**Both of the first two are where this is most likely to fail**, and saying so now is the point of
 writing the order down: if the engine has to grow to take a second rule, the answer above is worth
 less than it reads.
 
