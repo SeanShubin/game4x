@@ -507,6 +507,25 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
         PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../crates/game-model/src/game.rs"),
     )
     .expect("the model");
+    // **`split_once` takes the first occurrence, and a comment naming the module is the same
+    // bytes as the module.** `CLAUDE.md` already has the rule - an anchor that matches twice is
+    // refused rather than silently taking the first - and this had no guard.
+    //
+    // **What this guards is a rearrangement, and not a defect that exists today.** Measured,
+    // because the first draft of this comment claimed otherwise: planting a second
+    // `pub mod cost` in a comment near the top of `game.rs` and removing this assertion leaves
+    // the test passing and correct. There is no closing brace at column zero above line 22, so
+    // the slice taken from the earlier match still contains the whole module. The hazard needs
+    // the module to move below some other closing brace first.
+    //
+    // So this is right by construction rather than right by luck, which is the whole of what
+    // it buys. Written after re-deriving a count of this failure class; nothing had failed.
+    let occurrences = model.matches("pub mod cost").count();
+    assert_eq!(
+        occurrences, 1,
+        "`pub mod cost` appears {occurrences} times in `game.rs`, so the slice below would \
+         guess which one is the module"
+    );
     let module = model
         .split_once("pub mod cost")
         .expect("the model has a `cost` module")
