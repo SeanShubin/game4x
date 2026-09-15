@@ -15,3 +15,21 @@
 
 {drops rule:move relation:at thing:$it place:$from}
 {adds rule:move relation:at thing:$it place:$to}
+
+# The second rule, and the one that tested whether the engine grows when the game does.
+
+{rule name:found}
+
+# **The founder is here, the place is a place, and the place is free.** The third of these is a
+# negative - *there is not already a settlement here* - and `needs` can only say *this row is
+# true*. So the world states `{vacant place:N}` and this reads it, which is the absence written
+# as a fact. Stated without it, the second founding at a place succeeded silently and added a
+# second settlement; that is the run this row exists because of.
+{needs rule:found relation:at thing:$it place:$where}
+{needs rule:found relation:territory id:$where}
+{needs rule:found relation:vacant place:$where}
+
+# **Dropping `vacant` is what makes it true only once.** A rule that needs a row and does not drop
+# it is a rule that can fire for ever.
+{drops rule:found relation:vacant place:$where}
+{adds rule:found relation:settlement place:$where owner:$it}

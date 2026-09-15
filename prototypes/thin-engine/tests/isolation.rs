@@ -122,10 +122,13 @@ fn no_relation_the_data_names_appears_in_code_that_runs() {
             "`{engine}` is not a relation the data names"
         );
     }
+    // **The count is written down and changes when the game does**, which is the point rather
+    // than a maintenance cost: a concept that adds vocabulary fails this line and somebody has
+    // to look at what it added. It fired on `found`, `settlement` and `vacant` together.
     assert_eq!(
         nouns.len(),
-        4,
-        "four nouns the game has - at, adjacent, territory, move; this found {nouns:?}"
+        7,
+        "seven nouns the game has - at, adjacent, territory, move, found, settlement, vacant;          this found {nouns:?}"
     );
 
     let mut looked = 0;
@@ -155,5 +158,5 @@ fn no_relation_the_data_names_appears_in_code_that_runs() {
             looked += 1;
         }
     }
-    assert_eq!(looked, 16, "four nouns over four modules");
+    assert_eq!(looked, 28, "seven nouns over four modules");
 }

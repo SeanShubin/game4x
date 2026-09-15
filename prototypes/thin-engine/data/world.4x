@@ -1,4 +1,4 @@
-# The world: three territories, two adjacencies, one vehicle.
+# The world: three territories, two adjacencies, two vehicles.
 
 {territory id:1}
 {territory id:2}
@@ -12,3 +12,15 @@
 {adjacent from:2 to:3}
 
 {at thing:scout place:1}
+{at thing:pioneer place:1}
+
+# **A place with no settlement says so, because the engine has no word for *not*.** `found` needs
+# a settlement not to be here already, and the only shape a `needs` clause has is *this row is
+# true*. So the absence is written as a fact and `found` drops it - see `data/rules.4x`.
+#
+# **This is a row per territory and that is the cost**, paid in data rather than in code. A world
+# of ten thousand territories states ten thousand of these, and the day that matters is the day
+# the engine needs a word the data cannot stand in for.
+{vacant place:1}
+{vacant place:2}
+{vacant place:3}

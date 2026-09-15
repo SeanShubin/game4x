@@ -17,10 +17,14 @@ fn the_scout_moves_to_a_place_that_is_adjacent() {
     let after = run(&world(), &rules(), &command("{move it:scout from:1 to:2}"))
         .expect("1 is adjacent to 2 and the scout is at 1");
 
+    // **Where the scout is, and not where everything is.** Written the second way first, and a
+    // second vehicle in `data/world.4x` failed it - the assertion said *the scout is at 2 and
+    // nowhere else* and checked *the world contains exactly this one `at` row*, which is a
+    // narrower question than the one the sentence asks. `CLAUDE.md` names the class.
     let at: Vec<String> = after
         .rows()
         .iter()
-        .filter(|row| row.relation == "at")
+        .filter(|row| row.relation == "at" && row.value("thing") == Some("scout"))
         .map(write)
         .collect();
     assert_eq!(
