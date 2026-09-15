@@ -12,6 +12,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **P-514** - Three rows of `spec/data/line.4x` are unwritable, and this lane's own check said there was one · `decide/proposals.md`
 - **P-513** - A relation names its columns, and nothing says so · `decide/proposals.md`
 - **P-512** - *Where things are* still says a tank holds fuel, and one row of it changes the game · `decide/proposals.md`
+- **P-517** - `spec/data/` states the cases, and the rules are what you wanted to read · `decide/questions.md`
 - **P-516** - Moving resources: put or consume-and-produce, and how the fuel says who burnt it · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`

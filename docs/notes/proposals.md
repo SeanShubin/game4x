@@ -77,8 +77,15 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 normalized data a lot easier to review because it makes the relationships apparent and has less
 duplication.* **He approved the seven names and has now met the rows and could not place them.**
 
-**That is a defect in what this lane delivered rather than in his familiarity.** The relations
-exist, round-trip, and have a generator - and **nothing anywhere shows them as relations.**
+**This item first called that a defect in what this lane delivered. It is half of one.** Sean, on
+being told so: *I am actually not sure whose fault this is, I know full well I asked for relational.*
+**Measured since, in `P-517`: fifteen of the thirty-six blocks are four rules written out as their
+cases**, and the release was already that way before `spec/data/` existed.
+
+**So there are two things and only one of them is a missing rendering.** The relations exist,
+round-trip, and have a generator, and **nothing anywhere shows them as relations** - that is this
+lane's and it is what this item asks for. **The other is that the thing being shown is the unfolded
+form**, which is `P-517` and is the release's.
 
 ## What exists and what does not
 

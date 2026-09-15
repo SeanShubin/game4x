@@ -11,6 +11,75 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
+### P-517 - `spec/data/` states the cases, and the rules are what you wanted to read
+
+**to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `spec/data/`, and `C-114`
+
+**Neither of your first two, and it is measurable rather than a matter of blame.** Normalizing did
+not make this complexity. **It removed the layout that was hiding it.**
+
+## What the data actually holds
+
+```
+{block id:refresh-citizen-bearing    recipe:refresh owner:world}
+{block id:refresh-citizen-defending  recipe:refresh owner:world}
+{block id:refresh-citizen-laboring   recipe:refresh owner:world}
+{block id:refresh-extractor-working  recipe:refresh owner:world}
+{block id:refresh-unit-defending     recipe:refresh owner:world}
+{block id:refresh-unit-moving        recipe:refresh owner:world}
+```
+
+**Six blocks, identical in every respect but a `(kind, trait)` pair.** They are one rule - *put that
+count back at its maximum* - written out six times.
+
+| Recipe      | Blocks | Differing only in |
+| ----------- | ------ | ----------------- |
+| **refresh** | 6      | `(kind, trait)`   |
+| **discard** | 5      | `kind`            |
+| **stow**    | 2      | `kind`            |
+| **renew**   | 2      | `(kind, trait)`   |
+
+**Fifteen blocks of thirty-six are four rules and their cases.** The other twenty-one are each the
+only one of their name.
+
+## And the repository already has the word for it
+
+`docs/designing-rules.md`, about `reports/nogain.md`: **a family becomes its members, a density
+becomes its cases.** That describes the unfolding `nogain` does **in order to check**, which means
+the folded form is the one it thinks of as the rules. **The data is the unfolded form.**
+
+## Why this is not `P-497`'s doing and not yours
+
+**The release was already unfolded.** `releases/first-release.md` -> Recipes has six `refresh`
+blocks and five `discard` blocks, and has had since long before `spec/data/` existed. **`P-497`
+transcribed faithfully, which is what a migration should do.**
+
+**What changed is that the layout stopped hiding it.** In the markdown table the six `refresh` blocks
+are six rows among ninety-two, separated by blank continuation cells, and read as one paragraph of a
+long table. **As rows they are six things with six names, and six is a number you can see.**
+
+**So the complexity was always there and was always the release's.** You asked for relational; what
+arrived is relational and correct; **and the first thing it showed you is a thing worth knowing.**
+
+## The decision
+
+**`F1` - state the rules and let the reader unfold.** One `refresh` block with six cases, one
+`discard` with five. **Thirty-six blocks become twenty-five**, and `block` stops needing a written id
+for the twenty-one that are the only one of their name.
+
+**`F2` - state the cases, as now.** Every block stands alone and nothing has to be unfolded to be
+read. **The cost is that `refresh` is six things and a reader must notice they are one.**
+
+## What this lane would say, and it is less a recommendation than a connection
+
+**`F1` is `C-114`'s engine argued from the data side.** Your own words there: *if the data itself
+explodes in complexity, that tells us something needs to be unified.* **Fifteen blocks that are four
+rules is that reading, taken off the instrument you asked for.**
+
+**But folding requires the engine to unfold**, and nothing reads these files at run time yet. **So
+`F1` is not a change to `spec/data/` that stands on its own** - it is the first half of the
+restructuring you have not decided, and this lane would rather name that than smuggle it in as
+tidying.
 ### P-516 - Moving resources: put or consume-and-produce, and how the fuel says who burnt it
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** invented · **shape** an instruction · **asks** a decision · **into** `releases/first-release.md` -> Recipes, and `spec/console.md` if the notation moves
