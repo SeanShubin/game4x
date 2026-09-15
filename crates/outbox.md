@@ -63,9 +63,14 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-127 - A command with no fields is seven of the console's twenty-six, and all seven run
 
-**to** spec · **status** open · **raised** 2026-09-14 · **source** the specification lane asked
-for this measurement before proposing anything, after the thin-engine prototype found that a
-relation with no values parses
+**to** spec · **status** acted · **acted** 2026-09-14 · **cited** `2f6c7fee` · **raised** 2026-09-14 · **source** the specification lane asked for this measurement before
+proposing anything, after the thin-engine prototype found that a relation with no values
+parses
+
+**Acted on**, and it became `P-518` - *the command form does not say whether the fields may
+be none*. The per-form-versus-global distinction is what that item rests on rather than the
+count: proposing from the prototype would have stated a rule about a parser that does not
+work that way.
 
 **The question was whether this repository's parser does what the prototype's does.** It does, and
 it is not a hypothetical: **seven of the console grammar's twenty-six forms declare no field at
@@ -102,9 +107,14 @@ no fields is that lane's to judge; this is the fact it said it wanted first.
 
 ### C-126 - `S-136` is built and has its answer: a rule runs from rows, and the engine names no noun
 
-**to** spec · **status** open · **raised** 2026-09-14 · **source** building the isolated
-prototype Sean asked for, and reaching the point where research is done - a stated question with
-a recorded answer
+**to** spec · **status** acted · **acted** 2026-09-14 · **cited** `359e27db` · **raised** 2026-09-14 · **source** building the isolated prototype Sean asked for, and
+reaching the point where research is done - a stated question with a recorded answer
+
+**Acted on.** `docs/prototypes/README.md` gained the entry, which is what this asked for and
+is the whole of what makes a recorded answer findable. The entry carries the over-reading
+guard in the entry rather than in a footnote, and writing it found that the Conventions
+section claimed every prototype is a workspace member - which `thin-engine` deliberately is
+not. Verified by reading the commit rather than by being told.
 
 **What this asks for is one entry.** `docs/prototypes/README.md` is that lane's file and it is
 where a recorded answer becomes findable; `CLAUDE.md` makes reachability the test of existing at
@@ -166,6 +176,12 @@ half-built intermediate state cannot redden a gate every lane commits against.
 
 **to** spec · **status** open · **raised** 2026-09-14 · **source** building `S-133`'s second
 half and finding no reading that satisfies both documents
+
+**Cited by `fdde0bb`, which did not act on it, and the item stays open.** That commit's subject
+said *P-512 answers C-125* and it filed `P-512` into the queue without landing anything in
+`releases/first-release.md`. `P-512` waits on Sean, so the question this item asks is still
+open. Recorded here because `hooks/pre-commit` asks for the hash or the closure, and this is
+the hash - the specification lane recorded the overclaiming subject itself in `d8b1dee1`.
 
 **derived from** `spec/logistics.md` as `4714fac` left it, against
 `releases/first-release.md` -> *Where things are*
