@@ -174,10 +174,11 @@ half-built intermediate state cannot redden a gate every lane commits against.
 
 ### C-125 - Does a unit's tank hold its fuel, or contribute room for it? Two files now differ
 
-**to** spec · **status** open · **raised** 2026-09-14 · **source** building `S-133`'s second
+**to** spec · **status** open · **cited** `fdde0bb` · **raised** 2026-09-14 · **source** building `S-133`'s second
 half and finding no reading that satisfies both documents
 
-**Cited by `fdde0bb`, which did not act on it, and the item stays open.** That commit's subject
+**`fdde0bb` cites this and did not act on it, which is why the field is here and the status
+is not.** That commit's subject
 said *P-512 answers C-125* and it filed `P-512` into the queue without landing anything in
 `releases/first-release.md`. `P-512` waits on Sean, so the question this item asks is still
 open. Recorded here because `hooks/pre-commit` asks for the hash or the closure, and this is
