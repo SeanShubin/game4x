@@ -61,7 +61,47 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-131 - Two kinds carry an `id` and nothing else can say it is one of a kind
+
+**to** spec · **status** open · **raised** 2026-09-15 · **source** Sean, on a whole-state dump: *That
+a territory has capacity of 1 for those things is not structurally true like something with an id
+is. It just happens to be true based on the data.*
+
+**derived from** `spec/data/carries.4x`, and `scenario/expected/play.4x` as generated
+
+**Sean's line is what makes this a gap rather than a preference.** A `-> 1` that could be `-> 2`
+under other data has to be written; one that can never be anything else is noise. **So the notation
+needs to know which entries are structurally one**, and `spec/data/` can say that about two kinds.
+
+**`trait:id` is carried by `territory` and `orbit`, and by nothing else** - the whole of the declared
+identity in the game's model. Measured over the committed dump:
+
+| Entries (less the root)                      | 113    |
+| -------------------------------------------- | ------ |
+| structurally identified, by carrying an `id` | **24** |
+| not, so the quantity must be written         | **89** |
+| of those, writing `-> 1`                     | **79** |
+
+**Two of them look identified and are not declared so.** An `adjacency` is a fact about a pair - 30
+entries, `from` and `to`, never twice - and a `deposit` is one per territory per resource - 34
+entries. **64 of the 79 are those two.** Nothing in `spec/data/` says either pair is a key, and
+**there is no way to say it**: `carries` names a kind's traits and no relation names a key.
+
+**This lane read those two as identified off the data and was wrong to**, which is the error Sean's
+sentence forbids, made while applying it. The first count reported here was 88 of 114 and it is 24
+of 113.
+
+**Three things this does not do.** It does not say `adjacency` and `deposit` *should* be identified -
+that is a reading of the rules, not of the dump. It does not propose a notation for a key. And it
+does not touch `garrison` and `yard`, which Sean has settled: **capacity 1 is contingent, so their
+`-> 1` stays.**
+
+**`P-513` is not this.** That fixes the order a relation's columns are written in; this is about
+whether a relation says which of them identify a row. **`C-90` is not this either** - it closed on a
+description being ambiguous about contents, not on identity being undeclared.
+
 ### C-130 - `R-8` says eighteen kinds and 153 pairs; the report it rests on says 19 and 171
+
 
 **to** spec · **status** open · **raised** 2026-09-15 · **source** this lane, counting the release's
 Kinds table while answering a question about fungibility
