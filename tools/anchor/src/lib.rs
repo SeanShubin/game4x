@@ -116,6 +116,110 @@ pub fn replace(
     Ok(out)
 }
 
+/// Several edits, from one file, applied in order.
+///
+/// **`C-129`. The carrier lost to the failure it prevents, because it was harder to use.** An edit
+/// in three parts needed six files and three invocations of `replace`; a throwaway script doing
+/// `str.replace` needed one file and one command. So the script won every time, and every failure
+/// it is a carrier for came back - an anchor drafted against a file a formatter had since reflowed,
+/// a regex assembled inside a shell string, a replacement that silently matched nothing.
+///
+/// **This makes the right thing the smaller thing**: one file, one command, however many edits.
+///
+/// # The format
+///
+/// **The first line is the marker**, chosen by whoever writes the file, and every section after it
+/// begins `<marker> anchor` or `<marker> replace`. A marker is chosen rather than fixed so that
+/// text containing one can still be edited - the same reason a heredoc takes a word.
+///
+/// ```text
+/// @@
+/// @@ anchor
+/// the words to find
+/// @@ replace
+/// the words to put there
+/// @@ anchor
+/// ...
+/// ```
+///
+/// **Each edit is applied to the result of the one before**, so an anchor may name text an earlier
+/// edit wrote. Every refusal [`find`] makes applies to each in turn, and the index says which.
+pub fn edits(text: &str, spec: &str, strip: Option<&str>) -> Result<String, Refused> {
+    let mut lines = spec.lines();
+    let marker = lines.next().unwrap_or_default().trim();
+    if marker.is_empty() {
+        return Err(Refused {
+            at: 0,
+            why: Problem::EmptyAnchor,
+            what: "the first line of the edits names the marker and is empty".to_string(),
+        });
+    }
+
+    // Sections, in order, each a heading and the lines under it.
+    let anchor_at = format!("{marker} anchor");
+    let replace_at = format!("{marker} replace");
+    let mut sections: Vec<(bool, Vec<&str>)> = Vec::new();
+    for line in lines {
+        if line.trim_end() == anchor_at {
+            sections.push((true, Vec::new()));
+        } else if line.trim_end() == replace_at {
+            sections.push((false, Vec::new()));
+        } else if let Some((_, body)) = sections.last_mut() {
+            body.push(line);
+        }
+    }
+
+    if sections.is_empty() || !sections.len().is_multiple_of(2) {
+        return Err(Refused {
+            at: 0,
+            why: Problem::NotFound,
+            what: format!(
+                "{} sections, and an edit is an `{anchor_at}` followed by a `{replace_at}`",
+                sections.len()
+            ),
+        });
+    }
+
+    let mut out = text.to_string();
+    for (at, pair) in sections.chunks(2).enumerate() {
+        let (is_anchor, anchor) = &pair[0];
+        let (is_replace, with) = &pair[1];
+        if !is_anchor || *is_replace {
+            return Err(Refused {
+                at: at + 1,
+                why: Problem::NotFound,
+                what: format!("edit {} is not an anchor followed by a replacement", at + 1),
+            });
+        }
+        let anchor = anchor.join("\n");
+        let with = with.join("\n");
+        out = replace(&out, &anchor, &with, strip).map_err(|why| Refused {
+            at: at + 1,
+            what: format!("edit {}: {}", at + 1, collapse(&anchor)),
+            why,
+        })?;
+    }
+    Ok(out)
+}
+
+/// Which edit was refused, and why.
+///
+/// **The index is the point.** A batch that says only *the anchor is not in the file* leaves
+/// whoever wrote it to find which of six edits meant it, which is the cost that sent them back to
+/// the script in the first place.
+#[derive(Debug, PartialEq, Eq)]
+pub struct Refused {
+    pub at: usize,
+    pub why: Problem,
+    pub what: String,
+}
+
+impl std::fmt::Display for Refused {
+    fn fmt(&self, out: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(out, "{}: {}", self.what, self.why)
+    }
+}
+
 /// Why an edit was refused. **Every one of these is a failure**, including finding nothing.
 #[derive(Debug, PartialEq, Eq)]
 pub enum Problem {

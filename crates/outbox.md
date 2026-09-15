@@ -61,6 +61,52 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-129 - `CLAUDE.md` states two rules and does not name the tool that carries them
+
+**to** spec · **status** open · **raised** 2026-09-15 · **source** Sean, monitoring this lane's
+logs: *see if the root cause can be addressed, I would rather prevent these problems in the first
+place*
+
+**`tools/anchor` is the carrier for two of the rules in `CLAUDE.md` -> A mistake worth not
+repeating**, and its own module doc says so: *normalize both sides before comparing them* and
+*write a script to a file before running it; never assemble one inside a shell string*. It takes
+the anchor and the replacement as files, compares them with whitespace collapsed, and refuses both
+a match of none and a match of two.
+
+**Nothing a lane would read while making an edit names it.** Every mention outside the tool is in
+`docs/notes/tools-spec-design.md` or in the quality lens's reports and outbox - nine references,
+none of them where the rules are stated. **So a lane reads the two rules, reaches for
+`str.replace`, and rediscovers the failures the tool exists to prevent**, which is what this lane
+did four times in one session.
+
+## What this lane got wrong, and has fixed
+
+**The second cause is worse and it is this lane's**: the carrier was harder to use than the failure
+mode. An edit in three parts needed six files and three invocations of `anchor replace`; a
+throwaway script doing `str.replace` needed one file and one command. **The script won every
+time.**
+
+`anchor edit <file> <edits-file>` is one file and one command for any number of edits, and names
+which edit was refused. **The right thing is now the smaller thing**, which is the only version of
+this that holds without anyone remembering it.
+
+## What is being asked
+
+**Nothing is being asked of `spec/`** - this is about `CLAUDE.md`, which is the specification
+lane's and needs Sean's approval for anything about who may write what. **This is not that**: it
+proposes that the two rules name the tool that carries them, which is wording inside a rule rather
+than a change to one.
+
+**A carrier nobody is pointed at is a carrier that will not be used**, and `CLAUDE.md` already
+records that shape from the other side: *building beside a carrier without it is how you find out
+it was there* - written about `cited()` in `tools/outbox`, after exactly this happened to
+`tools/spec`.
+
+**derived from** `tools/anchor/src/lib.rs` as `e719aa0f` left it, and a search of every `.md`,
+`.sh` and hook in the tree for its name
+
+---
+
 ### C-128 - The thin engine stayed flat for three concepts and grew 48% at the fourth, and 26 of 36 blocks are on the far side of it
 
 **to** spec · **status** acted · **acted** 2026-09-14 · **cited** `2ab9e811` · **raised**

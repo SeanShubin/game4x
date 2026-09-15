@@ -339,6 +339,16 @@ example - the territories and the thing are named, the adjacencies and the resid
 those two are exactly the relations nothing points at. **A name on a row nothing references would
 be a value nothing reads**, which is the thing this prototype is meant not to have.
 
+## Editing this directory, and the tool that exists for it
+
+**Every scripted edit here goes through `tools/anchor`**, and the reason is recorded in `C-129`:
+the carrier for *normalize both sides before comparing them* and *write a script to a file* lost to
+the failures it prevents, because a three-part edit needed six files and three invocations while a
+throwaway `str.replace` script needed one file and one command.
+
+**`anchor edit <file> <edits-file>` is one file and one command**, however many edits. It is now
+the smaller thing as well as the right one.
+
 ## Two directories, and friendly is the source
 
 **Sean, 2026-09-15**: *Lets make friendly the source and not omit anything. This presumes we can

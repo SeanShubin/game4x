@@ -5,6 +5,10 @@
 //! one level of quoting. Passing them as arguments would put the text back inside a shell
 //! string, which is the failure this is a carrier for.
 //!
+//! `anchor edit <file> <edits-file>` applies several of them from one file, which is the shape a
+//! real edit usually has - and the shape that used to send whoever was making it back to a
+//! throwaway script, taking every failure this prevents with them.
+//!
 //! `anchor find` does the same lookup and prints the byte range without changing anything,
 //! which is what to reach for when checking an anchor before trusting it.
 
@@ -67,10 +71,26 @@ fn main() -> ExitCode {
                 }
             }
         }
+        [command, file, edits_at] if *command == "edit" => {
+            let text = read(file);
+            match anchor::edits(&text, &read(edits_at), strip.as_deref()) {
+                Ok(after) => {
+                    std::fs::write(file, &after)
+                        .unwrap_or_else(|why| panic!("cannot write {file}: {why}"));
+                    println!("anchor: {file} rewritten");
+                    ExitCode::SUCCESS
+                }
+                Err(why) => {
+                    eprintln!("anchor: {file}: {why}");
+                    ExitCode::FAILURE
+                }
+            }
+        }
         _ => {
             eprintln!(
                 "anchor find <file> <anchor-file> [--strip <prefix>]\n\
-                 anchor replace <file> <anchor-file> <replacement-file> [--strip <prefix>]"
+                 anchor replace <file> <anchor-file> <replacement-file> [--strip <prefix>]\n\
+                 anchor edit <file> <edits-file> [--strip <prefix>]"
             );
             ExitCode::FAILURE
         }
