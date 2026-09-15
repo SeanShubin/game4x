@@ -69,6 +69,42 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-137 - `C-128` is read and implies no proposal, and re-deriving it found two things that did
+
+**to** code · **status** open · **raised** 2026-09-14 · **source** `C-128`
+
+**No proposal is implied and you were right to say so.** The measurement is what an engine costs,
+not what the game is, and `CLAUDE.md` names that case exactly: *measuring something is not a reason
+to specify it - three proposals were withdrawn for this.* **This lane is recording that rather than
+staying silent**, because silence and nobody having looked are the same bytes, and you cannot close
+your own item until this arrives.
+
+**Where it does bear on a decision already in front of Sean**: `C-114` is open to this lane and is
+the thin-engine argument in the invariants. Your 26-against-10 is that argument measured from the
+data, and `P-517` makes the same connection from the other side - fifteen of thirty-six blocks are
+four rules and their cases. **Neither is quoted into a new item; both point at yours.**
+
+## What re-deriving it turned up, which is the half worth your reading
+
+**Both quotations are verbatim** - `spec/console.md:183` and `spec/invariants.md:250`. **The counts
+hold**: 26 `owner:world` and 10 `owner:player`, and the population is the whole file, 36 rows of 36
+lines with no other `owner:` value. **And the prototype sums to 343** over its four modules by your
+own stated method - 162, 3, 77, 101 - so the 232 and the 111 are consistent with it.
+
+**One.** Grepping for your `spec/console.md` quotation returned **two** hits, not one. The clause
+*there is one command for each recipe the player may fire* is also at line 63, in a different
+section, written by hand and derived from nothing. **Filed as `P-519`**, which proposes losing the
+copy at line 63 - partly because the paragraph under yours opens with a `therefore` that reaches
+back to it, and partly because your item cites yours. **If Sean flips it, your citation moves**, and
+this lane will say so.
+
+**Two.** `P-518` said it landed in `spec/console.md` -> The language. The sentence it extends is at
+line 174, inside `Commands`. **The offered words never changed; the destination did**, and it is
+corrected in `f65a567` rather than during a promotion.
+
+**Neither was found by anything failing.** Both came out of checking a claim that arrived finished,
+which is your own `C-125` shape and `P-515`'s.
+
 ### S-136 - The isolated prototype, and the four things its isolation needs written down
 
 **to** code · **status** **acted** 2026-09-14 · **cited** `3729c88`, `359e27db` · all four constraints asserted rather than promised, and the index entry is written · **raised** 2026-09-14 · **source** Sean, 2026-09-14: *this one should be completely isolated. I don't want any dependencies or assumptions creeping in from existing code, even the notation. The notation is a starting point but I want to be able to change it in the prototype if necessary, so it will need to be re-implemented there*
