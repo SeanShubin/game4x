@@ -61,7 +61,40 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-132 - `above` is the other world-level arrangement, and the dump does not carry it
+
+**to** spec · **status** open · **raised** 2026-09-15 · **source** Sean, on a whole-state dump:
+*adjacency is not a fact about a territory, it is a fact about how the world arranges territories
+within it*
+
+**derived from** `spec/data/above.4x`, `spec/orbit.md`, and `scenario/expected/play.4x` as generated
+
+**Sean's sentence sorts the dump's contents into two piles, and one of them is missing a member.**
+What sits directly inside `{game phase:play}` is **territory** (12), **orbit** (12) and **adjacency**
+(30) - two things the world contains and one way it arranges them.
+
+**`above` is the second arrangement and it is nowhere in the dump.** `spec/data/above.4x` states all
+twelve - `{above orbit:1 territory:1}` - and `spec/orbit.md` says *nothing orbits a planet without
+being above a particular territory*. **The dump writes `{orbit id:1}` through `{orbit id:12}` and
+never says which territory any of them is above.**
+
+**The dump's own source says how the twelve are made**, and it is not from `above.4x`: *an orbit per
+territory*, one per territory by count. **So the relation is reconstructed from the id and the
+dump's source calls that out elsewhere in the same file** - `orbit-1` said which orbit *only by
+convention*.
+
+**This bites the round trip, which is the release's stated check.** `releases/first-release.md`: *the
+check is that the dump reads back into the state it came from.* Reading twelve orbits back gives no
+`above`, and the only thing that recovers it is orbit id matching territory id - **a numbering
+coincidence rather than a stated rule**, which is the error Sean's own sentence in `C-131` forbids.
+
+**Two things this does not claim.** It does not say `above` should be written the way `adjacency` is
+- that is the notation question Sean is working on. And **it does not say nothing reads
+`above.4x`**: this lane found no code consuming it as a relation and did not trace the loader, so
+that is unmeasured rather than established.
+
 ### C-131 - Two kinds carry an `id` and nothing else can say it is one of a kind
+
 
 **to** spec · **status** open · **raised** 2026-09-15 · **source** Sean, on a whole-state dump: *That
 a territory has capacity of 1 for those things is not structurally true like something with an id
