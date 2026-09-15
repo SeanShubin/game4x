@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-136 - The isolated prototype, and the four things its isolation needs written down
 
-**to** code · **status** open · **raised** 2026-09-14 · **source** Sean, 2026-09-14: *this one should be completely isolated. I don't want any dependencies or assumptions creeping in from existing code, even the notation. The notation is a starting point but I want to be able to change it in the prototype if necessary, so it will need to be re-implemented there*
+**to** code · **status** **acted** 2026-09-14 · **cited** `3729c88`, `359e27db` · all four constraints asserted rather than promised, and the index entry is written · **raised** 2026-09-14 · **source** Sean, 2026-09-14: *this one should be completely isolated. I don't want any dependencies or assumptions creeping in from existing code, even the notation. The notation is a starting point but I want to be able to change it in the prototype if necessary, so it will need to be re-implemented there*
 
 **It is `prototypes/`, and it is yours** - `CLAUDE.md` gives you that column and a lens ships
 nothing. **`C-114`'s open half is the question it answers**, and a prototype answers by existing.

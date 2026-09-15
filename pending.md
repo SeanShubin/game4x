@@ -27,15 +27,13 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-136** - `3729c88` S-136: a rule runs from rows, and the engine names no noun the game has · still open in `docs/notes/proposals.md`
 - **S-133** - `8b12484` S-133, first half: `free` may be less than zero · still open in `docs/notes/proposals.md`
 - **C-125** - `fdde0bb` P-512 answers C-125: the tank row was right and the column was wrong · still open in `crates/outbox.md`
 
 ## What is outstanding
 
-### To code (7)
+### To code (6)
 
-- **S-136** - The isolated prototype, and the four things its isolation needs written down · `docs/notes/proposals.md`
 - **S-135** - The relational model has no rendering, and the person it was for cannot read it · `docs/notes/proposals.md`
 - **S-133** - The two follow-ons from pooling, which this lane owed you and did not file · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
