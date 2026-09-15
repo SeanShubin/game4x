@@ -18,62 +18,80 @@ that reaches Sean as a proposal through the specification lane, not from this di
 
 ## The answer
 
-**Yes so far, and the engine has not grown once.** Two mechanics and three concepts have gone into
-`data/`, and `src/` is byte-identical across all three - the same 232 lines it was when it ran one
-rule. **The cost did not vanish; it went into the data every time**, and where it goes is the
-reading `C-114` asked for. Measured on 2026-09-14:
+**Three concepts cost the engine nothing, and the fourth cost it half as much again.** `src/` was
+byte-identical across a second rule, a place that must exist, and a number. Then a turn - rules that
+fire with no command - took it from 232 lines to 343. **The engine still names no noun the game
+has**, which is the claim that survived; what did not survive is *a mechanic is rows*.
 
-|                                                        |                                                              |
-| ------------------------------------------------------ | ------------------------------------------------------------ |
-| Code that runs, in `src/`                              | **232 lines** - notation 77, store 65, engine 87, `lib.rs` 3 |
-| Mechanics it runs                                      | **2** - `move` and `found`, neither named in the code        |
-| The same engine in `crates/game-model/src/`            | **1662 lines**, of which `rules.rs` is 636                   |
-| Rows of data                                           | **31** - fifteen of world, sixteen of rule                   |
-| Of those, rows standing in for a word the engine lacks | **6 of the world's 15** - three `vacant`, three `less`       |
-| Game nouns in code that runs                           | **0**, checked against a list read out of `data/`            |
-| Tests                                                  | **22**, all passing                                          |
+**And the reason is one sentence: the engine was thin because the command was doing the work.** Every
+`$name` in a rule was bound by the player typing it. Take the player away and the engine has to find
+the bindings itself, which is a query. Measured on 2026-09-14:
 
-**The two numbers are not comparable and the table says so by being read carefully.** 232 lines run
-two mechanics and 1662 run twenty-six, so the honest reading is not *seven times smaller*. It is
-that **the 232 does not grow when a mechanic is added** - a mechanic is rows - and that claim is
-now tested rather than asserted: `found` was added and `git diff` over `src/` is empty.
+|                                                        |                                                                |
+| ------------------------------------------------------ | -------------------------------------------------------------- |
+| Code that runs, in `src/`                              | **343 lines** - notation 77, store 101, engine 162, `lib.rs` 3 |
+| What that was before the turn                          | **232 lines** - so a turn cost **111 lines, 48%**              |
+| Mechanics it runs                                      | **3** - `move`, `found` and `grow`, none named in the code     |
+| The same engine in `crates/game-model/src/`            | **1662 lines**, of which `rules.rs` is 636                     |
+| Rows of data                                           | **35** - fifteen of world, twenty of rule                      |
+| Of those, rows standing in for a word the engine lacks | **6 of the world's 15** - three `vacant`, three `less`         |
+| Game nouns in code that runs                           | **0**, checked against a list read out of `data/`              |
+| Tests                                                  | **27**, all passing                                            |
 
-**One mechanic is not a trend either, and neither is two.** What two establishes is that the first
-one was not a coincidence of the engine having been written around it - which is the specific thing
-one mechanic could not rule out, because `move` and the engine were written in the same hour.
+**The two numbers are not comparable and the table says so by being read carefully.** 343 lines run
+three mechanics and 1662 run twenty-six, so the honest reading was never *five times smaller*.
 
-**And the row under it is the one to read beside it.** Six of the world's fifteen rows are not facts
-about the game anybody would want to write down. They are there because the engine has no word for
-*not* and no word for *minus*. **The engine stayed at 232 lines, and those six rows are where the
-lines it did not grow went.**
+**The claim this file carried for three concepts was that the engine does not grow when a mechanic
+is added, because a mechanic is rows.** It was tested three times and held three times, and then a
+mechanic was added that is rows and it grew by 111 lines anyway. **So the claim was true of the
+mechanics it had been tested on and false as stated**, and what separates the two groups is not how
+big the mechanic is:
 
-**What is established is narrower and is the part that was in doubt**: a rule can be *stated* as
-rows - what it needs, what it drops, what it adds - and executed without the engine knowing what
-any of it means. The engine's whole vocabulary is four words, `rule`, `needs`, `drops` and `adds`,
-and they are about how a rule is written rather than about what the game is.
+| The first three concepts                                                    | The fourth                                                        |
+| --------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| Every `$name` is bound by the command                                       | No command, so nothing binds anything                             |
+| The engine substitutes into a pattern and asks the world *is this row true* | The engine has to ask the world *which rows would make this true* |
+| A test against a store                                                      | A join over a store                                               |
+| Zero lines                                                                  | 111 lines                                                         |
+
+**Six of the world's fifteen rows are the other half of the same story.** They are not facts about
+the game anybody would want to write down; they are there because the engine has no word for *not*
+and no word for *minus*. **Where the engine has no word, the data carries a row** - and where the
+data cannot carry one, the engine grows. A turn is the second case.
+
+**What is established is the part that was in doubt, and a turn did not take it away**: a rule can
+be *stated* as rows - what it needs, what it drops, what it adds, and what fires it - and executed
+without the engine knowing what any of it means. **`grow` is run by 343 lines that have never heard
+of a settlement.** The engine's vocabulary is four relations, `rule`, `needs`, `drops` and `adds`,
+plus `by` and its two values `command` and `turn` - every one of them about how a rule is written
+rather than about what the game is.
 
 ## The three readings, which is what `C-114` asked for
 
-| Does it explode?       | At three concepts                                                                                                                                                                                                   |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **The code**           | **No, three times.** 232 lines, unchanged by `found`, by *a place must exist*, and by fuel                                                                                                                          |
-| **The data structure** | **No, and this is the one that surprised.** There is one structure - a row - and rules are written in it too. `{needs rule:move relation:at thing:$it place:$from}` is the same shape as `{at thing:scout place:1}` |
-| **The data**           | **Yes, and it is the only one that has.** Six of fifteen world rows exist because the engine cannot say *not* or *minus* - `{vacant place:N}` per place, `{less of:N is:N-1}` per amount                            |
+| Does it explode?       | At four concepts                                                                                                                                                                         |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **The code**           | **Not for three concepts, and then yes.** 232 lines through `found`, *a place must exist* and fuel; 343 once rules fire without a command                                                |
+| **The data structure** | **No, and it is now the one that has held.** Still one structure - a row. A rule is rows, and so is what fires it: `{rule name:grow by:turn}`                                            |
+| **The data**           | **Yes, and it is the only one that has.** Six of fifteen world rows exist because the engine cannot say *not* or *minus* - `{vacant place:N}` per place, `{less of:N is:N-1}` per amount |
 
-**The instrument has separated its three readings, which is what it was built to do.** Two have
-stayed flat across three concepts and the third has not - and the third is the one nobody was
-watching, because `C-114` named all three and the code was the one in doubt. **A thin engine puts
-its cost in the data, and the mechanism is that it has no word for things**, so the data carries a
-row where a word would have been.
+**All three readings have now moved, and they moved in an order worth reading.** The data went
+first, at the second concept, and the code held for three - then the code went at the fourth, and
+the data structure has not moved at all. **The one that never moved is the answer to `C-114`'s
+middle third**: a row was enough to state every rule this prototype has, including the rule about
+when rules fire.
+
+**And the code's reading has a shape rather than a size.** It did not creep up a little per
+mechanic; it sat at exactly 232 for three and then jumped 48% for one. **That is not a cost of
+mechanics, it is the cost of one concept** - and the concept is search.
 
 **And one thing is answered that the question did not ask.** The main tree's `move` is a method
 whose failure is a `Rejection` variant; here a refusal is *the world does not have this row*, named
 back to the caller as the row itself. `{adjacent from:1 to:3}` **is** the error message. Every
-refusal this engine has is one of five, none of them about the game.
+refusal this engine has is one of six, none of them about the game.
 
-## The nine tests of the game, which are the whole of it
+## The fourteen tests of the game, which are the whole of it
 
-Three territories, two adjacencies, two vehicles - `data/world.4x`. Two rules - `data/rules.4x`.
+Three territories, two adjacencies, two vehicles - `data/world.4x`. Three rules - `data/rules.4x`.
 
 `tests/moving.rs`:
 
@@ -105,6 +123,18 @@ Three territories, two adjacencies, two vehicles - `data/world.4x`. Two rules - 
 - `a_command_that_misstates_the_fuel_is_refused_on_both_halves` - claiming fuel the world does not
   state is refused by the world, and claiming to arrive with what you left with is refused by the
   table that says what paying is
+
+`tests/turning.rs`:
+
+- `a_turn_fires_a_rule_once_for_every_way_the_world_satisfies_it` - two settlements, two foods, and
+  nothing told the engine where they were
+- `a_settlement_whose_owner_walked_away_does_not_grow` - **the test that earns the join**. The scout
+  founds at 2 and walks to 3, so `$who` bound by one clause has to filter the next
+- `a_turn_does_not_fire_a_rule_a_command_fires` - nothing moved, because `move` says `by:command`
+- `a_turn_over_a_world_with_no_settlement_changes_nothing` - the control, so that the first test
+  cannot be passing over an empty search
+- `a_command_cannot_fire_a_rule_that_belongs_to_the_turn` - `{grow where:1}` is refused, so `by`
+  means something in both directions
 
 `tests/isolation.rs` holds the two checks that are about the engine rather than the game - that it
 reads no file and depends on no crate, and that it names no noun the game has.
@@ -144,16 +174,21 @@ it symmetric is either a second row per pair, which the data can do today, or a 
 relation, which is a concept the engine does not have. **Nothing here needs it, so nothing here
 decides it.**
 
-**A hole nothing bound is refused rather than matched.** `$name` is substitution and not search: a
-hole that matched anything would have to answer *which one, when several match*, and that is the
-question a query language exists to answer. The day a rule needs one it arrives as a concept with
-a name.
+**A hole nothing bound is refused rather than matched - when a command fired the rule.** `$name` is
+substitution there, and a hole the command did not bind is an error rather than a wildcard.
+
+**A turn is the other case, and it is where the day this predicted arrived.** A rule with no command
+has nothing to bind its holes, so a turn matches them against the world and fires once per solution
+- *which one, when several match* answered as *all of them*. **The two halves of `$name` now differ
+by who fired the rule**, which is a seam rather than a design, and the section on a turn below says
+what it cost.
 
 ## The concepts added since, and what each cost
 
 **The cost of a concept is lines of `src/`**, measured the same way every time: lines that are
-neither blank nor `//`, taken before `#[cfg(test)]`, summed over the four modules. The baseline is
-the 232 in the table above.
+neither blank nor `//`, taken before `#[cfg(test)]`, summed over the four modules. **The baseline is
+232**, which is what the engine was when it ran one rule - not the 343 in the table above, which is
+what it became.
 
 ## 1. A place must exist - `src/` did not change
 
@@ -314,15 +349,90 @@ prototype inherits the cliff the specification already identified rather than es
 routes reached one construction is a fact about the construction, not permission to write it
 anywhere.
 
+## 4. A turn - the 232 moved, and this file said it would
+
+**Cost: 111 lines of `src/`, which is 48%.** `store.rs` went from 65 to 101 and `engine.rs` from 87
+to 162; `notation.rs` did not change at all, and neither did `lib.rs`. **The prediction this file
+made one concept ago was right**, and it is quoted here rather than pointed at because the edit that
+recorded the outcome deleted it - the words are at `2105590`:
+
+> A rule that fires without a command has no command to carry `had` and `left`, **so a turn cannot
+> be built the way fuel was** - the engine will have to read a value out of the world, which is the
+> search this concept found the edge of. **That is the first concept with a real chance of moving
+> the 232.**
+
+**The rule itself is three rows, exactly like the others**:
+
+```text
+{rule name:grow by:turn}
+{needs rule:grow relation:settlement place:$where owner:$who}
+{needs rule:grow relation:at thing:$who place:$where}
+{adds rule:grow relation:food place:$where}
+```
+
+**So the data structure did not move and the code did**, which is the reverse of every concept
+before it, and it is the whole reason the two are counted separately.
+
+## What the 111 lines are, since a number on its own is not a reading
+
+**Thirty-six of them are a search**, `solutions` in `src/store.rs`: every way one pattern can be
+made true by one row, extending what is already bound. **It is `fill` run backwards** - `fill` puts a
+bound value into a pattern and refuses a hole nothing bound; this takes a hole nothing bound and
+reads a value out of a row.
+
+**A value already bound filters rather than rebinds**, and that one line is what joins a rule's
+clauses into a rule rather than two. **It is also the line a test had to be added for.** `grow` was
+written with one `needs` clause, and with one clause there is nothing to join - so the property was
+unchecked and nothing said so. The poison confirms it: with the filter removed, four of the five
+turn tests still pass and only `a_settlement_whose_owner_walked_away_does_not_grow` fails. **The
+test that separates them is the one where the answer differs**, and it had to be built on purpose,
+because in the obvious world both settlements have somebody standing in them and a cross product
+lands on the right answer by accident.
+
+**Seventy-five are the turn itself**, in `src/engine.rs`: `by` and the refusal that enforces it,
+`turn`, and the three helpers `run` and `turn` now share rather than each having their own.
+
+**And one pass, not a fixpoint.** Solutions are worked out against the world as the turn found it
+and applied to a copy, so a rule cannot see what another firing of it has just done. **That makes a
+turn terminate by construction** rather than by a rule about loops, and it is a choice: a fixpoint
+would fire until nothing changed, and would not terminate for every rule anybody could write.
+
+**What two contending firings should do is not settled, and is not settled on purpose.** No rule in
+`data/` both drops something and fires on a turn, so the case has not come up. When it does it is a
+concept with a name.
+
+## What this says about the answer, which is the part worth carrying out of here
+
+**A thin engine is thin in proportion to how much the caller has already decided.** Three concepts
+cost nothing because every hole in every rule was filled in by the person typing the command - the
+engine never had to find anything, only to check it. **The 232 was not the size of an engine that
+runs a game from data; it was the size of an engine that runs rules somebody has already
+instantiated.**
+
+**The first rule nobody types cost 48%**, and it will be the last thing to cost that: a second turn
+rule is rows again, because the search is now there. **So the shape to expect is a step and not a
+slope** - flat until a concept the engine has no machinery for, then a jump, then flat again.
+
+**And `C-114`'s question has a better-formed version now than the one it was asked in.** *Can a thin
+engine run the game from data* turns out to depend on what the game asks the engine to find rather
+than on how many mechanics it has. **The question worth putting to the next prototype is how much of
+the game fires without a command**, because that is the part that pays for a query engine.
+
 ## What comes next
 
-**A turn** - rules that fire without a command, which is where `block.4x`'s firing order lives in
-the main tree and lives nowhere here. One concept, with a test that fails before it.
+**Nothing is scheduled, and the four concepts this file set out are done.** What it would take
+next, in the order the findings point:
 
-**And the one after it is now named rather than guessed at.** A rule that fires without a command
-has no command to carry `had` and `left`, **so a turn cannot be built the way fuel was** - the
-engine will have to read a value out of the world, which is the search this concept found the edge
-of. **That is the first concept with a real chance of moving the 232.**
+1. **A second turn rule** - which is what would show the step is a step. If it is rows and `src/`
+   does not move, the claim above is tested rather than argued
+2. **Two firings that contend** - a turn rule that drops something two solutions both want, which
+   is the case named above and deliberately left open
+3. **An unbounded amount** - `{less of:N is:N-1}` is a table, and the specification already says
+   which kinds have no ceiling to build one against
+
+**Nothing here is a decision and none of it reaches Sean as one.** If an answer implies a decision
+it goes through the specification lane as a proposal, which is where this directory's findings stop
+and somebody else's work starts.
 
 ## Running it
 
@@ -335,21 +445,29 @@ It is not in the workspace, so the root `cargo test` does not reach it.
 
 **Every check here was poisoned before being trusted**, and each one failed the run it should have:
 
-| The check                     | Poisoned by                                 | What failed                                                        |
-| ----------------------------- | ------------------------------------------- | ------------------------------------------------------------------ |
-| The engine names no game noun | a game noun added to `src/`                 | `no_relation_the_data_names_appears_in_code_that_runs`             |
-| The engine reads no file      | a file read added to `src/`                 | `nothing_in_src_reads_a_file_or_depends_on_another_crate`          |
-| Moving needs an adjacency     | `{adjacent from:1 to:3}` added to the world | `the_scout_does_not_move_to_a_place_that_is_not_adjacent`          |
-| A place must exist            | the `territory` clause absent               | the refusal named `{adjacent from:1 to:9}`, not `{territory id:9}` |
-| A place takes one settlement  | the `vacant` clause absent                  | the second founding succeeded, silently                            |
-| A place takes one settlement  | the `drops vacant` row removed              | the second founding succeeded, silently                            |
-| Founding needs a free place   | `{vacant place:1}` removed from the world   | the *first* founding was refused                                   |
-| Moving burns a fuel           | `{less of:3 is:2}` removed                  | the scout could not move at all                                    |
-| Moving burns a fuel           | the `drops fuel` row removed                | the scout kept three fuel and gained two                           |
-| Zero fuel is a floor          | `{less of:0 is:0}` added to the world       | a vehicle with no fuel moved                                       |
+| The check                            | Poisoned by                                          | What failed                                                        |
+| ------------------------------------ | ---------------------------------------------------- | ------------------------------------------------------------------ |
+| The engine names no game noun        | a game noun added to `src/`                          | `no_relation_the_data_names_appears_in_code_that_runs`             |
+| The engine reads no file             | a file read added to `src/`                          | `nothing_in_src_reads_a_file_or_depends_on_another_crate`          |
+| Moving needs an adjacency            | `{adjacent from:1 to:3}` added to the world          | `the_scout_does_not_move_to_a_place_that_is_not_adjacent`          |
+| A place must exist                   | the `territory` clause absent                        | the refusal named `{adjacent from:1 to:9}`, not `{territory id:9}` |
+| A place takes one settlement         | the `vacant` clause absent                           | the second founding succeeded, silently                            |
+| A place takes one settlement         | the `drops vacant` row removed                       | the second founding succeeded, silently                            |
+| Founding needs a free place          | `{vacant place:1}` removed from the world            | the *first* founding was refused                                   |
+| Moving burns a fuel                  | `{less of:3 is:2}` removed                           | the scout could not move at all                                    |
+| Moving burns a fuel                  | the `drops fuel` row removed                         | the scout kept three fuel and gained two                           |
+| Zero fuel is a floor                 | `{less of:0 is:0}` added to the world                | a vehicle with no fuel moved                                       |
+| A turn fires every solution          | `grow` set to `by:command`                           | three of the five turn tests                                       |
+| A turn fires only its own rules      | `move` set to `by:turn`                              | all five - the scout moved on a turn                               |
+| A bound hole filters the next clause | the filter in `solutions` removed, so a hole rebinds | **only** `a_settlement_whose_owner_walked_away_does_not_grow`      |
 
 **The pairs are what make these worth having.** A rule that needs a row and does not drop it fires
 for ever, and a rule that drops a row nothing states never fires at all - **the same clause missing
-from either side, failing in opposite directions.** The last row is the other shape: a row *added*
-to the world rather than taken from it, because the floor here is an absence and an absence is
-poisoned by filling it in.
+from either side, failing in opposite directions.** The `{less of:0 is:0}` row is the other shape: a
+row *added* to the world rather than taken from it, because the floor there is an absence and an
+absence is poisoned by filling it in.
+
+**And the last row is the one that paid for itself.** Four of the five turn tests survive it, so
+without the test that was written specifically to separate a join from a cross product, the filter
+could have been deleted and the suite would have stayed green. **That is what a poison is for**: it
+does not check the code, it checks whether the tests would notice.

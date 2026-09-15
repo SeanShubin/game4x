@@ -103,6 +103,58 @@ impl Store {
     }
 }
 
+/// Every way `pattern` can be made true by one row, extending what is already bound.
+///
+/// **This is the other direction, and it is the concept the first three did without.** [`fill`]
+/// puts a bound value into a pattern and refuses a hole nothing bound; this takes a hole nothing
+/// bound and reads a value *out of* a row. A rule fired by a command never needs it - the command
+/// binds everything - and a rule fired by a turn has no command, so it needs nothing else.
+///
+/// **Several rows may match and all of them are returned.** That is the question `README.md` said
+/// a search would have to answer - *which one, when several match* - and the answer here is *all
+/// of them, and the caller fires once per solution*. It is an answer rather than an evasion
+/// because a turn wants every settlement and not one of them.
+///
+/// **A value already bound is a filter and not a rebinding**, which is what joins the clauses of
+/// one rule together: `$where` bound by the first clause has to be the same `$where` in the
+/// second.
+pub fn solutions(
+    store: &Store,
+    pattern: &Pattern,
+    bindings: &BTreeMap<String, String>,
+) -> Vec<BTreeMap<String, String>> {
+    let mut ways = Vec::new();
+    for row in &store.rows {
+        if row.relation != pattern.relation {
+            continue;
+        }
+        let mut extended = bindings.clone();
+        let mut fits = true;
+        for (key, value) in &pattern.values {
+            let Some(held) = row.value(key) else {
+                fits = false;
+                break;
+            };
+            match value.strip_prefix('$') {
+                None => fits = value == held,
+                Some(name) => match extended.get(name) {
+                    Some(already) => fits = already == held,
+                    None => {
+                        extended.insert(name.to_string(), held.to_string());
+                    }
+                },
+            }
+            if !fits {
+                break;
+            }
+        }
+        if fits && !ways.contains(&extended) {
+            ways.push(extended);
+        }
+    }
+    ways
+}
+
 fn matches(row: &Row, wanted: &Row) -> bool {
     row.relation == wanted.relation
         && wanted

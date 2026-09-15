@@ -100,16 +100,22 @@ fn nothing_in_src_reads_a_file_or_depends_on_another_crate() {
 /// **A false fire is the correct error here** - it costs a rename and catches the real thing.
 #[test]
 fn no_relation_the_data_names_appears_in_code_that_runs() {
-    // `rule`, `needs`, `drops` and `adds` are how a rule is *stated*; every other relation is
-    // what the game *is*. That is the whole of the line this test draws.
-    let engines = ["rule", "needs", "drops", "adds"];
+    // **How a rule is stated, as against what the game is** - that is the whole of the line this
+    // test draws. `rule`, `needs`, `drops` and `adds` are the four the engine started with;
+    // `command` and `turn` are what a rule may be fired `by`, which is also about the statement
+    // and not about the world. Every other word the data uses is the game's, and must appear in
+    // no line of `src/` that runs.
+    let engines = ["rule", "needs", "drops", "adds", "command", "turn"];
 
     let mut nouns: BTreeSet<String> = BTreeSet::new();
     for file in ["data/world.4x", "data/rules.4x"] {
         for row in rows(file) {
             nouns.insert(row.relation.clone());
-            // A clause names the relation it is about, and `{rule name:move}` names the rule.
-            for key in ["relation", "name"] {
+            // A clause names the relation it is about, `{rule name:move by:command}` names the
+            // rule, and `by` names what fires it. **`by` is read for the same reason the other
+            // two are**: a value the engine compares against is vocabulary, and one this test
+            // cannot see is one `src/` could name freely.
+            for key in ["relation", "name", "by"] {
                 if let Some(value) = row.value(key) {
                     nouns.insert(value.to_string());
                 }
@@ -127,8 +133,8 @@ fn no_relation_the_data_names_appears_in_code_that_runs() {
     // to look at what it added. It fired on `found`, `settlement` and `vacant` together.
     assert_eq!(
         nouns.len(),
-        9,
-        "nine nouns the game has - at, adjacent, territory, move, found, settlement, vacant,          fuel, less; this found {nouns:?}"
+        11,
+        "eleven nouns the game has - at, adjacent, territory, move, found, settlement, vacant, fuel, less, grow, food; this found {nouns:?}"
     );
 
     let mut looked = 0;
@@ -158,5 +164,5 @@ fn no_relation_the_data_names_appears_in_code_that_runs() {
             looked += 1;
         }
     }
-    assert_eq!(looked, 36, "nine nouns over four modules");
+    assert_eq!(looked, 44, "eleven nouns over four modules");
 }

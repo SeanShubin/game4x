@@ -1,6 +1,11 @@
-# Every rule the game has, which is one.
+# Every rule the game has, which is three.
+#
+# **Every rule says what fires it and none of them may leave it out.** `by:command` is a rule a
+# player types; `by:turn` is one that fires on its own. A rule that says neither is a rule somebody
+# has not finished writing, and the engine refuses it rather than guessing - in both directions,
+# so a player cannot type `{grow where:1}` any more than a turn can move the scout.
 
-{rule name:move}
+{rule name:move by:command}
 
 # **The order of `needs` rows is the order they are checked**, so it chooses which refusal a
 # reader sees. Destination-is-a-place before destination-is-adjacent, because *there is no
@@ -32,7 +37,7 @@
 
 # The second rule, and the one that tested whether the engine grows when the game does.
 
-{rule name:found}
+{rule name:found by:command}
 
 # **The founder is here, the place is a place, and the place is free.** The third of these is a
 # negative - *there is not already a settlement here* - and `needs` can only say *this row is
@@ -47,3 +52,21 @@
 # it is a rule that can fire for ever.
 {drops rule:found relation:vacant place:$where}
 {adds rule:found relation:settlement place:$where owner:$it}
+
+# The third rule, and the first that no player fires.
+#
+# **Nothing binds `$where` here.** A rule fired by a command takes its holes from the command, and
+# this one has no command - so the engine has to find every settlement itself and fire once for
+# each. That is the search the first three concepts did without, and it is where `src/` finally
+# grew.
+
+{rule name:grow by:turn}
+
+# **Two clauses, and the second is what makes this a join.** `$where` and `$who` are bound by the
+# first clause and *filter* the second: a settlement grows while its owner is still standing in it,
+# and one whose owner has walked away does not. With one clause the engine could bind each hole
+# independently and nothing would notice - `README.md` says which run showed that.
+{needs rule:grow relation:settlement place:$where owner:$who}
+{needs rule:grow relation:at thing:$who place:$where}
+
+{adds rule:grow relation:food place:$where}
