@@ -11,6 +11,46 @@ of it needs you.
 
 ## Open
 
+### P-518 - `{name field:value ...}` does not say whether the fields may be none, and seven forms are
+
+**to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**One clause, on a case the committed scenario runs fourteen times.**
+
+`spec/console.md` says: *A command is written `{name field:value ...}`. **Its name is one word**,
+dashed where it needs more, and its arguments are named.*
+
+**The `...` does not say whether none is allowed**, and the sentence after it presumes arguments.
+
+> **A command may carry no fields at all**, and seven of them do. Its name is the whole of it, and
+> `{end-turn}` is a command exactly as `{move unit:scout from:1 to:2}` is.
+
+## What is measured, by the code lane in `C-127`
+
+**Seven of the console grammar's twenty-six forms take no fields** - `start`, `end-turn`,
+`show-planet`, `show-orbit`, `show-units`, `show-turn`, `history` - **and every one of the seven is
+exercised by a test.** `{end-turn}` appears **fourteen times** in `scenario/commands/`.
+
+**So this is not a hypothetical and never was.**
+
+## Why a test does not already settle it, which is the usual reason not to file
+
+`CLAUDE.md`: *a fact already asserted by a test does not belong in prose too - the test is the
+stronger statement.* **That applies to behaviour and this is not behaviour.** The tests assert that
+`{end-turn}` parses; **they cannot say what `{name field:value ...}` means**, and a written form is
+the one thing a test cannot disambiguate.
+
+**The tell that it needed deciding is that somebody decided it in code.** `crates/command-language`'s
+`parse.rs` carries a dedicated failure message - *no fields at all* - for a field given to a form
+that takes none. **A branch written on purpose, for a case the specification left to the reader.**
+
+## What it does not say
+
+**Nothing about a minimum in a data file.** The code lane found `{bad}` parsing in its prototype and
+this lane declined to propose from it, because that parser has no grammar and this one is
+grammar-driven: **whether a command may carry no fields is per form there and global here.** Same
+answer, different question. **This clause is about the console grammar and says nothing about what a
+`.4x` row may be.**
 ### P-515 - Publish the shape of the error, not only the correction
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `CLAUDE.md` -> What done means
