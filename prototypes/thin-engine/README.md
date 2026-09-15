@@ -352,6 +352,80 @@ single value to be pointed at by; a relation nothing points at does not.
 caveat above from the other side: the day something needs to point at a residency, it needs a single
 value to point at, and the composite key is what it would have to give up.
 
+## Two options, and this lane had been asking one question as if it were two
+
+**Sean, 2026-09-15**: *Lets explore two options, and we don't have to go with the same option on
+both friendly and foundation. One option is the foreign key to a quantity table, which you just
+presented. Another option is a quantity field. Note that it would make no sense to have both an id
+and a quantity in the same logical model. Also note that the foundation is the logical model,
+friendly is a bridge from the user to the logical model.*
+
+**There are two questions and this README ran them together:**
+
+| Question                                     | Where it is settled                    |
+| -------------------------------------------- | -------------------------------------- |
+| how a state row says its quantity            | **may differ** between the two formats |
+| how the foundation says which column that is | the foundation alone                   |
+
+## Option A - a quantity table, and Option B - a reserved name
+
+**A: the quantity is a column named anything, and a row says which.** Seven rows to stand it up -
+one relation, three columns, two references and the declaration - then one per counted relation
+after that.
+
+```text
+{quantity id:1 relation:16 column:46}
+```
+
+**B: the quantity is a column named `quantity`, and that is the whole of it.** **Zero rows added.**
+A relation carrying a column named `quantity` is counted and its key is the others; one carrying an
+`id` is identified.
+
+```text
+{column id:46 relation:16 seq:3 name:quantity}
+```
+
+## Sean's *no id and a quantity* is what decides it, and it decides for B
+
+**They are not two properties. They are one slot** - how a relation individuates its rows - and
+`spec/console.md` says so: *a thing carrying an `id` has a description no other thing shares, so its
+quantity is always one.* **A thing is counted or it is identified.**
+
+**And `id` already occupies that slot by name.** `const ID: &str = "id"` is in both `schema.rs` and
+`engine.rs`, and every one of the sixteen relations is keyed by a first column called `id`. **So A
+would state one half of an exclusive pair as a table and leave the other half a naming convention**
+- and the asymmetry is the thing that would read as wrong in a logical model, which is what the
+foundation is.
+
+**B also makes the exclusion checkable where it is stated.** *Exactly one of `id` and `quantity`*
+is a fact about a relation's column list, so under B it is read off that list. Under A it is a join
+between the column list and another table, which is the same fact in two places.
+
+**The cost of B, said rather than skipped**: a third column name becomes load-bearing. `schema.4x`
+already records two - *a row names its relation by `relation.name`, and a row's values are keyed by
+`column.name`* - and `role.name` is a third. **B adds a fourth, and it is the one that was already
+half there.**
+
+## The friendly half is not a choice, because the game already made it
+
+**The dump writes `{description} -> quantity`, nested**, and it is not a sketch: `scenario/expected/play.4x`
+uses the arrow **114 times**, and its header says *a line reads `{description} -> quantity`, and the
+description is the kind and every trait of that thing.*
+
+| Format         | A residency of two scouts                       |
+| -------------- | ----------------------------------------------- |
+| **foundation** | `{residency what:1 where:1 quantity:2}`         |
+| **friendly**   | `{residency what:scout where:territory-1} -> 2` |
+
+**So the two formats differ here, which is what Sean allowed for** - and the friendly side is the
+notation he already derives by hand rather than anything invented for this prototype.
+
+**What it costs is translator work and no engine work.** `src/notation.rs` reads one `{…}` per line
+and knows no arrow; it does not learn one. **The arrow is read and written in
+`tests/common/friendly.rs`**, which is where Sean put the translator and said it *can be as thick as
+it likes and the engine does not grow*.
+
+
 
 **And the same sentence settles two of the three earlier answers, which this lane had recorded as
 Sean's rather than as the specification's:**
