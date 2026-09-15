@@ -12,29 +12,54 @@ that reaches Sean as a proposal through the specification lane, not from this di
 
 ## The answer
 
-**Yes, and the whole of it is in two files you can read.** `data/before.4x` states everything -
-the structure, the structure's own structure, the roles, the rule, the command and the world.
-`data/after.4x` is that file with **one row different**. The engine is what gets from one to the
-other, and `tests/first_test.rs` is what proves it. Measured on 2026-09-14:
+**Yes, and the test that proves it is data too.** `data/test.4x` is the orchestrator: it sets the
+schema up, initializes the state, executes the command, compares what came out with what was
+expected, and composes a report. **Nothing in `tests/` says what the test does** - it reads
+`test.4x` and runs it.
 
-|                                           |                                                                           |
-| ----------------------------------------- | ------------------------------------------------------------------------- |
-| Code that runs, in `src/`                 | **638 lines** - notation 77, store 33, schema 230, engine 294             |
-| Rows of data                              | **98**, of which 7 are the world and 91 are structure, rule and command   |
-| Rows that differ between before and after | **1** - `{residency what:1 where:1}` becomes `{residency what:1 where:2}` |
-| Relations declared                        | **14** - ten that describe the structure, four that are the game          |
-| Game nouns in code that runs              | **0**, checked against a list read out of `data/`                         |
-| Tests                                     | **22**, all passing                                                       |
+```text
+{test name:the-scout-moves-to-an-adjacent-place}
+
+{load seq:1 file:schema.4x into:game}
+{load seq:2 file:rules.4x into:game}
+{load seq:3 file:before.4x into:game}
+{load seq:4 file:command.4x into:game}
+{load seq:5 file:expected.4x into:expected}
+
+{execute seq:6 command:1}
+{compare seq:7 this:actual with:expected}
+{report seq:8 title:the-first-test}
+```
+
+And the report it composes:
+
+```text
+the-first-test
+  test      the-scout-moves-to-an-adjacent-place
+  compared  adjacency, residency, territory, thing
+  result    as expected
+```
+
+Measured on 2026-09-14:
+
+|                                              |                                                                                        |
+| -------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Code that runs, in `src/`                    | **873 lines** - notation 77, store 33, schema 230, engine 294, script 234              |
+| Rows of data                                 | **121** across six files - 78 schema, 16 rule, 9 test, 7 before, 7 expected, 4 command |
+| Rows that differ between before and expected | **1** - `{residency what:1 where:1}` becomes `{residency what:1 where:2}`              |
+| Relations declared                           | **15** - eleven that describe the structure, four that are the game                    |
+| Game nouns in code that runs                 | **0**, checked against a list read out of `data/`                                      |
+| Tests                                        | **23**, all passing                                                                    |
 
 **The engine names nothing the game has.** `territory`, `thing`, `adjacency`, `residency` and
 `move` appear in `data/`, in the tests and in comments, and in no line of `src/` that runs.
 
 ## What making the structure explicit cost, which is the reading
 
-**638 lines against 232.** An earlier version of this prototype ran the same first test in 232
+**873 lines against 232.** An earlier version of this prototype ran the same first test in 232
 lines, with rows that had no declared columns and a `$name` substitution in place of a binding.
-**Stating the structure the way `temporary-notes/first-test.md` states it cost 2.75 times the
-engine**, and where it went is worth reading off:
+**Stating the structure explicitly cost 406 lines and making the test data cost another 235**, and
+where it went is worth reading off:
 
 | Module        | Was | Is      | Why                                                                     |
 | ------------- | --- | ------- | ----------------------------------------------------------------------- |
@@ -42,6 +67,7 @@ engine**, and where it went is worth reading off:
 | `store.rs`    | 65  | **33**  | **Shrank.** `$name` substitution went away entirely                     |
 | `schema.rs`   | 0   | **230** | New. Relations, ordered columns, references, and checking               |
 | `engine.rs`   | 87  | **294** | Reads the rule, its clauses, their bindings and the command out of rows |
+| `script.rs`   | 0   | **234** | New. Running a test that is written down rather than compiled in        |
 
 **The notation never moved.** Four concepts were built on it and then thrown away, a whole
 relational structure was put through it, and it is the same 77 lines it was at the first commit.
@@ -98,17 +124,38 @@ same change seen from two sides: a hole in a string became a row that names a co
 there is no `key` relation, and where no natural key existed a surrogate was made. The dotted ones
 are readable on purpose: `residency.what`, `move.from`, `move.3.where`.
 
+## The six files
+
+| File          | Rows   | What it is                                                          |
+| ------------- | ------ | ------------------------------------------------------------------- |
+| `schema.4x`   | **78** | The shared schema: every relation, its columns in order, references |
+| `rules.4x`    | **16** | `move`, as inputs, clauses and bindings                             |
+| `before.4x`   | **7**  | The state before                                                    |
+| `command.4x`  | **4**  | The move command                                                    |
+| `expected.4x` | **7**  | The state after, written by hand from the note                      |
+| `test.4x`     | **9**  | The orchestrator                                                    |
+
+**`rules.4x` is not one of the five Sean listed, and that is a question rather than a decision.** A
+rule is not the schema, not the state before, not the state after and not the command - it is
+static input, shared by before and after the way the schema is. It is on its own so that folding it
+into `schema.4x` is one move if that is where it belongs.
+
 ## The three places most likely to be unnecessary
 
 **Sean's job is removing what is not needed and mine is filling the structure out**, so these are
-marked `WHY` in `data/before.4x` rather than decided here.
+marked `WHY` in the data rather than decided here.
 
-**The self-description, which is 53 of the 98 rows.** Nothing needs it to run the first test - the
-engine could simply know its ten relations. It is there so that *everything is data* is checkable.
-**Cut it and 45 rows are left**, of which 7 are the world.
+**The self-description, which is 56 of `schema.4x`'s 78 rows.** Nothing needs it to run the first
+test - the engine could simply know its eleven relations. It is there so that *everything is data*
+is checkable. **Cut it and the schema is 22 rows.**
 
-The 98 break down as: 53 the structure's own structure, 15 the game's four tables, 3 roles, 16 the
-rule, 4 the command, 7 the world.
+**`{state relation:...}`, the four rows saying which relations are the game's state.** They are
+what bounds the comparison: without them a diff would compare the rule and the command too, which
+are in the actual because they were loaded rather than because anything happened. The alternative
+is scoping to whatever relations `expected.4x` happens to mention - **the same thing decided by
+omission**, where a relation left out of `expected.4x` would go unchecked silently.
+
+**`{test name:...}`, which nothing needs while there is one test.**
 
 **`residency`'s key being `what`, so a thing is in one place and cannot be in two.** That is an
 inference from the note rather than something it says - the note gives `residency` no key at all.
@@ -121,11 +168,11 @@ enforces**, and if that asymmetry is unacceptable the fix is a decision rather t
 
 ## The three readings, which is what `C-114` asked for
 
-| Does it explode?       | Against the first test, fully normalized                                                                                                     |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| **The code**           | **Yes, 2.75 times** - and all of it in two modules, for two things: knowing the structure, and reading a rule that no longer has holes in it |
-| **The data structure** | **No.** One structure - a row - and it describes itself. Fourteen relations, no nesting, no second kind of thing                             |
-| **The data**           | **Yes, in ceremony rather than in size.** Seven rows of world need 91 rows of structure, rule and command                                    |
+| Does it explode?       | Against the first test, fully normalized, with the test itself as data                                                                                                             |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **The code**           | **Yes, 3.8 times** - 232 to 873, in three modules, for three things: knowing the structure, reading a rule that no longer has holes in it, and running a test that is written down |
+| **The data structure** | **No, and it has now taken a third kind of thing.** One structure - a row. The game is rows, the rule is rows, the command is rows, and so is the test that runs them              |
+| **The data**           | **Yes, in ceremony rather than in size.** Seven rows of world need 78 of schema, 16 of rule, 4 of command and 9 of test                                                            |
 
 **The readings point in opposite directions and that is the finding.** Everything the code gained,
 the data paid for in explicitness - and the thing that did not move in either direction is the
@@ -138,18 +185,43 @@ measurement of the gap between them.
 3`; two adjacencies `1-2` and `2-3`; one vehicle named `scout`. Moving the scout from 1 to 2
 succeeds; from 1 to 3 fails. **No mechanic that is not needed to pass it.**
 
-`tests/first_test.rs`:
+**The test is `data/test.4x` and `tests/first_test.rs` only runs it.** What is left in Rust is the
+two things that cannot be data: handing the engine a way to read a file, and asserting the report
+says what it should.
 
-- `the_engine_gets_from_before_to_after` - running command 1 turns the entirety before into the
-  entirety after, compared whole
-- `before_and_after_differ_by_one_row_and_nothing_else` - **the control**, without which the test
-  above could pass by the two files having drifted into agreement
-- `the_scout_does_not_move_to_a_place_that_is_not_adjacent` - refused, naming
-  `{adjacency from:1 to:3}`
-- `a_refused_command_changes_nothing`
+- `the_engine_gets_from_before_to_expected` - the report says *as expected*
+- `the_report_says_which_relations_it_compared` - **the control**. If `{state relation:...}` were
+  dropped, the comparison would scope to no relations, find no differences and report success in
+  the same words; this asserts all four are named
+- `the_report_reads_as_a_report` - the composed text, exactly
+- `a_state_that_is_not_expected_is_reported_as_both_rows` - `expected.4x` served from `before.4x`,
+  so the report has to say `NOT as expected` and name the row that left and the row that arrived
 
-`tests/structure.rs` checks what declaring the structure buys; `tests/isolation.rs` checks that
-the engine reads no file, depends on no crate, and names no noun the game has.
+`tests/structure.rs` checks what declaring the structure buys - and one of its checks is that the
+four files `tests/` assembles are the four `test.4x` loads, **which caught the two lists disagreeing
+about their order the first time it ran**. `tests/isolation.rs` checks that the engine reads no
+file, depends on no crate, and names no noun the game has.
+
+## `load` exists and the engine still reads no file
+
+**`{load seq:1 file:schema.4x into:game}` is a row, and `src/script.rs` never opens anything.** It
+is handed something that can turn a name into text and asks it; the harness in `tests/` is what
+reads the directory, which is where `std::fs` is allowed to be.
+
+```rust
+pub trait Files {
+    fn read(&self, name: &str) -> Option<String>;
+}
+```
+
+**That is not a dodge, it is the finding.** A command that loads a file cannot be pure data in an
+engine that reads nothing, so **the file system is the first thing this game has needed from
+outside itself** - and it arrives as one method rather than as a dependency. Everything else the
+engine does is a function of rows it was handed.
+
+**It also made the poison into a test.** Serving `expected.4x` from `before.4x` is four lines of a
+different `Files`, so the case where the expected state is wrong is in the suite rather than
+something run by hand once.
 
 ## What was here before, and what it established
 
@@ -199,12 +271,19 @@ It is not in the workspace, so the root `cargo test` does not reach it.
 
 **Every check here was poisoned before being trusted**, and each failed the run it should have:
 
-| The check                            | Poisoned by                              | What failed                                       |
-| ------------------------------------ | ---------------------------------------- | ------------------------------------------------- |
-| The engine gets from before to after | the `add` effect made a no-op            | `the_engine_gets_from_before_to_after` alone      |
-| Before and after really differ       | `after.4x` made identical to `before.4x` | that test **and** its control, which is the point |
-| The engine names no game noun        | a game noun added to `src/`              | `no_relation_or_rule_the_data_names...`           |
-| The engine reads no file             | a file read added to `src/`              | `nothing_in_src_reads_a_file_...`                 |
+| The check                            | Poisoned by                           | What failed                                                                                               |
+| ------------------------------------ | ------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| The engine gets from before to after | the `add` effect made a no-op         | `the_engine_gets_from_before_to_after` alone                                                              |
+| The comparison really compares       | `expected.4x` served from `before.4x` | `a_state_that_is_not_expected_is_reported_as_both_rows`, which is a test rather than a poison run by hand |
+| The engine names no game noun        | a game noun added to `src/`           | `no_relation_or_rule_the_data_names...`                                                                   |
+| The engine reads no file             | a file read added to `src/`           | `nothing_in_src_reads_a_file_...`                                                                         |
 
-**The second row is why the control exists.** A test that the engine turns one file into another
-passes trivially if the two files are the same, and nothing about it would look wrong.
+**The second row became a test rather than staying a poison.** A test that the engine turns one
+state into another passes trivially if the expected state is the state before, so the suite now
+contains that case on purpose: `expected.4x` is served from `before.4x` and the report has to say
+`NOT as expected` and name both rows.
+
+**And the report says what it compared**, which is the other half of the same worry. If the
+`{state relation:...}` rows were dropped, the comparison would scope to no relations, find no
+differences, and report success in exactly the same words - so
+`the_report_says_which_relations_it_compared` asserts all four are named.

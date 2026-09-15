@@ -30,8 +30,8 @@ fn nothing_in_src_reads_a_file_or_depends_on_another_crate() {
         .collect();
     assert_eq!(
         files.len(),
-        5,
-        "five modules, and each is checked: {files:?}"
+        6,
+        "six modules, and each is checked: {files:?}"
     );
     let mut read = 0;
 
@@ -63,7 +63,7 @@ fn nothing_in_src_reads_a_file_or_depends_on_another_crate() {
 
     assert!(
         read >= 300,
-        "the five modules came to {read} lines of code, and the crate is larger than that - so the filter is eating something it should not"
+        "the six modules came to {read} lines of code, and the crate is larger than that - so the filter is eating something it should not"
     );
 
     // **A path dependency would not show up above**, so the manifest is checked too.
@@ -104,6 +104,7 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
         "relation",
         "column",
         "reference",
+        "state",
         "role",
         "rule",
         "input",
@@ -114,7 +115,7 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
     ];
 
     let mut nouns: BTreeSet<String> = BTreeSet::new();
-    for file in ["data/before.4x", "data/after.4x"] {
+    for file in ["data/schema.4x", "data/rules.4x"] {
         for row in rows(file) {
             // A relation declares itself by name, and so does a rule. Nothing else is read:
             // a column name is not vocabulary the engine could be accused of knowing.
@@ -164,5 +165,5 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
             looked += 1;
         }
     }
-    assert_eq!(looked, 25, "five nouns over five modules");
+    assert_eq!(looked, 30, "five nouns over six modules");
 }

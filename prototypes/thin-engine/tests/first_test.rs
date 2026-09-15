@@ -1,107 +1,112 @@
-//! The first test, which is `temporary-notes/first-test.md`.
+//! The first test, which is `temporary-notes/first-test.md` - and the test itself is data.
 //!
-//! **Sean's words, in `S-136`**: three territories `1, 2, 3`; two adjacencies `1-2` and `2-3`; one
-//! vehicle named `scout`. Moving the scout from 1 to 2 succeeds; from 1 to 3 fails. **No mechanic
-//! that is not needed to pass it.**
+//! **`data/test.4x` is the test.** It sets the schema up, initializes the state from `before.4x`,
+//! executes the command in `command.4x`, compares what that produced with `expected.4x`, and
+//! composes a report. Nothing in this file says any of that; it reads `test.4x` and runs it.
 //!
-//! # Entirety before, entirety after
-//!
-//! `data/before.4x` is everything - the structure, the structure's own structure, the rule, the
-//! command and the world. `data/after.4x` is that file with one row different. **The engine is
-//! what gets from one to the other, and this is what proves it does.**
-//!
-//! The two files are compared whole. That is stronger than comparing the rows anybody expected to
-//! change, and stronger in the direction that has already bitten here: an earlier version compared
-//! only the scout's rows, under a message claiming the scout was *nowhere else*, and could not
-//! have noticed anything else moving.
+//! **What is left in Rust is the two things that cannot be data**: handing the engine a way to
+//! read a file, and asserting that the report says what it should.
 
-use thin_engine::engine::run;
+use std::path::PathBuf;
+
+use thin_engine::script::{Files, Report, run_test};
 
 mod common;
-use common::{after, before};
+use common::{mine, rows};
 
-/// **Running command 1 turns the entirety before into the entirety after.**
-#[test]
-fn the_engine_gets_from_before_to_after() {
-    let start = before();
-    let end = run(&start, "1").expect("the scout is at 1 and 1 is adjacent to 2");
+/// The directory, as something the engine can ask for a file by name.
+///
+/// **This is where `std::fs` lives and the only place it may.** `src/` reads nothing - it is
+/// handed this and asks it, which is what lets `load` exist without the engine opening anything.
+struct Directory(PathBuf);
 
-    assert_eq!(
-        end.shown(),
-        after().shown(),
-        "the whole of the data afterwards is `data/after.4x`, row for row"
-    );
+impl Files for Directory {
+    fn read(&self, name: &str) -> Option<String> {
+        std::fs::read_to_string(self.0.join(name)).ok()
+    }
 }
 
-/// **The two files differ by exactly one row**, which is what makes the test above say what it
-/// looks like it says.
-///
-/// Without this, `before.4x` and `after.4x` could have drifted into agreeing - and a test that the
-/// engine turns one into the other would pass by the two being the same file. **The count is the
-/// control**: 98 rows, 97 of them shared.
-#[test]
-fn before_and_after_differ_by_one_row_and_nothing_else() {
-    let start = before().shown();
-    let end = after().shown();
-
-    assert_eq!(start.len(), 98, "the entirety is 98 rows");
-    assert_eq!(end.len(), 98, "and so is the entirety afterwards");
-
-    let moved: Vec<&String> = start.iter().filter(|row| !end.contains(row)).collect();
-    let arrived: Vec<&String> = end.iter().filter(|row| !start.contains(row)).collect();
-    assert_eq!(moved, vec!["{residency what:1 where:1}"], "one row leaves");
-    assert_eq!(
-        arrived,
-        vec!["{residency what:1 where:2}"],
-        "one row arrives"
-    );
+fn data() -> Directory {
+    Directory(mine().join("data"))
 }
 
-/// The scout is at 1, and 1 is adjacent to 2 and to nothing else.
-///
-/// **The refusal names the row the world does not have.** There is no error about movement in the
-/// engine - `{adjacency from:1 to:3}` is the whole of the message.
-#[test]
-fn the_scout_does_not_move_to_a_place_that_is_not_adjacent() {
-    // The same command with one argument changed, stated the way every other command is.
-    let start = common::with(
-        "{command id:2 rule:move}\n\
-                              {argument id:2.what command:2 input:move.what value:1}\n\
-                              {argument id:2.from command:2 input:move.from value:1}\n\
-                              {argument id:2.to command:2 input:move.to value:3}",
-    )
-    .expect("a second command is well formed");
-
-    let why = run(&start, "2").expect_err("1 is not adjacent to 3");
-
-    assert_eq!(
-        format!("{why}"),
-        "`move` needs {adjacency from:1 to:3} and it is not",
-        "the refusal names the row the world does not have"
-    );
+fn report() -> Report {
+    run_test(&rows("data/test.4x"), &data()).unwrap_or_else(|why| panic!("{why}"))
 }
 
-/// **A refused command leaves everything exactly as it was.**
-///
-/// **Not a property this test establishes**: `run` takes `&Game` and returns a new one, so a
-/// half-applied world is not a thing that can be built, and this would pass without the property.
-/// It asserts the observable half - that the caller still holds what it started with.
+/// **The whole of the first test: the engine gets from before to expected.**
 #[test]
-fn a_refused_command_changes_nothing() {
-    let start = common::with(
-        "{command id:2 rule:move}\n\
-                              {argument id:2.what command:2 input:move.what value:1}\n\
-                              {argument id:2.from command:2 input:move.from value:1}\n\
-                              {argument id:2.to command:2 input:move.to value:3}",
-    )
-    .expect("a second command is well formed");
-    let held = start.shown();
+fn the_engine_gets_from_before_to_expected() {
+    let report = report();
 
-    run(&start, "2").expect_err("1 is not adjacent to 3");
+    // **Printed as well as asserted**, so `cargo test -- --nocapture` shows the report the script
+    // composed rather than only the fact that it was right.
+    println!("{report}");
 
-    assert_eq!(start.shown(), held, "the data is what it started as");
     assert!(
-        held.contains(&"{residency what:1 where:1}".to_string()),
-        "and the scout is still in territory 1, which is the row that would have moved"
+        report.same(),
+        "the state after the command is not the expected state:\n{report}"
+    );
+}
+
+/// **The report says what it compared**, so a green test cannot be one that compared nothing.
+///
+/// **A count over nothing is the same failure with the sign flipped** - `CLAUDE.md`. If
+/// `{state relation:...}` were dropped from `schema.4x`, the comparison would scope to no
+/// relations, find no differences, and report success in exactly the same words.
+#[test]
+fn the_report_says_which_relations_it_compared() {
+    let report = report();
+
+    assert_eq!(
+        report.compared,
+        vec!["adjacency", "residency", "territory", "thing"],
+        "all four of the game's relations are state, and all four are compared"
+    );
+    assert_eq!(report.test, "the-scout-moves-to-an-adjacent-place");
+    assert_eq!(report.title, "the-first-test");
+}
+
+/// **The report is composed and readable**, which is the step `test.4x` ends with.
+#[test]
+fn the_report_reads_as_a_report() {
+    assert_eq!(
+        format!("{}", report()),
+        "the-first-test\n  \
+           test      the-scout-moves-to-an-adjacent-place\n  \
+           compared  adjacency, residency, territory, thing\n  \
+           result    as expected"
+    );
+}
+
+/// **A wrong expectation is reported rather than passed over**, and the report names both rows.
+///
+/// This is the poison written down: `expected.4x` is replaced by one that says the scout stayed
+/// where it was, and the test that would have to notice is this one.
+#[test]
+fn a_state_that_is_not_expected_is_reported_as_both_rows() {
+    struct Wrong(Directory);
+    impl Files for Wrong {
+        fn read(&self, name: &str) -> Option<String> {
+            if name == "expected.4x" {
+                // The state before, offered as the state after.
+                return self.0.read("before.4x");
+            }
+            self.0.read(name)
+        }
+    }
+
+    let report =
+        run_test(&rows("data/test.4x"), &Wrong(data())).unwrap_or_else(|why| panic!("{why}"));
+
+    assert!(
+        !report.same(),
+        "the scout did move, so this is not as expected"
+    );
+    assert_eq!(report.missing, vec!["{residency what:1 where:1}"]);
+    assert_eq!(report.extra, vec!["{residency what:1 where:2}"]);
+    assert!(
+        format!("{report}").contains("NOT as expected"),
+        "and the report says so: {report}"
     );
 }

@@ -1,0 +1,25 @@
+# The orchestrator: what this test does, in the order it does it.
+#
+# **A test is data too.** Nothing here is Rust - the harness reads this file, and every step is a
+# row. `seq` orders them across the four step relations, so the file reads top to bottom.
+#
+# **`load` is the command that reads another file.** The engine itself still reads nothing: the
+# harness is handed a way to fetch a name and the engine asks it, which is what keeps *no
+# `std::fs` in `src/`* true while `load` exists.
+#
+# WHY: `{test name:...}` is one row that nothing needs while there is one test. It is here because
+# there will be more.
+
+{test name:the-scout-moves-to-an-adjacent-place}
+
+{load seq:1 file:schema.4x into:game}
+{load seq:2 file:rules.4x into:game}
+{load seq:3 file:before.4x into:game}
+{load seq:4 file:command.4x into:game}
+{load seq:5 file:expected.4x into:expected}
+
+{execute seq:6 command:1}
+
+{compare seq:7 this:actual with:expected}
+
+{report seq:8 title:the-first-test}

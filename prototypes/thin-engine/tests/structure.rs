@@ -23,6 +23,7 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         "relation",
         "column",
         "reference",
+        "state",
         "role",
         "rule",
         "input",
@@ -41,11 +42,11 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         );
         checked += 1;
     }
-    assert_eq!(checked, 10, "ten relations describe the structure");
+    assert_eq!(checked, 11, "eleven relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        14,
-        "fourteen relations in all - those ten, and the game's four"
+        15,
+        "fifteen relations in all - those eleven, and the game's four"
     );
 }
 
@@ -148,4 +149,27 @@ fn an_input_is_checked_against_its_own_relation() {
 fn a_command_that_is_not_stated_is_not_a_command() {
     let why = run(&before(), "99").expect_err("nothing states command 99");
     assert_eq!(format!("{why}"), "no command is stated with id `99`");
+}
+
+/// **The files the helpers load are the files `data/test.4x` loads**, and neither list is derived
+/// from the other.
+///
+/// `common::LOADED` names four files so that these tests can assemble a game without running the
+/// script; `test.4x` names them so the script can. **Two lists that must agree and nothing making
+/// them** - so this is what would notice, rather than a fifth file being loaded by the script and
+/// silently missing from every test here.
+#[test]
+fn the_helper_loads_what_the_script_loads() {
+    let script: Vec<String> = common::rows("data/test.4x")
+        .iter()
+        .filter(|row| row.relation == "load" && row.value("into") == Some("game"))
+        .filter_map(|row| row.value("file").map(|it| format!("data/{it}")))
+        .collect();
+
+    assert_eq!(script.len(), 4, "the script loads four files into the game");
+    assert_eq!(
+        script,
+        common::LOADED.to_vec(),
+        "and they are the four the helpers here assemble, in the same order"
+    );
 }

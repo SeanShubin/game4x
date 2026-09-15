@@ -1,0 +1,9 @@
+# The command: move thing 1 from territory 1 to territory 2.
+#
+# **A command is data like everything else**, so running the test is naming which command to run
+# rather than typing one.
+
+{command id:1 rule:move}
+{argument id:1.what command:1 input:move.what value:1}
+{argument id:1.from command:1 input:move.from value:1}
+{argument id:1.to command:1 input:move.to value:2}

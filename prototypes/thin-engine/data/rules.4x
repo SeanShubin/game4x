@@ -1,0 +1,27 @@
+# The rule, which is the command table of `temporary-notes/first-test.md` normalized.
+#
+# **This file is not one of the five Sean listed, and that is a question rather than a decision.**
+# A rule is not the schema, not the state before, not the state after and not the command - it is
+# static input like the schema, and it is shared by before and after the same way. It is here on
+# its own so that folding it into `schema.4x` is one move if that is where it belongs.
+#
+# The note's first column was the discriminator - `input`, `effect` - and its effect rows carried a
+# verb and then two positional cells. Those cells are `binding` rows now, because a relation cannot
+# have columns that change with what it points at.
+
+{rule name:move}
+{input id:move.what rule:move seq:1 name:what of:thing}
+{input id:move.from rule:move seq:2 name:from of:territory}
+{input id:move.to rule:move seq:3 name:to of:territory}
+{clause id:move.1 rule:move seq:1 role:require relation:residency}
+{clause id:move.2 rule:move seq:2 role:require relation:adjacency}
+{clause id:move.3 rule:move seq:3 role:remove relation:residency}
+{clause id:move.4 rule:move seq:4 role:add relation:residency}
+{binding id:move.1.what clause:move.1 column:residency.what input:move.what}
+{binding id:move.1.where clause:move.1 column:residency.where input:move.from}
+{binding id:move.2.from clause:move.2 column:adjacency.from input:move.from}
+{binding id:move.2.to clause:move.2 column:adjacency.to input:move.to}
+{binding id:move.3.what clause:move.3 column:residency.what input:move.what}
+{binding id:move.3.where clause:move.3 column:residency.where input:move.from}
+{binding id:move.4.what clause:move.4 column:residency.what input:move.what}
+{binding id:move.4.where clause:move.4 column:residency.where input:move.to}
