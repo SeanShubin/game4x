@@ -66,8 +66,8 @@ was wrong, and being refuted is the lens working.
 
 ### Q-92 - The gate's own command reports one failure of eleven, and one flag fixes it
 
-**to** code · **status** open · **raised** 2026-09-13 · **source** measuring the masking this lens
-had been describing in messages, at `ab33689`
+**to** code · **status** **acted** 2026-09-14 · `97835c6c` · **raised** 2026-09-13 · **source** measuring the masking
+this lens had been describing in messages, at `ab33689`
 
 **Where.** `hooks/pre-push`, the two `cargo test` lines.
 
@@ -110,10 +110,20 @@ confidence. `--no-fail-fast` is the default path.
 so a failing `fmt` still hides the tests entirely. That ordering is deliberate and cheap to
 remember; the within-a-run masking is neither.
 
+## Closed, and the flag is on all three lines - 2026-09-14
+
+**`97835c6c` put `--no-fail-fast` in `hooks/pre-push`**, and the commit cites `Q-92` in the words the
+item asked for: *the flag exists so it should not be a habit*. **Re-read at `HEAD`: three `cargo
+test` lines, all three carrying it** - lines 57, 82 and 96, which is one more than the two this item
+named, because the per-tool loop at 82 was not in the measurement.
+
+**This closure was found by sweeping, not by anyone saying so**, which is what `Q-92` sat open for a
+day to demonstrate at this lens's own expense.
+
 ### Q-89 - Both new `put energy` rows have a destination and no source, and `P-489` would make that official
 
-**to** spec · **status** open · **raised** 2026-09-13 · **source** reading `C-113` and `P-489`
-against the rows themselves
+**to** spec · **status** **acted** 2026-09-14 · `2113dc7c`, `a0d3c193` · **raised** 2026-09-13 · **source** reading
+`C-113` and `P-489` against the rows themselves
 
 **Where.** `releases/first-release.md:229-230` and `:245-248`; `P-489`'s offered sentence;
 `spec/units.md:17`.
@@ -196,6 +206,23 @@ spec** - and it fails identically at `c4ba239` with the release untouched.
 and `hooks/pre-push` runs under `set -e`, so *the gate is red on the quantified put* was **true and
 incomplete** for as long as the put failed first. **A red hides the reds behind it**, and every lane
 including this one has been quoting the top one as though it were the count.
+
+## Closed: both rows are gone, by two promotions rather than one - 2026-09-14
+
+**The choice this item said was load-bearing and unmade has been made, and made twice.**
+
+- `2113dc7c` promoted `P-489`: `produce pioneer` now reads `consume 2 energy`, which is the
+  `consume`-plus-`put` shape this item derived from `move` and `stow`.
+- `a0d3c193` promoted `P-511`: **`refuel` no longer exists.** Pooling left it moving an energy into
+  a unit with nowhere to move it to, so the recipe went rather than gaining a source row.
+
+**Re-derived over the whole table rather than over the two rows named.** Parsing the *Recipes*
+table's `Role` column at `HEAD`: **seventeen `put` rows, and every one of them has an empty `Qty`
+and a count trait** - so the structural exception this item counted, two of fifteen, is now zero of
+seventeen. The population is non-empty and the count is over all of it.
+
+**`spec/units.md`'s *paid* and `spec/invariants.md`'s conservation both hold again**, and neither
+needed changing; what changed was the rows.
 
 ### Q-90 - `P-489` offers two blocks, declares one shape and one destination, and would promote unverified
 
