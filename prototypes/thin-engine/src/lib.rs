@@ -14,7 +14,7 @@
 //! **No `main`, no file reading, no argument parsing.** The engine takes `&str` and rows; the
 //! tests read `data/`. That is what makes *no file read outside its own directory* true by
 //! construction rather than by discipline - there is no `std::fs` in `src/` at all, which
-//! `tests/moving.rs` asserts.
+//! `tests/isolation.rs` asserts.
 
 pub mod engine;
 pub mod notation;

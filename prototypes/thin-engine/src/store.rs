@@ -6,7 +6,7 @@
 //! reach is one where the engine names no noun at all.
 //!
 //! **No relation the data names appears anywhere in this crate's code**, which
-//! `tests/moving.rs` checks by reading the word list out of `data/` rather than remembering it.
+//! `tests/isolation.rs` checks by reading the word list out of `data/` rather than remembering it.
 //! `scout`, `territory` and `move` are in the data, in the tests and in comments like this one,
 //! and in no line that runs.
 

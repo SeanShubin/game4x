@@ -80,7 +80,7 @@ even the notation.* **A borrowed parser is a borrowed decision about what a line
 the notation is the thing most likely to have to change here, because what the data must express
 is exactly what is under test. `src/notation.rs` is 77 lines and answers to this directory alone.
 
-The isolation is checked rather than promised, by `tests/moving.rs`:
+The isolation is checked rather than promised, by `tests/isolation.rs`:
 
 - the `[dependencies]` table is empty, so there is no path dependency on any crate
 - `std::fs`, `include_str!` and `env!` appear in no line of `src/` that runs, so **the engine
