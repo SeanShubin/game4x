@@ -141,11 +141,22 @@ impl Names {
             };
             let of = rows
                 .iter()
-                .find(|it| it.relation == "input" && it.value("id") == Some(input))
+                // **By id or by name**, for the same reason the relation lookup below is: in the
+                // friendly source an argument names its input `what`, and in the foundation it
+                // names it `2`.
+                .find(|it| {
+                    it.relation == "input"
+                        && (it.value("id") == Some(input) || it.value("name") == Some(input))
+                })
                 .and_then(|it| it.value("of"))
+                // **By id or by name.** In the foundation `of` is a relation's id; in the
+                // friendly source it is already its name. This is read from whichever it is
+                // handed, which is what lets the same translator work in both directions.
                 .and_then(|of| {
-                    rows.iter()
-                        .find(|it| it.relation == "relation" && it.value("id") == Some(of))
+                    rows.iter().find(|it| {
+                        it.relation == "relation"
+                            && (it.value("id") == Some(of) || it.value("name") == Some(of))
+                    })
                 })
                 .and_then(|it| it.value("name"));
             if let Some(of) = of {
@@ -230,9 +241,17 @@ impl Names {
     /// each reference from a name back into an id, and dropping the `name` where the relation
     /// does not declare one. **A value that is not a name is left alone**, which is what lets a
     /// reference to a row with no name stay an id.
-    pub fn foundation(&self, row: &Row) -> Row {
+    ///
+    /// # It refuses a name it would otherwise drop
+    ///
+    /// **`{territory id:1 name:home}` is an error rather than `{territory id:1}`.** `territory`
+    /// declares no `name`, so the foundation has nowhere to put one - and silently dropping it
+    /// would lose an author's work in the format they author in. **The refusal is the whole of
+    /// what makes the conversion reliable**; naming a territory needs somewhere in the foundation
+    /// to keep it, which is a schema decision rather than a translator one.
+    pub fn foundation(&self, row: &Row) -> Result<Row, String> {
         let Some(relation) = self.schema.relation(&row.relation) else {
-            return row.clone();
+            return Ok(row.clone());
         };
         let id = row.value(relation.key()).unwrap_or_default().to_string();
 
@@ -257,13 +276,22 @@ impl Names {
 
         // **A generated `name` goes**, because the relation never had one. A relation that does
         // declare `name` keeps it: there it is data.
-        if !self.declares_name.contains(&row.relation) {
-            values.remove("name");
+        if !self.declares_name.contains(&row.relation)
+            && let Some(given) = values.remove("name")
+        {
+            let generated = format!("{}-{id}", row.relation);
+            if given != generated {
+                return Err(format!(
+                    "`{}` is named `{given}`, and `{}` has nowhere to keep a name -                      the generated one is `{generated}`",
+                    shown(row),
+                    row.relation
+                ));
+            }
         }
-        Row {
+        Ok(Row {
             relation: row.relation.clone(),
             values,
-        }
+        })
     }
 
     /// Every row, in the order given.
@@ -273,4 +301,9 @@ impl Names {
             .collect::<Vec<String>>()
             .join("\n")
     }
+}
+
+/// A row as the notation writes it, for a message about it.
+pub fn shown(row: &Row) -> String {
+    thin_engine::notation::write(row)
 }

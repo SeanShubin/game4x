@@ -40,7 +40,7 @@ use common::mine;
 /// Every file in `data/`, as text.
 fn originals() -> BTreeMap<String, String> {
     let mut all = BTreeMap::new();
-    for file in std::fs::read_dir(mine().join("data")).expect("data") {
+    for file in std::fs::read_dir(mine().join("data").join("foundation")).expect("data") {
         let file = file.expect("a file").path();
         if file.extension().map(|it| it != "4x").unwrap_or(true) {
             continue;

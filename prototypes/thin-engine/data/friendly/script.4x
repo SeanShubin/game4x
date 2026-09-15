@@ -1,0 +1,79 @@
+# The script's own vocabulary, declared the way the game's is.
+#
+# **Declaring this does not make the engine stop implementing it.** A `load` row has a `file` and
+# an `into`; what loading *is* stays a branch in `src/script.rs`, and `engine.4x` lists every such
+# branch.
+#
+# **The bootstrap, said rather than hidden.** `test.4x` loads this file, so the `load` step that
+# fetches it runs before its own description is available. **That is the one place the data cannot
+# describe itself.** Every other step is validated before it runs.
+
+
+## The relations a test is written in
+#
+# **Including the three the declarations themselves are written in.** Without them the rows
+# of this file are rows of relations nothing declares, and the script store goes unchecked -
+# which is how a column here could be deleted and nothing noticed.
+
+{relation id:17 name:store}
+{relation id:18 name:test}
+{relation id:19 name:load}
+{relation id:20 name:execute}
+{relation id:21 name:compare}
+{relation id:22 name:report}
+
+{relation id:23 name:relation}
+{relation id:24 name:column}
+{relation id:25 name:reference}
+
+
+## Their columns
+
+{column id:47 relation:store seq:1 name:id}
+{column id:48 relation:store seq:2 name:name}
+{column id:49 relation:test seq:1 name:id}
+{column id:50 relation:test seq:2 name:name}
+{column id:51 relation:load seq:1 name:id}
+{column id:52 relation:load seq:2 name:seq}
+{column id:53 relation:load seq:3 name:file}
+{column id:54 relation:load seq:4 name:into}
+{column id:55 relation:execute seq:1 name:id}
+{column id:56 relation:execute seq:2 name:seq}
+{column id:57 relation:execute seq:3 name:command}
+{column id:58 relation:compare seq:1 name:id}
+{column id:59 relation:compare seq:2 name:seq}
+{column id:60 relation:compare seq:3 name:this}
+{column id:61 relation:compare seq:4 name:with}
+{column id:62 relation:report seq:1 name:id}
+{column id:63 relation:report seq:2 name:seq}
+{column id:64 relation:report seq:3 name:title}
+{column id:65 relation:relation seq:1 name:id}
+{column id:66 relation:relation seq:2 name:name}
+{column id:67 relation:column seq:1 name:id}
+{column id:68 relation:column seq:2 name:relation}
+{column id:69 relation:column seq:3 name:seq}
+{column id:70 relation:column seq:4 name:name}
+{column id:71 relation:reference seq:1 name:id}
+{column id:72 relation:reference seq:2 name:column}
+{column id:73 relation:reference seq:3 name:to}
+
+
+## What points at what
+
+{reference id:20 column:54 to:store}
+{reference id:21 column:60 to:store}
+{reference id:22 column:61 to:store}
+{reference id:23 column:68 to:relation}
+{reference id:24 column:72 to:column}
+{reference id:25 column:73 to:relation}
+
+
+## The stores a test has
+#
+# **The engine branches on the `name` here too**, for the same reason it does for a role: `into:2`
+# means nothing until the row is looked up.
+
+{store id:1 name:script}
+{store id:2 name:game}
+{store id:3 name:expected}
+{store id:4 name:actual}

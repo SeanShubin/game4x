@@ -27,11 +27,11 @@ impl Files for Directory {
 }
 
 fn data() -> Directory {
-    Directory(mine().join("data"))
+    Directory(mine().join("data").join("foundation"))
 }
 
 fn report() -> Report {
-    run_test(&rows("data/test.4x"), &data()).unwrap_or_else(|why| panic!("{why}"))
+    run_test(&rows("data/foundation/test.4x"), &data()).unwrap_or_else(|why| panic!("{why}"))
 }
 
 /// **The whole of the first test: the engine gets from before to expected.**
@@ -96,8 +96,8 @@ fn a_state_that_is_not_expected_is_reported_as_both_rows() {
         }
     }
 
-    let report =
-        run_test(&rows("data/test.4x"), &Wrong(data())).unwrap_or_else(|why| panic!("{why}"));
+    let report = run_test(&rows("data/foundation/test.4x"), &Wrong(data()))
+        .unwrap_or_else(|why| panic!("{why}"));
 
     assert!(
         !report.same(),

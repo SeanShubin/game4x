@@ -53,7 +53,7 @@ fn constants() -> BTreeSet<String> {
 
 /// Every word `data/engine.4x` says the engine implements.
 fn declared() -> BTreeSet<String> {
-    rows("data/engine.4x")
+    rows("data/foundation/engine.4x")
         .iter()
         .filter(|row| row.relation == "primitive")
         .filter_map(|row| row.value("word").map(str::to_string))

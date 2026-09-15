@@ -339,6 +339,48 @@ example - the territories and the thing are named, the adjacencies and the resid
 those two are exactly the relations nothing points at. **A name on a row nothing references would
 be a value nothing reads**, which is the thing this prototype is meant not to have.
 
+## Two directories, and friendly is the source
+
+**Sean, 2026-09-15**: *Lets make friendly the source and not omit anything. This presumes we can
+reliably convert between friendly and foundation. Also it is ok that sometimes they happen to be
+the same thing.*
+
+`data/friendly/` and `data/foundation/` hold **the same eight files and the same 219 rows**.
+`tests/directories.rs` is what says they say the same thing, in both directions: converting the
+friendly source gives the foundation row for row, and rendering the foundation gives the friendly
+source back.
+
+**One file is byte-identical in both**, and that is the *sometimes* Sean allowed for: `engine.4x`
+is 35 `primitive` rows with no references and names of their own, so there is nothing to rename
+and nothing to generate.
+
+| Gains from the friendly format                                                                                                              | Renders identically                                          |
+| ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `adjacency` `argument` `binding` `clause` `column` `command` `compare` `execute` `input` `load` `reference` `residency` `state` `territory` | `primitive` `relation` `report` `role` `rule` `store` `test` |
+
+**`column` is in the left column, which is why it is not omitted.** Its own rows cannot be named,
+so a reference *to* a column is an id - but `column.relation` renders as `residency` rather than
+`16`, so the table does support the format and is shown. Sean: *it is ok to omit some machinery
+tables if they don't support the friendly format, but if they do support the friendly format I want
+to see those too.*
+
+## A name the foundation cannot keep is refused, not dropped
+
+**Making friendly the source turned a harmless asymmetry into a data-loss bug**, and it took
+writing the conversion the other way to see it. `territory` declares no `name`, so:
+
+```text
+{territory id:1 name:home}   ->   {territory id:1}
+```
+
+The name was **silently gone**. In the old direction that never mattered, because a generated name
+was all there ever was; with friendly as the source it is an author's work disappearing in the
+format they author in. **It is refused now**, and the refusal says what the generated name would
+have been.
+
+**Naming a territory therefore needs somewhere in the foundation to keep it** - a `name` column on
+every relation, or a table mapping a row to a name. That is a schema decision and is not made here.
+
 ## Authoring in the friendly format, and the round trip
 
 **Sean, 2026-09-15**: *I expect to be authoring tests in the friendly format and only

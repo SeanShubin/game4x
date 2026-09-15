@@ -13,7 +13,7 @@ fn the_world_renders_in_the_user_facing_format() {
     let game = game_rows();
     let names = Names::of(&game);
 
-    let rendered = names.all(&rows("data/before.4x"));
+    let rendered = names.all(&rows("data/foundation/before.4x"));
     println!("{rendered}");
 
     assert_eq!(
@@ -37,10 +37,10 @@ fn every_row_keeps_its_id() {
 
     let mut checked = 0;
     for file in [
-        "data/before.4x",
-        "data/rules.4x",
-        "data/command.4x",
-        "data/schema.4x",
+        "data/foundation/before.4x",
+        "data/foundation/rules.4x",
+        "data/foundation/command.4x",
+        "data/foundation/schema.4x",
     ] {
         for row in rows(file) {
             let Some(id) = row.value("id") else { continue };
@@ -102,26 +102,28 @@ fn a_column_is_referenced_by_id_because_its_name_is_a_token() {
 fn every_file_survives_the_round_trip() {
     let game = game_rows();
     let of_game = Names::of(&game);
-    let mut script = rows("data/script.4x");
-    script.extend(rows("data/test.4x"));
+    let mut script = rows("data/foundation/script.4x");
+    script.extend(rows("data/foundation/test.4x"));
     let of_script = Names::of(&script);
 
     let mut checked = 0;
     for (file, names) in [
-        ("data/schema.4x", &of_game),
-        ("data/engine.4x", &of_game),
-        ("data/rules.4x", &of_game),
-        ("data/before.4x", &of_game),
-        ("data/command.4x", &of_game),
-        ("data/expected.4x", &of_game),
-        ("data/script.4x", &of_script),
-        ("data/test.4x", &of_script),
+        ("data/foundation/schema.4x", &of_game),
+        ("data/foundation/engine.4x", &of_game),
+        ("data/foundation/rules.4x", &of_game),
+        ("data/foundation/before.4x", &of_game),
+        ("data/foundation/command.4x", &of_game),
+        ("data/foundation/expected.4x", &of_game),
+        ("data/foundation/script.4x", &of_script),
+        ("data/foundation/test.4x", &of_script),
     ] {
         for row in rows(file) {
             let friendly = names.row(&row);
             let parsed = thin_engine::notation::read(&friendly)
                 .unwrap_or_else(|why| panic!("{file}: `{friendly}`: {why}"));
-            let back = names.foundation(&parsed[0]);
+            let back = names
+                .foundation(&parsed[0])
+                .unwrap_or_else(|why| panic!("{file}: {why}"));
             assert_eq!(
                 back,
                 row,

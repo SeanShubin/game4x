@@ -1,0 +1,128 @@
+# The shared schema: every relation, its columns in order, and what points at what.
+#
+# **Every relation is keyed by a single opaque integer id**, and every reference is to one of those
+# ids - Sean, 2026-09-15: *I want the truth of the data model to be fully normalized, which I
+# believe means always referencing by ids, and a single id at that.*
+#
+# **The ids mean nothing and are not meant to be read.** Making them legible is the user-facing
+# style's job, not this one's. What is legible here is the `name` column, which is decoration -
+# with two exceptions worth knowing: a row names its relation by `relation.name`, and a row's
+# values are keyed by `column.name`, so those two decorations are what the notation is written in.
+
+
+## Every relation, and its columns in order
+
+{relation id:1 name:relation}
+{relation id:2 name:column}
+{relation id:3 name:reference}
+{relation id:4 name:state}
+{relation id:5 name:role}
+{relation id:6 name:rule}
+{relation id:7 name:input}
+{relation id:8 name:clause}
+{relation id:9 name:binding}
+{relation id:10 name:command}
+{relation id:11 name:argument}
+{relation id:12 name:primitive}
+{relation id:13 name:territory}
+{relation id:14 name:thing}
+{relation id:15 name:adjacency}
+{relation id:16 name:residency}
+
+
+## The columns
+
+{column id:1 relation:relation seq:1 name:id}
+{column id:2 relation:relation seq:2 name:name}
+{column id:3 relation:column seq:1 name:id}
+{column id:4 relation:column seq:2 name:relation}
+{column id:5 relation:column seq:3 name:seq}
+{column id:6 relation:column seq:4 name:name}
+{column id:7 relation:reference seq:1 name:id}
+{column id:8 relation:reference seq:2 name:column}
+{column id:9 relation:reference seq:3 name:to}
+{column id:10 relation:state seq:1 name:id}
+{column id:11 relation:state seq:2 name:relation}
+{column id:12 relation:role seq:1 name:id}
+{column id:13 relation:role seq:2 name:name}
+{column id:14 relation:rule seq:1 name:id}
+{column id:15 relation:rule seq:2 name:name}
+{column id:16 relation:input seq:1 name:id}
+{column id:17 relation:input seq:2 name:rule}
+{column id:18 relation:input seq:3 name:seq}
+{column id:19 relation:input seq:4 name:name}
+{column id:20 relation:input seq:5 name:of}
+{column id:21 relation:clause seq:1 name:id}
+{column id:22 relation:clause seq:2 name:rule}
+{column id:23 relation:clause seq:3 name:seq}
+{column id:24 relation:clause seq:4 name:role}
+{column id:25 relation:clause seq:5 name:relation}
+{column id:26 relation:binding seq:1 name:id}
+{column id:27 relation:binding seq:2 name:clause}
+{column id:28 relation:binding seq:3 name:column}
+{column id:29 relation:binding seq:4 name:input}
+{column id:30 relation:command seq:1 name:id}
+{column id:31 relation:command seq:2 name:rule}
+{column id:32 relation:argument seq:1 name:id}
+{column id:33 relation:argument seq:2 name:command}
+{column id:34 relation:argument seq:3 name:input}
+{column id:35 relation:argument seq:4 name:value}
+{column id:36 relation:primitive seq:1 name:id}
+{column id:37 relation:primitive seq:2 name:word}
+{column id:38 relation:territory seq:1 name:id}
+{column id:39 relation:thing seq:1 name:id}
+{column id:40 relation:thing seq:2 name:name}
+{column id:41 relation:adjacency seq:1 name:id}
+{column id:42 relation:adjacency seq:2 name:from}
+{column id:43 relation:adjacency seq:3 name:to}
+{column id:44 relation:residency seq:1 name:id}
+{column id:45 relation:residency seq:2 name:what}
+{column id:46 relation:residency seq:3 name:where}
+
+
+## What points at what
+#
+# **A reference is always to a relation's `id`.** The engine checks that such a row is there, so a
+# value pointing at nothing is refused when the data is read rather than when it is used.
+
+{reference id:1 column:4 to:relation}
+{reference id:2 column:8 to:column}
+{reference id:3 column:9 to:relation}
+{reference id:4 column:11 to:relation}
+{reference id:5 column:17 to:rule}
+{reference id:6 column:20 to:relation}
+{reference id:7 column:22 to:rule}
+{reference id:8 column:24 to:role}
+{reference id:9 column:25 to:relation}
+{reference id:10 column:27 to:clause}
+{reference id:11 column:28 to:column}
+{reference id:12 column:29 to:input}
+{reference id:13 column:31 to:rule}
+{reference id:14 column:33 to:command}
+{reference id:15 column:34 to:input}
+{reference id:16 column:42 to:territory}
+{reference id:17 column:43 to:territory}
+{reference id:18 column:45 to:thing}
+{reference id:19 column:46 to:territory}
+
+
+## Which relations are the game's state
+#
+# **This is what bounds the comparison.** `expected.4x` states the state after, and a diff has to
+# know which relations to look at - without this it would compare the rule and the command too.
+
+{state id:1 relation:territory}
+{state id:2 relation:thing}
+{state id:3 relation:adjacency}
+{state id:4 relation:residency}
+
+
+## The three roles a clause can have
+#
+# **The engine branches on the `name`, not on the id.** An id is arbitrary, so a rule that says
+# `role:2` means nothing until the row is looked up - which makes `role.name` load-bearing where
+# every other `name` is decoration.
+
+{role id:1 name:require}
+{role id:2 name:remove}
+{role id:3 name:add}

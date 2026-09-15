@@ -35,11 +35,11 @@ pub fn rows(at: &str) -> Vec<Row> {
 /// store and is validated together; the lists agreeing is what matters, and asserting the order is
 /// the cheapest way to notice that they do not.
 pub const LOADED: [&str; 5] = [
-    "data/schema.4x",
-    "data/engine.4x",
-    "data/rules.4x",
-    "data/before.4x",
-    "data/command.4x",
+    "data/foundation/schema.4x",
+    "data/foundation/engine.4x",
+    "data/foundation/rules.4x",
+    "data/foundation/before.4x",
+    "data/foundation/command.4x",
 ];
 
 pub fn game_rows() -> Vec<Row> {

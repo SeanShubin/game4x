@@ -1,0 +1,14 @@
+# The state after, which is `temporary-notes/first-test.md`'s ending state row for row.
+#
+# **Every relation is stated, including the three that do not change.** That is the shape of the
+# note and it is the stronger assertion: comparing whole relations says nothing else moved.
+#
+# **Written by hand from the note** - the one row that differs is the residency.
+
+{territory id:1 name:territory-1}
+{territory id:2 name:territory-2}
+{territory id:3 name:territory-3}
+{thing id:1 name:scout}
+{adjacency id:1 from:territory-1 to:territory-2}
+{adjacency id:2 from:territory-2 to:territory-3}
+{residency id:1 what:scout where:territory-2}

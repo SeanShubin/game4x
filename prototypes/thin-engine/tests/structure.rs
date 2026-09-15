@@ -168,15 +168,15 @@ fn a_command_that_is_not_stated_is_not_a_command() {
 #[test]
 fn the_helper_loads_what_the_script_loads() {
     // `into` names a store by id, and `script.4x` says which is which.
-    let game_store = common::rows("data/script.4x")
+    let game_store = common::rows("data/foundation/script.4x")
         .iter()
         .find(|row| row.relation == "store" && row.value("name") == Some("game"))
         .and_then(|row| row.value("id").map(str::to_string))
         .expect("a store named `game`");
-    let script: Vec<String> = common::rows("data/test.4x")
+    let script: Vec<String> = common::rows("data/foundation/test.4x")
         .iter()
         .filter(|row| row.relation == "load" && row.value("into") == Some(game_store.as_str()))
-        .filter_map(|row| row.value("file").map(|it| format!("data/{it}")))
+        .filter_map(|row| row.value("file").map(|it| format!("data/foundation/{it}")))
         .collect();
 
     assert_eq!(script.len(), 5, "the script loads five files into the game");
