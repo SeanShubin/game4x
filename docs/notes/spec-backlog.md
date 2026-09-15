@@ -26,6 +26,31 @@ can check it himself. `C-114` is the measurement; this is what it is for.
 largest structural choice in the repository and leaves to him. Recorded here so that when that choice
 is made, the reason it was wanted is not reconstructed from the code lane's measurements alone.
 
+## Said 2026-09-14: a prototype that strips the engine and adds concepts one at a time
+
+*I intend to reuse the game notation with different values, and strip out the entire game engine,
+adding concepts in one at a time. This should be separate from the main code base. I intend to write
+tests in my game notation.*
+
+**The first test, in his words**: three territories `1, 2, 3`; two adjacencies `1-2` and `2-3`; one
+vehicle named `scout`. One test moves the scout from 1 to 2. The next shows that moving it from 1 to
+3 fails. **No mechanic that is not needed to pass the test**, and *overkill on the code structure,
+being data driven with a thin engine.*
+
+**This is `C-114`'s open half done empirically rather than decided.** That item asks whether the
+engine can be thin and the data can run the game; the code lane measured the arrangement and
+declined to start the restructuring because it is the largest structural choice in the repository.
+**A prototype answers it by existing**, which is `docs/prototypes/README.md`'s whole idea - *the
+question is stated, the answer is recorded, and a prototype is finished when its question is
+answered.*
+
+**And it is his own concrete-first rule applied to the biggest question left**: *something concrete
+that can't possibly work can be adapted, while abstract ideas alone don't allow progress.*
+
+**Said while stopping** - *this is getting a bit out of control, I want to come back to this after I
+have designed the data structures from scratch* - so `P-516` and `P-517` wait on it rather than the
+other way round.
+
 ## Said 2026-09-14: resources are declared with the unit, and the interface defaults
 
 *My inclination right now is to declare resources along with units in what is moved. The ui is in
