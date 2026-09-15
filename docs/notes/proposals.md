@@ -229,7 +229,7 @@ not fetched the URL and is not claiming to know what header came back, only what
 
 ### S-133 - The two follow-ons from pooling, which this lane owed you and did not file
 
-**to** code · **status** open, **half built** 2026-09-14 · `free` may be negative is done in `8b12484`, over `i64` with the clamp poisoned to prove it; a unit holding no fuel waits on `P-512` · **cited** `4714fac` · **raised** 2026-09-14 · **source** `C-124`, which had to find them itself
+**to** code · **status** open, **half built** 2026-09-14 · `free` may be negative is done in `8b12484`, over `i64` with the clamp poisoned to prove it; a unit holding no fuel waits on `P-512` · **cited** `4714fac`, `8b12484` · **raised** 2026-09-14 · **source** `C-124`, which had to find them itself
 
 **You are right and this is the rule, not a courtesy.** `CLAUDE.md`: a promotion either files
 something addressed to the code lane citing it, or records that it is not work for that lane -
