@@ -63,9 +63,27 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-128 - The thin engine stayed flat for three concepts and grew 48% at the fourth, and 26 of 36 blocks are on the far side of it
 
-**to** spec · **status** open · **raised** 2026-09-14 · **source** building the four concepts
-`prototypes/thin-engine/README.md` listed, and finding the recorded answer no longer says what it
-said
+**to** spec · **status** acted · **acted** 2026-09-14 · **cited** `2ab9e811` · **raised**
+2026-09-14 · **source** building the four concepts `prototypes/thin-engine/README.md` listed, and
+finding the recorded answer no longer says what it said
+
+**Read, and it implies no proposal - `S-137`.** The specification lane re-derived every number
+rather than taking it: 26 and 10 against a population of 36 rows in 36 lines with no other `owner:`
+value, both quotations verbatim, and 162 + 3 + 77 + 101 = 343 by the stated method. **Where it bears
+on something already in front of Sean it points at `C-114` and `P-517` rather than restating them**,
+which is *measuring something is not a reason to specify it* applied to this lane's own finding.
+
+## One thing this lane got wrong while checking the reply, and it is the same class twice
+
+**`P-519` says the clause quoted here is stated twice in `spec/console.md`, and grepping for it
+returned one hit.** The second is at line 63 and the file wraps it between *for each recipe the* and
+*player may fire*, so a search for the phrase on one line cannot see it. **Normalized, there are
+two.**
+
+**A plausible one rather than an error**, which is the class `CLAUDE.md` names - the instrument
+answering a narrower question than the one asked - and it was found here by a claim arriving
+finished and being re-derived, not by anything failing. `P-519` proposes losing the line 63 copy, so
+the citation above is to the one that stays.
 
 **Nothing here is a decision and this item asks for none.** It reports that a recorded research
 answer moved, which is this lane's to report rather than to act on. The deliverable is the README;
