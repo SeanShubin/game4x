@@ -167,6 +167,20 @@ impl Game {
         out
     }
 
+    /// The `name` of the row of `relation` whose id is `id`.
+    ///
+    /// **The engine branches on names and the data references by ids**, so this is where the two
+    /// meet. An id is arbitrary - `role:2` means nothing until the row is looked up - so a value
+    /// that selects a code path is resolved here first. **That makes `role.name` and
+    /// `relation.name` load-bearing where every other `name` is decoration.**
+    pub fn named(&self, relation: &str, id: &str) -> Option<&str> {
+        self.rows
+            .rows()
+            .iter()
+            .find(|row| row.relation == relation && row.value(ID) == Some(id))
+            .and_then(|row| row.value(NAME))
+    }
+
     fn of_relation(&self, relation: &str) -> Vec<&Row> {
         self.rows
             .rows()
@@ -255,7 +269,10 @@ pub fn run(game: &Game, command: &str) -> Result<Game, Refused> {
             id: command.to_string(),
         });
     };
-    let rule = stated.value(RULE).unwrap_or_default().to_string();
+    let of_rule = stated.value(RULE).unwrap_or_default().to_string();
+    // **The id identifies and the name is what a refusal says.** Every filter below is by id;
+    // this is only ever read into a message.
+    let rule = game.named(RULE, &of_rule).unwrap_or(&of_rule).to_string();
 
     // **An argument per declared input, each of the input's declared type.** A value the structure
     // cannot place is refused here, which is why no rule says *the destination exists*.
@@ -269,7 +286,7 @@ pub fn run(game: &Game, command: &str) -> Result<Game, Refused> {
     let mut inputs: Vec<&Row> = game
         .of_relation(INPUT)
         .into_iter()
-        .filter(|row| row.value(RULE) == Some(rule.as_str()))
+        .filter(|row| row.value(RULE) == Some(of_rule.as_str()))
         .collect();
     inputs.sort_by_key(|row| row.value(SEQ).unwrap_or_default().to_string());
 
@@ -280,7 +297,9 @@ pub fn run(game: &Game, command: &str) -> Result<Game, Refused> {
         let Some(given) = arguments.get(id) else {
             return Err(Refused::Missing { rule, input: named });
         };
-        let of = input.value(OF).unwrap_or_default().to_string();
+        // `of` is a relation's id; `has_key` wants its name.
+        let of = input.value(OF).unwrap_or_default();
+        let of = game.named(RELATION, of).unwrap_or(of).to_string();
         if !game.has_key(&of, given) {
             return Err(Refused::WrongType {
                 rule,
@@ -295,7 +314,7 @@ pub fn run(game: &Game, command: &str) -> Result<Game, Refused> {
     let mut clauses: Vec<&Row> = game
         .of_relation(CLAUSE)
         .into_iter()
-        .filter(|row| row.value(RULE) == Some(rule.as_str()))
+        .filter(|row| row.value(RULE) == Some(of_rule.as_str()))
         .collect();
     clauses.sort_by_key(|row| row.value(SEQ).unwrap_or_default().to_string());
 
@@ -305,10 +324,16 @@ pub fn run(game: &Game, command: &str) -> Result<Game, Refused> {
     for pass in [REQUIRE, REMOVE] {
         for clause in &clauses {
             let role = clause.value(ROLE).unwrap_or_default();
+            let role = game.named(ROLE, role).unwrap_or(role);
             if role != pass {
                 continue;
             }
-            let wanted = row_of(game, clause, &bound, &rule)?;
+            // **A pattern, not a whole row.** `require` and `remove` match on what they name,
+            // so a clause can ask for *an adjacency from here to there* without naming which one.
+            // **`add` is the other case and must name every column**, because a row that does not
+            // fit the structure cannot be put into the world - including the `id` it will be
+            // known by.
+            let wanted = row_of(game, clause, &bound, &rule, PATTERN)?;
             match role {
                 REQUIRE => {
                     if !game.rows.holds(&wanted) {
@@ -330,9 +355,10 @@ pub fn run(game: &Game, command: &str) -> Result<Game, Refused> {
         }
     }
     for clause in &clauses {
-        match clause.value(ROLE).unwrap_or_default() {
+        let role = clause.value(ROLE).unwrap_or_default();
+        match game.named(ROLE, role).unwrap_or(role) {
             REQUIRE | REMOVE => continue,
-            ADD => after.add(row_of(game, clause, &bound, &rule)?),
+            ADD => after.add(row_of(game, clause, &bound, &rule, WHOLE)?),
             other => {
                 return Err(Refused::NoSuchRole {
                     rule,
@@ -355,13 +381,22 @@ pub fn run(game: &Game, command: &str) -> Result<Game, Refused> {
 }
 
 /// The row a clause is about, with every column taking the value its binding names.
+/// Whether a clause must name every column of its relation, or only the ones it constrains.
+const WHOLE: bool = true;
+const PATTERN: bool = false;
+
 fn row_of(
     game: &Game,
     clause: &Row,
     bound: &BTreeMap<String, String>,
     rule: &str,
+    whole: bool,
 ) -> Result<Row, Refused> {
-    let relation = clause.value(RELATION).unwrap_or_default().to_string();
+    let relation = clause.value(RELATION).unwrap_or_default();
+    let relation = game
+        .named(RELATION, relation)
+        .unwrap_or(relation)
+        .to_string();
     let id = clause.value(ID).unwrap_or_default();
     let bindings: Vec<&Row> = game
         .of_relation(BINDING)
@@ -386,7 +421,9 @@ fn row_of(
     // **Every column of the relation has to be bound**, said here rather than left to the
     // structure check - a half-built row would otherwise be reported as one whose columns are
     // wrong, which names the symptom instead of the clause.
-    if let Some(declared) = declared {
+    if let Some(declared) = declared
+        && whole
+    {
         for column in &declared.columns {
             if !values.contains_key(&column.name) {
                 return Err(Refused::Unbound {

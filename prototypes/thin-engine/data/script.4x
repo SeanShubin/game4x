@@ -1,35 +1,79 @@
 # The script's own vocabulary, declared the way the game's is.
 #
-# **Declaring this does not make the engine stop implementing it.** `{relation name:load}` says a
-# `load` row has a `file` and an `into`; it does not say what loading *is*. That stays a branch in
-# `src/script.rs`, and `engine.4x` is where every such branch is listed.
-#
-# **What it does buy** is that a step is checked like any other row: a misspelt column is refused
-# by the structure rather than by a special case in Rust, and the five step relations are readable
-# without opening the code.
+# **Declaring this does not make the engine stop implementing it.** A `load` row has a `file` and
+# an `into`; what loading *is* stays a branch in `src/script.rs`, and `engine.4x` lists every such
+# branch.
 #
 # **The bootstrap, said rather than hidden.** `test.4x` loads this file, so the `load` step that
 # fetches it runs before its own description is available. **That is the one place the data cannot
-# describe itself** - the step that fetches the description. Every other step is validated before
-# it runs.
+# describe itself.** Every other step is validated before it runs.
 
-{relation name:test}
-{column id:test.name relation:test seq:1 name:name}
 
-{relation name:load}
-{column id:load.seq relation:load seq:1 name:seq}
-{column id:load.file relation:load seq:2 name:file}
-{column id:load.into relation:load seq:3 name:into}
+## The relations a test is written in
+#
+# **Including the three the declarations themselves are written in.** Without them the rows
+# of this file are rows of relations nothing declares, and the script store goes unchecked -
+# which is how a column here could be deleted and nothing noticed.
 
-{relation name:execute}
-{column id:execute.seq relation:execute seq:1 name:seq}
-{column id:execute.command relation:execute seq:2 name:command}
+{relation id:17 name:store}
+{relation id:18 name:test}
+{relation id:19 name:load}
+{relation id:20 name:execute}
+{relation id:21 name:compare}
+{relation id:22 name:report}
 
-{relation name:compare}
-{column id:compare.seq relation:compare seq:1 name:seq}
-{column id:compare.this relation:compare seq:2 name:this}
-{column id:compare.with relation:compare seq:3 name:with}
+{relation id:23 name:relation}
+{relation id:24 name:column}
+{relation id:25 name:reference}
 
-{relation name:report}
-{column id:report.seq relation:report seq:1 name:seq}
-{column id:report.title relation:report seq:2 name:title}
+
+## Their columns
+
+{column id:47 relation:17 seq:1 name:id}
+{column id:48 relation:17 seq:2 name:name}
+{column id:49 relation:18 seq:1 name:id}
+{column id:50 relation:18 seq:2 name:name}
+{column id:51 relation:19 seq:1 name:id}
+{column id:52 relation:19 seq:2 name:seq}
+{column id:53 relation:19 seq:3 name:file}
+{column id:54 relation:19 seq:4 name:into}
+{column id:55 relation:20 seq:1 name:id}
+{column id:56 relation:20 seq:2 name:seq}
+{column id:57 relation:20 seq:3 name:command}
+{column id:58 relation:21 seq:1 name:id}
+{column id:59 relation:21 seq:2 name:seq}
+{column id:60 relation:21 seq:3 name:this}
+{column id:61 relation:21 seq:4 name:with}
+{column id:62 relation:22 seq:1 name:id}
+{column id:63 relation:22 seq:2 name:seq}
+{column id:64 relation:22 seq:3 name:title}
+{column id:65 relation:23 seq:1 name:id}
+{column id:66 relation:23 seq:2 name:name}
+{column id:67 relation:24 seq:1 name:id}
+{column id:68 relation:24 seq:2 name:relation}
+{column id:69 relation:24 seq:3 name:seq}
+{column id:70 relation:24 seq:4 name:name}
+{column id:71 relation:25 seq:1 name:id}
+{column id:72 relation:25 seq:2 name:column}
+{column id:73 relation:25 seq:3 name:to}
+
+
+## What points at what
+
+{reference id:20 column:54 to:17}
+{reference id:21 column:60 to:17}
+{reference id:22 column:61 to:17}
+{reference id:23 column:68 to:23}
+{reference id:24 column:72 to:24}
+{reference id:25 column:73 to:23}
+
+
+## The stores a test has
+#
+# **The engine branches on the `name` here too**, for the same reason it does for a role: `into:2`
+# means nothing until the row is looked up.
+
+{store id:1 name:script}
+{store id:2 name:game}
+{store id:3 name:expected}
+{store id:4 name:actual}

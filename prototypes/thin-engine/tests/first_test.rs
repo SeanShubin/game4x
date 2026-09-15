@@ -103,8 +103,8 @@ fn a_state_that_is_not_expected_is_reported_as_both_rows() {
         !report.same(),
         "the scout did move, so this is not as expected"
     );
-    assert_eq!(report.missing, vec!["{residency what:1 where:1}"]);
-    assert_eq!(report.extra, vec!["{residency what:1 where:2}"]);
+    assert_eq!(report.missing, vec!["{residency id:1 what:1 where:1}"]);
+    assert_eq!(report.extra, vec!["{residency id:1 what:1 where:2}"]);
     assert!(
         format!("{report}").contains("NOT as expected"),
         "and the report says so: {report}"

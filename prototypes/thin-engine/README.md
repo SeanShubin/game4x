@@ -42,16 +42,16 @@ the-first-test
 
 Measured on 2026-09-14:
 
-|                                              |                                                                           |
-| -------------------------------------------- | ------------------------------------------------------------------------- |
-| Code that runs, in `src/`                    | **927 lines** - notation 77, store 33, schema 230, engine 294, script 288 |
-| Rows of data                                 | **175** across eight files, holding **429** values                        |
-| Of those, rows nothing reads                 | **0** - every row can be deleted and something fails                      |
-| Values nothing reads                         | **51 of 429**, all of them surrogate keys or orderings that do not order  |
-| Rows that differ between before and expected | **1** - `{residency what:1 where:1}` becomes `{residency what:1 where:2}` |
-| Relations declared                           | **16** - twelve that describe the structure, four that are the game       |
-| Game nouns in code that runs                 | **0**, checked against a list read out of `data/`                         |
-| Tests                                        | **28**, all passing                                                       |
+|                                              |                                                                              |
+| -------------------------------------------- | ---------------------------------------------------------------------------- |
+| Code that runs, in `src/`                    | **1013 lines** - notation 77, store 33, schema 249, engine 333, script 316   |
+| Rows of data                                 | **219** across eight files, holding **681** values                           |
+| Of those, rows nothing reads                 | **8**, all bindings on a clause nothing in the suite tries to violate        |
+| Values nothing reads                         | **17 of 681** - thirteen decorations, and four ids on relations with one row |
+| Rows that differ between before and expected | **1** - `{residency what:1 where:1}` becomes `{residency what:1 where:2}`    |
+| Relations declared                           | **16** in the game and **9** in the script, every one keyed by an `id`       |
+| Game nouns in code that runs                 | **0**, checked against a list read out of `data/`                            |
+| Tests                                        | **29**, all passing                                                          |
 
 **The engine names nothing the game has.** `territory`, `thing`, `adjacency`, `residency` and
 `move` appear in `data/`, in the tests and in comments, and in no line of `src/` that runs.
@@ -312,6 +312,40 @@ floor asks whether there are enough; the question was whether they are all still
 validated against their own declarations, the `{test ...}` row was skipped entirely, and
 `engine.4x` was read from the file rather than from what the script had loaded - so the step
 loading it was dead.
+
+## The foundation style: every relation keyed by one opaque integer
+
+**Sean, 2026-09-15**: *I want the truth of the data model to be fully normalized, which I believe
+means always referencing by ids, and a single id at that. The names are decorations, but important
+decorations.* And: *there will have to be two styles. The foundational style is equivalent to a
+database row. The user friendly style won't be normalised, it will model user intentions.*
+
+**The data is the foundation style now.** Every one of the 25 relations has `id` as its first
+column, every reference is to one of those ids, and nothing is readable without the schema:
+
+```text
+{clause id:3 rule:1 seq:3 role:2 relation:16}
+{binding id:6 clause:3 column:44 input:1}
+{residency id:1 what:1 where:1}
+```
+
+**Three things fell out of it that were not obvious beforehand.**
+
+**The engine branches on names, and the data references by ids**, so the two have to meet
+somewhere. `role:2` means nothing until the row is looked up, so a value that selects a code path
+is resolved to its `name` first. **That makes `role.name`, `store.name` and `relation.name`
+load-bearing where every other name is decoration** - the opposite of the rule, and a consequence
+of it.
+
+**`add` must name every column and `require` must not.** Once a row has an `id`, an `add` clause
+has to say what it will be - so `move` gained an input for the residency it moves, and the
+residency keeps its identity across the move rather than becoming a different row. **A `require` is
+a pattern**, which is what lets the adjacency clause ask whether *any* road runs that way.
+
+**A nonsense mutation asks the wrong question of a key.** Changing an id to `mutated` leaves it
+distinct, so every id in the data survived and looked dead. **An id is swapped for another row's id
+now**, which collides - and that, with key uniqueness, is what made all but four of them
+load-bearing.
 
 ## A key names one row, and nothing checked it
 

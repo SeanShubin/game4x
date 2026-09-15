@@ -1,27 +1,19 @@
 # The orchestrator: what this test does, in the order it does it.
 #
 # **A test is data too.** Nothing here is Rust - the harness reads this file, and every step is a
-# row. `seq` orders them across the four step relations, so the file reads top to bottom.
-#
-# **`load` is the command that reads another file.** The engine itself still reads nothing: the
-# harness is handed a way to fetch a name and the engine asks it, which is what keeps *no
-# `std::fs` in `src/`* true while `load` exists.
-#
-# WHY: `{test name:...}` is one row that nothing needs while there is one test. It is here because
-# there will be more.
+# row. `seq` orders them across the four step relations, and is read as a number rather than as
+# text, because `10` sorts before `2`.
 
-{test name:the-scout-moves-to-an-adjacent-place}
+{test id:1 name:the-scout-moves-to-an-adjacent-place}
 
-{load seq:1 file:script.4x into:script}
-{load seq:2 file:schema.4x into:game}
-{load seq:3 file:engine.4x into:game}
-{load seq:4 file:rules.4x into:game}
-{load seq:5 file:before.4x into:game}
-{load seq:6 file:command.4x into:game}
-{load seq:7 file:expected.4x into:expected}
+{load id:1 seq:1 file:script.4x into:1}
+{load id:2 seq:2 file:schema.4x into:2}
+{load id:3 seq:3 file:engine.4x into:2}
+{load id:4 seq:4 file:rules.4x into:2}
+{load id:5 seq:5 file:before.4x into:2}
+{load id:6 seq:6 file:command.4x into:2}
+{load id:7 seq:7 file:expected.4x into:3}
 
-{execute seq:8 command:1}
-
-{compare seq:9 this:actual with:expected}
-
-{report seq:10 title:the-first-test}
+{execute id:1 seq:8 command:1}
+{compare id:1 seq:9 this:4 with:3}
+{report id:1 seq:10 title:the-first-test}

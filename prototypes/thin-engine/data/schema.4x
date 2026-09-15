@@ -1,115 +1,128 @@
 # The shared schema: every relation, its columns in order, and what points at what.
 #
-# **Shared by the state before and the state after**, which is why it is its own file - `before.4x`
-# and `expected.4x` differ by one row and neither repeats any of this.
+# **Every relation is keyed by a single opaque integer id**, and every reference is to one of those
+# ids - Sean, 2026-09-15: *I want the truth of the data model to be fully normalized, which I
+# believe means always referencing by ids, and a single id at that.*
 #
-# **Every relation's key is its first column**, which is a convention rather than a dependency, so
-# there is no `key` relation. Where no natural key existed a surrogate was made, and the dotted
-# ones are readable on purpose.
+# **The ids mean nothing and are not meant to be read.** Making them legible is the user-facing
+# style's job, not this one's. What is legible here is the `name` column, which is decoration -
+# with two exceptions worth knowing: a row names its relation by `relation.name`, and a row's
+# values are keyed by `column.name`, so those two decorations are what the notation is written in.
 
 
-## The structure's own structure
+## Every relation, and its columns in order
+
+{relation id:1 name:relation}
+{relation id:2 name:column}
+{relation id:3 name:reference}
+{relation id:4 name:state}
+{relation id:5 name:role}
+{relation id:6 name:rule}
+{relation id:7 name:input}
+{relation id:8 name:clause}
+{relation id:9 name:binding}
+{relation id:10 name:command}
+{relation id:11 name:argument}
+{relation id:12 name:primitive}
+{relation id:13 name:territory}
+{relation id:14 name:thing}
+{relation id:15 name:adjacency}
+{relation id:16 name:residency}
+
+
+## The columns
+
+{column id:1 relation:1 seq:1 name:id}
+{column id:2 relation:1 seq:2 name:name}
+{column id:3 relation:2 seq:1 name:id}
+{column id:4 relation:2 seq:2 name:relation}
+{column id:5 relation:2 seq:3 name:seq}
+{column id:6 relation:2 seq:4 name:name}
+{column id:7 relation:3 seq:1 name:id}
+{column id:8 relation:3 seq:2 name:column}
+{column id:9 relation:3 seq:3 name:to}
+{column id:10 relation:4 seq:1 name:id}
+{column id:11 relation:4 seq:2 name:relation}
+{column id:12 relation:5 seq:1 name:id}
+{column id:13 relation:5 seq:2 name:name}
+{column id:14 relation:6 seq:1 name:id}
+{column id:15 relation:6 seq:2 name:name}
+{column id:16 relation:7 seq:1 name:id}
+{column id:17 relation:7 seq:2 name:rule}
+{column id:18 relation:7 seq:3 name:seq}
+{column id:19 relation:7 seq:4 name:name}
+{column id:20 relation:7 seq:5 name:of}
+{column id:21 relation:8 seq:1 name:id}
+{column id:22 relation:8 seq:2 name:rule}
+{column id:23 relation:8 seq:3 name:seq}
+{column id:24 relation:8 seq:4 name:role}
+{column id:25 relation:8 seq:5 name:relation}
+{column id:26 relation:9 seq:1 name:id}
+{column id:27 relation:9 seq:2 name:clause}
+{column id:28 relation:9 seq:3 name:column}
+{column id:29 relation:9 seq:4 name:input}
+{column id:30 relation:10 seq:1 name:id}
+{column id:31 relation:10 seq:2 name:rule}
+{column id:32 relation:11 seq:1 name:id}
+{column id:33 relation:11 seq:2 name:command}
+{column id:34 relation:11 seq:3 name:input}
+{column id:35 relation:11 seq:4 name:value}
+{column id:36 relation:12 seq:1 name:id}
+{column id:37 relation:12 seq:2 name:word}
+{column id:38 relation:13 seq:1 name:id}
+{column id:39 relation:14 seq:1 name:id}
+{column id:40 relation:14 seq:2 name:name}
+{column id:41 relation:15 seq:1 name:id}
+{column id:42 relation:15 seq:2 name:from}
+{column id:43 relation:15 seq:3 name:to}
+{column id:44 relation:16 seq:1 name:id}
+{column id:45 relation:16 seq:2 name:what}
+{column id:46 relation:16 seq:3 name:where}
+
+
+## What points at what
 #
-# WHY: this section is the self-description. Nothing needs it to run the first test - the engine
-# could know these eleven relations. It is here so that the claim *everything is data* is
-# checkable rather than asserted, and it is the first thing to cut if that is not worth 56 rows.
+# **A reference is always to a relation's `id`.** The engine checks that such a row is there, so a
+# value pointing at nothing is refused when the data is read rather than when it is used.
 
-{relation name:relation}
-{column id:relation.name relation:relation seq:1 name:name}
-{relation name:column}
-{column id:column.id relation:column seq:1 name:id}
-{column id:column.relation relation:column seq:2 name:relation}
-{column id:column.seq relation:column seq:3 name:seq}
-{column id:column.name relation:column seq:4 name:name}
-{reference column:column.relation to:relation}
-{relation name:reference}
-{column id:reference.column relation:reference seq:1 name:column}
-{column id:reference.to relation:reference seq:2 name:to}
-{reference column:reference.column to:column}
-{reference column:reference.to to:relation}
-{relation name:role}
-{column id:role.name relation:role seq:1 name:name}
-{relation name:rule}
-{column id:rule.name relation:rule seq:1 name:name}
-{relation name:input}
-{column id:input.id relation:input seq:1 name:id}
-{column id:input.rule relation:input seq:2 name:rule}
-{column id:input.seq relation:input seq:3 name:seq}
-{column id:input.name relation:input seq:4 name:name}
-{column id:input.of relation:input seq:5 name:of}
-{reference column:input.rule to:rule}
-{reference column:input.of to:relation}
-{relation name:clause}
-{column id:clause.id relation:clause seq:1 name:id}
-{column id:clause.rule relation:clause seq:2 name:rule}
-{column id:clause.seq relation:clause seq:3 name:seq}
-{column id:clause.role relation:clause seq:4 name:role}
-{column id:clause.relation relation:clause seq:5 name:relation}
-{reference column:clause.rule to:rule}
-{reference column:clause.role to:role}
-{reference column:clause.relation to:relation}
-{relation name:binding}
-{column id:binding.id relation:binding seq:1 name:id}
-{column id:binding.clause relation:binding seq:2 name:clause}
-{column id:binding.column relation:binding seq:3 name:column}
-{column id:binding.input relation:binding seq:4 name:input}
-{reference column:binding.clause to:clause}
-{reference column:binding.column to:column}
-{reference column:binding.input to:input}
-{relation name:command}
-{column id:command.id relation:command seq:1 name:id}
-{column id:command.rule relation:command seq:2 name:rule}
-{reference column:command.rule to:rule}
-{relation name:argument}
-{column id:argument.id relation:argument seq:1 name:id}
-{column id:argument.command relation:argument seq:2 name:command}
-{column id:argument.input relation:argument seq:3 name:input}
-{column id:argument.value relation:argument seq:4 name:value}
-{reference column:argument.command to:command}
-{reference column:argument.input to:input}
-
-{relation name:state}
-{column id:state.relation relation:state seq:1 name:relation}
-{reference column:state.relation to:relation}
+{reference id:1 column:4 to:1}
+{reference id:2 column:8 to:2}
+{reference id:3 column:9 to:1}
+{reference id:4 column:11 to:1}
+{reference id:5 column:17 to:6}
+{reference id:6 column:20 to:1}
+{reference id:7 column:22 to:6}
+{reference id:8 column:24 to:5}
+{reference id:9 column:25 to:1}
+{reference id:10 column:27 to:8}
+{reference id:11 column:28 to:2}
+{reference id:12 column:29 to:7}
+{reference id:13 column:31 to:6}
+{reference id:14 column:33 to:10}
+{reference id:15 column:34 to:7}
+{reference id:16 column:42 to:13}
+{reference id:17 column:43 to:13}
+{reference id:18 column:45 to:14}
+{reference id:19 column:46 to:13}
 
 
 ## Which relations are the game's state
 #
 # **This is what bounds the comparison.** `expected.4x` states the state after, and a diff has to
-# know which relations to look at - without this it would compare the rule and the command too,
-# and they are in the actual because they were loaded rather than because anything happened.
-#
-# WHY: four rows saying what a reader can already see. The alternative is for the comparison to
-# scope itself to whatever relations `expected.4x` happens to mention, which is the same thing
-# decided by omission - and a relation left out of `expected.4x` would then go unchecked silently.
+# know which relations to look at - without this it would compare the rule and the command too.
 
-{state relation:territory}
-{state relation:thing}
-{state relation:adjacency}
-{state relation:residency}
-
-
-## The game's structure, which is Sean's four tables
-
-{relation name:territory}
-{column id:territory.id relation:territory seq:1 name:id}
-{relation name:thing}
-{column id:thing.id relation:thing seq:1 name:id}
-{column id:thing.name relation:thing seq:2 name:name}
-{relation name:adjacency}
-{column id:adjacency.from relation:adjacency seq:1 name:from}
-{column id:adjacency.to relation:adjacency seq:2 name:to}
-{reference column:adjacency.from to:territory}
-{reference column:adjacency.to to:territory}
-{relation name:residency}
-{column id:residency.what relation:residency seq:1 name:what}
-{column id:residency.where relation:residency seq:2 name:where}
-{reference column:residency.what to:thing}
-{reference column:residency.where to:territory}
+{state id:1 relation:13}
+{state id:2 relation:14}
+{state id:3 relation:15}
+{state id:4 relation:16}
 
 
 ## The three roles a clause can have
+#
+# **The engine branches on the `name`, not on the id.** An id is arbitrary, so a rule that says
+# `role:2` means nothing until the row is looked up - which makes `role.name` load-bearing where
+# every other `name` is decoration.
 
-{role name:require}
-{role name:remove}
-{role name:add}
+{role id:1 name:require}
+{role id:2 name:remove}
+{role id:3 name:add}

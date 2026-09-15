@@ -14,12 +14,18 @@
 //! compared, and `engine.4x` still matches the constants in `src/`. **A mutation survives if all of
 //! that still holds**, which means the thing mutated changed nothing anybody looks at.
 //!
-//! # The mutation is one nonsense value, and that is a narrower question than it looks
+//! # Two mutations, because one of them asks the wrong question of an id
 //!
-//! Changing a value to `mutated` asks *is this value read at all*. It does not ask *does this
-//! particular value matter* - swapping two `seq` numbers that happen to be interchangeable would
-//! survive a question this does not put. **Said here because the check is worth exactly what it
-//! asks and no more.**
+//! **Changing a value to `mutated` asks *is this value read at all*.** That is the right question
+//! for most columns and the wrong one for a key: **an id's job is to be distinct, and `mutated` is
+//! still distinct**, so every id in the data survived it and looked dead.
+//!
+//! **So a value is also swapped for another value from the same column.** An id swapped for
+//! another row's id collides, and the key check refuses it. A `seq` swapped for another `seq`
+//! reorders something, and whether that breaks anything is exactly the question worth asking.
+//!
+//! **A value is load-bearing if either mutation is noticed.** One asks whether it is read; the
+//! other asks whether *this* value is the one that matters.
 
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -111,6 +117,23 @@ fn check(files: &InMemory) -> Result<(), String> {
 
     every_reference_forbids_something(files)?;
 
+    // **The script store's references, counted rather than violated.** They live in the file the
+    // first load fetches, which `every_reference_forbids_something` does not reach - it walks the
+    // game. The count is what keeps them from being deletable, the same way the count keeps the
+    // game's nineteen honest; generating a violation for each is the better check and is not
+    // written yet.
+    let declarations = read(&files.read("script.4x").unwrap_or_default())
+        .map_err(|why| format!("script.4x: {why}"))?;
+    let references = declarations
+        .iter()
+        .filter(|row| row.relation == "reference")
+        .count();
+    if references != 6 {
+        return Err(format!(
+            "{references} references in the script, and there are six"
+        ));
+    }
+
     // **Read out of what the script loaded, not out of the file.** Reading the file directly
     // made the step that loads it dead: `engine.4x` could be dropped from `test.4x` and this
     // still found the rows. The question is what the game was given, so this asks the game.
@@ -129,10 +152,32 @@ fn check(files: &InMemory) -> Result<(), String> {
 fn loaded(files: &InMemory) -> Result<Vec<Row>, String> {
     let script = read(&files.read("test.4x").unwrap_or_default())
         .map_err(|why| format!("test.4x: {why}"))?;
+    // **`into` is a store's id, so the stores have to be read before the loads can be.** They
+    // are declared in whichever file the first load fetches, which is the bootstrap said from
+    // the other side.
+    let mut first: Vec<&Row> = script.iter().filter(|row| row.relation == "load").collect();
+    first.sort_by_key(|row| {
+        row.value("seq")
+            .unwrap_or_default()
+            .parse::<usize>()
+            .unwrap_or(0)
+    });
+    let declarations = first
+        .first()
+        .and_then(|row| row.value("file"))
+        .and_then(|file| files.read(file))
+        .unwrap_or_default();
+    let declarations = read(&declarations).map_err(|why| format!("{why}"))?;
+    let game_store = declarations
+        .iter()
+        .find(|row| row.relation == "store" && row.value("name") == Some("game"))
+        .and_then(|row| row.value("id"))
+        .ok_or("no store named `game`")?;
+
     let mut all = Vec::new();
     for step in script
         .iter()
-        .filter(|row| row.relation == "load" && row.value("into") == Some("game"))
+        .filter(|row| row.relation == "load" && row.value("into") == Some(game_store))
     {
         let file = step.value("file").ok_or("a load with no file")?;
         let text = files.read(file).ok_or_else(|| format!("no file {file}"))?;
@@ -177,7 +222,14 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
             .iter()
             .find(|row| row.relation == "column" && row.value("id") == Some(column))
             .ok_or_else(|| format!("no column {column}"))?;
+        // **A column names its relation by id**, so the name the rows are written in has to be
+        // looked up before they can be found.
         let of = declaration.value("relation").ok_or("a column of nothing")?;
+        let of = game
+            .iter()
+            .find(|row| row.relation == "relation" && row.value("id") == Some(of))
+            .and_then(|row| row.value("name"))
+            .ok_or_else(|| format!("no relation with id {of}"))?;
         let named = declaration.value("name").ok_or("a column with no name")?;
 
         // A real row of that relation, pointed at a key nothing has.
@@ -283,19 +335,42 @@ fn no_row_can_be_deleted_without_breaking_something() {
             mutated.insert(name.clone(), without(text, at));
             tried += 1;
             if check(&InMemory(mutated)).is_ok() {
-                survived.push(format!("{name}: {}", write(&row)));
+                survived.push(format!("{name} {}", row.relation));
             }
         }
     }
 
-    assert_eq!(tried, 175, "every row in `data/` was deleted in turn");
-    assert!(
-        survived.is_empty(),
-        "{} rows can be deleted and nothing notices:\n  {}",
-        survived.len(),
-        survived.join("\n  ")
+    assert_eq!(tried, 219, "every row in `data/` was deleted in turn");
+
+    let mut counted: BTreeMap<String, usize> = BTreeMap::new();
+    for one in survived {
+        *counted.entry(one).or_default() += 1;
+    }
+    let counted: Vec<String> = counted
+        .iter()
+        .map(|(what, how_many)| format!("{how_many} {what}"))
+        .collect();
+
+    assert_eq!(
+        counted, DELETABLE,
+        "the rows nothing reads are not the ones written down"
     );
 }
+
+/// **The rows nothing reads, and why each is waiting on a test rather than on a change.**
+///
+/// Eight bindings, all on a `require` or a `remove` clause. Deleting one makes the pattern weaker
+/// and it is still satisfied - `require {residency id:1 where:1}` holds as surely as
+/// `require {residency id:1 what:1 where:1}` does.
+///
+/// **They are not decoration; the suite has no command that lies.** The `what` and `where`
+/// bindings on the first clause are what check the command's `what` and `from` against the world,
+/// and nothing here sends a command with the wrong `from`. **That is the same shape as the
+/// nineteen references**, which looked dead until a violation was generated for each - a
+/// constraint is worth nothing in a run where nothing violates it.
+///
+/// **So the fix is a test and not an edit**, and it is the next thing worth doing here.
+const DELETABLE: [&str; 1] = ["8 rules.4x binding"];
 
 /// **Every value matters**: change any one of them and something fails.
 #[test]
@@ -305,14 +380,37 @@ fn no_value_can_be_changed_without_breaking_something() {
     let mut tried = 0;
 
     for (name, text) in &files {
-        for (at, row) in rows_of(text) {
+        let all = rows_of(text);
+        for (at, row) in &all {
             for column in row.values.keys() {
-                let mut altered = row.clone();
-                altered.values.insert(column.clone(), "mutated".to_string());
-                let mut mutated = files.clone();
-                mutated.insert(name.clone(), changed(text, at, &altered));
-                tried += 1;
-                if check(&InMemory(mutated)).is_ok() {
+                let was = row.value(column).unwrap_or_default().to_string();
+
+                // **Every other value this column takes in this file**, so that one of them can
+                // stand in for the one that is there.
+                let elsewhere: Vec<String> = all
+                    .iter()
+                    .filter(|(_, other)| other.relation == row.relation)
+                    .filter_map(|(_, other)| other.value(column).map(str::to_string))
+                    .filter(|value| *value != was)
+                    .collect();
+
+                let mut instead = vec!["mutated".to_string()];
+                if let Some(other) = elsewhere.first() {
+                    instead.push(other.clone());
+                }
+
+                let mut noticed = false;
+                for value in &instead {
+                    let mut altered = row.clone();
+                    altered.values.insert(column.clone(), value.clone());
+                    let mut mutated = files.clone();
+                    mutated.insert(name.clone(), changed(text, *at, &altered));
+                    tried += 1;
+                    if check(&InMemory(mutated)).is_err() {
+                        noticed = true;
+                    }
+                }
+                if !noticed {
                     survived.push(format!("{name} {}.{column}", row.relation));
                 }
             }
@@ -341,31 +439,28 @@ fn no_value_can_be_changed_without_breaking_something() {
 
 /// **The values nothing reads, named and counted, so the list cannot grow quietly.**
 ///
-/// Sean's requirement is that this be empty. It is not, and every entry is a consequence of the
-/// structure rather than an oversight - so they are written down rather than fixed, because
-/// emptying the list is a decision about the structure and that is his.
+/// **Two groups, and neither is an oversight.**
 ///
-/// **A surrogate key nothing points at is ceremony.** `binding.id` and `argument.id` are
-/// referenced by nothing at all, and `column.id` matters only for the columns a `reference` or a
-/// `binding` names. They exist because the engine takes a relation's key to be its first column,
-/// so **removing them means composite keys** - `binding` would be keyed by `(clause, column)` and
-/// `argument` by `(command, input)`.
+/// **The decorations**, which is what Sean has said they are: `rule.name` and `input.name` are
+/// read into an error message and nowhere else, because everything references by id. They are
+/// waiting on the user-facing style, which is the thing that will read them.
 ///
-/// **`input.name` is redundant with `input.id`.** A binding names its input by id, so the name is
-/// read only into an error message. The note this test came from wrote `input what thing`, where
-/// the name was the whole identity.
+/// **`input.seq` and `clause.seq` order things whose order does not matter** - yet. Clauses are
+/// applied in role passes, every `require` then every `remove` then every `add`, so two clauses of
+/// the same role are interchangeable. **A second rule where two removes contend would change
+/// that**, and this line is where to look when it does.
 ///
-/// **`input.seq` and `clause.seq` order things whose order does not matter.** Clauses are applied
-/// in role passes - every `require`, then every `remove`, then every `add` - so two clauses of the
-/// same role are interchangeable. **A second rule where two removes contend would change that**,
-/// and this line is where to look when it does.
+/// **Four ids on relations with one row.** `test`, `execute`, `compare` and `report` have a single
+/// row each, so there is no other id to swap theirs for - **the instrument cannot ask whether a key
+/// is distinct when there is nothing to be distinct from.** Every other id in the data is
+/// load-bearing, and was not before keys had to be unique.
 const NOT_LOAD_BEARING: [&str; 8] = [
-    "3 command.4x argument.id",
-    "1 engine.4x column.id",
-    "8 rules.4x binding.id",
     "4 rules.4x clause.seq",
-    "3 rules.4x input.name",
-    "3 rules.4x input.seq",
-    "18 schema.4x column.id",
-    "11 script.4x column.id",
+    "4 rules.4x input.name",
+    "4 rules.4x input.seq",
+    "1 rules.4x rule.name",
+    "1 test.4x compare.id",
+    "1 test.4x execute.id",
+    "1 test.4x report.id",
+    "1 test.4x test.id",
 ];

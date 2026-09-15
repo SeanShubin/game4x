@@ -54,6 +54,8 @@ const THIS: &str = "this";
 const WITH: &str = "with";
 const ACTUAL: &str = "actual";
 const SCRIPT: &str = "script";
+const STORE: &str = "store";
+const ID: &str = "id";
 const RELATION: &str = "relation";
 const GAME: &str = "game";
 const EXPECTED: &str = "expected";
@@ -233,15 +235,50 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
                     file: file.to_string(),
                     why,
                 })?;
-                match step.value(INTO) {
+                // **The first load is the declarations, by definition** - nothing has been
+                // declared yet, so there is no row saying what `into:1` means. That is the same
+                // bootstrap as the step itself not being validated until afterwards, and it is
+                // closed the same way: once the declarations are in, this step's `into` is
+                // resolved and refused if it was not the script store after all.
+                let bootstrap = declared.is_empty();
+                let into = if bootstrap {
+                    SCRIPT
+                } else {
+                    store_named(&declared, step.value(INTO).unwrap_or_default())
+                };
+                match Some(into) {
                     Some(SCRIPT) => {
                         declared.extend(rows);
                         // **Every step is checked once the declarations are here, loads
                         // included.** Checking only the steps that come after left `load`'s own
                         // columns undeclared in effect - the `into` column could be dropped from
                         // `script.4x` and nothing noticed, because no load was ever validated.
+                        // **The script store is a game, and is checked like one.** Every row
+                        // fits its relation, every key names one row, and every reference points
+                        // at something - which needs `script.4x` to declare `relation`, `column`
+                        // and `reference` as well as its own five, and it does. **Checked by hand
+                        // first**, which got the fits and missed the keys, so every id in the
+                        // script store could be swapped for another and nothing noticed.
+                        // **The declarations and the script together**, so the script's own rows
+                        // are key-checked as well as fitted. Checking only the declarations left
+                        // every id in `test.4x` free to be any value at all.
+                        let mut whole = declared.clone();
+                        whole.extend(script.iter().cloned());
+                        Game::of(whole).map_err(|why| Failed::BadlyFormed {
+                            step: crate::notation::write(step),
+                            why,
+                        })?;
                         for earlier in steps.iter().chain(named.iter()) {
                             fits(earlier, &declared)?;
+                        }
+                        // **And the bootstrap load's own `into` is checked, late.** Without this
+                        // the first load could name any store at all and nothing would notice,
+                        // because nothing was there to notice at the time.
+                        let said = step.value(INTO).unwrap_or_default();
+                        if store_named(&declared, said) != SCRIPT {
+                            return Err(Failed::NoSuchStore {
+                                into: said.to_string(),
+                            });
                         }
                     }
                     Some(GAME) => game.extend(rows),
@@ -271,8 +308,8 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
                 // **`this` and `with` are read rather than decorative.** They were written before
                 // anything looked at them, and a column the data states and the code ignores is
                 // exactly the thing this prototype is meant to make visible.
-                let this = step.value(THIS).unwrap_or_default();
-                let with = step.value(WITH).unwrap_or_default();
+                let this = store_named(&declared, step.value(THIS).unwrap_or_default());
+                let with = store_named(&declared, step.value(WITH).unwrap_or_default());
                 if this != ACTUAL || with != EXPECTED {
                     return Err(Failed::NothingToCompare {
                         this: this.to_string(),
@@ -311,6 +348,20 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
     })
 }
 
+/// The name of the store an id names.
+///
+/// **`into:2` means nothing until the row is looked up.** The script declares its stores as rows
+/// like everything else, so the engine branches on `game` or `expected` and the data references
+/// the row that says so. A store the script does not declare is left as its id, which then matches
+/// none of the names and is refused by name.
+fn store_named<'a>(declared: &'a [Row], id: &'a str) -> &'a str {
+    declared
+        .iter()
+        .find(|row| row.relation == STORE && row.value(ID) == Some(id))
+        .and_then(|row| row.value(NAME))
+        .unwrap_or(id)
+}
+
 /// Whether a step fits what `script.4x` declares for its relation.
 ///
 /// **A step is checked like any other row**, so a misspelt column is refused by the structure
@@ -337,12 +388,15 @@ fn fits(step: &Row, declared: &[Row]) -> Result<(), Failed> {
 /// whatever `expected.4x` happens to mention.
 fn compare(actual: &Game, expected: &[Row]) -> Result<Difference, Failed> {
     let schema = actual.schema();
+    // **`{state relation:13}` names the relation by id**, so each is resolved to the name the
+    // rows are actually written in.
     let mut of_state: Vec<String> = actual
         .rows()
         .rows()
         .iter()
         .filter(|row| row.relation == STATE)
-        .filter_map(|row| row.value(RELATION).map(str::to_string))
+        .filter_map(|row| row.value(RELATION))
+        .map(|id| actual.named(RELATION, id).unwrap_or(id).to_string())
         .collect();
     of_state.sort();
 

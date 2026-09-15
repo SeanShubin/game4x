@@ -1,57 +1,46 @@
 # Every word this engine implements, and therefore every place the data delegates to the code.
 #
 # **This is the boundary the prototype is for.** A row of `clause` or `binding` is data the engine
-# moves around without knowing what it means - a second rule is rows and no code. A word in this
-# file is the other thing: the engine holds the string and branches on it, so a word that is not
-# here cannot be added without writing Rust.
-#
-# **Three kinds are mixed together and the difference is worth seeing.** Some are column names the
-# engine reads by name - `name`, `seq`, `id`. Some are relation names it dispatches on - `clause`,
-# `load`. And some are values in a row that select a code path - `require`, `remove`, `add`, which
-# is the purest case: `{role name:require}` is a row whose entire meaning is a match arm.
+# moves around without knowing what it means - a second rule is rows and no code. A word here is
+# the other thing: the engine holds the string and branches on it, so a word that is not here
+# cannot be added without writing Rust.
 #
 # **Generated from the constants in `src/` and checked against them both ways** by
 # `tests/engine.rs`: a match arm with no row here fails, and a row here with no match arm fails.
-# **So this list cannot drift**, which is the whole reason it is worth having rather than writing
-# the same thing in a comment.
-#
-# WHY: `primitive` is a name rather than a decision - `builtin` or `implemented` would do. And
-# nothing reads these rows at run time; they exist to be checked.
+# So this list cannot drift.
 
-{relation name:primitive}
-{column id:primitive.word relation:primitive seq:1 name:word}
-
-{primitive word:actual}
-{primitive word:add}
-{primitive word:argument}
-{primitive word:binding}
-{primitive word:clause}
-{primitive word:column}
-{primitive word:command}
-{primitive word:compare}
-{primitive word:execute}
-{primitive word:expected}
-{primitive word:file}
-{primitive word:game}
-{primitive word:id}
-{primitive word:input}
-{primitive word:into}
-{primitive word:load}
-{primitive word:name}
-{primitive word:of}
-{primitive word:reference}
-{primitive word:relation}
-{primitive word:remove}
-{primitive word:report}
-{primitive word:require}
-{primitive word:role}
-{primitive word:rule}
-{primitive word:script}
-{primitive word:seq}
-{primitive word:state}
-{primitive word:test}
-{primitive word:this}
-{primitive word:title}
-{primitive word:to}
-{primitive word:value}
-{primitive word:with}
+{primitive id:1 word:actual}
+{primitive id:2 word:add}
+{primitive id:3 word:argument}
+{primitive id:4 word:binding}
+{primitive id:5 word:clause}
+{primitive id:6 word:column}
+{primitive id:7 word:command}
+{primitive id:8 word:compare}
+{primitive id:9 word:execute}
+{primitive id:10 word:expected}
+{primitive id:11 word:file}
+{primitive id:12 word:game}
+{primitive id:13 word:id}
+{primitive id:14 word:input}
+{primitive id:15 word:into}
+{primitive id:16 word:load}
+{primitive id:17 word:name}
+{primitive id:18 word:of}
+{primitive id:19 word:reference}
+{primitive id:20 word:relation}
+{primitive id:21 word:remove}
+{primitive id:22 word:report}
+{primitive id:23 word:require}
+{primitive id:24 word:role}
+{primitive id:25 word:rule}
+{primitive id:26 word:script}
+{primitive id:27 word:seq}
+{primitive id:28 word:state}
+{primitive id:29 word:store}
+{primitive id:30 word:test}
+{primitive id:31 word:this}
+{primitive id:32 word:title}
+{primitive id:33 word:to}
+{primitive id:34 word:value}
+{primitive id:35 word:with}

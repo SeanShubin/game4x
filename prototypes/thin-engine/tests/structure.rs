@@ -61,7 +61,7 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
 fn a_reference_is_checked_against_the_relation_it_names() {
     // Thing 2 does not exist; territory 2 does.
     assert_eq!(
-        with("{residency what:2 where:2}").expect_err("there is no thing 2"),
+        with("{residency id:2 what:2 where:2}").expect_err("there is no thing 2"),
         Malformed::NoSuchRow {
             relation: "residency".to_string(),
             column: "what".to_string(),
@@ -75,7 +75,7 @@ fn a_reference_is_checked_against_the_relation_it_names() {
     // residency for thing 1**: `residency` is keyed by `what`, so reusing thing 1 is refused for
     // having a key already taken, and this test would pass on the wrong refusal.
     assert_eq!(
-        with("{thing id:2 name:pioneer}\n{residency what:2 where:9}")
+        with("{thing id:2 name:pioneer}\n{residency id:2 what:2 where:9}")
             .expect_err("there is no territory 9"),
         Malformed::NoSuchRow {
             relation: "residency".to_string(),
@@ -88,7 +88,7 @@ fn a_reference_is_checked_against_the_relation_it_names() {
 
     // The control: a row whose references both resolve is accepted, so the two above fail for
     // their own reason rather than because nothing added to this data is ever allowed.
-    with("{thing id:3 name:runner}\n{residency what:3 where:2}")
+    with("{thing id:3 name:runner}\n{residency id:3 what:3 where:2}")
         .expect("a second residency resolves both ways");
 }
 
@@ -96,9 +96,9 @@ fn a_reference_is_checked_against_the_relation_it_names() {
 #[test]
 fn a_row_states_only_what_its_relation_declares() {
     for wrong in [
-        "{residency what:1}",
-        "{residency what:1 where:1 when:now}",
-        "{settlement place:1}",
+        "{residency id:2 what:1}",
+        "{residency id:2 what:1 where:1 when:now}",
+        "{settlement id:1 place:1}",
     ] {
         with(wrong).expect_err(wrong);
     }
@@ -116,10 +116,11 @@ fn a_row_states_only_what_its_relation_declares() {
 #[test]
 fn a_command_naming_something_that_does_not_exist_is_refused_by_the_type() {
     let start = with(
-        "{command id:3 rule:move}\n\
-                      {argument id:3.what command:3 input:move.what value:1}\n\
-                      {argument id:3.from command:3 input:move.from value:1}\n\
-                      {argument id:3.to command:3 input:move.to value:9}",
+        "{command id:3 rule:1}\n\
+         {argument id:11 command:3 input:1 value:1}\n\
+         {argument id:12 command:3 input:2 value:1}\n\
+         {argument id:13 command:3 input:3 value:1}\n\
+         {argument id:14 command:3 input:4 value:9}",
     )
     .expect("a command naming territory 9 is still well formed data");
 
@@ -134,10 +135,11 @@ fn a_command_naming_something_that_does_not_exist_is_refused_by_the_type() {
 #[test]
 fn an_input_is_checked_against_its_own_relation() {
     let start = with(
-        "{command id:4 rule:move}\n\
-                      {argument id:4.what command:4 input:move.what value:3}\n\
-                      {argument id:4.from command:4 input:move.from value:1}\n\
-                      {argument id:4.to command:4 input:move.to value:2}",
+        "{command id:4 rule:1}\n\
+         {argument id:21 command:4 input:1 value:1}\n\
+         {argument id:22 command:4 input:2 value:3}\n\
+         {argument id:23 command:4 input:3 value:1}\n\
+         {argument id:24 command:4 input:4 value:2}",
     )
     .expect("well formed data");
 
@@ -165,9 +167,15 @@ fn a_command_that_is_not_stated_is_not_a_command() {
 /// silently missing from every test here.
 #[test]
 fn the_helper_loads_what_the_script_loads() {
+    // `into` names a store by id, and `script.4x` says which is which.
+    let game_store = common::rows("data/script.4x")
+        .iter()
+        .find(|row| row.relation == "store" && row.value("name") == Some("game"))
+        .and_then(|row| row.value("id").map(str::to_string))
+        .expect("a store named `game`");
     let script: Vec<String> = common::rows("data/test.4x")
         .iter()
-        .filter(|row| row.relation == "load" && row.value("into") == Some("game"))
+        .filter(|row| row.relation == "load" && row.value("into") == Some(game_store.as_str()))
         .filter_map(|row| row.value("file").map(|it| format!("data/{it}")))
         .collect();
 

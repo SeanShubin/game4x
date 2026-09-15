@@ -1,16 +1,14 @@
 # The state after, which is `temporary-notes/first-test.md`'s ending state row for row.
 #
 # **Every relation is stated, including the three that do not change.** That is the shape of the
-# note and it is the stronger assertion: comparing whole relations says that nothing else moved,
-# where comparing the scout's row says only that the scout did.
+# note and it is the stronger assertion: comparing whole relations says nothing else moved.
 #
-# **Written by hand from the note**, so comparing the engine's output against it is a comparison
-# against what a person said should happen.
+# **Written by hand from the note** - the one row that differs is the residency.
 
 {territory id:1}
 {territory id:2}
 {territory id:3}
-{adjacency from:1 to:2}
-{adjacency from:2 to:3}
 {thing id:1 name:scout}
-{residency what:1 where:2}
+{adjacency id:1 from:1 to:2}
+{adjacency id:2 from:2 to:3}
+{residency id:1 what:1 where:2}

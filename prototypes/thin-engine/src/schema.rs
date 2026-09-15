@@ -179,9 +179,14 @@ impl Schema {
     /// Read a schema from the `{relation ...}`, `{column ...}` and `{reference ...}` rows among
     /// whatever else is there.
     pub fn of(rows: &[Row]) -> Result<Schema, Malformed> {
+        // **A relation is named by its id everywhere except in its own declaration.** The rows
+        // that follow say `relation:16`, not `relation:residency`, so this book is what turns one
+        // into the other - and it is read first because everything else depends on it.
+        let mut named: BTreeMap<String, String> = BTreeMap::new();
         let mut relations: BTreeMap<String, Relation> = BTreeMap::new();
         for row in rows.iter().filter(|row| row.relation == RELATION) {
             let name = row.value(NAME).unwrap_or_default().to_string();
+            named.insert(row.value(ID).unwrap_or_default().to_string(), name.clone());
             relations.insert(
                 name.clone(),
                 Relation {
@@ -195,16 +200,18 @@ impl Schema {
         // reference to a column that is declared later is not an error of ordering.
         let mut points_at: BTreeMap<String, String> = BTreeMap::new();
         for row in rows.iter().filter(|row| row.relation == REFERENCE) {
+            let to = row.value(TO).unwrap_or_default();
             points_at.insert(
                 row.value(COLUMN).unwrap_or_default().to_string(),
-                row.value(TO).unwrap_or_default().to_string(),
+                named.get(to).cloned().unwrap_or_else(|| to.to_string()),
             );
         }
 
         let mut numbered: BTreeMap<String, Vec<(String, Column)>> = BTreeMap::new();
         let mut by_id: BTreeMap<String, (String, String)> = BTreeMap::new();
         for row in rows.iter().filter(|row| row.relation == COLUMN) {
-            let of = row.value(RELATION).unwrap_or_default().to_string();
+            let of = row.value(RELATION).unwrap_or_default();
+            let of = named.get(of).cloned().unwrap_or_else(|| of.to_string());
             let name = row.value(NAME).unwrap_or_default().to_string();
             let id = row.value(ID).unwrap_or_default().to_string();
             if !relations.contains_key(&of) {
