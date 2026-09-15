@@ -127,7 +127,7 @@ saying you said it. **Written into the item rather than left to be remembered**,
 it would be easiest to skip is the moment it comes up - which is the code lane's point and it made
 it before the moment rather than during it.
 
-## The two cases, and neither was found by anything failing
+## The three cases, and not one was found by anything failing
 
 **One, across a column boundary.** `P-514` reported three unwritable rows of `spec/data/line.4x`
 and said how they got past: `P-497`'s check asserted exactly one unrepresentable cell **and looked
@@ -143,6 +143,17 @@ lane ran the command rather than quoting the corrected figure, and it was **fort
 this lane's own commit had landed between the measurement and the message. **Their words**: *if you
 had sent 40 without the confession I would probably have repeated it to Sean.*
 
+**Three, and this one is the rule being used rather than argued for.** `P-519` reported a clause
+written twice in `spec/console.md` and **said where both copies were**. The code lane grepped for
+the clause, got **one** hit, and had the two lanes disagreeing - then found its own instrument was
+the narrow one: line 63 wraps between *for each recipe the* and *player may fire*, so a
+line-oriented search cannot see it. Raw 1, normalized 2. **This lane's pattern escaped only by being
+short enough to sit on one line**, which is a discipline `CLAUDE.md` already records failing three
+times in an hour - **luck, not a better instrument**, and said so rather than claimed as care.
+
+**What makes it evidence for this item**: the disagreement was checkable because the report named
+the lines. *The clause is duplicated and I will fix it* gives a reader nothing to re-derive against.
+
 ## Why this is not already covered
 
 **`CLAUDE.md` has the diagnosis and not the duty.** It says *a measurement travels with an
@@ -154,7 +165,7 @@ nothing to re-derive against.**
 ## What it costs, stated because it is the argument against
 
 **Accounts are longer than fixes.** `P-514` is longer than the change it proposes, and a queue of
-accounts is a queue somebody reads. **Two cases in one day is the evidence, and one day is the
+accounts is a queue somebody reads. **Three cases in one day is the evidence, and one day is the
 whole of it** - if it stops paying, it is a rule that should come back out.
 
 The working-out is in
