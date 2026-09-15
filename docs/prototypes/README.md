@@ -13,11 +13,14 @@ question is answered — not when it is polished.
 | [Kinds](../../prototypes/kinds/README.md)                   | What do the inputs to the gameplay logic actually look like?                                                                                                          | **Answered** 2026-08-31, below                                  |
 | [Gap view](../../prototypes/gap-view/README.md)             | Can a player set a destination anywhere on the world with one mouse gesture, without rotating anything?                                                               | Built ([code](../../prototypes/gap-view/README.md))             |
 | [Hex torus view](../../prototypes/hex-torus-view/README.md) | At the sizes the game would use, does a flat isotropic hex torus read as a world, and how visible is the wrapping? **Not whether a torus should be the game's shape** | Being built ([code](../../prototypes/hex-torus-view/README.md)) |
+| [Thin engine](../../prototypes/thin-engine/README.md)       | Can a rule run from rows of data, against an engine that names no game noun? **`C-114`'s open half, answered by existing rather than decided**                        | **Answered** 2026-09-14, below                                  |
 
 ## Conventions
 
-- One prototype per crate, each its own workspace member, each with a `README.md` linked
-  from this index.
+- One prototype per crate, each with a `README.md` linked from this index. **Most are workspace
+  members and `thin-engine` is deliberately not** - `S-136` keeps it outside so the gate does not
+  fire on a thing being grown one concept at a time, and so nothing it depends on can arrive
+  without being asked for.
 - Each prototype gets a run script in [`scripts/`](../../scripts/README.md), so running
   one never requires remembering a cargo incantation.
 - A prototype depends on real modules where that is the point, and fakes everything else.
@@ -31,6 +34,45 @@ question is answered — not when it is polished.
   it out save work, or does it prevent the question being answered?
 - Every prototype document states its **question** up front and records the **answer**
   when it has one. That answer is the deliverable; the code is a byproduct.
+
+## Thin engine: answered 2026-09-14
+
+**Yes for one mechanic, and the reading it was built to take has not been taken.** `move` runs from
+**eleven rows of data** against **232 lines of code that contain no game noun** - checked against a
+word list read out of `data/` rather than written by hand. Sean's two tests pass: the scout moves
+from territory 1 to 2, and does not move from 1 to 3.
+
+**The number is not a ratio and must not be read as one.** 232 lines runs **one** mechanic;
+`crates/game-model/src/` is 1,662 lines for **twenty-six**. *Seven times smaller* is not a reading
+this supports. **The claim under test is that 232 does not grow when a mechanic is added**, and the
+second mechanic is what tests it. **An instrument built, and taken once.**
+
+**`C-114`'s three explosions get one reading each, and the third is unknown.** The code: no
+explosion. The data structure: no explosion, and this is the one that surprised - **rules are
+written in the same structure as facts**, so `{needs rule:move relation:at thing:$it place:$from}`
+is a row exactly as `{at thing:scout place:1}` is, and there is one structure rather than two. The
+data itself: **honestly unknown**, because eleven rows is too few to read anything off.
+
+**The engine's whole vocabulary is four words** - `rule`, `needs`, `drops`, `adds` - and all four
+are about how a rule is **stated** rather than about what the game **is**.
+
+**Nothing in it is normative.** `S-136` required that and the code lane agrees: a second mechanic
+could take it apart. A form that appears here and not in `spec/` is not a contradiction, and
+anything worth keeping comes back as a proposal.
+
+**Three absences are the design rather than gaps.** Territories are stated and read by nothing, so
+*not adjacent* and *no such place* refuse identically - which is the next concept, and first because
+it is the smallest one needing the engine to check a row it was not handed. Adjacency is
+one-directional. And the notation is re-implemented with `crates/command-language` unused, which
+`S-136` required and the prototype's own README argues, so a reader who finds the duplication finds
+the reason with it.
+
+**Fifteen tests, three of them poisoned before being trusted** - a game noun added to `src/`, a file
+read added to `src/`, and `{adjacent from:1 to:3}` added to the world - each failing the run it
+should have. **The isolation is asserted rather than promised.**
+
+Recorded from the code lane's `C-126`; the argument is in
+[`prototypes/thin-engine/README.md`](../../prototypes/thin-engine/README.md).
 
 ## Goldberg view: answered 2026-08-30
 
