@@ -1,0 +1,174 @@
+# The entirety, before.
+#
+# **Everything is here**: the structure, the structure's own structure, the rule, the command, and
+# the world. `after.4x` is this file with one row different, and the engine is what gets from one
+# to the other.
+#
+# **Fully normalized means no row has a column that depends on which row it is.** The version
+# before this one wrote an effect as `{effect relation:residency what:$what where:$from}`, whose
+# columns change with the relation it points at - so `effect` had no fixed columns and was not a
+# relation at all. `clause` and `binding` below are that split apart.
+#
+# **Every relation's key is its first column**, which is a convention rather than a dependency, so
+# there is no `key` relation. Where no natural key existed a surrogate was made, and the dotted
+# ones - `residency.what`, `move.from` - are readable on purpose.
+#
+# **Sean's job is to remove what is unnecessary and mine is to fill it out**, so this is the long
+# form. The three places most likely to go are marked WHY.
+
+
+## The structure's own structure
+#
+# WHY: this section is the self-description. Nothing needs it to run the first test - the engine
+# could know these ten relations. It is here so that the claim *everything is data* is checkable
+# rather than asserted, and it is the first thing to cut if that is not worth 40 rows.
+
+{relation name:relation}
+{column id:relation.name relation:relation seq:1 name:name}
+
+{relation name:column}
+{column id:column.id relation:column seq:1 name:id}
+{column id:column.relation relation:column seq:2 name:relation}
+{column id:column.seq relation:column seq:3 name:seq}
+{column id:column.name relation:column seq:4 name:name}
+{reference column:column.relation to:relation}
+
+{relation name:reference}
+{column id:reference.column relation:reference seq:1 name:column}
+{column id:reference.to relation:reference seq:2 name:to}
+{reference column:reference.column to:column}
+{reference column:reference.to to:relation}
+
+{relation name:role}
+{column id:role.name relation:role seq:1 name:name}
+
+{relation name:rule}
+{column id:rule.name relation:rule seq:1 name:name}
+
+{relation name:input}
+{column id:input.id relation:input seq:1 name:id}
+{column id:input.rule relation:input seq:2 name:rule}
+{column id:input.seq relation:input seq:3 name:seq}
+{column id:input.name relation:input seq:4 name:name}
+{column id:input.of relation:input seq:5 name:of}
+{reference column:input.rule to:rule}
+{reference column:input.of to:relation}
+
+{relation name:clause}
+{column id:clause.id relation:clause seq:1 name:id}
+{column id:clause.rule relation:clause seq:2 name:rule}
+{column id:clause.seq relation:clause seq:3 name:seq}
+{column id:clause.role relation:clause seq:4 name:role}
+{column id:clause.relation relation:clause seq:5 name:relation}
+{reference column:clause.rule to:rule}
+{reference column:clause.role to:role}
+{reference column:clause.relation to:relation}
+
+{relation name:binding}
+{column id:binding.id relation:binding seq:1 name:id}
+{column id:binding.clause relation:binding seq:2 name:clause}
+{column id:binding.column relation:binding seq:3 name:column}
+{column id:binding.input relation:binding seq:4 name:input}
+{reference column:binding.clause to:clause}
+{reference column:binding.column to:column}
+{reference column:binding.input to:input}
+
+{relation name:command}
+{column id:command.id relation:command seq:1 name:id}
+{column id:command.rule relation:command seq:2 name:rule}
+{reference column:command.rule to:rule}
+
+{relation name:argument}
+{column id:argument.id relation:argument seq:1 name:id}
+{column id:argument.command relation:argument seq:2 name:command}
+{column id:argument.input relation:argument seq:3 name:input}
+{column id:argument.value relation:argument seq:4 name:value}
+{reference column:argument.command to:command}
+{reference column:argument.input to:input}
+# WHY: `argument.value` has no reference and cannot have one. What it points at is whatever
+# `input.of` says, which is data - so the type is checked when the command runs and not here.
+# This is the one place the structure cannot state a constraint that the engine still enforces.
+
+
+## The game's structure, which is Sean's four tables
+
+{relation name:territory}
+{column id:territory.id relation:territory seq:1 name:id}
+
+{relation name:thing}
+{column id:thing.id relation:thing seq:1 name:id}
+{column id:thing.name relation:thing seq:2 name:name}
+
+{relation name:adjacency}
+{column id:adjacency.from relation:adjacency seq:1 name:from}
+{column id:adjacency.to relation:adjacency seq:2 name:to}
+{reference column:adjacency.from to:territory}
+{reference column:adjacency.to to:territory}
+
+{relation name:residency}
+{column id:residency.what relation:residency seq:1 name:what}
+{column id:residency.where relation:residency seq:2 name:where}
+{reference column:residency.what to:thing}
+{reference column:residency.where to:territory}
+# WHY: `residency`'s key is `what`, so a thing is in one place and cannot be in two. That is an
+# inference from the note rather than something it says - the note gives residency no key at all.
+# It is what makes `remove` then `add` an update rather than two unrelated edits.
+
+
+## The three roles a clause can have
+
+{role name:require}
+{role name:remove}
+{role name:add}
+
+
+## The rule, which is the note's command table normalized
+#
+# The note's first column was the discriminator - `input`, `effect` - and its effect rows carried a
+# verb and then two positional cells. Those cells are `binding` rows now, because a relation cannot
+# have columns that change with what it points at.
+
+{rule name:move}
+
+{input id:move.what rule:move seq:1 name:what of:thing}
+{input id:move.from rule:move seq:2 name:from of:territory}
+{input id:move.to rule:move seq:3 name:to of:territory}
+
+{clause id:move.1 rule:move seq:1 role:require relation:residency}
+{clause id:move.2 rule:move seq:2 role:require relation:adjacency}
+{clause id:move.3 rule:move seq:3 role:remove relation:residency}
+{clause id:move.4 rule:move seq:4 role:add relation:residency}
+
+{binding id:move.1.what clause:move.1 column:residency.what input:move.what}
+{binding id:move.1.where clause:move.1 column:residency.where input:move.from}
+{binding id:move.2.from clause:move.2 column:adjacency.from input:move.from}
+{binding id:move.2.to clause:move.2 column:adjacency.to input:move.to}
+{binding id:move.3.what clause:move.3 column:residency.what input:move.what}
+{binding id:move.3.where clause:move.3 column:residency.where input:move.from}
+{binding id:move.4.what clause:move.4 column:residency.what input:move.what}
+{binding id:move.4.where clause:move.4 column:residency.where input:move.to}
+
+
+## The command
+#
+# Move thing 1 from territory 1 to territory 2.
+
+{command id:1 rule:move}
+
+{argument id:1.what command:1 input:move.what value:1}
+{argument id:1.from command:1 input:move.from value:1}
+{argument id:1.to command:1 input:move.to value:2}
+
+
+## The world
+
+{territory id:1}
+{territory id:2}
+{territory id:3}
+
+{adjacency from:1 to:2}
+{adjacency from:2 to:3}
+
+{thing id:1 name:scout}
+
+{residency what:1 where:1}

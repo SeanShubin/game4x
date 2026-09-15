@@ -10,56 +10,7 @@
 //! `scout`, `territory` and `move` are in the data, in the tests and in comments like this one,
 //! and in no line that runs.
 
-use std::collections::BTreeMap;
-
 use crate::notation::Row;
-
-/// A pattern over rows, with `$name` standing for something a command bound.
-///
-/// **A pattern is a row whose values may be holes**, which is why it is the same type. The
-/// notation does not distinguish them and neither does this: `{at thing:$it place:$from}` is a
-/// row that happens to have two values beginning `$`.
-pub type Pattern = Row;
-
-/// What a pattern could not be turned into.
-#[derive(Debug, PartialEq, Eq)]
-pub enum Unbound {
-    /// A `$name` the command did not give a value for.
-    ///
-    /// **Refused rather than matched against anything**, which is the thin choice and the one
-    /// that keeps the next concept visible: a hole that matches anything is a *search*, and a
-    /// search has to answer *which one when several match*. Nothing here needs one yet.
-    Hole { key: String, name: String },
-}
-
-impl std::fmt::Display for Unbound {
-    fn fmt(&self, out: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Unbound::Hole { key, name } => {
-                write!(out, "`{key}` wants `${name}` and nothing bound it")
-            }
-        }
-    }
-}
-
-/// A pattern with every `$name` replaced by what the bindings give it.
-pub fn fill(pattern: &Pattern, bindings: &BTreeMap<String, String>) -> Result<Row, Unbound> {
-    let mut values = BTreeMap::new();
-    for (key, value) in &pattern.values {
-        let filled = match value.strip_prefix('$') {
-            None => value.clone(),
-            Some(name) => bindings.get(name).cloned().ok_or_else(|| Unbound::Hole {
-                key: key.clone(),
-                name: name.to_string(),
-            })?,
-        };
-        values.insert(key.clone(), filled);
-    }
-    Ok(Row {
-        relation: pattern.relation.clone(),
-        values,
-    })
-}
 
 /// The rows the world is made of.
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
@@ -103,58 +54,6 @@ impl Store {
     }
 }
 
-/// Every way `pattern` can be made true by one row, extending what is already bound.
-///
-/// **This is the other direction, and it is the concept the first three did without.** [`fill`]
-/// puts a bound value into a pattern and refuses a hole nothing bound; this takes a hole nothing
-/// bound and reads a value *out of* a row. A rule fired by a command never needs it - the command
-/// binds everything - and a rule fired by a turn has no command, so it needs nothing else.
-///
-/// **Several rows may match and all of them are returned.** That is the question `README.md` said
-/// a search would have to answer - *which one, when several match* - and the answer here is *all
-/// of them, and the caller fires once per solution*. It is an answer rather than an evasion
-/// because a turn wants every settlement and not one of them.
-///
-/// **A value already bound is a filter and not a rebinding**, which is what joins the clauses of
-/// one rule together: `$where` bound by the first clause has to be the same `$where` in the
-/// second.
-pub fn solutions(
-    store: &Store,
-    pattern: &Pattern,
-    bindings: &BTreeMap<String, String>,
-) -> Vec<BTreeMap<String, String>> {
-    let mut ways = Vec::new();
-    for row in &store.rows {
-        if row.relation != pattern.relation {
-            continue;
-        }
-        let mut extended = bindings.clone();
-        let mut fits = true;
-        for (key, value) in &pattern.values {
-            let Some(held) = row.value(key) else {
-                fits = false;
-                break;
-            };
-            match value.strip_prefix('$') {
-                None => fits = value == held,
-                Some(name) => match extended.get(name) {
-                    Some(already) => fits = already == held,
-                    None => {
-                        extended.insert(name.to_string(), held.to_string());
-                    }
-                },
-            }
-            if !fits {
-                break;
-            }
-        }
-        if fits && !ways.contains(&extended) {
-            ways.push(extended);
-        }
-    }
-    ways
-}
-
 fn matches(row: &Row, wanted: &Row) -> bool {
     row.relation == wanted.relation
         && wanted
@@ -167,33 +66,6 @@ fn matches(row: &Row, wanted: &Row) -> bool {
 mod tests {
     use super::*;
     use crate::notation::read;
-
-    fn bound(pairs: &[(&str, &str)]) -> BTreeMap<String, String> {
-        pairs
-            .iter()
-            .map(|(key, value)| (key.to_string(), value.to_string()))
-            .collect()
-    }
-
-    #[test]
-    fn a_hole_takes_what_the_binding_gives_it() {
-        let pattern = read("{at thing:$it place:$from}").expect("a pattern")[0].clone();
-        let filled = fill(&pattern, &bound(&[("it", "scout"), ("from", "1")])).expect("filled");
-        assert_eq!(crate::notation::write(&filled), "{at place:1 thing:scout}");
-    }
-
-    #[test]
-    fn a_hole_nothing_bound_is_refused_by_name() {
-        let pattern = read("{at thing:$it place:$from}").expect("a pattern")[0].clone();
-        let why = fill(&pattern, &bound(&[("it", "scout")])).expect_err("`from` is unbound");
-        assert_eq!(
-            why,
-            Unbound::Hole {
-                key: "place".to_string(),
-                name: "from".to_string()
-            }
-        );
-    }
 
     /// Matching is the same relation and at least these values, and both halves are checked.
     #[test]

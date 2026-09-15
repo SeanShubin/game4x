@@ -1,362 +1,384 @@
-//! The whole of the engine: bind a command, check what the rule needs, apply what it changes.
+//! The whole of the engine: read a command out of the data, check its rule, apply what it changes.
 //!
-//! # The four words it knows
+//! # Everything it reads is a row, including what it is
 //!
-//! `rule`, `needs`, `drops` and `adds`. Nothing else. **They are the engine's own vocabulary and
-//! not the game's**, which is the distinction the experiment turns on: a word here is about how a
-//! rule is stated, and a word like `move` or `adjacent` is about what the game is. The second
-//! kind appears in `data/` and in the tests and nowhere in `src/`.
+//! `data/before.4x` holds the structure, the structure's own structure, the roles, the rule, the
+//! command and the world, all as rows of declared relations. **The engine is handed that one list
+//! and nothing else.** There is no separate schema file, no separate rule file and no command
+//! typed at it - a command is `{command id:1 rule:move}` with `{argument ...}` rows beside it.
 //!
-//! A rule is stated as rows:
+//! # The words it knows
 //!
-//! ```text
-//! {rule name:move}
-//! {needs rule:move relation:at       thing:$it   place:$from}
-//! {needs rule:move relation:adjacent from:$from  to:$to}
-//! {drops rule:move relation:at       thing:$it   place:$from}
-//! {adds  rule:move relation:at       thing:$it   place:$to}
-//! ```
+//! `relation`, `column` and `reference`, in [`crate::schema`]; and `role`, `rule`, `input`,
+//! `clause`, `binding`, `command` and `argument` here. **Every one is about how a thing is written
+//! down** - `territory`, `residency` and `move` appear in `data/` and in the tests and in no line
+//! of `src/` that runs, which `tests/isolation.rs` checks.
 //!
-//! A command is a row too, and its relation names the rule: `{move it:scout from:1 to:2}` binds
-//! `$it`, `$from` and `$to` to what it says.
+//! # Why a clause and a binding are two relations
 //!
-//! # The two keys a clause reserves
+//! A clause says *require this relation*; a binding says *this column of it takes that input*.
+//! **They are split because a relation cannot have columns that change with what it points at.**
+//! An earlier version wrote `{effect relation:residency what:$what where:$from}`, whose columns
+//! are `residency`'s - so `effect` had no fixed columns and was not a relation at all. That is the
+//! whole of what *fully normalized* cost here, and it is four rows becoming twelve.
 //!
-//! A clause row is flat, so `rule` and `relation` are read by the engine and everything else is
-//! the pattern. **A game relation with a column called `rule` therefore cannot be written**, and
-//! that is a real limit rather than an oversight - the alternative is nesting, which the notation
-//! does not have. Recorded because the day it bites, the fix is a decision and not a patch.
+//! # An input is typed, and that is where *no such place* is caught
+//!
+//! `of:territory` says the value bound to an input is a `territory`'s key, so a command naming
+//! territory 9 is refused by the structure before the rule is looked at. **No rule has to say that
+//! the destination exists.**
 
 use std::collections::BTreeMap;
 
-use crate::notation::{Row, write};
-use crate::store::{Store, Unbound, fill, solutions};
+use crate::notation::Row;
+use crate::schema::{Malformed, Schema};
+use crate::store::Store;
 
+const ROLE: &str = "role";
 const RULE: &str = "rule";
-const NEEDS: &str = "needs";
-const DROPS: &str = "drops";
-const ADDS: &str = "adds";
-const NAME: &str = "name";
-const RELATION: &str = "relation";
-/// **What fires a rule**, which is about how a rule is stated and not about what the game is - so
-/// `by`, `command` and `turn` are the engine's own vocabulary, like `rule` and `needs` above.
-const BY: &str = "by";
+const INPUT: &str = "input";
+const CLAUSE: &str = "clause";
+const BINDING: &str = "binding";
 const COMMAND: &str = "command";
-const TURN: &str = "turn";
+const ARGUMENT: &str = "argument";
+const ID: &str = "id";
+const NAME: &str = "name";
+const SEQ: &str = "seq";
+const OF: &str = "of";
+const RELATION: &str = "relation";
+const COLUMN: &str = "column";
+const VALUE: &str = "value";
+const REQUIRE: &str = "require";
+const REMOVE: &str = "remove";
+const ADD: &str = "add";
 
-/// Why a command did not happen, said in terms of the rule rather than of the engine.
+/// Why a command did not happen, said in terms of the data rather than of the engine.
 #[derive(Debug, PartialEq, Eq)]
 pub enum Refused {
-    /// The command names something no `{rule name:...}` row declares.
-    NoSuchRule { name: String },
-    /// The command names a rule that is not fired by a command.
+    /// Nothing states a `{command id:...}` with that id.
+    NoSuchCommand { id: String },
+    /// The command's rule declares an input the command gives no argument for.
+    Missing { rule: String, input: String },
+    /// An argument's value is not a key of the relation its input is typed as.
     ///
-    /// **`by` has to mean something in both directions or it means nothing.** Without this a turn
-    /// would skip `move` and a player could still type `{grow where:1}`, which is the rule being
-    /// enforced against the engine and not against the game.
-    ///
-    /// **`by` is required rather than defaulted**, so this carries what the rule actually says -
-    /// the turn, something the engine does not know, or nothing at all. A rule that does not say
-    /// how it fires is one somebody has not finished writing, and guessing `command` for it is
-    /// the engine deciding.
-    NotByCommand { name: String, by: String },
-    /// A clause wants a `$name` the command did not bind.
-    Unbound { rule: String, why: Unbound },
-    /// A clause is malformed - it says no `relation`.
-    Unstated { rule: String, clause: String },
+    /// **This is *no such place*, and it arrives from the structure rather than from a rule.**
+    WrongType {
+        rule: String,
+        input: String,
+        value: String,
+        of: String,
+    },
+    /// A clause names a role that is not `require`, `remove` or `add`.
+    NoSuchRole {
+        rule: String,
+        clause: String,
+        role: String,
+    },
+    /// A clause has a column bound to no input, so the row it wants cannot be built.
+    Unbound {
+        rule: String,
+        clause: String,
+        column: String,
+    },
     /// Everything was bound and the world does not agree.
     NotSo { rule: String, wanted: String },
-    /// The rule drops something no row matches, so the rule contradicts itself.
-    ///
-    /// **Not a game rule and not reachable from `data/`**: every `drops` in there is also a
-    /// `needs`, so the check can only fire on a rule that is wrong. **A count over nothing is
-    /// the same failure with the sign flipped** - `CLAUDE.md` - and a drop that removes nothing
-    /// is exactly that, succeeding silently.
-    NothingToDrop { rule: String, wanted: String },
+    /// The rule removes something no row matches, so the rule contradicts itself.
+    NothingToRemove { rule: String, wanted: String },
+    /// The rule left a world that does not fit the structure.
+    Broke { rule: String, why: Malformed },
 }
 
 impl std::fmt::Display for Refused {
     fn fmt(&self, out: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Refused::NoSuchRule { name } => write!(out, "no rule is named `{name}`"),
-            Refused::NotByCommand { name, by } => {
-                write!(out, "`{name}` is fired by {by} and not by a command")
+            Refused::NoSuchCommand { id } => write!(out, "no command is stated with id `{id}`"),
+            Refused::Missing { rule, input } => write!(out, "`{rule}` wants `{input}`"),
+            Refused::WrongType {
+                rule,
+                input,
+                value,
+                of,
+            } => {
+                write!(
+                    out,
+                    "`{rule}`.`{input}` is `{value}`, and no `{of}` has that key"
+                )
             }
-            Refused::Unbound { rule, why } => write!(out, "`{rule}`: {why}"),
-            Refused::Unstated { rule, clause } => {
-                write!(out, "`{rule}`: {clause} says no `relation`")
+            Refused::NoSuchRole { rule, clause, role } => {
+                write!(
+                    out,
+                    "`{rule}`.`{clause}` has the role `{role}`, which is not one"
+                )
+            }
+            Refused::Unbound {
+                rule,
+                clause,
+                column,
+            } => {
+                write!(out, "`{rule}`.`{clause}` binds nothing to `{column}`")
             }
             Refused::NotSo { rule, wanted } => write!(out, "`{rule}` needs {wanted} and it is not"),
-            Refused::NothingToDrop { rule, wanted } => {
-                write!(out, "`{rule}` drops {wanted} and nothing matched")
+            Refused::NothingToRemove { rule, wanted } => {
+                write!(out, "`{rule}` removes {wanted} and nothing matched")
+            }
+            Refused::Broke { rule, why } => write!(out, "`{rule}` would leave a world where {why}"),
+        }
+    }
+}
+
+/// Every row there is, and the structure read out of them.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Game {
+    schema: Schema,
+    rows: Store,
+}
+
+impl Game {
+    /// **The rows are checked against the structure they themselves declare** before anything is
+    /// run on them, so a game that exists is one where every row fits and every reference points
+    /// at something.
+    pub fn of(rows: Vec<Row>) -> Result<Game, Malformed> {
+        let schema = Schema::of(&rows)?;
+        let rows = Store::of(rows);
+        check(&schema, &rows)?;
+        Ok(Game { schema, rows })
+    }
+
+    pub fn schema(&self) -> &Schema {
+        &self.schema
+    }
+
+    pub fn rows(&self) -> &Store {
+        &self.rows
+    }
+
+    /// Every row, in each relation's declared column order, sorted.
+    ///
+    /// **Sorted because the rows are a set and the order they are held in is nobody's**, so two
+    /// games holding the same rows are the same game however they were built.
+    pub fn shown(&self) -> Vec<String> {
+        let mut out: Vec<String> = self
+            .rows
+            .rows()
+            .iter()
+            .map(|row| self.schema.write(row))
+            .collect();
+        out.sort();
+        out
+    }
+
+    fn of_relation(&self, relation: &str) -> Vec<&Row> {
+        self.rows
+            .rows()
+            .iter()
+            .filter(|row| row.relation == relation)
+            .collect()
+    }
+
+    /// Whether any row of `relation` has `value` as its key.
+    fn has_key(&self, relation: &str, value: &str) -> bool {
+        let Some(declared) = self.schema.relation(relation) else {
+            return false;
+        };
+        self.rows
+            .rows()
+            .iter()
+            .any(|row| row.relation == relation && row.value(declared.key()) == Some(value))
+    }
+}
+
+/// Every row fits its relation, and every reference points at a row that is there.
+fn check(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
+    for row in rows.rows() {
+        let relation = schema.fits(row)?;
+        for column in &relation.columns {
+            let Some(to) = &column.references else {
+                continue;
+            };
+            let value = row.value(&column.name).unwrap_or_default();
+            let declared = schema
+                .relation(to)
+                .expect("checked when the schema was read");
+            let there = rows
+                .rows()
+                .iter()
+                .any(|it| it.relation == *to && it.value(declared.key()) == Some(value));
+            if !there {
+                return Err(Malformed::NoSuchRow {
+                    relation: row.relation.clone(),
+                    column: column.name.clone(),
+                    value: value.to_string(),
+                    to: to.clone(),
+                });
             }
         }
     }
+    Ok(())
 }
 
-/// Run one command against one world, and give back the world it leaves.
+/// Run one of the commands the data states, and give back the game it leaves.
 ///
-/// **A new store rather than an edit in place**, so a refusal half way through applying leaves
-/// nothing half applied. The caller either has the world after the command or the world before
-/// it, and never one in between.
-///
-/// **The signature is the whole of that guarantee, and there is deliberately no test for it.**
-/// `&Store` in and a fresh `Store` out means a partial application is not a thing that can be
-/// written here, so a test asserting the world is unchanged after a refusal would pass without
-/// the property and is therefore not evidence of it - *passing tests prove nothing*,
-/// `CLAUDE.md`. If this ever takes `&mut Store`, that test becomes necessary in the same commit.
-pub fn run(store: &Store, rules: &[Row], command: &Row) -> Result<Store, Refused> {
-    let name = command.relation.clone();
-    let Some(declared) = declaration(rules, &name) else {
-        return Err(Refused::NoSuchRule { name });
+/// **A new game rather than an edit in place**, so a refusal half way through applying leaves
+/// nothing half applied. The caller either has the game after the command or the game before it,
+/// and never one in between. **The signature is the whole of that guarantee**, so a test asserting
+/// it would pass without the property; `tests/first_test.rs` asserts the observable half and says
+/// so.
+pub fn run(game: &Game, command: &str) -> Result<Game, Refused> {
+    let Some(stated) = game
+        .of_relation(COMMAND)
+        .into_iter()
+        .find(|row| row.value(ID) == Some(command))
+    else {
+        return Err(Refused::NoSuchCommand {
+            id: command.to_string(),
+        });
     };
-    if declared.value(BY) != Some(COMMAND) {
-        let by = match declared.value(BY) {
-            Some(TURN) => "the turn".to_string(),
-            Some(other) => format!("`{other}`"),
-            None => "nothing it states".to_string(),
+    let rule = stated.value(RULE).unwrap_or_default().to_string();
+
+    // **An argument per declared input, each of the input's declared type.** A value the structure
+    // cannot place is refused here, which is why no rule says *the destination exists*.
+    let arguments: BTreeMap<&str, &str> = game
+        .of_relation(ARGUMENT)
+        .into_iter()
+        .filter(|row| row.value(COMMAND) == Some(command))
+        .filter_map(|row| Some((row.value(INPUT)?, row.value(VALUE)?)))
+        .collect();
+
+    let mut inputs: Vec<&Row> = game
+        .of_relation(INPUT)
+        .into_iter()
+        .filter(|row| row.value(RULE) == Some(rule.as_str()))
+        .collect();
+    inputs.sort_by_key(|row| row.value(SEQ).unwrap_or_default().to_string());
+
+    let mut bound: BTreeMap<String, String> = BTreeMap::new();
+    for input in inputs {
+        let id = input.value(ID).unwrap_or_default();
+        let named = input.value(NAME).unwrap_or_default().to_string();
+        let Some(given) = arguments.get(id) else {
+            return Err(Refused::Missing { rule, input: named });
         };
-        return Err(Refused::NotByCommand { name, by });
+        let of = input.value(OF).unwrap_or_default().to_string();
+        if !game.has_key(&of, given) {
+            return Err(Refused::WrongType {
+                rule,
+                input: named,
+                value: (*given).to_string(),
+                of,
+            });
+        }
+        bound.insert(id.to_string(), (*given).to_string());
     }
 
-    let bindings: BTreeMap<String, String> = command.values.clone();
-    let clauses = |kind: &str| -> Vec<&Row> {
-        rules
-            .iter()
-            .filter(|row| row.relation == kind && row.value(RULE) == Some(name.as_str()))
-            .collect()
-    };
-    let wanted = |clause: &Row| -> Result<Row, Refused> {
-        let relation = clause
-            .value(RELATION)
-            .ok_or_else(|| Refused::Unstated {
-                rule: name.clone(),
-                clause: write(clause),
-            })?
-            .to_string();
-        let mut values = clause.values.clone();
-        values.remove(RULE);
-        values.remove(RELATION);
-        fill(&Row { relation, values }, &bindings).map_err(|why| Refused::Unbound {
-            rule: name.clone(),
-            why,
-        })
-    };
+    let mut clauses: Vec<&Row> = game
+        .of_relation(CLAUSE)
+        .into_iter()
+        .filter(|row| row.value(RULE) == Some(rule.as_str()))
+        .collect();
+    clauses.sort_by_key(|row| row.value(SEQ).unwrap_or_default().to_string());
 
-    // **Everything is checked before anything is applied**, which is what makes the two halves
-    // below safe to write as two loops rather than one.
-    for clause in clauses(NEEDS) {
-        let row = wanted(clause)?;
-        if !store.holds(&row) {
-            return Err(Refused::NotSo {
-                rule: name.clone(),
-                wanted: write(&row),
-            });
+    // **Requiring happens before anything is applied**, which is what makes the two passes below
+    // safe to write as two rather than one.
+    let mut after = game.rows.clone();
+    for pass in [REQUIRE, REMOVE] {
+        for clause in &clauses {
+            let role = clause.value(ROLE).unwrap_or_default();
+            if role != pass {
+                continue;
+            }
+            let wanted = row_of(game, clause, &bound, &rule)?;
+            match role {
+                REQUIRE => {
+                    if !game.rows.holds(&wanted) {
+                        return Err(Refused::NotSo {
+                            rule,
+                            wanted: game.schema.write(&wanted),
+                        });
+                    }
+                }
+                _ => {
+                    if after.remove(&wanted) == 0 {
+                        return Err(Refused::NothingToRemove {
+                            rule,
+                            wanted: game.schema.write(&wanted),
+                        });
+                    }
+                }
+            }
+        }
+    }
+    for clause in &clauses {
+        match clause.value(ROLE).unwrap_or_default() {
+            REQUIRE | REMOVE => continue,
+            ADD => after.add(row_of(game, clause, &bound, &rule)?),
+            other => {
+                return Err(Refused::NoSuchRole {
+                    rule,
+                    clause: clause.value(ID).unwrap_or_default().to_string(),
+                    role: other.to_string(),
+                });
+            }
         }
     }
 
-    let mut after = store.clone();
-    for clause in clauses(DROPS) {
-        let row = wanted(clause)?;
-        if after.remove(&row) == 0 {
-            return Err(Refused::NothingToDrop {
-                rule: name.clone(),
-                wanted: write(&row),
-            });
+    let schema = Schema::of(after.rows()).map_err(|why| Refused::Broke {
+        rule: rule.clone(),
+        why,
+    })?;
+    check(&schema, &after).map_err(|why| Refused::Broke { rule, why })?;
+    Ok(Game {
+        schema,
+        rows: after,
+    })
+}
+
+/// The row a clause is about, with every column taking the value its binding names.
+fn row_of(
+    game: &Game,
+    clause: &Row,
+    bound: &BTreeMap<String, String>,
+    rule: &str,
+) -> Result<Row, Refused> {
+    let relation = clause.value(RELATION).unwrap_or_default().to_string();
+    let id = clause.value(ID).unwrap_or_default();
+    let bindings: Vec<&Row> = game
+        .of_relation(BINDING)
+        .into_iter()
+        .filter(|row| row.value(CLAUSE) == Some(id))
+        .collect();
+
+    let declared = game.schema.relation(&relation);
+    let mut values = BTreeMap::new();
+    for binding in bindings {
+        let column = binding.value(COLUMN).unwrap_or_default();
+        let Some((_, name)) = game.schema.column(column) else {
+            continue;
+        };
+        let input = binding.value(INPUT).unwrap_or_default();
+        let Some(value) = bound.get(input) else {
+            continue;
+        };
+        values.insert(name.to_string(), value.clone());
+    }
+
+    // **Every column of the relation has to be bound**, said here rather than left to the
+    // structure check - a half-built row would otherwise be reported as one whose columns are
+    // wrong, which names the symptom instead of the clause.
+    if let Some(declared) = declared {
+        for column in &declared.columns {
+            if !values.contains_key(&column.name) {
+                return Err(Refused::Unbound {
+                    rule: rule.to_string(),
+                    clause: id.to_string(),
+                    column: column.name.clone(),
+                });
+            }
         }
     }
-    for clause in clauses(ADDS) {
-        after.add(wanted(clause)?);
-    }
-    Ok(after)
-}
-
-fn declaration<'a>(rules: &'a [Row], name: &str) -> Option<&'a Row> {
-    rules
-        .iter()
-        .find(|row| row.relation == RULE && row.value(NAME) == Some(name))
-}
-
-fn clauses_of<'a>(rules: &'a [Row], kind: &str, name: &str) -> Vec<&'a Row> {
-    rules
-        .iter()
-        .filter(|row| row.relation == kind && row.value(RULE) == Some(name))
-        .collect()
-}
-
-/// A clause as a pattern: its own two keys removed, and its holes left as holes.
-fn pattern(clause: &Row, name: &str) -> Result<Row, Refused> {
-    let relation = clause
-        .value(RELATION)
-        .ok_or_else(|| Refused::Unstated {
-            rule: name.to_string(),
-            clause: write(clause),
-        })?
-        .to_string();
-    let mut values = clause.values.clone();
-    values.remove(RULE);
-    values.remove(RELATION);
     Ok(Row { relation, values })
 }
 
-/// Run every rule the turn fires, once for each way the world satisfies it.
-///
-/// **This is the concept the other three did without, and it is why `src/` grew.** A rule fired by
-/// a command is handed its `$name` holes; a rule fired by a turn has no command, so the holes are
-/// bound from the world by [`crate::store::solutions`] - the search `README.md` had been naming as
-/// a concept with no owner since the first commit.
-///
-/// **One pass, against the world as the turn found it.** Solutions are worked out from `store` and
-/// applied to a copy, so a rule cannot see what another firing of it has just done. That makes a
-/// turn terminate by construction rather than by a rule about loops - and it is a choice rather
-/// than the only option, because a fixpoint would keep firing until nothing changed and would not.
-///
-/// **What two firings that contend look like is not settled here.** No rule the data has both
-/// drops and fires on a turn, so the case has not come up; when it does it is a concept with a
-/// name, not a patch.
-pub fn turn(store: &Store, rules: &[Row]) -> Result<Store, Refused> {
-    let mut after = store.clone();
-    for declared in rules
-        .iter()
-        .filter(|row| row.relation == RULE && row.value(BY) == Some(TURN))
-    {
-        let name = declared.value(NAME).unwrap_or_default().to_string();
-
-        // Every way the world satisfies every `needs` clause at once. Starting from one empty
-        // binding rather than from none: a rule with no clauses fires once, and a rule whose
-        // first clause matches nothing fires not at all.
-        let mut solved = vec![BTreeMap::new()];
-        for clause in clauses_of(rules, NEEDS, &name) {
-            let wanted = pattern(clause, &name)?;
-            solved = solved
-                .iter()
-                .flat_map(|bound| solutions(store, &wanted, bound))
-                .collect();
-        }
-
-        for bindings in solved {
-            let filled = |clause: &Row| -> Result<Row, Refused> {
-                let wanted = pattern(clause, &name)?;
-                fill(&wanted, &bindings).map_err(|why| Refused::Unbound {
-                    rule: name.clone(),
-                    why,
-                })
-            };
-            for clause in clauses_of(rules, DROPS, &name) {
-                let row = filled(clause)?;
-                if after.remove(&row) == 0 {
-                    return Err(Refused::NothingToDrop {
-                        rule: name.clone(),
-                        wanted: write(&row),
-                    });
-                }
-            }
-            for clause in clauses_of(rules, ADDS, &name) {
-                after.add(filled(clause)?);
-            }
-        }
-    }
-    Ok(after)
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::notation::read;
-
-    /// A rule with no game in it, so that these tests do not restate the ones in `tests/`.
-    const RULES: &str = "\
-{rule name:swap by:command}
-{needs rule:swap relation:here what:$a}
-{drops rule:swap relation:here what:$a}
-{adds rule:swap relation:here what:$b}
-";
-
-    /// A rule that does not say how it fires. **Declared here rather than written inline**,
-    /// because the edit that gave every other rule a `by` was a sweep over `{rule name:swap}` and
-    /// would have given this one too.
-    const NO_BY: &str = "{rule name:swap}";
-
-    fn rules() -> Vec<Row> {
-        read(RULES).expect("the rules")
-    }
-
-    fn one(text: &str) -> Row {
-        read(text).expect(text)[0].clone()
-    }
-
-    #[test]
-    fn a_rule_whose_needs_hold_drops_and_adds() {
-        let store = Store::of(read("{here what:x}").expect("a world"));
-        let after = run(&store, &rules(), &one("{swap a:x b:y}")).expect("x is here");
-        let rows: Vec<String> = after.rows().iter().map(write).collect();
-        assert_eq!(rows, vec!["{here what:y}".to_string()]);
-    }
-
-    /// Each way a command is refused, and the count so that none is untested.
-    #[test]
-    fn every_refusal_says_the_rule_and_what_about_it() {
-        let store = Store::of(read("{here what:x}").expect("a world"));
-        let refused = [
-            (
-                "{stroll a:x b:y}",
-                RULES,
-                Refused::NoSuchRule {
-                    name: "stroll".to_string(),
-                },
-            ),
-            (
-                "{swap a:x}",
-                RULES,
-                Refused::Unbound {
-                    rule: "swap".to_string(),
-                    why: Unbound::Hole {
-                        key: "what".to_string(),
-                        name: "b".to_string(),
-                    },
-                },
-            ),
-            (
-                "{swap a:q b:y}",
-                RULES,
-                Refused::NotSo {
-                    rule: "swap".to_string(),
-                    wanted: "{here what:q}".to_string(),
-                },
-            ),
-            (
-                "{swap a:x b:y}",
-                "{rule name:swap by:command}\n{drops rule:swap relation:here what:$b}\n",
-                Refused::NothingToDrop {
-                    rule: "swap".to_string(),
-                    wanted: "{here what:y}".to_string(),
-                },
-            ),
-            (
-                "{swap a:x b:y}",
-                "{rule name:swap by:command}\n{needs rule:swap what:$a}\n",
-                Refused::Unstated {
-                    rule: "swap".to_string(),
-                    clause: "{needs rule:swap what:$a}".to_string(),
-                },
-            ),
-            // **A rule that does not say how it fires is refused, and the refusal says which.**
-            // `by` is reported back rather than defaulted, so a rule nobody finished writing
-            // cannot be run as though somebody had.
-            (
-                "{swap a:x b:y}",
-                NO_BY,
-                Refused::NotByCommand {
-                    name: "swap".to_string(),
-                    by: "nothing it states".to_string(),
-                },
-            ),
-        ];
-        for (command, stated, expected) in &refused {
-            let why = run(&store, &read(stated).expect(stated), &one(command))
-                .expect_err("this command cannot happen");
-            assert_eq!(&why, expected, "{command}");
-        }
-        assert_eq!(refused.len(), 6, "six refusals, and each is checked");
-    }
+/// The roles a clause may have, so that a test can assert the data uses all of them and no others.
+pub fn roles() -> [&'static str; 3] {
+    [REQUIRE, REMOVE, ADD]
 }

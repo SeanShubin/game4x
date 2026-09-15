@@ -18,4 +18,5 @@
 
 pub mod engine;
 pub mod notation;
+pub mod schema;
 pub mod store;
