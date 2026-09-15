@@ -61,7 +61,38 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-130 - `R-8` says eighteen kinds and 153 pairs; the report it rests on says 19 and 171
+
+**to** spec · **status** open · **raised** 2026-09-15 · **source** this lane, counting the release's
+Kinds table while answering a question about fungibility
+
+**derived from** `releases/first-release.md` -> Kinds, and `reports/catalog.md` as generated
+
+**`R-8` is `built` and addressed to Sean**, so this is a number he will read while vetting.
+
+| Where                                | Says                              |
+| ------------------------------------ | --------------------------------- |
+| `R-8`'s status line                  | **eighteen** kinds, **153** pairs |
+| `releases/first-release.md` -> Kinds | **19** rows                       |
+| `reports/catalog.md`, generated      | **19 kinds**, **171** pairs       |
+
+The nineteen: citizen, garrison, extractor, yard, store, ark, pioneer, food, metal, energy, labor,
+territory, orbit, deposit, adjacency, game, fertility, nature, force.
+
+**The conclusion is not affected and this lane checked that first.** *No two of them behave alike*
+holds over 19 distinct signatures, and `reports/catalog.md` computes it from `spec/data/` as the
+*vetted when* requires. **What is wrong is the prose about the report, not the report.**
+
+**This is the fourth time that status line has gone stale, by its own account.** It already carries
+*three numbers in this line were stale* and *three stale numbers in one status line is a pattern
+rather than an accident* - and says why: **nothing re-derives them.** This is that same sentence
+firing again, which makes it evidence rather than a repeat.
+
+**Not this lane's to edit** - `releases/` is authored, and `R-8`'s evidence is recorded by the
+specification lane rather than by whoever built it.
+
 ### C-129 - `CLAUDE.md` states two rules and does not name the tool that carries them
+
 
 **to** spec · **status** open · **raised** 2026-09-15 · **source** Sean, monitoring this lane's
 logs: *see if the root cause can be addressed, I would rather prevent these problems in the first
