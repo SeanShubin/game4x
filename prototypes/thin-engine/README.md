@@ -339,6 +339,16 @@ example - the territories and the thing are named, the adjacencies and the resid
 those two are exactly the relations nothing points at. **A name on a row nothing references would
 be a value nothing reads**, which is the thing this prototype is meant not to have.
 
+## Authoring in the friendly format, and the round trip
+
+**Sean, 2026-09-15**: *I expect to be authoring tests in the friendly format and only
+debugging/vetting in the foundation format.* So the translation has to go both ways, and it does:
+**foundation to friendly to foundation is the identity for all 219 rows**, asserted per row.
+
+**Nothing is minted.** A friendly row carries its own `id`, so translating back is resolving each
+reference from a name to an id and dropping the `name` where the relation does not declare one.
+No value is invented anywhere, which is why the minting question closed rather than being solved.
+
 ## The one relation that cannot satisfy the constraint
 
 **`column`.** Forty-six rows, seventeen distinct names, **sixteen of them called `id`**. It shows
@@ -360,8 +370,22 @@ relation, and a *global* name, unique everywhere. `column.name` is the first and
 wants the second. **`input.name` is the same shape**: `it`, `what`, `from`, `to` are local to their
 rule, and a second rule with its own `to` would collide.
 
-**The fix is to tell them apart** - a column for the token a row is keyed by, and `name` reserved
-for the unique one - and that is Sean's to make rather than this directory's.
+**Sean chose to leave it alone**, over renaming the column or adding a second one: *binding and
+column are machinery*, and the friendly format is for authoring tests and reading the game rather
+than the self-description. **So a reference to a column is written as an id**:
+
+```text
+{binding id:1 clause:clause-1 column:44 input:it}
+```
+
+**All or nothing, per relation.** Some column names happen to be unique - `what`, `where` - and
+taking those while falling back for the rest rendered one kind of thing two ways, `column:what`
+beside `column:44`. A relation whose names collide gets none.
+
+**And a relation that declares `name` gets no generated one either.** Its `name` slot is taken by
+the token, so a generated name would appear nowhere a reader could find it, and a reference to it
+would be a name that resolves against nothing. That was the first version, and `column-44` named a
+row that never said it was called that.
 
 ## The user-facing style, which is not part of the engine
 

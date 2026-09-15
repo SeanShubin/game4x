@@ -24,7 +24,7 @@
 //!
 //! # It is not part of the engine
 //!
-//! **Sean**: *I don\'t consider the translation between user friendly format and foundational
+//! **Sean**: *I don't consider the translation between user friendly format and foundational
 //! format part of the engine. The engine should only know about the foundational format. The user
 //! friendly format is for the test harness and debugging.*
 //!
@@ -40,9 +40,14 @@ use thin_engine::schema::Schema;
 pub struct Names {
     schema: Schema,
     names: BTreeMap<(String, String), String>,
-    /// An `argument`\'s id, and the relation its value is of - the one reference the schema cannot
-    /// state, because it follows the input\'s `of` rather than a `{reference ...}` row.
+    /// An `argument`'s id, and the relation its value is of - the one reference the schema cannot
+    /// state, because it follows the input's `of` rather than a `{reference ...}` row.
     argument_of: BTreeMap<String, String>,
+    /// A relation and a name, to the id of the row that carries it - the inverse of `names`, and
+    /// what turns a friendly reference back into a foundation one.
+    by_name: BTreeMap<(String, String), String>,
+    /// Which relations declare a `name` column, so a generated name can be told from data.
+    declares_name: std::collections::BTreeSet<String>,
 }
 
 impl Names {
@@ -59,6 +64,50 @@ impl Names {
             .filter_map(|column| column.references.clone())
             .collect();
 
+        // **Whether a relation's names are all its own.** `column.name` is not a name for the
+        // row - it is the token a row is keyed by - so sixteen columns are called `id`. Sean,
+        // 2026-09-15, choosing this over giving `column` a second column: *binding and column are
+        // machinery.*
+        //
+        // **All or nothing, per relation.** Some column names happen to be unique - `what`,
+        // `where` - and taking those while falling back for the rest rendered one kind of thing
+        // two ways: `column:what` beside `column:44`.
+        let mut seen: BTreeMap<String, Vec<String>> = BTreeMap::new();
+        for row in rows {
+            if let Some(name) = row.value("name") {
+                seen.entry(row.relation.clone())
+                    .or_default()
+                    .push(name.to_string());
+            }
+        }
+        let mut nameable: std::collections::BTreeSet<String> = Default::default();
+        for (relation, mut all) in seen {
+            let how_many = all.len();
+            all.sort();
+            all.dedup();
+            if all.len() == how_many {
+                nameable.insert(relation);
+            }
+        }
+
+        // Which relations declare a `name` column at all. **One that does and whose names
+        // collide gets no generated name either** - the row's `name` slot is taken by the token,
+        // so a generated name would appear nowhere a reader could find it, and a reference to it
+        // would be unresolvable. Those references stay ids.
+        let declares_name: std::collections::BTreeSet<String> = schema
+            .names()
+            .iter()
+            .filter(|name| {
+                schema
+                    .relation(name)
+                    .expect("declared")
+                    .columns
+                    .iter()
+                    .any(|column| column.name == "name")
+            })
+            .map(|name| name.to_string())
+            .collect();
+
         let mut names = BTreeMap::new();
         for row in rows {
             let Some(relation) = schema.relation(&row.relation) else {
@@ -70,11 +119,15 @@ impl Names {
             // **The `name` the row already has, or one made from its relation and id.** Sean:
             // *I was thinking of having a generated name for the user friendly style, in this
             // case `territory-1`.*
-            let name = row.value("name").map(str::to_string).or_else(|| {
+            let name = if declares_name.contains(&row.relation) {
+                nameable
+                    .contains(&row.relation)
+                    .then(|| row.value("name").unwrap_or_default().to_string())
+            } else {
                 referenced
                     .contains(&row.relation)
                     .then(|| format!("{}-{id}", row.relation))
-            });
+            };
             if let Some(name) = name {
                 names.insert((row.relation.clone(), id.to_string()), name);
             }
@@ -100,10 +153,17 @@ impl Names {
             }
         }
 
+        let by_name = names
+            .iter()
+            .map(|((relation, id), name)| ((relation.clone(), name.clone()), id.clone()))
+            .collect();
+
         Names {
             schema,
             names,
             argument_of,
+            by_name,
+            declares_name,
         }
     }
 
@@ -115,7 +175,7 @@ impl Names {
         self.names
             .get(&(relation.to_string(), id.to_string()))
             .cloned()
-            .unwrap_or_else(|| format!("{relation}-{id}?"))
+            .unwrap_or_else(|| id.to_string())
     }
 
     /// One row in the user-facing format.
@@ -158,6 +218,52 @@ impl Names {
         }
         out.push('}');
         out
+    }
+
+    /// One friendly row turned back into its foundation form.
+    ///
+    /// **This is what authoring in the friendly format needs.** Sean, 2026-09-15: *I expect to be
+    /// authoring tests in the friendly format and only debugging/vetting in the foundation
+    /// format.*
+    ///
+    /// **Nothing is minted.** A friendly row carries its own `id`, so the only work is turning
+    /// each reference from a name back into an id, and dropping the `name` where the relation
+    /// does not declare one. **A value that is not a name is left alone**, which is what lets a
+    /// reference to a row with no name stay an id.
+    pub fn foundation(&self, row: &Row) -> Row {
+        let Some(relation) = self.schema.relation(&row.relation) else {
+            return row.clone();
+        };
+        let id = row.value(relation.key()).unwrap_or_default().to_string();
+
+        let mut values = BTreeMap::new();
+        for (column, value) in &row.values {
+            let declared = relation.columns.iter().find(|it| it.name == *column);
+            let points_at = declared.and_then(|it| it.references.clone()).or_else(|| {
+                (row.relation == "argument" && column == "value")
+                    .then(|| self.argument_of.get(&id).cloned())
+                    .flatten()
+            });
+            let resolved = match points_at {
+                Some(to) => self
+                    .by_name
+                    .get(&(to, value.clone()))
+                    .cloned()
+                    .unwrap_or_else(|| value.clone()),
+                None => value.clone(),
+            };
+            values.insert(column.clone(), resolved);
+        }
+
+        // **A generated `name` goes**, because the relation never had one. A relation that does
+        // declare `name` keeps it: there it is data.
+        if !self.declares_name.contains(&row.relation) {
+            values.remove("name");
+        }
+        Row {
+            relation: row.relation.clone(),
+            values,
+        }
     }
 
     /// Every row, in the order given.
