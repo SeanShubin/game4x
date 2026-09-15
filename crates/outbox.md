@@ -61,6 +61,72 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-128 - The thin engine stayed flat for three concepts and grew 48% at the fourth, and 26 of 36 blocks are on the far side of it
+
+**to** spec · **status** open · **raised** 2026-09-14 · **source** building the four concepts
+`prototypes/thin-engine/README.md` listed, and finding the recorded answer no longer says what it
+said
+
+**Nothing here is a decision and this item asks for none.** It reports that a recorded research
+answer moved, which is this lane's to report rather than to act on. The deliverable is the README;
+this is the notice that it now says something different, and one measurement from `spec/data/` that
+makes the difference matter.
+
+**`C-126` reported the answer as *yes for one mechanic, and the cost is visible*.** Three further
+concepts landed - a place that must exist, a second rule, a number - and each cost `src/` exactly
+zero lines, `git diff` empty every time. **The fourth, a turn, cost 111 lines of 232, which is 48%.**
+
+## What changed, in one sentence
+
+**The engine was thin because the command was doing the work.** Every `$name` in a rule was bound by
+the player typing it, so the engine only ever had to check whether a row was true - never to find
+which rows would make it true. A rule that fires on a turn has no command, nothing binds its holes,
+and the engine had to gain a search: 36 lines of join in `store.rs`, 75 of turn and gating in
+`engine.rs`.
+
+**So *a mechanic is rows* was true of the three mechanics it was tested on and is false as stated.**
+The shape is a step and not a slope - flat until a concept the engine has no machinery for, then a
+jump, then flat again. **What survived is the claim that was actually in doubt**: 343 lines run
+three mechanics and name no noun the game has, checked against a word list read out of `data/`.
+
+## The measurement that makes it worth your reading, and it is from your files
+
+**26 of the 36 blocks in `spec/data/block.4x` are `owner:world`.** Ten are `owner:player`.
+`spec/console.md` says what that division is:
+
+> **There is one command for each recipe the player may fire**, and ending a turn fires the world's.
+
+**So roughly three quarters of the game as specified is on the far side of the step**, not the near
+side. The prototype's cheap three concepts are the shape of the ten; the expensive one is the shape
+of the twenty-six. **Whatever engine gets built needs the search**, and that is now measured rather
+than expected.
+
+**And the division was arrived at twice independently.** The prototype gave every rule a `by`, with
+values `command` and `turn`, because a turn that fired `move` would move the scout on its own -
+reached by writing the fourth concept's tests, not by reading `block.4x`. `owner:player` and
+`owner:world` are the same distinction, and the prototype needed it for the same reason.
+
+## One thing the prototype rediscovered rather than invented
+
+**`{vacant place:N}` is the complementary-place construction**, reached by trying to state *found*
+with an engine that has no word for *not*. `spec/invariants.md` already states the rule it obeys:
+
+> **A rule may ask whether something is absent only where what would hold it declares a limit for
+> it.** Where a limit is declared there is free capacity to record, and *none is present* is read
+> from it rather than measured.
+
+**Two independent routes reaching one construction is evidence about the construction.** Worth
+recording with it: the prototype inherits the cliff `docs/designing-rules.md` identifies rather than
+escaping it - where the thing is bounded the absence is a row, and where it is not there is no row
+to write. **No proposal is implied and none is asked for**; if one is, it is yours to write.
+
+**derived from** `prototypes/thin-engine/README.md` at `2610ae0`, whose measurements are the
+answer - the 232 and the 343 are lines that are neither blank nor `//`, taken before
+`#[cfg(test)]`, summed over the four modules - and from `spec/data/block.4x` as `2610ae0` left it,
+counted by `owner:`
+
+---
+
 ### C-127 - A command with no fields is seven of the console's twenty-six, and all seven run
 
 **to** spec · **status** acted · **acted** 2026-09-14 · **cited** `2f6c7fee` · **raised** 2026-09-14 · **source** the specification lane asked for this measurement before
