@@ -10,6 +10,64 @@ of the code, of the data structure, of the data - are its three readings.**
 Built to `S-136`. **Nothing here is a decision** - it is research, and if its answer implies one,
 that reaches Sean as a proposal through the specification lane, not from this directory.
 
+## The invariants
+
+**Sean, 2026-09-15**, saying what is essential here and what may bend. **They are about this
+prototype's friendly notation and not about the game's command language**, which is
+`spec/console.md`.
+
+**1 - The friendly notation states the minimum.** *The user should only have to specify the minimal
+needed information to execute the command in the friendly notation.*
+
+**2 - Arguments are identified by name.** *The user should identify arguments by name rather than
+id, except where the id is part of the minimal needed information to execute the command.*
+
+**3 - Friendly to foundation is the direction that must work.** *While we should retain two-way
+translation between friendly and foundation notations if we can, this should not come at the
+expense of the other invariants, being able to translate from friendly to foundation is the
+direction we must support, the translation from foundation to friendly can be abandoned if we
+must.*
+
+| Invariant               | May it bend                                       |
+| ----------------------- | ------------------------------------------------- |
+| **1**, the minimum      | no                                                |
+| **2**, names before ids | no, and **1** is written into it as its exception |
+| **3**, the round trip   | **yes**, and it yields to **1** and **2**         |
+
+**2's exception is 1 applied to an identifier**, so the two cannot collide: an id appears only
+where the minimum genuinely is one.
+
+**Neither 1 nor 2 has a check yet**, and cannot until a friendly command is a rule-named row at
+all. **3 is a precedence rather than a property**, so what checks it is which test is allowed to
+be deleted, named below.
+
+## What the invariants settle, which the prototype had left open
+
+**Minting is permitted.** This README has called the minting question *closed rather than solved*,
+and `tests/common/friendly.rs` rests on *nothing is minted*. **That was a consequence of the
+friendly format carrying every id**, which 1 removes: a minimal command states no `command` id and
+no `argument` ids, so the converter must make them. **3 is what says that cost is acceptable.**
+
+**And 3 names the test that may go.** `tests/directories.rs` asserts both directions;
+`the_friendly_source_is_what_the_foundation_renders_to` is the expendable one, and
+`the_foundation_is_what_the_friendly_source_converts_to` is not.
+
+## What 1 opens, and it is larger than the example that prompted it
+
+**`{move what:scout from:territory-1 to:territory-2}` is not minimal under 1.** The scout's
+residency already states where it is, so `from` is derivable from the world and stating it states a
+fact twice. **The minimum is `{move what:scout to:territory-2}`.**
+
+**Two readings of *needed*, and they cost differently:**
+
+| *Needed* means                        | The minimal command                         | What it costs                                |
+| ------------------------------------- | ------------------------------------------- | -------------------------------------------- |
+| what the rule declares as inputs      | `{move what:scout from:territory-1 to:t-2}` | the converter only                           |
+| what cannot be derived from the world | `{move what:scout to:territory-2}`          | the engine: a `require` clause must bind out |
+
+**Which one 1 means is Sean's to say**, and nothing here assumes either. Re-keying `residency` by
+`what` is required by both and is the first step whichever way it goes.
+
 ## The answer
 
 **Yes, and the test that proves it is data too.** `data/test.4x` is the orchestrator: it sets the
