@@ -69,6 +69,56 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-136 - The isolated prototype, and the four things its isolation needs written down
+
+**to** code · **status** open · **raised** 2026-09-14 · **source** Sean, 2026-09-14: *this one should be completely isolated. I don't want any dependencies or assumptions creeping in from existing code, even the notation. The notation is a starting point but I want to be able to change it in the prototype if necessary, so it will need to be re-implemented there*
+
+**It is `prototypes/`, and it is yours** - `CLAUDE.md` gives you that column and a lens ships
+nothing. **`C-114`'s open half is the question it answers**, and a prototype answers by existing.
+
+**Its first test, in his words**: three territories `1, 2, 3`; two adjacencies `1-2` and `2-3`; one
+vehicle named `scout`. Moving the scout from 1 to 2 succeeds; from 1 to 3 fails. **No mechanic that
+is not needed to pass it**, and *overkill on the code structure, being data driven with a thin
+engine*.
+
+## Four things the isolation needs, and three of them would be defects if unwritten
+
+**One - outside the workspace.** `Cargo.toml` lists all five prototypes as members, so
+`cargo fmt --all`, `clippy --workspace --all-targets -- -D warnings` and the whole test suite run
+over them. **A thing stripped to nothing and grown one concept at a time reddens that gate at every
+intermediate state.** `tools/spec`, `tools/outbox` and `tools/pad-tables` are already outside it for
+the same reason.
+
+**Two - no path dependency and no file read outside itself.** `prototypes/kinds` is the near miss
+worth looking at: it declares no dependencies **and reads `releases/first-release.md` at run time**,
+`src/release.rs:21`. **That is an assumption creeping in through a file rather than through
+Cargo**, which is exactly what he ruled out. Its test data is its own.
+
+**Three - the re-implemented notation is deliberate duplication and must say so.** There is a
+`crates/command-language` - *a grammar, a parser and a syntax tree; no game nouns* - and the
+prototype will have a second one. **A lens reading the tree finds two parsers and files it**, and it
+will be right by every rule it has. **The declaration is the carrier**: the prototype's own
+`README.md` says the duplication is the point and cites this item, so the finding is answered before
+it is filed rather than after.
+
+**Four - nothing in it is normative, and its notation is not `spec/console.md`'s.** He may change it
+there. **So a form that appears in the prototype and not in `spec/` is not a contradiction** and
+must not be filed as one. If something in it turns out better, it comes back as a proposal and
+arrives by promotion like anything else.
+
+## What the specification lane does about it, which is nothing
+
+**This lane serves the notation and the prototype's notation is its own.** So there is no proposal to
+write, no rule to keep it consistent with, and **nothing this lane should be asked for until
+something comes back out.** Saying so because the default assumption would be the opposite.
+
+## One thing this lane would want recorded when it starts, and it is `docs/`
+
+`docs/prototypes/README.md` is the index and **a prototype is finished when its question is
+answered**. When the directory exists, the question wants writing down in that index - *can a thin
+engine run the game from data?* - and that entry is this lane's to write from what you report.
+**Not before it exists.**
+
 ### S-135 - The relational model has no rendering, and the person it was for cannot read it
 
 **to** code · **status** open · **cited** `87a8fc0` · **raised** 2026-09-14 · **source** Sean, on being shown `{line …}` rows: *I am less familiar with "line", "block", and "constraint". Are these data rows rather than commands?*

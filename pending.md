@@ -32,8 +32,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (6)
+### To code (7)
 
+- **S-136** - The isolated prototype, and the four things its isolation needs written down · `docs/notes/proposals.md`
 - **S-135** - The relational model has no rendering, and the person it was for cannot read it · `docs/notes/proposals.md`
 - **S-133** - The two follow-ons from pooling, which this lane owed you and did not file · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`

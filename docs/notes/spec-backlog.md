@@ -47,6 +47,14 @@ answered.*
 **And it is his own concrete-first rule applied to the biggest question left**: *something concrete
 that can't possibly work can be adapted, while abstract ideas alone don't allow progress.*
 
+**Completely isolated**, 2026-09-14: *I don't want any dependencies or assumptions creeping in from
+existing code, even the notation. The notation is a starting point but I want to be able to change it
+in the prototype if necessary, so it will need to be re-implemented there.*
+
+**So the notation in it is not `spec/console.md`'s**, and a form that appears there and not in
+`spec/` is not a contradiction. **Anything worth keeping comes back as a proposal and arrives by
+promotion**, like everything else. `S-136` carries what the isolation needs written down.
+
 **Said while stopping** - *this is getting a bit out of control, I want to come back to this after I
 have designed the data structures from scratch* - so `P-516` and `P-517` wait on it rather than the
 other way round.
