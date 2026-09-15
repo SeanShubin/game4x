@@ -32,20 +32,55 @@ energy from nothing.
 **So no option here has to make energy balance**, and one that did would be hiding the cost rather
 than paying it.
 
-## Second, `put` cannot say seven
+## Second, and this lane had it wrong until Sean pushed on it
 
-`releases/first-release.md`: *a put names a thing that is already there and says what is true of it
-afterwards - the same thing and not a new one, so what has an identity keeps it.* **A put has no
-quantity, because nothing is made or taken.**
+**The first version of this item said: `put` for what has an `id`, `consume` and `produce` for what
+is counted.** Sean: *I am not so sure put applies to units anymore... if a 100 identical transports
+are moving 1000 resources it is not clear that there is any substantive difference between the units
+and the resources.*
 
-**So `put` is for a thing that keeps its identity, and a resource has none.** Seven metal at
-territory 1 and seven metal at territory 2 are the same seven only in the sense that the total is
-unchanged - **there is nothing to keep.** For a quantity, moving and destroying-then-making are the
-same operation described twice.
+**He is right, and the measurement is worse than he put it.**
 
-**That is the whole answer to which model to use**: `put` for what has an `id`, `consume` and
-`produce` for what is counted. **`move` already does both** - it puts the unit and consumes the
-energy.
+```
+kinds carrying an `id`        territory, orbit
+put rows on either of them    0 of 17
+```
+
+`releases/first-release.md` justifies `put` as *the same thing and not a new one, **so what has an
+identity keeps it***. **That sentence is true of no row in the game.** Every put is on a `unit`, a
+`citizen`, an `extractor`, a `thing` or a `nature`, and not one of those carries an `id`.
+
+## What `put` is actually for, which is in the code and not in the release
+
+`crates/game-console/src/petri.rs`: **a count is a place of its own, and the kind's own place is
+untouched.** *A citizen that spends its `laboring` is the same citizen afterwards, so the arc is on
+`citizen laboring` and nothing goes in or out of `citizen`.* **Drawing it on the kind instead would
+show `create labor` eating a citizen.**
+
+**So `put` is about a state change not reading as a destruction**, and has nothing to do with
+identity. The release names the wrong reason, and names it in the one place a reader would look.
+
+## And that sharpens where the line falls
+
+```
+put rows that change a state, in place     16
+put rows that change a place               1     move, `moving one less` at `$to`
+```
+
+> **A `put` is a change of state where the thing already is. A change of place is a `consume` where
+> it was and a `produce` where it is.**
+
+**Sixteen of seventeen already obey that.** The exception is `move`, which crosses to `$to` with a
+put - and it is the row Sean was looking at when he said a unit and a resource are not different.
+**They are not.** Both are counted things changing place, so both are consumed at one end and
+produced at the other:
+
+| Recipe   | Owner  | Role    | Qty | Kind | Traits            | Where   |
+| -------- | ------ | ------- | --- | ---- | ----------------- | ------- |
+| **move** | player | consume | 1   | unit | moving at least 1 | `$from` |
+|          |        | produce | 1   | unit | moving one less   | `$to`   |
+
+**`put` then never names a place**, which is a check a tool can make.
 
 ## `M1` - consume at one end and produce at the other
 
@@ -107,9 +142,11 @@ that moved into a place with no energy stops being ready rather than being refus
 
 ## What this lane would pick
 
-**`M1` and `E3`.** `M1` because `put` meaning *the same thing* is the distinction worth keeping, and
-a resource has no sameness to keep. `E3` because it answers your question directly - **the loss stops
-needing an explanation once the thing being bought is readiness rather than distance.**
+**`M1` and `E3`, and `M1` for a better reason than this lane first gave.** Not *`put` keeps identity
+and a resource has none* - nothing in the game has an identity to keep. **`M1` because a change of
+place is not a change of state**, and the net has two places to draw it between. `E3` because it
+answers your question directly - **the loss stops needing an explanation once the thing being bought
+is readiness rather than distance.**
 
 **`M2` is the one to take if the seven matters more than the sentence**, and that is a judgement
 about how often a haul will be a constant rather than a repeat.
