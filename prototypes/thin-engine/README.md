@@ -52,21 +52,53 @@ no `argument` ids, so the converter must make them. **3 is what says that cost i
 `the_friendly_source_is_what_the_foundation_renders_to` is the expendable one, and
 `the_foundation_is_what_the_friendly_source_converts_to` is not.
 
-## What 1 opens, and it is larger than the example that prompted it
+## What 1 opens, and it is not what this lane first wrote
 
-**`{move what:scout from:territory-1 to:territory-2}` is not minimal under 1.** The scout's
-residency already states where it is, so `from` is derivable from the world and stating it states a
-fact twice. **The minimum is `{move what:scout to:territory-2}`.**
+**This section said the minimum was `{move what:scout to:territory-2}`, and that was wrong.**
+Sean, 2026-09-15: *I don't think that is true, or if it is true it is only true in a coincidental
+sense and not a general sense. Say I have 3 territories, all adjacent to each other, and two scouts
+in each territory. If I want to move a scout to territory-2 I have to specify if I mean a scout
+from territory-1 or a scout from territory-3.*
 
-**Two readings of *needed*, and they cost differently:**
+**The error was generalizing from a one-instance world.** `before.4x` holds one scout, so `what`
+happened to identify a thing, so `from` happened to be derivable. **Nothing in the model says
+either** - the same failure this directory had demonstrated one commit earlier by adding a second
+`residency` row and watching the structure accept it.
 
-| *Needed* means                        | The minimal command                         | What it costs                                |
-| ------------------------------------- | ------------------------------------------- | -------------------------------------------- |
-| what the rule declares as inputs      | `{move what:scout from:territory-1 to:t-2}` | the converter only                           |
-| what cannot be derived from the world | `{move what:scout to:territory-2}`          | the engine: a `require` clause must bind out |
+**`from` is part of the intent whenever `what` is indefinite**, and *a scout* is indefinite.
 
-**Which one 1 means is Sean's to say**, and nothing here assumes either. Re-keying `residency` by
-`what` is required by both and is the first step whichever way it goes.
+## Six scouts, and the second invariant is the one that breaks
+
+**Sean's world does not merely make `from` necessary; it cannot be written down.** Rendered with
+six things named `scout`, measured rather than reasoned:
+
+```text
+{residency id:1 what:1 where:territory-1}
+```
+
+**`what:1` is an id.** `tests/common/friendly.rs` makes nameability all-or-nothing per relation, so
+six things sharing a name means `thing` is not nameable and every reference to one falls back to
+its id. `where:territory-1` survives because territories are distinct. **That is invariant 2
+failing, in the world invariant 1 was being argued about.**
+
+**So referring to one of several interchangeable things is the open question**, and both answers
+cost an invariant:
+
+| How a scout is referred to       | What it costs                                                              |
+| -------------------------------- | -------------------------------------------------------------------------- |
+| a unique name per thing          | **1** - naming `scout-4` is more than the minimum when the intent is *any* |
+| a shared name, `scout`           | **2** as it stands - `thing` stops being nameable and `what` renders as id |
+| a kind, with `from` to narrow it | neither, and it is what Sean wrote                                         |
+
+**The release is already on the third line, which is evidence rather than proof.**
+`releases/first-release.md` -> Recipes names an individual nowhere: `consume 2 citizens`, `consume
+1 metal`, `require 1 unit | moving at least 1` at `$from`. **Every ingredient is a kind narrowed by
+a trait and a place** - which is `{move what:scout from:territory-1 to:territory-2}` exactly. The
+prototype's single named scout is the unrepresentative world, not Sean's six.
+
+**What this does not settle** is how the engine picks which scout, when two in `territory-1` both
+match. Today nothing chooses: `require` matches any, `remove` removes every match. **That is the
+next thing to measure and it is not measured here.**
 
 ## The answer
 
