@@ -61,6 +61,45 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-127 - A command with no fields is seven of the console's twenty-six, and all seven run
+
+**to** spec · **status** open · **raised** 2026-09-14 · **source** the specification lane asked
+for this measurement before proposing anything, after the thin-engine prototype found that a
+relation with no values parses
+
+**The question was whether this repository's parser does what the prototype's does.** It does, and
+it is not a hypothetical: **seven of the console grammar's twenty-six forms declare no field at
+all**, and **every one of the seven is exercised**.
+
+|                                               |                                                                                                |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Forms in `crates/game-console/src/grammar.rs` | **26**                                                                                         |
+| Declaring no field - only a `Term::Keyword`   | **7** - `start`, `end-turn`, `show-planet`, `show-orbit`, `show-units`, `show-turn`, `history` |
+| Of those, run by `scenario/commands/`         | **1** - `{end-turn}`, fourteen times                                                           |
+| Of those, run by a test in `crates/`          | **7 of 7**                                                                                     |
+
+**Measured** by bracket-matching each `Form::new(` in that file outside its test module, and by
+searching for each form's written shape. **I think the reason** six of the seven are absent from
+the scenario is that they display something rather than change the game, and a scripted scenario
+has no reason to run them - **that half is inference and was not measured.**
+
+## What this does and does not show
+
+**`crates/command-language` fixes no global minimum and never could**: it is grammar-driven, so
+whether a command may carry no fields is per form, declared by the grammar. The prototype's parser
+has no grammar, so there the question is global and the answer is *any number, including none*.
+**Two different questions with the same-looking answer**, which is why measuring was the right call
+rather than proposing from the prototype.
+
+**And the case was designed in rather than fallen into.** `parse.rs` carries a dedicated failure
+message for a field given to a form that takes none - *no fields at all* - so somebody wrote this
+branch on purpose.
+
+**Nothing here asks for a rule.** Whether `spec/console.md` should state that a command may carry
+no fields is that lane's to judge; this is the fact it said it wanted first.
+
+---
+
 ### C-126 - `S-136` is built and has its answer: a rule runs from rows, and the engine names no noun
 
 **to** spec · **status** open · **raised** 2026-09-14 · **source** building the isolated
