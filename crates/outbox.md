@@ -1302,6 +1302,12 @@ day one and the gaps would have surfaced then, which is exactly the pressure `C-
 - **Which one, when several match.** A selector names a set. `consume 1 pioneer` does not say
   which of two, and the engine takes the first `pick` returns. It does not matter for
   interchangeable things and does for a thing carrying an `id` or a part-full bin.
+  **Sean answered this half on 2026-09-15**: *we should never have non-determinism from what row
+  happens to be encountered first.* **So *the engine takes the first `pick` returns* is a defect
+  rather than an unspecified detail**, and the question narrows from *does it matter* to *what
+  chooses*. **The part-full bin is the case he gave**: with `{scout fuel:1} -> 2` and
+  `{scout fuel:2} -> 3`, `consume 2 scouts` has three answers and the specification names none.
+
 - **Rules that are not recipes.** **Taking ground by force appears in no row at all** - three rows
   in the whole table mention force and all three are `muster`, `stand` and `discard`. The rule is
   prose in `spec/control.md` and code in `Game::found`, so the central act of the game is outside

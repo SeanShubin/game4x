@@ -238,6 +238,66 @@ is two columns** - `scout@territory-1`, or whatever it would be - and that is re
 friendly side. It does not arise today and would arrive the first time a rule needs to refer to a
 residency rather than match one.
 
+## Fuel falsifies the key relation, and `spec/console.md` had already said so
+
+**Sean, 2026-09-15**: *We shoud never have non-determinism form what row happens to be encountered
+first. The app spec has the concept of a tree from distinguisishable to quantity. We don't have fuel
+yet but if we did, we might have something like `{scout fuel:1} -> 2`, `{scout fuel:2} -> 3`. Does
+this change your recommendation regarding the key relation?*
+
+**It does, and the example does not complicate the key relation - it falsifies it.** A key declared
+as `(what, where)` makes those two rows collide: same category, same place, different fuel.
+**A declared key rejects valid data the moment a trait it does not list starts telling rows apart**,
+and it does it silently, by refusing rather than by being wrong.
+
+**The specification already states the rule, and this lane recommended against it without reading
+it.** `spec/console.md`:
+
+> **What a thing contains is a map from a description to a quantity.** A description is a kind and
+> **every trait of that thing** [...] **No trait of the thing may be left out** - `{citizen
+> defending:1} -> 8` and `{citizen defending:0} -> 6`, never `{citizen} -> 14`.
+
+**So the key is not a subset anybody chooses. It is every column but the quantity, by rule.**
+
+## Declare the quantity, not the key
+
+**One row per relation instead of one per key column**, and it is the difference between a fact
+stated once and a fact stated twice. **A declared key restates the column list**, so adding `fuel`
+means remembering to add a key row - and forgetting leaves a check that is green and wrong.
+**Declaring which column is the quantity cannot drift**: the key extends itself.
+
+**And the same sentence settles two of the three earlier answers, which this lane had recorded as
+Sean's rather than as the specification's:**
+
+| Answer                                      | `spec/console.md` already says                                                                    |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| a row at zero goes                          | *an entry is never zero*                                                                          |
+| a territory is unique by id, always count 1 | *a thing carrying an `id` has a description no other thing shares, so its quantity is always one* |
+
+**That second line is the unification, and it is better than the two sorts this README proposed.**
+There are not an individual sort and a fungible sort. **There is one rule** - a description maps to
+a quantity - **and an `id` is what makes a description unique**, which is why a territory's count is
+always one without anything saying so. `{territory id:2} -> 1` and `{scout fuel:1} -> 2` are the
+same shape.
+
+**Where it stops.** This is the rule for a **state** relation. A declaration - `thing`, keyed by an
+id with `name` as decoration - is not a description mapped to a quantity, and `spec/console.md`
+keeps them apart: *`name` is to a declaration what `id` is to a thing.* **The prototype already has
+the hook**, in the `{state relation:...}` rows that say which relations the state is made of.
+
+## What a key still does not do, which is the harder half
+
+**Invariant 4 is not satisfied by any key.** A key makes each description unique. **It says nothing
+about which row a selector picks**, and `spec/console.md` is explicit that a selector is the partial
+form: *it may **leave traits out***, where a description may not.
+
+**So `consume 2 scouts` against `{scout fuel:1} -> 2` and `{scout fuel:2} -> 3` has three answers
+and the specification names none.** Keys cannot reach it - the rows are already distinct and already
+legal. **It is filed as the third bullet of `C-114`**, where it was written as *it does not matter
+for interchangeable things and does for a thing carrying an `id` or a part-full bin*. **Sean's
+invariant promotes it from a detail to a defect**: the engine takes the first match, and nothing may.
+
+
 
 
 
