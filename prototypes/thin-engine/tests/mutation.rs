@@ -206,9 +206,9 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
     // floor first, and deleting a reference then simply meant one fewer was checked - the loop
     // below only ever tests the references that are there. A floor asks *are there enough*; the
     // question is *are they all still here*.
-    if references.len() != 19 {
+    if references.len() != 21 {
         return Err(format!(
-            "{} references, and there are nineteen",
+            "{} references, and there are twenty-one",
             references.len()
         ));
     }
@@ -340,7 +340,7 @@ fn no_row_can_be_deleted_without_breaking_something() {
         }
     }
 
-    assert_eq!(tried, 219, "every row in `data/` was deleted in turn");
+    assert_eq!(tried, 224, "every row in `data/` was deleted in turn");
 
     let mut counted: BTreeMap<String, usize> = BTreeMap::new();
     for one in survived {
@@ -370,7 +370,7 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// constraint is worth nothing in a run where nothing violates it.
 ///
 /// **So the fix is a test and not an edit**, and it is the next thing worth doing here.
-const DELETABLE: [&str; 1] = ["8 rules.4x binding"];
+const DELETABLE: [&str; 1] = ["6 rules.4x binding"];
 
 /// **Every value matters**: change any one of them and something fails.
 #[test]
@@ -450,14 +450,28 @@ fn no_value_can_be_changed_without_breaking_something() {
 /// the same role are interchangeable. **A second rule where two removes contend would change
 /// that**, and this line is where to look when it does.
 ///
-/// **Four ids on relations with one row.** `test`, `execute`, `compare` and `report` have a single
-/// row each, so there is no other id to swap theirs for - **the instrument cannot ask whether a key
-/// is distinct when there is nothing to be distinct from.** Every other id in the data is
-/// load-bearing, and was not before keys had to be unique.
-const NOT_LOAD_BEARING: [&str; 8] = [
+/// **Five ids on relations with one row.** `test`, `execute`, `compare`, `report` and `literal`
+/// have a single row each, so there is no other id to swap theirs for - **the instrument cannot ask
+/// whether a key is distinct when there is nothing to be distinct from.** Every other id in the
+/// data is load-bearing, and was not before keys had to be unique.
+///
+/// **And one that is none of those groups, which this instrument found rather than anybody
+/// predicting where**: `residency.quantity` in `before.4x`. **The world says one scout is in
+/// territory 1 and changing that to five breaks nothing**, because `move` never reads it - its
+/// `require` and `remove` clauses match on `what` and `where` and leave the quantity unbound, and
+/// the quantity that lands at the destination is the `literal` written in the rule.
+///
+/// **That is the arithmetic gap, showing up as dead data rather than as an argument.** Moving one
+/// scout out of a territory holding five should leave four, and nothing in `require`, `remove` and
+/// `add` can say so - they are set operations over whole rows. **This line is the check that will
+/// go red when quantities start being read**, which is the only reason it is worth writing down
+/// rather than fixing by binding a column nothing needs yet.
+const NOT_LOAD_BEARING: [&str; 10] = [
+    "1 before.4x residency.quantity",
     "4 rules.4x clause.seq",
-    "4 rules.4x input.name",
-    "4 rules.4x input.seq",
+    "3 rules.4x input.name",
+    "3 rules.4x input.seq",
+    "1 rules.4x literal.id",
     "1 rules.4x rule.name",
     "1 test.4x compare.id",
     "1 test.4x execute.id",

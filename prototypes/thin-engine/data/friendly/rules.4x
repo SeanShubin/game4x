@@ -4,39 +4,37 @@
 # input.** They are two relations because a clause cannot carry `residency`'s columns - those
 # change with the relation it points at, and a relation's columns do not change.
 #
-# **A command names the row it acts on by its id.** `it` is the residency being moved, and the
-# other three inputs are what the world already knows about it - stated by the command and checked
-# against the world by the first clause, so none of them can be lied about. **That is what the
-# foundation style costs a caller**, and it is what the user-facing style exists to hide.
+# **A command names what is moved, not which row.** Scouts are fungible, so `what` is the category
+# and `from` is what picks the row out of the three a category may have. **There is no `it`**: a
+# residency has no id to name, because it is keyed by its description.
 #
 # **`require` and `remove` are patterns; `add` is a whole row.** The adjacency clause names no id
-# because it asks whether *any* road runs that way. The add clause names every column, including
-# the `id` the new row will be known by - which is why `it` is an input at all: the residency keeps
-# its identity across the move rather than becoming a different row.
+# because it asks whether *any* road runs that way. **The add clause names every column, and the
+# quantity is the one no caller supplies** - an input is typed as a relation and carries one of its
+# keys, so a plain number cannot be one. `{literal ...}` is where it comes from, which is what
+# `releases/first-release.md` does with a **Qty** written in the recipe.
 
 {rule id:1 name:move}
 
-{input id:1 rule:move seq:1 name:it of:residency}
-{input id:2 rule:move seq:2 name:what of:thing}
-{input id:3 rule:move seq:3 name:from of:territory}
-{input id:4 rule:move seq:4 name:to of:territory}
+{input id:1 rule:move seq:1 name:what of:thing}
+{input id:2 rule:move seq:2 name:from of:territory}
+{input id:3 rule:move seq:3 name:to of:territory}
 
 {clause id:1 rule:move seq:1 role:require relation:residency name:clause-1}
 {clause id:2 rule:move seq:2 role:require relation:adjacency name:clause-2}
 {clause id:3 rule:move seq:3 role:remove relation:residency name:clause-3}
 {clause id:4 rule:move seq:4 role:add relation:residency name:clause-4}
 
-{binding id:1 clause:clause-1 column:44 input:it}
-{binding id:2 clause:clause-1 column:45 input:what}
-{binding id:3 clause:clause-1 column:46 input:from}
+{binding id:1 clause:clause-1 column:44 input:what}
+{binding id:2 clause:clause-1 column:45 input:from}
 
-{binding id:4 clause:clause-2 column:42 input:from}
-{binding id:5 clause:clause-2 column:43 input:to}
+{binding id:3 clause:clause-2 column:42 input:from}
+{binding id:4 clause:clause-2 column:43 input:to}
 
-{binding id:6 clause:clause-3 column:44 input:it}
-{binding id:7 clause:clause-3 column:45 input:what}
-{binding id:8 clause:clause-3 column:46 input:from}
+{binding id:5 clause:clause-3 column:44 input:what}
+{binding id:6 clause:clause-3 column:45 input:from}
 
-{binding id:9 clause:clause-4 column:44 input:it}
-{binding id:10 clause:clause-4 column:45 input:what}
-{binding id:11 clause:clause-4 column:46 input:to}
+{binding id:7 clause:clause-4 column:44 input:what}
+{binding id:8 clause:clause-4 column:45 input:to}
+
+{literal id:1 clause:clause-4 column:46 value:1}

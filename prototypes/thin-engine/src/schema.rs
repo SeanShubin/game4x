@@ -32,6 +32,7 @@ const RELATION: &str = "relation";
 const COLUMN: &str = "column";
 const REFERENCE: &str = "reference";
 const ID: &str = "id";
+const QUANTITY: &str = "quantity";
 const NAME: &str = "name";
 const SEQ: &str = "seq";
 const TO: &str = "to";
@@ -55,10 +56,46 @@ pub struct Relation {
 }
 
 impl Relation {
-    /// **A relation's key is its first column.** Said in one place so that the day a compound key
-    /// is needed, there is one thing to change and it is findable.
-    pub fn key(&self) -> &str {
+    /// The column a reference names this relation's rows by - always the first.
+    ///
+    /// **This is identity, not uniqueness**, and the two parted company when a quantity arrived.
+    /// A reference needs one value to carry, so a relation something points at is identified by
+    /// one column. **A relation nothing points at need not be**, which is what [`Relation::key`]
+    /// is about.
+    pub fn identity(&self) -> &str {
         &self.columns[0].name
+    }
+
+    /// The column holding how many things each row stands for, where there is one.
+    ///
+    /// **Named rather than declared**, exactly as `id` already is. Sean, 2026-09-15: *it would
+    /// make no sense to have both an id and a quantity in the same logical model* - they are one
+    /// slot, how a relation tells its rows apart, and `id` had occupied it by name since the
+    /// beginning. A table saying which column is the quantity would have stated one half of an
+    /// exclusive pair as data and left the other half a convention.
+    pub fn quantity(&self) -> Option<&str> {
+        self.columns
+            .iter()
+            .find(|it| it.name == QUANTITY)
+            .map(|it| it.name.as_str())
+    }
+
+    /// The columns that together tell one row from another.
+    ///
+    /// **Every column but the quantity, where there is one** - `spec/console.md`: *a description
+    /// is a kind and every trait of that thing* [...] *no trait of the thing may be left out*. So
+    /// the key is not a subset anybody chooses, and a column added to the relation joins it by
+    /// existing. **Where there is no quantity the key is the first column**, as it always was.
+    pub fn key(&self) -> Vec<&str> {
+        match self.quantity() {
+            None => vec![self.identity()],
+            Some(quantity) => self
+                .columns
+                .iter()
+                .map(|it| it.name.as_str())
+                .filter(|name| *name != quantity)
+                .collect(),
+        }
     }
 }
 
@@ -90,9 +127,19 @@ pub enum Malformed {
     /// `{residency what:1}` then pointed at both of them.
     TwoWithOneKey {
         relation: String,
-        key: String,
-        value: String,
+        /// Each key column and the value this row carries in it, in declared order.
+        ///
+        /// **A list because a key may be several columns.** One entry reads exactly as it did
+        /// when a key was always one column, so the message did not change for the case that
+        /// already existed.
+        key: Vec<(String, String)>,
     },
+    /// A relation declaring both an `id` and a `quantity`.
+    ///
+    /// **Sean, 2026-09-15**: *it would make no sense to have both an id and a quantity in the
+    /// same logical model.* They are one slot - whether a row is one thing or a count of them -
+    /// so carrying both says a row is identified and counted at once, and nothing can be.
+    IdAndQuantity { relation: String },
     /// A value in a column that points at a row nothing states.
     NoSuchRow {
         relation: String,
@@ -142,16 +189,24 @@ impl std::fmt::Display for Malformed {
                     "`{relation}` is ({wanted}) and this row gives ({given})"
                 )
             }
-            Malformed::TwoWithOneKey {
-                relation,
-                key,
-                value,
-            } => {
+            Malformed::IdAndQuantity { relation } => {
                 write!(
                     out,
-                    "two `{relation}` rows have `{key}` of `{value}`, so it names neither"
+                    "`{relation}` declares both an `id` and a `quantity`, and a row is one or the other"
                 )
             }
+            Malformed::TwoWithOneKey { relation, key } => {
+                let said = key
+                    .iter()
+                    .map(|(column, value)| format!("`{column}` of `{value}`"))
+                    .collect::<Vec<String>>()
+                    .join(" and ");
+                write!(
+                    out,
+                    "two `{relation}` rows have {said}, so it names neither"
+                )
+            }
+
             Malformed::NoSuchRow {
                 relation,
                 column,
@@ -256,6 +311,16 @@ impl Schema {
                     relation: relation.name.clone(),
                 });
             }
+            // **Identified or counted, never both.** Checked here rather than left to the key
+            // computation, which would otherwise quietly drop `id` out of the key and go on.
+            if relation.quantity().is_some()
+                && relation.columns.iter().any(|column| column.name == ID)
+            {
+                return Err(Malformed::IdAndQuantity {
+                    relation: relation.name.clone(),
+                });
+            }
+
             for column in &relation.columns {
                 if let Some(to) = &column.references
                     && !relations.contains_key(to)

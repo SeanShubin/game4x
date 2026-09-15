@@ -24,7 +24,7 @@ fn the_world_renders_in_the_user_facing_format() {
          {thing id:1 name:scout}\n\
          {adjacency id:1 from:territory-1 to:territory-2}\n\
          {adjacency id:2 from:territory-2 to:territory-3}\n\
-         {residency id:1 what:scout where:territory-1}"
+                  {residency what:scout where:territory-1} -> 1"
     );
 }
 
@@ -85,7 +85,7 @@ fn a_column_is_referenced_by_id_because_its_name_is_a_token() {
         .expect("the first binding");
     assert_eq!(
         names.row(binding),
-        "{binding id:1 clause:clause-1 column:44 input:it}"
+        "{binding id:1 clause:clause-1 column:44 input:what}"
     );
 
     // The control: a relation whose names are its own is referenced by name.
@@ -119,10 +119,11 @@ fn every_file_survives_the_round_trip() {
     ] {
         for row in rows(file) {
             let friendly = names.row(&row);
-            let parsed = thin_engine::notation::read(&friendly)
+            let parsed = names
+                .parse(&friendly)
                 .unwrap_or_else(|why| panic!("{file}: `{friendly}`: {why}"));
             let back = names
-                .foundation(&parsed[0])
+                .foundation(&parsed)
                 .unwrap_or_else(|why| panic!("{file}: {why}"));
             assert_eq!(
                 back,
@@ -134,5 +135,38 @@ fn every_file_survives_the_round_trip() {
             checked += 1;
         }
     }
-    assert_eq!(checked, 219, "every row in `data/` went round");
+    assert_eq!(checked, 224, "every row in `data/` went round");
+}
+
+/// **A counted relation writes its quantity after the brace, and an identified one has no arrow.**
+///
+/// **The arrow is the game's own notation rather than one invented here.**
+/// `scenario/expected/play.4x` writes `{description} -> quantity` 114 times, under a header saying
+/// so. **It is the friendly format's and not the notation's**: `src/notation.rs` reads one `{…}`
+/// per line and never learns one, which is what keeps the bridge out of the engine.
+#[test]
+fn a_counted_relation_renders_with_an_arrow() {
+    let game = game_rows();
+    let names = Names::of(&game);
+
+    let residency = game
+        .iter()
+        .find(|row| row.relation == "residency")
+        .expect("a residency");
+    assert_eq!(
+        names.row(residency),
+        "{residency what:scout where:territory-1} -> 1"
+    );
+
+    // **Friendly to foundation is the direction that must work** - Sean, 2026-09-15 - so the
+    // arrow is read back as well as written.
+    let parsed = names.parse(&names.row(residency)).expect("read back");
+    assert_eq!(&names.foundation(&parsed).expect("converted"), residency);
+
+    // The control: `thing` is identified rather than counted, so nothing is appended to it.
+    let thing = game
+        .iter()
+        .find(|row| row.relation == "thing")
+        .expect("a thing");
+    assert_eq!(names.row(thing), "{thing id:1 name:scout}");
 }

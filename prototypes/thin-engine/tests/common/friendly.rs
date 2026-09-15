@@ -33,8 +33,51 @@
 
 use std::collections::BTreeMap;
 
-use thin_engine::notation::Row;
+use thin_engine::notation::{Row, read};
 use thin_engine::schema::Schema;
+
+/// Read friendly text, folding `-> n` back into the relation's quantity column.
+///
+/// **The arrow is the friendly format's and not the notation's.** `src/notation.rs` reads one
+/// `{…}` per line and does not learn one - Sean, 2026-09-15: *the foundation is the logical model,
+/// friendly is a bridge from the user to the logical model*, and the arrow is the bridge's.
+///
+/// **It is what `scenario/expected/play.4x` already writes**, 114 times, under its own header: *a
+/// line reads `{description} -> quantity`, and the description is the kind and every trait of that
+/// thing.* So this is the game's notation rather than one invented for this prototype.
+pub fn fold(text: &str, schema: &Schema) -> Result<Vec<Row>, String> {
+    let mut out = Vec::new();
+    for (number, line) in text.lines().enumerate() {
+        let line = line.trim();
+        if line.is_empty() || line.starts_with('#') {
+            continue;
+        }
+        let (shape, counted) = match line.split_once("->") {
+            Some((left, right)) => (left.trim(), Some(right.trim().to_string())),
+            None => (line, None),
+        };
+        let mut row = read(shape)
+            .map_err(|why| format!("line {}: {why}", number + 1))?
+            .pop()
+            .ok_or_else(|| format!("line {}: no row", number + 1))?;
+        if let Some(counted) = counted {
+            let quantity = schema
+                .relation(&row.relation)
+                .and_then(|it| it.quantity())
+                .map(str::to_string)
+                .ok_or_else(|| {
+                    format!(
+                        "line {}: `{}` has no quantity, so `->` says nothing about it",
+                        number + 1,
+                        row.relation
+                    )
+                })?;
+            row.values.insert(quantity, counted);
+        }
+        out.push(row);
+    }
+    Ok(out)
+}
 
 /// What each row is called, and what its columns point at.
 pub struct Names {
@@ -113,7 +156,7 @@ impl Names {
             let Some(relation) = schema.relation(&row.relation) else {
                 continue;
             };
-            let Some(id) = row.value(relation.key()) else {
+            let Some(id) = row.value(relation.identity()) else {
                 continue;
             };
             // **The `name` the row already has, or one made from its relation and id.** Sean:
@@ -194,13 +237,17 @@ impl Names {
         let Some(relation) = self.schema.relation(&row.relation) else {
             return thin_engine::notation::write(row);
         };
-        let key = relation.key();
-        let id = row.value(key).unwrap_or_default();
+        // **A counted relation has no key column to lead with**, and an identified one's key is
+        // its first column - which is where writing it first and then skipping it in the loop
+        // put it anyway. **So leading with the key was declared order written twice**, and
+        // dropping it is the whole of what a compound key cost this renderer.
+        let quantity = relation.quantity();
+        let id = row.value(relation.identity()).unwrap_or_default();
 
-        let mut out = format!("{{{} {key}:{id}", row.relation);
+        let mut out = format!("{{{}", row.relation);
         let mut said_name = false;
         for column in &relation.columns {
-            if column.name == key {
+            if Some(column.name.as_str()) == quantity {
                 continue;
             }
             let Some(value) = row.value(&column.name) else {
@@ -228,7 +275,17 @@ impl Names {
             out.push_str(&format!(" name:{name}"));
         }
         out.push('}');
+        if let Some(quantity) = quantity {
+            out.push_str(&format!(" -> {}", row.value(quantity).unwrap_or_default()));
+        }
         out
+    }
+
+    /// One friendly line, arrow and all, as a row.
+    pub fn parse(&self, line: &str) -> Result<Row, String> {
+        fold(line, &self.schema)?
+            .pop()
+            .ok_or_else(|| format!("`{line}` is no row"))
     }
 
     /// One friendly row turned back into its foundation form.
@@ -253,7 +310,10 @@ impl Names {
         let Some(relation) = self.schema.relation(&row.relation) else {
             return Ok(row.clone());
         };
-        let id = row.value(relation.key()).unwrap_or_default().to_string();
+        let id = row
+            .value(relation.identity())
+            .unwrap_or_default()
+            .to_string();
 
         let mut values = BTreeMap::new();
         for (column, value) in &row.values {

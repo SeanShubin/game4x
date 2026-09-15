@@ -29,6 +29,7 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         "input",
         "clause",
         "binding",
+        "literal",
         "command",
         "argument",
         "primitive",
@@ -43,11 +44,11 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         );
         checked += 1;
     }
-    assert_eq!(checked, 12, "twelve relations describe the structure");
+    assert_eq!(checked, 13, "thirteen relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        16,
-        "sixteen relations in all - those twelve, and the game's four"
+        17,
+        "seventeen relations in all - those thirteen, and the game's four"
     );
 }
 
@@ -61,7 +62,7 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
 fn a_reference_is_checked_against_the_relation_it_names() {
     // Thing 2 does not exist; territory 2 does.
     assert_eq!(
-        with("{residency id:2 what:2 where:2}").expect_err("there is no thing 2"),
+        with("{residency what:2 where:2 quantity:1}").expect_err("there is no thing 2"),
         Malformed::NoSuchRow {
             relation: "residency".to_string(),
             column: "what".to_string(),
@@ -75,7 +76,7 @@ fn a_reference_is_checked_against_the_relation_it_names() {
     // residency for thing 1**: `residency` is keyed by `what`, so reusing thing 1 is refused for
     // having a key already taken, and this test would pass on the wrong refusal.
     assert_eq!(
-        with("{thing id:2 name:pioneer}\n{residency id:2 what:2 where:9}")
+        with("{thing id:2 name:pioneer}\n{residency what:2 where:9 quantity:1}")
             .expect_err("there is no territory 9"),
         Malformed::NoSuchRow {
             relation: "residency".to_string(),
@@ -88,7 +89,7 @@ fn a_reference_is_checked_against_the_relation_it_names() {
 
     // The control: a row whose references both resolve is accepted, so the two above fail for
     // their own reason rather than because nothing added to this data is ever allowed.
-    with("{thing id:3 name:runner}\n{residency id:3 what:3 where:2}")
+    with("{thing id:3 name:runner}\n{residency what:3 where:2 quantity:1}")
         .expect("a second residency resolves both ways");
 }
 
@@ -96,8 +97,8 @@ fn a_reference_is_checked_against_the_relation_it_names() {
 #[test]
 fn a_row_states_only_what_its_relation_declares() {
     for wrong in [
-        "{residency id:2 what:1}",
-        "{residency id:2 what:1 where:1 when:now}",
+        "{residency what:1 where:1}",
+        "{residency what:1 where:1 quantity:1 when:now}",
         "{settlement id:1 place:1}",
     ] {
         with(wrong).expect_err(wrong);
@@ -119,8 +120,7 @@ fn a_command_naming_something_that_does_not_exist_is_refused_by_the_type() {
         "{command id:3 rule:1}\n\
          {argument id:11 command:3 input:1 value:1}\n\
          {argument id:12 command:3 input:2 value:1}\n\
-         {argument id:13 command:3 input:3 value:1}\n\
-         {argument id:14 command:3 input:4 value:9}",
+         {argument id:13 command:3 input:3 value:9}",
     )
     .expect("a command naming territory 9 is still well formed data");
 
@@ -136,10 +136,9 @@ fn a_command_naming_something_that_does_not_exist_is_refused_by_the_type() {
 fn an_input_is_checked_against_its_own_relation() {
     let start = with(
         "{command id:4 rule:1}\n\
-         {argument id:21 command:4 input:1 value:1}\n\
-         {argument id:22 command:4 input:2 value:3}\n\
-         {argument id:23 command:4 input:3 value:1}\n\
-         {argument id:24 command:4 input:4 value:2}",
+         {argument id:21 command:4 input:1 value:3}\n\
+         {argument id:22 command:4 input:2 value:1}\n\
+         {argument id:23 command:4 input:3 value:2}",
     )
     .expect("well formed data");
 
@@ -195,8 +194,7 @@ fn two_rows_of_one_relation_cannot_share_a_key() {
         with("{thing id:1 name:pioneer}").expect_err("thing 1 is taken"),
         Malformed::TwoWithOneKey {
             relation: "thing".to_string(),
-            key: "id".to_string(),
-            value: "1".to_string()
+            key: vec![("id".to_string(), "1".to_string())]
         },
         "`{{residency what:1}}` would otherwise point at two things"
     );
@@ -204,4 +202,68 @@ fn two_rows_of_one_relation_cannot_share_a_key() {
     // The control: a thing with a key of its own is fine, so the refusal above is about the key
     // rather than about adding a thing at all.
     with("{thing id:2 name:pioneer}").expect("a thing with its own key");
+}
+
+/// **A description names one row, and a quantity is what made that matter.**
+///
+/// Two residencies for the same thing in the same place used to be legal - the surrogate `id` told
+/// them apart - and merely *redundant*, because the store is a set and identical rows collapse.
+/// **A quantity is the column that breaks that**: `-> 2` and `-> 3` are not identical, so the set
+/// keeps both and the world says two things at once.
+///
+/// **This is the check that would have passed before**, which is the only reason it is worth
+/// having. `{residency id:1 what:1 where:1 quantity:2}` beside `{residency id:4 what:1 where:1
+/// quantity:3}` loaded clean, and nothing could say whether there were two scouts, three, or five.
+#[test]
+fn two_residencies_of_one_description_are_refused() {
+    assert_eq!(
+        with("{residency what:1 where:1 quantity:3}")
+            .expect_err("scouts are already stated to be in territory 1"),
+        Malformed::TwoWithOneKey {
+            relation: "residency".to_string(),
+            key: vec![
+                ("what".to_string(), "1".to_string()),
+                ("where".to_string(), "1".to_string())
+            ]
+        },
+        "one scout, or three, or four - nothing could say"
+    );
+
+    // The control: the same description somewhere else is a different description, so the refusal
+    // above is about the key and not about adding a residency at all.
+    with("{residency what:1 where:2 quantity:3}").expect("another place is another description");
+}
+
+/// **Identified or counted, and never both.**
+///
+/// Sean, 2026-09-15: *it would make no sense to have both an id and a quantity in the same logical
+/// model.* They are one slot - whether a row is one thing or a count of them - so a relation
+/// carrying both says it is each at once. **Checked where the schema is read**, so it is refused
+/// before any row of that relation is looked at.
+#[test]
+fn a_relation_cannot_carry_both_an_id_and_a_quantity() {
+    assert_eq!(
+        with("{column id:90 relation:16 seq:4 name:id}")
+            .expect_err("a row is one thing or a count of them"),
+        Malformed::IdAndQuantity {
+            relation: "residency".to_string()
+        }
+    );
+
+    // **The controls are a relation of their own**, because adding a column to one that has rows
+    // makes every one of them stop fitting, and `WrongColumns` would then be the refusal whatever
+    // the columns were called. A relation with no rows isolates the pair.
+    let pile = "{relation id:90 name:pile}\n{column id:90 relation:90 seq:1 name:quantity}";
+    with(pile).expect("counted alone is fine");
+    with("{relation id:90 name:pile}\n{column id:90 relation:90 seq:1 name:id}")
+        .expect("identified alone is fine");
+    assert_eq!(
+        with(&format!(
+            "{pile}\n{{column id:91 relation:90 seq:2 name:id}}"
+        ))
+        .expect_err("and the two together are not"),
+        Malformed::IdAndQuantity {
+            relation: "pile".to_string()
+        }
+    );
 }

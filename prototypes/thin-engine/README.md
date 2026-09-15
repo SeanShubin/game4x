@@ -425,6 +425,67 @@ and knows no arrow; it does not learn one. **The arrow is read and written in
 `tests/common/friendly.rs`**, which is where Sean put the translator and said it *can be as thick as
 it likes and the engine does not grow*.
 
+## Built, 2026-09-15, and one thing it needed that was not in the plan
+
+**`residency` is `(what, where, quantity)`**, keyed by the first two and counted by the third.
+`{residency what:scout where:territory-1} -> 1` in friendly, `{residency what:1 where:1 quantity:1}`
+in the foundation, and `tests/directories.rs` still converts each into the other row for row.
+
+**Two checks that would have passed before**, which is the only reason they are worth having:
+
+- `two_residencies_of_one_description_are_refused` - the pair that loaded clean when a surrogate id
+  told them apart, and which a quantity turns from redundant into contradictory
+- `a_relation_cannot_carry_both_an_id_and_a_quantity` - Sean's exclusion, checked where the schema
+  is read, with a relation of its own as the control because adding a column to one that has rows
+  makes `WrongColumns` the refusal whatever the columns are called
+
+**`Relation::key` split in two, as its own comment said it would.** `identity()` is the first
+column and is what a reference resolves against; `key()` is every column but the quantity, or the
+first column where there is none. **Fifteen relations noticed nothing.**
+
+## `literal`, which the plan did not have and the build needed
+
+**An input is typed as a relation and carries one of its keys**, so a plain number cannot be one -
+and `add` is a whole row, so something had to supply `residency`'s quantity. **That is a gap this
+lane predicted in prose and then walked into.**
+
+**`{literal id:1 clause:clause-4 column:46 value:1}`** - a sibling of `binding` that takes its value
+from the rule rather than from the caller. **`releases/first-release.md` already does this**, with a
+**Qty** written in the recipe, so it is the shape the game has rather than a new idea. It cost one
+relation, one engine word, and `literal` joining `binding` in the list of machinery
+`tests/isolation.rs` keeps apart from the game's nouns.
+
+**The engine learns two words and the count is asserted**: 35 to 37, `literal` and `quantity`.
+`tests/engine.rs` reads the constants out of `src/` and fails either way round, so neither could
+have been added quietly.
+
+## What the mutation suite found that nobody predicted the location of
+
+**`before.4x`'s `residency.quantity` can be changed and nothing fails.** One scout or five, the
+suite stays green - because `move` never reads it. Its `require` and `remove` clauses match on
+`what` and `where` and leave the quantity unbound, and what lands at the destination is the
+`literal`.
+
+**That is the arithmetic gap, as dead data rather than as an argument.** Moving one scout out of a
+territory holding five should leave four, and `require`, `remove` and `add` are set operations over
+whole rows that cannot say so. **It is written into `NOT_LOAD_BEARING` with its reason**, so the day
+quantities start being read, that line goes red and says so.
+
+**And the control caught its own instrument first.** With the reference count left at nineteen,
+`check` failed for the unmutated data too, so every mutation looked load-bearing and both lists came
+back empty - which is exactly what `the_data_as_it_stands_passes_every_check` says it exists to
+prevent, in its own words: *without this the two tests below could pass by `check` failing for some
+reason of its own.* **The empty lists were read as a result for about a minute.**
+
+## `examples/render.rs`, and why the two directories needed one
+
+**Nothing produced `data/friendly/` from `data/foundation/`**; it was kept by hand while
+`tests/directories.rs` compared the two. **That is a test that stays green because somebody
+remembered**, which is the arrangement this repository has a note about. `cargo run --example
+render` writes the friendly directory, comments and all, and the comparison is still what says they
+agree however either was produced.
+
+
 
 
 **And the same sentence settles two of the three earlier answers, which this lane had recorded as
@@ -494,16 +555,16 @@ the-first-test
 
 Measured on 2026-09-14:
 
-|                                              |                                                                              |
-| -------------------------------------------- | ---------------------------------------------------------------------------- |
-| Code that runs, in `src/`                    | **1013 lines** - notation 77, store 33, schema 249, engine 333, script 316   |
-| Rows of data                                 | **219** across eight files, holding **681** values                           |
-| Of those, rows nothing reads                 | **8**, all bindings on a clause nothing in the suite tries to violate        |
-| Values nothing reads                         | **17 of 681** - thirteen decorations, and four ids on relations with one row |
-| Rows that differ between before and expected | **1** - `{residency what:1 where:1}` becomes `{residency what:1 where:2}`    |
-| Relations declared                           | **16** in the game and **9** in the script, every one keyed by an `id`       |
-| Game nouns in code that runs                 | **0**, checked against a list read out of `data/`                            |
-| Tests                                        | **35**, all passing                                                          |
+|                                              |                                                                                           |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Code that runs, in `src/`                    | **1069 lines** - notation 77, store 33, schema 281, engine 357, script 316                |
+| Rows of data                                 | **224** across eight files, holding **692** values                                        |
+| Of those, rows nothing reads                 | **1**, a binding on a clause nothing in the suite tries to violate                        |
+| Values nothing reads                         | **17 of 692** - decorations, ids on relations with one row, and one quantity              |
+| Rows that differ between before and expected | **1** - `{residency what:1 where:1 quantity:1}` becomes `… where:2 quantity:1`            |
+| Relations declared                           | **17** in the game and **9** in the script; sixteen keyed by an `id`, `residency` counted |
+| Game nouns in code that runs                 | **0**, checked against a list read out of `data/`                                         |
+| Tests                                        | **40**, all passing                                                                       |
 
 **The engine names nothing the game has.** `territory`, `thing`, `adjacency`, `residency` and
 `move` appear in `data/`, in the tests and in comments, and in no line of `src/` that runs.
@@ -807,7 +868,7 @@ the smaller thing as well as the right one.
 reliably convert between friendly and foundation. Also it is ok that sometimes they happen to be
 the same thing.*
 
-`data/friendly/` and `data/foundation/` hold **the same eight files and the same 219 rows**.
+`data/friendly/` and `data/foundation/` hold **the same eight files and the same 224 rows**.
 `tests/directories.rs` is what says they say the same thing, in both directions: converting the
 friendly source gives the foundation row for row, and rendering the foundation gives the friendly
 source back.
@@ -847,7 +908,7 @@ every relation, or a table mapping a row to a name. That is a schema decision an
 
 **Sean, 2026-09-15**: *I expect to be authoring tests in the friendly format and only
 debugging/vetting in the foundation format.* So the translation has to go both ways, and it does:
-**foundation to friendly to foundation is the identity for all 219 rows**, asserted per row.
+**foundation to friendly to foundation is the identity for all 224 rows**, asserted per row.
 
 **Nothing is minted.** A friendly row carries its own `id`, so translating back is resolving each
 reference from a name to an id and dropping the `name` where the relation does not declare one.
@@ -855,7 +916,7 @@ No value is invented anywhere, which is why the minting question closed rather t
 
 ## The one relation that cannot satisfy the constraint
 
-**`column`.** Forty-six rows, seventeen distinct names, **sixteen of them called `id`**. It shows
+**`column`.** Fifty rows, eighteen distinct names, **sixteen of them called `id`**. It shows
 up where it hurts:
 
 ```text
@@ -1012,16 +1073,19 @@ original's key; they replace the original instead, which keeps every reference t
 means always referencing by ids, and a single id at that. The names are decorations, but important
 decorations.*
 
-**The data does that now, and this section said otherwise until it was re-derived.** It reported
-eight relations keyed by an `id` and thirteen keyed by whatever their first column happened to be,
-with `adjacency` as the sharpest case. **All sixteen are keyed by an `id`**, read out of
-`data/foundation/schema.4x` rather than recalled. **Nothing edited this section when they changed**,
-which is `docs/notes/nothing-removes.md` happening in this lane's own file.
+**The data did that, and then one relation stopped - which is the point rather than a regression.**
+This section once reported eight relations keyed by an `id` and thirteen keyed by whatever their
+first column happened to be, with `adjacency` as the sharpest case; it had gone stale with nothing
+editing it, which is `docs/notes/nothing-removes.md` happening in this lane's own file.
 
-**A surrogate key is not the end of it.** It admits two rows stating the same fact - two residencies
-for the same thing in the same place, accepted by the structure when it was tried - and once a
-residency carries a quantity that is exactly what must not be admitted. **What `residency` wants is
-a key over `(what, where)`**, which the next section measures and the engine has not got.
+**Today, read out of `data/foundation/schema.4x` rather than recalled: seventeen relations,
+sixteen keyed by an `id` and one counted.** `residency` carries a `quantity` and is keyed by
+`(what, where)`, and **that is the whole of the exception**.
+
+**A surrogate key was not the end of it.** It admits two rows stating the same fact - two
+residencies for the same thing in the same place, which the structure accepted when it was tried -
+and once a residency carries a quantity that is exactly what must not be admitted. **It is refused
+now**, by `two_residencies_of_one_description_are_refused`, which would have passed before.
 
 
 

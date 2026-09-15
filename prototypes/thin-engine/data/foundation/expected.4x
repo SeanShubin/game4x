@@ -11,4 +11,4 @@
 {thing id:1 name:scout}
 {adjacency id:1 from:1 to:2}
 {adjacency id:2 from:2 to:3}
-{residency id:1 what:1 where:2}
+{residency what:1 where:2 quantity:1}

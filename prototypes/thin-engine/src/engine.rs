@@ -39,6 +39,7 @@ const RULE: &str = "rule";
 const INPUT: &str = "input";
 const CLAUSE: &str = "clause";
 const BINDING: &str = "binding";
+const LITERAL: &str = "literal";
 const COMMAND: &str = "command";
 const ARGUMENT: &str = "argument";
 const ID: &str = "id";
@@ -197,7 +198,7 @@ impl Game {
         self.rows
             .rows()
             .iter()
-            .any(|row| row.relation == relation && row.value(declared.key()) == Some(value))
+            .any(|row| row.relation == relation && row.value(declared.identity()) == Some(value))
     }
 }
 
@@ -205,22 +206,34 @@ impl Game {
 fn check(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
     // **A key names one row.** A reference is a key, so a key naming two rows is a reference that
     // names neither - and nothing checked it until it was looked for.
-    let mut taken: BTreeMap<(&str, &str), usize> = BTreeMap::new();
+    let mut taken: BTreeMap<(&str, Vec<&str>), usize> = BTreeMap::new();
     for row in rows.rows() {
         let Some(relation) = schema.relation(&row.relation) else {
             continue;
         };
+        // **A relation is identified or counted and never both**, so a key of several columns and
+        // a key of one are read the same way here: `key()` says which columns, and this counts
+        // what the row carries in them.
         let key = relation.key();
-        let Some(value) = row.value(key) else {
+        let Some(values) = key
+            .iter()
+            .map(|column| row.value(column))
+            .collect::<Option<Vec<&str>>>()
+        else {
             continue;
         };
-        let seen = taken.entry((relation.name.as_str(), value)).or_default();
+        let seen = taken
+            .entry((relation.name.as_str(), values.clone()))
+            .or_default();
         *seen += 1;
         if *seen > 1 {
             return Err(Malformed::TwoWithOneKey {
                 relation: row.relation.clone(),
-                key: key.to_string(),
-                value: value.to_string(),
+                key: key
+                    .iter()
+                    .zip(values)
+                    .map(|(column, value)| (column.to_string(), value.to_string()))
+                    .collect(),
             });
         }
     }
@@ -238,7 +251,7 @@ fn check(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
             let there = rows
                 .rows()
                 .iter()
-                .any(|it| it.relation == *to && it.value(declared.key()) == Some(value));
+                .any(|it| it.relation == *to && it.value(declared.identity()) == Some(value));
             if !there {
                 return Err(Malformed::NoSuchRow {
                     relation: row.relation.clone(),
@@ -416,6 +429,27 @@ fn row_of(
             continue;
         };
         values.insert(name.to_string(), value.clone());
+    }
+
+    // **A literal is a binding whose value is written in the rule rather than passed to it.**
+    // An input is typed as a relation and carries one of its keys, so a plain number cannot be
+    // one - and a quantity is a plain number. `releases/first-release.md` does the same thing by
+    // writing **Qty** in the recipe, so this is the shape the game already has rather than a new
+    // idea. **Read after the bindings and into the same map**, because a column takes its value
+    // from one place or the other and never both.
+    for literal in game
+        .of_relation(LITERAL)
+        .into_iter()
+        .filter(|row| row.value(CLAUSE) == Some(id))
+    {
+        let column = literal.value(COLUMN).unwrap_or_default();
+        let Some((_, name)) = game.schema.column(column) else {
+            continue;
+        };
+        let Some(value) = literal.value(VALUE) else {
+            continue;
+        };
+        values.insert(name.to_string(), value.to_string());
     }
 
     // **Every column of the relation has to be bound**, said here rather than left to the

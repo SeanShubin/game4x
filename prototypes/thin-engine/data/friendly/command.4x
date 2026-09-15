@@ -6,7 +6,6 @@
 
 {command id:1 rule:move name:command-1}
 
-{argument id:1 command:command-1 input:it value:1}
-{argument id:2 command:command-1 input:what value:scout}
-{argument id:3 command:command-1 input:from value:territory-1}
-{argument id:4 command:command-1 input:to value:territory-2}
+{argument id:1 command:command-1 input:what value:scout}
+{argument id:2 command:command-1 input:from value:territory-1}
+{argument id:3 command:command-1 input:to value:territory-2}

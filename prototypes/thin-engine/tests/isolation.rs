@@ -110,6 +110,7 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
         "input",
         "clause",
         "binding",
+        "literal",
         "command",
         "argument",
         "primitive",
@@ -128,8 +129,15 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
         "data/foundation/rules.4x",
     ] {
         for row in rows(file) {
-            // A relation declares itself by name, and so does a rule. Nothing else is read:
-            // a column name is not vocabulary the engine could be accused of knowing.
+            // A relation declares itself by name, and so does a rule.
+            //
+            // **A column name is read as vocabulary in exactly one case, and this does not cover
+            // it.** `id` and `quantity` are names the engine branches on - a relation carrying
+            // one is identified and carrying the other is counted - so the sentence that used to
+            // stand here, *a column name is not vocabulary the engine could be accused of
+            // knowing*, stopped being true when the quantity arrived. **Neither is a game noun**,
+            // which is why this test still passes and why the claim needed narrowing rather than
+            // the check needing widening.
             if (row.relation == "relation" || row.relation == "rule")
                 && let Some(name) = row.value("name")
             {

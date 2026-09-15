@@ -11,4 +11,4 @@
 {thing id:1 name:scout}
 {adjacency id:1 from:territory-1 to:territory-2}
 {adjacency id:2 from:territory-2 to:territory-3}
-{residency id:1 what:scout where:territory-2}
+{residency what:scout where:territory-2} -> 1

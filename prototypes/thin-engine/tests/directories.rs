@@ -10,10 +10,12 @@
 //! friendly one back.
 
 mod common;
-use common::friendly::Names;
+use common::friendly::{self, Names};
+
 use common::{mine, rows};
 
 use thin_engine::notation::{Row, write};
+use thin_engine::schema::Schema;
 
 /// The eight files, and which store each belongs to.
 const FILES: [(&str, bool); 8] = [
@@ -33,10 +35,28 @@ fn store(of_game: bool, from: &str) -> Vec<Row> {
         // `expected.4x` is a second world for the same schema, so it is not part of the store
         // the others make up - including it would put two rows of each relation in it.
         if game == of_game && file != "expected.4x" {
-            all.extend(rows(&format!("data/{from}/{file}")));
+            all.extend(of(from, file, of_game));
         }
     }
     all
+}
+
+/// One file's rows, from whichever directory.
+///
+/// **The friendly side may carry `-> n` and the foundation never does**, so friendly files go
+/// through the fold that puts a quantity back into its column. **The schema is read first and
+/// from the same directory**, because the fold has to know which column that is - and a schema
+/// file carries no arrow itself, so reading it needs nothing that is not already there.
+fn of(from: &str, file: &str, of_game: bool) -> Vec<Row> {
+    let at = format!("data/{from}/{file}");
+    if from == "foundation" {
+        return rows(&at);
+    }
+    let declares = if of_game { "schema.4x" } else { "script.4x" };
+    let schema = Schema::of(&rows(&format!("data/friendly/{declares}"))).expect("a schema");
+    let text =
+        std::fs::read_to_string(mine().join(&at)).unwrap_or_else(|why| panic!("{at}: {why}"));
+    friendly::fold(&text, &schema).unwrap_or_else(|why| panic!("{at}: {why}"))
 }
 
 /// **Converting the friendly directory gives the foundation directory, row for row.**
@@ -48,7 +68,7 @@ fn the_foundation_is_what_the_friendly_source_converts_to() {
     let mut checked = 0;
     for (file, game) in FILES {
         let names = Names::of(&store(game, "friendly"));
-        let friendly = rows(&format!("data/friendly/{file}"));
+        let friendly = of("friendly", file, game);
         let foundation = rows(&format!("data/foundation/{file}"));
         assert_eq!(
             friendly.len(),
@@ -73,7 +93,7 @@ fn the_foundation_is_what_the_friendly_source_converts_to() {
         }
     }
     assert_eq!(
-        checked, 219,
+        checked, 224,
         "every row of the friendly source was converted"
     );
 }
@@ -85,15 +105,16 @@ fn the_friendly_source_is_what_the_foundation_renders_to() {
     let mut checked = 0;
     for (file, game) in FILES {
         let names = Names::of(&store(game, "foundation"));
-        let friendly = rows(&format!("data/friendly/{file}"));
+        let friendly = of("friendly", file, game);
         let foundation = rows(&format!("data/foundation/{file}"));
         for (at, row) in foundation.iter().enumerate() {
             // **Compared as rows and not as text.** A rendering writes the columns in the order
             // the relation declares; `write` sorts them. Two spellings of the same row.
-            let rendered = thin_engine::notation::read(&names.row(row))
+            let rendered = names
+                .parse(&names.row(row))
                 .unwrap_or_else(|why| panic!("data/foundation/{file}: {why}"));
             assert_eq!(
-                rendered[0],
+                rendered,
                 friendly[at],
                 "data/foundation/{file}: `{}` renders to `{}` and `friendly/{file}` says `{}`",
                 write(row),
@@ -103,7 +124,7 @@ fn the_friendly_source_is_what_the_foundation_renders_to() {
             checked += 1;
         }
     }
-    assert_eq!(checked, 219, "every row of the foundation was rendered");
+    assert_eq!(checked, 224, "every row of the foundation was rendered");
 }
 
 /// **Both directories hold the same eight files**, because nothing is omitted from either.

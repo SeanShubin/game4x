@@ -1,8 +1,13 @@
 # The shared schema: every relation, its columns in order, and what points at what.
 #
-# **Every relation is keyed by a single opaque integer id**, and every reference is to one of those
-# ids - Sean, 2026-09-15: *I want the truth of the data model to be fully normalized, which I
-# believe means always referencing by ids, and a single id at that.*
+# **Every reference is to a single opaque integer id** - Sean, 2026-09-15: *I want the truth of the
+# data model to be fully normalized, which I believe means always referencing by ids, and a single
+# id at that.*
+#
+# **Sixteen relations are keyed by such an id and one is not.** `residency` carries a `quantity`
+# and is keyed by its description, `(what, where)` - Sean, 2026-09-15: *it would make no sense to
+# have both an id and a quantity in the same logical model.* **Nothing references a residency**,
+# which is what lets it do without one.
 #
 # **The ids mean nothing and are not meant to be read.** Making them legible is the user-facing
 # style's job, not this one's. What is legible here is the `name` column, which is decoration -
@@ -28,6 +33,7 @@
 {relation id:14 name:thing}
 {relation id:15 name:adjacency}
 {relation id:16 name:residency}
+{relation id:17 name:literal}
 
 
 ## The columns
@@ -75,9 +81,15 @@
 {column id:41 relation:adjacency seq:1 name:id}
 {column id:42 relation:adjacency seq:2 name:from}
 {column id:43 relation:adjacency seq:3 name:to}
-{column id:44 relation:residency seq:1 name:id}
-{column id:45 relation:residency seq:2 name:what}
-{column id:46 relation:residency seq:3 name:where}
+
+
+{column id:44 relation:residency seq:1 name:what}
+{column id:45 relation:residency seq:2 name:where}
+{column id:46 relation:residency seq:3 name:quantity}
+{column id:47 relation:literal seq:1 name:id}
+{column id:48 relation:literal seq:2 name:clause}
+{column id:49 relation:literal seq:3 name:column}
+{column id:50 relation:literal seq:4 name:value}
 
 
 ## What points at what
@@ -102,8 +114,12 @@
 {reference id:15 column:34 to:input}
 {reference id:16 column:42 to:territory}
 {reference id:17 column:43 to:territory}
-{reference id:18 column:45 to:thing}
-{reference id:19 column:46 to:territory}
+
+
+{reference id:18 column:44 to:thing}
+{reference id:19 column:45 to:territory}
+{reference id:20 column:48 to:clause}
+{reference id:21 column:49 to:column}
 
 
 ## Which relations are the game's state
