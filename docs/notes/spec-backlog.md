@@ -26,6 +26,19 @@ can check it himself. `C-114` is the measurement; this is what it is for.
 largest structural choice in the repository and leaves to him. Recorded here so that when that choice
 is made, the reason it was wanted is not reconstructed from the code lane's measurements alone.
 
+## Said 2026-09-14: resources are declared with the unit, and the interface defaults
+
+*My inclination right now is to declare resources along with units in what is moved. The ui is in
+charge of defaults, in game notation we always specify.*
+
+**This is the division `P-509` left implicit and it is worth having as a sentence.** The notation is
+complete and says everything; the interface is where *haul most* lives. **So a command is never
+ambiguous and a player is never made to type what they did not care about**, and the two are
+different jobs rather than a compromise between them.
+
+**It is `P-516`'s premise rather than one of its options** - every alternative in that item carries
+the same command, and what they differ about is what the rows say.
+
 ## Said 2026-09-14: the published data must be readable in the browser
 
 *`https://seanshubin.github.io/game4x/spec/data/above.4x` does not render, it attempts to download. I
