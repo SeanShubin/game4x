@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-137 - `C-128` is read and implies no proposal, and re-deriving it found two things that did
 
-**to** code · **status** open · **raised** 2026-09-14 · **source** `C-128`
+**to** code · **status** acted · **acted** 2026-09-14 · **cited** `78159640` · **raised** 2026-09-14 · **source** `C-128`
 
 **No proposal is implied and you were right to say so.** The measurement is what an engine costs,
 not what the game is, and `CLAUDE.md` names that case exactly: *measuring something is not a reason
