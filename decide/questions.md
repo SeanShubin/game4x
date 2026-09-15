@@ -140,7 +140,7 @@ move itself, and `move` becomes purely a change of place. **The cost is that it 
 turn's end rather than when you move**, so a unit moves on credit and is charged later - and a unit
 that moved into a place with no energy stops being ready rather than being refused.
 
-## The four, written whole, because the pieces read differently combined
+## The four, in game notation
 
 **The command is the same under all four.**
 
@@ -148,59 +148,78 @@ that moved into a place with no energy stops being ready rather than being refus
 {move unit:transport from:1 to:2 metal:7 energy:2}
 ```
 
+**And writing them this way found something the relational tables hid** - it is the section below
+this one.
+
 **`A` - a place change is a consume and a produce, whatever is moving. `move` pays.**
 
-| Recipe   | Owner  | Role    | Qty | Kind   | Traits                                        | Where   |
-| -------- | ------ | ------- | --- | ------ | --------------------------------------------- | ------- |
-| **move** | player | require | 1   | place  |                                               | `$from` |
-|          |        | require | 1   | place  | joined to `$from` by an edge the unit crosses | `$to`   |
-|          |        | consume | 1   | unit   | moving at least 1                             | `$from` |
-|          |        | produce | 1   | unit   | moving one less                               | `$to`   |
-|          |        | consume | 7   | metal  |                                               | `$from` |
-|          |        | produce | 7   | metal  |                                               | `$to`   |
-|          |        | consume | 1   | energy |                                               | `$from` |
+```
+{block id:move recipe:move owner:player}
+{line block:move seq:1 role:require qty:1 kind:place place-bound:from}
+{line block:move seq:2 role:require qty:1 kind:place place-bound:to}
+{line block:move seq:3 role:consume qty:1 kind:unit place-bound:from}
+{constraint block:move seq:3 trait:moving compare:at-least n:1}
+{line block:move seq:4 role:produce qty:1 kind:unit place-bound:to}
+{constraint block:move seq:4 trait:moving compare:exactly n:0}
+{line block:move seq:5 role:consume qty:7 kind:metal place-bound:from}
+{line block:move seq:6 role:produce qty:7 kind:metal place-bound:to}
+{line block:move seq:7 role:consume qty:1 kind:energy place-bound:from}
+```
 
-**`B` - `A`, and readiness is what costs rather than distance. RECOMMENDED.**
+**`B` - `A` without `seq:7`, and `refresh` pays instead. RECOMMENDED.**
 
-| Recipe      | Owner  | Role    | Qty | Kind   | Traits                                        | Where   |
-| ----------- | ------ | ------- | --- | ------ | --------------------------------------------- | ------- |
-| **move**    | player | require | 1   | place  |                                               | `$from` |
-|             |        | require | 1   | place  | joined to `$from` by an edge the unit crosses | `$to`   |
-|             |        | consume | 1   | unit   | moving at least 1                             | `$from` |
-|             |        | produce | 1   | unit   | moving one less                               | `$to`   |
-|             |        | consume | 7   | metal  |                                               | `$from` |
-|             |        | produce | 7   | metal  |                                               | `$to`   |
-| **refresh** | world  | require | 1   | unit   |                                               |         |
-|             |        | consume | 1   | energy |                                               |         |
-|             |        | put     |     | unit   | moving at its maximum                         |         |
+```
+{block id:refresh-unit-moving recipe:refresh owner:world}
+{line block:refresh-unit-moving seq:1 role:require qty:1 kind:unit}
+{line block:refresh-unit-moving seq:2 role:consume qty:1 kind:energy}
+{line block:refresh-unit-moving seq:3 role:put kind:unit}
+{constraint block:refresh-unit-moving seq:3 trait:moving compare:at-maximum}
+```
 
 **`C` - the unit is put and the cargo is not. Closest to today.**
 
-| Recipe   | Owner  | Role    | Qty | Kind   | Traits            | Where   |
-| -------- | ------ | ------- | --- | ------ | ----------------- | ------- |
-| **move** | player | require | 1   | unit   | moving at least 1 | `$from` |
-|          |        | put     |     | unit   | moving one less   | `$to`   |
-|          |        | consume | 7   | metal  |                   | `$from` |
-|          |        | produce | 7   | metal  |                   | `$to`   |
-|          |        | consume | 1   | energy |                   | `$from` |
+```
+{line block:move seq:3 role:require qty:1 kind:unit place-bound:from}
+{constraint block:move seq:3 trait:moving compare:at-least n:1}
+{line block:move seq:4 role:put kind:unit place-bound:to}
+{constraint block:move seq:4 trait:moving compare:one-less}
+{line block:move seq:5 role:consume qty:7 kind:metal place-bound:from}
+{line block:move seq:6 role:produce qty:7 kind:metal place-bound:to}
+{line block:move seq:7 role:consume qty:1 kind:energy place-bound:from}
+```
 
 **`D` - a put may carry a quantity, and everything moving is put.**
 
-| Recipe   | Owner  | Role    | Qty | Kind   | Traits            | Where   |
-| -------- | ------ | ------- | --- | ------ | ----------------- | ------- |
-| **move** | player | require | 1   | unit   | moving at least 1 | `$from` |
-|          |        | put     | 1   | unit   | moving one less   | `$to`   |
-|          |        | put     | 7   | metal  |                   | `$to`   |
-|          |        | consume | 1   | energy |                   | `$from` |
+```
+{line block:move seq:4 role:put qty:1 kind:unit place-bound:to}
+{line block:move seq:5 role:put qty:7 kind:metal place-bound:to}
+{line block:move seq:6 role:consume qty:1 kind:energy place-bound:from}
+```
+
+## What the notation showed and the tables did not
+
+**`compare:one-less` cannot sit on a `produce` row.** *One less* is relative, and a produced thing is
+a new token - **there is nothing for it to be one less than.** Under `A` and `B` it has to become
+`compare:exactly n:0`, which is what the blocks above say.
+
+**That works here only because `moving` is 0 or 1.** `docs/designing-rules.md` measured it: *moving
+is 0 or 1 and `move` requires moving at least 1*. **So the exact value is writable for this game and
+not in general** - a counter with a range would need the produced row to refer to the consumed one,
+and nothing in the relation can say that.
+
+**`C` and `D` do not have the problem**, because a put changes a thing that is already there and
+*one less* has its referent. **That is a real point for `C` and `D` that the tables did not show**,
+and it is the first argument against the recommendation that came from the data rather than from
+taste.
 
 ## What separates them, in one line each
 
-|         |                                                                                                                                             |
-| ------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`A`** | a unit and a resource are the same kind of thing, which is what you said. Energy is still a toll on the move and nothing says who paid      |
-| **`B`** | the same, and the fuel is visibly what a vehicle burns to be ready. **`put` then never names a place**, which a tool can check              |
-| **`C`** | keeps `put` for the unit on a justification the release states and no row satisfies - zero of seventeen puts are on a kind carrying an `id` |
-| **`D`** | one row per thing moved, and it costs the sentence *a put has no quantity*, which is what currently tells a reader that a put makes nothing |
+|         |                                                                                                                                                                           |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`A`** | a unit and a resource are the same kind of thing, which is what you said. Energy is still a toll on the move and nothing says who paid                                    |
+| **`B`** | the same, and the fuel is visibly what a vehicle burns to be ready. **`put` then never names a place**, which a tool can check                                            |
+| **`C`** | keeps `put` for the unit on a justification the release states and no row satisfies - zero of seventeen puts are on a kind carrying an `id`. **Keeps `one-less` working** |
+| **`D`** | one row per thing moved, and it costs the sentence *a put has no quantity*, which is what currently tells a reader that a put makes nothing                               |
 
 ## What `B` costs, said plainly
 
@@ -209,17 +228,23 @@ that moved into a place with no energy **stops being ready** next turn rather th
 this one. **That is a different game, not a different notation**, and it is the part of `B` that is
 yours rather than this lane's.
 
-**And it does not help with scale.** `consume 1 unit` moves one, so a hundred transports is still
-`repeat:100` under every option here. **Your hundred-transports observation is answered as a
+**And it does not help with scale.** `qty:1` on the unit row moves one, so a hundred transports is
+still `repeat:100` under every option here. **Your hundred-transports observation is answered as a
 question about sameness and not as one about firing**, and the second is still open.
 
 ## What this lane would pick
 
-**`M1` and `E3`, and `M1` for a better reason than this lane first gave.** Not *`put` keeps identity
-and a resource has none* - nothing in the game has an identity to keep. **`M1` because a change of
-place is not a change of state**, and the net has two places to draw it between. `E3` because it
-answers your question directly - **the loss stops needing an explanation once the thing being bought
-is readiness rather than distance.**
+**`B`, and less confidently than an hour ago.** A change of place is not a change of state, and the
+net has two places to draw it between; the fuel stops needing an explanation once what is bought is
+readiness rather than distance.
+
+**What weakened it is the `one-less` finding**, and it came from writing the blocks in game notation
+rather than as tables. `B` can only say *one less* as *exactly zero*, and that is writable because
+`moving` is 0 or 1 today. **A trait with a range would break it and nothing in the relation could
+say what the produced thing is one less than.**
+
+**So `C` is the answer if you expect a counter with a range**, and `B` if you do not. **This lane
+does not know which**, and that is a question about the game rather than about the notation.
 
 **`M2` is the one to take if the seven matters more than the sentence**, and that is a judgement
 about how often a haul will be a constant rather than a repeat.
