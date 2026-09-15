@@ -83,6 +83,16 @@ pub enum Malformed {
         wanted: String,
         given: String,
     },
+    /// Two rows of one relation with the same key.
+    ///
+    /// **A reference names a row by its key, so a key naming two rows names neither.** Nothing
+    /// checked this until it was looked for: two `{thing id:1 ...}` rows were accepted, and
+    /// `{residency what:1}` then pointed at both of them.
+    TwoWithOneKey {
+        relation: String,
+        key: String,
+        value: String,
+    },
     /// A value in a column that points at a row nothing states.
     NoSuchRow {
         relation: String,
@@ -130,6 +140,16 @@ impl std::fmt::Display for Malformed {
                 write!(
                     out,
                     "`{relation}` is ({wanted}) and this row gives ({given})"
+                )
+            }
+            Malformed::TwoWithOneKey {
+                relation,
+                key,
+                value,
+            } => {
+                write!(
+                    out,
+                    "two `{relation}` rows have `{key}` of `{value}`, so it names neither"
                 )
             }
             Malformed::NoSuchRow {

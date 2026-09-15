@@ -187,8 +187,30 @@ impl Game {
     }
 }
 
-/// Every row fits its relation, and every reference points at a row that is there.
+/// Every row fits its relation, its key is its own, and every reference points at a row.
 fn check(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
+    // **A key names one row.** A reference is a key, so a key naming two rows is a reference that
+    // names neither - and nothing checked it until it was looked for.
+    let mut taken: BTreeMap<(&str, &str), usize> = BTreeMap::new();
+    for row in rows.rows() {
+        let Some(relation) = schema.relation(&row.relation) else {
+            continue;
+        };
+        let key = relation.key();
+        let Some(value) = row.value(key) else {
+            continue;
+        };
+        let seen = taken.entry((relation.name.as_str(), value)).or_default();
+        *seen += 1;
+        if *seen > 1 {
+            return Err(Malformed::TwoWithOneKey {
+                relation: row.relation.clone(),
+                key: key.to_string(),
+                value: value.to_string(),
+            });
+        }
+    }
+
     for row in rows.rows() {
         let relation = schema.fits(row)?;
         for column in &relation.columns {

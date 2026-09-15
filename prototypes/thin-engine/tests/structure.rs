@@ -71,9 +71,12 @@ fn a_reference_is_checked_against_the_relation_it_names() {
         "`what` points at `thing`, and no thing has the key 2"
     );
 
-    // Territory 9 does not exist; thing 1 does.
+    // Territory 9 does not exist; thing 2 does now. **A second thing rather than a second
+    // residency for thing 1**: `residency` is keyed by `what`, so reusing thing 1 is refused for
+    // having a key already taken, and this test would pass on the wrong refusal.
     assert_eq!(
-        with("{residency what:1 where:9}").expect_err("there is no territory 9"),
+        with("{thing id:2 name:pioneer}\n{residency what:2 where:9}")
+            .expect_err("there is no territory 9"),
         Malformed::NoSuchRow {
             relation: "residency".to_string(),
             column: "where".to_string(),
@@ -85,7 +88,8 @@ fn a_reference_is_checked_against_the_relation_it_names() {
 
     // The control: a row whose references both resolve is accepted, so the two above fail for
     // their own reason rather than because nothing added to this data is ever allowed.
-    with("{residency what:1 where:2}").expect("a second residency resolves both ways");
+    with("{thing id:3 name:runner}\n{residency what:3 where:2}")
+        .expect("a second residency resolves both ways");
 }
 
 /// **A row is exactly its relation's columns**, and data stating anything else is refused.
@@ -173,4 +177,23 @@ fn the_helper_loads_what_the_script_loads() {
         common::LOADED.to_vec(),
         "and they are the five the helpers here assemble, in the same order"
     );
+}
+
+/// **A key names one row.** Two rows of a relation with the same key is a reference that names
+/// neither, and nothing checked it until it was looked for.
+#[test]
+fn two_rows_of_one_relation_cannot_share_a_key() {
+    assert_eq!(
+        with("{thing id:1 name:pioneer}").expect_err("thing 1 is taken"),
+        Malformed::TwoWithOneKey {
+            relation: "thing".to_string(),
+            key: "id".to_string(),
+            value: "1".to_string()
+        },
+        "`{{residency what:1}}` would otherwise point at two things"
+    );
+
+    // The control: a thing with a key of its own is fine, so the refusal above is about the key
+    // rather than about adding a thing at all.
+    with("{thing id:2 name:pioneer}").expect("a thing with its own key");
 }

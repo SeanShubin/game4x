@@ -313,6 +313,44 @@ validated against their own declarations, the `{test ...}` row was skipped entir
 `engine.4x` was read from the file rather than from what the script had loaded - so the step
 loading it was dead.
 
+## A key names one row, and nothing checked it
+
+**`{thing id:1 name:scout}` and `{thing id:1 name:pioneer}` were both accepted**, and
+`{residency what:1}` then pointed at neither. A reference names a row by its key, so **a key that
+names two rows is a reference that names nothing** - and the foundation rests on references being
+by id.
+
+It is checked now. **Finding it needed looking for it**: no test failed, because no data had ever
+had a duplicate.
+
+**It also made two checks honest that had been passing for the wrong reason.** The reference test
+added `{residency what:1 where:9}` beside an existing `{residency what:1 where:1}`, so once keys
+had to be unique it was refused for the key rather than for the territory - it uses a second thing
+now. And the mutation check's generated violations were a row cloned and broken, which kept the
+original's key; they replace the original instead, which keeps every reference to it resolving.
+
+## Thirteen of twenty-one relations are not keyed by an id
+
+**Sean, 2026-09-15**: *I want the truth of the data model to be fully normalized, which I believe
+means always referencing by ids, and a single id at that. The names are decorations, but important
+decorations.*
+
+**The data does not do that yet.** Eight relations have a single-column `id`; thirteen are keyed by
+whatever their first column happens to be:
+
+| Keyed by an `id`                                                                    | Keyed by something else                                                                                                                                                                                                              |
+| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `argument`, `binding`, `clause`, `column`, `command`, `input`, `territory`, `thing` | `adjacency` (from), `compare` (seq), `execute` (seq), `load` (seq), `primitive` (word), `reference` (column), `relation` (name), `report` (seq), `residency` (what), `role` (name), `rule` (name), `state` (relation), `test` (name) |
+
+**`adjacency` is the sharpest case**: keyed by `from`, so `{adjacency from:1 to:2}` and
+`{adjacency from:1 to:3}` would collide. It is unique today by accident of there being one road
+out of each territory.
+
+**And this is what the 51 unread values are really about.** They are not waste - `input.name` is a
+decoration awaiting the second style, and the surrogate ids are the foundation being what it is
+meant to be. **What is missing is the other half**: the user-facing style that reads those names,
+and the translation between the two.
+
 ## `load` exists and the engine still reads no file
 
 **`{load seq:1 file:schema.4x into:game}` is a row, and `src/script.rs` never opens anything.** It

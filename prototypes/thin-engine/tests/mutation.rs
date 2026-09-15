@@ -25,6 +25,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use thin_engine::engine::Game;
 use thin_engine::notation::{Row, read, write};
+use thin_engine::schema::Malformed;
 use thin_engine::script::{Files, run_test};
 
 mod common;
@@ -189,14 +190,39 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
         violating
             .values
             .insert(named.to_string(), "nothing-has-this-key".to_string());
-
-        let mut with_violation = game.clone();
+        // **The sample is replaced rather than joined**, which keeps its key and so keeps every
+        // reference to it resolving. Adding a second row alongside broke the key's uniqueness
+        // instead, and giving the copy a fresh key broke the key's own reference where the key is
+        // one - `adjacency` is keyed by `from`, which points at `territory`.
+        let mut with_violation: Vec<Row> =
+            game.iter().filter(|row| *row != sample).cloned().collect();
         with_violation.push(violating.clone());
-        if Game::of(with_violation).is_ok() {
-            return Err(format!(
-                "{} is allowed, so `{column}` points at nothing",
-                write(&violating)
-            ));
+        match Game::of(with_violation) {
+            Ok(_) => {
+                return Err(format!(
+                    "{} is allowed, so `{column}` points at nothing",
+                    write(&violating)
+                ));
+            }
+            // **Refused for the reference and not for something else.** Without this the check
+            // asks *does anything complain*, which is a narrower question than *is this
+            // constraint doing the work*.
+            Err(Malformed::NoSuchRow { column: at, .. }) if at == named => {}
+            // **Three references are backstopped by the schema builder**, which cannot use them:
+            // it refuses a column of an undeclared relation, and a reference naming a column or a
+            // relation nothing declares, while it is still working out what the relations are.
+            // **So `column.relation`, `reference.column` and `reference.to` are not the only
+            // thing forbidding their own violation** - the count above is what keeps them
+            // load-bearing, not the forbidding.
+            Err(Malformed::ColumnOfNothing { .. })
+            | Err(Malformed::ReferenceOfNothing { .. })
+            | Err(Malformed::ReferencesNothing { .. }) => {}
+            Err(why) => {
+                return Err(format!(
+                    "{} was refused for {why}, which is not `{column}` doing the work",
+                    write(&violating)
+                ));
+            }
         }
     }
     Ok(())
