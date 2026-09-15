@@ -51,7 +51,7 @@ Measured on 2026-09-14:
 | Rows that differ between before and expected | **1** - `{residency what:1 where:1}` becomes `{residency what:1 where:2}`    |
 | Relations declared                           | **16** in the game and **9** in the script, every one keyed by an `id`       |
 | Game nouns in code that runs                 | **0**, checked against a list read out of `data/`                            |
-| Tests                                        | **29**, all passing                                                          |
+| Tests                                        | **35**, all passing                                                          |
 
 **The engine names nothing the game has.** `territory`, `thing`, `adjacency`, `residency` and
 `move` appear in `data/`, in the tests and in comments, and in no line of `src/` that runs.
@@ -312,6 +312,57 @@ floor asks whether there are enough; the question was whether they are all still
 validated against their own declarations, the `{test ...}` row was skipped entirely, and
 `engine.4x` was read from the file rather than from what the script had loaded - so the step
 loading it was dead.
+
+## The user-facing style, which is not part of the engine
+
+**Sean, 2026-09-15**: *I don't consider the translation between user friendly format and
+foundational format part of the engine. The engine should only know about the foundational format.
+The user friendly format is for the test harness and debugging.*
+
+**So it lives in `tests/common/friendly.rs`, and that is what keeps it free.** `src/` may name no
+noun the game has, and every constant in it is a word `data/engine.4x` lists as delegated. Neither
+applies in `tests/`. **The translator can be as thick as it likes and the engine does not grow a
+line** - it is still 1013.
+
+**All eight files render**, which `every_file_in_data_renders` asserts rather than claims:
+
+```text
+data/command.4x
+  command-1  rule=move
+  argument-1  command=command-1  input=move.it    value=residency-1
+  argument-2  command=command-1  input=move.what  value=scout
+  argument-3  command=command-1  input=move.from  value=territory-1
+  argument-4  command=command-1  input=move.to    value=territory-2
+```
+
+## What a row is called, in three rules
+
+**A row with no name gets one made** - Sean: *I was thinking of having a generated name for the
+user friendly style, in this case `territory-1`.* The rules are tried in order, and each is there
+because the one before it was not enough:
+
+| Rule                                         | Example                                               | Why the earlier rule was not enough                  |
+| -------------------------------------------- | ----------------------------------------------------- | ---------------------------------------------------- |
+| The `name`, if it names one row              | `{thing id:1 name:scout}` → `scout`                   | -                                                    |
+| The name qualified by what the row points at | `{column id:44 relation:16 name:id}` → `residency.id` | **Twenty-five columns are called `id`**              |
+| `<relation>-<id>`                            | `{territory id:1}` → `territory-1`                    | Fifteen of twenty-five relations have no name at all |
+
+**The second rule takes the shortest qualification that names one row.** Joining every reference
+gave `move.residency.it` for an input - an input points at its rule *and* at the relation it is
+typed as, and only the first of those says which input it is. It is `move.it`.
+
+**And one reference the schema cannot state, the renderer can.** `argument.value` points at
+whatever the input's `of` says, which is data rather than schema - so no `{reference ...}` row
+describes it, and the translator follows the input itself. **A translator may know that; the engine
+may not.**
+
+## What is not done, and is the harder half
+
+**This renders and does not parse.** Friendly to foundation has to mint ids, so it can only
+reproduce the original **up to renaming** - and the first test compares `actual` against
+`expected` including ids. If `expected.4x` were authored in the friendly style and translated, its
+ids need not match, and the comparison would have to be up to isomorphism rather than row for row.
+**That is a separate question from rendering and does not block it.**
 
 ## The foundation style: every relation keyed by one opaque integer
 
