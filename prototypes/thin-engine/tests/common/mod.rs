@@ -32,8 +32,9 @@ pub fn rows(at: &str) -> Vec<Row> {
 /// first time it ran. **The order does not matter to the engine**, since everything goes into one
 /// store and is validated together; the lists agreeing is what matters, and asserting the order is
 /// the cheapest way to notice that they do not.
-pub const LOADED: [&str; 4] = [
+pub const LOADED: [&str; 5] = [
     "data/schema.4x",
+    "data/engine.4x",
     "data/rules.4x",
     "data/before.4x",
     "data/command.4x",

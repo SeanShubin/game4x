@@ -12,14 +12,16 @@
 
 {test name:the-scout-moves-to-an-adjacent-place}
 
-{load seq:1 file:schema.4x into:game}
-{load seq:2 file:rules.4x into:game}
-{load seq:3 file:before.4x into:game}
-{load seq:4 file:command.4x into:game}
-{load seq:5 file:expected.4x into:expected}
+{load seq:1 file:script.4x into:script}
+{load seq:2 file:schema.4x into:game}
+{load seq:3 file:engine.4x into:game}
+{load seq:4 file:rules.4x into:game}
+{load seq:5 file:before.4x into:game}
+{load seq:6 file:command.4x into:game}
+{load seq:7 file:expected.4x into:expected}
 
-{execute seq:6 command:1}
+{execute seq:8 command:1}
 
-{compare seq:7 this:actual with:expected}
+{compare seq:9 this:actual with:expected}
 
-{report seq:8 title:the-first-test}
+{report seq:10 title:the-first-test}

@@ -31,6 +31,7 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         "binding",
         "command",
         "argument",
+        "primitive",
     ] {
         let declared = game
             .schema()
@@ -42,11 +43,11 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         );
         checked += 1;
     }
-    assert_eq!(checked, 11, "eleven relations describe the structure");
+    assert_eq!(checked, 12, "twelve relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        15,
-        "fifteen relations in all - those eleven, and the game's four"
+        16,
+        "sixteen relations in all - those twelve, and the game's four"
     );
 }
 
@@ -166,10 +167,10 @@ fn the_helper_loads_what_the_script_loads() {
         .filter_map(|row| row.value("file").map(|it| format!("data/{it}")))
         .collect();
 
-    assert_eq!(script.len(), 4, "the script loads four files into the game");
+    assert_eq!(script.len(), 5, "the script loads five files into the game");
     assert_eq!(
         script,
         common::LOADED.to_vec(),
-        "and they are the four the helpers here assemble, in the same order"
+        "and they are the five the helpers here assemble, in the same order"
     );
 }

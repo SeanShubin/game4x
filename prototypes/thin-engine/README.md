@@ -42,14 +42,16 @@ the-first-test
 
 Measured on 2026-09-14:
 
-|                                              |                                                                                        |
-| -------------------------------------------- | -------------------------------------------------------------------------------------- |
-| Code that runs, in `src/`                    | **873 lines** - notation 77, store 33, schema 230, engine 294, script 234              |
-| Rows of data                                 | **121** across six files - 78 schema, 16 rule, 9 test, 7 before, 7 expected, 4 command |
-| Rows that differ between before and expected | **1** - `{residency what:1 where:1}` becomes `{residency what:1 where:2}`              |
-| Relations declared                           | **15** - eleven that describe the structure, four that are the game                    |
-| Game nouns in code that runs                 | **0**, checked against a list read out of `data/`                                      |
-| Tests                                        | **23**, all passing                                                                    |
+|                                              |                                                                           |
+| -------------------------------------------- | ------------------------------------------------------------------------- |
+| Code that runs, in `src/`                    | **927 lines** - notation 77, store 33, schema 230, engine 294, script 288 |
+| Rows of data                                 | **175** across eight files, holding **429** values                        |
+| Of those, rows nothing reads                 | **0** - every row can be deleted and something fails                      |
+| Values nothing reads                         | **51 of 429**, all of them surrogate keys or orderings that do not order  |
+| Rows that differ between before and expected | **1** - `{residency what:1 where:1}` becomes `{residency what:1 where:2}` |
+| Relations declared                           | **16** - twelve that describe the structure, four that are the game       |
+| Game nouns in code that runs                 | **0**, checked against a list read out of `data/`                         |
+| Tests                                        | **28**, all passing                                                       |
 
 **The engine names nothing the game has.** `territory`, `thing`, `adjacency`, `residency` and
 `move` appear in `data/`, in the tests and in comments, and in no line of `src/` that runs.
@@ -124,21 +126,18 @@ same change seen from two sides: a hole in a string became a row that names a co
 there is no `key` relation, and where no natural key existed a surrogate was made. The dotted ones
 are readable on purpose: `residency.what`, `move.from`, `move.3.where`.
 
-## The six files
+## The eight files
 
 | File          | Rows   | What it is                                                          |
 | ------------- | ------ | ------------------------------------------------------------------- |
 | `schema.4x`   | **78** | The shared schema: every relation, its columns in order, references |
+| `script.4x`   | **16** | The orchestrator's own vocabulary, declared the same way            |
+| `engine.4x`   | **36** | Every word the engine implements - where the data delegates to code |
 | `rules.4x`    | **16** | `move`, as inputs, clauses and bindings                             |
 | `before.4x`   | **7**  | The state before                                                    |
 | `command.4x`  | **4**  | The move command                                                    |
 | `expected.4x` | **7**  | The state after, written by hand from the note                      |
-| `test.4x`     | **9**  | The orchestrator                                                    |
-
-**`rules.4x` is not one of the five Sean listed, and that is a question rather than a decision.** A
-rule is not the schema, not the state before, not the state after and not the command - it is
-static input, shared by before and after the way the schema is. It is on its own so that folding it
-into `schema.4x` is one move if that is where it belongs.
+| `test.4x`     | **11** | The orchestrator                                                    |
 
 ## The three places most likely to be unnecessary
 
@@ -201,6 +200,118 @@ says what it should.
 four files `tests/` assembles are the four `test.4x` loads, **which caught the two lists disagreeing
 about their order the first time it ran**. `tests/isolation.rs` checks that the engine reads no
 file, depends on no crate, and names no noun the game has.
+
+## Where the data stops describing and starts delegating
+
+**This is the boundary the prototype is for**, and `data/engine.4x` is it written down: every
+string the engine holds and compares a data value against. **34 words.**
+
+**The difference between the two kinds of row is the thing to look at.** A `{clause ...}` or
+`{binding ...}` row is data the engine walks without knowing what it means, so a second rule is
+rows and no code. A word in `engine.4x` is the other thing - the engine branches on it, so adding
+one means writing Rust. Three kinds are mixed in that list:
+
+| Kind                                   | Examples                    | Adding one costs |
+| -------------------------------------- | --------------------------- | ---------------- |
+| Column names the engine reads by name  | `name`, `seq`, `id`, `of`   | code             |
+| Relation names it dispatches on        | `clause`, `binding`, `load` | code             |
+| **Values in a row that select a path** | `require`, `remove`, `add`  | code             |
+
+**The third is the purest case, and it is already in the game's data.** `{role name:require}` is a
+row whose entire meaning is a match arm in `engine.rs`. That is the shape to recognise: a relation
+whose rows are a list of things the engine implements, as against one whose rows the engine only
+moves around.
+
+**The list is checked against `src/` both ways** by `tests/engine.rs` - a constant with no row
+fails, and a row with no constant fails - so **the boundary cannot drift**. That is the only reason
+it is worth a file rather than a paragraph. **It caught something on its first run**: four
+constants added an hour earlier, when `compare` was made to read the columns it had been ignoring.
+
+**And the game's own nouns are absent from it**, which is what says the engine is thin.
+`territory`, `thing`, `adjacency`, `residency` and `move` are declared in `data/` and the engine
+has never heard of any of them.
+
+## Declaring the script's vocabulary, and what it did not buy
+
+`data/script.4x` declares `test`, `load`, `execute`, `compare` and `report` the way the game's
+relations are declared, so a step is checked like any other row: a misspelt column is refused by
+the structure rather than by a special case in Rust.
+
+```text
+{report seq:10 titel:the-first-test}: `report` is (seq title) and this row gives (seq titel)
+```
+
+**What it did not buy is any less delegation.** `{relation name:load}` says a `load` row has a
+`file` and an `into`; it does not say what loading *is*. **Declaring it makes the delegation
+nameable rather than removing it** - which is why `engine.4x` exists beside it.
+
+**It also found a lie in the data.** `{compare seq:9 this:actual with:expected}` had been written
+with two columns nothing read - data that looks meaningful and is not. They are read now, and a
+`compare` naming a store that is not there is refused.
+
+**The bootstrap, said rather than hidden.** `test.4x` loads `script.4x`, so the `load` step that
+fetches the declarations runs before its own description exists. **That is the one place the data
+cannot describe itself**: the step that fetches the description. Every other step is validated
+before it runs.
+
+## And `seq` sorted as text, which a tenth step found
+
+**Every value in this notation is a string**, and ordering steps by `seq` means deciding what a
+`seq` is. Sorted as text, `10` comes before `2` - so the first time the script had ten steps, every
+step after the first ran in the wrong order and `report` was reached before `compare` had run.
+
+**It failed loudly rather than quietly**, because `report` refuses when there is nothing to report
+on. **That was luck rather than design**: nothing about sorting strings would have complained, and
+a script whose steps are order-independent would have been silently wrong. `seq` is parsed as a
+number now, and a `seq` that is not one is refused.
+
+## Every row is used, and 51 values are not
+
+**Sean's requirement, in his words**: *there should not be a single value I can change or delete
+that doesn't end up breaking something.* `tests/mutation.rs` is that, run over the data: every row
+deleted in turn, every value replaced in turn, and something has to notice.
+
+**Every one of the 175 rows is load-bearing.** Delete any of them and the suite fails.
+
+**51 of the 429 values are not**, and they are named and counted so the list cannot grow quietly:
+
+| Not read                                | Count | Why                                                        |
+| --------------------------------------- | ----- | ---------------------------------------------------------- |
+| `column.id` in `schema.4x`              | 18    | A surrogate key nothing points at                          |
+| `column.id` in `script.4x`, `engine.4x` | 12    | The same                                                   |
+| `binding.id`                            | 8     | Nothing references a binding                               |
+| `clause.seq`                            | 4     | Clauses apply in role passes, so same-role order is free   |
+| `input.name`                            | 3     | A binding names its input by id; the name reaches an error |
+| `input.seq`                             | 3     | Inputs are sorted and the order changes no outcome         |
+| `argument.id`                           | 3     | Nothing references an argument                             |
+
+**41 of the 51 are surrogate keys nothing points at.** They exist because the engine takes a
+relation's key to be its first column, so **removing them means composite keys** - `binding` would
+be keyed by `(clause, column)` and `argument` by `(command, input)`. That is a decision about the
+structure rather than a tidy-up.
+
+**`input.name` is redundant with `input.id`**, which is worth seeing next to the note this came
+from: `input what thing` made the name the whole identity, and introducing ids made it decoration.
+
+**`clause.seq` and `input.seq` order things whose order does not matter** - yet. A second rule
+where two `remove` clauses contend would make `clause.seq` load-bearing, and that line in
+`tests/mutation.rs` is where to look when it does.
+
+## What the mutation check taught about checking
+
+**Nineteen `{reference ...}` rows looked dead and were not.** A reference is a constraint, and a
+constraint is worth nothing in a run where nothing violates it - so deleting one changed nothing
+anybody looked at. **The suite had no case that needed them.** The fix was to generate a violation
+for every reference the data declares, which is now part of what the check means by *working*.
+
+**And the count of them had to be exact.** Written as *at least fifteen references*, deleting one
+simply meant one fewer was tested - the loop only ever checks the references that are there. **A
+floor asks whether there are enough; the question was whether they are all still there.**
+
+**Three real gaps came out of it**, none of which any other test would have found: loads were never
+validated against their own declarations, the `{test ...}` row was skipped entirely, and
+`engine.4x` was read from the file rather than from what the script had loaded - so the step
+loading it was dead.
 
 ## `load` exists and the engine still reads no file
 

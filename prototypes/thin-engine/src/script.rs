@@ -36,7 +36,7 @@ use std::collections::BTreeMap;
 
 use crate::engine::{Game, Refused, run};
 use crate::notation::{Row, Unreadable, read};
-use crate::schema::Malformed;
+use crate::schema::{Malformed, Schema};
 
 const TEST: &str = "test";
 const LOAD: &str = "load";
@@ -50,6 +50,10 @@ const FILE: &str = "file";
 const INTO: &str = "into";
 const COMMAND: &str = "command";
 const TITLE: &str = "title";
+const THIS: &str = "this";
+const WITH: &str = "with";
+const ACTUAL: &str = "actual";
+const SCRIPT: &str = "script";
 const RELATION: &str = "relation";
 const GAME: &str = "game";
 const EXPECTED: &str = "expected";
@@ -70,8 +74,18 @@ pub enum Failed {
     Unreadable { file: String, why: Unreadable },
     /// A row in the script that is not a step, or a step missing a column.
     BadStep { row: String },
-    /// `into` naming somewhere that is not `game` or `expected`.
+    /// `into` naming somewhere that is not `script`, `game` or `expected`.
     NoSuchStore { into: String },
+    /// A step that does not fit the structure `script.4x` declares for it.
+    BadlyFormed { step: String, why: Malformed },
+    /// `compare` naming something other than the two stores there are.
+    NothingToCompare { this: String, with: String },
+    /// A step whose `seq` is not a number, so the steps cannot be put in order.
+    ///
+    /// **Every value in this notation is a string**, so ordering by `seq` means deciding what a
+    /// `seq` is. Sorted as text, `10` comes before `2` - which is exactly what happened the first
+    /// time a tenth step existed, and every step from the second onwards ran in the wrong order.
+    OutOfSequence { step: String, seq: String },
     /// The rows loaded do not fit the structure they declare.
     Malformed { why: Malformed },
     /// The command did not happen.
@@ -87,6 +101,13 @@ impl std::fmt::Display for Failed {
             Failed::Unreadable { file, why } => write!(out, "`{file}`: {why}"),
             Failed::BadStep { row } => write!(out, "{row} is not a step this knows"),
             Failed::NoSuchStore { into } => write!(out, "`{into}` is not somewhere to load into"),
+            Failed::BadlyFormed { step, why } => write!(out, "{step}: {why}"),
+            Failed::NothingToCompare { this, with } => {
+                write!(out, "there is nothing to compare `{this}` with `{with}`")
+            }
+            Failed::OutOfSequence { step, seq } => {
+                write!(out, "{step} is at `{seq}`, which is not a number")
+            }
             Failed::Malformed { why } => write!(out, "{why}"),
             Failed::Refused { why } => write!(out, "{why}"),
             Failed::OutOfOrder { step, needs } => {
@@ -161,10 +182,14 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
         .to_string();
 
     // **Ordered across the step relations by `seq`**, so the file reads top to bottom.
+    // **The `{test ...}` row is validated even though it is not a step.** Skipped entirely at
+    // first, which meant its columns were declared in `script.4x` and checked by nothing - the
+    // `name` column could be renamed there and nothing noticed.
+    let mut named: Vec<&Row> = Vec::new();
     let mut steps: Vec<&Row> = Vec::new();
     for row in script {
         match row.relation.as_str() {
-            TEST => continue,
+            TEST => named.push(row),
             LOAD | EXECUTE | COMPARE | REPORT => steps.push(row),
             _ => {
                 return Err(Failed::BadStep {
@@ -173,14 +198,29 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
             }
         }
     }
-    steps.sort_by_key(|row| row.value(SEQ).unwrap_or_default().to_string());
+    // **Ordered by `seq` as a number and not as text.** Written the other way first, and the
+    // tenth step is what found it: `10` sorts before `2`, so every step after the first ran in
+    // the wrong order and `report` was reached before `compare`. A refusal rather than a silent
+    // fallback, because a `seq` nobody can order is a script nobody can run.
+    let mut ordered: Vec<(usize, &Row)> = Vec::new();
+    for step in steps {
+        let seq = step.value(SEQ).unwrap_or_default();
+        let at = seq.parse::<usize>().map_err(|_| Failed::OutOfSequence {
+            step: crate::notation::write(step),
+            seq: seq.to_string(),
+        })?;
+        ordered.push((at, step));
+    }
+    ordered.sort_by_key(|(at, _)| *at);
+    let steps: Vec<&Row> = ordered.into_iter().map(|(_, step)| step).collect();
 
+    let mut declared: Vec<Row> = Vec::new();
     let mut game: Vec<Row> = Vec::new();
     let mut expected: Vec<Row> = Vec::new();
     let mut actual: Option<Game> = None;
     let mut found: Option<Difference> = None;
 
-    for step in steps {
+    for step in &steps {
         match step.relation.as_str() {
             LOAD => {
                 let file = step.value(FILE).ok_or_else(|| Failed::BadStep {
@@ -194,6 +234,16 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
                     why,
                 })?;
                 match step.value(INTO) {
+                    Some(SCRIPT) => {
+                        declared.extend(rows);
+                        // **Every step is checked once the declarations are here, loads
+                        // included.** Checking only the steps that come after left `load`'s own
+                        // columns undeclared in effect - the `into` column could be dropped from
+                        // `script.4x` and nothing noticed, because no load was ever validated.
+                        for earlier in steps.iter().chain(named.iter()) {
+                            fits(earlier, &declared)?;
+                        }
+                    }
                     Some(GAME) => game.extend(rows),
                     Some(EXPECTED) => expected.extend(rows),
                     Some(other) => {
@@ -209,6 +259,7 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
                 }
             }
             EXECUTE => {
+                fits(step, &declared)?;
                 let command = step.value(COMMAND).ok_or_else(|| Failed::BadStep {
                     row: crate::notation::write(step),
                 })?;
@@ -216,6 +267,18 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
                 actual = Some(run(&before, command).map_err(|why| Failed::Refused { why })?);
             }
             COMPARE => {
+                fits(step, &declared)?;
+                // **`this` and `with` are read rather than decorative.** They were written before
+                // anything looked at them, and a column the data states and the code ignores is
+                // exactly the thing this prototype is meant to make visible.
+                let this = step.value(THIS).unwrap_or_default();
+                let with = step.value(WITH).unwrap_or_default();
+                if this != ACTUAL || with != EXPECTED {
+                    return Err(Failed::NothingToCompare {
+                        this: this.to_string(),
+                        with: with.to_string(),
+                    });
+                }
                 let Some(after) = &actual else {
                     return Err(Failed::OutOfOrder {
                         step: COMPARE.to_string(),
@@ -225,6 +288,7 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
                 found = Some(compare(after, &expected)?);
             }
             _ => {
+                fits(step, &declared)?;
                 let Some(difference) = found.clone() else {
                     return Err(Failed::OutOfOrder {
                         step: REPORT.to_string(),
@@ -245,6 +309,24 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
         step: "the test".to_string(),
         needs: REPORT.to_string(),
     })
+}
+
+/// Whether a step fits what `script.4x` declares for its relation.
+///
+/// **A step is checked like any other row**, so a misspelt column is refused by the structure
+/// rather than by a special case here. **Loads are the exception and cannot not be**: the step
+/// that fetches the declarations runs before they exist, which is the one place the data cannot
+/// describe itself.
+fn fits(step: &Row, declared: &[Row]) -> Result<(), Failed> {
+    let schema = Schema::of(declared).map_err(|why| Failed::BadlyFormed {
+        step: crate::notation::write(step),
+        why,
+    })?;
+    schema.fits(step).map_err(|why| Failed::BadlyFormed {
+        step: crate::notation::write(step),
+        why,
+    })?;
+    Ok(())
 }
 
 /// The relations the schema marks as state, and what differs in them.

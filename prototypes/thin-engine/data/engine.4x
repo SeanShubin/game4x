@@ -1,0 +1,57 @@
+# Every word this engine implements, and therefore every place the data delegates to the code.
+#
+# **This is the boundary the prototype is for.** A row of `clause` or `binding` is data the engine
+# moves around without knowing what it means - a second rule is rows and no code. A word in this
+# file is the other thing: the engine holds the string and branches on it, so a word that is not
+# here cannot be added without writing Rust.
+#
+# **Three kinds are mixed together and the difference is worth seeing.** Some are column names the
+# engine reads by name - `name`, `seq`, `id`. Some are relation names it dispatches on - `clause`,
+# `load`. And some are values in a row that select a code path - `require`, `remove`, `add`, which
+# is the purest case: `{role name:require}` is a row whose entire meaning is a match arm.
+#
+# **Generated from the constants in `src/` and checked against them both ways** by
+# `tests/engine.rs`: a match arm with no row here fails, and a row here with no match arm fails.
+# **So this list cannot drift**, which is the whole reason it is worth having rather than writing
+# the same thing in a comment.
+#
+# WHY: `primitive` is a name rather than a decision - `builtin` or `implemented` would do. And
+# nothing reads these rows at run time; they exist to be checked.
+
+{relation name:primitive}
+{column id:primitive.word relation:primitive seq:1 name:word}
+
+{primitive word:actual}
+{primitive word:add}
+{primitive word:argument}
+{primitive word:binding}
+{primitive word:clause}
+{primitive word:column}
+{primitive word:command}
+{primitive word:compare}
+{primitive word:execute}
+{primitive word:expected}
+{primitive word:file}
+{primitive word:game}
+{primitive word:id}
+{primitive word:input}
+{primitive word:into}
+{primitive word:load}
+{primitive word:name}
+{primitive word:of}
+{primitive word:reference}
+{primitive word:relation}
+{primitive word:remove}
+{primitive word:report}
+{primitive word:require}
+{primitive word:role}
+{primitive word:rule}
+{primitive word:script}
+{primitive word:seq}
+{primitive word:state}
+{primitive word:test}
+{primitive word:this}
+{primitive word:title}
+{primitive word:to}
+{primitive word:value}
+{primitive word:with}

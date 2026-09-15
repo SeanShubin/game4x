@@ -1,0 +1,35 @@
+# The script's own vocabulary, declared the way the game's is.
+#
+# **Declaring this does not make the engine stop implementing it.** `{relation name:load}` says a
+# `load` row has a `file` and an `into`; it does not say what loading *is*. That stays a branch in
+# `src/script.rs`, and `engine.4x` is where every such branch is listed.
+#
+# **What it does buy** is that a step is checked like any other row: a misspelt column is refused
+# by the structure rather than by a special case in Rust, and the five step relations are readable
+# without opening the code.
+#
+# **The bootstrap, said rather than hidden.** `test.4x` loads this file, so the `load` step that
+# fetches it runs before its own description is available. **That is the one place the data cannot
+# describe itself** - the step that fetches the description. Every other step is validated before
+# it runs.
+
+{relation name:test}
+{column id:test.name relation:test seq:1 name:name}
+
+{relation name:load}
+{column id:load.seq relation:load seq:1 name:seq}
+{column id:load.file relation:load seq:2 name:file}
+{column id:load.into relation:load seq:3 name:into}
+
+{relation name:execute}
+{column id:execute.seq relation:execute seq:1 name:seq}
+{column id:execute.command relation:execute seq:2 name:command}
+
+{relation name:compare}
+{column id:compare.seq relation:compare seq:1 name:seq}
+{column id:compare.this relation:compare seq:2 name:this}
+{column id:compare.with relation:compare seq:3 name:with}
+
+{relation name:report}
+{column id:report.seq relation:report seq:1 name:seq}
+{column id:report.title relation:report seq:2 name:title}
