@@ -14,8 +14,16 @@ use common::{command, rules, world};
 /// The scout is at 1, and 1 is adjacent to 2.
 #[test]
 fn the_scout_moves_to_a_place_that_is_adjacent() {
-    let after = run(&world(), &rules(), &command("{move it:scout from:1 to:2}"))
-        .expect("1 is adjacent to 2 and the scout is at 1");
+    // **`had` and `left` are the fuel `move` burns**, and they are in the command because the
+    // engine cannot read the scout's fuel out of the world - `tests/counting.rs` is where that is
+    // under test. **Adding a mechanic to a rule changed the form of every command that fires it
+    // and succeeds**; the two refusals below did not change, because neither reaches that far.
+    let after = run(
+        &world(),
+        &rules(),
+        &command("{move it:scout from:1 to:2 had:3 left:2}"),
+    )
+    .expect("1 is adjacent to 2, the scout is at 1, and it has fuel");
 
     // **Where the scout is, and not where everything is.** Written the second way first, and a
     // second vehicle in `data/world.4x` failed it - the assertion said *the scout is at 2 and

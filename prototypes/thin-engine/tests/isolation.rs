@@ -127,8 +127,8 @@ fn no_relation_the_data_names_appears_in_code_that_runs() {
     // to look at what it added. It fired on `found`, `settlement` and `vacant` together.
     assert_eq!(
         nouns.len(),
-        7,
-        "seven nouns the game has - at, adjacent, territory, move, found, settlement, vacant;          this found {nouns:?}"
+        9,
+        "nine nouns the game has - at, adjacent, territory, move, found, settlement, vacant,          fuel, less; this found {nouns:?}"
     );
 
     let mut looked = 0;
@@ -158,5 +158,5 @@ fn no_relation_the_data_names_appears_in_code_that_runs() {
             looked += 1;
         }
     }
-    assert_eq!(looked, 28, "seven nouns over four modules");
+    assert_eq!(looked, 36, "nine nouns over four modules");
 }

@@ -18,19 +18,20 @@ that reaches Sean as a proposal through the specification lane, not from this di
 
 ## The answer
 
-**Yes for two mechanics, and the engine did not grow to take the second.** `move` and `found` both
-run from data, with neither word anywhere in the code, and `src/` is byte-identical across the
-second one. **The cost did not vanish; it moved into the data**, and where it went is the reading
-`C-114` asked for. Measured on 2026-09-14:
+**Yes so far, and the engine has not grown once.** Two mechanics and three concepts have gone into
+`data/`, and `src/` is byte-identical across all three - the same 232 lines it was when it ran one
+rule. **The cost did not vanish; it went into the data every time**, and where it goes is the
+reading `C-114` asked for. Measured on 2026-09-14:
 
-|                                             |                                                              |
-| ------------------------------------------- | ------------------------------------------------------------ |
-| Code that runs, in `src/`                   | **232 lines** - notation 77, store 65, engine 87, `lib.rs` 3 |
-| Mechanics it runs                           | **2** - `move` and `found`, neither named in the code        |
-| The same engine in `crates/game-model/src/` | **1662 lines**, of which `rules.rs` is 636                   |
-| Rows of data                                | **22** - ten of world, twelve of rule                        |
-| Game nouns in code that runs                | **0**, checked against a list read out of `data/`            |
-| Tests                                       | **19**, all passing                                          |
+|                                                        |                                                              |
+| ------------------------------------------------------ | ------------------------------------------------------------ |
+| Code that runs, in `src/`                              | **232 lines** - notation 77, store 65, engine 87, `lib.rs` 3 |
+| Mechanics it runs                                      | **2** - `move` and `found`, neither named in the code        |
+| The same engine in `crates/game-model/src/`            | **1662 lines**, of which `rules.rs` is 636                   |
+| Rows of data                                           | **31** - fifteen of world, sixteen of rule                   |
+| Of those, rows standing in for a word the engine lacks | **6 of the world's 15** - three `vacant`, three `less`       |
+| Game nouns in code that runs                           | **0**, checked against a list read out of `data/`            |
+| Tests                                                  | **22**, all passing                                          |
 
 **The two numbers are not comparable and the table says so by being read carefully.** 232 lines run
 two mechanics and 1662 run twenty-six, so the honest reading is not *seven times smaller*. It is
@@ -41,6 +42,11 @@ now tested rather than asserted: `found` was added and `git diff` over `src/` is
 one was not a coincidence of the engine having been written around it - which is the specific thing
 one mechanic could not rule out, because `move` and the engine were written in the same hour.
 
+**And the row under it is the one to read beside it.** Six of the world's fifteen rows are not facts
+about the game anybody would want to write down. They are there because the engine has no word for
+*not* and no word for *minus*. **The engine stayed at 232 lines, and those six rows are where the
+lines it did not grow went.**
+
 **What is established is narrower and is the part that was in doubt**: a rule can be *stated* as
 rows - what it needs, what it drops, what it adds - and executed without the engine knowing what
 any of it means. The engine's whole vocabulary is four words, `rule`, `needs`, `drops` and `adds`,
@@ -48,30 +54,32 @@ and they are about how a rule is written rather than about what the game is.
 
 ## The three readings, which is what `C-114` asked for
 
-| Does it explode?       | At two mechanics                                                                                                                                                                                                           |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **The code**           | **No, and the second mechanic is what says so.** 232 lines, unchanged by `found`                                                                                                                                           |
-| **The data structure** | **No, and this is the one that surprised.** There is one structure - a row - and rules are written in it too. `{needs rule:move relation:at thing:$it place:$from}` is the same shape as `{at thing:scout place:1}`        |
-| **The data**           | **Yes, a little, and this is its first real reading.** The engine has no word for *not*, so an absence is written as a fact - `{vacant place:N}`, one row per place. Three of the world's ten rows say what is *not* there |
+| Does it explode?       | At three concepts                                                                                                                                                                                                   |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **The code**           | **No, three times.** 232 lines, unchanged by `found`, by *a place must exist*, and by fuel                                                                                                                          |
+| **The data structure** | **No, and this is the one that surprised.** There is one structure - a row - and rules are written in it too. `{needs rule:move relation:at thing:$it place:$from}` is the same shape as `{at thing:scout place:1}` |
+| **The data**           | **Yes, and it is the only one that has.** Six of fifteen world rows exist because the engine cannot say *not* or *minus* - `{vacant place:N}` per place, `{less of:N is:N-1}` per amount                            |
 
-**The second mechanic is where the instrument started reading.** The code stayed at 232 lines,
-which is what the first row above could not say on its own - and the third row moved off *unknown*
-for the first time, in the direction the first two did not. **Two readings are still not a trend**,
-and the third and fourth concepts are what would make them one.
+**The instrument has separated its three readings, which is what it was built to do.** Two have
+stayed flat across three concepts and the third has not - and the third is the one nobody was
+watching, because `C-114` named all three and the code was the one in doubt. **A thin engine puts
+its cost in the data, and the mechanism is that it has no word for things**, so the data carries a
+row where a word would have been.
 
 **And one thing is answered that the question did not ask.** The main tree's `move` is a method
 whose failure is a `Rejection` variant; here a refusal is *the world does not have this row*, named
 back to the caller as the row itself. `{adjacent from:1 to:3}` **is** the error message. Every
 refusal this engine has is one of five, none of them about the game.
 
-## The six tests of the game, which are the whole of it
+## The nine tests of the game, which are the whole of it
 
 Three territories, two adjacencies, two vehicles - `data/world.4x`. Two rules - `data/rules.4x`.
 
 `tests/moving.rs`:
 
-- `the_scout_moves_to_a_place_that_is_adjacent` - `{move it:scout from:1 to:2}` succeeds, and the
-  scout is at 2 and nowhere else
+- `the_scout_moves_to_a_place_that_is_adjacent` - `{move it:scout from:1 to:2 had:3 left:2}`
+  succeeds, and the scout is at 2 and nowhere else. **`had` and `left` arrived with fuel** - see
+  *the wall is not arithmetic* below, which is what they are evidence of
 - `the_scout_does_not_move_to_a_place_that_is_not_adjacent` - `{move it:scout from:1 to:3}` is
   refused, naming `{adjacent from:1 to:3}`
 - `a_place_that_does_not_exist_and_a_place_that_is_not_adjacent_refuse_differently` -
@@ -89,10 +97,19 @@ Three territories, two adjacencies, two vehicles - `data/world.4x`. Two rules - 
   foundings at one place there is one settlement there*. What makes that true is the data's
   business, and this is what says something has.
 
+`tests/counting.rs`:
+
+- `moving_burns_one_fuel` - the scout has three fuel and arrives with two
+- `a_vehicle_with_no_fuel_cannot_move` - the pioneer has none, and the refusal names `{less is:0
+  of:0}`, the row nobody wrote
+- `a_command_that_misstates_the_fuel_is_refused_on_both_halves` - claiming fuel the world does not
+  state is refused by the world, and claiming to arrive with what you left with is refused by the
+  table that says what paying is
+
 `tests/isolation.rs` holds the two checks that are about the engine rather than the game - that it
 reads no file and depends on no crate, and that it names no noun the game has.
 
-**No resources, no turns, no capacity, no combat**, because none of the six needs one. Every
+**No turns, no capacity, no combat, and one resource only because moving spends it.** Every
 absence below is a concept not yet added rather than a thing left undone.
 
 ## Why the notation is re-implemented, which looks like a defect and is not
@@ -114,9 +131,11 @@ The isolation is checked rather than promised, by `tests/isolation.rs`:
 
 ## The three things that look like defects and are the design
 
-**Which refusal a reader sees is chosen by the order of rows in a data file.** `move` needs three
+**Which refusal a reader sees is chosen by the order of rows in a data file.** `move` needs five
 things and `data/rules.4x` states the destination-is-a-place clause before the adjacency one, so
 moving to 9 says *there is no territory 9* rather than *1 is not next to 9*, and both are true.
+The fuel clauses come last for the same reason: *you are not next to that* is a better answer than
+*you cannot afford it* when both are true.
 **The message is the data's to choose and not the engine's**, which is the same property as a
 refusal being a row: the engine has nothing to say about `move` and so cannot rank its reasons.
 
@@ -153,10 +172,9 @@ still untested**, because no mechanic has been added yet. That is concept 2.
 
 ## 2. A second rule - `src/` did not change, and the data paid instead
 
-**Cost: zero lines of `src/`, and one row of world per territory.** `found` is the second
-mechanic, and it was
-chosen for what the game wants rather than for what the engine can do: **a settlement is founded
-where the founder is, on a place that is a place, and where there is not already one.**
+**Cost: zero lines of `src/`, and one row of world per territory.** `found` is the second mechanic,
+and it was chosen for what the game wants rather than for what the engine can do: **a settlement is
+founded where the founder is, on a place that is a place, and where there is not already one.**
 
 **Two of those three clauses cost nothing.** They are `needs` rows like `move`'s, and they worked
 first time:
@@ -203,19 +221,108 @@ about the scout and the assertion asked about the world - **the instrument answe
 question than the one asked**, which `CLAUDE.md` names, found the ordinary way rather than by a
 check.
 
-## What comes next, in order
+## 3. A number - `src/` did not change, and the prediction above it was wrong
 
-Each is one concept, and each has a test that fails before it:
+**Cost: zero lines of `src/`, and one row of world per amount.** Moving burns a fuel. The engine has
+no arithmetic - `1` and `scout` are the same sort of thing to `src/notation.rs` - so subtraction is
+stated the way the negative was, as rows:
 
-1. **A number** - everything is a string today, and the first rule that counts anything forces
-   the question `src/notation.rs` records as deliberately open
-2. **A turn** - rules that fire without a command, which is where `block.4x`'s firing order lives
-   in the main tree and lives nowhere here
+```text
+{less of:3 is:2}
+{less of:2 is:1}
+{less of:1 is:0}
+```
 
-**A number is where this is most likely to fail**, and saying so now is the point of writing the
-order down. A negative could be pushed into the data because an absence is a fact somebody can
-state; **a sum is not a fact anybody can state in advance**, and there is no row that stands in for
-addition.
+**This file predicted that this concept would fail, and it did not.** Written one concept earlier,
+at `cbf8f92`, and deleted by the edit that recorded the outcome - so the words are quoted here
+rather than pointed at:
+
+> **a sum is not a fact anybody can state in advance**, and there is no row that stands in for
+> addition
+
+**It was wrong, and the way it was wrong is the useful part.** Over a bounded range a sum is exactly a fact anybody can state in
+advance - `{less of:3 is:2}` is the row that stands in for subtraction - and what the prediction had
+confused was *unbounded* with *hard*. **Three amounts is three rows; an amount with no ceiling is
+the case that has no table**, and that distinction is the whole of it.
+
+**The floor is a row that is not there.** Nothing states what one less than zero is, so a vehicle at
+zero has no move available. **That is the second time an absence has stood in for a word the engine
+lacks**, after `vacant`, and the prototype found it both times by trying to state a rule rather than
+by looking for it.
+
+**The count is two and not three, and the one left out is worth naming.** Moving to territory 9 is
+also refused by a row that is not there - but *no such place* is what the absence of a place row
+honestly means, and nothing is standing in for anything. `vacant` and the missing `{less of:0 ...}`
+are different: **both are rows written so that an absence can be asked about**, which is the thing
+the engine has no word for.
+
+## The wall is not arithmetic, it is reading the world
+
+**`$name` is substitution and not search.** The engine can put a value the command gave it into a
+pattern; it cannot go the other way and take a value out of a row. So it cannot read the scout's
+fuel, and **the command has to carry what the world already knows**:
+
+```text
+{move it:scout from:1 to:2 had:3 left:2}
+```
+
+**That is sound and it is not acceptable.** Sound, because neither half can be lied about: an
+overstated `had` is not a `fuel` row the world has, and a `left` that is not one less is not a
+`less` row anybody wrote - `a_command_that_misstates_the_fuel_is_refused_on_both_halves` is that
+test, and it fails in both directions. Not acceptable, because a player should not have to state
+their own fuel and do the subtraction, and **the day a rule needs a value nobody can state in
+advance, this stops being ugly and starts being impossible.**
+
+**So the concept the engine is actually missing has a name, and it is not arithmetic.** It is a
+hole that *matches* rather than substitutes - which this file has called a search since its first
+commit, and named as the thing that would have to answer *which one, when several match*. Fuel is
+the first mechanic to want one, and it got away without it because a vehicle has exactly one fuel
+row.
+
+**And adding a mechanic to a rule changed the form of every command that fires it and succeeds.**
+`{move it:scout from:1 to:2}` became `{move it:scout from:1 to:2 had:3 left:2}`. The two refusal
+tests did not change, because neither reaches the fuel clauses - **so the coupling is between a
+command and the clauses a successful run actually gets to**, which is worse than it sounds: it is
+invisible until the command starts working.
+
+## What the specification already says about this, which nobody told the prototype
+
+**The stand-in for a negative is a construction `spec/` has already reasoned through, and arriving
+at it from the other end is evidence rather than a coincidence.** This directory was built knowing
+nothing of the game, and `vacant` was reached by trying to state `found` and failing.
+
+`spec/invariants.md` states the rule:
+
+> **A rule may ask whether something is absent only where what would hold it declares a limit for
+> it.** Where a limit is declared there is free capacity to record, and *none is present* is read
+> from it rather than measured.
+
+And [`docs/designing-rules.md`](../../docs/designing-rules.md) names the construction and the
+reason:
+
+> **A place bounded by a stated capacity can be zero-tested for free.** The standard
+> complementary-place construction turns *is it empty* into *is the room full*, with no inhibitor
+> arc and nothing lost.
+
+**`{vacant place:N}` is that complementary place, and `{less of:N is:N-1}` is the same trick applied
+to a counter.** Both work for the same reason and **both stop working at the same place**: where the
+thing is bounded, the absence is a row, and where it is not, there is no row to write. So the
+prototype inherits the cliff the specification already identified rather than escaping it - and
+`docs/designing-rules.md` says which kinds fall off it.
+
+**This is corroboration and not a decision.** Nothing here is normative, and that two independent
+routes reached one construction is a fact about the construction, not permission to write it
+anywhere.
+
+## What comes next
+
+**A turn** - rules that fire without a command, which is where `block.4x`'s firing order lives in
+the main tree and lives nowhere here. One concept, with a test that fails before it.
+
+**And the one after it is now named rather than guessed at.** A rule that fires without a command
+has no command to carry `had` and `left`, **so a turn cannot be built the way fuel was** - the
+engine will have to read a value out of the world, which is the search this concept found the edge
+of. **That is the first concept with a real chance of moving the 232.**
 
 ## Running it
 
@@ -237,7 +344,12 @@ It is not in the workspace, so the root `cargo test` does not reach it.
 | A place takes one settlement  | the `vacant` clause absent                  | the second founding succeeded, silently                            |
 | A place takes one settlement  | the `drops vacant` row removed              | the second founding succeeded, silently                            |
 | Founding needs a free place   | `{vacant place:1}` removed from the world   | the *first* founding was refused                                   |
+| Moving burns a fuel           | `{less of:3 is:2}` removed                  | the scout could not move at all                                    |
+| Moving burns a fuel           | the `drops fuel` row removed                | the scout kept three fuel and gained two                           |
+| Zero fuel is a floor          | `{less of:0 is:0}` added to the world       | a vehicle with no fuel moved                                       |
 
-**The last two are the pair worth having.** A rule that needs a row and does not drop it fires for
-ever, and a rule that drops a row nothing states never fires at all - **the same clause missing from
-either side, failing in opposite directions.**
+**The pairs are what make these worth having.** A rule that needs a row and does not drop it fires
+for ever, and a rule that drops a row nothing states never fires at all - **the same clause missing
+from either side, failing in opposite directions.** The last row is the other shape: a row *added*
+to the world rather than taken from it, because the floor here is an absence and an absence is
+poisoned by filling it in.

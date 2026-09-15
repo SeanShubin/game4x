@@ -13,8 +13,22 @@
 # says something is there, and a place holding a thing is a place. A second clause would be a
 # row that can never be the one to fail.
 
+# **Burning one fuel, stated as two rows because the engine cannot subtract.** `$had` and `$left`
+# are bound by the command and checked against the world: `fuel` says the amount is really what was
+# claimed, and `less` says `$left` really is one less than it. Neither can be got at any other way -
+# `$name` is substitution and not search, so the engine cannot read the scout's fuel for itself.
+#
+# **After the adjacency clauses on purpose.** The order of `needs` rows chooses which refusal a
+# reader sees, and *you are not next to that* is a better answer than *you cannot afford it* when
+# both are true.
+{needs rule:move relation:fuel thing:$it amount:$had}
+{needs rule:move relation:less of:$had is:$left}
+
 {drops rule:move relation:at thing:$it place:$from}
 {adds rule:move relation:at thing:$it place:$to}
+
+{drops rule:move relation:fuel thing:$it amount:$had}
+{adds rule:move relation:fuel thing:$it amount:$left}
 
 # The second rule, and the one that tested whether the engine grows when the game does.
 

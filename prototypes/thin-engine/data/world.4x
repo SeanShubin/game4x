@@ -24,3 +24,18 @@
 {vacant place:1}
 {vacant place:2}
 {vacant place:3}
+
+# **Fuel, and what one less than each amount is.** The engine has no arithmetic - every value is a
+# string, and `3` and `scout` are the same sort of thing to `src/notation.rs`. So subtraction is
+# stated the way the negative was: as rows.
+{fuel thing:scout amount:3}
+{fuel thing:pioneer amount:0}
+
+# **The floor is the row that is not here.** There is no `{less of:0 is:...}`, so a vehicle at zero
+# has no move available - the same trick as `vacant`, where an absence does the work a word would.
+#
+# **And this is the row count the third reading is about**: a world whose amounts run to N states N
+# of these, once, for every rule that ever subtracts one.
+{less of:3 is:2}
+{less of:2 is:1}
+{less of:1 is:0}
