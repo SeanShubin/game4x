@@ -99,6 +99,41 @@ the compliment.**
 correction cost three sentences. **It is the rule applied to praise rather than to error**, which is
 the harder direction and the one nobody checks.
 
+## A third case, and it is the one where the count moved twice
+
+**This lane counted six instances of a narrower class** - *a check whose subject is text, run over a
+file that also talks about the subject* - **and told the code lane five.** They flagged one line of
+`CLAUDE.md` they could not tie to an incident and **declined to count it either way** rather than
+guess.
+
+**It is real, and it is `1875e5cb`, 2026-09-12.** *The unchecked-constant arm searched this file's
+own text for `cost::NAME` - and a comment satisfies that.* The comment explaining why two constants
+were **deleted** names them both, so restoring them would have satisfied the arm that exists to
+catch exactly that. **Distinct from the `cited` field reader**, which is the *sentence about a
+citation* in the same list.
+
+**So the count went five, then unverified, then six** - and it moved because two lanes each declined
+to state a number they had not derived. **Neither of the corrections came from a check.**
+
+## What that sweep found that changes the conclusion rather than the count
+
+**The code lane swept its own column and found four sites with three different carriers:**
+
+```
+cited() in tools/outbox                      drop the double-backticked span
+tools/outbox/tests/architecture.rs           exclude the file that writes the literal
+tools/hooks/tests/no_pager.rs                count comments deliberately, accept over-strictness
+crates/game-console/tests/first_release.rs   no carrier
+```
+
+**Three forms, and their argument is better than *the evidence is thin*:** no single mechanism
+produces all three, **because what counts as *shown rather than said* is different in markdown, in
+Rust source and in a shell script.** An instrument would have to pick one and be wrong in the other
+two.
+
+**That turns *not yet an instrument* into *not an instrument*,** and it is a reason rather than a
+count.
+
 ## The general form, which is the code lane's and better than this lane's
 
 > **Naming a gap is how it closes, and silence about a gap reads exactly like not having one.**
