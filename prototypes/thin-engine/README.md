@@ -423,9 +423,9 @@ by deleting columns, one by finding a reader.
 
 ## What may be fired is computed, not listed
 
-**`spec/invariants.md` states it and nothing implemented it**: *the player's recipes are offered
-wherever their inputs are present, to take or to leave*, and *what may be chosen is whatever the
-game holds, and the offering is derived rather than listed*.
+`spec/invariants.md` states it and nothing implemented it. Of a recipe: *The player's are offered
+wherever their inputs are present, to take or to leave.* And of a choice: *What may be chosen is
+whatever the game holds, and the offering is derived rather than listed.*
 
 **Sean, 2026-09-15**, on why it matters more than a tidy reference: *we won't want executing an
 invalid command to even be possible in the user interface.*
@@ -476,8 +476,9 @@ and it does it silently, by refusing rather than by being wrong.
 it.** `spec/console.md`:
 
 > **What a thing contains is a map from a description to a quantity.** A description is a kind and
-> **every trait of that thing** [...] **No trait of the thing may be left out** - `{citizen
-> defending:1} -> 8` and `{citizen defending:0} -> 6`, never `{citizen} -> 14`.
+> **every trait of that thing**; a trait **of its kind** is not part of one, because naming the kind
+> has already said it. **No trait of the thing may be left out** - `{citizen defending:1} -> 8` and
+> `{citizen defending:0} -> 6`, never `{citizen} -> 14`.
 
 **So the key is not a subset anybody chooses. It is every column but the quantity, by rule.**
 
@@ -609,9 +610,12 @@ A relation carrying a column named `quantity` is counted and its key is the othe
 
 ## Sean's *no id and a quantity* is what decides it, and it decides for B
 
-**They are not two properties. They are one slot** - how a relation individuates its rows - and
-`spec/console.md` says so: *a thing carrying an `id` has a description no other thing shares, so its
-quantity is always one.* **A thing is counted or it is identified.**
+**They are not two properties. They are one slot** - how a relation individuates its rows. The
+specification says it of a thing with an `id`, in `spec/console.md`: *A thing carrying an `id` has a
+description no other thing shares, so **its quantity is always one**.*
+
+This lane's reading of that sentence, which is not the sentence: a thing is counted or it is
+identified.
 
 **And `id` already occupies that slot by name.** `const ID: &str = "id"` is in both `schema.rs` and
 `engine.rs`, and every one of the sixteen relations is keyed by a first column called `id`. **So A

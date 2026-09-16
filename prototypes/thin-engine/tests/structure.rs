@@ -181,9 +181,9 @@ fn the_helper_loads_what_the_script_loads() {
 
 /// **What the player may fire is derived from the world, not listed anywhere.**
 ///
-/// `spec/invariants.md`: *the player's recipes are offered wherever their inputs are present, to
-/// take or to leave*, and *what may be chosen is whatever the game holds, and the offering is
-/// derived rather than listed*.
+/// `spec/invariants.md`, of a recipe: *The player's are offered wherever their inputs are present,
+/// to take or to leave.* And of a choice: *What may be chosen is whatever the game holds, and the
+/// offering is derived rather than listed.*
 ///
 /// **Sean, 2026-09-15**, on why this matters more than a reference being tidy: *we won't want
 /// executing an invalid command to even be possible in the user interface.*

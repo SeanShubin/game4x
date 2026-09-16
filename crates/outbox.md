@@ -104,7 +104,8 @@ is. It just happens to be true based on the data.*
 
 **Sean's line is what makes this a gap rather than a preference.** A `-> 1` that could be `-> 2`
 under other data has to be written; one that can never be anything else is noise. **So the notation
-needs to know which entries are structurally one**, and `spec/data/` can say that about two kinds.
+needs to know which entries are structurally one**, and the game's data can say that about two
+kinds and no more.
 
 **`trait:id` is carried by `territory` and `orbit`, and by nothing else** - the whole of the declared
 identity in the game's model. Measured over the committed dump:
@@ -117,7 +118,7 @@ identity in the game's model. Measured over the committed dump:
 
 **Two of them look identified and are not declared so.** An `adjacency` is a fact about a pair - 30
 entries, `from` and `to`, never twice - and a `deposit` is one per territory per resource - 34
-entries. **64 of the 79 are those two.** Nothing in `spec/data/` says either pair is a key, and
+entries. **64 of the 79 are those two.** Nothing in the game's data declares either pair a key, and
 **there is no way to say it**: `carries` names a kind's traits and no relation names a key.
 
 **This lane read those two as identified off the data and was wrong to**, which is the error Sean's

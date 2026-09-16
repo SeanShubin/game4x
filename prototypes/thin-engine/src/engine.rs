@@ -514,8 +514,8 @@ fn row_of(
 /// inputs. **This is the same shape [`offered`] gives back**, so what the engine says a player may
 /// do is what the player writes.
 ///
-/// **`repeat` is how many times it fires** - `spec/console.md`: *a command may carry a `repeat`,
-/// which is how many times it fires, and a command without one fires once.*
+/// **`repeat` is how many times it fires** - `spec/console.md`: *A command may carry a `repeat`,
+/// which is how many times it fires.* And: *a command without one fires once.*
 pub fn fire(game: &Game, command: &Row, repeat: usize) -> Result<Game, Refused> {
     let Some(rule) = game
         .of_relation(RULE)
@@ -567,9 +567,9 @@ pub fn fire(game: &Game, command: &Row, repeat: usize) -> Result<Game, Refused> 
 
 /// Every command the player could fire right now, as rows in the friendly command form.
 ///
-/// **`spec/invariants.md`**: *the player's recipes are offered wherever their inputs are present,
-/// to take or to leave*, and *what may be chosen is whatever the game holds, and the offering is
-/// derived rather than listed*. **This is that sentence, run.**
+/// `spec/invariants.md`, of a recipe: *The player's are offered wherever their inputs are present,
+/// to take or to leave.* And of a choice: *What may be chosen is whatever the game holds, and the
+/// offering is derived rather than listed.* **This is that sentence, run.**
 ///
 /// **Offerable means would not be refused**, which is the strongest reading and the cheapest: a
 /// candidate is bound and fired, and kept if firing succeeds. **No second copy of what legal
