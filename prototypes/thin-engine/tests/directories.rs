@@ -17,14 +17,49 @@ use common::{mine, rows};
 use thin_engine::notation::{Row, write};
 use thin_engine::schema::Schema;
 
-/// The eight files, and which store each belongs to.
-const FILES: [(&str, bool); 5] = [
-    ("schema.4x", true),
-    ("engine.4x", true),
-    ("rules.4x", true),
-    ("script.4x", false),
-    ("test.4x", false),
-];
+/// Every file in a directory: the shared ones, then one per test.
+///
+/// **Read rather than listed.** Sean, 2026-09-15: *I intend to have one test per file*, so a list
+/// here would be a second place to remember - and `data/{d}/tests/` holding only tests is what
+/// makes reading it safe.
+/// Every row in `data/foundation`, so a count below is derived rather than written down.
+///
+/// **Adding a test must not mean editing a number.** Sean, 2026-09-15: *I intend to have one test
+/// per file*, and a total written by hand is a line every new test would have to move. **The floor
+/// is what keeps it honest** - a derived total compared against itself passes over an empty
+/// directory, which is `CLAUDE.md`'s count over nothing.
+fn every_row() -> usize {
+    let total: usize = files()
+        .iter()
+        .map(|(file, _)| rows(&format!("data/foundation/{file}")).len())
+        .sum();
+    assert!(total > 150, "only {total} rows, so a total proves nothing");
+    total
+}
+
+fn files() -> Vec<(String, bool)> {
+    let mut all: Vec<(String, bool)> = vec![
+        ("schema.4x".to_string(), true),
+        ("engine.4x".to_string(), true),
+        ("rules.4x".to_string(), true),
+        ("script.4x".to_string(), false),
+        ("setup.4x".to_string(), false),
+    ];
+    let mut tests: Vec<String> =
+        std::fs::read_dir(mine().join("data").join("foundation").join("tests"))
+            .expect("data/foundation/tests")
+            .filter_map(|it| it.ok())
+            .filter_map(|it| it.file_name().to_str().map(str::to_string))
+            .filter(|name| name.ends_with(".4x"))
+            .collect();
+    tests.sort();
+    all.extend(
+        tests
+            .into_iter()
+            .map(|name| (format!("tests/{name}"), false)),
+    );
+    all
+}
 
 fn store(of_game: bool, from: &str) -> Vec<Row> {
     // **A merged test file spans two stores**, so which one a row belongs to is a fact about where
@@ -32,8 +67,8 @@ fn store(of_game: bool, from: &str) -> Vec<Row> {
     // **Deduplicated**, because `then` repeats `given` and two rows named `scout` would take away
     // every thing's name.
     let mut all: Vec<Row> = Vec::new();
-    for (file, game) in FILES {
-        let these = of(from, file, game);
+    for (file, game) in files() {
+        let these = of(from, &file, game);
         let mine = friendly::in_a_section(&these);
         for (row, is_game) in these.into_iter().zip(mine) {
             if (game || is_game) == of_game && !all.contains(&row) {
@@ -72,8 +107,8 @@ fn the_foundation_is_what_the_friendly_source_converts_to() {
     let mut checked = 0;
     let of_game = Names::of(&store(true, "friendly"));
     let of_script = Names::of(&store(false, "friendly"));
-    for (file, game) in FILES {
-        let friendly = of("friendly", file, game);
+    for (file, game) in files() {
+        let friendly = of("friendly", &file, game);
         let mine = friendly::in_a_section(&friendly);
         let foundation = rows(&format!("data/foundation/{file}"));
         assert_eq!(
@@ -104,7 +139,8 @@ fn the_foundation_is_what_the_friendly_source_converts_to() {
         }
     }
     assert_eq!(
-        checked, 187,
+        checked,
+        every_row(),
         "every row of the friendly source was converted"
     );
 }
@@ -116,8 +152,8 @@ fn the_friendly_source_is_what_the_foundation_renders_to() {
     let mut checked = 0;
     let of_game = Names::of(&store(true, "foundation"));
     let of_script = Names::of(&store(false, "foundation"));
-    for (file, game) in FILES {
-        let friendly = of("friendly", file, game);
+    for (file, game) in files() {
+        let friendly = of("friendly", &file, game);
         let foundation = rows(&format!("data/foundation/{file}"));
         let mine = friendly::in_a_section(&foundation);
         for (at, row) in foundation.iter().enumerate() {
@@ -142,7 +178,11 @@ fn the_friendly_source_is_what_the_foundation_renders_to() {
             checked += 1;
         }
     }
-    assert_eq!(checked, 187, "every row of the foundation was rendered");
+    assert_eq!(
+        checked,
+        every_row(),
+        "every row of the foundation was rendered"
+    );
 }
 
 /// **Both directories hold the same eight files**, because nothing is omitted from either.
@@ -156,7 +196,11 @@ fn neither_directory_omits_anything() {
             .filter(|name| name.ends_with(".4x"))
             .collect();
         found.sort();
-        let mut wanted: Vec<String> = FILES.iter().map(|(f, _)| f.to_string()).collect();
+        let mut wanted: Vec<String> = files()
+            .iter()
+            .map(|(f, _)| f.to_string())
+            .filter(|f| !f.starts_with("tests/"))
+            .collect();
         wanted.sort();
         assert_eq!(
             found, wanted,

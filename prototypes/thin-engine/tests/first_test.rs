@@ -1,8 +1,11 @@
-//! The first test, which is `temporary-notes/first-test.md` - and the test itself is data.
+//! The tests are data, and this runs every one of them.
 //!
-//! **`data/test.4x` is the test.** It sets the schema up, initializes the state from `given.4x`,
-//! executes the command in `when.4x`, compares what that produced with `expected.4x`, and
-//! composes a report. Nothing in this file says any of that; it reads `test.4x` and runs it.
+//! **`data/foundation/tests/` holds one test per file and nothing else.** Each states its name and
+//! its three sections; `setup.4x` says what every test reads before it runs. Sean, 2026-09-15:
+//! *the supporting infrastructure should eat up no more than one line per test file*, and that
+//! line is `{test name:...}`.
+//!
+//! **Adding a test is adding a file.** Nothing here names one, so nothing here changes.
 //!
 //! **What is left in Rust is the two things that cannot be data**: handing the engine a way to
 //! read a file, and asserting that the report says what it should.
@@ -13,6 +16,7 @@ use thin_engine::script::{Files, Report, run_test};
 
 mod common;
 use common::{mine, rows};
+use thin_engine::notation::Row;
 
 /// The directory, as something the engine can ask for a file by name.
 ///
@@ -30,23 +34,48 @@ fn data() -> Directory {
     Directory(mine().join("data").join("foundation"))
 }
 
-fn report() -> Report {
-    run_test(&rows("data/foundation/test.4x"), &data()).unwrap_or_else(|why| panic!("{why}"))
+/// Every test file, by name, in the order the directory gives them sorted.
+fn every_test() -> Vec<String> {
+    let mut found: Vec<String> =
+        std::fs::read_dir(mine().join("data").join("foundation").join("tests"))
+            .expect("data/foundation/tests")
+            .filter_map(|it| it.ok())
+            .filter_map(|it| it.file_name().to_str().map(str::to_string))
+            .filter(|name| name.ends_with(".4x"))
+            .collect();
+    found.sort();
+    assert!(!found.is_empty(), "no tests, so passing means nothing");
+    found
 }
 
-/// **The whole of the first test: the engine gets from before to expected.**
+/// One test's rows: what every test loads, then the test itself.
+fn script_of(file: &str) -> Vec<Row> {
+    let mut all = rows("data/foundation/setup.4x");
+    all.extend(rows(&format!("data/foundation/tests/{file}")));
+    all
+}
+
+fn report_of(file: &str) -> Report {
+    run_test(&script_of(file), &data()).unwrap_or_else(|why| panic!("{file}: {why}"))
+}
+
+/// **Every test in the directory gets from its `given` to its `then`.**
+///
+/// **Nothing here names a test**, so adding one is adding a file and this does not change.
 #[test]
-fn the_engine_gets_from_before_to_expected() {
-    let report = report();
+fn every_test_gets_from_its_given_to_its_then() {
+    for file in every_test() {
+        let report = report_of(&file);
 
-    // **Printed as well as asserted**, so `cargo test -- --nocapture` shows the report the script
-    // composed rather than only the fact that it was right.
-    println!("{report}");
+        // **Printed as well as asserted**, so `cargo test -- --nocapture` shows the report the
+        // script composed rather than only the fact that it was right.
+        println!("{report}");
 
-    assert!(
-        report.same(),
-        "the state after the command is not the expected state:\n{report}"
-    );
+        assert!(
+            report.same(),
+            "{file}: the state after the command is not the `then` state:\n{report}"
+        );
+    }
 }
 
 /// **The report says what it compared**, so a green test cannot be one that compared nothing.
@@ -56,7 +85,7 @@ fn the_engine_gets_from_before_to_expected() {
 /// relations, find no differences, and report success in exactly the same words.
 #[test]
 fn the_report_says_which_relations_it_compared() {
-    let report = report();
+    let report = report_of("the-scout-moves-to-an-adjacent-place.4x");
 
     assert_eq!(
         report.compared,
@@ -64,16 +93,17 @@ fn the_report_says_which_relations_it_compared() {
         "all four of the game's relations are state, and all four are compared"
     );
     assert_eq!(report.test, "the-scout-moves-to-an-adjacent-place");
-    assert_eq!(report.title, "the-first-test");
 }
 
-/// **The report is composed and readable**, which is the step `test.4x` ends with.
+/// **The report is composed and readable**, and a test's name is its title.
+///
+/// **There were two names for one test** - `{test name:...}` and `{report title:...}` - and the
+/// second went with the `report` relation. A test that is one file needs one name.
 #[test]
 fn the_report_reads_as_a_report() {
     assert_eq!(
-        format!("{}", report()),
-        "the-first-test\n  \
-           test      the-scout-moves-to-an-adjacent-place\n  \
+        format!("{}", report_of("the-scout-moves-to-an-adjacent-place.4x")),
+        "the-scout-moves-to-an-adjacent-place\n  \
            compared  adjacency, residency, territory, thing\n  \
            result    as expected"
     );
@@ -91,7 +121,7 @@ fn the_report_reads_as_a_report() {
 fn a_state_that_is_not_expected_is_reported_as_both_rows() {
     // **The script is handed in, not read through `Files`** - the sections are in it, so the
     // poison is a row rather than a file. The last residency is the `then` one.
-    let mut script = rows("data/foundation/test.4x");
+    let mut script = script_of("the-scout-moves-to-an-adjacent-place.4x");
     let at = script
         .iter()
         .rposition(|row| row.relation == "residency")

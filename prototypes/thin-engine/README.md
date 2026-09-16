@@ -258,7 +258,46 @@ is two columns** - `scout@territory-1`, or whatever it would be - and that is re
 friendly side. It does not arise today and would arrive the first time a rule needs to refer to a
 residency rather than match one.
 
+## One test per file, and one line of it is not the test
+
+**Sean, 2026-09-15**: *I want the tests to be grouped together in a directory without non-tests.
+The supporting infrastructure should eat up no more than one line per test file. [...] I intend to
+have one test per file.*
+
+```text
+data/friendly/
+  schema.4x  engine.4x  rules.4x  script.4x  setup.4x
+  tests/
+    the-scout-crosses-two-borders.4x
+    the-scout-moves-to-an-adjacent-place.4x
+```
+
+**A test file is `{test name:...}` and three sections.** The four `{load ...}` rows moved to
+`setup.4x`, which every test reads before it runs; `{report title:...}` went entirely, because a
+test that is one file needs one name. **`report` and `title` left the engine with it**, and the
+vocabulary went 34 words to **32**.
+
+## Adding a test is adding a file, and that had to be made true
+
+**Nothing in `src/` or `tests/` names a test.** The harness reads `data/foundation/tests/`, and so
+do the round trip, the directory comparison and the mutation suite. **A second test was added to
+check that** - `the-scout-crosses-two-borders` - and the only things that broke were three
+hand-written row totals.
+
+**Those totals are derived now.** A number every new test has to move is a number that makes adding
+a test expensive, which is the opposite of what this reorganization is for. **Each carries a floor**,
+because a derived total compared against itself passes over an empty directory - `CLAUDE.md`'s count
+over nothing, which the same edit would otherwise have introduced.
+
+## A test's name is its file's name, and the mutation check is why
+
+**Dropping the one literal test name left `{test name:...}` read by nothing.** The mutation suite
+said so in the same run: both test rows became deletable. **The fix is a better check than the
+literal was** - `report.test` must equal the file's stem - so the name is load-bearing, the
+convention is enforced, and no new test adds a line anywhere.
+
 ## Given, when, then - one file, and the engine got smaller
+
 
 **Sean's sketch, 2026-09-15**, and it is what `data/friendly/test.4x` now is:
 
@@ -695,12 +734,12 @@ Measured on 2026-09-14:
 
 |                                              |                                                                                            |
 | -------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| Code that runs, in `src/`                    | **1173 lines** - notation 77, store 33, schema 281, engine 486, script 291                 |
-| Rows of data                                 | **187** across **five** files, holding **546** values                                      |
+| Code that runs, in `src/`                    | **1163 lines** - notation 77, store 33, schema 281, engine 486, script 281                 |
+| Rows of data                                 | **202** across **seven** files - five shared and **two tests** - holding **570** values    |
 | Of those, rows nothing reads                 | **1**, a binding on a clause nothing in the suite tries to violate                         |
-| Values nothing reads                         | **9 of 546** - two `seq`s, one id on a one-row relation, and one quantity                  |
+| Values nothing reads                         | **10 of 570** - two `seq`s, one id on a one-row relation, and a quantity per test          |
 | Rows that differ between before and expected | **1** - `{residency what:1 where:1 quantity:1}` becomes `… where:2 quantity:1`             |
-| Relations declared                           | **15** in the game and **7** in the script; fourteen keyed by an `id`, `residency` counted |
+| Relations declared                           | **15** in the game and **6** in the script; fourteen keyed by an `id`, `residency` counted |
 | Game nouns in code that runs                 | **0**, checked against a list read out of `data/`                                          |
 | Tests                                        | **41**, all passing                                                                        |
 

@@ -40,7 +40,6 @@ use crate::schema::{Malformed, Schema};
 
 const TEST: &str = "test";
 const LOAD: &str = "load";
-const REPORT: &str = "report";
 const STATE: &str = "state";
 
 const NAME: &str = "name";
@@ -53,7 +52,6 @@ const GIVEN: &str = "given";
 const WHEN: &str = "when";
 const THEN: &str = "then";
 
-const TITLE: &str = "title";
 const SCRIPT: &str = "script";
 const STORE: &str = "store";
 const ID: &str = "id";
@@ -135,7 +133,6 @@ struct Difference {
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Report {
     pub test: String,
-    pub title: String,
     /// The relations compared, which is every one the schema marks as state.
     pub compared: Vec<String>,
     /// Rows the expected state has and the actual one does not.
@@ -152,8 +149,7 @@ impl Report {
 
 impl std::fmt::Display for Report {
     fn fmt(&self, out: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        writeln!(out, "{}", self.title)?;
-        writeln!(out, "  test      {}", self.test)?;
+        writeln!(out, "{}", self.test)?;
         writeln!(out, "  compared  {}", self.compared.join(", "))?;
         if self.same() {
             write!(out, "  result    as expected")
@@ -219,7 +215,7 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
         }
         match (section, row.relation.as_str()) {
             (None, TEST) => named.push(row),
-            (None, LOAD | REPORT) => steps.push(row),
+            (None, LOAD) => steps.push(row),
             (Some(GIVEN), _) => given.push(row.clone()),
             (Some(WHEN), _) => when.push(row.clone()),
             (Some(THEN), _) => then.push(row.clone()),
@@ -237,11 +233,11 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
 
     let mut declared: Vec<Row> = Vec::new();
     let mut game: Vec<Row> = Vec::new();
-    let mut title: Option<String> = None;
-
+    // **Every step is a load now**, which is what dropping `execute`, `compare` and `report` left:
+    // a test says what to read, and its three sections say everything else.
     for step in &steps {
-        match step.relation.as_str() {
-            LOAD => {
+        {
+            {
                 let file = step.value(FILE).ok_or_else(|| Failed::BadStep {
                     row: crate::notation::write(step),
                 })?;
@@ -317,10 +313,6 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
                     }
                 }
             }
-            _ => {
-                fits(step, &declared)?;
-                title = step.value(TITLE).map(str::to_string);
-            }
         }
     }
 
@@ -340,7 +332,6 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
     let difference = compare(&actual, &then)?;
     Ok(Report {
         test: name,
-        title: title.unwrap_or_else(|| "(untitled)".to_string()),
         compared: difference.compared,
         missing: difference.missing,
         extra: difference.extra,

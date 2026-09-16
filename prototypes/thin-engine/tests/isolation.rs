@@ -115,7 +115,6 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
         "store",
         "test",
         "load",
-        "report",
     ];
 
     let mut nouns: BTreeSet<String> = BTreeSet::new();

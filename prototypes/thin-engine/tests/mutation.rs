@@ -40,18 +40,31 @@ use common::mine;
 /// Every file in `data/`, as text.
 fn originals() -> BTreeMap<String, String> {
     let mut all = BTreeMap::new();
-    for file in std::fs::read_dir(mine().join("data").join("foundation")).expect("data") {
-        let file = file.expect("a file").path();
-        if file.extension().map(|it| it != "4x").unwrap_or(true) {
-            continue;
+    // **The shared files, then the tests.** A test is one file in `tests/` and nothing else is,
+    // so both are read rather than listed - a list here would be a second place to remember.
+    let root = mine().join("data").join("foundation");
+    for at in [root.clone(), root.join("tests")] {
+        let under = at == root.join("tests");
+        for file in std::fs::read_dir(&at).expect("data") {
+            let file = file.expect("a file").path();
+            if file.extension().map(|it| it != "4x").unwrap_or(true) {
+                continue;
+            }
+            let name = file.file_name().and_then(|it| it.to_str()).expect("a name");
+            let name = if under {
+                format!("tests/{name}")
+            } else {
+                name.to_string()
+            };
+            all.insert(name, std::fs::read_to_string(&file).expect("a file"));
         }
-        let name = file.file_name().and_then(|it| it.to_str()).expect("a name");
-        all.insert(
-            name.to_string(),
-            std::fs::read_to_string(&file).expect("a file"),
-        );
     }
-    assert_eq!(all.len(), 5, "five data files: {:?}", all.keys());
+    // **Five shared files and at least one test**, rather than a number every new test would move.
+    // Sean, 2026-09-15: *I intend to have one test per file.*
+    let tests = all.keys().filter(|it| it.starts_with("tests/")).count();
+    assert_eq!(all.len() - tests, 5, "five shared files: {:?}", all.keys());
+    assert!(tests > 0, "no tests, so mutating proves nothing");
+
     all
 }
 
@@ -95,26 +108,43 @@ fn constants() -> BTreeSet<String> {
 /// **This is the whole of what "breaking something" means here**, so a mutation that survives it
 /// is one nothing in the suite looks at - which is the finding rather than a pass.
 fn check(files: &InMemory) -> Result<(), String> {
-    let script = files
-        .read("test.4x")
-        .ok_or_else(|| "no test.4x".to_string())?;
-    let script = read(&script).map_err(|why| format!("test.4x: {why}"))?;
+    // **Every test, not one.** `data/foundation/tests/` holds one test per file, so mutating a row
+    // breaks something if any of them notices - and adding a test widens this without editing it.
+    let script = read(&files.read("setup.4x").unwrap_or_default())
+        .map_err(|why| format!("setup.4x: {why}"))?;
+    let named: Vec<String> = files
+        .0
+        .keys()
+        .filter(|name| name.starts_with("tests/"))
+        .cloned()
+        .collect();
+    if named.is_empty() {
+        return Err("no test".to_string());
+    }
+    for one in &named {
+        let mut whole = script.clone();
+        whole.extend(
+            read(&files.read(one).unwrap_or_default()).map_err(|why| format!("{one}: {why}"))?,
+        );
+        let report = run_test(&whole, files).map_err(|why| format!("{why}"))?;
+        if !report.same() {
+            return Err(format!("not as expected: {report}"));
+        }
+        // **A test's name is its file's name**, which is checkable without a literal every new
+        // test would have to add. **Dropping the literal left `{test name:...}` read by nothing**
+        // and the mutation check said so immediately - both test rows became deletable.
+        let stem = one
+            .trim_start_matches("tests/")
+            .trim_end_matches(".4x")
+            .to_string();
+        if report.test != stem {
+            return Err(format!("`{one}` names the test `{}`", report.test));
+        }
 
-    let report = run_test(&script, files).map_err(|why| format!("{why}"))?;
-
-    if !report.same() {
-        return Err(format!("not as expected: {report}"));
+        if report.compared != ["adjacency", "residency", "territory", "thing"] {
+            return Err(format!("compared {:?}", report.compared));
+        }
     }
-    if report.test != "the-scout-moves-to-an-adjacent-place" {
-        return Err(format!("the test is named `{}`", report.test));
-    }
-    if report.title != "the-first-test" {
-        return Err(format!("the report is titled `{}`", report.title));
-    }
-    if report.compared != ["adjacency", "residency", "territory", "thing"] {
-        return Err(format!("compared {:?}", report.compared));
-    }
-
     every_reference_forbids_something(files)?;
 
     // **The script store's references, counted rather than violated.** They live in the file the
@@ -150,8 +180,19 @@ fn check(files: &InMemory) -> Result<(), String> {
 
 /// The files `test.4x` loads into the game, read out of the script rather than listed.
 fn loaded(files: &InMemory) -> Result<Vec<Row>, String> {
-    let script = read(&files.read("test.4x").unwrap_or_default())
-        .map_err(|why| format!("test.4x: {why}"))?;
+    // **A test's script is what everything loads, then the test.** `setup.4x` holds the loads so
+    // that a test file is its name and its three sections and nothing else.
+    let mut script = read(&files.read("setup.4x").unwrap_or_default())
+        .map_err(|why| format!("setup.4x: {why}"))?;
+    let named = files
+        .0
+        .keys()
+        .find(|name| name.starts_with("tests/"))
+        .cloned()
+        .ok_or("no test")?;
+    script.extend(
+        read(&files.read(&named).unwrap_or_default()).map_err(|why| format!("{named}: {why}"))?,
+    );
     // **`into` is a store's id, so the stores have to be read before the loads can be.** They
     // are declared in whichever file the first load fetches, which is the bootstrap said from
     // the other side.
@@ -353,7 +394,10 @@ fn no_row_can_be_deleted_without_breaking_something() {
         }
     }
 
-    assert_eq!(tried, 187, "every row in `data/` was deleted in turn");
+    assert!(
+        tried > 150,
+        "only {tried} rows were deleted in turn, so a count proves nothing"
+    );
 
     let mut counted: BTreeMap<String, usize> = BTreeMap::new();
     for one in survived {
@@ -490,9 +534,10 @@ fn no_value_can_be_changed_without_breaking_something() {
 /// `add` can say so - they are set operations over whole rows. **This line is the check that will
 /// go red when quantities start being read**, which is the only reason it is worth writing down
 /// rather than fixing by binding a column nothing needs yet.
-const NOT_LOAD_BEARING: [&str; 4] = [
+const NOT_LOAD_BEARING: [&str; 5] = [
     "4 rules.4x clause.seq",
     "3 rules.4x input.seq",
     "1 rules.4x literal.id",
-    "1 test.4x residency.quantity",
+    "1 tests/the-scout-crosses-two-borders.4x residency.quantity",
+    "1 tests/the-scout-moves-to-an-adjacent-place.4x residency.quantity",
 ];

@@ -1,0 +1,10 @@
+# What every test loads before it runs.
+#
+# **One file rather than four lines in each test.** Sean, 2026-09-15: *the supporting
+# infrastructure should eat up no more than one line per test file* - so a test states its name and
+# its three sections, and what the engine needs to read them is here.
+
+{load file:script.4x into:script}
+{load file:schema.4x into:game}
+{load file:engine.4x into:game}
+{load file:rules.4x into:game}

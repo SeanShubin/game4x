@@ -161,7 +161,7 @@ fn the_helper_loads_what_the_script_loads() {
         .find(|row| row.relation == "store" && row.value("name") == Some("game"))
         .and_then(|row| row.value("id").map(str::to_string))
         .expect("a store named `game`");
-    let script: Vec<String> = common::rows("data/foundation/test.4x")
+    let script: Vec<String> = common::rows("data/foundation/setup.4x")
         .iter()
         .filter(|row| row.relation == "load" && row.value("into") == Some(game_store.as_str()))
         .filter_map(|row| row.value("file").map(|it| format!("data/foundation/{it}")))

@@ -40,6 +40,21 @@ pub const LOADED: [&str; 3] = [
     "data/foundation/rules.4x",
 ];
 
+/// Every test file, read rather than listed - one test per file, and nothing else in `tests/`.
+pub fn every_test() -> Vec<String> {
+    let mut found: Vec<String> =
+        std::fs::read_dir(mine().join("data").join("foundation").join("tests"))
+            .expect("data/foundation/tests")
+            .filter_map(|it| it.ok())
+            .filter_map(|it| it.file_name().to_str().map(str::to_string))
+            .filter(|name| name.ends_with(".4x"))
+            .map(|name| format!("data/foundation/tests/{name}"))
+            .collect();
+    found.sort();
+    assert!(!found.is_empty(), "no tests, so passing means nothing");
+    found
+}
+
 pub fn game_rows() -> Vec<Row> {
     let mut all = Vec::new();
     for file in LOADED {
@@ -57,7 +72,7 @@ pub fn game_rows() -> Vec<Row> {
 pub fn section(want: &str) -> Vec<Row> {
     let mut inside = false;
     let mut out = Vec::new();
-    for row in rows("data/foundation/test.4x") {
+    for row in rows("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x") {
         if matches!(row.relation.as_str(), "given" | "when" | "then") {
             inside = row.relation == want;
             continue;

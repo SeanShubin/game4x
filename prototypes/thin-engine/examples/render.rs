@@ -23,13 +23,34 @@ mod friendly;
 use friendly::Names;
 use thin_engine::notation::{Row, read};
 
-const FILES: [(&str, bool); 5] = [
-    ("schema.4x", true),
-    ("engine.4x", true),
-    ("rules.4x", true),
-    ("script.4x", false),
-    ("test.4x", false),
-];
+/// Every file in a directory: the shared ones, then one per test.
+///
+/// **Read rather than listed.** Sean, 2026-09-15: *I intend to have one test per file*, so a list
+/// here would be a second place to remember - and `data/{d}/tests/` holding only tests is what
+/// makes reading it safe.
+fn files() -> Vec<(String, bool)> {
+    let mut all: Vec<(String, bool)> = vec![
+        ("schema.4x".to_string(), true),
+        ("engine.4x".to_string(), true),
+        ("rules.4x".to_string(), true),
+        ("script.4x".to_string(), false),
+        ("setup.4x".to_string(), false),
+    ];
+    let mut tests: Vec<String> =
+        std::fs::read_dir(mine().join("data").join("foundation").join("tests"))
+            .expect("data/foundation/tests")
+            .filter_map(|it| it.ok())
+            .filter_map(|it| it.file_name().to_str().map(str::to_string))
+            .filter(|name| name.ends_with(".4x"))
+            .collect();
+    tests.sort();
+    all.extend(
+        tests
+            .into_iter()
+            .map(|name| (format!("tests/{name}"), false)),
+    );
+    all
+}
 
 fn mine() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -48,7 +69,7 @@ fn main() {
     // non-nameable and take every thing's name away with it. Found by the names vanishing.
     let store = |of_game: bool| -> Vec<Row> {
         let mut all = Vec::new();
-        for (file, game) in FILES {
+        for (file, game) in files() {
             let these = rows(&format!("data/foundation/{file}"));
             if game {
                 if of_game {
@@ -75,7 +96,7 @@ fn main() {
     let of_game = Names::of(&store(true));
     let of_script = Names::of(&store(false));
 
-    for (file, game) in FILES {
+    for (file, game) in files() {
         let from = format!("data/foundation/{file}");
         let text = std::fs::read_to_string(mine().join(&from)).expect(&from);
         // **A merged test file spans two stores**, so which `Names` reads a row is a fact about
@@ -103,7 +124,7 @@ fn main() {
             }
             out.push('\n');
         }
-        std::fs::write(mine().join(format!("data/friendly/{file}")), &out).expect(file);
+        std::fs::write(mine().join(format!("data/friendly/{file}")), &out).expect(&file);
         println!("data/friendly/{file}");
     }
 }
