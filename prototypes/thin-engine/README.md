@@ -272,7 +272,14 @@ data/friendly/
     the-scout-moves-to-an-adjacent-place.4x
 ```
 
-**A test file is `{test name:...}` and three sections.** The four `{load ...}` rows moved to
+**A blank line sets each section apart**, which Sean wrote into the friendly files and
+`a_test_sets_its_sections_apart` now keeps. **The generator would have taken it straight back
+out**: `render` copies the foundation's blank lines, and the foundation had none - so a convention
+written on one side only would have lasted until the next render. **It is in both, and checked in
+both.**
+
+**A test file is `{test name:...}` and three sections.**
+ The four `{load ...}` rows moved to
 `setup.4x`, which every test reads before it runs; `{report title:...}` went entirely, because a
 test that is one file needs one name. **`report` and `title` left the engine with it**, and the
 vocabulary went 34 words to **32**.

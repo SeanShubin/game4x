@@ -15,7 +15,7 @@ use std::path::PathBuf;
 use thin_engine::script::{Files, Report, run_test};
 
 mod common;
-use common::{mine, rows};
+use common::{every_test, mine, rows};
 use thin_engine::notation::Row;
 
 /// The directory, as something the engine can ask for a file by name.
@@ -34,24 +34,10 @@ fn data() -> Directory {
     Directory(mine().join("data").join("foundation"))
 }
 
-/// Every test file, by name, in the order the directory gives them sorted.
-fn every_test() -> Vec<String> {
-    let mut found: Vec<String> =
-        std::fs::read_dir(mine().join("data").join("foundation").join("tests"))
-            .expect("data/foundation/tests")
-            .filter_map(|it| it.ok())
-            .filter_map(|it| it.file_name().to_str().map(str::to_string))
-            .filter(|name| name.ends_with(".4x"))
-            .collect();
-    found.sort();
-    assert!(!found.is_empty(), "no tests, so passing means nothing");
-    found
-}
-
 /// One test's rows: what every test loads, then the test itself.
 fn script_of(file: &str) -> Vec<Row> {
     let mut all = rows("data/foundation/setup.4x");
-    all.extend(rows(&format!("data/foundation/tests/{file}")));
+    all.extend(rows(file));
     all
 }
 
@@ -59,7 +45,57 @@ fn report_of(file: &str) -> Report {
     run_test(&script_of(file), &data()).unwrap_or_else(|why| panic!("{file}: {why}"))
 }
 
+/// **A test's sections are set apart by a blank line**, in both directories.
+///
+/// **Sean's spacing, 2026-09-15**, and a check rather than a habit: he wrote it into the friendly
+/// files and the generator would have taken it straight back out, because `render` copies the
+/// foundation's blank lines and the foundation had none. **It is in both now**, and this is what
+/// says so when the next test is written.
+///
+/// **Whitespace carries nothing to the engine** - `{given}` is a marker and the rows after it are
+/// its section however they are spaced. This is about the one reader who is not the engine.
+#[test]
+fn a_test_sets_its_sections_apart() {
+    let mut checked = 0;
+    for directory in ["foundation", "friendly"] {
+        for file in every_test() {
+            let named = file.replace("data/foundation/", &format!("data/{directory}/"));
+            let text = std::fs::read_to_string(mine().join(&named)).expect(&named);
+            let lines: Vec<&str> = text.lines().collect();
+            for (at, line) in lines.iter().enumerate() {
+                let opens = matches!(line.trim(), "{given}" | "{when}" | "{then}");
+                let names = line.starts_with("{test ");
+                if opens {
+                    assert!(
+                        at > 0 && lines[at - 1].trim().is_empty(),
+                        "{named}: `{line}` wants a blank line before it"
+                    );
+                    checked += 1;
+                }
+                if names {
+                    assert!(
+                        lines
+                            .get(at + 1)
+                            .map(|next| next.trim().is_empty())
+                            .unwrap_or(false),
+                        "{named}: `{line}` wants a blank line after it"
+                    );
+                    checked += 1;
+                }
+            }
+        }
+    }
+    // **Four a file and two directories**, so a test file that stated no sections at all would
+    // pass every assertion above and be caught here.
+    assert_eq!(
+        checked,
+        every_test().len() * 8,
+        "four marks in each test, in each of the two directories"
+    );
+}
+
 /// **Every test in the directory gets from its `given` to its `then`.**
+
 ///
 /// **Nothing here names a test**, so adding one is adding a file and this does not change.
 #[test]
@@ -85,7 +121,7 @@ fn every_test_gets_from_its_given_to_its_then() {
 /// relations, find no differences, and report success in exactly the same words.
 #[test]
 fn the_report_says_which_relations_it_compared() {
-    let report = report_of("the-scout-moves-to-an-adjacent-place.4x");
+    let report = report_of("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x");
 
     assert_eq!(
         report.compared,
@@ -102,7 +138,10 @@ fn the_report_says_which_relations_it_compared() {
 #[test]
 fn the_report_reads_as_a_report() {
     assert_eq!(
-        format!("{}", report_of("the-scout-moves-to-an-adjacent-place.4x")),
+        format!(
+            "{}",
+            report_of("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x")
+        ),
         "the-scout-moves-to-an-adjacent-place\n  \
            compared  adjacency, residency, territory, thing\n  \
            result    as expected"
@@ -121,7 +160,7 @@ fn the_report_reads_as_a_report() {
 fn a_state_that_is_not_expected_is_reported_as_both_rows() {
     // **The script is handed in, not read through `Files`** - the sections are in it, so the
     // poison is a row rather than a file. The last residency is the `then` one.
-    let mut script = script_of("the-scout-moves-to-an-adjacent-place.4x");
+    let mut script = script_of("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x");
     let at = script
         .iter()
         .rposition(|row| row.relation == "residency")

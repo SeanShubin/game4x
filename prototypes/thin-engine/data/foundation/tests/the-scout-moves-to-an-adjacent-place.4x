@@ -4,6 +4,7 @@
 # this is; everything else is `{given}`, `{when}` and `{then}`.
 
 {test name:the-scout-moves-to-an-adjacent-place}
+
 {given}
 {territory id:1}
 {territory id:2}
@@ -12,8 +13,10 @@
 {adjacency id:1 from:1 to:2}
 {adjacency id:2 from:2 to:3}
 {residency what:1 where:1 quantity:1}
+
 {when}
 {move what:1 from:1 to:2}
+
 {then}
 {territory id:1}
 {territory id:2}

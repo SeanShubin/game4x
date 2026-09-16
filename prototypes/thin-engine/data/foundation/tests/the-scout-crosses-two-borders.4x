@@ -3,6 +3,7 @@
 # **A second test, added by adding a file.** Nothing in `tests/` or `src/` names it.
 
 {test name:the-scout-crosses-two-borders}
+
 {given}
 {territory id:1}
 {territory id:2}
@@ -11,9 +12,11 @@
 {adjacency id:1 from:1 to:2}
 {adjacency id:2 from:2 to:3}
 {residency what:1 where:1 quantity:1}
+
 {when}
 {move what:1 from:1 to:2}
 {move what:1 from:2 to:3}
+
 {then}
 {territory id:1}
 {territory id:2}
