@@ -3,7 +3,7 @@
 //! **Sean typed the first test in relational notation to be clear about the structure**, so the
 //! structure is as much under test as the move is. These are what declaring it buys.
 
-use thin_engine::engine::run;
+use thin_engine::engine::fire;
 use thin_engine::schema::Malformed;
 
 mod common;
@@ -30,8 +30,6 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         "clause",
         "binding",
         "literal",
-        "command",
-        "argument",
         "primitive",
     ] {
         let declared = game
@@ -44,11 +42,11 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         );
         checked += 1;
     }
-    assert_eq!(checked, 13, "thirteen relations describe the structure");
+    assert_eq!(checked, 11, "eleven relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        17,
-        "seventeen relations in all - those thirteen, and the game's four"
+        15,
+        "fifteen relations in all - those eleven, and the game's four"
     );
 }
 
@@ -116,15 +114,8 @@ fn a_row_states_only_what_its_relation_declares() {
 /// structure does it once for every rule at once.
 #[test]
 fn a_command_naming_something_that_does_not_exist_is_refused_by_the_type() {
-    let start = with(
-        "{command id:3 rule:1}\n\
-         {argument id:11 command:3 input:1 value:1}\n\
-         {argument id:12 command:3 input:2 value:1}\n\
-         {argument id:13 command:3 input:3 value:9}",
-    )
-    .expect("a command naming territory 9 is still well formed data");
-
-    let why = run(&start, "3").expect_err("there is no territory 9");
+    let command = thin_engine::notation::read("{move what:1 from:1 to:9}").expect("a command");
+    let why = fire(&before(), &command[0], 1).expect_err("there is no territory 9");
     assert_eq!(
         format!("{why}"),
         "`move`.`to` is `9`, and no `territory` has that key"
@@ -134,27 +125,25 @@ fn a_command_naming_something_that_does_not_exist_is_refused_by_the_type() {
 /// **A thing is not a territory**, even where both have the key 1.
 #[test]
 fn an_input_is_checked_against_its_own_relation() {
-    let start = with(
-        "{command id:4 rule:1}\n\
-         {argument id:21 command:4 input:1 value:3}\n\
-         {argument id:22 command:4 input:2 value:1}\n\
-         {argument id:23 command:4 input:3 value:2}",
-    )
-    .expect("well formed data");
-
     // 3 is a territory and is not a thing, so `what` refuses it.
-    let why = run(&start, "4").expect_err("there is no thing 3");
+    let command = thin_engine::notation::read("{move what:3 from:1 to:2}").expect("a command");
+    let why = fire(&before(), &command[0], 1).expect_err("there is no thing 3");
     assert_eq!(
         format!("{why}"),
         "`move`.`what` is `3`, and no `thing` has that key"
     );
 }
 
-/// **A command nothing states cannot be run**, because a command is data like everything else.
+/// **A command names its rule, and a rule nothing declares is not a command.**
+///
+/// **This used to be about a `{command id:99}` nobody stated.** There is no `command` relation any
+/// more - a command is a row of its own rule - so the way to write one nothing can fire is to name
+/// a rule that does not exist.
 #[test]
 fn a_command_that_is_not_stated_is_not_a_command() {
-    let why = run(&before(), "99").expect_err("nothing states command 99");
-    assert_eq!(format!("{why}"), "no command is stated with id `99`");
+    let command = thin_engine::notation::read("{fly what:1 from:1 to:2}").expect("a command");
+    let why = fire(&before(), &command[0], 1).expect_err("nothing declares a rule `fly`");
+    assert_eq!(format!("{why}"), "no command is stated with id `fly`");
 }
 
 /// **The files the helpers load are the files `data/test.4x` loads**, and neither list is derived
@@ -178,11 +167,15 @@ fn the_helper_loads_what_the_script_loads() {
         .filter_map(|row| row.value("file").map(|it| format!("data/foundation/{it}")))
         .collect();
 
-    assert_eq!(script.len(), 5, "the script loads five files into the game");
+    assert_eq!(
+        script.len(),
+        3,
+        "the script loads three files into the game"
+    );
     assert_eq!(
         script,
         common::LOADED.to_vec(),
-        "and they are the five the helpers here assemble, in the same order"
+        "and they are the three the helpers here assemble, in the same order"
     );
 }
 
@@ -235,7 +228,8 @@ fn only_the_moves_the_world_allows_are_offered() {
     // **Asserted as it is rather than as it should be.** Which way to fix it - state both
     // directions, or read the one that is stated from either end - is a modelling decision and
     // not this test's. This line goes red when it is made, which is what it is for.
-    let moved = thin_engine::engine::run(&game, "1").expect("the scout moves");
+    let command = thin_engine::notation::read("{move what:1 from:1 to:2}").expect("a command");
+    let moved = fire(&game, &command[0], 1).expect("the scout moves");
     let after: Vec<String> = thin_engine::engine::offered(&moved)
         .iter()
         .map(thin_engine::notation::write)

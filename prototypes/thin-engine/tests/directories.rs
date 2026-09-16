@@ -18,24 +18,27 @@ use thin_engine::notation::{Row, write};
 use thin_engine::schema::Schema;
 
 /// The eight files, and which store each belongs to.
-const FILES: [(&str, bool); 8] = [
+const FILES: [(&str, bool); 5] = [
     ("schema.4x", true),
     ("engine.4x", true),
     ("rules.4x", true),
-    ("before.4x", true),
-    ("command.4x", true),
-    ("expected.4x", true),
     ("script.4x", false),
     ("test.4x", false),
 ];
 
 fn store(of_game: bool, from: &str) -> Vec<Row> {
-    let mut all = Vec::new();
+    // **A merged test file spans two stores**, so which one a row belongs to is a fact about where
+    // it sits: a section's rows are the game's, the rest of that file is the script's.
+    // **Deduplicated**, because `then` repeats `given` and two rows named `scout` would take away
+    // every thing's name.
+    let mut all: Vec<Row> = Vec::new();
     for (file, game) in FILES {
-        // `expected.4x` is a second world for the same schema, so it is not part of the store
-        // the others make up - including it would put two rows of each relation in it.
-        if game == of_game && file != "expected.4x" {
-            all.extend(of(from, file, of_game));
+        let these = of(from, file, game);
+        let mine = friendly::in_a_section(&these);
+        for (row, is_game) in these.into_iter().zip(mine) {
+            if (game || is_game) == of_game && !all.contains(&row) {
+                all.push(row);
+            }
         }
     }
     all
@@ -47,13 +50,14 @@ fn store(of_game: bool, from: &str) -> Vec<Row> {
 /// through the fold that puts a quantity back into its column. **The schema is read first and
 /// from the same directory**, because the fold has to know which column that is - and a schema
 /// file carries no arrow itself, so reading it needs nothing that is not already there.
-fn of(from: &str, file: &str, of_game: bool) -> Vec<Row> {
+fn of(from: &str, file: &str, _of_game: bool) -> Vec<Row> {
     let at = format!("data/{from}/{file}");
     if from == "foundation" {
         return rows(&at);
     }
-    let declares = if of_game { "schema.4x" } else { "script.4x" };
-    let schema = Schema::of(&rows(&format!("data/friendly/{declares}"))).expect("a schema");
+    // **Always the game's schema.** Only a game row carries `-> n`, so a script row passes through
+    // untouched and a section row inside a script file is still folded correctly.
+    let schema = Schema::of(&rows("data/friendly/schema.4x")).expect("a schema");
     let text =
         std::fs::read_to_string(mine().join(&at)).unwrap_or_else(|why| panic!("{at}: {why}"));
     friendly::fold(&text, &schema).unwrap_or_else(|why| panic!("{at}: {why}"))
@@ -66,9 +70,11 @@ fn of(from: &str, file: &str, of_game: bool) -> Vec<Row> {
 #[test]
 fn the_foundation_is_what_the_friendly_source_converts_to() {
     let mut checked = 0;
+    let of_game = Names::of(&store(true, "friendly"));
+    let of_script = Names::of(&store(false, "friendly"));
     for (file, game) in FILES {
-        let names = Names::of(&store(game, "friendly"));
         let friendly = of("friendly", file, game);
+        let mine = friendly::in_a_section(&friendly);
         let foundation = rows(&format!("data/foundation/{file}"));
         assert_eq!(
             friendly.len(),
@@ -78,6 +84,11 @@ fn the_foundation_is_what_the_friendly_source_converts_to() {
             foundation.len()
         );
         for (at, row) in friendly.iter().enumerate() {
+            let names = if game || mine[at] {
+                &of_game
+            } else {
+                &of_script
+            };
             let converted = names
                 .foundation(row)
                 .unwrap_or_else(|why| panic!("data/friendly/{file}: {why}"));
@@ -93,7 +104,7 @@ fn the_foundation_is_what_the_friendly_source_converts_to() {
         }
     }
     assert_eq!(
-        checked, 215,
+        checked, 187,
         "every row of the friendly source was converted"
     );
 }
@@ -103,11 +114,18 @@ fn the_foundation_is_what_the_friendly_source_converts_to() {
 #[test]
 fn the_friendly_source_is_what_the_foundation_renders_to() {
     let mut checked = 0;
+    let of_game = Names::of(&store(true, "foundation"));
+    let of_script = Names::of(&store(false, "foundation"));
     for (file, game) in FILES {
-        let names = Names::of(&store(game, "foundation"));
         let friendly = of("friendly", file, game);
         let foundation = rows(&format!("data/foundation/{file}"));
+        let mine = friendly::in_a_section(&foundation);
         for (at, row) in foundation.iter().enumerate() {
+            let names = if game || mine[at] {
+                &of_game
+            } else {
+                &of_script
+            };
             // **Compared as rows and not as text.** A rendering writes the columns in the order
             // the relation declares; `write` sorts them. Two spellings of the same row.
             let rendered = names
@@ -124,7 +142,7 @@ fn the_friendly_source_is_what_the_foundation_renders_to() {
             checked += 1;
         }
     }
-    assert_eq!(checked, 215, "every row of the foundation was rendered");
+    assert_eq!(checked, 187, "every row of the foundation was rendered");
 }
 
 /// **Both directories hold the same eight files**, because nothing is omitted from either.

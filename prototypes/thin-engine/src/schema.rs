@@ -6,7 +6,7 @@
 //!
 //! # It is read from the same rows as everything else
 //!
-//! `{relation ...}`, `{column ...}` and `{reference ...}` are rows in `data/before.4x` beside
+//! `{relation ...}`, `{column ...}` and `{reference ...}` are rows in `data/given.4x` beside
 //! `{territory id:1}`, and they are declared there too, so **the structure describes itself and is
 //! checked against its own description**. That is what makes *everything is data* a thing a test
 //! can fail rather than a thing to say.

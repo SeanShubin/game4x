@@ -1,7 +1,7 @@
 //! The first test, which is `temporary-notes/first-test.md` - and the test itself is data.
 //!
-//! **`data/test.4x` is the test.** It sets the schema up, initializes the state from `before.4x`,
-//! executes the command in `command.4x`, compares what that produced with `expected.4x`, and
+//! **`data/test.4x` is the test.** It sets the schema up, initializes the state from `given.4x`,
+//! executes the command in `when.4x`, compares what that produced with `expected.4x`, and
 //! composes a report. Nothing in this file says any of that; it reads `test.4x` and runs it.
 //!
 //! **What is left in Rust is the two things that cannot be data**: handing the engine a way to
@@ -81,23 +81,26 @@ fn the_report_reads_as_a_report() {
 
 /// **A wrong expectation is reported rather than passed over**, and the report names both rows.
 ///
-/// This is the poison written down: `expected.4x` is replaced by one that says the scout stayed
-/// where it was, and the test that would have to notice is this one.
+/// This is the poison written down: the `then` section is rewritten to say the scout stayed where
+/// it was, and the test that would have to notice is this one.
+///
+/// **The poison moved with the file.** It used to swap `expected.4x` for `given.4x`; there are no
+/// such files now, so it edits the one file's `then` section instead - which is a truer poison,
+/// because a wrong expectation is exactly a wrong `then`.
 #[test]
 fn a_state_that_is_not_expected_is_reported_as_both_rows() {
-    struct Wrong(Directory);
-    impl Files for Wrong {
-        fn read(&self, name: &str) -> Option<String> {
-            if name == "expected.4x" {
-                // The state before, offered as the state after.
-                return self.0.read("before.4x");
-            }
-            self.0.read(name)
-        }
-    }
+    // **The script is handed in, not read through `Files`** - the sections are in it, so the
+    // poison is a row rather than a file. The last residency is the `then` one.
+    let mut script = rows("data/foundation/test.4x");
+    let at = script
+        .iter()
+        .rposition(|row| row.relation == "residency")
+        .expect("a `then` residency");
+    script[at] = thin_engine::notation::read("{residency what:1 where:1 quantity:1}")
+        .expect("the state before, offered as the state after")
+        .remove(0);
 
-    let report = run_test(&rows("data/foundation/test.4x"), &Wrong(data()))
-        .unwrap_or_else(|why| panic!("{why}"));
+    let report = run_test(&script, &data()).unwrap_or_else(|why| panic!("{why}"));
 
     assert!(
         !report.same(),

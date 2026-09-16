@@ -87,7 +87,7 @@ fn nothing_in_src_reads_a_file_or_depends_on_another_crate() {
 ///
 /// ## Where the line falls, now that the structure describes itself
 ///
-/// `data/before.4x` declares `relation`, `column`, `reference`, `role`, `rule`, `input`, `clause`,
+/// `data/given.4x` declares `relation`, `column`, `reference`, `role`, `rule`, `input`, `clause`,
 /// `binding`, `command` and `argument` as relations, exactly as it declares `territory`. **Those
 /// ten are how a thing is written down and the engine may name them**; every other relation, and
 /// every rule, is what the game *is* and it may not.
@@ -111,14 +111,10 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
         "clause",
         "binding",
         "literal",
-        "command",
-        "argument",
         "primitive",
         "store",
         "test",
         "load",
-        "execute",
-        "compare",
         "report",
     ];
 

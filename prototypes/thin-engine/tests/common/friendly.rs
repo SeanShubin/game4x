@@ -91,6 +91,31 @@ pub struct Names {
     by_name: BTreeMap<(String, String), String>,
     /// Which relations declare a `name` column, so a generated name can be told from data.
     declares_name: std::collections::BTreeSet<String>,
+    /// A rule's name and one of its input's names, to the relation that input is typed as.
+    ///
+    /// **This is what lets a command be a row of its own rule.** `{move what:scout …}` names no
+    /// relation the schema declares, so nothing above can say what `scout` is - the rule's input
+    /// says it, and this is that lookup.
+    input_of: BTreeMap<(String, String), (String, String)>,
+}
+
+/// Which rows of a test file are the game's: everything after a `{given}`, `{when}` or `{then}`.
+///
+/// **A merged test file spans two stores.** Its prologue is script rows and its sections are game
+/// rows, and the two schemas number their relations independently - so one `Names` cannot read the
+/// whole file and which one to use is a fact about where the row sits.
+pub fn in_a_section(rows: &[Row]) -> Vec<bool> {
+    let mut inside = false;
+    rows.iter()
+        .map(|row| {
+            if matches!(row.relation.as_str(), "given" | "when" | "then") {
+                inside = true;
+                false
+            } else {
+                inside
+            }
+        })
+        .collect()
 }
 
 impl Names {
@@ -207,6 +232,40 @@ impl Names {
             }
         }
 
+        // **A rule's inputs, by the rule's name and the input's own.** Read *by id or by name* for
+        // the same reason everything else here is: the friendly source writes `rule:move` and the
+        // foundation writes `rule:1`, and one translator reads whichever it is handed.
+        let mut input_of = BTreeMap::new();
+        for row in rows.iter().filter(|row| row.relation == "input") {
+            let Some(of_rule) = row.value("rule") else {
+                continue;
+            };
+            let named = rows
+                .iter()
+                .find(|it| {
+                    it.relation == "rule"
+                        && (it.value("id") == Some(of_rule) || it.value("name") == Some(of_rule))
+                })
+                .and_then(|it| it.value("name"));
+            let of = row.value("of").and_then(|of| {
+                rows.iter()
+                    .find(|it| {
+                        it.relation == "relation"
+                            && (it.value("id") == Some(of) || it.value("name") == Some(of))
+                    })
+                    .and_then(|it| it.value("name"))
+            });
+            if let (Some(named), Some(name), Some(of)) = (named, row.value("name"), of) {
+                input_of.insert(
+                    (named.to_string(), name.to_string()),
+                    (
+                        of.to_string(),
+                        row.value("seq").unwrap_or_default().to_string(),
+                    ),
+                );
+            }
+        }
+
         let by_name = names
             .iter()
             .map(|((relation, id), name)| ((relation.clone(), name.clone()), id.clone()))
@@ -218,6 +277,7 @@ impl Names {
             argument_of,
             by_name,
             declares_name,
+            input_of,
         }
     }
 
@@ -235,7 +295,28 @@ impl Names {
     /// One row in the user-facing format.
     pub fn row(&self, row: &Row) -> String {
         let Some(relation) = self.schema.relation(&row.relation) else {
-            return thin_engine::notation::write(row);
+            // **A command is a row of its own rule**, so its relation is a rule's name and each
+            // value is named for one of that rule's inputs. A row that is neither - a `{given}`
+            // marker, say - carries nothing to rename and is written as it is.
+            // **Written in the rule's input order**, which is the order a player would say it in
+            // and not the alphabetical one a row of no relation would otherwise get.
+            let mut shown: Vec<(String, String, String)> = row
+                .values
+                .iter()
+                .map(
+                    |(key, value)| match self.input_of.get(&(row.relation.clone(), key.clone())) {
+                        Some((of, seq)) => (seq.clone(), key.clone(), self.name(of, value)),
+                        None => (String::new(), key.clone(), value.clone()),
+                    },
+                )
+                .collect();
+            shown.sort();
+            let body = shown
+                .iter()
+                .map(|(_, key, value)| format!(" {key}:{value}"))
+                .collect::<Vec<String>>()
+                .join("");
+            return format!("{{{}{body}}}", row.relation);
         };
         // **A counted relation has no key column to lead with**, and an identified one's key is
         // its first column - which is where writing it first and then skipping it in the loop
@@ -308,7 +389,26 @@ impl Names {
     /// to keep it, which is a schema decision rather than a translator one.
     pub fn foundation(&self, row: &Row) -> Result<Row, String> {
         let Some(relation) = self.schema.relation(&row.relation) else {
-            return Ok(row.clone());
+            // **The same rule-named row, read the other way.**
+            let resolved: BTreeMap<String, String> = row
+                .values
+                .iter()
+                .map(|(key, value)| {
+                    let back = match self.input_of.get(&(row.relation.clone(), key.clone())) {
+                        Some((of, _)) => self
+                            .by_name
+                            .get(&(of.clone(), value.clone()))
+                            .cloned()
+                            .unwrap_or_else(|| value.clone()),
+                        None => value.clone(),
+                    };
+                    (key.clone(), back)
+                })
+                .collect();
+            return Ok(Row {
+                relation: row.relation.clone(),
+                values: resolved,
+            });
         };
         let id = row
             .value(relation.identity())

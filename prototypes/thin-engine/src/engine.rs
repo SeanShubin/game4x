@@ -2,7 +2,7 @@
 //!
 //! # Everything it reads is a row, including what it is
 //!
-//! `data/before.4x` holds the structure, the structure's own structure, the roles, the rule, the
+//! `data/given.4x` holds the structure, the structure's own structure, the roles, the rule, the
 //! command and the world, all as rows of declared relations. **The engine is handed that one list
 //! and nothing else.** There is no separate schema file, no separate rule file and no command
 //! typed at it - a command is `{command id:1 rule:move}` with `{argument ...}` rows beside it.
@@ -505,6 +505,64 @@ fn row_of(
         }
     }
     Ok(Row { relation, values })
+}
+
+/// Fire a command written as a rule-named row: `{move what:1 from:1 to:2}`.
+///
+/// **The row is the command**, so there is no `{command ...}` and no `{argument ...}` to mint and
+/// none to read. Its relation is the rule's name and each value is named for one of the rule's
+/// inputs. **This is the same shape [`offered`] gives back**, so what the engine says a player may
+/// do is what the player writes.
+///
+/// **`repeat` is how many times it fires** - `spec/console.md`: *a command may carry a `repeat`,
+/// which is how many times it fires, and a command without one fires once.*
+pub fn fire(game: &Game, command: &Row, repeat: usize) -> Result<Game, Refused> {
+    let Some(rule) = game
+        .of_relation(RULE)
+        .into_iter()
+        .find(|row| row.value(NAME) == Some(command.relation.as_str()))
+    else {
+        return Err(Refused::NoSuchCommand {
+            id: command.relation.clone(),
+        });
+    };
+    let of_rule = rule.value(ID).unwrap_or_default().to_string();
+    let named = command.relation.clone();
+
+    // **Bound by the input's name, which is what the row writes.** A value the structure cannot
+    // place is refused here, exactly as it is when a command is read from rows.
+    let mut bound: BTreeMap<String, String> = BTreeMap::new();
+    for input in game
+        .of_relation(INPUT)
+        .into_iter()
+        .filter(|row| row.value(RULE) == Some(of_rule.as_str()))
+    {
+        let id = input.value(ID).unwrap_or_default();
+        let name = input.value(NAME).unwrap_or_default();
+        let Some(given) = command.value(name) else {
+            return Err(Refused::Missing {
+                rule: named,
+                input: name.to_string(),
+            });
+        };
+        let of = input.value(OF).unwrap_or_default();
+        let of = game.named(RELATION, of).unwrap_or(of).to_string();
+        if !game.has_key(&of, given) {
+            return Err(Refused::WrongType {
+                rule: named,
+                input: name.to_string(),
+                value: given.to_string(),
+                of,
+            });
+        }
+        bound.insert(id.to_string(), given.to_string());
+    }
+
+    let mut after = game.clone();
+    for _ in 0..repeat {
+        after = apply(&after, &of_rule, named.clone(), &bound)?;
+    }
+    Ok(after)
 }
 
 /// Every command the player could fire right now, as rows in the friendly command form.

@@ -258,6 +258,65 @@ is two columns** - `scout@territory-1`, or whatever it would be - and that is re
 friendly side. It does not arise today and would arrive the first time a rule needs to refer to a
 residency rather than match one.
 
+## Given, when, then - one file, and the engine got smaller
+
+**Sean's sketch, 2026-09-15**, and it is what `data/friendly/test.4x` now is:
+
+```text
+{given}
+{territory id:1 name:territory-1}
+{thing id:1 name:scout}
+{adjacency id:1 from:territory-1 to:territory-2}
+{residency what:scout where:territory-1} -> 1
+{when}
+{move what:scout from:territory-1 to:territory-2}
+{then}
+{residency what:scout where:territory-2} -> 1
+```
+
+**`{given}`, `{when}` and `{then}` are markers**: every row after one belongs to it, which is line
+order carrying grouping as well as sequence. **They carry no values** - the name is the whole of the
+row - so they are words the script knows rather than relations `script.4x` declares. A relation with
+no columns has no key and holds no data, and `Malformed::NoColumns` is right to refuse one.
+
+**`#` stays a comment.** Written as `# Given` the sections would be invisible: the file would parse
+to fifteen rows with the given and then states merged, one scout in two places at once, and `{move
+…}` a row of no relation. **The headers had to be structure or nothing.**
+
+## What the merge deleted
+
+**Nothing says to execute or to compare** - the sections say it. `execute` and `compare` went, and
+the `actual` and `expected` stores with them. **And a command is a row of its own rule**, so
+`{command …}` and `{argument …}` had no rows left at all: the `command` and `argument` relations
+went too, with their six columns and three references.
+
+|                        | before | after      |
+| ---------------------- | ------ | ---------- |
+| files in `data/`       | 8      | **5**      |
+| rows                   | 215    | **187**    |
+| words the engine knows | 37     | **34**     |
+| relations              | 17 + 9 | **15 + 7** |
+
+**The engine's vocabulary shrank.** It gained `given`, `when` and `then` and lost `execute`,
+`compare`, `this`, `with`, `actual` and `expected` - **six for three**, which is the first time
+adding a feature here has cost negative words.
+
+**And the last decoration found a reader.** `input.name` was read into an error message and nowhere
+else; `fire` binds a command's inputs *by name*, so `{move what:… from:… to:…}` reads it. **Both
+names this list used to hold now do work** - `rule.name` when a section fires, `input.name` when it
+binds - and the dead-value list is down to four entries from ten.
+
+## What the merge cost, which is one real thing
+
+**A test file spans two stores.** Its prologue is script rows and its sections are game rows, and
+the two schemas number their relations independently - so one `Names` cannot read the whole file and
+which one to use is a fact about where the row sits. `friendly::in_a_section` is that fact, and
+every reader of a merged file needs it.
+
+**It was found by the names vanishing.** The `then` section repeats `given`'s rows, and two rows
+named `scout` made `thing` non-nameable, which took away every thing's name. **A store is a set**,
+so deduplicating was the fix and the store's own doc comment already said so.
+
 ## The test is a sequence, so it stopped saying so twice
 
 **`{execute id:1 seq:8 command:1}` is `{execute command:move}`.** Nine columns went - `id` and `seq`
@@ -634,16 +693,16 @@ the-first-test
 
 Measured on 2026-09-14:
 
-|                                              |                                                                                           |
-| -------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| Code that runs, in `src/`                    | **1161 lines** - notation 77, store 33, schema 281, engine 442, script 323                |
-| Rows of data                                 | **215** across eight files, holding **635** values                                        |
-| Of those, rows nothing reads                 | **1**, a binding on a clause nothing in the suite tries to violate                        |
-| Values nothing reads                         | **12 of 635** - decorations, one id on a one-row relation, and one quantity               |
-| Rows that differ between before and expected | **1** - `{residency what:1 where:1 quantity:1}` becomes `… where:2 quantity:1`            |
-| Relations declared                           | **17** in the game and **9** in the script; sixteen keyed by an `id`, `residency` counted |
-| Game nouns in code that runs                 | **0**, checked against a list read out of `data/`                                         |
-| Tests                                        | **41**, all passing                                                                       |
+|                                              |                                                                                            |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Code that runs, in `src/`                    | **1173 lines** - notation 77, store 33, schema 281, engine 486, script 291                 |
+| Rows of data                                 | **187** across **five** files, holding **546** values                                      |
+| Of those, rows nothing reads                 | **1**, a binding on a clause nothing in the suite tries to violate                         |
+| Values nothing reads                         | **9 of 546** - two `seq`s, one id on a one-row relation, and one quantity                  |
+| Rows that differ between before and expected | **1** - `{residency what:1 where:1 quantity:1}` becomes `… where:2 quantity:1`             |
+| Relations declared                           | **15** in the game and **7** in the script; fourteen keyed by an `id`, `residency` counted |
+| Game nouns in code that runs                 | **0**, checked against a list read out of `data/`                                          |
+| Tests                                        | **41**, all passing                                                                        |
 
 **The engine names nothing the game has.** `territory`, `thing`, `adjacency`, `residency` and
 `move` appear in `data/`, in the tests and in comments, and in no line of `src/` that runs.

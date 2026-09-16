@@ -34,36 +34,31 @@
 
 use std::collections::BTreeMap;
 
-use crate::engine::{Game, Refused, run};
+use crate::engine::{Game, Refused, fire};
 use crate::notation::{Row, Unreadable, read};
 use crate::schema::{Malformed, Schema};
 
 const TEST: &str = "test";
 const LOAD: &str = "load";
-const EXECUTE: &str = "execute";
-const COMPARE: &str = "compare";
 const REPORT: &str = "report";
 const STATE: &str = "state";
 
 const NAME: &str = "name";
 const FILE: &str = "file";
 const INTO: &str = "into";
-const COMMAND: &str = "command";
-// **Already a word the engine knows**, in `crate::engine`. Named again here because a module
-// compares against its own constants, and `tests/engine.rs` reads them all into one set - so a
-// word said twice is one word, and saying it adds nothing to the vocabulary.
-const RULE: &str = "rule";
+// **The three sections a test is written in.** They carry no values - the name is the whole of the
+// row - so they are words the script knows rather than relations `script.4x` declares. A relation
+// with no columns has no key and holds no data, and `Malformed::NoColumns` is right to refuse one.
+const GIVEN: &str = "given";
+const WHEN: &str = "when";
+const THEN: &str = "then";
 
 const TITLE: &str = "title";
-const THIS: &str = "this";
-const WITH: &str = "with";
-const ACTUAL: &str = "actual";
 const SCRIPT: &str = "script";
 const STORE: &str = "store";
 const ID: &str = "id";
 const RELATION: &str = "relation";
 const GAME: &str = "game";
-const EXPECTED: &str = "expected";
 
 /// Somewhere to get a file from, by name.
 ///
@@ -180,27 +175,6 @@ impl std::fmt::Display for Report {
 }
 
 /// Run a test written as rows.
-/// The id of the command that fires the rule with this name.
-///
-/// **Resolved against the game rather than written down**, which is what lets a script say
-/// `{execute command:move}` and never a number. **It reads the first**, and a file stating two
-/// commands for one rule would be ambiguous - which the prototype's one command per rule does not
-/// reach, and which the game's scenario of 133 commands would.
-fn command_firing(game: &Game, rule: &str) -> Option<String> {
-    let of_rule = game
-        .rows()
-        .rows()
-        .iter()
-        .find(|row| row.relation == RULE && row.value(NAME) == Some(rule))
-        .and_then(|row| row.value(ID))?;
-    game.rows()
-        .rows()
-        .iter()
-        .find(|row| row.relation == COMMAND && row.value(RULE) == Some(of_rule))
-        .and_then(|row| row.value(ID))
-        .map(str::to_string)
-}
-
 pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
     let name = script
         .iter()
@@ -216,12 +190,39 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
     // **The `{test ...}` row is validated even though it is not a step.** Skipped entirely at
     // first, which meant its columns were declared in `script.4x` and checked by nothing - the
     // `name` column could be renamed there and nothing noticed.
+    // **A prologue of steps, then three sections.** `{given}`, `{when}` and `{then}` are markers:
+    // every row after one belongs to it, which is line order carrying grouping as well as
+    // sequence. **The sections hold game rows and the prologue holds script rows**, which is why
+    // the script store below is checked against the prologue alone.
     let mut named: Vec<&Row> = Vec::new();
     let mut steps: Vec<&Row> = Vec::new();
+    let mut section: Option<&str> = None;
+    let mut given: Vec<Row> = Vec::new();
+    let mut when: Vec<Row> = Vec::new();
+    let mut then: Vec<Row> = Vec::new();
     for row in script {
-        match row.relation.as_str() {
-            TEST => named.push(row),
-            LOAD | EXECUTE | COMPARE | REPORT => steps.push(row),
+        let marker = matches!(row.relation.as_str(), GIVEN | WHEN | THEN);
+        if marker {
+            // **A marker carries nothing**, so anything beside its name is a mistake rather than
+            // a value nobody reads.
+            if !row.values.is_empty() {
+                return Err(Failed::BadStep {
+                    row: crate::notation::write(row),
+                });
+            }
+            section = Some(match row.relation.as_str() {
+                GIVEN => GIVEN,
+                WHEN => WHEN,
+                _ => THEN,
+            });
+            continue;
+        }
+        match (section, row.relation.as_str()) {
+            (None, TEST) => named.push(row),
+            (None, LOAD | REPORT) => steps.push(row),
+            (Some(GIVEN), _) => given.push(row.clone()),
+            (Some(WHEN), _) => when.push(row.clone()),
+            (Some(THEN), _) => then.push(row.clone()),
             _ => {
                 return Err(Failed::BadStep {
                     row: crate::notation::write(row),
@@ -236,9 +237,7 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
 
     let mut declared: Vec<Row> = Vec::new();
     let mut game: Vec<Row> = Vec::new();
-    let mut expected: Vec<Row> = Vec::new();
-    let mut actual: Option<Game> = None;
-    let mut found: Option<Difference> = None;
+    let mut title: Option<String> = None;
 
     for step in &steps {
         match step.relation.as_str() {
@@ -280,8 +279,13 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
                         // **The declarations and the script together**, so the script's own rows
                         // are key-checked as well as fitted. Checking only the declarations left
                         // every id in `test.4x` free to be any value at all.
+                        // **The prologue, not the whole file.** The sections hold game rows, and
+                        // a `{territory ...}` checked against the script's schema is a row of a
+                        // relation the script never declared. **They are checked where they are
+                        // used** - `given` when the game is built, `then` when it is compared.
                         let mut whole = declared.clone();
-                        whole.extend(script.iter().cloned());
+                        whole.extend(named.iter().map(|row| (*row).clone()));
+                        whole.extend(steps.iter().map(|row| (*row).clone()));
                         Game::of(whole).map_err(|why| Failed::BadlyFormed {
                             step: crate::notation::write(step),
                             why,
@@ -300,7 +304,7 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
                         }
                     }
                     Some(GAME) => game.extend(rows),
-                    Some(EXPECTED) => expected.extend(rows),
+
                     Some(other) => {
                         return Err(Failed::NoSuchStore {
                             into: other.to_string(),
@@ -313,63 +317,33 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
                     }
                 }
             }
-            EXECUTE => {
-                fits(step, &declared)?;
-                let named = step.value(COMMAND).ok_or_else(|| Failed::BadStep {
-                    row: crate::notation::write(step),
-                })?;
-                let before = Game::of(game.clone()).map_err(|why| Failed::Malformed { why })?;
-                // **`{execute command:move}` names the rule, not a number.** The command is the
-                // one whose rule has that name - looked up in the game rather than written down,
-                // which is `spec/invariants.md`'s *what may be chosen is whatever the game holds*.
-                let command =
-                    command_firing(&before, named).ok_or_else(|| Failed::NoSuchCommand {
-                        command: named.to_string(),
-                    })?;
-                actual = Some(run(&before, &command).map_err(|why| Failed::Refused { why })?);
-            }
-            COMPARE => {
-                fits(step, &declared)?;
-                // **`this` and `with` are read rather than decorative.** They were written before
-                // anything looked at them, and a column the data states and the code ignores is
-                // exactly the thing this prototype is meant to make visible.
-                let this = store_named(&declared, step.value(THIS).unwrap_or_default());
-                let with = store_named(&declared, step.value(WITH).unwrap_or_default());
-                if this != ACTUAL || with != EXPECTED {
-                    return Err(Failed::NothingToCompare {
-                        this: this.to_string(),
-                        with: with.to_string(),
-                    });
-                }
-                let Some(after) = &actual else {
-                    return Err(Failed::OutOfOrder {
-                        step: COMPARE.to_string(),
-                        needs: EXECUTE.to_string(),
-                    });
-                };
-                found = Some(compare(after, &expected)?);
-            }
             _ => {
                 fits(step, &declared)?;
-                let Some(difference) = found.clone() else {
-                    return Err(Failed::OutOfOrder {
-                        step: REPORT.to_string(),
-                        needs: COMPARE.to_string(),
-                    });
-                };
-                return Ok(Report {
-                    test: name,
-                    title: step.value(TITLE).unwrap_or("(untitled)").to_string(),
-                    compared: difference.compared,
-                    missing: difference.missing,
-                    extra: difference.extra,
-                });
+                title = step.value(TITLE).map(str::to_string);
             }
         }
     }
-    Err(Failed::OutOfOrder {
-        step: "the test".to_string(),
-        needs: REPORT.to_string(),
+
+    // **Given, when, then - and nothing says to execute or to compare.** The sections say it:
+    // `given` is the state the game starts in, `when` is what the player does, `then` is the
+    // state it should leave. **Three relations went with the three steps** - `execute`, `compare`
+    // and the stores they named.
+    game.extend(given);
+    let before = Game::of(game).map_err(|why| Failed::Malformed { why })?;
+    let mut actual = before;
+    for command in &when {
+        // **A command without a `repeat` fires once** - `spec/console.md`. Nothing here writes
+        // one yet, and writing one means a column in the foundation and `-> n` in the friendly
+        // form, exactly as a quantity is written.
+        actual = fire(&actual, command, 1).map_err(|why| Failed::Refused { why })?;
+    }
+    let difference = compare(&actual, &then)?;
+    Ok(Report {
+        test: name,
+        title: title.unwrap_or_else(|| "(untitled)".to_string()),
+        compared: difference.compared,
+        missing: difference.missing,
+        extra: difference.extra,
     })
 }
 

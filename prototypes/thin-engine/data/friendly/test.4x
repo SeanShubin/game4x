@@ -1,8 +1,14 @@
-# The orchestrator: what this test does, in the order it does it.
+# The whole test, in three sections: the state, the act, the state it leaves.
 #
-# **A test is data too.** Nothing here is Rust - the harness reads this file, and every step is a
-# row. `seq` orders them across the four step relations, and is read as a number rather than as
-# text, because `10` sorts before `2`.
+# **`{given}`, `{when}` and `{then}` are markers.** Every row after one belongs to it, which is
+# line order carrying grouping as well as sequence - Sean, 2026-09-15, on his own sketch of this
+# file. **They carry no values**; the name is the whole of the row.
+#
+# **Nothing says to execute or to compare.** The sections say it: `when` is what the player does
+# and `then` is what should be true afterwards.
+#
+# **The prologue is script rows and the sections are game rows**, which is why the script store is
+# checked against the prologue alone.
 
 {test name:the-scout-moves-to-an-adjacent-place}
 
@@ -10,10 +16,25 @@
 {load file:schema.4x into:game}
 {load file:engine.4x into:game}
 {load file:rules.4x into:game}
-{load file:before.4x into:game}
-{load file:command.4x into:game}
-{load file:expected.4x into:expected}
-
-{execute command:move}
-{compare this:actual with:expected}
 {report title:the-first-test}
+
+{given}
+{territory id:1 name:territory-1}
+{territory id:2 name:territory-2}
+{territory id:3 name:territory-3}
+{thing id:1 name:scout}
+{adjacency id:1 from:territory-1 to:territory-2}
+{adjacency id:2 from:territory-2 to:territory-3}
+{residency what:scout where:territory-1} -> 1
+
+{when}
+{move what:scout from:territory-1 to:territory-2}
+
+{then}
+{territory id:1 name:territory-1}
+{territory id:2 name:territory-2}
+{territory id:3 name:territory-3}
+{thing id:1 name:scout}
+{adjacency id:1 from:territory-1 to:territory-2}
+{adjacency id:2 from:territory-2 to:territory-3}
+{residency what:scout where:territory-2} -> 1

@@ -34,12 +34,10 @@ pub fn rows(at: &str) -> Vec<Row> {
 /// first time it ran. **The order does not matter to the engine**, since everything goes into one
 /// store and is validated together; the lists agreeing is what matters, and asserting the order is
 /// the cheapest way to notice that they do not.
-pub const LOADED: [&str; 5] = [
+pub const LOADED: [&str; 3] = [
     "data/foundation/schema.4x",
     "data/foundation/engine.4x",
     "data/foundation/rules.4x",
-    "data/foundation/before.4x",
-    "data/foundation/command.4x",
 ];
 
 pub fn game_rows() -> Vec<Row> {
@@ -47,7 +45,28 @@ pub fn game_rows() -> Vec<Row> {
     for file in LOADED {
         all.extend(rows(file));
     }
+    all.extend(section("given"));
     all
+}
+
+/// The rows of one section of `data/foundation/test.4x`.
+///
+/// **The state lives in the test now.** `given` and `then` are two worlds for one schema, so a
+/// caller asks for the one it means - putting both in a store would give two `{territory id:1}`
+/// rows and a key that names neither.
+pub fn section(want: &str) -> Vec<Row> {
+    let mut inside = false;
+    let mut out = Vec::new();
+    for row in rows("data/foundation/test.4x") {
+        if matches!(row.relation.as_str(), "given" | "when" | "then") {
+            inside = row.relation == want;
+            continue;
+        }
+        if inside {
+            out.push(row);
+        }
+    }
+    out
 }
 
 /// The game as `data/` states it, before anything has run.

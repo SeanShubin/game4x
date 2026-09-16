@@ -51,7 +51,7 @@ fn originals() -> BTreeMap<String, String> {
             std::fs::read_to_string(&file).expect("a file"),
         );
     }
-    assert_eq!(all.len(), 8, "eight data files: {:?}", all.keys());
+    assert_eq!(all.len(), 5, "five data files: {:?}", all.keys());
     all
 }
 
@@ -128,9 +128,9 @@ fn check(files: &InMemory) -> Result<(), String> {
         .iter()
         .filter(|row| row.relation == "reference")
         .count();
-    if references != 6 {
+    if references != 4 {
         return Err(format!(
-            "{references} references in the script, and there are six"
+            "{references} references in the script, and there are four"
         ));
     }
 
@@ -183,6 +183,19 @@ fn loaded(files: &InMemory) -> Result<Vec<Row>, String> {
         let text = files.read(file).ok_or_else(|| format!("no file {file}"))?;
         all.extend(read(&text).map_err(|why| format!("{file}: {why}"))?);
     }
+    // **And the state, which is no longer loaded from anywhere.** It is the `{given}` section of
+    // the test, so a game built from the loads alone has a schema and a rule and no world - which
+    // is what `adjacency has no rows` said when this was not here.
+    let mut inside = false;
+    for row in &script {
+        if matches!(row.relation.as_str(), "given" | "when" | "then") {
+            inside = row.relation == "given";
+            continue;
+        }
+        if inside {
+            all.push(row.clone());
+        }
+    }
     Ok(all)
 }
 
@@ -206,9 +219,9 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
     // floor first, and deleting a reference then simply meant one fewer was checked - the loop
     // below only ever tests the references that are there. A floor asks *are there enough*; the
     // question is *are they all still here*.
-    if references.len() != 21 {
+    if references.len() != 18 {
         return Err(format!(
-            "{} references, and there are twenty-one",
+            "{} references, and there are eighteen",
             references.len()
         ));
     }
@@ -340,7 +353,7 @@ fn no_row_can_be_deleted_without_breaking_something() {
         }
     }
 
-    assert_eq!(tried, 215, "every row in `data/` was deleted in turn");
+    assert_eq!(tried, 187, "every row in `data/` was deleted in turn");
 
     let mut counted: BTreeMap<String, usize> = BTreeMap::new();
     for one in survived {
@@ -441,9 +454,10 @@ fn no_value_can_be_changed_without_breaking_something() {
 ///
 /// **Two groups, and neither is an oversight.**
 ///
-/// **The decorations**, which is what Sean has said they are: `input.name` is read into an error
-/// message and nowhere else, because everything references by id. It is waiting on the user-facing
-/// style, which is the thing that will read it.
+/// **The decorations are gone.** `input.name` was the last of them - read into an error message and
+/// nowhere else - and a command that is a row of its own rule binds its inputs *by name*, so
+/// `{move what:... from:... to:...}` reads it. **Both names this list used to hold now do work**:
+/// `rule.name` when the section fires, `input.name` when it binds.
 ///
 /// **`rule.name` was on that list and is not now**, which is what collapsing `test.4x` bought.
 /// `{execute command:move}` resolves a command by the name of the rule it fires, so a decoration
@@ -466,7 +480,7 @@ fn no_value_can_be_changed_without_breaking_something() {
 /// being dead.
 ///
 /// **And one that is none of those groups, which this instrument found rather than anybody
-/// predicting where**: `residency.quantity` in `before.4x`. **The world says one scout is in
+/// predicting where**: `residency.quantity` in `given.4x`. **The world says one scout is in
 /// territory 1 and changing that to five breaks nothing**, because `move` never reads it - its
 /// `require` and `remove` clauses match on `what` and `where` and leave the quantity unbound, and
 /// the quantity that lands at the destination is the `literal` written in the rule.
@@ -476,10 +490,9 @@ fn no_value_can_be_changed_without_breaking_something() {
 /// `add` can say so - they are set operations over whole rows. **This line is the check that will
 /// go red when quantities start being read**, which is the only reason it is worth writing down
 /// rather than fixing by binding a column nothing needs yet.
-const NOT_LOAD_BEARING: [&str; 5] = [
-    "1 before.4x residency.quantity",
+const NOT_LOAD_BEARING: [&str; 4] = [
     "4 rules.4x clause.seq",
-    "3 rules.4x input.name",
     "3 rules.4x input.seq",
     "1 rules.4x literal.id",
+    "1 test.4x residency.quantity",
 ];

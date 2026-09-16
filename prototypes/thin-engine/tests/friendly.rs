@@ -7,13 +7,13 @@ mod common;
 use common::friendly::Names;
 use common::{game_rows, rows};
 
-/// **`before.4x` renders as Sean wrote it**, line for line.
+/// **`given.4x` renders as Sean wrote it**, line for line.
 #[test]
 fn the_world_renders_in_the_user_facing_format() {
     let game = game_rows();
     let names = Names::of(&game);
 
-    let rendered = names.all(&rows("data/foundation/before.4x"));
+    let rendered = names.all(&common::section("given"));
     println!("{rendered}");
 
     assert_eq!(
@@ -36,13 +36,8 @@ fn every_row_keeps_its_id() {
     let names = Names::of(&game);
 
     let mut checked = 0;
-    for file in [
-        "data/foundation/before.4x",
-        "data/foundation/rules.4x",
-        "data/foundation/command.4x",
-        "data/foundation/schema.4x",
-    ] {
-        for row in rows(file) {
+    for file in ["data/foundation/rules.4x", "data/foundation/schema.4x"] {
+        for row in rows(file).into_iter().chain(common::section("given")) {
             let Some(id) = row.value("id") else { continue };
             let rendered = names.row(&row);
             assert!(
@@ -62,7 +57,7 @@ fn every_row_keeps_its_id() {
 /// `what:scout` is looked up among things and cannot be confused with a role of the same name.
 ///
 /// **`column` is the one relation that cannot satisfy it**, because `column.name` is not a name
-/// for the row - it is the token a row is keyed by, so sixteen columns are called `id`. Sean chose
+/// for the row - it is the token a row is keyed by, so fourteen columns are called `id`. Sean chose
 /// to leave it that way rather than give `column` a second column: *binding and column are
 /// machinery.* **So a reference to a column is written as an id**, and this is what says so.
 #[test]
@@ -75,7 +70,7 @@ fn a_column_is_referenced_by_id_because_its_name_is_a_token() {
         .iter()
         .filter(|row| row.relation == "column" && row.value("name") == Some("id"))
         .count();
-    assert_eq!(called_id, 16, "sixteen columns are called `id`");
+    assert_eq!(called_id, 14, "fourteen columns are called `id`");
 
     // So no column has a name, and a reference to one is its id.
     assert_eq!(names.name("column", "44"), "44");
@@ -103,21 +98,36 @@ fn every_file_survives_the_round_trip() {
     let game = game_rows();
     let of_game = Names::of(&game);
     let mut script = rows("data/foundation/script.4x");
-    script.extend(rows("data/foundation/test.4x"));
+    // **Only the prologue of the test.** Its sections are game rows, and mixing the two stores
+    // gives one set of ids two meanings.
+    script.extend(
+        rows("data/foundation/test.4x")
+            .into_iter()
+            .zip(common::friendly::in_a_section(&rows(
+                "data/foundation/test.4x",
+            )))
+            .filter(|(_, section)| !section)
+            .map(|(row, _)| row),
+    );
     let of_script = Names::of(&script);
 
     let mut checked = 0;
-    for (file, names) in [
-        ("data/foundation/schema.4x", &of_game),
-        ("data/foundation/engine.4x", &of_game),
-        ("data/foundation/rules.4x", &of_game),
-        ("data/foundation/before.4x", &of_game),
-        ("data/foundation/command.4x", &of_game),
-        ("data/foundation/expected.4x", &of_game),
-        ("data/foundation/script.4x", &of_script),
-        ("data/foundation/test.4x", &of_script),
+    for file in [
+        "data/foundation/schema.4x",
+        "data/foundation/engine.4x",
+        "data/foundation/rules.4x",
+        "data/foundation/script.4x",
+        "data/foundation/test.4x",
     ] {
-        for row in rows(file) {
+        let these = rows(file);
+        let mine = common::friendly::in_a_section(&these);
+        for (at, row) in these.iter().enumerate() {
+            let row = row.clone();
+            let names = if file.ends_with("script.4x") || (file.ends_with("test.4x") && !mine[at]) {
+                &of_script
+            } else {
+                &of_game
+            };
             let friendly = names.row(&row);
             let parsed = names
                 .parse(&friendly)
@@ -135,7 +145,7 @@ fn every_file_survives_the_round_trip() {
             checked += 1;
         }
     }
-    assert_eq!(checked, 215, "every row in `data/` went round");
+    assert_eq!(checked, 187, "every row in `data/` went round");
 }
 
 /// **A counted relation writes its quantity after the brace, and an identified one has no arrow.**

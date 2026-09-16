@@ -26,8 +26,6 @@
 {relation id:7 name:input}
 {relation id:8 name:clause}
 {relation id:9 name:binding}
-{relation id:10 name:command}
-{relation id:11 name:argument}
 {relation id:12 name:primitive}
 {relation id:13 name:territory}
 {relation id:14 name:thing}
@@ -67,12 +65,6 @@
 {column id:27 relation:binding seq:2 name:clause}
 {column id:28 relation:binding seq:3 name:column}
 {column id:29 relation:binding seq:4 name:input}
-{column id:30 relation:command seq:1 name:id}
-{column id:31 relation:command seq:2 name:rule}
-{column id:32 relation:argument seq:1 name:id}
-{column id:33 relation:argument seq:2 name:command}
-{column id:34 relation:argument seq:3 name:input}
-{column id:35 relation:argument seq:4 name:value}
 {column id:36 relation:primitive seq:1 name:id}
 {column id:37 relation:primitive seq:2 name:word}
 {column id:38 relation:territory seq:1 name:id}
@@ -109,9 +101,6 @@
 {reference id:10 column:27 to:clause}
 {reference id:11 column:28 to:column}
 {reference id:12 column:29 to:input}
-{reference id:13 column:31 to:rule}
-{reference id:14 column:33 to:command}
-{reference id:15 column:34 to:input}
 {reference id:16 column:42 to:territory}
 {reference id:17 column:43 to:territory}
 
