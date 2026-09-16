@@ -295,7 +295,37 @@ them.
 too, because it never gets as far as moving anything. **Worth knowing before a short dead list is
 read as a tidy one.**
 
+## What the suite is testing, which is not the engine
+
+**Sean, 2026-09-16**: *This suite is testing one of many sets of possible rules supported by the
+game engine. We are directly testing the interface that the game user interface is going to use.
+The support infrastructure, which includes most of the data and all of the game engine, is being
+indirectly tested through this surface. All of the tests share the same instance of the game rules,
+so the rules for one test are the same as the rules for another. This indirectly tests if our
+support infrastructure is flexible enough to implement this particular ruleset.*
+
+**So a `{when}` row is the surface, not a convenience.** `{move what:scout from:territory-1
+to:territory-2}` is what a user interface would send, and `offered` is what it would ask to know
+what to show. **Nothing here tests the engine directly**, and that is the design rather than a gap:
+a rule the engine cannot express shows up as a test that cannot be written.
+
+**And it decides what belongs in a test.** A test's `given` holds **state** - territories,
+adjacencies, residencies - and the **ruleset** is shared: the schema, the rules, and which
+categories exist. `scout` means the same thing in every test because the ruleset is one instance.
+
+## `thing` moved out of the tests, and the collision is what found it
+
+**Two tests used `thing id:1` for two different categories** - `scout` in one and `labor` in
+another - and the translator could not say which, because one name table reads every file. **The
+fix is not unique ids across tests**, which is a coupling nothing states and nothing checks; it is
+that a category was never a test's to declare.
+
+`data/{d}/things.4x` holds all four, loaded by `setup.4x` beside the rules. **And `thing` stopped
+being state**: a test compares `adjacency`, `residency` and `territory`, because what a test asserts
+is what its world became and not which categories exist.
+
 ## One test per file, and one line of it is not the test
+
 
 
 **Sean, 2026-09-15**: *I want the tests to be grouped together in a directory without non-tests.

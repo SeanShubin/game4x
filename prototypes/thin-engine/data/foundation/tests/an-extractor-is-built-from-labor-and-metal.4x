@@ -8,18 +8,12 @@
 
 {given}
 {territory id:1}
-{thing id:1 name:labor}
-{thing id:2 name:metal}
-{thing id:3 name:extractor}
-{residency what:1 where:1 quantity:1}
 {residency what:2 where:1 quantity:1}
+{residency what:3 where:1 quantity:1}
 
 {when}
 {build-extractor where:1}
 
 {then}
 {territory id:1}
-{thing id:1 name:labor}
-{thing id:2 name:metal}
-{thing id:3 name:extractor}
-{residency what:3 where:1 quantity:1}
+{residency what:4 where:1 quantity:1}

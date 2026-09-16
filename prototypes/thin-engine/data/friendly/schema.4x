@@ -117,7 +117,6 @@
 # know which relations to look at - without this it would compare the rule and the command too.
 
 {state id:1 relation:territory}
-{state id:2 relation:thing}
 {state id:3 relation:adjacency}
 {state id:4 relation:residency}
 

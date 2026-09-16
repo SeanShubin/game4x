@@ -143,7 +143,7 @@ fn check(files: &InMemory) -> Result<(), String> {
 
         // **A test compares a world or a refusal**, and either is a real comparison. What would
         // not be is comparing nothing, which is what this rules out.
-        let state = ["adjacency", "residency", "territory", "thing"];
+        let state = ["adjacency", "residency", "territory"];
         if report.compared != state && report.compared != ["the refusal"] {
             return Err(format!("compared {:?}", report.compared));
         }

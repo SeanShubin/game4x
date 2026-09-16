@@ -33,6 +33,7 @@ fn files() -> Vec<(String, bool)> {
         ("schema.4x".to_string(), true),
         ("engine.4x".to_string(), true),
         ("rules.4x".to_string(), true),
+        ("things.4x".to_string(), true),
         ("script.4x".to_string(), false),
         ("setup.4x".to_string(), false),
     ];

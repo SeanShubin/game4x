@@ -9,7 +9,6 @@
 {territory id:1}
 {territory id:2}
 {territory id:3}
-{thing id:1 name:scout}
 {adjacency id:1 from:1 to:2}
 {adjacency id:2 from:2 to:3}
 {residency what:1 where:1 quantity:1}
