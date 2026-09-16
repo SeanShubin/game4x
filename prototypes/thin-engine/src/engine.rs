@@ -190,6 +190,27 @@ impl Game {
             .collect()
     }
 
+    /// Every value that identifies a row of `relation`, in the order the rows are held.
+    ///
+    /// **The identity rather than the key**, because this is what a reference would carry - a
+    /// counted relation has no single value to be named by, so it offers none and an input typed
+    /// as one has nothing to range over.
+    fn keys_of(&self, relation: &str) -> Vec<String> {
+        let Some(declared) = self.schema.relation(relation) else {
+            return Vec::new();
+        };
+        if declared.quantity().is_some() {
+            return Vec::new();
+        }
+        self.rows
+            .rows()
+            .iter()
+            .filter(|row| row.relation == relation)
+            .filter_map(|row| row.value(declared.identity()))
+            .map(str::to_string)
+            .collect()
+    }
+
     /// Whether any row of `relation` has `value` as its key.
     fn has_key(&self, relation: &str, value: &str) -> bool {
         let Some(declared) = self.schema.relation(relation) else {
@@ -324,10 +345,25 @@ pub fn run(game: &Game, command: &str) -> Result<Game, Refused> {
         bound.insert(id.to_string(), (*given).to_string());
     }
 
+    apply(game, &of_rule, rule, &bound)
+}
+
+/// Fire a rule under a binding of its inputs, and give back the game it leaves.
+///
+/// **Split out of [`run`] so that [`offered`] can ask whether a binding would be refused without
+/// a `{command ...}` row existing for it.** Reading a command and firing a rule were one function,
+/// and only the first half needs a command. **No logic moved** - this is the second half of `run`
+/// with its own name.
+fn apply(
+    game: &Game,
+    of_rule: &str,
+    rule: String,
+    bound: &BTreeMap<String, String>,
+) -> Result<Game, Refused> {
     let mut clauses: Vec<&Row> = game
         .of_relation(CLAUSE)
         .into_iter()
-        .filter(|row| row.value(RULE) == Some(of_rule.as_str()))
+        .filter(|row| row.value(RULE) == Some(of_rule))
         .collect();
     clauses.sort_by_key(|row| row.value(SEQ).unwrap_or_default().to_string());
 
@@ -346,7 +382,7 @@ pub fn run(game: &Game, command: &str) -> Result<Game, Refused> {
             // **`add` is the other case and must name every column**, because a row that does not
             // fit the structure cannot be put into the world - including the `id` it will be
             // known by.
-            let wanted = row_of(game, clause, &bound, &rule, PATTERN)?;
+            let wanted = row_of(game, clause, bound, &rule, PATTERN)?;
             match role {
                 REQUIRE => {
                     if !game.rows.holds(&wanted) {
@@ -371,7 +407,7 @@ pub fn run(game: &Game, command: &str) -> Result<Game, Refused> {
         let role = clause.value(ROLE).unwrap_or_default();
         match game.named(ROLE, role).unwrap_or(role) {
             REQUIRE | REMOVE => continue,
-            ADD => after.add(row_of(game, clause, &bound, &rule, WHOLE)?),
+            ADD => after.add(row_of(game, clause, bound, &rule, WHOLE)?),
             other => {
                 return Err(Refused::NoSuchRole {
                     rule,
@@ -469,6 +505,101 @@ fn row_of(
         }
     }
     Ok(Row { relation, values })
+}
+
+/// Every command the player could fire right now, as rows in the friendly command form.
+///
+/// **`spec/invariants.md`**: *the player's recipes are offered wherever their inputs are present,
+/// to take or to leave*, and *what may be chosen is whatever the game holds, and the offering is
+/// derived rather than listed*. **This is that sentence, run.**
+///
+/// **Offerable means would not be refused**, which is the strongest reading and the cheapest: a
+/// candidate is bound and fired, and kept if firing succeeds. **No second copy of what legal
+/// means** - `docs/process.md` calls a check that reads a copy of the population a check of the
+/// copy, and a predicate written beside [`apply`] would be exactly that.
+///
+/// **It adds no word to the engine.** Every row it reads - `rule`, `input`, `clause`, `binding` -
+/// is vocabulary the engine already had, so the boundary `data/engine.4x` draws does not move.
+///
+/// **A row's relation is the rule's name and its values are the input names**, so what comes back
+/// is what a player would type: `{move what:scout from:territory-1 to:territory-2}`.
+///
+/// **The cost is a product over every input's type**, which is fine at three territories and is
+/// the thing to watch as a world grows. It is measured rather than guarded against, because what
+/// this prototype is for is finding out where the data explodes.
+pub fn offered(game: &Game) -> Vec<Row> {
+    let mut out = Vec::new();
+    for rule in game.of_relation(RULE) {
+        let Some(of_rule) = rule.value(ID) else {
+            continue;
+        };
+        let named = rule.value(NAME).unwrap_or(of_rule).to_string();
+
+        let mut inputs: Vec<&Row> = game
+            .of_relation(INPUT)
+            .into_iter()
+            .filter(|row| row.value(RULE) == Some(of_rule))
+            .collect();
+        inputs.sort_by_key(|row| row.value(SEQ).unwrap_or_default().to_string());
+
+        // **Every key of the relation each input is typed as.** That is what *wherever their
+        // inputs are present* ranges over, and the type is what bounds it.
+        let choices: Vec<(String, String, Vec<String>)> = inputs
+            .iter()
+            .map(|input| {
+                let of = input.value(OF).unwrap_or_default();
+                let of = game.named(RELATION, of).unwrap_or(of).to_string();
+                let keys = game.keys_of(&of);
+                (
+                    input.value(ID).unwrap_or_default().to_string(),
+                    input.value(NAME).unwrap_or_default().to_string(),
+                    keys,
+                )
+            })
+            .collect();
+
+        for bound in every_binding(&choices) {
+            let by_id: BTreeMap<String, String> = choices
+                .iter()
+                .map(|(id, _, _)| id.clone())
+                .zip(bound.iter().cloned())
+                .collect();
+            if apply(game, of_rule, named.clone(), &by_id).is_ok() {
+                out.push(Row {
+                    relation: named.clone(),
+                    values: choices
+                        .iter()
+                        .map(|(_, name, _)| name.clone())
+                        .zip(bound)
+                        .collect(),
+                });
+            }
+        }
+    }
+    out.sort_by_key(|row| (row.relation.clone(), format!("{:?}", row.values)));
+    out
+}
+
+/// Every way of choosing one value for each input, in declared order.
+///
+/// **Written with loops because the closure form needed the word `move`**, which is a Rust keyword
+/// and also the name of the game's one rule. `tests/isolation.rs` reads `src/` for the game's nouns
+/// and cannot tell a keyword from a noun - and should not try, because the day it does is the day
+/// it stops catching the thing it is for. **The check was right and the code moved.**
+fn every_binding(choices: &[(String, String, Vec<String>)]) -> Vec<Vec<String>> {
+    let mut all: Vec<Vec<String>> = vec![Vec::new()];
+    for (_, _, keys) in choices {
+        let mut next = Vec::new();
+        for so_far in &all {
+            for key in keys {
+                let mut one = so_far.clone();
+                one.push(key.clone());
+                next.push(one);
+            }
+        }
+        all = next;
+    }
+    all
 }
 
 /// The roles a clause may have, so that a test can assert the data uses all of them and no others.

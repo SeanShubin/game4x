@@ -10,7 +10,27 @@ of the code, of the data structure, of the data - are its three readings.**
 Built to `S-136`. **Nothing here is a decision** - it is research, and if its answer implies one,
 that reaches Sean as a proposal through the specification lane, not from this directory.
 
+## Why any of this is a requirement, in Sean's words
+
+**Sean, 2026-09-15**: *The primary reason for these conciseness and simplicity requirements are so
+that I can maintain executive control as a human. I felt I was losing control from the spec instance
+so now I am redoing everything incrementally from the ground up, making sure I keep the language
+understandable by both of us along the way. The friendly format is how I keep track of everything in
+my head, the foundation format is the more formal model that is easy for an ai assistant to
+understand but hard for a human to grok.*
+
+**So minimal is not a taste here.** A row this lane could add without anybody noticing is a row that
+costs the one thing the process depends on - `docs/process.md` is Sean's statement that he keeps
+executive control over the specification, and a model he cannot hold is one he cannot exercise it
+over. **The two formats have different readers and that is their whole design**: friendly is his,
+foundation is this lane's, and `tests/directories.rs` is what says they are the same facts.
+
+**It is also why the invariants below rank the way they do.** Losing the foundation-to-friendly
+direction is acceptable and losing conciseness is not, because one costs a tool and the other costs
+a reader.
+
 ## The invariants
+
 
 **Sean, 2026-09-15**, saying what is essential here and what may bend. **They are about this
 prototype's friendly notation and not about the game's command language**, which is
@@ -238,7 +258,66 @@ is two columns** - `scout@territory-1`, or whatever it would be - and that is re
 friendly side. It does not arise today and would arrive the first time a rule needs to refer to a
 residency rather than match one.
 
+## The test is a sequence, so it stopped saying so twice
+
+**`{execute id:1 seq:8 command:1}` is `{execute command:move}`.** Nine columns went - `id` and `seq`
+from `load`, `execute`, `compare` and `report`, and `id` from `test` - because **the file already
+says what order it is in** and nothing referenced a step. 482 characters became 369.
+
+**`seq` carried a bug and it is now unwritable rather than fixed.** It was sorted as text once, so
+`10` came before `2` and every step after the first ran out of order. `Failed::OutOfSequence` and
+its refusal are gone with the column: **nothing can say a wrong order when nothing says an order.**
+
+**Sean drew the line this rests on**: line order is a *temporal coupling* - it says when a statement
+happens, and never what an argument means. **Every argument stays named.** That also rules out the
+bare `territory-1 territory-2` form this README weighed for adjacency, which bought its brevity by
+making columns positional.
+
+**And a decoration became load-bearing, which is the better direction.** `rule.name` was on the list
+of values nothing reads; `{execute command:move}` resolves a command by the rule it fires, so the
+name is now what a step is written in. **The dead-value list went from ten entries to five** - four
+by deleting columns, one by finding a reader.
+
+## What may be fired is computed, not listed
+
+**`spec/invariants.md` states it and nothing implemented it**: *the player's recipes are offered
+wherever their inputs are present, to take or to leave*, and *what may be chosen is whatever the
+game holds, and the offering is derived rather than listed*.
+
+**Sean, 2026-09-15**, on why it matters more than a tidy reference: *we won't want executing an
+invalid command to even be possible in the user interface.*
+
+**`offered` returns rows in the friendly command form**, so what comes back is what a player would
+type. **Offerable means would not be refused** - each candidate binding is fired and kept if firing
+succeeds, so there is no second copy of what legal means to drift from the first.
+
+**It added no word to the engine.** `rule`, `input`, `clause` and `binding` were all vocabulary it
+already had, so the boundary `data/engine.4x` draws did not move: 37 words before and after. **`run`
+split into reading a command and firing a rule**, and no logic moved.
+
+## The offering walk found a one-way world
+
+**The scout can go from territory 1 to 2 and cannot come back.** `adjacency` is stated one way -
+`{from:1 to:2}`, `{from:2 to:3}` - and `move`'s second clause requires a row in exactly that
+direction. **No test could see it**, because the only move in the scenario runs downhill.
+
+**The game does not have this.** `crates/game-model/src/game.rs` holds adjacency as
+`Vec<Vec<TerritoryId>>` and its own comment says *Symmetric*; the dump halves it for writing.
+**The prototype kept the halved form and lost the symmetry with it.**
+
+**Asserted as it is rather than as it should be**, in
+`only_the_moves_the_world_allows_are_offered`. Whether to state both directions or to read one from
+either end is a modelling decision and not a test's, and that line goes red when it is made.
+
+## And the isolation check caught a keyword
+
+**`move` is a Rust keyword and the name of the game's one rule.** A closure written
+`.map(move |key| …)` put the word in a line that runs, and `tests/isolation.rs` refused it. **It was
+right and should not be taught the difference** - the day it can tell a keyword from a noun is the
+day it stops catching what it is for. The loop form says the same thing and says no nouns.
+
 ## Fuel falsifies the key relation, and `spec/console.md` had already said so
+
 
 **Sean, 2026-09-15**: *We shoud never have non-determinism form what row happens to be encountered
 first. The app spec has the concept of a tree from distinguisishable to quantity. We don't have fuel
@@ -557,14 +636,14 @@ Measured on 2026-09-14:
 
 |                                              |                                                                                           |
 | -------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| Code that runs, in `src/`                    | **1069 lines** - notation 77, store 33, schema 281, engine 357, script 316                |
-| Rows of data                                 | **224** across eight files, holding **692** values                                        |
+| Code that runs, in `src/`                    | **1161 lines** - notation 77, store 33, schema 281, engine 442, script 323                |
+| Rows of data                                 | **215** across eight files, holding **635** values                                        |
 | Of those, rows nothing reads                 | **1**, a binding on a clause nothing in the suite tries to violate                        |
-| Values nothing reads                         | **17 of 692** - decorations, ids on relations with one row, and one quantity              |
+| Values nothing reads                         | **12 of 635** - decorations, one id on a one-row relation, and one quantity               |
 | Rows that differ between before and expected | **1** - `{residency what:1 where:1 quantity:1}` becomes `… where:2 quantity:1`            |
 | Relations declared                           | **17** in the game and **9** in the script; sixteen keyed by an `id`, `residency` counted |
 | Game nouns in code that runs                 | **0**, checked against a list read out of `data/`                                         |
-| Tests                                        | **40**, all passing                                                                       |
+| Tests                                        | **41**, all passing                                                                       |
 
 **The engine names nothing the game has.** `territory`, `thing`, `adjacency`, `residency` and
 `move` appear in `data/`, in the tests and in comments, and in no line of `src/` that runs.
@@ -868,7 +947,7 @@ the smaller thing as well as the right one.
 reliably convert between friendly and foundation. Also it is ok that sometimes they happen to be
 the same thing.*
 
-`data/friendly/` and `data/foundation/` hold **the same eight files and the same 224 rows**.
+`data/friendly/` and `data/foundation/` hold **the same eight files and the same 215 rows**.
 `tests/directories.rs` is what says they say the same thing, in both directions: converting the
 friendly source gives the foundation row for row, and rendering the foundation gives the friendly
 source back.
@@ -908,7 +987,7 @@ every relation, or a table mapping a row to a name. That is a schema decision an
 
 **Sean, 2026-09-15**: *I expect to be authoring tests in the friendly format and only
 debugging/vetting in the foundation format.* So the translation has to go both ways, and it does:
-**foundation to friendly to foundation is the identity for all 224 rows**, asserted per row.
+**foundation to friendly to foundation is the identity for all 215 rows**, asserted per row.
 
 **Nothing is minted.** A friendly row carries its own `id`, so translating back is resolving each
 reference from a name to an id and dropping the `name` where the relation does not declare one.

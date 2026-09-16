@@ -135,7 +135,7 @@ fn every_file_survives_the_round_trip() {
             checked += 1;
         }
     }
-    assert_eq!(checked, 224, "every row in `data/` went round");
+    assert_eq!(checked, 215, "every row in `data/` went round");
 }
 
 /// **A counted relation writes its quantity after the brace, and an identified one has no arrow.**

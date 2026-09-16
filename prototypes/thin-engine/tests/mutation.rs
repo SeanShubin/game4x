@@ -340,7 +340,7 @@ fn no_row_can_be_deleted_without_breaking_something() {
         }
     }
 
-    assert_eq!(tried, 224, "every row in `data/` was deleted in turn");
+    assert_eq!(tried, 215, "every row in `data/` was deleted in turn");
 
     let mut counted: BTreeMap<String, usize> = BTreeMap::new();
     for one in survived {
@@ -441,19 +441,29 @@ fn no_value_can_be_changed_without_breaking_something() {
 ///
 /// **Two groups, and neither is an oversight.**
 ///
-/// **The decorations**, which is what Sean has said they are: `rule.name` and `input.name` are
-/// read into an error message and nowhere else, because everything references by id. They are
-/// waiting on the user-facing style, which is the thing that will read them.
+/// **The decorations**, which is what Sean has said they are: `input.name` is read into an error
+/// message and nowhere else, because everything references by id. It is waiting on the user-facing
+/// style, which is the thing that will read it.
+///
+/// **`rule.name` was on that list and is not now**, which is what collapsing `test.4x` bought.
+/// `{execute command:move}` resolves a command by the name of the rule it fires, so a decoration
+/// became the thing a step is written in. **That is the direction to want**: a value nothing reads
+/// is a question, and answering it by finding a reader beats answering it by deleting the column.
 ///
 /// **`input.seq` and `clause.seq` order things whose order does not matter** - yet. Clauses are
 /// applied in role passes, every `require` then every `remove` then every `add`, so two clauses of
 /// the same role are interchangeable. **A second rule where two removes contend would change
 /// that**, and this line is where to look when it does.
 ///
-/// **Five ids on relations with one row.** `test`, `execute`, `compare`, `report` and `literal`
-/// have a single row each, so there is no other id to swap theirs for - **the instrument cannot ask
-/// whether a key is distinct when there is nothing to be distinct from.** Every other id in the
-/// data is load-bearing, and was not before keys had to be unique.
+/// **One id on a relation with one row.** `literal` has a single row, so there is no other id to
+/// swap its for - **the instrument cannot ask whether a key is distinct when there is nothing to be
+/// distinct from.**
+///
+/// **Four more were on that list and the columns are gone.** `test`, `execute`, `compare` and
+/// `report` were keyed by an id nothing referenced and ordered by a `seq` nothing needed, because
+/// the steps are a sequence and the file already says what order they are in. **Nine columns went
+/// and the list got shorter by four**, which is the cheaper of the two ways a dead value stops
+/// being dead.
 ///
 /// **And one that is none of those groups, which this instrument found rather than anybody
 /// predicting where**: `residency.quantity` in `before.4x`. **The world says one scout is in
@@ -466,15 +476,10 @@ fn no_value_can_be_changed_without_breaking_something() {
 /// `add` can say so - they are set operations over whole rows. **This line is the check that will
 /// go red when quantities start being read**, which is the only reason it is worth writing down
 /// rather than fixing by binding a column nothing needs yet.
-const NOT_LOAD_BEARING: [&str; 10] = [
+const NOT_LOAD_BEARING: [&str; 5] = [
     "1 before.4x residency.quantity",
     "4 rules.4x clause.seq",
     "3 rules.4x input.name",
     "3 rules.4x input.seq",
     "1 rules.4x literal.id",
-    "1 rules.4x rule.name",
-    "1 test.4x compare.id",
-    "1 test.4x execute.id",
-    "1 test.4x report.id",
-    "1 test.4x test.id",
 ];

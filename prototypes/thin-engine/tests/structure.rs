@@ -186,6 +186,67 @@ fn the_helper_loads_what_the_script_loads() {
     );
 }
 
+/// **What the player may fire is derived from the world, not listed anywhere.**
+///
+/// `spec/invariants.md`: *the player's recipes are offered wherever their inputs are present, to
+/// take or to leave*, and *what may be chosen is whatever the game holds, and the offering is
+/// derived rather than listed*.
+///
+/// **Sean, 2026-09-15**, on why this matters more than a reference being tidy: *we won't want
+/// executing an invalid command to even be possible in the user interface.*
+///
+/// **Checked against the world rather than against a number.** The scout is in territory 1, which
+/// is next to territory 2 and to nothing else - so exactly one move is offered, and the check that
+/// it is *one* is what makes the two controls below mean anything.
+#[test]
+fn only_the_moves_the_world_allows_are_offered() {
+    let game = before();
+    let offered: Vec<String> = thin_engine::engine::offered(&game)
+        .iter()
+        .map(thin_engine::notation::write)
+        .collect();
+
+    assert_eq!(offered, vec!["{move from:1 to:2 what:1}"]);
+
+    // **The candidates it chose between**, so a single answer is not a walk that tried one thing.
+    // Three territories to leave, three to enter, one thing to move: 9 bindings, 1 legal.
+    let territories = game
+        .rows()
+        .rows()
+        .iter()
+        .filter(|row| row.relation == "territory")
+        .count();
+    assert_eq!(
+        territories, 3,
+        "three territories, so nine bindings were tried"
+    );
+
+    // **The control, and it found something.** With the scout in territory 2 it can reach 3 and
+    // **cannot go back to 1**: `adjacency` is stated one way - `{from:1 to:2}`, `{from:2 to:3}` -
+    // and `move`'s second clause requires a row in exactly that direction. **The world is a
+    // one-way corridor and no test could see it**, because the only move in the scenario runs
+    // downhill.
+    //
+    // **The game does not have this**: `crates/game-model/src/game.rs` holds adjacency as
+    // `Vec<Vec<TerritoryId>>` and its own comment says *Symmetric*, so both directions are stored
+    // and the dump halves them for writing. **The prototype kept the halved form and lost the
+    // symmetry with it.**
+    //
+    // **Asserted as it is rather than as it should be.** Which way to fix it - state both
+    // directions, or read the one that is stated from either end - is a modelling decision and
+    // not this test's. This line goes red when it is made, which is what it is for.
+    let moved = thin_engine::engine::run(&game, "1").expect("the scout moves");
+    let after: Vec<String> = thin_engine::engine::offered(&moved)
+        .iter()
+        .map(thin_engine::notation::write)
+        .collect();
+    assert_eq!(
+        after,
+        vec!["{move from:2 to:3 what:1}"],
+        "one way only, which is the finding rather than the intent"
+    );
+}
+
 /// **A key names one row.** Two rows of a relation with the same key is a reference that names
 /// neither, and nothing checked it until it was looked for.
 #[test]

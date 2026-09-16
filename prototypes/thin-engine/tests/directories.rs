@@ -93,7 +93,7 @@ fn the_foundation_is_what_the_friendly_source_converts_to() {
         }
     }
     assert_eq!(
-        checked, 224,
+        checked, 215,
         "every row of the friendly source was converted"
     );
 }
@@ -124,7 +124,7 @@ fn the_friendly_source_is_what_the_foundation_renders_to() {
             checked += 1;
         }
     }
-    assert_eq!(checked, 224, "every row of the foundation was rendered");
+    assert_eq!(checked, 215, "every row of the foundation was rendered");
 }
 
 /// **Both directories hold the same eight files**, because nothing is omitted from either.

@@ -4,16 +4,16 @@
 # row. `seq` orders them across the four step relations, and is read as a number rather than as
 # text, because `10` sorts before `2`.
 
-{test id:1 name:the-scout-moves-to-an-adjacent-place}
+{test name:the-scout-moves-to-an-adjacent-place}
 
-{load id:1 seq:1 file:script.4x into:1}
-{load id:2 seq:2 file:schema.4x into:2}
-{load id:3 seq:3 file:engine.4x into:2}
-{load id:4 seq:4 file:rules.4x into:2}
-{load id:5 seq:5 file:before.4x into:2}
-{load id:6 seq:6 file:command.4x into:2}
-{load id:7 seq:7 file:expected.4x into:3}
+{load file:script.4x into:1}
+{load file:schema.4x into:2}
+{load file:engine.4x into:2}
+{load file:rules.4x into:2}
+{load file:before.4x into:2}
+{load file:command.4x into:2}
+{load file:expected.4x into:3}
 
-{execute id:1 seq:8 command:1}
-{compare id:1 seq:9 this:4 with:3}
-{report id:1 seq:10 title:the-first-test}
+{execute command:move}
+{compare this:4 with:3}
+{report title:the-first-test}

@@ -44,11 +44,16 @@ const EXECUTE: &str = "execute";
 const COMPARE: &str = "compare";
 const REPORT: &str = "report";
 const STATE: &str = "state";
-const SEQ: &str = "seq";
+
 const NAME: &str = "name";
 const FILE: &str = "file";
 const INTO: &str = "into";
 const COMMAND: &str = "command";
+// **Already a word the engine knows**, in `crate::engine`. Named again here because a module
+// compares against its own constants, and `tests/engine.rs` reads them all into one set - so a
+// word said twice is one word, and saying it adds nothing to the vocabulary.
+const RULE: &str = "rule";
+
 const TITLE: &str = "title";
 const THIS: &str = "this";
 const WITH: &str = "with";
@@ -82,12 +87,12 @@ pub enum Failed {
     BadlyFormed { step: String, why: Malformed },
     /// `compare` naming something other than the two stores there are.
     NothingToCompare { this: String, with: String },
-    /// A step whose `seq` is not a number, so the steps cannot be put in order.
+    /// A step naming a command nothing fires.
     ///
-    /// **Every value in this notation is a string**, so ordering by `seq` means deciding what a
-    /// `seq` is. Sorted as text, `10` comes before `2` - which is exactly what happened the first
-    /// time a tenth step existed, and every step from the second onwards ran in the wrong order.
-    OutOfSequence { step: String, seq: String },
+    /// **A command is named by the rule it fires**, which `spec/invariants.md` calls *the offering
+    /// is derived rather than listed* - the name is resolved against what the game holds rather
+    /// than against a number somebody wrote down.
+    NoSuchCommand { command: String },
     /// The rows loaded do not fit the structure they declare.
     Malformed { why: Malformed },
     /// The command did not happen.
@@ -107,8 +112,8 @@ impl std::fmt::Display for Failed {
             Failed::NothingToCompare { this, with } => {
                 write!(out, "there is nothing to compare `{this}` with `{with}`")
             }
-            Failed::OutOfSequence { step, seq } => {
-                write!(out, "{step} is at `{seq}`, which is not a number")
+            Failed::NoSuchCommand { command } => {
+                write!(out, "nothing fires `{command}`")
             }
             Failed::Malformed { why } => write!(out, "{why}"),
             Failed::Refused { why } => write!(out, "{why}"),
@@ -175,6 +180,27 @@ impl std::fmt::Display for Report {
 }
 
 /// Run a test written as rows.
+/// The id of the command that fires the rule with this name.
+///
+/// **Resolved against the game rather than written down**, which is what lets a script say
+/// `{execute command:move}` and never a number. **It reads the first**, and a file stating two
+/// commands for one rule would be ambiguous - which the prototype's one command per rule does not
+/// reach, and which the game's scenario of 133 commands would.
+fn command_firing(game: &Game, rule: &str) -> Option<String> {
+    let of_rule = game
+        .rows()
+        .rows()
+        .iter()
+        .find(|row| row.relation == RULE && row.value(NAME) == Some(rule))
+        .and_then(|row| row.value(ID))?;
+    game.rows()
+        .rows()
+        .iter()
+        .find(|row| row.relation == COMMAND && row.value(RULE) == Some(of_rule))
+        .and_then(|row| row.value(ID))
+        .map(str::to_string)
+}
+
 pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
     let name = script
         .iter()
@@ -183,7 +209,10 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
         .unwrap_or("(unnamed)")
         .to_string();
 
-    // **Ordered across the step relations by `seq`**, so the file reads top to bottom.
+    // **Ordered by where they appear**, so the file reads top to bottom and says so by saying it
+    // in that order. Sean, 2026-09-15: line order is a **temporal coupling** - it says when a
+    // statement happens and never what an argument means, which stay named.
+    //
     // **The `{test ...}` row is validated even though it is not a step.** Skipped entirely at
     // first, which meant its columns were declared in `script.4x` and checked by nothing - the
     // `name` column could be renamed there and nothing noticed.
@@ -200,21 +229,10 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
             }
         }
     }
-    // **Ordered by `seq` as a number and not as text.** Written the other way first, and the
-    // tenth step is what found it: `10` sorts before `2`, so every step after the first ran in
-    // the wrong order and `report` was reached before `compare`. A refusal rather than a silent
-    // fallback, because a `seq` nobody can order is a script nobody can run.
-    let mut ordered: Vec<(usize, &Row)> = Vec::new();
-    for step in steps {
-        let seq = step.value(SEQ).unwrap_or_default();
-        let at = seq.parse::<usize>().map_err(|_| Failed::OutOfSequence {
-            step: crate::notation::write(step),
-            seq: seq.to_string(),
-        })?;
-        ordered.push((at, step));
-    }
-    ordered.sort_by_key(|(at, _)| *at);
-    let steps: Vec<&Row> = ordered.into_iter().map(|(_, step)| step).collect();
+    // **`seq` is gone and the bug it carried is unwritable rather than fixed.** It was sorted as
+    // text once, so `10` came before `2` and every step after the first ran in the wrong order -
+    // `report` reached before `compare` had run. **Nothing can say a wrong order now**, because
+    // nothing says an order at all except the order the lines are in.
 
     let mut declared: Vec<Row> = Vec::new();
     let mut game: Vec<Row> = Vec::new();
@@ -297,11 +315,18 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
             }
             EXECUTE => {
                 fits(step, &declared)?;
-                let command = step.value(COMMAND).ok_or_else(|| Failed::BadStep {
+                let named = step.value(COMMAND).ok_or_else(|| Failed::BadStep {
                     row: crate::notation::write(step),
                 })?;
                 let before = Game::of(game.clone()).map_err(|why| Failed::Malformed { why })?;
-                actual = Some(run(&before, command).map_err(|why| Failed::Refused { why })?);
+                // **`{execute command:move}` names the rule, not a number.** The command is the
+                // one whose rule has that name - looked up in the game rather than written down,
+                // which is `spec/invariants.md`'s *what may be chosen is whatever the game holds*.
+                let command =
+                    command_firing(&before, named).ok_or_else(|| Failed::NoSuchCommand {
+                        command: named.to_string(),
+                    })?;
+                actual = Some(run(&before, &command).map_err(|why| Failed::Refused { why })?);
             }
             COMPARE => {
                 fits(step, &declared)?;
