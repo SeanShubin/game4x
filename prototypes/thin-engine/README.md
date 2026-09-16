@@ -48,11 +48,28 @@ expense of the other invariants, being able to translate from friendly to founda
 direction we must support, the translation from foundation to friendly can be abandoned if we
 must.*
 
+**4 - A defect is fixed when a test replicates it, and not before.** Sean, 2026-09-16: *We don't
+fix problems a test does not replicate. The process is red/green/refactor. [...] we must not fix
+this until we have a test to make sure it can't creep back in.*
+
 | Invariant               | May it bend                                       |
 | ----------------------- | ------------------------------------------------- |
 | **1**, the minimum      | no                                                |
 | **2**, names before ids | no, and **1** is written into it as its exception |
 | **3**, the round trip   | **yes**, and it yields to **1** and **2**         |
+| **4**, red before green | no                                                |
+
+**4 binds a correct diagnosis as hard as a wrong one.** It was said of a defect this lane had just
+measured and got right - `move` removes a whole row and adds exactly one, so moving a scout into a
+territory that already holds one loses it silently. **Being right about a defect is not permission
+to fix it.** A fix with no red test behind it leaves nothing that would notice the defect coming
+back, so the repair is unverifiable in exactly the sense `docs/process.md` means: *a quality
+improvement's evidence is a test that would have failed before it.*
+
+**So a defect this lane finds gets written down and left alone.** The silent loss above is recorded
+in the mutation suite already - `residency.quantity` sits in `NOT_LOAD_BEARING` with the note that
+the line goes red when quantities start being read - and that is the whole of what to do with it
+until a test replicates it.
 
 **2's exception is 1 applied to an identifier**, so the two cannot collide: an id appears only
 where the minimum genuinely is one.
