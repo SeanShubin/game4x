@@ -63,7 +63,7 @@ fn a_test_sets_its_sections_apart() {
             let text = std::fs::read_to_string(mine().join(&named)).expect(&named);
             let lines: Vec<&str> = text.lines().collect();
             for (at, line) in lines.iter().enumerate() {
-                let opens = matches!(line.trim(), "{given}" | "{when}" | "{then}");
+                let opens = matches!(line.trim(), "{given}" | "{when}" | "{then}" | "{refused}");
                 let names = line.starts_with("{test ");
                 if opens {
                     assert!(
@@ -95,7 +95,6 @@ fn a_test_sets_its_sections_apart() {
 }
 
 /// **Every test in the directory gets from its `given` to its `then`.**
-
 ///
 /// **Nothing here names a test**, so adding one is adding a file and this does not change.
 #[test]

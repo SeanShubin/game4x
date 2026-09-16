@@ -141,7 +141,10 @@ fn check(files: &InMemory) -> Result<(), String> {
             return Err(format!("`{one}` names the test `{}`", report.test));
         }
 
-        if report.compared != ["adjacency", "residency", "territory", "thing"] {
+        // **A test compares a world or a refusal**, and either is a real comparison. What would
+        // not be is comparing nothing, which is what this rules out.
+        let state = ["adjacency", "residency", "territory", "thing"];
+        if report.compared != state && report.compared != ["the refusal"] {
             return Err(format!("compared {:?}", report.compared));
         }
     }
@@ -416,18 +419,27 @@ fn no_row_can_be_deleted_without_breaking_something() {
 
 /// **The rows nothing reads, and why each is waiting on a test rather than on a change.**
 ///
-/// Eight bindings, all on a `require` or a `remove` clause. Deleting one makes the pattern weaker
-/// and it is still satisfied - `require {residency id:1 where:1}` holds as surely as
-/// `require {residency id:1 what:1 where:1}` does.
+/// **Bindings on a `require` or a `remove` clause.** Deleting one makes the pattern weaker and it
+/// is still satisfied - `require {residency what:1}` holds as surely as
+/// `require {residency what:1 where:1}` does. They are not decoration; a constraint is worth
+/// nothing in a run where nothing violates it, which is the same shape as the references that
+/// looked dead until a violation was generated for each.
 ///
-/// **They are not decoration; the suite has no command that lies.** The `what` and `where`
-/// bindings on the first clause are what check the command's `what` and `from` against the world,
-/// and nothing here sends a command with the wrong `from`. **That is the same shape as the
-/// nineteen references**, which looked dead until a violation was generated for each - a
-/// constraint is worth nothing in a run where nothing violates it.
+/// **This said six until a test was written that refuses, and it says four now.**
+/// `the-scout-cannot-cross-where-there-is-no-border` sends a `move` the world does not allow, and
+/// two bindings that nothing had ever leaned on became load-bearing. **That is what an error
+/// condition is for**: a test that only succeeds exercises no constraint, because a constraint is
+/// what stops something.
 ///
-/// **So the fix is a test and not an edit**, and it is the next thing worth doing here.
-const DELETABLE: [&str; 1] = ["6 rules.4x binding"];
+/// **And two rows the other way, which is the cost of a given that reads.** The refusal test
+/// states `{adjacency from:1 to:2}` and `{adjacency from:2 to:3}` and needs neither - what it
+/// turns on is that nothing says 1 touches 3. **They are there so a reader can see there is a path
+/// and it is not a direct one**, and this line is the price of that, said out loud rather than
+/// trimmed away.
+const DELETABLE: [&str; 2] = [
+    "4 rules.4x binding",
+    "2 tests/the-scout-cannot-cross-where-there-is-no-border.4x adjacency",
+];
 
 /// **Every value matters**: change any one of them and something fails.
 #[test]
@@ -529,15 +541,22 @@ fn no_value_can_be_changed_without_breaking_something() {
 /// `require` and `remove` clauses match on `what` and `where` and leave the quantity unbound, and
 /// the quantity that lands at the destination is the `literal` written in the rule.
 ///
+/// **And `thing.name` in the refusal test**, which is the same shape one level along: that test
+/// never gets as far as moving anything, so the scout's name is never resolved. **A test that is
+/// refused reads less of its own world than one that succeeds**, which is worth knowing before
+/// reading a short list as a tidy one.
+///
 /// **That is the arithmetic gap, showing up as dead data rather than as an argument.** Moving one
 /// scout out of a territory holding five should leave four, and nothing in `require`, `remove` and
 /// `add` can say so - they are set operations over whole rows. **This line is the check that will
 /// go red when quantities start being read**, which is the only reason it is worth writing down
 /// rather than fixing by binding a column nothing needs yet.
-const NOT_LOAD_BEARING: [&str; 5] = [
+const NOT_LOAD_BEARING: [&str; 7] = [
     "4 rules.4x clause.seq",
     "3 rules.4x input.seq",
     "1 rules.4x literal.id",
+    "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x residency.quantity",
+    "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x thing.name",
     "1 tests/the-scout-crosses-two-borders.4x residency.quantity",
     "1 tests/the-scout-moves-to-an-adjacent-place.4x residency.quantity",
 ];

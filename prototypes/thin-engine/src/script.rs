@@ -51,6 +51,9 @@ const INTO: &str = "into";
 const GIVEN: &str = "given";
 const WHEN: &str = "when";
 const THEN: &str = "then";
+// **The fourth section, and the one that says nothing should happen.** A test either states the
+// world the command leaves - `{then}` - or what the rule needed and did not find - `{refused}`.
+const REFUSED: &str = "refused";
 
 const SCRIPT: &str = "script";
 const STORE: &str = "store";
@@ -80,6 +83,11 @@ pub enum Failed {
     BadlyFormed { step: String, why: Malformed },
     /// `compare` naming something other than the two stores there are.
     NothingToCompare { this: String, with: String },
+    /// A test stating both a `{then}` and a `{refused}`.
+    ///
+    /// **A command leaves a world or it is refused**, and a test saying both says two things about
+    /// one command. Refused rather than resolved, because which one was meant is the author's.
+    BothEndings { test: String },
     /// A step naming a command nothing fires.
     ///
     /// **A command is named by the rule it fires**, which `spec/invariants.md` calls *the offering
@@ -104,6 +112,12 @@ impl std::fmt::Display for Failed {
             Failed::BadlyFormed { step, why } => write!(out, "{step}: {why}"),
             Failed::NothingToCompare { this, with } => {
                 write!(out, "there is nothing to compare `{this}` with `{with}`")
+            }
+            Failed::BothEndings { test } => {
+                write!(
+                    out,
+                    "`{test}` states a `then` and a `refused`, and a command does one"
+                )
             }
             Failed::NoSuchCommand { command } => {
                 write!(out, "nothing fires `{command}`")
@@ -196,8 +210,9 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
     let mut given: Vec<Row> = Vec::new();
     let mut when: Vec<Row> = Vec::new();
     let mut then: Vec<Row> = Vec::new();
+    let mut refused: Vec<Row> = Vec::new();
     for row in script {
-        let marker = matches!(row.relation.as_str(), GIVEN | WHEN | THEN);
+        let marker = matches!(row.relation.as_str(), GIVEN | WHEN | THEN | REFUSED);
         if marker {
             // **A marker carries nothing**, so anything beside its name is a mistake rather than
             // a value nobody reads.
@@ -209,6 +224,7 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
             section = Some(match row.relation.as_str() {
                 GIVEN => GIVEN,
                 WHEN => WHEN,
+                REFUSED => REFUSED,
                 _ => THEN,
             });
             continue;
@@ -219,6 +235,7 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
             (Some(GIVEN), _) => given.push(row.clone()),
             (Some(WHEN), _) => when.push(row.clone()),
             (Some(THEN), _) => then.push(row.clone()),
+            (Some(REFUSED), _) => refused.push(row.clone()),
             _ => {
                 return Err(Failed::BadStep {
                     row: crate::notation::write(row),
@@ -322,13 +339,64 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
     // and the stores they named.
     game.extend(given);
     let before = Game::of(game).map_err(|why| Failed::Malformed { why })?;
-    let mut actual = before;
+
+    // **A test says what the world becomes, or what the rule could not find.** `{then}` is the
+    // first and `{refused}` the second, and a test carrying both is saying two things about one
+    // command.
+    if !refused.is_empty() && !then.is_empty() {
+        return Err(Failed::BothEndings { test: name });
+    }
+
+    let mut actual = before.clone();
     for command in &when {
         // **A command without a `repeat` fires once** - `spec/console.md`. Nothing here writes
         // one yet, and writing one means a column in the foundation and `-> n` in the friendly
         // form, exactly as a quantity is written.
-        actual = fire(&actual, command, 1).map_err(|why| Failed::Refused { why })?;
+        match fire(&actual, command, 1) {
+            Ok(after) => actual = after,
+            Err(why) => {
+                // **A refusal is the answer when a test asked for one**, and the failure
+                // otherwise. `{refused}` names the row the rule required and the world did not
+                // have, which is what `Refused::NotSo` carries.
+                if refused.is_empty() {
+                    return Err(Failed::Refused { why });
+                }
+                let wanted = match &why {
+                    Refused::NotSo { wanted, .. } => wanted.clone(),
+                    other => format!("{other}"),
+                };
+                let said: Vec<String> = refused
+                    .iter()
+                    .map(|row| before.schema().write(row))
+                    .collect();
+                return Ok(Report {
+                    test: name,
+                    compared: vec!["the refusal".to_string()],
+                    missing: said.iter().filter(|it| **it != wanted).cloned().collect(),
+                    extra: if said.contains(&wanted) {
+                        Vec::new()
+                    } else {
+                        vec![wanted]
+                    },
+                });
+            }
+        }
     }
+
+    // **A test that asked to be refused and was not is not as expected**, and says what it wanted
+    // rather than passing because nothing went wrong.
+    if !refused.is_empty() {
+        return Ok(Report {
+            test: name,
+            compared: vec!["the refusal".to_string()],
+            missing: refused
+                .iter()
+                .map(|row| before.schema().write(row))
+                .collect(),
+            extra: vec!["nothing was refused".to_string()],
+        });
+    }
+
     let difference = compare(&actual, &then)?;
     Ok(Report {
         test: name,

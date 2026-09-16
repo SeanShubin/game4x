@@ -258,7 +258,45 @@ is two columns** - `scout@territory-1`, or whatever it would be - and that is re
 friendly side. It does not arise today and would arrive the first time a rule needs to refer to a
 residency rather than match one.
 
+## `{refused}` is the other ending, and an error test earns its place
+
+**A command leaves a world or it is refused**, so a test states a `{then}` or a `{refused}` and
+never both - `Failed::BothEndings` says so rather than guessing which was meant.
+
+```text
+{when}
+{move what:scout from:territory-1 to:territory-3}
+
+{refused}
+{adjacency from:territory-1 to:territory-3}
+```
+
+**`{refused}` names the row the rule needed and the world did not have**, which is exactly what
+`Refused::NotSo` already carried. **It reads as the reason**: territory 1 touches 2 and 2 touches 3,
+nothing says 1 touches 3, and `move`'s second clause asks for a row that is not there.
+
+**Poisoned both ways rather than one.** Make the move legal and the report says *expected
+{adjacency from:1 to:3}, actual nothing was refused*; name the wrong reason and it says *expected
+{adjacency from:3 to:1}, actual {adjacency from:1 to:3}*. **A test that asked to be refused and was
+not is a failure**, which is the half a refusal test most easily loses.
+
+## What the error test was worth, measured rather than argued
+
+**Two bindings stopped being dead.** The deletable list said six `rules.4x binding` rows and says
+four. **A test that only succeeds exercises no constraint**, because a constraint is what stops
+something - and nothing in this suite had ever sent a `move` the world refuses.
+
+**And two rows went the other way.** The refusal test states the adjacencies 1-2 and 2-3 and needs
+neither; what it turns on is that nothing says 1-3. **They are there so a reader can see there is a
+path and it is not a direct one**, and the deletable list carries them rather than the test losing
+them.
+
+**A refused test reads less of its own world than one that succeeds** - `thing.name` is dead in it
+too, because it never gets as far as moving anything. **Worth knowing before a short dead list is
+read as a tidy one.**
+
 ## One test per file, and one line of it is not the test
+
 
 **Sean, 2026-09-15**: *I want the tests to be grouped together in a directory without non-tests.
 The supporting infrastructure should eat up no more than one line per test file. [...] I intend to
