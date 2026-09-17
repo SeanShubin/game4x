@@ -78,7 +78,8 @@
 {clause id:9 rule:3 seq:1 role:1 relation:19}
 {clause id:10 rule:3 seq:2 role:1 relation:18}
 {clause id:11 rule:3 seq:3 role:2 relation:29}
-{clause id:12 rule:3 seq:4 role:3 relation:27}
+{clause id:13 rule:3 seq:4 role:2 relation:32}
+{clause id:12 rule:3 seq:5 role:3 relation:27}
 
 {relation-of clause:12 input:9}
 
@@ -90,8 +91,12 @@
 
 {binding id:19 clause:11 column:78 input:8}
 
+{binding id:22 clause:13 column:84 input:8}
+{binding id:23 clause:13 column:85 input:9}
+
 {binding id:21 clause:12 column:74 input:8}
 
 {literal id:11 clause:11 column:79 value:1}
+{literal id:12 clause:13 column:86 value:1}
 
 {reading id:1 clause:12 column:75 of:10 takes:53}

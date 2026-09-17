@@ -1,0 +1,28 @@
+# A food extractor and a metal extractor, two labor, and the food one still works only once.
+#
+# **Sean, 2026-09-17**: *Will this still work if we have 1 food extractor and 1 metal extractor and
+# 2 labor? I don't want be able to run the food extractor twice.*
+#
+# **An allowance is keyed like the thing that has it** - `(where, what)`, the same key as
+# `extractor` - so the metal extractor's readiness is a different row and is no use to the food
+# one. **Everything the second command needs except the readiness is present**: there is labor for
+# it, a deposit under it, and an extractor to do it, which is what makes this about the key.
+
+{test name:one-extractors-readiness-is-not-anothers}
+
+{given}
+{territory id:1}
+{deposit where:1 what:31 density:6 quantity:1}
+{deposit where:1 what:30 density:2 quantity:1}
+{extractor where:1 what:31 quantity:1}
+{extractor where:1 what:30 quantity:1}
+{working where:1 what:31 quantity:1}
+{working where:1 what:30 quantity:1}
+{labor where:1 quantity:2}
+
+{when}
+{work where:1 what:31}
+{work where:1 what:31}
+
+{refused}
+{working where:1 what:31 quantity:1}

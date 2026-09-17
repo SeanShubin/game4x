@@ -154,8 +154,8 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
     }
     assert_eq!(
         nouns.len(),
-        13,
-        "thirteen nouns the game has - territory, adjacency, deposit, extractor, unit, resource, scout, labor, metal, food, move, build-extractor, work; this found {nouns:?}"
+        14,
+        "fourteen nouns the game has - territory, adjacency, deposit, extractor, unit, resource, scout, labor, metal, food, working, move, build-extractor, work; this found {nouns:?}"
     );
 
     let mut looked = 0;
@@ -185,5 +185,5 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
             looked += 1;
         }
     }
-    assert_eq!(looked, 104, "thirteen nouns over eight modules");
+    assert_eq!(looked, 112, "fourteen nouns over eight modules");
 }

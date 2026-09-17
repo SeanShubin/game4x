@@ -20,9 +20,13 @@ old state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - working
+      - {working where:territory-1 what:metal} -> 1
+      - {working where:territory-1 what:food} -> 1
 
 command  {work where:territory-1 what:food}
   took   {labor where:territory-1} -> 1
+  took   {working where:territory-1 what:food} -> 1
   made   {food where:territory-1} -> 6
 
 new state
@@ -41,6 +45,8 @@ new state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - working
+      - {working where:territory-1 what:metal} -> 1
 
 as expected
 
@@ -62,6 +68,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
+    - working
 
 command  {move what:scout from:territory-1 to:territory-2}
   took   {scout where:territory-1} -> 1
@@ -81,6 +88,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
+    - working
 
 as expected
 
@@ -102,6 +110,7 @@ old state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - working
 
 refused
   `build-extractor` would leave a world where `extractor` needs {deposit where:1 what:31 quantity:2} and there is room for 1 in `deposit`
@@ -124,9 +133,59 @@ old state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - working
 
 refused
   `build-extractor` would leave a world where `extractor` needs {deposit where:1 what:31 quantity:1} and there is room for 0 in `deposit`
+
+as expected
+
+==============================================================================
+an-extractor-cannot-be-worked-twice-on-one-readiness
+
+old state
+  - root
+    - adjacency
+    - deposit
+      - {deposit where:territory-1 what:food density:6} -> 1
+    - extractor
+      - {extractor where:territory-1 what:food} -> 1
+    - food
+    - labor
+      - {labor where:territory-1} -> 2
+    - metal
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - working
+      - {working where:territory-1 what:food} -> 1
+
+refused
+  `work` removes {working where:1 what:31 quantity:1} and nothing matched
+
+as expected
+
+==============================================================================
+an-extractor-cannot-be-worked-without-labor
+
+old state
+  - root
+    - adjacency
+    - deposit
+      - {deposit where:territory-1 what:food density:6} -> 1
+    - extractor
+      - {extractor where:territory-1 what:food} -> 1
+    - food
+    - labor
+    - metal
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - working
+      - {working where:territory-1 what:food} -> 1
+
+refused
+  `work` removes {labor where:1 quantity:1} and nothing matched
 
 as expected
 
@@ -147,6 +206,7 @@ old state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - working
 
 command  {build-extractor where:territory-1 what:food}
   took   {labor where:territory-1} -> 1
@@ -166,6 +226,7 @@ new state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - working
 
 as expected
 
@@ -186,9 +247,12 @@ old state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - working
+      - {working where:territory-1 what:food} -> 1
 
 command  {work where:territory-1 what:food}
   took   {labor where:territory-1} -> 1
+  took   {working where:territory-1 what:food} -> 1
   made   {food where:territory-1} -> 6
 
 new state
@@ -205,6 +269,35 @@ new state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - working
+
+as expected
+
+==============================================================================
+one-extractors-readiness-is-not-anothers
+
+old state
+  - root
+    - adjacency
+    - deposit
+      - {deposit where:territory-1 what:metal density:2} -> 1
+      - {deposit where:territory-1 what:food density:6} -> 1
+    - extractor
+      - {extractor where:territory-1 what:metal} -> 1
+      - {extractor where:territory-1 what:food} -> 1
+    - food
+    - labor
+      - {labor where:territory-1} -> 2
+    - metal
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - working
+      - {working where:territory-1 what:metal} -> 1
+      - {working where:territory-1 what:food} -> 1
+
+refused
+  `work` removes {working where:1 what:31 quantity:1} and nothing matched
 
 as expected
 
@@ -225,6 +318,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
+    - working
 
 command  {move what:scout from:territory-1 to:territory-2}
   took   {scout where:territory-1} -> 1
@@ -245,6 +339,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
+    - working
 
 as expected
 
@@ -267,6 +362,7 @@ old state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
+    - working
 
 refused
   `move` needs {adjacency from:1 to:3} and it is not
@@ -292,6 +388,7 @@ old state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
+    - working
 
 command  {move what:scout from:territory-1 to:territory-2}
   took   {scout where:territory-1} -> 1
@@ -317,6 +414,7 @@ new state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
+    - working
 
 as expected
 
@@ -339,6 +437,7 @@ old state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
+    - working
 
 command  {move what:scout from:territory-1 to:territory-2}
   took   {scout where:territory-1} -> 1
@@ -360,6 +459,7 @@ new state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
+    - working
 
 as expected
 
@@ -380,13 +480,17 @@ old state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - working
+      - {working where:territory-1 what:food} -> 2
 
 command  {work where:territory-1 what:food}
   took   {labor where:territory-1} -> 1
+  took   {working where:territory-1 what:food} -> 1
   made   {food where:territory-1} -> 6
 
 command  {work where:territory-1 what:food}
   took   {labor where:territory-1} -> 1
+  took   {working where:territory-1 what:food} -> 1
   made   {food where:territory-1} -> 6
 
 new state
@@ -403,5 +507,6 @@ new state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - working
 
 as expected

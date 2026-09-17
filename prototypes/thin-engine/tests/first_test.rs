@@ -250,9 +250,10 @@ fn the_report_says_which_relations_it_compared() {
             "labor",
             "metal",
             "scout",
-            "territory"
+            "territory",
+            "working"
         ],
-        "eight of the game's relations are state - four of them are kinds, which is what a kind became"
+        "nine of the game's relations are state - four kinds, and an allowance that is one too"
     );
     assert_eq!(report.test, "the-scout-moves-to-an-adjacent-place");
 }
@@ -269,7 +270,7 @@ fn the_report_reads_as_a_report() {
             report_of("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x")
         ),
         "the-scout-moves-to-an-adjacent-place\n  \
-           compared  adjacency, deposit, extractor, food, labor, metal, scout, territory\n  \
+           compared  adjacency, deposit, extractor, food, labor, metal, scout, territory, working\n  \
            result    as expected"
     );
 }

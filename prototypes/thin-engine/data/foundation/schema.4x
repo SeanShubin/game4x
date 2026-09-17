@@ -44,6 +44,7 @@
 {relation id:29 name:labor}
 {relation id:30 name:metal}
 {relation id:31 name:food}
+{relation id:32 name:working}
 
 
 ## The columns
@@ -150,6 +151,28 @@
 {column id:83 relation:31 seq:2 name:quantity}
 
 
+## How many times a thing may still act
+#
+# **Sean, 2026-09-17**, on an extractor that can be worked as often as there is labor for it:
+# *rediness is going to end up being a number of times we can do something rather than whether we
+# have done something.* **So it is a quantity, and a quantity is a relation's.**
+#
+# **An allowance is its own counted relation rather than a column on the thing.** A column would
+# have meant going from `working:3` to `working:2`, which is arithmetic on a named column and
+# something the engine cannot do; a quantity is arithmetic it already does, and running out is the
+# refusal it already gives. **What that gives up is which extractor was worked** - and two
+# extractors with one work each cannot be told from two extractors sharing two works by anything
+# the game can ask, because extractors are fungible.
+#
+# **One relation per kind of readiness**, named for the activity, which is what `spec/data/traits.4x`
+# does with `working`, `moving`, `laboring` and `bearing`. Each is keyed like the thing that has
+# it, so `{limit ...}` says an allowance cannot exceed the things holding it.
+
+{column id:84 relation:32 seq:1 name:where}
+{column id:85 relation:32 seq:2 name:what}
+{column id:86 relation:32 seq:3 name:quantity}
+
+
 ## What points at what
 #
 # **A reference is always to a relation's `id`.** The engine checks that such a row is there, so a
@@ -200,6 +223,9 @@
 {reference id:43 column:80 to:13}
 {reference id:44 column:82 to:13}
 
+{reference id:45 column:84 to:13}
+{reference id:46 column:85 to:27}
+
 
 ## Which relations are the game's state
 #
@@ -214,6 +240,7 @@
 {state id:8 relation:29}
 {state id:9 relation:30}
 {state id:10 relation:31}
+{state id:11 relation:32}
 
 
 ## Which relations are families, and who belongs
@@ -251,6 +278,7 @@
 # rule already refuses the world it would leave, so this binds rules that do not exist yet.
 
 {limit held:19 by:18}
+{limit held:32 by:19}
 
 
 ## The three roles a clause can have

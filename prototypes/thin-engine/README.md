@@ -2034,3 +2034,86 @@ and each member declares its own.
 kind are gone rather than dead, because a clause's relation says it now; two bindings went the same
 way. `4 things.4x thing.name` left the list by the file leaving. **A unification that removes dead
 data is a different kind of evidence from one that reads better.**
+
+
+## Readiness is a quantity, so it is a relation
+
+Sean, 2026-09-17, reviewing `a-food-extractor-and-a-metal-extractor-do-not-interfere`: *I notice
+that an extractor can be used as many times as we have labor for.* And on how to fix it: *we are
+going to have multiple kinds of ready, and rediness is going to end up being a number of times we
+can do something rather than whether we have done something.*
+
+```
+{extractor where:territory-1 what:food} -> 1
+{working   where:territory-1 what:food} -> 1
+{labor     where:territory-1}           -> 2
+```
+
+One extractor, one work in it, two labor - and the second `work` is refused. **`work` spends a
+labor and a readiness**, not one or the other.
+
+## Why it is not a column on the extractor
+
+**`{extractor where:t1 what:food working:1} -> 2` is the obvious answer and it costs an engine.**
+Going from `working:3` to `working:2` is arithmetic on a named column, which the engine does not
+do - it does arithmetic on the quantity and nowhere else. That would have needed a pattern meaning
+*at least n* and a supplier meaning *one less*, which are `spec/data/constraint.4x`'s `at-least`
+and `one-less`. **Sean asked for a solution that did not presume the specification's**, and this
+one does not: running out is the refusal `take` already gives, and the number of times is the
+quantity.
+
+**What it gives up is which extractor was worked, and that is the point.** Sean: *not being able
+to tell which extractor operated is a feature, not a bug. I expect to use the same idea for
+containers and loss due to disorder, we only lose what we don't have the storage for, without
+tracking what is stored where.* **Two extractors with one work each and two extractors sharing two
+works cannot be told apart by anything the game can ask**, because extractors are fungible - so
+the column version pays an engine concept for a distinction that is unobservable.
+
+## Keyed like the thing that has it
+
+**`working` has `extractor`'s key**, `(where, what)`, which is what makes two things true at once.
+The `limit` can say an allowance never exceeds the things holding it:
+
+```
+{limit held:working by:extractor}
+```
+
+And one extractor's readiness is no use to another. Sean: *Will this still work if we have 1 food
+extractor and 1 metal extractor and 2 labor? I don't want be able to run the food extractor
+twice.* **`one-extractors-readiness-is-not-anothers` is that question as a test**: everything the
+second command needs is present except the readiness - labor for it, a deposit under it, an
+extractor to do it - so what refuses it is the key and nothing else.
+
+**One relation per kind of readiness**, named for the activity, which is what `spec/data/traits.4x`
+does with `working`, `moving`, `laboring` and `bearing` as separate traits.
+
+## Refreshing needs nothing new either
+
+Remove the whole `working` row, require the extractor, add a `working` whose quantity is read off
+the extractor count. **`reading` already does the last part**, so a turn boundary is rows when
+somebody wants one. It is not written yet, because no test asks for one - and a built extractor
+therefore starts unready, which is a consequence worth knowing rather than a decision.
+
+## Four poisons, and one of them measured the hole
+
+| Poison                                      | What it showed                                                 |
+| ------------------------------------------- | -------------------------------------------------------------- |
+| the readiness clause out of `work` entirely | four tests notice, and the new one is among them               |
+| two works instead of one                    | the second `work` succeeds, so the refusal is about the number |
+| a labor added to the no-labor test          | it succeeds, so that refusal is about the labor                |
+| food given two works beside metal's one     | the second `work` succeeds, so the refusal is about the key    |
+
+**The first is the red half of red-green**, done after the fact: the rule and the test were written
+together, so taking the mechanism back out is what shows the test would have failed without it.
+
+## What the mutation check said, and one thing it cannot say
+
+**`{limit held:working by:extractor}` reads as deletable and is not.** What that check measures is
+whether a **data test** reads a row, and none can: a world stating more works than extractors does
+not load, and a test whose world does not load has no outcome to state.
+`an_allowance_cannot_exceed_the_things_that_have_it` in `tests/structure.rs` is what holds it.
+**Worth saying out loud, because the list otherwise reads as *nothing needs this*.**
+
+**And three tests state a readiness they do not spend**, each a refusal that stops before reaching
+it or refuses on it either way. They are there so a reader can see which of the two costs the test
+is named for, and the line in `DELETABLE` is the price of that said rather than trimmed.

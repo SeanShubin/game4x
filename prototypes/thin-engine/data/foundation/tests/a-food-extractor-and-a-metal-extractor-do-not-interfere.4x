@@ -11,6 +11,8 @@
 {deposit where:1 what:30 density:2 quantity:1}
 {extractor where:1 what:31 quantity:1}
 {extractor where:1 what:30 quantity:1}
+{working where:1 what:31 quantity:1}
+{working where:1 what:30 quantity:1}
 {labor where:1 quantity:1}
 
 {when}
@@ -22,4 +24,5 @@
 {deposit where:1 what:30 density:2 quantity:1}
 {extractor where:1 what:31 quantity:1}
 {extractor where:1 what:30 quantity:1}
+{working where:1 what:30 quantity:1}
 {food where:1 quantity:6}

@@ -51,8 +51,8 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
     assert_eq!(checked, 17, "seventeen relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        27,
-        "twenty-seven in all - those seventeen, and the game's ten: four kinds, two families,\n         a territory, an adjacency, a deposit and an extractor"
+        28,
+        "twenty-eight in all - those seventeen, and the game's eleven: four kinds, two families,\n         a territory, an adjacency, a deposit and an extractor"
     );
 }
 
@@ -408,4 +408,38 @@ fn an_extractor_needs_a_deposit_to_stand_in() {
         },
         "a full deposit and an absent one are one refusal with a different number"
     );
+}
+
+/// **An allowance cannot exceed the things that have it.**
+///
+/// **`{limit held:working by:extractor}` is what says so**, and without this test the row
+/// declaring it could be deleted and nothing would notice - which the mutation check said the day
+/// the limit was added. **A limit is only worth declaring where something would otherwise be
+/// allowed**, and two works for one extractor is that something.
+#[test]
+fn an_allowance_cannot_exceed_the_things_that_have_it() {
+    assert_eq!(
+        with(
+            "{deposit where:1 what:31 density:6 quantity:1}
+{extractor where:1 what:31 quantity:1}
+{working where:1 what:31 quantity:2}"
+        )
+        .expect_err("two works and one extractor to do them"),
+        Malformed::Overfull {
+            held: "working".to_string(),
+            by: "extractor".to_string(),
+            wanted: "{extractor where:1 what:31 quantity:2}".to_string(),
+            room: "1".to_string()
+        },
+        "the refusal names the extractor that would have had to be there"
+    );
+
+    // The control: as many works as there are extractors is fine, so the refusal above is about
+    // the number rather than about stating a readiness at all.
+    with(
+        "{deposit where:1 what:31 density:6 quantity:1}
+{extractor where:1 what:31 quantity:1}
+{working where:1 what:31 quantity:1}",
+    )
+    .expect("one work for one extractor");
 }

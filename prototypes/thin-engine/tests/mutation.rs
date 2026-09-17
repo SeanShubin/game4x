@@ -152,6 +152,7 @@ fn check(files: &InMemory) -> Result<(), String> {
             "metal",
             "scout",
             "territory",
+            "working",
         ];
         if report.compared != state && report.compared != ["the refusal"] {
             return Err(format!("compared {:?}", report.compared));
@@ -312,7 +313,7 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
     Ok(())
 }
 
-const REFERENCES: usize = 37;
+const REFERENCES: usize = 39;
 
 /// **References no test world can violate**, because nothing points at them there.
 ///
@@ -530,9 +531,25 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// `value:metal` - and a clause's relation says that now, so they are gone rather than dead. Two
 /// bindings went the same way: `move` no longer binds a `what` column, because what is moved is
 /// the relation the clause is about.
-const DELETABLE: [&str; 3] = [
-    "8 rules.4x binding",
+/// **`{limit held:working by:extractor}` is here and it is not dead.** What this check measures
+/// is whether a *data test* reads a row, and no data test can: a world stating more works than
+/// extractors does not load, and a test whose world does not load is not a test with an outcome.
+/// **`an_allowance_cannot_exceed_the_things_that_have_it` in `tests/structure.rs` is what holds
+/// it** - which is worth saying out loud, because this list otherwise reads as *nothing needs
+/// this*.
+///
+/// **And three tests state a readiness they do not spend.** Each is a refusal: two of them refuse
+/// before reaching the readiness clause, and the third refuses on the readiness whether it was
+/// stated as one or as none. **They are there so a reader can see the refusal is about the one
+/// thing the test is named for** - the labor in one, the key in another - and this line is the
+/// price of that, said rather than trimmed.
+const DELETABLE: [&str; 7] = [
+    "7 rules.4x binding",
     "2 rules.4x literal",
+    "1 schema.4x limit",
+    "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x working",
+    "1 tests/an-extractor-cannot-be-worked-without-labor.4x working",
+    "2 tests/one-extractors-readiness-is-not-anothers.4x working",
     "2 tests/the-scout-cannot-cross-where-there-is-no-border.4x adjacency",
 ];
 
@@ -667,10 +684,20 @@ fn no_value_can_be_changed_without_breaking_something() {
 /// **And `things.4x` left the list by leaving.** Four category names were read only by the
 /// friendly side; a kind is a relation now and its name is read by everything, so the entry is not
 /// fixed - it is gone.
-const NOT_LOAD_BEARING: [&str; 5] = [
-    "11 rules.4x clause.seq",
+/// **Every density in a test that is refused.** A deposit declares a `density` column, so every
+/// deposit row carries one whether the test reads it or not - and a test about running out of
+/// something never gets as far as working the deposit. **Four of the eleven lines below are that
+/// one fact**, which is the shape of a refusal test rather than spare data.
+const NOT_LOAD_BEARING: [&str; 11] = [
+    "12 rules.4x clause.seq",
     "7 rules.4x input.seq",
     "1 rules.4x reading.id",
     "1 tests/an-extractor-cannot-be-built-where-the-deposits-are-taken.4x deposit.density",
+    "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x deposit.density",
+    "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x working.quantity",
+    "1 tests/an-extractor-cannot-be-worked-without-labor.4x deposit.density",
+    "1 tests/an-extractor-cannot-be-worked-without-labor.4x working.quantity",
+    "2 tests/one-extractors-readiness-is-not-anothers.4x deposit.density",
+    "2 tests/one-extractors-readiness-is-not-anothers.4x working.quantity",
     "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x scout.quantity",
 ];
