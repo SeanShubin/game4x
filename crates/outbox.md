@@ -61,6 +61,41 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-133 - Is a deposit's density part of its description? Two files answer differently
+
+**to** spec · **status** open · **raised** 2026-09-17 · **source** the thin-engine prototype,
+modelling deposits
+
+**derived from** `spec/console.md`, `spec/planet.md`, `spec/data/traits.4x`,
+`spec/data/carries.4x`
+
+**`spec/data/carries.4x` makes density a trait of a deposit**, and `spec/console.md` says what a
+description is: *a description is a kind and every trait of that thing* - and that *no trait of
+the thing may be left out*. Read together, a deposit's description includes its density, so two
+deposits at one territory for one resource with different densities are two descriptions and both
+are legal.
+
+**`spec/planet.md` says there is one**: *For each resource, a territory has capacity for some
+number of extractors, and a density that each of them yields.* One density per territory per
+resource, so the second row cannot arise.
+
+**Both cannot be the rule at once, and which one it is decides whether a model can refuse the
+second row.** If density is part of the description, two densities for one resource in one
+territory is a legal state and nothing detects it. If it is not, the description is
+`(territory, resource)` and the second row is refused as two rows with one key.
+
+**Nothing observable distinguishes them today**, which is why this is a question rather than a
+defect: every world the game can reach has one density per resource, so the two readings agree on
+every legal state and differ only on which illegal ones can be named.
+
+**What this lane proceeded under**, per the rule on filing rather than waiting: the prototype
+treats `(where, what)` as the description and density as a fact about it, because Sean's stated
+reason for the whole shape is that an over-filled deposit *should be detectible and therefore
+preventable* - and the same argument applies to a deposit with two densities.
+
+**This is the first trait in the prototype that is neither a key nor a quantity**, so it is also
+the first case where `spec/console.md`'s sentence and a relation's key come apart.
+
 ### C-132 - `above` is the other world-level arrangement, and the dump does not carry it
 
 **to** spec · **status** open · **raised** 2026-09-15 · **source** Sean, on a whole-state dump:
