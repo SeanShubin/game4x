@@ -30,8 +30,8 @@ fn nothing_in_src_reads_a_file_or_depends_on_another_crate() {
         .collect();
     assert_eq!(
         files.len(),
-        6,
-        "six modules, and each is checked: {files:?}"
+        8,
+        "eight modules, and each is checked: {files:?}"
     );
     let mut read = 0;
 
@@ -179,5 +179,5 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
             looked += 1;
         }
     }
-    assert_eq!(looked, 36, "six nouns over six modules");
+    assert_eq!(looked, 48, "six nouns over eight modules");
 }

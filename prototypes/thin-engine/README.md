@@ -317,7 +317,32 @@ them.
 too, because it never gets as far as moving anything. **Worth knowing before a short dead list is
 read as a tidy one.**
 
+## Where the game logic is, and what is beside it rather than in it
+
+**Sean, 2026-09-16**: *I want to make sure the core game logic is in a single, small file focused on
+nothing else but game logic. [...] I need to be able to understand the core input->processing->output
+loop, so I will need the input and output data structures, but any generic utility logic not
+specific to the game should be elsewhere.*
+
+**`src/engine.rs` went from 600 lines that run to 356**, and what left it was not game logic:
+
+| Left for                     | Lines | Why it is not the loop                                               |
+| ---------------------------- | ----- | -------------------------------------------------------------------- |
+| `store.rs`, `take`/`put`     | 120   | arithmetic over rows; the caller asks the schema which column counts |
+| `schema.rs`, `check`         | 63    | whether rows fit the structure, which is the structure's question    |
+| `refusal.rs`, `Refused`      | 62    | an output type and thirty lines of the words it is written in        |
+| `view.rs`, `shown`/`outline` | 42    | what a reader does with what the engine left                         |
+
+**What stayed is the loop and its two ends.** `play` and `fire` and `apply` and `row_of` and
+`offered`, with `Effect` as the output and a command row as the input. **`Game` stayed too**,
+because the old state and the new state are the other two ends of the signature.
+
+**`take` and `put` lost their `Game` on the way out**, which is what made them generic: a store is
+handed the column that counts and does the arithmetic, rather than asking a schema it should not
+know about.
+
 ## `build-extractor`, and what it needed from the engine: nothing
+
 
 **A rule, an input, three clauses and nine rows of binding.** No new role, no new word, no line of
 `src/` - the machinery a second rule wanted was already there.

@@ -34,8 +34,9 @@
 
 use std::collections::BTreeMap;
 
-use crate::engine::{Effect, Game, Refused, play};
+use crate::engine::{Effect, Game, play};
 use crate::notation::{Row, Unreadable, read};
+use crate::refusal::Refused;
 use crate::schema::{Malformed, Schema};
 
 const TEST: &str = "test";

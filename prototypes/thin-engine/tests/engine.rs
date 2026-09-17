@@ -47,7 +47,7 @@ fn constants() -> BTreeSet<String> {
             }
         }
     }
-    assert_eq!(files, 6, "six modules were read");
+    assert_eq!(files, 8, "eight modules were read");
     found
 }
 

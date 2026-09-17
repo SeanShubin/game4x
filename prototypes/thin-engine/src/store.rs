@@ -54,6 +54,113 @@ impl Store {
     }
 }
 
+/// Whether `row` carries every value `description` names, in the same relation.
+fn describes(row: &Row, description: &Row) -> bool {
+    row.relation == description.relation
+        && description
+            .values
+            .iter()
+            .all(|(key, value)| row.value(key) == Some(value.as_str()))
+}
+
+/// The same row with its quantity left off - what is left is the description.
+fn description(row: &Row, quantity: &str) -> Row {
+    let mut values = row.values.clone();
+    values.remove(quantity);
+    Row {
+        relation: row.relation.clone(),
+        values,
+    }
+}
+
+impl Store {
+    /// Take what `wanted` names out of the store, and say what was taken.
+    ///
+    /// **A counted relation is arithmetic and an identified one is a set.** `{residency what:1
+    /// where:1 quantity:1}` takes one scout from a territory that may hold five; `{adjacency
+    /// from:1 to:2}` takes the row, because there is nothing there to count.
+    ///
+    /// **An entry is never zero** - `spec/console.md` - so a row taken down to nothing is removed
+    /// rather than written as `-> 0`. **Taking more than there are is refused**, which is the same
+    /// answer as taking from nothing: neither leaves a world the rule described.
+    ///
+    /// **`quantity` is handed in rather than looked up.** Which column counts is a fact about the
+    /// schema, and a store holds rows - so the caller asks the schema and this does the arithmetic.
+    pub fn take(&mut self, wanted: &Row, quantity: Option<&str>) -> Option<Row> {
+        let Some(quantity) = quantity else {
+            return (self.remove(wanted) != 0).then(|| wanted.clone());
+        };
+        let Some(taking) = wanted.value(quantity).and_then(|it| it.parse::<i64>().ok()) else {
+            // **A pattern that names no quantity means the row**, which is what taking meant
+            // before any relation counted, and what it still means for a clause that says nothing
+            // about how many.
+            return (self.remove(wanted) != 0).then(|| wanted.clone());
+        };
+        let description = description(wanted, quantity);
+        let there = self
+            .rows()
+            .iter()
+            .find(|row| describes(row, &description))
+            .cloned()?;
+        let held: i64 = there
+            .value(quantity)
+            .and_then(|it| it.parse().ok())
+            .unwrap_or(0);
+        if held < taking {
+            return None;
+        }
+        self.remove(&there);
+        if held > taking {
+            let mut left = there;
+            left.values
+                .insert(quantity.to_string(), (held - taking).to_string());
+            self.add(left);
+        }
+        // **What was taken, not what is left.** One scout of five leaving is one taken, and the
+        // four that stayed are nobody's effect.
+        let mut took = description;
+        took.values.insert(quantity.to_string(), taking.to_string());
+        Some(took)
+    }
+
+    /// Put `row` in, joining what is already there where the relation counts.
+    ///
+    /// **Two of a description are one entry**, so arriving where a scout stands makes two rather
+    /// than a second row - which the key would refuse - or nothing at all, which is what an
+    /// identical row meeting a set used to do.
+    pub fn put(&mut self, row: Row, quantity: Option<&str>) {
+        let Some(quantity) = quantity else {
+            self.add(row);
+            return;
+        };
+        let adding: i64 = row
+            .value(quantity)
+            .and_then(|it| it.parse().ok())
+            .unwrap_or(0);
+        let description = description(&row, quantity);
+        let there = self
+            .rows()
+            .iter()
+            .find(|it| describes(it, &description))
+            .cloned();
+        match there {
+            None => self.add(row),
+            Some(there) => {
+                let held: i64 = there
+                    .value(quantity)
+                    .and_then(|it| it.parse().ok())
+                    .unwrap_or(0);
+                self.remove(&there);
+                let mut joined = there;
+                joined
+                    .values
+                    .insert(quantity.to_string(), (held + adding).to_string());
+                self.add(joined);
+            }
+        }
+    }
+}
+
 fn matches(row: &Row, wanted: &Row) -> bool {
     row.relation == wanted.relation
         && wanted

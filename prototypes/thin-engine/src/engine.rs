@@ -31,6 +31,7 @@
 use std::collections::BTreeMap;
 
 use crate::notation::Row;
+use crate::refusal::Refused;
 use crate::schema::{Malformed, Schema};
 use crate::store::Store;
 
@@ -45,86 +46,11 @@ const NAME: &str = "name";
 const SEQ: &str = "seq";
 const OF: &str = "of";
 const RELATION: &str = "relation";
-const STATE: &str = "state";
 const COLUMN: &str = "column";
 const VALUE: &str = "value";
 const REQUIRE: &str = "require";
 const REMOVE: &str = "remove";
 const ADD: &str = "add";
-
-/// Why a command did not happen, said in terms of the data rather than of the engine.
-#[derive(Debug, PartialEq, Eq)]
-pub enum Refused {
-    /// Nothing states a `{command id:...}` with that id.
-    NoSuchCommand { id: String },
-    /// The command's rule declares an input the command gives no argument for.
-    Missing { rule: String, input: String },
-    /// An argument's value is not a key of the relation its input is typed as.
-    ///
-    /// **This is *no such place*, and it arrives from the structure rather than from a rule.**
-    WrongType {
-        rule: String,
-        input: String,
-        value: String,
-        of: String,
-    },
-    /// A clause names a role that is not `require`, `remove` or `add`.
-    NoSuchRole {
-        rule: String,
-        clause: String,
-        role: String,
-    },
-    /// A clause has a column bound to no input, so the row it wants cannot be built.
-    Unbound {
-        rule: String,
-        clause: String,
-        column: String,
-    },
-    /// Everything was bound and the world does not agree.
-    NotSo { rule: String, wanted: String },
-    /// The rule removes something no row matches, so the rule contradicts itself.
-    NothingToRemove { rule: String, wanted: String },
-    /// The rule left a world that does not fit the structure.
-    Broke { rule: String, why: Malformed },
-}
-
-impl std::fmt::Display for Refused {
-    fn fmt(&self, out: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Refused::NoSuchCommand { id } => write!(out, "no command is stated with id `{id}`"),
-            Refused::Missing { rule, input } => write!(out, "`{rule}` wants `{input}`"),
-            Refused::WrongType {
-                rule,
-                input,
-                value,
-                of,
-            } => {
-                write!(
-                    out,
-                    "`{rule}`.`{input}` is `{value}`, and no `{of}` has that key"
-                )
-            }
-            Refused::NoSuchRole { rule, clause, role } => {
-                write!(
-                    out,
-                    "`{rule}`.`{clause}` has the role `{role}`, which is not one"
-                )
-            }
-            Refused::Unbound {
-                rule,
-                clause,
-                column,
-            } => {
-                write!(out, "`{rule}`.`{clause}` binds nothing to `{column}`")
-            }
-            Refused::NotSo { rule, wanted } => write!(out, "`{rule}` needs {wanted} and it is not"),
-            Refused::NothingToRemove { rule, wanted } => {
-                write!(out, "`{rule}` removes {wanted} and nothing matched")
-            }
-            Refused::Broke { rule, why } => write!(out, "`{rule}` would leave a world where {why}"),
-        }
-    }
-}
 
 /// Every row there is, and the structure read out of them.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -140,7 +66,7 @@ impl Game {
     pub fn of(rows: Vec<Row>) -> Result<Game, Malformed> {
         let schema = Schema::of(&rows)?;
         let rows = Store::of(rows);
-        check(&schema, &rows)?;
+        crate::schema::check(&schema, &rows)?;
         Ok(Game { schema, rows })
     }
 
@@ -150,58 +76,6 @@ impl Game {
 
     pub fn rows(&self) -> &Store {
         &self.rows
-    }
-
-    /// Every row, in each relation's declared column order, sorted.
-    ///
-    /// **Sorted because the rows are a set and the order they are held in is nobody's**, so two
-    /// games holding the same rows are the same game however they were built.
-    pub fn shown(&self) -> Vec<String> {
-        let mut out: Vec<String> = self
-            .rows
-            .rows()
-            .iter()
-            .map(|row| self.schema.write(row))
-            .collect();
-        out.sort();
-        out
-    }
-
-    /// The world as indented text: one block per relation the schema marks as state.
-    ///
-    /// **Sean, 2026-09-16**: *I also like to define an indented text form of the state.* This is
-    /// the plainest one the data can say without being told anything new - **grouped, not nested**.
-    ///
-    /// **Nesting would need one thing nobody has declared**: which column of a relation holds the
-    /// thing that contains it. `residency` has `what` and `where` and both are references, and
-    /// nothing says `where` is the container - so a tree would be this lane guessing which of two
-    /// columns to hang the row from.
-    pub fn outline(&self) -> String {
-        let mut out = String::from("- root\n");
-        let mut of_state: Vec<&str> = self
-            .rows
-            .rows()
-            .iter()
-            .filter(|row| row.relation == STATE)
-            .filter_map(|row| row.value(RELATION))
-            .filter_map(|id| self.named(RELATION, id))
-            .collect();
-        of_state.sort_unstable();
-        for relation in of_state {
-            out.push_str(&format!("  - {relation}\n"));
-            let mut written: Vec<String> = self
-                .rows
-                .rows()
-                .iter()
-                .filter(|row| row.relation == relation)
-                .map(|row| self.schema.write(row))
-                .collect();
-            written.sort();
-            for row in written {
-                out.push_str(&format!("    - {row}\n"));
-            }
-        }
-        out
     }
 
     /// The `name` of the row of `relation` whose id is `id`.
@@ -259,69 +133,6 @@ impl Game {
     }
 }
 
-/// Every row fits its relation, its key is its own, and every reference points at a row.
-fn check(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
-    // **A key names one row.** A reference is a key, so a key naming two rows is a reference that
-    // names neither - and nothing checked it until it was looked for.
-    let mut taken: BTreeMap<(&str, Vec<&str>), usize> = BTreeMap::new();
-    for row in rows.rows() {
-        let Some(relation) = schema.relation(&row.relation) else {
-            continue;
-        };
-        // **A relation is identified or counted and never both**, so a key of several columns and
-        // a key of one are read the same way here: `key()` says which columns, and this counts
-        // what the row carries in them.
-        let key = relation.key();
-        let Some(values) = key
-            .iter()
-            .map(|column| row.value(column))
-            .collect::<Option<Vec<&str>>>()
-        else {
-            continue;
-        };
-        let seen = taken
-            .entry((relation.name.as_str(), values.clone()))
-            .or_default();
-        *seen += 1;
-        if *seen > 1 {
-            return Err(Malformed::TwoWithOneKey {
-                relation: row.relation.clone(),
-                key: key
-                    .iter()
-                    .zip(values)
-                    .map(|(column, value)| (column.to_string(), value.to_string()))
-                    .collect(),
-            });
-        }
-    }
-
-    for row in rows.rows() {
-        let relation = schema.fits(row)?;
-        for column in &relation.columns {
-            let Some(to) = &column.references else {
-                continue;
-            };
-            let value = row.value(&column.name).unwrap_or_default();
-            let declared = schema
-                .relation(to)
-                .expect("checked when the schema was read");
-            let there = rows
-                .rows()
-                .iter()
-                .any(|it| it.relation == *to && it.value(declared.identity()) == Some(value));
-            if !there {
-                return Err(Malformed::NoSuchRow {
-                    relation: row.relation.clone(),
-                    column: column.name.clone(),
-                    value: value.to_string(),
-                    to: to.clone(),
-                });
-            }
-        }
-    }
-    Ok(())
-}
-
 /// Fire a rule under a binding of its inputs, and give back the game it leaves.
 ///
 /// **Split out of [`run`] so that [`offered`] can ask whether a binding would be refused without
@@ -368,12 +179,13 @@ fn apply(
                     }
                 }
                 _ => {
-                    if !take(game, &mut after, &wanted, effect) {
+                    let Some(took) = after.take(&wanted, counted(game, &wanted).as_deref()) else {
                         return Err(Refused::NothingToRemove {
                             rule,
                             wanted: game.schema.write(&wanted),
                         });
-                    }
+                    };
+                    effect.took.push(took);
                 }
             }
         }
@@ -382,12 +194,11 @@ fn apply(
         let role = clause.value(ROLE).unwrap_or_default();
         match game.named(ROLE, role).unwrap_or(role) {
             REQUIRE | REMOVE => continue,
-            ADD => put(
-                game,
-                &mut after,
-                row_of(game, clause, bound, &rule, WHOLE)?,
-                effect,
-            ),
+            ADD => {
+                let made = row_of(game, clause, bound, &rule, WHOLE)?;
+                after.put(made.clone(), counted(game, &made).as_deref());
+                effect.made.push(made);
+            }
             other => {
                 return Err(Refused::NoSuchRole {
                     rule,
@@ -402,7 +213,7 @@ fn apply(
         rule: rule.clone(),
         why,
     })?;
-    check(&schema, &after).map_err(|why| Refused::Broke { rule, why })?;
+    crate::schema::check(&schema, &after).map_err(|why| Refused::Broke { rule, why })?;
     Ok(Game {
         schema,
         rows: after,
@@ -417,126 +228,6 @@ fn counted(game: &Game, row: &Row) -> Option<String> {
         .map(str::to_string)
 }
 
-/// Whether `row` carries every value `description` names, in the same relation.
-fn describes(row: &Row, description: &Row) -> bool {
-    row.relation == description.relation
-        && description
-            .values
-            .iter()
-            .all(|(key, value)| row.value(key) == Some(value.as_str()))
-}
-
-/// The same row with its quantity left off - what is left is the description.
-fn description(row: &Row, quantity: &str) -> Row {
-    let mut values = row.values.clone();
-    values.remove(quantity);
-    Row {
-        relation: row.relation.clone(),
-        values,
-    }
-}
-
-/// Take what `wanted` names out of the store.
-///
-/// **A counted relation is arithmetic and an identified one is a set.** `{residency what:1 where:1
-/// quantity:1}` takes one scout from a territory that may hold five; `{adjacency from:1 to:2}`
-/// takes the row, because there is nothing there to count.
-///
-/// **An entry is never zero** - `spec/console.md` - so a row taken down to nothing is removed
-/// rather than written as `-> 0`.
-///
-/// **Taking more than there are is refused**, which is the same answer as taking from nothing:
-/// neither leaves a world the rule described.
-fn take(game: &Game, after: &mut Store, wanted: &Row, effect: &mut Effect) -> bool {
-    let Some(quantity) = counted(game, wanted) else {
-        if after.remove(wanted) == 0 {
-            return false;
-        }
-        effect.took.push(wanted.clone());
-        return true;
-    };
-    let Some(taking) = wanted
-        .value(&quantity)
-        .and_then(|it| it.parse::<i64>().ok())
-    else {
-        // **A pattern that names no quantity means the row**, which is what `remove` meant
-        // before any relation counted, and what it still means for a clause that says nothing
-        // about how many.
-        if after.remove(wanted) == 0 {
-            return false;
-        }
-        effect.took.push(wanted.clone());
-        return true;
-    };
-    let description = description(wanted, &quantity);
-    let Some(there) = after
-        .rows()
-        .iter()
-        .find(|row| describes(row, &description))
-        .cloned()
-    else {
-        return false;
-    };
-    let held: i64 = there
-        .value(&quantity)
-        .and_then(|it| it.parse().ok())
-        .unwrap_or(0);
-    if held < taking {
-        return false;
-    }
-    after.remove(&there);
-    if held > taking {
-        let mut left = there;
-        left.values
-            .insert(quantity.clone(), (held - taking).to_string());
-        after.add(left);
-    }
-    // **What the command took, not what the store now holds.** One scout of five leaving is one
-    // taken, and the four are not an effect of anything.
-    let mut took = description;
-    took.values.insert(quantity, taking.to_string());
-    effect.took.push(took);
-    true
-}
-
-/// Put `row` into the store, joining what is already there where the relation counts.
-///
-/// **Two of a description are one entry**, so arriving where a scout stands makes two rather than
-/// a second row - which the key would refuse - or nothing at all, which is what an identical row
-/// meeting a set used to do.
-fn put(game: &Game, after: &mut Store, row: Row, effect: &mut Effect) {
-    let Some(quantity) = counted(game, &row) else {
-        effect.made.push(row.clone());
-        after.add(row);
-        return;
-    };
-    let adding: i64 = row
-        .value(&quantity)
-        .and_then(|it| it.parse().ok())
-        .unwrap_or(0);
-    let description = description(&row, &quantity);
-    let there = after
-        .rows()
-        .iter()
-        .find(|it| describes(it, &description))
-        .cloned();
-    effect.made.push(row.clone());
-    match there {
-        None => after.add(row),
-        Some(there) => {
-            let held: i64 = there
-                .value(&quantity)
-                .and_then(|it| it.parse().ok())
-                .unwrap_or(0);
-            after.remove(&there);
-            let mut joined = there;
-            joined.values.insert(quantity, (held + adding).to_string());
-            after.add(joined);
-        }
-    }
-}
-
-/// The row a clause is about, with every column taking the value its binding names.
 /// Whether a clause must name every column of its relation, or only the ones it constrains.
 const WHOLE: bool = true;
 const PATTERN: bool = false;

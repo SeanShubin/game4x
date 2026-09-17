@@ -27,6 +27,7 @@
 use std::collections::BTreeMap;
 
 use crate::notation::Row;
+use crate::store::Store;
 
 const RELATION: &str = "relation";
 const COLUMN: &str = "column";
@@ -397,6 +398,69 @@ impl Schema {
         }
         Ok(relation)
     }
+}
+
+/// Every row fits its relation, its key is its own, and every reference points at a row.
+pub fn check(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
+    // **A key names one row.** A reference is a key, so a key naming two rows is a reference that
+    // names neither - and nothing checked it until it was looked for.
+    let mut taken: BTreeMap<(&str, Vec<&str>), usize> = BTreeMap::new();
+    for row in rows.rows() {
+        let Some(relation) = schema.relation(&row.relation) else {
+            continue;
+        };
+        // **A relation is identified or counted and never both**, so a key of several columns and
+        // a key of one are read the same way here: `key()` says which columns, and this counts
+        // what the row carries in them.
+        let key = relation.key();
+        let Some(values) = key
+            .iter()
+            .map(|column| row.value(column))
+            .collect::<Option<Vec<&str>>>()
+        else {
+            continue;
+        };
+        let seen = taken
+            .entry((relation.name.as_str(), values.clone()))
+            .or_default();
+        *seen += 1;
+        if *seen > 1 {
+            return Err(Malformed::TwoWithOneKey {
+                relation: row.relation.clone(),
+                key: key
+                    .iter()
+                    .zip(values)
+                    .map(|(column, value)| (column.to_string(), value.to_string()))
+                    .collect(),
+            });
+        }
+    }
+
+    for row in rows.rows() {
+        let relation = schema.fits(row)?;
+        for column in &relation.columns {
+            let Some(to) = &column.references else {
+                continue;
+            };
+            let value = row.value(&column.name).unwrap_or_default();
+            let declared = schema
+                .relation(to)
+                .expect("checked when the schema was read");
+            let there = rows
+                .rows()
+                .iter()
+                .any(|it| it.relation == *to && it.value(declared.identity()) == Some(value));
+            if !there {
+                return Err(Malformed::NoSuchRow {
+                    relation: row.relation.clone(),
+                    column: column.name.clone(),
+                    value: value.to_string(),
+                    to: to.clone(),
+                });
+            }
+        }
+    }
+    Ok(())
 }
 
 #[cfg(test)]
