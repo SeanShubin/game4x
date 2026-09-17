@@ -97,6 +97,7 @@ fn main() {
     let of_game = Names::of(&store(true));
     let of_script = Names::of(&store(false));
 
+    let mut changed = 0;
     for (file, game) in files() {
         let from = format!("data/foundation/{file}");
         let text = std::fs::read_to_string(mine().join(&from)).expect(&from);
@@ -125,7 +126,16 @@ fn main() {
             }
             out.push('\n');
         }
-        std::fs::write(mine().join(format!("data/friendly/{file}")), &out).expect(&file);
-        println!("data/friendly/{file}");
+        // **Only what changed, because a silent overwrite is how a hand edit is lost.** Sean's
+        // spacing was written into `data/friendly/` and this would have taken it straight back
+        // out at the next run, one line among six that all looked the same.
+        let at = mine().join(format!("data/friendly/{file}"));
+        let before = std::fs::read_to_string(&at).unwrap_or_default();
+        if before != out {
+            std::fs::write(&at, &out).expect(&file);
+            println!("data/friendly/{file}");
+            changed += 1;
+        }
     }
+    println!("{changed} rewritten");
 }

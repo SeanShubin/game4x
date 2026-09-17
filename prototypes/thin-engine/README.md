@@ -1607,3 +1607,44 @@ contains that case on purpose: `expected.4x` is served from `before.4x` and the 
 `{state relation:...}` rows were dropped, the comparison would scope to no relations, find no
 differences, and report success in exactly the same words - so
 `the_report_says_which_relations_it_compared` asserts all four are named.
+
+
+## Saying you have read a test, and being told when that stops being true
+
+Sean, 2026-09-16: *I need some way to indicate I have reviewed a test, and for that to be undone
+should the test change, so I know which tests I need to re-review.* And on what the marker should
+be: *I was thinking of something along the lines of a copy of the tests that I put some sort of
+marker in... although I don't want to create work for myself by having to manually update the
+copies when they change.*
+
+**The copy is the marker, so there is nothing to hand-maintain.**
+`cargo run --example review -- <name>` puts the current `data/friendly/tests/<name>.4x` into
+`reviewed/`, and that act is the review. `report.html` then says one of three things per test:
+**never reviewed**, **reviewed**, or **drifted**, with the lines that differ shown under the test.
+
+**Whole file, whitespace collapsed.** A reworded comment counts and a re-indented row does not.
+Rows-only was the first recommendation and Sean's *I don't want to miss anything* overruled it -
+in the workflow this is for, the prose is changed by the same lane that changes the rows.
+
+**It never blocks, and this lane never runs it.** An unreviewed test is not a broken one, so no
+check fails on it. And a lane that could stamp its own change would be approving its own work,
+which is the rule `CLAUDE.md` already has for not marking a capability vetted. **There is no
+`--all`** for the same reason: approving everything at once is approving without reading.
+
+**Deliberately, a test you edited two seconds ago reads as drifted.** That is the point rather
+than a cost - Sean, weighing it: *that sounds like the whole point, I don't want to miss anything.*
+It is cheap because only two workflows are supported: he approves a test, or he asks this lane to
+change one and approves it afterwards.
+
+## What the drift lines are, and what they are not
+
+**The status is the fact and the lines are a hint.** Whole-file equality decides `drifted`, so a
+reordering with no other change is caught; the set difference underneath it would be empty in that
+case, and the badge would still be right.
+
+**Verifying this meant writing stamps and deleting them.** Two copies were written, one mutated in
+its prose and in a row and re-indented in a third place, the page read, and `reviewed/` then
+removed - so nothing in the repository claims a test was read that was not. The first mutation
+attempt changed `quantity:1`, which the friendly form does not contain; it writes `-> 1`. **The
+row half of the check was green because nothing had been mutated**, and only the comment was
+carrying the result.
