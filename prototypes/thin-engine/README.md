@@ -1484,10 +1484,39 @@ The isolation is checked rather than promised, by `tests/isolation.rs`:
 
 ```
 cd prototypes/thin-engine
-cargo test
+cargo test --no-fail-fast      # every binary, not just up to the first that fails
+cargo run --example report     # report.html: every test, whole, failures marked
+cargo run --example render     # data/friendly/ from data/foundation/
 ```
 
 It is not in the workspace, so the root `cargo test` does not reach it.
+
+**`--no-fail-fast` is not a nicety.** `cargo test` stops at the first failing target, so a run with
+four red binaries shows one - which is how four stale assertions sat unseen across two commits
+here, each reported green.
+
+## `report.html`, which is where a red is read
+
+**Sean, 2026-09-16**: *I want an aesthetically pleasing and informative test report. [...] Make sure
+I can see the entirety of the test and the failures are highlighted somehow.*
+
+**Every test is shown whole**, in the friendly form and including its prose, so nothing about a test
+is off the page. A row the run wanted and did not get is marked in place **inside the section that
+asserted it**; what it got instead is appended beneath. A test that could not run at all carries the
+refusal above its text.
+
+**It shows the friendly file and runs the foundation one**, which is the split the two formats are
+for - and `tests/directories.rs` is what says the two agree, so the page cannot show one thing and
+measure another without that test going red first.
+
+**Marking by text alone was wrong and the poison caught it.** A wanted row was marked on a `{given}`
+line that happened to read the same as the `{then}` line it was about. **A given says what was
+there, and nothing in it can be missing** - the mark is scoped to the section now.
+
+**No script in the page and no stylesheet beside it**, so it opens from disk; and every mark is an
+alpha over whatever the page sits on, so it reads in a light reader and a dark one - which is what
+`R-10` asks of a generated drawing.
+
 
 **Every check here was poisoned before being trusted**, and each failed the run it should have:
 
