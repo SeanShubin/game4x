@@ -1648,3 +1648,64 @@ removed - so nothing in the repository claims a test was read that was not. The 
 attempt changed `quantity:1`, which the friendly form does not contain; it writes `-> 1`. **The
 row half of the check was green because nothing had been mutated**, and only the comment was
 carrying the result.
+
+
+## Reviewing from the page, which is where reading already happens
+
+Sean, 2026-09-16: *Lets explore the idea of marking things as reviewed from the web page... The
+goal is to be able to look through everything quickly and express my decisions quickly.*
+
+```
+cd prototypes/thin-engine
+cargo run --example review-web
+  http://127.0.0.1:7878  -  6 tests
+```
+
+`j`/`k` move, `Enter` opens, `r` marks the test reviewed, `u` takes that back, and `x` opens a box
+for one line saying what needs changing. **Each key press is a write that has already happened
+before the badge changes** - the page never shows a decision the disk does not hold, and says so
+in red if nothing is listening rather than flipping a badge it cannot back up.
+
+**Of the three ways a page can reach a disk, this is the only one with no hop.** The other two
+were a page that hands you a command to paste, and Chrome's File System Access API, whose
+behaviour from a `file://` page nobody here had checked. The hop is the whole cost of the other
+two, and the hop is what was being removed.
+
+## Two halves of a review, in two files
+
+**An approval and an instruction are different things and are kept apart.** A copy in `reviewed/`
+says *I have read this*, and it auto-invalidates when the test changes. A bullet in
+`reviewed/asked.md` says *change this*, is addressed to this lane, and does not invalidate -
+it is cleared by whoever acts on it.
+
+**A note shows on a folded card.** It did not at first: the list sits in the card's body, so a
+test you had not opened said nothing about having notes against it - which is the one state the
+file exists to make visible. A count in the summary fixed it.
+
+## What the page is, and what the file on disk still is
+
+**`report.html` has no script in it and never gains one.** `build(live)` is told whether anything
+is listening: served, the page carries the controls; written to disk, it is exactly what it was.
+**A button that writes to the disk would be a lie in a file opened from the disk**, and that is the
+reason rather than tidiness.
+
+**The page has one definition.** `review-web` includes `report.rs` as a module and calls `build`,
+so the served page and the written one cannot disagree about what a test says. A second renderer
+would be a second thing to keep in step, and this repository has already been bitten by a page
+that could show one thing and measure another.
+
+## No dependency, and what that cost
+
+**About 200 lines of `std::net` rather than a crate.** Sean: *I don't want any dependencies or
+assumptions creeping in from existing code.* What it buys is small and exact: one request at a
+time, enough JSON for two string fields, and no TLS - all of which is honest for a thing one
+person runs on their own machine while reading.
+
+**It binds `127.0.0.1` and refuses a name that is not a test.** Both are about it being a thing
+that writes files on request: the first bounds who can ask, and the second bounds what a bad ask
+can do to `reviewed/` - a copy under a name no test has is compared against nothing, forever.
+
+**Every route was driven before it was believed**, by hand with `curl` and then through Chrome:
+the page, a refused name, a refused empty note, an unknown route, a note carrying a quote, two
+notes landing in one section, and the keys. Then `reviewed/` was deleted, notes included, because
+this lane inventing a note would be inventing an instruction from Sean.
