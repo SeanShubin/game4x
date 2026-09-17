@@ -425,6 +425,13 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// nothing in a run where nothing violates it, which is the same shape as the references that
 /// looked dead until a violation was generated for each.
 ///
+/// **`build-extractor` arrived under-tested, and this is where that shows.** Its three bindings
+/// and four of the literals can go without any test noticing: one test builds one extractor from
+/// exactly one labor and one metal, so a `remove` that loses its `what` still takes something, and
+/// one that loses its quantity falls back to taking the row - **which is the same answer when the
+/// row holds one**. The masking is the fallback doing what it was written to do, and it wants a
+/// test with two of something before it can be trusted.
+///
 /// **This said six until a test was written that refuses, and it says four now.**
 /// `the-scout-cannot-cross-where-there-is-no-border` sends a `move` the world does not allow, and
 /// two bindings that nothing had ever leaned on became load-bearing. **That is what an error
@@ -436,8 +443,9 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// turns on is that nothing says 1 touches 3. **They are there so a reader can see there is a path
 /// and it is not a direct one**, and this line is the price of that, said out loud rather than
 /// trimmed away.
-const DELETABLE: [&str; 2] = [
-    "4 rules.4x binding",
+const DELETABLE: [&str; 3] = [
+    "6 rules.4x binding",
+    "4 rules.4x literal",
     "2 tests/the-scout-cannot-cross-where-there-is-no-border.4x adjacency",
 ];
 
@@ -541,6 +549,15 @@ fn no_value_can_be_changed_without_breaking_something() {
 /// `require` and `remove` clauses match on `what` and `where` and leave the quantity unbound, and
 /// the quantity that lands at the destination is the `literal` written in the rule.
 ///
+/// **Every category's name, and it is the friendly side that reads them.** `things.4x` states four
+/// and the mutation suite runs the foundation, where a thing is `1` and never `scout` - so renaming
+/// all four changes nothing it looks at. **`tests/directories.rs` is what reads them**, and it is
+/// not what this suite mutates.
+///
+/// **The quantities went live.** Three of these lines used to be a test's `residency.quantity`,
+/// dead because `move` removed rows and added ones. `take` and `put` read them now, and only the
+/// refusal test's remains - that test never moves anything, so nothing of its world is counted.
+///
 /// **And `thing.name` in the refusal test**, which is the same shape one level along: that test
 /// never gets as far as moving anything, so the scout's name is never resolved. **A test that is
 /// refused reads less of its own world than one that succeeds**, which is worth knowing before
@@ -551,12 +568,9 @@ fn no_value_can_be_changed_without_breaking_something() {
 /// `add` can say so - they are set operations over whole rows. **This line is the check that will
 /// go red when quantities start being read**, which is the only reason it is worth writing down
 /// rather than fixing by binding a column nothing needs yet.
-const NOT_LOAD_BEARING: [&str; 7] = [
-    "4 rules.4x clause.seq",
-    "3 rules.4x input.seq",
-    "1 rules.4x literal.id",
+const NOT_LOAD_BEARING: [&str; 4] = [
+    "7 rules.4x clause.seq",
+    "4 rules.4x input.seq",
     "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x residency.quantity",
-    "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x thing.name",
-    "1 tests/the-scout-crosses-two-borders.4x residency.quantity",
-    "1 tests/the-scout-moves-to-an-adjacent-place.4x residency.quantity",
+    "4 things.4x thing.name",
 ];

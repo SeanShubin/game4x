@@ -148,8 +148,8 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
     }
     assert_eq!(
         nouns.len(),
-        5,
-        "five nouns the game has - territory, thing, adjacency, residency, move; this found {nouns:?}"
+        6,
+        "six nouns the game has - territory, thing, adjacency, residency, move, build-extractor; this found {nouns:?}"
     );
 
     let mut looked = 0;
@@ -179,5 +179,5 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
             looked += 1;
         }
     }
-    assert_eq!(looked, 30, "five nouns over six modules");
+    assert_eq!(looked, 36, "six nouns over six modules");
 }

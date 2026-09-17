@@ -312,7 +312,48 @@ them.
 too, because it never gets as far as moving anything. **Worth knowing before a short dead list is
 read as a tidy one.**
 
+## `build-extractor`, and what it needed from the engine: nothing
+
+**A rule, an input, three clauses and nine rows of binding.** No new role, no new word, no line of
+`src/` - the machinery a second rule wanted was already there.
+
+```text
+{rule id:2 name:build-extractor}
+{input id:4 rule:build-extractor seq:1 name:where of:territory}
+{clause id:5 rule:build-extractor seq:1 role:remove relation:residency}
+{clause id:6 rule:build-extractor seq:2 role:remove relation:residency}
+{clause id:7 rule:build-extractor seq:3 role:add relation:residency}
+{literal id:3 clause:clause-5 column:44 value:labor}
+{literal id:7 clause:clause-7 column:44 value:extractor}
+```
+
+**No `require` clause.** `move` carries one beside each `remove`, and it buys nothing: `remove`
+refuses when there is not enough, and `apply` builds a new store it discards on any failure, so the
+all-or-nothing does not rest on requiring first. The only difference is which refusal a reader
+gets.
+
+**`value:labor` reads because the column says what the value is.** A literal binds `residency.what`,
+which references `thing`, so the value is a thing and the friendly form names it. Before that the
+rules file stated three category ids and named none of them - `value:2`, `value:3`, `value:4` - which
+is the id lookup the friendly format exists to remove.
+
+## What the mutation suite said about it, which is that it is under-tested
+
+**Three bindings and four literals can be deleted and no test notices.** One test builds one
+extractor from exactly one labor and one metal, so a `remove` that loses its `what` still takes
+something, and one that loses its quantity **falls back to taking the row - the same answer when the
+row holds one**.
+
+**That fallback is working as written and masking as a consequence.** It wants a test with two of
+something before the quantity on a `remove` can be trusted, and per invariant 4 it is written down
+rather than changed.
+
+**And the quantities went live.** Three lines that used to sit in the dead-value list were a test's
+`residency.quantity`, dead while `move` removed rows and added ones. `take` and `put` read them now.
+Only the refusal test's remains, because that test never moves anything.
+
 ## Green: `remove` and `add` count, where the relation counts
+
 
 **A counted relation is arithmetic and an identified one is a set.** `{residency what:1 where:1
 quantity:1}` takes one scout from a territory that may hold five; `{adjacency from:1 to:2}` takes

@@ -86,6 +86,12 @@ pub struct Names {
     /// An `argument`'s id, and the relation its value is of - the one reference the schema cannot
     /// state, because it follows the input's `of` rather than a `{reference ...}` row.
     argument_of: BTreeMap<String, String>,
+    /// A `literal`'s id, and the relation its value is of - read from the column it binds.
+    ///
+    /// **The column says what the value is.** `{literal column:44 value:2}` binds `residency.what`,
+    /// which references `thing`, so the `2` is a thing - and a reader should see `labor`. Without
+    /// this the rules file states three category ids and names none of them.
+    literal_of: BTreeMap<String, String>,
     /// A relation and a name, to the id of the row that carries it - the inverse of `names`, and
     /// what turns a friendly reference back into a foundation one.
     by_name: BTreeMap<(String, String), String>,
@@ -266,6 +272,33 @@ impl Names {
             }
         }
 
+        // **What each column points at, by the column's id.** The literal rows below are the only
+        // place a value's type comes from the column rather than from an input.
+        let mut points_at: BTreeMap<String, String> = BTreeMap::new();
+        for row in rows.iter().filter(|row| row.relation == "reference") {
+            let Some(column) = row.value("column") else {
+                continue;
+            };
+            let Some(to) = row.value("to") else { continue };
+            let named = rows
+                .iter()
+                .find(|it| {
+                    it.relation == "relation"
+                        && (it.value("id") == Some(to) || it.value("name") == Some(to))
+                })
+                .and_then(|it| it.value("name"))
+                .unwrap_or(to);
+            points_at.insert(column.to_string(), named.to_string());
+        }
+        let mut literal_of = BTreeMap::new();
+        for row in rows.iter().filter(|row| row.relation == "literal") {
+            if let (Some(id), Some(column)) = (row.value("id"), row.value("column"))
+                && let Some(of) = points_at.get(column)
+            {
+                literal_of.insert(id.to_string(), of.clone());
+            }
+        }
+
         let by_name = names
             .iter()
             .map(|((relation, id), name)| ((relation.clone(), name.clone()), id.clone()))
@@ -275,6 +308,7 @@ impl Names {
             schema,
             names,
             argument_of,
+            literal_of,
             by_name,
             declares_name,
             input_of,
@@ -338,6 +372,12 @@ impl Names {
                 Some(to) => self.name(to, value),
                 None if row.relation == "argument" && column.name == "value" => {
                     match self.argument_of.get(id) {
+                        Some(of) => self.name(of, value),
+                        None => value.to_string(),
+                    }
+                }
+                None if row.relation == "literal" && column.name == "value" => {
+                    match self.literal_of.get(id) {
                         Some(of) => self.name(of, value),
                         None => value.to_string(),
                     }
@@ -422,6 +462,11 @@ impl Names {
                 (row.relation == "argument" && column == "value")
                     .then(|| self.argument_of.get(&id).cloned())
                     .flatten()
+                    .or_else(|| {
+                        (row.relation == "literal" && column == "value")
+                            .then(|| self.literal_of.get(&id).cloned())
+                            .flatten()
+                    })
             });
             let resolved = match points_at {
                 Some(to) => self

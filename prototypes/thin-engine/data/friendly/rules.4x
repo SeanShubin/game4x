@@ -39,3 +39,22 @@
 
 {literal id:1 clause:clause-4 column:46 value:1}
 {literal id:2 clause:clause-3 column:46 value:1}
+
+{rule id:2 name:build-extractor}
+
+{input id:4 rule:build-extractor seq:1 name:where of:territory}
+
+{clause id:5 rule:build-extractor seq:1 role:remove relation:residency name:clause-5}
+{clause id:6 rule:build-extractor seq:2 role:remove relation:residency name:clause-6}
+{clause id:7 rule:build-extractor seq:3 role:add relation:residency name:clause-7}
+
+{binding id:9 clause:clause-5 column:45 input:where}
+{binding id:10 clause:clause-6 column:45 input:where}
+{binding id:11 clause:clause-7 column:45 input:where}
+
+{literal id:3 clause:clause-5 column:44 value:labor}
+{literal id:4 clause:clause-5 column:46 value:1}
+{literal id:5 clause:clause-6 column:44 value:metal}
+{literal id:6 clause:clause-6 column:46 value:1}
+{literal id:7 clause:clause-7 column:44 value:extractor}
+{literal id:8 clause:clause-7 column:46 value:1}

@@ -39,3 +39,22 @@
 
 {literal id:1 clause:4 column:46 value:1}
 {literal id:2 clause:3 column:46 value:1}
+
+{rule id:2 name:build-extractor}
+
+{input id:4 rule:2 seq:1 name:where of:13}
+
+{clause id:5 rule:2 seq:1 role:2 relation:16}
+{clause id:6 rule:2 seq:2 role:2 relation:16}
+{clause id:7 rule:2 seq:3 role:3 relation:16}
+
+{binding id:9 clause:5 column:45 input:4}
+{binding id:10 clause:6 column:45 input:4}
+{binding id:11 clause:7 column:45 input:4}
+
+{literal id:3 clause:5 column:44 value:2}
+{literal id:4 clause:5 column:46 value:1}
+{literal id:5 clause:6 column:44 value:3}
+{literal id:6 clause:6 column:46 value:1}
+{literal id:7 clause:7 column:44 value:4}
+{literal id:8 clause:7 column:46 value:1}
