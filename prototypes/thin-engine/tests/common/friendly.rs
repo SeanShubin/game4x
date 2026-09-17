@@ -110,6 +110,8 @@ pub struct Names {
     input_id: BTreeMap<(String, String), String>,
     /// Which rule a clause belongs to, by the clause's id and by its generated name.
     rule_of_clause: BTreeMap<String, String>,
+    /// The relations that are families, whose values are relations rather than rows of their own.
+    families: std::collections::BTreeSet<String>,
 }
 
 /// Which rows of a test file are the game's: everything after a `{given}`, `{when}` or `{then}`.
@@ -384,6 +386,21 @@ impl Names {
             }
         }
 
+        // **A family's values are relations.** `{move what:scout ...}` carries a relation's id
+        // because a kind is a relation now, so a reference whose target is a family is resolved
+        // against `relation` - the family itself has no rows to be named by.
+        let mut families: std::collections::BTreeSet<String> = Default::default();
+        for row in rows.iter().filter(|row| row.relation == "family") {
+            let of = row.value("relation").unwrap_or_default();
+            if let Some(row) = rows.iter().find(|it| {
+                it.relation == "relation"
+                    && (it.value("id") == Some(of) || it.value("name") == Some(of))
+            }) && let Some(name) = row.value("name")
+            {
+                families.insert(name.to_string());
+            }
+        }
+
         let by_name = names
             .iter()
             .map(|((relation, id), name)| ((relation.clone(), name.clone()), id.clone()))
@@ -399,6 +416,7 @@ impl Names {
             input_of,
             input_id,
             rule_of_clause,
+            families,
         }
     }
 
@@ -406,7 +424,18 @@ impl Names {
     ///
     /// **A value pointing at nothing keeps its id, marked**, so a rendering of data the engine
     /// would refuse still says something rather than panicking.
+    /// Where a name for a value of this relation is to be looked for.
+    ///
+    /// **A family has no rows**, so a value typed by one names a relation and is looked up there.
+    fn under(&self, relation: &str) -> String {
+        if self.families.contains(relation) {
+            return "relation".to_string();
+        }
+        relation.to_string()
+    }
+
     pub fn name(&self, relation: &str, id: &str) -> String {
+        let relation = &self.under(relation);
         self.names
             .get(&(relation.to_string(), id.to_string()))
             .cloned()
@@ -524,7 +553,7 @@ impl Names {
                     let back = match self.input_of.get(&(row.relation.clone(), key.clone())) {
                         Some((of, _)) => self
                             .by_name
-                            .get(&(of.clone(), value.clone()))
+                            .get(&(self.under(of), value.clone()))
                             .cloned()
                             .unwrap_or_else(|| value.clone()),
                         None => value.clone(),
@@ -567,7 +596,7 @@ impl Names {
                     .unwrap_or_else(|| value.clone()),
                 Some(to) => self
                     .by_name
-                    .get(&(to, value.clone()))
+                    .get(&(self.under(&to), value.clone()))
                     .cloned()
                     .unwrap_or_else(|| value.clone()),
                 None => value.clone(),

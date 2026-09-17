@@ -34,11 +34,10 @@ pub fn rows(at: &str) -> Vec<Row> {
 /// first time it ran. **The order does not matter to the engine**, since everything goes into one
 /// store and is validated together; the lists agreeing is what matters, and asserting the order is
 /// the cheapest way to notice that they do not.
-pub const LOADED: [&str; 4] = [
+pub const LOADED: [&str; 3] = [
     "data/foundation/schema.4x",
     "data/foundation/engine.4x",
     "data/foundation/rules.4x",
-    "data/foundation/things.4x",
 ];
 
 /// Every test file, read rather than listed - one test per file, and nothing else in `tests/`.

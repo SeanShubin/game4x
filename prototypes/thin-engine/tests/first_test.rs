@@ -132,7 +132,7 @@ fn a_scenario_states_a_world_and_an_act_and_nothing_else() {
 fn the_ruleset_states_no_world() {
     let state = state_relations();
     let mut checked = 0;
-    for file in ["schema.4x", "engine.4x", "rules.4x", "things.4x"] {
+    for file in ["schema.4x", "engine.4x", "rules.4x"] {
         for row in rows(&format!("data/foundation/{file}")) {
             assert!(
                 !state.contains(&row.relation),
@@ -246,10 +246,13 @@ fn the_report_says_which_relations_it_compared() {
             "adjacency",
             "deposit",
             "extractor",
-            "residency",
+            "food",
+            "labor",
+            "metal",
+            "scout",
             "territory"
         ],
-        "five of the game's relations are state - a category is vocabulary, and shared"
+        "eight of the game's relations are state - four of them are kinds, which is what a kind became"
     );
     assert_eq!(report.test, "the-scout-moves-to-an-adjacent-place");
 }
@@ -266,7 +269,7 @@ fn the_report_reads_as_a_report() {
             report_of("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x")
         ),
         "the-scout-moves-to-an-adjacent-place\n  \
-           compared  adjacency, deposit, extractor, residency, territory\n  \
+           compared  adjacency, deposit, extractor, food, labor, metal, scout, territory\n  \
            result    as expected"
     );
 }
@@ -282,13 +285,13 @@ fn the_report_reads_as_a_report() {
 #[test]
 fn a_state_that_is_not_expected_is_reported_as_both_rows() {
     // **The script is handed in, not read through `Files`** - the sections are in it, so the
-    // poison is a row rather than a file. The last residency is the `then` one.
+    // poison is a row rather than a file. The last scout is the `then` one.
     let mut script = script_of("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x");
     let at = script
         .iter()
-        .rposition(|row| row.relation == "residency")
-        .expect("a `then` residency");
-    script[at] = thin_engine::notation::read("{residency what:1 where:1 quantity:1}")
+        .rposition(|row| row.relation == "scout")
+        .expect("a `then` scout");
+    script[at] = thin_engine::notation::read("{scout where:1 quantity:1}")
         .expect("the state before, offered as the state after")
         .remove(0);
 
@@ -298,11 +301,8 @@ fn a_state_that_is_not_expected_is_reported_as_both_rows() {
         !report.same(),
         "the scout did move, so this is not as expected"
     );
-    assert_eq!(
-        report.missing,
-        vec!["{residency what:1 where:1 quantity:1}"]
-    );
-    assert_eq!(report.extra, vec!["{residency what:1 where:2 quantity:1}"]);
+    assert_eq!(report.missing, vec!["{scout where:1 quantity:1}"]);
+    assert_eq!(report.extra, vec!["{scout where:2 quantity:1}"]);
     assert!(
         format!("{report}").contains("NOT as expected"),
         "and the report says so: {report}"

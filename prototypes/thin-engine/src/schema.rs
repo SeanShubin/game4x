@@ -41,6 +41,9 @@ const ATTRIBUTE: &str = "attribute";
 const LIMIT: &str = "limit";
 const HELD: &str = "held";
 const BY: &str = "by";
+const FAMILY: &str = "family";
+const MEMBER: &str = "member";
+const KIND: &str = "kind";
 
 /// One column: its id, what it is called, and what it points at if anything.
 ///
@@ -166,6 +169,12 @@ pub enum Malformed {
         /// How much room there actually is, which is `0` where the row is absent.
         room: String,
     },
+    /// A relation belongs to a family and does not declare one of the family's columns.
+    UnlikeShape {
+        family: String,
+        member: String,
+        column: String,
+    },
     /// A limit between two relations whose keys are not the same columns.
     ///
     /// **Held and holder are compared key for key**, so a limit between relations that do not
@@ -208,6 +217,13 @@ impl std::fmt::Display for Malformed {
                     out,
                     "`{held}` needs {wanted} and there is room for {room} in `{by}`"
                 )
+            }
+            Malformed::UnlikeShape {
+                family,
+                member,
+                column,
+            } => {
+                write!(out, "`{member}` is a `{family}` and declares no `{column}`")
             }
             Malformed::CannotLimit { held, by } => {
                 write!(
@@ -276,6 +292,17 @@ pub struct Schema {
     relations: BTreeMap<String, Relation>,
     /// A column's id to the relation it belongs to and what it is called there.
     by_id: BTreeMap<String, (String, String)>,
+    /// A family's name to the names of the relations that belong to it.
+    ///
+    /// **A family is an abstract relation: columns and no rows.** The columns are the shape its
+    /// members share and the members are the set - Sean, 2026-09-17, having considered both an
+    /// exists/not-exists trait and a set of kinds: *they are the same mechanism*, and
+    /// `spec/data/families.4x` writes it as one.
+    ///
+    /// **Kept here rather than worked out twice.** Both the engine, deciding what an input ranges
+    /// over, and the reference check, deciding whether a value is of the right kind, ask the same
+    /// question - so it is answered in the one place that already turns ids into names.
+    families: BTreeMap<String, Vec<String>>,
     /// Which relation is held by which: `(extractor, deposit)` says there cannot be more
     /// extractors somewhere than there are deposits to hold them.
     ///
@@ -364,6 +391,30 @@ impl Schema {
             attributes.entry(of.clone()).or_default().push(name.clone());
         }
 
+        // **A family and its members, resolved to names here** so that nothing downstream has
+        // to turn an id into a relation again.
+        let mut families: BTreeMap<String, Vec<String>> = BTreeMap::new();
+        for row in rows.iter().filter(|row| row.relation == FAMILY) {
+            let of = row.value(RELATION).unwrap_or_default();
+            if let Some(name) = named.get(of) {
+                families.entry(name.clone()).or_default();
+            }
+        }
+        for row in rows.iter().filter(|row| row.relation == MEMBER) {
+            let (Some(kind), Some(family)) = (row.value(KIND), row.value(FAMILY)) else {
+                continue;
+            };
+            // **Members are kept as ids, because that is what a value carries.** A command says
+            // `what:28`, a reference says `to:27`, and every other value in the data is an id -
+            // so a family that answered in names would be the one place that did not.
+            let Some(family) = named.get(family) else {
+                continue;
+            };
+            if let Some(members) = families.get_mut(family) {
+                members.push(kind.to_string());
+            }
+        }
+
         let mut limits: Vec<(String, String)> = Vec::new();
         for row in rows.iter().filter(|row| row.relation == LIMIT) {
             let held = row.value(HELD).unwrap_or_default();
@@ -414,11 +465,43 @@ impl Schema {
             }
         }
 
+        // **Every member declares the columns its family does.** That is what makes a family a
+        // shape rather than only a set: a clause whose relation comes from an argument binds the
+        // family's columns, and it can only do that if every member has them.
+        for (family, members) in &families {
+            let Some(shape) = relations.get(family) else {
+                continue;
+            };
+            for member in members {
+                let Some(member) = named.get(member) else {
+                    continue;
+                };
+                let Some(declared) = relations.get(member) else {
+                    continue;
+                };
+                for column in &shape.columns {
+                    if !declared.columns.iter().any(|it| it.name == column.name) {
+                        return Err(Malformed::UnlikeShape {
+                            family: family.clone(),
+                            member: member.to_string(),
+                            column: column.name.clone(),
+                        });
+                    }
+                }
+            }
+        }
+
         Ok(Schema {
             relations,
             by_id,
+            families,
             limits,
         })
+    }
+
+    /// The relations belonging to `family`, or `None` where it is not a family.
+    pub fn members(&self, family: &str) -> Option<&[String]> {
+        self.families.get(family).map(Vec::as_slice)
     }
 
     pub fn relation(&self, name: &str) -> Option<&Relation> {
@@ -527,6 +610,20 @@ pub fn check(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
                 continue;
             };
             let value = row.value(&column.name).unwrap_or_default();
+            // **A reference to a family is a reference to its members.** A family has no rows, so
+            // asking whether one of them carries this key would refuse everything; what the value
+            // names is a relation, and the question is whether that relation belongs.
+            if let Some(members) = schema.members(to) {
+                if members.iter().any(|it| it == value) {
+                    continue;
+                }
+                return Err(Malformed::NoSuchRow {
+                    relation: row.relation.clone(),
+                    column: column.name.clone(),
+                    value: value.to_string(),
+                    to: to.clone(),
+                });
+            }
             let declared = schema
                 .relation(to)
                 .expect("checked when the schema was read");

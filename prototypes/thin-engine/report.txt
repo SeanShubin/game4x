@@ -13,14 +13,17 @@ old state
     - extractor
       - {extractor where:territory-1 what:metal} -> 1
       - {extractor where:territory-1 what:food} -> 1
-    - residency
-      - {residency what:labor where:territory-1} -> 1
+    - food
+    - labor
+      - {labor where:territory-1} -> 1
+    - metal
+    - scout
     - territory
       - {territory id:1 name:territory-1}
 
 command  {work where:territory-1 what:food}
-  took   {residency what:labor where:territory-1} -> 1
-  made   {residency what:food where:territory-1} -> 6
+  took   {labor where:territory-1} -> 1
+  made   {food where:territory-1} -> 6
 
 new state
   - root
@@ -31,8 +34,11 @@ new state
     - extractor
       - {extractor where:territory-1 what:metal} -> 1
       - {extractor where:territory-1 what:food} -> 1
-    - residency
-      - {residency what:food where:territory-1} -> 6
+    - food
+      - {food where:territory-1} -> 6
+    - labor
+    - metal
+    - scout
     - territory
       - {territory id:1 name:territory-1}
 
@@ -47,16 +53,19 @@ old state
       - {adjacency id:1 from:territory-1 to:territory-2}
     - deposit
     - extractor
-    - residency
-      - {residency what:scout where:territory-1} -> 1
-      - {residency what:scout where:territory-2} -> 1
+    - food
+    - labor
+    - metal
+    - scout
+      - {scout where:territory-1} -> 1
+      - {scout where:territory-2} -> 1
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
 
 command  {move what:scout from:territory-1 to:territory-2}
-  took   {residency what:scout where:territory-1} -> 1
-  made   {residency what:scout where:territory-2} -> 1
+  took   {scout where:territory-1} -> 1
+  made   {scout where:territory-2} -> 1
 
 new state
   - root
@@ -64,8 +73,11 @@ new state
       - {adjacency id:1 from:territory-1 to:territory-2}
     - deposit
     - extractor
-    - residency
-      - {residency what:scout where:territory-2} -> 2
+    - food
+    - labor
+    - metal
+    - scout
+      - {scout where:territory-2} -> 2
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
@@ -82,14 +94,17 @@ old state
       - {deposit where:territory-1 what:food density:6} -> 1
     - extractor
       - {extractor where:territory-1 what:food} -> 1
-    - residency
-      - {residency what:labor where:territory-1} -> 1
-      - {residency what:metal where:territory-1} -> 1
+    - food
+    - labor
+      - {labor where:territory-1} -> 1
+    - metal
+      - {metal where:territory-1} -> 1
+    - scout
     - territory
       - {territory id:1 name:territory-1}
 
 refused
-  `build-extractor` would leave a world where `extractor` needs {deposit where:1 what:5 quantity:2} and there is room for 1 in `deposit`
+  `build-extractor` would leave a world where `extractor` needs {deposit where:1 what:31 quantity:2} and there is room for 1 in `deposit`
 
 as expected
 
@@ -101,14 +116,17 @@ old state
     - adjacency
     - deposit
     - extractor
-    - residency
-      - {residency what:labor where:territory-1} -> 1
-      - {residency what:metal where:territory-1} -> 1
+    - food
+    - labor
+      - {labor where:territory-1} -> 1
+    - metal
+      - {metal where:territory-1} -> 1
+    - scout
     - territory
       - {territory id:1 name:territory-1}
 
 refused
-  `build-extractor` would leave a world where `extractor` needs {deposit where:1 what:5 quantity:1} and there is room for 0 in `deposit`
+  `build-extractor` would leave a world where `extractor` needs {deposit where:1 what:31 quantity:1} and there is room for 0 in `deposit`
 
 as expected
 
@@ -121,15 +139,18 @@ old state
     - deposit
       - {deposit where:territory-1 what:food density:6} -> 1
     - extractor
-    - residency
-      - {residency what:labor where:territory-1} -> 1
-      - {residency what:metal where:territory-1} -> 1
+    - food
+    - labor
+      - {labor where:territory-1} -> 1
+    - metal
+      - {metal where:territory-1} -> 1
+    - scout
     - territory
       - {territory id:1 name:territory-1}
 
 command  {build-extractor where:territory-1 what:food}
-  took   {residency what:labor where:territory-1} -> 1
-  took   {residency what:metal where:territory-1} -> 1
+  took   {labor where:territory-1} -> 1
+  took   {metal where:territory-1} -> 1
   made   {extractor where:territory-1 what:food} -> 1
 
 new state
@@ -139,7 +160,10 @@ new state
       - {deposit where:territory-1 what:food density:6} -> 1
     - extractor
       - {extractor where:territory-1 what:food} -> 1
-    - residency
+    - food
+    - labor
+    - metal
+    - scout
     - territory
       - {territory id:1 name:territory-1}
 
@@ -155,14 +179,17 @@ old state
       - {deposit where:territory-1 what:food density:6} -> 1
     - extractor
       - {extractor where:territory-1 what:food} -> 1
-    - residency
-      - {residency what:labor where:territory-1} -> 1
+    - food
+    - labor
+      - {labor where:territory-1} -> 1
+    - metal
+    - scout
     - territory
       - {territory id:1 name:territory-1}
 
 command  {work where:territory-1 what:food}
-  took   {residency what:labor where:territory-1} -> 1
-  made   {residency what:food where:territory-1} -> 6
+  took   {labor where:territory-1} -> 1
+  made   {food where:territory-1} -> 6
 
 new state
   - root
@@ -171,8 +198,11 @@ new state
       - {deposit where:territory-1 what:food density:6} -> 1
     - extractor
       - {extractor where:territory-1 what:food} -> 1
-    - residency
-      - {residency what:food where:territory-1} -> 6
+    - food
+      - {food where:territory-1} -> 6
+    - labor
+    - metal
+    - scout
     - territory
       - {territory id:1 name:territory-1}
 
@@ -187,15 +217,18 @@ old state
       - {adjacency id:1 from:territory-1 to:territory-2}
     - deposit
     - extractor
-    - residency
-      - {residency what:scout where:territory-1} -> 2
+    - food
+    - labor
+    - metal
+    - scout
+      - {scout where:territory-1} -> 2
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
 
 command  {move what:scout from:territory-1 to:territory-2}
-  took   {residency what:scout where:territory-1} -> 1
-  made   {residency what:scout where:territory-2} -> 1
+  took   {scout where:territory-1} -> 1
+  made   {scout where:territory-2} -> 1
 
 new state
   - root
@@ -203,9 +236,12 @@ new state
       - {adjacency id:1 from:territory-1 to:territory-2}
     - deposit
     - extractor
-    - residency
-      - {residency what:scout where:territory-1} -> 1
-      - {residency what:scout where:territory-2} -> 1
+    - food
+    - labor
+    - metal
+    - scout
+      - {scout where:territory-1} -> 1
+      - {scout where:territory-2} -> 1
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
@@ -222,8 +258,11 @@ old state
       - {adjacency id:2 from:territory-2 to:territory-3}
     - deposit
     - extractor
-    - residency
-      - {residency what:scout where:territory-1} -> 1
+    - food
+    - labor
+    - metal
+    - scout
+      - {scout where:territory-1} -> 1
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
@@ -244,20 +283,23 @@ old state
       - {adjacency id:2 from:territory-2 to:territory-3}
     - deposit
     - extractor
-    - residency
-      - {residency what:scout where:territory-1} -> 1
+    - food
+    - labor
+    - metal
+    - scout
+      - {scout where:territory-1} -> 1
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
 
 command  {move what:scout from:territory-1 to:territory-2}
-  took   {residency what:scout where:territory-1} -> 1
-  made   {residency what:scout where:territory-2} -> 1
+  took   {scout where:territory-1} -> 1
+  made   {scout where:territory-2} -> 1
 
 command  {move what:scout from:territory-2 to:territory-3}
-  took   {residency what:scout where:territory-2} -> 1
-  made   {residency what:scout where:territory-3} -> 1
+  took   {scout where:territory-2} -> 1
+  made   {scout where:territory-3} -> 1
 
 new state
   - root
@@ -266,8 +308,11 @@ new state
       - {adjacency id:2 from:territory-2 to:territory-3}
     - deposit
     - extractor
-    - residency
-      - {residency what:scout where:territory-3} -> 1
+    - food
+    - labor
+    - metal
+    - scout
+      - {scout where:territory-3} -> 1
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
@@ -285,16 +330,19 @@ old state
       - {adjacency id:2 from:territory-2 to:territory-3}
     - deposit
     - extractor
-    - residency
-      - {residency what:scout where:territory-1} -> 1
+    - food
+    - labor
+    - metal
+    - scout
+      - {scout where:territory-1} -> 1
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
 
 command  {move what:scout from:territory-1 to:territory-2}
-  took   {residency what:scout where:territory-1} -> 1
-  made   {residency what:scout where:territory-2} -> 1
+  took   {scout where:territory-1} -> 1
+  made   {scout where:territory-2} -> 1
 
 new state
   - root
@@ -303,8 +351,11 @@ new state
       - {adjacency id:2 from:territory-2 to:territory-3}
     - deposit
     - extractor
-    - residency
-      - {residency what:scout where:territory-2} -> 1
+    - food
+    - labor
+    - metal
+    - scout
+      - {scout where:territory-2} -> 1
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
@@ -322,18 +373,21 @@ old state
       - {deposit where:territory-1 what:food density:6} -> 2
     - extractor
       - {extractor where:territory-1 what:food} -> 2
-    - residency
-      - {residency what:labor where:territory-1} -> 2
+    - food
+    - labor
+      - {labor where:territory-1} -> 2
+    - metal
+    - scout
     - territory
       - {territory id:1 name:territory-1}
 
 command  {work where:territory-1 what:food}
-  took   {residency what:labor where:territory-1} -> 1
-  made   {residency what:food where:territory-1} -> 6
+  took   {labor where:territory-1} -> 1
+  made   {food where:territory-1} -> 6
 
 command  {work where:territory-1 what:food}
-  took   {residency what:labor where:territory-1} -> 1
-  made   {residency what:food where:territory-1} -> 6
+  took   {labor where:territory-1} -> 1
+  made   {food where:territory-1} -> 6
 
 new state
   - root
@@ -342,8 +396,11 @@ new state
       - {deposit where:territory-1 what:food density:6} -> 2
     - extractor
       - {extractor where:territory-1 what:food} -> 2
-    - residency
-      - {residency what:food where:territory-1} -> 12
+    - food
+      - {food where:territory-1} -> 12
+    - labor
+    - metal
+    - scout
     - territory
       - {territory id:1 name:territory-1}
 

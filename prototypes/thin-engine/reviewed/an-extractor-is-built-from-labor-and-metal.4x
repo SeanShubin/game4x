@@ -1,19 +1,21 @@
-# Building an extractor spends a labor and a metal and leaves an extractor.
+# Building an extractor spends a labor and a metal, and puts the extractor in a deposit.
 #
-# **Red on purpose.** Nothing declares a `build-extractor` rule, so this states what the rule
-# should do before there is one to do it - Sean, 2026-09-16: *we will use this to puzzle out the
-# design more before implementing anything.*
+# **The deposit is untouched.** It is not spent - it is what holds the extractor, and holding one
+# is what it goes on doing. What changes is that one of its three is now occupied, which the world
+# says by there being an extractor row rather than by the deposit counting down.
 
 {test name:an-extractor-is-built-from-labor-and-metal}
 
 {given}
 {territory id:1 name:territory-1}
+{deposit where:territory-1 what:food density:6} -> 1
 {residency what:labor where:territory-1} -> 1
 {residency what:metal where:territory-1} -> 1
 
 {when}
-{build-extractor where:territory-1}
+{build-extractor where:territory-1 what:food}
 
 {then}
 {territory id:1 name:territory-1}
-{residency what:extractor where:territory-1} -> 1
+{deposit where:territory-1 what:food density:6} -> 1
+{extractor where:territory-1 what:food} -> 1

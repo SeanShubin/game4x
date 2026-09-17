@@ -43,6 +43,7 @@ const BINDING: &str = "binding";
 const LITERAL: &str = "literal";
 const READING: &str = "reading";
 const TAKES: &str = "takes";
+const RELATION_OF: &str = "relation-of";
 const ID: &str = "id";
 const NAME: &str = "name";
 const SEQ: &str = "seq";
@@ -108,6 +109,12 @@ impl Game {
     /// counted relation has no single value to be named by, so it offers none and an input typed
     /// as one has nothing to range over.
     fn keys_of(&self, relation: &str) -> Vec<String> {
+        // **A family ranges over its members, not over its rows**, because it has none. This is
+        // what makes `offered` exact by what the game says rather than by what a column shape
+        // happens to permit: a deposit is not offered to `move` because it is not a unit.
+        if let Some(members) = self.schema.members(relation) {
+            return members.to_vec();
+        }
         let Some(declared) = self.schema.relation(relation) else {
             return Vec::new();
         };
@@ -125,6 +132,12 @@ impl Game {
 
     /// Whether any row of `relation` has `value` as its key.
     fn has_key(&self, relation: &str, value: &str) -> bool {
+        // **Typed by the family is typed by membership.** `of:unit` admits a relation that is a
+        // member of `unit` and nothing else, which is where *no such place* becomes *not one of
+        // those*.
+        if let Some(members) = self.schema.members(relation) {
+            return members.iter().any(|it| it == value);
+        }
         let Some(declared) = self.schema.relation(relation) else {
             return false;
         };
@@ -257,12 +270,26 @@ fn row_of(
     whole: bool,
     matched: &BTreeMap<String, Row>,
 ) -> Result<Row, Refused> {
-    let relation = clause.value(RELATION).unwrap_or_default();
-    let relation = game
-        .named(RELATION, relation)
-        .unwrap_or(relation)
-        .to_string();
     let id = clause.value(ID).unwrap_or_default();
+    // **A clause's relation is its own, or an argument's.** `{relation-of clause:12 input:9}` says
+    // the second - the rule works on whichever kind the command named, which is what lets one
+    // `work` serve every resource now that a kind is a relation rather than a value.
+    //
+    // **Read before the columns are bound**, because which columns exist depends on it.
+    let relation = match game
+        .of_relation(RELATION_OF)
+        .into_iter()
+        .find(|row| row.value(CLAUSE) == Some(id))
+        .and_then(|row| row.value(INPUT))
+        .and_then(|input| bound.get(input))
+    {
+        Some(given) => given.clone(),
+        None => clause.value(RELATION).unwrap_or_default().to_string(),
+    };
+    let relation = game
+        .named(RELATION, &relation)
+        .unwrap_or(&relation)
+        .to_string();
     let bindings: Vec<&Row> = game
         .of_relation(BINDING)
         .into_iter()

@@ -9,14 +9,14 @@
 {territory id:1}
 {territory id:2}
 {adjacency id:1 from:1 to:2}
-{residency what:1 where:1 quantity:1}
-{residency what:1 where:2 quantity:1}
+{scout where:1 quantity:1}
+{scout where:2 quantity:1}
 
 {when}
-{move what:1 from:1 to:2}
+{move what:28 from:1 to:2}
 
 {then}
 {territory id:1}
 {territory id:2}
 {adjacency id:1 from:1 to:2}
-{residency what:1 where:2 quantity:2}
+{scout where:2 quantity:2}

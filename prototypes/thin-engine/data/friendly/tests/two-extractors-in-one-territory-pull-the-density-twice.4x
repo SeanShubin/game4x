@@ -9,7 +9,7 @@
 {territory id:1 name:territory-1}
 {deposit where:territory-1 what:food density:6} -> 2
 {extractor where:territory-1 what:food} -> 2
-{residency what:labor where:territory-1} -> 2
+{labor where:territory-1} -> 2
 
 {when}
 {work where:territory-1 what:food}
@@ -19,4 +19,4 @@
 {territory id:1 name:territory-1}
 {deposit where:territory-1 what:food density:6} -> 2
 {extractor where:territory-1 what:food} -> 2
-{residency what:food where:territory-1} -> 12
+{food where:territory-1} -> 12

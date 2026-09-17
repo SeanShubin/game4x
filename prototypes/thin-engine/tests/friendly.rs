@@ -16,8 +16,9 @@ fn the_world_renders_in_the_user_facing_format() {
     let rendered = names.all(&common::section("given"));
     println!("{rendered}");
 
-    // **No `{thing ...}` row**, because a category belongs to the ruleset and a `given` holds
-    // state. `things.4x` declares the four, shared by every test.
+    // **A kind is a relation, so the scout is its own row rather than a residency of a
+    // category.** Sean, 2026-09-17, looking at three co-located things written three ways: *the
+    // way we specify this is different.* It is not now.
     assert_eq!(
         rendered,
         [
@@ -26,7 +27,7 @@ fn the_world_renders_in_the_user_facing_format() {
             "{territory id:3 name:territory-3}",
             "{adjacency id:1 from:territory-1 to:territory-2}",
             "{adjacency id:2 from:territory-2 to:territory-3}",
-            "{residency what:scout where:territory-1} -> 1",
+            "{scout where:territory-1} -> 1",
         ]
         .join(
             "
@@ -72,12 +73,12 @@ fn a_column_is_referenced_by_id_because_its_name_is_a_token() {
     let game = game_rows();
     let names = Names::of(&game);
 
-    // A column's `name` is the token, and it is not unique: fifteen columns are called `id`.
+    // A column's `name` is the token, and it is not unique: fourteen columns are called `id`.
     let called_id = game
         .iter()
         .filter(|row| row.relation == "column" && row.value("name") == Some("id"))
         .count();
-    assert_eq!(called_id, 15, "fifteen columns are called `id`");
+    assert_eq!(called_id, 14, "fourteen columns are called `id`");
 
     // So no column has a name, and a reference to one is its id.
     assert_eq!(names.name("column", "44"), "44");
@@ -87,11 +88,12 @@ fn a_column_is_referenced_by_id_because_its_name_is_a_token() {
         .expect("the first binding");
     assert_eq!(
         names.row(binding),
-        "{binding id:1 clause:clause-1 column:44 input:what}"
+        "{binding id:1 clause:clause-1 column:72 input:from}"
     );
 
-    // The control: a relation whose names are its own is referenced by name.
-    assert_eq!(names.name("thing", "1"), "scout");
+    // The control: a relation whose names are its own is referenced by name - and a family's
+    // values are relations, so `of:unit` is looked up among them.
+    assert_eq!(names.name("unit", "28"), "scout");
     assert_eq!(names.name("territory", "1"), "territory-1");
 }
 
@@ -177,24 +179,21 @@ fn a_counted_relation_renders_with_an_arrow() {
     let game = game_rows();
     let names = Names::of(&game);
 
-    let residency = game
+    let scout = game
         .iter()
-        .find(|row| row.relation == "residency")
-        .expect("a residency");
-    assert_eq!(
-        names.row(residency),
-        "{residency what:scout where:territory-1} -> 1"
-    );
+        .find(|row| row.relation == "scout")
+        .expect("a scout");
+    assert_eq!(names.row(scout), "{scout where:territory-1} -> 1");
 
     // **Friendly to foundation is the direction that must work** - Sean, 2026-09-15 - so the
     // arrow is read back as well as written.
-    let parsed = names.parse(&names.row(residency)).expect("read back");
-    assert_eq!(&names.foundation(&parsed).expect("converted"), residency);
+    let parsed = names.parse(&names.row(scout)).expect("read back");
+    assert_eq!(&names.foundation(&parsed).expect("converted"), scout);
 
-    // The control: `thing` is identified rather than counted, so nothing is appended to it.
-    let thing = game
+    // The control: `territory` is identified rather than counted, so nothing is appended to it.
+    let territory = game
         .iter()
-        .find(|row| row.relation == "thing")
-        .expect("a thing");
-    assert_eq!(names.row(thing), "{thing id:1 name:scout}");
+        .find(|row| row.relation == "territory")
+        .expect("a territory");
+    assert_eq!(names.row(territory), "{territory id:1 name:territory-1}");
 }

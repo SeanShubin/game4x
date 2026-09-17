@@ -11,7 +11,7 @@
 {deposit where:territory-1 what:metal density:2} -> 1
 {extractor where:territory-1 what:food} -> 1
 {extractor where:territory-1 what:metal} -> 1
-{residency what:labor where:territory-1} -> 1
+{labor where:territory-1} -> 1
 
 {when}
 {work where:territory-1 what:food}
@@ -22,4 +22,4 @@
 {deposit where:territory-1 what:metal density:2} -> 1
 {extractor where:territory-1 what:food} -> 1
 {extractor where:territory-1 what:metal} -> 1
-{residency what:food where:territory-1} -> 6
+{food where:territory-1} -> 6

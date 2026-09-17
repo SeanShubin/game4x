@@ -161,7 +161,7 @@ pub fn build(live: bool) -> Built {
     // **The shared ruleset**, which every test is read against: the schema, the rules and the
     // categories. A test's own rows are added per test, because its territories are its own.
     let mut shared = Vec::new();
-    for file in ["schema.4x", "engine.4x", "rules.4x", "things.4x"] {
+    for file in ["schema.4x", "engine.4x", "rules.4x"] {
         shared.extend(rows(&format!("data/foundation/{file}")));
     }
 

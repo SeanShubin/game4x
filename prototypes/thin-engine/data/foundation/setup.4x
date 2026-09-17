@@ -8,4 +8,3 @@
 {load file:schema.4x into:2}
 {load file:engine.4x into:2}
 {load file:rules.4x into:2}
-{load file:things.4x into:2}

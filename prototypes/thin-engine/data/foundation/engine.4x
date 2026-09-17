@@ -46,3 +46,7 @@
 {primitive id:35 word:by}
 {primitive id:36 word:held}
 {primitive id:37 word:limit}
+{primitive id:38 word:family}
+{primitive id:39 word:kind}
+{primitive id:40 word:member}
+{primitive id:41 word:relation-of}

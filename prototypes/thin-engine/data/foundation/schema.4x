@@ -28,15 +28,22 @@
 {relation id:9 name:binding}
 {relation id:12 name:primitive}
 {relation id:13 name:territory}
-{relation id:14 name:thing}
 {relation id:15 name:adjacency}
-{relation id:16 name:residency}
 {relation id:17 name:literal}
 {relation id:18 name:deposit}
 {relation id:19 name:extractor}
 {relation id:20 name:limit}
 {relation id:21 name:reading}
 {relation id:22 name:attribute}
+{relation id:23 name:relation-of}
+{relation id:24 name:family}
+{relation id:25 name:member}
+{relation id:26 name:unit}
+{relation id:27 name:resource}
+{relation id:28 name:scout}
+{relation id:29 name:labor}
+{relation id:30 name:metal}
+{relation id:31 name:food}
 
 
 ## The columns
@@ -73,16 +80,11 @@
 {column id:36 relation:12 seq:1 name:id}
 {column id:37 relation:12 seq:2 name:word}
 {column id:38 relation:13 seq:1 name:id}
-{column id:39 relation:14 seq:1 name:id}
-{column id:40 relation:14 seq:2 name:name}
 {column id:41 relation:15 seq:1 name:id}
 {column id:42 relation:15 seq:2 name:from}
 {column id:43 relation:15 seq:3 name:to}
 
 
-{column id:44 relation:16 seq:1 name:what}
-{column id:45 relation:16 seq:2 name:where}
-{column id:46 relation:16 seq:3 name:quantity}
 {column id:47 relation:17 seq:1 name:id}
 {column id:48 relation:17 seq:2 name:clause}
 {column id:49 relation:17 seq:3 name:column}
@@ -107,6 +109,46 @@
 {column id:65 relation:22 seq:1 name:column}
 {column id:66 relation:22 seq:2 name:relation}
 
+{column id:67 relation:23 seq:1 name:clause}
+{column id:68 relation:23 seq:2 name:input}
+{column id:69 relation:24 seq:1 name:relation}
+{column id:70 relation:25 seq:1 name:kind}
+{column id:71 relation:25 seq:2 name:family}
+
+
+## The families, and the kinds that belong to them
+#
+# **A family is an abstract relation: columns and no rows.** The columns are the shape its members
+# share, and `{member ...}` is the set - Sean, 2026-09-17, having considered an exists/not-exists
+# trait and a set of kinds and asking whether both were relevant: they are the same mechanism.
+# `spec/data/families.4x` writes it this way already, and `spec/data/for.4x` uses it for exactly
+# what it is for here: `{for block:build-extractor seq:3 kind:$resource}`.
+
+{column id:72 relation:26 seq:1 name:where}
+{column id:73 relation:26 seq:2 name:quantity}
+{column id:74 relation:27 seq:1 name:where}
+{column id:75 relation:27 seq:2 name:quantity}
+
+
+## Every kind of thing, as a relation of its own
+#
+# **Sean, 2026-09-17**, looking at a deposit, an extractor and a labor in one territory: *I notice
+# that in territory-1, we have a deposit, an extractor, and a food. Yet the way we specify this is
+# different.* **It was: two of them had their kind in the schema and one had it in a column.** A
+# kind is a relation now, and `residency` and `thing` are both gone.
+#
+# **This is `spec/data/carries.4x` said in the notation** - a kind and the traits it carries is a
+# relation and its columns.
+
+{column id:76 relation:28 seq:1 name:where}
+{column id:77 relation:28 seq:2 name:quantity}
+{column id:78 relation:29 seq:1 name:where}
+{column id:79 relation:29 seq:2 name:quantity}
+{column id:80 relation:30 seq:1 name:where}
+{column id:81 relation:30 seq:2 name:quantity}
+{column id:82 relation:31 seq:1 name:where}
+{column id:83 relation:31 seq:2 name:quantity}
+
 
 ## What points at what
 #
@@ -129,15 +171,13 @@
 {reference id:17 column:43 to:13}
 
 
-{reference id:18 column:44 to:14}
-{reference id:19 column:45 to:13}
 {reference id:20 column:48 to:8}
 {reference id:21 column:49 to:2}
 
 {reference id:22 column:51 to:13}
-{reference id:23 column:52 to:14}
+{reference id:23 column:52 to:27}
 {reference id:24 column:55 to:13}
-{reference id:25 column:56 to:14}
+{reference id:25 column:56 to:27}
 {reference id:26 column:58 to:1}
 {reference id:27 column:59 to:1}
 
@@ -149,6 +189,17 @@
 {reference id:32 column:65 to:2}
 {reference id:33 column:66 to:1}
 
+{reference id:34 column:67 to:8}
+{reference id:35 column:68 to:7}
+{reference id:36 column:69 to:1}
+{reference id:37 column:70 to:1}
+{reference id:38 column:71 to:1}
+
+{reference id:41 column:76 to:13}
+{reference id:42 column:78 to:13}
+{reference id:43 column:80 to:13}
+{reference id:44 column:82 to:13}
+
 
 ## Which relations are the game's state
 #
@@ -157,9 +208,27 @@
 
 {state id:1 relation:13}
 {state id:3 relation:15}
-{state id:4 relation:16}
 {state id:5 relation:18}
 {state id:6 relation:19}
+{state id:7 relation:28}
+{state id:8 relation:29}
+{state id:9 relation:30}
+{state id:10 relation:31}
+
+
+## Which relations are families, and who belongs
+#
+# **A `unit` may be moved and a `resource` may be extracted**, and those are the two sets any rule
+# here ranges over. **`move` is typed `of:unit`**, so a deposit is not offered to it because the
+# game says a deposit is not a unit - rather than because `move`'s add clause happens to leave a
+# column unbound, which is how it would have been excluded without this.
+
+{family relation:26}
+{family relation:27}
+
+{member kind:28 family:26}
+{member kind:30 family:27}
+{member kind:31 family:27}
 
 
 ## What a deposit's density is, and what a deposit holds

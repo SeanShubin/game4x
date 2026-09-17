@@ -62,7 +62,7 @@ fn originals() -> BTreeMap<String, String> {
     // **Six shared files and at least one test**, rather than a number every new test would move.
     // Sean, 2026-09-15: *I intend to have one test per file.*
     let tests = all.keys().filter(|it| it.starts_with("tests/")).count();
-    assert_eq!(all.len() - tests, 6, "six shared files: {:?}", all.keys());
+    assert_eq!(all.len() - tests, 5, "five shared files: {:?}", all.keys());
     assert!(tests > 0, "no tests, so mutating proves nothing");
 
     all
@@ -147,7 +147,10 @@ fn check(files: &InMemory) -> Result<(), String> {
             "adjacency",
             "deposit",
             "extractor",
-            "residency",
+            "food",
+            "labor",
+            "metal",
+            "scout",
             "territory",
         ];
         if report.compared != state && report.compared != ["the refusal"] {
@@ -283,24 +286,47 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
         return Err("no test".to_string());
     }
     let mut violated: BTreeSet<String> = BTreeSet::new();
+    let mut named: BTreeMap<String, String> = BTreeMap::new();
     for world in &worlds {
-        every_reference_forbids_something_in(files, world, &mut violated)?;
+        every_reference_forbids_something_in(files, world, &mut violated, &mut named)?;
     }
-    if violated.len() != REFERENCES {
+    if named.len() != REFERENCES {
         return Err(format!(
-            "{} references were violated somewhere and there are {REFERENCES}; the rest point at a relation no test has a row of",
-            violated.len()
+            "{} references, and there are {REFERENCES}",
+            named.len()
+        ));
+    }
+    // **What no world can violate is named rather than counted.** A count said *36 of 37* and
+    // left a reader to find which - and the one it could not reach turned out to be a fact worth
+    // knowing: no test states food in its `given`, so food only ever appears as an outcome.
+    let unreachable: Vec<String> = named
+        .iter()
+        .filter(|(id, _)| !violated.contains(*id))
+        .map(|(_, name)| name.clone())
+        .collect();
+    if unreachable != UNREACHABLE {
+        return Err(format!(
+            "these references are violated in no world: {unreachable:?}"
         ));
     }
     Ok(())
 }
 
-const REFERENCES: usize = 30;
+const REFERENCES: usize = 37;
+
+/// **References no test world can violate**, because nothing points at them there.
+///
+/// **`food.where` is the only one, and it says something about the tests rather than the data.**
+/// Food is produced by `work` and stated by nobody: it appears in a `then` and never in a `given`.
+/// **The day a test starts with food already in a territory this list goes empty**, and that is
+/// the whole of what it is for.
+const UNREACHABLE: [&str; 1] = ["food.where"];
 
 fn every_reference_forbids_something_in(
     files: &InMemory,
     world: &str,
     violated: &mut BTreeSet<String>,
+    named: &mut BTreeMap<String, String>,
 ) -> Result<(), String> {
     let game = loaded_from(files, world)?;
     let references: Vec<Row> = game
@@ -336,7 +362,9 @@ fn every_reference_forbids_something_in(
             .find(|row| row.relation == "relation" && row.value("id") == Some(of))
             .and_then(|row| row.value("name"))
             .ok_or_else(|| format!("no relation with id {of}"))?;
-        let named = declaration.value("name").ok_or("a column with no name")?;
+        let column_name = declaration.value("name").ok_or("a column with no name")?;
+        named.insert(column.to_string(), format!("{of}.{column_name}"));
+        let column_name = column_name.to_string();
 
         // A real row of that relation, pointed at a key nothing has.
         // **Nothing to violate is not a failure here**, because the caller asks the question
@@ -348,7 +376,7 @@ fn every_reference_forbids_something_in(
         let mut violating = sample.clone();
         violating
             .values
-            .insert(named.to_string(), "nothing-has-this-key".to_string());
+            .insert(column_name.clone(), "nothing-has-this-key".to_string());
         // **The sample is replaced rather than joined**, which keeps its key and so keeps every
         // reference to it resolving. Adding a second row alongside broke the key's uniqueness
         // instead, and giving the copy a fresh key broke the key's own reference where the key is
@@ -366,7 +394,7 @@ fn every_reference_forbids_something_in(
             // **Refused for the reference and not for something else.** Without this the check
             // asks *does anything complain*, which is a narrower question than *is this
             // constraint doing the work*.
-            Err(Malformed::NoSuchRow { column: at, .. }) if at == named => {}
+            Err(Malformed::NoSuchRow { column: at, .. }) if at == column_name => {}
             // **Three references are backstopped by the schema builder**, which cannot use them:
             // it refuses a column of an undeclared relation, and a reference naming a column or a
             // relation nothing declares, while it is still working out what the relations are.
@@ -498,9 +526,13 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// them, because every deposit test has one territory and one or two deposits in it. **A binding
 /// is load-bearing when something else could have matched**, and a world with one of everything
 /// gives nothing else to match. The masking is the world's, not the rule's.
+/// **The unification brought both numbers down.** Three literals named a kind - `value:labor`,
+/// `value:metal` - and a clause's relation says that now, so they are gone rather than dead. Two
+/// bindings went the same way: `move` no longer binds a `what` column, because what is moved is
+/// the relation the clause is about.
 const DELETABLE: [&str; 3] = [
-    "10 rules.4x binding",
-    "5 rules.4x literal",
+    "8 rules.4x binding",
+    "2 rules.4x literal",
     "2 tests/the-scout-cannot-cross-where-there-is-no-border.4x adjacency",
 ];
 
@@ -632,11 +664,13 @@ fn no_value_can_be_changed_without_breaking_something() {
 /// test about running out of room never gets as far as working the deposit. **It is the refusal
 /// test's shape rather than a spare value**, the same way that test's `thing.name` is: a command
 /// that is refused reads less of its world than one that succeeds.
-const NOT_LOAD_BEARING: [&str; 6] = [
+/// **And `things.4x` left the list by leaving.** Four category names were read only by the
+/// friendly side; a kind is a relation now and its name is read by everything, so the entry is not
+/// fixed - it is gone.
+const NOT_LOAD_BEARING: [&str; 5] = [
     "11 rules.4x clause.seq",
     "7 rules.4x input.seq",
     "1 rules.4x reading.id",
     "1 tests/an-extractor-cannot-be-built-where-the-deposits-are-taken.4x deposit.density",
-    "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x residency.quantity",
-    "4 things.4x thing.name",
+    "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x scout.quantity",
 ];

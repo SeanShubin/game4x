@@ -1929,3 +1929,108 @@ call that succeeds. Both now box the `Malformed` they carry.
 **The middle one is Sean's sentence run twice.** *The situation should be detectible and therefore
 preventable*: detection is `Game::of` refusing the world, and prevention is the same check running
 after a rule. There is one check and two places it fires.
+
+
+## A kind is a relation
+
+Sean, 2026-09-17, on a deposit, an extractor and a labor standing in one territory: *I notice that
+in territory-1, we have a deposit, an extractor, and a food. Yet the way we specify this is
+different.*
+
+It was. Two of them had their kind in the schema and one had it in a column:
+
+```
+{deposit   where:territory-1 what:food density:6} -> 1
+{extractor where:territory-1 what:food}           -> 1
+{residency what:labor        where:territory-1}   -> 1
+```
+
+Now every kind is a relation, `where` says where it is, the remaining columns are that kind's
+traits, and the quantity says how many:
+
+```
+{deposit   where:territory-1 what:food density:6} -> 1
+{extractor where:territory-1 what:food}           -> 1
+{labor     where:territory-1}                     -> 1
+{food      where:territory-1}                     -> 6
+```
+
+**`residency` and `thing` are both gone.** `residency` was the relation for things with nothing to
+say about themselves, and everything else grew out of it - which is why the extractor had to leave
+it the day it gained a trait. **`spec/data/carries.4x` was already written this way**: a kind and
+the traits it carries is a relation and its columns.
+
+## The thing that made it possible, and the thing that made it necessary
+
+**A clause can take its relation from an argument.**
+
+```
+{clause id:12 rule:work seq:4 role:add relation:resource name:clause-12}
+{relation-of clause:clause-12 input:what}
+```
+
+So `work` adds to whichever resource the command named, and one rule still serves them all.
+Without this, a kind being a relation would have forced a rule per kind - *the very thing this
+prototype exists to avoid*.
+
+**And that is what made families necessary.** A column id belongs to one relation, so a clause that
+might be about `scout` or about `food` has no single column id to bind. **The family declares the
+shape**: it is an abstract relation, columns and no rows, and its members must declare those
+columns - which `Malformed::UnlikeShape` is what says.
+
+```
+{relation id:26 name:unit}
+{column relation:unit seq:1 name:where}
+{column relation:unit seq:2 name:quantity}
+{family relation:unit}
+{member kind:scout family:unit}
+```
+
+## Both of Sean's considerations were one mechanism
+
+Sean, 2026-09-17: *I had considered exists/not-exists traits, such as "movable", to filter out what
+is able to move / I had considered sets, such as "resource"=[food, metal, energy], so that I could
+have generic recipes that only work on resources.*
+
+**A predicate is a row that is there or is not, and a set is the rows that are there.** One
+relation for all of them costs a row per membership where a marker per predicate costs a relation.
+**And the specification already writes it that way** - `spec/data/families.4x` and `member.4x` -
+with `spec/data/for.4x` using it for the generic recipe: `{for block:build-extractor seq:3
+kind:$resource}`.
+
+## What it bought, which was the open question
+
+**An input typed by a family ranges over exactly its members.** `move.what` is `of:unit`, so a
+deposit is not offered to `move` because the game says a deposit is not a unit - rather than
+because `move`'s add clause happens to leave a `density` unbound, which is how it would have been
+excluded under the alternative. **The exclusion is principled rather than accidental**, and
+`offered` still gives exactly one command per test world.
+
+## What it cost, measured against what was estimated
+
+|                           | estimated               | actual                                                          |
+| ------------------------- | ----------------------- | --------------------------------------------------------------- |
+| rows                      | +26                     | **+30** (393 to 423)                                            |
+| new engine concepts       | 2                       | 2 - `relation-of` and the family                                |
+| `src/`                    | ~25 lines in two places | `keys_of`, `has_key`, `row_of`, and the schema reading families |
+| written-down counts moved | 10                      | **15**                                                          |
+
+**The count of counts is the number I was most wrong about**, and by the largest margin. Ten was
+read off the last two increments; this one moved every state-relation list, every relation count,
+four tests that named `thing` or `residency` in an assertion, and the shared-file count.
+
+## Three things the checks found
+
+**No test states food in its `given`.** The reference check asks that every reference be violated
+somewhere, and `food.where` could not be - because food is produced by `work` and stated by
+nobody. **The check now names what it cannot reach rather than counting it**, because *36 of 37*
+left a reader to find which one, and the one it was turned out to be worth knowing.
+
+**A family's columns can carry no reference.** A reference on a relation with no rows forbids
+nothing, ever, so `unit.where` and `resource.where` declare none - the shape is the column names
+and each member declares its own.
+
+**Both mutation lists got shorter, which has not happened before.** Three literals that named a
+kind are gone rather than dead, because a clause's relation says it now; two bindings went the same
+way. `4 things.4x thing.name` left the list by the file leaving. **A unification that removes dead
+data is a different kind of evidence from one that reads better.**

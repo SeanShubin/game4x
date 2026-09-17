@@ -9,8 +9,8 @@
 {territory id:1 name:territory-1}
 {territory id:2 name:territory-2}
 {adjacency id:1 from:territory-1 to:territory-2}
-{residency what:scout where:territory-1} -> 1
-{residency what:scout where:territory-2} -> 1
+{scout where:territory-1} -> 1
+{scout where:territory-2} -> 1
 
 {when}
 {move what:scout from:territory-1 to:territory-2}
@@ -19,4 +19,4 @@
 {territory id:1 name:territory-1}
 {territory id:2 name:territory-2}
 {adjacency id:1 from:territory-1 to:territory-2}
-{residency what:scout where:territory-2} -> 2
+{scout where:territory-2} -> 2

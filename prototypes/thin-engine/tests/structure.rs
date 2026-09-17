@@ -33,6 +33,9 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         "reading",
         "limit",
         "attribute",
+        "relation-of",
+        "family",
+        "member",
         "primitive",
     ] {
         let declared = game
@@ -45,43 +48,43 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         );
         checked += 1;
     }
-    assert_eq!(checked, 14, "fourteen relations describe the structure");
+    assert_eq!(checked, 17, "seventeen relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        20,
-        "twenty relations in all - those fourteen, and the game's six"
+        27,
+        "twenty-seven in all - those seventeen, and the game's ten: four kinds, two families,\n         a territory, an adjacency, a deposit and an extractor"
     );
 }
 
 /// **A reference points at the relation its column names, and not at whichever has that key.**
 ///
-/// `{residency what:1 where:1}` reads `1` twice and they mean different things - `what:1` is the
-/// scout, `where:1` is territory 1. **Both are `1` in the first test**, so a check that only ever
-/// saw the real data would pass with the two references crossed. These use values that exist in
-/// one relation and not the other, which is what tells them apart.
+/// `{extractor where:1 what:31}` reads two ids that mean different things - `where:1` is
+/// territory 1 and `what:31` is the relation `food`. **A check that only ever saw the real data
+/// could pass with the two references crossed**, so these use values that exist in one relation
+/// and not the other.
 #[test]
 fn a_reference_is_checked_against_the_relation_it_names() {
-    // **Thing 9 does not exist; territory 2 does.** The ids are past the four `things.4x`
-    // declares, because every category the ruleset has is now a thing that does exist.
+    // **There is no relation 99; territory 1 there is.** `extractor.what` points at the family
+    // `resource`, so what it admits is a member of it rather than any row that happens to have
+    // the key.
     assert_eq!(
-        with("{residency what:9 where:2 quantity:1}").expect_err("there is no thing 9"),
+        with("{extractor where:1 what:99 quantity:1}").expect_err("there is no resource 99"),
         Malformed::NoSuchRow {
-            relation: "residency".to_string(),
+            relation: "extractor".to_string(),
             column: "what".to_string(),
-            value: "9".to_string(),
-            to: "thing".to_string()
+            value: "99".to_string(),
+            to: "resource".to_string()
         },
-        "`what` points at `thing`, and no thing has the key 2"
+        "`what` points at the family `resource`, and 99 belongs to nothing"
     );
 
-    // Territory 9 does not exist; thing 2 does now. **A second thing rather than a second
-    // residency for thing 1**: `residency` is keyed by `what`, so reusing thing 1 is refused for
-    // having a key already taken, and this test would pass on the wrong refusal.
+    // **Territory 9 does not exist, and the row is a scout rather than a second extractor**,
+    // because reusing a description already stated would be refused for having a key already
+    // taken - and this test would then pass on the wrong refusal.
     assert_eq!(
-        with("{thing id:9 name:pioneer}\n{residency what:9 where:9 quantity:1}")
-            .expect_err("there is no territory 9"),
+        with("{scout where:9 quantity:1}").expect_err("there is no territory 9"),
         Malformed::NoSuchRow {
-            relation: "residency".to_string(),
+            relation: "scout".to_string(),
             column: "where".to_string(),
             value: "9".to_string(),
             to: "territory".to_string()
@@ -91,8 +94,8 @@ fn a_reference_is_checked_against_the_relation_it_names() {
 
     // The control: a row whose references both resolve is accepted, so the two above fail for
     // their own reason rather than because nothing added to this data is ever allowed.
-    with("{thing id:10 name:runner}\n{residency what:10 where:2 quantity:1}")
-        .expect("a second residency resolves both ways");
+    with("{deposit where:2 what:31 density:6 quantity:1}\n{extractor where:2 what:31 quantity:1}")
+        .expect("a resource in a real territory, with a deposit to stand in");
 }
 
 /// **A row is exactly its relation's columns**, and data stating anything else is refused.
@@ -118,7 +121,7 @@ fn a_row_states_only_what_its_relation_declares() {
 /// structure does it once for every rule at once.
 #[test]
 fn a_command_naming_something_that_does_not_exist_is_refused_by_the_type() {
-    let command = thin_engine::notation::read("{move what:1 from:1 to:9}").expect("a command");
+    let command = thin_engine::notation::read("{move what:28 from:1 to:9}").expect("a command");
     let why = fire(&before(), &command[0], 1)
         .map(|(game, _)| game)
         .expect_err("there is no territory 9");
@@ -131,17 +134,17 @@ fn a_command_naming_something_that_does_not_exist_is_refused_by_the_type() {
 /// **A thing is not a territory**, even where both have the key 1.
 #[test]
 fn an_input_is_checked_against_its_own_relation() {
-    // **Territory 9 is a territory and is not a thing, so `what` refuses it.** It is added here
-    // rather than taken from `before()`, because every territory the tests declare is also a
-    // thing now - and a value that is neither would refuse for a weaker reason.
+    // **Territory 9 is a territory and is not a unit, so `what` refuses it.** It is added here
+    // rather than taken from `before()`, because a value that is nothing at all would refuse for
+    // a weaker reason than a value that is something else.
     let game = with("{territory id:9}").expect("a ninth territory");
     let command = thin_engine::notation::read("{move what:9 from:1 to:2}").expect("a command");
     let why = fire(&game, &command[0], 1)
         .map(|(game, _)| game)
-        .expect_err("there is no thing 9");
+        .expect_err("territory 9 is no unit");
     assert_eq!(
         format!("{why}"),
-        "`move`.`what` is `9`, and no `thing` has that key"
+        "`move`.`what` is `9`, and no `unit` has that key"
     );
 }
 
@@ -180,11 +183,15 @@ fn the_helper_loads_what_the_script_loads() {
         .filter_map(|row| row.value("file").map(|it| format!("data/foundation/{it}")))
         .collect();
 
-    assert_eq!(script.len(), 4, "the script loads four files into the game");
+    assert_eq!(
+        script.len(),
+        3,
+        "the script loads three files into the game"
+    );
     assert_eq!(
         script,
         common::LOADED.to_vec(),
-        "and they are the four the helpers here assemble, in the same order"
+        "and they are the three the helpers here assemble, in the same order"
     );
 }
 
@@ -208,7 +215,7 @@ fn only_the_moves_the_world_allows_are_offered() {
         .map(thin_engine::notation::write)
         .collect();
 
-    assert_eq!(offered, vec!["{move from:1 to:2 what:1}"]);
+    assert_eq!(offered, vec!["{move from:1 to:2 what:28}"]);
 
     // **The candidates it chose between**, so a single answer is not a walk that tried one thing.
     // Three territories to leave, three to enter, one thing to move: 9 bindings, 1 legal.
@@ -237,7 +244,7 @@ fn only_the_moves_the_world_allows_are_offered() {
     // **Asserted as it is rather than as it should be.** Which way to fix it - state both
     // directions, or read the one that is stated from either end - is a modelling decision and
     // not this test's. This line goes red when it is made, which is what it is for.
-    let command = thin_engine::notation::read("{move what:1 from:1 to:2}").expect("a command");
+    let command = thin_engine::notation::read("{move what:28 from:1 to:2}").expect("a command");
     let (moved, _) = fire(&game, &command[0], 1).expect("the scout moves");
     let after: Vec<String> = thin_engine::engine::offered(&moved)
         .iter()
@@ -245,7 +252,7 @@ fn only_the_moves_the_world_allows_are_offered() {
         .collect();
     assert_eq!(
         after,
-        vec!["{move from:2 to:3 what:1}"],
+        vec!["{move from:2 to:3 what:28}"],
         "one way only, which is the finding rather than the intent"
     );
 }
@@ -255,47 +262,47 @@ fn only_the_moves_the_world_allows_are_offered() {
 #[test]
 fn two_rows_of_one_relation_cannot_share_a_key() {
     assert_eq!(
-        with("{thing id:1 name:pioneer}").expect_err("thing 1 is taken"),
+        with("{territory id:1}").expect_err("territory 1 is taken"),
         Malformed::TwoWithOneKey {
-            relation: "thing".to_string(),
+            relation: "territory".to_string(),
             key: vec![("id".to_string(), "1".to_string())]
         },
-        "`{{residency what:1}}` would otherwise point at two things"
+        "`{{scout where:1}}` would otherwise point at two territories"
     );
 
-    // The control: a thing with a key of its own is fine, so the refusal above is about the key
-    // rather than about adding a thing at all.
-    with("{thing id:9 name:pioneer}").expect("a thing with its own key");
+    // The control: a territory with a key of its own is fine, so the refusal above is about the
+    // key rather than about adding a territory at all.
+    with("{territory id:9}").expect("a territory with its own key");
 }
 
 /// **A description names one row, and a quantity is what made that matter.**
 ///
-/// Two residencies for the same thing in the same place used to be legal - the surrogate `id` told
-/// them apart - and merely *redundant*, because the store is a set and identical rows collapse.
-/// **A quantity is the column that breaks that**: `-> 2` and `-> 3` are not identical, so the set
-/// keeps both and the world says two things at once.
+/// Two scouts in one place used to be legal - a surrogate `id` told them apart - and merely
+/// *redundant*, because the store is a set and identical rows collapse. **A quantity is the column
+/// that breaks that**: `-> 2` and `-> 3` are not identical, so the set keeps both and the world
+/// says two things at once.
 ///
 /// **This is the check that would have passed before**, which is the only reason it is worth
-/// having. `{residency id:1 what:1 where:1 quantity:2}` beside `{residency id:4 what:1 where:1
-/// quantity:3}` loaded clean, and nothing could say whether there were two scouts, three, or five.
+/// having. Two rows saying how many scouts stand in territory 1 loaded clean, and nothing could
+/// say whether there were two, three, or five.
+///
+/// **The relation it is asked of moved and the question did not.** It was `residency`, keyed by
+/// `(what, where)`; a kind is a relation now, so it is `scout`, keyed by `where` alone.
 #[test]
-fn two_residencies_of_one_description_are_refused() {
+fn two_scouts_of_one_description_are_refused() {
     assert_eq!(
-        with("{residency what:1 where:1 quantity:3}")
+        with("{scout where:1 quantity:3}")
             .expect_err("scouts are already stated to be in territory 1"),
         Malformed::TwoWithOneKey {
-            relation: "residency".to_string(),
-            key: vec![
-                ("what".to_string(), "1".to_string()),
-                ("where".to_string(), "1".to_string())
-            ]
+            relation: "scout".to_string(),
+            key: vec![("where".to_string(), "1".to_string())]
         },
         "one scout, or three, or four - nothing could say"
     );
 
     // The control: the same description somewhere else is a different description, so the refusal
-    // above is about the key and not about adding a residency at all.
-    with("{residency what:1 where:2 quantity:3}").expect("another place is another description");
+    // above is about the key and not about adding a scout at all.
+    with("{scout where:2 quantity:3}").expect("another place is another description");
 }
 
 /// **Identified or counted, and never both.**
@@ -307,10 +314,10 @@ fn two_residencies_of_one_description_are_refused() {
 #[test]
 fn a_relation_cannot_carry_both_an_id_and_a_quantity() {
     assert_eq!(
-        with("{column id:90 relation:16 seq:4 name:id}")
+        with("{column id:90 relation:28 seq:3 name:id}")
             .expect_err("a row is one thing or a count of them"),
         Malformed::IdAndQuantity {
-            relation: "residency".to_string()
+            relation: "scout".to_string()
         }
     );
 
@@ -345,13 +352,13 @@ fn a_relation_cannot_carry_both_an_id_and_a_quantity() {
 #[test]
 fn a_deposit_cannot_have_two_densities() {
     assert_eq!(
-        with("{deposit where:1 what:5 density:6 quantity:3}\n{deposit where:1 what:5 density:9 quantity:1}")
+        with("{deposit where:1 what:31 density:6 quantity:3}\n{deposit where:1 what:31 density:9 quantity:1}")
             .expect_err("two grades of one resource in one territory"),
         Malformed::TwoWithOneKey {
             relation: "deposit".to_string(),
             key: vec![
                 ("where".to_string(), "1".to_string()),
-                ("what".to_string(), "5".to_string())
+                ("what".to_string(), "31".to_string())
             ]
         },
         "density is a fact about the deposit, so it is not what tells two deposits apart"
@@ -359,7 +366,7 @@ fn a_deposit_cannot_have_two_densities() {
 
     // The control: two deposits of different resources in one territory are two descriptions, so
     // the refusal above is about the key and not about stating two deposits at all.
-    with("{deposit where:1 what:5 density:6 quantity:3}\n{deposit where:1 what:3 density:9 quantity:1}")
+    with("{deposit where:1 what:31 density:6 quantity:3}\n{deposit where:1 what:30 density:9 quantity:1}")
         .expect("food and metal are different deposits");
 }
 
@@ -372,11 +379,11 @@ fn a_deposit_cannot_have_two_densities() {
 #[test]
 fn an_extractor_needs_a_deposit_to_stand_in() {
     assert_eq!(
-        with("{extractor where:1 what:5 quantity:1}").expect_err("no deposit of food here"),
+        with("{extractor where:1 what:31 quantity:1}").expect_err("no deposit of food here"),
         Malformed::Overfull {
             held: "extractor".to_string(),
             by: "deposit".to_string(),
-            wanted: "{deposit where:1 what:5 quantity:1}".to_string(),
+            wanted: "{deposit where:1 what:31 quantity:1}".to_string(),
             room: "0".to_string()
         },
         "the refusal names the deposit that would have had to be there"
@@ -384,19 +391,19 @@ fn an_extractor_needs_a_deposit_to_stand_in() {
 
     // The control: the same extractor over a deposit with room is fine, so the refusal is about
     // the room rather than about extractors.
-    with("{deposit where:1 what:5 density:6 quantity:1}\n{extractor where:1 what:5 quantity:1}")
+    with("{deposit where:1 what:31 density:6 quantity:1}\n{extractor where:1 what:31 quantity:1}")
         .expect("one extractor in one deposit");
 
     // And one more than there is room for is refused by the number, not by the absence.
     assert_eq!(
         with(
-            "{deposit where:1 what:5 density:6 quantity:1}\n{extractor where:1 what:5 quantity:2}"
+            "{deposit where:1 what:31 density:6 quantity:1}\n{extractor where:1 what:31 quantity:2}"
         )
         .expect_err("two extractors in one deposit"),
         Malformed::Overfull {
             held: "extractor".to_string(),
             by: "deposit".to_string(),
-            wanted: "{deposit where:1 what:5 quantity:2}".to_string(),
+            wanted: "{deposit where:1 what:31 quantity:2}".to_string(),
             room: "1".to_string()
         },
         "a full deposit and an absent one are one refusal with a different number"
