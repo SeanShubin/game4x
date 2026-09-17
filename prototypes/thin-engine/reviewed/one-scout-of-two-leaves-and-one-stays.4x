@@ -1,0 +1,22 @@
+# Moving one scout of two takes one, and the other stays where it was.
+#
+# **This is the `remove` half on its own.** The destination is empty, so what lands there is right
+# either way - what this asks is whether leaving took one or took the row.
+
+{test name:one-scout-of-two-leaves-and-one-stays}
+
+{given}
+{territory id:1 name:territory-1}
+{territory id:2 name:territory-2}
+{adjacency id:1 from:territory-1 to:territory-2}
+{residency what:scout where:territory-1} -> 2
+
+{when}
+{move what:scout from:territory-1 to:territory-2}
+
+{then}
+{territory id:1 name:territory-1}
+{territory id:2 name:territory-2}
+{adjacency id:1 from:territory-1 to:territory-2}
+{residency what:scout where:territory-1} -> 1
+{residency what:scout where:territory-2} -> 1

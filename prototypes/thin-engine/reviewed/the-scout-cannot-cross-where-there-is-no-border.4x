@@ -1,0 +1,20 @@
+# A scout cannot step to a territory its own does not touch.
+#
+# **`{refused}` says what the rule needed and did not find.** Territory 1 touches 2 and 2 touches
+# 3; nothing says 1 touches 3, so `move`'s second clause asks for an adjacency that is not there.
+
+{test name:the-scout-cannot-cross-where-there-is-no-border}
+
+{given}
+{territory id:1 name:territory-1}
+{territory id:2 name:territory-2}
+{territory id:3 name:territory-3}
+{adjacency id:1 from:territory-1 to:territory-2}
+{adjacency id:2 from:territory-2 to:territory-3}
+{residency what:scout where:territory-1} -> 1
+
+{when}
+{move what:scout from:territory-1 to:territory-3}
+
+{refused}
+{adjacency from:territory-1 to:territory-3}

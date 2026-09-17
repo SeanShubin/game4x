@@ -1,0 +1,19 @@
+# Building an extractor spends a labor and a metal and leaves an extractor.
+#
+# **Red on purpose.** Nothing declares a `build-extractor` rule, so this states what the rule
+# should do before there is one to do it - Sean, 2026-09-16: *we will use this to puzzle out the
+# design more before implementing anything.*
+
+{test name:an-extractor-is-built-from-labor-and-metal}
+
+{given}
+{territory id:1 name:territory-1}
+{residency what:labor where:territory-1} -> 1
+{residency what:metal where:territory-1} -> 1
+
+{when}
+{build-extractor where:territory-1}
+
+{then}
+{territory id:1 name:territory-1}
+{residency what:extractor where:territory-1} -> 1
