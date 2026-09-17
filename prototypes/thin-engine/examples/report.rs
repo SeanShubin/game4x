@@ -155,14 +155,15 @@ fn main() {
             } else {
                 "row"
             };
-            body.push_str(&format!(
-                "<span class=\"{kind}\">{}</span>\n",
-                escaped(line)
-            ));
+            // **No newline after the span, and that is the whole of the spacing.** A `<pre>`
+            // keeps the newlines in its text and these spans are `display: block`, so a `\n`
+            // between them ended the line a second time and every row rendered with a blank one
+            // beneath it. **The block is what ends the line**; the newline was a second ending.
+            body.push_str(&format!("<span class=\"{kind}\">{}</span>", escaped(line)));
         }
         if let Outcome::Differed { extra, .. } = &outcome {
             for one in extra {
-                body.push_str(&format!("<span class=\"extra\">{}</span>\n", escaped(one)));
+                body.push_str(&format!("<span class=\"extra\">{}</span>", escaped(one)));
             }
         }
 
@@ -199,13 +200,13 @@ fn main() {
 const STYLE: &str = r#"
 :root { color-scheme: light dark }
 body {
-  font: 14px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace;
-  margin: 1.5rem auto; max-width: 62rem; padding: 0 1rem;
+  font: 15px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+  margin: 2rem auto; max-width: 62rem; padding: 0 1rem;
 }
-h1 { font-size: 1.2rem; margin: 0 0 .2rem }
-p { margin: .3rem 0 }
-.tally { font-size: .95rem }
-.note { opacity: .7; font-size: .8rem; margin-bottom: 1rem }
+h1 { font-size: 1.3rem; margin: 0 0 .25rem }
+p { margin: .4rem 0 }
+.tally { font-size: 1rem }
+.note { opacity: .7; font-size: .85rem; margin-bottom: 1.5rem }
 .ok { color: rgb(30 130 60) }
 .red { color: rgb(190 50 50) }
 @media (prefers-color-scheme: dark) {
@@ -215,7 +216,7 @@ p { margin: .3rem 0 }
 .test {
   border: 1px solid rgba(127,127,127,.35);
   border-left: 4px solid rgba(127,127,127,.5);
-  border-radius: .3rem; padding: .5rem .7rem; margin: .5rem 0;
+  border-radius: .3rem; padding: .7rem .9rem; margin: .7rem 0;
 }
 .test.red { border-left-color: rgb(190 50 50) }
 .test.ok { border-left-color: rgb(30 130 60) }
@@ -224,17 +225,17 @@ summary::marker { opacity: .5 }
 details[open] > summary { margin-bottom: .45rem }
 .name { font-weight: 600 }
 .badge {
-  font-size: .72rem; font-weight: 600; letter-spacing: .02em;
-  padding: .05rem .4rem; border-radius: .2rem; border: 1px solid currentColor;
+  font-size: .75rem; font-weight: 600; letter-spacing: .02em;
+  padding: .1rem .45rem; border-radius: .2rem; border: 1px solid currentColor;
 }
-.why { font-size: .85rem; margin: 0 0 .45rem }
+.why { font-size: .9rem; margin: 0 0 .6rem }
 pre {
   margin: 0; overflow-x: auto; background: rgba(127,127,127,.08);
-  padding: .45rem .6rem; border-radius: .25rem; line-height: 1.3;
+  padding: .7rem .9rem; border-radius: .25rem;
 }
 pre span { display: block; padding: 0 .3rem; border-left: 3px solid transparent }
 .said { opacity: .55 }
-.gap { height: .45em }
+.gap { height: .8em }
 .mark { font-weight: 700 }
 .missing { background: rgba(200,40,40,.16); border-left-color: rgb(190 50 50) }
 .missing::after { content: " <- wanted, not got"; opacity: .7; font-size: .8em }
