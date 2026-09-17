@@ -63,8 +63,23 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-133 - Is a deposit's density part of its description? Two files answer differently
 
-**to** spec · **status** open · **raised** 2026-09-17 · **source** the thin-engine prototype,
-modelling deposits
+**to** spec · **status** withdrawn · **raised** 2026-09-17 · **withdrawn** 2026-09-17 · **source**
+the thin-engine prototype, modelling deposits
+
+**Withdrawn the same day, and the premise was this lane's.** Sean, 2026-09-17: *what made anything
+think density was part of deposits key in the first place? Here we are declaring that there are 3
+deposits for food in territory-1 with density 6.* **The description is `(where, density, what)`
+and the quantity counts the deposits**, which is what `key()` already does and what
+`spec/console.md` already says - there is nothing for the specification to settle.
+
+**The contradiction was manufactured by reading a second row as illegal.** Two deposit rows for
+one resource differing only in density are four deposits, three poorer than the fourth, and
+nothing in `spec/planet.md` forbids that. **`planet.md` fits this shape better than the one it
+replaced**: *a territory has capacity for some number of extractors, and a density that each of
+them yields* is the count and the column, in one row.
+
+**Left here rather than deleted**, because `CLAUDE.md` says a rejection is recorded with its
+reason or the same item is filed again in a later session.
 
 **derived from** `spec/console.md`, `spec/planet.md`, `spec/data/traits.4x`,
 `spec/data/carries.4x`
