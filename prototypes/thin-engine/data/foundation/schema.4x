@@ -32,10 +32,11 @@
 {relation id:15 name:adjacency}
 {relation id:16 name:residency}
 {relation id:17 name:literal}
-{relation id:18 name:density}
-{relation id:19 name:free}
-{relation id:20 name:extractor}
+{relation id:18 name:deposit}
+{relation id:19 name:extractor}
+{relation id:20 name:limit}
 {relation id:21 name:reading}
+{relation id:22 name:attribute}
 
 
 ## The columns
@@ -89,19 +90,22 @@
 
 {column id:51 relation:18 seq:1 name:where}
 {column id:52 relation:18 seq:2 name:what}
-{column id:53 relation:18 seq:3 name:quantity}
-{column id:54 relation:19 seq:1 name:where}
-{column id:55 relation:19 seq:2 name:what}
-{column id:56 relation:19 seq:3 name:quantity}
-{column id:57 relation:20 seq:1 name:where}
-{column id:58 relation:20 seq:2 name:for}
-{column id:59 relation:20 seq:3 name:quantity}
+{column id:53 relation:18 seq:3 name:density}
+{column id:54 relation:18 seq:4 name:quantity}
+{column id:55 relation:19 seq:1 name:where}
+{column id:56 relation:19 seq:2 name:what}
+{column id:57 relation:19 seq:3 name:quantity}
+{column id:58 relation:20 seq:1 name:held}
+{column id:59 relation:20 seq:2 name:by}
 
 {column id:60 relation:21 seq:1 name:id}
 {column id:61 relation:21 seq:2 name:clause}
 {column id:62 relation:21 seq:3 name:column}
 {column id:63 relation:21 seq:4 name:of}
 {column id:64 relation:21 seq:5 name:takes}
+
+{column id:65 relation:22 seq:1 name:column}
+{column id:66 relation:22 seq:2 name:relation}
 
 
 ## What points at what
@@ -132,15 +136,18 @@
 
 {reference id:22 column:51 to:13}
 {reference id:23 column:52 to:14}
-{reference id:24 column:54 to:13}
-{reference id:25 column:55 to:14}
-{reference id:26 column:57 to:13}
-{reference id:27 column:58 to:14}
+{reference id:24 column:55 to:13}
+{reference id:25 column:56 to:14}
+{reference id:26 column:58 to:1}
+{reference id:27 column:59 to:1}
 
 {reference id:28 column:61 to:8}
 {reference id:29 column:62 to:2}
 {reference id:30 column:63 to:8}
 {reference id:31 column:64 to:2}
+
+{reference id:32 column:65 to:2}
+{reference id:33 column:66 to:1}
 
 
 ## Which relations are the game's state
@@ -153,7 +160,28 @@
 {state id:4 relation:16}
 {state id:5 relation:18}
 {state id:6 relation:19}
-{state id:7 relation:20}
+
+
+## What a deposit's density is, and what a deposit holds
+#
+# **A density is a fact about a deposit and not part of what a deposit is.** Sean, 2026-09-17,
+# ruling out the alternative: a territory may have deposits of two grades, or the notation may be
+# uniform and minimal, and it cannot have both - *we are dropping (2)*. `spec/planet.md` asks for
+# one: *For each resource, a territory has capacity for some number of extractors, and a density
+# that each of them yields.*
+#
+# **So a second grade is two rows with one key and the structure refuses it**, which is the whole
+# reason the column is marked: with density in the key it would be a legal state nothing could
+# name.
+
+{attribute column:53 relation:18}
+
+
+# **An extractor stands in a deposit, so there cannot be more of them than there are deposits.**
+# Sean: *We can't place an extractor if there are no available deposits.* No rule says so - every
+# rule already refuses the world it would leave, so this binds rules that do not exist yet.
+
+{limit held:19 by:18}
 
 
 ## The three roles a clause can have

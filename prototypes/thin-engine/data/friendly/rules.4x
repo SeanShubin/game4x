@@ -4,6 +4,16 @@
 # input.** They are two relations because a clause cannot carry `residency`'s columns - those
 # change with the relation it points at, and a relation's columns do not change.
 #
+# **`build-extractor` says nothing about capacity.** It removes a labor, removes a metal and adds
+# an extractor; that there must be a deposit with room for it is a fact about the world, stated
+# once in `schema.4x` and enforced wherever a world is checked. **A rule that cannot break it is
+# better than a rule that remembers not to** - and the next rule that makes an extractor is bound
+# by it without saying anything either.
+#
+# **`work` requires the deposit it reads from.** The density is a column of that row, so the
+# require clause and the reading clause are the same one seen twice - and a territory holding two
+# grades of one resource cannot arise, because the structure refuses it.
+#
 # **A command names what is moved, not which row.** Scouts are fungible, so `what` is the category
 # and `from` is what picks the row out of the three a category may have. **There is no `it`**: a
 # residency has no id to name, because it is keyed by its description.
@@ -43,47 +53,43 @@
 {rule id:2 name:build-extractor}
 
 {input id:4 rule:build-extractor seq:1 name:where of:territory}
-{input id:7 rule:build-extractor seq:2 name:for of:thing}
+{input id:7 rule:build-extractor seq:2 name:what of:thing}
 
 {clause id:5 rule:build-extractor seq:1 role:remove relation:residency name:clause-5}
 {clause id:6 rule:build-extractor seq:2 role:remove relation:residency name:clause-6}
-{clause id:8 rule:build-extractor seq:3 role:remove relation:free name:clause-8}
-{clause id:7 rule:build-extractor seq:4 role:add relation:extractor name:clause-7}
+{clause id:7 rule:build-extractor seq:3 role:add relation:extractor name:clause-7}
 
 {binding id:9 clause:clause-5 column:45 input:where}
 {binding id:10 clause:clause-6 column:45 input:where}
-{binding id:11 clause:clause-7 column:57 input:where}
-{binding id:12 clause:clause-7 column:58 input:for}
 
-{binding id:13 clause:clause-8 column:54 input:where}
-{binding id:14 clause:clause-8 column:55 input:for}
+{binding id:11 clause:clause-7 column:55 input:where}
+{binding id:12 clause:clause-7 column:56 input:what}
 
 {literal id:3 clause:clause-5 column:44 value:labor}
 {literal id:4 clause:clause-5 column:46 value:1}
 {literal id:5 clause:clause-6 column:44 value:metal}
 {literal id:6 clause:clause-6 column:46 value:1}
-{literal id:8 clause:clause-7 column:59 value:1}
-{literal id:9 clause:clause-8 column:56 value:1}
+{literal id:8 clause:clause-7 column:57 value:1}
 
 {rule id:3 name:work}
 
 {input id:8 rule:work seq:1 name:where of:territory}
-{input id:9 rule:work seq:2 name:for of:thing}
+{input id:9 rule:work seq:2 name:what of:thing}
 
 {clause id:9 rule:work seq:1 role:require relation:extractor name:clause-9}
-{clause id:10 rule:work seq:2 role:require relation:density name:clause-10}
+{clause id:10 rule:work seq:2 role:require relation:deposit name:clause-10}
 {clause id:11 rule:work seq:3 role:remove relation:residency name:clause-11}
 {clause id:12 rule:work seq:4 role:add relation:residency name:clause-12}
 
-{binding id:15 clause:clause-9 column:57 input:where}
-{binding id:16 clause:clause-9 column:58 input:for}
+{binding id:15 clause:clause-9 column:55 input:where}
+{binding id:16 clause:clause-9 column:56 input:what}
 
 {binding id:17 clause:clause-10 column:51 input:where}
-{binding id:18 clause:clause-10 column:52 input:for}
+{binding id:18 clause:clause-10 column:52 input:what}
 
 {binding id:19 clause:clause-11 column:45 input:where}
 
-{binding id:20 clause:clause-12 column:44 input:for}
+{binding id:20 clause:clause-12 column:44 input:what}
 {binding id:21 clause:clause-12 column:45 input:where}
 
 {literal id:10 clause:clause-11 column:44 value:labor}

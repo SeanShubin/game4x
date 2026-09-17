@@ -1,0 +1,19 @@
+# A territory with the labor and the metal but no deposit of that resource at all.
+#
+# **A deposit that is full and a deposit that is not there are one refusal.** A row at quantity
+# zero is never written - Sean, 2026-09-15: *the model is a minimal expression of intent* - so
+# having no room and having no deposit differ only in the number, and the refusal names the row
+# that would have had to exist either way.
+
+{test name:an-extractor-cannot-be-built-where-there-is-no-deposit}
+
+{given}
+{territory id:1 name:territory-1}
+{residency what:labor where:territory-1} -> 1
+{residency what:metal where:territory-1} -> 1
+
+{when}
+{build-extractor where:territory-1 what:food}
+
+{refused}
+{deposit where:territory-1 what:food} -> 1

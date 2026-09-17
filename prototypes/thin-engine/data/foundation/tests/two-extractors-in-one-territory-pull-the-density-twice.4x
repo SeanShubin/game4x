@@ -1,0 +1,22 @@
+# Two deposits, two extractors, worked twice, pull the density twice.
+#
+# **The density is the deposit's and is not divided between them.** Nothing about the second
+# extractor differs from the first, which is what makes twelve rather than six.
+
+{test name:two-extractors-in-one-territory-pull-the-density-twice}
+
+{given}
+{territory id:1}
+{deposit where:1 what:5 density:6 quantity:2}
+{extractor where:1 what:5 quantity:2}
+{residency what:2 where:1 quantity:2}
+
+{when}
+{work where:1 what:5}
+{work where:1 what:5}
+
+{then}
+{territory id:1}
+{deposit where:1 what:5 density:6 quantity:2}
+{extractor where:1 what:5 quantity:2}
+{residency what:5 where:1 quantity:12}

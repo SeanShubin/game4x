@@ -225,9 +225,12 @@ fn apply(
 
     let schema = Schema::of(after.rows()).map_err(|why| Refused::Broke {
         rule: rule.clone(),
-        why,
+        why: Box::new(why),
     })?;
-    crate::schema::check(&schema, &after).map_err(|why| Refused::Broke { rule, why })?;
+    crate::schema::check(&schema, &after).map_err(|why| Refused::Broke {
+        rule,
+        why: Box::new(why),
+    })?;
     Ok(Game {
         schema,
         rows: after,

@@ -37,6 +37,10 @@ const QUANTITY: &str = "quantity";
 const NAME: &str = "name";
 const SEQ: &str = "seq";
 const TO: &str = "to";
+const ATTRIBUTE: &str = "attribute";
+const LIMIT: &str = "limit";
+const HELD: &str = "held";
+const BY: &str = "by";
 
 /// One column: its id, what it is called, and what it points at if anything.
 ///
@@ -54,6 +58,13 @@ pub struct Column {
 pub struct Relation {
     pub name: String,
     pub columns: Vec<Column>,
+    /// Columns that are neither the key nor the quantity: facts about the row rather than what
+    /// tells it from another.
+    ///
+    /// **The default is that there are none**, which is why they are marked one at a time rather
+    /// than the key being declared. `spec/console.md` - *a description is a kind and every trait
+    /// of that thing* - is still what a key is, and this is the exception saying so out loud.
+    pub attributes: Vec<String>,
 }
 
 impl Relation {
@@ -95,6 +106,7 @@ impl Relation {
                 .iter()
                 .map(|it| it.name.as_str())
                 .filter(|name| *name != quantity)
+                .filter(|name| !self.attributes.iter().any(|it| it == name))
                 .collect(),
         }
     }
@@ -141,6 +153,24 @@ pub enum Malformed {
     /// same logical model.* They are one slot - whether a row is one thing or a count of them -
     /// so carrying both says a row is identified and counted at once, and nothing can be.
     IdAndQuantity { relation: String },
+    /// More of a held thing somewhere than there is room for it.
+    ///
+    /// **One variant for both ways of having no room**, because a row at quantity zero is not
+    /// written: a deposit that is full and a deposit that does not exist differ only in the
+    /// number, and `wanted` says which by naming the row that would have had to be there.
+    Overfull {
+        held: String,
+        by: String,
+        /// The row of `by` that would have had to exist, written out.
+        wanted: String,
+        /// How much room there actually is, which is `0` where the row is absent.
+        room: String,
+    },
+    /// A limit between two relations whose keys are not the same columns.
+    ///
+    /// **Held and holder are compared key for key**, so a limit between relations that do not
+    /// agree about what a row is keyed by has nothing to compare.
+    CannotLimit { held: String, by: String },
     /// A value in a column that points at a row nothing states.
     NoSuchRow {
         relation: String,
@@ -167,6 +197,23 @@ impl std::fmt::Display for Malformed {
             }
             Malformed::NoColumns { relation } => {
                 write!(out, "`{relation}` declares no columns, so it has no key")
+            }
+            Malformed::Overfull {
+                held,
+                by,
+                wanted,
+                room,
+            } => {
+                write!(
+                    out,
+                    "`{held}` needs {wanted} and there is room for {room} in `{by}`"
+                )
+            }
+            Malformed::CannotLimit { held, by } => {
+                write!(
+                    out,
+                    "`{held}` is limited by `{by}` and the two are not keyed alike"
+                )
             }
             Malformed::BadOrder { relation, seq } => {
                 write!(
@@ -229,6 +276,14 @@ pub struct Schema {
     relations: BTreeMap<String, Relation>,
     /// A column's id to the relation it belongs to and what it is called there.
     by_id: BTreeMap<String, (String, String)>,
+    /// Which relation is held by which: `(extractor, deposit)` says there cannot be more
+    /// extractors somewhere than there are deposits to hold them.
+    ///
+    /// **A constraint on the world rather than on a rule.** Sean, 2026-09-17: *We can't place an
+    /// extractor if there are no available deposits* - and *the situation should be detectible and
+    /// therefore preventable*. Detectable is this; preventable follows, because every rule already
+    /// refuses the world it would leave if that world does not fit.
+    limits: Vec<(String, String)>,
 }
 
 impl Schema {
@@ -248,6 +303,7 @@ impl Schema {
                 Relation {
                     name,
                     columns: Vec::new(),
+                    attributes: Vec::new(),
                 },
             );
         }
@@ -295,6 +351,29 @@ impl Schema {
             }
         }
 
+        // **Which columns are facts about a row rather than part of what it is.** Read before the
+        // columns are attached, because `key()` asks the relation and the relation has to know.
+        let mut attributes: BTreeMap<String, Vec<String>> = BTreeMap::new();
+        for row in rows.iter().filter(|row| row.relation == ATTRIBUTE) {
+            let column = row.value(COLUMN).unwrap_or_default();
+            let Some((of, name)) = by_id.get(column) else {
+                return Err(Malformed::ReferenceOfNothing {
+                    column: column.to_string(),
+                });
+            };
+            attributes.entry(of.clone()).or_default().push(name.clone());
+        }
+
+        let mut limits: Vec<(String, String)> = Vec::new();
+        for row in rows.iter().filter(|row| row.relation == LIMIT) {
+            let held = row.value(HELD).unwrap_or_default();
+            let by = row.value(BY).unwrap_or_default();
+            limits.push((
+                named.get(held).cloned().unwrap_or_else(|| held.to_string()),
+                named.get(by).cloned().unwrap_or_else(|| by.to_string()),
+            ));
+        }
+
         for (of, mut columns) in numbered {
             columns.sort_by(|left, right| left.0.cmp(&right.0));
             let seq: Vec<String> = columns.iter().map(|it| it.0.clone()).collect();
@@ -302,8 +381,9 @@ impl Schema {
             if seq != wanted {
                 return Err(Malformed::BadOrder { relation: of, seq });
             }
-            relations.get_mut(&of).expect("declared above").columns =
-                columns.into_iter().map(|it| it.1).collect();
+            let relation = relations.get_mut(&of).expect("declared above");
+            relation.columns = columns.into_iter().map(|it| it.1).collect();
+            relation.attributes = attributes.get(&of).cloned().unwrap_or_default();
         }
 
         for relation in relations.values() {
@@ -334,7 +414,11 @@ impl Schema {
             }
         }
 
-        Ok(Schema { relations, by_id })
+        Ok(Schema {
+            relations,
+            by_id,
+            limits,
+        })
     }
 
     pub fn relation(&self, name: &str) -> Option<&Relation> {
@@ -458,6 +542,92 @@ pub fn check(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
                     to: to.clone(),
                 });
             }
+        }
+    }
+
+    // **Last, because breaking a reference breaks this too.** Point a deposit's `where` at a key
+    // nothing has and the extractors over it are suddenly over nothing - so a check that ran
+    // first would answer *too many extractors* to a question about a dangling reference, and
+    // `tests/mutation.rs` said exactly that. **The narrower fault is the one to report.**
+    held_within_what_holds_it(schema, rows)?;
+    Ok(())
+}
+
+/// No more of a held thing anywhere than there is room for it.
+///
+/// **This is a reference with a number on it.** An ordinary reference asks whether the row it
+/// points at exists; this asks whether it exists *and has room*, and the two are the same question
+/// where the room is one. **Both halves come out of the same comparison**, because a row at
+/// quantity zero is never written - so a deposit that is full and a deposit that is not there at
+/// all differ only in what the number is.
+///
+/// **No rule says any of this.** `build-extractor` adds an extractor and nothing else; every rule
+/// already refuses the world it would leave when that world does not fit, so a rule written
+/// tomorrow is bound by this without knowing it exists.
+fn held_within_what_holds_it(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
+    for (held, by) in &schema.limits {
+        let (Some(holder), Some(holds)) = (schema.relation(held), schema.relation(by)) else {
+            return Err(Malformed::CannotLimit {
+                held: held.clone(),
+                by: by.clone(),
+            });
+        };
+        let (Some(counted), Some(room_in)) = (holder.quantity(), holds.quantity()) else {
+            return Err(Malformed::CannotLimit {
+                held: held.clone(),
+                by: by.clone(),
+            });
+        };
+        // **Keyed alike or not comparable at all.** The two relations are matched key column for
+        // key column, so a limit between relations that disagree about what a row is keyed by has
+        // nothing to compare and says so rather than matching on whatever they happen to share.
+        let key = holder.key();
+        if key != holds.key() {
+            return Err(Malformed::CannotLimit {
+                held: held.clone(),
+                by: by.clone(),
+            });
+        }
+
+        for row in rows.rows().iter().filter(|it| it.relation == *held) {
+            let how_many: i64 = row
+                .value(counted)
+                .and_then(|it| it.parse().ok())
+                .unwrap_or(0);
+            let there = rows
+                .rows()
+                .iter()
+                .filter(|it| it.relation == *by)
+                .find(|it| {
+                    key.iter()
+                        .all(|column| it.value(column) == row.value(column))
+                });
+            let room: i64 = there
+                .and_then(|it| it.value(room_in))
+                .and_then(|it| it.parse().ok())
+                .unwrap_or(0);
+            if how_many <= room {
+                continue;
+            }
+            // **The refusal names the row that would have had to be there**, which is what a test
+            // can state and what a reader can act on: not *this is too many* but *there is no
+            // deposit with room for this many*.
+            let mut wanted = BTreeMap::new();
+            for column in &key {
+                if let Some(value) = row.value(column) {
+                    wanted.insert(column.to_string(), value.to_string());
+                }
+            }
+            wanted.insert(room_in.to_string(), how_many.to_string());
+            return Err(Malformed::Overfull {
+                held: held.clone(),
+                by: by.clone(),
+                wanted: schema.write(&Row {
+                    relation: by.clone(),
+                    values: wanted,
+                }),
+                room: room.to_string(),
+            });
         }
     }
     Ok(())

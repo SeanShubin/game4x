@@ -1835,3 +1835,97 @@ the report compares, the columns called `id`, the game's nouns and the product o
 the relations in all, the references, and both mutation lists. **Not one was a defect and every
 one had to be re-derived** - which is what `docs/notes/checks-outlive-examples.md` is about, seen
 from the inside.
+
+
+## A deposit is a thing you can run out of
+
+Sean, 2026-09-17: *{deposit where:territory-1 density:6 what:food} -> 3* and *We can't place an
+extractor if there are no available deposits.*
+
+```
+{deposit   where:territory-1 what:food density:6} -> 3
+{extractor where:territory-1 what:food}           -> 2
+```
+
+Three deposits, two of them worked. **`free` is gone and so is `density` as a relation.** What was
+two counted relations and a clause that spent one of them is now one relation and a fact about the
+world.
+
+## The trilemma, and which of the three went
+
+Sean, naming it: *I want to not have to specify anything more if there only happens to be 1
+choice / I want the option to have more than one choice / I want the notation to be uniform
+regardless of number of choices.*
+
+**All three turn on one question - is density part of the key?** Keep it in and two grades are two
+legal descriptions, so a command has to say which, either always or only when it is ambiguous; the
+first costs minimality and the second costs uniformity. Take it out and the description is
+`(where, what)`, both of those are kept, and a second grade is refused.
+
+**The specification asks for one density, twice.** `spec/planet.md`: *For each resource, a
+territory has capacity for some number of extractors, and a density that each of them yields.*
+`spec/economy.md`: *The territory's density for a resource is what each extractor pulls from it
+each turn.* So the option that was dropped is the one the game does not use.
+
+**It cost one row**, and the default rule did not move:
+
+```
+{attribute column:53 relation:deposit}
+```
+
+**And dropping it only means anything because the second grade is now refused** -
+`a_deposit_cannot_have_two_densities` in `tests/structure.rs` is what says so. With density in the
+key it would have been a legal state that nothing could name.
+
+## The limit is a reference with a number on it
+
+```
+{limit held:extractor by:deposit}
+```
+
+**No rule mentions capacity.** `build-extractor` removes a labor, removes a metal and adds an
+extractor; the world it would leave is checked as every world is, and an extractor with no deposit
+under it does not fit. **So the limit binds rules that have not been written**, which is the
+argument for putting it here rather than in the rule that happens to exist today.
+
+**A full deposit and an absent one are one refusal.** A row at quantity zero is never written, so
+the two differ only in the number, and the refusal names the row that would have had to be there:
+
+```
+{refused}
+{deposit where:territory-1 what:food} -> 2
+```
+
+Reading *there is no deposit here with room for two*, where a plain *too many* would have named
+the symptom.
+
+**Held and holder are compared key for key**, and a limit between relations that disagree about
+what a row is keyed by is refused rather than matched on whatever they happen to share.
+
+## Two things the checks caught, and one clippy did
+
+**The limit ran before references and answered the wrong question.** Point a deposit's `where` at
+a key nothing has and the extractors over it are suddenly over nothing, so `tests/mutation.rs` got
+*too many extractors* where it had asked about a dangling reference. **The narrower fault is the
+one to report**, so the limit runs last.
+
+**A density nothing reads.** A deposit declares a `density` column, so every deposit row carries
+one - and the test about running out of room never gets as far as working the deposit. It is in
+`NOT_LOAD_BEARING` beside that test's `thing.name`, for the same reason: a command that is refused
+reads less of its world than one that succeeds.
+
+**And the error type got big enough to pay for.** `Malformed` gained a variant naming a row and a
+number, which pushed `Refused` and `Failed` over the size clippy warns about - a cost paid on every
+call that succeeds. Both now box the `Malformed` they carry.
+
+## Poisoned, again, and what each one showed
+
+| Poison                                 | What it proved                                            |
+| -------------------------------------- | --------------------------------------------------------- |
+| deposit `-> 1` becomes `-> 2`          | the limit compares quantities rather than always refusing |
+| an extractor with no deposit, at load  | detection does not wait for a rule to run                 |
+| two deposits differing only in density | the attribute row is what makes the second grade illegal  |
+
+**The middle one is Sean's sentence run twice.** *The situation should be detectible and therefore
+preventable*: detection is `Game::of` refusing the world, and prevention is the same check running
+after a rule. There is one check and two places it fires.

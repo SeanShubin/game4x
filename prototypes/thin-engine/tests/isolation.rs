@@ -112,6 +112,8 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
         "binding",
         "literal",
         "reading",
+        "limit",
+        "attribute",
         "primitive",
         "store",
         "test",
@@ -149,8 +151,8 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
     }
     assert_eq!(
         nouns.len(),
-        10,
-        "ten nouns the game has - territory, thing, adjacency, residency, density, free, extractor, move, build-extractor, work; this found {nouns:?}"
+        9,
+        "nine nouns the game has - territory, thing, adjacency, residency, deposit, extractor, move, build-extractor, work; this found {nouns:?}"
     );
 
     let mut looked = 0;
@@ -180,5 +182,5 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
             looked += 1;
         }
     }
-    assert_eq!(looked, 80, "ten nouns over eight modules");
+    assert_eq!(looked, 72, "nine nouns over eight modules");
 }

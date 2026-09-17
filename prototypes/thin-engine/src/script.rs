@@ -81,7 +81,9 @@ pub enum Failed {
     /// `into` naming somewhere that is not `script`, `game` or `expected`.
     NoSuchStore { into: String },
     /// A step that does not fit the structure `script.4x` declares for it.
-    BadlyFormed { step: String, why: Malformed },
+    /// **Boxed for the same reason `Refused::Broke` is**: it carries a `Malformed`, which is the
+    /// largest thing either error holds.
+    BadlyFormed { step: String, why: Box<Malformed> },
     /// `compare` naming something other than the two stores there are.
     NothingToCompare { this: String, with: String },
     /// A test stating both a `{then}` and a `{refused}`.
@@ -308,7 +310,7 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
                         whole.extend(steps.iter().map(|row| (*row).clone()));
                         Game::of(whole).map_err(|why| Failed::BadlyFormed {
                             step: crate::notation::write(step),
-                            why,
+                            why: Box::new(why),
                         })?;
                         for earlier in steps.iter().chain(named.iter()) {
                             fits(earlier, &declared)?;
@@ -371,6 +373,17 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
                 let wanted = match &why {
                     Refused::NotSo { wanted, .. } | Refused::NothingToRemove { wanted, .. } => {
                         wanted.clone()
+                    }
+                    // **A limit refuses by naming the row that would have had to be there**, so
+                    // it is the same kind of answer as the other two: not *this is too many* but
+                    // *there is no deposit with room for this many*.
+                    Refused::Broke { why: broke, .. }
+                        if matches!(**broke, crate::schema::Malformed::Overfull { .. }) =>
+                    {
+                        match broke.as_ref() {
+                            crate::schema::Malformed::Overfull { wanted, .. } => wanted.clone(),
+                            _ => unreachable!("guarded above"),
+                        }
                     }
                     other => format!("{other}"),
                 };
@@ -441,11 +454,11 @@ fn store_named<'a>(declared: &'a [Row], id: &'a str) -> &'a str {
 fn fits(step: &Row, declared: &[Row]) -> Result<(), Failed> {
     let schema = Schema::of(declared).map_err(|why| Failed::BadlyFormed {
         step: crate::notation::write(step),
-        why,
+        why: Box::new(why),
     })?;
     schema.fits(step).map_err(|why| Failed::BadlyFormed {
         step: crate::notation::write(step),
-        why,
+        why: Box::new(why),
     })?;
     Ok(())
 }

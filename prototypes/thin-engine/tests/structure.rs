@@ -31,6 +31,8 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         "binding",
         "literal",
         "reading",
+        "limit",
+        "attribute",
         "primitive",
     ] {
         let declared = game
@@ -43,11 +45,11 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         );
         checked += 1;
     }
-    assert_eq!(checked, 12, "twelve relations describe the structure");
+    assert_eq!(checked, 14, "fourteen relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        19,
-        "nineteen relations in all - those twelve, and the game's seven"
+        20,
+        "twenty relations in all - those fourteen, and the game's six"
     );
 }
 
@@ -327,5 +329,76 @@ fn a_relation_cannot_carry_both_an_id_and_a_quantity() {
         Malformed::IdAndQuantity {
             relation: "pile".to_string()
         }
+    );
+}
+
+/// **A territory has one density per resource, and stating a second is refused.**
+///
+/// **This is what marking `density` an attribute buys, and the only thing it buys.** Sean,
+/// 2026-09-17, on wanting three things and being able to have two - specify nothing extra where
+/// there is one choice, allow more than one choice, and keep the notation uniform: *we are
+/// dropping (2)*. **Dropping it only means anything if the second grade is refused**, and with
+/// density in the key it would be a legal state nothing could name.
+///
+/// `spec/planet.md` is what says one: *For each resource, a territory has capacity for some number
+/// of extractors, and a density that each of them yields.*
+#[test]
+fn a_deposit_cannot_have_two_densities() {
+    assert_eq!(
+        with("{deposit where:1 what:5 density:6 quantity:3}\n{deposit where:1 what:5 density:9 quantity:1}")
+            .expect_err("two grades of one resource in one territory"),
+        Malformed::TwoWithOneKey {
+            relation: "deposit".to_string(),
+            key: vec![
+                ("where".to_string(), "1".to_string()),
+                ("what".to_string(), "5".to_string())
+            ]
+        },
+        "density is a fact about the deposit, so it is not what tells two deposits apart"
+    );
+
+    // The control: two deposits of different resources in one territory are two descriptions, so
+    // the refusal above is about the key and not about stating two deposits at all.
+    with("{deposit where:1 what:5 density:6 quantity:3}\n{deposit where:1 what:3 density:9 quantity:1}")
+        .expect("food and metal are different deposits");
+}
+
+/// **An extractor with no deposit under it is refused when the world is read**, not when something
+/// tries to use it.
+///
+/// **Sean, 2026-09-17**: *the situation should be detectible and therefore preventable.* This is
+/// the detectable half, and prevention is the same check running after a rule - which is why no
+/// rule mentions capacity.
+#[test]
+fn an_extractor_needs_a_deposit_to_stand_in() {
+    assert_eq!(
+        with("{extractor where:1 what:5 quantity:1}").expect_err("no deposit of food here"),
+        Malformed::Overfull {
+            held: "extractor".to_string(),
+            by: "deposit".to_string(),
+            wanted: "{deposit where:1 what:5 quantity:1}".to_string(),
+            room: "0".to_string()
+        },
+        "the refusal names the deposit that would have had to be there"
+    );
+
+    // The control: the same extractor over a deposit with room is fine, so the refusal is about
+    // the room rather than about extractors.
+    with("{deposit where:1 what:5 density:6 quantity:1}\n{extractor where:1 what:5 quantity:1}")
+        .expect("one extractor in one deposit");
+
+    // And one more than there is room for is refused by the number, not by the absence.
+    assert_eq!(
+        with(
+            "{deposit where:1 what:5 density:6 quantity:1}\n{extractor where:1 what:5 quantity:2}"
+        )
+        .expect_err("two extractors in one deposit"),
+        Malformed::Overfull {
+            held: "extractor".to_string(),
+            by: "deposit".to_string(),
+            wanted: "{deposit where:1 what:5 quantity:2}".to_string(),
+            room: "1".to_string()
+        },
+        "a full deposit and an absent one are one refusal with a different number"
     );
 }

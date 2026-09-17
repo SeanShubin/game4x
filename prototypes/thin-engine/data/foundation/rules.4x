@@ -4,6 +4,16 @@
 # input.** They are two relations because a clause cannot carry `residency`'s columns - those
 # change with the relation it points at, and a relation's columns do not change.
 #
+# **`build-extractor` says nothing about capacity.** It removes a labor, removes a metal and adds
+# an extractor; that there must be a deposit with room for it is a fact about the world, stated
+# once in `schema.4x` and enforced wherever a world is checked. **A rule that cannot break it is
+# better than a rule that remembers not to** - and the next rule that makes an extractor is bound
+# by it without saying anything either.
+#
+# **`work` requires the deposit it reads from.** The density is a column of that row, so the
+# require clause and the reading clause are the same one seen twice - and a territory holding two
+# grades of one resource cannot arise, because the structure refuses it.
+#
 # **A command names what is moved, not which row.** Scouts are fungible, so `what` is the category
 # and `from` is what picks the row out of the three a category may have. **There is no `it`**: a
 # residency has no id to name, because it is keyed by its description.
@@ -43,40 +53,36 @@
 {rule id:2 name:build-extractor}
 
 {input id:4 rule:2 seq:1 name:where of:13}
-{input id:7 rule:2 seq:2 name:for of:14}
+{input id:7 rule:2 seq:2 name:what of:14}
 
 {clause id:5 rule:2 seq:1 role:2 relation:16}
 {clause id:6 rule:2 seq:2 role:2 relation:16}
-{clause id:8 rule:2 seq:3 role:2 relation:19}
-{clause id:7 rule:2 seq:4 role:3 relation:20}
+{clause id:7 rule:2 seq:3 role:3 relation:19}
 
 {binding id:9 clause:5 column:45 input:4}
 {binding id:10 clause:6 column:45 input:4}
-{binding id:11 clause:7 column:57 input:4}
-{binding id:12 clause:7 column:58 input:7}
 
-{binding id:13 clause:8 column:54 input:4}
-{binding id:14 clause:8 column:55 input:7}
+{binding id:11 clause:7 column:55 input:4}
+{binding id:12 clause:7 column:56 input:7}
 
 {literal id:3 clause:5 column:44 value:2}
 {literal id:4 clause:5 column:46 value:1}
 {literal id:5 clause:6 column:44 value:3}
 {literal id:6 clause:6 column:46 value:1}
-{literal id:8 clause:7 column:59 value:1}
-{literal id:9 clause:8 column:56 value:1}
+{literal id:8 clause:7 column:57 value:1}
 
 {rule id:3 name:work}
 
 {input id:8 rule:3 seq:1 name:where of:13}
-{input id:9 rule:3 seq:2 name:for of:14}
+{input id:9 rule:3 seq:2 name:what of:14}
 
-{clause id:9 rule:3 seq:1 role:1 relation:20}
+{clause id:9 rule:3 seq:1 role:1 relation:19}
 {clause id:10 rule:3 seq:2 role:1 relation:18}
 {clause id:11 rule:3 seq:3 role:2 relation:16}
 {clause id:12 rule:3 seq:4 role:3 relation:16}
 
-{binding id:15 clause:9 column:57 input:8}
-{binding id:16 clause:9 column:58 input:9}
+{binding id:15 clause:9 column:55 input:8}
+{binding id:16 clause:9 column:56 input:9}
 
 {binding id:17 clause:10 column:51 input:8}
 {binding id:18 clause:10 column:52 input:9}

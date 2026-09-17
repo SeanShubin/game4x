@@ -145,9 +145,8 @@ fn check(files: &InMemory) -> Result<(), String> {
         // not be is comparing nothing, which is what this rules out.
         let state = [
             "adjacency",
-            "density",
+            "deposit",
             "extractor",
-            "free",
             "residency",
             "territory",
         ];
@@ -296,7 +295,7 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
     Ok(())
 }
 
-const REFERENCES: usize = 28;
+const REFERENCES: usize = 30;
 
 fn every_reference_forbids_something_in(
     files: &InMemory,
@@ -628,10 +627,16 @@ fn no_value_can_be_changed_without_breaking_something() {
 /// clause it belongs to, exactly as a `literal` is, so nothing ever looks its id up. **It carries
 /// one because every relation the structure declares is keyed**, which is the rule paying for
 /// itself somewhere it is not needed.
-const NOT_LOAD_BEARING: [&str; 5] = [
-    "12 rules.4x clause.seq",
+/// **And a density in a test that is refused before anything reads it.** A deposit declares a
+/// `density` column, so every deposit row carries one whether the test needs it or not - and a
+/// test about running out of room never gets as far as working the deposit. **It is the refusal
+/// test's shape rather than a spare value**, the same way that test's `thing.name` is: a command
+/// that is refused reads less of its world than one that succeeds.
+const NOT_LOAD_BEARING: [&str; 6] = [
+    "11 rules.4x clause.seq",
     "7 rules.4x input.seq",
     "1 rules.4x reading.id",
+    "1 tests/an-extractor-cannot-be-built-where-the-deposits-are-taken.4x deposit.density",
     "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x residency.quantity",
     "4 things.4x thing.name",
 ];

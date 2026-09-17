@@ -1,25 +1,25 @@
 # Two deposits in one territory, and working one of them leaves the other exactly as it was.
 #
-# **This is the parameterization.** `for` is an argument like any other, so one rule serves every
+# **This is the parameterization.** `what` is an argument like any other, so one rule serves every
 # resource - and what says so is that the metal deposit is untouched while the food one pays out.
 
 {test name:a-food-extractor-and-a-metal-extractor-do-not-interfere}
 
 {given}
 {territory id:1}
-{density where:1 what:5 quantity:6}
-{density where:1 what:3 quantity:2}
-{extractor where:1 for:5 quantity:1}
-{extractor where:1 for:3 quantity:1}
+{deposit where:1 what:5 density:6 quantity:1}
+{deposit where:1 what:3 density:2 quantity:1}
+{extractor where:1 what:5 quantity:1}
+{extractor where:1 what:3 quantity:1}
 {residency what:2 where:1 quantity:1}
 
 {when}
-{work where:1 for:5}
+{work where:1 what:5}
 
 {then}
 {territory id:1}
-{density where:1 what:5 quantity:6}
-{density where:1 what:3 quantity:2}
-{extractor where:1 for:5 quantity:1}
-{extractor where:1 for:3 quantity:1}
+{deposit where:1 what:5 density:6 quantity:1}
+{deposit where:1 what:3 density:2 quantity:1}
+{extractor where:1 what:5 quantity:1}
+{extractor where:1 what:3 quantity:1}
 {residency what:5 where:1 quantity:6}

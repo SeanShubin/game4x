@@ -52,7 +52,11 @@ pub enum Refused {
     /// The rule removes something no row matches, so the rule contradicts itself.
     NothingToRemove { rule: String, wanted: String },
     /// The rule left a world that does not fit the structure.
-    Broke { rule: String, why: Malformed },
+    ///
+    /// **Boxed, because this is the one refusal that carries another error.** `Malformed` grew a
+    /// variant naming a row and a number, and a `Result` whose error is that large is paid for on
+    /// every call that succeeds.
+    Broke { rule: String, why: Box<Malformed> },
 }
 
 impl std::fmt::Display for Refused {
