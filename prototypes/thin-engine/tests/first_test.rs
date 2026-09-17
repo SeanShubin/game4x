@@ -10,6 +10,7 @@
 //! **What is left in Rust is the two things that cannot be data**: handing the engine a way to
 //! read a file, and asserting that the report says what it should.
 
+use std::collections::{BTreeMap, BTreeSet};
 use std::path::PathBuf;
 
 use thin_engine::script::{Files, Report, run_test};
@@ -43,6 +44,108 @@ fn script_of(file: &str) -> Vec<Row> {
 
 fn report_of(file: &str) -> Report {
     run_test(&script_of(file), &data()).unwrap_or_else(|why| panic!("{file}: {why}"))
+}
+
+/// Every relation the schema marks as state, by name.
+fn state_relations() -> BTreeSet<String> {
+    let schema = rows("data/foundation/schema.4x");
+    let named: BTreeMap<String, String> = schema
+        .iter()
+        .filter(|row| row.relation == "relation")
+        .filter_map(|row| Some((row.value("id")?.to_string(), row.value("name")?.to_string())))
+        .collect();
+    schema
+        .iter()
+        .filter(|row| row.relation == "state")
+        .filter_map(|row| row.value("relation"))
+        .filter_map(|it| named.get(it).cloned())
+        .collect()
+}
+
+/// Every rule the ruleset declares, by name.
+fn rule_names() -> BTreeSet<String> {
+    rows("data/foundation/rules.4x")
+        .iter()
+        .filter(|row| row.relation == "rule")
+        .filter_map(|row| row.value("name").map(str::to_string))
+        .collect()
+}
+
+/// **A scenario states a world and an act, and nothing else.**
+///
+/// **This is the boundary between the scenario layer and the ruleset**, and it had nothing on it.
+/// A test's `given` could declare a category, a rule and a role and every test still passed - which
+/// is how two tests came to use `thing id:1` for `scout` and for `labor`. **That was fixed as an
+/// instance and not as a class**, by moving the categories out; this is the class.
+///
+/// **It needs no new data.** `{state relation:...}` already says which relations a world is made
+/// of, and `{rule name:...}` says what may be commanded. A `given` or a `then` holds the first; a
+/// `when` holds the second.
+#[test]
+fn a_scenario_states_a_world_and_an_act_and_nothing_else() {
+    let state = state_relations();
+    let rules = rule_names();
+    assert!(
+        !state.is_empty() && !rules.is_empty(),
+        "nothing is declared, so nothing would be checked"
+    );
+
+    let mut checked = 0;
+    for file in every_test() {
+        let mut section = String::new();
+        for row in rows(&file) {
+            if matches!(row.relation.as_str(), "given" | "when" | "then" | "refused") {
+                section = row.relation.clone();
+                continue;
+            }
+            if row.relation == "test" {
+                continue;
+            }
+            if section == "when" {
+                assert!(
+                    rules.contains(&row.relation),
+                    "{file}: `{}` is in a `when` and names no rule - a command is a rule fired",
+                    row.relation
+                );
+            } else {
+                assert!(
+                    state.contains(&row.relation),
+                    "{file}: `{}` is in a `{section}` and is not state - a scenario states a world, \
+                     and what a category or a rule is belongs to the ruleset",
+                    row.relation
+                );
+            }
+            checked += 1;
+        }
+    }
+    assert!(
+        checked > 20,
+        "only {checked} rows were placed, so a pass proves little"
+    );
+}
+
+/// **The ruleset states no world.**
+///
+/// The mirror of the check above: a `{residency ...}` in `rules.4x` is a world smuggled into the
+/// rules, and it would quietly become part of every test's starting state.
+#[test]
+fn the_ruleset_states_no_world() {
+    let state = state_relations();
+    let mut checked = 0;
+    for file in ["schema.4x", "engine.4x", "rules.4x", "things.4x"] {
+        for row in rows(&format!("data/foundation/{file}")) {
+            assert!(
+                !state.contains(&row.relation),
+                "{file}: `{}` is state, and a world belongs to the scenario that states it",
+                row.relation
+            );
+            checked += 1;
+        }
+    }
+    assert!(
+        checked > 100,
+        "only {checked} rows were read, so a pass proves little"
+    );
 }
 
 /// **A test's sections are set apart by a blank line**, in both directories.

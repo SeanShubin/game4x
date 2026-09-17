@@ -10,6 +10,11 @@ of the code, of the data structure, of the data - are its three readings.**
 Built to `S-136`. **Nothing here is a decision** - it is research, and if its answer implies one,
 that reaches Sean as a proposal through the specification lane, not from this directory.
 
+**[`layers.md`](layers.md) says what may say what**, and which check holds each boundary - the code,
+the words it branches on, the structure, this game's rules, a scenario, and the harness that runs
+one.
+
+
 ## Why any of this is a requirement, in Sean's words
 
 **Sean, 2026-09-15**: *The primary reason for these conciseness and simplicity requirements are so
