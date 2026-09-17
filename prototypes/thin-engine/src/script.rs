@@ -366,8 +366,12 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
                 if refused.is_empty() {
                     return Err(Failed::Refused { why });
                 }
+                // **Both refusals that carry a row hand it over in the same form**, so a test
+                // can name what a rule could not take as readily as what it could not find.
                 let wanted = match &why {
-                    Refused::NotSo { wanted, .. } => wanted.clone(),
+                    Refused::NotSo { wanted, .. } | Refused::NothingToRemove { wanted, .. } => {
+                        wanted.clone()
+                    }
                     other => format!("{other}"),
                 };
                 let said: Vec<String> = refused

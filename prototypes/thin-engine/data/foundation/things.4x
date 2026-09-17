@@ -11,4 +11,4 @@
 {thing id:1 name:scout}
 {thing id:2 name:labor}
 {thing id:3 name:metal}
-{thing id:4 name:extractor}
+{thing id:5 name:food}

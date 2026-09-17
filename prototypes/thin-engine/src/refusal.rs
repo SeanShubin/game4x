@@ -38,6 +38,17 @@ pub enum Refused {
     },
     /// Everything was bound and the world does not agree.
     NotSo { rule: String, wanted: String },
+    /// A clause reads a value out of the row an earlier clause matched, and that clause did not
+    /// match exactly one.
+    ///
+    /// **Not *no row* and not *a row*.** Several rows matching is the case this exists for: the
+    /// engine would otherwise read whichever was encountered first - Sean, 2026-09-15: *We should
+    /// never have non-determinism from what row happens to be encountered first.*
+    NotOne {
+        rule: String,
+        clause: String,
+        found: usize,
+    },
     /// The rule removes something no row matches, so the rule contradicts itself.
     NothingToRemove { rule: String, wanted: String },
     /// The rule left a world that does not fit the structure.
@@ -74,6 +85,14 @@ impl std::fmt::Display for Refused {
                 write!(out, "`{rule}`.`{clause}` binds nothing to `{column}`")
             }
             Refused::NotSo { rule, wanted } => write!(out, "`{rule}` needs {wanted} and it is not"),
+            Refused::NotOne {
+                rule,
+                clause,
+                found,
+            } => write!(
+                out,
+                "`{rule}`.`{clause}` is read from and matched {found} rows, not one"
+            ),
             Refused::NothingToRemove { rule, wanted } => {
                 write!(out, "`{rule}` removes {wanted} and nothing matched")
             }

@@ -146,12 +146,47 @@ impl Names {
         // **All or nothing, per relation.** Some column names happen to be unique - `what`,
         // `where` - and taking those while falling back for the rest rendered one kind of thing
         // two ways: `column:what` beside `column:44`.
+        // **An input's name is unique inside its rule and nowhere else**, so a reference to one
+        // is written `rule.name`. Sean, 2026-09-16, choosing this over resolving the bare name
+        // through the binding's clause: it is *unambiguous on the line you are reading*, where
+        // the bare form makes two rules' bindings read identically and tells them apart only by
+        // following each clause back to its rule.
+        //
+        // **It was the second rule that broke it, not the third.** `move`'s three inputs are all
+        // differently named; `build-extractor` and `work` both take a `where` and a `for`, and
+        // the all-or-nothing rule below then dropped every input reference back to an id at once.
+        let mut qualified: BTreeMap<String, String> = BTreeMap::new();
+        for row in rows.iter().filter(|row| row.relation == "input") {
+            let (Some(id), Some(name), Some(of_rule)) =
+                (row.value("id"), row.value("name"), row.value("rule"))
+            else {
+                continue;
+            };
+            // **By id or by name**, for the same reason everything else here is: the friendly
+            // source writes `rule:move` and the foundation writes `rule:1`.
+            let rule = rows
+                .iter()
+                .find(|it| {
+                    it.relation == "rule"
+                        && (it.value("id") == Some(of_rule) || it.value("name") == Some(of_rule))
+                })
+                .and_then(|it| it.value("name"));
+            if let Some(rule) = rule {
+                qualified.insert(id.to_string(), format!("{rule}.{name}"));
+            }
+        }
+        let called = |row: &Row| -> Option<String> {
+            let name = row.value("name")?;
+            if row.relation == "input" {
+                return qualified.get(row.value("id")?).cloned();
+            }
+            Some(name.to_string())
+        };
+
         let mut seen: BTreeMap<String, Vec<String>> = BTreeMap::new();
         for row in rows {
-            if let Some(name) = row.value("name") {
-                seen.entry(row.relation.clone())
-                    .or_default()
-                    .push(name.to_string());
+            if let Some(name) = called(row) {
+                seen.entry(row.relation.clone()).or_default().push(name);
             }
         }
         let mut nameable: std::collections::BTreeSet<String> = Default::default();
@@ -196,7 +231,7 @@ impl Names {
             let name = if declares_name.contains(&row.relation) {
                 nameable
                     .contains(&row.relation)
-                    .then(|| row.value("name").unwrap_or_default().to_string())
+                    .then(|| called(row).unwrap_or_default())
             } else {
                 referenced
                     .contains(&row.relation)

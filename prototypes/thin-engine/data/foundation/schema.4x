@@ -32,6 +32,10 @@
 {relation id:15 name:adjacency}
 {relation id:16 name:residency}
 {relation id:17 name:literal}
+{relation id:18 name:density}
+{relation id:19 name:free}
+{relation id:20 name:extractor}
+{relation id:21 name:reading}
 
 
 ## The columns
@@ -83,6 +87,22 @@
 {column id:49 relation:17 seq:3 name:column}
 {column id:50 relation:17 seq:4 name:value}
 
+{column id:51 relation:18 seq:1 name:where}
+{column id:52 relation:18 seq:2 name:what}
+{column id:53 relation:18 seq:3 name:quantity}
+{column id:54 relation:19 seq:1 name:where}
+{column id:55 relation:19 seq:2 name:what}
+{column id:56 relation:19 seq:3 name:quantity}
+{column id:57 relation:20 seq:1 name:where}
+{column id:58 relation:20 seq:2 name:for}
+{column id:59 relation:20 seq:3 name:quantity}
+
+{column id:60 relation:21 seq:1 name:id}
+{column id:61 relation:21 seq:2 name:clause}
+{column id:62 relation:21 seq:3 name:column}
+{column id:63 relation:21 seq:4 name:of}
+{column id:64 relation:21 seq:5 name:takes}
+
 
 ## What points at what
 #
@@ -110,6 +130,18 @@
 {reference id:20 column:48 to:8}
 {reference id:21 column:49 to:2}
 
+{reference id:22 column:51 to:13}
+{reference id:23 column:52 to:14}
+{reference id:24 column:54 to:13}
+{reference id:25 column:55 to:14}
+{reference id:26 column:57 to:13}
+{reference id:27 column:58 to:14}
+
+{reference id:28 column:61 to:8}
+{reference id:29 column:62 to:2}
+{reference id:30 column:63 to:8}
+{reference id:31 column:64 to:2}
+
 
 ## Which relations are the game's state
 #
@@ -119,6 +151,9 @@
 {state id:1 relation:13}
 {state id:3 relation:15}
 {state id:4 relation:16}
+{state id:5 relation:18}
+{state id:6 relation:19}
+{state id:7 relation:20}
 
 
 ## The three roles a clause can have

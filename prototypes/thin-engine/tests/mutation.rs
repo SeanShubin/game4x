@@ -143,7 +143,14 @@ fn check(files: &InMemory) -> Result<(), String> {
 
         // **A test compares a world or a refusal**, and either is a real comparison. What would
         // not be is comparing nothing, which is what this rules out.
-        let state = ["adjacency", "residency", "territory"];
+        let state = [
+            "adjacency",
+            "density",
+            "extractor",
+            "free",
+            "residency",
+            "territory",
+        ];
         if report.compared != state && report.compared != ["the refusal"] {
             return Err(format!("compared {:?}", report.compared));
         }
@@ -183,18 +190,28 @@ fn check(files: &InMemory) -> Result<(), String> {
 
 /// The files `test.4x` loads into the game, read out of the script rather than listed.
 fn loaded(files: &InMemory) -> Result<Vec<Row>, String> {
-    // **A test's script is what everything loads, then the test.** `setup.4x` holds the loads so
-    // that a test file is its name and its three sections and nothing else.
-    let mut script = read(&files.read("setup.4x").unwrap_or_default())
-        .map_err(|why| format!("setup.4x: {why}"))?;
     let named = files
         .0
         .keys()
         .find(|name| name.starts_with("tests/"))
         .cloned()
         .ok_or("no test")?;
+    loaded_from(files, &named)
+}
+
+/// The rows one named test loads, which is the script, the ruleset and that test's own world.
+///
+/// **Which test is named used to be *whichever sorted first*.** That was invisible and it moved:
+/// adding a deposit test put a world with no `adjacency` at the front of the map, and the
+/// reference check failed saying a relation it had always found rows for had none. **The check
+/// was right and its world was arbitrary.**
+fn loaded_from(files: &InMemory, named: &str) -> Result<Vec<Row>, String> {
+    // **A test's script is what everything loads, then the test.** `setup.4x` holds the loads so
+    // that a test file is its name and its three sections and nothing else.
+    let mut script = read(&files.read("setup.4x").unwrap_or_default())
+        .map_err(|why| format!("setup.4x: {why}"))?;
     script.extend(
-        read(&files.read(&named).unwrap_or_default()).map_err(|why| format!("{named}: {why}"))?,
+        read(&files.read(named).unwrap_or_default()).map_err(|why| format!("{named}: {why}"))?,
     );
     // **`into` is a store's id, so the stores have to be read before the loads can be.** They
     // are declared in whichever file the first load fetches, which is the bootstrap said from
@@ -253,7 +270,40 @@ fn loaded(files: &InMemory) -> Result<Vec<Row>, String> {
 /// column at a key nothing has, and asserts the structure refuses it. Delete the reference and
 /// that row becomes legal, which is what the mutation check then notices.
 fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
-    let game = loaded(files)?;
+    // **Every test's world, not one of them.** No single world holds a row of every relation a
+    // reference points at - a deposit test has no border and a movement test has no deposit - so
+    // a reference is violated wherever there is something to violate it in, and what is asserted
+    // is that all of them were violated somewhere.
+    let worlds: Vec<String> = files
+        .0
+        .keys()
+        .filter(|name| name.starts_with("tests/"))
+        .cloned()
+        .collect();
+    if worlds.is_empty() {
+        return Err("no test".to_string());
+    }
+    let mut violated: BTreeSet<String> = BTreeSet::new();
+    for world in &worlds {
+        every_reference_forbids_something_in(files, world, &mut violated)?;
+    }
+    if violated.len() != REFERENCES {
+        return Err(format!(
+            "{} references were violated somewhere and there are {REFERENCES}; the rest point at a relation no test has a row of",
+            violated.len()
+        ));
+    }
+    Ok(())
+}
+
+const REFERENCES: usize = 28;
+
+fn every_reference_forbids_something_in(
+    files: &InMemory,
+    world: &str,
+    violated: &mut BTreeSet<String>,
+) -> Result<(), String> {
+    let game = loaded_from(files, world)?;
     let references: Vec<Row> = game
         .iter()
         .filter(|row| row.relation == "reference")
@@ -263,9 +313,9 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
     // floor first, and deleting a reference then simply meant one fewer was checked - the loop
     // below only ever tests the references that are there. A floor asks *are there enough*; the
     // question is *are they all still here*.
-    if references.len() != 18 {
+    if references.len() != REFERENCES {
         return Err(format!(
-            "{} references, and there are eighteen",
+            "{} references, and there are {REFERENCES}",
             references.len()
         ));
     }
@@ -290,11 +340,12 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
         let named = declaration.value("name").ok_or("a column with no name")?;
 
         // A real row of that relation, pointed at a key nothing has.
+        // **Nothing to violate is not a failure here**, because the caller asks the question
+        // across every world rather than in one.
         let Some(sample) = game.iter().find(|row| row.relation == of) else {
-            return Err(format!(
-                "`{of}` has no rows, so `{column}` cannot be violated"
-            ));
+            continue;
         };
+        violated.insert(column.to_string());
         let mut violating = sample.clone();
         violating
             .values
@@ -443,9 +494,14 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// turns on is that nothing says 1 touches 3. **They are there so a reader can see there is a path
 /// and it is not a direct one**, and this line is the price of that, said out loud rather than
 /// trimmed away.
+/// **Two rules later it says ten and five, and the reason is the same one.** `work` and
+/// `build-extractor` each bind `where` and `for` on clauses whose pattern still matches without
+/// them, because every deposit test has one territory and one or two deposits in it. **A binding
+/// is load-bearing when something else could have matched**, and a world with one of everything
+/// gives nothing else to match. The masking is the world's, not the rule's.
 const DELETABLE: [&str; 3] = [
-    "6 rules.4x binding",
-    "4 rules.4x literal",
+    "10 rules.4x binding",
+    "5 rules.4x literal",
     "2 tests/the-scout-cannot-cross-where-there-is-no-border.4x adjacency",
 ];
 
@@ -568,9 +624,14 @@ fn no_value_can_be_changed_without_breaking_something() {
 /// `add` can say so - they are set operations over whole rows. **This line is the check that will
 /// go red when quantities start being read**, which is the only reason it is worth writing down
 /// rather than fixing by binding a column nothing needs yet.
-const NOT_LOAD_BEARING: [&str; 4] = [
-    "7 rules.4x clause.seq",
-    "4 rules.4x input.seq",
+/// **And `reading.id`, which is the newest and the plainest.** A `reading` row is found by the
+/// clause it belongs to, exactly as a `literal` is, so nothing ever looks its id up. **It carries
+/// one because every relation the structure declares is keyed**, which is the rule paying for
+/// itself somewhere it is not needed.
+const NOT_LOAD_BEARING: [&str; 5] = [
+    "12 rules.4x clause.seq",
+    "7 rules.4x input.seq",
+    "1 rules.4x reading.id",
     "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x residency.quantity",
     "4 things.4x thing.name",
 ];

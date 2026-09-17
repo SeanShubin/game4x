@@ -1,19 +1,20 @@
-# Building an extractor spends a labor and a metal and leaves an extractor.
+# Building an extractor spends a labor, a metal and one of the deposit's free capacity.
 #
-# **Red on purpose.** Nothing declares a `build-extractor` rule, so this states what the rule
-# should do before there is one to do it - Sean, 2026-09-16: *we will use this to puzzle out the
-# design more before implementing anything.*
+# **The extractor is not a residency.** It stands in a relation of its own, because an extractor
+# for food and an extractor for metal are different things standing in the same place - and what
+# tells them apart is a column rather than a category.
 
 {test name:an-extractor-is-built-from-labor-and-metal}
 
 {given}
 {territory id:1}
+{free where:1 what:5 quantity:1}
 {residency what:2 where:1 quantity:1}
 {residency what:3 where:1 quantity:1}
 
 {when}
-{build-extractor where:1}
+{build-extractor where:1 for:5}
 
 {then}
 {territory id:1}
-{residency what:4 where:1 quantity:1}
+{extractor where:1 for:5 quantity:1}

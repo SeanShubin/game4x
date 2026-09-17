@@ -1,0 +1,21 @@
+# A deposit holds only so many extractors, and a territory with none free refuses another.
+#
+# **There is no row saying zero.** A quantity of nothing is not written - Sean, 2026-09-15: *the
+# model is a minimal expression of intent* - so a deposit with no capacity left is a deposit with
+# no `free` row, and the refusal is the same one a missing border gives.
+#
+# **This is why capacity is not stated.** Building spends one free and arithmetic already refuses
+# to take what is not there, so the limit needs nothing the engine cannot do.
+
+{test name:an-extractor-cannot-be-built-with-no-free-capacity}
+
+{given}
+{territory id:1}
+{residency what:2 where:1 quantity:1}
+{residency what:3 where:1 quantity:1}
+
+{when}
+{build-extractor where:1 for:5}
+
+{refused}
+{free where:1 what:5 quantity:1}

@@ -40,3 +40,5 @@
 {primitive id:29 word:to}
 {primitive id:30 word:value}
 {primitive id:31 word:when}
+{primitive id:32 word:reading}
+{primitive id:33 word:takes}

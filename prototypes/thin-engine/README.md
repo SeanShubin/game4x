@@ -1709,3 +1709,107 @@ can do to `reviewed/` - a copy under a name no test has is compared against noth
 the page, a refused name, a refused empty note, an unknown route, a note carrying a quote, two
 notes landing in one section, and the keys. Then `reviewed/` was deleted, notes included, because
 this lane inventing a note would be inventing an instruction from Sean.
+
+
+## Deposits: density, capacity, and one rule for every resource
+
+Sean, 2026-09-16: *We need some tests around deposits. We need density, capacity, and some form
+of parameterization to handle food/metal/energy, so this is going to be some design work too.*
+
+**A deposit is two counted relations rather than one row with numbers in it.**
+
+```
+{density where:territory-1 what:food} -> 6
+{free    where:territory-1 what:food} -> 3
+```
+
+Each is *a description mapping to a number*, which is `residency`'s shape exactly - so neither
+needs a new engine word, and the two-rows-one-key check covers them as it stands. **One `deposit`
+row carrying named numbers would have needed a new idea**: the key is every column but the
+quantity, so two rows disagreeing about density would both be legal until the schema learned
+which columns are the key and which are attributes.
+
+**Capacity is not stated, and that is a substitution worth naming.** What is stated is `free`.
+Building spends one, and taking what is not there is already refused - so the limit test needs
+nothing new. The total is `free` plus the extractors standing there, which the model already
+holds, and stating it would be stating a number the model can work out.
+
+## An extractor is not a residency
+
+```
+{extractor where:territory-1 for:food}  -> 2
+{extractor where:territory-1 for:metal} -> 1
+```
+
+**Extractors stop being fungible the moment there is a second resource**, so they leave
+`residency` for a relation whose columns are what tells them apart. `for` is then an ordinary
+named input, and `{build-extractor where:territory-1 for:food}` parameterizes by argument.
+
+**The parameterization cost no engine at all**, which was not the expectation. A category per kind
+- `food-extractor`, `metal-extractor` - would have forced the rule to derive a name from an
+argument, which is string work in Rust; a column on `residency` would have put a meaningless `for`
+on every scout.
+
+**`{thing id:4 name:extractor}` is gone.** An extractor is a relation now, and the mutation check
+found the category deletable the same day it stopped being read.
+
+## `reading`: the first value a rule takes out of the world
+
+Every column of a clause used to get its value from one of two places - a **binding**, which is
+what the caller wrote, or a **literal**, which is what the rule says. Neither can express *the
+density here*.
+
+```
+{binding id:21 clause:clause-12 column:45 input:work.where}
+{literal id:11 clause:clause-11 column:46 value:1}
+{reading id:1  clause:clause-12 column:46 of:clause-10 takes:53}
+```
+
+The third says: this clause's quantity is the quantity of the row `clause-10` matched. That is
+`spec/data/line.4x`'s `` qty:`$where`'s density for that resource `` , and it is general - it is
+how any rule reads a number out of the world rather than carrying one.
+
+**A clause that matched more than one row is refused rather than read from.** Sean, 2026-09-15:
+*We should never have non-determinism from what row happens to be encountered first.* One match is
+remembered, several are not, and `Refused::NotOne` is what a rule gets for reading from a clause
+that did not narrow to one.
+
+**Two words, and the engine grew by no others.** `reading` and `takes` are in `data/engine.4x`,
+which `tests/engine.rs` checks against `src/` both ways - so 31 words became 33 and everything
+else about deposits is rows.
+
+## What the four tests are for, and the two poisons
+
+| Test                                                      | What it holds down                                                 |
+| --------------------------------------------------------- | ------------------------------------------------------------------ |
+| `an-extractor-pulls-its-deposits-density`                 | the quantity comes from the deposit, not from the rule             |
+| `an-extractor-cannot-be-built-with-no-free-capacity`      | the limit, which needs no arithmetic the engine lacks              |
+| `a-food-extractor-and-a-metal-extractor-do-not-interfere` | `for` is read, and one rule serves every resource                  |
+| `two-extractors-on-one-deposit-each-pull-its-density`     | the density is the deposit's and is not divided between extractors |
+
+**Both new claims were poisoned before being believed.** Setting the deposit's density to 9
+without touching the rule produced 9, so the number is read rather than written. Sending
+`{work where:1 for:metal}` produced two metal instead of six food, so the argument is read rather
+than assumed. Each was put back afterwards.
+
+## What adding two rules broke, which is the interesting part
+
+**An input's name is unique inside its rule and nowhere else.** `move`'s three inputs are all
+differently named; `build-extractor` and `work` both take a `where` and a `for`, and the
+translator's all-or-nothing rule then dropped every input reference back to an id at once -
+against the invariant that arguments are named rather than numbered. **A reference to an input is
+written `rule.name` now**: `input:work.where`. Sean, choosing it over resolving the bare name
+through the binding's clause: it is unambiguous on the line you are reading.
+
+**The mutation check was reading whichever test sorted first.** `every_reference_forbids_something`
+loaded one world and needed a row of every relation a reference points at; a deposit test sorted
+ahead of the movement tests, that world had no `adjacency`, and a check that had been green for
+weeks said a relation had no rows. **The check was right and its world was arbitrary** - it now
+violates each reference in whichever world has something to violate it in, and asserts that all
+28 were violated somewhere.
+
+**Seven written-down counts moved**, in six files: the engine's word count, the state relations
+the report compares, the columns called `id`, the game's nouns and the product over the modules,
+the relations in all, the references, and both mutation lists. **Not one was a defect and every
+one had to be re-derived** - which is what `docs/notes/checks-outlive-examples.md` is about, seen
+from the inside.

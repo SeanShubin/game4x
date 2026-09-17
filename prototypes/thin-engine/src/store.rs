@@ -27,6 +27,18 @@ impl Store {
         &self.rows
     }
 
+    /// Every row that matches, in the order they are held.
+    ///
+    /// **A caller that needs the row itself rather than whether there is one.** `holds` answers a
+    /// question and this hands back the answer, which is what a clause reading a value out of the
+    /// world needs.
+    pub fn matching(&self, wanted: &Row) -> Vec<&Row> {
+        self.rows
+            .iter()
+            .filter(|row| matches(row, wanted))
+            .collect()
+    }
+
     /// Whether any row matches, where matching is *the same relation and at least these values*.
     ///
     /// **A subset rather than the whole row**, so a fact can gain a value without every pattern

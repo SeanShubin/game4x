@@ -2,12 +2,54 @@ The thin engine, per test: the world it starts in, what each command took and ma
 the world it leaves. (old state, commands) -> (new state, effects).
 
 ==============================================================================
+a-food-extractor-and-a-metal-extractor-do-not-interfere
+
+old state
+  - root
+    - adjacency
+    - density
+      - {density where:territory-1 what:metal} -> 2
+      - {density where:territory-1 what:food} -> 6
+    - extractor
+      - {extractor where:territory-1 for:metal} -> 1
+      - {extractor where:territory-1 for:food} -> 1
+    - free
+    - residency
+      - {residency what:labor where:territory-1} -> 1
+    - territory
+      - {territory id:1 name:territory-1}
+
+command  {work where:territory-1 for:food}
+  took   {residency what:labor where:territory-1} -> 1
+  made   {residency what:food where:territory-1} -> 6
+
+new state
+  - root
+    - adjacency
+    - density
+      - {density where:territory-1 what:metal} -> 2
+      - {density where:territory-1 what:food} -> 6
+    - extractor
+      - {extractor where:territory-1 for:metal} -> 1
+      - {extractor where:territory-1 for:food} -> 1
+    - free
+    - residency
+      - {residency what:food where:territory-1} -> 6
+    - territory
+      - {territory id:1 name:territory-1}
+
+as expected
+
+==============================================================================
 a-scout-arriving-where-one-stands-makes-two
 
 old state
   - root
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
+    - density
+    - extractor
+    - free
     - residency
       - {residency what:scout where:territory-1} -> 1
       - {residency what:scout where:territory-2} -> 1
@@ -23,6 +65,9 @@ new state
   - root
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
+    - density
+    - extractor
+    - free
     - residency
       - {residency what:scout where:territory-2} -> 2
     - territory
@@ -32,27 +77,90 @@ new state
 as expected
 
 ==============================================================================
-an-extractor-is-built-from-labor-and-metal
+an-extractor-cannot-be-built-with-no-free-capacity
 
 old state
   - root
     - adjacency
+    - density
+    - extractor
+    - free
     - residency
       - {residency what:labor where:territory-1} -> 1
       - {residency what:metal where:territory-1} -> 1
     - territory
       - {territory id:1 name:territory-1}
 
-command  {build-extractor where:territory-1}
+refused
+  `build-extractor` removes {free where:1 what:5 quantity:1} and nothing matched
+
+as expected
+
+==============================================================================
+an-extractor-is-built-from-labor-and-metal
+
+old state
+  - root
+    - adjacency
+    - density
+    - extractor
+    - free
+      - {free where:territory-1 what:food} -> 1
+    - residency
+      - {residency what:labor where:territory-1} -> 1
+      - {residency what:metal where:territory-1} -> 1
+    - territory
+      - {territory id:1 name:territory-1}
+
+command  {build-extractor where:territory-1 for:food}
   took   {residency what:labor where:territory-1} -> 1
   took   {residency what:metal where:territory-1} -> 1
-  made   {residency what:extractor where:territory-1} -> 1
+  took   {free where:territory-1 what:food} -> 1
+  made   {extractor where:territory-1 for:food} -> 1
 
 new state
   - root
     - adjacency
+    - density
+    - extractor
+      - {extractor where:territory-1 for:food} -> 1
+    - free
     - residency
-      - {residency what:extractor where:territory-1} -> 1
+    - territory
+      - {territory id:1 name:territory-1}
+
+as expected
+
+==============================================================================
+an-extractor-pulls-its-deposits-density
+
+old state
+  - root
+    - adjacency
+    - density
+      - {density where:territory-1 what:food} -> 6
+    - extractor
+      - {extractor where:territory-1 for:food} -> 1
+    - free
+    - residency
+      - {residency what:labor where:territory-1} -> 1
+    - territory
+      - {territory id:1 name:territory-1}
+
+command  {work where:territory-1 for:food}
+  took   {residency what:labor where:territory-1} -> 1
+  made   {residency what:food where:territory-1} -> 6
+
+new state
+  - root
+    - adjacency
+    - density
+      - {density where:territory-1 what:food} -> 6
+    - extractor
+      - {extractor where:territory-1 for:food} -> 1
+    - free
+    - residency
+      - {residency what:food where:territory-1} -> 6
     - territory
       - {territory id:1 name:territory-1}
 
@@ -65,6 +173,9 @@ old state
   - root
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
+    - density
+    - extractor
+    - free
     - residency
       - {residency what:scout where:territory-1} -> 2
     - territory
@@ -79,6 +190,9 @@ new state
   - root
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
+    - density
+    - extractor
+    - free
     - residency
       - {residency what:scout where:territory-1} -> 1
       - {residency what:scout where:territory-2} -> 1
@@ -96,6 +210,9 @@ old state
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
       - {adjacency id:2 from:territory-2 to:territory-3}
+    - density
+    - extractor
+    - free
     - residency
       - {residency what:scout where:territory-1} -> 1
     - territory
@@ -116,6 +233,9 @@ old state
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
       - {adjacency id:2 from:territory-2 to:territory-3}
+    - density
+    - extractor
+    - free
     - residency
       - {residency what:scout where:territory-1} -> 1
     - territory
@@ -136,6 +256,9 @@ new state
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
       - {adjacency id:2 from:territory-2 to:territory-3}
+    - density
+    - extractor
+    - free
     - residency
       - {residency what:scout where:territory-3} -> 1
     - territory
@@ -153,6 +276,9 @@ old state
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
       - {adjacency id:2 from:territory-2 to:territory-3}
+    - density
+    - extractor
+    - free
     - residency
       - {residency what:scout where:territory-1} -> 1
     - territory
@@ -169,11 +295,53 @@ new state
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
       - {adjacency id:2 from:territory-2 to:territory-3}
+    - density
+    - extractor
+    - free
     - residency
       - {residency what:scout where:territory-2} -> 1
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
+
+as expected
+
+==============================================================================
+two-extractors-on-one-deposit-each-pull-its-density
+
+old state
+  - root
+    - adjacency
+    - density
+      - {density where:territory-1 what:food} -> 6
+    - extractor
+      - {extractor where:territory-1 for:food} -> 2
+    - free
+    - residency
+      - {residency what:labor where:territory-1} -> 2
+    - territory
+      - {territory id:1 name:territory-1}
+
+command  {work where:territory-1 for:food}
+  took   {residency what:labor where:territory-1} -> 1
+  made   {residency what:food where:territory-1} -> 6
+
+command  {work where:territory-1 for:food}
+  took   {residency what:labor where:territory-1} -> 1
+  made   {residency what:food where:territory-1} -> 6
+
+new state
+  - root
+    - adjacency
+    - density
+      - {density where:territory-1 what:food} -> 6
+    - extractor
+      - {extractor where:territory-1 for:food} -> 2
+    - free
+    - residency
+      - {residency what:food where:territory-1} -> 12
+    - territory
+      - {territory id:1 name:territory-1}
 
 as expected

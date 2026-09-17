@@ -41,6 +41,8 @@ const INPUT: &str = "input";
 const CLAUSE: &str = "clause";
 const BINDING: &str = "binding";
 const LITERAL: &str = "literal";
+const READING: &str = "reading";
+const TAKES: &str = "takes";
 const ID: &str = "id";
 const NAME: &str = "name";
 const SEQ: &str = "seq";
@@ -155,6 +157,10 @@ fn apply(
 
     // **Requiring happens before anything is applied**, which is what makes the two passes below
     // safe to write as two rather than one.
+    //
+    // **What each `require` matched, kept by clause.** A later clause can take a value out of it -
+    // a quantity read from the world rather than written in the rule, which is what a density is.
+    let mut matched: BTreeMap<String, Row> = BTreeMap::new();
     let mut after = game.rows.clone();
     for pass in [REQUIRE, REMOVE] {
         for clause in &clauses {
@@ -168,14 +174,22 @@ fn apply(
             // **`add` is the other case and must name every column**, because a row that does not
             // fit the structure cannot be put into the world - including the `id` it will be
             // known by.
-            let wanted = row_of(game, clause, bound, &rule, PATTERN)?;
+            let wanted = row_of(game, clause, bound, &rule, PATTERN, &matched)?;
             match role {
                 REQUIRE => {
-                    if !game.rows.holds(&wanted) {
+                    let found = game.rows.matching(&wanted);
+                    if found.is_empty() {
                         return Err(Refused::NotSo {
                             rule,
                             wanted: game.schema.write(&wanted),
                         });
+                    }
+                    // **One match is remembered and several are not.** A clause nothing reads
+                    // from does not care either way; one that is read from refuses below rather
+                    // than picking, which is where the non-determinism would have been.
+                    if let [one] = found[..] {
+                        let id = clause.value(ID).unwrap_or_default().to_string();
+                        matched.insert(id, one.clone());
                     }
                 }
                 _ => {
@@ -195,7 +209,7 @@ fn apply(
         match game.named(ROLE, role).unwrap_or(role) {
             REQUIRE | REMOVE => continue,
             ADD => {
-                let made = row_of(game, clause, bound, &rule, WHOLE)?;
+                let made = row_of(game, clause, bound, &rule, WHOLE, &matched)?;
                 after.put(made.clone(), counted(game, &made).as_deref());
                 effect.made.push(made);
             }
@@ -238,6 +252,7 @@ fn row_of(
     bound: &BTreeMap<String, String>,
     rule: &str,
     whole: bool,
+    matched: &BTreeMap<String, Row>,
 ) -> Result<Row, Refused> {
     let relation = clause.value(RELATION).unwrap_or_default();
     let relation = game
@@ -281,6 +296,41 @@ fn row_of(
             continue;
         };
         let Some(value) = literal.value(VALUE) else {
+            continue;
+        };
+        values.insert(name.to_string(), value.to_string());
+    }
+
+    // **A reading is the third way a column gets its value, and the only one that looks at the
+    // world.** A binding takes it from what the caller wrote and a literal from what the rule
+    // says; this takes it from the row an earlier clause matched, which is how a rule produces
+    // *the density here* rather than a number somebody typed. `spec/data/line.4x` writes that as
+    // `$where`'s density for that resource.
+    //
+    // **Read last, for the same reason a literal is read after a binding**: one column, one
+    // source, and the order says which wins if a rule says two things.
+    for reading in game
+        .of_relation(READING)
+        .into_iter()
+        .filter(|row| row.value(CLAUSE) == Some(id))
+    {
+        let column = reading.value(COLUMN).unwrap_or_default();
+        let Some((_, name)) = game.schema.column(column) else {
+            continue;
+        };
+        let of = reading.value(OF).unwrap_or_default();
+        let Some(source) = matched.get(of) else {
+            return Err(Refused::NotOne {
+                rule: rule.to_string(),
+                clause: of.to_string(),
+                found: 0,
+            });
+        };
+        let takes = reading.value(TAKES).unwrap_or_default();
+        let Some((_, taken)) = game.schema.column(takes) else {
+            continue;
+        };
+        let Some(value) = source.value(taken) else {
             continue;
         };
         values.insert(name.to_string(), value.to_string());

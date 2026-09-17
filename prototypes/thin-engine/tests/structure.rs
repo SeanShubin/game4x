@@ -30,6 +30,7 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         "clause",
         "binding",
         "literal",
+        "reading",
         "primitive",
     ] {
         let declared = game
@@ -42,11 +43,11 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         );
         checked += 1;
     }
-    assert_eq!(checked, 11, "eleven relations describe the structure");
+    assert_eq!(checked, 12, "twelve relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        15,
-        "fifteen relations in all - those eleven, and the game's four"
+        19,
+        "nineteen relations in all - those twelve, and the game's seven"
     );
 }
 

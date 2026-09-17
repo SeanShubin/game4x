@@ -242,8 +242,15 @@ fn the_report_says_which_relations_it_compared() {
 
     assert_eq!(
         report.compared,
-        vec!["adjacency", "residency", "territory"],
-        "three of the game's relations are state - a category is vocabulary, and shared"
+        vec![
+            "adjacency",
+            "density",
+            "extractor",
+            "free",
+            "residency",
+            "territory"
+        ],
+        "six of the game's relations are state - a category is vocabulary, and shared"
     );
     assert_eq!(report.test, "the-scout-moves-to-an-adjacent-place");
 }
@@ -260,7 +267,7 @@ fn the_report_reads_as_a_report() {
             report_of("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x")
         ),
         "the-scout-moves-to-an-adjacent-place\n  \
-           compared  adjacency, residency, territory\n  \
+           compared  adjacency, density, extractor, free, residency, territory\n  \
            result    as expected"
     );
 }
