@@ -17,7 +17,19 @@
 //! **There is no `--all`.** Approving everything at once is approving without reading, which is
 //! the one thing the copy exists to make impossible to do by accident.
 //!
-//! `cargo run --example review -- the-scout-moves-to-an-adjacent-place`
+//! **Run it from `prototypes/thin-engine`.** This is its own workspace rather than a member of the
+//! root one, so `-p thin-engine` from the tree root does not find it.
+//!
+//! ```text
+//! cd prototypes/thin-engine
+//! cargo run --example review -- the-scout-moves-to-an-adjacent-place
+//! ```
+//!
+//! Or, from anywhere:
+//!
+//! ```text
+//! cargo run --manifest-path prototypes/thin-engine/Cargo.toml --example review -- <name>
+//! ```
 
 use std::path::PathBuf;
 
