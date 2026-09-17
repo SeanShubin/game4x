@@ -38,3 +38,4 @@
 {binding id:8 clause:clause-4 column:45 input:to}
 
 {literal id:1 clause:clause-4 column:46 value:1}
+{literal id:2 clause:clause-3 column:46 value:1}

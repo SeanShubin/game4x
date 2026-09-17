@@ -16,15 +16,22 @@ fn the_world_renders_in_the_user_facing_format() {
     let rendered = names.all(&common::section("given"));
     println!("{rendered}");
 
+    // **No `{thing ...}` row**, because a category belongs to the ruleset and a `given` holds
+    // state. `things.4x` declares the four, shared by every test.
     assert_eq!(
         rendered,
-        "{territory id:1 name:territory-1}\n\
-         {territory id:2 name:territory-2}\n\
-         {territory id:3 name:territory-3}\n\
-         {thing id:1 name:scout}\n\
-         {adjacency id:1 from:territory-1 to:territory-2}\n\
-         {adjacency id:2 from:territory-2 to:territory-3}\n\
-                  {residency what:scout where:territory-1} -> 1"
+        [
+            "{territory id:1 name:territory-1}",
+            "{territory id:2 name:territory-2}",
+            "{territory id:3 name:territory-3}",
+            "{adjacency id:1 from:territory-1 to:territory-2}",
+            "{adjacency id:2 from:territory-2 to:territory-3}",
+            "{residency what:scout where:territory-1} -> 1",
+        ]
+        .join(
+            "
+"
+        )
     );
 }
 

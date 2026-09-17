@@ -312,7 +312,27 @@ them.
 too, because it never gets as far as moving anything. **Worth knowing before a short dead list is
 read as a tidy one.**
 
+## Green: `remove` and `add` count, where the relation counts
+
+**A counted relation is arithmetic and an identified one is a set.** `{residency what:1 where:1
+quantity:1}` takes one scout from a territory that may hold five; `{adjacency from:1 to:2}` takes
+the row, because there is nothing there to count. **Same two roles, no new words** - the engine
+still knows 33.
+
+- **`take`** finds the row by its description, refuses if there are fewer than asked, decrements,
+  and **deletes the row at zero** - `spec/console.md`: *an entry is never zero*
+- **`put`** finds the row by its description and joins what is there, or adds it where there is
+  none
+
+**`move` gained one row of data and no code.** `{literal id:2 clause:3 column:46 value:1}` is
+what says the remove takes **one**; before it, the clause named no quantity and meant the row.
+
+**A pattern that names no quantity still means the row**, which is what `remove` meant before any
+relation counted. So the change is additive: a clause that says how many gets arithmetic, and one
+that says nothing behaves as it always did.
+
 ## Three reds, and what each one isolates
+
 
 **`move` has two defects and one test would have caught both at once.** Sean, 2026-09-16, chose two
 instead, so a single red names a single repair:

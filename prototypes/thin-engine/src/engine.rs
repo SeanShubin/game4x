@@ -393,7 +393,7 @@ fn apply(
                     }
                 }
                 _ => {
-                    if after.remove(&wanted) == 0 {
+                    if !take(game, &mut after, &wanted) {
                         return Err(Refused::NothingToRemove {
                             rule,
                             wanted: game.schema.write(&wanted),
@@ -407,7 +407,7 @@ fn apply(
         let role = clause.value(ROLE).unwrap_or_default();
         match game.named(ROLE, role).unwrap_or(role) {
             REQUIRE | REMOVE => continue,
-            ADD => after.add(row_of(game, clause, bound, &rule, WHOLE)?),
+            ADD => put(game, &mut after, row_of(game, clause, bound, &rule, WHOLE)?),
             other => {
                 return Err(Refused::NoSuchRole {
                     rule,
@@ -427,6 +427,117 @@ fn apply(
         schema,
         rows: after,
     })
+}
+
+/// The column a relation counts by, where it counts.
+fn counted(game: &Game, row: &Row) -> Option<String> {
+    game.schema
+        .relation(&row.relation)
+        .and_then(|it| it.quantity())
+        .map(str::to_string)
+}
+
+/// Whether `row` carries every value `description` names, in the same relation.
+fn describes(row: &Row, description: &Row) -> bool {
+    row.relation == description.relation
+        && description
+            .values
+            .iter()
+            .all(|(key, value)| row.value(key) == Some(value.as_str()))
+}
+
+/// The same row with its quantity left off - what is left is the description.
+fn description(row: &Row, quantity: &str) -> Row {
+    let mut values = row.values.clone();
+    values.remove(quantity);
+    Row {
+        relation: row.relation.clone(),
+        values,
+    }
+}
+
+/// Take what `wanted` names out of the store.
+///
+/// **A counted relation is arithmetic and an identified one is a set.** `{residency what:1 where:1
+/// quantity:1}` takes one scout from a territory that may hold five; `{adjacency from:1 to:2}`
+/// takes the row, because there is nothing there to count.
+///
+/// **An entry is never zero** - `spec/console.md` - so a row taken down to nothing is removed
+/// rather than written as `-> 0`.
+///
+/// **Taking more than there are is refused**, which is the same answer as taking from nothing:
+/// neither leaves a world the rule described.
+fn take(game: &Game, after: &mut Store, wanted: &Row) -> bool {
+    let Some(quantity) = counted(game, wanted) else {
+        return after.remove(wanted) != 0;
+    };
+    let Some(taking) = wanted
+        .value(&quantity)
+        .and_then(|it| it.parse::<i64>().ok())
+    else {
+        // **A pattern that names no quantity means the row**, which is what `remove` meant
+        // before any relation counted, and what it still means for a clause that says nothing
+        // about how many.
+        return after.remove(wanted) != 0;
+    };
+    let description = description(wanted, &quantity);
+    let Some(there) = after
+        .rows()
+        .iter()
+        .find(|row| describes(row, &description))
+        .cloned()
+    else {
+        return false;
+    };
+    let held: i64 = there
+        .value(&quantity)
+        .and_then(|it| it.parse().ok())
+        .unwrap_or(0);
+    if held < taking {
+        return false;
+    }
+    after.remove(&there);
+    if held > taking {
+        let mut left = there;
+        left.values.insert(quantity, (held - taking).to_string());
+        after.add(left);
+    }
+    true
+}
+
+/// Put `row` into the store, joining what is already there where the relation counts.
+///
+/// **Two of a description are one entry**, so arriving where a scout stands makes two rather than
+/// a second row - which the key would refuse - or nothing at all, which is what an identical row
+/// meeting a set used to do.
+fn put(game: &Game, after: &mut Store, row: Row) {
+    let Some(quantity) = counted(game, &row) else {
+        after.add(row);
+        return;
+    };
+    let adding: i64 = row
+        .value(&quantity)
+        .and_then(|it| it.parse().ok())
+        .unwrap_or(0);
+    let description = description(&row, &quantity);
+    let there = after
+        .rows()
+        .iter()
+        .find(|it| describes(it, &description))
+        .cloned();
+    match there {
+        None => after.add(row),
+        Some(there) => {
+            let held: i64 = there
+                .value(&quantity)
+                .and_then(|it| it.parse().ok())
+                .unwrap_or(0);
+            after.remove(&there);
+            let mut joined = there;
+            joined.values.insert(quantity, (held + adding).to_string());
+            after.add(joined);
+        }
+    }
 }
 
 /// The row a clause is about, with every column taking the value its binding names.

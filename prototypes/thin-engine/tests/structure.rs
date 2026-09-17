@@ -58,13 +58,14 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
 /// one relation and not the other, which is what tells them apart.
 #[test]
 fn a_reference_is_checked_against_the_relation_it_names() {
-    // Thing 2 does not exist; territory 2 does.
+    // **Thing 9 does not exist; territory 2 does.** The ids are past the four `things.4x`
+    // declares, because every category the ruleset has is now a thing that does exist.
     assert_eq!(
-        with("{residency what:2 where:2 quantity:1}").expect_err("there is no thing 2"),
+        with("{residency what:9 where:2 quantity:1}").expect_err("there is no thing 9"),
         Malformed::NoSuchRow {
             relation: "residency".to_string(),
             column: "what".to_string(),
-            value: "2".to_string(),
+            value: "9".to_string(),
             to: "thing".to_string()
         },
         "`what` points at `thing`, and no thing has the key 2"
@@ -74,7 +75,7 @@ fn a_reference_is_checked_against_the_relation_it_names() {
     // residency for thing 1**: `residency` is keyed by `what`, so reusing thing 1 is refused for
     // having a key already taken, and this test would pass on the wrong refusal.
     assert_eq!(
-        with("{thing id:2 name:pioneer}\n{residency what:2 where:9 quantity:1}")
+        with("{thing id:9 name:pioneer}\n{residency what:9 where:9 quantity:1}")
             .expect_err("there is no territory 9"),
         Malformed::NoSuchRow {
             relation: "residency".to_string(),
@@ -87,7 +88,7 @@ fn a_reference_is_checked_against_the_relation_it_names() {
 
     // The control: a row whose references both resolve is accepted, so the two above fail for
     // their own reason rather than because nothing added to this data is ever allowed.
-    with("{thing id:3 name:runner}\n{residency what:3 where:2 quantity:1}")
+    with("{thing id:10 name:runner}\n{residency what:10 where:2 quantity:1}")
         .expect("a second residency resolves both ways");
 }
 
@@ -125,12 +126,15 @@ fn a_command_naming_something_that_does_not_exist_is_refused_by_the_type() {
 /// **A thing is not a territory**, even where both have the key 1.
 #[test]
 fn an_input_is_checked_against_its_own_relation() {
-    // 3 is a territory and is not a thing, so `what` refuses it.
-    let command = thin_engine::notation::read("{move what:3 from:1 to:2}").expect("a command");
-    let why = fire(&before(), &command[0], 1).expect_err("there is no thing 3");
+    // **Territory 9 is a territory and is not a thing, so `what` refuses it.** It is added here
+    // rather than taken from `before()`, because every territory the tests declare is also a
+    // thing now - and a value that is neither would refuse for a weaker reason.
+    let game = with("{territory id:9}").expect("a ninth territory");
+    let command = thin_engine::notation::read("{move what:9 from:1 to:2}").expect("a command");
+    let why = fire(&game, &command[0], 1).expect_err("there is no thing 9");
     assert_eq!(
         format!("{why}"),
-        "`move`.`what` is `3`, and no `thing` has that key"
+        "`move`.`what` is `9`, and no `thing` has that key"
     );
 }
 
@@ -167,15 +171,11 @@ fn the_helper_loads_what_the_script_loads() {
         .filter_map(|row| row.value("file").map(|it| format!("data/foundation/{it}")))
         .collect();
 
-    assert_eq!(
-        script.len(),
-        3,
-        "the script loads three files into the game"
-    );
+    assert_eq!(script.len(), 4, "the script loads four files into the game");
     assert_eq!(
         script,
         common::LOADED.to_vec(),
-        "and they are the three the helpers here assemble, in the same order"
+        "and they are the four the helpers here assemble, in the same order"
     );
 }
 
@@ -256,7 +256,7 @@ fn two_rows_of_one_relation_cannot_share_a_key() {
 
     // The control: a thing with a key of its own is fine, so the refusal above is about the key
     // rather than about adding a thing at all.
-    with("{thing id:2 name:pioneer}").expect("a thing with its own key");
+    with("{thing id:9 name:pioneer}").expect("a thing with its own key");
 }
 
 /// **A description names one row, and a quantity is what made that matter.**
