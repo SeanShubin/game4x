@@ -99,18 +99,33 @@ fn a_test_sets_its_sections_apart() {
 /// **Nothing here names a test**, so adding one is adding a file and this does not change.
 #[test]
 fn every_test_gets_from_its_given_to_its_then() {
+    // **Every red, not the first one.** Panicking inside the loop hid the rest, which is the wrong
+    // shape for red/green/refactor: a run that is meant to be red is a run where you want to see
+    // every test that is.
+    let mut red = Vec::new();
     for file in every_test() {
-        let report = report_of(&file);
-
-        // **Printed as well as asserted**, so `cargo test -- --nocapture` shows the report the
-        // script composed rather than only the fact that it was right.
-        println!("{report}");
-
-        assert!(
-            report.same(),
-            "{file}: the state after the command is not the `then` state:\n{report}"
-        );
+        // **A test that will not run is red too**, and unwrapping here hid every test after the
+        // first one that could not.
+        match run_test(&script_of(&file), &data()) {
+            Err(why) => red.push(format!("{file}\n  refused   {why}")),
+            Ok(report) => {
+                // **Printed as well as asserted**, so `cargo test -- --nocapture` shows the report
+                // the script composed rather than only the fact that it was right.
+                println!("{report}");
+                if !report.same() {
+                    red.push(format!("{file}\n{report}"));
+                }
+            }
+        }
     }
+
+    assert!(
+        red.is_empty(),
+        "{} of {} tests did not reach their `then`:\n\n{}",
+        red.len(),
+        every_test().len(),
+        red.join("\n\n")
+    );
 }
 
 /// **The report says what it compared**, so a green test cannot be one that compared nothing.

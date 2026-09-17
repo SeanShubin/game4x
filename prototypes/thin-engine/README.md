@@ -312,7 +312,47 @@ them.
 too, because it never gets as far as moving anything. **Worth knowing before a short dead list is
 read as a tidy one.**
 
+## Three reds, and what each one isolates
+
+**`move` has two defects and one test would have caught both at once.** Sean, 2026-09-16, chose two
+instead, so a single red names a single repair:
+
+| Test                                          | World              | What it asks                         |
+| --------------------------------------------- | ------------------ | ------------------------------------ |
+| `one-scout-of-two-leaves-and-one-stays`       | 2 here, none there | did leaving take **one** or the row  |
+| `a-scout-arriving-where-one-stands-makes-two` | 1 here, 1 there    | did arriving **join** what was there |
+
+**The suite passed before these because the two defects cancel.** One scout leaving an empty
+destination: removing the whole row takes exactly the one that should go, and adding exactly one
+lands where nothing was. **Right answer, wrong reason, twice** - which is why `residency.quantity`
+had been sitting in the dead-value list.
+
+**Each new test breaks one masking and not the other.** Two in the source makes removing the row
+visibly wrong while the arrival stays correct; one already in the destination makes the arrival
+visibly wrong while the departure stays correct. **Neither passes under half a repair**, checked
+both ways round.
+
+## Every red at once, because that is the shape of red/green
+
+**The harness collected the first failure and stopped.** With three tests red that showed one of
+them, and a test that would not run at all - `build-extractor` - aborted the loop before the others
+were reached. **It reports all of them now**, run failures included, because a run that is meant to
+be red is one where you want to see everything that is.
+
+```text
+3 of 6 tests did not reach their `then`:
+  a-scout-arriving-where-one-stands-makes-two   expected quantity:2, actual quantity:1
+  an-extractor-is-built-from-labor-and-metal    refused: no command is stated with id `build-extractor`
+  one-scout-of-two-leaves-and-one-stays         expected {residency what:1 where:1 quantity:1}
+```
+
+**The mutation suite is red too, and correctly.** It mutates the data and asks whether anything
+notices; its own control checks the *unmutated* data first, and that control is failing because the
+tests are red. **A mutation suite means nothing over a red suite** - that is the control doing its
+job rather than a second defect.
+
 ## What the suite is testing, which is not the engine
+
 
 **Sean, 2026-09-16**: *This suite is testing one of many sets of possible rules supported by the
 game engine. We are directly testing the interface that the game user interface is going to use.

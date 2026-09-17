@@ -1,0 +1,22 @@
+# A scout moving to where a scout already stands makes two of them.
+#
+# **This is the `add` half on its own.** One leaves a territory that held one, so the row going is
+# right either way - what this asks is whether arriving joined what was there.
+
+{test name:a-scout-arriving-where-one-stands-makes-two}
+
+{given}
+{territory id:1 name:territory-1}
+{territory id:2 name:territory-2}
+{adjacency id:1 from:territory-1 to:territory-2}
+{residency what:scout where:territory-1} -> 1
+{residency what:scout where:territory-2} -> 1
+
+{when}
+{move what:scout from:territory-1 to:territory-2}
+
+{then}
+{territory id:1 name:territory-1}
+{territory id:2 name:territory-2}
+{adjacency id:1 from:territory-1 to:territory-2}
+{residency what:scout where:territory-2} -> 2

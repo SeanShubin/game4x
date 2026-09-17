@@ -59,10 +59,10 @@ fn originals() -> BTreeMap<String, String> {
             all.insert(name, std::fs::read_to_string(&file).expect("a file"));
         }
     }
-    // **Five shared files and at least one test**, rather than a number every new test would move.
+    // **Six shared files and at least one test**, rather than a number every new test would move.
     // Sean, 2026-09-15: *I intend to have one test per file.*
     let tests = all.keys().filter(|it| it.starts_with("tests/")).count();
-    assert_eq!(all.len() - tests, 5, "five shared files: {:?}", all.keys());
+    assert_eq!(all.len() - tests, 6, "six shared files: {:?}", all.keys());
     assert!(tests > 0, "no tests, so mutating proves nothing");
 
     all
