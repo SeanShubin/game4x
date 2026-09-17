@@ -2117,3 +2117,51 @@ not load, and a test whose world does not load has no outcome to state.
 **And three tests state a readiness they do not spend**, each a refusal that stops before reaching
 it or refuses on it either way. They are there so a reader can see which of the two costs the test
 is named for, and the line in `DELETABLE` is the price of that said rather than trimmed.
+
+
+## What `{refused}` names, and why it is compared exactly
+
+Sean, 2026-09-17: *What does the refused section actually list? Are they the commands that were
+refused to carry out, the state that refused to come into existance, or the row that was missing
+that cause the refusal?*
+
+**The third.** Not the command, and not a state - a refused command leaves none, because the fold
+stops and the world before it is discarded.
+
+**Three refusals produce a row; everything else produces prose no row can equal.** A test naming
+one of those others is red however right it looks.
+
+| Refusal           | The row                                       | What its quantity is                                   |
+| ----------------- | --------------------------------------------- | ------------------------------------------------------ |
+| `NotSo`           | `{adjacency from:territory-1 to:territory-3}` | none - `adjacency` is not counted                      |
+| `NothingToRemove` | `{working where:territory-1 what:food} -> 1`  | what the **rule** tried to take, a literal in the rule |
+| `Overfull`        | `{deposit where:territory-1 what:food} -> 2`  | what the **world** would have needed, derived from it  |
+
+**The last two read alike and behave differently**, which is worth knowing when one goes red. A
+wrong number in a `NothingToRemove` row means the rule's literal was mis-transcribed; a wrong
+number in an `Overfull` row usually means the `given` moved underneath it.
+
+**And `Overfull` is not a missing row at all.** The deposit exists, with room for one. What the
+test names is the row that would have had to be there instead - *there is no deposit here with
+room for two* - which is a different statement from *this row is absent*, though the section holds
+both.
+
+## Exact, deliberately
+
+**The comparison is string equality between the row the test writes and the row the refusal
+produces.** Measured three ways on `an-extractor-cannot-be-built-where-the-deposits-are-taken`,
+whose refusal says `-> 2`: writing `-> 3` is red, writing `-> 1` is red, and omitting the quantity
+is red. **There is no subset matching, no threshold, and no way to say *never mind the number*.**
+
+**The loosening is available and was not taken.** Letting a `{refused}` row omit the quantity and
+match on the rest would make the `Overfull` case survive an edit to the test's `given`. Sean,
+2026-09-17: *i will keep it exact for now unless i find a reason not to.* **Looser matching is how
+a test starts passing for a reason nobody chose**, and the cost of exactness is re-deriving a
+number that a check will name for you when it changes.
+
+**One thing it deliberately does not do**, and Sean's reason for leaving it: `{refused}` is the
+same whether the first command of a `when` was turned away or the second. He, on whether to add
+it: *I don't need to say which command was refused on a multi line command, don't want to
+encorage too many lines in the test.* **The cost is real and is written down** -
+`an-extractor-cannot-be-worked-twice-on-one-readiness` cannot tell *refused on the second* from
+*refused on the first*, and what pins it is the test beside it showing one work succeeding.
