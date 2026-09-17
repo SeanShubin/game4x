@@ -171,8 +171,17 @@ fn main() {
         } else {
             format!("<p class=\"why\">{why}</p>\n")
         };
+        // **Open when red and folded when not**, so a run that is mostly green opens on what went
+        // wrong. `<details>` is plain HTML and needs no script, which is what lets the page open
+        // from disk - the same reason `R-9` gives for a report that filters being a page rather
+        // than a click.
+        let open = if matches!(outcome, Outcome::Passed) {
+            ""
+        } else {
+            " open"
+        };
         cards.push_str(&format!(
-            "<section class=\"test {class}\">\n<h2>{stem} <span class=\"badge {class}\">{badge}</span></h2>\n{said}<pre>{body}</pre>\n</section>\n"
+            "<details class=\"test {class}\"{open}>\n<summary><span class=\"name\">{stem}</span> <span class=\"badge {class}\">{badge}</span></summary>\n{said}<pre>{body}</pre>\n</details>\n"
         ));
     }
 
@@ -190,14 +199,13 @@ fn main() {
 const STYLE: &str = r#"
 :root { color-scheme: light dark }
 body {
-  font: 15px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
-  margin: 2rem auto; max-width: 62rem; padding: 0 1rem;
+  font: 14px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace;
+  margin: 1.5rem auto; max-width: 62rem; padding: 0 1rem;
 }
-h1 { font-size: 1.3rem; margin: 0 0 .25rem }
-h2 { font-size: 1rem; margin: 0 0 .6rem; display: flex; gap: .6rem; align-items: baseline }
-p { margin: .4rem 0 }
-.tally { font-size: 1rem }
-.note { opacity: .7; font-size: .85rem; margin-bottom: 1.5rem }
+h1 { font-size: 1.2rem; margin: 0 0 .2rem }
+p { margin: .3rem 0 }
+.tally { font-size: .95rem }
+.note { opacity: .7; font-size: .8rem; margin-bottom: 1rem }
 .ok { color: rgb(30 130 60) }
 .red { color: rgb(190 50 50) }
 @media (prefers-color-scheme: dark) {
@@ -207,22 +215,26 @@ p { margin: .4rem 0 }
 .test {
   border: 1px solid rgba(127,127,127,.35);
   border-left: 4px solid rgba(127,127,127,.5);
-  border-radius: .3rem; padding: .9rem 1rem; margin: 1rem 0;
+  border-radius: .3rem; padding: .5rem .7rem; margin: .5rem 0;
 }
 .test.red { border-left-color: rgb(190 50 50) }
 .test.ok { border-left-color: rgb(30 130 60) }
+summary { cursor: pointer; font-weight: 600 }
+summary::marker { opacity: .5 }
+details[open] > summary { margin-bottom: .45rem }
+.name { font-weight: 600 }
 .badge {
-  font-size: .75rem; font-weight: 600; letter-spacing: .02em;
-  padding: .1rem .45rem; border-radius: .2rem; border: 1px solid currentColor;
+  font-size: .72rem; font-weight: 600; letter-spacing: .02em;
+  padding: .05rem .4rem; border-radius: .2rem; border: 1px solid currentColor;
 }
-.why { font-size: .9rem; margin: 0 0 .6rem }
+.why { font-size: .85rem; margin: 0 0 .45rem }
 pre {
   margin: 0; overflow-x: auto; background: rgba(127,127,127,.08);
-  padding: .7rem .9rem; border-radius: .25rem;
+  padding: .45rem .6rem; border-radius: .25rem; line-height: 1.3;
 }
 pre span { display: block; padding: 0 .3rem; border-left: 3px solid transparent }
 .said { opacity: .55 }
-.gap { min-height: .6em }
+.gap { height: .45em }
 .mark { font-weight: 700 }
 .missing { background: rgba(200,40,40,.16); border-left-color: rgb(190 50 50) }
 .missing::after { content: " <- wanted, not got"; opacity: .7; font-size: .8em }
