@@ -1,0 +1,25 @@
+# One extractor with one work in it, worked twice, and the second time there is nothing left.
+#
+# **This is the hole the test beside it had.** `work` required an extractor and consumed a labor,
+# so an extractor could be worked as often as there was labor for it - Sean, 2026-09-17, reading
+# `a-food-extractor-and-a-metal-extractor-do-not-interfere`: *an extractor can be used as many
+# times as we have labor for.*
+#
+# **There is labor for the second one**, which is what makes this about the readiness and not
+# about the labor.
+
+{test name:an-extractor-cannot-be-worked-twice-on-one-readiness}
+
+{given}
+{territory id:1 name:territory-1}
+{deposit where:territory-1 what:food density:6} -> 1
+{extractor where:territory-1 what:food} -> 1
+{working where:territory-1 what:food} -> 1
+{labor where:territory-1} -> 2
+
+{when}
+{work where:territory-1 what:food}
+{work where:territory-1 what:food}
+
+{refused}
+{working where:territory-1 what:food} -> 1

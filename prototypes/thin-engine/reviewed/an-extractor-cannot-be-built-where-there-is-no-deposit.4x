@@ -9,8 +9,8 @@
 
 {given}
 {territory id:1 name:territory-1}
-{residency what:labor where:territory-1} -> 1
-{residency what:metal where:territory-1} -> 1
+{labor where:territory-1} -> 1
+{metal where:territory-1} -> 1
 
 {when}
 {build-extractor where:territory-1 what:food}
