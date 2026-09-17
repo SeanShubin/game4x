@@ -34,7 +34,7 @@
 
 use std::collections::BTreeMap;
 
-use crate::engine::{Game, Refused, fire};
+use crate::engine::{Effect, Game, Refused, play};
 use crate::notation::{Row, Unreadable, read};
 use crate::schema::{Malformed, Schema};
 
@@ -147,6 +147,12 @@ struct Difference {
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Report {
     pub test: String,
+    /// What each command took and made, in the order they were played.
+    ///
+    /// **The effects half of (old state, commands) -> (new state, effects).** A report that only
+    /// carried the difference between two states would leave a reader to infer what happened;
+    /// this is what happened, said by the thing that did it.
+    pub effects: Vec<Effect>,
     /// The relations compared, which is every one the schema marks as state.
     pub compared: Vec<String>,
     /// Rows the expected state has and the actual one does not.
@@ -347,14 +353,12 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
         return Err(Failed::BothEndings { test: name });
     }
 
-    let mut actual = before.clone();
-    for command in &when {
-        // **A command without a `repeat` fires once** - `spec/console.md`. Nothing here writes
-        // one yet, and writing one means a column in the foundation and `-> n` in the friendly
-        // form, exactly as a quantity is written.
-        match fire(&actual, command, 1) {
-            Ok(after) => actual = after,
-            Err(why) => {
+    // **(old state, commands) -> (new state, effects)**, which is the whole of what a `when` is.
+    // A command without a `repeat` fires once - `spec/console.md`.
+    let (actual, effects) = match play(&before, &when) {
+        Ok((after, effects)) => (after, effects),
+        Err(why) => {
+            {
                 // **A refusal is the answer when a test asked for one**, and the failure
                 // otherwise. `{refused}` names the row the rule required and the world did not
                 // have, which is what `Refused::NotSo` carries.
@@ -371,6 +375,7 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
                     .collect();
                 return Ok(Report {
                     test: name,
+                    effects: Vec::new(),
                     compared: vec!["the refusal".to_string()],
                     missing: said.iter().filter(|it| **it != wanted).cloned().collect(),
                     extra: if said.contains(&wanted) {
@@ -381,13 +386,14 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
                 });
             }
         }
-    }
+    };
 
     // **A test that asked to be refused and was not is not as expected**, and says what it wanted
     // rather than passing because nothing went wrong.
     if !refused.is_empty() {
         return Ok(Report {
             test: name,
+            effects,
             compared: vec!["the refusal".to_string()],
             missing: refused
                 .iter()
@@ -400,6 +406,7 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
     let difference = compare(&actual, &then)?;
     Ok(Report {
         test: name,
+        effects,
         compared: difference.compared,
         missing: difference.missing,
         extra: difference.extra,

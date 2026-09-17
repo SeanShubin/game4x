@@ -1,0 +1,179 @@
+The thin engine, per test: the world it starts in, what each command took and made, and
+the world it leaves. (old state, commands) -> (new state, effects).
+
+==============================================================================
+a-scout-arriving-where-one-stands-makes-two
+
+old state
+  - root
+    - adjacency
+      - {adjacency id:1 from:territory-1 to:territory-2}
+    - residency
+      - {residency what:scout where:territory-1} -> 1
+      - {residency what:scout where:territory-2} -> 1
+    - territory
+      - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
+
+command  {move what:scout from:territory-1 to:territory-2}
+  took   {residency what:scout where:territory-1} -> 1
+  made   {residency what:scout where:territory-2} -> 1
+
+new state
+  - root
+    - adjacency
+      - {adjacency id:1 from:territory-1 to:territory-2}
+    - residency
+      - {residency what:scout where:territory-2} -> 2
+    - territory
+      - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
+
+as expected
+
+==============================================================================
+an-extractor-is-built-from-labor-and-metal
+
+old state
+  - root
+    - adjacency
+    - residency
+      - {residency what:labor where:territory-1} -> 1
+      - {residency what:metal where:territory-1} -> 1
+    - territory
+      - {territory id:1 name:territory-1}
+
+command  {build-extractor where:territory-1}
+  took   {residency what:labor where:territory-1} -> 1
+  took   {residency what:metal where:territory-1} -> 1
+  made   {residency what:extractor where:territory-1} -> 1
+
+new state
+  - root
+    - adjacency
+    - residency
+      - {residency what:extractor where:territory-1} -> 1
+    - territory
+      - {territory id:1 name:territory-1}
+
+as expected
+
+==============================================================================
+one-scout-of-two-leaves-and-one-stays
+
+old state
+  - root
+    - adjacency
+      - {adjacency id:1 from:territory-1 to:territory-2}
+    - residency
+      - {residency what:scout where:territory-1} -> 2
+    - territory
+      - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
+
+command  {move what:scout from:territory-1 to:territory-2}
+  took   {residency what:scout where:territory-1} -> 1
+  made   {residency what:scout where:territory-2} -> 1
+
+new state
+  - root
+    - adjacency
+      - {adjacency id:1 from:territory-1 to:territory-2}
+    - residency
+      - {residency what:scout where:territory-1} -> 1
+      - {residency what:scout where:territory-2} -> 1
+    - territory
+      - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
+
+as expected
+
+==============================================================================
+the-scout-cannot-cross-where-there-is-no-border
+
+old state
+  - root
+    - adjacency
+      - {adjacency id:1 from:territory-1 to:territory-2}
+      - {adjacency id:2 from:territory-2 to:territory-3}
+    - residency
+      - {residency what:scout where:territory-1} -> 1
+    - territory
+      - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
+      - {territory id:3 name:territory-3}
+
+refused
+  `move` needs {adjacency from:1 to:3} and it is not
+
+as expected
+
+==============================================================================
+the-scout-crosses-two-borders
+
+old state
+  - root
+    - adjacency
+      - {adjacency id:1 from:territory-1 to:territory-2}
+      - {adjacency id:2 from:territory-2 to:territory-3}
+    - residency
+      - {residency what:scout where:territory-1} -> 1
+    - territory
+      - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
+      - {territory id:3 name:territory-3}
+
+command  {move what:scout from:territory-1 to:territory-2}
+  took   {residency what:scout where:territory-1} -> 1
+  made   {residency what:scout where:territory-2} -> 1
+
+command  {move what:scout from:territory-2 to:territory-3}
+  took   {residency what:scout where:territory-2} -> 1
+  made   {residency what:scout where:territory-3} -> 1
+
+new state
+  - root
+    - adjacency
+      - {adjacency id:1 from:territory-1 to:territory-2}
+      - {adjacency id:2 from:territory-2 to:territory-3}
+    - residency
+      - {residency what:scout where:territory-3} -> 1
+    - territory
+      - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
+      - {territory id:3 name:territory-3}
+
+as expected
+
+==============================================================================
+the-scout-moves-to-an-adjacent-place
+
+old state
+  - root
+    - adjacency
+      - {adjacency id:1 from:territory-1 to:territory-2}
+      - {adjacency id:2 from:territory-2 to:territory-3}
+    - residency
+      - {residency what:scout where:territory-1} -> 1
+    - territory
+      - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
+      - {territory id:3 name:territory-3}
+
+command  {move what:scout from:territory-1 to:territory-2}
+  took   {residency what:scout where:territory-1} -> 1
+  made   {residency what:scout where:territory-2} -> 1
+
+new state
+  - root
+    - adjacency
+      - {adjacency id:1 from:territory-1 to:territory-2}
+      - {adjacency id:2 from:territory-2 to:territory-3}
+    - residency
+      - {residency what:scout where:territory-2} -> 1
+    - territory
+      - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
+      - {territory id:3 name:territory-3}
+
+as expected

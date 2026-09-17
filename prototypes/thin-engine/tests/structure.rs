@@ -116,7 +116,9 @@ fn a_row_states_only_what_its_relation_declares() {
 #[test]
 fn a_command_naming_something_that_does_not_exist_is_refused_by_the_type() {
     let command = thin_engine::notation::read("{move what:1 from:1 to:9}").expect("a command");
-    let why = fire(&before(), &command[0], 1).expect_err("there is no territory 9");
+    let why = fire(&before(), &command[0], 1)
+        .map(|(game, _)| game)
+        .expect_err("there is no territory 9");
     assert_eq!(
         format!("{why}"),
         "`move`.`to` is `9`, and no `territory` has that key"
@@ -131,7 +133,9 @@ fn an_input_is_checked_against_its_own_relation() {
     // thing now - and a value that is neither would refuse for a weaker reason.
     let game = with("{territory id:9}").expect("a ninth territory");
     let command = thin_engine::notation::read("{move what:9 from:1 to:2}").expect("a command");
-    let why = fire(&game, &command[0], 1).expect_err("there is no thing 9");
+    let why = fire(&game, &command[0], 1)
+        .map(|(game, _)| game)
+        .expect_err("there is no thing 9");
     assert_eq!(
         format!("{why}"),
         "`move`.`what` is `9`, and no `thing` has that key"
@@ -146,7 +150,9 @@ fn an_input_is_checked_against_its_own_relation() {
 #[test]
 fn a_command_that_is_not_stated_is_not_a_command() {
     let command = thin_engine::notation::read("{fly what:1 from:1 to:2}").expect("a command");
-    let why = fire(&before(), &command[0], 1).expect_err("nothing declares a rule `fly`");
+    let why = fire(&before(), &command[0], 1)
+        .map(|(game, _)| game)
+        .expect_err("nothing declares a rule `fly`");
     assert_eq!(format!("{why}"), "no command is stated with id `fly`");
 }
 
@@ -229,7 +235,7 @@ fn only_the_moves_the_world_allows_are_offered() {
     // directions, or read the one that is stated from either end - is a modelling decision and
     // not this test's. This line goes red when it is made, which is what it is for.
     let command = thin_engine::notation::read("{move what:1 from:1 to:2}").expect("a command");
-    let moved = fire(&game, &command[0], 1).expect("the scout moves");
+    let (moved, _) = fire(&game, &command[0], 1).expect("the scout moves");
     let after: Vec<String> = thin_engine::engine::offered(&moved)
         .iter()
         .map(thin_engine::notation::write)

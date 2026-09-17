@@ -40,13 +40,12 @@ const INPUT: &str = "input";
 const CLAUSE: &str = "clause";
 const BINDING: &str = "binding";
 const LITERAL: &str = "literal";
-const COMMAND: &str = "command";
-const ARGUMENT: &str = "argument";
 const ID: &str = "id";
 const NAME: &str = "name";
 const SEQ: &str = "seq";
 const OF: &str = "of";
 const RELATION: &str = "relation";
+const STATE: &str = "state";
 const COLUMN: &str = "column";
 const VALUE: &str = "value";
 const REQUIRE: &str = "require";
@@ -168,6 +167,43 @@ impl Game {
         out
     }
 
+    /// The world as indented text: one block per relation the schema marks as state.
+    ///
+    /// **Sean, 2026-09-16**: *I also like to define an indented text form of the state.* This is
+    /// the plainest one the data can say without being told anything new - **grouped, not nested**.
+    ///
+    /// **Nesting would need one thing nobody has declared**: which column of a relation holds the
+    /// thing that contains it. `residency` has `what` and `where` and both are references, and
+    /// nothing says `where` is the container - so a tree would be this lane guessing which of two
+    /// columns to hang the row from.
+    pub fn outline(&self) -> String {
+        let mut out = String::from("- root\n");
+        let mut of_state: Vec<&str> = self
+            .rows
+            .rows()
+            .iter()
+            .filter(|row| row.relation == STATE)
+            .filter_map(|row| row.value(RELATION))
+            .filter_map(|id| self.named(RELATION, id))
+            .collect();
+        of_state.sort_unstable();
+        for relation in of_state {
+            out.push_str(&format!("  - {relation}\n"));
+            let mut written: Vec<String> = self
+                .rows
+                .rows()
+                .iter()
+                .filter(|row| row.relation == relation)
+                .map(|row| self.schema.write(row))
+                .collect();
+            written.sort();
+            for row in written {
+                out.push_str(&format!("    - {row}\n"));
+            }
+        }
+        out
+    }
+
     /// The `name` of the row of `relation` whose id is `id`.
     ///
     /// **The engine branches on names and the data references by ids**, so this is where the two
@@ -286,68 +322,6 @@ fn check(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
     Ok(())
 }
 
-/// Run one of the commands the data states, and give back the game it leaves.
-///
-/// **A new game rather than an edit in place**, so a refusal half way through applying leaves
-/// nothing half applied. The caller either has the game after the command or the game before it,
-/// and never one in between. **The signature is the whole of that guarantee**, so a test asserting
-/// it would pass without the property; `tests/first_test.rs` asserts the observable half and says
-/// so.
-pub fn run(game: &Game, command: &str) -> Result<Game, Refused> {
-    let Some(stated) = game
-        .of_relation(COMMAND)
-        .into_iter()
-        .find(|row| row.value(ID) == Some(command))
-    else {
-        return Err(Refused::NoSuchCommand {
-            id: command.to_string(),
-        });
-    };
-    let of_rule = stated.value(RULE).unwrap_or_default().to_string();
-    // **The id identifies and the name is what a refusal says.** Every filter below is by id;
-    // this is only ever read into a message.
-    let rule = game.named(RULE, &of_rule).unwrap_or(&of_rule).to_string();
-
-    // **An argument per declared input, each of the input's declared type.** A value the structure
-    // cannot place is refused here, which is why no rule says *the destination exists*.
-    let arguments: BTreeMap<&str, &str> = game
-        .of_relation(ARGUMENT)
-        .into_iter()
-        .filter(|row| row.value(COMMAND) == Some(command))
-        .filter_map(|row| Some((row.value(INPUT)?, row.value(VALUE)?)))
-        .collect();
-
-    let mut inputs: Vec<&Row> = game
-        .of_relation(INPUT)
-        .into_iter()
-        .filter(|row| row.value(RULE) == Some(of_rule.as_str()))
-        .collect();
-    inputs.sort_by_key(|row| row.value(SEQ).unwrap_or_default().to_string());
-
-    let mut bound: BTreeMap<String, String> = BTreeMap::new();
-    for input in inputs {
-        let id = input.value(ID).unwrap_or_default();
-        let named = input.value(NAME).unwrap_or_default().to_string();
-        let Some(given) = arguments.get(id) else {
-            return Err(Refused::Missing { rule, input: named });
-        };
-        // `of` is a relation's id; `has_key` wants its name.
-        let of = input.value(OF).unwrap_or_default();
-        let of = game.named(RELATION, of).unwrap_or(of).to_string();
-        if !game.has_key(&of, given) {
-            return Err(Refused::WrongType {
-                rule,
-                input: named,
-                value: (*given).to_string(),
-                of,
-            });
-        }
-        bound.insert(id.to_string(), (*given).to_string());
-    }
-
-    apply(game, &of_rule, rule, &bound)
-}
-
 /// Fire a rule under a binding of its inputs, and give back the game it leaves.
 ///
 /// **Split out of [`run`] so that [`offered`] can ask whether a binding would be refused without
@@ -359,6 +333,7 @@ fn apply(
     of_rule: &str,
     rule: String,
     bound: &BTreeMap<String, String>,
+    effect: &mut Effect,
 ) -> Result<Game, Refused> {
     let mut clauses: Vec<&Row> = game
         .of_relation(CLAUSE)
@@ -393,7 +368,7 @@ fn apply(
                     }
                 }
                 _ => {
-                    if !take(game, &mut after, &wanted) {
+                    if !take(game, &mut after, &wanted, effect) {
                         return Err(Refused::NothingToRemove {
                             rule,
                             wanted: game.schema.write(&wanted),
@@ -407,7 +382,12 @@ fn apply(
         let role = clause.value(ROLE).unwrap_or_default();
         match game.named(ROLE, role).unwrap_or(role) {
             REQUIRE | REMOVE => continue,
-            ADD => put(game, &mut after, row_of(game, clause, bound, &rule, WHOLE)?),
+            ADD => put(
+                game,
+                &mut after,
+                row_of(game, clause, bound, &rule, WHOLE)?,
+                effect,
+            ),
             other => {
                 return Err(Refused::NoSuchRole {
                     rule,
@@ -467,9 +447,13 @@ fn description(row: &Row, quantity: &str) -> Row {
 ///
 /// **Taking more than there are is refused**, which is the same answer as taking from nothing:
 /// neither leaves a world the rule described.
-fn take(game: &Game, after: &mut Store, wanted: &Row) -> bool {
+fn take(game: &Game, after: &mut Store, wanted: &Row, effect: &mut Effect) -> bool {
     let Some(quantity) = counted(game, wanted) else {
-        return after.remove(wanted) != 0;
+        if after.remove(wanted) == 0 {
+            return false;
+        }
+        effect.took.push(wanted.clone());
+        return true;
     };
     let Some(taking) = wanted
         .value(&quantity)
@@ -478,7 +462,11 @@ fn take(game: &Game, after: &mut Store, wanted: &Row) -> bool {
         // **A pattern that names no quantity means the row**, which is what `remove` meant
         // before any relation counted, and what it still means for a clause that says nothing
         // about how many.
-        return after.remove(wanted) != 0;
+        if after.remove(wanted) == 0 {
+            return false;
+        }
+        effect.took.push(wanted.clone());
+        return true;
     };
     let description = description(wanted, &quantity);
     let Some(there) = after
@@ -499,9 +487,15 @@ fn take(game: &Game, after: &mut Store, wanted: &Row) -> bool {
     after.remove(&there);
     if held > taking {
         let mut left = there;
-        left.values.insert(quantity, (held - taking).to_string());
+        left.values
+            .insert(quantity.clone(), (held - taking).to_string());
         after.add(left);
     }
+    // **What the command took, not what the store now holds.** One scout of five leaving is one
+    // taken, and the four are not an effect of anything.
+    let mut took = description;
+    took.values.insert(quantity, taking.to_string());
+    effect.took.push(took);
     true
 }
 
@@ -510,8 +504,9 @@ fn take(game: &Game, after: &mut Store, wanted: &Row) -> bool {
 /// **Two of a description are one entry**, so arriving where a scout stands makes two rather than
 /// a second row - which the key would refuse - or nothing at all, which is what an identical row
 /// meeting a set used to do.
-fn put(game: &Game, after: &mut Store, row: Row) {
+fn put(game: &Game, after: &mut Store, row: Row, effect: &mut Effect) {
     let Some(quantity) = counted(game, &row) else {
+        effect.made.push(row.clone());
         after.add(row);
         return;
     };
@@ -525,6 +520,7 @@ fn put(game: &Game, after: &mut Store, row: Row) {
         .iter()
         .find(|it| describes(it, &description))
         .cloned();
+    effect.made.push(row.clone());
     match there {
         None => after.add(row),
         Some(there) => {
@@ -618,6 +614,42 @@ fn row_of(
     Ok(Row { relation, values })
 }
 
+/// What one command took out of the world and what it made.
+///
+/// **Sean, 2026-09-16**: *I like to implement my programs as some form of (old-state, commands) ->
+/// (new-state, effects), sometimes omitting effects depending on the architecture.* **This is the
+/// effects half**, and it was there all along without a name - `take` and `put` knew what they had
+/// done and nobody asked them.
+///
+/// **It says what the command did, not what the world now holds.** One scout of five leaving is
+/// one taken; the four that stayed are nobody's effect.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Effect {
+    /// The command that caused it, as the player wrote it.
+    pub command: Row,
+    pub took: Vec<Row>,
+    pub made: Vec<Row>,
+}
+
+/// Play a list of commands against a world: **(old state, commands) -> (new state, effects)**.
+///
+/// **The whole of what the engine does, in one signature.** Everything else here is how. A refusal
+/// stops the fold and gives back neither a world nor a list, because a command that was refused
+/// leaves no state to have arrived at.
+///
+/// **One effect per command, in the order they were played**, so reading the list beside the two
+/// states is reading what happened rather than inferring it from the difference.
+pub fn play(game: &Game, commands: &[Row]) -> Result<(Game, Vec<Effect>), Refused> {
+    let mut after = game.clone();
+    let mut effects = Vec::new();
+    for command in commands {
+        let (next, effect) = fire(&after, command, 1)?;
+        after = next;
+        effects.push(effect);
+    }
+    Ok((after, effects))
+}
+
 /// Fire a command written as a rule-named row: `{move what:1 from:1 to:2}`.
 ///
 /// **The row is the command**, so there is no `{command ...}` and no `{argument ...}` to mint and
@@ -627,7 +659,7 @@ fn row_of(
 ///
 /// **`repeat` is how many times it fires** - `spec/console.md`: *A command may carry a `repeat`,
 /// which is how many times it fires.* And: *a command without one fires once.*
-pub fn fire(game: &Game, command: &Row, repeat: usize) -> Result<Game, Refused> {
+pub fn fire(game: &Game, command: &Row, repeat: usize) -> Result<(Game, Effect), Refused> {
     let Some(rule) = game
         .of_relation(RULE)
         .into_iter()
@@ -670,10 +702,15 @@ pub fn fire(game: &Game, command: &Row, repeat: usize) -> Result<Game, Refused> 
     }
 
     let mut after = game.clone();
+    let mut effect = Effect {
+        command: command.clone(),
+        took: Vec::new(),
+        made: Vec::new(),
+    };
     for _ in 0..repeat {
-        after = apply(&after, &of_rule, named.clone(), &bound)?;
+        after = apply(&after, &of_rule, named.clone(), &bound, &mut effect)?;
     }
-    Ok(after)
+    Ok((after, effect))
 }
 
 /// Every command the player could fire right now, as rows in the friendly command form.
@@ -733,7 +770,17 @@ pub fn offered(game: &Game) -> Vec<Row> {
                 .map(|(id, _, _)| id.clone())
                 .zip(bound.iter().cloned())
                 .collect();
-            if apply(game, of_rule, named.clone(), &by_id).is_ok() {
+            // **Offering does not care what a command would do**, only that it could - so the
+            // effect it would have is built and dropped.
+            let mut aside = Effect {
+                command: Row {
+                    relation: named.clone(),
+                    values: BTreeMap::new(),
+                },
+                took: Vec::new(),
+                made: Vec::new(),
+            };
+            if apply(game, of_rule, named.clone(), &by_id, &mut aside).is_ok() {
                 out.push(Row {
                     relation: named.clone(),
                     values: choices

@@ -84,6 +84,13 @@ fn main() {
     }
 
     let mut cards = String::new();
+    // **The diffable sibling** - `R-9`: every generated view has one. It is also the log:
+    // (old state, commands) -> (new state, effects), written out per test.
+    let mut log = String::from(
+        "The thin engine, per test: the world it starts in, what each command took and made, and
+the world it leaves. (old state, commands) -> (new state, effects).
+",
+    );
     let (mut passed, mut red) = (0usize, 0usize);
 
     for file in every_test() {
@@ -104,6 +111,34 @@ fn main() {
             }
         };
 
+        // **The world the test starts in**, built the way `run_test` builds it so the log shows
+        // what the run saw rather than what the file said.
+        let mut world = shared.clone();
+        let mut inside = false;
+        for row in rows(&format!("data/foundation/tests/{file}")) {
+            if matches!(row.relation.as_str(), "given" | "when" | "then" | "refused") {
+                inside = row.relation == "given";
+                continue;
+            }
+            if inside {
+                world.push(row);
+            }
+        }
+        let before = thin_engine::engine::Game::of(world).ok();
+
+        // **The commands the `when` states**, which is the middle of the fold.
+        let mut commands = Vec::new();
+        let mut inside = false;
+        for row in rows(&format!("data/foundation/tests/{file}")) {
+            if matches!(row.relation.as_str(), "given" | "when" | "then" | "refused") {
+                inside = row.relation == "when";
+                continue;
+            }
+            if inside {
+                commands.push(row);
+            }
+        }
+
         let outcome = match run_test(&script, &data) {
             Err(why) => Outcome::Refused(format!("{why}")),
             Ok(report) if report.same() => Outcome::Passed,
@@ -112,6 +147,129 @@ fn main() {
                 extra: report.extra.iter().map(|it| friendly(it)).collect(),
             },
         };
+
+        // **(old state, commands) -> (new state, effects), written out.** The log calls `play`
+        // itself rather than reading it back off a report, so what it shows is the fold rather
+        // than a reconstruction of it.
+        let named = |outline: &str| -> String {
+            outline
+                .lines()
+                .map(|line| match line.trim().strip_prefix("- {") {
+                    Some(_) => {
+                        let at = line.find("- ").unwrap_or(0) + 2;
+                        format!("{}{}", &line[..at], friendly(line[at..].trim()))
+                    }
+                    None => line.to_string(),
+                })
+                .collect::<Vec<String>>()
+                .join(
+                    "
+",
+                )
+        };
+
+        log.push_str(&format!(
+            "
+{}
+{stem}
+",
+            "=".repeat(78)
+        ));
+        match &before {
+            None => log.push_str(
+                "
+  the given world does not fit the structure
+",
+            ),
+            Some(before) => {
+                log.push_str(
+                    "
+old state
+",
+                );
+                for line in named(&before.outline()).lines() {
+                    log.push_str(&format!(
+                        "  {line}
+"
+                    ));
+                }
+                match thin_engine::engine::play(before, &commands) {
+                    Err(why) => log.push_str(&format!(
+                        "
+refused
+  {why}
+"
+                    )),
+                    Ok((after, effects)) => {
+                        for effect in &effects {
+                            log.push_str(&format!(
+                                "
+command  {}
+",
+                                names.row(&effect.command)
+                            ));
+                            for row in &effect.took {
+                                log.push_str(&format!(
+                                    "  took   {}
+",
+                                    names.row(row)
+                                ));
+                            }
+                            for row in &effect.made {
+                                log.push_str(&format!(
+                                    "  made   {}
+",
+                                    names.row(row)
+                                ));
+                            }
+                        }
+                        log.push_str(
+                            "
+new state
+",
+                        );
+                        for line in named(&after.outline()).lines() {
+                            log.push_str(&format!(
+                                "  {line}
+"
+                            ));
+                        }
+                    }
+                }
+            }
+        }
+        log.push_str(&match &outcome {
+            Outcome::Passed => "
+as expected
+"
+            .to_string(),
+            Outcome::Refused(said) => format!(
+                "
+not as expected
+  refused  {said}
+"
+            ),
+            Outcome::Differed { missing, extra } => {
+                let mut said = String::from(
+                    "
+not as expected
+",
+                );
+                for row in missing {
+                    said.push_str(&format!(
+                        "  wanted   {row}
+"
+                    ));
+                }
+                for row in extra {
+                    said.push_str(&format!(
+                        "  got      {row}
+"
+                    ));
+                }
+                said
+            }
+        });
 
         let (badge, class, why) = match &outcome {
             Outcome::Passed => ("as expected", "ok", String::new()),
@@ -191,7 +349,8 @@ fn main() {
         "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>thin-engine tests</title>\n<style>{STYLE}</style>\n</head>\n<body>\n<h1>thin-engine</h1>\n<p class=\"tally\"><strong>{total}</strong> tests &middot; <span class=\"ok\">{passed} as expected</span> &middot; <span class=\"red\">{red} red</span></p>\n<p class=\"note\">Generated by <code>cargo run --example report</code>. Each test is shown whole, in the friendly form. A line the run wanted and did not get is marked <span class=\"key missing\">so</span>; one it got and did not want is marked <span class=\"key extra\">so</span>.</p>\n{cards}</body>\n</html>\n"
     );
     std::fs::write(mine().join("report.html"), &page).expect("report.html");
-    println!("report.html: {total} tests, {passed} as expected, {red} red");
+    std::fs::write(mine().join("report.txt"), &log).expect("report.txt");
+    println!("report.html, report.txt: {total} tests, {passed} as expected, {red} red");
 }
 
 /// **Both themes, because a report nobody can read in their own is not one** - the same rule
