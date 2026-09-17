@@ -103,6 +103,13 @@ pub struct Names {
     /// relation the schema declares, so nothing above can say what `scout` is - the rule's input
     /// says it, and this is that lookup.
     input_of: BTreeMap<(String, String), (String, String)>,
+    /// An input's id, by the rule it belongs to and its own name.
+    ///
+    /// **A bare input name is read in the scope of a rule**, which is the one thing the flat
+    /// `by_name` cannot do: two rules each have a `where`, and the clause says which is meant.
+    input_id: BTreeMap<(String, String), String>,
+    /// Which rule a clause belongs to, by the clause's id and by its generated name.
+    rule_of_clause: BTreeMap<String, String>,
 }
 
 /// Which rows of a test file are the game's: everything after a `{given}`, `{when}` or `{then}`.
@@ -146,15 +153,20 @@ impl Names {
         // **All or nothing, per relation.** Some column names happen to be unique - `what`,
         // `where` - and taking those while falling back for the rest rendered one kind of thing
         // two ways: `column:what` beside `column:44`.
-        // **An input's name is unique inside its rule and nowhere else**, so a reference to one
-        // is written `rule.name`. Sean, 2026-09-16, choosing this over resolving the bare name
-        // through the binding's clause: it is *unambiguous on the line you are reading*, where
-        // the bare form makes two rules' bindings read identically and tells them apart only by
-        // following each clause back to its rule.
+        // **An input's name is unique inside its rule, and that is enough to resolve it.** A
+        // binding names its clause and a clause names its rule, so `input:where` on a binding of
+        // `work` can only be `work`'s `where`. **Nothing about the model is ambiguous here** -
+        // what was ambiguous was the uniqueness test below, which asks whether a name is unique
+        // across every row of a relation and knows nothing about parents.
         //
-        // **It was the second rule that broke it, not the third.** `move`'s three inputs are all
-        // differently named; `build-extractor` and `work` both take a `where` and a `for`, and
-        // the all-or-nothing rule below then dropped every input reference back to an id at once.
+        // **Sean, 2026-09-17**: *Wouldn't the invariant still be fine unless one rule took 2
+        // wheres?* It would. The first version of this qualified every reference as `rule.name`,
+        // on the strength of a limitation that was described as though it were the model.
+        //
+        // **The blast radius is what gives it away.** `move`'s inputs are `what`, `from` and `to`
+        // and collide with nothing, and they fell back to ids too - because the test is
+        // all-or-nothing per relation. So the names are scoped for the uniqueness test below and
+        // kept bare everywhere else.
         let mut qualified: BTreeMap<String, String> = BTreeMap::new();
         for row in rows.iter().filter(|row| row.relation == "input") {
             let (Some(id), Some(name), Some(of_rule)) =
@@ -175,7 +187,9 @@ impl Names {
                 qualified.insert(id.to_string(), format!("{rule}.{name}"));
             }
         }
-        let called = |row: &Row| -> Option<String> {
+        // **Scoped for the uniqueness test only.** Two rules each taking a `where` are two
+        // distinct names once the rule is part of them, which is what the model already says.
+        let scoped = |row: &Row| -> Option<String> {
             let name = row.value("name")?;
             if row.relation == "input" {
                 return qualified.get(row.value("id")?).cloned();
@@ -185,8 +199,44 @@ impl Names {
 
         let mut seen: BTreeMap<String, Vec<String>> = BTreeMap::new();
         for row in rows {
-            if let Some(name) = called(row) {
+            if let Some(name) = scoped(row) {
                 seen.entry(row.relation.clone()).or_default().push(name);
+            }
+        }
+
+        // **Which rule each clause belongs to, by the clause's id and by its generated name.** A
+        // friendly binding says `clause:clause-9` and a foundation one says `clause:9`, and this
+        // turns either into `work` - the scope a bare input name is read in.
+        let mut rule_of_clause: BTreeMap<String, String> = BTreeMap::new();
+        for row in rows.iter().filter(|row| row.relation == "clause") {
+            let (Some(id), Some(of_rule)) = (row.value("id"), row.value("rule")) else {
+                continue;
+            };
+            let rule = rows
+                .iter()
+                .find(|it| {
+                    it.relation == "rule"
+                        && (it.value("id") == Some(of_rule) || it.value("name") == Some(of_rule))
+                })
+                .and_then(|it| it.value("name"));
+            if let Some(rule) = rule {
+                rule_of_clause.insert(id.to_string(), rule.to_string());
+                rule_of_clause.insert(format!("clause-{id}"), rule.to_string());
+            }
+        }
+
+        // **An input's id, by its rule and its own name.** The flat `by_name` cannot hold these:
+        // `("input", "where")` names two different inputs, and which one it means is the question
+        // the clause answers.
+        let mut input_id: BTreeMap<(String, String), String> = BTreeMap::new();
+        for row in rows.iter().filter(|row| row.relation == "input") {
+            let (Some(id), Some(name)) = (row.value("id"), row.value("name")) else {
+                continue;
+            };
+            if let Some(whole) = qualified.get(id)
+                && let Some((rule, _)) = whole.split_once('.')
+            {
+                input_id.insert((rule.to_string(), name.to_string()), id.to_string());
             }
         }
         let mut nameable: std::collections::BTreeSet<String> = Default::default();
@@ -231,7 +281,7 @@ impl Names {
             let name = if declares_name.contains(&row.relation) {
                 nameable
                     .contains(&row.relation)
-                    .then(|| called(row).unwrap_or_default())
+                    .then(|| row.value("name").unwrap_or_default().to_string())
             } else {
                 referenced
                     .contains(&row.relation)
@@ -347,6 +397,8 @@ impl Names {
             by_name,
             declares_name,
             input_of,
+            input_id,
+            rule_of_clause,
         }
     }
 
@@ -504,6 +556,15 @@ impl Names {
                     })
             });
             let resolved = match points_at {
+                // **An input is named inside its rule**, so the clause this row names is what
+                // says which rule to look in. A value that is already an id finds nothing here
+                // and is left alone, exactly as every other reference is.
+                Some(to) if to == "input" => row
+                    .value("clause")
+                    .and_then(|clause| self.rule_of_clause.get(clause))
+                    .and_then(|rule| self.input_id.get(&(rule.clone(), value.clone())))
+                    .cloned()
+                    .unwrap_or_else(|| value.clone()),
                 Some(to) => self
                     .by_name
                     .get(&(to, value.clone()))

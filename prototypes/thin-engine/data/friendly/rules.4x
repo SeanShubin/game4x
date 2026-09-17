@@ -25,17 +25,17 @@
 {clause id:3 rule:move seq:3 role:remove relation:residency name:clause-3}
 {clause id:4 rule:move seq:4 role:add relation:residency name:clause-4}
 
-{binding id:1 clause:clause-1 column:44 input:move.what}
-{binding id:2 clause:clause-1 column:45 input:move.from}
+{binding id:1 clause:clause-1 column:44 input:what}
+{binding id:2 clause:clause-1 column:45 input:from}
 
-{binding id:3 clause:clause-2 column:42 input:move.from}
-{binding id:4 clause:clause-2 column:43 input:move.to}
+{binding id:3 clause:clause-2 column:42 input:from}
+{binding id:4 clause:clause-2 column:43 input:to}
 
-{binding id:5 clause:clause-3 column:44 input:move.what}
-{binding id:6 clause:clause-3 column:45 input:move.from}
+{binding id:5 clause:clause-3 column:44 input:what}
+{binding id:6 clause:clause-3 column:45 input:from}
 
-{binding id:7 clause:clause-4 column:44 input:move.what}
-{binding id:8 clause:clause-4 column:45 input:move.to}
+{binding id:7 clause:clause-4 column:44 input:what}
+{binding id:8 clause:clause-4 column:45 input:to}
 
 {literal id:1 clause:clause-4 column:46 value:1}
 {literal id:2 clause:clause-3 column:46 value:1}
@@ -50,13 +50,13 @@
 {clause id:8 rule:build-extractor seq:3 role:remove relation:free name:clause-8}
 {clause id:7 rule:build-extractor seq:4 role:add relation:extractor name:clause-7}
 
-{binding id:9 clause:clause-5 column:45 input:build-extractor.where}
-{binding id:10 clause:clause-6 column:45 input:build-extractor.where}
-{binding id:11 clause:clause-7 column:57 input:build-extractor.where}
-{binding id:12 clause:clause-7 column:58 input:build-extractor.for}
+{binding id:9 clause:clause-5 column:45 input:where}
+{binding id:10 clause:clause-6 column:45 input:where}
+{binding id:11 clause:clause-7 column:57 input:where}
+{binding id:12 clause:clause-7 column:58 input:for}
 
-{binding id:13 clause:clause-8 column:54 input:build-extractor.where}
-{binding id:14 clause:clause-8 column:55 input:build-extractor.for}
+{binding id:13 clause:clause-8 column:54 input:where}
+{binding id:14 clause:clause-8 column:55 input:for}
 
 {literal id:3 clause:clause-5 column:44 value:labor}
 {literal id:4 clause:clause-5 column:46 value:1}
@@ -75,16 +75,16 @@
 {clause id:11 rule:work seq:3 role:remove relation:residency name:clause-11}
 {clause id:12 rule:work seq:4 role:add relation:residency name:clause-12}
 
-{binding id:15 clause:clause-9 column:57 input:work.where}
-{binding id:16 clause:clause-9 column:58 input:work.for}
+{binding id:15 clause:clause-9 column:57 input:where}
+{binding id:16 clause:clause-9 column:58 input:for}
 
-{binding id:17 clause:clause-10 column:51 input:work.where}
-{binding id:18 clause:clause-10 column:52 input:work.for}
+{binding id:17 clause:clause-10 column:51 input:where}
+{binding id:18 clause:clause-10 column:52 input:for}
 
-{binding id:19 clause:clause-11 column:45 input:work.where}
+{binding id:19 clause:clause-11 column:45 input:where}
 
-{binding id:20 clause:clause-12 column:44 input:work.for}
-{binding id:21 clause:clause-12 column:45 input:work.where}
+{binding id:20 clause:clause-12 column:44 input:for}
+{binding id:21 clause:clause-12 column:45 input:where}
 
 {literal id:10 clause:clause-11 column:44 value:labor}
 {literal id:11 clause:clause-11 column:46 value:1}

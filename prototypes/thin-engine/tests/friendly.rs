@@ -87,7 +87,7 @@ fn a_column_is_referenced_by_id_because_its_name_is_a_token() {
         .expect("the first binding");
     assert_eq!(
         names.row(binding),
-        "{binding id:1 clause:clause-1 column:44 input:move.what}"
+        "{binding id:1 clause:clause-1 column:44 input:what}"
     );
 
     // The control: a relation whose names are its own is referenced by name.

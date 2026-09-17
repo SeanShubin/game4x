@@ -1794,12 +1794,34 @@ than assumed. Each was put back afterwards.
 
 ## What adding two rules broke, which is the interesting part
 
-**An input's name is unique inside its rule and nowhere else.** `move`'s three inputs are all
-differently named; `build-extractor` and `work` both take a `where` and a `for`, and the
-translator's all-or-nothing rule then dropped every input reference back to an id at once -
-against the invariant that arguments are named rather than numbered. **A reference to an input is
-written `rule.name` now**: `input:work.where`. Sean, choosing it over resolving the bare name
-through the binding's clause: it is unambiguous on the line you are reading.
+**The translator stopped naming inputs, and the model was never ambiguous.** A binding names its
+clause and a clause names its rule, so `input:where` on a binding of `work` can only be `work`'s
+`where`. What broke is narrower: `Names::of` decides whether a relation can be referenced by name
+by testing that `name` is unique across **every row of that relation**, all-or-nothing, with no
+notion of a parent. Two inputs called `where` failed that test, so every input reference fell back
+to an id.
+
+**The blast radius is what gives it away, and it is what this lane missed.** `move`'s inputs are
+`what`, `from` and `to`, colliding with nothing, and they fell back too:
+
+```
+left:  {binding id:1 clause:clause-1 column:44 input:1}
+right: {binding id:1 clause:clause-1 column:44 input:what}
+```
+
+Nothing about `move` had become ambiguous. **A limitation of the translator was put to Sean as
+though it were a property of the model** - the first version of this section said an input's name
+*is unique inside its rule and nowhere else*, implying the bare form could not work, and the
+reference form was changed to `input:work.where` on that basis.
+
+**Sean, 2026-09-17**: *Wouldn't the invariant still be fine unless one rule took 2 wheres?* It
+would. The names are bare again, and the uniqueness test is scoped: `input` names are qualified by
+their rule for the purpose of asking whether they collide, and kept bare everywhere else. Reading
+one back resolves through the binding's clause to its rule.
+
+**Poisoned, because a round trip can be right for the wrong reason.** Resolving a bare name
+without the rule makes `work`'s `where` come back as input `4`, which is `build-extractor`'s, and
+`tests/directories.rs` says so line for line. The scoping is load-bearing rather than decorative.
 
 **The mutation check was reading whichever test sorted first.** `every_reference_forbids_something`
 loaded one world and needed a row of every relation a reference points at; a deposit test sorted
