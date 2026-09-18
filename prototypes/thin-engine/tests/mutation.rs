@@ -315,7 +315,7 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
     Ok(())
 }
 
-const REFERENCES: usize = 47;
+const REFERENCES: usize = 51;
 
 /// **References no test world can violate**, because nothing points at them there.
 ///
@@ -562,7 +562,7 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// deposit's key, the deposit and the extractor stop sharing one, and `{limit held:extractor
 /// by:deposit}` has nothing to compare.
 const DELETABLE: [&str; 10] = [
-    "4 rules.4x binding",
+    "3 rules.4x binding",
     "2 rules.4x literal",
     "2 schema.4x attribute",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x move",
@@ -647,7 +647,7 @@ fn no_value_can_be_changed_without_breaking_something() {
 ///
 /// **A `moving` that never moves is the other shape here.** The berth tests hold vehicles to count
 /// them, not to move them, so what those rows say about moves is read by nothing.
-const NOT_LOAD_BEARING: [&str; 22] = [
+const NOT_LOAD_BEARING: [&str; 23] = [
     // **The one `assigns` row's id is read by nothing.** There were two, and changing one id
     // to the other's collided on the key; with one row there is nothing to collide with.
     // **`assigns` may not need an `id` at all** - keyed by `(clause, input, value)` it could not
@@ -655,7 +655,14 @@ const NOT_LOAD_BEARING: [&str; 22] = [
     // restriction. That is in `backlog.md` rather than done here.
     "1 rules.4x assigns.id",
     "12 rules.4x clause.seq",
-    "10 rules.4x input.seq",
+    "9 rules.4x input.seq",
+    // **Neither part's `seq` is read by anything, and that is the honest state of the order.**
+    // `end-turn` refreshes `moving` and then `working`, and the two do not touch each other - so
+    // swapping them leaves the same world and nothing fails. **The column exists and nothing
+    // depends on it yet**, which is worth saying out loud rather than letting the tree imply an
+    // order is being enforced. The four steps of `spec/turn.md` that are not built are the ones
+    // that will depend on it: upkeep must be paid before a population grows on what is left.
+    "2 rules.4x part.seq",
     "1 rules.4x reading.id",
     "1 schema.4x supply.name",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x scout.quantity",

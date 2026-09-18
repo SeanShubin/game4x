@@ -44,6 +44,11 @@ const BY: &str = "by";
 const FAMILY: &str = "family";
 const MEMBER: &str = "member";
 const KIND: &str = "kind";
+const PART: &str = "part";
+const IS: &str = "is";
+const OF: &str = "of";
+const RULE: &str = "rule";
+const CLAUSE: &str = "clause";
 const TRAIT: &str = "trait";
 const CARRIES: &str = "carries";
 const SUPPLY: &str = "supply";
@@ -221,6 +226,25 @@ pub enum Malformed {
     /// not through its columns. **Checked in both directions is what keeps the two from drifting
     /// apart** while each stays individually true.
     DoesNotCarry { relation: String, carried: String },
+    /// A rule is a part of two different composites.
+    ///
+    /// **A tree and not a graph** - Sean, 2026-09-18: *it must be able to organize the entirety of
+    /// game rules is some type of acyclic graph or tree. Otherwise it will be impossible for a
+    /// human player to understand how to play the game.* **One composite may name a rule twice**,
+    /// which is two steps of one order rather than two parents, and is not this.
+    TwoParents { rule: String, parents: Vec<String> },
+    /// A composite reaches itself through its parts.
+    ///
+    /// **This is what lets the engine recurse with no depth counter.** A cycle here would be a
+    /// rule that fires forever, which is the unboundedness the whole shape exists to refuse - so
+    /// it is refused when the world is read rather than guarded against when it runs.
+    CycleOfParts { rules: Vec<String> },
+    /// A rule with clauses of its own and parts as well.
+    ///
+    /// **A rule is a leaf or a composite.** Both would make *what does this rule do* need two
+    /// answers, and would leave the order between its clauses and its parts to whatever the
+    /// engine happened to do first.
+    BothLeafAndComposite { rule: String },
     /// A limit between two relations whose keys are not the same columns.
     ///
     /// **Held and holder are compared key for key**, so a limit between relations that do not
@@ -292,6 +316,21 @@ impl std::fmt::Display for Malformed {
                 write!(
                     out,
                     "`{relation}` declares `{carried}` and does not carry it"
+                )
+            }
+            Malformed::TwoParents { rule, parents } => {
+                write!(
+                    out,
+                    "`{rule}` is a part of {parents:?}, and a rule has one parent"
+                )
+            }
+            Malformed::CycleOfParts { rules } => {
+                write!(out, "these reach themselves through their parts: {rules:?}")
+            }
+            Malformed::BothLeafAndComposite { rule } => {
+                write!(
+                    out,
+                    "`{rule}` has clauses and parts, and a rule has one or the other"
                 )
             }
             Malformed::CannotLimit { held, by } => {
@@ -791,6 +830,84 @@ pub fn check(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
                     carried: column.name.clone(),
                 });
             }
+        }
+    }
+
+    // **The rules are a tree, and that is what makes them readable and the engine safe.** Sean,
+    // 2026-09-18: *it must be able to organize the entirety of game rules is some type of acyclic
+    // graph or tree. Otherwise it will be impossible for a human player to understand how to play
+    // the game.*
+    //
+    // **Two graphs and only one of them can be this.** What a rule produces that another consumes
+    // is cyclic here already - `build-extractor` takes metal and makes an extractor, `work` takes
+    // an extractor and makes metal - and that cycle is the economy. **What is checked here is
+    // containment**, which rule is a step of which, and a weighting is what makes the other one
+    // safe.
+    //
+    // **After the references**, for the reason every check below is: a `part` pointing at no rule
+    // is that reference's to refuse, and a check answering first would say *two parents* about a
+    // dangling id.
+    let mut parent: BTreeMap<&str, Vec<&str>> = BTreeMap::new();
+    for row in rows.rows().iter().filter(|row| row.relation == PART) {
+        let (Some(of), Some(is)) = (row.value(OF), row.value(IS)) else {
+            continue;
+        };
+        let seen = parent.entry(is).or_default();
+        // **Named twice by one composite is one parent.** `end-turn` refreshes once for `moving`
+        // and once for `working`, and a person reading the tree sees two steps rather than two
+        // owners.
+        if !seen.contains(&of) {
+            seen.push(of);
+        }
+    }
+    // **A rule's id is not a relation's id**, and `named` above is the relation map - so reading
+    // a rule through it turns `refresh` into `state`, which is the name of whatever relation
+    // happens to share the number. Found by the test asserting the words rather than the ids.
+    let rule_named: BTreeMap<&str, &str> = rows
+        .rows()
+        .iter()
+        .filter(|row| row.relation == RULE)
+        .filter_map(|row| Some((row.value(ID)?, row.value(NAME)?)))
+        .collect();
+    let shown = |id: &str| rule_named.get(id).unwrap_or(&id).to_string();
+    for (rule, parents) in &parent {
+        if parents.len() > 1 {
+            return Err(Malformed::TwoParents {
+                rule: shown(rule),
+                parents: parents.iter().map(|it| shown(it)).collect(),
+            });
+        }
+    }
+
+    // **Every rule has at most one parent now, so a cycle is a walk upwards that repeats.** No
+    // general graph search is needed, and the walk is bounded by the number of rules.
+    for start in parent.keys() {
+        let mut walked: Vec<&str> = vec![start];
+        let mut at = *start;
+        while let Some(above) = parent.get(at).and_then(|it| it.first()) {
+            if walked.contains(above) {
+                return Err(Malformed::CycleOfParts {
+                    rules: walked.iter().map(|it| shown(it)).collect(),
+                });
+            }
+            walked.push(above);
+            at = above;
+        }
+    }
+
+    // **A rule is a leaf or a composite.**
+    for row in rows.rows().iter().filter(|row| row.relation == RULE) {
+        let Some(id) = row.value(ID) else { continue };
+        let composite = rows
+            .rows()
+            .iter()
+            .any(|it| it.relation == PART && it.value(OF) == Some(id));
+        let leaf = rows
+            .rows()
+            .iter()
+            .any(|it| it.relation == CLAUSE && it.value(RULE) == Some(id));
+        if composite && leaf {
+            return Err(Malformed::BothLeafAndComposite { rule: shown(id) });
         }
     }
 

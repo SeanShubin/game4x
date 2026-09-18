@@ -34,12 +34,37 @@ needs the engine to add numbers it is currently only comparing.
 ones, and the world's are the whole automatic half of the game: upkeep, breed, perish, age, spoil,
 refresh, muster, hold, reclaim, renew, take.
 
-**And it is what readiness is waiting for.** `refresh` exists and a player fires it by hand;
-what the turn adds is somebody firing it without being asked. **The rule is no longer the missing
-part** - `{refresh where:territory-1 what:unit trait:moving}` restores an allowance today, and the
-paragraph that stood here said it was unbuildable, which stopped being true when `put` landed.
+**`end-turn` exists and restores every count**, so the last of `spec/turn.md`'s five steps is
+built and the other four are not: everything with upkeep pays it, a population grows or starves,
+what expires expires, and nature takes back what is no longer held. **Each is a rule the order has
+room for**, which is what the tree buys - adding one is a `{part ...}` row and a leaf, not a change
+to `end-turn`.
+
+**Two of the four need something the engine has not got.** *Everything with upkeep pays it* is a
+sweeping `remove`, and `remove` takes one match where `put` sweeps. *Grows on surplus food or
+starves for want of it* is a branch on failure, which is a zero test on a counted place - the
+inhibitor arc `docs/designing-rules.md` measures, and `C-75` puts food on the fatal side of.
+
+**What survives a zero test is the invariant, which is worth knowing before deciding.** The
+weighting argument is about what a rule does and not about when it may fire, so guards only remove
+firings: **nogain stays sound and only becomes conservative.** What a zero test costs is
+reachability and termination.
 
 ## Refresh, what is left of it
+
+**The order a composite states is not depended on by anything yet.** Both of `end-turn`'s
+`{part ... seq:N}` values can be changed and nothing fails - refreshing `moving` and refreshing
+`working` do not touch each other, so swapping them leaves the same world. **`tests/mutation.rs`
+records it as not load-bearing**, which is the honest state: the column exists and the tree prints
+an order that nothing enforces because nothing needs it enforced. **The four unbuilt steps of
+`spec/turn.md` are what will need it** - upkeep must be paid before a population grows on what is
+left - and until one of them lands, a test asserting the order would be a test asserting a
+coincidence.
+
+**A part cannot be handed its parent's argument.** `{argument ...}` carries a constant, so a
+composite that took a `where` and passed it down has no way to say so. **Nothing needs one**:
+`end-turn` takes no arguments because time does not visit one place. It is here because it is the
+first thing a second composite is likely to want.
 
 **A fifth test: refresh where there is nothing to refresh.** The four that exist cover a group
 already topped off, which is what makes `refresh-makes-one-entry` come to five rather than refuse -

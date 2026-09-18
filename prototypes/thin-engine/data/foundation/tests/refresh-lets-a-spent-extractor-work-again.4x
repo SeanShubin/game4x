@@ -21,7 +21,7 @@
 
 {when}
 {work where:1 what:31}
-{refresh where:1 what:19 trait:2}
+{refresh what:19 trait:2}
 {work where:1 what:31}
 
 {then}

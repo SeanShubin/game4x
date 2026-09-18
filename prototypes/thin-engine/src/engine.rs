@@ -59,6 +59,9 @@ const ASSIGNS: &str = "assigns";
 const TRAIT: &str = "trait";
 const CARRIES: &str = "carries";
 const KIND: &str = "kind";
+const PART: &str = "part";
+const ARGUMENT: &str = "argument";
+const IS: &str = "is";
 
 /// Every row there is, and the structure read out of them.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -612,9 +615,105 @@ pub fn fire(game: &Game, command: &Row, repeat: usize) -> Result<(Game, Effect),
         made: Vec::new(),
     };
     for _ in 0..repeat {
-        after = apply(&after, &of_rule, named.clone(), &bound, &mut effect)?;
+        after = run(&after, &of_rule, named.clone(), &bound, &mut effect)?;
     }
     Ok((after, effect))
+}
+
+/// A rule's parts, in the order they fire.
+fn parts_of<'a>(game: &'a Game, of_rule: &str) -> Vec<&'a Row> {
+    let mut found: Vec<&Row> = game
+        .of_relation(PART)
+        .into_iter()
+        .filter(|row| row.value(OF) == Some(of_rule))
+        .collect();
+    found.sort_by_key(|row| row.value(SEQ).unwrap_or_default().to_string());
+    found
+}
+
+/// Fire a rule: its clauses if it is a leaf, its parts in order if it is a composite.
+///
+/// **A rule is a leaf or a composite and never both**, which `src/schema.rs` refuses - so this
+/// reads the parts and stops if there are any, rather than doing both and leaving the order
+/// between them to whichever this function happened to write first.
+///
+/// **The recursion terminates because the structure says so.** `{part ...}` is checked for cycles
+/// and for a rule with two parents when the world is read, so a composite cannot reach itself and
+/// this needs no depth counter. **That is the check doing the work a guard would otherwise do**,
+/// and it is why Sean's *acyclic graph or tree* is a property of the data rather than advice.
+///
+/// **An effect is the whole command's**, not one part's: ending a turn took and made whatever its
+/// parts did, in the order they did it, so a test reads one list rather than five.
+fn run(
+    game: &Game,
+    of_rule: &str,
+    rule: String,
+    bound: &BTreeMap<String, String>,
+    effect: &mut Effect,
+) -> Result<Game, Refused> {
+    let parts = parts_of(game, of_rule);
+    if parts.is_empty() {
+        return apply(game, of_rule, rule, bound, effect);
+    }
+    let mut after = game.clone();
+    for part in parts {
+        let id = part.value(ID).unwrap_or_default();
+        let of = part.value(IS).unwrap_or_default().to_string();
+        let named = game.named(RULE, &of).unwrap_or(&of).to_string();
+        let given = arguments_of(game, id, &of, &named)?;
+        after = run(&after, &of, named, &given, effect)?;
+    }
+    Ok(after)
+}
+
+/// What a part hands the rule it names, by that rule's input ids.
+///
+/// **Every input gets an argument and none may be of the wrong sort**, which are the two things
+/// [`fire`] checks for a command - said here for a part, because a part is where a rule is called
+/// from when a player is not the one calling it.
+///
+/// **`{argument ...}`'s value is the one reference the schema cannot state.** What sort of thing it
+/// is follows the input's `of` rather than a `{reference ...}` row on the column, so nothing checks
+/// it when the world is read and this is where it is checked instead.
+fn arguments_of(
+    game: &Game,
+    part: &str,
+    of_rule: &str,
+    named: &str,
+) -> Result<BTreeMap<String, String>, Refused> {
+    let mut bound = BTreeMap::new();
+    for input in game
+        .of_relation(INPUT)
+        .into_iter()
+        .filter(|row| row.value(RULE) == Some(of_rule))
+    {
+        let id = input.value(ID).unwrap_or_default();
+        let name = input.value(NAME).unwrap_or_default();
+        let Some(given) = game
+            .of_relation(ARGUMENT)
+            .into_iter()
+            .filter(|row| row.value(PART) == Some(part))
+            .find(|row| row.value(INPUT) == Some(id))
+            .and_then(|row| row.value(VALUE))
+        else {
+            return Err(Refused::Missing {
+                rule: named.to_string(),
+                input: name.to_string(),
+            });
+        };
+        let of = input.value(OF).unwrap_or_default();
+        let of = game.named(RELATION, of).unwrap_or(of).to_string();
+        if !game.has_key(&of, given) {
+            return Err(Refused::WrongType {
+                rule: named.to_string(),
+                input: name.to_string(),
+                value: given.to_string(),
+                of,
+            });
+        }
+        bound.insert(id.to_string(), given.to_string());
+    }
+    Ok(bound)
 }
 
 /// Every command the player could fire right now, as rows in the friendly command form.
@@ -643,6 +742,22 @@ pub fn offered(game: &Game) -> Vec<Row> {
         let Some(of_rule) = rule.value(ID) else {
             continue;
         };
+        // **A rule that is somebody's part is fired by that somebody.** So the roots of the tree
+        // are the player's menu, and nothing has to declare an owner: `spec/data/block.4x` writes
+        // `owner:world` and here the structure says it, which is one fact rather than two that can
+        // disagree.
+        //
+        // **Offered and fireable are two questions.** Sean, 2026-09-18: *Why can't refresh be both
+        // a player command and part of the turn [...] it will be easier to test the end turn
+        // command itself if i can test its parts.* A test names `refresh` and fires it; a player
+        // is not shown it. This lane had collapsed the two into one.
+        if game
+            .of_relation(PART)
+            .into_iter()
+            .any(|row| row.value(IS) == Some(of_rule))
+        {
+            continue;
+        }
         let named = rule.value(NAME).unwrap_or(of_rule).to_string();
 
         let mut inputs: Vec<&Row> = game

@@ -42,6 +42,8 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         "consumes",
         "trait",
         "carries",
+        "part",
+        "argument",
         "primitive",
     ] {
         let declared = game
@@ -54,11 +56,11 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         );
         checked += 1;
     }
-    assert_eq!(checked, 22, "twenty-two relations describe the structure");
+    assert_eq!(checked, 24, "twenty-four relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        34,
-        "thirty-four in all - those twenty-two, and the game's twelve: five kinds, two families,\n         a territory, an adjacency, a deposit and an extractor"
+        36,
+        "thirty-six in all - those twenty-four, and the game's twelve: five kinds, two families,\n         a territory, an adjacency, a deposit and an extractor"
     );
 }
 
@@ -225,27 +227,14 @@ fn only_the_moves_the_world_allows_are_offered() {
     assert_eq!(
         offered,
         vec![
+            // **Two offers, and twelve refreshes are not among them.** `refresh` is a part of
+            // `end-turn`, so it is fired by `end-turn` rather than chosen by a player - and the
+            // tree is the whole of what says so. **`fire` still takes it by name**, which is how
+            // `refresh-makes-one-entry-of-a-spent-scout-and-a-fresh-one` tests the part on its
+            // own. Sean, 2026-09-18: *it will be easier to test the end turn command itself if i
+            // can test its parts.*
+            "{end-turn}",
             "{move from:1 to:2 what:28}",
-            // **The family and its two members are three offers, not one.** `26` is `unit`,
-            // `28` is `scout` and `35` is `transport` - Sean, 2026-09-18: *I should be able to
-            // declare separate things with separate commands, as well as explicitly declare group
-            // commands.* Both forms are offered because both are things the player may say.
-            "{refresh trait:1 what:26 where:1}",
-            "{refresh trait:1 what:26 where:2}",
-            "{refresh trait:1 what:26 where:3}",
-            "{refresh trait:1 what:28 where:1}",
-            "{refresh trait:1 what:28 where:2}",
-            "{refresh trait:1 what:28 where:3}",
-            "{refresh trait:1 what:35 where:1}",
-            "{refresh trait:1 what:35 where:2}",
-            "{refresh trait:1 what:35 where:3}",
-            // **And `working` is offered for the extractor alone**, because it is the only kind
-            // that carries one. The pairing is what the type cannot say: `refresh`'s `what` is
-            // typed as a relation, so `{refresh what:19 trait:1}` is well typed and refused when
-            // fired - and what is *offered* is what would not be refused, so it is absent here.
-            "{refresh trait:2 what:19 where:1}",
-            "{refresh trait:2 what:19 where:2}",
-            "{refresh trait:2 what:19 where:3}",
         ]
     );
 
@@ -280,10 +269,7 @@ fn only_the_moves_the_world_allows_are_offered() {
     // and nothing would be offered at all - which would hide the one-way corridor behind a spent
     // allowance rather than show it.
     let mut moved = game;
-    for step in [
-        "{move what:28 from:1 to:2}",
-        "{refresh where:2 what:28 trait:1}",
-    ] {
+    for step in ["{move what:28 from:1 to:2}", "{end-turn}"] {
         let command = thin_engine::notation::read(step).expect("a command");
         moved = fire(&moved, &command[0], 1)
             .expect("the scout moves and is refreshed")
@@ -295,21 +281,7 @@ fn only_the_moves_the_world_allows_are_offered() {
         .collect();
     assert_eq!(
         after,
-        vec![
-            "{move from:2 to:3 what:28}",
-            "{refresh trait:1 what:26 where:1}",
-            "{refresh trait:1 what:26 where:2}",
-            "{refresh trait:1 what:26 where:3}",
-            "{refresh trait:1 what:28 where:1}",
-            "{refresh trait:1 what:28 where:2}",
-            "{refresh trait:1 what:28 where:3}",
-            "{refresh trait:1 what:35 where:1}",
-            "{refresh trait:1 what:35 where:2}",
-            "{refresh trait:1 what:35 where:3}",
-            "{refresh trait:2 what:19 where:1}",
-            "{refresh trait:2 what:19 where:2}",
-            "{refresh trait:2 what:19 where:3}",
-        ],
+        vec!["{end-turn}", "{move from:2 to:3 what:28}",],
         "one way only, which is the finding rather than the intent"
     );
 }
@@ -622,5 +594,101 @@ fn a_trait_and_the_column_that_holds_it_are_checked_both_ways() {
             .count(),
         4,
         "unit, scout and transport carry `moving`; extractor carries `working`"
+    );
+}
+
+/// **The rules are a tree, and the three ways they could stop being one are refused.**
+///
+/// Sean, 2026-09-18: *it must be able to organize the entirety of game rules is some type of
+/// acyclic graph or tree. Otherwise it will be impossible for a human player to understand how to
+/// play the game.* **This is also what makes the engine safe to recurse** - `run` walks parts with
+/// no depth counter, because a cycle cannot be in a world that loaded.
+///
+/// **Ids in the 990s**, so that a poison never squats on one the schema grows into.
+#[test]
+fn the_rules_are_a_tree() {
+    // **`4` is `refresh` and `1` is `move`.** Refresh is already a part of `end-turn`, so a part
+    // of `move` naming it gives it a second parent.
+    assert_eq!(
+        with("{part id:990 of:1 is:4 seq:1}").expect_err("refresh belongs to end-turn"),
+        Malformed::TwoParents {
+            rule: "refresh".to_string(),
+            // **In the order the parts are stated**, which is `end-turn`'s two rows and then the
+            // poison's - so the message reads as the file does.
+            parents: vec!["end-turn".to_string(), "move".to_string()]
+        }
+    );
+
+    // **`5` is `end-turn`.** A part of refresh naming end-turn closes the loop, and the walk
+    // upwards repeats rather than running forever.
+    assert_eq!(
+        with("{part id:991 of:4 is:5 seq:1}").expect_err("end-turn would reach itself"),
+        Malformed::CycleOfParts {
+            rules: vec!["refresh".to_string(), "end-turn".to_string()]
+        }
+    );
+
+    // **A rule is a leaf or a composite.** `refresh` has clauses, so giving it a part as well
+    // leaves *what does this rule do* with two answers and no order between them.
+    assert_eq!(
+        with("{part id:992 of:4 is:2 seq:1}").expect_err("refresh has clauses of its own"),
+        Malformed::BothLeafAndComposite {
+            rule: "refresh".to_string()
+        }
+    );
+
+    // **The control, and it is a fourth part of the composite that already has two.** So none of
+    // the three above is about adding a `{part ...}` row; each is about the shape it would make.
+    // **Its arguments are missing**, which is a refusal when it fires and not when it is read -
+    // the structure says what the tree is, and `run` says what a part is handed.
+    with("{part id:993 of:5 is:4 seq:3}").expect("a composite may name a rule again");
+}
+
+/// **The tree is written down, so a rule added to it has to be read by somebody.**
+///
+/// **Sean, 2026-09-18**, on what went wrong with the specification: it *had no artifact whose whole
+/// structure you could read at once*. `tree.txt` is that artifact here, and this is what makes it
+/// impossible to change the shape of the rules without the change showing up in a diff of it.
+///
+/// **`cargo run --example tree` regenerates it.** The failure says to do that, because a test that
+/// fails without saying what to do is a test somebody deletes.
+#[test]
+fn the_tree_is_what_the_file_says_it_is() {
+    let shown = before().tree();
+    let at = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tree.txt");
+    let written = std::fs::read_to_string(&at).unwrap_or_default();
+    assert_eq!(
+        written, shown,
+        "`tree.txt` is not what the rules render to - run `cargo run --example tree` and read it"
+    );
+
+    // **Every rule appears exactly once**, which is what makes it the whole of the rules rather
+    // than a view of some of them. A rule missing from the tree is a rule nobody can find.
+    let rules: Vec<String> = before()
+        .rows()
+        .rows()
+        .iter()
+        .filter(|row| row.relation == "rule")
+        .filter_map(|row| row.value("name"))
+        .map(str::to_string)
+        .collect();
+    assert_eq!(
+        rules.len(),
+        5,
+        "move, build-extractor, work, refresh, end-turn"
+    );
+    // **At least once, not exactly once.** `refresh` appears twice because `end-turn` names it
+    // twice - two steps of one order - and asserting *once* said the tree was wrong when it was
+    // the assertion that was. What matters is that no rule is missing: a rule absent from the
+    // tree is a rule nobody reading this can find.
+    for rule in &rules {
+        let found = shown.matches(&format!("{rule} ")).count()
+            + shown.matches(&format!("{rule}\n")).count();
+        assert!(found >= 1, "`{rule}` is nowhere in the tree");
+    }
+    assert_eq!(
+        shown.matches("refresh").count(),
+        2,
+        "and refresh is there twice, once per trait the turn restores"
     );
 }

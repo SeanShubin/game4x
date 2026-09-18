@@ -73,12 +73,12 @@ fn a_column_is_referenced_by_id_because_its_name_is_a_token() {
     let game = game_rows();
     let names = Names::of(&game);
 
-    // A column's `name` is the token, and it is not unique: seventeen columns are called `id`.
+    // A column's `name` is the token, and it is not unique: nineteen columns are called `id`.
     let called_id = game
         .iter()
         .filter(|row| row.relation == "column" && row.value("name") == Some("id"))
         .count();
-    assert_eq!(called_id, 17, "seventeen columns are called `id`");
+    assert_eq!(called_id, 19, "nineteen columns are called `id`");
 
     // So no column has a name, and a reference to one is its id.
     assert_eq!(names.name("column", "44"), "44");

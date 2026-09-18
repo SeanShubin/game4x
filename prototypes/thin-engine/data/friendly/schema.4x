@@ -51,6 +51,8 @@
 {relation id:37 name:assigns}
 {relation id:38 name:trait}
 {relation id:39 name:carries}
+{relation id:40 name:part}
+{relation id:41 name:argument}
 
 
 ## The columns
@@ -185,6 +187,14 @@
 {column id:107 relation:trait seq:2 name:name}
 {column id:108 relation:carries seq:1 name:kind}
 {column id:109 relation:carries seq:2 name:trait}
+{column id:110 relation:part seq:1 name:id}
+{column id:111 relation:part seq:2 name:of}
+{column id:112 relation:part seq:3 name:is}
+{column id:113 relation:part seq:4 name:seq}
+{column id:114 relation:argument seq:1 name:id}
+{column id:115 relation:argument seq:2 name:part}
+{column id:116 relation:argument seq:3 name:input}
+{column id:117 relation:argument seq:4 name:value}
 
 
 ## What a place has room for, and what each kind takes up
@@ -279,6 +289,10 @@
 {reference id:52 column:96 to:territory}
 {reference id:53 column:108 to:relation}
 {reference id:54 column:109 to:trait}
+{reference id:55 column:111 to:rule}
+{reference id:56 column:112 to:rule}
+{reference id:57 column:115 to:part}
+{reference id:58 column:116 to:input}
 
 
 ## Which relations are the game's state
@@ -396,3 +410,36 @@
 {carries kind:scout trait:moving}
 {carries kind:transport trait:moving}
 {carries kind:extractor trait:working}
+
+
+## What a composite is, and why the tree is the point
+
+# **A rule is a leaf or a composite, and a composite names rules in order.** `{part id:1
+# of:end-turn is:refresh seq:1}` says ending a turn does a refresh first; `{argument id:1 part:1
+# input:what value:unit}` says which refresh.
+#
+# **It is the clause layer one level up, and deliberately the same shape.** A clause has an id and
+# `{binding ...}` rows name it; a part has an id and `{argument ...}` rows name it. Nothing here
+# is a new idea about how a rule is described - it is the existing idea applied to rules rather
+# than to rows.
+#
+# **Sean, 2026-09-18**, on what the structure has to be: *Whatever it turns out to mean, it must be
+# able to organize the entirety of game rules is some type of acyclic graph or tree. Otherwise it
+# will be impossible for a human player to understand how to play the game.* So `src/schema.rs`
+# refuses a cycle and refuses a rule with two parents, and `examples/tree.rs` prints the whole of
+# it on one screen.
+#
+# **A rule with one parent may still be named twice by it.** `end-turn` refreshes twice, once per
+# trait, and those are two steps of one order rather than two parents - which is what a person
+# reading the tree sees and what the check counts.
+#
+# **The roots are the player's menu.** A rule that is somebody's part is fired by that somebody; a
+# rule that is nobody's part is offered. So nothing declares an owner: `spec/data/block.4x` says
+# `owner:world` and here the tree says it, which is one fact in one place rather than two that can
+# disagree.
+#
+# **Sean, 2026-09-18**, on why a part is still a command in its own right: *Why can't refresh be
+# both a player command and part of the turn. It seems it will make it easier to read tests across
+# multiple turns if i see an end turn command, and it will be easier to test the end turn command
+# itself if i can test its parts.* **Fired by name and offered to a player are two questions**, and
+# this lane had collapsed them into one.

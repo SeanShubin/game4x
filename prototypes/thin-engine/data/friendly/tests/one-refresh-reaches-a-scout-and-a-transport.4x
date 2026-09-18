@@ -35,7 +35,7 @@
 {transport where:territory-1 moving:1} -> 2
 
 {when}
-{refresh where:territory-1 what:unit trait:moving}
+{refresh what:unit trait:moving}
 
 {then}
 {territory id:1 name:territory-1}

@@ -35,7 +35,7 @@
 {transport where:1 moving:1 quantity:2}
 
 {when}
-{refresh where:1 what:26 trait:1}
+{refresh what:26 trait:1}
 
 {then}
 {territory id:1}

@@ -16,7 +16,7 @@
 {scout where:1 moving:0 quantity:3}
 
 {when}
-{refresh where:1 what:28 trait:1}
+{refresh what:28 trait:1}
 
 {then}
 {territory id:1}

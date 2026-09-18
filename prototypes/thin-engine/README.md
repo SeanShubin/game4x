@@ -2524,6 +2524,93 @@ it to `check` - reached only from `Game::of`, and only with foundation rows - ma
 its comment false, and both travelled unchanged. Caught by re-deriving the claim rather than by any
 check, which is what `docs/working-with-an-assistant.md` is about.
 
+## A rule is a leaf or a composite, and the composites make a tree
+
+**`{part id:1 of:end-turn is:refresh seq:1}`** says ending a turn refreshes first;
+**`{argument id:1 part:part-1 input:what value:unit}`** says which refresh. **It is the clause
+layer one level up and deliberately the same shape**: a clause has an id and `{binding ...}` rows
+name it, a part has an id and `{argument ...}` rows name it. Nothing here is a new idea about how a
+rule is described.
+
+**Sean, 2026-09-18**, on what the structure has to be, and why:
+
+> Whatever it turns out to mean, it must be able to organize the entirety of game rules is some
+> type of acyclic graph or tree. Otherwise it will be impossible for a human player to understand
+> how to play the game.
+
+**Two graphs, and only one of them can be that.** What a rule produces that another consumes is
+already cyclic here - `build-extractor` takes metal and makes an extractor, `work` takes an
+extractor and makes metal - and **that cycle is the economy**. Removing it removes the game. What
+is checked is *containment*: which rule is a step of which. A weighting is what makes the other one
+safe, and acyclicity is not available as an alternative to it.
+
+**Three refusals keep it a tree**, and `the_rules_are_a_tree` states all three with a control:
+`TwoParents`, `CycleOfParts`, and `BothLeafAndComposite`. **The cycle check is what lets `run`
+recurse with no depth counter** - a composite cannot reach itself in a world that loaded.
+
+**One composite may name a rule twice.** `end-turn` refreshes once for `moving` and once for
+`working`; those are two steps of one order rather than two parents, and the check counts distinct
+parents rather than part rows.
+
+## The roots are the player's menu, and that is one fact rather than two
+
+**A rule that is somebody's part is fired by that somebody.** So `offered` skips any rule a
+`{part ...}` names, and nothing declares an owner - `spec/data/block.4x` writes `owner:world` and
+here the tree says it. **The offering went from thirteen commands to two**: `{end-turn}` and the
+one legal `{move ...}`.
+
+**Fired by name and offered to a player are two different questions**, and this lane had collapsed
+them. Sean:
+
+> Why can't refresh be both a player command and part of the turn. It seems it will make it easier
+> to read tests across multiple turns if i see an end turn command, and it will be easier to test
+> the end turn command itself if i can test its parts.
+
+**He was right and the restriction was mine, not the model's.** `fire` takes `refresh` by name, so
+`refresh-makes-one-entry-of-a-spent-scout-and-a-fresh-one` tests the part on its own and keeps its
+own review stamp; `ending-a-turn-restores-a-scout-and-an-extractor` tests the composite; and
+`the-scout-crosses-two-borders` reads as `move · end-turn · move`, which is what a turn boundary
+looks like in a test.
+
+## What the turn did not need, which is a turn
+
+**Refresh does not gain resources.** A weighting exists over the four rules and `move` against
+`refresh` nets exactly zero under it, so a nogain check would have passed this prototype - while a
+scout crossed a border **50 times in a row**, measured. **The invariant was green and the game was
+broken**, which is this repository's named recurring failure arriving in a new place.
+
+**What refresh made infinite was tempo, not resources.** So the fix is that a player cannot choose
+it, and **no turn token is needed**: within-a-turn acting is bounded by the allowances already, which
+is `spec/turn.md`'s *when no thing has a count left, there is nothing left to do*. Ending a turn
+repeatedly is not a hole - that is time passing.
+
+**A source place earns its keep when something creates from nothing** - a star providing energy -
+because then nogain needs it in the arithmetic. `reports/nogain.md` already treats `time` that way:
+*a source is a place they take from rather than an exemption from the arithmetic*. Not yet here.
+
+**`refresh` lost its `where` on the way.** Time does not visit one place. **Checked against the
+tests rather than assumed**: the four that refresh have one territory or one scout between them, so
+none of them could tell a per-place refresh from a global one, and none ever needed to.
+
+## `tree.txt`, which is the artifact the specification never had
+
+```text
+end-turn
+    1. refresh  what:unit trait:moving
+    2. refresh  what:extractor trait:working
+```
+
+**`cargo run --example tree` writes it and a test compares against it**, so a rule added to the
+tree makes that test red and the only way to green it is to regenerate and read what changed.
+
+**Sean, 2026-09-18**, on why this was worth building before anything else in the turn:
+
+> the spec had no artifact whose whole structure you could read at once
+
+**A root shows what it takes and a part shows what it is given** - `what:unit` under a root is the
+type of an argument, under a part it is the argument. **Four rules of prose cannot say what those
+five lines say**, which is the whole argument for generating it rather than describing it.
+
 ## What was deliberately not built
 
 **No per-kind maximum row.** Sean: *I am not sure I am ready for treating turns as a resource yet,

@@ -59,3 +59,6 @@
 {primitive id:48 word:put}
 {primitive id:49 word:trait}
 {primitive id:50 word:carries}
+{primitive id:51 word:part}
+{primitive id:52 word:argument}
+{primitive id:53 word:is}

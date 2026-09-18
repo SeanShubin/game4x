@@ -121,16 +121,40 @@
 # and `extractor.moving` does not exist, which is the refusal rather than a lookup that fails
 # quietly.
 
+
+# **`refresh` has no `where`, because time does not visit one place.** It had one while it was a
+# player's command; as a step of ending a turn it restores every count there is, and the pattern
+# its `put` matches names no place at all. **Checked against the tests rather than assumed** - the
+# four that refresh have one territory or one scout between them, so none of them could tell a
+# per-place refresh from this one, and none ever needed to.
+
+# **Ending a turn is the composite, and refresh is its whole body so far.** `spec/turn.md` has five
+# steps - upkeep, then growth or starvation, then what expires, then what nature reclaims, and
+# *time restores every count to the number that thing's kind declares* last. **Only the last is
+# built**, and the other four are rules this order has room for rather than something this rule
+# will grow clauses to do.
+#
+# **It takes no arguments**, so its parts supply constants and nothing is passed down from a parent
+# to a child. That is the smallest thing that works; a part that needed its parent's argument would
+# be a second kind of `{argument ...}`, and nothing needs one yet.
+
 {rule id:4 name:refresh}
 
-{input id:10 rule:refresh seq:1 name:where of:territory}
-{input id:11 rule:refresh seq:2 name:what of:relation}
-{input id:12 rule:refresh seq:3 name:trait of:trait}
+{input id:11 rule:refresh seq:1 name:what of:relation}
+{input id:12 rule:refresh seq:2 name:trait of:trait}
 
 {clause id:15 rule:refresh seq:1 role:put relation:unit name:clause-15}
 
 {relation-of clause:clause-15 input:what}
 
-{binding id:24 clause:clause-15 column:72 input:where}
-
 {assigns id:1 clause:clause-15 input:trait value:1}
+
+{rule id:5 name:end-turn}
+
+{part id:1 of:end-turn is:refresh seq:1 name:part-1}
+{part id:2 of:end-turn is:refresh seq:2 name:part-2}
+
+{argument id:1 part:part-1 input:what  value:unit}
+{argument id:2 part:part-1 input:trait value:moving}
+{argument id:3 part:part-2 input:what  value:extractor}
+{argument id:4 part:part-2 input:trait value:working}

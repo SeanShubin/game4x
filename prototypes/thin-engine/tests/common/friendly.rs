@@ -110,6 +110,12 @@ pub struct Names {
     input_id: BTreeMap<(String, String), String>,
     /// Which rule a clause belongs to, by the clause's id and by its generated name.
     rule_of_clause: BTreeMap<String, String>,
+    /// A `part`'s id, and the name of the rule that part **invokes**.
+    ///
+    /// **Not the rule it belongs to, which is the other one.** An `{argument ...}` names an input,
+    /// and the input it means is an input of the rule being called - so this follows `is` and not
+    /// `of`. The two are the same shape and the wrong one would resolve silently to nothing.
+    rule_of_part: BTreeMap<String, String>,
     /// The relations that are families, whose values are relations rather than rows of their own.
     families: std::collections::BTreeSet<String>,
 }
@@ -258,6 +264,24 @@ impl Names {
             }
         }
 
+        let mut rule_of_part: BTreeMap<String, String> = BTreeMap::new();
+        for row in rows.iter().filter(|row| row.relation == "part") {
+            let (Some(id), Some(is)) = (row.value("id"), row.value("is")) else {
+                continue;
+            };
+            let rule = rows
+                .iter()
+                .find(|it| {
+                    it.relation == "rule"
+                        && (it.value("id") == Some(is) || it.value("name") == Some(is))
+                })
+                .and_then(|it| it.value("name"));
+            if let Some(rule) = rule {
+                rule_of_part.insert(id.to_string(), rule.to_string());
+                rule_of_part.insert(format!("part-{id}"), rule.to_string());
+            }
+        }
+
         // **An input's id, by its rule and its own name.** The flat `by_name` cannot hold these:
         // `("input", "where")` names two different inputs, and which one it means is the question
         // the clause answers.
@@ -331,6 +355,11 @@ impl Names {
             let Some(input) = row.value("input") else {
                 continue;
             };
+            // **An input's name is unique inside its rule and nowhere else.** `what` is an input
+            // of four rules here, so an argument that looked one up by name alone would take
+            // whichever was written first - and the type it read off it would be that rule's.
+            // **The part says which rule**, through the rule it invokes.
+            let called = row.value("part").and_then(|part| rule_of_part.get(part));
             let of = rows
                 .iter()
                 // **By id or by name**, for the same reason the relation lookup below is: in the
@@ -339,6 +368,15 @@ impl Names {
                 .find(|it| {
                     it.relation == "input"
                         && (it.value("id") == Some(input) || it.value("name") == Some(input))
+                        && match (called, it.value("rule")) {
+                            (Some(called), Some(of_rule)) => rows.iter().any(|rule| {
+                                rule.relation == "rule"
+                                    && rule.value("name") == Some(called.as_str())
+                                    && (rule.value("id") == Some(of_rule)
+                                        || rule.value("name") == Some(of_rule))
+                            }),
+                            _ => false,
+                        }
                 })
                 .and_then(|it| it.value("of"))
                 // **By id or by name.** In the foundation `of` is a relation's id; in the
@@ -447,6 +485,7 @@ impl Names {
             input_of,
             input_id,
             rule_of_clause,
+            rule_of_part,
             families,
         }
     }
@@ -622,6 +661,13 @@ impl Names {
                 Some(to) if to == "input" => row
                     .value("clause")
                     .and_then(|clause| self.rule_of_clause.get(clause))
+                    // **Or the part, which names the rule being called.** A binding is scoped by
+                    // its clause and an argument by its part, and those are the only two rows that
+                    // point at an input.
+                    .or_else(|| {
+                        row.value("part")
+                            .and_then(|part| self.rule_of_part.get(part))
+                    })
                     .and_then(|rule| self.input_id.get(&(rule.clone(), value.clone())))
                     .cloned()
                     .unwrap_or_else(|| value.clone()),

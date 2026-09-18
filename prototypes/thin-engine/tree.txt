@@ -1,0 +1,12 @@
+Every rule, and the tree its parts make.
+A root is what a player may choose; everything under one is fired by it.
+
+move  what:unit from:territory to:territory
+
+build-extractor  where:territory what:resource
+
+work  where:territory what:resource
+
+end-turn
+    1. refresh  what:unit trait:moving
+    2. refresh  what:extractor trait:working
