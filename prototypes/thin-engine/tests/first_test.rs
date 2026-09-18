@@ -62,6 +62,15 @@ fn state_relations() -> BTreeSet<String> {
         .collect()
 }
 
+/// Every relation the structure declares, by name.
+fn declared_relations() -> BTreeSet<String> {
+    rows("data/foundation/schema.4x")
+        .iter()
+        .filter(|row| row.relation == "relation")
+        .filter_map(|row| row.value("name").map(str::to_string))
+        .collect()
+}
+
 /// Every rule the ruleset declares, by name.
 fn rule_names() -> BTreeSet<String> {
     rows("data/foundation/rules.4x")
@@ -85,6 +94,7 @@ fn rule_names() -> BTreeSet<String> {
 fn a_scenario_states_a_world_and_an_act_and_nothing_else() {
     let state = state_relations();
     let rules = rule_names();
+    let declared = declared_relations();
     assert!(
         !state.is_empty() && !rules.is_empty(),
         "nothing is declared, so nothing would be checked"
@@ -105,6 +115,17 @@ fn a_scenario_states_a_world_and_an_act_and_nothing_else() {
                 assert!(
                     rules.contains(&row.relation),
                     "{file}: `{}` is in a `when` and names no rule - a command is a rule fired",
+                    row.relation
+                );
+            } else if section == "refused" {
+                // **A `refused` row is an assertion and not a world.** What a rule needed may be
+                // a rule's own declaration rather than a fact of the place - a crowded territory
+                // is refused for want of a bigger `{pool ...}`, which is the ruleset's. **Nothing
+                // here is loaded into a store**: these rows are written out and compared as text,
+                // so a scenario naming one declares nothing and the layer still holds.
+                assert!(
+                    declared.contains(&row.relation),
+                    "{file}: `{}` is in a `refused` and is not a relation at all",
                     row.relation
                 );
             } else {
@@ -251,9 +272,10 @@ fn the_report_says_which_relations_it_compared() {
             "metal",
             "scout",
             "territory",
+            "transport",
             "working"
         ],
-        "nine of the game's relations are state - four kinds, and an allowance that is one too"
+        "ten of the game's relations are state - five kinds, and an allowance that is one too"
     );
     assert_eq!(report.test, "the-scout-moves-to-an-adjacent-place");
 }
@@ -270,7 +292,7 @@ fn the_report_reads_as_a_report() {
             report_of("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x")
         ),
         "the-scout-moves-to-an-adjacent-place\n  \
-           compared  adjacency, deposit, extractor, food, labor, metal, scout, territory, working\n  \
+           compared  adjacency, deposit, extractor, food, labor, metal, scout, territory, transport, working\n  \
            result    as expected"
     );
 }

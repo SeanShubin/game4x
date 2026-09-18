@@ -378,10 +378,15 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
                     // it is the same kind of answer as the other two: not *this is too many* but
                     // *there is no deposit with room for this many*.
                     Refused::Broke { why: broke, .. }
-                        if matches!(**broke, crate::schema::Malformed::Overfull { .. }) =>
+                        if matches!(
+                            **broke,
+                            crate::schema::Malformed::Overfull { .. }
+                                | crate::schema::Malformed::Crowded { .. }
+                        ) =>
                     {
                         match broke.as_ref() {
-                            crate::schema::Malformed::Overfull { wanted, .. } => wanted.clone(),
+                            crate::schema::Malformed::Overfull { wanted, .. }
+                            | crate::schema::Malformed::Crowded { wanted, .. } => wanted.clone(),
                             _ => unreachable!("guarded above"),
                         }
                     }

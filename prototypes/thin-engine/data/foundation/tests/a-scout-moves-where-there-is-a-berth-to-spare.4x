@@ -1,0 +1,24 @@
+# Five berths of six are taken and a scout moves in, which is the sixth.
+#
+# **The control for the two beside it.** Both of those refuse a move into a full territory, and a
+# refusal proves nothing unless something otherwise like it is allowed.
+
+{test name:a-scout-moves-where-there-is-a-berth-to-spare}
+
+{given}
+{territory id:1}
+{territory id:2}
+{adjacency id:1 from:1 to:2}
+{scout where:1 quantity:1}
+{transport where:2 quantity:2}
+{scout where:2 quantity:1}
+
+{when}
+{move what:28 from:1 to:2}
+
+{then}
+{territory id:1}
+{territory id:2}
+{adjacency id:1 from:1 to:2}
+{transport where:2 quantity:2}
+{scout where:2 quantity:2}

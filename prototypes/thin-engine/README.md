@@ -2165,3 +2165,68 @@ it: *I don't need to say which command was refused on a multi line command, don'
 encorage too many lines in the test.* **The cost is real and is written down** -
 `an-extractor-cannot-be-worked-twice-on-one-readiness` cannot tell *refused on the second* from
 *refused on the first*, and what pins it is the test beside it showing one work succeeding.
+
+
+## A place has room, and each kind takes up a different amount of it
+
+Sean, 2026-09-17: *I am thinking of inventing a resource that vehicles take up and having a certain
+limit per territory that is the same across all territories. A lot of real time strategy games do
+this, and I know the board game twilight imperium does this as well.*
+
+```
+{pool  id:1 name:berth per:territory n:6}
+{draws id:1 kind:scout     pool:berth n:1}
+{draws id:2 kind:transport pool:berth n:2}
+```
+
+Per place, the sum of *how many × what each takes* must not exceed the pool. **No rule mentions
+berths** - a move that would overfill a territory leaves a world that does not fit, and every rule
+already refuses that, so this binds rules nobody has written.
+
+**This is the half `spec/data/limit.4x` cannot write.** `{limit container:territory contained:ark
+n:2}` counts arks, and a transport worth two scouts has nowhere to be said there. **The
+specification's version is a count and this one is a weight**, which is the first place the
+prototype is ahead on something Sean asked for rather than on something it noticed.
+
+## Two things about the shape
+
+**The allowance is declared once, not stated per place.** The alternative was `{berth
+where:territory-1} -> 6` per territory, which needs no engine and is the deposit pattern exactly.
+At two hundred territories that is six hundred rows saying the same thing - **data growing with
+data, which is the same failure as code growing with data** and against *the model is a minimal
+expression of intent*. A deposit legitimately differs per territory; an allowance Sean has said is
+uniform does not.
+
+**The place column is found rather than named.** A pool says `per:territory`, and a drawing kind's
+place is whichever of its columns references `territory`. **The engine could have read `where`
+instead**, and then a column name of the game's would have been a word the engine branches on -
+which is the boundary `data/engine.4x` exists to keep.
+
+## What the checks said
+
+**A `{refused}` row is not a world row, and one check thought it was.**
+`a_scenario_states_a_world_and_an_act_and_nothing_else` requires every row of a section to be a
+state relation, and a crowded territory is refused for want of a bigger `{pool ...}` - which is
+the ruleset's. **The check was right about `given` and `then` and wrong about `refused`**: rows
+there are written out and compared as text and never enter a store, so a scenario naming one
+declares nothing. Relaxed to *must be a declared relation* for that section alone.
+
+**The mutation check found nothing to delete, which has not happened before.** Every row the pool
+added is load-bearing: the two refusal tests turn on the allowance, the rate and the kinds. What
+it did find is an `adjacency.id` in each of those tests - a `move` reads `from` and `to`, and the
+id is compared only by a `then`, which a refusal test does not have. **The test beside them has
+one and does not leak**, which is the difference showing rather than a fault.
+
+## Two poisons
+
+| Poison                             | What it showed                                           |
+| ---------------------------------- | -------------------------------------------------------- |
+| a transport drawing 1 instead of 2 | both refusals go green - the weight is what refuses them |
+| the pool raised from 6 to 7        | the same, so the allowance is read rather than assumed   |
+
+## And a cost that has started to show
+
+**The mutation check now takes about ten minutes.** It deletes each row and re-runs every test, so
+its cost is rows times tests - and today both roughly doubled. **It has stopped being something to
+run while waiting**, which is worth knowing before it stops being run at all. Nothing is wrong
+with it; the shape is quadratic and the data is growing.

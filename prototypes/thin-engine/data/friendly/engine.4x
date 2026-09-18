@@ -50,3 +50,7 @@
 {primitive id:39 word:kind}
 {primitive id:40 word:member}
 {primitive id:41 word:relation-of}
+{primitive id:42 word:draws}
+{primitive id:43 word:n}
+{primitive id:44 word:per}
+{primitive id:45 word:pool}

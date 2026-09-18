@@ -45,6 +45,9 @@
 {relation id:30 name:metal}
 {relation id:31 name:food}
 {relation id:32 name:working}
+{relation id:33 name:pool}
+{relation id:34 name:draws}
+{relation id:35 name:transport}
 
 
 ## The columns
@@ -173,6 +176,34 @@
 {column id:86 relation:working seq:3 name:quantity}
 
 
+## What a place has room for, and what each kind takes up
+#
+# **Sean, 2026-09-17**: *I am thinking of inventing a resource that vehicles take up and having a
+# certain limit per territory that is the same across all territories. A lot of real time strategy
+# games do this, and I know the board game twilight imperium does this as well.*
+#
+# **The allowance is a constant and the rate is per kind**, which is the half `spec/data/limit.4x`
+# cannot write: `{limit container:territory contained:ark n:2}` counts arks, and a transport worth
+# two scouts has nowhere to be said.
+#
+# **A pool names the kind of place it is an allowance of**, and a drawing kind's place is whichever
+# of its columns points at that - so the engine finds it rather than knowing the game calls it
+# `where`.
+
+{column id:87 relation:pool seq:1 name:id}
+{column id:88 relation:pool seq:2 name:name}
+{column id:89 relation:pool seq:3 name:per}
+{column id:90 relation:pool seq:4 name:n}
+
+{column id:91 relation:draws seq:1 name:id}
+{column id:92 relation:draws seq:2 name:kind}
+{column id:93 relation:draws seq:3 name:pool}
+{column id:94 relation:draws seq:4 name:n}
+
+{column id:95 relation:transport seq:1 name:where}
+{column id:96 relation:transport seq:2 name:quantity}
+
+
 ## What points at what
 #
 # **A reference is always to a relation's `id`.** The engine checks that such a row is there, so a
@@ -226,6 +257,11 @@
 {reference id:45 column:84 to:territory}
 {reference id:46 column:85 to:resource}
 
+{reference id:47 column:89 to:relation}
+{reference id:48 column:92 to:relation}
+{reference id:49 column:93 to:pool}
+{reference id:50 column:95 to:territory}
+
 
 ## Which relations are the game's state
 #
@@ -241,6 +277,7 @@
 {state id:9 relation:metal}
 {state id:10 relation:food}
 {state id:11 relation:working}
+{state id:12 relation:transport}
 
 
 ## Which relations are families, and who belongs
@@ -254,6 +291,7 @@
 {family relation:resource}
 
 {member kind:scout family:unit}
+{member kind:transport family:unit}
 {member kind:metal family:resource}
 {member kind:food family:resource}
 
@@ -279,6 +317,14 @@
 
 {limit held:extractor by:deposit}
 {limit held:working by:extractor}
+
+
+## Every territory has six berths, and a transport is worth two scouts
+
+{pool id:1 name:berth per:territory n:6}
+
+{draws id:1 kind:scout pool:1 n:1}
+{draws id:2 kind:transport pool:1 n:2}
 
 
 ## The three roles a clause can have

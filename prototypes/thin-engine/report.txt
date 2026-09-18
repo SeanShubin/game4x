@@ -20,6 +20,7 @@ old state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - transport
     - working
       - {working where:territory-1 what:metal} -> 1
       - {working where:territory-1 what:food} -> 1
@@ -45,6 +46,7 @@ new state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - transport
     - working
       - {working where:territory-1 what:metal} -> 1
 
@@ -68,6 +70,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
+    - transport
     - working
 
 command  {move what:scout from:territory-1 to:territory-2}
@@ -88,7 +91,107 @@ new state
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
+    - transport
     - working
+
+as expected
+
+==============================================================================
+a-scout-cannot-move-where-every-berth-is-taken
+
+old state
+  - root
+    - adjacency
+      - {adjacency id:1 from:territory-1 to:territory-2}
+    - deposit
+    - extractor
+    - food
+    - labor
+    - metal
+    - scout
+      - {scout where:territory-1} -> 1
+    - territory
+      - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
+    - transport
+      - {transport where:territory-2} -> 3
+    - working
+
+refused
+  `move` would leave a world where `2` draws {pool name:berth per:13 n:7} and there is room for 6 in `berth`
+
+as expected
+
+==============================================================================
+a-scout-moves-where-there-is-a-berth-to-spare
+
+old state
+  - root
+    - adjacency
+      - {adjacency id:1 from:territory-1 to:territory-2}
+    - deposit
+    - extractor
+    - food
+    - labor
+    - metal
+    - scout
+      - {scout where:territory-1} -> 1
+      - {scout where:territory-2} -> 1
+    - territory
+      - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
+    - transport
+      - {transport where:territory-2} -> 2
+    - working
+
+command  {move what:scout from:territory-1 to:territory-2}
+  took   {scout where:territory-1} -> 1
+  made   {scout where:territory-2} -> 1
+
+new state
+  - root
+    - adjacency
+      - {adjacency id:1 from:territory-1 to:territory-2}
+    - deposit
+    - extractor
+    - food
+    - labor
+    - metal
+    - scout
+      - {scout where:territory-2} -> 2
+    - territory
+      - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
+    - transport
+      - {transport where:territory-2} -> 2
+    - working
+
+as expected
+
+==============================================================================
+a-transport-takes-two-berths-where-a-scout-takes-one
+
+old state
+  - root
+    - adjacency
+      - {adjacency id:1 from:territory-1 to:territory-2}
+    - deposit
+    - extractor
+    - food
+    - labor
+    - metal
+    - scout
+      - {scout where:territory-2} -> 1
+    - territory
+      - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
+    - transport
+      - {transport where:territory-1} -> 1
+      - {transport where:territory-2} -> 2
+    - working
+
+refused
+  `move` would leave a world where `2` draws {pool name:berth per:13 n:7} and there is room for 6 in `berth`
 
 as expected
 
@@ -110,6 +213,7 @@ old state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - transport
     - working
 
 refused
@@ -133,6 +237,7 @@ old state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - transport
     - working
 
 refused
@@ -157,6 +262,7 @@ old state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - transport
     - working
       - {working where:territory-1 what:food} -> 1
 
@@ -181,6 +287,7 @@ old state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - transport
     - working
       - {working where:territory-1 what:food} -> 1
 
@@ -206,6 +313,7 @@ old state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - transport
     - working
 
 command  {build-extractor where:territory-1 what:food}
@@ -226,6 +334,7 @@ new state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - transport
     - working
 
 as expected
@@ -247,6 +356,7 @@ old state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - transport
     - working
       - {working where:territory-1 what:food} -> 1
 
@@ -269,6 +379,7 @@ new state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - transport
     - working
 
 as expected
@@ -292,6 +403,7 @@ old state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - transport
     - working
       - {working where:territory-1 what:metal} -> 1
       - {working where:territory-1 what:food} -> 1
@@ -318,6 +430,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
+    - transport
     - working
 
 command  {move what:scout from:territory-1 to:territory-2}
@@ -339,6 +452,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
+    - transport
     - working
 
 as expected
@@ -362,6 +476,7 @@ old state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
+    - transport
     - working
 
 refused
@@ -388,6 +503,7 @@ old state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
+    - transport
     - working
 
 command  {move what:scout from:territory-1 to:territory-2}
@@ -414,6 +530,7 @@ new state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
+    - transport
     - working
 
 as expected
@@ -437,6 +554,7 @@ old state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
+    - transport
     - working
 
 command  {move what:scout from:territory-1 to:territory-2}
@@ -459,6 +577,7 @@ new state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
+    - transport
     - working
 
 as expected
@@ -480,6 +599,7 @@ old state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - transport
     - working
       - {working where:territory-1 what:food} -> 2
 
@@ -507,6 +627,7 @@ new state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - transport
     - working
 
 as expected

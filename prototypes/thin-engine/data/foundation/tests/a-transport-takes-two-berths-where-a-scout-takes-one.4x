@@ -1,0 +1,21 @@
+# One berth of six is free, and a transport wants two of it.
+#
+# **This is the weight, and it is the whole reason the pool is not a count.** The territory holds
+# five berths' worth and admits a scout - the test beside this one says so - and refuses a
+# transport, which a rule counting vehicles could not tell apart.
+
+{test name:a-transport-takes-two-berths-where-a-scout-takes-one}
+
+{given}
+{territory id:1}
+{territory id:2}
+{adjacency id:1 from:1 to:2}
+{transport where:1 quantity:1}
+{transport where:2 quantity:2}
+{scout where:2 quantity:1}
+
+{when}
+{move what:35 from:1 to:2}
+
+{refused}
+{pool name:berth per:13 n:7}

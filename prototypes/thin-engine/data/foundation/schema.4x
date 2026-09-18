@@ -45,6 +45,9 @@
 {relation id:30 name:metal}
 {relation id:31 name:food}
 {relation id:32 name:working}
+{relation id:33 name:pool}
+{relation id:34 name:draws}
+{relation id:35 name:transport}
 
 
 ## The columns
@@ -173,6 +176,34 @@
 {column id:86 relation:32 seq:3 name:quantity}
 
 
+## What a place has room for, and what each kind takes up
+#
+# **Sean, 2026-09-17**: *I am thinking of inventing a resource that vehicles take up and having a
+# certain limit per territory that is the same across all territories. A lot of real time strategy
+# games do this, and I know the board game twilight imperium does this as well.*
+#
+# **The allowance is a constant and the rate is per kind**, which is the half `spec/data/limit.4x`
+# cannot write: `{limit container:territory contained:ark n:2}` counts arks, and a transport worth
+# two scouts has nowhere to be said.
+#
+# **A pool names the kind of place it is an allowance of**, and a drawing kind's place is whichever
+# of its columns points at that - so the engine finds it rather than knowing the game calls it
+# `where`.
+
+{column id:87 relation:33 seq:1 name:id}
+{column id:88 relation:33 seq:2 name:name}
+{column id:89 relation:33 seq:3 name:per}
+{column id:90 relation:33 seq:4 name:n}
+
+{column id:91 relation:34 seq:1 name:id}
+{column id:92 relation:34 seq:2 name:kind}
+{column id:93 relation:34 seq:3 name:pool}
+{column id:94 relation:34 seq:4 name:n}
+
+{column id:95 relation:35 seq:1 name:where}
+{column id:96 relation:35 seq:2 name:quantity}
+
+
 ## What points at what
 #
 # **A reference is always to a relation's `id`.** The engine checks that such a row is there, so a
@@ -226,6 +257,11 @@
 {reference id:45 column:84 to:13}
 {reference id:46 column:85 to:27}
 
+{reference id:47 column:89 to:1}
+{reference id:48 column:92 to:1}
+{reference id:49 column:93 to:33}
+{reference id:50 column:95 to:13}
+
 
 ## Which relations are the game's state
 #
@@ -241,6 +277,7 @@
 {state id:9 relation:30}
 {state id:10 relation:31}
 {state id:11 relation:32}
+{state id:12 relation:35}
 
 
 ## Which relations are families, and who belongs
@@ -254,6 +291,7 @@
 {family relation:27}
 
 {member kind:28 family:26}
+{member kind:35 family:26}
 {member kind:30 family:27}
 {member kind:31 family:27}
 
@@ -279,6 +317,14 @@
 
 {limit held:19 by:18}
 {limit held:32 by:19}
+
+
+## Every territory has six berths, and a transport is worth two scouts
+
+{pool id:1 name:berth per:13 n:6}
+
+{draws id:1 kind:28 pool:1 n:1}
+{draws id:2 kind:35 pool:1 n:2}
 
 
 ## The three roles a clause can have

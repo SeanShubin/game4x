@@ -36,6 +36,8 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         "relation-of",
         "family",
         "member",
+        "pool",
+        "draws",
         "primitive",
     ] {
         let declared = game
@@ -48,11 +50,11 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         );
         checked += 1;
     }
-    assert_eq!(checked, 17, "seventeen relations describe the structure");
+    assert_eq!(checked, 19, "nineteen relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        28,
-        "twenty-eight in all - those seventeen, and the game's eleven: four kinds, two families,\n         a territory, an adjacency, a deposit and an extractor"
+        31,
+        "thirty-one in all - those nineteen, and the game's twelve: five kinds, two families,\n         a territory, an adjacency, a deposit and an extractor"
     );
 }
 
@@ -314,7 +316,7 @@ fn two_scouts_of_one_description_are_refused() {
 #[test]
 fn a_relation_cannot_carry_both_an_id_and_a_quantity() {
     assert_eq!(
-        with("{column id:90 relation:28 seq:3 name:id}")
+        with("{column id:900 relation:28 seq:3 name:id}")
             .expect_err("a row is one thing or a count of them"),
         Malformed::IdAndQuantity {
             relation: "scout".to_string()
@@ -324,13 +326,13 @@ fn a_relation_cannot_carry_both_an_id_and_a_quantity() {
     // **The controls are a relation of their own**, because adding a column to one that has rows
     // makes every one of them stop fitting, and `WrongColumns` would then be the refusal whatever
     // the columns were called. A relation with no rows isolates the pair.
-    let pile = "{relation id:90 name:pile}\n{column id:90 relation:90 seq:1 name:quantity}";
+    let pile = "{relation id:990 name:pile}\n{column id:990 relation:990 seq:1 name:quantity}";
     with(pile).expect("counted alone is fine");
-    with("{relation id:90 name:pile}\n{column id:90 relation:90 seq:1 name:id}")
+    with("{relation id:990 name:pile}\n{column id:990 relation:990 seq:1 name:id}")
         .expect("identified alone is fine");
     assert_eq!(
         with(&format!(
-            "{pile}\n{{column id:91 relation:90 seq:2 name:id}}"
+            "{pile}\n{{column id:991 relation:990 seq:2 name:id}}"
         ))
         .expect_err("and the two together are not"),
         Malformed::IdAndQuantity {

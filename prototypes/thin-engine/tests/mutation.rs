@@ -152,6 +152,7 @@ fn check(files: &InMemory) -> Result<(), String> {
             "metal",
             "scout",
             "territory",
+            "transport",
             "working",
         ];
         if report.compared != state && report.compared != ["the refusal"] {
@@ -313,7 +314,7 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
     Ok(())
 }
 
-const REFERENCES: usize = 39;
+const REFERENCES: usize = 43;
 
 /// **References no test world can violate**, because nothing points at them there.
 ///
@@ -688,10 +689,15 @@ fn no_value_can_be_changed_without_breaking_something() {
 /// deposit row carries one whether the test reads it or not - and a test about running out of
 /// something never gets as far as working the deposit. **Four of the eleven lines below are that
 /// one fact**, which is the shape of a refusal test rather than spare data.
-const NOT_LOAD_BEARING: [&str; 11] = [
+/// **And an adjacency's `id` in a test that is refused.** A `move` reads `from` and `to`; the id
+/// is compared only by a `then`, and a refusal test has none - so the two berth tests each leave
+/// one. **The test beside them has a `then` and does not**, which is the difference showing.
+const NOT_LOAD_BEARING: [&str; 13] = [
     "12 rules.4x clause.seq",
     "7 rules.4x input.seq",
     "1 rules.4x reading.id",
+    "1 tests/a-scout-cannot-move-where-every-berth-is-taken.4x adjacency.id",
+    "1 tests/a-transport-takes-two-berths-where-a-scout-takes-one.4x adjacency.id",
     "1 tests/an-extractor-cannot-be-built-where-the-deposits-are-taken.4x deposit.density",
     "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x deposit.density",
     "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x working.quantity",
