@@ -319,6 +319,36 @@ silently** - the class the script was written about, in the script, at the small
 A terminator rather than a number would do it.
 
 
+### Q-94 - The number every `refresh` tops off to is stated only in a release, and `movable` says one of them twice
+
+**to** spec · **status** open · **raised** 2026-09-18 · **source**
+[The maximum is called Readies](2026-09-18-the-maximum-is-called-readies.md)
+
+**Where.** `releases/first-release.md:173`, the **Readies** column of *Units and structures*; and
+`spec/`, which does not have it.
+
+**What.** Five allowances are refreshed *to their maximum* - `moving`, `laboring`, `bearing`,
+`working`, `defending`, six `refresh` blocks in `spec/data/block.4x`. The maximum is per kind, is a
+number, and is 1 for every kind that has one; it is stated **only** in the release's Readies
+column. `grep -rn "readies\|ready" spec/` finds no trait in `traits.4x`, no row in `carries.4x` and
+no sentence in any `spec/*.md`, so `compare:at-maximum` has no maximum in `spec/` to point at.
+
+**And `movable` states one of the five a second time.** `{trait name:movable admits:number
+kept:kind}`, carried by `ark` and `pioneer`, is **1** where Readies says **moving 1** - both per
+kind, both numbers, both 1. Either that is one fact stated twice, which `spec/invariants.md` ->
+*A fact is stated once* forbids, or they are two facts and nothing says how they differ. **The
+weaker half is certainly true**: `movable` is declared in a data file, given to two kinds, and
+defined in no prose anywhere.
+
+**Why.** `CLAUDE.md` -> Releases: a release never invents a rule, and a release is deleted once
+vetted - so five of the game's numbers have their only statement in the file with the shortest
+life. Sean is designing refresh against these numbers this week, which is what makes it now rather
+than eventually.
+
+**Whether.** Worth a proposal now. **This lens proposes no wording and resolves nothing** - which
+of `movable` and Readies is canonical is Sean's, and the honest form of the question is that one of
+them is a duplicate or neither is defined.
+
 ### Q-93 - The prototype's backlog says the sum blocks storage, and the sum shipped in the commit that said so
 
 **to** code · **status** open · **raised** 2026-09-18 · **source**

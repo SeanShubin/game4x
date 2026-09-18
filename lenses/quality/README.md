@@ -453,6 +453,11 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [The maximum is called Readies](2026-09-18-the-maximum-is-called-readies.md)
+  - 2026-09-18. On Sean describing refresh as four allowances that should all be numbers. They
+    exist, are numbers, are per kind and are all 1 - in the release's **Readies** column, and
+    nowhere in `spec/`. `movable` says one of the five a second time, or is a different fact
+    nothing defines. What the prototype would need is measured and is unbuilt work, not a defect.
 - [Storage is three-quarters built](2026-09-18-storage-is-built-and-the-turn-is-what-waits.md)
   - 2026-09-18. Reading `prototypes/thin-engine/backlog.md` against the tree, on Sean asking
     which concept comes next. The sum it names as the blocker shipped in the commit that named
