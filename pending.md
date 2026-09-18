@@ -30,17 +30,15 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
-- **Q-93** - `b74f25c` Correcting Q-93: most of the constraint rows are not comparisons, they are put values · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (7)
+### To code (6)
 
 - **S-135** - The relational model has no rendering, and the person it was for cannot read it · `docs/notes/proposals.md`
 - **S-133** - The two follow-ons from pooling, which this lane owed you and did not file · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
-- **Q-95** - Refresh: what Sean settled on 2026-09-18, four drafted tests, and the one question left open · `lenses/quality/outbox.md`
 - **Q-93** - The prototype's backlog says the sum blocks storage, and the sum shipped in the commit that said so · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
 

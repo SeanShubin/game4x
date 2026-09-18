@@ -321,8 +321,46 @@ A terminator rather than a number would do it.
 
 ### Q-95 - Refresh: what Sean settled on 2026-09-18, four drafted tests, and the one question left open
 
-**to** code · **status** open · **raised** 2026-09-18 · **source**
+**to** code · **status** **acted** 2026-09-18 · `dcd3a353` · **raised** 2026-09-18 · **source**
 [What the refresh conversation settled](2026-09-18-what-the-refresh-conversation-settled.md)
+
+## Built, and three of this lens's readings were wrong - checked at `dcd3a353` rather than taken from the report
+
+**Two of the four drafted tests were wrong and the code lane corrected rather than bent them**,
+which is the right way round. `a-scout-that-has-moved-cannot-move-again` moved a scout back along
+a one-way border, so it would have refused for want of a border rather than for want of a move.
+And the second test stated a refusal **and** the world it would have left: `Failed::BothEndings` in
+`src/script.rs:356` refuses a test that states both, and it **predates this work** - three
+occurrences at `dcd3a353^` - so the draft was wrong about the harness rather than ahead of it.
+This lens flagged that one as the thing to check hardest, which is the flag working and not an
+excuse.
+
+**The guess this lens declined to make was declined correctly, and its refutation is right with the
+wrong evidence.** *Bindings match, literals assign* cannot work, and the code lane said so citing
+`build-extractor`'s remove clause finding labor by `{literal ... value:labor}`. **No such row
+exists**: every one of the 13 literals in `rules.4x` has a numeric value, and clause-5 finds labor
+by its own `relation:labor` field. **The conclusion stands on better evidence than the example
+given** - `{literal id:13 clause:clause-3 column:98 value:1}`, written in this very change, is a
+literal doing nothing but matching: it is how `move` picks the `moving:1` group out of a place
+holding both. Filed so that a reader re-deriving the reasoning from the stated example does not
+find nothing there.
+
+**Their two departures are sound and this lens checked both.** Two refresh rules rather than one,
+because the assigned column is named in the rule and a scout has no `working` - and
+`spec/data/block.4x` has six refresh blocks against one recipe, so a rule here is the analogue of a
+block. And the deposit limit now takes the container's key as a subset of the held key, summing the
+held rows over it: `working` joining the extractor's key would otherwise have broken it, and **the
+sum is the part that matters**, because two groups each fitting while together they do not is
+exactly what an unsummed comparison would have allowed.
+
+**Their own finding is real, and the fifth test does not close it.** They report that
+`refresh-restores-a-spent-extractor` survives mutating its given from `working:0` to `working:1` -
+correct, because refresh is a no-op on a ready extractor and both worlds end at `working:0` with
+`food -> 6`. **No test of that shape can make the given load-bearing**, so the backlog's *refresh
+where there is nothing to refresh* closes a different hole. **What closes this one is spending the
+extractor inside the test**: given `working:1` and two labor, `work`, `refresh-working`, `work`,
+ending at `food -> 12`. Every part of that given is then load-bearing - `working:0` refuses the
+first work, deleting the refresh refuses the second, one labor refuses the second.
 
 **Where.** `prototypes/thin-engine/` - `data/friendly/schema.4x`, `rules.4x`, and the tests.
 
@@ -393,7 +431,7 @@ them is a duplicate or neither is defined.
 
 ### Q-93 - The prototype's backlog says the sum blocks storage, and the sum shipped in the commit that said so
 
-**to** code · **status** open · **raised** 2026-09-18 · **source**
+**to** code · **status** open · **cited** `b74f25c` · **raised** 2026-09-18 · **source**
 [Storage is three-quarters built](2026-09-18-storage-is-built-and-the-turn-is-what-waits.md)
 
 **Where.** `prototypes/thin-engine/backlog.md` - the Storage table, and line 28.
