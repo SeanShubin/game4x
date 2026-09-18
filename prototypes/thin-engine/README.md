@@ -1566,6 +1566,34 @@ It is not in the workspace, so the root `cargo test` does not reach it.
 four red binaries shows one - which is how four stale assertions sat unseen across two commits
 here, each reported green.
 
+## Two people building one crate, and only one of them may have the binary
+
+**Sean leaves the review server running in a terminal of his own**, which holds
+`target/debug/examples/review-web.exe` open. A build that relinks it then fails with *Access is
+denied* - and on 2026-09-17 this lane answered that five or six times with `taskkill /IM
+review-web.exe /F`, killing his server each time without saying so.
+
+**So this lane builds somewhere else.**
+
+```
+CARGO_TARGET_DIR=target/claude cargo test --no-fail-fast
+```
+
+**`target/` is gitignored unanchored**, so `target/claude/` needs no rule of its own and nothing
+new is committed.
+
+**Not a `.cargo/config.toml`.** Setting `build.target-dir` there would move Sean's builds as well,
+which is the one thing this must not do - his server has to keep the binary it is running.
+
+**It costs 132 MB and a rebuild of one crate**, which is quick because the crate has no
+dependencies at all. An estimate of 600 MB was offered first, read off the size of the existing
+`target/`; almost all of that is the test binaries and incremental state of repeated runs rather
+than anything a fresh build has to produce.
+
+**And the hooks do not collide either**, which was worth checking before relying on this:
+`pre-commit` runs rustfmt and `pad-tables` and builds nothing here, and `pre-push`'s gate is
+`--workspace`, which this crate is deliberately outside of.
+
 ## `report.html`, which is where a red is read
 
 **Sean, 2026-09-16**: *I want an aesthetically pleasing and informative test report. [...] Make sure
