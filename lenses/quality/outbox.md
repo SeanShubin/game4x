@@ -319,6 +319,48 @@ silently** - the class the script was written about, in the script, at the small
 A terminator rather than a number would do it.
 
 
+### Q-95 - Refresh: what Sean settled on 2026-09-18, four drafted tests, and the one question left open
+
+**to** code · **status** open · **raised** 2026-09-18 · **source**
+[What the refresh conversation settled](2026-09-18-what-the-refresh-conversation-settled.md)
+
+**Where.** `prototypes/thin-engine/` - `data/friendly/schema.4x`, `rules.4x`, and the tests.
+
+**What.** Sean spent a conversation designing refresh with this session, believing it was the code
+lane. **The record is the report and none of it is this lens's decision.** He settled: the trait is
+`moving`, not `moves-remaining`, because `spec/console.md` already writes `{citizen defending:1} ->
+8`; an allowance is a **key column on the thing**, so things group by it and `{scout where:t1
+moving:1} -> 2` beside `{scout where:t1 moving:0} -> 3` is two rows; and **refreshing something
+already topped off is a no-op rather than a refusal**, which is what makes `put` necessary. His
+reason: *this is not a transformation recipe, it is creation... the resources that come from the
+ground and sun are infinite but rate limited. So are moves.*
+
+**He deferred two things deliberately**, and deferring both is free: whether a turn is a resource -
+nothing in `spec/data/kinds.4x`'s 23 kinds is a turn - and whether allowance unifies with capacity,
+which is the word question (`readies`, `allows`, `affords`). **While every maximum is 1 the maximum
+is a literal in the rule**, so no maximum row is needed yet.
+
+**Why this is addressed to you.** It is four tests and a role, in a directory this lens may not
+write. **The drafts are in the report, in friendly format, ready to place** - and the report sizes
+the change rather than leaving it to be discovered: `moving` joins the `unit` family and
+`UnlikeShape` will require `scout` and `transport` to declare it; **8 of 17 tests name a scout or
+transport, 21 rows**, each gaining a `moving:` field; `working` stops being a relation and becomes
+a column of `extractor`, taking `{limit held:working by:extractor}` with it.
+
+**Measured, not asserted**: 25 recipes and 92 role rows in `releases/first-release.md` - 32
+`consume`, 22 `require`, 21 `produce`, 17 `put`, 0 `limit`. Six recipes make something and consume
+nothing; five spend an allowance with `put <trait> one less`; **refresh restores it and is the only
+recipe of the 25 that is a `put` alone**.
+
+**The question left open, which this lens will not answer.** In a put clause, which columns are the
+match and which the assignment? A require or remove clause's bindings and literals make one
+pattern; a put needs both. *Bindings match, literals assign* is the cheapest reading and is
+recorded as a guess about your design rather than a recommendation.
+
+**Whether.** Worth doing now - it is the concept Sean is working on. **Check the drafts before
+trusting them**: the second test asserts a refusal *and* the world it would have left, and this
+lens does not know that `{refused}` carries both.
+
 ### Q-94 - The number every `refresh` tops off to is stated only in a release, and `movable` says one of them twice
 
 **to** spec · **status** open · **raised** 2026-09-18 · **source**

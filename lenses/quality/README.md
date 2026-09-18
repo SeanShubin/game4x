@@ -453,6 +453,11 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [What the refresh conversation settled](2026-09-18-what-the-refresh-conversation-settled.md)
+  - 2026-09-18. A record of a conversation, not a decision by this lens: Sean designed refresh
+    with this session believing it was the code lane. The trait is `moving`, an allowance is a
+    key column so things group by it, and refreshing something already full is a no-op - which
+    is what makes `put` necessary. Four tests drafted, and the put-clause question left open.
 - [The maximum is called Readies](2026-09-18-the-maximum-is-called-readies.md)
   - 2026-09-18. On Sean describing refresh as four allowances that should all be numbers. They
     exist, are numbers, are per kind and are all 1 - in the release's **Readies** column, and
