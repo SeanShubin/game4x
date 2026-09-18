@@ -36,8 +36,9 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         "relation-of",
         "family",
         "member",
-        "pool",
-        "draws",
+        "supply",
+        "provides",
+        "consumes",
         "primitive",
     ] {
         let declared = game
@@ -50,11 +51,11 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         );
         checked += 1;
     }
-    assert_eq!(checked, 19, "nineteen relations describe the structure");
+    assert_eq!(checked, 20, "twenty relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        31,
-        "thirty-one in all - those nineteen, and the game's twelve: five kinds, two families,\n         a territory, an adjacency, a deposit and an extractor"
+        32,
+        "thirty-two in all - those twenty, and the game's twelve: five kinds, two families,\n         a territory, an adjacency, a deposit and an extractor"
     );
 }
 

@@ -7,6 +7,7 @@ a-food-extractor-and-a-metal-extractor-do-not-interfere
 old state
   - root
     - adjacency
+    - consumes
     - deposit
       - {deposit where:territory-1 what:metal density:2} -> 1
       - {deposit where:territory-1 what:food density:6} -> 1
@@ -17,6 +18,7 @@ old state
     - labor
       - {labor where:territory-1} -> 1
     - metal
+    - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
@@ -33,6 +35,7 @@ command  {work where:territory-1 what:food}
 new state
   - root
     - adjacency
+    - consumes
     - deposit
       - {deposit where:territory-1 what:metal density:2} -> 1
       - {deposit where:territory-1 what:food density:6} -> 1
@@ -43,6 +46,7 @@ new state
       - {food where:territory-1} -> 6
     - labor
     - metal
+    - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
@@ -59,11 +63,13 @@ old state
   - root
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
+    - consumes
     - deposit
     - extractor
     - food
     - labor
     - metal
+    - provides
     - scout
       - {scout where:territory-1} -> 1
       - {scout where:territory-2} -> 1
@@ -81,11 +87,13 @@ new state
   - root
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
+    - consumes
     - deposit
     - extractor
     - food
     - labor
     - metal
+    - provides
     - scout
       - {scout where:territory-2} -> 2
     - territory
@@ -103,11 +111,16 @@ old state
   - root
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
+    - consumes
+      - {consumes kind:scout what:berth} -> 1
+      - {consumes kind:transport what:berth} -> 2
     - deposit
     - extractor
     - food
     - labor
     - metal
+    - provides
+      - {provides kind:territory what:berth} -> 6
     - scout
       - {scout where:territory-1} -> 1
     - territory
@@ -118,7 +131,7 @@ old state
     - working
 
 refused
-  `move` would leave a world where `2` draws {pool name:berth per:13 n:7} and there is room for 6 in `berth`
+  `move` would leave a world where `2` consumes berth enough for {provides kind:13 what:1 quantity:7} and is provided 6
 
 as expected
 
@@ -129,11 +142,16 @@ old state
   - root
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
+    - consumes
+      - {consumes kind:scout what:berth} -> 1
+      - {consumes kind:transport what:berth} -> 2
     - deposit
     - extractor
     - food
     - labor
     - metal
+    - provides
+      - {provides kind:territory what:berth} -> 6
     - scout
       - {scout where:territory-1} -> 1
       - {scout where:territory-2} -> 1
@@ -152,11 +170,16 @@ new state
   - root
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
+    - consumes
+      - {consumes kind:scout what:berth} -> 1
+      - {consumes kind:transport what:berth} -> 2
     - deposit
     - extractor
     - food
     - labor
     - metal
+    - provides
+      - {provides kind:territory what:berth} -> 6
     - scout
       - {scout where:territory-2} -> 2
     - territory
@@ -175,11 +198,16 @@ old state
   - root
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
+    - consumes
+      - {consumes kind:scout what:berth} -> 1
+      - {consumes kind:transport what:berth} -> 2
     - deposit
     - extractor
     - food
     - labor
     - metal
+    - provides
+      - {provides kind:territory what:berth} -> 6
     - scout
       - {scout where:territory-2} -> 1
     - territory
@@ -191,7 +219,7 @@ old state
     - working
 
 refused
-  `move` would leave a world where `2` draws {pool name:berth per:13 n:7} and there is room for 6 in `berth`
+  `move` would leave a world where `2` consumes berth enough for {provides kind:13 what:1 quantity:7} and is provided 6
 
 as expected
 
@@ -201,6 +229,7 @@ an-extractor-cannot-be-built-where-the-deposits-are-taken
 old state
   - root
     - adjacency
+    - consumes
     - deposit
       - {deposit where:territory-1 what:food density:6} -> 1
     - extractor
@@ -210,6 +239,7 @@ old state
       - {labor where:territory-1} -> 1
     - metal
       - {metal where:territory-1} -> 1
+    - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
@@ -227,6 +257,7 @@ an-extractor-cannot-be-built-where-there-is-no-deposit
 old state
   - root
     - adjacency
+    - consumes
     - deposit
     - extractor
     - food
@@ -234,6 +265,7 @@ old state
       - {labor where:territory-1} -> 1
     - metal
       - {metal where:territory-1} -> 1
+    - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
@@ -251,6 +283,7 @@ an-extractor-cannot-be-worked-twice-on-one-readiness
 old state
   - root
     - adjacency
+    - consumes
     - deposit
       - {deposit where:territory-1 what:food density:6} -> 1
     - extractor
@@ -259,6 +292,7 @@ old state
     - labor
       - {labor where:territory-1} -> 2
     - metal
+    - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
@@ -277,6 +311,7 @@ an-extractor-cannot-be-worked-without-labor
 old state
   - root
     - adjacency
+    - consumes
     - deposit
       - {deposit where:territory-1 what:food density:6} -> 1
     - extractor
@@ -284,6 +319,7 @@ old state
     - food
     - labor
     - metal
+    - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
@@ -302,6 +338,7 @@ an-extractor-is-built-from-labor-and-metal
 old state
   - root
     - adjacency
+    - consumes
     - deposit
       - {deposit where:territory-1 what:food density:6} -> 1
     - extractor
@@ -310,6 +347,7 @@ old state
       - {labor where:territory-1} -> 1
     - metal
       - {metal where:territory-1} -> 1
+    - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
@@ -324,6 +362,7 @@ command  {build-extractor where:territory-1 what:food}
 new state
   - root
     - adjacency
+    - consumes
     - deposit
       - {deposit where:territory-1 what:food density:6} -> 1
     - extractor
@@ -331,6 +370,7 @@ new state
     - food
     - labor
     - metal
+    - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
@@ -345,6 +385,7 @@ an-extractor-pulls-its-deposits-density
 old state
   - root
     - adjacency
+    - consumes
     - deposit
       - {deposit where:territory-1 what:food density:6} -> 1
     - extractor
@@ -353,6 +394,7 @@ old state
     - labor
       - {labor where:territory-1} -> 1
     - metal
+    - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
@@ -368,6 +410,7 @@ command  {work where:territory-1 what:food}
 new state
   - root
     - adjacency
+    - consumes
     - deposit
       - {deposit where:territory-1 what:food density:6} -> 1
     - extractor
@@ -376,6 +419,7 @@ new state
       - {food where:territory-1} -> 6
     - labor
     - metal
+    - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
@@ -390,6 +434,7 @@ one-extractors-readiness-is-not-anothers
 old state
   - root
     - adjacency
+    - consumes
     - deposit
       - {deposit where:territory-1 what:metal density:2} -> 1
       - {deposit where:territory-1 what:food density:6} -> 1
@@ -400,6 +445,7 @@ old state
     - labor
       - {labor where:territory-1} -> 2
     - metal
+    - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
@@ -420,11 +466,13 @@ old state
   - root
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
+    - consumes
     - deposit
     - extractor
     - food
     - labor
     - metal
+    - provides
     - scout
       - {scout where:territory-1} -> 2
     - territory
@@ -441,11 +489,13 @@ new state
   - root
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
+    - consumes
     - deposit
     - extractor
     - food
     - labor
     - metal
+    - provides
     - scout
       - {scout where:territory-1} -> 1
       - {scout where:territory-2} -> 1
@@ -465,11 +515,13 @@ old state
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
       - {adjacency id:2 from:territory-2 to:territory-3}
+    - consumes
     - deposit
     - extractor
     - food
     - labor
     - metal
+    - provides
     - scout
       - {scout where:territory-1} -> 1
     - territory
@@ -492,11 +544,13 @@ old state
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
       - {adjacency id:2 from:territory-2 to:territory-3}
+    - consumes
     - deposit
     - extractor
     - food
     - labor
     - metal
+    - provides
     - scout
       - {scout where:territory-1} -> 1
     - territory
@@ -519,11 +573,13 @@ new state
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
       - {adjacency id:2 from:territory-2 to:territory-3}
+    - consumes
     - deposit
     - extractor
     - food
     - labor
     - metal
+    - provides
     - scout
       - {scout where:territory-3} -> 1
     - territory
@@ -543,11 +599,13 @@ old state
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
       - {adjacency id:2 from:territory-2 to:territory-3}
+    - consumes
     - deposit
     - extractor
     - food
     - labor
     - metal
+    - provides
     - scout
       - {scout where:territory-1} -> 1
     - territory
@@ -566,11 +624,13 @@ new state
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
       - {adjacency id:2 from:territory-2 to:territory-3}
+    - consumes
     - deposit
     - extractor
     - food
     - labor
     - metal
+    - provides
     - scout
       - {scout where:territory-2} -> 1
     - territory
@@ -588,6 +648,7 @@ two-extractors-in-one-territory-pull-the-density-twice
 old state
   - root
     - adjacency
+    - consumes
     - deposit
       - {deposit where:territory-1 what:food density:6} -> 2
     - extractor
@@ -596,6 +657,7 @@ old state
     - labor
       - {labor where:territory-1} -> 2
     - metal
+    - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
@@ -616,6 +678,7 @@ command  {work where:territory-1 what:food}
 new state
   - root
     - adjacency
+    - consumes
     - deposit
       - {deposit where:territory-1 what:food density:6} -> 2
     - extractor
@@ -624,6 +687,7 @@ new state
       - {food where:territory-1} -> 12
     - labor
     - metal
+    - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}

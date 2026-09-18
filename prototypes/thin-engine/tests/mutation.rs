@@ -145,11 +145,13 @@ fn check(files: &InMemory) -> Result<(), String> {
         // not be is comparing nothing, which is what this rules out.
         let state = [
             "adjacency",
+            "consumes",
             "deposit",
             "extractor",
             "food",
             "labor",
             "metal",
+            "provides",
             "scout",
             "territory",
             "transport",
@@ -314,7 +316,7 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
     Ok(())
 }
 
-const REFERENCES: usize = 43;
+const REFERENCES: usize = 45;
 
 /// **References no test world can violate**, because nothing points at them there.
 ///
@@ -692,10 +694,14 @@ fn no_value_can_be_changed_without_breaking_something() {
 /// **And an adjacency's `id` in a test that is refused.** A `move` reads `from` and `to`; the id
 /// is compared only by a `then`, and a refusal test has none - so the two berth tests each leave
 /// one. **The test beside them has a `then` and does not**, which is the difference showing.
-const NOT_LOAD_BEARING: [&str; 13] = [
+/// **And a supply's own name.** `berth` is read by the friendly renderer and by nobody else - the
+/// engine groups providers and consumers by the supply's id, and the word is there so a reader has
+/// one. It is the same shape `thing.name` had before a kind became a relation.
+const NOT_LOAD_BEARING: [&str; 14] = [
     "12 rules.4x clause.seq",
     "7 rules.4x input.seq",
     "1 rules.4x reading.id",
+    "1 schema.4x supply.name",
     "1 tests/a-scout-cannot-move-where-every-berth-is-taken.4x adjacency.id",
     "1 tests/a-transport-takes-two-berths-where-a-scout-takes-one.4x adjacency.id",
     "1 tests/an-extractor-cannot-be-built-where-the-deposits-are-taken.4x deposit.density",

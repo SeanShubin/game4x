@@ -2258,3 +2258,97 @@ one and does not leak**, which is the difference showing rather than a fault.
 its cost is rows times tests - and today both roughly doubled. **It has stopped being something to
 run while waiting**, which is worth knowing before it stops being run at all. Nothing is wrong
 with it; the shape is quadratic and the data is growing.
+
+
+## Provides and consumes, where you can read them
+
+Sean, 2026-09-17, on the berth system that preceded this: *I don't like the current berth system
+and it is good to have an option to keep it out by not approving any of these tests.* And on why:
+*there are certain things I always want to see in tests because I need to compute the tests in my
+head. So something like the berth system, I need see what the actual numbers are, not some hidden
+default.*
+
+```
+{provides kind:territory what:berth} -> 6
+{consumes kind:scout     what:berth} -> 1
+{consumes kind:transport what:berth} -> 2
+```
+
+**They are state, stated in each test's `given` and repeated in its `then`.** So a test reads
+whole: a territory provides six, two transports and a scout are five, and a third transport wants
+two more.
+
+**`pool` and `draws` are gone** - two relations and eight columns replaced by two relations and
+six, with the numbers moved from the ruleset into the world.
+
+## Why the number is a quantity and not a column
+
+Sean offered four spellings: `amount:6`, `quantity:6`, `value:6`, and `-> 6`. **The last two are
+the same row** - `-> 6` is how the friendly form writes a quantity - and the argument for them is
+the key, not the look.
+
+**A relation with no quantity is keyed by its first column alone.** So
+`{provides kind:territory what:berth amount:6}` is keyed by `kind`, a territory could provide only
+one thing, and `{provides kind:territory what:slot amount:4}` would be refused as a duplicate key.
+With the quantity, the key is `(kind, what)`: one row per kind per thing provided, and a second row
+saying four is refused - which is the uniqueness wanted, got for nothing.
+
+**`value:` has a second problem**: it is already `literal.value`, a word the engine branches on.
+
+**And it passes the test the model already has for this** - *a number is a trait when two rows
+differing only in it can both be true, and a quantity when it says how many of one description
+there are.* Two providings of berth by a territory cannot both be true, so it is not a trait.
+
+## A supply is declared once; its amounts are not
+
+```
+{supply id:1 name:berth per:territory}
+```
+
+**`per` says what the supply is measured in**, so the check does not have to work out which
+relation every provider and consumer has in common. It is the one part of the old `pool` worth
+keeping.
+
+**And it makes a typo impossible.** `what` references a supply, so
+`{consumes kind:scout what:berht} -> 1` is refused when the world is read rather than silently
+meaning *scouts are unlimited*.
+
+## The shape storage needs, reached without another idea
+
+**A provider either is the place or is in one.** A territory provides berths at itself. A store
+would provide room at the territory it stands in, and a place's capacity is then the sum of what is
+in it that provides - `spec/logistics.md`: *a place's capacity for a kind is the sum of what is in
+it that can hold that kind.*
+
+```
+{provides kind:store what:metal} -> 10
+```
+
+**The pool could not say that at all**, because its allowance was one constant rather than a sum
+over what is present. That is the reason to have replaced it rather than patched it, and it is a
+better reason than legibility.
+
+## The layer that bent, and the ruling that bent it
+
+**A scenario is now stating a rule**, which `a_scenario_states_a_world_and_an_act_and_nothing_else`
+exists to prevent. Sean, 2026-09-17: *the layers weren't meant to hide information relevant to
+understanding the test. They may still be a good idea that is simply superceded by test
+comprehension being more important.* **That precedence is in `layers.md`** rather than left to be
+re-argued, because the layer argument is the one that was written down and would otherwise win by
+default.
+
+**A test may now set up a world where territories provide ten**, which for a prototype is a
+feature.
+
+## Two poisons, and a metric this lane will stop using
+
+| Poison                                     | What it showed                                         |
+| ------------------------------------------ | ------------------------------------------------------ |
+| a transport consuming one instead of two   | both refusals go green - the rate is what refuses them |
+| a territory providing seven instead of six | the same, so the provision is read rather than assumed |
+
+**Sean, 2026-09-17**: *I don't really care if a change causes every test to have to be reviewed.
+This is prototyping and I am going to be making drastic changes to see what happens. So how many
+tests need to be rewritten should not be a metric used to judge a change as bad.* **This lane had
+used it twice** - six hundred rows at two hundred territories, and every test changing - and both
+arguments are withdrawn.

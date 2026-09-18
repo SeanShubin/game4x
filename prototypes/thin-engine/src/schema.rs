@@ -44,10 +44,11 @@ const BY: &str = "by";
 const FAMILY: &str = "family";
 const MEMBER: &str = "member";
 const KIND: &str = "kind";
-const POOL: &str = "pool";
-const DRAWS: &str = "draws";
+const SUPPLY: &str = "supply";
+const PROVIDES: &str = "provides";
+const CONSUMES: &str = "consumes";
+const WHAT: &str = "what";
 const PER: &str = "per";
-const N: &str = "n";
 
 /// One column: its id, what it is called, and what it points at if anything.
 ///
@@ -173,18 +174,17 @@ pub enum Malformed {
         /// How much room there actually is, which is `0` where the row is absent.
         room: String,
     },
-    /// More drawn on a place's allowance than the place has.
+    /// More of a supply consumed in a place than is provided there.
     ///
-    /// **One number for many kinds**, which is what a weighted pool is for: two transports and two
-    /// scouts are six berths, and the refusal says so rather than naming whichever row was read
-    /// last.
+    /// **One number for many kinds**: two transports and two scouts are six berths, and the
+    /// refusal says so rather than naming whichever row was read last.
     Crowded {
-        pool: String,
+        supply: String,
         /// The place it was counted in, as its key.
         place: String,
-        /// The allowance that would have had to be there, written out.
+        /// The providing that would have had to be there, written out.
         wanted: String,
-        /// What there is.
+        /// What is provided.
         room: String,
     },
     /// A relation belongs to a family and does not declare one of the family's columns.
@@ -237,14 +237,14 @@ impl std::fmt::Display for Malformed {
                 )
             }
             Malformed::Crowded {
-                pool,
+                supply,
                 place,
                 wanted,
                 room,
             } => {
                 write!(
                     out,
-                    "`{place}` draws {wanted} and there is room for {room} in `{pool}`"
+                    "`{place}` consumes {supply} enough for {wanted} and is provided {room}"
                 )
             }
             Malformed::UnlikeShape {
@@ -680,102 +680,142 @@ pub fn check(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
     Ok(())
 }
 
-/// No place holds more than its allowance for a pool, counting each kind at its own rate.
+/// No place consumes more of a supply than is provided there, each kind counting at its own rate.
 ///
-/// **Sean, 2026-09-17**, on limiting vehicles in a territory: *I am thinking of inventing a
-/// resource that vehicles take up and having a certain limit per territory that is the same
-/// across all territories.* **The limit is a constant and the rate is per kind**, which is what
-/// `{limit container:territory contained:ark n:2}` in `spec/data/limit.4x` cannot say - a count
-/// there is a count, and a transport worth two scouts has nowhere to be written.
+/// **Sean, 2026-09-17**: *there are certain things I always want to see in tests because I need to
+/// compute the tests in my head.* So the amounts are rows of the world, stated in a test's `given`
+/// and read where the test is read - and a layer that would have kept them out of a scenario is a
+/// layer hiding what the test is about. **Comprehension wins and the layer bends**, which is his
+/// ruling rather than an inference.
 ///
-/// **The place column is found rather than named.** A pool says `per:territory`, and a drawing
-/// relation's place is whichever of its columns references that - so the engine does not have to
-/// know that the game calls it `where`, which would have made a game noun of a column name.
+/// ```text
+/// {provides kind:territory what:berth} -> 6
+/// {consumes kind:scout     what:berth} -> 1
+/// {consumes kind:transport what:berth} -> 2
+/// ```
 ///
-/// **No rule mentions it**, the same as every other limit here: a command that would overfill a
-/// place leaves a world that does not fit, and every rule already refuses that.
+/// **A provider either is the place or is in one.** A territory provides berths at itself; a store
+/// would provide room at the territory it stands in, and a place's capacity is then the sum of what
+/// is in it that provides - which is `spec/logistics.md`'s sentence, reached without another idea.
+///
+/// **The place is declared, not guessed.** `{supply ... per:territory}` says what a supply is
+/// measured in, so nothing has to work out which relation every provider and consumer has in
+/// common.
+///
+/// **No rule mentions any of it**, as with every limit here: a command that would overfill a place
+/// leaves a world that does not fit, and every rule already refuses that.
 fn nothing_crowds_a_place(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
-    let pools: Vec<&Row> = rows
+    let supplies: Vec<&Row> = rows
         .rows()
         .iter()
-        .filter(|it| it.relation == POOL)
+        .filter(|it| it.relation == SUPPLY)
         .collect();
-    if pools.is_empty() {
+    if supplies.is_empty() {
         return Ok(());
     }
-    // **A pool and a rate name their relations by id**, as every reference in this data does, so
-    // the ids are turned into names once before anything is counted.
     let by_id: BTreeMap<&str, &str> = rows
         .rows()
         .iter()
         .filter(|it| it.relation == RELATION)
         .filter_map(|it| Some((it.value(ID)?, it.value(NAME)?)))
         .collect();
-    for pool in pools {
+
+    for supply in supplies {
         let (Some(id), Some(named), Some(per)) =
-            (pool.value(ID), pool.value(NAME), pool.value(PER))
+            (supply.value(ID), supply.value(NAME), supply.value(PER))
         else {
             continue;
         };
-        let room: i64 = pool.value(N).and_then(|it| it.parse().ok()).unwrap_or(0);
         let Some(of_place) = by_id.get(per).map(|it| it.to_string()) else {
             continue;
         };
 
-        // **What draws on this pool, and at what rate.** A kind naming no rate draws nothing,
-        // which is how every kind that is not a vehicle stays out of the arithmetic.
-        let mut taken: BTreeMap<String, i64> = BTreeMap::new();
-        for draws in rows.rows().iter().filter(|it| it.relation == DRAWS) {
-            if draws.value(POOL) != Some(id) {
-                continue;
-            }
-            let (Some(kind), Some(rate)) = (draws.value(KIND), draws.value(N)) else {
-                continue;
-            };
-            let rate: i64 = rate.parse().unwrap_or(0);
-            let Some(kind) = by_id.get(kind) else {
-                continue;
-            };
-            let Some(declared) = schema.relation(kind) else {
-                continue;
-            };
-            // The column of that kind which says where one of them is.
-            let Some(place) = declared
-                .columns
-                .iter()
-                .find(|it| it.references.as_deref() == Some(of_place.as_str()))
-            else {
-                continue;
-            };
-            let Some(counted) = declared.quantity() else {
-                continue;
-            };
-            for row in rows.rows().iter().filter(|it| it.relation == *kind) {
-                let (Some(at), Some(how_many)) = (row.value(&place.name), row.value(counted))
-                else {
+        // **How much each side is worth, per kind.** A kind named by neither is not in the
+        // arithmetic at all, which is how everything that is not a vehicle stays out of it.
+        let amounts = |relation: &str| -> BTreeMap<String, i64> {
+            let mut found = BTreeMap::new();
+            for row in rows.rows().iter().filter(|it| it.relation == relation) {
+                if row.value(WHAT) != Some(id) {
+                    continue;
+                }
+                let (Some(kind), Some(rate)) = (row.value(KIND), row.value(QUANTITY)) else {
                     continue;
                 };
-                let how_many: i64 = how_many.parse().unwrap_or(0);
-                *taken.entry(at.to_string()).or_default() += how_many * rate;
+                let Some(kind) = by_id.get(kind) else {
+                    continue;
+                };
+                found.insert(kind.to_string(), rate.parse().unwrap_or(0));
             }
-        }
+            found
+        };
 
-        for (place, drawn) in taken {
-            if drawn <= room {
+        // **Rows of a kind, counted into the place each sits in.** A kind that *is* the place is
+        // one of itself in itself; a kind that references the place is however many it says.
+        let counted = |kinds: &BTreeMap<String, i64>| -> BTreeMap<String, i64> {
+            let mut total: BTreeMap<String, i64> = BTreeMap::new();
+            for (kind, rate) in kinds {
+                let Some(declared) = schema.relation(kind) else {
+                    continue;
+                };
+                if *kind == of_place {
+                    for row in rows.rows().iter().filter(|it| it.relation == *kind) {
+                        if let Some(at) = row.value(declared.identity()) {
+                            *total.entry(at.to_string()).or_default() += rate;
+                        }
+                    }
+                    continue;
+                }
+                let (Some(place), Some(quantity)) = (
+                    declared
+                        .columns
+                        .iter()
+                        .find(|it| it.references.as_deref() == Some(of_place.as_str())),
+                    declared.quantity(),
+                ) else {
+                    continue;
+                };
+                for row in rows.rows().iter().filter(|it| it.relation == *kind) {
+                    let (Some(at), Some(how_many)) = (row.value(&place.name), row.value(quantity))
+                    else {
+                        continue;
+                    };
+                    *total.entry(at.to_string()).or_default() +=
+                        how_many.parse::<i64>().unwrap_or(0) * rate;
+                }
+            }
+            total
+        };
+
+        let provided = counted(&amounts(PROVIDES));
+        let consumed = counted(&amounts(CONSUMES));
+        let providers = amounts(PROVIDES);
+
+        for (place, taken) in consumed {
+            let room = provided.get(&place).copied().unwrap_or(0);
+            if taken <= room {
                 continue;
             }
-            // **The refusal names the allowance that would have had to be there**, which is the
-            // same answer every other limit here gives: not *this is too many* but *there is no
-            // pool this big*.
+            // **The refusal names the providing that would have had to be there**, which is the
+            // answer every limit here gives: not *this is too many* but *nothing provides this
+            // much*.
+            let of_kind = providers
+                .keys()
+                .next()
+                .cloned()
+                .unwrap_or_else(|| of_place.clone());
+            let by_name: BTreeMap<&str, &str> = by_id.iter().map(|(a, b)| (*b, *a)).collect();
             let mut wanted = BTreeMap::new();
-            wanted.insert(NAME.to_string(), named.to_string());
-            wanted.insert(PER.to_string(), per.to_string());
-            wanted.insert(N.to_string(), drawn.to_string());
+            wanted.insert(
+                KIND.to_string(),
+                by_name.get(of_kind.as_str()).unwrap_or(&"").to_string(),
+            );
+            wanted.insert(WHAT.to_string(), id.to_string());
+            wanted.insert(QUANTITY.to_string(), taken.to_string());
             return Err(Malformed::Crowded {
-                pool: named.to_string(),
+                supply: named.to_string(),
                 place,
                 wanted: schema.write(&Row {
-                    relation: POOL.to_string(),
+                    relation: PROVIDES.to_string(),
                     values: wanted,
                 }),
                 room: room.to_string(),

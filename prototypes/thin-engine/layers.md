@@ -79,6 +79,40 @@ once; a layer violation that is fixed by a check is fixed for every file that co
 same instance of the game rules, so the rules for one test are the same as the rules for another.*
 A scenario that declares `scout` is saying what the game is, in a file about one situation.
 
+## When a layer and a reader disagree
+
+**A layer may not hide what is needed to understand a test.** Where the two conflict, comprehension
+wins and the layer bends.
+
+**Sean, 2026-09-17**, on discovering that a test's outcome turned on numbers kept in the ruleset:
+*there are certain things I always want to see in tests because I need to compute the tests in my
+head.* And on what that does to the boundary: *the layers weren't meant to hide information
+relevant to understanding the test. They may still be a good idea that is simply superceded by
+test comprehension being more important.*
+
+**The case that forced it.** A berth allowance and each kind's rate lived in `schema.4x`, so
+`{transport where:territory-2} -> 2` was five of six berths and the test said neither the five nor
+the six. Ten numbers in the ruleset can change an outcome; seven are `{literal ... value:1}` rows
+whose effect shows in the given-to-then difference, and those three were the only ones a reader
+could not derive.
+
+**So `provides` and `consumes` are state**, stated in each test's `given`:
+
+```
+{provides kind:territory what:berth} -> 6
+{consumes kind:scout     what:berth} -> 1
+{consumes kind:transport what:berth} -> 2
+```
+
+**That is a scenario stating a rule**, which `a_scenario_states_a_world_and_an_act_and_nothing_else`
+exists to prevent - and it is allowed here because the rule is a number the reader has to have.
+**A test may now set up a world where territories provide ten**, which for a prototype is a feature
+rather than the hole it would be in a shipped game.
+
+**The precedence is stated rather than inferred.** Without it, the next case gets argued from
+scratch and probably decided the other way, because the layer argument is the one that is written
+down.
+
 ## What is still unheld
 
 **Nothing separates structure from ruleset in the other direction.** `schema.4x` could declare a

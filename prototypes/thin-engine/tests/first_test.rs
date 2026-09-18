@@ -265,17 +265,19 @@ fn the_report_says_which_relations_it_compared() {
         report.compared,
         vec![
             "adjacency",
+            "consumes",
             "deposit",
             "extractor",
             "food",
             "labor",
             "metal",
+            "provides",
             "scout",
             "territory",
             "transport",
             "working"
         ],
-        "ten of the game's relations are state - five kinds, and an allowance that is one too"
+        "twelve of the game's relations are state - five kinds, an allowance, and the two sides of a supply"
     );
     assert_eq!(report.test, "the-scout-moves-to-an-adjacent-place");
 }
@@ -292,7 +294,7 @@ fn the_report_reads_as_a_report() {
             report_of("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x")
         ),
         "the-scout-moves-to-an-adjacent-place\n  \
-           compared  adjacency, deposit, extractor, food, labor, metal, scout, territory, transport, working\n  \
+           compared  adjacency, consumes, deposit, extractor, food, labor, metal, provides, scout, territory, transport, working\n  \
            result    as expected"
     );
 }

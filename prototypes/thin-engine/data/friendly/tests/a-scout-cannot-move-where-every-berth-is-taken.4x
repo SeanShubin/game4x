@@ -1,12 +1,15 @@
-# Six berths of six are taken and a seventh vehicle has nowhere to stand.
+# Six berths of six are taken and a seventh berth's worth has nowhere to stand.
 #
-# **No rule mentions berths.** `move` puts the scout down and the world it would leave does not
-# fit, which is where the refusal comes from - so the allowance binds every rule that puts a
-# vehicle anywhere, including ones not written yet.
+# **No rule mentions berths.** `move` puts the scout down and the world it would leave consumes
+# seven where six are provided, which is where the refusal comes from - so this binds every rule
+# that puts a vehicle anywhere, including ones not written yet.
 
 {test name:a-scout-cannot-move-where-every-berth-is-taken}
 
 {given}
+{provides kind:territory what:berth} -> 6
+{consumes kind:scout what:berth} -> 1
+{consumes kind:transport what:berth} -> 2
 {territory id:1 name:territory-1}
 {territory id:2 name:territory-2}
 {adjacency id:1 from:territory-1 to:territory-2}
@@ -17,4 +20,4 @@
 {move what:scout from:territory-1 to:territory-2}
 
 {refused}
-{pool name:berth per:territory n:7}
+{provides kind:territory what:berth} -> 7
