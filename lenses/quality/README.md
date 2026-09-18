@@ -453,6 +453,11 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [A test named for a number nothing states](2026-09-18-a-test-named-for-a-number-nothing-states.md)
+  - 2026-09-18. On Sean calling one berth test questionable. Its name makes the subject a game
+    fact where the fact under test is an engine one, and neither number exists outside the
+    prototype. Its argument lives in the file beside it with nothing coupling them. The test
+    itself is correctly pinned, which the mutation harness proves.
 - [What the refresh conversation settled](2026-09-18-what-the-refresh-conversation-settled.md)
   - 2026-09-18. A record of a conversation, not a decision by this lens: Sean designed refresh
     with this session believing it was the code lane. The trait is `moving`, an allowance is a

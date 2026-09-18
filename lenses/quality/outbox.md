@@ -319,6 +319,38 @@ silently** - the class the script was written about, in the script, at the small
 A terminator rather than a number would do it.
 
 
+### Q-96 - A test is named for two numbers nothing states, and its argument lives in another file
+
+**to** code · **status** open · **raised** 2026-09-18 · **source**
+[A test named for a number nothing states](2026-09-18-a-test-named-for-a-number-nothing-states.md)
+
+**Where.** `data/friendly/tests/a-transport-takes-two-berths-where-a-scout-takes-one.4x` and its
+foundation copy - the `{test name:...}` line and the header comment. Raised by Sean, 2026-09-18:
+*we don't specifically care what those sizes are for what units.*
+
+**What.** The name makes the subject a fact about the game - a transport is worth two scouts - where
+the fact under test is about the engine: the same free space admits one kind and refuses another,
+because the rate belongs to the consumer. **Neither number is stated anywhere**:
+`grep -rn "berth\|scout\|transport" spec/ releases/` returns nothing, which is `S-136`'s isolation
+working and is what makes `2` and `1` arbitrary rather than wrong.
+
+**And the argument is not in the test.** Its comment says *the test beside this one says so*, so the
+contrast that makes it mean anything lives in `a-scout-moves-where-there-is-a-berth-to-spare` with
+nothing coupling them - rename that one and this comment is silently false, both still green. The
+split is forced, since `Failed::BothEndings` refuses a test stating both endings, so the repair is
+in the words rather than the structure.
+
+**Why.** A test named for a number reads as authoritative about it, and the prototype's isolation
+exists so its invented values are not mistaken for findings. Nothing states the rate, so it will
+change, and the test will go on passing under a name that has become false.
+
+**What is not wrong.** The test is correctly pinned and `tests/mutation.rs` proves it - it reads
+each test's own `given` rows, and at `-> 1` the arrival makes four of six, the move succeeds and the
+test fails. **The objection is to what it says it is about, not to what it checks**, and the two
+neighbouring berth tests are named for their mechanism and need nothing.
+
+**Whether.** Worth doing when the file is next touched. A rename and two sentences, no row changed.
+
 ### Q-95 - Refresh: what Sean settled on 2026-09-18, four drafted tests, and the one question left open
 
 **to** code · **status** **acted** 2026-09-18 · `dcd3a353` · **raised** 2026-09-18 · **source**
