@@ -320,6 +320,8 @@
 # name.
 
 {attribute column:53 relation:deposit}
+{attribute column:66 relation:attribute}
+{attribute column:68 relation:relation-of}
 
 
 # **An extractor stands in a deposit, so there cannot be more of them than there are deposits.**

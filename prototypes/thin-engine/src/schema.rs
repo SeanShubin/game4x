@@ -102,21 +102,34 @@ impl Relation {
 
     /// The columns that together tell one row from another.
     ///
-    /// **Every column but the quantity, where there is one** - `spec/console.md`: *a description
-    /// is a kind and every trait of that thing* [...] *no trait of the thing may be left out*. So
-    /// the key is not a subset anybody chooses, and a column added to the relation joins it by
-    /// existing. **Where there is no quantity the key is the first column**, as it always was.
+    /// **An id where there is one; otherwise every column but the quantity and the attributes** -
+    /// `spec/console.md`: *a description is a kind and every trait of that thing* [...] *no trait
+    /// of the thing may be left out*. So the key is not a subset anybody chooses, and a column
+    /// added to the relation joins it by existing.
+    ///
+    /// **It used to be the first column wherever there was no quantity**, which made the quantity
+    /// decide the shape of the rule rather than being one more column the key excludes. That was
+    /// right for three relations and wrong for two: `member` was keyed by `kind` alone, so a kind
+    /// could belong to one family, and `limit` by `held` alone, so a thing could be held by one
+    /// container. **Neither was a decision** - Sean, 2026-09-18, on being told a scout could not
+    /// also be a refreshable: *Why not? Many languages have multiple inheritance.* It was an
+    /// artefact of this function presented as a property of the model.
+    ///
+    /// **The two it was right about are kept right by marking a column**, which is what
+    /// `{attribute ...}` is for and costs a row each: `attribute.relation` and `relation-of.input`
+    /// are facts about the row rather than part of what it is, so a column is an attribute of one
+    /// relation and a clause takes its relation from one input, as before.
     pub fn key(&self) -> Vec<&str> {
-        match self.quantity() {
-            None => vec![self.identity()],
-            Some(quantity) => self
-                .columns
-                .iter()
-                .map(|it| it.name.as_str())
-                .filter(|name| *name != quantity)
-                .filter(|name| !self.attributes.iter().any(|it| it == name))
-                .collect(),
+        if let Some(id) = self.columns.iter().find(|it| it.name == ID) {
+            return vec![id.name.as_str()];
         }
+        let quantity = self.quantity();
+        self.columns
+            .iter()
+            .map(|it| it.name.as_str())
+            .filter(|name| Some(*name) != quantity)
+            .filter(|name| !self.attributes.iter().any(|it| it == name))
+            .collect()
     }
 }
 

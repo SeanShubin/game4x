@@ -554,9 +554,17 @@ fn no_row_can_be_deleted_without_breaking_something() {
 ///
 /// **The same shape accounts for the `scout` and `extractor` rows here.** A world that reaches the
 /// refusal by a shorter route reaches it just the same.
-const DELETABLE: [&str; 9] = [
+/// **Two of the three `{attribute ...}` rows are deletable and the third is not**, which says
+/// what each is doing. Marking `attribute.relation` and `relation-of.input` keeps those two
+/// relations keyed by their first column as they were before the key rule changed - and no data
+/// test states a second row that would collide, so only `tests/structure.rs` holds them.
+/// **Marking a deposit's `density` is load-bearing everywhere**: without it `density` rejoins the
+/// deposit's key, the deposit and the extractor stop sharing one, and `{limit held:extractor
+/// by:deposit}` has nothing to compare.
+const DELETABLE: [&str; 10] = [
     "5 rules.4x binding",
     "2 rules.4x literal",
+    "2 schema.4x attribute",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x move",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x scout",
     "1 tests/a-scout-that-has-moved-cannot-move-again.4x move",

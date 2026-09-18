@@ -457,3 +457,56 @@ fn an_extractor_needs_a_deposit_to_stand_in() {
         "a full deposit and an absent one are one refusal with a different number"
     );
 }
+
+/// **A relation with no id is keyed by its whole row, so a kind may belong to two families.**
+///
+/// **It could not before, and that was an artefact rather than a decision.** `key()` said the
+/// first column wherever there was no quantity, so `member` was keyed by `kind` - and this lane
+/// reported that as a property of the model. Sean, 2026-09-18: *Why not? Many languages have
+/// multiple inheritance. Some languages have multiple trait inheritance. Some languages have duck
+/// typing.*
+///
+/// **`limit` was the second casualty and nobody had noticed**: keyed by `held`, a thing could be
+/// held by one container, which is a restriction no one chose either.
+#[test]
+fn a_kind_can_belong_to_two_families() {
+    with("{member kind:28 family:27}").expect("a scout may also be a resource, however odd");
+
+    // **The second membership is a different row and the first still stands**, which is what
+    // being keyed by the pair means rather than by the kind.
+    let game = with("{member kind:28 family:27}").expect("two memberships");
+    let how_many = game
+        .rows()
+        .rows()
+        .iter()
+        .filter(|row| row.relation == "member" && row.value("kind") == Some("28"))
+        .count();
+    assert_eq!(how_many, 2, "a scout is a unit and a resource, in two rows");
+}
+
+/// **What the key rule was right about is kept right by marking a column.**
+///
+/// A column is an attribute of one relation, and a clause takes its relation from one input. Both
+/// were free when the key was the first column; both are `{attribute ...}` rows now, which is the
+/// same marker that keeps a deposit's density out of its key.
+#[test]
+fn a_column_is_an_attribute_of_one_relation() {
+    assert_eq!(
+        with("{attribute column:53 relation:19}")
+            .expect_err("column 53 is already marked, and it belongs to `deposit`"),
+        Malformed::TwoWithOneKey {
+            relation: "attribute".to_string(),
+            key: vec![("column".to_string(), "53".to_string())]
+        },
+        "`attribute.relation` is marked an attribute, so the key is the column alone"
+    );
+
+    // The control: marking a different column is fine, so the refusal is about the key rather
+    // than about adding an attribute at all.
+    //
+    // **Not just any column, and the first attempt found out why.** Marking `extractor.what`
+    // takes it out of the extractor's key, and the deposit limit then has nothing to compare -
+    // `CannotLimit`. So the control marks a column of a relation keyed by an id, where the key
+    // does not move.
+    with("{attribute column:42 relation:15}").expect("a column of an identified relation");
+}
