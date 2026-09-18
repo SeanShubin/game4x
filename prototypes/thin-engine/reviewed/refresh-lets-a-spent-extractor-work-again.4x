@@ -1,0 +1,31 @@
+# One extractor, worked, refreshed, and worked again - twelve food from a deposit of six.
+#
+# **The extractor is spent inside the test rather than in the `given`.** It was the other way
+# round, and the mutation check said the `given` could have started it ready and the test would
+# still have passed - so it showed that refresh and work compose, not that refresh was needed.
+#
+# **Now every line of the `given` is load-bearing.** Starting at `working:0` refuses the first
+# work; deleting the refresh refuses the second; one labor refuses the second; and the density is
+# what makes twelve rather than any other number.
+#
+# **Found by the quality lens re-deriving the survivor** rather than by a check - the check named
+# the row and the reading of why the obvious repair would not have worked was a person's.
+
+{test name:refresh-lets-a-spent-extractor-work-again}
+
+{given}
+{territory id:1 name:territory-1}
+{deposit where:territory-1 what:food density:6} -> 1
+{extractor where:territory-1 what:food working:1} -> 1
+{labor where:territory-1} -> 2
+
+{when}
+{work where:territory-1 what:food}
+{refresh where:territory-1 what:extractor trait:working}
+{work where:territory-1 what:food}
+
+{then}
+{territory id:1 name:territory-1}
+{deposit where:territory-1 what:food density:6} -> 1
+{extractor where:territory-1 what:food working:0} -> 1
+{food where:territory-1} -> 12
