@@ -113,6 +113,30 @@ of reach is `at-maximum` (8) and `exactly` (6), and `exactly 0` is a require-abs
 no role for. **The backlog's *the prototype has none of them* is the pessimistic half of a true
 sentence**, and the optimistic half changes what building the turn would cost.
 
+## Corrected 2026-09-18: most of them are not comparisons, and the difference is one role
+
+**The section above reads `constraint.4x` without reading the recipe rows the constraints attach
+to, which is this lens making the mistake it named in the same report.** The `compare` column is
+doing two jobs, and counting it as one produced a cost estimate that is too high.
+
+**15 of the 28 sit on `put` rows** - every one of the 8 `at-maximum`
+(`grep -E "at its maximum" releases/first-release.md` is 8 rows and all 8 are `put`) and every one
+of the 7 `one less` (lines 229, 257, 261, 268, 275, 291, 294, all `put`). **A put writes a value,
+so those are not tests.** *Moving at its maximum* is what the row assigns, not something it checks.
+
+**The 6 `exactly n:0` are mixed**, which is the tell: `hold` has `require nature met 0` and
+`renew` has `put nature met 0`, the same `compare` cell on both sides of the distinction.
+
+**So the engine needs one comparison and one role, not four operators.** The comparison is
+`at-least n:1` on require rows, 7 of them, which require-then-remove already gives. The role is
+`put`, **the only one of the release's four the prototype has not built** - counted across the
+recipe table, 92 role rows are 32 `consume`, 22 `require`, 21 `produce`, 17 `put` and **0 `limit`**,
+and the prototype's require/remove/add cover 75 of the 92.
+
+**The practical difference.** Refresh was placed behind *comparison* in the backlog's ordering and
+in the section above. It is not behind it at all: a put writes the maximum, and writing 1 where 1
+already stands is a no-op, so *tops off whatever has less* needs no operator to notice the *less*.
+
 ## Whether
 
 **Worth acting on now, as a choice of what to build rather than a repair.** The three stale lines
