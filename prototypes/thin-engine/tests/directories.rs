@@ -69,7 +69,7 @@ fn store(of_game: bool, from: &str) -> Vec<Row> {
     let mut all: Vec<Row> = Vec::new();
     for (file, game) in files() {
         let these = of(from, &file, game);
-        let mine = friendly::in_a_section(&these);
+        let mine = friendly::states_a_world(&these);
         for (row, is_game) in these.into_iter().zip(mine) {
             if (game || is_game) == of_game && !all.contains(&row) {
                 all.push(row);

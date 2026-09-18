@@ -76,7 +76,7 @@ fn main() {
                     all.extend(these);
                 }
             } else {
-                let section = friendly::in_a_section(&these);
+                let section = friendly::states_a_world(&these);
                 for (row, mine) in these.into_iter().zip(section) {
                     if mine == of_game {
                         all.push(row);

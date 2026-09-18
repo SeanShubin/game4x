@@ -323,8 +323,8 @@
 
 {pool id:1 name:berth per:territory n:6}
 
-{draws id:1 kind:scout pool:1 n:1}
-{draws id:2 kind:transport pool:1 n:2}
+{draws id:1 kind:scout pool:berth n:1}
+{draws id:2 kind:transport pool:berth n:2}
 
 
 ## The three roles a clause can have

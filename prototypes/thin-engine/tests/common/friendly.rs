@@ -133,6 +133,37 @@ pub fn in_a_section(rows: &[Row]) -> Vec<bool> {
         .collect()
 }
 
+/// Whether each row states part of a world, as against asserting something about one.
+///
+/// **A `{refused}` row is an assertion and not a world.** It names the row a rule needed and did
+/// not find, which may be the ruleset's own - `{pool name:berth per:territory n:7}` says *there is
+/// no berth allowance this big*, and no world has such a pool in it.
+///
+/// **Putting those in the store they are written against took a name away from everything.** Three
+/// rows came to be called `berth` - the real allowance and two assertions - and nameable is all or
+/// nothing per relation, so every reference to a pool started rendering as a bare id. The same
+/// hazard is already written down one function along, about two rows named `scout`.
+///
+/// **Which `Names` renders a row is a different question**, and [`in_a_section`] still answers it:
+/// a refused row names the game's relations and is written in the game's spelling. It is read by
+/// that store without joining it.
+pub fn states_a_world(rows: &[Row]) -> Vec<bool> {
+    let mut inside = false;
+    rows.iter()
+        .map(|row| match row.relation.as_str() {
+            "given" | "when" | "then" => {
+                inside = true;
+                false
+            }
+            "refused" => {
+                inside = false;
+                false
+            }
+            _ => inside,
+        })
+        .collect()
+}
+
 impl Names {
     pub fn of(rows: &[Row]) -> Names {
         let schema = Schema::of(rows).expect("a schema");
