@@ -146,6 +146,10 @@ pub struct Built {
     pub total: usize,
     pub passed: usize,
     pub red: usize,
+    /// How many tests the copy in `reviewed/` still matches.
+    pub reviewed: usize,
+    /// How many are drifted or were never read, which is what `scripts/reviewed` is for.
+    pub unreviewed: usize,
 }
 
 /// Run every test and render it.
@@ -485,6 +489,8 @@ not as expected
         total,
         passed,
         red,
+        reviewed,
+        unreviewed,
     }
 }
 
@@ -493,7 +499,10 @@ fn main() {
     std::fs::write(mine().join("report.html"), &built.page).expect("report.html");
     std::fs::write(mine().join("report.txt"), &built.log).expect("report.txt");
     let (total, passed, red) = (built.total, built.passed, built.red);
-    println!("report.html, report.txt: {total} tests, {passed} as expected, {red} red");
+    let (seen, unseen) = (built.reviewed, built.unreviewed);
+    println!(
+        "report.html, report.txt: {total} tests, {passed} as expected, {red} red, {seen} reviewed, {unseen} to read"
+    );
 }
 
 /// **Both themes, because a report nobody can read in their own is not one** - the same rule
