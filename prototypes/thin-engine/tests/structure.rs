@@ -4,6 +4,7 @@
 //! structure is as much under test as the move is. These are what declaring it buys.
 
 use thin_engine::engine::fire;
+use thin_engine::refusal::Refused;
 use thin_engine::schema::Malformed;
 
 mod common;
@@ -39,6 +40,8 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         "supply",
         "provides",
         "consumes",
+        "trait",
+        "carries",
         "primitive",
     ] {
         let declared = game
@@ -51,11 +54,11 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         );
         checked += 1;
     }
-    assert_eq!(checked, 20, "twenty relations describe the structure");
+    assert_eq!(checked, 22, "twenty-two relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        32,
-        "thirty-two in all - those twenty, and the game's twelve: five kinds, two families,\n         a territory, an adjacency, a deposit and an extractor"
+        34,
+        "thirty-four in all - those twenty-two, and the game's twelve: five kinds, two families,\n         a territory, an adjacency, a deposit and an extractor"
     );
 }
 
@@ -223,15 +226,26 @@ fn only_the_moves_the_world_allows_are_offered() {
         offered,
         vec![
             "{move from:1 to:2 what:28}",
-            "{refresh-moving what:28 where:1}",
-            "{refresh-moving what:28 where:2}",
-            "{refresh-moving what:28 where:3}",
-            "{refresh-moving what:35 where:1}",
-            "{refresh-moving what:35 where:2}",
-            "{refresh-moving what:35 where:3}",
-            "{refresh-working where:1}",
-            "{refresh-working where:2}",
-            "{refresh-working where:3}",
+            // **The family and its two members are three offers, not one.** `26` is `unit`,
+            // `28` is `scout` and `35` is `transport` - Sean, 2026-09-18: *I should be able to
+            // declare separate things with separate commands, as well as explicitly declare group
+            // commands.* Both forms are offered because both are things the player may say.
+            "{refresh trait:1 what:26 where:1}",
+            "{refresh trait:1 what:26 where:2}",
+            "{refresh trait:1 what:26 where:3}",
+            "{refresh trait:1 what:28 where:1}",
+            "{refresh trait:1 what:28 where:2}",
+            "{refresh trait:1 what:28 where:3}",
+            "{refresh trait:1 what:35 where:1}",
+            "{refresh trait:1 what:35 where:2}",
+            "{refresh trait:1 what:35 where:3}",
+            // **And `working` is offered for the extractor alone**, because it is the only kind
+            // that carries one. The pairing is what the type cannot say: `refresh`'s `what` is
+            // typed as a relation, so `{refresh what:19 trait:1}` is well typed and refused when
+            // fired - and what is *offered* is what would not be refused, so it is absent here.
+            "{refresh trait:2 what:19 where:1}",
+            "{refresh trait:2 what:19 where:2}",
+            "{refresh trait:2 what:19 where:3}",
         ]
     );
 
@@ -268,7 +282,7 @@ fn only_the_moves_the_world_allows_are_offered() {
     let mut moved = game;
     for step in [
         "{move what:28 from:1 to:2}",
-        "{refresh-moving where:2 what:28}",
+        "{refresh where:2 what:28 trait:1}",
     ] {
         let command = thin_engine::notation::read(step).expect("a command");
         moved = fire(&moved, &command[0], 1)
@@ -283,15 +297,18 @@ fn only_the_moves_the_world_allows_are_offered() {
         after,
         vec![
             "{move from:2 to:3 what:28}",
-            "{refresh-moving what:28 where:1}",
-            "{refresh-moving what:28 where:2}",
-            "{refresh-moving what:28 where:3}",
-            "{refresh-moving what:35 where:1}",
-            "{refresh-moving what:35 where:2}",
-            "{refresh-moving what:35 where:3}",
-            "{refresh-working where:1}",
-            "{refresh-working where:2}",
-            "{refresh-working where:3}",
+            "{refresh trait:1 what:26 where:1}",
+            "{refresh trait:1 what:26 where:2}",
+            "{refresh trait:1 what:26 where:3}",
+            "{refresh trait:1 what:28 where:1}",
+            "{refresh trait:1 what:28 where:2}",
+            "{refresh trait:1 what:28 where:3}",
+            "{refresh trait:1 what:35 where:1}",
+            "{refresh trait:1 what:35 where:2}",
+            "{refresh trait:1 what:35 where:3}",
+            "{refresh trait:2 what:19 where:1}",
+            "{refresh trait:2 what:19 where:2}",
+            "{refresh trait:2 what:19 where:3}",
         ],
         "one way only, which is the finding rather than the intent"
     );
@@ -509,4 +526,101 @@ fn a_column_is_an_attribute_of_one_relation() {
     // `CannotLimit`. So the control marks a column of a relation keyed by an id, where the key
     // does not move.
     with("{attribute column:42 relation:15}").expect("a column of an identified relation");
+}
+
+/// **A kind is refreshed for a trait it carries, and refused for one it does not.**
+///
+/// **This is the pairing a type cannot state.** `refresh`'s `what` is typed as a relation and its
+/// `trait` as a trait, so `{refresh what:extractor trait:moving}` is well typed in both arguments
+/// and wrong in their combination - which is why it is refused when it fires rather than when it
+/// is read. **`offered` shows only the pairs that would not be refused**, which is where a player
+/// sees the difference.
+#[test]
+fn a_kind_is_refreshed_only_for_a_trait_it_carries() {
+    let game = before();
+    let fired = |text: &str| {
+        let command = thin_engine::notation::read(text).expect("a command");
+        fire(&game, &command[0], 1)
+    };
+
+    // **19 is `extractor` and 1 is `moving`.** An extractor has a `working` and no `moving`, so
+    // there is no column for the put to assign and nothing to restore.
+    assert_eq!(
+        fired("{refresh where:1 what:19 trait:1}")
+            .expect_err("an extractor has no move to give back"),
+        Refused::DoesNotCarry {
+            rule: "refresh".to_string(),
+            relation: "extractor".to_string(),
+            carried: "moving".to_string()
+        }
+    );
+
+    // **The control, and it is the same command with the trait it does carry** - so the refusal
+    // is about the pair rather than about extractors, or about `refresh` reaching them at all.
+    fired("{refresh where:1 what:19 trait:2}").expect("an extractor carries `working`");
+
+    // **And the other way round**, so neither half is the one doing all the work: a scout carries
+    // `moving` and not `working`. **28 is `scout` and 2 is `working`.**
+    assert_eq!(
+        fired("{refresh where:1 what:28 trait:2}").expect_err("a scout does no work"),
+        Refused::DoesNotCarry {
+            rule: "refresh".to_string(),
+            relation: "scout".to_string(),
+            carried: "working".to_string()
+        }
+    );
+}
+
+/// **A trait and the column that holds it are checked in both directions.**
+///
+/// `{carries kind:scout trait:moving}` and `{column ... relation:scout name:moving}` are two
+/// statements of one fact, and that is the shape that drifts. **Neither direction implies the
+/// other**: without the first check a `carries` row could name a column nothing declares, and
+/// without the second a column could hold an allowance no rule can reach - because `refresh`
+/// finds a kind through `carries` rather than through its columns.
+///
+/// **Sean, 2026-09-18**, on why the duplication is allowed to stand at all: *One reason I resist
+/// duplication is to guard against the inconsistency. Another reason is to keep the model simple.
+/// Inconsistency can be mitigated by automated checks. Simplicity is more important from the
+/// expression side that I audit than it is for the implementation details.*
+#[test]
+fn a_trait_and_the_column_that_holds_it_are_checked_both_ways() {
+    // **13 is `territory` and 1 is `moving`.** A territory is one column, `id`, so a row saying
+    // it carries a move names a place to keep one that does not exist.
+    assert_eq!(
+        with("{carries kind:13 trait:1}").expect_err("a territory has nowhere to keep a move"),
+        Malformed::CarriesNothing {
+            relation: "territory".to_string(),
+            carried: "moving".to_string()
+        }
+    );
+
+    // **The other direction, and `density` is the column to name it with** - `deposit` is the
+    // only relation that declares one, so which relation the refusal names is not a question of
+    // what order the structure happens to be walked in.
+    assert_eq!(
+        with("{trait id:990 name:density}").expect_err("a deposit does not spend its density"),
+        Malformed::DoesNotCarry {
+            relation: "deposit".to_string(),
+            carried: "density".to_string()
+        }
+    );
+
+    // **The control for the second, and it is the same row with a name nothing declares.** So
+    // the refusal is about a trait meeting a column of that name, and not about a trait being
+    // added - a trait nothing carries yet is how a new one would arrive.
+    with("{trait id:991 name:dashing}").expect("a trait no relation declares a column for");
+
+    // **The control for the first is the game**: four `{carries ...}` rows, each naming a column
+    // its kind declares, and `before()` loading at all is what says a consistent pair is taken.
+    assert_eq!(
+        before()
+            .rows()
+            .rows()
+            .iter()
+            .filter(|row| row.relation == "carries")
+            .count(),
+        4,
+        "unit, scout and transport carry `moving`; extractor carries `working`"
+    );
 }

@@ -18,7 +18,7 @@
 
 {when}
 {move what:scout from:territory-1 to:territory-2}
-{refresh-moving where:territory-2 what:scout}
+{refresh where:territory-2 what:scout trait:moving}
 {move what:scout from:territory-2 to:territory-3}
 
 {then}

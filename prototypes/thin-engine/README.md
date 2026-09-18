@@ -2406,15 +2406,21 @@ deleted it - a clause names its relation directly now, and all thirteen literals
 thing no check does: *a claim that arrives finished is the one to re-derive*. The better evidence
 was inside the change being argued for.
 
-## Two refresh rules rather than one, which is this lane's call
+## Two refresh rules rather than one, which was this lane's call and did not survive
 
-`refresh-moving` assigns `moving`, `refresh-working` assigns `working`. **One rule cannot do both**,
-because the column assigned is named in the rule and a scout has no `working`.
+**Withdrawn on 2026-09-18.** What stood here said one rule cannot do both, *because the column
+assigned is named in the rule and a scout has no `working`* - and cited `spec/data/block.4x`'s six
+refresh blocks as precedent rather than workaround.
 
-**`spec/data/block.4x` is the precedent rather than a workaround**: six blocks - `refresh-unit-moving`,
-`refresh-citizen-laboring`, `refresh-citizen-bearing`, `refresh-extractor-working`,
-`refresh-citizen-defending`, `refresh-unit-defending` - all sharing the recipe `refresh`. **A rule
-here is the analogue of a block, not of a recipe.**
+**The premise was about one line of the prototype and was presented as a property of the model.**
+The column assigned was named in the rule because `{assigns ... column:98 ...}` named a column;
+nothing required that. Sean: *I don't like that I have a separate refresh command for each
+resource, I feel like this should be parameterized somehow.* The section below is what replaced it.
+
+**The precedent was not wrong and was not load-bearing either.** Six blocks share the recipe
+`refresh` in the specification, which says a block is where a rule is pinned to a kind - it does
+not say the prototype's `rule` must be the analogue of a block. **That was the choice being
+defended, dressed as the reason for it.**
 
 ## Three things in the drafted tests that were wrong
 
@@ -2444,13 +2450,79 @@ the held rows are summed over it - which is also what stops two groups each fitt
 they do not.
 
 **Every refresh is offered, everywhere.** A put never refuses, so `offered` lists
-`{refresh-moving ...}` for every place and kind. **In the specification every refresh is
+`{refresh ...}` for every place and every kind that carries the trait. **In the specification every refresh is
 `owner:world`** and would not be offered to a player at all - the prototype has no owner, because
 Sean deferred treating the turn as a resource, so refresh is fired by hand from a `when`.
 
 **And a test about the one-way corridor had to refresh first.** After moving, the scout has no move
 left and *nothing* is offered - which would have hidden the corridor behind a spent allowance
 rather than shown it.
+
+## One refresh, and the trait is an argument
+
+**`{refresh where:territory-1 what:scout trait:moving}`.** Three arguments: the place, the kind or
+family to reach, and which allowance to restore. **There is one rule**, and `refresh-moving` and
+`refresh-working` are gone.
+
+**The trait is the column's name, so nothing has to say which column.** `{trait id:1 name:moving}`
+is the vocabulary and `{assigns id:1 clause:clause-15 input:trait value:1}` is the rule reading it
+off an argument - where it read a column id before. A column named `moving` is what a `moving`
+restores, in whatever relation the other argument denotes.
+
+**`what` is typed as a relation and not as a family**, which is what lets one rule reach both:
+
+| What is written                                       | What it denotes                               |
+| ----------------------------------------------------- | --------------------------------------------- |
+| `{refresh where:territory-1 what:scout trait:moving}` | `scout`                                       |
+| `{refresh where:territory-1 what:unit trait:moving}`  | `scout` and `transport`, the family's members |
+
+Sean, 2026-09-18, on what the parameterisation had to reach: *I should be able to declare separate
+things with separate commands, as well as explicitly declare group commands. So i can refresh a
+scout, refresh a transport, refresh all movable, refresh all workable, and their intersections.*
+**The intersection needs no third mechanism** - it is the pair of arguments, and `offered` lists
+all of them: three places by three denotations for `moving`, plus three for the extractor's
+`working`.
+
+**A clause is done once per relation its argument denotes**, which is one sentence for all four
+roles rather than a special case for `put`. Only `refresh` can receive a family today, because it
+is the only rule whose input is typed as a relation - a fact stated in the data rather than a
+branch in the engine.
+
+## `carries` is two statements of one fact, and both are kept
+
+`{carries kind:scout trait:moving}` says a scout has a move to spend; `{column id:99
+relation:scout seq:2 name:moving}` is where the number lives. **That is duplication, and it stays.**
+
+Sean, 2026-09-18: *One reason I resist duplication is to guard against the inconsistency. Another
+reason is to keep the model simple. Inconsistency can be mitigated by automated checks. Simplicity
+is more important from the expression side that I audit than it is for the implementation details.*
+
+**So the check is the mitigation, and it runs both ways**: a kind that carries a trait declares a
+column of that name, and a column named for a trait is carried by the relation declaring it.
+**Neither direction implies the other** - without the first a `carries` row could name a column
+nothing declares; without the second a column could hold an allowance no rule can reach, because
+`refresh` finds a kind through `carries` rather than through its columns.
+
+**Two words, and the count is what says so.** `data/engine.4x` went from 48 to 50, which
+`tests/engine.rs` asserts precisely so that adding one is a decision rather than a line.
+
+## What the mutation sweep caught here, twice
+
+**Both halves of the `carries` check answered ahead of the reference check**, and both times the
+sweep is what said so. It poisons every reference in turn and reads *which* check complained: point
+`carries.kind` at a key nothing has and the first version answered *nothing-has-this-key carries
+moving and declares no such column*, the second *`unit` declares `moving` and does not carry it* -
+neither of which is a dangling reference.
+
+**The fix was to move the check after the references**, where `{limit held:extractor by:deposit}`
+already sits for the same reason and says so in a comment this lane had read and not applied.
+**The narrower fault is the one to report.**
+
+**And the reason the check gives for itself went stale on the way.** The by-name arm was correct
+while the block lived in `Schema::of`, which `tests/directories.rs` hands the friendly rows; moving
+it to `check` - reached only from `Game::of`, and only with foundation rows - made the arm dead and
+its comment false, and both travelled unchanged. Caught by re-deriving the claim rather than by any
+check, which is what `docs/working-with-an-assistant.md` is about.
 
 ## What was deliberately not built
 

@@ -21,7 +21,7 @@
 
 {when}
 {work where:territory-1 what:food}
-{refresh-working where:territory-1}
+{refresh where:territory-1 what:extractor trait:working}
 {work where:territory-1 what:food}
 
 {then}

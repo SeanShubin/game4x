@@ -44,6 +44,8 @@ const BY: &str = "by";
 const FAMILY: &str = "family";
 const MEMBER: &str = "member";
 const KIND: &str = "kind";
+const TRAIT: &str = "trait";
+const CARRIES: &str = "carries";
 const SUPPLY: &str = "supply";
 const PROVIDES: &str = "provides";
 const CONSUMES: &str = "consumes";
@@ -206,6 +208,19 @@ pub enum Malformed {
         member: String,
         column: String,
     },
+    /// A kind carries a trait and declares no column of that name.
+    ///
+    /// **A trait is the column that holds how many are left**, so this is the half of the check
+    /// that says a `carries` row names something real.
+    CarriesNothing { relation: String, carried: String },
+    /// A relation declares a column named for a trait and does not carry it.
+    ///
+    /// **The other half, and neither implies the other.** Without the first, a `carries` row
+    /// could name a column that does not exist; without this one, a column could hold an
+    /// allowance that no rule can reach, because `refresh` finds a kind through `carries` and
+    /// not through its columns. **Checked in both directions is what keeps the two from drifting
+    /// apart** while each stays individually true.
+    DoesNotCarry { relation: String, carried: String },
     /// A limit between two relations whose keys are not the same columns.
     ///
     /// **Held and holder are compared key for key**, so a limit between relations that do not
@@ -266,6 +281,18 @@ impl std::fmt::Display for Malformed {
                 column,
             } => {
                 write!(out, "`{member}` is a `{family}` and declares no `{column}`")
+            }
+            Malformed::CarriesNothing { relation, carried } => {
+                write!(
+                    out,
+                    "`{relation}` carries `{carried}` and declares no such column"
+                )
+            }
+            Malformed::DoesNotCarry { relation, carried } => {
+                write!(
+                    out,
+                    "`{relation}` declares `{carried}` and does not carry it"
+                )
             }
             Malformed::CannotLimit { held, by } => {
                 write!(
@@ -679,6 +706,89 @@ pub fn check(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
                     column: column.name.clone(),
                     value: value.to_string(),
                     to: to.clone(),
+                });
+            }
+        }
+    }
+
+    // **A trait is checked against the columns both ways.** `{carries kind:scout trait:moving}`
+    // says a scout has a `moving` to spend, and `{column ... name:moving}` is where the number
+    // lives - two statements of one fact, which is the shape that drifts.
+    //
+    // **Sean, 2026-09-18**, on why the duplication is allowed to stand: *One reason I resist
+    // duplication is to guard against the inconsistency. Another reason is to keep the model
+    // simple. Inconsistency can be mitigated by automated checks. Simplicity is more important
+    // from the expression side that I audit than it is for the implementation details.* This is
+    // that mitigation, and the expression side keeps both words.
+    //
+    // **After the references, for the reason the block below is after them too.** Point
+    // `carries.kind` at a key nothing has and the kind carrying that trait is simply gone - so a
+    // check running first answers *`unit` declares `moving` and does not carry it* to a question
+    // about a dangling reference. **The narrower fault is the one to report**, and the mutation
+    // sweep is what said so, twice.
+    let named: BTreeMap<&str, &str> = rows
+        .rows()
+        .iter()
+        .filter(|row| row.relation == RELATION)
+        .filter_map(|row| Some((row.value(ID)?, row.value(NAME)?)))
+        .collect();
+    let traits: Vec<&str> = rows
+        .rows()
+        .iter()
+        .filter(|row| row.relation == TRAIT)
+        .filter_map(|row| row.value(NAME))
+        .collect();
+    let mut carried: Vec<(&str, &str)> = Vec::new();
+    for row in rows.rows().iter().filter(|row| row.relation == CARRIES) {
+        let (Some(kind), Some(of)) = (row.value(KIND), row.value(TRAIT)) else {
+            continue;
+        };
+        // **A value naming nothing is skipped, because somebody else refuses it.** Both columns
+        // carry a `{reference ...}` row, and the loop above has already walked them - so a kind
+        // that is not a relation, or a trait that is not a trait, has been reported by the check
+        // whose subject that is. **What is left here is the pair**, which is this check's.
+        //
+        // **By id and not also by name**, unlike everywhere else in this file: `check` is reached
+        // only from `Game::of`, which is handed the foundation rows. A by-name arm was written
+        // here while this block still sat in `Schema::of`, where `tests/directories.rs` does hand
+        // it the friendly rows - and it came along when the block moved, still carrying the
+        // reason it had there. **The code was right and the reason had stopped being true**,
+        // which is the failure `docs/working-with-an-assistant.md` is about.
+        let Some(kind) = named.get(kind) else {
+            continue;
+        };
+        let Some(of) = rows
+            .rows()
+            .iter()
+            .find(|it| it.relation == TRAIT && it.value(ID) == Some(of))
+            .and_then(|it| it.value(NAME))
+        else {
+            continue;
+        };
+        carried.push((*kind, of));
+    }
+    for (relation, of) in &carried {
+        let declares = schema
+            .relation(relation)
+            .is_some_and(|it| it.columns.iter().any(|column| column.name == *of));
+        if !declares {
+            return Err(Malformed::CarriesNothing {
+                relation: relation.to_string(),
+                carried: of.to_string(),
+            });
+        }
+    }
+    for name in schema.names() {
+        let declared = schema.relation(name).expect("named just above");
+        for column in &declared.columns {
+            if traits.contains(&column.name.as_str())
+                && !carried
+                    .iter()
+                    .any(|(kind, of)| *kind == name && *of == column.name)
+            {
+                return Err(Malformed::DoesNotCarry {
+                    relation: name.to_string(),
+                    carried: column.name.clone(),
                 });
             }
         }

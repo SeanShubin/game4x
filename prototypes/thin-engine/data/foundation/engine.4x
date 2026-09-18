@@ -57,3 +57,5 @@
 {primitive id:46 word:what}
 {primitive id:47 word:assigns}
 {primitive id:48 word:put}
+{primitive id:49 word:trait}
+{primitive id:50 word:carries}

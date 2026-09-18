@@ -315,7 +315,7 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
     Ok(())
 }
 
-const REFERENCES: usize = 45;
+const REFERENCES: usize = 47;
 
 /// **References no test world can violate**, because nothing points at them there.
 ///
@@ -562,7 +562,7 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// deposit's key, the deposit and the extractor stop sharing one, and `{limit held:extractor
 /// by:deposit}` has nothing to compare.
 const DELETABLE: [&str; 10] = [
-    "5 rules.4x binding",
+    "4 rules.4x binding",
     "2 rules.4x literal",
     "2 schema.4x attribute",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x move",
@@ -647,8 +647,14 @@ fn no_value_can_be_changed_without_breaking_something() {
 ///
 /// **A `moving` that never moves is the other shape here.** The berth tests hold vehicles to count
 /// them, not to move them, so what those rows say about moves is read by nothing.
-const NOT_LOAD_BEARING: [&str; 21] = [
-    "13 rules.4x clause.seq",
+const NOT_LOAD_BEARING: [&str; 22] = [
+    // **The one `assigns` row's id is read by nothing.** There were two, and changing one id
+    // to the other's collided on the key; with one row there is nothing to collide with.
+    // **`assigns` may not need an `id` at all** - keyed by `(clause, input, value)` it could not
+    // state two assignments of one input on one clause, which is the rule rather than a
+    // restriction. That is in `backlog.md` rather than done here.
+    "1 rules.4x assigns.id",
+    "12 rules.4x clause.seq",
     "10 rules.4x input.seq",
     "1 rules.4x reading.id",
     "1 schema.4x supply.name",

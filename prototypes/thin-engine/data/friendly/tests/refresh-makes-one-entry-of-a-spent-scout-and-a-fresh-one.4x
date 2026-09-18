@@ -16,7 +16,7 @@
 {scout where:territory-1 moving:0} -> 3
 
 {when}
-{refresh-moving where:territory-1 what:scout}
+{refresh where:territory-1 what:scout trait:moving}
 
 {then}
 {territory id:1 name:territory-1}

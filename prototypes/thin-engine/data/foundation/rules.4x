@@ -104,10 +104,28 @@
 
 {reading id:1 clause:12 column:75 of:10 takes:53}
 
-{rule id:4 name:refresh-moving}
+# **One `refresh`, because the trait it restores is an argument rather than part of its name.**
+# Sean, 2026-09-18: *I don't like that I have a separate refresh command for each resource, I feel
+# like this should be parameterized somehow.* There were two rules, identical but for which column
+# they assigned, and the column was the only thing telling them apart.
+#
+# **`what` is typed as a relation and not as a family**, which is what lets one rule reach a kind
+# and a family alike: `{refresh what:scout trait:moving}` denotes one relation, and
+# `{refresh what:unit trait:moving}` denotes every member of that family. **The type cannot narrow
+# this to the kinds that carry the trait**, because an input's type is fixed and which kinds carry
+# a trait depends on the other argument - so the pairing is refused when fired rather than when
+# declared, and `offered` shows only the pairs that would work.
+#
+# **`{assigns ... input:trait ...}` names an input where it named a column.** The trait's name is
+# the column's name, so nothing else has to say which column: `moving` restores `scout.moving`
+# and `extractor.moving` does not exist, which is the refusal rather than a lookup that fails
+# quietly.
+
+{rule id:4 name:refresh}
 
 {input id:10 rule:4 seq:1 name:where of:13}
-{input id:11 rule:4 seq:2 name:what of:26}
+{input id:11 rule:4 seq:2 name:what of:1}
+{input id:12 rule:4 seq:3 name:trait of:38}
 
 {clause id:15 rule:4 seq:1 role:4 relation:26}
 
@@ -115,14 +133,4 @@
 
 {binding id:24 clause:15 column:72 input:10}
 
-{assigns id:1 clause:15 column:98 value:1}
-
-{rule id:5 name:refresh-working}
-
-{input id:12 rule:5 seq:1 name:where of:13}
-
-{clause id:16 rule:5 seq:1 role:4 relation:19}
-
-{binding id:25 clause:16 column:55 input:12}
-
-{assigns id:2 clause:16 column:101 value:1}
+{assigns id:1 clause:15 input:12 value:1}

@@ -49,6 +49,8 @@
 {relation id:35 name:transport}
 {relation id:36 name:consumes}
 {relation id:37 name:assigns}
+{relation id:38 name:trait}
+{relation id:39 name:carries}
 
 
 ## The columns
@@ -177,8 +179,12 @@
 
 {column id:102 relation:37 seq:1 name:id}
 {column id:103 relation:37 seq:2 name:clause}
-{column id:104 relation:37 seq:3 name:column}
+{column id:104 relation:37 seq:3 name:input}
 {column id:105 relation:37 seq:4 name:value}
+{column id:106 relation:38 seq:1 name:id}
+{column id:107 relation:38 seq:2 name:name}
+{column id:108 relation:39 seq:1 name:kind}
+{column id:109 relation:39 seq:2 name:trait}
 
 
 ## What a place has room for, and what each kind takes up
@@ -263,7 +269,7 @@
 {reference id:44 column:82 to:13}
 
 {reference id:45 column:103 to:8}
-{reference id:46 column:104 to:2}
+{reference id:46 column:104 to:7}
 
 {reference id:47 column:89 to:1}
 {reference id:48 column:90 to:1}
@@ -271,6 +277,8 @@
 {reference id:50 column:93 to:1}
 {reference id:51 column:94 to:33}
 {reference id:52 column:96 to:13}
+{reference id:53 column:108 to:1}
+{reference id:54 column:109 to:38}
 
 
 ## Which relations are the game's state
@@ -355,3 +363,36 @@
 {role id:2 name:remove}
 {role id:3 name:add}
 {role id:4 name:put}
+
+
+## What a trait is, and which kinds carry one
+
+# **A trait is an allowance a kind carries**, and it is the column that holds how many are left.
+# `moving` is one and `working` is another; a scout has a `moving` and an extractor has a
+# `working`, and `refresh` is one rule over both because the trait is an argument rather than
+# part of the rule's name.
+#
+# **Sean, 2026-09-18**: *I don't like that I have a separate refresh command for each resource, I
+# feel like this should be parameterized somehow.* And on what the parameterisation has to reach:
+# *I should be able to declare separate things with separate commands, as well as explicitly
+# declare group commands. So i can refresh a scout, refresh a transport, refresh all movable,
+# refresh all workable, and their intersections.*
+#
+# **`carries` is checked both ways**, which is what stops it drifting from the columns it
+# describes: a kind that carries a trait declares a column of that name, and a column named for a
+# trait is carried by the relation that declares it. Neither half is derivable from the other -
+# the first would let a column go undeclared, the second would let a `carries` row name nothing -
+# so the check is a pair and `src/schema.rs` states it as one.
+#
+# **A family carries what its members carry.** `unit` declares `moving` because `scout` and
+# `transport` do, so `{refresh what:unit trait:moving}` is the group command and
+# `{refresh what:scout trait:moving}` is the separate one. That is Sean's *their intersections*
+# with no third mechanism: the pair of arguments is the intersection.
+
+{trait id:1 name:moving}
+{trait id:2 name:working}
+
+{carries kind:26 trait:1}
+{carries kind:28 trait:1}
+{carries kind:35 trait:1}
+{carries kind:19 trait:2}

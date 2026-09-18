@@ -34,10 +34,10 @@ needs the engine to add numbers it is currently only comparing.
 ones, and the world's are the whole automatic half of the game: upkeep, breed, perish, age, spoil,
 refresh, muster, hold, reclaim, renew, take.
 
-**And it is what readiness is waiting for.** `work` spends a `{working ...}` and nothing puts one
-back, so a built extractor starts unready and stays that way. The refresh rule is expressible
-today - remove the row, require the extractor, add a `working` whose quantity is read off the
-extractor count - and there is nowhere to fire it from.
+**And it is what readiness is waiting for.** `refresh` exists and a player fires it by hand;
+what the turn adds is somebody firing it without being asked. **The rule is no longer the missing
+part** - `{refresh where:territory-1 what:unit trait:moving}` restores an allowance today, and the
+paragraph that stood here said it was unbuildable, which stopped being true when `put` landed.
 
 ## Refresh, what is left of it
 
@@ -68,8 +68,30 @@ is probably not a separate mechanism; it is here because nothing has needed it y
 at the place it leaves, and the prototype's `move` is free.
 
 **A `draws` row is keyed by its id**, so two rates for one kind and one pool are both legal and
-nothing says which wins. It has not happened; a key of `(kind, pool)` would need a relation keyed
-by more than its first column, which the schema cannot express without a quantity.
+nothing says which wins. It has not happened, and **the reason it was deferred has gone**: this
+said a key of `(kind, pool)` needs a relation keyed by more than its first column, *which the
+schema cannot express without a quantity* - and the key rule changed on 2026-09-18, so a relation
+with no `id` is keyed by every column but the quantity and the attributes. Dropping the `id` is
+now the whole change. **Nothing edited this line when the rule moved under it**, which is the
+staleness `CLAUDE.md` describes and the reason the sentence names its rule.
+
+**`assigns` has an `id` it does not need.** With one row left its id is read by nothing, which
+`tests/mutation.rs` now records. **Keyed by `(clause, input, value)` instead, it could not state
+two assignments of one input on one clause** - which is the rule rather than a restriction, and
+the key rule of 2026-09-18 made that key expressible. It is one row's worth of change and nothing
+needs it yet.
+
+**A family is silently not a family when the schema is read from the friendly rows.**
+`Schema::of` resolves `{family relation:26}` and `{member kind:28 family:26}` through the id-to-name
+map, so on the friendly side - where those rows already say `unit` and `scout` - both lookups miss
+and `families` comes back empty. **`UnlikeShape` then checks nothing and passes**, which is a green
+that means *no families were found* rather than *every member has the shape*. Harmless today:
+`tests/directories.rs` is the only caller that hands it friendly rows, and it wants the schema for
+the quantity column alone. **It is here because it is the same defect the `carries` check hit** -
+`by id or by name` is the pattern the translator uses everywhere, and these two places do not.
+**Read from the code, not run**: `named` is keyed by the relation row's `id`, which is numeric in
+both notations, and the friendly file writes `{family relation:unit}`. No test would show it,
+because a check that finds nothing to check passes.
 
 **`move` offers a unit into a place it cannot fit.** It does not - the pool refuses it - but
 `offered` finds that out by firing the rule and catching the refusal, which is the expensive way.

@@ -51,6 +51,17 @@ pub enum Refused {
     },
     /// The rule removes something no row matches, so the rule contradicts itself.
     NothingToRemove { rule: String, wanted: String },
+    /// A `put` would assign a trait to a kind that does not carry one.
+    ///
+    /// **`refresh` is one rule over every trait, so the pairing is checked when it fires.** An
+    /// input's type is fixed and which kinds carry a trait is not, so `{refresh what:extractor
+    /// trait:moving}` cannot be refused by the type - `extractor` is a relation and `moving` is a
+    /// trait, and only the two together are wrong.
+    DoesNotCarry {
+        rule: String,
+        relation: String,
+        carried: String,
+    },
     /// The rule left a world that does not fit the structure.
     ///
     /// **Boxed, because this is the one refusal that carries another error.** `Malformed` grew a
@@ -100,6 +111,14 @@ impl std::fmt::Display for Refused {
             Refused::NothingToRemove { rule, wanted } => {
                 write!(out, "`{rule}` removes {wanted} and nothing matched")
             }
+            Refused::DoesNotCarry {
+                rule,
+                relation,
+                carried,
+            } => write!(
+                out,
+                "`{rule}` refreshes `{carried}`, and no `{relation}` carries one"
+            ),
             Refused::Broke { rule, why } => write!(out, "`{rule}` would leave a world where {why}"),
         }
     }

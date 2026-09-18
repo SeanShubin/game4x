@@ -56,6 +56,9 @@ const REMOVE: &str = "remove";
 const ADD: &str = "add";
 const PUT: &str = "put";
 const ASSIGNS: &str = "assigns";
+const TRAIT: &str = "trait";
+const CARRIES: &str = "carries";
+const KIND: &str = "kind";
 
 /// Every row there is, and the structure read out of them.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -189,32 +192,46 @@ fn apply(
             // **`add` is the other case and must name every column**, because a row that does not
             // fit the structure cannot be put into the world - including the `id` it will be
             // known by.
-            let wanted = row_of(game, clause, bound, &rule, PATTERN, &matched)?;
-            match role {
-                REQUIRE => {
-                    let found = game.rows.matching(&wanted);
-                    if found.is_empty() {
-                        return Err(Refused::NotSo {
-                            rule,
-                            wanted: game.schema.write(&wanted),
-                        });
+            // **A clause is done once for each relation its argument denotes.** One where
+            // the argument is a kind, and one per member where it is a family - which is the
+            // same sentence for every role, so no role is a special case.
+            let relations = relations_of(game, clause, bound);
+            let alone = relations.len() == 1;
+            for relation in &relations {
+                let wanted = row_of(game, clause, bound, &rule, PATTERN, &matched, relation)?;
+                match role {
+                    REQUIRE => {
+                        let found = game.rows.matching(&wanted);
+                        if found.is_empty() {
+                            return Err(Refused::NotSo {
+                                rule,
+                                wanted: game.schema.write(&wanted),
+                            });
+                        }
+                        // **One match is remembered and several are not.** A clause nothing reads
+                        // from does not care either way; one that is read from refuses below
+                        // rather than picking, which is where the non-determinism would have been.
+                        //
+                        // **A clause over several relations remembers none of them**, for that
+                        // same reason one step out: which member a reading meant would be
+                        // whichever was walked last.
+                        if let [one] = found[..]
+                            && alone
+                        {
+                            let id = clause.value(ID).unwrap_or_default().to_string();
+                            matched.insert(id, one.clone());
+                        }
                     }
-                    // **One match is remembered and several are not.** A clause nothing reads
-                    // from does not care either way; one that is read from refuses below rather
-                    // than picking, which is where the non-determinism would have been.
-                    if let [one] = found[..] {
-                        let id = clause.value(ID).unwrap_or_default().to_string();
-                        matched.insert(id, one.clone());
+                    _ => {
+                        let Some(took) = after.take(&wanted, counted(game, &wanted).as_deref())
+                        else {
+                            return Err(Refused::NothingToRemove {
+                                rule,
+                                wanted: game.schema.write(&wanted),
+                            });
+                        };
+                        effect.took.push(took);
                     }
-                }
-                _ => {
-                    let Some(took) = after.take(&wanted, counted(game, &wanted).as_deref()) else {
-                        return Err(Refused::NothingToRemove {
-                            rule,
-                            wanted: game.schema.write(&wanted),
-                        });
-                    };
-                    effect.took.push(took);
                 }
             }
         }
@@ -248,32 +265,49 @@ fn apply(
             continue;
         }
         let id = clause.value(ID).unwrap_or_default().to_string();
-        let wanted = row_of(game, clause, bound, &rule, PATTERN, &matched)?;
-        let found: Vec<Row> = after.matching(&wanted).into_iter().cloned().collect();
-        for row in found {
-            let mut made = row.clone();
+        for relation in relations_of(game, clause, bound) {
+            // **What is assigned is worked out once per relation, because it can refuse.** A
+            // trait names the column it restores, so the kind either carries one or the rule is
+            // being asked for something that does not exist.
+            let mut assignments: Vec<(String, String)> = Vec::new();
             for assign in game
                 .of_relation(ASSIGNS)
                 .into_iter()
                 .filter(|it| it.value(CLAUSE) == Some(id.as_str()))
             {
-                let column = assign.value(COLUMN).unwrap_or_default();
-                let Some((_, name)) = game.schema.column(column) else {
+                let input = assign.value(INPUT).unwrap_or_default();
+                let Some(given) = bound.get(input) else {
                     continue;
                 };
+                let carried = game.named(TRAIT, given).unwrap_or(given).to_string();
                 let Some(value) = assign.value(VALUE) else {
                     continue;
                 };
-                made.values.insert(name.to_string(), value.to_string());
+                if !carries(game, &relation, &carried) {
+                    return Err(Refused::DoesNotCarry {
+                        rule,
+                        relation,
+                        carried,
+                    });
+                }
+                assignments.push((carried, value.to_string()));
             }
-            // **Already so is nothing done**, which is the no-op this role exists for.
-            if made == row {
-                continue;
+            let wanted = row_of(game, clause, bound, &rule, PATTERN, &matched, &relation)?;
+            let found: Vec<Row> = after.matching(&wanted).into_iter().cloned().collect();
+            for row in found {
+                let mut made = row.clone();
+                for (column, value) in &assignments {
+                    made.values.insert(column.clone(), value.clone());
+                }
+                // **Already so is nothing done**, which is the no-op this role exists for.
+                if made == row {
+                    continue;
+                }
+                after.take(&row, None);
+                after.put(made.clone(), counted(game, &made).as_deref());
+                effect.took.push(row);
+                effect.made.push(made);
             }
-            after.take(&row, None);
-            after.put(made.clone(), counted(game, &made).as_deref());
-            effect.took.push(row);
-            effect.made.push(made);
         }
     }
 
@@ -282,9 +316,11 @@ fn apply(
         match game.named(ROLE, role).unwrap_or(role) {
             REQUIRE | REMOVE | PUT => continue,
             ADD => {
-                let made = row_of(game, clause, bound, &rule, WHOLE, &matched)?;
-                after.put(made.clone(), counted(game, &made).as_deref());
-                effect.made.push(made);
+                for relation in relations_of(game, clause, bound) {
+                    let made = row_of(game, clause, bound, &rule, WHOLE, &matched, &relation)?;
+                    after.put(made.clone(), counted(game, &made).as_deref());
+                    effect.made.push(made);
+                }
             }
             other => {
                 return Err(Refused::NoSuchRole {
@@ -322,21 +358,23 @@ fn counted(game: &Game, row: &Row) -> Option<String> {
 const WHOLE: bool = true;
 const PATTERN: bool = false;
 
-fn row_of(
-    game: &Game,
-    clause: &Row,
-    bound: &BTreeMap<String, String>,
-    rule: &str,
-    whole: bool,
-    matched: &BTreeMap<String, Row>,
-) -> Result<Row, Refused> {
+/// The relations a clause works on, in the order the data states them.
+///
+/// **A clause's relation is its own, or an argument's.** `{relation-of clause:12 input:9}` says
+/// the second - the rule works on whichever kind the command named, which is what lets one `work`
+/// serve every resource now that a kind is a relation rather than a value.
+///
+/// **An argument denotes one relation or several.** A kind denotes itself; a family denotes its
+/// members, because a family has no rows of its own and a rule that worked on it would find
+/// nothing. That is what makes `{refresh what:unit trait:moving}` the group command and
+/// `{refresh what:scout trait:moving}` the separate one, with no second mechanism for grouping -
+/// Sean, 2026-09-18: *I should be able to declare separate things with separate commands, as well
+/// as explicitly declare group commands.*
+///
+/// **Read before the columns are bound**, because which columns exist depends on it.
+fn relations_of(game: &Game, clause: &Row, bound: &BTreeMap<String, String>) -> Vec<String> {
     let id = clause.value(ID).unwrap_or_default();
-    // **A clause's relation is its own, or an argument's.** `{relation-of clause:12 input:9}` says
-    // the second - the rule works on whichever kind the command named, which is what lets one
-    // `work` serve every resource now that a kind is a relation rather than a value.
-    //
-    // **Read before the columns are bound**, because which columns exist depends on it.
-    let relation = match game
+    let given = match game
         .of_relation(RELATION_OF)
         .into_iter()
         .find(|row| row.value(CLAUSE) == Some(id))
@@ -346,17 +384,49 @@ fn row_of(
         Some(given) => given.clone(),
         None => clause.value(RELATION).unwrap_or_default().to_string(),
     };
-    let relation = game
-        .named(RELATION, &relation)
-        .unwrap_or(&relation)
-        .to_string();
+    let named = game.named(RELATION, &given).unwrap_or(&given).to_string();
+    match game.schema.members(&named) {
+        // **Members are ids, because that is what a value carries** - so they are turned into
+        // names here, which is what everything downstream of this reads.
+        Some(members) => members
+            .iter()
+            .map(|it| game.named(RELATION, it).unwrap_or(it).to_string())
+            .collect(),
+        None => vec![named],
+    }
+}
+
+/// Whether `relation` declares `carried` as one of its traits.
+///
+/// **Read from `{carries ...}` rather than from the columns**, because that is where the game
+/// says it. `src/schema.rs` checks the two agree in both directions, so reading either is
+/// reading both - and this reads the one a person would edit.
+fn carries(game: &Game, relation: &str, carried: &str) -> bool {
+    game.of_relation(CARRIES).into_iter().any(|row| {
+        let kind = row.value(KIND).unwrap_or_default();
+        let of = row.value(TRAIT).unwrap_or_default();
+        game.named(RELATION, kind).unwrap_or(kind) == relation
+            && game.named(TRAIT, of).unwrap_or(of) == carried
+    })
+}
+
+fn row_of(
+    game: &Game,
+    clause: &Row,
+    bound: &BTreeMap<String, String>,
+    rule: &str,
+    whole: bool,
+    matched: &BTreeMap<String, Row>,
+    relation: &str,
+) -> Result<Row, Refused> {
+    let id = clause.value(ID).unwrap_or_default();
     let bindings: Vec<&Row> = game
         .of_relation(BINDING)
         .into_iter()
         .filter(|row| row.value(CLAUSE) == Some(id))
         .collect();
 
-    let declared = game.schema.relation(&relation);
+    let declared = game.schema.relation(relation);
     let mut values = BTreeMap::new();
     for binding in bindings {
         let column = binding.value(COLUMN).unwrap_or_default();
@@ -442,7 +512,10 @@ fn row_of(
             }
         }
     }
-    Ok(Row { relation, values })
+    Ok(Row {
+        relation: relation.to_string(),
+        values,
+    })
 }
 
 /// What one command took out of the world and what it made.
