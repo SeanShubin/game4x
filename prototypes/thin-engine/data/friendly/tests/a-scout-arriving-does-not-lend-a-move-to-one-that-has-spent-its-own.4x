@@ -1,0 +1,26 @@
+# A spent scout stands where a fresh one arrives, and the two do not pool their moves.
+#
+# **Sean, 2026-09-18**: *or allow a scout that has moved on a previous turn to pick up a move from
+# a scout on the place it moved to.* The arriving scout spends its move getting there, so the
+# territory holds two scouts and no moves.
+#
+# **This is why the allowance is a key column.** Were it not, the two scouts would be one row of
+# two and the move left in the group would be anybody's.
+
+{test name:a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own}
+
+{given}
+{territory id:1 name:territory-1}
+{territory id:2 name:territory-2}
+{territory id:3 name:territory-3}
+{adjacency id:1 from:territory-1 to:territory-2}
+{adjacency id:2 from:territory-2 to:territory-3}
+{scout where:territory-1 moving:1} -> 1
+{scout where:territory-2 moving:0} -> 1
+
+{when}
+{move what:scout from:territory-1 to:territory-2}
+{move what:scout from:territory-2 to:territory-3}
+
+{refused}
+{scout where:territory-2 moving:1} -> 1

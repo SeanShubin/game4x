@@ -1,0 +1,27 @@
+# A spent extractor, refreshed, works again - and is spent again by the working.
+#
+# **The evidence is the food and not the column.** `CLAUDE.md`: *a check whose subject is behaviour
+# reads the outcome, not the input* - a test asserting only that `working` went from 0 to 1 would
+# be satisfied by a rule that writes the column and changes nothing about what the extractor can
+# do.
+#
+# **The `then` says `working:0` again** because `work` spends what `refresh-working` restored,
+# which is the whole loop in one file.
+
+{test name:refresh-restores-a-spent-extractor}
+
+{given}
+{territory id:1}
+{deposit where:1 what:31 density:6 quantity:1}
+{extractor where:1 what:31 working:0 quantity:1}
+{labor where:1 quantity:1}
+
+{when}
+{refresh-working where:1}
+{work where:1 what:31}
+
+{then}
+{territory id:1}
+{deposit where:1 what:31 density:6 quantity:1}
+{extractor where:1 what:31 working:0 quantity:1}
+{food where:1 quantity:6}

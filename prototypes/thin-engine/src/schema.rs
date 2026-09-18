@@ -850,29 +850,46 @@ fn held_within_what_holds_it(schema: &Schema, rows: &Store) -> Result<(), Malfor
                 by: by.clone(),
             });
         };
-        // **Keyed alike or not comparable at all.** The two relations are matched key column for
-        // key column, so a limit between relations that disagree about what a row is keyed by has
-        // nothing to compare and says so rather than matching on whatever they happen to share.
-        let key = holder.key();
-        if key != holds.key() {
+        // **The container's key must be part of the held thing's.** A deposit is keyed by
+        // `(where, what)` and an extractor by `(where, what, working)`, and the extractors of one
+        // deposit are every row that agrees on the deposit's columns - so a subset rather than
+        // equality, and a limit between relations that share no key at all still says so.
+        let key = holds.key();
+        if !key.iter().all(|column| holder.key().contains(column)) {
             return Err(Malformed::CannotLimit {
                 held: held.clone(),
                 by: by.clone(),
             });
         }
 
+        // **The held rows are summed over the container's key.** They were matched key for key
+        // until an extractor gained a `working` column: a deposit holds an extractor whatever
+        // state it is in, so one spent and one fresh are two rows of the same deposit. **The sum
+        // is what stops two groups each fitting while together they do not.**
+        let mut taken: BTreeMap<Vec<String>, i64> = BTreeMap::new();
         for row in rows.rows().iter().filter(|it| it.relation == *held) {
-            let how_many: i64 = row
+            let Some(values) = key
+                .iter()
+                .map(|column| row.value(column).map(str::to_string))
+                .collect::<Option<Vec<String>>>()
+            else {
+                continue;
+            };
+            *taken.entry(values).or_default() += row
                 .value(counted)
-                .and_then(|it| it.parse().ok())
+                .and_then(|it| it.parse::<i64>().ok())
                 .unwrap_or(0);
+        }
+
+        for (values, how_many) in taken {
             let there = rows
                 .rows()
                 .iter()
                 .filter(|it| it.relation == *by)
                 .find(|it| {
                     key.iter()
-                        .all(|column| it.value(column) == row.value(column))
+                        .zip(&values)
+                        .all(|(column, value)| it.value(column) == Some(value.as_str()))
                 });
             let room: i64 = there
                 .and_then(|it| it.value(room_in))
@@ -885,10 +902,8 @@ fn held_within_what_holds_it(schema: &Schema, rows: &Store) -> Result<(), Malfor
             // can state and what a reader can act on: not *this is too many* but *there is no
             // deposit with room for this many*.
             let mut wanted = BTreeMap::new();
-            for column in &key {
-                if let Some(value) = row.value(column) {
-                    wanted.insert(column.to_string(), value.to_string());
-                }
+            for (column, value) in key.iter().zip(&values) {
+                wanted.insert(column.to_string(), value.clone());
             }
             wanted.insert(room_in.to_string(), how_many.to_string());
             return Err(Malformed::Overfull {

@@ -1,0 +1,24 @@
+# A scout with one move in it, moved, and then asked to move back.
+#
+# **Sean, 2026-09-18**, on why an allowance is a column of the thing: *I want to make sure that we
+# don't have one scout allowed to move 3 times because there are 3 scouts with one move each
+# present.* This is the same hazard with one scout and two commands.
+#
+# **Territory 2 touches territory 1 here**, which it does in no other test - so the move back is
+# refused for want of a move and not for want of a border.
+
+{test name:a-scout-that-has-moved-cannot-move-again}
+
+{given}
+{territory id:1 name:territory-1}
+{territory id:2 name:territory-2}
+{adjacency id:1 from:territory-1 to:territory-2}
+{adjacency id:2 from:territory-2 to:territory-1}
+{scout where:territory-1 moving:1} -> 1
+
+{when}
+{move what:scout from:territory-1 to:territory-2}
+{move what:scout from:territory-2 to:territory-1}
+
+{refused}
+{scout where:territory-2 moving:1} -> 1

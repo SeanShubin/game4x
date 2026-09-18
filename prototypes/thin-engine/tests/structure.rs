@@ -71,7 +71,8 @@ fn a_reference_is_checked_against_the_relation_it_names() {
     // `resource`, so what it admits is a member of it rather than any row that happens to have
     // the key.
     assert_eq!(
-        with("{extractor where:1 what:99 quantity:1}").expect_err("there is no resource 99"),
+        with("{extractor where:1 what:99 working:0 quantity:1}")
+            .expect_err("there is no resource 99"),
         Malformed::NoSuchRow {
             relation: "extractor".to_string(),
             column: "what".to_string(),
@@ -85,7 +86,7 @@ fn a_reference_is_checked_against_the_relation_it_names() {
     // because reusing a description already stated would be refused for having a key already
     // taken - and this test would then pass on the wrong refusal.
     assert_eq!(
-        with("{scout where:9 quantity:1}").expect_err("there is no territory 9"),
+        with("{scout where:9 moving:1 quantity:1}").expect_err("there is no territory 9"),
         Malformed::NoSuchRow {
             relation: "scout".to_string(),
             column: "where".to_string(),
@@ -97,7 +98,7 @@ fn a_reference_is_checked_against_the_relation_it_names() {
 
     // The control: a row whose references both resolve is accepted, so the two above fail for
     // their own reason rather than because nothing added to this data is ever allowed.
-    with("{deposit where:2 what:31 density:6 quantity:1}\n{extractor where:2 what:31 quantity:1}")
+    with("{deposit where:2 what:31 density:6 quantity:1}\n{extractor where:2 what:31 working:0 quantity:1}")
         .expect("a resource in a real territory, with a deposit to stand in");
 }
 
@@ -218,7 +219,21 @@ fn only_the_moves_the_world_allows_are_offered() {
         .map(thin_engine::notation::write)
         .collect();
 
-    assert_eq!(offered, vec!["{move from:1 to:2 what:28}"]);
+    assert_eq!(
+        offered,
+        vec![
+            "{move from:1 to:2 what:28}",
+            "{refresh-moving what:28 where:1}",
+            "{refresh-moving what:28 where:2}",
+            "{refresh-moving what:28 where:3}",
+            "{refresh-moving what:35 where:1}",
+            "{refresh-moving what:35 where:2}",
+            "{refresh-moving what:35 where:3}",
+            "{refresh-working where:1}",
+            "{refresh-working where:2}",
+            "{refresh-working where:3}",
+        ]
+    );
 
     // **The candidates it chose between**, so a single answer is not a walk that tried one thing.
     // Three territories to leave, three to enter, one thing to move: 9 bindings, 1 legal.
@@ -247,15 +262,37 @@ fn only_the_moves_the_world_allows_are_offered() {
     // **Asserted as it is rather than as it should be.** Which way to fix it - state both
     // directions, or read the one that is stated from either end - is a modelling decision and
     // not this test's. This line goes red when it is made, which is what it is for.
-    let command = thin_engine::notation::read("{move what:28 from:1 to:2}").expect("a command");
-    let (moved, _) = fire(&game, &command[0], 1).expect("the scout moves");
+    // **The scout is refreshed before asking**, because a scout that has moved has no move left
+    // and nothing would be offered at all - which would hide the one-way corridor behind a spent
+    // allowance rather than show it.
+    let mut moved = game;
+    for step in [
+        "{move what:28 from:1 to:2}",
+        "{refresh-moving where:2 what:28}",
+    ] {
+        let command = thin_engine::notation::read(step).expect("a command");
+        moved = fire(&moved, &command[0], 1)
+            .expect("the scout moves and is refreshed")
+            .0;
+    }
     let after: Vec<String> = thin_engine::engine::offered(&moved)
         .iter()
         .map(thin_engine::notation::write)
         .collect();
     assert_eq!(
         after,
-        vec!["{move from:2 to:3 what:28}"],
+        vec![
+            "{move from:2 to:3 what:28}",
+            "{refresh-moving what:28 where:1}",
+            "{refresh-moving what:28 where:2}",
+            "{refresh-moving what:28 where:3}",
+            "{refresh-moving what:35 where:1}",
+            "{refresh-moving what:35 where:2}",
+            "{refresh-moving what:35 where:3}",
+            "{refresh-working where:1}",
+            "{refresh-working where:2}",
+            "{refresh-working where:3}",
+        ],
         "one way only, which is the finding rather than the intent"
     );
 }
@@ -294,18 +331,25 @@ fn two_rows_of_one_relation_cannot_share_a_key() {
 #[test]
 fn two_scouts_of_one_description_are_refused() {
     assert_eq!(
-        with("{scout where:1 quantity:3}")
-            .expect_err("scouts are already stated to be in territory 1"),
+        with("{scout where:1 moving:1 quantity:3}")
+            .expect_err("scouts with a move are already stated to be in territory 1"),
         Malformed::TwoWithOneKey {
             relation: "scout".to_string(),
-            key: vec![("where".to_string(), "1".to_string())]
+            key: vec![
+                ("where".to_string(), "1".to_string()),
+                ("moving".to_string(), "1".to_string())
+            ]
         },
         "one scout, or three, or four - nothing could say"
     );
 
     // The control: the same description somewhere else is a different description, so the refusal
     // above is about the key and not about adding a scout at all.
-    with("{scout where:2 quantity:3}").expect("another place is another description");
+    with("{scout where:2 moving:1 quantity:3}").expect("another place is another description");
+
+    // And the allowance tells them apart in the same place, which is what makes the grouping
+    // work: a scout that has moved is not the same description as one that has not.
+    with("{scout where:1 moving:0 quantity:3}").expect("a spent scout is another description");
 }
 
 /// **Identified or counted, and never both.**
@@ -317,7 +361,7 @@ fn two_scouts_of_one_description_are_refused() {
 #[test]
 fn a_relation_cannot_carry_both_an_id_and_a_quantity() {
     assert_eq!(
-        with("{column id:900 relation:28 seq:3 name:id}")
+        with("{column id:900 relation:28 seq:4 name:id}")
             .expect_err("a row is one thing or a count of them"),
         Malformed::IdAndQuantity {
             relation: "scout".to_string()
@@ -382,7 +426,8 @@ fn a_deposit_cannot_have_two_densities() {
 #[test]
 fn an_extractor_needs_a_deposit_to_stand_in() {
     assert_eq!(
-        with("{extractor where:1 what:31 quantity:1}").expect_err("no deposit of food here"),
+        with("{extractor where:1 what:31 working:0 quantity:1}")
+            .expect_err("no deposit of food here"),
         Malformed::Overfull {
             held: "extractor".to_string(),
             by: "deposit".to_string(),
@@ -394,13 +439,13 @@ fn an_extractor_needs_a_deposit_to_stand_in() {
 
     // The control: the same extractor over a deposit with room is fine, so the refusal is about
     // the room rather than about extractors.
-    with("{deposit where:1 what:31 density:6 quantity:1}\n{extractor where:1 what:31 quantity:1}")
+    with("{deposit where:1 what:31 density:6 quantity:1}\n{extractor where:1 what:31 working:0 quantity:1}")
         .expect("one extractor in one deposit");
 
     // And one more than there is room for is refused by the number, not by the absence.
     assert_eq!(
         with(
-            "{deposit where:1 what:31 density:6 quantity:1}\n{extractor where:1 what:31 quantity:2}"
+            "{deposit where:1 what:31 density:6 quantity:1}\n{extractor where:1 what:31 working:0 quantity:2}"
         )
         .expect_err("two extractors in one deposit"),
         Malformed::Overfull {
@@ -411,38 +456,4 @@ fn an_extractor_needs_a_deposit_to_stand_in() {
         },
         "a full deposit and an absent one are one refusal with a different number"
     );
-}
-
-/// **An allowance cannot exceed the things that have it.**
-///
-/// **`{limit held:working by:extractor}` is what says so**, and without this test the row
-/// declaring it could be deleted and nothing would notice - which the mutation check said the day
-/// the limit was added. **A limit is only worth declaring where something would otherwise be
-/// allowed**, and two works for one extractor is that something.
-#[test]
-fn an_allowance_cannot_exceed_the_things_that_have_it() {
-    assert_eq!(
-        with(
-            "{deposit where:1 what:31 density:6 quantity:1}
-{extractor where:1 what:31 quantity:1}
-{working where:1 what:31 quantity:2}"
-        )
-        .expect_err("two works and one extractor to do them"),
-        Malformed::Overfull {
-            held: "working".to_string(),
-            by: "extractor".to_string(),
-            wanted: "{extractor where:1 what:31 quantity:2}".to_string(),
-            room: "1".to_string()
-        },
-        "the refusal names the extractor that would have had to be there"
-    );
-
-    // The control: as many works as there are extractors is fine, so the refusal above is about
-    // the number rather than about stating a readiness at all.
-    with(
-        "{deposit where:1 what:31 density:6 quantity:1}
-{extractor where:1 what:31 quantity:1}
-{working where:1 what:31 quantity:1}",
-    )
-    .expect("one work for one extractor");
 }

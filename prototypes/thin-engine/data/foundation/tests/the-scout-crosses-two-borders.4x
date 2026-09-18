@@ -1,6 +1,10 @@
 # The scout moves twice, one step at a time, because territory 1 does not touch territory 3.
 #
 # **A second test, added by adding a file.** Nothing in `tests/` or `src/` names it.
+#
+# **The refresh between them is not decoration.** A scout has one move, so crossing two borders in
+# one go is exactly what the allowance forbids - and this test would have been the first casualty
+# of that rule. It now says what crossing twice costs.
 
 {test name:the-scout-crosses-two-borders}
 
@@ -10,10 +14,11 @@
 {territory id:3}
 {adjacency id:1 from:1 to:2}
 {adjacency id:2 from:2 to:3}
-{scout where:1 quantity:1}
+{scout where:1 moving:1 quantity:1}
 
 {when}
 {move what:28 from:1 to:2}
+{refresh-moving where:2 what:28}
 {move what:28 from:2 to:3}
 
 {then}
@@ -22,4 +27,4 @@
 {territory id:3}
 {adjacency id:1 from:1 to:2}
 {adjacency id:2 from:2 to:3}
-{scout where:3 quantity:1}
+{scout where:3 moving:0 quantity:1}

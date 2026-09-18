@@ -155,7 +155,6 @@ fn check(files: &InMemory) -> Result<(), String> {
             "scout",
             "territory",
             "transport",
-            "working",
         ];
         if report.compared != state && report.compared != ["the refusal"] {
             return Err(format!("compared {:?}", report.compared));
@@ -546,14 +545,25 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// stated as one or as none. **They are there so a reader can see the refusal is about the one
 /// thing the test is named for** - the labor in one, the key in another - and this line is the
 /// price of that, said rather than trimmed.
-const DELETABLE: [&str; 7] = [
-    "7 rules.4x binding",
+/// **Two `{move ...}` rows are deletable, and that is the cost Sean chose.** Each is the first of
+/// two commands in a refusal test, and either command alone produces the same refusal - because
+/// `{refused}` names what the rule wanted and not which command wanted it. He, on whether to add
+/// the index: *I don't need to say which command was refused on a multi line command, don't want
+/// to encorage too many lines in the test.* **So the test says less than it looks like it says**,
+/// and what pins the behaviour is the test beside it where the command succeeds.
+///
+/// **The same shape accounts for the `scout` and `extractor` rows here.** A world that reaches the
+/// refusal by a shorter route reaches it just the same.
+const DELETABLE: [&str; 9] = [
+    "5 rules.4x binding",
     "2 rules.4x literal",
-    "1 schema.4x limit",
-    "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x working",
-    "1 tests/an-extractor-cannot-be-worked-without-labor.4x working",
-    "2 tests/one-extractors-readiness-is-not-anothers.4x working",
+    "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x move",
+    "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x scout",
+    "1 tests/a-scout-that-has-moved-cannot-move-again.4x move",
+    "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x extractor",
+    "2 tests/one-extractors-readiness-is-not-anothers.4x extractor",
     "2 tests/the-scout-cannot-cross-where-there-is-no-border.4x adjacency",
+    "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x scout",
 ];
 
 /// **Every value matters**: change any one of them and something fails.
@@ -697,19 +707,36 @@ fn no_value_can_be_changed_without_breaking_something() {
 /// **And a supply's own name.** `berth` is read by the friendly renderer and by nobody else - the
 /// engine groups providers and consumers by the supply's id, and the word is there so a reader has
 /// one. It is the same shape `thing.name` had before a kind became a relation.
-const NOT_LOAD_BEARING: [&str; 14] = [
-    "12 rules.4x clause.seq",
-    "7 rules.4x input.seq",
+/// **`refresh-restores-a-spent-extractor` starting spent is not load-bearing, and it should be
+/// read carefully.** The `refresh-working` command *is* - deleting it makes the work refuse - but
+/// the extractor could start at `working:1` and the test would pass, because `work` succeeds
+/// either way. **So the test shows that refresh and work compose, not that refresh was needed**,
+/// and the fifth test Sean capped out - refresh where there is nothing to refresh - is what would
+/// close it. It is in `backlog.md`.
+///
+/// **A `moving` that never moves is the other new shape here.** The berth tests hold vehicles to
+/// count them, not to move them, so what those rows say about moves is read by nothing.
+const NOT_LOAD_BEARING: [&str; 22] = [
+    "13 rules.4x clause.seq",
+    "10 rules.4x input.seq",
     "1 rules.4x reading.id",
     "1 schema.4x supply.name",
+    "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x scout.quantity",
     "1 tests/a-scout-cannot-move-where-every-berth-is-taken.4x adjacency.id",
+    "1 tests/a-scout-cannot-move-where-every-berth-is-taken.4x transport.moving",
     "1 tests/a-transport-takes-two-berths-where-a-scout-takes-one.4x adjacency.id",
+    "1 tests/a-transport-takes-two-berths-where-a-scout-takes-one.4x scout.moving",
+    "1 tests/a-transport-takes-two-berths-where-a-scout-takes-one.4x transport.moving",
     "1 tests/an-extractor-cannot-be-built-where-the-deposits-are-taken.4x deposit.density",
+    "1 tests/an-extractor-cannot-be-built-where-the-deposits-are-taken.4x extractor.working",
     "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x deposit.density",
-    "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x working.quantity",
+    "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x extractor.quantity",
+    "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x extractor.working",
     "1 tests/an-extractor-cannot-be-worked-without-labor.4x deposit.density",
-    "1 tests/an-extractor-cannot-be-worked-without-labor.4x working.quantity",
     "2 tests/one-extractors-readiness-is-not-anothers.4x deposit.density",
-    "2 tests/one-extractors-readiness-is-not-anothers.4x working.quantity",
+    "2 tests/one-extractors-readiness-is-not-anothers.4x extractor.quantity",
+    "2 tests/one-extractors-readiness-is-not-anothers.4x extractor.working",
+    "1 tests/refresh-restores-a-spent-extractor.4x extractor.working",
+    "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x scout.moving",
     "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x scout.quantity",
 ];

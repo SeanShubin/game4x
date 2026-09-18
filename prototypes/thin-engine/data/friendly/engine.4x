@@ -55,3 +55,5 @@
 {primitive id:44 word:provides}
 {primitive id:45 word:supply}
 {primitive id:46 word:what}
+{primitive id:47 word:assigns}
+{primitive id:48 word:put}

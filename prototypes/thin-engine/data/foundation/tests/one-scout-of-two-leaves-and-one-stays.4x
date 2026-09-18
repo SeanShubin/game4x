@@ -9,7 +9,7 @@
 {territory id:1}
 {territory id:2}
 {adjacency id:1 from:1 to:2}
-{scout where:1 quantity:2}
+{scout where:1 moving:1 quantity:2}
 
 {when}
 {move what:28 from:1 to:2}
@@ -18,5 +18,5 @@
 {territory id:1}
 {territory id:2}
 {adjacency id:1 from:1 to:2}
-{scout where:1 quantity:1}
-{scout where:2 quantity:1}
+{scout where:1 moving:1 quantity:1}
+{scout where:2 moving:0 quantity:1}

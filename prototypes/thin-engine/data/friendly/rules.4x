@@ -30,16 +30,12 @@
 {input id:2 rule:move seq:2 name:from of:territory}
 {input id:3 rule:move seq:3 name:to of:territory}
 
-{clause id:1 rule:move seq:1 role:require relation:unit name:clause-1}
-{clause id:2 rule:move seq:2 role:require relation:adjacency name:clause-2}
-{clause id:3 rule:move seq:3 role:remove relation:unit name:clause-3}
-{clause id:4 rule:move seq:4 role:add relation:unit name:clause-4}
+{clause id:2 rule:move seq:1 role:require relation:adjacency name:clause-2}
+{clause id:3 rule:move seq:2 role:remove relation:unit name:clause-3}
+{clause id:4 rule:move seq:3 role:add relation:unit name:clause-4}
 
-{relation-of clause:clause-1 input:what}
 {relation-of clause:clause-3 input:what}
 {relation-of clause:clause-4 input:what}
-
-{binding id:1 clause:clause-1 column:72 input:from}
 
 {binding id:3 clause:clause-2 column:42 input:from}
 {binding id:4 clause:clause-2 column:43 input:to}
@@ -48,8 +44,11 @@
 
 {binding id:7 clause:clause-4 column:72 input:to}
 
-{literal id:1 clause:clause-4 column:73 value:1}
+{literal id:13 clause:clause-3 column:98 value:1}
 {literal id:2 clause:clause-3 column:73 value:1}
+
+{literal id:14 clause:clause-4 column:98 value:0}
+{literal id:1 clause:clause-4 column:73 value:1}
 
 {rule id:2 name:build-extractor}
 
@@ -68,6 +67,7 @@
 
 {literal id:4 clause:clause-5 column:79 value:1}
 {literal id:6 clause:clause-6 column:81 value:1}
+{literal id:15 clause:clause-7 column:101 value:0}
 {literal id:8 clause:clause-7 column:57 value:1}
 
 {rule id:3 name:work}
@@ -75,28 +75,54 @@
 {input id:8 rule:work seq:1 name:where of:territory}
 {input id:9 rule:work seq:2 name:what of:resource}
 
-{clause id:9 rule:work seq:1 role:require relation:extractor name:clause-9}
-{clause id:10 rule:work seq:2 role:require relation:deposit name:clause-10}
+{clause id:10 rule:work seq:1 role:require relation:deposit name:clause-10}
+{clause id:13 rule:work seq:2 role:remove relation:extractor name:clause-13}
 {clause id:11 rule:work seq:3 role:remove relation:labor name:clause-11}
-{clause id:13 rule:work seq:4 role:remove relation:working name:clause-13}
+{clause id:14 rule:work seq:4 role:add relation:extractor name:clause-14}
 {clause id:12 rule:work seq:5 role:add relation:resource name:clause-12}
 
 {relation-of clause:clause-12 input:what}
 
-{binding id:15 clause:clause-9 column:55 input:where}
-{binding id:16 clause:clause-9 column:56 input:what}
-
 {binding id:17 clause:clause-10 column:51 input:where}
 {binding id:18 clause:clause-10 column:52 input:what}
 
+{binding id:26 clause:clause-13 column:55 input:where}
+{binding id:27 clause:clause-13 column:56 input:what}
+
 {binding id:19 clause:clause-11 column:78 input:where}
 
-{binding id:22 clause:clause-13 column:84 input:where}
-{binding id:23 clause:clause-13 column:85 input:what}
+{binding id:28 clause:clause-14 column:55 input:where}
+{binding id:29 clause:clause-14 column:56 input:what}
 
 {binding id:21 clause:clause-12 column:74 input:where}
 
+{literal id:16 clause:clause-13 column:101 value:1}
+{literal id:17 clause:clause-13 column:57 value:1}
 {literal id:11 clause:clause-11 column:79 value:1}
-{literal id:12 clause:clause-13 column:86 value:1}
+{literal id:18 clause:clause-14 column:101 value:0}
+{literal id:19 clause:clause-14 column:57 value:1}
 
 {reading id:1 clause:clause-12 column:75 of:clause-10 takes:53}
+
+{rule id:4 name:refresh-moving}
+
+{input id:10 rule:refresh-moving seq:1 name:where of:territory}
+{input id:11 rule:refresh-moving seq:2 name:what of:unit}
+
+{clause id:15 rule:refresh-moving seq:1 role:put relation:unit name:clause-15}
+
+{relation-of clause:clause-15 input:what}
+
+{binding id:24 clause:clause-15 column:72 input:where}
+
+{assigns id:1 clause:clause-15 column:98 value:1}
+
+{rule id:5 name:refresh-working}
+
+{input id:12 rule:refresh-working seq:1 name:where of:territory}
+
+{clause id:16 rule:refresh-working seq:1 role:put relation:extractor name:clause-16}
+
+{binding id:25 clause:clause-16 column:55 input:where}
+
+{assigns id:2 clause:clause-16 column:101 value:1}

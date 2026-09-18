@@ -44,11 +44,11 @@
 {relation id:29 name:labor}
 {relation id:30 name:metal}
 {relation id:31 name:food}
-{relation id:32 name:working}
 {relation id:33 name:supply}
 {relation id:34 name:provides}
 {relation id:35 name:transport}
 {relation id:36 name:consumes}
+{relation id:37 name:assigns}
 
 
 ## The columns
@@ -101,7 +101,8 @@
 {column id:54 relation:18 seq:4 name:quantity}
 {column id:55 relation:19 seq:1 name:where}
 {column id:56 relation:19 seq:2 name:what}
-{column id:57 relation:19 seq:3 name:quantity}
+{column id:101 relation:19 seq:3 name:working}
+{column id:57 relation:19 seq:4 name:quantity}
 {column id:58 relation:20 seq:1 name:held}
 {column id:59 relation:20 seq:2 name:by}
 
@@ -130,7 +131,8 @@
 # what it is for here: `{for block:build-extractor seq:3 kind:$resource}`.
 
 {column id:72 relation:26 seq:1 name:where}
-{column id:73 relation:26 seq:2 name:quantity}
+{column id:98 relation:26 seq:2 name:moving}
+{column id:73 relation:26 seq:3 name:quantity}
 {column id:74 relation:27 seq:1 name:where}
 {column id:75 relation:27 seq:2 name:quantity}
 
@@ -146,7 +148,8 @@
 # relation and its columns.
 
 {column id:76 relation:28 seq:1 name:where}
-{column id:77 relation:28 seq:2 name:quantity}
+{column id:99 relation:28 seq:2 name:moving}
+{column id:77 relation:28 seq:3 name:quantity}
 {column id:78 relation:29 seq:1 name:where}
 {column id:79 relation:29 seq:2 name:quantity}
 {column id:80 relation:30 seq:1 name:where}
@@ -172,9 +175,10 @@
 # does with `working`, `moving`, `laboring` and `bearing`. Each is keyed like the thing that has
 # it, so `{limit ...}` says an allowance cannot exceed the things holding it.
 
-{column id:84 relation:32 seq:1 name:where}
-{column id:85 relation:32 seq:2 name:what}
-{column id:86 relation:32 seq:3 name:quantity}
+{column id:102 relation:37 seq:1 name:id}
+{column id:103 relation:37 seq:2 name:clause}
+{column id:104 relation:37 seq:3 name:column}
+{column id:105 relation:37 seq:4 name:value}
 
 
 ## What a place has room for, and what each kind takes up
@@ -204,7 +208,8 @@
 {column id:95 relation:36 seq:3 name:quantity}
 
 {column id:96 relation:35 seq:1 name:where}
-{column id:97 relation:35 seq:2 name:quantity}
+{column id:100 relation:35 seq:2 name:moving}
+{column id:97 relation:35 seq:3 name:quantity}
 
 
 ## What points at what
@@ -257,8 +262,8 @@
 {reference id:43 column:80 to:13}
 {reference id:44 column:82 to:13}
 
-{reference id:45 column:84 to:13}
-{reference id:46 column:85 to:27}
+{reference id:45 column:103 to:8}
+{reference id:46 column:104 to:2}
 
 {reference id:47 column:89 to:1}
 {reference id:48 column:90 to:1}
@@ -281,7 +286,6 @@
 {state id:8 relation:29}
 {state id:9 relation:30}
 {state id:10 relation:31}
-{state id:11 relation:32}
 {state id:12 relation:35}
 {state id:13 relation:34}
 {state id:14 relation:36}
@@ -323,7 +327,6 @@
 # rule already refuses the world it would leave, so this binds rules that do not exist yet.
 
 {limit held:19 by:18}
-{limit held:32 by:19}
 
 
 ## What a supply is, and what it is measured in
@@ -349,3 +352,4 @@
 {role id:1 name:require}
 {role id:2 name:remove}
 {role id:3 name:add}
+{role id:4 name:put}

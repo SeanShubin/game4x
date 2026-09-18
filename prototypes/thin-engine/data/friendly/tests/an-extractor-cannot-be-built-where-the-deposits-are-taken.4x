@@ -11,7 +11,7 @@
 {given}
 {territory id:1 name:territory-1}
 {deposit where:territory-1 what:food density:6} -> 1
-{extractor where:territory-1 what:food} -> 1
+{extractor where:territory-1 what:food working:0} -> 1
 {labor where:territory-1} -> 1
 {metal where:territory-1} -> 1
 

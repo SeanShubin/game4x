@@ -39,6 +39,18 @@ back, so a built extractor starts unready and stays that way. The refresh rule i
 today - remove the row, require the extractor, add a `working` whose quantity is read off the
 extractor count - and there is nowhere to fire it from.
 
+## Refresh, what is left of it
+
+**A fifth test: refresh where there is nothing to refresh.** The four that exist cover a group
+already topped off, which is what makes `refresh-makes-one-entry` come to five rather than refuse -
+but none refreshes an empty place, and that is the case `put` exists for over a remove and an add.
+Sean capped the set at four and said this is the one to add if another is dropped.
+
+**A per-kind maximum, and the word for it.** Every maximum is 1, so it is a literal in the refresh
+rule and nothing checks that a world stating `{scout ... moving:9}` is wrong. Sean deferred both the
+word - `readies`, `allows`, `affords` - and whether it unifies with capacity, and deferring costs
+nothing while every maximum is 1.
+
 ## Comparison
 
 **The engine has no operators.** `spec/data/constraint.4x` has 28 rows using four - `at-least`,

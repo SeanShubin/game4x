@@ -274,10 +274,9 @@ fn the_report_says_which_relations_it_compared() {
             "provides",
             "scout",
             "territory",
-            "transport",
-            "working"
+            "transport"
         ],
-        "twelve of the game's relations are state - five kinds, an allowance, and the two sides of a supply"
+        "eleven of the game's relations are state - an allowance is a column of the thing now, so `working` is not one of them"
     );
     assert_eq!(report.test, "the-scout-moves-to-an-adjacent-place");
 }
@@ -294,7 +293,7 @@ fn the_report_reads_as_a_report() {
             report_of("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x")
         ),
         "the-scout-moves-to-an-adjacent-place\n  \
-           compared  adjacency, consumes, deposit, extractor, food, labor, metal, provides, scout, territory, transport, working\n  \
+           compared  adjacency, consumes, deposit, extractor, food, labor, metal, provides, scout, territory, transport\n  \
            result    as expected"
     );
 }
@@ -316,7 +315,7 @@ fn a_state_that_is_not_expected_is_reported_as_both_rows() {
         .iter()
         .rposition(|row| row.relation == "scout")
         .expect("a `then` scout");
-    script[at] = thin_engine::notation::read("{scout where:1 quantity:1}")
+    script[at] = thin_engine::notation::read("{scout where:1 moving:1 quantity:1}")
         .expect("the state before, offered as the state after")
         .remove(0);
 
@@ -326,8 +325,8 @@ fn a_state_that_is_not_expected_is_reported_as_both_rows() {
         !report.same(),
         "the scout did move, so this is not as expected"
     );
-    assert_eq!(report.missing, vec!["{scout where:1 quantity:1}"]);
-    assert_eq!(report.extra, vec!["{scout where:2 quantity:1}"]);
+    assert_eq!(report.missing, vec!["{scout where:1 moving:1 quantity:1}"]);
+    assert_eq!(report.extra, vec!["{scout where:2 moving:0 quantity:1}"]);
     assert!(
         format!("{report}").contains("NOT as expected"),
         "and the report says so: {report}"

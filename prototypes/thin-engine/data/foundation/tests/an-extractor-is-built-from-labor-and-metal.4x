@@ -18,4 +18,4 @@
 {then}
 {territory id:1}
 {deposit where:1 what:31 density:6 quantity:1}
-{extractor where:1 what:31 quantity:1}
+{extractor where:1 what:31 working:0 quantity:1}
