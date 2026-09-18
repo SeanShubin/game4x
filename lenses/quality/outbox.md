@@ -319,6 +319,37 @@ silently** - the class the script was written about, in the script, at the small
 A terminator rather than a number would do it.
 
 
+### Q-93 - The prototype's backlog says the sum blocks storage, and the sum shipped in the commit that said so
+
+**to** code · **status** open · **raised** 2026-09-18 · **source**
+[Storage is three-quarters built](2026-09-18-storage-is-built-and-the-turn-is-what-waits.md)
+
+**Where.** `prototypes/thin-engine/backlog.md` - the Storage table, and line 28.
+
+**What.** Three lines of the Storage block have stopped being true without anyone editing them.
+Line 28 says *the one that blocks the rest is the sum*; the sum is `counted` at
+`src/schema.rs:754-786`, added by `f5687d24`, **the same commit that added the backlog**, and
+`850388e1`'s message says storage needs *no further engine*. Row one's
+`{store where:territory-1 what:metal}` puts the kind in a column, the shape `6b642e4f` removed -
+and row three's `{provides kind:store what:metal}` cannot work with it, because `provides.kind`
+references a **relation**, so it would apply to food stores too. Row two's stated difficulty - *a
+cap per description, not per relation* - is a consequence of row one rather than a requirement.
+
+**Why.** The backlog is what a reader consults to choose what to build next, so a stale line there
+costs a plan rather than a test. It is the ordinary shape: nothing edited it, the world moved under
+it.
+
+**And one thing that is not stale but changes the order.** `engine.rs:243` checks the world after a
+rule fires and **refuses** it, where `spec/logistics.md` says a place's excess is **lost at the
+turn's end**. Refusal is right for berths and wrong for resources, so the storage rows that look
+free are free only for capacity that refuses. **The half of storage that is not already built sits
+behind the turn**, which the backlog lists second.
+
+**Whether.** Worth fixing the three lines when the block is next touched, and not worth a commit of
+its own. **The ordering is the part worth acting on**, and it is a recommendation rather than a
+finding: the turn before storage. Reported to Sean on 2026-09-18, who asked which concept came
+next.
+
 ### Q-88 - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here
 
 **to** code · **status** open · **raised** 2026-09-13 · **source**

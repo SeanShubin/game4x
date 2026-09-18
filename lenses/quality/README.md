@@ -453,6 +453,12 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [Storage is three-quarters built](2026-09-18-storage-is-built-and-the-turn-is-what-waits.md)
+  - 2026-09-18. Reading `prototypes/thin-engine/backlog.md` against the tree, on Sean asking
+    which concept comes next. The sum it names as the blocker shipped in the commit that named
+    it; two of the four hard rows are rows-only today. What the other two wait on is the turn,
+    and so does the readiness already in the schema - `working` is removed by `work` and added
+    by nothing.
 - [*Did it land* is not *is it still there*](2026-09-13-did-it-land-is-not-is-it-still-there.md)
   - 2026-09-13. `P-486` restored a clause `P-66` promoted and a reword lost. Nothing checks
     that approved text survives, by design. The obvious sweep is noise at forty per cent
