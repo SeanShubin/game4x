@@ -31,6 +31,7 @@ releases/
 docs/
   README.md ....................... this file: the map and the rules
   process.md ...................... how Sean runs several instances, and what he requires of them
+  working-with-an-assistant.md .... his two rules for using one, and why the human was needed
   designing-rules.md .............. what the recipe net buys, and how to tell if a formula is allowed
   vision.md ....................... what the game is and what it must not become
   architecture.md ................. module boundaries and dependency rules
