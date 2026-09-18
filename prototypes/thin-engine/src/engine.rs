@@ -229,9 +229,14 @@ fn apply(
     // moves.*
     //
     // **Bindings and literals match; `{assigns ...}` says what changes.** The alternative offered -
-    // bindings match and literals assign - cannot work here, because `build-extractor` already uses
-    // a literal to *match*: `{literal ... value:labor}` is how its remove clause finds labor.
-    // **Which a value came from cannot decide what it is for.**
+    // bindings match and literals assign - cannot work, because a literal already matches:
+    // `{literal id:13 clause:clause-3 column:98 value:1}` is how `move` picks the `moving:1` group
+    // out of a place holding both, on a clause whose role is `remove`. **Which a value came from
+    // cannot decide what it is for.**
+    //
+    // **The evidence first given for this was stale by one increment** - `{literal ... value:labor}`,
+    // which the kinds unification deleted when a clause began naming its relation directly. Found
+    // by the quality lens re-deriving the claim and finding nothing there.
     //
     // **A put conserves the count**, which is what separates it from a remove and an add that
     // could drop or duplicate: three scouts before, three after, and only their descriptions

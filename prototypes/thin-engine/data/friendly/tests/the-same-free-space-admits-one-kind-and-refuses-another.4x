@@ -1,0 +1,35 @@
+# The same free space admits one kind and refuses another.
+#
+# **Sean, 2026-09-18**: *It is certainly valid to test that different berth sizes work properly,
+# but we don't specifically care what those sizes are for what units.* **So the numbers are not the
+# subject.** The rate belongs to the consumer, and two kinds meeting the same room get different
+# answers - which is a fact about the engine and not about how big a transport is.
+#
+# **Neither number is stated outside this prototype.** `berth`, `scout` and `transport` appear
+# nowhere in `spec/` or `releases/`, which is `S-136`'s isolation working - so a name carrying `2`
+# and `1` would read as authoritative about something nothing states, and would go on reading that
+# way after the numbers changed.
+#
+# **The other half of the argument is in `a-scout-moves-where-there-is-a-berth-to-spare`**, which
+# puts a scout into this same room and succeeds. A test states a `then` or a `refused` and not both
+# - `Failed::BothEndings` - so the contrast has to live in two files, and naming the other one is
+# what makes the pointer followable and gives a later rename something to find.
+
+{test name:the-same-free-space-admits-one-kind-and-refuses-another}
+
+{given}
+{provides kind:territory what:berth} -> 6
+{consumes kind:scout what:berth} -> 1
+{consumes kind:transport what:berth} -> 2
+{territory id:1 name:territory-1}
+{territory id:2 name:territory-2}
+{adjacency id:1 from:territory-1 to:territory-2}
+{transport where:territory-1 moving:1} -> 1
+{transport where:territory-2 moving:1} -> 2
+{scout where:territory-2 moving:1} -> 1
+
+{when}
+{move what:transport from:territory-1 to:territory-2}
+
+{refused}
+{provides kind:territory what:berth} -> 7

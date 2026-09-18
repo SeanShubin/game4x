@@ -239,37 +239,6 @@ refused
 as expected
 
 ==============================================================================
-a-transport-takes-two-berths-where-a-scout-takes-one
-
-old state
-  - root
-    - adjacency
-      - {adjacency id:1 from:territory-1 to:territory-2}
-    - consumes
-      - {consumes kind:scout what:berth} -> 1
-      - {consumes kind:transport what:berth} -> 2
-    - deposit
-    - extractor
-    - food
-    - labor
-    - metal
-    - provides
-      - {provides kind:territory what:berth} -> 6
-    - scout
-      - {scout where:territory-2 moving:1} -> 1
-    - territory
-      - {territory id:1 name:territory-1}
-      - {territory id:2 name:territory-2}
-    - transport
-      - {transport where:territory-1 moving:1} -> 1
-      - {transport where:territory-2 moving:1} -> 2
-
-refused
-  `move` would leave a world where `2` consumes berth enough for {provides kind:13 what:1 quantity:7} and is provided 6
-
-as expected
-
-==============================================================================
 an-extractor-cannot-be-built-where-the-deposits-are-taken
 
 old state
@@ -539,6 +508,63 @@ new state
 as expected
 
 ==============================================================================
+refresh-lets-a-spent-extractor-work-again
+
+old state
+  - root
+    - adjacency
+    - consumes
+    - deposit
+      - {deposit where:territory-1 what:food density:6} -> 1
+    - extractor
+      - {extractor where:territory-1 what:food working:1} -> 1
+    - food
+    - labor
+      - {labor where:territory-1} -> 2
+    - metal
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+command  {work where:territory-1 what:food}
+  took   {extractor where:territory-1 what:food working:1} -> 1
+  took   {labor where:territory-1} -> 1
+  made   {extractor where:territory-1 what:food working:0} -> 1
+  made   {food where:territory-1} -> 6
+
+command  {refresh-working where:territory-1}
+  took   {extractor where:territory-1 what:food working:0} -> 1
+  made   {extractor where:territory-1 what:food working:1} -> 1
+
+command  {work where:territory-1 what:food}
+  took   {extractor where:territory-1 what:food working:1} -> 1
+  took   {labor where:territory-1} -> 1
+  made   {extractor where:territory-1 what:food working:0} -> 1
+  made   {food where:territory-1} -> 6
+
+new state
+  - root
+    - adjacency
+    - consumes
+    - deposit
+      - {deposit where:territory-1 what:food density:6} -> 1
+    - extractor
+      - {extractor where:territory-1 what:food working:0} -> 1
+    - food
+      - {food where:territory-1} -> 12
+    - labor
+    - metal
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+as expected
+
+==============================================================================
 refresh-makes-one-entry-of-a-spent-scout-and-a-fresh-one
 
 old state
@@ -581,53 +607,33 @@ new state
 as expected
 
 ==============================================================================
-refresh-restores-a-spent-extractor
+the-same-free-space-admits-one-kind-and-refuses-another
 
 old state
   - root
     - adjacency
+      - {adjacency id:1 from:territory-1 to:territory-2}
     - consumes
+      - {consumes kind:scout what:berth} -> 1
+      - {consumes kind:transport what:berth} -> 2
     - deposit
-      - {deposit where:territory-1 what:food density:6} -> 1
     - extractor
-      - {extractor where:territory-1 what:food working:0} -> 1
     - food
-    - labor
-      - {labor where:territory-1} -> 1
-    - metal
-    - provides
-    - scout
-    - territory
-      - {territory id:1 name:territory-1}
-    - transport
-
-command  {refresh-working where:territory-1}
-  took   {extractor where:territory-1 what:food working:0} -> 1
-  made   {extractor where:territory-1 what:food working:1} -> 1
-
-command  {work where:territory-1 what:food}
-  took   {extractor where:territory-1 what:food working:1} -> 1
-  took   {labor where:territory-1} -> 1
-  made   {extractor where:territory-1 what:food working:0} -> 1
-  made   {food where:territory-1} -> 6
-
-new state
-  - root
-    - adjacency
-    - consumes
-    - deposit
-      - {deposit where:territory-1 what:food density:6} -> 1
-    - extractor
-      - {extractor where:territory-1 what:food working:0} -> 1
-    - food
-      - {food where:territory-1} -> 6
     - labor
     - metal
     - provides
+      - {provides kind:territory what:berth} -> 6
     - scout
+      - {scout where:territory-2 moving:1} -> 1
     - territory
       - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
     - transport
+      - {transport where:territory-1 moving:1} -> 1
+      - {transport where:territory-2 moving:1} -> 2
+
+refused
+  `move` would leave a world where `2` consumes berth enough for {provides kind:13 what:1 quantity:7} and is provided 6
 
 as expected
 

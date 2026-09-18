@@ -8,9 +8,13 @@
 //! cargo run --example review-web
 //! ```
 //!
-//! Then `http://127.0.0.1:7878`. `j`/`k` move, `Enter` opens, `r` marks the test reviewed, `u`
-//! takes that back, and `x` files a note saying what needs changing. Every key press is a write to
-//! the disk that has already happened before the badge changes.
+//! Then `http://127.0.0.1:7878`. The arrow keys move, `Enter` opens, `r` marks the test reviewed,
+//! `u` takes that back, and `x` files a note saying what needs changing. Every key press is a write
+//! to the disk that has already happened before the badge changes.
+//!
+//! **`j` and `k` still work and are not advertised.** They were the only way to move until Sean
+//! said so: *the j/k to move is unintuitive* - which it is, being vim's and not anything a reader
+//! would guess.
 //!
 //! **The page is `report`'s, not this file's.** This calls `report::build(true)` for every request,
 //! so the served page and `report.html` cannot disagree about what a test says - and because it is
@@ -55,7 +59,7 @@ fn main() {
         .map(|file| file.trim_end_matches(".4x").to_string())
         .collect();
     println!("http://{at}  -  {} tests", known.len());
-    println!("j/k move, Enter opens, r reviewed, x needs changing, u unreview. Ctrl-C to stop.");
+    println!("arrows move, Enter opens, r reviewed, x needs changing, u unreview. Ctrl-C to stop.");
     for coming in listening.incoming() {
         match coming {
             Ok(stream) => serve(stream, &known),

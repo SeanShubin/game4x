@@ -631,92 +631,15 @@ fn no_value_can_be_changed_without_breaking_something() {
     );
 }
 
-/// **The values nothing reads, named and counted, so the list cannot grow quietly.**
+/// **The refresh survivor is gone**, and it is what this list is for. It said
+/// `refresh-restores-a-spent-extractor` would pass with the extractor starting ready - so the test
+/// showed that refresh and work compose rather than that refresh was needed. **The repair was not
+/// the obvious one**: a no-op test cannot close it, because both worlds end identically. Spending
+/// the extractor inside the test does, and makes its density load-bearing too.
 ///
-/// **Two groups, and neither is an oversight.**
-///
-/// **The decorations are gone.** `input.name` was the last of them - read into an error message and
-/// nowhere else - and a command that is a row of its own rule binds its inputs *by name*, so
-/// `{move what:... from:... to:...}` reads it. **Both names this list used to hold now do work**:
-/// `rule.name` when the section fires, `input.name` when it binds.
-///
-/// **`rule.name` was on that list and is not now**, which is what collapsing `test.4x` bought.
-/// `{execute command:move}` resolves a command by the name of the rule it fires, so a decoration
-/// became the thing a step is written in. **That is the direction to want**: a value nothing reads
-/// is a question, and answering it by finding a reader beats answering it by deleting the column.
-///
-/// **`input.seq` and `clause.seq` order things whose order does not matter** - yet. Clauses are
-/// applied in role passes, every `require` then every `remove` then every `add`, so two clauses of
-/// the same role are interchangeable. **A second rule where two removes contend would change
-/// that**, and this line is where to look when it does.
-///
-/// **One id on a relation with one row.** `literal` has a single row, so there is no other id to
-/// swap its for - **the instrument cannot ask whether a key is distinct when there is nothing to be
-/// distinct from.**
-///
-/// **Four more were on that list and the columns are gone.** `test`, `execute`, `compare` and
-/// `report` were keyed by an id nothing referenced and ordered by a `seq` nothing needed, because
-/// the steps are a sequence and the file already says what order they are in. **Nine columns went
-/// and the list got shorter by four**, which is the cheaper of the two ways a dead value stops
-/// being dead.
-///
-/// **And one that is none of those groups, which this instrument found rather than anybody
-/// predicting where**: `residency.quantity` in `given.4x`. **The world says one scout is in
-/// territory 1 and changing that to five breaks nothing**, because `move` never reads it - its
-/// `require` and `remove` clauses match on `what` and `where` and leave the quantity unbound, and
-/// the quantity that lands at the destination is the `literal` written in the rule.
-///
-/// **Every category's name, and it is the friendly side that reads them.** `things.4x` states four
-/// and the mutation suite runs the foundation, where a thing is `1` and never `scout` - so renaming
-/// all four changes nothing it looks at. **`tests/directories.rs` is what reads them**, and it is
-/// not what this suite mutates.
-///
-/// **The quantities went live.** Three of these lines used to be a test's `residency.quantity`,
-/// dead because `move` removed rows and added ones. `take` and `put` read them now, and only the
-/// refusal test's remains - that test never moves anything, so nothing of its world is counted.
-///
-/// **And `thing.name` in the refusal test**, which is the same shape one level along: that test
-/// never gets as far as moving anything, so the scout's name is never resolved. **A test that is
-/// refused reads less of its own world than one that succeeds**, which is worth knowing before
-/// reading a short list as a tidy one.
-///
-/// **That is the arithmetic gap, showing up as dead data rather than as an argument.** Moving one
-/// scout out of a territory holding five should leave four, and nothing in `require`, `remove` and
-/// `add` can say so - they are set operations over whole rows. **This line is the check that will
-/// go red when quantities start being read**, which is the only reason it is worth writing down
-/// rather than fixing by binding a column nothing needs yet.
-/// **And `reading.id`, which is the newest and the plainest.** A `reading` row is found by the
-/// clause it belongs to, exactly as a `literal` is, so nothing ever looks its id up. **It carries
-/// one because every relation the structure declares is keyed**, which is the rule paying for
-/// itself somewhere it is not needed.
-/// **And a density in a test that is refused before anything reads it.** A deposit declares a
-/// `density` column, so every deposit row carries one whether the test needs it or not - and a
-/// test about running out of room never gets as far as working the deposit. **It is the refusal
-/// test's shape rather than a spare value**, the same way that test's `thing.name` is: a command
-/// that is refused reads less of its world than one that succeeds.
-/// **And `things.4x` left the list by leaving.** Four category names were read only by the
-/// friendly side; a kind is a relation now and its name is read by everything, so the entry is not
-/// fixed - it is gone.
-/// **Every density in a test that is refused.** A deposit declares a `density` column, so every
-/// deposit row carries one whether the test reads it or not - and a test about running out of
-/// something never gets as far as working the deposit. **Four of the eleven lines below are that
-/// one fact**, which is the shape of a refusal test rather than spare data.
-/// **And an adjacency's `id` in a test that is refused.** A `move` reads `from` and `to`; the id
-/// is compared only by a `then`, and a refusal test has none - so the two berth tests each leave
-/// one. **The test beside them has a `then` and does not**, which is the difference showing.
-/// **And a supply's own name.** `berth` is read by the friendly renderer and by nobody else - the
-/// engine groups providers and consumers by the supply's id, and the word is there so a reader has
-/// one. It is the same shape `thing.name` had before a kind became a relation.
-/// **`refresh-restores-a-spent-extractor` starting spent is not load-bearing, and it should be
-/// read carefully.** The `refresh-working` command *is* - deleting it makes the work refuse - but
-/// the extractor could start at `working:1` and the test would pass, because `work` succeeds
-/// either way. **So the test shows that refresh and work compose, not that refresh was needed**,
-/// and the fifth test Sean capped out - refresh where there is nothing to refresh - is what would
-/// close it. It is in `backlog.md`.
-///
-/// **A `moving` that never moves is the other new shape here.** The berth tests hold vehicles to
-/// count them, not to move them, so what those rows say about moves is read by nothing.
-const NOT_LOAD_BEARING: [&str; 22] = [
+/// **A `moving` that never moves is the other shape here.** The berth tests hold vehicles to count
+/// them, not to move them, so what those rows say about moves is read by nothing.
+const NOT_LOAD_BEARING: [&str; 21] = [
     "13 rules.4x clause.seq",
     "10 rules.4x input.seq",
     "1 rules.4x reading.id",
@@ -724,9 +647,6 @@ const NOT_LOAD_BEARING: [&str; 22] = [
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x scout.quantity",
     "1 tests/a-scout-cannot-move-where-every-berth-is-taken.4x adjacency.id",
     "1 tests/a-scout-cannot-move-where-every-berth-is-taken.4x transport.moving",
-    "1 tests/a-transport-takes-two-berths-where-a-scout-takes-one.4x adjacency.id",
-    "1 tests/a-transport-takes-two-berths-where-a-scout-takes-one.4x scout.moving",
-    "1 tests/a-transport-takes-two-berths-where-a-scout-takes-one.4x transport.moving",
     "1 tests/an-extractor-cannot-be-built-where-the-deposits-are-taken.4x deposit.density",
     "1 tests/an-extractor-cannot-be-built-where-the-deposits-are-taken.4x extractor.working",
     "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x deposit.density",
@@ -736,7 +656,9 @@ const NOT_LOAD_BEARING: [&str; 22] = [
     "2 tests/one-extractors-readiness-is-not-anothers.4x deposit.density",
     "2 tests/one-extractors-readiness-is-not-anothers.4x extractor.quantity",
     "2 tests/one-extractors-readiness-is-not-anothers.4x extractor.working",
-    "1 tests/refresh-restores-a-spent-extractor.4x extractor.working",
+    "1 tests/the-same-free-space-admits-one-kind-and-refuses-another.4x adjacency.id",
+    "1 tests/the-same-free-space-admits-one-kind-and-refuses-another.4x scout.moving",
+    "1 tests/the-same-free-space-admits-one-kind-and-refuses-another.4x transport.moving",
     "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x scout.moving",
     "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x scout.quantity",
 ];

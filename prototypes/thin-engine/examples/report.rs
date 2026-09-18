@@ -517,8 +517,8 @@ const SCRIPT: &str = r#"
 
   const bar = document.createElement('p');
   bar.className = 'keys';
-  bar.innerHTML = '<b>j</b>/<b>k</b> move &middot; <b>Enter</b> open &middot; <b>r</b> reviewed'
-    + ' &middot; <b>x</b> needs changing &middot; <b>u</b> unreview';
+  bar.innerHTML = '<b>&uarr;</b>/<b>&darr;</b> move &middot; <b>Enter</b> open'
+    + ' &middot; <b>r</b> reviewed &middot; <b>x</b> needs changing &middot; <b>u</b> unreview';
   document.querySelector('.note').after(bar);
 
   const flash = document.createElement('p');
@@ -616,9 +616,16 @@ const SCRIPT: &str = r#"
 
   document.addEventListener('keydown', (e) => {
     if (e.target.tagName === 'INPUT' || e.metaKey || e.ctrlKey || e.altKey) return;
+    // **The arrows are the keys and j/k are aliases.** Sean, 2026-09-18: *The j/k to move is
+    // unintuitive on the review-web app.* It was vim muscle memory rather than anything a reader
+    // would guess; the aliases cost a line and the bar advertises the arrows.
+    const down = () => { here = Math.min(here + 1, cards.length - 1); show(); };
+    const up = () => { here = Math.max(here - 1, 0); show(); };
     const keys = {
-      j: () => { here = Math.min(here + 1, cards.length - 1); show(); },
-      k: () => { here = Math.max(here - 1, 0); show(); },
+      ArrowDown: down,
+      ArrowUp: up,
+      j: down,
+      k: up,
       r: () => mark(cards[here], 'reviewed'),
       u: () => mark(cards[here], 'unreview'),
       x: () => ask(cards[here]),
