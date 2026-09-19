@@ -1,0 +1,25 @@
+# A bin costs one labor and one metal, the same as an extractor, and stands where it was built.
+#
+# **`build-bin` is the second rule of that shape and says nothing about capacity**, the way
+# `build-extractor` says nothing about deposits: the world it would leave either fits or it does
+# not, and every rule already refuses one that does not.
+#
+# **The capacity of four is on the page and only one bin is built**, so this test says what
+# building costs and the two beside it say what the cap does. **Sean, 2026-09-17**: *I need see
+# what the actual numbers are, not some hidden default.*
+
+{test name:a-bin-is-built-from-labor-and-metal}
+
+{given}
+{territory id:1}
+{capacity where:1 what:30 quantity:4}
+{labor where:1 quantity:1}
+{metal where:1 quantity:1}
+
+{when}
+{build-bin where:1 what:30}
+
+{then}
+{territory id:1}
+{capacity where:1 what:30 quantity:4}
+{bin where:1 what:30 quantity:1}

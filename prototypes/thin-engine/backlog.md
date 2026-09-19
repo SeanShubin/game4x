@@ -16,17 +16,28 @@ vehicles that can do this as well.*
 it - a place's capacity for a kind is the sum of what is in it that can hold that kind, a place
 declares none of its own, and what a place holds beyond its capacity is lost at the turn's end.
 
-|                                                                                                                       | What it needs                                                                                                                                                    |
-| --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **A store is a thing a place holds** - `{store where:territory-1 what:metal} -> 4`, one kind keyed by `(where, what)` | nothing; it is a kind like any other                                                                                                                             |
-| **A territory holds only so many stores of each resource** - 4 metal, 3 food, 5 energy                                | **a cap per description**, not per relation: the allowance differs by the store's `what`, and the weighted pool cannot say that because a pool is named per kind |
-| **A store contributes capacity for its resource** - `{provides kind:store what:metal} -> 10`                          | summing a product over the things present - the first real arithmetic                                                                                            |
-| **A vehicle carries capacity that travels with it** - a transport holds 10 metal and 2 fuel                           | the same sum, over a kind that moves                                                                                                                             |
-| **What a place holds beyond its capacity is lost at the turn's end**                                                  | the turn, and a comparison - see below                                                                                                                           |
-| **A thing that leaves takes what it hauls**, defaulting to a full load                                                | allocation at the moment of leaving, and a command that may name an amount                                                                                       |
+|                                                                                                              | What it needs                                                                                                                                                                                                           |
+| ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ~~**A store is a thing a place holds**~~ - **built** as `{bin where:territory-1 what:metal} -> 4`            | nothing, and nothing is what it took                                                                                                                                                                                    |
+| ~~**A territory holds only so many stores of each resource**~~ - **built** as `{limit held:bin by:capacity}` | **nothing, and this entry was wrong about that.** It said the cap had to be per description and that the pool could not say it - both true, and both about the pool. The limit keys on `(where, what)` and always could |
+| **A store contributes capacity for its resource** - `{provides kind:store what:metal} -> 10`                 | summing a product over the things present - the first real arithmetic                                                                                                                                                   |
+| **A vehicle carries capacity that travels with it** - a transport holds 10 metal and 2 fuel                  | the same sum, over a kind that moves                                                                                                                                                                                    |
+| **What a place holds beyond its capacity is lost at the turn's end**                                         | the turn, and a comparison - see below                                                                                                                                                                                  |
+| **A thing that leaves takes what it hauls**, defaulting to a full load                                       | allocation at the moment of leaving, and a command that may name an amount                                                                                                                                              |
 
 **The one that blocks the rest is the sum.** Everything above the line is rows; everything below
 needs the engine to add numbers it is currently only comparing.
+
+**Two rows are struck out and the first four words of this section are why**: *most of this is
+already in `spec/logistics.md`* was true, and so was the part nobody checked - the mechanism was
+already in `schema.4x`. **The entry that said what was needed had named the wrong instrument**, and
+it took looking at `held_within_what_holds_it` to find out. That is worth remembering the next time
+an entry here says a thing needs building.
+
+**The thing is a `bin` and not a `store`.** `store` is the engine's own word - `src/store.rs`, and
+a bare word in five of the eight modules - so `tests/isolation.rs` cannot hold *no game noun
+appears in code that runs* for it. `spec/logistics.md` draws the same line: *A bin is a thing. What
+holds a kind is a store for that kind.*
 
 ## The turn
 

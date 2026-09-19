@@ -53,6 +53,8 @@
 {relation id:39 name:carries}
 {relation id:40 name:part}
 {relation id:41 name:argument}
+{relation id:42 name:bin}
+{relation id:43 name:capacity}
 
 
 ## The columns
@@ -195,6 +197,12 @@
 {column id:115 relation:41 seq:2 name:part}
 {column id:116 relation:41 seq:3 name:input}
 {column id:117 relation:41 seq:4 name:value}
+{column id:118 relation:42 seq:1 name:where}
+{column id:119 relation:42 seq:2 name:what}
+{column id:120 relation:42 seq:3 name:quantity}
+{column id:121 relation:43 seq:1 name:where}
+{column id:122 relation:43 seq:2 name:what}
+{column id:123 relation:43 seq:3 name:quantity}
 
 
 ## What a place has room for, and what each kind takes up
@@ -293,6 +301,10 @@
 {reference id:56 column:112 to:6}
 {reference id:57 column:115 to:40}
 {reference id:58 column:116 to:7}
+{reference id:59 column:118 to:13}
+{reference id:60 column:119 to:27}
+{reference id:61 column:121 to:13}
+{reference id:62 column:122 to:27}
 
 
 ## Which relations are the game's state
@@ -443,3 +455,46 @@
 # multiple turns if i see an end turn command, and it will be easier to test the end turn command
 # itself if i can test its parts.* **Fired by name and offered to a player are two questions**, and
 # this lane had collapsed them into one.
+
+
+## A bin, and how many of each a place has room for
+
+# **A bin is a kind like any other** - `{bin where:territory-1 what:metal} -> 4` is four metal bins
+# standing in territory-1, keyed by the pair the way an extractor is.
+#
+# **It is called a bin and not a store, because `store` is the engine's word.** `src/store.rs` is
+# where rows are kept and five of the eight modules say `store` in a line that runs, so a game
+# noun of that name cannot satisfy `tests/isolation.rs` - *no relation or rule the data names
+# appears in code that runs*. **The check found it; the name was not chosen for taste.**
+#
+# **`spec/logistics.md` draws the same line and drew it first**: *A bin is a thing. What holds a
+# kind is a store for that kind, and a thing with two bins holds two stores.* The thing is the
+# bin; what it is for a resource is the store. Sean asked for storage and this is the thing half
+# of it.
+#
+# **How many a place has room for is `{capacity ...}`, and the limit is the one a deposit already
+# uses.** `{limit held:bin by:capacity}` requires the container's key to be part of the held
+# thing's and sums the held rows over it - so `capacity` keyed by `(where, what)` caps bins keyed
+# by `(where, what)`, and four metal bins and three food ones are two rows rather than a rule
+# about storage.
+#
+# **Sean, 2026-09-17**: *Each territory will have a limit of how many storage structures of each
+# type it can hold.* **This needed no new mechanism, and `backlog.md` said it would** - it said the
+# cap had to be *per description, not per relation*, and that the weighted pool could not say it
+# *because a pool is named per kind*. Both true, and both about the pool. **The limit was already
+# the right instrument and nobody had looked at it.**
+#
+# **`spec/logistics.md` had the shape too**: *What a thing may contain is a maximum per kind, per
+# family of kinds, or **per kind carrying a particular value of a trait***. A bin carrying
+# `what:metal` is the third case.
+#
+# **A deviation worth seeing rather than settling.** The same document says a place *declares none
+# of its own* capacity - it is the sum of what stands there. Here a territory does declare it, as
+# it already does for berths with `{provides kind:territory what:berth} -> 6`. **The number has to
+# be visible in the test**, which is Sean's rule and decides it for now: *I need see what the
+# actual numbers are, not some hidden default.*
+
+{state id:15 relation:42}
+{state id:16 relation:43}
+
+{limit held:42 by:43}

@@ -2611,6 +2611,53 @@ tree makes that test red and the only way to green it is to regenerate and read 
 type of an argument, under a part it is the argument. **Four rules of prose cannot say what those
 five lines say**, which is the whole argument for generating it rather than describing it.
 
+## A bin, and the cap that was already expressible
+
+```text
+{capacity where:territory-1 what:metal} -> 2
+{capacity where:territory-1 what:food}  -> 3
+{bin      where:territory-1 what:metal} -> 2
+{limit held:bin by:capacity}
+```
+
+**Sean, 2026-09-17**: *Each territory will have a limit of how many storage structures of each type
+it can hold.* **It needed no new engine word.** `{limit ...}` requires the container's key to be
+part of the held thing's and sums the held rows over it, and that key is `(where, what)` - so metal
+bins and food bins count against different rows without the engine being told about resources.
+
+**`backlog.md` said this needed a cap *per description, not per relation*, and that the weighted
+pool could not say it *because a pool is named per kind*.** Both sentences are true and both are
+about the pool. **The limit was the right instrument and nobody had looked at it** - found by
+reading `held_within_what_holds_it` rather than by any check, and then confirmed by three tests
+passing on the first run.
+
+**`spec/logistics.md` had already written the shape**: *What a thing may contain is a maximum per
+kind, per family of kinds, or **per kind carrying a particular value of a trait***. A bin carrying
+`what:metal` is the third case.
+
+**The pair of tests is what says *per resource*, and one test could not.** A cap counted per
+territory would refuse `a-bin-cannot-be-built-where-the-capacity-is-taken` too;
+`the-same-territory-has-room-for-a-bin-of-another-resource` is the one that tells them apart.
+
+## It is a bin because `store` is the engine's word
+
+**`tests/isolation.rs` refused the name and was right to.** `store` is `src/store.rs` and a bare
+word in five of the eight modules, so *no relation or rule the data names appears in code that
+runs* cannot hold for it - and the engine-word list was quietly swallowing the game noun, which is
+the hole rather than the inconvenience.
+
+**`spec/logistics.md` draws the same line and drew it first**: *A bin is a thing. What holds a kind
+is a store for that kind, and a thing with two bins holds two stores.* **The thing is the bin.**
+
+**The proof the rename worked is the check seeing it.** `bin`, `capacity` and `build-bin` are three
+new game nouns to `tests/isolation.rs` where `store` was zero.
+
+**A deviation, stated rather than settled.** `spec/logistics.md` says a place *declares none of its
+own* capacity - it is the sum of what stands there. Here a territory declares it, as it already
+does for berths. **Sean's rule about tests is what decides it for now**: *I need see what the actual
+numbers are, not some hidden default*, and a capacity summed from what stands there would not be on
+the page.
+
 ## What was deliberately not built
 
 **No per-kind maximum row.** Sean: *I am not sure I am ready for treating turns as a resource yet,

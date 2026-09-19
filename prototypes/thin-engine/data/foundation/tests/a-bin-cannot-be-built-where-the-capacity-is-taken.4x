@@ -1,0 +1,29 @@
+# Two metal bins in a territory with room for two, and a third has nowhere to stand.
+#
+# **No rule refuses this.** `build-bin` adds the bin and the world it would leave does not fit,
+# which is where the refusal comes from - so the cap holds for every rule that makes a bin,
+# including ones not written yet.
+#
+# **The refusal names what would have had to be there**: room for three.
+#
+# **This test cannot say the cap is per resource and does not try.** A cap counted per territory
+# would refuse this too. `the-same-territory-has-room-for-a-bin-of-another-resource` is what tells
+# the two apart, and it is a separate file with its own `given` - **a first draft of this one
+# carried a food capacity row saying they shared one, and the mutation sweep found the row read
+# nothing.** One test per file is the rule here; two tests do not share a world, they state the
+# same one twice.
+
+{test name:a-bin-cannot-be-built-where-the-capacity-is-taken}
+
+{given}
+{territory id:1}
+{capacity where:1 what:30 quantity:2}
+{bin where:1 what:30 quantity:2}
+{labor where:1 quantity:1}
+{metal where:1 quantity:1}
+
+{when}
+{build-bin where:1 what:30}
+
+{refused}
+{capacity where:1 what:30 quantity:3}

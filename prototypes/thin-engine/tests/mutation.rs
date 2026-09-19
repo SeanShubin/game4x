@@ -145,6 +145,8 @@ fn check(files: &InMemory) -> Result<(), String> {
         // not be is comparing nothing, which is what this rules out.
         let state = [
             "adjacency",
+            "bin",
+            "capacity",
             "consumes",
             "deposit",
             "extractor",
@@ -315,7 +317,7 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
     Ok(())
 }
 
-const REFERENCES: usize = 51;
+const REFERENCES: usize = 55;
 
 /// **References no test world can violate**, because nothing points at them there.
 ///
@@ -562,8 +564,8 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// deposit's key, the deposit and the extractor stop sharing one, and `{limit held:extractor
 /// by:deposit}` has nothing to compare.
 const DELETABLE: [&str; 10] = [
-    "3 rules.4x binding",
-    "2 rules.4x literal",
+    "5 rules.4x binding",
+    "4 rules.4x literal",
     "2 schema.4x attribute",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x move",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x scout",
@@ -654,8 +656,8 @@ const NOT_LOAD_BEARING: [&str; 23] = [
     // state two assignments of one input on one clause, which is the rule rather than a
     // restriction. That is in `backlog.md` rather than done here.
     "1 rules.4x assigns.id",
-    "12 rules.4x clause.seq",
-    "9 rules.4x input.seq",
+    "15 rules.4x clause.seq",
+    "11 rules.4x input.seq",
     // **Neither part's `seq` is read by anything, and that is the honest state of the order.**
     // `end-turn` refreshes `moving` and then `working`, and the two do not touch each other - so
     // swapping them leaves the same world and nothing fails. **The column exists and nothing

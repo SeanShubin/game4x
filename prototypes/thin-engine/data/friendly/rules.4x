@@ -158,3 +158,27 @@
 {argument id:2 part:part-1 input:trait value:moving}
 {argument id:3 part:part-2 input:what  value:extractor}
 {argument id:4 part:part-2 input:trait value:working}
+
+# **`build-bin` says nothing about how many will fit**, the same way `build-extractor` says
+# nothing about deposits. That a territory has room for only so many is a fact about the world,
+# stated once in `schema.4x` and enforced wherever a world is checked - so a rule that cannot
+# break it is better than a rule that remembers not to.
+
+{rule id:6 name:build-bin}
+
+{input id:13 rule:build-bin seq:1 name:where of:territory}
+{input id:14 rule:build-bin seq:2 name:what of:resource}
+
+{clause id:17 rule:build-bin seq:1 role:remove relation:labor name:clause-17}
+{clause id:18 rule:build-bin seq:2 role:remove relation:metal name:clause-18}
+{clause id:19 rule:build-bin seq:3 role:add relation:bin name:clause-19}
+
+{binding id:30 clause:clause-17 column:78 input:where}
+{binding id:31 clause:clause-18 column:80 input:where}
+
+{binding id:32 clause:clause-19 column:118 input:where}
+{binding id:33 clause:clause-19 column:119 input:what}
+
+{literal id:20 clause:clause-17 column:79 value:1}
+{literal id:21 clause:clause-18 column:81 value:1}
+{literal id:22 clause:clause-19 column:120 value:1}

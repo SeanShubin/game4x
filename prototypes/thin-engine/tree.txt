@@ -10,3 +10,5 @@ work  where:territory what:resource
 end-turn
     1. refresh  what:unit trait:moving
     2. refresh  what:extractor trait:working
+
+build-bin  where:territory what:resource

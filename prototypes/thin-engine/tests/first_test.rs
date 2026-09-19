@@ -265,6 +265,8 @@ fn the_report_says_which_relations_it_compared() {
         report.compared,
         vec![
             "adjacency",
+            "bin",
+            "capacity",
             "consumes",
             "deposit",
             "extractor",
@@ -293,7 +295,7 @@ fn the_report_reads_as_a_report() {
             report_of("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x")
         ),
         "the-scout-moves-to-an-adjacent-place\n  \
-           compared  adjacency, consumes, deposit, extractor, food, labor, metal, provides, scout, territory, transport\n  \
+           compared  adjacency, bin, capacity, consumes, deposit, extractor, food, labor, metal, provides, scout, territory, transport\n  \
            result    as expected"
     );
 }

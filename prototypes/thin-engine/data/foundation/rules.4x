@@ -158,3 +158,27 @@
 {argument id:2 part:1 input:12 value:1}
 {argument id:3 part:2 input:11 value:19}
 {argument id:4 part:2 input:12 value:2}
+
+# **`build-bin` says nothing about how many will fit**, the same way `build-extractor` says
+# nothing about deposits. That a territory has room for only so many is a fact about the world,
+# stated once in `schema.4x` and enforced wherever a world is checked - so a rule that cannot
+# break it is better than a rule that remembers not to.
+
+{rule id:6 name:build-bin}
+
+{input id:13 rule:6 seq:1 name:where of:13}
+{input id:14 rule:6 seq:2 name:what of:27}
+
+{clause id:17 rule:6 seq:1 role:2 relation:29}
+{clause id:18 rule:6 seq:2 role:2 relation:30}
+{clause id:19 rule:6 seq:3 role:3 relation:42}
+
+{binding id:30 clause:17 column:78 input:13}
+{binding id:31 clause:18 column:80 input:13}
+
+{binding id:32 clause:19 column:118 input:13}
+{binding id:33 clause:19 column:119 input:14}
+
+{literal id:20 clause:17 column:79 value:1}
+{literal id:21 clause:18 column:81 value:1}
+{literal id:22 clause:19 column:120 value:1}
