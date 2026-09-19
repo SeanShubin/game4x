@@ -2698,6 +2698,53 @@ that indicates to me we are on the right track.*
 was already there: the expansion produces a row keyed exactly as the written one, and two rows of
 one key is refused. **Reifying before the key check is what makes that free.**
 
+## Fungible or not is a design decision, and it splits on whether the thing moves
+
+**Sean, 2026-09-19**, asked why *2 bins total, regardless of resource* cannot be said:
+
+> I am intentionally avoiding that kind of fungibility because I don't want the player to have to
+> destroy capabilities to make room for other capabilities, I want territory development to always
+> be a benefit, not a tradeoff.
+
+**And then drew the line, against this lane's guess that it generalised to berths:**
+
+> don't be so sure it applies to berths. Territories contains structures that don't move so I don't
+> want tradeoffs there, but armies do move and the tradeoffs of what to move where is the whole
+> point of a military simulation. We are a 4x which contains a military simulation.
+
+|                                   | Capacity is                 | Because                                                                          |
+| --------------------------------- | --------------------------- | -------------------------------------------------------------------------------- |
+| **Structures** - bins, extractors | **per kind**, not shared    | building one never costs you another, so developing a territory is always a gain |
+| **Armies** - scouts, transports   | **shared**, drawn at a rate | choosing what to move where is the game rather than an obstacle to it            |
+
+**So the two mechanisms in this prototype were never an accident of history.** The berth pool is
+shared and weighted; the capacity table is per kind and unweighted. **They are two designs, and
+unifying the mechanism must not unify the semantics.**
+
+## What that costs the unification, measured rather than guessed
+
+**A family in `for` means one bucket per member**, which is what bins want and the opposite of what
+berths want. Writing six berths the way the table would have to:
+
+```text
+{capacity of:territory for:unit what:resource per:territory} -> 6
+```
+
+**reifies to four rows** - the cross product of `unit`'s members with `resource`'s - and four
+scouts and four transports then both fit against six, each in its own bucket. It also invents a
+capacity for *scouts carrying metal*, which is nothing.
+
+So folding the pool into the table needs three things it does not have:
+
+- **A way to name a family as itself** rather than as each member. This lane raised it as
+  hypothetical - *whether a family name is ever meant as itself* - and berths are the case.
+- **A rate per kind.** A scout takes one berth and a transport takes two; the table has no `takes`.
+- **A trait column that does not apply.** `what` is required, and a berth is about no resource at
+  all, so the cross product above is the *not applicable* gap arriving a second time.
+
+**None of this is an argument against unifying** - it is the price, named before paying it, and two
+of the three are gaps the table already had.
+
 ## What building it found, and anticipating it had not
 
 **Sean, 2026-09-18**: *Pressure testing with concrete implementations is more important than

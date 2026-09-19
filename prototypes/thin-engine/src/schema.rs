@@ -1078,12 +1078,18 @@ pub fn check(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
 /// ```text
 /// {capacity of:territory for:bin      what:resource per:territory} -> 4
 /// {capacity of:bin       for:resource what:resource per:territory} -> 10
+/// {capacity of:transport for:resource what:resource per:territory} -> 10
 /// ```
 ///
+/// **A place's room is the sum of what stands in it**, which is `spec/logistics.md`'s sentence and
+/// the reason the capacity rows are grouped before anything is compared: a territory holding a bin
+/// and a transport has room for twenty metal, not ten twice. **The first version compared each
+/// capacity row on its own** and refused a world that fits, and no test caught it because none had
+/// two kinds of container for one thing. Found by Sean asking what a transport does.
+///
 /// **A capacity row is read once per row of the container.** A territory is one of itself, so the
-/// first says *four bins of each resource*; a bin is however many stand there, so the second says
-/// *ten metal for each metal bin*, which is `spec/logistics.md`'s *a place's capacity for a kind
-/// is the sum of what is in it that can hold that kind*.
+/// first row above says *four bins of each resource*; a bin is however many stand there, so the
+/// second says *ten metal for each metal bin*.
 ///
 /// **The trait column restricts whichever side declares one.** A territory has no `what` and a bin
 /// has one, so one column serves both sides and a row that qualifies neither qualifies nothing.
@@ -1102,6 +1108,11 @@ fn nothing_holds_more_than_there_is_room_for(
         .collect();
     let name_of = |id: &str| named.get(id).copied().unwrap_or(id).to_string();
 
+    // **Grouped by what is held, where, so the containers can be added up.** Everything that gives
+    // room for one resource in one kind of place belongs to one question, however many kinds give
+    // it. **In the order the rows are stated**, so the refusal names the same one twice.
+    let mut asked: Vec<(String, String, String)> = Vec::new();
+    let mut giving: BTreeMap<(String, String, String), Vec<(String, i64)>> = BTreeMap::new();
     for capacity in rows.rows().iter().filter(|it| it.relation == CAPACITY) {
         let (Some(of), Some(held), Some(what), Some(per), Some(each)) = (
             capacity.value(OF),
@@ -1114,17 +1125,27 @@ fn nothing_holds_more_than_there_is_room_for(
         ) else {
             continue;
         };
-        let (raw_of, raw_held, raw_what, raw_per) = (of, held, what, per);
-        let (of, held, per) = (name_of(of), name_of(held), name_of(per));
+        let question = (held.to_string(), what.to_string(), per.to_string());
+        if !asked.contains(&question) {
+            asked.push(question.clone());
+        }
+        giving
+            .entry(question)
+            .or_default()
+            .push((of.to_string(), each));
+    }
+
+    for question in &asked {
+        let (raw_held, raw_what, raw_per) = question;
+        let (held, what, per) = (name_of(raw_held), raw_what.as_str(), name_of(raw_per));
 
         // **Where a row of this relation stands.** A kind that *is* the place is one of itself in
         // itself; a kind that references the place says which one in the column that points at it.
         let placed = |relation: &str| -> Option<(bool, String)> {
+            let declared = schema.relation(relation)?;
             if relation == per {
-                let declared = schema.relation(relation)?;
                 return Some((true, declared.identity().to_string()));
             }
-            let declared = schema.relation(relation)?;
             let column = declared
                 .columns
                 .iter()
@@ -1162,40 +1183,64 @@ fn nothing_holds_more_than_there_is_room_for(
             found
         };
 
-        let room = total(&of, each);
-        // **How many containers there are, so the refusal can say what each would have to hold.**
-        // One territory and three bins wanted is a capacity of three; two bins and twenty-five
-        // metal is thirteen apiece, rounded up, because a capacity is per container.
-        let containers = total(&of, 1);
+        let gives = giving.get(question).expect("asked is built from giving");
+        let mut room: BTreeMap<String, i64> = BTreeMap::new();
+        for (of, each) in gives {
+            for (place, how_much) in total(&name_of(of), *each) {
+                *room.entry(place).or_default() += how_much;
+            }
+        }
+
         for (place, used) in total(&held, 1) {
             let there = room.get(&place).copied().unwrap_or(0);
-            if used > there {
-                let each_would_be = match containers.get(&place).copied().unwrap_or(0) {
-                    0 => used,
-                    how_many => {
-                        used.div_euclid(how_many) + i64::from(used.rem_euclid(how_many) != 0)
-                    }
-                };
-                let mut wanted = BTreeMap::new();
-                wanted.insert(OF.to_string(), raw_of.to_string());
-                wanted.insert(FOR.to_string(), raw_held.to_string());
-                wanted.insert(WHAT.to_string(), raw_what.to_string());
-                wanted.insert(PER.to_string(), raw_per.to_string());
-                wanted.insert(QUANTITY.to_string(), each_would_be.to_string());
-                return Err(Malformed::NoRoom {
-                    // **The place is a row of `per` and not a relation**, so it is shown as its
-                    // kind and its key. Reading it through the relation map turned `territory 1`
-                    // into `relation`, which is the same mistake the rule tree made a commit ago.
-                    place: format!("{per} {place}"),
-                    contained: held.clone(),
-                    used,
-                    room: there,
-                    wanted: schema.write(&Row {
-                        relation: CAPACITY.to_string(),
-                        values: wanted,
-                    }),
-                });
+            if used <= there {
+                continue;
             }
+            // **The refusal names a capacity that would have had to be there**, the way a full
+            // deposit and a crowded place already do.
+            //
+            // **One kind gives room, and it is named**: what its containers would each have to
+            // hold to close the whole gap, which is exact.
+            //
+            // **Several kinds give room, and none of them is the answer** - so rather than pick
+            // one, the refusal names the *place itself* granting the shortfall. Sean, 2026-09-15:
+            // *We should never have non-determinism from what row happens to be encountered
+            // first*, which is why `NotOne` refuses instead of choosing; **taking the first row
+            // here was that same fault**, deterministic only by accident of what order the store
+            // holds rows in. **The place's own row is exact rather than arbitrary**: adding it
+            // makes the room equal what is used, whatever else is standing there.
+            let (of, each_would_be) = match gives.as_slice() {
+                [(only, _)] => {
+                    let mine = total(&name_of(only), 1).get(&place).copied().unwrap_or(0);
+                    let apiece = match mine {
+                        0 => used,
+                        how_many => {
+                            used.div_euclid(how_many) + i64::from(used.rem_euclid(how_many) != 0)
+                        }
+                    };
+                    (only.clone(), apiece)
+                }
+                _ => (raw_per.clone(), used - there),
+            };
+            let mut wanted = BTreeMap::new();
+            wanted.insert(OF.to_string(), of);
+            wanted.insert(FOR.to_string(), raw_held.clone());
+            wanted.insert(WHAT.to_string(), raw_what.clone());
+            wanted.insert(PER.to_string(), raw_per.clone());
+            wanted.insert(QUANTITY.to_string(), each_would_be.to_string());
+            return Err(Malformed::NoRoom {
+                // **The place is a row of `per` and not a relation**, so it is shown as its kind
+                // and its key. Reading it through the relation map turned `territory 1` into
+                // `relation`, which is the same mistake the rule tree made a commit ago.
+                place: format!("{per} {place}"),
+                contained: held.clone(),
+                used,
+                room: there,
+                wanted: schema.write(&Row {
+                    relation: CAPACITY.to_string(),
+                    values: wanted,
+                }),
+            });
         }
     }
     Ok(())

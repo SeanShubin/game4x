@@ -63,6 +63,18 @@ reachability and termination.
 
 ## Refresh, what is left of it
 
+**Folding the berth pool into the capacity table needs three things.** Measured on 2026-09-19 by
+writing berths as a capacity row and reading what it reified into: a family in `for` gives **one
+bucket per member** where berths need one shared, it **cross-products with `what`** into a capacity
+for scouts carrying metal, and there is **no rate**, so a transport cannot take two berths where a
+scout takes one. **The deposit limit folds without any of them**; the pool does not.
+
+**And that is a design boundary rather than a missing feature.** Sean, 2026-09-19: *Territories
+contains structures that don't move so I don't want tradeoffs there, but armies do move and the
+tradeoffs of what to move where is the whole point of a military simulation.* **Shared capacity is
+the army side and per-kind capacity is the structure side**, so a unification that made everything
+one or the other would be changing the game rather than tidying the engine.
+
 **Omitting a capacity means unconstrained, where Sean said it should mean none.** *If we omit a
 capacity, we can default that to mean it may carry none of that thing* - and
 `nothing_holds_more_than_there_is_room_for` walks the capacity rows, so a pairing nobody states is
