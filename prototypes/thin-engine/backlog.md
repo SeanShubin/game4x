@@ -63,6 +63,21 @@ reachability and termination.
 
 ## Refresh, what is left of it
 
+**Omitting a capacity means unconstrained, where Sean said it should mean none.** *If we omit a
+capacity, we can default that to mean it may carry none of that thing* - and
+`nothing_holds_more_than_there_is_room_for` walks the capacity rows, so a pairing nobody states is
+one nobody asks about. **Found by the mutation sweep**, which deleted a capacity row from a test
+and found nothing failed, while that test's own prose claimed the row was what made the world
+legal.
+
+**The fix is not a small one, and that is the interesting part.** To make omission mean *none*,
+the check has to walk the things that are *present* rather than the capacities that are *stated* -
+and then every kind in the world needs a capacity or nothing of it may exist. **That cannot happen
+while `limit` and the berth pool still govern deposits and units**: scouts would be refused for
+having no capacity row, because the mechanism that admits them is a different one. **So the
+default Sean specified arrives with the unification and not before it**, which is an argument for
+doing the unification sooner rather than a defect in the table.
+
 **The order a composite states is not depended on by anything yet.** Both of `end-turn`'s
 `{part ... seq:N}` values can be changed and nothing fails - refreshing `moving` and refreshing
 `working` do not touch each other, so swapping them leaves the same world. **`tests/mutation.rs`

@@ -44,6 +44,9 @@ const BY: &str = "by";
 const FAMILY: &str = "family";
 const MEMBER: &str = "member";
 const KIND: &str = "kind";
+const CAPACITY: &str = "capacity";
+const STATE: &str = "state";
+const FOR: &str = "for";
 const PART: &str = "part";
 const IS: &str = "is";
 const OF: &str = "of";
@@ -245,6 +248,24 @@ pub enum Malformed {
     /// answers, and would leave the order between its clauses and its parts to whatever the
     /// engine happened to do first.
     BothLeafAndComposite { rule: String },
+    /// A place holds more of something than what stands in it has room for.
+    ///
+    /// **Named in the words a person would use to ask about it**: the place, the thing, and the
+    /// two numbers. Sean, 2026-09-18: *I want errors detectible with good error messages* - and
+    /// *I am imagining a live recipe editor that will be able to reject invalid recipes and give
+    /// the reason.*
+    NoRoom {
+        place: String,
+        contained: String,
+        used: i64,
+        room: i64,
+        /// The capacity that would have had to be there, written out.
+        ///
+        /// **The same answer `Overfull` and `Crowded` give**, and for the same reason: not *this
+        /// is too many* but *there is no capacity this large*. It is what a `{refused}` section
+        /// states, so a test can say what was missing rather than quoting a sentence.
+        wanted: String,
+    },
     /// A limit between two relations whose keys are not the same columns.
     ///
     /// **Held and holder are compared key for key**, so a limit between relations that do not
@@ -333,6 +354,16 @@ impl std::fmt::Display for Malformed {
                     "`{rule}` has clauses and parts, and a rule has one or the other"
                 )
             }
+            Malformed::NoRoom {
+                place,
+                contained,
+                used,
+                room,
+                ..
+            } => write!(
+                out,
+                "`{place}` holds {used} `{contained}` and has room for {room}"
+            ),
             Malformed::CannotLimit { held, by } => {
                 write!(
                     out,
@@ -411,6 +442,22 @@ pub struct Schema {
     /// over, and the reference check, deciding whether a value is of the right kind, ask the same
     /// question - so it is answered in the one place that already turns ids into names.
     families: BTreeMap<String, Vec<String>>,
+    /// The relations the world states, by name.
+    ///
+    /// **Templating is for the world and not for the structure.** `{member kind:scout
+    /// family:unit}` names a family as *itself* and must not become one row per member;
+    /// `{capacity ... for:resource}` names one where a member belongs and must. **What tells them
+    /// apart is `{state ...}`**, which the data already says - so the rule is read from the data
+    /// rather than written as a list of exceptions in here.
+    stated: std::collections::BTreeSet<String>,
+    /// A relation's id to its name.
+    ///
+    /// **Worked out while reading and then thrown away**, which meant every caller that needed it
+    /// built it again from the rows it happened to hold - and `reified` was handed a `then`
+    /// section with no `{relation ...}` rows in it and quietly expanded nothing. **A map built
+    /// from the caller's rows answers a question about the caller's rows**, which is not the
+    /// question anybody was asking.
+    named: BTreeMap<String, String>,
     /// Which relation is held by which: `(extractor, deposit)` says there cannot be more
     /// extractors somewhere than there are deposits to hold them.
     ///
@@ -599,7 +646,15 @@ impl Schema {
             }
         }
 
+        let stated = rows
+            .iter()
+            .filter(|row| row.relation == STATE)
+            .filter_map(|row| named.get(row.value(RELATION)?).cloned())
+            .collect();
+
         Ok(Schema {
+            stated,
+            named: named.clone(),
             relations,
             by_id,
             families,
@@ -608,6 +663,16 @@ impl Schema {
     }
 
     /// The relations belonging to `family`, or `None` where it is not a family.
+    /// Whether the world states rows of this relation, rather than it describing the structure.
+    pub fn stated(&self, relation: &str) -> bool {
+        self.stated.contains(relation)
+    }
+
+    /// The name of the relation with this id.
+    pub fn relation_named(&self, id: &str) -> Option<&str> {
+        self.named.get(id).map(String::as_str)
+    }
+
     pub fn members(&self, family: &str) -> Option<&[String]> {
         self.families.get(family).map(Vec::as_slice)
     }
@@ -673,6 +738,93 @@ impl Schema {
         }
         Ok(relation)
     }
+}
+
+/// Every row, with a family named where a member belongs replaced by one row per member.
+///
+/// **A family named where a member is expected means each member.** That is the rule
+/// `{refresh what:unit trait:moving}` already runs on, applied to a row instead of to a command -
+/// so `{capacity of:bin for:resource what:resource per:territory} -> 10` is three rows, one per
+/// resource. **Named twice in one row it means the same member**, which is what makes a bin hold
+/// what it carries rather than everything.
+///
+/// **Sean, 2026-09-18**: *if we declared resource = [food, metal, energy], we could have
+/// bin[resource] and transport[resource], which would need to be reified to a leaf resource by
+/// some mechanic.* This is that mechanic, and it is substitution rather than computation: the
+/// expansion is bounded by the family's size and cannot reach itself, so **nothing downstream
+/// learns a new word** - every check reads the plain rows it always read.
+///
+/// **A value is a slot only where its column points at the family it names.** `{member kind:28
+/// family:26}` says `26` in a column pointing at `relation`, not at `unit`, so nothing expands
+/// there - which is the difference between a value that *is* a family and a value that *names one
+/// where a member belongs*.
+pub fn reified(schema: &Schema, rows: Vec<Row>) -> Vec<Row> {
+    let mut out = Vec::new();
+    for row in rows {
+        let Some(declared) = schema.relations.get(&row.relation) else {
+            out.push(row);
+            continue;
+        };
+        // **Only what the world states.** A row describing the structure names a family as the
+        // thing it is - `{member kind:scout family:unit}` - and expanding that would turn one
+        // membership into two. A row of the world names one where a member belongs.
+        if !schema.stated(&row.relation) {
+            out.push(row);
+            continue;
+        }
+        // **A column that points at something, holding the name of a family.** The column's own
+        // reference is not enough to go on: `capacity.for` points at `relation`, because what a
+        // thing has room for may be any kind - so what says *each member* is the **value**, and
+        // the reference only says the value is a name rather than a number.
+        let mut slots: Vec<(String, String)> = Vec::new();
+        for column in &declared.columns {
+            if column.references.is_none() {
+                continue;
+            }
+            let Some(value) = row.value(&column.name) else {
+                continue;
+            };
+            let Some(family) = schema.relation_named(value) else {
+                continue;
+            };
+            if schema.members(family).is_some() {
+                slots.push((column.name.clone(), family.to_string()));
+            }
+        }
+        if slots.is_empty() {
+            out.push(row);
+            continue;
+        }
+
+        // **One variable per family, however many columns name it.** Two columns naming
+        // `resource` are one choice made twice, not two choices.
+        let mut families: Vec<String> = Vec::new();
+        for (_, family) in &slots {
+            if !families.contains(family) {
+                families.push(family.clone());
+            }
+        }
+
+        let mut made = vec![row];
+        for family in &families {
+            let members = schema.members(family).unwrap_or(&[]).to_vec();
+            let mut next = Vec::new();
+            for row in &made {
+                for member in &members {
+                    let mut one = row.clone();
+                    for (column, of) in &slots {
+                        if of == family {
+                            one.values.insert(column.clone(), member.clone());
+                        }
+                    }
+                    next.push(one);
+                }
+            }
+            made = next;
+        }
+        out.extend(made);
+    }
+    out
 }
 
 /// Every row fits its relation, its key is its own, and every reference points at a row.
@@ -917,6 +1069,135 @@ pub fn check(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
     // `tests/mutation.rs` said exactly that. **The narrower fault is the one to report.**
     held_within_what_holds_it(schema, rows)?;
     nothing_crowds_a_place(schema, rows)?;
+    nothing_holds_more_than_there_is_room_for(schema, rows)?;
+    Ok(())
+}
+
+/// No place holds more of a thing than what stands in it has room for.
+///
+/// ```text
+/// {capacity of:territory for:bin      what:resource per:territory} -> 4
+/// {capacity of:bin       for:resource what:resource per:territory} -> 10
+/// ```
+///
+/// **A capacity row is read once per row of the container.** A territory is one of itself, so the
+/// first says *four bins of each resource*; a bin is however many stand there, so the second says
+/// *ten metal for each metal bin*, which is `spec/logistics.md`'s *a place's capacity for a kind
+/// is the sum of what is in it that can hold that kind*.
+///
+/// **The trait column restricts whichever side declares one.** A territory has no `what` and a bin
+/// has one, so one column serves both sides and a row that qualifies neither qualifies nothing.
+///
+/// **No rule mentions any of it**, as with every limit here: a command that would overfill a place
+/// leaves a world that does not fit, and every rule already refuses that.
+fn nothing_holds_more_than_there_is_room_for(
+    schema: &Schema,
+    rows: &Store,
+) -> Result<(), Malformed> {
+    let named: BTreeMap<&str, &str> = rows
+        .rows()
+        .iter()
+        .filter(|row| row.relation == RELATION)
+        .filter_map(|row| Some((row.value(ID)?, row.value(NAME)?)))
+        .collect();
+    let name_of = |id: &str| named.get(id).copied().unwrap_or(id).to_string();
+
+    for capacity in rows.rows().iter().filter(|it| it.relation == CAPACITY) {
+        let (Some(of), Some(held), Some(what), Some(per), Some(each)) = (
+            capacity.value(OF),
+            capacity.value(FOR),
+            capacity.value(WHAT),
+            capacity.value(PER),
+            capacity
+                .value(QUANTITY)
+                .and_then(|it| it.parse::<i64>().ok()),
+        ) else {
+            continue;
+        };
+        let (raw_of, raw_held, raw_what, raw_per) = (of, held, what, per);
+        let (of, held, per) = (name_of(of), name_of(held), name_of(per));
+
+        // **Where a row of this relation stands.** A kind that *is* the place is one of itself in
+        // itself; a kind that references the place says which one in the column that points at it.
+        let placed = |relation: &str| -> Option<(bool, String)> {
+            if relation == per {
+                let declared = schema.relation(relation)?;
+                return Some((true, declared.identity().to_string()));
+            }
+            let declared = schema.relation(relation)?;
+            let column = declared
+                .columns
+                .iter()
+                .find(|it| it.references.as_deref() == Some(per.as_str()))?;
+            Some((false, column.name.clone()))
+        };
+
+        // **Totalled per place, at a rate each.** A row that does not carry the trait the capacity
+        // names is a different thing and is not counted here.
+        let total = |relation: &str, rate: i64| -> BTreeMap<String, i64> {
+            let mut found: BTreeMap<String, i64> = BTreeMap::new();
+            let Some((is_place, column)) = placed(relation) else {
+                return found;
+            };
+            let Some(declared) = schema.relation(relation) else {
+                return found;
+            };
+            let carries_what = declared.columns.iter().any(|it| it.name == WHAT);
+            for row in rows.rows().iter().filter(|it| it.relation == relation) {
+                if carries_what && row.value(WHAT) != Some(what) {
+                    continue;
+                }
+                let Some(at) = row.value(&column) else {
+                    continue;
+                };
+                let how_many = match declared.quantity() {
+                    Some(quantity) if !is_place => row
+                        .value(quantity)
+                        .and_then(|it| it.parse::<i64>().ok())
+                        .unwrap_or(0),
+                    _ => 1,
+                };
+                *found.entry(at.to_string()).or_default() += how_many * rate;
+            }
+            found
+        };
+
+        let room = total(&of, each);
+        // **How many containers there are, so the refusal can say what each would have to hold.**
+        // One territory and three bins wanted is a capacity of three; two bins and twenty-five
+        // metal is thirteen apiece, rounded up, because a capacity is per container.
+        let containers = total(&of, 1);
+        for (place, used) in total(&held, 1) {
+            let there = room.get(&place).copied().unwrap_or(0);
+            if used > there {
+                let each_would_be = match containers.get(&place).copied().unwrap_or(0) {
+                    0 => used,
+                    how_many => {
+                        used.div_euclid(how_many) + i64::from(used.rem_euclid(how_many) != 0)
+                    }
+                };
+                let mut wanted = BTreeMap::new();
+                wanted.insert(OF.to_string(), raw_of.to_string());
+                wanted.insert(FOR.to_string(), raw_held.to_string());
+                wanted.insert(WHAT.to_string(), raw_what.to_string());
+                wanted.insert(PER.to_string(), raw_per.to_string());
+                wanted.insert(QUANTITY.to_string(), each_would_be.to_string());
+                return Err(Malformed::NoRoom {
+                    // **The place is a row of `per` and not a relation**, so it is shown as its
+                    // kind and its key. Reading it through the relation map turned `territory 1`
+                    // into `relation`, which is the same mistake the rule tree made a commit ago.
+                    place: format!("{per} {place}"),
+                    contained: held.clone(),
+                    used,
+                    room: there,
+                    wanted: schema.write(&Row {
+                        relation: CAPACITY.to_string(),
+                        values: wanted,
+                    }),
+                });
+            }
+        }
+    }
     Ok(())
 }
 

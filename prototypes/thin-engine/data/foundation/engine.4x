@@ -62,3 +62,5 @@
 {primitive id:51 word:part}
 {primitive id:52 word:argument}
 {primitive id:53 word:is}
+{primitive id:54 word:capacity}
+{primitive id:55 word:for}

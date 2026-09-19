@@ -200,9 +200,11 @@
 {column id:118 relation:42 seq:1 name:where}
 {column id:119 relation:42 seq:2 name:what}
 {column id:120 relation:42 seq:3 name:quantity}
-{column id:121 relation:43 seq:1 name:where}
-{column id:122 relation:43 seq:2 name:what}
-{column id:123 relation:43 seq:3 name:quantity}
+{column id:121 relation:43 seq:1 name:of}
+{column id:122 relation:43 seq:2 name:for}
+{column id:123 relation:43 seq:3 name:what}
+{column id:124 relation:43 seq:4 name:per}
+{column id:125 relation:43 seq:5 name:quantity}
 
 
 ## What a place has room for, and what each kind takes up
@@ -303,8 +305,10 @@
 {reference id:58 column:116 to:7}
 {reference id:59 column:118 to:13}
 {reference id:60 column:119 to:27}
-{reference id:61 column:121 to:13}
-{reference id:62 column:122 to:27}
+{reference id:61 column:121 to:1}
+{reference id:62 column:122 to:1}
+{reference id:63 column:123 to:27}
+{reference id:64 column:124 to:1}
 
 
 ## Which relations are the game's state
@@ -472,11 +476,41 @@
 # bin; what it is for a resource is the store. Sean asked for storage and this is the thing half
 # of it.
 #
-# **How many a place has room for is `{capacity ...}`, and the limit is the one a deposit already
-# uses.** `{limit held:bin by:capacity}` requires the container's key to be part of the held
-# thing's and sums the held rows over it - so `capacity` keyed by `(where, what)` caps bins keyed
-# by `(where, what)`, and four metal bins and three food ones are two rows rather than a rule
-# about storage.
+# **How many a thing has room for is `{capacity ...}`, which is a table and not a number.**
+#
+# **Sean, 2026-09-18**: *a territory has many types of capacities: one for bins, one for berth, one
+# for extractors. A bin can have many types of capacities: one for metal, one for food, one for
+# energy. A metal transport has 2 types of capacities: one for metal, one energy (which it uses as
+# fuel). If we omit a capacity, we can default that to mean it may carry none of that thing.*
+#
+# ```text
+# {capacity of:territory for:bin      what:resource per:territory} -> 4
+# {capacity of:bin       for:resource what:resource per:territory} -> 10
+# ```
+#
+# **One trait column, and it restricts whichever side declares one.** A territory has no `what`,
+# so the first row is about every territory; a bin has one, so it is about bins carrying that
+# resource. **Two columns - one per side - was the first draft and it does not work**: `of:territory`
+# has nothing to qualify, every column of a row must be present, and there is no way to write *not
+# applicable*.
+#
+# **A family named where a member is expected means each member**, which is the rule
+# `{refresh what:unit trait:moving}` already runs on. **Named twice in one row it means the same
+# member**, so `for:resource what:resource` is a bin holding what it carries and not what it does
+# not. That sentence is the whole of the templating, and it needs no notation: `src/notation.rs`
+# still has no types and every value is still a word.
+#
+# **Sean, 2026-09-18**, on why this is the shape to take: *so it is macro substitution, not
+# computation, yes, that indicates to me we are on the right track.* Expansion is bounded by the
+# family's size and cannot recurse, so what every check sees is the plain rows it always saw.
+#
+# **`per` is declared and not guessed**, for the reason already written on `{supply ... per:...}`:
+# a container may be the place or be in it, and working out which relation every side has in
+# common is a guess where this is a fact.
+#
+# **Omitting a capacity already meant none.** `nothing_crowds_a_place` says so in a comment - *a
+# kind named by neither is not in the arithmetic at all* - so the default is being written down
+# rather than added.
 #
 # **Sean, 2026-09-17**: *Each territory will have a limit of how many storage structures of each
 # type it can hold.* **This needed no new mechanism, and `backlog.md` said it would** - it said the
@@ -497,4 +531,3 @@
 {state id:15 relation:42}
 {state id:16 relation:43}
 
-{limit held:42 by:43}

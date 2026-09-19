@@ -17,7 +17,7 @@
 
 {given}
 {territory id:1}
-{capacity where:1 what:30 quantity:2}
+{capacity of:13 for:42 what:27 per:13 quantity:2}
 {bin where:1 what:30 quantity:2}
 {labor where:1 quantity:1}
 {metal where:1 quantity:1}
@@ -26,4 +26,4 @@
 {build-bin where:1 what:30}
 
 {refused}
-{capacity where:1 what:30 quantity:3}
+{capacity of:13 for:42 what:30 per:13 quantity:3}

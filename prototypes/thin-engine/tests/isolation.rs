@@ -123,6 +123,7 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
         "assigns",
         "trait",
         "carries",
+        "capacity",
         "part",
         "argument",
         "primitive",
@@ -162,8 +163,8 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
     }
     assert_eq!(
         nouns.len(),
-        19,
-        "nineteen nouns the game has - territory, adjacency, deposit, extractor, unit, resource, scout, transport, labor, metal, food, bin, capacity, move, build-extractor, work, refresh, end-turn, build-bin; this found {nouns:?}"
+        18,
+        "eighteen nouns the game has - territory, adjacency, deposit, extractor, unit, resource, scout, transport, labor, metal, food, bin, move, build-extractor, work, refresh, end-turn, build-bin; this found {nouns:?}"
     );
 
     let mut looked = 0;
@@ -193,5 +194,5 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
             looked += 1;
         }
     }
-    assert_eq!(looked, 152, "nineteen nouns over eight modules");
+    assert_eq!(looked, 144, "eighteen nouns over eight modules");
 }

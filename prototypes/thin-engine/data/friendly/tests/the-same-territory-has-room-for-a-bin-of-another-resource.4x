@@ -16,8 +16,8 @@
 
 {given}
 {territory id:1 name:territory-1}
-{capacity where:territory-1 what:metal} -> 2
-{capacity where:territory-1 what:food} -> 3
+{capacity of:territory for:bin what:metal per:territory} -> 2
+{capacity of:territory for:bin what:food per:territory} -> 3
 {bin where:territory-1 what:metal} -> 2
 {labor where:territory-1} -> 1
 {metal where:territory-1} -> 1
@@ -27,7 +27,7 @@
 
 {then}
 {territory id:1 name:territory-1}
-{capacity where:territory-1 what:metal} -> 2
-{capacity where:territory-1 what:food} -> 3
+{capacity of:territory for:bin what:metal per:territory} -> 2
+{capacity of:territory for:bin what:food per:territory} -> 3
 {bin where:territory-1 what:metal} -> 2
 {bin where:territory-1 what:food} -> 1

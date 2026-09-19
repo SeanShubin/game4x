@@ -692,3 +692,82 @@ fn the_tree_is_what_the_file_says_it_is() {
         "and refresh is there twice, once per trait the turn restores"
     );
 }
+
+/// **A family named where a member belongs is each member, and named twice it is the same one.**
+///
+/// Sean, 2026-09-18: *if we declared resource = [food, metal, energy], we could have bin[resource]
+/// and transport[resource], which would need to be reified to a leaf resource by some mechanic.*
+/// **This is that mechanic, and it is substitution**: bounded by the family, unable to recurse,
+/// and leaving plain rows for every check downstream.
+///
+/// **27 is `resource`, 30 is `metal`, 31 is `food`, 42 is `bin` and 13 is `territory`.**
+#[test]
+fn a_family_named_where_a_member_belongs_is_each_member() {
+    let game = with("{capacity of:42 for:27 what:27 per:13 quantity:10}")
+        .expect("a bin holds ten of what it carries");
+    let made: Vec<String> = game
+        .rows()
+        .rows()
+        .iter()
+        .filter(|row| row.relation == "capacity" && row.value("of") == Some("42"))
+        .map(|row| game.schema().write(row))
+        .collect();
+
+    // **Two rows and not four**, because `for` and `what` name one family and so are one choice.
+    // A row per pairing would say a metal bin holds food.
+    assert_eq!(
+        made,
+        vec![
+            "{capacity of:42 for:30 what:30 per:13 quantity:10}",
+            "{capacity of:42 for:31 what:31 per:13 quantity:10}",
+        ],
+        "one row per resource, the same member on both sides"
+    );
+}
+
+/// **A template and a row written out cannot disagree**, and the check that says so is the one
+/// that was already there.
+///
+/// Sean, 2026-09-18: *I don't really care what time a contradiction like that is detected, so long
+/// as we can write code to prevent it from entering a live game. I am imagining a live recipe
+/// editor that will be able to reject invalid recipes and give the reason.* **Reifying before the
+/// key check is what makes this free**: the expansion produces a row keyed exactly as the written
+/// one, and two rows of one key is already refused.
+#[test]
+fn a_template_and_a_row_written_out_cannot_disagree() {
+    assert_eq!(
+        with("{capacity of:42 for:27 what:27 per:13 quantity:10}\n{capacity of:42 for:30 what:30 per:13 quantity:4}")
+            .expect_err("the template already says what a metal bin holds"),
+        Malformed::TwoWithOneKey {
+            relation: "capacity".to_string(),
+            // **In the relation's declared column order**, which is the order a person reads
+            // the row in rather than the order the values happen to sort.
+            key: vec![
+                ("of".to_string(), "42".to_string()),
+                ("for".to_string(), "30".to_string()),
+                ("what".to_string(), "30".to_string()),
+                ("per".to_string(), "13".to_string()),
+            ]
+        }
+    );
+
+    // **The control, and it is the same pair with the written-out row naming a resource the
+    // template does not reach.** There is none - a family reaches all of its members - so the
+    // control is a template alone, which is accepted, and that is what says the refusal above is
+    // about the disagreement rather than about templates.
+    with("{capacity of:42 for:27 what:27 per:13 quantity:10}").expect("a template on its own");
+
+    // **And a row that is not the world's is not expanded.** `{member kind:28 family:26}` names
+    // `unit` as the thing it is, so a second membership is one row and not two - which is what
+    // restricting reification to what `{state ...}` declares buys.
+    let game = with("{member kind:28 family:27}").expect("a scout may also be a resource");
+    assert_eq!(
+        game.rows()
+            .rows()
+            .iter()
+            .filter(|row| row.relation == "member" && row.value("kind") == Some("28"))
+            .count(),
+        2,
+        "two memberships, not one per member of the family named"
+    );
+}

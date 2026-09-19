@@ -76,6 +76,11 @@ impl Game {
     /// at something.
     pub fn of(rows: Vec<Row>) -> Result<Game, Malformed> {
         let schema = Schema::of(&rows)?;
+        // **A family where a member belongs becomes one row per member**, before anything else
+        // reads them - so no check downstream learns a word, and a template conflicting with a
+        // row written out is two rows of one key, which is refused by the check that already
+        // asks that.
+        let rows = crate::schema::reified(&schema, rows);
         let rows = Store::of(rows);
         crate::schema::check(&schema, &rows)?;
         Ok(Game { schema, rows })

@@ -17,7 +17,7 @@
 
 {given}
 {territory id:1 name:territory-1}
-{capacity where:territory-1 what:metal} -> 2
+{capacity of:territory for:bin what:resource per:territory} -> 2
 {bin where:territory-1 what:metal} -> 2
 {labor where:territory-1} -> 1
 {metal where:territory-1} -> 1
@@ -26,4 +26,4 @@
 {build-bin where:territory-1 what:metal}
 
 {refused}
-{capacity where:territory-1 what:metal} -> 3
+{capacity of:territory for:bin what:metal per:territory} -> 3

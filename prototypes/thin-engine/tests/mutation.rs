@@ -317,7 +317,7 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
     Ok(())
 }
 
-const REFERENCES: usize = 55;
+const REFERENCES: usize = 57;
 
 /// **References no test world can violate**, because nothing points at them there.
 ///

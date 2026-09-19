@@ -382,11 +382,13 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
                             **broke,
                             crate::schema::Malformed::Overfull { .. }
                                 | crate::schema::Malformed::Crowded { .. }
+                                | crate::schema::Malformed::NoRoom { .. }
                         ) =>
                     {
                         match broke.as_ref() {
                             crate::schema::Malformed::Overfull { wanted, .. }
-                            | crate::schema::Malformed::Crowded { wanted, .. } => wanted.clone(),
+                            | crate::schema::Malformed::Crowded { wanted, .. }
+                            | crate::schema::Malformed::NoRoom { wanted, .. } => wanted.clone(),
                             _ => unreachable!("guarded above"),
                         }
                     }
@@ -476,6 +478,15 @@ fn fits(step: &Row, declared: &[Row]) -> Result<(), Failed> {
 /// whatever `expected.4x` happens to mention.
 fn compare(actual: &Game, expected: &[Row]) -> Result<Difference, Failed> {
     let schema = actual.schema();
+    // **The `then` is reified too, because the world it is compared against was.** A test states
+    // a template in its `given` and must be able to state one in its `then`; without this it
+    // would have to write the expansion on one side and the template on the other, which is the
+    // asymmetry that would make somebody stop using templates.
+    //
+    // **This is the second of the two places rows become a world**, the other being `Game::of`,
+    // and `tests/structure.rs` is what says there are only two.
+    let expected = crate::schema::reified(schema, expected.to_vec());
+    let expected = &expected[..];
     // **`{state relation:13}` names the relation by id**, so each is resolved to the name the
     // rows are actually written in.
     let mut of_state: Vec<String> = actual

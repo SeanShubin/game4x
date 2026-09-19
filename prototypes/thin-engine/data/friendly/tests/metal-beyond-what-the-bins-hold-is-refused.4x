@@ -1,0 +1,43 @@
+# Two metal bins hold twenty metal, and twenty-two does not fit.
+#
+# **This is the thing no mechanism here could state until now.** A bin holds its own resource and
+# not another's, which needs a capacity indexed by what the container carries - `backlog.md` called
+# it *the first real arithmetic* and it is the sum `nothing_holds_more_than_there_is_room_for`
+# does.
+#
+# **One row says it for every resource.** `{capacity of:bin for:resource what:resource per:territory}`
+# names the family twice, so it reifies to one row per resource with the same member on both
+# sides: a metal bin holds metal. Sean, 2026-09-18: *if we declared resource = [food, metal,
+# energy], we could have bin[resource] and transport[resource], which would need to be reified to
+# a leaf resource by some mechanic.*
+#
+# **There is no capacity for bins here, and that is a finding rather than an omission.** Sean,
+# 2026-09-18: *if we omit a capacity, we can default that to mean it may carry none of that
+# thing.* **It does not yet**, because `nothing_holds_more_than_there_is_room_for` walks the
+# capacity rows - so a pairing nobody states is a pairing nobody asks about, which is
+# *unconstrained* and not *none*. **The mutation sweep found it**, by deleting the row this test
+# used to carry and finding nothing failed; the prose here claimed the opposite. `backlog.md` has
+# what it would take.
+#
+# **Every number is on the page**: two bins at ten apiece is twenty, and sixteen and six is twenty-two.
+#
+# **The refusal names the capacity that would have had to be there**, the way a full deposit and a
+# crowded place already do: eleven apiece across two bins is twenty-two, so it is not *this is too
+# much* but *there is no capacity this large*.
+
+{test name:metal-beyond-what-the-bins-hold-is-refused}
+
+{given}
+{territory id:1 name:territory-1}
+{capacity of:bin for:resource what:resource per:territory} -> 10
+{deposit where:territory-1 what:metal density:6} -> 1
+{extractor where:territory-1 what:metal working:1} -> 1
+{labor where:territory-1} -> 1
+{bin where:territory-1 what:metal} -> 2
+{metal where:territory-1} -> 16
+
+{when}
+{work where:territory-1 what:metal}
+
+{refused}
+{capacity of:bin for:metal what:metal per:territory} -> 11

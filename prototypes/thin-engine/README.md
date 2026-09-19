@@ -2658,6 +2658,74 @@ does for berths. **Sean's rule about tests is what decides it for now**: *I need
 numbers are, not some hidden default*, and a capacity summed from what stands there would not be on
 the page.
 
+## Capacity is a table, and a family named twice is the templating
+
+**Sean, 2026-09-18**, working out the unification himself after this lane said one of his six
+policies did not fit:
+
+> a territory has many types of capacities: one for bins, one for berth, one for extractors [...]
+> a bin can have many types of capacities: one for metal, one for food, one for energy [...] If we
+> omit a capacity, we can default that to mean it may carry none of that thing.
+
+```text
+{capacity of:territory for:bin      what:resource per:territory} -> 4
+{capacity of:bin       for:resource what:resource per:territory} -> 10
+```
+
+**One trait column, restricting whichever side declares one.** A territory has no `what`; a bin
+has one. **Two columns, one per side, was this lane's first draft and does not work**: `of:territory`
+has nothing to qualify, every column of a row must be present, and there is no way to write *not
+applicable*.
+
+**`per` is declared rather than guessed**, for the reason already written on `{supply ... per:...}`.
+
+**The templating needed no notation.** A family named where a member is expected already means
+*each member* - `{refresh what:unit trait:moving}` runs on that rule - and the one thing added is
+that **named twice in a row it means the same member**. So `for:resource what:resource` is a bin
+holding what it carries. Sean: *if we declared resource = [food, metal, energy], we could have
+bin[resource] and transport[resource], which would need to be reified to a leaf resource by some
+mechanic.*
+
+**Reification is at load, in two places**, `Game::of` and `compare` - the second because a `then`
+is compared as rows, and without it a test would write a template on one side and the expansion on
+the other. **Everything downstream reads plain rows**, so no check learned a word.
+
+**It is substitution and not computation**, which is why it costs nothing in decidability: bounded
+by the family's size, unable to recurse. Sean: *so it is macro substitution, not computation, yes,
+that indicates to me we are on the right track.*
+
+**A template and a row written out cannot disagree**, and the check that says so is the one that
+was already there: the expansion produces a row keyed exactly as the written one, and two rows of
+one key is refused. **Reifying before the key check is what makes that free.**
+
+## What building it found, and anticipating it had not
+
+**Sean, 2026-09-18**: *Pressure testing with concrete implementations is more important than
+anticipation.* Four rounds of design produced two notations that do not work; the build produced
+these.
+
+**The templating rule this lane stated was wrong.** It said a value expands where its column
+*references the family it names*. `capacity.for` references `relation`, because what a thing has
+room for may be any kind - so `for:resource` expanded to nothing and the check silently found no
+room anywhere. **The rule is: a row the world states, a column that references something, and a
+value naming a family.** Restricting it to `{state ...}` rows is what keeps `{member kind:scout
+family:unit}` out, where a family is named as the thing it is.
+
+**`capacity` is engine vocabulary, not a game noun** - `tests/isolation.rs` caught `src/schema.rs`
+saying it, exactly as it caught `store` one commit earlier. It joins `limit`, `supply`, `provides`
+and `consumes` in that list.
+
+**And omitting a capacity does not yet mean none.** `nothing_holds_more_than_there_is_room_for`
+walks the capacity rows, so a pairing nobody states is *unconstrained* rather than *none* - the
+opposite of what Sean specified. **The mutation sweep found it** by deleting a capacity row from a
+test and finding nothing failed, **while that test's own prose claimed the row was what made the
+world legal.**
+
+**The fix waits on the unification, and that is the finding rather than the defect.** Walking what
+is *present* instead of what is *stated* means every kind needs a capacity or nothing of it may
+exist - and scouts would be refused, because the mechanism that admits them is the berth pool.
+`backlog.md` carries it.
+
 ## What was deliberately not built
 
 **No per-kind maximum row.** Sean: *I am not sure I am ready for treating turns as a resource yet,
