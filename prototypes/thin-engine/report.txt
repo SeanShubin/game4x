@@ -434,6 +434,55 @@ new state
 as expected
 
 ==============================================================================
+ending-a-turn-restores-a-scout-and-an-extractor
+
+old state
+  - root
+    - adjacency
+    - consumes
+    - deposit
+      - {deposit where:territory-1 what:food density:6} -> 2
+    - extractor
+      - {extractor where:territory-1 what:food working:0} -> 1
+      - {extractor where:territory-1 what:food working:1} -> 1
+    - food
+    - labor
+    - metal
+    - provides
+    - scout
+      - {scout where:territory-1 moving:0} -> 2
+      - {scout where:territory-1 moving:1} -> 1
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+command  {end-turn}
+  took   {scout where:territory-1 moving:0} -> 2
+  took   {extractor where:territory-1 what:food working:0} -> 1
+  made   {scout where:territory-1 moving:1} -> 2
+  made   {extractor where:territory-1 what:food working:1} -> 1
+
+new state
+  - root
+    - adjacency
+    - consumes
+    - deposit
+      - {deposit where:territory-1 what:food density:6} -> 2
+    - extractor
+      - {extractor where:territory-1 what:food working:1} -> 2
+    - food
+    - labor
+    - metal
+    - provides
+    - scout
+      - {scout where:territory-1 moving:1} -> 3
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+as expected
+
+==============================================================================
 one-extractors-readiness-is-not-anothers
 
 old state
@@ -483,7 +532,7 @@ old state
       - {transport where:territory-1 moving:0} -> 1
       - {transport where:territory-1 moving:1} -> 2
 
-command  {refresh where:territory-1 what:unit trait:moving}
+command  {refresh what:unit trait:moving}
   took   {scout where:territory-1 moving:0} -> 2
   took   {transport where:territory-1 moving:0} -> 1
   made   {scout where:territory-1 moving:1} -> 2
@@ -581,7 +630,7 @@ command  {work where:territory-1 what:food}
   made   {extractor where:territory-1 what:food working:0} -> 1
   made   {food where:territory-1} -> 6
 
-command  {refresh where:territory-1 what:extractor trait:working}
+command  {refresh what:extractor trait:working}
   took   {extractor where:territory-1 what:food working:0} -> 1
   made   {extractor where:territory-1 what:food working:1} -> 1
 
@@ -631,7 +680,7 @@ old state
       - {territory id:1 name:territory-1}
     - transport
 
-command  {refresh where:territory-1 what:scout trait:moving}
+command  {refresh what:scout trait:moving}
   took   {scout where:territory-1 moving:0} -> 3
   made   {scout where:territory-1 moving:1} -> 3
 
@@ -739,7 +788,7 @@ command  {move what:scout from:territory-1 to:territory-2}
   took   {scout where:territory-1 moving:1} -> 1
   made   {scout where:territory-2 moving:0} -> 1
 
-command  {refresh where:territory-2 what:scout trait:moving}
+command  {end-turn}
   took   {scout where:territory-2 moving:0} -> 1
   made   {scout where:territory-2 moving:1} -> 1
 
