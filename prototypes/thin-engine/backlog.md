@@ -16,17 +16,23 @@ vehicles that can do this as well.*
 it - a place's capacity for a kind is the sum of what is in it that can hold that kind, a place
 declares none of its own, and what a place holds beyond its capacity is lost at the turn's end.
 
-|                                                                                                              | What it needs                                                                                                                                                                                                           |
-| ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ~~**A store is a thing a place holds**~~ - **built** as `{bin where:territory-1 what:metal} -> 4`            | nothing, and nothing is what it took                                                                                                                                                                                    |
-| ~~**A territory holds only so many stores of each resource**~~ - **built** as `{limit held:bin by:capacity}` | **nothing, and this entry was wrong about that.** It said the cap had to be per description and that the pool could not say it - both true, and both about the pool. The limit keys on `(where, what)` and always could |
-| **A store contributes capacity for its resource** - `{provides kind:store what:metal} -> 10`                 | summing a product over the things present - the first real arithmetic                                                                                                                                                   |
-| **A vehicle carries capacity that travels with it** - a transport holds 10 metal and 2 fuel                  | the same sum, over a kind that moves                                                                                                                                                                                    |
-| **What a place holds beyond its capacity is lost at the turn's end**                                         | the turn, and a comparison - see below                                                                                                                                                                                  |
-| **A thing that leaves takes what it hauls**, defaulting to a full load                                       | allocation at the moment of leaving, and a command that may name an amount                                                                                                                                              |
+|                                                                                                                                         | What it needs                                                                                                                                                                                                           |
+| --------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ~~**A store is a thing a place holds**~~ - **built** as `{bin where:territory-1 what:metal} -> 4`                                       | nothing, and nothing is what it took                                                                                                                                                                                    |
+| ~~**A territory holds only so many stores of each resource**~~ - **built** as `{limit held:bin by:capacity}`                            | **nothing, and this entry was wrong about that.** It said the cap had to be per description and that the pool could not say it - both true, and both about the pool. The limit keys on `(where, what)` and always could |
+| ~~**A store contributes capacity for its resource**~~ - **built** as `{capacity of:bin for:resource what:resource per:territory} -> 10` | the sum, which `rooming` does                                                                                                                                                                                           |
+| ~~**A vehicle carries capacity that travels with it**~~ - **built**, and it was one row                                                 | nothing. Sean reframed it and the reframing is what made it free                                                                                                                                                        |
+| ~~**What a place holds beyond its capacity is lost at the turn's end**~~ - **built** as disorder                                        | no comparison after all: `keep` bounds a quantity rather than testing one                                                                                                                                               |
+| ~~**A thing that leaves takes what it hauls**~~ - **dissolved, not deferred**                                                           | nothing is inside a transport, so there is nothing to take. Sean, 2026-09-19: *transport would not automatically take what they haul, they would provide the capacity necessary to move the resource they haul*         |
 
-**The one that blocks the rest is the sum.** Everything above the line is rows; everything below
-needs the engine to add numbers it is currently only comparing.
+**Storage is done.** All six are built or struck out, and **the one this section said blocked the
+rest - the sum - was the smallest part of it.** What actually cost anything was none of the six: it
+was finding that a place's room is a sum over *kinds of container* and not one comparison per
+capacity row, and that a resource over capacity is disorder rather than a refusal.
+
+**Two entries here were wrong about what a thing needed, and both in the same direction**: they
+named a mechanism that would have to be built when one already existed. That is worth remembering
+the next time an entry says a thing needs building - **the entry is a claim like any other.**
 
 **Two rows are struck out and the first four words of this section are why**: *most of this is
 already in `spec/logistics.md`* was true, and so was the part nobody checked - the mechanism was
@@ -45,11 +51,23 @@ holds a kind is a store for that kind.*
 ones, and the world's are the whole automatic half of the game: upkeep, breed, perish, age, spoil,
 refresh, muster, hold, reclaim, renew, take.
 
-**`end-turn` exists and restores every count**, so the last of `spec/turn.md`'s five steps is
-built and the other four are not: everything with upkeep pays it, a population grows or starves,
-what expires expires, and nature takes back what is no longer held. **Each is a rule the order has
-room for**, which is what the tree buys - adding one is a `{part ...}` row and a leaf, not a change
-to `end-turn`.
+**Two of `spec/turn.md`'s five steps are built and three are not.** *Time restores every count*
+is `refresh`; *what was not kept in order is lost* is `lose-what-is-not-kept`. Still missing:
+everything with upkeep pays it, a population grows on surplus food or starves for want of it, and
+nature takes back what is no longer held. **Each is a rule the order has room for**, which is what
+the tree buys - adding one is a `{part ...}` row and a leaf, not a change to `end-turn`.
+
+**Upkeep is the one to do next, and the reason is the order.** `spec/turn.md` puts upkeep *before*
+what is lost, so a thing pays its upkeep out of everything a place holds - **including what is over
+capacity**. That is Sean's *use stuff over capacity in other recipies to avoid the waste* happening
+automatically rather than by hand, and it is the first time two parts of the turn will interact.
+**So it is also the first thing that would make `{part ... seq:N}` load-bearing**, which nothing
+does today.
+
+**What it needs from the engine is one thing: a sweeping `remove`.** `put` and `keep` walk every
+matching row; `remove` takes one match. *Everything with upkeep pays it* is a sweep by definition.
+**And it needs a word for upkeep** - what a kind owes per turn - which is a row like `{carries ...}`
+rather than a new mechanism.
 
 **Two of the four need something the engine has not got.** *Everything with upkeep pays it* is a
 sweeping `remove`, and `remove` takes one match where `put` sweeps. *Grows on surplus food or
@@ -114,12 +132,120 @@ rule and nothing checks that a world stating `{scout ... moving:9}` is wrong. Se
 word - `readies`, `allows`, `affords` - and whether it unifies with capacity, and deferring costs
 nothing while every maximum is 1.
 
-## Comparison
+## Comparison, and why the prototype may never need it
 
 **The engine has no operators.** `spec/data/constraint.4x` has 28 rows using four - `at-least`,
-`at-maximum`, `exactly` and `one-less` - and the prototype has none of them. It gets *at least
-one* from `take` refusing, and everything else is out of reach: `at-maximum` is every refresh and
-`exactly 0` is perish, hold, reclaim and renew.
+`at-maximum`, `exactly` and `one-less` - and the prototype has none of them.
+
+**It may not need any of them, and working out grow-or-starve is what showed it.** Two of the four
+turn out to be things thin-engine already says another way, and the other two turn out to be
+repetition:
+
+| the spec's operator                                                    | what the prototype says instead                                                                            |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `exactly n:0` on a trait, as in `perish`                               | a literal in a pattern - `{literal clause:clause-3 column:98 value:1}` is how `move` matches a spent scout |
+| `at-maximum` on a trait, as in `upkeep`                                | `{assigns ... value:1}`, which is what `refresh` does                                                      |
+| *at least one*, anywhere                                               | `remove` refusing when nothing matches                                                                     |
+| a varying amount, as in *the minimum of extra-food and total-citizens* | **a rule that fires as many times as it can**                                                              |
+
+**So the operators are not deferred; they may be unnecessary.** That is worth checking before
+anyone builds four of them.
+
+## Grow or starve without a zero test, and the one word it costs
+
+**This is the design worked out on 2026-09-19 and not yet built.** It is written down because the
+conversation that produced it would be expensive to have twice.
+
+**The problem it looked like.** *A population grows on surplus food or starves for want of it* reads
+as a comparison, and `docs/designing-rules.md` puts a zero test on a counted place - food - on the
+fatal side of decidability: *An unbounded place cannot [be zero-tested]. If there is no food, if the
+store is empty - these are the cliff, and they are exactly the tests a resource game invites.*
+
+**Sean's move, 2026-09-19**: *Can starvation be represented as the recipe: (citizen, food) ->
+(citizen). Can growing be represented as the recipe: (citizen, excess-food) -> citizen. All without
+a zero test?*
+
+**Yes, with a state on the citizen.** As written the recipe gives the citizen back unchanged, so it
+can fire again on the same one - one citizen eats all the food and nobody dies. With a state, each
+rule is a plain pattern match and nothing tests for absence:
+
+```text
+upkeep   citizen[hungry:1] + food  ->  citizen[hungry:0]
+perish   citizen[hungry:1]         ->  gone
+bear     citizen[bearing:1]        ->  citizen[bearing:0] + fertility
+breed    fertility + food          ->  citizen
+discard  fertility                 ->  gone
+```
+
+**And excess is a position in the order, not a comparison.** Breeding runs after upkeep, so whatever
+food it finds *is* the surplus. Nothing anywhere says *more than*.
+
+**The mainline spec reaches the same answer**, which is worth knowing before anyone thinks this is a
+prototype-only trick. `spec/data/line.4x` and `spec/data/constraint.4x`:
+
+```text
+{line block:upkeep seq:3 role:put kind:citizen}
+{constraint block:upkeep seq:3 trait:paid compare:at-maximum}
+{line block:perish seq:1 role:consume qty:1 kind:citizen}
+{constraint block:perish seq:1 trait:paid compare:exactly n:0}
+{line block:breed seq:1 role:consume qty:1 kind:fertility}
+```
+
+**`paid` is the same state and `fertility` is the piece Sean's version was missing** - without it one
+citizen breeds with all the surplus, the same defect the starvation recipe had before its state bit.
+**`min(extra-food, total-citizens)` falls out of consuming one of each**, and *at most doubling* is
+one fertility per citizen.
+
+**The polarity is inverted here and that is deliberate.** `refresh` restores a trait to **1**, so
+`paid` would be restored to *already paid*. `hungry` restores correctly and is then exactly `moving`
+and `working` - an allowance the turn restores and acting spends. **The only difference is what
+unspent means**: a scout that did not move is fine, a citizen that did not eat is dead.
+
+**A citizen's food reserve is capacity, not a counter on the citizen.** Sean, 2026-09-19, asked
+whether starvation needed a richer state - *thematically a citizen has an amount of food in their
+body. When they are capped they are not hungry. When they are not capped but not empty they are
+hungry. When they are 0 and can't get more at end of turn they starve.*
+
+**It does not change the representation, and a counter would be expensive.** A `fed` level of
+`0..cap` needs decrement, and `put` assigns a constant - so going from `fed:2` to `fed:1` is a rule
+per level, or arithmetic on trait values. **The reserve belongs in capacity instead**, which is
+already built:
+
+```text
+{capacity of:citizen for:food what:food per:territory} -> 3
+```
+
+Five citizens is room for fifteen food, which is three turns of reserve, **kept orderly so disorder
+does not take it**. Run out of production and upkeep eats the reserve down over three turns before
+anyone starves. **`hungry` then means exactly one thing: did you eat this turn.**
+
+**The middle state is the food count rather than a citizen state**, which is the number a player
+wants to read anyway: it says how many turns are left.
+
+**And a per-individual belly is the wrong scale.** `spec/population.md`: *A citizen is not one
+person. It is the smallest group that can sustain reproduction.* The reserve is a settlement's
+larder. **What this gives up is deliberate**: some citizens full while others starve in one
+territory cannot be said, because which ones went short is not a question the model can ask - which
+is *we only lose what we don't have the storage for, without tracking what is stored where*, one
+level down.
+
+**What it costs the engine is one word: `{repeats rule:R}`.** A rule that fires as many times as it
+can. **It replaces three things that were each written down as needed** - a sweeping `remove`, a
+comparison operator, and arithmetic - because every rule that wanted one of those wanted the same
+thing: to happen as many times as it could. Perish is one remove repeated until nothing matches.
+
+**Two things stop a repeating rule**: being refused, and leaving the world as it found it. The
+second is what makes a `put` safe to repeat. **A rule with no `remove` can do neither** and should be
+refused when the world is read.
+
+**And that is not a termination proof.** A rule that removes one and adds two stops for neither
+reason. What catches it is the weighting - *nothing comes back round with more* - which
+`reports/nogain.md` decides in the main tree and **nothing decides here.**
+
+**It cannot land before its first user**, which is `tests/mutation.rs` enforcing something worth
+knowing: `every_reference_forbids_something` asserts every `{reference ...}` is violated in some
+world, and a reference nothing uses is violated in none. **Vocabulary without a user is red**, not
+merely untested. Sean asked whether that would happen before it did.
 
 ## Smaller things, each with the reason it is not done
 

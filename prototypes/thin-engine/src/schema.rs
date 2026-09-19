@@ -46,6 +46,7 @@ const MEMBER: &str = "member";
 const KIND: &str = "kind";
 const CAPACITY: &str = "capacity";
 const STATE: &str = "state";
+const LOOSE: &str = "loose";
 const FOR: &str = "for";
 const PART: &str = "part";
 const IS: &str = "is";
@@ -266,6 +267,19 @@ pub enum Malformed {
         /// states, so a test can say what was missing rather than quoting a sentence.
         wanted: String,
     },
+    /// A kind that is not fungible is declared loose.
+    ///
+    /// **`spec/logistics.md`**: *What a place holds of a kind is one number.* A kind keyed by
+    /// anything more could hold two numbers in one place, and then taking what is over capacity
+    /// would have to choose which row to take it from. **So the declaration is refused rather
+    /// than the situation**, and `keep` has nothing to decide.
+    ///
+    /// Sean, 2026-09-19: *I am expecting that we can compute the amount of room for something, we
+    /// can compute the excess, and discard the rest. I don't imagine we need to choose anything
+    /// here.* **Two earlier versions of this put the choice where it would bite** - first a
+    /// refusal when `keep` fired, then a count of the rows in a world - and both guarded a
+    /// situation instead of forbidding what allows it.
+    LooseAndNotFungible { relation: String, by: String },
     /// A limit between two relations whose keys are not the same columns.
     ///
     /// **Held and holder are compared key for key**, so a limit between relations that do not
@@ -363,6 +377,10 @@ impl std::fmt::Display for Malformed {
             } => write!(
                 out,
                 "`{place}` holds {used} `{contained}` and has room for {room}"
+            ),
+            Malformed::LooseAndNotFungible { relation, by } => write!(
+                out,
+                "`{relation}` is not fungible - it is told apart by `{by}` - so it may not lie loose"
             ),
             Malformed::CannotLimit { held, by } => {
                 write!(
@@ -1067,39 +1085,59 @@ pub fn check(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
     // nothing has and the extractors over it are suddenly over nothing - so a check that ran
     // first would answer *too many extractors* to a question about a dangling reference, and
     // `tests/mutation.rs` said exactly that. **The narrower fault is the one to report.**
+    only_what_is_fungible_lies_loose(schema, rows)?;
     held_within_what_holds_it(schema, rows)?;
     nothing_crowds_a_place(schema, rows)?;
     nothing_holds_more_than_there_is_room_for(schema, rows)?;
     Ok(())
 }
 
-/// No place holds more of a thing than what stands in it has room for.
+/// What has room for what, where, and how much of it there is.
 ///
-/// ```text
-/// {capacity of:territory for:bin      what:resource per:territory} -> 4
-/// {capacity of:bin       for:resource what:resource per:territory} -> 10
-/// {capacity of:transport for:resource what:resource per:territory} -> 10
-/// ```
+/// **One question, however many kinds answer it.** A place's room for a thing is the sum of what
+/// stands in it that can hold that thing, so the capacity rows are grouped before anything is
+/// counted - `spec/logistics.md`: *a place's capacity for a kind is the sum of what is in it that
+/// can hold that kind*.
 ///
-/// **A place's room is the sum of what stands in it**, which is `spec/logistics.md`'s sentence and
-/// the reason the capacity rows are grouped before anything is compared: a territory holding a bin
-/// and a transport has room for twenty metal, not ten twice. **The first version compared each
-/// capacity row on its own** and refused a world that fits, and no test caught it because none had
-/// two kinds of container for one thing. Found by Sean asking what a transport does.
+/// **Read by two callers and written once**, which is the point of it being here rather than
+/// inside either: [`check`] refuses a world where something that may not exceed its room does, and
+/// the `keep` role takes away what a loose kind has beyond it. **Two readings of one arithmetic
+/// cannot disagree about what fits.**
+pub struct Rooming {
+    /// The relation the room is for.
+    pub held: String,
+    /// The trait value it is for, where the held kind carries one.
+    pub what: String,
+    /// The relation whose rows the room is counted in.
+    pub per: String,
+    /// How much room there is, by the key of the place.
+    pub room: BTreeMap<String, i64>,
+    /// How much is there, by the key of the place.
+    pub used: BTreeMap<String, i64>,
+    /// The capacity rows that answered, as `(container, how much each)`.
+    pub gives: Vec<(String, i64)>,
+    /// The values of this question's columns, as the rows write them.
+    pub written: (String, String, String),
+}
+
+/// Where a row of `relation` stands, as a column of it and whether it is the place itself.
 ///
-/// **A capacity row is read once per row of the container.** A territory is one of itself, so the
-/// first row above says *four bins of each resource*; a bin is however many stand there, so the
-/// second says *ten metal for each metal bin*.
-///
-/// **The trait column restricts whichever side declares one.** A territory has no `what` and a bin
-/// has one, so one column serves both sides and a row that qualifies neither qualifies nothing.
-///
-/// **No rule mentions any of it**, as with every limit here: a command that would overfill a place
-/// leaves a world that does not fit, and every rule already refuses that.
-fn nothing_holds_more_than_there_is_room_for(
-    schema: &Schema,
-    rows: &Store,
-) -> Result<(), Malformed> {
+/// **A kind that *is* the place is one of itself in itself**; a kind that references the place says
+/// which one in the column that points at it.
+pub fn place_of(schema: &Schema, relation: &str, per: &str) -> Option<(bool, String)> {
+    let declared = schema.relation(relation)?;
+    if relation == per {
+        return Some((true, declared.identity().to_string()));
+    }
+    let column = declared
+        .columns
+        .iter()
+        .find(|it| it.references.as_deref() == Some(per))?;
+    Some((false, column.name.clone()))
+}
+
+/// Every room question the capacity rows ask, answered.
+pub fn rooming(schema: &Schema, rows: &Store) -> Vec<Rooming> {
     let named: BTreeMap<&str, &str> = rows
         .rows()
         .iter()
@@ -1108,9 +1146,8 @@ fn nothing_holds_more_than_there_is_room_for(
         .collect();
     let name_of = |id: &str| named.get(id).copied().unwrap_or(id).to_string();
 
-    // **Grouped by what is held, where, so the containers can be added up.** Everything that gives
-    // room for one resource in one kind of place belongs to one question, however many kinds give
-    // it. **In the order the rows are stated**, so the refusal names the same one twice.
+    // **Grouped by what is held, where, so the containers can be added up.** **In the order the
+    // rows are stated**, so a refusal names the same one twice.
     let mut asked: Vec<(String, String, String)> = Vec::new();
     let mut giving: BTreeMap<(String, String, String), Vec<(String, i64)>> = BTreeMap::new();
     for capacity in rows.rows().iter().filter(|it| it.relation == CAPACITY) {
@@ -1135,29 +1172,16 @@ fn nothing_holds_more_than_there_is_room_for(
             .push((of.to_string(), each));
     }
 
-    for question in &asked {
-        let (raw_held, raw_what, raw_per) = question;
-        let (held, what, per) = (name_of(raw_held), raw_what.as_str(), name_of(raw_per));
-
-        // **Where a row of this relation stands.** A kind that *is* the place is one of itself in
-        // itself; a kind that references the place says which one in the column that points at it.
-        let placed = |relation: &str| -> Option<(bool, String)> {
-            let declared = schema.relation(relation)?;
-            if relation == per {
-                return Some((true, declared.identity().to_string()));
-            }
-            let column = declared
-                .columns
-                .iter()
-                .find(|it| it.references.as_deref() == Some(per.as_str()))?;
-            Some((false, column.name.clone()))
-        };
+    let mut out = Vec::new();
+    for question in asked {
+        let (raw_held, raw_what, raw_per) = question.clone();
+        let (held, per) = (name_of(&raw_held), name_of(&raw_per));
 
         // **Totalled per place, at a rate each.** A row that does not carry the trait the capacity
         // names is a different thing and is not counted here.
         let total = |relation: &str, rate: i64| -> BTreeMap<String, i64> {
             let mut found: BTreeMap<String, i64> = BTreeMap::new();
-            let Some((is_place, column)) = placed(relation) else {
+            let Some((is_place, column)) = place_of(schema, relation, &per) else {
                 return found;
             };
             let Some(declared) = schema.relation(relation) else {
@@ -1165,7 +1189,7 @@ fn nothing_holds_more_than_there_is_room_for(
             };
             let carries_what = declared.columns.iter().any(|it| it.name == WHAT);
             for row in rows.rows().iter().filter(|it| it.relation == relation) {
-                if carries_what && row.value(WHAT) != Some(what) {
+                if carries_what && row.value(WHAT) != Some(raw_what.as_str()) {
                     continue;
                 }
                 let Some(at) = row.value(&column) else {
@@ -1183,17 +1207,163 @@ fn nothing_holds_more_than_there_is_room_for(
             found
         };
 
-        let gives = giving.get(question).expect("asked is built from giving");
+        let gives = giving
+            .get(&question)
+            .expect("asked is built from giving")
+            .clone();
         let mut room: BTreeMap<String, i64> = BTreeMap::new();
-        for (of, each) in gives {
+        for (of, each) in &gives {
             for (place, how_much) in total(&name_of(of), *each) {
                 *room.entry(place).or_default() += how_much;
             }
         }
+        let used = total(&held, 1);
+        out.push(Rooming {
+            held,
+            what: name_of(&raw_what),
+            per,
+            room,
+            used,
+            gives,
+            written: (raw_held, raw_what, raw_per),
+        });
+    }
+    out
+}
 
-        for (place, used) in total(&held, 1) {
-            let there = room.get(&place).copied().unwrap_or(0);
-            if used <= there {
+/// Whether a kind may lie loose - over its capacity, in disorder - rather than being bounded by it.
+///
+/// **`{loose kind:resource}` names a family and means its members**, resolved here rather than by
+/// reification: a structural row is not `{state ...}` and so is never expanded.
+pub fn is_loose(schema: &Schema, rows: &Store, relation: &str) -> bool {
+    loose_kinds(schema, rows).iter().any(|it| it == relation)
+}
+
+/// Only what is fungible may lie loose.
+///
+/// # What fungible means here, and why it decides this
+///
+/// **Two of a fungible kind in one place are interchangeable**, so there is no such thing as
+/// *which one*. `spec/logistics.md`: *What a place holds of a kind is one number.* Taking what is
+/// over capacity is then arithmetic - compute the room, compute the excess, take it - with nothing
+/// to choose between.
+///
+/// **A kind that carries state is not fungible.** Two scouts differing in `moving` are not
+/// interchangeable: one may act and one may not. Taking one away would have to say which, and a
+/// rule that picks is a rule nobody wrote. Sean, 2026-09-19: *things without state are fungible in
+/// a way things with state are not.*
+///
+/// **It is read off the key, which is where it already lived.** A kind is fungible when its key is
+/// at most where it is and what it is of:
+///
+/// ```text
+/// metal      (where)                 fungible
+/// bin        (where, what)           fungible - `what` is what a capacity groups by
+/// deposit    (where, what)           fungible - `density` is an attribute and out of the key
+/// scout      (where, moving)         not - `moving` is state
+/// extractor  (where, what, working)  not - `working` is state
+/// territory  (id)                    never - an id is the opposite of fungible
+/// ```
+///
+/// **This is why a scout row looks the way it does.** `{scout where:territory-1 moving:1} -> 2` is
+/// two scouts counted as one number precisely because nothing but `moving` tells them apart.
+/// **Fungibility did not arrive with disorder** - it is the reason the rows have had a quantity
+/// since the quantity landed, and disorder is the first thing that had to name it.
+///
+/// **`{carries ...}` says the same thing a second way and is not the one to read.** Every kind
+/// that carries a trait is told apart by it, so the two agree on every kind the game has - but a
+/// state column that is not a declared trait would still divide a kind, and `carries` would not
+/// see it. **The key is the fact; `carries` is a use of it.**
+///
+/// **It is derived and not declared, deliberately.** A `{fungible ...}` row would state twice what
+/// the key states once, and unlike `carries` - which `refresh` reads - nothing would read it but
+/// the check that can already work it out. Sean's reason for letting `carries` duplicate does not
+/// reach it: *inconsistency can be mitigated by automated checks* justifies a second statement
+/// that earns something, and this one would earn nothing.
+///
+/// # What would have to change for a non-fungible kind to be loose
+///
+/// **A priority, and nothing less.** If units over a berth capacity should be lost rather than
+/// refused, the loss has to say *which* - spent before fresh, say. That ordering is the only thing
+/// that makes it a rule rather than an accident, and nothing has asked for it.
+///
+/// # Three versions of this check, and why the first two were wrong
+///
+/// Sean, 2026-09-19: *I am expecting that we can compute the amount of room for something, we can
+/// compute the excess, and discard the rest. I don't imagine we need to choose anything here.*
+///
+/// **A refusal when `keep` fired** put a choice nobody could make exactly where it would bite.
+/// **A count of the rows in a world** guarded the situation instead of forbidding what allows it -
+/// and sat inside the loop over capacity questions, so it only saw kinds something already gave
+/// room to. **Marking `extractor` loose was accepted silently**, because nothing gives extractors
+/// capacity, and the poison being taken is what revealed it. This one reads the `{loose ...}` rows.
+fn only_what_is_fungible_lies_loose(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
+    for relation in loose_kinds(schema, rows) {
+        let Some(declared) = schema.relation(&relation) else {
+            continue;
+        };
+        let mut rest = declared.key();
+        rest.retain(|it| *it != WHAT);
+        if rest.len() > 1 {
+            return Err(Malformed::LooseAndNotFungible {
+                relation,
+                by: rest[1].to_string(),
+            });
+        }
+    }
+    Ok(())
+}
+
+/// Every kind that may lie loose, with a family standing for its members.
+pub fn loose_kinds(schema: &Schema, rows: &Store) -> Vec<String> {
+    let mut out = Vec::new();
+    for named in rows
+        .rows()
+        .iter()
+        .filter(|row| row.relation == LOOSE)
+        .filter_map(|row| row.value(KIND))
+        .filter_map(|kind| schema.relation_named(kind))
+    {
+        match schema.members(named) {
+            Some(members) => out.extend(
+                members
+                    .iter()
+                    .filter_map(|it| schema.relation_named(it))
+                    .map(str::to_string),
+            ),
+            None => out.push(named.to_string()),
+        }
+    }
+    out
+}
+
+/// No place holds more of a thing than what stands in it has room for, unless that thing is loose.
+///
+/// ```text
+/// {capacity of:territory for:bin      what:resource per:territory} -> 4
+/// {capacity of:bin       for:resource what:resource per:territory} -> 10
+/// {loose kind:resource}
+/// ```
+///
+/// **A capacity is a maximum unless the thing it holds is loose**, and then it is a threshold: what
+/// is beyond it is in disorder, still spendable, and taken at the turn's end by
+/// `lose-what-is-not-kept`. Sean, 2026-09-19: *structures behave differently from resources in this
+/// regard [...] structures are intentionally built for the purpose of having that structure there,
+/// while resources are mined to be spent or stored.*
+///
+/// **No rule mentions any of it**, as with every limit here: a command that would overfill a place
+/// leaves a world that does not fit, and every rule already refuses that.
+fn nothing_holds_more_than_there_is_room_for(
+    schema: &Schema,
+    rows: &Store,
+) -> Result<(), Malformed> {
+    for asked in rooming(schema, rows) {
+        if is_loose(schema, rows, &asked.held) {
+            continue;
+        }
+        for (place, used) in &asked.used {
+            let there = asked.room.get(place).copied().unwrap_or(0);
+            if *used <= there {
                 continue;
             }
             // **The refusal names a capacity that would have had to be there**, the way a full
@@ -1205,15 +1375,17 @@ fn nothing_holds_more_than_there_is_room_for(
             // **Several kinds give room, and none of them is the answer** - so rather than pick
             // one, the refusal names the *place itself* granting the shortfall. Sean, 2026-09-15:
             // *We should never have non-determinism from what row happens to be encountered
-            // first*, which is why `NotOne` refuses instead of choosing; **taking the first row
-            // here was that same fault**, deterministic only by accident of what order the store
-            // holds rows in. **The place's own row is exact rather than arbitrary**: adding it
-            // makes the room equal what is used, whatever else is standing there.
-            let (of, each_would_be) = match gives.as_slice() {
+            // first*, which is why `NotOne` refuses instead of choosing.
+            let (raw_held, raw_what, raw_per) = &asked.written;
+            let (of, each_would_be) = match asked.gives.as_slice() {
                 [(only, _)] => {
-                    let mine = total(&name_of(only), 1).get(&place).copied().unwrap_or(0);
+                    let mine = schema
+                        .relation_named(only)
+                        .and_then(|it| place_of(schema, it, &asked.per).map(|_| it))
+                        .map(|it| count_in(schema, rows, it, &asked.what, &asked.per, place))
+                        .unwrap_or(0);
                     let apiece = match mine {
-                        0 => used,
+                        0 => *used,
                         how_many => {
                             used.div_euclid(how_many) + i64::from(used.rem_euclid(how_many) != 0)
                         }
@@ -1230,11 +1402,10 @@ fn nothing_holds_more_than_there_is_room_for(
             wanted.insert(QUANTITY.to_string(), each_would_be.to_string());
             return Err(Malformed::NoRoom {
                 // **The place is a row of `per` and not a relation**, so it is shown as its kind
-                // and its key. Reading it through the relation map turned `territory 1` into
-                // `relation`, which is the same mistake the rule tree made a commit ago.
-                place: format!("{per} {place}"),
-                contained: held.clone(),
-                used,
+                // and its key.
+                place: format!("{} {place}", asked.per),
+                contained: asked.held.clone(),
+                used: *used,
                 room: there,
                 wanted: schema.write(&Row {
                     relation: CAPACITY.to_string(),
@@ -1244,6 +1415,42 @@ fn nothing_holds_more_than_there_is_room_for(
         }
     }
     Ok(())
+}
+
+/// How many rows of `relation` carrying `what` stand in one place.
+fn count_in(
+    schema: &Schema,
+    rows: &Store,
+    relation: &str,
+    what: &str,
+    per: &str,
+    place: &str,
+) -> i64 {
+    let Some((is_place, column)) = place_of(schema, relation, per) else {
+        return 0;
+    };
+    let Some(declared) = schema.relation(relation) else {
+        return 0;
+    };
+    let carries_what = declared.columns.iter().any(|it| it.name == WHAT);
+    let mut found = 0;
+    for row in rows.rows().iter().filter(|it| it.relation == relation) {
+        if carries_what && schema.relation_named(row.value(WHAT).unwrap_or_default()) != Some(what)
+        {
+            continue;
+        }
+        if row.value(&column) != Some(place) {
+            continue;
+        }
+        found += match declared.quantity() {
+            Some(quantity) if !is_place => row
+                .value(quantity)
+                .and_then(|it| it.parse::<i64>().ok())
+                .unwrap_or(0),
+            _ => 1,
+        };
+    }
+    found
 }
 
 /// No place consumes more of a supply than is provided there, each kind counting at its own rate.

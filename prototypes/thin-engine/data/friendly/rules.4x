@@ -151,8 +151,9 @@
 
 {rule id:5 name:end-turn}
 
-{part id:1 of:end-turn is:refresh seq:1 name:part-1}
-{part id:2 of:end-turn is:refresh seq:2 name:part-2}
+{part id:3 of:end-turn is:lose-what-is-not-kept seq:1 name:part-3}
+{part id:1 of:end-turn is:refresh seq:2 name:part-1}
+{part id:2 of:end-turn is:refresh seq:3 name:part-2}
 
 {argument id:1 part:part-1 input:what  value:unit}
 {argument id:2 part:part-1 input:trait value:moving}
@@ -182,3 +183,25 @@
 {literal id:20 clause:clause-17 column:79 value:1}
 {literal id:21 clause:clause-18 column:81 value:1}
 {literal id:22 clause:clause-19 column:120 value:1}
+
+# **`lose-what-is-not-kept` is `spec/turn.md`'s third step, in its own words**: *what expires
+# expires, and what was not kept in order is lost*. **It comes before the refreshes**, which is the
+# order that document states - upkeep, then growth, then this, then what nature reclaims, and time
+# restoring the counts last.
+#
+# **Its one clause has the role `keep`**, which bounds a quantity to the room there is for it. That
+# is the fifth role and the first that reads a capacity: `require` and `remove` match, `add` makes,
+# `put` assigns, and this one takes away what will not fit.
+
+# **It takes no argument, and the sweep is what said so.** It had a `what`, and
+# `{relation-of clause:clause-20 input:what}` to read it - but the clause already declares
+# `relation:resource`, and `resource` is the only loose family, so the argument could only ever be
+# what the clause already said. **Deleting the `relation-of` row broke nothing**, which is the
+# sweep reporting decoration rather than a rule.
+#
+# **So the input, the `relation-of` and the argument are all gone**, and the rule says what it does.
+# If a second family is ever loose, the argument comes back - and then it will be doing something.
+
+{rule id:7 name:lose-what-is-not-kept}
+
+{clause id:20 rule:lose-what-is-not-kept seq:1 role:keep relation:resource name:clause-20}

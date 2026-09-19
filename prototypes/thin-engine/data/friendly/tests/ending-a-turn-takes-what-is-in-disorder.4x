@@ -1,0 +1,34 @@
+# Twenty-two metal where there is room for twenty, a turn ends, and twenty are left.
+#
+# **`lose-what-is-not-kept` is the turn's first part**, which is the order `spec/turn.md` states:
+# upkeep, then growth or starvation, then *what expires expires, and what was not kept in order is
+# lost*, then what nature reclaims, and time restoring the counts last. **Only this one and the
+# refreshes are built**, and the tree in `tree.txt` is where the order can be read.
+#
+# **Nothing says which two metal went.** A place holds one number for a kind, so there is no metal
+# in disorder to pick out - the number is bounded and what is above the bound is gone. Sean,
+# 2026-09-17: *we only lose what we don't have the storage for, without tracking what is stored
+# where.*
+#
+# **The refreshes do nothing here**, because nothing in this world carries a `moving` or a
+# `working` to restore. That is `put` being a no-op where nothing matches, and it is why the turn
+# can be tested one part at a time.
+
+{test name:ending-a-turn-takes-what-is-in-disorder}
+
+{given}
+{territory id:1 name:territory-1}
+{capacity of:territory for:bin what:resource per:territory} -> 4
+{capacity of:bin for:resource what:resource per:territory} -> 10
+{bin where:territory-1 what:metal} -> 2
+{metal where:territory-1} -> 22
+
+{when}
+{end-turn}
+
+{then}
+{territory id:1 name:territory-1}
+{capacity of:territory for:bin what:resource per:territory} -> 4
+{capacity of:bin for:resource what:resource per:territory} -> 10
+{bin where:territory-1 what:metal} -> 2
+{metal where:territory-1} -> 20

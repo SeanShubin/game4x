@@ -55,6 +55,7 @@
 {relation id:41 name:argument}
 {relation id:42 name:bin}
 {relation id:43 name:capacity}
+{relation id:44 name:loose}
 
 
 ## The columns
@@ -205,6 +206,7 @@
 {column id:123 relation:capacity seq:3 name:what}
 {column id:124 relation:capacity seq:4 name:per}
 {column id:125 relation:capacity seq:5 name:quantity}
+{column id:126 relation:loose seq:1 name:kind}
 
 
 ## What a place has room for, and what each kind takes up
@@ -309,6 +311,7 @@
 {reference id:62 column:122 to:relation}
 {reference id:63 column:123 to:resource}
 {reference id:64 column:124 to:relation}
+{reference id:65 column:126 to:relation}
 
 
 ## Which relations are the game's state
@@ -393,6 +396,7 @@
 {role id:2 name:remove}
 {role id:3 name:add}
 {role id:4 name:put}
+{role id:5 name:keep}
 
 
 ## What a trait is, and which kinds carry one
@@ -531,3 +535,30 @@
 {state id:15 relation:bin}
 {state id:16 relation:capacity}
 
+
+## What may lie loose, and what may not
+
+# **A resource over its capacity is in disorder; a structure over its capacity cannot exist.**
+# Sean, 2026-09-19, on why one word has two behaviours: *structures behave differently from
+# resources in this regard. This is because structures are intentionally built for the purpose of
+# having that structure there, while resources are mined to be spent or stored.*
+#
+# **So a capacity is a maximum unless the thing it holds is loose.** `{loose kind:resource}` names
+# the kinds that may exceed one, and there is nothing else it does: the check stops refusing, and
+# `lose-what-is-not-kept` takes the excess at the turn's end.
+#
+# **Over capacity is still usable, which is the point.** Sean: *i am going to have mechanics that
+# allow for stuff over capacity to be used in other recipies to avoid the waste.*
+# `spec/resources.md` had already said it: *Matter that is out of its source may be spent, whether
+# it is in disorder or in order.*
+#
+# **A family names its members**, so one row covers every resource. It is not `{state ...}` and so
+# is not reified - a structural fact belongs beside `{limit ...}` and `{supply ...}` rather than in
+# every test's `given`.
+#
+# **What is lost is lost, and does not go anywhere.** `spec/resources.md` says disorder *returns to
+# its source*; Sean, 2026-09-19: *This was a thematic statement rather than a mechanical one, I am
+# not sure our thin-engine needs that theme yet.* **There are no sources here**, so nothing has
+# anywhere to return to, and the theme is noted rather than built.
+
+{loose kind:resource}

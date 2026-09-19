@@ -64,3 +64,5 @@
 {primitive id:53 word:is}
 {primitive id:54 word:capacity}
 {primitive id:55 word:for}
+{primitive id:56 word:loose}
+{primitive id:57 word:keep}

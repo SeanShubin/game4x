@@ -55,6 +55,7 @@ const REQUIRE: &str = "require";
 const REMOVE: &str = "remove";
 const ADD: &str = "add";
 const PUT: &str = "put";
+const KEEP: &str = "keep";
 const ASSIGNS: &str = "assigns";
 const TRAIT: &str = "trait";
 const CARRIES: &str = "carries";
@@ -322,7 +323,7 @@ fn apply(
     for clause in &clauses {
         let role = clause.value(ROLE).unwrap_or_default();
         match game.named(ROLE, role).unwrap_or(role) {
-            REQUIRE | REMOVE | PUT => continue,
+            REQUIRE | REMOVE | PUT | KEEP => continue,
             ADD => {
                 for relation in relations_of(game, clause, bound) {
                     let made = row_of(game, clause, bound, &rule, WHOLE, &matched, &relation)?;
@@ -336,6 +337,70 @@ fn apply(
                     clause: clause.value(ID).unwrap_or_default().to_string(),
                     role: other.to_string(),
                 });
+            }
+        }
+    }
+
+    // **What is over its capacity is taken**, which is the fifth role and the only one that
+    // reads an amount out of the world rather than out of the rule. `require` and `remove` match,
+    // `add` makes, `put` assigns; this one takes away what will not fit.
+    //
+    // **Only what is loose can be over**, and a kind that is not loose is bounded by the world
+    // check rather than trimmed here - so a `keep` on a structure finds nothing to do, which is
+    // right rather than a special case.
+    //
+    // **The same arithmetic the check reads**, from `crate::schema::rooming`, so the two cannot
+    // disagree about what fits.
+    for clause in &clauses {
+        let role = clause.value(ROLE).unwrap_or_default();
+        if game.named(ROLE, role).unwrap_or(role) != KEEP {
+            continue;
+        }
+        for relation in relations_of(game, clause, bound) {
+            let schema = Schema::of(after.rows()).map_err(|why| Refused::Broke {
+                rule: rule.clone(),
+                why: Box::new(why),
+            })?;
+            for asked in crate::schema::rooming(&schema, &after) {
+                if asked.held != relation {
+                    continue;
+                }
+                for (place, used) in &asked.used {
+                    let there = asked.room.get(place).copied().unwrap_or(0);
+                    if *used <= there {
+                        continue;
+                    }
+                    // **One row holds it, and nothing here has to make that true.** A place holds
+                    // one number of a kind - `spec/logistics.md` - and `Malformed::NotOneNumber`
+                    // refuses a world where a loose kind is in two rows of one place. **So there
+                    // is an excess and a row to take it from, and no choice between them.**
+                    let Some((_, column)) = crate::schema::place_of(&schema, &relation, &asked.per)
+                    else {
+                        continue;
+                    };
+                    let Some(only) = after
+                        .rows()
+                        .iter()
+                        .find(|row| {
+                            row.relation == relation && row.value(&column) == Some(place.as_str())
+                        })
+                        .cloned()
+                    else {
+                        continue;
+                    };
+                    let only = &only;
+                    let Some(quantity) = counted(game, only) else {
+                        continue;
+                    };
+                    let mut kept = only.clone();
+                    kept.values.insert(quantity.clone(), there.to_string());
+                    after.take(only, Some(&quantity));
+                    if there > 0 {
+                        after.put(kept.clone(), Some(&quantity));
+                        effect.made.push(kept);
+                    }
+                    effect.took.push(only.clone());
+                }
             }
         }
     }
@@ -843,6 +908,6 @@ fn every_binding(choices: &[(String, String, Vec<String>)]) -> Vec<Vec<String>> 
 }
 
 /// The roles a clause may have, so that a test can assert the data uses all of them and no others.
-pub fn roles() -> [&'static str; 4] {
-    [REQUIRE, REMOVE, ADD, PUT]
+pub fn roles() -> [&'static str; 5] {
+    [REQUIRE, REMOVE, ADD, PUT, KEEP]
 }

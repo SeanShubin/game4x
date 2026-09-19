@@ -44,6 +44,9 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         "carries",
         "part",
         "argument",
+        "assigns",
+        "capacity",
+        "loose",
         "primitive",
     ] {
         let declared = game
@@ -56,11 +59,11 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         );
         checked += 1;
     }
-    assert_eq!(checked, 24, "twenty-four relations describe the structure");
+    assert_eq!(checked, 27, "twenty-seven relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        38,
-        "thirty-eight in all - those twenty-four, and the game's twelve: five kinds, two families,\n         a territory, an adjacency, a deposit and an extractor"
+        39,
+        "thirty-nine in all - those twenty-seven, and the game's twelve: six kinds, two families,\n         a territory, an adjacency, a deposit and an extractor"
     );
 }
 
@@ -459,18 +462,26 @@ fn an_extractor_needs_a_deposit_to_stand_in() {
 /// held by one container, which is a restriction no one chose either.
 #[test]
 fn a_kind_can_belong_to_two_families() {
-    with("{member kind:28 family:27}").expect("a scout may also be a resource, however odd");
+    // **`30` is `metal`, already a `resource`, and `29` is `labor` made a family for this.**
+    //
+    // **It used to put a scout in `resource` and cannot any more**, which is a later rule
+    // arriving rather than this one weakening: `{loose kind:resource}` makes every resource
+    // loose, and a scout is told apart by `moving`, so it would be two numbers in one place.
+    // `what_lies_loose_is_one_number` refuses that and is right to. **Metal is loose already and
+    // keyed by `where` alone**, so nothing about this membership is in question.
+    let extra = "{family relation:29}\n{member kind:30 family:29}";
+    with(extra).expect("metal may also be a labor, however odd");
 
     // **The second membership is a different row and the first still stands**, which is what
     // being keyed by the pair means rather than by the kind.
-    let game = with("{member kind:28 family:27}").expect("two memberships");
+    let game = with(extra).expect("two memberships");
     let how_many = game
         .rows()
         .rows()
         .iter()
-        .filter(|row| row.relation == "member" && row.value("kind") == Some("28"))
+        .filter(|row| row.relation == "member" && row.value("kind") == Some("30"))
         .count();
-    assert_eq!(how_many, 2, "a scout is a unit and a resource, in two rows");
+    assert_eq!(how_many, 2, "metal is a resource and a labor, in two rows");
 }
 
 /// **What the key rule was right about is kept right by marking a column.**
@@ -674,8 +685,8 @@ fn the_tree_is_what_the_file_says_it_is() {
         .collect();
     assert_eq!(
         rules.len(),
-        6,
-        "move, build-extractor, work, refresh, end-turn, build-bin"
+        7,
+        "move, build-extractor, work, refresh, end-turn, build-bin, lose-what-is-not-kept"
     );
     // **At least once, not exactly once.** `refresh` appears twice because `end-turn` names it
     // twice - two steps of one order - and asserting *once* said the tree was wrong when it was
@@ -757,17 +768,64 @@ fn a_template_and_a_row_written_out_cannot_disagree() {
     // about the disagreement rather than about templates.
     with("{capacity of:42 for:27 what:27 per:13 quantity:10}").expect("a template on its own");
 
-    // **And a row that is not the world's is not expanded.** `{member kind:28 family:26}` names
-    // `unit` as the thing it is, so a second membership is one row and not two - which is what
-    // restricting reification to what `{state ...}` declares buys.
-    let game = with("{member kind:28 family:27}").expect("a scout may also be a resource");
+    // **And a row that is not the world's is not expanded.** `{member kind:30 family:27}` names
+    // `resource` as the thing it is, so a second membership is one row and not two - which is
+    // what restricting reification to what `{state ...}` declares buys. **`27` is `resource` and
+    // would be two rows if it were.**
+    let game = with("{family relation:29}\n{member kind:30 family:29}")
+        .expect("metal may also be a labor");
     assert_eq!(
         game.rows()
             .rows()
             .iter()
-            .filter(|row| row.relation == "member" && row.value("kind") == Some("28"))
+            .filter(|row| row.relation == "member" && row.value("kind") == Some("30"))
             .count(),
         2,
         "two memberships, not one per member of the family named"
+    );
+}
+
+/// **Only what is fungible may lie loose**, and a kind's key is what says whether it is.
+///
+/// `spec/logistics.md`: *What a place holds of a kind is one number.* A kind told apart by
+/// anything beyond where it is and what it is of could hold two numbers in one place, and then
+/// taking what is over capacity would have to choose which row to take from.
+///
+/// **Sean, 2026-09-19**: *I am expecting that we can compute the amount of room for something, we
+/// can compute the excess, and discard the rest. I don't imagine we need to choose anything here.*
+/// **He was right, and two earlier versions of this lane's were wrong in the same way** - a
+/// refusal when `keep` fired, then a count of rows in a world. Both guarded the situation; this
+/// refuses what allows it.
+///
+/// **19 is `extractor`, which is keyed by `where`, `what` and `working`.** `working` is the third,
+/// so an extractor could be two numbers in one territory - one spent, one ready - and it may not
+/// be loose.
+#[test]
+fn only_what_is_fungible_may_lie_loose() {
+    assert_eq!(
+        with("{loose kind:19}").expect_err("an extractor is told apart by more than where it is"),
+        Malformed::LooseAndNotFungible {
+            relation: "extractor".to_string(),
+            by: "working".to_string()
+        }
+    );
+
+    // **The control, and it is the kind that is already loose.** `42` is `bin`, keyed by `where`
+    // and `what` - which are the two things a capacity groups by, so one bin row per group per
+    // place and nothing to choose between.
+    with("{loose kind:42}").expect("a bin is where it is and what it is of, and nothing more");
+
+    // **And the loose kinds the game has are accepted**, which is `before()` loading at all:
+    // `{loose kind:resource}` names a family, so `metal` and `food` are both checked and both
+    // keyed by `where` alone.
+    assert_eq!(
+        before()
+            .rows()
+            .rows()
+            .iter()
+            .filter(|row| row.relation == "loose")
+            .count(),
+        1,
+        "one row, naming the family, and not one per member"
     );
 }

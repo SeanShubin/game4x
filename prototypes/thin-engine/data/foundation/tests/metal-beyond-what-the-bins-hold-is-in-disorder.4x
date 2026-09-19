@@ -1,0 +1,40 @@
+# Two bins hold twenty metal, and twenty-two is a world that exists.
+#
+# **Over capacity is not refused; it is disorder.** Sean, 2026-09-19: *We will be able to have
+# things in a territory over capacity, and everything over capacity is in disorder. There will be
+# an end turn mechanic that discards everything in disorder.* **This test used to assert the
+# opposite** - that twenty-two metal could not exist - and it was the intent that was wrong rather
+# than the arithmetic.
+#
+# **`{loose kind:resource}` is what makes the difference**, and structures do not have it: a third
+# bin where there is room for two is still refused, which
+# `a-bin-cannot-be-built-where-the-capacity-is-taken` states. Sean: *structures are intentionally
+# built for the purpose of having that structure there, while resources are mined to be spent or
+# stored.*
+#
+# **Sixteen and six is twenty-two, against room for twenty** - so two are in disorder, and
+# `ending-a-turn-takes-what-is-in-disorder` is what happens to them.
+
+{test name:metal-beyond-what-the-bins-hold-is-in-disorder}
+
+{given}
+{territory id:1}
+{capacity of:13 for:42 what:27 per:13 quantity:4}
+{capacity of:42 for:27 what:27 per:13 quantity:10}
+{deposit where:1 what:30 density:6 quantity:1}
+{extractor where:1 what:30 working:1 quantity:1}
+{labor where:1 quantity:1}
+{bin where:1 what:30 quantity:2}
+{metal where:1 quantity:16}
+
+{when}
+{work where:1 what:30}
+
+{then}
+{territory id:1}
+{capacity of:13 for:42 what:27 per:13 quantity:4}
+{capacity of:42 for:27 what:27 per:13 quantity:10}
+{deposit where:1 what:30 density:6 quantity:1}
+{extractor where:1 what:30 working:0 quantity:1}
+{bin where:1 what:30 quantity:2}
+{metal where:1 quantity:22}

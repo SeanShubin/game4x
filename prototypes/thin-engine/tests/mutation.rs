@@ -317,7 +317,7 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
     Ok(())
 }
 
-const REFERENCES: usize = 57;
+const REFERENCES: usize = 58;
 
 /// **References no test world can violate**, because nothing points at them there.
 ///
@@ -421,6 +421,43 @@ fn every_reference_forbids_something_in(
 }
 
 /// The rows of one file, each with the line it came from.
+/// Run one job per mutation, across as many threads as the machine has.
+///
+/// **Every mutation is independent**: clone the files, change one thing, ask whether anything
+/// noticed. Nothing a job does is visible to another, so the only shared state is the list of
+/// what survived - and that is gathered per thread and joined afterwards rather than locked.
+///
+/// **Sean, 2026-09-19**: *Go ahead and implement parallelism on the sweep at the next available
+/// opportunity.* It had reached forty-five minutes and is quadratic - mutations grow with the data
+/// and each one runs every test - so the constant factor is worth having. **Nothing about what the
+/// sweep means changes**; it asks the same questions in a different order.
+///
+/// **No crate.** `std::thread::scope` borrows the originals without moving them, which is the
+/// whole of what this needed, and the prototype stays a thing with no dependencies.
+fn swept<Job, Made>(jobs: Vec<Job>, made: Made) -> Vec<String>
+where
+    Job: Sync,
+    Made: Fn(&Job) -> Option<String> + Sync,
+{
+    let threads = std::thread::available_parallelism()
+        .map(|it| it.get())
+        .unwrap_or(4);
+    let each = jobs.len().div_ceil(threads).max(1);
+    let made = &made;
+    let mut survived = Vec::new();
+    std::thread::scope(|scope| {
+        let mut running = Vec::new();
+        for chunk in jobs.chunks(each) {
+            running
+                .push(scope.spawn(move || chunk.iter().filter_map(made).collect::<Vec<String>>()));
+        }
+        for one in running {
+            survived.extend(one.join().expect("a sweep thread"));
+        }
+    });
+    survived
+}
+
 fn rows_of(text: &str) -> Vec<(usize, Row)> {
     text.lines()
         .enumerate()
@@ -466,19 +503,25 @@ fn the_data_as_it_stands_passes_every_check() {
 #[test]
 fn no_row_can_be_deleted_without_breaking_something() {
     let files = originals();
-    let mut survived = Vec::new();
-    let mut tried = 0;
-
-    for (name, text) in &files {
-        for (at, row) in rows_of(text) {
-            let mut mutated = files.clone();
-            mutated.insert(name.clone(), without(text, at));
-            tried += 1;
-            if check(&InMemory(mutated)).is_ok() {
-                survived.push(format!("{name} {}", row.relation));
-            }
-        }
-    }
+    // **The jobs are described rather than built.** Holding four thousand mutated copies of the
+    // data at once is a lot of memory for no reason; a job is a file, a line, and what to call it.
+    let jobs: Vec<(String, usize, String)> = files
+        .iter()
+        .flat_map(|(name, text)| {
+            rows_of(text)
+                .into_iter()
+                .map(|(at, row)| (name.clone(), at, row.relation.clone()))
+                .collect::<Vec<_>>()
+        })
+        .collect();
+    let tried = jobs.len();
+    let survived = swept(jobs, |(name, at, relation)| {
+        let mut mutated = files.clone();
+        mutated.insert(name.clone(), without(files.get(name)?, *at));
+        check(&InMemory(mutated))
+            .is_ok()
+            .then(|| format!("{name} {relation}"))
+    });
 
     assert!(
         tried > 150,
@@ -565,7 +608,7 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// by:deposit}` has nothing to compare.
 const DELETABLE: [&str; 10] = [
     "5 rules.4x binding",
-    "4 rules.4x literal",
+    "3 rules.4x literal",
     "2 schema.4x attribute",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x move",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x scout",
@@ -580,9 +623,10 @@ const DELETABLE: [&str; 10] = [
 #[test]
 fn no_value_can_be_changed_without_breaking_something() {
     let files = originals();
-    let mut survived = Vec::new();
+    // **One job per value**, carrying the two things to try in its place. **Counted as before**:
+    // a job that tries two values is two attempts, so the floor below still means what it meant.
+    let mut jobs: Vec<(String, usize, Row, String, Vec<String>)> = Vec::new();
     let mut tried = 0;
-
     for (name, text) in &files {
         let all = rows_of(text);
         for (at, row) in &all {
@@ -602,24 +646,22 @@ fn no_value_can_be_changed_without_breaking_something() {
                 if let Some(other) = elsewhere.first() {
                     instead.push(other.clone());
                 }
-
-                let mut noticed = false;
-                for value in &instead {
-                    let mut altered = row.clone();
-                    altered.values.insert(column.clone(), value.clone());
-                    let mut mutated = files.clone();
-                    mutated.insert(name.clone(), changed(text, *at, &altered));
-                    tried += 1;
-                    if check(&InMemory(mutated)).is_err() {
-                        noticed = true;
-                    }
-                }
-                if !noticed {
-                    survived.push(format!("{name} {}.{column}", row.relation));
-                }
+                tried += instead.len();
+                jobs.push((name.clone(), *at, row.clone(), column.clone(), instead));
             }
         }
     }
+    let survived = swept(jobs, |(name, at, row, column, instead)| {
+        let text = files.get(name)?;
+        let noticed = instead.iter().any(|value| {
+            let mut altered = row.clone();
+            altered.values.insert(column.clone(), value.clone());
+            let mut mutated = files.clone();
+            mutated.insert(name.clone(), changed(text, *at, &altered));
+            check(&InMemory(mutated)).is_err()
+        });
+        (!noticed).then(|| format!("{name} {}.{column}", row.relation))
+    });
 
     assert!(
         tried > 300,
@@ -656,7 +698,7 @@ const NOT_LOAD_BEARING: [&str; 23] = [
     // state two assignments of one input on one clause, which is the rule rather than a
     // restriction. That is in `backlog.md` rather than done here.
     "1 rules.4x assigns.id",
-    "15 rules.4x clause.seq",
+    "16 rules.4x clause.seq",
     "11 rules.4x input.seq",
     // **Neither part's `seq` is read by anything, and that is the honest state of the order.**
     // `end-turn` refreshes `moving` and then `working`, and the two do not touch each other - so
@@ -664,7 +706,7 @@ const NOT_LOAD_BEARING: [&str; 23] = [
     // depends on it yet**, which is worth saying out loud rather than letting the tree imply an
     // order is being enforced. The four steps of `spec/turn.md` that are not built are the ones
     // that will depend on it: upkeep must be paid before a population grows on what is left.
-    "2 rules.4x part.seq",
+    "3 rules.4x part.seq",
     "1 rules.4x reading.id",
     "1 schema.4x supply.name",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x scout.quantity",

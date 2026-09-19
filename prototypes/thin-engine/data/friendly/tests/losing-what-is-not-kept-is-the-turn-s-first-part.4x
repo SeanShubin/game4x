@@ -1,0 +1,38 @@
+# The turn's first part, fired on its own: the metal over capacity goes.
+#
+# **A part is a rule and a test may name it.** Sean, 2026-09-18: *it will be easier to test the end
+# turn command itself if i can test its parts.* `ending-a-turn-takes-what-is-in-disorder` fires the
+# whole turn over this same world; this fires one step of it, and the two differ only in the
+# command - which is the point rather than a redundancy.
+#
+# **What the pair buys is a diagnosis.** Delete the `{part ...}` row and the composite test goes red
+# while this one stays green: *the turn stopped calling it* rather than *the rule broke*. One test
+# could not tell those apart.
+#
+# **A first draft asserted that a spent scout stayed spent**, which is testing that a rule does not
+# do something no rule of its shape could do. Sean, 2026-09-19: *it seems to test that we don't do
+# something we wouldn't do anyways.* The scout is gone.
+#
+# **It is also what the mutation sweep asked for**: with no test naming `lose-what-is-not-kept`, the
+# rule's name and its input's name were read by nothing, and the sweep said so.
+#
+# **Two bins at ten apiece is twenty, and twenty-two is two over.**
+
+{test name:losing-what-is-not-kept-is-the-turn-s-first-part}
+
+{given}
+{territory id:1 name:territory-1}
+{capacity of:territory for:bin what:resource per:territory} -> 4
+{capacity of:bin for:resource what:resource per:territory} -> 10
+{bin where:territory-1 what:metal} -> 2
+{metal where:territory-1} -> 22
+
+{when}
+{lose-what-is-not-kept}
+
+{then}
+{territory id:1 name:territory-1}
+{capacity of:territory for:bin what:resource per:territory} -> 4
+{capacity of:bin for:resource what:resource per:territory} -> 10
+{bin where:territory-1 what:metal} -> 2
+{metal where:territory-1} -> 20

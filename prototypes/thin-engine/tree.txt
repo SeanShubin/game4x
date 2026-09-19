@@ -8,7 +8,8 @@ build-extractor  where:territory what:resource
 work  where:territory what:resource
 
 end-turn
-    1. refresh  what:unit trait:moving
-    2. refresh  what:extractor trait:working
+    1. lose-what-is-not-kept
+    2. refresh  what:unit trait:moving
+    3. refresh  what:extractor trait:working
 
 build-bin  where:territory what:resource

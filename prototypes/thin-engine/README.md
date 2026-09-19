@@ -2698,6 +2698,68 @@ that indicates to me we are on the right track.*
 was already there: the expansion produces a row keyed exactly as the written one, and two rows of
 one key is refused. **Reifying before the key check is what makes that free.**
 
+## Disorder, and the thing it made us name: fungibility
+
+**A resource over its capacity is not refused; it is in disorder, still spendable, and taken when
+the turn ends.** A structure over its capacity cannot exist at all. Sean, 2026-09-19:
+
+> structures behave differently from resources in this regard. This is because structures are
+> intentionally built for the purpose of having that structure there, while resources are mined to
+> be spent or stored
+
+and on why over capacity has to remain usable:
+
+> i am going to have mechanics that allow for stuff over capacity to be used in other recipies to
+> avoid the waste
+
+**`{loose kind:resource}` is the whole of the difference**, and `lose-what-is-not-kept` - the turn's
+first part, in `spec/turn.md`'s own words - takes what is over.
+
+## Only what is fungible may lie loose, and this should not need finding twice
+
+**Sean, 2026-09-19**, on what the check had turned up:
+
+> things without state are fungible in a way things with state are not
+
+**Two of a fungible kind in one place are interchangeable, so there is no *which one*.** Taking
+what is over capacity is then arithmetic: compute the room, compute the excess, take it. **A kind
+that carries state cannot do that** - two scouts differing in `moving` are not interchangeable, and
+taking one away would have to say which.
+
+**It is read off the key, where it already lived:**
+
+| kind                 | key                    |                                                      |
+| -------------------- | ---------------------- | ---------------------------------------------------- |
+| `metal`, `food`      | `where`                | fungible                                             |
+| `bin`                | `where, what`          | fungible - `what` is what a capacity groups by       |
+| `deposit`            | `where, what`          | fungible - `density` is an attribute, out of the key |
+| `scout`, `transport` | `where, moving`        | **not** - `moving` is state                          |
+| `extractor`          | `where, what, working` | **not** - `working` is state                         |
+| `territory`          | `id`                   | **never** - an id is the opposite of fungible        |
+
+**This is why a scout row has a quantity at all.** `{scout where:territory-1 moving:1} -> 2` counts
+two scouts as one number precisely because nothing but `moving` tells them apart. **Fungibility did
+not arrive with disorder**; disorder is just the first thing that needed it named.
+
+**`{carries ...}` says it a second way and is not the one to read.** Every kind carrying a trait is
+told apart by it, so the two agree on every kind here - but a state column that is not a declared
+trait would still divide a kind and `carries` would not see it. **The key is the fact.**
+
+**Derived, not declared, deliberately.** A `{fungible ...}` row would state twice what the key
+states once, and nothing would read it but the check that can already work it out. Sean's reason
+for letting `carries` duplicate - *inconsistency can be mitigated by automated checks* - justifies a
+second statement that earns something; this one would earn nothing.
+
+**What would let a non-fungible kind be loose: a priority, and nothing less.** If units over a berth
+capacity should be lost rather than refused, the loss must say *which* - spent before fresh, say.
+Nothing has asked for it.
+
+**Three versions of the check, and the first two were wrong in the same direction.** A refusal when
+`keep` fired put the choice exactly where it would bite. A count of rows in a world guarded the
+situation instead of forbidding what allows it - and sat inside the loop over capacity questions, so
+it only saw kinds something already gave room to: **marking `extractor` loose was accepted
+silently**, and the poison being taken is what revealed it.
+
 ## Fungible or not is a design decision, and it splits on whether the thing moves
 
 **Sean, 2026-09-19**, asked why *2 bins total, regardless of resource* cannot be said:
