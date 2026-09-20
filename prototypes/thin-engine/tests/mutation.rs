@@ -594,6 +594,11 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// `value:metal` - and a clause's relation says that now, so they are gone rather than dead. Two
 /// bindings went the same way: `move` no longer binds a `what` column, because what is moved is
 /// the relation the clause is about.
+/// **And the loop test brought three more down, which is the clearest thing it has said.** Adding
+/// `an-ark-lands-a-planet-is-developed-and-an-ark-leaves` made three literals load-bearing that
+/// every single-rule test had left dead - **a world where one rule's leavings are another's
+/// ingredients reads values that a world stopped at one command never reaches.** It is the
+/// argument for an acceptance test, made by the instrument rather than by anyone's reasoning.
 /// **And three tests state a readiness they do not spend.** Each is a refusal: two of them refuse
 /// before reaching the readiness clause, and the third refuses on the readiness whether it was
 /// stated as one or as none. **They are there so a reader can see the refusal is about the one
@@ -623,7 +628,7 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// tests and the reference checks rather than the Rust suite.
 const DELETABLE: [&str; 23] = [
     "14 rules.4x binding",
-    "14 rules.4x literal",
+    "11 rules.4x literal",
     "3 schema.4x attribute",
     // **`stock`'s `quantity`, and it is read by `tests/structure.rs` rather than by `data/`.** A
     // family's columns are what its members must have, so declaring `quantity` is what stops a
@@ -779,7 +784,7 @@ fn no_value_can_be_changed_without_breaking_something() {
 ///
 /// **A `moving` that never moves is the other shape here.** The berth tests hold vehicles to count
 /// them, not to move them, so what those rows say about moves is read by nothing.
-const NOT_LOAD_BEARING: [&str; 56] = [
+const NOT_LOAD_BEARING: [&str; 58] = [
     // **The one `assigns` row's id is read by nothing.** There were two, and changing one id
     // to the other's collided on the key; with one row there is nothing to collide with.
     // **`assigns` may not need an `id` at all** - keyed by `(clause, input, value)` it could not
@@ -863,6 +868,8 @@ const NOT_LOAD_BEARING: [&str; 56] = [
     "1 tests/an-ark-deploys-onto-the-ground-below-it.4x ark.moving",
     "1 tests/an-ark-holds-one-energy-and-the-rest-is-lost.4x ark.gathering",
     "1 tests/an-ark-holds-one-energy-and-the-rest-is-lost.4x ark.moving",
+    "1 tests/an-ark-lands-a-planet-is-developed-and-an-ark-leaves.4x ark.gathering",
+    "1 tests/an-ark-lands-a-planet-is-developed-and-an-ark-leaves.4x ark.moving",
     "1 tests/an-extractor-cannot-be-built-where-the-deposits-are-taken.4x deposit.density",
     "1 tests/an-extractor-cannot-be-built-where-the-deposits-are-taken.4x extractor.working",
     // **And their quantities, for the reason their rows are deletable.** The rows are a few lines

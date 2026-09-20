@@ -1,0 +1,91 @@
+# The whole arc, from one ark to the next.
+#
+# **Sean, 2026-09-20**, naming what this prototype is for: *the core game loop: start with an ark ->
+# develop a planet -> launch an ark.* **This is that loop and nothing else** - every other test here
+# says one thing about one rule, and this one says the things join up.
+#
+# **What it adds is that what one rule leaves is what the next one needs.** Every piece is checked
+# on its own already - and a suite of pieces can pass entire while the arc they are pieces of does
+# not close, because no test of a piece ever looks at the next one.
+#
+# **Four turns, and what makes it four is that a built thing arrives spent.** `build-extractor`
+# leaves an extractor with `working:0`, so the energy it wants cannot be mined until the turn
+# restores it - which is the same shape as an ark arriving with no move.
+#
+# ## What each turn is for
+#
+# **Turn one is the landing.** The ark becomes two extractors and two citizens, and nothing else can
+# happen: both extractors are spent and both citizens have no `bearing` yet. Ending the turn is the
+# whole of the turn.
+#
+# **Turn two is food.** Two citizens make two labours; one is spent on the food extractor and the
+# other is wasted, because there is nothing else worth doing with it. **The waste is the point of
+# the turn**: six food feeds two citizens at `upkeep` and the four left over let `breed` fire twice,
+# so the settlement is four citizens by the end of it.
+#
+# **Turn three is the energy extractor.** Four labours: one for food, one for metal, one to build,
+# and one wasted. The six metal that `work` produced is spent down to five and then discarded at the
+# turn's end, because nothing here has a bin - and none of it is needed, because turn four mines its
+# own.
+#
+# **Turn four is the launch.** Six labours, of which three are used: metal, energy, and the launch
+# itself. **The ark it leaves is spent**, `moving:0` and `gathering:0`, which is what an ark always
+# is on the turn it is made.
+#
+# ## What the end state says
+#
+# **Six citizens, no food, and three labours standing.** The settlement that built the ark is still
+# there and still hungry - a launch is not a departure, it is a thing built. **What happens to them
+# next is the next turn's problem**, and nothing here pretends otherwise.
+#
+# **Nothing is stored.** Five metal and five energy lie loose and would go at the turn's end; the
+# test stops before that, because what it is about is the arc rather than the housekeeping.
+#
+# **This test is brittle and that is correct.** Every number in it is a consequence of every rule's
+# cost, so tuning any of them moves it - which is what an acceptance test for *the loop closes* is
+# supposed to do.
+
+{test name:an-ark-lands-a-planet-is-developed-and-an-ark-leaves}
+
+{given}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{place id:2 of:territory-1 layer:orbit name:place-2}
+{capacity of:deposit for:extractor what:resource per:place} -> 1
+{deposit where:place-1 what:metal density:6} -> 1
+{deposit where:place-1 what:food density:6} -> 1
+{deposit where:place-1 what:energy density:6} -> 1
+{ark where:place-2 moving:1 gathering:1} -> 1
+
+{when}
+{deploy where:place-2}
+{end-turn}
+{toil where:place-1}
+{work where:place-1 what:food}
+{end-turn}
+{toil where:place-1}
+{work where:place-1 what:food}
+{work where:place-1 what:metal}
+{build-extractor where:place-1 what:energy}
+{end-turn}
+{toil where:place-1}
+{work where:place-1 what:metal}
+{work where:place-1 what:energy}
+{launch where:place-1}
+
+{then}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{place id:2 of:territory-1 layer:orbit name:place-2}
+{capacity of:deposit for:extractor what:resource per:place} -> 1
+{deposit where:place-1 what:metal density:6} -> 1
+{deposit where:place-1 what:food density:6} -> 1
+{deposit where:place-1 what:energy density:6} -> 1
+{extractor where:place-1 what:metal working:0} -> 1
+{extractor where:place-1 what:food working:1} -> 1
+{extractor where:place-1 what:energy working:0} -> 1
+{citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 6
+{labor where:place-1} -> 3
+{metal where:place-1} -> 5
+{energy where:place-1} -> 5
+{ark where:place-2 moving:0 gathering:0} -> 1

@@ -528,11 +528,9 @@ earlier is vocabulary with no user, which the sweep would report and be right to
 3. ~~**`deploy` and `{soft ...}`, arriving together**~~ - **built**, and softness had its user the
    day it was written.
 
-**What is left of the arc is the loop as one test**: an ark deploys, the settlement develops, and
-an ark launches. **It is arithmetic rather than mechanism** - every rule it needs exists - and the
-arithmetic is the work: two citizens make two labours a turn, a turn's food is eaten before
-anything is stored, and what has no bin is in disorder when the turn ends. **Four turns is the
-shortest version found so far**, and the reason it is four is that a built extractor arrives spent.
+4. ~~**The loop as one test**~~ - **built**, and it passed the first time it ran. The arithmetic
+   was the whole of the work and it held: four turns, fourteen commands, and every number in the
+   end state a consequence of what each rule costs.
 
 **`capacity.layer` waits.** Sean approved it, and nothing yet asks for orbit and surface to differ
 in *amount* rather than in what is allowed - `{stands-in ...}` answers both cases named so far.
@@ -587,16 +585,19 @@ step and the only one this prototype had not built - **the turn is now four step
 rather than four of five. The mainline's `deploy-ark` requires a force and produces a garrison; this
 one does neither.
 
-**The loop is the acceptance test, and every piece of it now exists.** Starting with an ark is a
-world a `given` can state; developing a planet is `toil`, `work`, `breed`, `build-extractor` and
-`build-bin`; launching is `launch`; and `deploy` is what joins the end to the beginning. **What is
-left is the arc as one test**, which is arithmetic rather than mechanism.
+**The loop is the acceptance test and it is built.**
+`an-ark-lands-a-planet-is-developed-and-an-ark-leaves` is four turns and fourteen commands: turn
+one deploys and ends, turn two feeds and breeds, turn three works metal and builds the energy
+extractor it cannot yet work, turn four works it and launches.
 
-**The shortest arc found is four turns, and what makes it four is that a built extractor arrives
-spent.** Turn one deploys and ends; turn two feeds and breeds; turn three works metal and builds
-the energy extractor it cannot yet work; turn four works it and launches. **Nothing carries between
-turns without a bin**, so the shortest version stores nothing and mines what it needs in the turn
-it spends it.
+**What makes it four turns is that a built thing arrives spent**, which is the same shape as an ark
+arriving with no move. **Nothing carries between turns without a bin**, so the shortest version
+stores nothing and mines what it needs in the turn it spends it - and the `build-bin` that the
+longer version would need is checked by its own tests rather than by this one.
+
+**The prototype has now answered the question it was built to answer.** Sean, 2026-09-20: *start
+with an ark -> develop a planet -> launch an ark.* **Everything after this is tuning, or a thing
+the loop showed was missing** - and the loop showed nothing missing, which is itself the answer.
 
 ## The deposit limit folded, 2026-09-20, and what it turned out to cost
 
