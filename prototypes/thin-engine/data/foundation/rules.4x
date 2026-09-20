@@ -39,6 +39,19 @@
 # and a `kind` column to keep the three kinds of move apart. **Rows in the world against readings in
 # the rule**, and the readings keep the graph one thing.
 
+# **The two places must share a layer, and that is what stops anything crossing.** Sean, 2026-09-20:
+# *for now I am thinking nothing will move between layers.* The `to` place takes its `layer` from
+# the `from` place's, so a surface and an orbit never match and a move between them is refused -
+# **by construction rather than by a rule saying no.**
+#
+# **It is the same move as the territory join one line up.** What would be an equality test is a
+# pattern: the value is read from the row the first clause matched and written into the second
+# clause's pattern, and a place that does not carry it is simply not found.
+#
+# **Crossing happens, but never as a move.** Deploying an ark takes it out of an orbit and puts what
+# it becomes on the surface; building one takes resources off the surface and puts an ark in orbit.
+# **Both are transformations rather than journeys**, and neither is this rule.
+
 {rule id:1 name:move}
 
 {input id:1 rule:1 seq:1 name:what of:26}
@@ -59,6 +72,7 @@
 
 {reading id:3 clause:2 column:42 of:29 takes:135}
 {reading id:4 clause:2 column:43 of:30 takes:135}
+{reading id:10 clause:30 column:136 of:29 takes:136}
 
 {binding id:5 clause:3 column:72 input:2}
 
@@ -526,3 +540,53 @@
 
 {reading id:8 clause:37 column:143 of:35 takes:143}
 {reading id:9 clause:38 column:141 of:39 takes:53}
+
+# **`launch` builds an ark and puts it in orbit, and that is one action.** Sean, 2026-09-20:
+# *building/launching an ark will be one action, removing the resources required to build an ark
+# from the surface and adding an ark to orbit.* **Nothing crosses between layers**, so this is not a
+# journey with two halves - it is a transformation whose inputs are on the ground and whose output
+# is above it.
+#
+# **The orbit is worked out and not named.** The player says which surface place is building, the
+# rule reads that place's territory, and the orbit above is the one place with that territory and
+# that layer - found by matching rather than chosen. `spec/console.md` has the phrase: **a place
+# worked out from another is not open.**
+#
+# **A labour to assemble it, a metal to build it, an energy to launch it.** Sean: *tuning is going
+# to be separate, for now I am making everything cheap.* Each is one, and each is taken from the
+# ground rather than from the sky.
+#
+# **The ark arrives spent**, with no move and no gathering, which is what `build-extractor` does with
+# `working:0`. The turn restores both, so it is idle for the rest of the turn it was made in.
+#
+# **It names no kind, and one day it will.** Only an ark launches today; a second launchable kind
+# turns the rule's output into an argument, the way `discard-disorder` grew one the day a second
+# family lay loose.
+
+{rule id:13 name:launch}
+
+{input id:20 rule:13 seq:1 name:where of:48}
+
+{clause id:40 rule:13 seq:1 role:1 relation:48}
+{clause id:41 rule:13 seq:2 role:1 relation:48}
+{clause id:42 rule:13 seq:3 role:2 relation:29}
+{clause id:43 rule:13 seq:4 role:2 relation:30}
+{clause id:44 rule:13 seq:5 role:2 relation:50}
+{clause id:45 rule:13 seq:6 role:3 relation:51}
+
+{binding id:53 clause:40 column:134 input:20}
+{binding id:54 clause:42 column:78 input:20}
+{binding id:55 clause:43 column:80 input:20}
+{binding id:56 clause:44 column:140 input:20}
+
+{literal id:56 clause:40 column:136 value:surface}
+{literal id:57 clause:41 column:136 value:orbit}
+{literal id:58 clause:42 column:79 value:1}
+{literal id:59 clause:43 column:81 value:1}
+{literal id:60 clause:44 column:141 value:1}
+{literal id:61 clause:45 column:143 value:0}
+{literal id:62 clause:45 column:144 value:0}
+{literal id:63 clause:45 column:145 value:1}
+
+{reading id:11 clause:41 column:135 of:40 takes:135}
+{reading id:12 clause:45 column:142 of:41 takes:134}

@@ -821,9 +821,9 @@ fn the_tree_is_what_the_file_says_it_is() {
         .collect();
     assert_eq!(
         rules.len(),
-        12,
+        13,
         "move, build-extractor, work, refresh, end-turn, build-bin, discard-disorder,
-         upkeep, perish, breed, toil, gather"
+         upkeep, perish, breed, toil, gather, launch"
     );
     // **At least once, not exactly once.** `refresh` appears twice because `end-turn` names it
     // twice - two steps of one order - and asserting *once* said the tree was wrong when it was

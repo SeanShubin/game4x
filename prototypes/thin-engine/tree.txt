@@ -24,3 +24,5 @@ build-bin  where:place what:resource
 toil  where:place
 
 gather  where:place
+
+launch  where:place

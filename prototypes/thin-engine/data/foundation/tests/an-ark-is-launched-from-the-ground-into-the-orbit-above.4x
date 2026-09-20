@@ -1,0 +1,36 @@
+# A labour, a metal and an energy on the ground, and an ark in the orbit above.
+#
+# **Sean, 2026-09-20**: *building/launching an ark will be one action, removing the resources
+# required to build an ark from the surface and adding an ark to orbit.* And on the cost: *a labor
+# to assemble it, materials to build it, energy to launch it* - each of them one, because *for now I
+# am making everything cheap.*
+#
+# **Nothing crosses between layers, and this is not a crossing.** The ark is not lifted from the
+# ground; it is made, and where a made thing appears is the rule's to say. **A transformation rather
+# than a journey**, which is why `move` can forbid crossing without forbidding this.
+#
+# **The orbit is worked out and not named.** The command says only which surface place is building.
+# The rule reads that place's territory and asks for the one place that has it and is an orbit -
+# **found by matching, so a territory with no orbit above it simply cannot launch.**
+#
+# **The ark arrives spent**, with neither a move nor a gathering, which is what `build-extractor`
+# does with `working:0`. It can do nothing until the turn restores both.
+
+{test name:an-ark-is-launched-from-the-ground-into-the-orbit-above}
+
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{place id:2 of:1 layer:orbit}
+{labor where:1 quantity:1}
+{metal where:1 quantity:1}
+{energy where:1 quantity:1}
+
+{when}
+{launch where:1}
+
+{then}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{place id:2 of:1 layer:orbit}
+{ark where:2 moving:0 gathering:0 quantity:1}

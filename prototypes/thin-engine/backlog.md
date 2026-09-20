@@ -566,6 +566,39 @@ it does, *moving costs it nothing* stops being the only way to say the first hal
 gathers and spends is a game; a thing that moves for free is a rule** - and the prototype found that
 by building the first and noticing the second had nothing left to do.
 
+
+## What is cut, and the loop that is left
+
+**Sean, 2026-09-20**: *I am cutting nature and force from this prototype because I don't think they
+are necessary to vet the core game loop: start with an ark -> develop a planet -> launch an ark.*
+
+**So no garrison, no force, and no *what nature reclaims*.** That last one was `spec/turn.md`'s fifth
+step and the only one this prototype had not built - **the turn is now four steps and finished**,
+rather than four of five. The mainline's `deploy-ark` requires a force and produces a garrison; this
+one does neither.
+
+**The loop is the acceptance test, and `deploy` is the only piece missing.** Starting with an ark is
+a world a `given` can state; developing a planet is `toil`, `work`, `breed`, `build-extractor` and
+`build-bin`, all built and reviewed; launching is `launch`. **Deploying is what joins the end to the
+beginning**, and when it lands the whole arc can be one test.
+
+## The one thing `deploy` needs that does not exist
+
+**Softness caps a line at the room there is, and the deposit limit is not a room.** Sean:
+*it is legal to deploy an ark anywhere, individual rules may fail but the deployment succeeds.* So
+the metal extractor a deployment makes has to fall short where there is no metal deposit - and
+`{limit held:extractor by:deposit}` is a separate check that refuses the whole world, which a soft
+line cannot consult.
+
+**The answer is to fold the deposit limit into the capacity table**, which *Refresh, what is left of
+it* above already found was possible: **the deposit limit folds; the berth pool does not.** A
+deposit gives room for one extractor of its resource, `rooming` sums it like anything else, and the
+limit check stops being a second mechanism.
+
+**That is its own increment and a large one** - every test that states a deposit gains a capacity row
+- so it comes before `deploy` rather than inside it. **Two changes, one kind each**, which is what
+the review needs.
+
 ## Smaller things, each with the reason it is not done
 
 **A constant limit of the plain sort.** `{limit container:territory contained:garrison n:1}` -
