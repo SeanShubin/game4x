@@ -182,7 +182,7 @@ fn apply(
         .into_iter()
         .filter(|row| row.value(RULE) == Some(of_rule))
         .collect();
-    clauses.sort_by_key(|row| row.value(SEQ).unwrap_or_default().to_string());
+    clauses.sort_by_key(|row| crate::schema::ordinal(row.value(SEQ).unwrap_or_default()));
 
     // **Requiring happens before anything is applied**, which is what makes the two passes below
     // safe to write as two rather than one.
@@ -720,7 +720,7 @@ fn parts_of<'a>(game: &'a Game, of_rule: &str) -> Vec<&'a Row> {
         .into_iter()
         .filter(|row| row.value(OF) == Some(of_rule))
         .collect();
-    found.sort_by_key(|row| row.value(SEQ).unwrap_or_default().to_string());
+    found.sort_by_key(|row| crate::schema::ordinal(row.value(SEQ).unwrap_or_default()));
     found
 }
 
@@ -1025,7 +1025,7 @@ pub fn offered(game: &Game) -> Vec<Row> {
             .into_iter()
             .filter(|row| row.value(RULE) == Some(of_rule))
             .collect();
-        inputs.sort_by_key(|row| row.value(SEQ).unwrap_or_default().to_string());
+        inputs.sort_by_key(|row| crate::schema::ordinal(row.value(SEQ).unwrap_or_default()));
 
         // **Every key of the relation each input is typed as.** That is what *wherever their
         // inputs are present* ranges over, and the type is what bounds it.

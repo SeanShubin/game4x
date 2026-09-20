@@ -60,7 +60,7 @@ a leaf, not a change to `end-turn`.
 
 **`{part ... seq:N}` is load-bearing now**, which this said upkeep would be the thing to make it -
 and it was, though by a different pairing. It is `upkeep` before `perish` inside
-`adjust-population`: swap them and everyone dies.
+`end-turn`: swap them and everyone dies.
 
 **Two predictions here were wrong and are worth keeping as wrong.** *What it needs from the engine
 is one thing: a sweeping `remove`* - it needed `{repeats rule:R}` instead, which is not a sweep but
@@ -156,8 +156,7 @@ anyone builds four of them.
 
 ## Grow or starve without a zero test, and the one word it costs
 
-**The starving half is built**, on 2026-09-19 - `upkeep`, `perish`, `adjust-population`, `repeats`
-and `scope`. `README.md` -> *Hunger, and a rule that fires as many times as it can* is what it
+**The starving half is built**, on 2026-09-19 - `upkeep`, `perish`, `repeats` and `scope`. `README.md` -> *Hunger, and a rule that fires as many times as it can* is what it
 came to. **What is left here is breeding**, and the reserve, and what the two of them would need;
 the rest is kept because it is the reasoning the built half rests on.
 
@@ -269,7 +268,7 @@ one citizen eating all the food - and it is a capacity rather than an obligation
 **Removing the parent and adding two is how it gets its own `bearing` spent** without a `put` beside
 a `remove`.
 
-**It goes into `adjust-population` after `perish`**, and *excess* is then a position in the order
+**It goes into the turn after `perish`**, and *excess* is then a position in the order
 rather than a comparison: whatever food is left when breeding runs is by construction the surplus.
 The increase is `min(food to spare, citizens that can bear)` with nothing computing a minimum.
 

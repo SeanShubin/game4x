@@ -627,12 +627,12 @@ fn a_rule_that_repeats_and_removes_nothing_is_refused() {
         }
     );
 
-    // **`10` is `adjust-population`**, a composite, which has no clauses of its own - so what it
-    // consumes is its parts' business and a repetition of it would be reasoning about nothing.
+    // **`5` is `end-turn`**, a composite, which has no clauses of its own - so what it consumes is
+    // its parts' business and a repetition of it would be reasoning about nothing.
     assert_eq!(
-        with("{repeats rule:10}").expect_err("a composite removes nothing itself"),
+        with("{repeats rule:5}").expect_err("a composite removes nothing itself"),
         Malformed::NeverStops {
-            rule: "adjust-population".to_string()
+            rule: "end-turn".to_string()
         }
     );
 
@@ -674,6 +674,13 @@ fn the_rules_are_a_tree() {
 
     // **`5` is `end-turn`.** A part of refresh naming end-turn closes the loop, and the walk
     // upwards repeats rather than running forever.
+    //
+    // **The rotation is fixed and this line is the check on it.** A cycle of two rules can be
+    // written two ways that mean the same thing, and which one came back used to depend on where
+    // the walk began - so this assertion moved twice in one day from changes that had nothing to do
+    // with it, `adjust-population` arriving and then leaving. **The cycle is now rotated to start
+    // at its first name**, so `end-turn` leads whatever the walk did, and this fails if that
+    // stops being true.
     assert_eq!(
         with("{part id:991 of:4 is:5 seq:1}").expect_err("end-turn would reach itself"),
         Malformed::CycleOfParts {
@@ -727,9 +734,9 @@ fn the_tree_is_what_the_file_says_it_is() {
         .collect();
     assert_eq!(
         rules.len(),
-        10,
+        9,
         "move, build-extractor, work, refresh, end-turn, build-bin, discard-disorder,
-         upkeep, perish, adjust-population"
+         upkeep, perish"
     );
     // **At least once, not exactly once.** `refresh` appears twice because `end-turn` names it
     // twice - two steps of one order - and asserting *once* said the tree was wrong when it was

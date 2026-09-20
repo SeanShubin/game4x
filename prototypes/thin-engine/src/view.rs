@@ -154,7 +154,7 @@ impl Game {
             .filter_map(|it| {
                 let of = it.value(OF)?;
                 Some((
-                    it.value(SEQ)?.parse::<u64>().unwrap_or(u64::MAX),
+                    crate::schema::ordinal(it.value(SEQ)?),
                     format!(
                         "{}:{}",
                         it.value(NAME)?,
@@ -180,7 +180,7 @@ impl Game {
             .filter(|it| it.relation == PART && it.value(OF) == Some(of_rule))
             .filter_map(|it| {
                 Some((
-                    it.value(SEQ)?.parse::<u64>().unwrap_or(u64::MAX),
+                    crate::schema::ordinal(it.value(SEQ)?),
                     it.value(ID)?,
                     it.value(IS)?,
                 ))

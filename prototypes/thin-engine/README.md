@@ -2868,9 +2868,9 @@ rules, two words and one citizen:
 upkeep   remove citizen[hungry:1], remove food  ->  add citizen[hungry:0]      repeats, per territory
 perish   remove citizen[hungry:1]               ->  gone                       repeats, per territory
 
-adjust-population
-    1. upkeep
-    2. perish
+end-turn
+    1. upkeep   per:territory
+    2. perish   per:territory
 ```
 
 **Three citizens and two food leave two citizens.** Nothing computes a minimum and nothing compares
@@ -2928,15 +2928,32 @@ territory then both in the next. **And nothing had to learn how a part is handed
 argument**, which is the feature the other shape would have required. It stops being equivalent the
 day a scoped composite has a part that is not place-local.
 
+**That choice paid for itself the same day.** The composite his sketch named was dropped - see
+below - and a scope written on it would have gone with it. **Per rule, nothing moved**: `upkeep`
+and `perish` carry their own `{scope ...}` rows and did not notice becoming steps of the turn
+rather than steps of a group.
+
 **The tree says `per:territory`** beside a scoped step, because a scoped input is not in what a rule
 takes and the turn would otherwise read as though `upkeep` happened once.
 
 ## `part.seq` is load-bearing for the first time
 
-**Swap the two parts of `adjust-population` and everyone dies**: `perish` fired first finds every
+**Swap `upkeep` and `perish` in the turn and everyone dies**: `perish` fired first finds every
 citizen hungry and takes all of them, and the food goes untouched. Until now the mutation sweep
 reported all three `part.seq` values as read by nothing, which was true - order was a property no
 test had used yet.
+
+**They were grouped under a composite called `adjust-population` for a day**, and it was the wrong
+pair. Of its two parts one did not adjust the population - `upkeep` removes a citizen and adds a
+citizen - and the other only shrank it, so the name promised a symmetry with no second half. **And
+it cut across the document it followed**: `spec/turn.md` puts eating in step one and starving in
+step two *with* breeding, so `perish` belongs beside `breed`. Sean, 2026-09-20: *adjust-population
+is too vague, how is it adjusting population?* **The grouping returns as `grow-or-starve` when
+`breed` gives it a second part.**
+
+**What it cost is a seam**, and it is the honest price: nothing now fires the eating and the
+starving without also firing the refreshes, so `the-hungry-perish-after-upkeep-and-not-before` ends
+with its survivors hungry again.
 
 ## What building it found
 
@@ -2949,6 +2966,12 @@ test had used yet.
 `["adjust-population", "end-turn", "refresh"]` for a cycle `adjust-population` is not in - the walk
 begins at whichever rule sorts first and passes through rules that are fine on the way. **Found by
 the new data changing which rule that is**, and fixed to report from where the walk met itself.
+
+**The rotation is still not stable, and the cycle is.** Which of the two rules comes first depends
+on where the walk started, so the assertion moved again when `adjust-population` left. **It has
+moved twice in a day from changes that had nothing to do with it**, which is an argument for
+rotating the cycle to a canonical start - not made yet, and written in the test rather than left to
+be rediscovered.
 
 **`UNREACHABLE` emptied, and its own comment had predicted it.** `food.where` was the one reference
 no test world could violate, because food was produced by `work` and stated by nobody. The comment
@@ -3001,3 +3024,66 @@ looked up by neither. And `perish`'s own name, because no test fires it directly
 it and a test compares that file - but the sweep runs the `.4x` tests and the reference checks, not
 the Rust suite. **What the list means is *no test in `data/` reads this***, which is narrower than
 *nothing reads it*, and the entry now says so.
+
+
+## Two smaller things next to nondeterminism, and why both are refused
+
+**Sean, 2026-09-20**, having asked whether a message that kept reordering itself was nondeterminism:
+*while canonicalise is not as important as nondeterminism, I see no reason not to be just as strict
+about it.* Neither of these is nondeterminism - the same data always gave the same answer - and both
+are the shape next to it: **an answer settled by something incidental rather than by what was
+asked.**
+
+## A cycle written two ways
+
+`CycleOfParts` walks upwards from each rule and reports from where the walk met itself. **A cycle of
+two rules can be written two ways that mean the same thing**, and which one came back depended on
+which rule the walk began at - so `adjust-population` arriving reordered a message about a cycle it
+was not in, and `adjust-population` leaving reordered it back. **The assertion moved twice in one
+day from changes that had nothing to do with it.**
+
+**It is rotated to start at its first name now**, so the message names the cycle and not the walk.
+`tests/structure.rs` expecting `[end-turn, refresh]` is the check on it.
+
+**The remedy is the opposite of `NotOneToTake`'s and the situation is the mirror.** When several
+answers mean different things - one scout or another is a different world - the engine refuses.
+When several answers are one fact written differently, refusing would be absurd and the answer is
+to leave only one of them.
+
+## `seq` read as text, in four places
+
+**`10` sorts between `1` and `2`.** `src/engine.rs` ordered clauses, parts and inputs by the string;
+`src/view.rs` ordered by the number. **At ten parts the turn would have run one order while
+`tree.txt` showed another** - and silently, because the test that compares that file compares the
+tree against itself.
+
+**A third instance was found while fixing the first two.** `Schema::of` checks that a relation's
+column seqs are exactly `1..=n` and returns `Malformed::BadOrder` otherwise, comparing text-sorted
+seqs against `["1", "2", ...]`. At ten columns **it rejects data that is correct.**
+
+**All of it is latent.** The most anything has is five columns, six parts and five clauses, so no
+test could have caught it - the orders only start to differ at ten. What replaced them is one
+`ordinal()`, used by all four.
+
+**A `seq` that is not a number sorts last rather than being refused, and that is a deliberate
+call.** Refusing would make every `seq` in the data load-bearing for a reason that has nothing to do
+with order, because `tests/mutation.rs` probes ordering by writing `mutated` into one. **The strict
+reading blinds the instrument that measures it**, which is the one place strictness costs more than
+it buys.
+
+## What the turn's order is actually holding up
+
+**Six steps stated, one enforced.** Measured 2026-09-20 by transposing each neighbouring pair and
+running the suite:
+
+| adjacent pair                           |                                                             |
+| --------------------------------------- | ----------------------------------------------------------- |
+| `upkeep` and `perish`                   | **changes the answer** - perish first finds everyone hungry |
+| `perish` and `discard-disorder`         | commutes                                                    |
+| `discard-disorder` and `refresh moving` | commutes                                                    |
+| the three refreshes among themselves    | commute                                                     |
+
+**The sweep says three of six `part.seq` values are read, and that is a different question.** Its
+mutations are bigger moves than a swap: `mutated` sorts after every digit, so a part goes last, and
+taking another row's value puts two parts on one number. **Both numbers are in
+`tests/mutation.rs` and neither is offered as the other.**

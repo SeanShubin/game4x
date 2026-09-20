@@ -711,16 +711,22 @@ const NOT_LOAD_BEARING: [&str; 25] = [
     // and a person reading the rule.
     "2 rules.4x input.name",
     "13 rules.4x input.seq",
-    // **Five of the seven parts' `seq` are read by nothing, and two are.** The two are `upkeep`
-    // and `perish` inside `adjust-population`: swap them and everyone dies, which is
-    // `the-hungry-perish-after-upkeep-and-not-before`. **This entry said *neither* until
-    // 2026-09-19** and predicted exactly which step would change it - *upkeep must be paid before a
-    // population grows on what is left*.
+    // **Three of the six parts' `seq` are read by something and three are not.** This entry said
+    // *neither of the two* until 2026-09-19, and predicted which step would change it - *upkeep
+    // must be paid before a population grows on what is left*, which is what landed.
     //
-    // **The five that are left do not touch each other.** `end-turn` refreshes `moving` and then
-    // `working`, and its own four steps happen to commute in every world a test states - so the
-    // tree shows an order that only two of the rows are enforcing.
-    "5 rules.4x part.seq",
+    // **Which three the sweep counts is not measured here**, because its two mutations are both
+    // bigger moves than a swap: `mutated` sorts after every digit, so a part goes last, and taking
+    // another row's value puts two parts on one number.
+    //
+    // **Transposing adjacent pairs finds exactly one**, measured 2026-09-20 by swapping each
+    // neighbouring pair in turn and running the suite: `upkeep` with `perish` kills everyone, and
+    // the other four commute - `perish` with `discard-disorder`, `discard-disorder` with the first
+    // refresh, and the three refreshes among themselves.
+    //
+    // **So the turn states six steps of order and enforces one of them.** That is worth saying
+    // rather than letting `tree.txt` imply the rest is holding something up.
+    "3 rules.4x part.seq",
     "1 rules.4x reading.id",
     // **`perish` is never fired by name, and it is the only rule that is not.** A rule's name is
     // read when a command names it, and `perish` is reached only through `adjust-population` - so

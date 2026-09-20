@@ -463,6 +463,25 @@ impl std::fmt::Display for Malformed {
     }
 }
 
+/// A `seq` as the number it is, with anything that is not a number last.
+///
+/// **Read as text, `10` sorts between `1` and `2`.** Every ordering in the engine sorted the string
+/// and `src/view.rs` sorted the number, so at ten parts the turn would have run one order while
+/// `tree.txt` showed another - silently, because the test that compares that file compares the tree
+/// against itself. **It is latent rather than live**: nothing has ten of anything yet.
+///
+/// **Found by Sean asking whether the cycle message was nondeterminism**, 2026-09-20. It is not,
+/// and neither is this; both are the same smaller thing, an answer settled by something incidental
+/// rather than by what was asked.
+///
+/// **A `seq` that is not a number sorts last rather than being refused.** Refusing it would make
+/// every `seq` in the data load-bearing for a reason that has nothing to do with order, and
+/// `tests/mutation.rs` asks exactly that question by writing `mutated` into one - so the strict
+/// reading would blind the instrument that measures it.
+pub fn ordinal(seq: &str) -> u64 {
+    seq.parse().unwrap_or(u64::MAX)
+}
+
 /// Every relation there is.
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct Schema {
@@ -619,7 +638,7 @@ impl Schema {
         }
 
         for (of, mut columns) in numbered {
-            columns.sort_by(|left, right| left.0.cmp(&right.0));
+            columns.sort_by_key(|(seq, _)| ordinal(seq));
             let seq: Vec<String> = columns.iter().map(|it| it.0.clone()).collect();
             let wanted: Vec<String> = (1..=columns.len()).map(|it| it.to_string()).collect();
             if seq != wanted {
@@ -1080,9 +1099,23 @@ pub fn check(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
             // message sends a reader to look at a rule that is fine. Found by `adjust-population`
             // landing above `end-turn` in the walk order and joining a cycle it is not part of.
             if let Some(joined) = walked.iter().position(|it| it == above) {
-                return Err(Malformed::CycleOfParts {
-                    rules: walked[joined..].iter().map(|it| shown(it)).collect(),
-                });
+                // **Rotated to a fixed start, so the message names the cycle and not the walk.**
+                // A cycle of two rules can be written two ways and they mean the same thing, and
+                // which one came back depended on where the walk began - so an unrelated rule
+                // arriving reordered a message about a fault it was not part of. **That is not
+                // nondeterminism**, because the same data always gave the same answer; it is the
+                // smaller thing next to it, an answer settled by something incidental. Sean,
+                // 2026-09-20: *while canonicalise is not as important as nondeterminism, I see no
+                // reason not to be just as strict about it.*
+                let mut cycle: Vec<String> = walked[joined..].iter().map(|it| shown(it)).collect();
+                let first = cycle
+                    .iter()
+                    .enumerate()
+                    .min_by(|left, right| left.1.cmp(right.1))
+                    .map(|(at, _)| at)
+                    .unwrap_or(0);
+                cycle.rotate_left(first);
+                return Err(Malformed::CycleOfParts { rules: cycle });
             }
             walked.push(above);
             at = above;
@@ -1750,6 +1783,27 @@ fn held_within_what_holds_it(schema: &Schema, rows: &Store) -> Result<(), Malfor
 
 #[cfg(test)]
 mod tests {
+    /// **A tenth step comes after the ninth, and as text it came after the first.**
+    ///
+    /// This is the whole defect, and both halves are asserted: what the engine does now, and what
+    /// it did until 2026-09-20. **Nothing in the data has ten of anything**, so no test of the game
+    /// could have caught it - the order only starts to differ at ten, and `tree.txt` would have
+    /// gone on agreeing with itself while the turn ran something else.
+    #[test]
+    fn a_tenth_step_sorts_after_the_ninth_and_not_after_the_first() {
+        let mut by_number = vec!["10", "2", "1", "9"];
+        by_number.sort_by_key(|it| super::ordinal(it));
+        assert_eq!(by_number, vec!["1", "2", "9", "10"]);
+
+        let mut as_text = vec!["10", "2", "1", "9"];
+        as_text.sort();
+        assert_eq!(
+            as_text,
+            vec!["1", "10", "2", "9"],
+            "which is what every ordering in this engine did, and is the defect"
+        );
+    }
+
     use super::*;
     use crate::notation::read;
 

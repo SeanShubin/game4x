@@ -1,21 +1,22 @@
-# Three citizens and two food here, two and one there, and two territories feed before either
-# starves.
+# Three citizens and two food here, two and one there, and one turn leaves three citizens.
 #
-# **Swap the two parts of `adjust-population` and the answer is none.** `perish` fired first would
+# **Swap `upkeep` and `perish` in the turn and the answer is none.** `perish` fired first would
 # find all five citizens hungry and take all five, and the food would go untouched - so this is the
 # first test whose answer is carried by `part.seq` rather than by which rules there are.
 #
-# **That is what a composite is for.** Sean, 2026-09-18: *it must be able to organize the entirety
-# of game rules is some type of acyclic graph or tree.* The order between upkeep and starvation is
-# a fact about the tree, written once where a player can read it in `tree.txt`.
+# **That is what the order of the turn is for.** Sean, 2026-09-18: *it must be able to organize the
+# entirety of game rules is some type of acyclic graph or tree.* Eating before starving is a fact
+# about the tree, written once where a player can read it in `tree.txt`.
 #
 # **Two territories, because `perish` is scoped and one would not show it.** Its clause binds the
 # place it acts in; take that binding away and the pattern matches a hungry citizen in either
 # territory, which is two rows and no way to say which - so the rule is refused rather than
-# guessing, and with one territory there would have been nothing to guess between.
+# guessing, and with one territory there would be nothing to guess between.
 #
-# **Nothing is refreshed here**, because refreshing is the turn's business and not this composite's.
-# The survivors are still fed when it ends.
+# **The survivors are hungry again, and there is no way to see them otherwise.** The turn's last
+# step restores every count, and nothing groups the eating and the starving into something that can
+# be fired without it. **That is what dropping `adjust-population` cost** - the composite was a
+# seam, and it was the only one.
 
 {test name:the-hungry-perish-after-upkeep-and-not-before}
 
@@ -28,10 +29,10 @@
 {food where:2 quantity:1}
 
 {when}
-{adjust-population}
+{end-turn}
 
 {then}
 {territory id:1}
 {territory id:2}
-{citizen where:1 hungry:0 quantity:2}
-{citizen where:2 hungry:0 quantity:1}
+{citizen where:1 hungry:1 quantity:2}
+{citizen where:2 hungry:1 quantity:1}

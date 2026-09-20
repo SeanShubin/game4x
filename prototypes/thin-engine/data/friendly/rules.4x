@@ -150,19 +150,32 @@
 
 {rule id:5 name:end-turn}
 
-# **`adjust-population` is the turn's first part, and the refreshes are its last.** That is the
-# order `spec/turn.md` states - upkeep, then growth or starvation, then what expires and what was
-# not kept, then what nature reclaims, and time restoring the counts last.
+# **Every part is one of `spec/turn.md`'s steps, in its order** - upkeep is paid, then a population
+# grows on surplus food or starves for want of it, then what expires and what was not kept is lost,
+# then what nature reclaims, and time restoring the counts last. **Only what nature reclaims is
+# missing**, and `tree.txt` is where the order can be read.
+#
+# **`upkeep` and `perish` sat under a composite called `adjust-population` for a day**, and it was
+# the wrong pair to group. Of its two parts one did not adjust the population - `upkeep` removes a
+# citizen and adds a citizen - and the other only ever shrank it, so the name promised a symmetry
+# that had no second half. Sean, 2026-09-20: *adjust-population is too vague, how is it adjusting
+# population?*
+#
+# **And the grouping cut across the document it was meant to follow.** Eating is step one and
+# starving is step two, *with* breeding - so `perish` belongs beside `breed` and not beside
+# `upkeep`. **The grouping comes back as `grow-or-starve` when `breed` gives it a second part**;
+# until then it would be a composite of one, which is two rows nothing distinguishes.
 #
 # **Hunger is restored like every other count**, by the same `refresh` the scouts and the
 # extractors use. It is one rule over a trait, so a third pairing costs two argument rows and no
 # vocabulary at all - which is what parameterising it bought.
 
-{part id:4 of:end-turn is:adjust-population seq:1 name:part-4}
-{part id:3 of:end-turn is:discard-disorder seq:2 name:part-3}
-{part id:1 of:end-turn is:refresh seq:3 name:part-1}
-{part id:2 of:end-turn is:refresh seq:4 name:part-2}
-{part id:5 of:end-turn is:refresh seq:5 name:part-5}
+{part id:4 of:end-turn is:upkeep seq:1 name:part-4}
+{part id:6 of:end-turn is:perish seq:2 name:part-6}
+{part id:3 of:end-turn is:discard-disorder seq:3 name:part-3}
+{part id:1 of:end-turn is:refresh seq:4 name:part-1}
+{part id:2 of:end-turn is:refresh seq:5 name:part-2}
+{part id:5 of:end-turn is:refresh seq:6 name:part-5}
 
 {argument id:1 part:part-1 input:what value:unit}
 {argument id:2 part:part-1 input:trait value:moving}
@@ -202,7 +215,7 @@
 #
 # **It was called `discard-disorder`, which was that sentence**, and a rule's name being its
 # own citation is worth something. **It cost more than it bought**: the turn's other steps are
-# verbs - `upkeep`, `perish`, `refresh`, `adjust-population` - and this was the one clause, and by
+# verbs - `upkeep`, `perish`, `refresh` - and this was the one clause, and by
 # some way the longest thing a player reads in `tree.txt`. Sean, 2026-09-19, naming the concept it
 # takes its name from instead: *everything over capacity is in disorder. There will be an end turn
 # mechanic that discards everything in disorder.* **The sentence it was named for is right here**,
@@ -289,17 +302,12 @@
 
 {literal id:28 clause:clause-24 column:131 value:1}
 
-# **`adjust-population` is where the order between the two lives.** Sean, 2026-09-19:
-# *adjust-population: sequence (starvation, growth)*. **Swapping its two parts kills everyone** -
-# perish before upkeep finds every citizen hungry - which is what
-# `the-hungry-perish-after-upkeep-and-not-before` asserts, and the first time `part.seq` has
-# carried an answer rather than a tidy order.
+# **`upkeep` before `perish` is where the order lives**, and it is the first time `part.seq` has
+# carried an answer rather than a tidy arrangement. **Swap the two and everyone dies** - perish
+# fired first finds every citizen hungry and the food goes untouched - which is what
+# `the-hungry-perish-after-upkeep-and-not-before` asserts.
 #
-# **`breed` belongs here too and is not built.** `backlog.md` carries it: a citizen that is not
-# hungry and has a `bearing` makes another. Keeping it out is what keeps this increment's tests
-# about hunger.
-
-{rule id:10 name:adjust-population}
-
-{part id:6 of:adjust-population is:upkeep seq:1 name:part-6}
-{part id:7 of:adjust-population is:perish seq:2 name:part-7}
+# **`breed` goes beside `perish` and is not built.** `backlog.md` carries it: a citizen that is not
+# hungry and has a `bearing` makes another. It is the half of `spec/turn.md`'s second step that
+# grows where `perish` shrinks, and keeping it out is what keeps this increment's tests about
+# hunger.
