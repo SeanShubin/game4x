@@ -1558,6 +1558,9 @@ cd prototypes/thin-engine
 cargo test --no-fail-fast      # every binary, not just up to the first that fails
 cargo run --example report     # report.html: every test, whole, failures marked
 cargo run --example render     # data/friendly/ from data/foundation/
+cargo run --example tree       # tree.txt: every rule, and the tree its parts make
+
+cargo test --release --test mutation   # the sweep, on its own: 3.5 minutes rather than 10
 ```
 
 It is not in the workspace, so the root `cargo test` does not reach it.
@@ -2259,6 +2262,9 @@ its cost is rows times tests - and today both roughly doubled. **It has stopped 
 run while waiting**, which is worth knowing before it stops being run at all. Nothing is wrong
 with it; the shape is quadratic and the data is growing.
 
+**Two changes since have brought it to three and a half** - the sweep runs in parallel, and it is
+run with `--release`. The shape is still quadratic. See *What the sweep said about it* below.
+
 
 ## Provides and consumes, where you can read them
 
@@ -2851,3 +2857,147 @@ It is in `backlog.md`.
 
 **None of this is in `spec/`.** Sean: *It is prototype research, so whatever survives reaches the
 specification by promotion through the spec lane, the normal way - building it doesn't settle it.*
+
+
+## Hunger, and a rule that fires as many times as it can
+
+**Sean, 2026-09-19**: *Lets build the current model for hunger.* This is that, and it is three
+rules, two words and one citizen:
+
+```text
+upkeep   remove citizen[hunger:1], remove food  ->  add citizen[hunger:0]      repeats, per territory
+perish   remove citizen[hunger:1]               ->  gone                       repeats, per territory
+
+adjust-population
+    1. upkeep
+    2. perish
+```
+
+**Three citizens and two food leave two citizens.** Nothing computes a minimum and nothing compares
+anything: `upkeep` fires as many times as it can, which is twice, and the third citizen is still
+hungry when `perish` runs. `tree.txt` is where the order can be read.
+
+## Repeating, and why it is a termination proof
+
+**`{repeats rule:R}` draws from the world as it was when the repetition began.** What a firing makes
+is held aside until the repetition ends, so a rule cannot spend its own output. Sean, on the framing
+that gives that: *I am thinking that repeat should always have consume-once rather than consume
+semantics.*
+
+**That is the whole bound.** The pool is finite and every firing takes something out of it, so the
+repetition stops without anything counting - and `Malformed::NeverStops` refuses the one rule that
+would have no such pool, one that repeats and removes nothing. **The bound is a property of the data
+rather than a counter in the engine**, which is the same trade `CycleOfParts` makes.
+
+**The backlog said this was not a termination proof** - *a rule that removes one and adds two stops
+for neither reason* - and the snapshot is what makes it one. A rule that removes one and adds two
+still takes one out of the pool each time.
+
+**Two things end a repetition, and they are not the same thing.** Being refused for want of
+something, and leaving the pool as it found it. **A refusal that means the rule is wrong is
+reported rather than swallowed**: `NotSo`, `NothingToRemove` and `Broke` say the world does not have
+it, and a clause bound to no input has not run out of anything.
+
+## As many times as it can includes zero, which is what makes the turn safe
+
+**`perish` was written without `repeats` first**, because a `remove` clause naming no quantity takes
+the whole row and everyone hungry would go at once. **Three tests went red immediately** - every
+world with no citizens in it, because a bare `remove` refuses when nothing matches, and a turn has
+to end whatever the world holds.
+
+**So every step of the turn is a no-op when there is nothing to do, by one of three routes.** `put`
+assigns nothing, `keep` finds nothing over its capacity, and a repetition fires zero times. **That
+is what `repeats` is doing on `perish`**, which takes one at a time and stops - and it is a better
+reason than the one it was added for.
+
+## Scope, and the join a world-owned rule cannot make
+
+**`{scope rule:R input:I}` says an input is filled by the engine**, once per row of whatever it is
+typed as - not by a command and not by an argument. `upkeep` has to take a citizen and a food *from
+the same territory*, which is a join every other rule makes through an argument, and **a world-owned
+rule has no caller to supply one.**
+
+**It is on the rule and not on the part**, so a test firing `{upkeep}` by hand does what the turn
+does. Sean: *there are some things that happen in sequence, and others that can be declared once and
+applied separately.* A scope is the second kind.
+
+**His sketch put it on the composite**, with the parts inheriting - `scope: (adjust-population, per:
+territory)`. **Per rule gives the same answer here and needs less**: these rules are place-local, so
+all of `upkeep` everywhere then all of `perish` everywhere is the same world as both in one
+territory then both in the next. **And nothing had to learn how a part is handed its parent's
+argument**, which is the feature the other shape would have required. It stops being equivalent the
+day a scoped composite has a part that is not place-local.
+
+**The tree says `per:territory`** beside a scoped step, because a scoped input is not in what a rule
+takes and the turn would otherwise read as though `upkeep` happened once.
+
+## `part.seq` is load-bearing for the first time
+
+**Swap the two parts of `adjust-population` and everyone dies**: `perish` fired first finds every
+citizen hungry and takes all of them, and the food goes untouched. Until now the mutation sweep
+reported all three `part.seq` values as read by nothing, which was true - order was a property no
+test had used yet.
+
+## What building it found
+
+**`{state relation:citizen}` has two readers, not one.** This lane left it out, having grepped
+`stated` and found only `reified` - and templating is indeed the only thing in `src/` that reads it.
+**The test harness reads it too**: a `given` may state a world and nothing else, and `citizen` in a
+`given` was refused within the minute. *Grep the concept, not the word.*
+
+**A cycle named where the walk started rather than where it closed.** `CycleOfParts` reported
+`["adjust-population", "end-turn", "refresh"]` for a cycle `adjust-population` is not in - the walk
+begins at whichever rule sorts first and passes through rules that are fine on the way. **Found by
+the new data changing which rule that is**, and fixed to report from where the walk met itself.
+
+**`UNREACHABLE` emptied, and its own comment had predicted it.** `food.where` was the one reference
+no test world could violate, because food was produced by `work` and stated by nobody. The comment
+read: *the day a test starts with food already in a territory this list goes empty, and that is the
+whole of what it is for.* **`upkeep` is that day.**
+
+## What is not built
+
+**`breed`.** A citizen that is not hungry and has a `bearing` makes another, which is the other half
+of Sean's loop - *each remaining (citizen, food) produces an additional citizen*. Keeping it out is
+what kept this increment's tests about hunger, and `backlog.md` carries the design.
+
+**`Refused::NotOneToTake` is still reachable by no rule.** Every clause names every trait it means,
+which is exactly what avoids it - `hunger:1` is what makes one of two citizen rows in a place the
+one meant. It is a refusal that exists so that a clause which says too little fails loudly, and
+nothing says too little yet.
+
+
+## What the sweep said about it, and the two tests it rewrote
+
+**It runs in three and a half minutes now, not ten.** Measured 2026-09-19: 208s with
+`cargo test --release --test mutation`, against 581s for the same sweep in debug. **The parallelism
+landed first and the release build is the rest of it** - it is arithmetic over rows and nothing
+else, which is what optimising is good at. *Measured: 208s against 581s; I think the reason is that
+the sweep is pure computation with no I/O to hide behind.*
+
+**Four things came back and three were worth acting on.**
+
+**A binding that no test needed.** `perish`'s clause binds the place it acts in, and with one
+territory in every test that named perish there was nothing for it to bind *against* - take the
+binding away and the pattern still matched exactly one row. **So the order test got a second
+territory**, and without the binding it is now refused for matching two hungry citizens and not
+saying which.
+
+**A literal that no test needed.** `upkeep`'s remove names `hunger:1`, and no world reached the
+state where that matters: a firing's output is held aside, so the pool never holds a fed citizen
+and a hungry one at once. **So the scope test now starts with a fed citizen in its `given`** rather
+than producing one, and the literal is what keeps it from being fed twice.
+
+**A literal that was genuinely decoration.** `perish` named `quantity:1`, and with `repeats` the
+rule reaches the same world one at a time or all at once. **Deleted.** What is left says what it
+means: a `remove` naming no quantity takes the row, and the repetition is there so that *as many
+times as it can* can be zero.
+
+**And two names nothing in `data/` reads, both recorded rather than changed.** A scoped input's
+name - a command finds its argument by name and so does a part, and an input the engine fills is
+looked up by neither. And `perish`'s own name, because no test fires it directly.
+
+**That second one is a limit of the sweep rather than a fact about the name.** `tree.txt` prints
+it and a test compares that file - but the sweep runs the `.4x` tests and the reference checks, not
+the Rust suite. **What the list means is *no test in `data/` reads this***, which is narrower than
+*nothing reads it*, and the entry now says so.

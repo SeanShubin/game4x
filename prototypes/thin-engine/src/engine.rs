@@ -63,6 +63,8 @@ const KIND: &str = "kind";
 const PART: &str = "part";
 const ARGUMENT: &str = "argument";
 const IS: &str = "is";
+const REPEATS: &str = "repeats";
+const SCOPE: &str = "scope";
 
 /// Every row there is, and the structure read out of them.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -666,6 +668,7 @@ pub fn fire(game: &Game, command: &Row, repeat: usize) -> Result<(Game, Effect),
     // **Bound by the input's name, which is what the row writes.** A value the structure cannot
     // place is refused here, exactly as it is when a command is read from rows.
     let mut bound: BTreeMap<String, String> = BTreeMap::new();
+    let filled = scoped(game, &of_rule);
     for input in game
         .of_relation(INPUT)
         .into_iter()
@@ -673,6 +676,12 @@ pub fn fire(game: &Game, command: &Row, repeat: usize) -> Result<(Game, Effect),
     {
         let id = input.value(ID).unwrap_or_default();
         let name = input.value(NAME).unwrap_or_default();
+        // **A scoped input is not the caller's to give.** `{upkeep}` is written with no place
+        // because the engine supplies every place, which is what makes a test firing it by hand
+        // and the turn firing it do the same thing.
+        if filled.iter().any(|(it, _)| it == id) {
+            continue;
+        }
         let Some(given) = command.value(name) else {
             return Err(Refused::Missing {
                 rule: named,
@@ -715,7 +724,70 @@ fn parts_of<'a>(game: &'a Game, of_rule: &str) -> Vec<&'a Row> {
     found
 }
 
-/// Fire a rule: its clauses if it is a leaf, its parts in order if it is a composite.
+/// Fire a rule everywhere it is scoped to, which is once where it is scoped to nothing.
+///
+/// **A `{scope ...}` input is filled here and nowhere else**, so a rule that declares one is fired
+/// once per row of what it is typed as whether a command named it or a part did. **Two scoped
+/// inputs are a product**, which is the same enumeration [`offered`] does over a player's choices
+/// and is done by the same function.
+///
+/// **The fan-out is outside the repetition**, so `upkeep` feeds one territory to exhaustion before
+/// it looks at the next. Either order gives the same world while these rules are place-local, and
+/// this one is the order a person would read the turn in.
+///
+/// **An effect is the whole command's**, not one part's and not one place's: ending a turn took and
+/// made whatever its parts did, in the order they did it, so a test reads one list rather than five.
+fn run(
+    game: &Game,
+    of_rule: &str,
+    rule: String,
+    bound: &BTreeMap<String, String>,
+    effect: &mut Effect,
+) -> Result<Game, Refused> {
+    let over = scoped(game, of_rule);
+    if over.is_empty() {
+        return once(game, of_rule, rule, bound, effect);
+    }
+    let choices: Vec<(String, String, Vec<String>)> = over
+        .into_iter()
+        .map(|(input, of)| {
+            let keys = game.keys_of(&of);
+            (input, of, keys)
+        })
+        .collect();
+    let mut after = game.clone();
+    for places in every_binding(&choices) {
+        let mut bound = bound.clone();
+        for ((input, _, _), place) in choices.iter().zip(places) {
+            bound.insert(input.clone(), place);
+        }
+        after = once(&after, of_rule, rule.clone(), &bound, effect)?;
+    }
+    Ok(after)
+}
+
+/// The inputs a rule's `{scope ...}` rows say the engine fills, each with what it ranges over.
+///
+/// **In the order the rows are stated**, because two scoped inputs are a product and which one
+/// varies fastest would otherwise be whatever a map happened to hold first.
+fn scoped(game: &Game, of_rule: &str) -> Vec<(String, String)> {
+    game.of_relation(SCOPE)
+        .into_iter()
+        .filter(|row| row.value(RULE) == Some(of_rule))
+        .filter_map(|row| row.value(INPUT))
+        .filter_map(|input| {
+            let declared = game
+                .of_relation(INPUT)
+                .into_iter()
+                .find(|row| row.value(ID) == Some(input))?;
+            let of = declared.value(OF).unwrap_or_default();
+            let of = game.named(RELATION, of).unwrap_or(of).to_string();
+            Some((input.to_string(), of))
+        })
+        .collect()
+}
+
+/// Fire a rule once for one binding of its inputs: its parts, or its repetition, or its clauses.
 ///
 /// **A rule is a leaf or a composite and never both**, which `src/schema.rs` refuses - so this
 /// reads the parts and stops if there are any, rather than doing both and leaving the order
@@ -726,9 +798,10 @@ fn parts_of<'a>(game: &'a Game, of_rule: &str) -> Vec<&'a Row> {
 /// this needs no depth counter. **That is the check doing the work a guard would otherwise do**,
 /// and it is why Sean's *acyclic graph or tree* is a property of the data rather than advice.
 ///
-/// **An effect is the whole command's**, not one part's: ending a turn took and made whatever its
-/// parts did, in the order they did it, so a test reads one list rather than five.
-fn run(
+/// **A repetition is a leaf's business.** `Malformed::NeverStops` refuses one on a composite,
+/// because what a composite consumes is its parts' to say - so the two branches below cannot both
+/// be taken and the order between them decides nothing.
+fn once(
     game: &Game,
     of_rule: &str,
     rule: String,
@@ -736,18 +809,115 @@ fn run(
     effect: &mut Effect,
 ) -> Result<Game, Refused> {
     let parts = parts_of(game, of_rule);
-    if parts.is_empty() {
-        return apply(game, of_rule, rule, bound, effect);
+    if !parts.is_empty() {
+        let mut after = game.clone();
+        for part in parts {
+            let id = part.value(ID).unwrap_or_default();
+            let of = part.value(IS).unwrap_or_default().to_string();
+            let named = game.named(RULE, &of).unwrap_or(&of).to_string();
+            let given = arguments_of(game, id, &of, &named)?;
+            after = run(&after, &of, named, &given, effect)?;
+        }
+        return Ok(after);
     }
-    let mut after = game.clone();
-    for part in parts {
-        let id = part.value(ID).unwrap_or_default();
-        let of = part.value(IS).unwrap_or_default().to_string();
-        let named = game.named(RULE, &of).unwrap_or(&of).to_string();
-        let given = arguments_of(game, id, &of, &named)?;
-        after = run(&after, &of, named, &given, effect)?;
+    if game
+        .of_relation(REPEATS)
+        .into_iter()
+        .any(|row| row.value(RULE) == Some(of_rule))
+    {
+        return repeatedly(game, of_rule, rule, bound, effect);
     }
-    Ok(after)
+    apply(game, of_rule, rule, bound, effect)
+}
+
+/// Fire a rule as many times as it can, each firing drawing from what the last one left behind.
+///
+/// **The pool it draws from is the world as it was when the repetition began, and it only ever
+/// shrinks.** What a firing makes is held aside until the repetition ends, so a rule cannot spend
+/// its own output - which is what Sean, 2026-09-19, asked for: *repeat should always have
+/// consume-once rather than consume semantics.*
+///
+/// **That is the whole termination proof.** The pool is finite and each firing takes something out
+/// of it, so a bound falls out of the structure rather than out of a counter. `upkeep` feeds as
+/// many citizens as there is food for and stops when either runs out, and nothing computes which.
+///
+/// **A firing that is refused leaves no trace.** Its effect goes into a list of its own and is
+/// dropped, so the world the repetition gives back is the one the last firing that stood left.
+fn repeatedly(
+    game: &Game,
+    of_rule: &str,
+    rule: String,
+    bound: &BTreeMap<String, String>,
+    effect: &mut Effect,
+) -> Result<Game, Refused> {
+    let mut pool = game.clone();
+    let mut held: Vec<Row> = Vec::new();
+    loop {
+        let mut aside = Effect {
+            command: effect.command.clone(),
+            took: Vec::new(),
+            made: Vec::new(),
+        };
+        let next = match apply(&pool, of_rule, rule.clone(), bound, &mut aside) {
+            Ok(next) => next,
+            Err(why) if ran_out(&why) => break,
+            Err(why) => return Err(why),
+        };
+        let mut rows = next.rows;
+        for made in &aside.made {
+            let quantity = counted(&pool, made);
+            rows.take(made, quantity.as_deref());
+        }
+        // **It stops when the pool stops shrinking**, which no rule the structure admits should
+        // reach - `Malformed::NeverStops` refuses a repetition with nothing to consume. It is here
+        // because a loop that cannot be shown to end from inside itself is not one to run.
+        if same(&rows, &pool.rows) {
+            break;
+        }
+        pool.rows = rows;
+        held.extend(aside.made.clone());
+        effect.took.extend(aside.took);
+        effect.made.extend(aside.made);
+    }
+
+    // **And everything held aside goes back**, joined with whatever is there, which is the one
+    // world anybody outside this function sees.
+    let mut rows = pool.rows;
+    for made in held {
+        let quantity = counted(game, &made);
+        rows.put(made, quantity.as_deref());
+    }
+    let schema = Schema::of(rows.rows()).map_err(|why| Refused::Broke {
+        rule: rule.clone(),
+        why: Box::new(why),
+    })?;
+    crate::schema::check(&schema, &rows).map_err(|why| Refused::Broke {
+        rule,
+        why: Box::new(why),
+    })?;
+    Ok(Game { schema, rows })
+}
+
+/// Whether a refusal means *the world does not have it* rather than *the rule is wrong*.
+///
+/// **A repetition stops on the first and reports the second.** Firing as many times as it can ends
+/// when what it needs has run out - and a clause bound to no input has not run out of anything, it
+/// is malformed. **Swallowing that would lose the one message that says so**, which is the
+/// opposite of what Sean asked for: *I want errors detectible with good error messages.*
+fn ran_out(why: &Refused) -> bool {
+    matches!(
+        why,
+        Refused::NotSo { .. } | Refused::NothingToRemove { .. } | Refused::Broke { .. }
+    )
+}
+
+/// Whether two stores hold the same rows, in whatever order they hold them.
+///
+/// **Taking a row and putting it back moves it to the end**, so comparing the two as lists would
+/// call a firing that changed nothing a change, and the repetition above would not stop.
+fn same(these: &Store, those: &Store) -> bool {
+    these.rows().len() == those.rows().len()
+        && these.rows().iter().all(|row| those.rows().contains(row))
 }
 
 /// What a part hands the rule it names, by that rule's input ids.
@@ -766,6 +936,7 @@ fn arguments_of(
     named: &str,
 ) -> Result<BTreeMap<String, String>, Refused> {
     let mut bound = BTreeMap::new();
+    let filled = scoped(game, of_rule);
     for input in game
         .of_relation(INPUT)
         .into_iter()
@@ -773,6 +944,11 @@ fn arguments_of(
     {
         let id = input.value(ID).unwrap_or_default();
         let name = input.value(NAME).unwrap_or_default();
+        // **A scoped input takes no argument**, for the same reason a command gives none: it is
+        // the engine's to fill, and a part that supplied one would be overruled.
+        if filled.iter().any(|(it, _)| it == id) {
+            continue;
+        }
         let Some(given) = game
             .of_relation(ARGUMENT)
             .into_iter()

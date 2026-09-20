@@ -147,6 +147,7 @@ fn check(files: &InMemory) -> Result<(), String> {
             "adjacency",
             "bin",
             "capacity",
+            "citizen",
             "consumes",
             "deposit",
             "extractor",
@@ -317,15 +318,19 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
     Ok(())
 }
 
-const REFERENCES: usize = 58;
+const REFERENCES: usize = 62;
 
 /// **References no test world can violate**, because nothing points at them there.
 ///
-/// **`food.where` is the only one, and it says something about the tests rather than the data.**
-/// Food is produced by `work` and stated by nobody: it appears in a `then` and never in a `given`.
-/// **The day a test starts with food already in a territory this list goes empty**, and that is
-/// the whole of what it is for.
-const UNREACHABLE: [&str; 1] = ["food.where"];
+/// **It is empty, and the sentence that stood here is why.** `food.where` was the only entry: food
+/// was produced by `work` and stated by nobody, appearing in a `then` and never in a `given`. *The
+/// day a test starts with food already in a territory this list goes empty, and that is the whole
+/// of what it is for.* **`upkeep` is that day** - a citizen eats food that is already there.
+///
+/// **An empty list is not the same as no list.** Every reference in the data is now violated by
+/// some world, which is the strongest thing this can say; keeping the constant is what makes the
+/// next unreachable one arrive as a failure rather than as a silence.
+const UNREACHABLE: [&str; 0] = [];
 
 fn every_reference_forbids_something_in(
     files: &InMemory,
@@ -691,23 +696,41 @@ fn no_value_can_be_changed_without_breaking_something() {
 ///
 /// **A `moving` that never moves is the other shape here.** The berth tests hold vehicles to count
 /// them, not to move them, so what those rows say about moves is read by nothing.
-const NOT_LOAD_BEARING: [&str; 23] = [
+const NOT_LOAD_BEARING: [&str; 25] = [
     // **The one `assigns` row's id is read by nothing.** There were two, and changing one id
     // to the other's collided on the key; with one row there is nothing to collide with.
     // **`assigns` may not need an `id` at all** - keyed by `(clause, input, value)` it could not
     // state two assignments of one input on one clause, which is the rule rather than a
     // restriction. That is in `backlog.md` rather than done here.
     "1 rules.4x assigns.id",
-    "16 rules.4x clause.seq",
-    "11 rules.4x input.seq",
-    // **Neither part's `seq` is read by anything, and that is the honest state of the order.**
-    // `end-turn` refreshes `moving` and then `working`, and the two do not touch each other - so
-    // swapping them leaves the same world and nothing fails. **The column exists and nothing
-    // depends on it yet**, which is worth saying out loud rather than letting the tree imply an
-    // order is being enforced. The four steps of `spec/turn.md` that are not built are the ones
-    // that will depend on it: upkeep must be paid before a population grows on what is left.
-    "3 rules.4x part.seq",
+    "20 rules.4x clause.seq",
+    // **A scoped input's name is read by nothing, and the other eleven are read by name.** A
+    // command finds its argument by the input's name and so does a part; an input the engine fills
+    // is looked up by neither, because nothing outside the engine ever names it. **So `upkeep`'s
+    // `where` and `perish`'s are the two**, and what their names are for is the friendly notation
+    // and a person reading the rule.
+    "2 rules.4x input.name",
+    "13 rules.4x input.seq",
+    // **Five of the seven parts' `seq` are read by nothing, and two are.** The two are `upkeep`
+    // and `perish` inside `adjust-population`: swap them and everyone dies, which is
+    // `the-hungry-perish-after-upkeep-and-not-before`. **This entry said *neither* until
+    // 2026-09-19** and predicted exactly which step would change it - *upkeep must be paid before a
+    // population grows on what is left*.
+    //
+    // **The five that are left do not touch each other.** `end-turn` refreshes `moving` and then
+    // `working`, and its own four steps happen to commute in every world a test states - so the
+    // tree shows an order that only two of the rows are enforcing.
+    "5 rules.4x part.seq",
     "1 rules.4x reading.id",
+    // **`perish` is never fired by name, and it is the only rule that is not.** A rule's name is
+    // read when a command names it, and `perish` is reached only through `adjust-population` - so
+    // renaming it changes nothing any `.4x` test can see.
+    //
+    // **It is not decoration, and the sweep cannot say so.** `tree.txt` prints it, and
+    // `the_tree_is_what_the_file_says_it_is` compares that file - but the sweep runs the `.4x`
+    // tests and the reference checks, not the Rust suite. **What this list means is *no test in
+    // `data/` reads it***, which is narrower than *nothing reads it*.
+    "1 rules.4x rule.name",
     "1 schema.4x supply.name",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x scout.quantity",
     "1 tests/a-scout-cannot-move-where-every-berth-is-taken.4x adjacency.id",

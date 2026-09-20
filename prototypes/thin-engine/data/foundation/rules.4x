@@ -121,7 +121,6 @@
 # and `extractor.moving` does not exist, which is the refusal rather than a lookup that fails
 # quietly.
 
-
 # **`refresh` has no `where`, because time does not visit one place.** It had one while it was a
 # player's command; as a step of ending a turn it restores every count there is, and the pattern
 # its `put` matches names no place at all. **Checked against the tests rather than assumed** - the
@@ -151,14 +150,26 @@
 
 {rule id:5 name:end-turn}
 
-{part id:3 of:5 is:7 seq:1}
-{part id:1 of:5 is:4 seq:2}
-{part id:2 of:5 is:4 seq:3}
+# **`adjust-population` is the turn's first part, and the refreshes are its last.** That is the
+# order `spec/turn.md` states - upkeep, then growth or starvation, then what expires and what was
+# not kept, then what nature reclaims, and time restoring the counts last.
+#
+# **Hunger is restored like every other count**, by the same `refresh` the scouts and the
+# extractors use. It is one rule over a trait, so a third pairing costs two argument rows and no
+# vocabulary at all - which is what parameterising it bought.
+
+{part id:4 of:5 is:10 seq:1}
+{part id:3 of:5 is:7 seq:2}
+{part id:1 of:5 is:4 seq:3}
+{part id:2 of:5 is:4 seq:4}
+{part id:5 of:5 is:4 seq:5}
 
 {argument id:1 part:1 input:11 value:26}
 {argument id:2 part:1 input:12 value:1}
 {argument id:3 part:2 input:11 value:19}
 {argument id:4 part:2 input:12 value:2}
+{argument id:5 part:5 input:11 value:47}
+{argument id:6 part:5 input:12 value:3}
 
 # **`build-bin` says nothing about how many will fit**, the same way `build-extractor` says
 # nothing about deposits. That a territory has room for only so many is a fact about the world,
@@ -205,3 +216,82 @@
 {rule id:7 name:lose-what-is-not-kept}
 
 {clause id:20 rule:7 seq:1 role:5 relation:27}
+
+# **`upkeep` is `spec/turn.md`'s first step**: *upkeep is paid*. One citizen eats one food and is
+# no longer hungry, and it repeats - so as many eat as there is food for, and nothing anywhere
+# computes a minimum. Sean, 2026-09-19, on the loop he intends: *each citizen cosumes 1 food or
+# perishes*.
+#
+# **It is scoped per territory**, which is what joins the citizen to the food. Without it the
+# clause would name no place, match a citizen in every territory at once, and be refused for not
+# having said which - `Refused::NotOneToTake`.
+#
+# **Both clauses name every trait they mean.** `hunger:1` is what makes one of the two citizen rows
+# in a place the one meant, and it is why nothing here has to choose.
+
+{rule id:8 name:upkeep}
+
+{input id:15 rule:8 seq:1 name:where of:13}
+
+{scope rule:8 input:15}
+{repeats rule:8}
+
+{clause id:21 rule:8 seq:1 role:2 relation:47}
+{clause id:22 rule:8 seq:2 role:2 relation:31}
+{clause id:23 rule:8 seq:3 role:3 relation:47}
+
+{binding id:34 clause:21 column:130 input:15}
+{binding id:35 clause:22 column:82 input:15}
+{binding id:36 clause:23 column:130 input:15}
+
+{literal id:23 clause:21 column:131 value:1}
+{literal id:24 clause:21 column:132 value:1}
+{literal id:25 clause:22 column:83 value:1}
+{literal id:26 clause:23 column:131 value:0}
+{literal id:27 clause:23 column:132 value:1}
+
+# **`perish` is the consequence `hunger` does not carry.** A trait says what a thing may do; what
+# happens to a thing that did not is a step of the turn, with a name a player can read.
+#
+# **It takes the row rather than one of them**, which is what a `remove` clause naming no quantity
+# means: everyone still hungry after upkeep goes at once. **So its repetition fires once and then
+# runs out**, and that is not what the repetition is for.
+#
+# **It repeats because *as many times as it can* is zero**, and a turn has to end in a world with
+# no citizens in it. A bare `remove` refuses when nothing matches, which is right for a player's
+# command and wrong for a step the turn fires whatever the world holds.
+#
+# **So every step of the turn is a no-op when there is nothing to do**, by one of three routes -
+# `put` assigns nothing, `keep` finds nothing over, and a repetition fires zero times.
+#
+# **The quantity it used to name was decoration and the sweep said so.** With `repeats` the rule
+# reaches the same world one at a time or all at once, so `{literal ... column:132 value:1}` could
+# be deleted and nothing failed.
+
+{rule id:9 name:perish}
+
+{input id:16 rule:9 seq:1 name:where of:13}
+
+{scope rule:9 input:16}
+{repeats rule:9}
+
+{clause id:24 rule:9 seq:1 role:2 relation:47}
+
+{binding id:37 clause:24 column:130 input:16}
+
+{literal id:28 clause:24 column:131 value:1}
+
+# **`adjust-population` is where the order between the two lives.** Sean, 2026-09-19:
+# *adjust-population: sequence (starvation, growth)*. **Swapping its two parts kills everyone** -
+# perish before upkeep finds every citizen hungry - which is what
+# `the-hungry-perish-after-upkeep-and-not-before` asserts, and the first time `part.seq` has
+# carried an answer rather than a tidy order.
+#
+# **`breed` belongs here too and is not built.** `backlog.md` carries it: a citizen that is not
+# hungry and has a `bearing` makes another. Keeping it out is what keeps this increment's tests
+# about hunger.
+
+{rule id:10 name:adjust-population}
+
+{part id:6 of:10 is:8 seq:1}
+{part id:7 of:10 is:9 seq:2}

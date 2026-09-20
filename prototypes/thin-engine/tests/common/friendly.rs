@@ -668,7 +668,12 @@ impl Names {
                         row.value("part")
                             .and_then(|part| self.rule_of_part.get(part))
                     })
-                    .and_then(|rule| self.input_id.get(&(rule.clone(), value.clone())))
+                    .cloned()
+                    // **Or the rule itself, where there is nothing in between.** `{scope rule:R
+                    // input:I}` is a fact about a rule and names it directly, so the scope to read
+                    // the input in is already written on the row.
+                    .or_else(|| row.value("rule").map(str::to_string))
+                    .and_then(|rule| self.input_id.get(&(rule, value.clone())))
                     .cloned()
                     .unwrap_or_else(|| value.clone()),
                 Some(to) => self

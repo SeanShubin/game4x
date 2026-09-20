@@ -53,6 +53,9 @@ const IS: &str = "is";
 const OF: &str = "of";
 const RULE: &str = "rule";
 const CLAUSE: &str = "clause";
+const REPEATS: &str = "repeats";
+const ROLE: &str = "role";
+const REMOVE: &str = "remove";
 const TRAIT: &str = "trait";
 const CARRIES: &str = "carries";
 const SUPPLY: &str = "supply";
@@ -249,6 +252,17 @@ pub enum Malformed {
     /// answers, and would leave the order between its clauses and its parts to whatever the
     /// engine happened to do first.
     BothLeafAndComposite { rule: String },
+    /// A rule repeats and takes nothing out of the world, so the repetition has no bound.
+    ///
+    /// **A repetition draws from a pool that only shrinks**, and this is the rule with no pool: it
+    /// would be able to fire again every time it fired, forever. **So the bound is a property of
+    /// the data rather than a counter in the engine**, which is the same trade `CycleOfParts`
+    /// makes - a structure that cannot run away is checked once when the world is read.
+    ///
+    /// **`remove` is the only role that shrinks it.** `require` reads, `add` and `put` make, and
+    /// `keep` takes only what a capacity overflowed - which is nothing at all in a world that
+    /// fits, so a repetition resting on it would stop after one firing or never.
+    NeverStops { rule: String },
     /// A place holds more of something than what stands in it has room for.
     ///
     /// **Named in the words a person would use to ask about it**: the place, the thing, and the
@@ -366,6 +380,12 @@ impl std::fmt::Display for Malformed {
                 write!(
                     out,
                     "`{rule}` has clauses and parts, and a rule has one or the other"
+                )
+            }
+            Malformed::NeverStops { rule } => {
+                write!(
+                    out,
+                    "`{rule}` repeats and removes nothing, so it would never stop"
                 )
             }
             Malformed::NoRoom {
@@ -1055,9 +1075,13 @@ pub fn check(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
         let mut walked: Vec<&str> = vec![start];
         let mut at = *start;
         while let Some(above) = parent.get(at).and_then(|it| it.first()) {
-            if walked.contains(above) {
+            // **From where the walk met itself, and not from where it began.** A walk that starts
+            // below a cycle passes through rules that are not in it, and naming those in the
+            // message sends a reader to look at a rule that is fine. Found by `adjust-population`
+            // landing above `end-turn` in the walk order and joining a cycle it is not part of.
+            if let Some(joined) = walked.iter().position(|it| it == above) {
                 return Err(Malformed::CycleOfParts {
-                    rules: walked.iter().map(|it| shown(it)).collect(),
+                    rules: walked[joined..].iter().map(|it| shown(it)).collect(),
                 });
             }
             walked.push(above);
@@ -1078,6 +1102,37 @@ pub fn check(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
             .any(|it| it.relation == CLAUSE && it.value(RULE) == Some(id));
         if composite && leaf {
             return Err(Malformed::BothLeafAndComposite { rule: shown(id) });
+        }
+    }
+
+    // **A repetition needs something to consume.** It fires as many times as it can, and what
+    // makes *as many as it can* a number is that every firing takes something out of a pool that
+    // began finite. A rule that removes nothing would answer *forever*.
+    //
+    // **A composite reaches this too, and that is the right answer rather than a near miss.** It
+    // has no clauses of its own, so it removes nothing of its own - what its parts consume is
+    // their business, and a repetition of the whole would be reasoning about a pool nobody here
+    // can see.
+    let role_named: BTreeMap<&str, &str> = rows
+        .rows()
+        .iter()
+        .filter(|row| row.relation == ROLE)
+        .filter_map(|row| Some((row.value(ID)?, row.value(NAME)?)))
+        .collect();
+    for row in rows.rows().iter().filter(|row| row.relation == REPEATS) {
+        let Some(rule) = row.value(RULE) else {
+            continue;
+        };
+        let shrinks = rows.rows().iter().any(|it| {
+            it.relation == CLAUSE
+                && it.value(RULE) == Some(rule)
+                && it
+                    .value(ROLE)
+                    .map(|role| *role_named.get(role).unwrap_or(&role) == REMOVE)
+                    .unwrap_or(false)
+        });
+        if !shrinks {
+            return Err(Malformed::NeverStops { rule: shown(rule) });
         }
     }
 

@@ -562,3 +562,83 @@
 # anywhere to return to, and the theme is noted rather than built.
 
 {loose kind:resource}
+
+
+## A rule that fires as many times as it can, and the place it fires in
+
+# **`{repeats rule:R}`** is how a varying amount is said without arithmetic. `spec/invariants.md`:
+# *where a rule would need a quantity that varies, it is written as a smaller rule that fires as
+# many times as it can*, and the quantity is then how often it fired. Feeding a population is that
+# shape - as many citizens eat as there is food for, and nothing computes a minimum.
+#
+# **It draws from the world as it was when it began.** What a firing makes cannot be spent by its
+# own later firings, so a rule that produces what it consumes cannot run away. Sean, 2026-09-19, on
+# the framing that gives it: *I am thinking that repeat should always have consume-once rather than
+# consume semantics.*
+#
+# **That is the termination proof**: the pool it draws from is finite and only ever shrinks, so the
+# repetition stops without anything counting the turns. A rule that removes nothing has no such
+# pool and is refused - `Malformed::NeverStops`.
+#
+# **`{scope rule:R input:I}`** says an input is filled by the engine, once per row of whatever it
+# is typed as - not by a command and not by an argument. **A world-owned rule has no caller to
+# supply a place**, and `upkeep` has to take a citizen and a food *from the same territory*, which
+# is a join every other rule makes through an argument.
+#
+# **On the rule and not on the part**, so firing it by hand and firing it from the turn do the same
+# thing. Sean, 2026-09-19: *there are some things that happen in sequence, and others that can be
+# declared once and applied separately.* A scope is the second kind: it is true of the rule always.
+#
+# **So it is scoped per rule rather than per composite**, which Sean's sketch put it on. The two
+# give the same answer here because these rules are place-local - all of `upkeep` everywhere then
+# all of `perish` everywhere is the same world as both in one territory then both in the next - and
+# the per-rule form needs no way for a part to be handed its parent's argument.
+#
+# **A scoped rule is therefore a part and never a root.** The engine fills the input, so there is
+# nothing for a player to choose, and `offered` skips anything a part names.
+
+{relation id:45 name:repeats}
+{relation id:46 name:scope}
+
+{column id:127 relation:repeats seq:1 name:rule}
+{column id:128 relation:scope seq:1 name:rule}
+{column id:129 relation:scope seq:2 name:input}
+
+{reference id:66 column:127 to:rule}
+{reference id:67 column:128 to:rule}
+{reference id:68 column:129 to:input}
+
+
+## A citizen, and the hunger a turn gives it
+
+# **A citizen is not one person.** `spec/population.md`: *It is the smallest group that can sustain
+# reproduction.* A count of them is a density across a territory, the same way a deposit is.
+#
+# **`hunger` is an obligation where `moving` and `working` are capacities.** The machinery is the
+# same - one per turn, restored by the turn, spent by acting - and the difference is what unspent
+# means: a scout that did not move is fine, and a citizen that did not eat is dead.
+#
+# **That consequence lives in `perish`**, a named step of the turn, rather than in the trait. Sean,
+# 2026-09-19: *Hungry seems like not so much a capacity as it does a need, it seems the difference
+# is relevant and why it doesn't read as well as bearing.* **So the grammar says which it is**: a
+# capacity is a gerund - `moving`, `working` - and an obligation is a noun. A citizen *has a
+# hunger*, and discharges it by eating.
+#
+# **`{state ...}` says a citizen is something a world holds**, which two things read: templating,
+# so that a row naming a family becomes one per member, and the test harness, which refuses a
+# `given` stating anything that is not a world. **The second is what caught its absence** - this
+# lane left the row out on the strength of the first reader alone.
+
+{relation id:47 name:citizen}
+
+{column id:130 relation:citizen seq:1 name:where}
+{column id:131 relation:citizen seq:2 name:hunger}
+{column id:132 relation:citizen seq:3 name:quantity}
+
+{reference id:69 column:130 to:territory}
+
+{state id:17 relation:citizen}
+
+{trait id:3 name:hunger}
+
+{carries kind:citizen trait:hunger}

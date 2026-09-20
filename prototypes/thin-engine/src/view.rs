@@ -18,6 +18,7 @@ const SEQ: &str = "seq";
 const OF: &str = "of";
 const IS: &str = "is";
 const VALUE: &str = "value";
+const SCOPE: &str = "scope";
 
 impl Game {
     /// Every row, in each relation's declared column order, sorted.
@@ -112,10 +113,35 @@ impl Game {
             if !takes.is_empty() {
                 out.push_str(&format!("  {takes}"));
             }
+            out.push_str(&self.per(id));
             out.push('\n');
             self.under(id, 1, &mut out);
         }
         out
+    }
+
+    /// Where a rule is scoped, as ` per:territory` - and nothing at all where it is not.
+    ///
+    /// **A scoped input is not in `takes`**, because nothing hands it one: the engine fires the
+    /// rule once per row of what it is typed as. **So the tree would otherwise show `upkeep` as a
+    /// step with no arguments**, which is true of what it is given and silent about the one thing
+    /// a person reading the turn needs - that it happens in every territory rather than once.
+    fn per(&self, of_rule: &str) -> String {
+        self.rows()
+            .rows()
+            .iter()
+            .filter(|it| it.relation == SCOPE && it.value(RULE) == Some(of_rule))
+            .filter_map(|it| it.value(INPUT))
+            .filter_map(|input| {
+                let declared = self
+                    .rows()
+                    .rows()
+                    .iter()
+                    .find(|it| it.relation == INPUT && it.value(ID) == Some(input))?;
+                let of = declared.value(OF)?;
+                Some(format!("  per:{}", self.named(RELATION, of).unwrap_or(of)))
+            })
+            .collect()
     }
 
     /// What a rule takes, as `name:type` in the order a player would say them.
@@ -169,6 +195,7 @@ impl Game {
             if !given.is_empty() {
                 out.push_str(&format!("  {given}"));
             }
+            out.push_str(&self.per(is));
             out.push('\n');
             self.under(is, depth + 1, out);
         }

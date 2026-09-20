@@ -51,33 +51,36 @@ holds a kind is a store for that kind.*
 ones, and the world's are the whole automatic half of the game: upkeep, breed, perish, age, spoil,
 refresh, muster, hold, reclaim, renew, take.
 
-**Two of `spec/turn.md`'s five steps are built and three are not.** *Time restores every count*
-is `refresh`; *what was not kept in order is lost* is `lose-what-is-not-kept`. Still missing:
-everything with upkeep pays it, a population grows on surplus food or starves for want of it, and
-nature takes back what is no longer held. **Each is a rule the order has room for**, which is what
-the tree buys - adding one is a `{part ...}` row and a leaf, not a change to `end-turn`.
+**Three and a half of `spec/turn.md`'s five steps are built.** *Time restores every count* is
+`refresh`; *what was not kept in order is lost* is `lose-what-is-not-kept`; *upkeep is paid* is
+`upkeep`, and the starving half of *a population grows on surplus food or starves for want of it*
+is `perish`. Still missing: **breeding**, and *nature takes back what is no longer held*. **Each is
+a rule the order has room for**, which is what the tree buys - adding one is a `{part ...}` row and
+a leaf, not a change to `end-turn`.
 
-**Upkeep is the one to do next, and the reason is the order.** `spec/turn.md` puts upkeep *before*
-what is lost, so a thing pays its upkeep out of everything a place holds - **including what is over
-capacity**. That is Sean's *use stuff over capacity in other recipies to avoid the waste* happening
-automatically rather than by hand, and it is the first time two parts of the turn will interact.
-**So it is also the first thing that would make `{part ... seq:N}` load-bearing**, which nothing
-does today.
+**`{part ... seq:N}` is load-bearing now**, which this said upkeep would be the thing to make it -
+and it was, though by a different pairing. It is `upkeep` before `perish` inside
+`adjust-population`: swap them and everyone dies.
 
-**What it needs from the engine is one thing: a sweeping `remove`.** `put` and `keep` walk every
-matching row; `remove` takes one match. *Everything with upkeep pays it* is a sweep by definition.
-**And it needs a word for upkeep** - what a kind owes per turn - which is a row like `{carries ...}`
-rather than a new mechanism.
+**Two predictions here were wrong and are worth keeping as wrong.** *What it needs from the engine
+is one thing: a sweeping `remove`* - it needed `{repeats rule:R}` instead, which is not a sweep but
+a repetition, and covers the sweep as a special case. **And it needs a word for upkeep** - it did
+not; what a kind owes per turn is the trait it carries and the clause that spends it, which is the
+machinery `moving` already had.
 
-**Two of the four need something the engine has not got.** *Everything with upkeep pays it* is a
-sweeping `remove`, and `remove` takes one match where `put` sweeps. *Grows on surplus food or
-starves for want of it* is a branch on failure, which is a zero test on a counted place - the
-inhibitor arc `docs/designing-rules.md` measures, and `C-75` puts food on the fatal side of.
+**And the zero test never arrived.** *Grows on surplus food or starves for want of it* looked like a
+branch on failure - the inhibitor arc `docs/designing-rules.md` measures and `C-75` puts food on the
+fatal side of - and it is not one. A state on the citizen makes each half a plain pattern match, and
+the section below is the working.
 
-**What survives a zero test is the invariant, which is worth knowing before deciding.** The
-weighting argument is about what a rule does and not about when it may fire, so guards only remove
-firings: **nogain stays sound and only becomes conservative.** What a zero test costs is
-reachability and termination.
+**What survives a zero test is the invariant, which is still worth knowing.** The weighting argument
+is about what a rule does and not about when it may fire, so guards only remove firings: **nogain
+stays sound and only becomes conservative.** What a zero test costs is reachability and termination.
+
+**One thing this predicted is built and untested.** `upkeep` runs before `lose-what-is-not-kept`, so
+a citizen eats food that is over capacity - Sean's *use stuff over capacity in other recipies to
+avoid the waste*, happening automatically. **No test states food in disorder and then ends a turn**,
+so the order is asserted by the tree and by nothing that runs.
 
 ## Refresh, what is left of it
 
@@ -153,8 +156,10 @@ anyone builds four of them.
 
 ## Grow or starve without a zero test, and the one word it costs
 
-**This is the design worked out on 2026-09-19 and not yet built.** It is written down because the
-conversation that produced it would be expensive to have twice.
+**The starving half is built**, on 2026-09-19 - `upkeep`, `perish`, `adjust-population`, `repeats`
+and `scope`. `README.md` -> *Hunger, and a rule that fires as many times as it can* is what it
+came to. **What is left here is breeding**, and the reserve, and what the two of them would need;
+the rest is kept because it is the reasoning the built half rests on.
 
 **The problem it looked like.** *A population grows on surplus food or starves for want of it* reads
 as a comparison, and `docs/designing-rules.md` puts a zero test on a counted place - food - on the
@@ -229,23 +234,50 @@ territory cannot be said, because which ones went short is not a question the mo
 is *we only lose what we don't have the storage for, without tracking what is stored where*, one
 level down.
 
-**What it costs the engine is one word: `{repeats rule:R}`.** A rule that fires as many times as it
-can. **It replaces three things that were each written down as needed** - a sweeping `remove`, a
-comparison operator, and arithmetic - because every rule that wanted one of those wanted the same
-thing: to happen as many times as it could. Perish is one remove repeated until nothing matches.
+**What it cost the engine was two words, `{repeats rule:R}` and `{scope rule:R input:I}`**, and both
+are built. **`repeats` replaced three things that were each written down as needed** - a sweeping
+`remove`, a comparison operator, and arithmetic - because every rule that wanted one of those wanted
+the same thing: to happen as many times as it could.
 
-**Two things stop a repeating rule**: being refused, and leaving the world as it found it. The
-second is what makes a `put` safe to repeat. **A rule with no `remove` can do neither** and should be
-refused when the world is read.
+**The paragraph that stood here said this was not a termination proof**, on the grounds that a rule
+removing one and adding two stops for neither reason. **The snapshot is what makes it one**: a
+firing draws from the world as it was when the repetition began, so a rule that removes one and adds
+two still takes one out of a pool that only shrinks. `Malformed::NeverStops` is the other half,
+refusing a repetition with nothing to consume.
 
-**And that is not a termination proof.** A rule that removes one and adds two stops for neither
-reason. What catches it is the weighting - *nothing comes back round with more* - which
-`reports/nogain.md` decides in the main tree and **nothing decides here.**
+**And *as many times as it can* includes zero**, which turned out to matter more than the varying
+amounts it was added for. It is how a step of the turn does nothing in a world it has no business
+in.
 
-**It cannot land before its first user**, which is `tests/mutation.rs` enforcing something worth
-knowing: `every_reference_forbids_something` asserts every `{reference ...}` is violated in some
-world, and a reference nothing uses is violated in none. **Vocabulary without a user is red**, not
-merely untested. Sean asked whether that would happen before it did.
+
+## Breeding, which is the half of the loop that is not built
+
+**Sean's loop, 2026-09-19**, of which the first three lines are built and the fourth is not:
+
+> citizen works food extractor / food extractor generates enough food for more than one citizen /
+> each citizen cosumes 1 food or perishes / **each remaining (citizen, food) produces an additional
+> citizen**
+
+**As a rule it is what `upkeep` already is, one trait along:**
+
+```text
+breed   remove citizen[hunger:0 bearing:1], remove food  ->  add citizen[hunger:0 bearing:0] x2
+```
+
+**`bearing` is what stops one citizen breeding with the whole surplus**, the same way `hunger` stops
+one citizen eating all the food - and it is a capacity rather than an obligation, so it is a gerund.
+**Removing the parent and adding two is how it gets its own `bearing` spent** without a `put` beside
+a `remove`.
+
+**It goes into `adjust-population` after `perish`**, and *excess* is then a position in the order
+rather than a comparison: whatever food is left when breeding runs is by construction the surplus.
+The increase is `min(food to spare, citizens that can bear)` with nothing computing a minimum.
+
+**What it costs every citizen row is a second trait**, and every clause that names a citizen has to
+name it - which is the churn this increment deliberately did not pay while nothing needed it.
+
+**Sean, 2026-09-19, on keeping the two apart**: *keeping breeding and hunger separate is the right
+call, the apparent connection is coincidental.*
 
 ## Smaller things, each with the reason it is not done
 
@@ -285,3 +317,16 @@ because a check that finds nothing to check passes.
 **`move` offers a unit into a place it cannot fit.** It does not - the pool refuses it - but
 `offered` finds that out by firing the rule and catching the refusal, which is the expensive way.
 Nothing is wrong; it is here because it is where the cost will show up first.
+
+**Nothing refuses a scoped rule that is nobody's part.** A `{scope ...}` input is the engine's to
+fill, so a rule that declares one is world-owned and belongs under the turn - and `offered` decides
+what a player may choose by skipping anything a part names, which is a different question that
+happens to give the right answer today. **Made a root, `upkeep` would be tried with `where` unbound,
+refused, and quietly left off the menu.** The fix is either a check when the world is read or
+`offered` skipping a scoped rule outright; **which one is worth writing is not clear yet**, because
+the menu a player is shown and the rules the world owns may want to be the same statement.
+
+**`Refused::NotOneToTake` is reachable by no rule.** It refuses a `remove` that several rows answer,
+and every clause names every trait it means - which is what avoids it. **A refusal nothing reaches
+is not the same as one nothing needs**: it is what makes a clause that says too little fail loudly
+rather than pick, and the clause that says too little has not been written yet.

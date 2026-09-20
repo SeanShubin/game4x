@@ -47,6 +47,8 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         "assigns",
         "capacity",
         "loose",
+        "repeats",
+        "scope",
         "primitive",
     ] {
         let declared = game
@@ -59,11 +61,11 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         );
         checked += 1;
     }
-    assert_eq!(checked, 27, "twenty-seven relations describe the structure");
+    assert_eq!(checked, 29, "twenty-nine relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        39,
-        "thirty-nine in all - those twenty-seven, and the game's twelve: six kinds, two families,\n         a territory, an adjacency, a deposit and an extractor"
+        42,
+        "forty-two in all - those twenty-nine, and the game's thirteen: six kinds, two families,\n         a territory, an adjacency, a deposit, an extractor and a citizen"
     );
 }
 
@@ -594,7 +596,7 @@ fn a_trait_and_the_column_that_holds_it_are_checked_both_ways() {
     // added - a trait nothing carries yet is how a new one would arrive.
     with("{trait id:991 name:dashing}").expect("a trait no relation declares a column for");
 
-    // **The control for the first is the game**: four `{carries ...}` rows, each naming a column
+    // **The control for the first is the game**: five `{carries ...}` rows, each naming a column
     // its kind declares, and `before()` loading at all is what says a consistent pair is taken.
     assert_eq!(
         before()
@@ -603,8 +605,48 @@ fn a_trait_and_the_column_that_holds_it_are_checked_both_ways() {
             .iter()
             .filter(|row| row.relation == "carries")
             .count(),
-        4,
-        "unit, scout and transport carry `moving`; extractor carries `working`"
+        5,
+        "unit, scout and transport carry `moving`; extractor carries `working`; citizen carries `hunger`"
+    );
+}
+
+/// **A repetition draws from a pool that only shrinks, and this is the rule with no pool.**
+///
+/// **It is the one bound the engine does not carry itself.** A composite cannot reach itself
+/// because `CycleOfParts` refuses it; a repetition cannot run forever because every firing takes
+/// something out of a world that began finite - and a rule that takes nothing out has no such
+/// argument to make.
+#[test]
+fn a_rule_that_repeats_and_removes_nothing_is_refused() {
+    // **`4` is `refresh`**, whose one clause is a `put`: it assigns and takes nothing away, so it
+    // would be able to fire again every time it fired.
+    assert_eq!(
+        with("{repeats rule:4}").expect_err("refresh consumes nothing"),
+        Malformed::NeverStops {
+            rule: "refresh".to_string()
+        }
+    );
+
+    // **`10` is `adjust-population`**, a composite, which has no clauses of its own - so what it
+    // consumes is its parts' business and a repetition of it would be reasoning about nothing.
+    assert_eq!(
+        with("{repeats rule:10}").expect_err("a composite removes nothing itself"),
+        Malformed::NeverStops {
+            rule: "adjust-population".to_string()
+        }
+    );
+
+    // **The control is the game**: `upkeep` and `perish` both repeat and both remove, and
+    // `before()` loading at all is what says a repetition with a pool is taken.
+    assert_eq!(
+        before()
+            .rows()
+            .rows()
+            .iter()
+            .filter(|row| row.relation == "repeats")
+            .count(),
+        2,
+        "`upkeep` and `perish` are what repeat"
     );
 }
 
@@ -635,7 +677,7 @@ fn the_rules_are_a_tree() {
     assert_eq!(
         with("{part id:991 of:4 is:5 seq:1}").expect_err("end-turn would reach itself"),
         Malformed::CycleOfParts {
-            rules: vec!["refresh".to_string(), "end-turn".to_string()]
+            rules: vec!["end-turn".to_string(), "refresh".to_string()]
         }
     );
 
@@ -685,8 +727,9 @@ fn the_tree_is_what_the_file_says_it_is() {
         .collect();
     assert_eq!(
         rules.len(),
-        7,
-        "move, build-extractor, work, refresh, end-turn, build-bin, lose-what-is-not-kept"
+        10,
+        "move, build-extractor, work, refresh, end-turn, build-bin, lose-what-is-not-kept,
+         upkeep, perish, adjust-population"
     );
     // **At least once, not exactly once.** `refresh` appears twice because `end-turn` names it
     // twice - two steps of one order - and asserting *once* said the tree was wrong when it was
@@ -699,8 +742,17 @@ fn the_tree_is_what_the_file_says_it_is() {
     }
     assert_eq!(
         shown.matches("refresh").count(),
+        3,
+        "and refresh is there three times, once per trait the turn restores"
+    );
+
+    // **And a step the engine fans out says so.** `upkeep` and `perish` are handed nothing, so
+    // without this the turn would read as though each happened once - which is the one thing a
+    // person reading it would get wrong.
+    assert_eq!(
+        shown.matches("per:territory").count(),
         2,
-        "and refresh is there twice, once per trait the turn restores"
+        "`upkeep` and `perish` each happen once per territory"
     );
 }
 
