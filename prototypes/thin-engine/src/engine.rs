@@ -381,8 +381,8 @@ fn apply(
                 if asked.held != relation {
                     continue;
                 }
-                for (place, used) in &asked.used {
-                    let there = asked.room.get(place).copied().unwrap_or(0);
+                for (at, used) in &asked.used {
+                    let there = asked.room.get(at).copied().unwrap_or(0);
                     if *used <= there {
                         continue;
                     }
@@ -398,7 +398,7 @@ fn apply(
                         .rows()
                         .iter()
                         .find(|row| {
-                            row.relation == relation && row.value(&column) == Some(place.as_str())
+                            row.relation == relation && row.value(&column) == Some(at.as_str())
                         })
                         .cloned()
                     else {
@@ -758,8 +758,8 @@ fn run(
     let mut after = game.clone();
     for places in every_binding(&choices) {
         let mut bound = bound.clone();
-        for ((input, _, _), place) in choices.iter().zip(places) {
-            bound.insert(input.clone(), place);
+        for ((input, _, _), at) in choices.iter().zip(places) {
+            bound.insert(input.clone(), at);
         }
         after = once(&after, of_rule, rule.clone(), &bound, effect)?;
     }

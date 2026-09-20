@@ -7,8 +7,11 @@
 
 {given}
 {territory id:1}
+{place id:1 of:1 layer:surface}
 {territory id:2}
+{place id:2 of:2 layer:surface}
 {territory id:3}
+{place id:3 of:3 layer:surface}
 {adjacency id:1 from:1 to:2}
 {adjacency id:2 from:2 to:3}
 {scout where:1 moving:1 quantity:1}

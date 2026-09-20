@@ -208,7 +208,7 @@ pub enum Malformed {
     Crowded {
         supply: String,
         /// The place it was counted in, as its key.
-        place: String,
+        at: String,
         /// The providing that would have had to be there, written out.
         wanted: String,
         /// What is provided.
@@ -270,7 +270,7 @@ pub enum Malformed {
     /// *I am imagining a live recipe editor that will be able to reject invalid recipes and give
     /// the reason.*
     NoRoom {
-        place: String,
+        at: String,
         contained: String,
         used: i64,
         room: i64,
@@ -339,13 +339,13 @@ impl std::fmt::Display for Malformed {
             }
             Malformed::Crowded {
                 supply,
-                place,
+                at,
                 wanted,
                 room,
             } => {
                 write!(
                     out,
-                    "`{place}` consumes {supply} enough for {wanted} and is provided {room}"
+                    "`{at}` consumes {supply} enough for {wanted} and is provided {room}"
                 )
             }
             Malformed::UnlikeShape {
@@ -389,14 +389,14 @@ impl std::fmt::Display for Malformed {
                 )
             }
             Malformed::NoRoom {
-                place,
+                at,
                 contained,
                 used,
                 room,
                 ..
             } => write!(
                 out,
-                "`{place}` holds {used} `{contained}` and has room for {room}"
+                "`{at}` holds {used} `{contained}` and has room for {room}"
             ),
             Malformed::LooseAndNotFungible { relation, by } => write!(
                 out,
@@ -1301,8 +1301,8 @@ pub fn rooming(schema: &Schema, rows: &Store) -> Vec<Rooming> {
             .clone();
         let mut room: BTreeMap<String, i64> = BTreeMap::new();
         for (of, each) in &gives {
-            for (place, how_much) in total(&name_of(of), *each) {
-                *room.entry(place).or_default() += how_much;
+            for (at, how_much) in total(&name_of(of), *each) {
+                *room.entry(at).or_default() += how_much;
             }
         }
         let used = total(&held, 1);
@@ -1449,8 +1449,8 @@ fn nothing_holds_more_than_there_is_room_for(
         if is_loose(schema, rows, &asked.held) {
             continue;
         }
-        for (place, used) in &asked.used {
-            let there = asked.room.get(place).copied().unwrap_or(0);
+        for (at, used) in &asked.used {
+            let there = asked.room.get(at).copied().unwrap_or(0);
             if *used <= there {
                 continue;
             }
@@ -1470,7 +1470,7 @@ fn nothing_holds_more_than_there_is_room_for(
                     let mine = schema
                         .relation_named(only)
                         .and_then(|it| place_of(schema, it, &asked.per).map(|_| it))
-                        .map(|it| count_in(schema, rows, it, &asked.what, &asked.per, place))
+                        .map(|it| count_in(schema, rows, it, &asked.what, &asked.per, at))
                         .unwrap_or(0);
                     let apiece = match mine {
                         0 => *used,
@@ -1491,7 +1491,7 @@ fn nothing_holds_more_than_there_is_room_for(
             return Err(Malformed::NoRoom {
                 // **The place is a row of `per` and not a relation**, so it is shown as its kind
                 // and its key.
-                place: format!("{} {place}", asked.per),
+                at: format!("{} {at}", asked.per),
                 contained: asked.held.clone(),
                 used: *used,
                 room: there,
@@ -1506,14 +1506,7 @@ fn nothing_holds_more_than_there_is_room_for(
 }
 
 /// How many rows of `relation` carrying `what` stand in one place.
-fn count_in(
-    schema: &Schema,
-    rows: &Store,
-    relation: &str,
-    what: &str,
-    per: &str,
-    place: &str,
-) -> i64 {
+fn count_in(schema: &Schema, rows: &Store, relation: &str, what: &str, per: &str, at: &str) -> i64 {
     let Some((is_place, column)) = place_of(schema, relation, per) else {
         return 0;
     };
@@ -1527,7 +1520,7 @@ fn count_in(
         {
             continue;
         }
-        if row.value(&column) != Some(place) {
+        if row.value(&column) != Some(at) {
             continue;
         }
         found += match declared.quantity() {
@@ -1626,7 +1619,7 @@ fn nothing_crowds_a_place(schema: &Schema, rows: &Store) -> Result<(), Malformed
                     }
                     continue;
                 }
-                let (Some(place), Some(quantity)) = (
+                let (Some(at_column), Some(quantity)) = (
                     declared
                         .columns
                         .iter()
@@ -1636,7 +1629,8 @@ fn nothing_crowds_a_place(schema: &Schema, rows: &Store) -> Result<(), Malformed
                     continue;
                 };
                 for row in rows.rows().iter().filter(|it| it.relation == *kind) {
-                    let (Some(at), Some(how_many)) = (row.value(&place.name), row.value(quantity))
+                    let (Some(at), Some(how_many)) =
+                        (row.value(&at_column.name), row.value(quantity))
                     else {
                         continue;
                     };
@@ -1651,8 +1645,8 @@ fn nothing_crowds_a_place(schema: &Schema, rows: &Store) -> Result<(), Malformed
         let consumed = counted(&amounts(CONSUMES));
         let providers = amounts(PROVIDES);
 
-        for (place, taken) in consumed {
-            let room = provided.get(&place).copied().unwrap_or(0);
+        for (at, taken) in consumed {
+            let room = provided.get(&at).copied().unwrap_or(0);
             if taken <= room {
                 continue;
             }
@@ -1674,7 +1668,7 @@ fn nothing_crowds_a_place(schema: &Schema, rows: &Store) -> Result<(), Malformed
             wanted.insert(QUANTITY.to_string(), taken.to_string());
             return Err(Malformed::Crowded {
                 supply: named.to_string(),
-                place,
+                at,
                 wanted: schema.write(&Row {
                     relation: PROVIDES.to_string(),
                     values: wanted,
@@ -1780,7 +1774,6 @@ fn held_within_what_holds_it(schema: &Schema, rows: &Store) -> Result<(), Malfor
     }
     Ok(())
 }
-
 #[cfg(test)]
 mod tests {
     /// **A tenth step comes after the ninth, and as text it came after the first.**

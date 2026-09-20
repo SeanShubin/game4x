@@ -6,25 +6,29 @@
 {test name:a-scout-moves-where-there-is-a-berth-to-spare}
 
 {given}
-{provides kind:territory what:berth} -> 6
+{provides kind:place what:berth} -> 6
 {consumes kind:scout what:berth} -> 1
 {consumes kind:transport what:berth} -> 2
 {territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
 {territory id:2 name:territory-2}
+{place id:2 of:territory-2 layer:surface name:place-2}
 {adjacency id:1 from:territory-1 to:territory-2}
-{scout where:territory-1 moving:1} -> 1
-{transport where:territory-2 moving:1} -> 2
-{scout where:territory-2 moving:0} -> 1
+{scout where:place-1 moving:1} -> 1
+{transport where:place-2 moving:1} -> 2
+{scout where:place-2 moving:0} -> 1
 
 {when}
-{move what:scout from:territory-1 to:territory-2}
+{move what:scout from:place-1 to:place-2}
 
 {then}
-{provides kind:territory what:berth} -> 6
+{provides kind:place what:berth} -> 6
 {consumes kind:scout what:berth} -> 1
 {consumes kind:transport what:berth} -> 2
 {territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
 {territory id:2 name:territory-2}
+{place id:2 of:territory-2 layer:surface name:place-2}
 {adjacency id:1 from:territory-1 to:territory-2}
-{transport where:territory-2 moving:1} -> 2
-{scout where:territory-2 moving:0} -> 2
+{transport where:place-2 moving:1} -> 2
+{scout where:place-2 moving:0} -> 2

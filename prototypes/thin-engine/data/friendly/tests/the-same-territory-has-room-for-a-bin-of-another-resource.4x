@@ -16,18 +16,20 @@
 
 {given}
 {territory id:1 name:territory-1}
-{capacity of:territory for:bin what:metal per:territory} -> 2
-{capacity of:territory for:bin what:food per:territory} -> 3
-{bin where:territory-1 what:metal} -> 2
-{labor where:territory-1} -> 1
-{metal where:territory-1} -> 1
+{place id:1 of:territory-1 layer:surface name:place-1}
+{capacity of:place for:bin what:metal per:place} -> 2
+{capacity of:place for:bin what:food per:place} -> 3
+{bin where:place-1 what:metal} -> 2
+{labor where:place-1} -> 1
+{metal where:place-1} -> 1
 
 {when}
-{build-bin where:territory-1 what:food}
+{build-bin where:place-1 what:food}
 
 {then}
 {territory id:1 name:territory-1}
-{capacity of:territory for:bin what:metal per:territory} -> 2
-{capacity of:territory for:bin what:food per:territory} -> 3
-{bin where:territory-1 what:metal} -> 2
-{bin where:territory-1 what:food} -> 1
+{place id:1 of:territory-1 layer:surface name:place-1}
+{capacity of:place for:bin what:metal per:place} -> 2
+{capacity of:place for:bin what:food per:place} -> 3
+{bin where:place-1 what:metal} -> 2
+{bin where:place-1 what:food} -> 1

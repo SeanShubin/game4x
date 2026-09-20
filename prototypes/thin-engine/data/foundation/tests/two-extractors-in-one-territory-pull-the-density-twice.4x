@@ -7,6 +7,7 @@
 
 {given}
 {territory id:1}
+{place id:1 of:1 layer:surface}
 {deposit where:1 what:31 density:6 quantity:2}
 {extractor where:1 what:31 working:1 quantity:2}
 {labor where:1 quantity:2}
@@ -17,6 +18,7 @@
 
 {then}
 {territory id:1}
+{place id:1 of:1 layer:surface}
 {deposit where:1 what:31 density:6 quantity:2}
 {extractor where:1 what:31 working:0 quantity:2}
 {food where:1 quantity:12}

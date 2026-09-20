@@ -8,19 +8,21 @@ old state
   - root
     - adjacency
     - bin
-      - {bin where:territory-1 what:metal} -> 2
+      - {bin where:place-1 what:metal} -> 2
     - capacity
-      - {capacity of:territory for:bin what:metal per:territory} -> 2
-      - {capacity of:territory for:bin what:food per:territory} -> 2
+      - {capacity of:place for:bin what:metal per:place} -> 2
+      - {capacity of:place for:bin what:food per:place} -> 2
     - citizen
     - consumes
     - deposit
     - extractor
     - food
     - labor
-      - {labor where:territory-1} -> 1
+      - {labor where:place-1} -> 1
     - metal
-      - {metal where:territory-1} -> 1
+      - {metal where:place-1} -> 1
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -28,7 +30,7 @@ old state
     - transport
 
 refused
-  `build-bin` would leave a world where `territory 1` holds 3 `bin` and has room for 2
+  `build-bin` would leave a world where `place 1` holds 3 `bin` and has room for 2
 
 as expected
 
@@ -40,36 +42,38 @@ old state
     - adjacency
     - bin
     - capacity
-      - {capacity of:territory for:bin what:metal per:territory} -> 4
-      - {capacity of:territory for:bin what:food per:territory} -> 4
+      - {capacity of:place for:bin what:metal per:place} -> 4
+      - {capacity of:place for:bin what:food per:place} -> 4
     - citizen
     - consumes
     - deposit
     - extractor
     - food
     - labor
-      - {labor where:territory-1} -> 1
+      - {labor where:place-1} -> 1
     - metal
-      - {metal where:territory-1} -> 1
+      - {metal where:place-1} -> 1
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
     - transport
 
-command  {build-bin where:territory-1 what:metal}
-  took   {labor where:territory-1} -> 1
-  took   {metal where:territory-1} -> 1
-  made   {bin where:territory-1 what:metal} -> 1
+command  {build-bin where:place-1 what:metal}
+  took   {labor where:place-1} -> 1
+  took   {metal where:place-1} -> 1
+  made   {bin where:place-1 what:metal} -> 1
 
 new state
   - root
     - adjacency
     - bin
-      - {bin where:territory-1 what:metal} -> 1
+      - {bin where:place-1 what:metal} -> 1
     - capacity
-      - {capacity of:territory for:bin what:metal per:territory} -> 4
-      - {capacity of:territory for:bin what:food per:territory} -> 4
+      - {capacity of:place for:bin what:metal per:place} -> 4
+      - {capacity of:place for:bin what:food per:place} -> 4
     - citizen
     - consumes
     - deposit
@@ -77,6 +81,8 @@ new state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -94,14 +100,16 @@ old state
     - bin
     - capacity
     - citizen
-      - {citizen where:territory-1 hungry:1 bearing:1} -> 3
+      - {citizen where:place-1 hungry:1 bearing:1} -> 3
     - consumes
     - deposit
     - extractor
     - food
-      - {food where:territory-1} -> 2
+      - {food where:place-1} -> 2
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -109,15 +117,15 @@ old state
     - transport
 
 command  {end-turn}
-  took   {citizen where:territory-1 hungry:1} -> 1
-  took   {food where:territory-1} -> 1
-  took   {citizen where:territory-1 hungry:1} -> 1
-  took   {food where:territory-1} -> 1
-  took   {citizen where:territory-1 hungry:1} -> 
-  took   {citizen where:territory-1 hungry:0 bearing:1} -> 2
-  made   {citizen where:territory-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:territory-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:territory-1 hungry:1 bearing:1} -> 2
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 
+  took   {citizen where:place-1 hungry:0 bearing:1} -> 2
+  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1} -> 2
 
 new state
   - root
@@ -125,13 +133,15 @@ new state
     - bin
     - capacity
     - citizen
-      - {citizen where:territory-1 hungry:1 bearing:1} -> 2
+      - {citizen where:place-1 hungry:1 bearing:1} -> 2
     - consumes
     - deposit
     - extractor
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -151,26 +161,28 @@ old state
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:metal density:2} -> 1
-      - {deposit where:territory-1 what:food density:6} -> 1
+      - {deposit where:place-1 what:metal density:2} -> 1
+      - {deposit where:place-1 what:food density:6} -> 1
     - extractor
-      - {extractor where:territory-1 what:metal working:1} -> 1
-      - {extractor where:territory-1 what:food working:1} -> 1
+      - {extractor where:place-1 what:metal working:1} -> 1
+      - {extractor where:place-1 what:food working:1} -> 1
     - food
     - labor
-      - {labor where:territory-1} -> 1
+      - {labor where:place-1} -> 1
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
     - transport
 
-command  {work where:territory-1 what:food}
-  took   {extractor where:territory-1 what:food working:1} -> 1
-  took   {labor where:territory-1} -> 1
-  made   {extractor where:territory-1 what:food working:0} -> 1
-  made   {food where:territory-1} -> 6
+command  {work where:place-1 what:food}
+  took   {extractor where:place-1 what:food working:1} -> 1
+  took   {labor where:place-1} -> 1
+  made   {extractor where:place-1 what:food working:0} -> 1
+  made   {food where:place-1} -> 6
 
 new state
   - root
@@ -180,15 +192,17 @@ new state
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:metal density:2} -> 1
-      - {deposit where:territory-1 what:food density:6} -> 1
+      - {deposit where:place-1 what:metal density:2} -> 1
+      - {deposit where:place-1 what:food density:6} -> 1
     - extractor
-      - {extractor where:territory-1 what:metal working:1} -> 1
-      - {extractor where:territory-1 what:food working:0} -> 1
+      - {extractor where:place-1 what:metal working:1} -> 1
+      - {extractor where:place-1 what:food working:0} -> 1
     - food
-      - {food where:territory-1} -> 6
+      - {food where:place-1} -> 6
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -214,10 +228,14 @@ old state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
+      - {place id:3 of:territory-3 layer:surface name:place-3}
     - provides
     - scout
-      - {scout where:territory-1 moving:1} -> 1
-      - {scout where:territory-2 moving:0} -> 1
+      - {scout where:place-1 moving:1} -> 1
+      - {scout where:place-2 moving:0} -> 1
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
@@ -245,18 +263,21 @@ old state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
     - provides
     - scout
-      - {scout where:territory-1 moving:1} -> 1
-      - {scout where:territory-2 moving:0} -> 1
+      - {scout where:place-1 moving:1} -> 1
+      - {scout where:place-2 moving:0} -> 1
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
     - transport
 
-command  {move what:scout from:territory-1 to:territory-2}
-  took   {scout where:territory-1 moving:1} -> 1
-  made   {scout where:territory-2 moving:0} -> 1
+command  {move what:scout from:place-1 to:place-2}
+  took   {scout where:place-1 moving:1} -> 1
+  made   {scout where:place-2 moving:0} -> 1
 
 new state
   - root
@@ -271,9 +292,12 @@ new state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
     - provides
     - scout
-      - {scout where:territory-2 moving:0} -> 2
+      - {scout where:place-2 moving:0} -> 2
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
@@ -299,18 +323,21 @@ old state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
     - provides
-      - {provides kind:territory what:berth} -> 6
+      - {provides kind:place what:berth} -> 6
     - scout
-      - {scout where:territory-1 moving:1} -> 1
+      - {scout where:place-1 moving:1} -> 1
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
     - transport
-      - {transport where:territory-2 moving:1} -> 3
+      - {transport where:place-2 moving:1} -> 3
 
 refused
-  `move` would leave a world where `2` consumes berth enough for {provides kind:13 what:1 quantity:7} and is provided 6
+  `move` would leave a world where `2` consumes berth enough for {provides kind:48 what:1 quantity:7} and is provided 6
 
 as expected
 
@@ -332,20 +359,23 @@ old state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
     - provides
-      - {provides kind:territory what:berth} -> 6
+      - {provides kind:place what:berth} -> 6
     - scout
-      - {scout where:territory-1 moving:1} -> 1
-      - {scout where:territory-2 moving:0} -> 1
+      - {scout where:place-1 moving:1} -> 1
+      - {scout where:place-2 moving:0} -> 1
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
     - transport
-      - {transport where:territory-2 moving:1} -> 2
+      - {transport where:place-2 moving:1} -> 2
 
-command  {move what:scout from:territory-1 to:territory-2}
-  took   {scout where:territory-1 moving:1} -> 1
-  made   {scout where:territory-2 moving:0} -> 1
+command  {move what:scout from:place-1 to:place-2}
+  took   {scout where:place-1 moving:1} -> 1
+  made   {scout where:place-2 moving:0} -> 1
 
 new state
   - root
@@ -362,15 +392,18 @@ new state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
     - provides
-      - {provides kind:territory what:berth} -> 6
+      - {provides kind:place what:berth} -> 6
     - scout
-      - {scout where:territory-2 moving:0} -> 2
+      - {scout where:place-2 moving:0} -> 2
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
     - transport
-      - {transport where:territory-2 moving:1} -> 2
+      - {transport where:place-2 moving:1} -> 2
 
 as expected
 
@@ -391,9 +424,12 @@ old state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
     - provides
     - scout
-      - {scout where:territory-1 moving:1} -> 1
+      - {scout where:place-1 moving:1} -> 1
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
@@ -411,66 +447,70 @@ old state
   - root
     - adjacency
     - bin
-      - {bin where:territory-1 what:metal} -> 1
+      - {bin where:place-1 what:metal} -> 1
     - capacity
-      - {capacity of:territory for:bin what:metal per:territory} -> 4
-      - {capacity of:territory for:bin what:food per:territory} -> 4
-      - {capacity of:transport for:metal what:metal per:territory} -> 10
-      - {capacity of:transport for:food what:food per:territory} -> 10
-      - {capacity of:bin for:metal what:metal per:territory} -> 10
-      - {capacity of:bin for:food what:food per:territory} -> 10
+      - {capacity of:transport for:metal what:metal per:place} -> 10
+      - {capacity of:transport for:food what:food per:place} -> 10
+      - {capacity of:bin for:metal what:metal per:place} -> 10
+      - {capacity of:bin for:food what:food per:place} -> 10
+      - {capacity of:place for:bin what:metal per:place} -> 4
+      - {capacity of:place for:bin what:food per:place} -> 4
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:metal density:6} -> 1
+      - {deposit where:place-1 what:metal density:6} -> 1
     - extractor
-      - {extractor where:territory-1 what:metal working:1} -> 1
+      - {extractor where:place-1 what:metal working:1} -> 1
     - food
     - labor
-      - {labor where:territory-1} -> 1
+      - {labor where:place-1} -> 1
     - metal
-      - {metal where:territory-1} -> 14
+      - {metal where:place-1} -> 14
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
     - transport
-      - {transport where:territory-1 moving:1} -> 1
+      - {transport where:place-1 moving:1} -> 1
 
-command  {work where:territory-1 what:metal}
-  took   {extractor where:territory-1 what:metal working:1} -> 1
-  took   {labor where:territory-1} -> 1
-  made   {extractor where:territory-1 what:metal working:0} -> 1
-  made   {metal where:territory-1} -> 6
+command  {work where:place-1 what:metal}
+  took   {extractor where:place-1 what:metal working:1} -> 1
+  took   {labor where:place-1} -> 1
+  made   {extractor where:place-1 what:metal working:0} -> 1
+  made   {metal where:place-1} -> 6
 
 new state
   - root
     - adjacency
     - bin
-      - {bin where:territory-1 what:metal} -> 1
+      - {bin where:place-1 what:metal} -> 1
     - capacity
-      - {capacity of:territory for:bin what:metal per:territory} -> 4
-      - {capacity of:territory for:bin what:food per:territory} -> 4
-      - {capacity of:transport for:metal what:metal per:territory} -> 10
-      - {capacity of:transport for:food what:food per:territory} -> 10
-      - {capacity of:bin for:metal what:metal per:territory} -> 10
-      - {capacity of:bin for:food what:food per:territory} -> 10
+      - {capacity of:transport for:metal what:metal per:place} -> 10
+      - {capacity of:transport for:food what:food per:place} -> 10
+      - {capacity of:bin for:metal what:metal per:place} -> 10
+      - {capacity of:bin for:food what:food per:place} -> 10
+      - {capacity of:place for:bin what:metal per:place} -> 4
+      - {capacity of:place for:bin what:food per:place} -> 4
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:metal density:6} -> 1
+      - {deposit where:place-1 what:metal density:6} -> 1
     - extractor
-      - {extractor where:territory-1 what:metal working:0} -> 1
+      - {extractor where:place-1 what:metal working:0} -> 1
     - food
     - labor
     - metal
-      - {metal where:territory-1} -> 20
+      - {metal where:place-1} -> 20
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
     - transport
-      - {transport where:territory-1 moving:1} -> 1
+      - {transport where:place-1 moving:1} -> 1
 
 as expected
 
@@ -485,14 +525,16 @@ old state
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:food density:6} -> 1
+      - {deposit where:place-1 what:food density:6} -> 1
     - extractor
-      - {extractor where:territory-1 what:food working:0} -> 1
+      - {extractor where:place-1 what:food working:0} -> 1
     - food
     - labor
-      - {labor where:territory-1} -> 1
+      - {labor where:place-1} -> 1
     - metal
-      - {metal where:territory-1} -> 1
+      - {metal where:place-1} -> 1
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -518,9 +560,11 @@ old state
     - extractor
     - food
     - labor
-      - {labor where:territory-1} -> 1
+      - {labor where:place-1} -> 1
     - metal
-      - {metal where:territory-1} -> 1
+      - {metal where:place-1} -> 1
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -543,13 +587,15 @@ old state
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:food density:6} -> 1
+      - {deposit where:place-1 what:food density:6} -> 1
     - extractor
-      - {extractor where:territory-1 what:food working:1} -> 1
+      - {extractor where:place-1 what:food working:1} -> 1
     - food
     - labor
-      - {labor where:territory-1} -> 2
+      - {labor where:place-1} -> 2
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -572,12 +618,14 @@ old state
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:food density:6} -> 1
+      - {deposit where:place-1 what:food density:6} -> 1
     - extractor
-      - {extractor where:territory-1 what:food working:1} -> 1
+      - {extractor where:place-1 what:food working:1} -> 1
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -600,23 +648,25 @@ old state
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:food density:6} -> 1
+      - {deposit where:place-1 what:food density:6} -> 1
     - extractor
     - food
     - labor
-      - {labor where:territory-1} -> 1
+      - {labor where:place-1} -> 1
     - metal
-      - {metal where:territory-1} -> 1
+      - {metal where:place-1} -> 1
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
     - transport
 
-command  {build-extractor where:territory-1 what:food}
-  took   {labor where:territory-1} -> 1
-  took   {metal where:territory-1} -> 1
-  made   {extractor where:territory-1 what:food working:0} -> 1
+command  {build-extractor where:place-1 what:food}
+  took   {labor where:place-1} -> 1
+  took   {metal where:place-1} -> 1
+  made   {extractor where:place-1 what:food working:0} -> 1
 
 new state
   - root
@@ -626,12 +676,14 @@ new state
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:food density:6} -> 1
+      - {deposit where:place-1 what:food density:6} -> 1
     - extractor
-      - {extractor where:territory-1 what:food working:0} -> 1
+      - {extractor where:place-1 what:food working:0} -> 1
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -651,24 +703,26 @@ old state
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:food density:6} -> 1
+      - {deposit where:place-1 what:food density:6} -> 1
     - extractor
-      - {extractor where:territory-1 what:food working:1} -> 1
+      - {extractor where:place-1 what:food working:1} -> 1
     - food
     - labor
-      - {labor where:territory-1} -> 1
+      - {labor where:place-1} -> 1
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
     - transport
 
-command  {work where:territory-1 what:food}
-  took   {extractor where:territory-1 what:food working:1} -> 1
-  took   {labor where:territory-1} -> 1
-  made   {extractor where:territory-1 what:food working:0} -> 1
-  made   {food where:territory-1} -> 6
+command  {work where:place-1 what:food}
+  took   {extractor where:place-1 what:food working:1} -> 1
+  took   {labor where:place-1} -> 1
+  made   {extractor where:place-1 what:food working:0} -> 1
+  made   {food where:place-1} -> 6
 
 new state
   - root
@@ -678,13 +732,15 @@ new state
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:food density:6} -> 1
+      - {deposit where:place-1 what:food density:6} -> 1
     - extractor
-      - {extractor where:territory-1 what:food working:0} -> 1
+      - {extractor where:place-1 what:food working:0} -> 1
     - food
-      - {food where:territory-1} -> 6
+      - {food where:place-1} -> 6
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -702,14 +758,16 @@ old state
     - bin
     - capacity
     - citizen
-      - {citizen where:territory-1 hungry:0 bearing:1} -> 2
+      - {citizen where:place-1 hungry:0 bearing:1} -> 2
     - consumes
     - deposit
     - extractor
     - food
-      - {food where:territory-1} -> 5
+      - {food where:place-1} -> 5
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -717,12 +775,12 @@ old state
     - transport
 
 command  {breed}
-  took   {citizen where:territory-1 hungry:0 bearing:1} -> 1
-  took   {food where:territory-1} -> 1
-  took   {citizen where:territory-1 hungry:0 bearing:1} -> 1
-  took   {food where:territory-1} -> 1
-  made   {citizen where:territory-1 hungry:0 bearing:0} -> 2
-  made   {citizen where:territory-1 hungry:0 bearing:0} -> 2
+  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  took   {food where:place-1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:0} -> 2
+  made   {citizen where:place-1 hungry:0 bearing:0} -> 2
 
 new state
   - root
@@ -730,14 +788,16 @@ new state
     - bin
     - capacity
     - citizen
-      - {citizen where:territory-1 hungry:0 bearing:0} -> 4
+      - {citizen where:place-1 hungry:0 bearing:0} -> 4
     - consumes
     - deposit
     - extractor
     - food
-      - {food where:territory-1} -> 3
+      - {food where:place-1} -> 3
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -755,14 +815,16 @@ old state
     - bin
     - capacity
     - citizen
-      - {citizen where:territory-1 hungry:1 bearing:1} -> 3
+      - {citizen where:place-1 hungry:1 bearing:1} -> 3
     - consumes
     - deposit
     - extractor
     - food
-      - {food where:territory-1} -> 5
+      - {food where:place-1} -> 5
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -770,27 +832,27 @@ old state
     - transport
 
 command  {end-turn}
-  took   {citizen where:territory-1 hungry:1} -> 1
-  took   {food where:territory-1} -> 1
-  took   {citizen where:territory-1 hungry:1} -> 1
-  took   {food where:territory-1} -> 1
-  took   {citizen where:territory-1 hungry:1} -> 1
-  took   {food where:territory-1} -> 1
-  took   {citizen where:territory-1 hungry:0 bearing:1} -> 1
-  took   {food where:territory-1} -> 1
-  took   {citizen where:territory-1 hungry:0 bearing:1} -> 1
-  took   {food where:territory-1} -> 1
-  took   {citizen where:territory-1 hungry:0 bearing:1} -> 1
-  took   {citizen where:territory-1 hungry:0 bearing:0} -> 4
-  took   {citizen where:territory-1 hungry:1 bearing:0} -> 4
-  made   {citizen where:territory-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:territory-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:territory-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:territory-1 hungry:0 bearing:0} -> 2
-  made   {citizen where:territory-1 hungry:0 bearing:0} -> 2
-  made   {citizen where:territory-1 hungry:1 bearing:1} -> 1
-  made   {citizen where:territory-1 hungry:1 bearing:0} -> 4
-  made   {citizen where:territory-1 hungry:1 bearing:1} -> 4
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:0} -> 4
+  took   {citizen where:place-1 hungry:1 bearing:0} -> 4
+  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:0} -> 2
+  made   {citizen where:place-1 hungry:0 bearing:0} -> 2
+  made   {citizen where:place-1 hungry:1 bearing:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:0} -> 4
+  made   {citizen where:place-1 hungry:1 bearing:1} -> 4
 
 new state
   - root
@@ -798,13 +860,15 @@ new state
     - bin
     - capacity
     - citizen
-      - {citizen where:territory-1 hungry:1 bearing:1} -> 5
+      - {citizen where:place-1 hungry:1 bearing:1} -> 5
     - consumes
     - deposit
     - extractor
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -820,12 +884,12 @@ old state
   - root
     - adjacency
     - bin
-      - {bin where:territory-1 what:metal} -> 2
+      - {bin where:place-1 what:metal} -> 2
     - capacity
-      - {capacity of:territory for:bin what:metal per:territory} -> 4
-      - {capacity of:territory for:bin what:food per:territory} -> 4
-      - {capacity of:bin for:metal what:metal per:territory} -> 10
-      - {capacity of:bin for:food what:food per:territory} -> 10
+      - {capacity of:bin for:metal what:metal per:place} -> 10
+      - {capacity of:bin for:food what:food per:place} -> 10
+      - {capacity of:place for:bin what:metal per:place} -> 4
+      - {capacity of:place for:bin what:food per:place} -> 4
     - citizen
     - consumes
     - deposit
@@ -833,7 +897,9 @@ old state
     - food
     - labor
     - metal
-      - {metal where:territory-1} -> 22
+      - {metal where:place-1} -> 22
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -841,19 +907,19 @@ old state
     - transport
 
 command  {discard-disorder}
-  took   {metal where:territory-1} -> 22
-  made   {metal where:territory-1} -> 20
+  took   {metal where:place-1} -> 22
+  made   {metal where:place-1} -> 20
 
 new state
   - root
     - adjacency
     - bin
-      - {bin where:territory-1 what:metal} -> 2
+      - {bin where:place-1 what:metal} -> 2
     - capacity
-      - {capacity of:territory for:bin what:metal per:territory} -> 4
-      - {capacity of:territory for:bin what:food per:territory} -> 4
-      - {capacity of:bin for:metal what:metal per:territory} -> 10
-      - {capacity of:bin for:food what:food per:territory} -> 10
+      - {capacity of:bin for:metal what:metal per:place} -> 10
+      - {capacity of:bin for:food what:food per:place} -> 10
+      - {capacity of:place for:bin what:metal per:place} -> 4
+      - {capacity of:place for:bin what:food per:place} -> 4
     - citizen
     - consumes
     - deposit
@@ -861,7 +927,9 @@ new state
     - food
     - labor
     - metal
-      - {metal where:territory-1} -> 20
+      - {metal where:place-1} -> 20
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -881,26 +949,28 @@ old state
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:food density:6} -> 2
+      - {deposit where:place-1 what:food density:6} -> 2
     - extractor
-      - {extractor where:territory-1 what:food working:0} -> 1
-      - {extractor where:territory-1 what:food working:1} -> 1
+      - {extractor where:place-1 what:food working:0} -> 1
+      - {extractor where:place-1 what:food working:1} -> 1
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
-      - {scout where:territory-1 moving:0} -> 2
-      - {scout where:territory-1 moving:1} -> 1
+      - {scout where:place-1 moving:0} -> 2
+      - {scout where:place-1 moving:1} -> 1
     - territory
       - {territory id:1 name:territory-1}
     - transport
 
 command  {end-turn}
-  took   {scout where:territory-1 moving:0} -> 2
-  took   {extractor where:territory-1 what:food working:0} -> 1
-  made   {scout where:territory-1 moving:1} -> 2
-  made   {extractor where:territory-1 what:food working:1} -> 1
+  took   {scout where:place-1 moving:0} -> 2
+  took   {extractor where:place-1 what:food working:0} -> 1
+  made   {scout where:place-1 moving:1} -> 2
+  made   {extractor where:place-1 what:food working:1} -> 1
 
 new state
   - root
@@ -910,15 +980,17 @@ new state
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:food density:6} -> 2
+      - {deposit where:place-1 what:food density:6} -> 2
     - extractor
-      - {extractor where:territory-1 what:food working:1} -> 2
+      - {extractor where:place-1 what:food working:1} -> 2
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
-      - {scout where:territory-1 moving:1} -> 3
+      - {scout where:place-1 moving:1} -> 3
     - territory
       - {territory id:1 name:territory-1}
     - transport
@@ -932,12 +1004,12 @@ old state
   - root
     - adjacency
     - bin
-      - {bin where:territory-1 what:metal} -> 2
+      - {bin where:place-1 what:metal} -> 2
     - capacity
-      - {capacity of:territory for:bin what:metal per:territory} -> 4
-      - {capacity of:territory for:bin what:food per:territory} -> 4
-      - {capacity of:bin for:metal what:metal per:territory} -> 10
-      - {capacity of:bin for:food what:food per:territory} -> 10
+      - {capacity of:bin for:metal what:metal per:place} -> 10
+      - {capacity of:bin for:food what:food per:place} -> 10
+      - {capacity of:place for:bin what:metal per:place} -> 4
+      - {capacity of:place for:bin what:food per:place} -> 4
     - citizen
     - consumes
     - deposit
@@ -945,7 +1017,9 @@ old state
     - food
     - labor
     - metal
-      - {metal where:territory-1} -> 22
+      - {metal where:place-1} -> 22
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -953,19 +1027,19 @@ old state
     - transport
 
 command  {end-turn}
-  took   {metal where:territory-1} -> 22
-  made   {metal where:territory-1} -> 20
+  took   {metal where:place-1} -> 22
+  made   {metal where:place-1} -> 20
 
 new state
   - root
     - adjacency
     - bin
-      - {bin where:territory-1 what:metal} -> 2
+      - {bin where:place-1 what:metal} -> 2
     - capacity
-      - {capacity of:territory for:bin what:metal per:territory} -> 4
-      - {capacity of:territory for:bin what:food per:territory} -> 4
-      - {capacity of:bin for:metal what:metal per:territory} -> 10
-      - {capacity of:bin for:food what:food per:territory} -> 10
+      - {capacity of:bin for:metal what:metal per:place} -> 10
+      - {capacity of:bin for:food what:food per:place} -> 10
+      - {capacity of:place for:bin what:metal per:place} -> 4
+      - {capacity of:place for:bin what:food per:place} -> 4
     - citizen
     - consumes
     - deposit
@@ -973,7 +1047,9 @@ new state
     - food
     - labor
     - metal
-      - {metal where:territory-1} -> 20
+      - {metal where:place-1} -> 20
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -989,55 +1065,59 @@ old state
   - root
     - adjacency
     - bin
-      - {bin where:territory-1 what:metal} -> 2
+      - {bin where:place-1 what:metal} -> 2
     - capacity
-      - {capacity of:territory for:bin what:metal per:territory} -> 4
-      - {capacity of:territory for:bin what:food per:territory} -> 4
-      - {capacity of:bin for:metal what:metal per:territory} -> 10
-      - {capacity of:bin for:food what:food per:territory} -> 10
+      - {capacity of:bin for:metal what:metal per:place} -> 10
+      - {capacity of:bin for:food what:food per:place} -> 10
+      - {capacity of:place for:bin what:metal per:place} -> 4
+      - {capacity of:place for:bin what:food per:place} -> 4
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:metal density:6} -> 1
+      - {deposit where:place-1 what:metal density:6} -> 1
     - extractor
-      - {extractor where:territory-1 what:metal working:1} -> 1
+      - {extractor where:place-1 what:metal working:1} -> 1
     - food
     - labor
-      - {labor where:territory-1} -> 1
+      - {labor where:place-1} -> 1
     - metal
-      - {metal where:territory-1} -> 16
+      - {metal where:place-1} -> 16
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
     - transport
 
-command  {work where:territory-1 what:metal}
-  took   {extractor where:territory-1 what:metal working:1} -> 1
-  took   {labor where:territory-1} -> 1
-  made   {extractor where:territory-1 what:metal working:0} -> 1
-  made   {metal where:territory-1} -> 6
+command  {work where:place-1 what:metal}
+  took   {extractor where:place-1 what:metal working:1} -> 1
+  took   {labor where:place-1} -> 1
+  made   {extractor where:place-1 what:metal working:0} -> 1
+  made   {metal where:place-1} -> 6
 
 new state
   - root
     - adjacency
     - bin
-      - {bin where:territory-1 what:metal} -> 2
+      - {bin where:place-1 what:metal} -> 2
     - capacity
-      - {capacity of:territory for:bin what:metal per:territory} -> 4
-      - {capacity of:territory for:bin what:food per:territory} -> 4
-      - {capacity of:bin for:metal what:metal per:territory} -> 10
-      - {capacity of:bin for:food what:food per:territory} -> 10
+      - {capacity of:bin for:metal what:metal per:place} -> 10
+      - {capacity of:bin for:food what:food per:place} -> 10
+      - {capacity of:place for:bin what:metal per:place} -> 4
+      - {capacity of:place for:bin what:food per:place} -> 4
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:metal density:6} -> 1
+      - {deposit where:place-1 what:metal density:6} -> 1
     - extractor
-      - {extractor where:territory-1 what:metal working:0} -> 1
+      - {extractor where:place-1 what:metal working:0} -> 1
     - food
     - labor
     - metal
-      - {metal where:territory-1} -> 22
+      - {metal where:place-1} -> 22
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -1053,54 +1133,58 @@ old state
   - root
     - adjacency
     - bin
-      - {bin where:territory-1 what:metal} -> 2
+      - {bin where:place-1 what:metal} -> 2
     - capacity
-      - {capacity of:territory for:bin what:metal per:territory} -> 4
-      - {capacity of:territory for:bin what:food per:territory} -> 4
-      - {capacity of:bin for:metal what:metal per:territory} -> 10
-      - {capacity of:bin for:food what:food per:territory} -> 10
+      - {capacity of:bin for:metal what:metal per:place} -> 10
+      - {capacity of:bin for:food what:food per:place} -> 10
+      - {capacity of:place for:bin what:metal per:place} -> 4
+      - {capacity of:place for:bin what:food per:place} -> 4
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:metal density:6} -> 2
+      - {deposit where:place-1 what:metal density:6} -> 2
     - extractor
-      - {extractor where:territory-1 what:metal working:0} -> 1
+      - {extractor where:place-1 what:metal working:0} -> 1
     - food
     - labor
-      - {labor where:territory-1} -> 1
+      - {labor where:place-1} -> 1
     - metal
-      - {metal where:territory-1} -> 22
+      - {metal where:place-1} -> 22
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
     - transport
 
-command  {build-extractor where:territory-1 what:metal}
-  took   {labor where:territory-1} -> 1
-  took   {metal where:territory-1} -> 1
-  made   {extractor where:territory-1 what:metal working:0} -> 1
+command  {build-extractor where:place-1 what:metal}
+  took   {labor where:place-1} -> 1
+  took   {metal where:place-1} -> 1
+  made   {extractor where:place-1 what:metal working:0} -> 1
 
 new state
   - root
     - adjacency
     - bin
-      - {bin where:territory-1 what:metal} -> 2
+      - {bin where:place-1 what:metal} -> 2
     - capacity
-      - {capacity of:territory for:bin what:metal per:territory} -> 4
-      - {capacity of:territory for:bin what:food per:territory} -> 4
-      - {capacity of:bin for:metal what:metal per:territory} -> 10
-      - {capacity of:bin for:food what:food per:territory} -> 10
+      - {capacity of:bin for:metal what:metal per:place} -> 10
+      - {capacity of:bin for:food what:food per:place} -> 10
+      - {capacity of:place for:bin what:metal per:place} -> 4
+      - {capacity of:place for:bin what:food per:place} -> 4
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:metal density:6} -> 2
+      - {deposit where:place-1 what:metal density:6} -> 2
     - extractor
-      - {extractor where:territory-1 what:metal working:0} -> 2
+      - {extractor where:place-1 what:metal working:0} -> 2
     - food
     - labor
     - metal
-      - {metal where:territory-1} -> 21
+      - {metal where:place-1} -> 21
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -1120,15 +1204,17 @@ old state
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:metal density:2} -> 1
-      - {deposit where:territory-1 what:food density:6} -> 1
+      - {deposit where:place-1 what:metal density:2} -> 1
+      - {deposit where:place-1 what:food density:6} -> 1
     - extractor
-      - {extractor where:territory-1 what:metal working:1} -> 1
-      - {extractor where:territory-1 what:food working:1} -> 1
+      - {extractor where:place-1 what:metal working:1} -> 1
+      - {extractor where:place-1 what:food working:1} -> 1
     - food
     - labor
-      - {labor where:territory-1} -> 2
+      - {labor where:place-1} -> 2
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -1155,21 +1241,23 @@ old state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
-      - {scout where:territory-1 moving:0} -> 2
-      - {scout where:territory-1 moving:1} -> 1
+      - {scout where:place-1 moving:0} -> 2
+      - {scout where:place-1 moving:1} -> 1
     - territory
       - {territory id:1 name:territory-1}
     - transport
-      - {transport where:territory-1 moving:0} -> 1
-      - {transport where:territory-1 moving:1} -> 2
+      - {transport where:place-1 moving:0} -> 1
+      - {transport where:place-1 moving:1} -> 2
 
 command  {refresh what:unit trait:moving}
-  took   {scout where:territory-1 moving:0} -> 2
-  took   {transport where:territory-1 moving:0} -> 1
-  made   {scout where:territory-1 moving:1} -> 2
-  made   {transport where:territory-1 moving:1} -> 1
+  took   {scout where:place-1 moving:0} -> 2
+  took   {transport where:place-1 moving:0} -> 1
+  made   {scout where:place-1 moving:1} -> 2
+  made   {transport where:place-1 moving:1} -> 1
 
 new state
   - root
@@ -1183,13 +1271,15 @@ new state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
-      - {scout where:territory-1 moving:1} -> 3
+      - {scout where:place-1 moving:1} -> 3
     - territory
       - {territory id:1 name:territory-1}
     - transport
-      - {transport where:territory-1 moving:1} -> 3
+      - {transport where:place-1 moving:1} -> 3
 
 as expected
 
@@ -1209,17 +1299,20 @@ old state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
     - provides
     - scout
-      - {scout where:territory-1 moving:1} -> 2
+      - {scout where:place-1 moving:1} -> 2
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
     - transport
 
-command  {move what:scout from:territory-1 to:territory-2}
-  took   {scout where:territory-1 moving:1} -> 1
-  made   {scout where:territory-2 moving:0} -> 1
+command  {move what:scout from:place-1 to:place-2}
+  took   {scout where:place-1 moving:1} -> 1
+  made   {scout where:place-2 moving:0} -> 1
 
 new state
   - root
@@ -1234,10 +1327,13 @@ new state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
     - provides
     - scout
-      - {scout where:territory-1 moving:1} -> 1
-      - {scout where:territory-2 moving:0} -> 1
+      - {scout where:place-1 moving:1} -> 1
+      - {scout where:place-2 moving:0} -> 1
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
@@ -1254,17 +1350,20 @@ old state
     - bin
     - capacity
     - citizen
-      - {citizen where:territory-1 hungry:0 bearing:1} -> 1
-      - {citizen where:territory-1 hungry:1 bearing:1} -> 2
-      - {citizen where:territory-2 hungry:1 bearing:1} -> 1
+      - {citizen where:place-1 hungry:0 bearing:1} -> 1
+      - {citizen where:place-1 hungry:1 bearing:1} -> 2
+      - {citizen where:place-2 hungry:1 bearing:1} -> 1
     - consumes
     - deposit
     - extractor
     - food
-      - {food where:territory-1} -> 1
-      - {food where:territory-2} -> 5
+      - {food where:place-1} -> 1
+      - {food where:place-2} -> 5
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
     - provides
     - scout
     - territory
@@ -1273,12 +1372,12 @@ old state
     - transport
 
 command  {upkeep}
-  took   {citizen where:territory-1 hungry:1} -> 1
-  took   {food where:territory-1} -> 1
-  took   {citizen where:territory-2 hungry:1} -> 1
-  took   {food where:territory-2} -> 1
-  made   {citizen where:territory-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:territory-2 hungry:0 bearing:1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-2 hungry:1} -> 1
+  took   {food where:place-2} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  made   {citizen where:place-2 hungry:0 bearing:1} -> 1
 
 new state
   - root
@@ -1286,16 +1385,19 @@ new state
     - bin
     - capacity
     - citizen
-      - {citizen where:territory-1 hungry:0 bearing:1} -> 2
-      - {citizen where:territory-1 hungry:1 bearing:1} -> 1
-      - {citizen where:territory-2 hungry:0 bearing:1} -> 1
+      - {citizen where:place-1 hungry:0 bearing:1} -> 2
+      - {citizen where:place-1 hungry:1 bearing:1} -> 1
+      - {citizen where:place-2 hungry:0 bearing:1} -> 1
     - consumes
     - deposit
     - extractor
     - food
-      - {food where:territory-2} -> 4
+      - {food where:place-2} -> 4
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
     - provides
     - scout
     - territory
@@ -1316,34 +1418,36 @@ old state
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:food density:6} -> 1
+      - {deposit where:place-1 what:food density:6} -> 1
     - extractor
-      - {extractor where:territory-1 what:food working:1} -> 1
+      - {extractor where:place-1 what:food working:1} -> 1
     - food
     - labor
-      - {labor where:territory-1} -> 2
+      - {labor where:place-1} -> 2
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
     - transport
 
-command  {work where:territory-1 what:food}
-  took   {extractor where:territory-1 what:food working:1} -> 1
-  took   {labor where:territory-1} -> 1
-  made   {extractor where:territory-1 what:food working:0} -> 1
-  made   {food where:territory-1} -> 6
+command  {work where:place-1 what:food}
+  took   {extractor where:place-1 what:food working:1} -> 1
+  took   {labor where:place-1} -> 1
+  made   {extractor where:place-1 what:food working:0} -> 1
+  made   {food where:place-1} -> 6
 
 command  {refresh what:extractor trait:working}
-  took   {extractor where:territory-1 what:food working:0} -> 1
-  made   {extractor where:territory-1 what:food working:1} -> 1
+  took   {extractor where:place-1 what:food working:0} -> 1
+  made   {extractor where:place-1 what:food working:1} -> 1
 
-command  {work where:territory-1 what:food}
-  took   {extractor where:territory-1 what:food working:1} -> 1
-  took   {labor where:territory-1} -> 1
-  made   {extractor where:territory-1 what:food working:0} -> 1
-  made   {food where:territory-1} -> 6
+command  {work where:place-1 what:food}
+  took   {extractor where:place-1 what:food working:1} -> 1
+  took   {labor where:place-1} -> 1
+  made   {extractor where:place-1 what:food working:0} -> 1
+  made   {food where:place-1} -> 6
 
 new state
   - root
@@ -1353,13 +1457,15 @@ new state
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:food density:6} -> 1
+      - {deposit where:place-1 what:food density:6} -> 1
     - extractor
-      - {extractor where:territory-1 what:food working:0} -> 1
+      - {extractor where:place-1 what:food working:0} -> 1
     - food
-      - {food where:territory-1} -> 12
+      - {food where:place-1} -> 12
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -1383,17 +1489,19 @@ old state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
-      - {scout where:territory-1 moving:0} -> 3
-      - {scout where:territory-1 moving:1} -> 2
+      - {scout where:place-1 moving:0} -> 3
+      - {scout where:place-1 moving:1} -> 2
     - territory
       - {territory id:1 name:territory-1}
     - transport
 
 command  {refresh what:scout trait:moving}
-  took   {scout where:territory-1 moving:0} -> 3
-  made   {scout where:territory-1 moving:1} -> 3
+  took   {scout where:place-1 moving:0} -> 3
+  made   {scout where:place-1 moving:1} -> 3
 
 new state
   - root
@@ -1407,9 +1515,11 @@ new state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
-      - {scout where:territory-1 moving:1} -> 5
+      - {scout where:place-1 moving:1} -> 5
     - territory
       - {territory id:1 name:territory-1}
     - transport
@@ -1425,16 +1535,19 @@ old state
     - bin
     - capacity
     - citizen
-      - {citizen where:territory-1 hungry:1 bearing:1} -> 3
-      - {citizen where:territory-2 hungry:1 bearing:1} -> 2
+      - {citizen where:place-1 hungry:1 bearing:1} -> 3
+      - {citizen where:place-2 hungry:1 bearing:1} -> 2
     - consumes
     - deposit
     - extractor
     - food
-      - {food where:territory-1} -> 2
-      - {food where:territory-2} -> 1
+      - {food where:place-1} -> 2
+      - {food where:place-2} -> 1
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
     - provides
     - scout
     - territory
@@ -1443,21 +1556,21 @@ old state
     - transport
 
 command  {end-turn}
-  took   {citizen where:territory-1 hungry:1} -> 1
-  took   {food where:territory-1} -> 1
-  took   {citizen where:territory-1 hungry:1} -> 1
-  took   {food where:territory-1} -> 1
-  took   {citizen where:territory-2 hungry:1} -> 1
-  took   {food where:territory-2} -> 1
-  took   {citizen where:territory-1 hungry:1} -> 
-  took   {citizen where:territory-2 hungry:1} -> 
-  took   {citizen where:territory-1 hungry:0 bearing:1} -> 2
-  took   {citizen where:territory-2 hungry:0 bearing:1} -> 1
-  made   {citizen where:territory-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:territory-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:territory-2 hungry:0 bearing:1} -> 1
-  made   {citizen where:territory-1 hungry:1 bearing:1} -> 2
-  made   {citizen where:territory-2 hungry:1 bearing:1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-2 hungry:1} -> 1
+  took   {food where:place-2} -> 1
+  took   {citizen where:place-1 hungry:1} -> 
+  took   {citizen where:place-2 hungry:1} -> 
+  took   {citizen where:place-1 hungry:0 bearing:1} -> 2
+  took   {citizen where:place-2 hungry:0 bearing:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  made   {citizen where:place-2 hungry:0 bearing:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1} -> 2
+  made   {citizen where:place-2 hungry:1 bearing:1} -> 1
 
 new state
   - root
@@ -1465,14 +1578,17 @@ new state
     - bin
     - capacity
     - citizen
-      - {citizen where:territory-1 hungry:1 bearing:1} -> 2
-      - {citizen where:territory-2 hungry:1 bearing:1} -> 1
+      - {citizen where:place-1 hungry:1 bearing:1} -> 2
+      - {citizen where:place-2 hungry:1 bearing:1} -> 1
     - consumes
     - deposit
     - extractor
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
     - provides
     - scout
     - territory
@@ -1500,19 +1616,22 @@ old state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
     - provides
-      - {provides kind:territory what:berth} -> 6
+      - {provides kind:place what:berth} -> 6
     - scout
-      - {scout where:territory-2 moving:1} -> 1
+      - {scout where:place-2 moving:1} -> 1
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
     - transport
-      - {transport where:territory-1 moving:1} -> 1
-      - {transport where:territory-2 moving:1} -> 2
+      - {transport where:place-1 moving:1} -> 1
+      - {transport where:place-2 moving:1} -> 2
 
 refused
-  `move` would leave a world where `2` consumes berth enough for {provides kind:13 what:1 quantity:7} and is provided 6
+  `move` would leave a world where `2` consumes berth enough for {provides kind:48 what:1 quantity:7} and is provided 6
 
 as expected
 
@@ -1523,39 +1642,41 @@ old state
   - root
     - adjacency
     - bin
-      - {bin where:territory-1 what:metal} -> 2
+      - {bin where:place-1 what:metal} -> 2
     - capacity
-      - {capacity of:territory for:bin what:metal per:territory} -> 2
-      - {capacity of:territory for:bin what:food per:territory} -> 3
+      - {capacity of:place for:bin what:metal per:place} -> 2
+      - {capacity of:place for:bin what:food per:place} -> 3
     - citizen
     - consumes
     - deposit
     - extractor
     - food
     - labor
-      - {labor where:territory-1} -> 1
+      - {labor where:place-1} -> 1
     - metal
-      - {metal where:territory-1} -> 1
+      - {metal where:place-1} -> 1
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
     - transport
 
-command  {build-bin where:territory-1 what:food}
-  took   {labor where:territory-1} -> 1
-  took   {metal where:territory-1} -> 1
-  made   {bin where:territory-1 what:food} -> 1
+command  {build-bin where:place-1 what:food}
+  took   {labor where:place-1} -> 1
+  took   {metal where:place-1} -> 1
+  made   {bin where:place-1 what:food} -> 1
 
 new state
   - root
     - adjacency
     - bin
-      - {bin where:territory-1 what:metal} -> 2
-      - {bin where:territory-1 what:food} -> 1
+      - {bin where:place-1 what:metal} -> 2
+      - {bin where:place-1 what:food} -> 1
     - capacity
-      - {capacity of:territory for:bin what:metal per:territory} -> 2
-      - {capacity of:territory for:bin what:food per:territory} -> 3
+      - {capacity of:place for:bin what:metal per:place} -> 2
+      - {capacity of:place for:bin what:food per:place} -> 3
     - citizen
     - consumes
     - deposit
@@ -1563,6 +1684,8 @@ new state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -1588,9 +1711,13 @@ old state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
+      - {place id:3 of:territory-3 layer:surface name:place-3}
     - provides
     - scout
-      - {scout where:territory-1 moving:1} -> 1
+      - {scout where:place-1 moving:1} -> 1
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
@@ -1619,26 +1746,30 @@ old state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
+      - {place id:3 of:territory-3 layer:surface name:place-3}
     - provides
     - scout
-      - {scout where:territory-1 moving:1} -> 1
+      - {scout where:place-1 moving:1} -> 1
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
     - transport
 
-command  {move what:scout from:territory-1 to:territory-2}
-  took   {scout where:territory-1 moving:1} -> 1
-  made   {scout where:territory-2 moving:0} -> 1
+command  {move what:scout from:place-1 to:place-2}
+  took   {scout where:place-1 moving:1} -> 1
+  made   {scout where:place-2 moving:0} -> 1
 
 command  {end-turn}
-  took   {scout where:territory-2 moving:0} -> 1
-  made   {scout where:territory-2 moving:1} -> 1
+  took   {scout where:place-2 moving:0} -> 1
+  made   {scout where:place-2 moving:1} -> 1
 
-command  {move what:scout from:territory-2 to:territory-3}
-  took   {scout where:territory-2 moving:1} -> 1
-  made   {scout where:territory-3 moving:0} -> 1
+command  {move what:scout from:place-2 to:place-3}
+  took   {scout where:place-2 moving:1} -> 1
+  made   {scout where:place-3 moving:0} -> 1
 
 new state
   - root
@@ -1654,9 +1785,13 @@ new state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
+      - {place id:3 of:territory-3 layer:surface name:place-3}
     - provides
     - scout
-      - {scout where:territory-3 moving:0} -> 1
+      - {scout where:place-3 moving:0} -> 1
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
@@ -1682,18 +1817,22 @@ old state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
+      - {place id:3 of:territory-3 layer:surface name:place-3}
     - provides
     - scout
-      - {scout where:territory-1 moving:1} -> 1
+      - {scout where:place-1 moving:1} -> 1
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
     - transport
 
-command  {move what:scout from:territory-1 to:territory-2}
-  took   {scout where:territory-1 moving:1} -> 1
-  made   {scout where:territory-2 moving:0} -> 1
+command  {move what:scout from:place-1 to:place-2}
+  took   {scout where:place-1 moving:1} -> 1
+  made   {scout where:place-2 moving:0} -> 1
 
 new state
   - root
@@ -1709,9 +1848,13 @@ new state
     - food
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
+      - {place id:3 of:territory-3 layer:surface name:place-3}
     - provides
     - scout
-      - {scout where:territory-2 moving:0} -> 1
+      - {scout where:place-2 moving:0} -> 1
     - territory
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
@@ -1729,14 +1872,16 @@ old state
     - bin
     - capacity
     - citizen
-      - {citizen where:territory-1 hungry:1 bearing:1} -> 3
+      - {citizen where:place-1 hungry:1 bearing:1} -> 3
     - consumes
     - deposit
     - extractor
     - food
-      - {food where:territory-1} -> 10
+      - {food where:place-1} -> 10
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -1744,28 +1889,28 @@ old state
     - transport
 
 command  {end-turn}
-  took   {citizen where:territory-1 hungry:1} -> 1
-  took   {food where:territory-1} -> 1
-  took   {citizen where:territory-1 hungry:1} -> 1
-  took   {food where:territory-1} -> 1
-  took   {citizen where:territory-1 hungry:1} -> 1
-  took   {food where:territory-1} -> 1
-  took   {citizen where:territory-1 hungry:0 bearing:1} -> 1
-  took   {food where:territory-1} -> 1
-  took   {citizen where:territory-1 hungry:0 bearing:1} -> 1
-  took   {food where:territory-1} -> 1
-  took   {citizen where:territory-1 hungry:0 bearing:1} -> 1
-  took   {food where:territory-1} -> 1
-  took   {citizen where:territory-1 hungry:0 bearing:0} -> 6
-  took   {citizen where:territory-1 hungry:1 bearing:0} -> 6
-  made   {citizen where:territory-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:territory-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:territory-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:territory-1 hungry:0 bearing:0} -> 2
-  made   {citizen where:territory-1 hungry:0 bearing:0} -> 2
-  made   {citizen where:territory-1 hungry:0 bearing:0} -> 2
-  made   {citizen where:territory-1 hungry:1 bearing:0} -> 6
-  made   {citizen where:territory-1 hungry:1 bearing:1} -> 6
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:0} -> 6
+  took   {citizen where:place-1 hungry:1 bearing:0} -> 6
+  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:0} -> 2
+  made   {citizen where:place-1 hungry:0 bearing:0} -> 2
+  made   {citizen where:place-1 hungry:0 bearing:0} -> 2
+  made   {citizen where:place-1 hungry:1 bearing:0} -> 6
+  made   {citizen where:place-1 hungry:1 bearing:1} -> 6
 
 new state
   - root
@@ -1773,14 +1918,16 @@ new state
     - bin
     - capacity
     - citizen
-      - {citizen where:territory-1 hungry:1 bearing:1} -> 6
+      - {citizen where:place-1 hungry:1 bearing:1} -> 6
     - consumes
     - deposit
     - extractor
     - food
-      - {food where:territory-1} -> 4
+      - {food where:place-1} -> 4
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -1800,30 +1947,32 @@ old state
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:food density:6} -> 2
+      - {deposit where:place-1 what:food density:6} -> 2
     - extractor
-      - {extractor where:territory-1 what:food working:1} -> 2
+      - {extractor where:place-1 what:food working:1} -> 2
     - food
     - labor
-      - {labor where:territory-1} -> 2
+      - {labor where:place-1} -> 2
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
       - {territory id:1 name:territory-1}
     - transport
 
-command  {work where:territory-1 what:food}
-  took   {extractor where:territory-1 what:food working:1} -> 1
-  took   {labor where:territory-1} -> 1
-  made   {extractor where:territory-1 what:food working:0} -> 1
-  made   {food where:territory-1} -> 6
+command  {work where:place-1 what:food}
+  took   {extractor where:place-1 what:food working:1} -> 1
+  took   {labor where:place-1} -> 1
+  made   {extractor where:place-1 what:food working:0} -> 1
+  made   {food where:place-1} -> 6
 
-command  {work where:territory-1 what:food}
-  took   {extractor where:territory-1 what:food working:1} -> 1
-  took   {labor where:territory-1} -> 1
-  made   {extractor where:territory-1 what:food working:0} -> 1
-  made   {food where:territory-1} -> 6
+command  {work where:place-1 what:food}
+  took   {extractor where:place-1 what:food working:1} -> 1
+  took   {labor where:place-1} -> 1
+  made   {extractor where:place-1 what:food working:0} -> 1
+  made   {food where:place-1} -> 6
 
 new state
   - root
@@ -1833,13 +1982,15 @@ new state
     - citizen
     - consumes
     - deposit
-      - {deposit where:territory-1 what:food density:6} -> 2
+      - {deposit where:place-1 what:food density:6} -> 2
     - extractor
-      - {extractor where:territory-1 what:food working:0} -> 2
+      - {extractor where:place-1 what:food working:0} -> 2
     - food
-      - {food where:territory-1} -> 12
+      - {food where:place-1} -> 12
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -1857,14 +2008,16 @@ old state
     - bin
     - capacity
     - citizen
-      - {citizen where:territory-1 hungry:1 bearing:1} -> 2
+      - {citizen where:place-1 hungry:1 bearing:1} -> 2
     - consumes
     - deposit
     - extractor
     - food
-      - {food where:territory-1} -> 10
+      - {food where:place-1} -> 10
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory
@@ -1872,12 +2025,12 @@ old state
     - transport
 
 command  {upkeep}
-  took   {citizen where:territory-1 hungry:1} -> 1
-  took   {food where:territory-1} -> 1
-  took   {citizen where:territory-1 hungry:1} -> 1
-  took   {food where:territory-1} -> 1
-  made   {citizen where:territory-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:territory-1 hungry:0 bearing:1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
 
 new state
   - root
@@ -1885,14 +2038,16 @@ new state
     - bin
     - capacity
     - citizen
-      - {citizen where:territory-1 hungry:0 bearing:1} -> 2
+      - {citizen where:place-1 hungry:0 bearing:1} -> 2
     - consumes
     - deposit
     - extractor
     - food
-      - {food where:territory-1} -> 8
+      - {food where:place-1} -> 8
     - labor
     - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - territory

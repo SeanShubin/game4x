@@ -6,11 +6,13 @@
 {test name:a-scout-moves-where-there-is-a-berth-to-spare}
 
 {given}
-{provides kind:13 what:1 quantity:6}
+{provides kind:48 what:1 quantity:6}
 {consumes kind:28 what:1 quantity:1}
 {consumes kind:35 what:1 quantity:2}
 {territory id:1}
+{place id:1 of:1 layer:surface}
 {territory id:2}
+{place id:2 of:2 layer:surface}
 {adjacency id:1 from:1 to:2}
 {scout where:1 moving:1 quantity:1}
 {transport where:2 moving:1 quantity:2}
@@ -20,11 +22,13 @@
 {move what:28 from:1 to:2}
 
 {then}
-{provides kind:13 what:1 quantity:6}
+{provides kind:48 what:1 quantity:6}
 {consumes kind:28 what:1 quantity:1}
 {consumes kind:35 what:1 quantity:2}
 {territory id:1}
+{place id:1 of:1 layer:surface}
 {territory id:2}
+{place id:2 of:2 layer:surface}
 {adjacency id:1 from:1 to:2}
 {transport where:2 moving:1 quantity:2}
 {scout where:2 moving:0 quantity:2}

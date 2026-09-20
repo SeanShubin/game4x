@@ -154,6 +154,7 @@ fn check(files: &InMemory) -> Result<(), String> {
             "food",
             "labor",
             "metal",
+            "place",
             "provides",
             "scout",
             "territory",
@@ -318,7 +319,7 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
     Ok(())
 }
 
-const REFERENCES: usize = 62;
+const REFERENCES: usize = 63;
 
 /// **References no test world can violate**, because nothing points at them there.
 ///
@@ -611,7 +612,7 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// **Marking a deposit's `density` is load-bearing everywhere**: without it `density` rejoins the
 /// deposit's key, the deposit and the extractor stop sharing one, and `{limit held:extractor
 /// by:deposit}` has nothing to compare.
-const DELETABLE: [&str; 10] = [
+const DELETABLE: [&str; 11] = [
     // **One of `breed`'s four bindings is read by nothing**: the one tying the food it consumes to
     // the place it acts in. **No test breeds in two territories at once** - both two-territory
     // tests have run out of food by the time breeding runs - so a pattern naming no place still
@@ -627,6 +628,10 @@ const DELETABLE: [&str; 10] = [
     "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x extractor",
     "2 tests/one-extractors-readiness-is-not-anothers.4x extractor",
     "2 tests/the-scout-cannot-cross-where-there-is-no-border.4x adjacency",
+    // **A place nothing stands in and nothing points at.** The scout crosses from the first
+    // territory to the third, and the second is there only to have no border with either - so the
+    // place standing on it is a row the test never uses, exactly like the adjacency one line up.
+    "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x place",
     "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x scout",
 ];
 
@@ -702,14 +707,14 @@ fn no_value_can_be_changed_without_breaking_something() {
 ///
 /// **A `moving` that never moves is the other shape here.** The berth tests hold vehicles to count
 /// them, not to move them, so what those rows say about moves is read by nothing.
-const NOT_LOAD_BEARING: [&str; 26] = [
+const NOT_LOAD_BEARING: [&str; 37] = [
     // **The one `assigns` row's id is read by nothing.** There were two, and changing one id
     // to the other's collided on the key; with one row there is nothing to collide with.
     // **`assigns` may not need an `id` at all** - keyed by `(clause, input, value)` it could not
     // state two assignments of one input on one clause, which is the rule rather than a
     // restriction. That is in `backlog.md` rather than done here.
     "1 rules.4x assigns.id",
-    "24 rules.4x clause.seq",
+    "23 rules.4x clause.seq",
     // **A scoped input's name is read by nothing, and the other eleven are read by name.** A
     // command finds its argument by the input's name and so does a part; an input the engine fills
     // is looked up by neither, because nothing outside the engine ever names it. **So `upkeep`'s
@@ -749,28 +754,52 @@ const NOT_LOAD_BEARING: [&str; 26] = [
     // `data/` reads it***, which is narrower than *nothing reads it*.
     "1 rules.4x rule.name",
     "1 schema.4x supply.name",
+    // **A `layer` no world reads, across eleven tests, and all eleven compare a refusal.** A
+    // `{refused}` test states a `given` and asserts what the rule said about it - there is no
+    // `then` world to differ - so a value in it is read only if a rule reads it, and no rule reads
+    // the layer yet. **It is the same class as the `adjacency.id` and `scout.moving` further
+    // down**, unread in those same tests for that same reason.
+    //
+    // **These entries empty themselves when the move rules land.** A `move-on-surface` that
+    // requires `layer:surface` makes the layer decide whether a move is refused, and the sweep
+    // will say so without anyone editing this list.
+    //
+    // **This lane predicted the opposite** - that a place stated in a `given` and a `then` would
+    // make its layer load-bearing by the world comparison. True of the twenty-seven tests that
+    // compare a world, and these are the other eleven.
+    "1 tests/a-bin-cannot-be-built-where-the-capacity-is-taken.4x place.layer",
     // **A `bearing` no world reads, in the two tests where nothing breeds.** Both run out of food
     // before `breed` reaches them, so whether their citizens could bear never comes up - and a
     // world row must name every column its relation declares, so the value has to be *something*.
     // **This is the schema forcing a value rather than a test stating one**, which is the same
     // reason a spent scout's quantity is further down this list.
     "1 tests/a-citizen-eats-and-one-there-is-no-food-for-starves.4x citizen.bearing",
+    "3 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x place.layer",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x scout.quantity",
     "1 tests/a-scout-cannot-move-where-every-berth-is-taken.4x adjacency.id",
+    "2 tests/a-scout-cannot-move-where-every-berth-is-taken.4x place.layer",
     "1 tests/a-scout-cannot-move-where-every-berth-is-taken.4x transport.moving",
+    "2 tests/a-scout-that-has-moved-cannot-move-again.4x place.layer",
     "1 tests/an-extractor-cannot-be-built-where-the-deposits-are-taken.4x deposit.density",
     "1 tests/an-extractor-cannot-be-built-where-the-deposits-are-taken.4x extractor.working",
+    "1 tests/an-extractor-cannot-be-built-where-the-deposits-are-taken.4x place.layer",
+    "1 tests/an-extractor-cannot-be-built-where-there-is-no-deposit.4x place.layer",
     "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x deposit.density",
     "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x extractor.quantity",
     "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x extractor.working",
+    "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x place.layer",
     "1 tests/an-extractor-cannot-be-worked-without-labor.4x deposit.density",
+    "1 tests/an-extractor-cannot-be-worked-without-labor.4x place.layer",
     "2 tests/one-extractors-readiness-is-not-anothers.4x deposit.density",
     "2 tests/one-extractors-readiness-is-not-anothers.4x extractor.quantity",
     "2 tests/one-extractors-readiness-is-not-anothers.4x extractor.working",
+    "1 tests/one-extractors-readiness-is-not-anothers.4x place.layer",
     "2 tests/the-hungry-perish-after-upkeep-and-not-before.4x citizen.bearing",
     "1 tests/the-same-free-space-admits-one-kind-and-refuses-another.4x adjacency.id",
+    "2 tests/the-same-free-space-admits-one-kind-and-refuses-another.4x place.layer",
     "1 tests/the-same-free-space-admits-one-kind-and-refuses-another.4x scout.moving",
     "1 tests/the-same-free-space-admits-one-kind-and-refuses-another.4x transport.moving",
+    "3 tests/the-scout-cannot-cross-where-there-is-no-border.4x place.layer",
     "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x scout.moving",
     "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x scout.quantity",
 ];

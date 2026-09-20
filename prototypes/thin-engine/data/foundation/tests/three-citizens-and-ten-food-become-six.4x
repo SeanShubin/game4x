@@ -19,6 +19,7 @@
 
 {given}
 {territory id:1}
+{place id:1 of:1 layer:surface}
 {citizen where:1 hungry:1 bearing:1 quantity:3}
 {food where:1 quantity:10}
 
@@ -27,5 +28,6 @@
 
 {then}
 {territory id:1}
+{place id:1 of:1 layer:surface}
 {citizen where:1 hungry:1 bearing:1 quantity:6}
 {food where:1 quantity:4}

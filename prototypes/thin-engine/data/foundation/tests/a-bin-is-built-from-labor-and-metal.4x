@@ -12,7 +12,8 @@
 
 {given}
 {territory id:1}
-{capacity of:13 for:42 what:27 per:13 quantity:4}
+{place id:1 of:1 layer:surface}
+{capacity of:48 for:42 what:27 per:48 quantity:4}
 {labor where:1 quantity:1}
 {metal where:1 quantity:1}
 
@@ -21,5 +22,6 @@
 
 {then}
 {territory id:1}
-{capacity of:13 for:42 what:27 per:13 quantity:4}
+{place id:1 of:1 layer:surface}
+{capacity of:48 for:42 what:27 per:48 quantity:4}
 {bin where:1 what:30 quantity:1}

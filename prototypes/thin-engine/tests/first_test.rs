@@ -274,12 +274,13 @@ fn the_report_says_which_relations_it_compared() {
             "food",
             "labor",
             "metal",
+            "place",
             "provides",
             "scout",
             "territory",
             "transport"
         ],
-        "fourteen of the game's relations are state - an allowance is a column of the thing now, so `working` is not one of them"
+        "fifteen of the game's relations are state - an allowance is a column of the thing now, so `working` is not one of them"
     );
     assert_eq!(report.test, "the-scout-moves-to-an-adjacent-place");
 }
@@ -296,7 +297,7 @@ fn the_report_reads_as_a_report() {
             report_of("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x")
         ),
         "the-scout-moves-to-an-adjacent-place\n  \
-           compared  adjacency, bin, capacity, citizen, consumes, deposit, extractor, food, labor, metal, provides, scout, territory, transport\n  \
+           compared  adjacency, bin, capacity, citizen, consumes, deposit, extractor, food, labor, metal, place, provides, scout, territory, transport\n  \
            result    as expected"
     );
 }

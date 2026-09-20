@@ -64,8 +64,8 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
     assert_eq!(checked, 29, "twenty-nine relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        42,
-        "forty-two in all - those twenty-nine, and the game's thirteen: six kinds, two families,\n         a territory, an adjacency, a deposit, an extractor and a citizen"
+        43,
+        "forty-three in all - those twenty-nine, and the game's fourteen: six kinds, two families,\n         a territory, a place, an adjacency, a deposit, an extractor and a citizen"
     );
 }
 
@@ -101,7 +101,7 @@ fn a_reference_is_checked_against_the_relation_it_names() {
             relation: "scout".to_string(),
             column: "where".to_string(),
             value: "9".to_string(),
-            to: "territory".to_string()
+            to: "place".to_string()
         },
         "`where` points at `territory`, and no territory has the key 9"
     );
@@ -141,7 +141,7 @@ fn a_command_naming_something_that_does_not_exist_is_refused_by_the_type() {
         .expect_err("there is no territory 9");
     assert_eq!(
         format!("{why}"),
-        "`move`.`to` is `9`, and no `territory` has that key"
+        "`move`.`to` is `9`, and no `place` has that key"
     );
 }
 
@@ -758,9 +758,9 @@ fn the_tree_is_what_the_file_says_it_is() {
     // without this the turn would read as though each happened once - which is the one thing a
     // person reading it would get wrong.
     assert_eq!(
-        shown.matches("per:territory").count(),
+        shown.matches("per:place").count(),
         3,
-        "`upkeep`, `perish` and `breed` each happen once per territory"
+        "`upkeep`, `perish` and `breed` each happen once per place"
     );
 }
 

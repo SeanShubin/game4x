@@ -12,15 +12,16 @@
 
 {given}
 {territory id:1 name:territory-1}
-{deposit where:territory-1 what:food density:6} -> 1
-{deposit where:territory-1 what:metal density:2} -> 1
-{extractor where:territory-1 what:food working:1} -> 1
-{extractor where:territory-1 what:metal working:1} -> 1
-{labor where:territory-1} -> 2
+{place id:1 of:territory-1 layer:surface name:place-1}
+{deposit where:place-1 what:food density:6} -> 1
+{deposit where:place-1 what:metal density:2} -> 1
+{extractor where:place-1 what:food working:1} -> 1
+{extractor where:place-1 what:metal working:1} -> 1
+{labor where:place-1} -> 2
 
 {when}
-{work where:territory-1 what:food}
-{work where:territory-1 what:food}
+{work where:place-1 what:food}
+{work where:place-1 what:food}
 
 {refused}
-{extractor where:territory-1 what:food working:1} -> 1
+{extractor where:place-1 what:food working:1} -> 1

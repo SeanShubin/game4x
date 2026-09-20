@@ -24,21 +24,41 @@
 # keys, so a plain number cannot be one. `{literal ...}` is where it comes from, which is what
 # `releases/first-release.md` does with a **Qty** written in the recipe.
 
+# **`move` binds places and adjacency joins territories, so the rule makes the join.** Two
+# `require place` clauses match the places named, and the adjacency clause takes its `from` and its
+# `to` by reading each one's `of` - which is `{reading ...}`, the same machinery `work` uses for a
+# deposit's density and `upkeep` for a parent's bearing. **Two sources feeding one pattern is what
+# `row_of` already does**, because it walks every reading on a clause rather than one.
+#
+# **The places are required before the adjacency, and the order is why.** A reading takes from the
+# row an earlier clause matched, and `matched` is filled in clause order during the `require` pass -
+# so a place named after the adjacency would be read before it had matched anything.
+#
+# **This is the join Sean chose.** 2026-09-20: *I don't want to be "stating adjacency between
+# places".* The alternative was an adjacency row per pair of places, which is three times the rows
+# and a `kind` column to keep the three kinds of move apart. **Rows in the world against readings in
+# the rule**, and the readings keep the graph one thing.
+
 {rule id:1 name:move}
 
 {input id:1 rule:move seq:1 name:what of:unit}
-{input id:2 rule:move seq:2 name:from of:territory}
-{input id:3 rule:move seq:3 name:to of:territory}
+{input id:2 rule:move seq:2 name:from of:place}
+{input id:3 rule:move seq:3 name:to of:place}
 
-{clause id:2 rule:move seq:1 role:require relation:adjacency name:clause-2}
-{clause id:3 rule:move seq:2 role:remove relation:unit name:clause-3}
-{clause id:4 rule:move seq:3 role:add relation:unit name:clause-4}
+{clause id:29 rule:move seq:1 role:require relation:place name:clause-29}
+{clause id:30 rule:move seq:2 role:require relation:place name:clause-30}
+{clause id:2 rule:move seq:3 role:require relation:adjacency name:clause-2}
+{clause id:3 rule:move seq:4 role:remove relation:unit name:clause-3}
+{clause id:4 rule:move seq:5 role:add relation:unit name:clause-4}
 
 {relation-of clause:clause-3 input:what}
 {relation-of clause:clause-4 input:what}
 
-{binding id:3 clause:clause-2 column:42 input:from}
-{binding id:4 clause:clause-2 column:43 input:to}
+{binding id:42 clause:clause-29 column:134 input:from}
+{binding id:43 clause:clause-30 column:134 input:to}
+
+{reading id:3 clause:clause-2 column:42 of:clause-29 takes:135}
+{reading id:4 clause:clause-2 column:43 of:clause-30 takes:135}
 
 {binding id:5 clause:clause-3 column:72 input:from}
 
@@ -52,7 +72,7 @@
 
 {rule id:2 name:build-extractor}
 
-{input id:4 rule:build-extractor seq:1 name:where of:territory}
+{input id:4 rule:build-extractor seq:1 name:where of:place}
 {input id:7 rule:build-extractor seq:2 name:what of:resource}
 
 {clause id:5 rule:build-extractor seq:1 role:remove relation:labor name:clause-5}
@@ -72,7 +92,7 @@
 
 {rule id:3 name:work}
 
-{input id:8 rule:work seq:1 name:where of:territory}
+{input id:8 rule:work seq:1 name:where of:place}
 {input id:9 rule:work seq:2 name:what of:resource}
 
 {clause id:10 rule:work seq:1 role:require relation:deposit name:clause-10}
@@ -195,7 +215,7 @@
 
 {rule id:6 name:build-bin}
 
-{input id:13 rule:build-bin seq:1 name:where of:territory}
+{input id:13 rule:build-bin seq:1 name:where of:place}
 {input id:14 rule:build-bin seq:2 name:what of:resource}
 
 {clause id:17 rule:build-bin seq:1 role:remove relation:labor name:clause-17}
@@ -266,7 +286,7 @@
 
 {rule id:8 name:upkeep}
 
-{input id:15 rule:upkeep seq:1 name:where of:territory}
+{input id:15 rule:upkeep seq:1 name:where of:place}
 
 {scope rule:upkeep input:where}
 {repeats rule:upkeep}
@@ -310,7 +330,7 @@
 
 {rule id:9 name:perish}
 
-{input id:16 rule:perish seq:1 name:where of:territory}
+{input id:16 rule:perish seq:1 name:where of:place}
 
 {scope rule:perish input:where}
 {repeats rule:perish}
@@ -350,7 +370,7 @@
 
 {rule id:10 name:breed}
 
-{input id:17 rule:breed seq:1 name:where of:territory}
+{input id:17 rule:breed seq:1 name:where of:place}
 
 {scope rule:breed input:where}
 {repeats rule:breed}

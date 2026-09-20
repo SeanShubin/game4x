@@ -23,11 +23,14 @@ fn the_world_renders_in_the_user_facing_format() {
         rendered,
         [
             "{territory id:1 name:territory-1}",
+            "{place id:1 of:territory-1 layer:surface name:place-1}",
             "{territory id:2 name:territory-2}",
+            "{place id:2 of:territory-2 layer:surface name:place-2}",
             "{territory id:3 name:territory-3}",
+            "{place id:3 of:territory-3 layer:surface name:place-3}",
             "{adjacency id:1 from:territory-1 to:territory-2}",
             "{adjacency id:2 from:territory-2 to:territory-3}",
-            "{scout where:territory-1 moving:1} -> 1",
+            "{scout where:place-1 moving:1} -> 1",
         ]
         .join(
             "
@@ -73,22 +76,22 @@ fn a_column_is_referenced_by_id_because_its_name_is_a_token() {
     let game = game_rows();
     let names = Names::of(&game);
 
-    // A column's `name` is the token, and it is not unique: nineteen columns are called `id`.
+    // A column's `name` is the token, and it is not unique: twenty columns are called `id`.
     let called_id = game
         .iter()
         .filter(|row| row.relation == "column" && row.value("name") == Some("id"))
         .count();
-    assert_eq!(called_id, 19, "nineteen columns are called `id`");
+    assert_eq!(called_id, 20, "twenty columns are called `id`");
 
     // So no column has a name, and a reference to one is its id.
     assert_eq!(names.name("column", "44"), "44");
     let binding = game
         .iter()
-        .find(|row| row.relation == "binding" && row.value("id") == Some("3"))
+        .find(|row| row.relation == "binding" && row.value("id") == Some("42"))
         .expect("a binding of the move rule");
     assert_eq!(
         names.row(binding),
-        "{binding id:3 clause:clause-2 column:42 input:from}"
+        "{binding id:42 clause:clause-29 column:134 input:from}"
     );
 
     // The control: a relation whose names are its own is referenced by name - and a family's
@@ -183,7 +186,7 @@ fn a_counted_relation_renders_with_an_arrow() {
         .iter()
         .find(|row| row.relation == "scout")
         .expect("a scout");
-    assert_eq!(names.row(scout), "{scout where:territory-1 moving:1} -> 1");
+    assert_eq!(names.row(scout), "{scout where:place-1 moving:1} -> 1");
 
     // **Friendly to foundation is the direction that must work** - Sean, 2026-09-15 - so the
     // arrow is read back as well as written.

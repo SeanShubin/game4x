@@ -24,21 +24,41 @@
 # keys, so a plain number cannot be one. `{literal ...}` is where it comes from, which is what
 # `releases/first-release.md` does with a **Qty** written in the recipe.
 
+# **`move` binds places and adjacency joins territories, so the rule makes the join.** Two
+# `require place` clauses match the places named, and the adjacency clause takes its `from` and its
+# `to` by reading each one's `of` - which is `{reading ...}`, the same machinery `work` uses for a
+# deposit's density and `upkeep` for a parent's bearing. **Two sources feeding one pattern is what
+# `row_of` already does**, because it walks every reading on a clause rather than one.
+#
+# **The places are required before the adjacency, and the order is why.** A reading takes from the
+# row an earlier clause matched, and `matched` is filled in clause order during the `require` pass -
+# so a place named after the adjacency would be read before it had matched anything.
+#
+# **This is the join Sean chose.** 2026-09-20: *I don't want to be "stating adjacency between
+# places".* The alternative was an adjacency row per pair of places, which is three times the rows
+# and a `kind` column to keep the three kinds of move apart. **Rows in the world against readings in
+# the rule**, and the readings keep the graph one thing.
+
 {rule id:1 name:move}
 
 {input id:1 rule:1 seq:1 name:what of:26}
-{input id:2 rule:1 seq:2 name:from of:13}
-{input id:3 rule:1 seq:3 name:to of:13}
+{input id:2 rule:1 seq:2 name:from of:48}
+{input id:3 rule:1 seq:3 name:to of:48}
 
-{clause id:2 rule:1 seq:1 role:1 relation:15}
-{clause id:3 rule:1 seq:2 role:2 relation:26}
-{clause id:4 rule:1 seq:3 role:3 relation:26}
+{clause id:29 rule:1 seq:1 role:1 relation:48}
+{clause id:30 rule:1 seq:2 role:1 relation:48}
+{clause id:2 rule:1 seq:3 role:1 relation:15}
+{clause id:3 rule:1 seq:4 role:2 relation:26}
+{clause id:4 rule:1 seq:5 role:3 relation:26}
 
 {relation-of clause:3 input:1}
 {relation-of clause:4 input:1}
 
-{binding id:3 clause:2 column:42 input:2}
-{binding id:4 clause:2 column:43 input:3}
+{binding id:42 clause:29 column:134 input:2}
+{binding id:43 clause:30 column:134 input:3}
+
+{reading id:3 clause:2 column:42 of:29 takes:135}
+{reading id:4 clause:2 column:43 of:30 takes:135}
 
 {binding id:5 clause:3 column:72 input:2}
 
@@ -52,7 +72,7 @@
 
 {rule id:2 name:build-extractor}
 
-{input id:4 rule:2 seq:1 name:where of:13}
+{input id:4 rule:2 seq:1 name:where of:48}
 {input id:7 rule:2 seq:2 name:what of:27}
 
 {clause id:5 rule:2 seq:1 role:2 relation:29}
@@ -72,7 +92,7 @@
 
 {rule id:3 name:work}
 
-{input id:8 rule:3 seq:1 name:where of:13}
+{input id:8 rule:3 seq:1 name:where of:48}
 {input id:9 rule:3 seq:2 name:what of:27}
 
 {clause id:10 rule:3 seq:1 role:1 relation:18}
@@ -195,7 +215,7 @@
 
 {rule id:6 name:build-bin}
 
-{input id:13 rule:6 seq:1 name:where of:13}
+{input id:13 rule:6 seq:1 name:where of:48}
 {input id:14 rule:6 seq:2 name:what of:27}
 
 {clause id:17 rule:6 seq:1 role:2 relation:29}
@@ -266,7 +286,7 @@
 
 {rule id:8 name:upkeep}
 
-{input id:15 rule:8 seq:1 name:where of:13}
+{input id:15 rule:8 seq:1 name:where of:48}
 
 {scope rule:8 input:15}
 {repeats rule:8}
@@ -310,7 +330,7 @@
 
 {rule id:9 name:perish}
 
-{input id:16 rule:9 seq:1 name:where of:13}
+{input id:16 rule:9 seq:1 name:where of:48}
 
 {scope rule:9 input:16}
 {repeats rule:9}
@@ -350,7 +370,7 @@
 
 {rule id:10 name:breed}
 
-{input id:17 rule:10 seq:1 name:where of:13}
+{input id:17 rule:10 seq:1 name:where of:48}
 
 {scope rule:10 input:17}
 {repeats rule:10}

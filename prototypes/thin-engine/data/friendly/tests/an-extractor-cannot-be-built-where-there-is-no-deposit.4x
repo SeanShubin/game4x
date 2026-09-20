@@ -9,11 +9,12 @@
 
 {given}
 {territory id:1 name:territory-1}
-{labor where:territory-1} -> 1
-{metal where:territory-1} -> 1
+{place id:1 of:territory-1 layer:surface name:place-1}
+{labor where:place-1} -> 1
+{metal where:place-1} -> 1
 
 {when}
-{build-extractor where:territory-1 what:food}
+{build-extractor where:place-1 what:food}
 
 {refused}
-{deposit where:territory-1 what:food} -> 1
+{deposit where:place-1 what:food} -> 1

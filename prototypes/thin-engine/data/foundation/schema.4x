@@ -264,9 +264,9 @@
 {reference id:20 column:48 to:8}
 {reference id:21 column:49 to:2}
 
-{reference id:22 column:51 to:13}
+{reference id:22 column:51 to:48}
 {reference id:23 column:52 to:27}
-{reference id:24 column:55 to:13}
+{reference id:24 column:55 to:48}
 {reference id:25 column:56 to:27}
 {reference id:26 column:58 to:1}
 {reference id:27 column:59 to:1}
@@ -285,10 +285,10 @@
 {reference id:37 column:70 to:1}
 {reference id:38 column:71 to:1}
 
-{reference id:41 column:76 to:13}
-{reference id:42 column:78 to:13}
-{reference id:43 column:80 to:13}
-{reference id:44 column:82 to:13}
+{reference id:41 column:76 to:48}
+{reference id:42 column:78 to:48}
+{reference id:43 column:80 to:48}
+{reference id:44 column:82 to:48}
 
 {reference id:45 column:103 to:8}
 {reference id:46 column:104 to:7}
@@ -298,14 +298,14 @@
 {reference id:49 column:91 to:33}
 {reference id:50 column:93 to:1}
 {reference id:51 column:94 to:33}
-{reference id:52 column:96 to:13}
+{reference id:52 column:96 to:48}
 {reference id:53 column:108 to:1}
 {reference id:54 column:109 to:38}
 {reference id:55 column:111 to:6}
 {reference id:56 column:112 to:6}
 {reference id:57 column:115 to:40}
 {reference id:58 column:116 to:7}
-{reference id:59 column:118 to:13}
+{reference id:59 column:118 to:48}
 {reference id:60 column:119 to:27}
 {reference id:61 column:121 to:1}
 {reference id:62 column:122 to:1}
@@ -383,7 +383,7 @@
 # **This declares the supply and nothing else.** `per` says what it is measured in, so the check
 # does not have to work out which relation every provider and consumer has in common.
 
-{supply id:1 name:berth per:13}
+{supply id:1 name:berth per:48}
 
 
 ## The three roles a clause can have
@@ -669,7 +669,7 @@
 {column id:133 relation:47 seq:3 name:bearing}
 {column id:132 relation:47 seq:4 name:quantity}
 
-{reference id:69 column:130 to:13}
+{reference id:69 column:130 to:48}
 
 {state id:17 relation:47}
 
@@ -678,3 +678,27 @@
 
 {carries kind:47 trait:3}
 {carries kind:47 trait:4}
+
+# **A place is a layer of a territory, and a thing stands in a place rather than in a territory.**
+# Sean, 2026-09-20: *I no longer think orbits should be separate territories with adjacencies like
+# they are in the mainline spec. I think orbits should be part of the territory.* `spec/orbit.md`
+# says the same from the other side - *an orbit is not a territory* - and `spec/console.md` says
+# *the orbit above a territory is named by naming the territory*, which is what `of` does here.
+#
+# **Adjacency stays between territories and does not learn about places.** Sean, 2026-09-20: *I
+# don't want to be "stating adjacency between places".* So the graph is one thing and `move` pays
+# for the join, reading each place's territory before it asks whether the two are neighbours.
+#
+# **Only the surface exists yet.** `layer` carries one value, which is honest rather than useful -
+# what it buys is that orbit is a row and not a change. The rules that tell the layers apart, and
+# the capacity that gives them different room, are the two increments after this one.
+
+{relation id:48 name:place}
+
+{column id:134 relation:48 seq:1 name:id}
+{column id:135 relation:48 seq:2 name:of}
+{column id:136 relation:48 seq:3 name:layer}
+
+{reference id:70 column:135 to:13}
+
+{state id:18 relation:48}

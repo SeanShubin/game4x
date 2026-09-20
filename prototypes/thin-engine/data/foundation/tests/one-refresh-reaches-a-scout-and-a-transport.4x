@@ -29,6 +29,7 @@
 
 {given}
 {territory id:1}
+{place id:1 of:1 layer:surface}
 {scout where:1 moving:0 quantity:2}
 {scout where:1 moving:1 quantity:1}
 {transport where:1 moving:0 quantity:1}
@@ -39,5 +40,6 @@
 
 {then}
 {territory id:1}
+{place id:1 of:1 layer:surface}
 {scout where:1 moving:1 quantity:3}
 {transport where:1 moving:1 quantity:3}
