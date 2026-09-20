@@ -172,6 +172,9 @@ old state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
       - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 1
     - consumes
@@ -208,6 +211,9 @@ new state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
       - {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
     - consumes
@@ -231,6 +237,136 @@ new state
 as expected
 
 ==============================================================================
+a-deployment-places-what-the-ground-has-room-for
+
+old state
+  - root
+    - adjacency
+    - ark
+      - {ark where:place-2 moving:1 gathering:1} -> 1
+    - bin
+    - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
+    - citizen
+    - consumes
+    - deposit
+      - {deposit where:place-1 what:metal density:6} -> 1
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-1 layer:orbit name:place-2}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+command  {deploy where:place-2}
+  took   {ark where:place-2} -> 1
+  made   {extractor where:place-1 what:metal working:0} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+
+new state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
+    - citizen
+      - {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+    - consumes
+    - deposit
+      - {deposit where:place-1 what:metal density:6} -> 1
+    - energy
+    - extractor
+      - {extractor where:place-1 what:metal working:0} -> 1
+    - food
+    - labor
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-1 layer:orbit name:place-2}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+as expected
+
+==============================================================================
+a-deployment-with-nowhere-to-mine-still-costs-the-ark
+
+old state
+  - root
+    - adjacency
+    - ark
+      - {ark where:place-2 moving:1 gathering:1} -> 1
+    - bin
+    - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-1 layer:orbit name:place-2}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+command  {deploy where:place-2}
+  took   {ark where:place-2} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+
+new state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
+    - citizen
+      - {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-1 layer:orbit name:place-2}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+as expected
+
+==============================================================================
 a-food-extractor-and-a-metal-extractor-do-not-interfere
 
 old state
@@ -239,6 +375,9 @@ old state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
     - consumes
     - deposit
@@ -272,6 +411,9 @@ new state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
     - consumes
     - deposit
@@ -539,6 +681,39 @@ refused
 as expected
 
 ==============================================================================
+a-territory-with-no-orbit-cannot-launch
+
+old state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+      - {energy where:place-1} -> 1
+    - extractor
+    - food
+    - labor
+      - {labor where:place-1} -> 1
+    - metal
+      - {metal where:place-1} -> 1
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+refused
+  `launch` needs {place of:1 layer:orbit} and it is not
+
+as expected
+
+==============================================================================
 a-transport-and-a-bin-give-room-together
 
 old state
@@ -548,6 +723,9 @@ old state
     - bin
       - {bin where:place-1 what:metal} -> 1
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
       - {capacity of:transport for:metal what:metal per:place} -> 10
       - {capacity of:transport for:food what:food per:place} -> 10
       - {capacity of:transport for:energy what:energy per:place} -> 10
@@ -591,6 +769,9 @@ new state
     - bin
       - {bin where:place-1 what:metal} -> 1
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
       - {capacity of:transport for:metal what:metal per:place} -> 10
       - {capacity of:transport for:food what:food per:place} -> 10
       - {capacity of:transport for:energy what:energy per:place} -> 10
@@ -619,6 +800,148 @@ new state
       - {territory id:1 name:territory-1}
     - transport
       - {transport where:place-1 moving:1} -> 1
+
+as expected
+
+==============================================================================
+an-ark-deploys-and-becomes-a-settlement
+
+old state
+  - root
+    - adjacency
+    - ark
+      - {ark where:place-2 moving:1 gathering:1} -> 1
+    - bin
+    - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
+    - citizen
+    - consumes
+    - deposit
+      - {deposit where:place-1 what:metal density:6} -> 1
+      - {deposit where:place-1 what:food density:6} -> 1
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-1 layer:orbit name:place-2}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+command  {deploy where:place-2}
+  took   {ark where:place-2} -> 1
+  made   {extractor where:place-1 what:metal working:0} -> 1
+  made   {extractor where:place-1 what:food working:0} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+
+new state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
+    - citizen
+      - {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+    - consumes
+    - deposit
+      - {deposit where:place-1 what:metal density:6} -> 1
+      - {deposit where:place-1 what:food density:6} -> 1
+    - energy
+    - extractor
+      - {extractor where:place-1 what:metal working:0} -> 1
+      - {extractor where:place-1 what:food working:0} -> 1
+    - food
+    - labor
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-1 layer:orbit name:place-2}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+as expected
+
+==============================================================================
+an-ark-deploys-onto-the-ground-below-it
+
+old state
+  - root
+    - adjacency
+    - ark
+      - {ark where:place-2 moving:1 gathering:1} -> 1
+    - bin
+    - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
+    - citizen
+    - consumes
+    - deposit
+      - {deposit where:place-3 what:metal density:6} -> 1
+      - {deposit where:place-3 what:food density:6} -> 1
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-1 layer:orbit name:place-2}
+      - {place id:3 of:territory-2 layer:surface name:place-3}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
+    - transport
+
+command  {deploy where:place-2}
+  took   {ark where:place-2} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+
+new state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
+    - citizen
+      - {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+    - consumes
+    - deposit
+      - {deposit where:place-3 what:metal density:6} -> 1
+      - {deposit where:place-3 what:food density:6} -> 1
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-1 layer:orbit name:place-2}
+      - {place id:3 of:territory-2 layer:surface name:place-3}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
+    - transport
 
 as expected
 
@@ -741,6 +1064,296 @@ new state
 as expected
 
 ==============================================================================
+an-ark-is-launched-from-the-ground-into-the-orbit-above
+
+old state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+      - {energy where:place-1} -> 1
+    - extractor
+    - food
+    - labor
+      - {labor where:place-1} -> 1
+    - metal
+      - {metal where:place-1} -> 1
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-1 layer:orbit name:place-2}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+command  {launch where:place-1}
+  took   {labor where:place-1} -> 1
+  took   {metal where:place-1} -> 1
+  took   {energy where:place-1} -> 1
+  made   {ark where:place-2 moving:0 gathering:0} -> 1
+
+new state
+  - root
+    - adjacency
+    - ark
+      - {ark where:place-2 moving:0 gathering:0} -> 1
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-1 layer:orbit name:place-2}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+as expected
+
+==============================================================================
+an-ark-lands-a-planet-is-developed-and-an-ark-leaves
+
+old state
+  - root
+    - adjacency
+    - ark
+      - {ark where:place-2 moving:1 gathering:1} -> 1
+    - bin
+    - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
+    - citizen
+    - consumes
+    - deposit
+      - {deposit where:place-1 what:metal density:6} -> 1
+      - {deposit where:place-1 what:food density:6} -> 1
+      - {deposit where:place-1 what:energy density:6} -> 1
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-1 layer:orbit name:place-2}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+command  {deploy where:place-2}
+  took   {ark where:place-2} -> 1
+  made   {extractor where:place-1 what:metal working:0} -> 1
+  made   {extractor where:place-1 what:food working:0} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+
+command  {end-turn}
+  took   {extractor where:place-1 what:metal working:0} -> 1
+  took   {extractor where:place-1 what:food working:0} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+  took   {citizen where:place-1 hungry:1 bearing:0 laboring:1} -> 2
+  made   {extractor where:place-1 what:metal working:1} -> 1
+  made   {extractor where:place-1 what:food working:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:0 laboring:1} -> 2
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 2
+
+command  {toil where:place-1}
+  took   {citizen where:place-1 laboring:1} -> 1
+  took   {citizen where:place-1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+
+command  {work where:place-1 what:food}
+  took   {extractor where:place-1 what:food working:1} -> 1
+  took   {labor where:place-1} -> 1
+  made   {extractor where:place-1 what:food working:0} -> 1
+  made   {food where:place-1} -> 6
+
+command  {end-turn}
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {food where:place-1} -> 2
+  took   {labor where:place-1} -> 1
+  took   {extractor where:place-1 what:food working:0} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 4
+  took   {citizen where:place-1 hungry:1 bearing:0 laboring:1} -> 4
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+  made   {extractor where:place-1 what:food working:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:0 laboring:1} -> 4
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 4
+
+command  {toil where:place-1}
+  took   {citizen where:place-1 laboring:1} -> 1
+  took   {citizen where:place-1 laboring:1} -> 1
+  took   {citizen where:place-1 laboring:1} -> 1
+  took   {citizen where:place-1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+
+command  {work where:place-1 what:food}
+  took   {extractor where:place-1 what:food working:1} -> 1
+  took   {labor where:place-1} -> 1
+  made   {extractor where:place-1 what:food working:0} -> 1
+  made   {food where:place-1} -> 6
+
+command  {work where:place-1 what:metal}
+  took   {extractor where:place-1 what:metal working:1} -> 1
+  took   {labor where:place-1} -> 1
+  made   {extractor where:place-1 what:metal working:0} -> 1
+  made   {metal where:place-1} -> 6
+
+command  {build-extractor where:place-1 what:energy}
+  took   {labor where:place-1} -> 1
+  took   {metal where:place-1} -> 1
+  made   {extractor where:place-1 what:energy working:0} -> 1
+
+command  {end-turn}
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {metal where:place-1} -> 5
+  took   {labor where:place-1} -> 1
+  took   {extractor where:place-1 what:food working:0} -> 1
+  took   {extractor where:place-1 what:metal working:0} -> 1
+  took   {extractor where:place-1 what:energy working:0} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 2
+  took   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 4
+  took   {citizen where:place-1 hungry:1 bearing:0 laboring:1} -> 4
+  took   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 2
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+  made   {extractor where:place-1 what:food working:1} -> 1
+  made   {extractor where:place-1 what:metal working:1} -> 1
+  made   {extractor where:place-1 what:energy working:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 2
+  made   {citizen where:place-1 hungry:1 bearing:0 laboring:1} -> 4
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 4
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 2
+
+command  {toil where:place-1}
+  took   {citizen where:place-1 laboring:1} -> 1
+  took   {citizen where:place-1 laboring:1} -> 1
+  took   {citizen where:place-1 laboring:1} -> 1
+  took   {citizen where:place-1 laboring:1} -> 1
+  took   {citizen where:place-1 laboring:1} -> 1
+  took   {citizen where:place-1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+
+command  {work where:place-1 what:metal}
+  took   {extractor where:place-1 what:metal working:1} -> 1
+  took   {labor where:place-1} -> 1
+  made   {extractor where:place-1 what:metal working:0} -> 1
+  made   {metal where:place-1} -> 6
+
+command  {work where:place-1 what:energy}
+  took   {extractor where:place-1 what:energy working:1} -> 1
+  took   {labor where:place-1} -> 1
+  made   {extractor where:place-1 what:energy working:0} -> 1
+  made   {energy where:place-1} -> 6
+
+command  {launch where:place-1}
+  took   {labor where:place-1} -> 1
+  took   {metal where:place-1} -> 1
+  took   {energy where:place-1} -> 1
+  made   {ark where:place-2 moving:0 gathering:0} -> 1
+
+new state
+  - root
+    - adjacency
+    - ark
+      - {ark where:place-2 moving:0 gathering:0} -> 1
+    - bin
+    - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
+    - citizen
+      - {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 6
+    - consumes
+    - deposit
+      - {deposit where:place-1 what:metal density:6} -> 1
+      - {deposit where:place-1 what:food density:6} -> 1
+      - {deposit where:place-1 what:energy density:6} -> 1
+    - energy
+      - {energy where:place-1} -> 5
+    - extractor
+      - {extractor where:place-1 what:metal working:0} -> 1
+      - {extractor where:place-1 what:food working:1} -> 1
+      - {extractor where:place-1 what:energy working:0} -> 1
+    - food
+    - labor
+      - {labor where:place-1} -> 3
+    - metal
+      - {metal where:place-1} -> 5
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-1 layer:orbit name:place-2}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+as expected
+
+==============================================================================
 an-extractor-cannot-be-built-where-the-deposits-are-taken
 
 old state
@@ -749,6 +1362,9 @@ old state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
     - consumes
     - deposit
@@ -770,7 +1386,7 @@ old state
     - transport
 
 refused
-  `build-extractor` would leave a world where `extractor` needs {deposit where:1 what:31 quantity:2} and there is room for 1 in `deposit`
+  `build-extractor` would leave a world where `place 1` holds 2 `extractor` and has room for 1
 
 as expected
 
@@ -783,6 +1399,9 @@ old state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
     - consumes
     - deposit
@@ -802,7 +1421,7 @@ old state
     - transport
 
 refused
-  `build-extractor` would leave a world where `extractor` needs {deposit where:1 what:31 quantity:1} and there is room for 0 in `deposit`
+  `build-extractor` would leave a world where `place 1` holds 1 `extractor` and has room for 0
 
 as expected
 
@@ -815,6 +1434,9 @@ old state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
     - consumes
     - deposit
@@ -848,6 +1470,9 @@ old state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
     - consumes
     - deposit
@@ -880,6 +1505,9 @@ old state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
     - consumes
     - deposit
@@ -910,6 +1538,9 @@ new state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
     - consumes
     - deposit
@@ -939,6 +1570,9 @@ old state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
     - consumes
     - deposit
@@ -970,6 +1604,9 @@ new state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
     - consumes
     - deposit
@@ -1205,6 +1842,9 @@ old state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
     - consumes
     - deposit
@@ -1238,6 +1878,9 @@ new state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
     - consumes
     - deposit
@@ -1338,6 +1981,9 @@ old state
     - bin
       - {bin where:place-1 what:metal} -> 2
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
       - {capacity of:bin for:metal what:metal per:place} -> 10
       - {capacity of:bin for:food what:food per:place} -> 10
       - {capacity of:bin for:energy what:energy per:place} -> 10
@@ -1377,6 +2023,9 @@ new state
     - bin
       - {bin where:place-1 what:metal} -> 2
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
       - {capacity of:bin for:metal what:metal per:place} -> 10
       - {capacity of:bin for:food what:food per:place} -> 10
       - {capacity of:bin for:energy what:energy per:place} -> 10
@@ -1414,6 +2063,9 @@ old state
     - bin
       - {bin where:place-1 what:metal} -> 2
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
       - {capacity of:bin for:metal what:metal per:place} -> 10
       - {capacity of:bin for:food what:food per:place} -> 10
       - {capacity of:bin for:energy what:energy per:place} -> 10
@@ -1452,6 +2104,9 @@ new state
     - bin
       - {bin where:place-1 what:metal} -> 2
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
       - {capacity of:bin for:metal what:metal per:place} -> 10
       - {capacity of:bin for:food what:food per:place} -> 10
       - {capacity of:bin for:energy what:energy per:place} -> 10
@@ -1480,6 +2135,40 @@ new state
 as expected
 
 ==============================================================================
+nothing-moves-between-the-layers
+
+old state
+  - root
+    - adjacency
+      - {adjacency id:1 from:territory-1 to:territory-2}
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:orbit name:place-2}
+    - provides
+    - scout
+      - {scout where:place-1 moving:1} -> 1
+    - territory
+      - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
+    - transport
+
+refused
+  `move` needs {place id:2 layer:surface} and it is not
+
+as expected
+
+==============================================================================
 one-extractors-readiness-is-not-anothers
 
 old state
@@ -1488,6 +2177,9 @@ old state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
     - consumes
     - deposit
@@ -1716,6 +2408,9 @@ old state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
     - consumes
     - deposit
@@ -1757,6 +2452,9 @@ new state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
     - consumes
     - deposit
@@ -2376,6 +3074,9 @@ old state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
     - consumes
     - deposit
@@ -2413,6 +3114,9 @@ new state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
     - consumes
     - deposit
@@ -2443,6 +3147,9 @@ old state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
     - consumes
     - deposit
@@ -2478,6 +3185,9 @@ new state
     - ark
     - bin
     - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
     - citizen
     - consumes
     - deposit

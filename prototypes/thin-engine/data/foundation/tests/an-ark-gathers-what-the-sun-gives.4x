@@ -6,8 +6,8 @@
 # sun gives, and the number is the world's rather than the rule's.
 #
 # **An ark is not an extractor.** `{capacity of:deposit for:extractor ...}` counts extractors
-# against deposits and an ark counts against nothing, which is where *unlimited capacity for extractors*
-# comes from: not a number, but the ark not being one of them.
+# against deposits and an ark counts against nothing, which is where *unlimited capacity for
+# extractors* comes from: not a number, but the ark not being one of them.
 #
 # **Three is gathered and three is still standing**, because nothing here ends a turn. What an ark
 # can keep is a different question and `an-ark-holds-one-energy-and-the-rest-is-lost` is where it is
