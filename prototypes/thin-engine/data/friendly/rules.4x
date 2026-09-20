@@ -194,10 +194,12 @@
 {part id:6 of:end-turn is:perish seq:2 name:part-6}
 {part id:7 of:end-turn is:breed seq:3 name:part-7}
 {part id:3 of:end-turn is:discard-disorder seq:4 name:part-3}
-{part id:1 of:end-turn is:refresh seq:5 name:part-1}
-{part id:2 of:end-turn is:refresh seq:6 name:part-2}
-{part id:5 of:end-turn is:refresh seq:7 name:part-5}
-{part id:8 of:end-turn is:refresh seq:8 name:part-8}
+{part id:9 of:end-turn is:discard-disorder seq:5 name:part-9}
+{part id:1 of:end-turn is:refresh seq:6 name:part-1}
+{part id:2 of:end-turn is:refresh seq:7 name:part-2}
+{part id:5 of:end-turn is:refresh seq:8 name:part-5}
+{part id:8 of:end-turn is:refresh seq:9 name:part-8}
+{part id:10 of:end-turn is:refresh seq:10 name:part-10}
 
 {argument id:1 part:part-1 input:what value:unit}
 {argument id:2 part:part-1 input:trait value:moving}
@@ -207,6 +209,10 @@
 {argument id:6 part:part-5 input:trait value:hungry}
 {argument id:7 part:part-8 input:what value:citizen}
 {argument id:8 part:part-8 input:trait value:bearing}
+{argument id:9 part:part-10 input:what value:citizen}
+{argument id:10 part:part-10 input:trait value:laboring}
+{argument id:11 part:part-3 input:what value:resource}
+{argument id:12 part:part-9 input:what value:labor}
 
 # **`build-bin` says nothing about how many will fit**, the same way `build-extractor` says
 # nothing about deposits. That a territory has room for only so many is a fact about the world,
@@ -258,9 +264,18 @@
 # **So the input, the `relation-of` and the argument are all gone**, and the rule says what it does.
 # If a second family is ever loose, the argument comes back - and then it will be doing something.
 
+# **Its argument is back, and the comment that deleted it said this day would come.** *If a second
+# family is ever loose, the argument comes back - and then it will be doing something.* Labour is
+# the second, so `discard-disorder` is fired twice by the turn, once per loose kind - which is the
+# same shape as the five refreshes and for the same reason.
+
 {rule id:7 name:discard-disorder}
 
+{input id:19 rule:discard-disorder seq:1 name:what of:relation}
+
 {clause id:20 rule:discard-disorder seq:1 role:keep relation:resource name:clause-20}
+
+{relation-of clause:clause-20 input:what}
 
 # **`upkeep` is `spec/turn.md`'s first step**: *upkeep is paid*. One citizen eats one food and is
 # no longer hungry, and it repeats - so as many eat as there is food for, and nothing anywhere
@@ -309,6 +324,7 @@
 {literal id:27 clause:clause-23 column:132 value:1}
 
 {reading id:2 clause:clause-23 column:133 of:clause-28 takes:133}
+{reading id:7 clause:clause-23 column:137 of:clause-28 takes:137}
 
 # **`perish` is the consequence `hungry` does not carry.** A trait says what a thing may do; what
 # happens to a thing that did not is a step of the turn, with a name a player can read.
@@ -368,6 +384,12 @@
 # citizens and ten food give six; three and five give five; three and two give two, because one
 # starved and none bred.
 
+# **A newborn arrives able to work and has missed today's shift.** `toil` is the turn's second part
+# and breeding is its fifth, so a citizen born here contributes no labour this turn whatever its
+# `laboring` says - and `refresh` sets it at the turn's end regardless. **So the value is only ever
+# read when `breed` is fired on its own**, and `laboring:1` is the honest one: it has not worked,
+# rather than having already done so.
+
 {rule id:10 name:breed}
 
 {input id:17 rule:breed seq:1 name:where of:place}
@@ -389,4 +411,52 @@
 {literal id:32 clause:clause-26 column:83 value:1}
 {literal id:33 clause:clause-27 column:131 value:0}
 {literal id:34 clause:clause-27 column:133 value:0}
+{literal id:48 clause:clause-27 column:137 value:1}
 {literal id:35 clause:clause-27 column:132 value:2}
+
+# **`toil` is a citizen spending its `laboring` to make a labour**, and it is `upkeep`'s mirror:
+# one takes a food and gives back a citizen that has eaten, this takes nothing and gives back a
+# citizen that has worked, plus the labour it made.
+#
+# **It is the player's and not the turn's.** Sean, 2026-09-20: *I was expecting citizens to generate
+# labor during a regular turn.* So it takes its place as an argument like every other command, and
+# it is a root of the tree rather than a step of `end-turn` - which is what makes working a choice
+# rather than something that happens to you.
+#
+# **One command works a whole place**, because it repeats: it fires once per citizen that still has
+# its `laboring`, and stops when none has. **A citizen produces one labour per turn**, which is the
+# `quantity:1` on the clause that makes it. Sean, 2026-09-20: *in the future I will want to be able
+# to change how much labor a single citizen can produce per turn* - and when that day comes the
+# number stops being a literal and becomes a rate, the way `{consumes kind:scout what:berth} -> 1`
+# already is. `backlog.md` carries it.
+#
+# **It reads the citizen it gives back, rather than stating one.** A citizen carries three traits,
+# and an `add` must name every column - so writing `hungry:1 bearing:1` would be right only because
+# the turn restores them last. The `require` is there to be read from, which is what `work` does
+# with a deposit's density and `upkeep` with a parent's bearing.
+
+{rule id:11 name:toil}
+
+{input id:18 rule:toil seq:1 name:where of:place}
+
+{repeats rule:toil}
+
+{clause id:31 rule:toil seq:1 role:require relation:citizen name:clause-31}
+{clause id:32 rule:toil seq:2 role:remove relation:citizen name:clause-32}
+{clause id:33 rule:toil seq:3 role:add relation:citizen name:clause-33}
+{clause id:34 rule:toil seq:4 role:add relation:labor name:clause-34}
+
+{binding id:44 clause:clause-31 column:130 input:where}
+{binding id:45 clause:clause-32 column:130 input:where}
+{binding id:46 clause:clause-33 column:130 input:where}
+{binding id:47 clause:clause-34 column:78 input:where}
+
+{literal id:42 clause:clause-31 column:137 value:1}
+{literal id:43 clause:clause-32 column:137 value:1}
+{literal id:44 clause:clause-32 column:132 value:1}
+{literal id:45 clause:clause-33 column:137 value:0}
+{literal id:46 clause:clause-33 column:132 value:1}
+{literal id:47 clause:clause-34 column:79 value:1}
+
+{reading id:5 clause:clause-33 column:131 of:clause-31 takes:131}
+{reading id:6 clause:clause-33 column:133 of:clause-31 takes:133}

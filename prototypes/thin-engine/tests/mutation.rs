@@ -707,37 +707,22 @@ fn no_value_can_be_changed_without_breaking_something() {
 ///
 /// **A `moving` that never moves is the other shape here.** The berth tests hold vehicles to count
 /// them, not to move them, so what those rows say about moves is read by nothing.
-const NOT_LOAD_BEARING: [&str; 37] = [
+const NOT_LOAD_BEARING: [&str; 42] = [
     // **The one `assigns` row's id is read by nothing.** There were two, and changing one id
     // to the other's collided on the key; with one row there is nothing to collide with.
     // **`assigns` may not need an `id` at all** - keyed by `(clause, input, value)` it could not
     // state two assignments of one input on one clause, which is the rule rather than a
     // restriction. That is in `backlog.md` rather than done here.
     "1 rules.4x assigns.id",
-    "23 rules.4x clause.seq",
+    "27 rules.4x clause.seq",
     // **A scoped input's name is read by nothing, and the other eleven are read by name.** A
     // command finds its argument by the input's name and so does a part; an input the engine fills
     // is looked up by neither, because nothing outside the engine ever names it. **So `upkeep`'s
     // `where` and `perish`'s are the two**, and what their names are for is the friendly notation
     // and a person reading the rule.
     "3 rules.4x input.name",
-    "14 rules.4x input.seq",
-    // **Three of the six parts' `seq` are read by something and three are not.** This entry said
-    // *neither of the two* until 2026-09-19, and predicted which step would change it - *upkeep
-    // must be paid before a population grows on what is left*, which is what landed.
-    //
-    // **Which three the sweep counts is not measured here**, because its two mutations are both
-    // bigger moves than a swap: `mutated` sorts after every digit, so a part goes last, and taking
-    // another row's value puts two parts on one number.
-    //
-    // **Transposing adjacent pairs finds exactly one**, measured 2026-09-20 by swapping each
-    // neighbouring pair in turn and running the suite: `upkeep` with `perish` kills everyone, and
-    // the other four commute - `perish` with `discard-disorder`, `discard-disorder` with the first
-    // refresh, and the three refreshes among themselves.
-    //
-    // **So the turn states six steps of order and enforces one of them.** That is worth saying
-    // rather than letting `tree.txt` imply the rest is holding something up.
-    "3 rules.4x part.seq",
+    "16 rules.4x input.seq",
+    "4 rules.4x part.seq",
     // **`reading.id` was on this list until `upkeep` grew a second reading.** With one row there
     // was nothing for an id to collide with, so changing it to anything at all was unnoticed; with
     // two, taking the other's value is a key the structure refuses. **A thing that was decoration
@@ -774,6 +759,12 @@ const NOT_LOAD_BEARING: [&str; 37] = [
     // **This is the schema forcing a value rather than a test stating one**, which is the same
     // reason a spent scout's quantity is further down this list.
     "1 tests/a-citizen-eats-and-one-there-is-no-food-for-starves.4x citizen.bearing",
+    // **A `laboring` no world reads, in the five tests that end a turn without working.** Nothing
+    // in them fires `toil`, so no rule looks at the trait - and the turn restores it last, so a
+    // citizen ends every one of these with `laboring:1` whatever it started with. **It is the same
+    // class as the `citizen.bearing` above it**, which is unread for the same reason in the tests
+    // where nothing breeds.
+    "1 tests/a-citizen-eats-and-one-there-is-no-food-for-starves.4x citizen.laboring",
     "3 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x place.layer",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x scout.quantity",
     "1 tests/a-scout-cannot-move-where-every-berth-is-taken.4x adjacency.id",
@@ -790,11 +781,14 @@ const NOT_LOAD_BEARING: [&str; 37] = [
     "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x place.layer",
     "1 tests/an-extractor-cannot-be-worked-without-labor.4x deposit.density",
     "1 tests/an-extractor-cannot-be-worked-without-labor.4x place.layer",
+    "1 tests/breeding-does-not-reach-the-citizens-it-just-made.4x citizen.laboring",
+    "1 tests/breeding-stops-when-the-food-does.4x citizen.laboring",
     "2 tests/one-extractors-readiness-is-not-anothers.4x deposit.density",
     "2 tests/one-extractors-readiness-is-not-anothers.4x extractor.quantity",
     "2 tests/one-extractors-readiness-is-not-anothers.4x extractor.working",
     "1 tests/one-extractors-readiness-is-not-anothers.4x place.layer",
     "2 tests/the-hungry-perish-after-upkeep-and-not-before.4x citizen.bearing",
+    "2 tests/the-hungry-perish-after-upkeep-and-not-before.4x citizen.laboring",
     "1 tests/the-same-free-space-admits-one-kind-and-refuses-another.4x adjacency.id",
     "2 tests/the-same-free-space-admits-one-kind-and-refuses-another.4x place.layer",
     "1 tests/the-same-free-space-admits-one-kind-and-refuses-another.4x scout.moving",
@@ -802,4 +796,5 @@ const NOT_LOAD_BEARING: [&str; 37] = [
     "3 tests/the-scout-cannot-cross-where-there-is-no-border.4x place.layer",
     "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x scout.moving",
     "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x scout.quantity",
+    "1 tests/three-citizens-and-ten-food-become-six.4x citizen.laboring",
 ];

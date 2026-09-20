@@ -1260,6 +1260,57 @@ pub fn rooming(schema: &Schema, rows: &Store) -> Vec<Rooming> {
             .push((of.to_string(), each));
     }
 
+    // **A loose kind nothing gives room for has no room, rather than unlimited room.** Sean,
+    // 2026-09-19: *if we omit a capacity, we can default that to mean it may carry none of that
+    // thing.* Until a kind was named in some capacity row's `for`, nothing asked about it at all -
+    // so *no capacity stated* meant *no bound* for one kind and *no room* for another, depending on
+    // whether anybody happened to mention it elsewhere.
+    //
+    // **Labour is what gave it a user.** Sean, 2026-09-20: *each citizen can produce one labor per
+    // turn* and *unspent labor does not survive the turn* - so labour is loose, nothing holds it,
+    // and all of it is in disorder when the turn ends. **No capacity row states that**; its absence
+    // does.
+    //
+    // **Where the kind is, is unambiguous and the fungibility check is why.** Only what is fungible
+    // may lie loose, which means a loose kind's key is at most where it is and what it is of - so
+    // taking `what` out leaves exactly one column, and what that column references is the `per`.
+    // **Nothing here guesses**, and nothing here names a place.
+    let id_of: BTreeMap<&str, &str> = rows
+        .rows()
+        .iter()
+        .filter(|row| row.relation == RELATION)
+        .filter_map(|row| Some((row.value(NAME)?, row.value(ID)?)))
+        .collect();
+    for held in loose_kinds(schema, rows) {
+        let Some(declared) = schema.relation(&held) else {
+            continue;
+        };
+        // **A loose kind that is of something is left alone**, because one question per `what` it
+        // holds is more than this needs and none of them is loose today. `backlog.md` carries it.
+        if declared.columns.iter().any(|it| it.name == WHAT) {
+            continue;
+        }
+        let mut key = declared.key();
+        key.retain(|it| *it != WHAT);
+        let (Some(name), Some(id)) = (key.first(), id_of.get(held.as_str())) else {
+            continue;
+        };
+        let Some(per) = declared
+            .columns
+            .iter()
+            .find(|it| it.name == **name)
+            .and_then(|it| it.references.as_deref())
+            .and_then(|it| id_of.get(it))
+        else {
+            continue;
+        };
+        let question = (id.to_string(), id.to_string(), per.to_string());
+        if !asked.contains(&question) {
+            asked.push(question.clone());
+            giving.entry(question).or_default();
+        }
+    }
+
     let mut out = Vec::new();
     for question in asked {
         let (raw_held, raw_what, raw_per) = question.clone();

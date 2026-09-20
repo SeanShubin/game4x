@@ -1,0 +1,46 @@
+# Two citizens that can still work, one that has already worked, and one in the next territory: two
+# labour, and only the first two worked.
+#
+# **Four things have to be true at once and this is where each of them can be seen.** `toil` names
+# a place and works the citizens of that place; it works the ones that still have their `laboring`
+# and not the one that has spent it; it takes them one at a time; and it gives each back exactly as
+# it found it but for the `laboring`.
+#
+# **The citizen in the next territory is untouched**, which is what the place binding is for. Take
+# it away and the rule matches a citizen in either place, which is two rows and no way to say
+# which - so it is refused rather than guessing.
+#
+# **The one that has already worked is not worked again**, which is what `laboring:1` is for, and it
+# is stated in the `given` rather than produced. Without it the pattern matches both rows in this
+# place and the rule is refused for the same reason.
+#
+# **`bearing:0` is stated so the reading can be seen doing its work.** An `add` must name every
+# column, so `toil` has to say what the citizen it gives back is like - and writing `bearing:1`
+# would hand a spent `bearing` back for free. It reads it instead, which is what `work` does with a
+# deposit's density and `upkeep` with a parent's bearing.
+#
+# **Two labour and not one**, because the rule takes one citizen at a time and repeats. Take the
+# quantity away and it takes the row whole, and two citizens make a single labour between them.
+
+{test name:toil-works-the-unworked-citizens-of-one-place}
+
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{territory id:2}
+{place id:2 of:2 layer:surface}
+{citizen where:1 hungry:1 bearing:0 laboring:1 quantity:2}
+{citizen where:1 hungry:1 bearing:0 laboring:0 quantity:1}
+{citizen where:2 hungry:1 bearing:1 laboring:1 quantity:1}
+
+{when}
+{toil where:1}
+
+{then}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{territory id:2}
+{place id:2 of:2 layer:surface}
+{citizen where:1 hungry:1 bearing:0 laboring:0 quantity:3}
+{citizen where:2 hungry:1 bearing:1 laboring:1 quantity:1}
+{labor where:1 quantity:2}

@@ -18,7 +18,7 @@
 {given}
 {territory id:1 name:territory-1}
 {place id:1 of:territory-1 layer:surface name:place-1}
-{citizen where:place-1 hungry:0 bearing:1} -> 2
+{citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
 {food where:place-1} -> 5
 
 {when}
@@ -27,5 +27,5 @@
 {then}
 {territory id:1 name:territory-1}
 {place id:1 of:territory-1 layer:surface name:place-1}
-{citizen where:place-1 hungry:0 bearing:0} -> 4
+{citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 4
 {food where:place-1} -> 3

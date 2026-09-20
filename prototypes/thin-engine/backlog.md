@@ -390,6 +390,50 @@ zero, and omitting a capacity currently means unconstrained - see *Refresh, what
 where Sean already ruled it should mean none. **It was deferred for want of a user and orbit is the
 user**: an orbit saying nothing about extractors would admit any number of them.
 
+
+## A second kind of machine, and the part of `work` that would not come free
+
+**Sean, 2026-09-20**, on `{work where:place-1 what:food}`: *the food extractor is the only thing
+that matches, but if we had two machines with food as their template key, we wouldn't be able to
+tell which operate. That's not to say we need to change it now, but as I am certain a change will be
+needed later, I want to make sure our design now is not pushing us in the wrong direction.*
+
+**Naming which machine is the mechanism the rule already uses one clause along.** `work` does not
+name `metal` or `food` in the clause that makes the resource - it names the family and takes the
+member from an argument:
+
+```text
+{clause id:12 rule:work seq:5 role:add relation:resource}
+{relation-of clause:12 input:what}
+```
+
+**So a second machine kind costs a family, an input and two `relation-of` rows** -
+`{work where:P what:food which:farm}` - and the remove and add clauses follow the argument.
+`move` already uses `relation-of` on a **remove** clause, so nothing new is needed to make it work.
+It is the same move `refresh` made when it stopped being two rules. **Deriving the machine from
+`(place, resource)` is right while there is one machine kind per resource**, and the day there is
+not, the rule gains an input.
+
+## The pressure point is where the number comes from
+
+**`work` takes its output from the deposit's density**, which is clause one requiring a deposit and
+clause five reading `density` off the row it matched. **That is a fact about mining and not about
+machines.** A farm that yields by some other rule - soil, a flat rate, weather - cannot use that
+clause, and a family cannot paper over it, because members of a family must share a shape and
+`UnlikeShape` checks it.
+
+- **A second machine that also mines a deposit is nearly free.**
+- **A second machine that yields differently is not**, and the question it forces is whether yield
+  becomes a property of the machine - a rate row, the way `{consumes kind:scout what:berth} -> 1`
+  already is - rather than a property of the ground.
+
+**If yield moves onto the machine, `deposit` stops being what `work` reads** and becomes only what
+limits how many machines a place may hold, which it already does through
+`{limit held:extractor by:deposit}`. That is a clean separation and is the likely end state.
+
+**One thing to avoid when the day comes**: a second `work` rule. That is the `metal-bin, food-bin`
+shape Sean has ruled out twice, and the family route costs less than it looks.
+
 ## Smaller things, each with the reason it is not done
 
 **A constant limit of the plain sort.** `{limit container:territory contained:garrison n:1}` -

@@ -1,0 +1,38 @@
+# The loop, closed: a citizen makes a labour, the labour works a food extractor, and one food in
+# becomes six out.
+#
+# **This is the half of Sean's loop that had no mechanism until now.** *citizen works food extractor
+# / food extractor generates enough food for more than one citizen* - and `labor` was consumed by
+# three rules and produced by none, so every test that spent one stated it in a `given`. **A
+# population could grow and starve while nothing it did made the food it lived on.**
+#
+# **Both halves are the player's.** Sean, 2026-09-20: *I was expecting citizens to generate labor
+# during a regular turn.* So `toil` is a command and not a step of the turn - working is a choice,
+# and a citizen that is not put to work keeps its `laboring` until the turn restores it anyway.
+#
+# **One command works the whole place**, because `toil` repeats: it fires once per citizen that
+# still has its `laboring` and stops when none has. Here that is one citizen and one labour.
+#
+# **The extractor is spent afterwards and the labour is gone**, so nothing in this world can work
+# again until a turn restores the one and a citizen makes the other.
+
+{test name:a-citizen-s-labor-works-an-extractor}
+
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{citizen where:1 hungry:1 bearing:1 laboring:1 quantity:1}
+{deposit where:1 what:31 density:6 quantity:1}
+{extractor where:1 what:31 working:1 quantity:1}
+
+{when}
+{toil where:1}
+{work where:1 what:31}
+
+{then}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{citizen where:1 hungry:1 bearing:1 laboring:0 quantity:1}
+{deposit where:1 what:31 density:6 quantity:1}
+{extractor where:1 what:31 working:0 quantity:1}
+{food where:1 quantity:6}

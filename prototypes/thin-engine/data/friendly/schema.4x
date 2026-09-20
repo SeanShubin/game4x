@@ -563,6 +563,13 @@
 
 {loose kind:resource}
 
+# **Labour is loose and nothing holds it, which together are the whole of *unspent labour is lost*.**
+# Sean, 2026-09-20: *unspent labor does not survive the turn* and *excess labor to be removed the
+# same as discard-disorder.* **No capacity row says nothing holds it**; the absence of one does,
+# because a loose kind nothing gives room for has no room.
+
+{loose kind:labor}
+
 
 ## A rule that fires as many times as it can, and the place it fires in
 
@@ -662,12 +669,22 @@
 # stops being true the engine refuses rather than guessing**, which is `Refused::NotOneToTake` doing
 # the job it was built for.
 
+# **`laboring` is a citizen's capacity to work, and it is a gerund like the rest.** Sean,
+# 2026-09-20: *citizen produces a labor that work then spends.* `spec/data/traits.4x` already names
+# it beside `working`, `moving` and `bearing`, and `schema.4x` has quoted that list since the
+# allowances were built - so this is the fourth use of a mechanism rather than a new one.
+#
+# **It closes the loop.** `labor` was consumed by three rules and produced by none: every test that
+# spent one stated it in a `given`, so a population could grow and starve but nothing it did made
+# the food it lived on. A citizen makes one labour a turn, and `work` spends it on an extractor.
+
 {relation id:47 name:citizen}
 
 {column id:130 relation:citizen seq:1 name:where}
 {column id:131 relation:citizen seq:2 name:hungry}
 {column id:133 relation:citizen seq:3 name:bearing}
-{column id:132 relation:citizen seq:4 name:quantity}
+{column id:137 relation:citizen seq:4 name:laboring}
+{column id:132 relation:citizen seq:5 name:quantity}
 
 {reference id:69 column:130 to:place}
 
@@ -675,9 +692,11 @@
 
 {trait id:3 name:hungry}
 {trait id:4 name:bearing}
+{trait id:5 name:laboring}
 
 {carries kind:citizen trait:hungry}
 {carries kind:citizen trait:bearing}
+{carries kind:citizen trait:laboring}
 
 # **A place is a layer of a territory, and a thing stands in a place rather than in a territory.**
 # Sean, 2026-09-20: *I no longer think orbits should be separate territories with adjacencies like

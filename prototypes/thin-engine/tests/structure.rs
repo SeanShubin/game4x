@@ -605,9 +605,9 @@ fn a_trait_and_the_column_that_holds_it_are_checked_both_ways() {
             .iter()
             .filter(|row| row.relation == "carries")
             .count(),
-        6,
+        7,
         "unit, scout and transport carry `moving`; extractor carries `working`; citizen carries
-         `hungry` and `bearing`"
+         `hungry`, `bearing` and `laboring`"
     );
 }
 
@@ -646,8 +646,8 @@ fn a_rule_that_repeats_and_removes_nothing_is_refused() {
             .iter()
             .filter(|row| row.relation == "repeats")
             .count(),
-        3,
-        "`upkeep`, `perish` and `breed` are what repeat"
+        4,
+        "`upkeep`, `perish`, `breed` and `toil` are what repeat"
     );
 }
 
@@ -735,9 +735,9 @@ fn the_tree_is_what_the_file_says_it_is() {
         .collect();
     assert_eq!(
         rules.len(),
-        10,
+        11,
         "move, build-extractor, work, refresh, end-turn, build-bin, discard-disorder,
-         upkeep, perish, breed"
+         upkeep, perish, breed, toil"
     );
     // **At least once, not exactly once.** `refresh` appears twice because `end-turn` names it
     // twice - two steps of one order - and asserting *once* said the tree was wrong when it was
@@ -750,8 +750,8 @@ fn the_tree_is_what_the_file_says_it_is() {
     }
     assert_eq!(
         shown.matches("refresh").count(),
-        4,
-        "and refresh is there four times, once per trait the turn restores"
+        5,
+        "and refresh is there five times, once per trait the turn restores"
     );
 
     // **And a step the engine fans out says so.** `upkeep` and `perish` are handed nothing, so
@@ -760,7 +760,7 @@ fn the_tree_is_what_the_file_says_it_is() {
     assert_eq!(
         shown.matches("per:place").count(),
         3,
-        "`upkeep`, `perish` and `breed` each happen once per place"
+        "`upkeep`, `perish` and `breed` each happen once per place; `toil` is the player's and names its own"
     );
 }
 
@@ -885,7 +885,7 @@ fn only_what_is_fungible_may_lie_loose() {
             .iter()
             .filter(|row| row.relation == "loose")
             .count(),
-        1,
-        "one row, naming the family, and not one per member"
+        2,
+        "two rows - the family, and labour, which is a kind and not a family"
     );
 }

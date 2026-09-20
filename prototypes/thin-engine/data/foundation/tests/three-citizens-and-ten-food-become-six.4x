@@ -12,6 +12,11 @@
 # **Nothing computes the six.** Each firing takes one citizen and one food and gives two citizens
 # back, and how many times it fired is the whole of the arithmetic.
 #
+# **And the four food that are left over are gone**, because nothing in this world holds food. A
+# loose kind nothing gives room for has no room, so all of it is in disorder and the turn takes it.
+# **Surplus feeds the next generation only if there is a bin to keep it in** - which is storage
+# earning its place in the game rather than being a thing you may build.
+#
 # **The survivors are fertile and hungry again**, because the turn restores every count last - so
 # the world is in the shape it started in, with twice the citizens and less food.
 
@@ -20,7 +25,7 @@
 {given}
 {territory id:1}
 {place id:1 of:1 layer:surface}
-{citizen where:1 hungry:1 bearing:1 quantity:3}
+{citizen where:1 hungry:1 bearing:1 laboring:1 quantity:3}
 {food where:1 quantity:10}
 
 {when}
@@ -29,5 +34,4 @@
 {then}
 {territory id:1}
 {place id:1 of:1 layer:surface}
-{citizen where:1 hungry:1 bearing:1 quantity:6}
-{food where:1 quantity:4}
+{citizen where:1 hungry:1 bearing:1 laboring:1 quantity:6}

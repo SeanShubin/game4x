@@ -16,6 +16,9 @@
 # **It is also what the mutation sweep asked for**: with no test naming `discard-disorder`, the
 # rule's name is read by nothing, and the sweep says so.
 #
+# **It names which loose kind it is trimming**, because there are two now - the resources, and
+# labour. The turn fires it once for each, and this fires it for the resources alone.
+#
 # **Two bins at ten apiece is twenty, and twenty-two is two over.**
 
 {test name:discarding-disorder-can-be-fired-on-its-own}
@@ -29,7 +32,7 @@
 {metal where:place-1} -> 22
 
 {when}
-{discard-disorder}
+{discard-disorder what:resource}
 
 {then}
 {territory id:1 name:territory-1}

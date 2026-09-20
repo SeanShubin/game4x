@@ -100,7 +100,7 @@ old state
     - bin
     - capacity
     - citizen
-      - {citizen where:place-1 hungry:1 bearing:1} -> 3
+      - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 3
     - consumes
     - deposit
     - extractor
@@ -122,10 +122,10 @@ command  {end-turn}
   took   {citizen where:place-1 hungry:1} -> 1
   took   {food where:place-1} -> 1
   took   {citizen where:place-1 hungry:1} -> 
-  took   {citizen where:place-1 hungry:0 bearing:1} -> 2
-  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:1} -> 2
+  took   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 2
 
 new state
   - root
@@ -133,11 +133,74 @@ new state
     - bin
     - capacity
     - citizen
-      - {citizen where:place-1 hungry:1 bearing:1} -> 2
+      - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 2
     - consumes
     - deposit
     - extractor
     - food
+    - labor
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+as expected
+
+==============================================================================
+a-citizen-s-labor-works-an-extractor
+
+old state
+  - root
+    - adjacency
+    - bin
+    - capacity
+    - citizen
+      - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 1
+    - consumes
+    - deposit
+      - {deposit where:place-1 what:food density:6} -> 1
+    - extractor
+      - {extractor where:place-1 what:food working:1} -> 1
+    - food
+    - labor
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+command  {toil where:place-1}
+  took   {citizen where:place-1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+
+command  {work where:place-1 what:food}
+  took   {extractor where:place-1 what:food working:1} -> 1
+  took   {labor where:place-1} -> 1
+  made   {extractor where:place-1 what:food working:0} -> 1
+  made   {food where:place-1} -> 6
+
+new state
+  - root
+    - adjacency
+    - bin
+    - capacity
+    - citizen
+      - {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+    - consumes
+    - deposit
+      - {deposit where:place-1 what:food density:6} -> 1
+    - extractor
+      - {extractor where:place-1 what:food working:0} -> 1
+    - food
+      - {food where:place-1} -> 6
     - labor
     - metal
     - place
@@ -758,7 +821,7 @@ old state
     - bin
     - capacity
     - citizen
-      - {citizen where:place-1 hungry:0 bearing:1} -> 2
+      - {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
     - consumes
     - deposit
     - extractor
@@ -779,8 +842,8 @@ command  {breed}
   took   {food where:place-1} -> 1
   took   {citizen where:place-1 hungry:0 bearing:1} -> 1
   took   {food where:place-1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:0} -> 2
-  made   {citizen where:place-1 hungry:0 bearing:0} -> 2
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
 
 new state
   - root
@@ -788,7 +851,7 @@ new state
     - bin
     - capacity
     - citizen
-      - {citizen where:place-1 hungry:0 bearing:0} -> 4
+      - {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 4
     - consumes
     - deposit
     - extractor
@@ -815,7 +878,7 @@ old state
     - bin
     - capacity
     - citizen
-      - {citizen where:place-1 hungry:1 bearing:1} -> 3
+      - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 3
     - consumes
     - deposit
     - extractor
@@ -842,17 +905,17 @@ command  {end-turn}
   took   {food where:place-1} -> 1
   took   {citizen where:place-1 hungry:0 bearing:1} -> 1
   took   {food where:place-1} -> 1
-  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
-  took   {citizen where:place-1 hungry:0 bearing:0} -> 4
-  took   {citizen where:place-1 hungry:1 bearing:0} -> 4
-  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:0} -> 2
-  made   {citizen where:place-1 hungry:0 bearing:0} -> 2
-  made   {citizen where:place-1 hungry:1 bearing:1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:0} -> 4
-  made   {citizen where:place-1 hungry:1 bearing:1} -> 4
+  took   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 4
+  took   {citizen where:place-1 hungry:1 bearing:0 laboring:1} -> 4
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:0 laboring:1} -> 4
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 4
 
 new state
   - root
@@ -860,7 +923,7 @@ new state
     - bin
     - capacity
     - citizen
-      - {citizen where:place-1 hungry:1 bearing:1} -> 5
+      - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 5
     - consumes
     - deposit
     - extractor
@@ -906,7 +969,7 @@ old state
       - {territory id:1 name:territory-1}
     - transport
 
-command  {discard-disorder}
+command  {discard-disorder what:resource}
   took   {metal where:place-1} -> 22
   made   {metal where:place-1} -> 20
 
@@ -1350,9 +1413,9 @@ old state
     - bin
     - capacity
     - citizen
-      - {citizen where:place-1 hungry:0 bearing:1} -> 1
-      - {citizen where:place-1 hungry:1 bearing:1} -> 2
-      - {citizen where:place-2 hungry:1 bearing:1} -> 1
+      - {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+      - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 2
+      - {citizen where:place-2 hungry:1 bearing:1 laboring:1} -> 1
     - consumes
     - deposit
     - extractor
@@ -1376,8 +1439,8 @@ command  {upkeep}
   took   {food where:place-1} -> 1
   took   {citizen where:place-2 hungry:1} -> 1
   took   {food where:place-2} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:place-2 hungry:0 bearing:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-2 hungry:0 bearing:1 laboring:1} -> 1
 
 new state
   - root
@@ -1385,9 +1448,9 @@ new state
     - bin
     - capacity
     - citizen
-      - {citizen where:place-1 hungry:0 bearing:1} -> 2
-      - {citizen where:place-1 hungry:1 bearing:1} -> 1
-      - {citizen where:place-2 hungry:0 bearing:1} -> 1
+      - {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
+      - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 1
+      - {citizen where:place-2 hungry:0 bearing:1 laboring:1} -> 1
     - consumes
     - deposit
     - extractor
@@ -1535,8 +1598,8 @@ old state
     - bin
     - capacity
     - citizen
-      - {citizen where:place-1 hungry:1 bearing:1} -> 3
-      - {citizen where:place-2 hungry:1 bearing:1} -> 2
+      - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 3
+      - {citizen where:place-2 hungry:1 bearing:1 laboring:1} -> 2
     - consumes
     - deposit
     - extractor
@@ -1564,13 +1627,13 @@ command  {end-turn}
   took   {food where:place-2} -> 1
   took   {citizen where:place-1 hungry:1} -> 
   took   {citizen where:place-2 hungry:1} -> 
-  took   {citizen where:place-1 hungry:0 bearing:1} -> 2
-  took   {citizen where:place-2 hungry:0 bearing:1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:place-2 hungry:0 bearing:1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:1} -> 2
-  made   {citizen where:place-2 hungry:1 bearing:1} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
+  took   {citizen where:place-2 hungry:0 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-2 hungry:0 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 2
+  made   {citizen where:place-2 hungry:1 bearing:1 laboring:1} -> 1
 
 new state
   - root
@@ -1578,8 +1641,8 @@ new state
     - bin
     - capacity
     - citizen
-      - {citizen where:place-1 hungry:1 bearing:1} -> 2
-      - {citizen where:place-2 hungry:1 bearing:1} -> 1
+      - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 2
+      - {citizen where:place-2 hungry:1 bearing:1 laboring:1} -> 1
     - consumes
     - deposit
     - extractor
@@ -1872,7 +1935,7 @@ old state
     - bin
     - capacity
     - citizen
-      - {citizen where:place-1 hungry:1 bearing:1} -> 3
+      - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 3
     - consumes
     - deposit
     - extractor
@@ -1901,16 +1964,17 @@ command  {end-turn}
   took   {food where:place-1} -> 1
   took   {citizen where:place-1 hungry:0 bearing:1} -> 1
   took   {food where:place-1} -> 1
-  took   {citizen where:place-1 hungry:0 bearing:0} -> 6
-  took   {citizen where:place-1 hungry:1 bearing:0} -> 6
-  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:0} -> 2
-  made   {citizen where:place-1 hungry:0 bearing:0} -> 2
-  made   {citizen where:place-1 hungry:0 bearing:0} -> 2
-  made   {citizen where:place-1 hungry:1 bearing:0} -> 6
-  made   {citizen where:place-1 hungry:1 bearing:1} -> 6
+  took   {food where:place-1} -> 4
+  took   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 6
+  took   {citizen where:place-1 hungry:1 bearing:0 laboring:1} -> 6
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+  made   {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+  made   {citizen where:place-1 hungry:1 bearing:0 laboring:1} -> 6
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 6
 
 new state
   - root
@@ -1918,12 +1982,11 @@ new state
     - bin
     - capacity
     - citizen
-      - {citizen where:place-1 hungry:1 bearing:1} -> 6
+      - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 6
     - consumes
     - deposit
     - extractor
     - food
-      - {food where:place-1} -> 4
     - labor
     - metal
     - place
@@ -1932,6 +1995,69 @@ new state
     - scout
     - territory
       - {territory id:1 name:territory-1}
+    - transport
+
+as expected
+
+==============================================================================
+toil-works-the-unworked-citizens-of-one-place
+
+old state
+  - root
+    - adjacency
+    - bin
+    - capacity
+    - citizen
+      - {citizen where:place-1 hungry:1 bearing:0 laboring:0} -> 1
+      - {citizen where:place-1 hungry:1 bearing:0 laboring:1} -> 2
+      - {citizen where:place-2 hungry:1 bearing:1 laboring:1} -> 1
+    - consumes
+    - deposit
+    - extractor
+    - food
+    - labor
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
+    - transport
+
+command  {toil where:place-1}
+  took   {citizen where:place-1 laboring:1} -> 1
+  took   {citizen where:place-1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:0 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:0 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+
+new state
+  - root
+    - adjacency
+    - bin
+    - capacity
+    - citizen
+      - {citizen where:place-1 hungry:1 bearing:0 laboring:0} -> 3
+      - {citizen where:place-2 hungry:1 bearing:1 laboring:1} -> 1
+    - consumes
+    - deposit
+    - extractor
+    - food
+    - labor
+      - {labor where:place-1} -> 2
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-2 layer:surface name:place-2}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
     - transport
 
 as expected
@@ -2000,6 +2126,66 @@ new state
 as expected
 
 ==============================================================================
+unspent-labor-does-not-survive-the-turn
+
+old state
+  - root
+    - adjacency
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+      - {deposit where:place-1 what:food density:1} -> 1
+    - extractor
+    - food
+    - labor
+      - {labor where:place-1} -> 5
+    - metal
+      - {metal where:place-1} -> 1
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+command  {build-extractor where:place-1 what:food}
+  took   {labor where:place-1} -> 1
+  took   {metal where:place-1} -> 1
+  made   {extractor where:place-1 what:food working:0} -> 1
+
+command  {end-turn}
+  took   {labor where:place-1} -> 4
+  took   {extractor where:place-1 what:food working:0} -> 1
+  made   {extractor where:place-1 what:food working:1} -> 1
+
+new state
+  - root
+    - adjacency
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+      - {deposit where:place-1 what:food density:1} -> 1
+    - extractor
+      - {extractor where:place-1 what:food working:1} -> 1
+    - food
+    - labor
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+as expected
+
+==============================================================================
 upkeep-feeds-as-many-as-there-are-citizens
 
 old state
@@ -2008,7 +2194,7 @@ old state
     - bin
     - capacity
     - citizen
-      - {citizen where:place-1 hungry:1 bearing:1} -> 2
+      - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 2
     - consumes
     - deposit
     - extractor
@@ -2029,8 +2215,8 @@ command  {upkeep}
   took   {food where:place-1} -> 1
   took   {citizen where:place-1 hungry:1} -> 1
   took   {food where:place-1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
 
 new state
   - root
@@ -2038,7 +2224,7 @@ new state
     - bin
     - capacity
     - citizen
-      - {citizen where:place-1 hungry:0 bearing:1} -> 2
+      - {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
     - consumes
     - deposit
     - extractor

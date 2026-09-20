@@ -11,10 +11,14 @@ end-turn
     1. upkeep  per:place
     2. perish  per:place
     3. breed  per:place
-    4. discard-disorder
-    5. refresh  what:unit trait:moving
-    6. refresh  what:extractor trait:working
-    7. refresh  what:citizen trait:hungry
-    8. refresh  what:citizen trait:bearing
+    4. discard-disorder  what:resource
+    5. discard-disorder  what:labor
+    6. refresh  what:unit trait:moving
+    7. refresh  what:extractor trait:working
+    8. refresh  what:citizen trait:hungry
+    9. refresh  what:citizen trait:bearing
+    10. refresh  what:citizen trait:laboring
 
 build-bin  where:place what:resource
+
+toil  where:place
