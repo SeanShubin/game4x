@@ -8,9 +8,14 @@
 //! cargo run --example review-web
 //! ```
 //!
-//! Then `http://127.0.0.1:7878`. The arrow keys move, `Enter` opens, `r` marks the test reviewed,
-//! `u` takes that back, and `x` files a note saying what needs changing. Every key press is a write
-//! to the disk that has already happened before the badge changes.
+//! **Then open `http://127.0.0.1:7878` in a browser.** That is an address to visit and not an
+//! argument: this takes none, and the port is fixed because one is all it needs. Sean, 2026-09-20,
+//! having pasted it onto the command line where it was silently ignored - the line above used to
+//! read *Then `http://127.0.0.1:7878`*, which invites exactly that.
+//!
+//! The arrow keys move, `Enter` opens, `r` marks the test reviewed, `u` takes that back, and `x`
+//! files a note saying what needs changing. Every key press is a write to the disk that has already
+//! happened before the badge changes.
 //!
 //! **`j` and `k` still work and are not advertised.** They were the only way to move until Sean
 //! said so: *the j/k to move is unintuitive* - which it is, being vim's and not anything a reader

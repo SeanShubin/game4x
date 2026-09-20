@@ -89,7 +89,7 @@ fn escaped(raw: &str) -> String {
 ///
 /// **Everything above the first marker is `note`** - the prose that says what the test is for,
 /// which drifts as readily as the rows and matters as much.
-fn review_of(stem: &str) -> (&'static str, Vec<String>) {
+fn review_of(stem: &str) -> (&'static str, Vec<(&'static str, String)>) {
     let now = std::fs::read_to_string(mine().join(format!("data/friendly/tests/{stem}.4x")))
         .unwrap_or_default();
     let Ok(read) = std::fs::read_to_string(mine().join(format!("reviewed/{stem}.4x"))) else {
@@ -127,9 +127,13 @@ fn review_of(stem: &str) -> (&'static str, Vec<String>) {
     //
     // **A line now carries its section, so the comparison is finer than it was.** A row deleted
     // from a `then` while an identical row stands in the `given` used to match and be hidden.
-    let shown =
-        |side: &str, (section, line): &(String, String)| format!("{side}: {section:<7} {line}");
-    let mut said: Vec<String> = is
+    // **Each line carries its side as well as saying it.** The page annotates one *what you read*
+    // and the other *not what you read*, and a stylesheet cannot work that out from the text - so
+    // the side travels with the line rather than being parsed back off the front of it.
+    let shown = |side: &'static str, (section, line): &(String, String)| {
+        (side, format!("{side}: {section:<7} {line}"))
+    };
+    let mut said: Vec<(&'static str, String)> = is
         .iter()
         .filter(|it| !was.contains(it))
         .map(|it| shown("now", it))
@@ -411,8 +415,11 @@ not as expected
                 if !drift.is_empty() {
                     said.push_str("<span class=\"gap\"></span>");
                 }
-                for line in &drift {
-                    said.push_str(&format!("<span class=\"drift\">{}</span>", escaped(line)));
+                for (side, line) in &drift {
+                    said.push_str(&format!(
+                        "<span class=\"drift {side}\">{}</span>",
+                        escaped(line)
+                    ));
                 }
                 said
             }
@@ -743,7 +750,9 @@ pre span { display: block; padding: 0 .3rem; border-left: 3px solid transparent 
   .unseen { color: rgb(230 180 90) }
 }
 .drift { background: rgba(120,120,200,.16); border-left-color: rgb(90 110 190) }
-.drift::after { content: " <- not what you read"; opacity: .7; font-size: .8em }
+.drift::after { opacity: .7; font-size: .8em }
+.drift.now::after { content: " <- not what you read" }
+.drift.was::after { content: " <- what you read" }
 .keys { font-size: .85rem; opacity: .8; margin: -1rem 0 1rem }
 .keys b { font-weight: 700; opacity: 1 }
 .flash { color: rgb(190 50 50); font-size: .9rem; margin-bottom: 1rem }
