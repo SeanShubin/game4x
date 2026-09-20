@@ -529,6 +529,43 @@ in *amount* rather than in what is allowed - `{stands-in ...}` answers both case
 **A can fake D with a zero and D cannot fake A at all**, so it is the more general of the two and
 still the one with no user.
 
+
+## What the prototype has settled that `spec/` has not caught up with
+
+**`spec/` is not the authority this answers to.** Sean, 2026-09-20, twice, after this lane cited it
+as though it were: *this is a prototype not bound by the spec. I use the spec for inspiration, but
+the whole point of not being bound to the spec is so that I can come up with appropriate changes to
+the spec.* And the reason: **I lost executive control of the spec and am re-asserting that control
+with precise tests.**
+
+**So the specification is the thing under suspicion, and a difference is the prototype working.**
+Every test here that Sean has read and approved is a piece of the game he is certain of; the
+document grew past what one person could hold, and this is how it is taken back. **Citing `spec/`
+to settle a question is exactly backwards** - it may be cited for an idea, for a word, or for what
+the mainline tried, and never for authority.
+
+**Differences are listed here so the spec lane can find them**, each a proposal it may make once the
+thing has survived review.
+
+**And none of that makes it less worth reading.** Sean, 2026-09-20: *sometimes the spec was correct,
+and I will sometimes ask questions about what the spec did to decide if we should do the same thing
+here, it is just not the authority when it comes to thin-engine.* **Half the good answers of that
+day came out of it** - `[soft]` is better than what this lane had designed, and `put` relocating a
+unit rather than remaking it is a shape worth stealing. **What to drop is the *therefore***: report
+what it did and what that cost, and let the prototype decide.
+
+| what the prototype does                                        | what `spec/` says                                                                                                                           |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| An ark stores one energy and spends one to move between orbits | `spec/units.md`: *a mobile unit that moves in orbit takes its energy directly from the sun. It stores no fuel, and moving costs it nothing* |
+| A bin is a thing a place holds                                 | `spec/logistics.md` calls it a store; the prototype renamed it because `store` is `src/store.rs` and a bare word in five of eight modules   |
+| A territory declares its own capacity for bins                 | `spec/logistics.md`: *a place declares none of its own* - kept because Sean needs the numbers visible in a test                             |
+
+**The orbital one shows what the difference is worth.** The spec's two clauses were written before
+anything gathered. *Takes its energy directly from the sun* now has a mechanism - `gather` - and once
+it does, *moving costs it nothing* stops being the only way to say the first half. **A thing that
+gathers and spends is a game; a thing that moves for free is a rule** - and the prototype found that
+by building the first and noticing the second had nothing left to do.
+
 ## Smaller things, each with the reason it is not done
 
 **A constant limit of the plain sort.** `{limit container:territory contained:garrison n:1}` -

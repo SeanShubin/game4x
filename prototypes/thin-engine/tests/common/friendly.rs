@@ -582,8 +582,15 @@ impl Names {
             out.push_str(&format!(" name:{name}"));
         }
         out.push('}');
-        if let Some(quantity) = quantity {
-            out.push_str(&format!(" -> {}", row.value(quantity).unwrap_or_default()));
+        // **A counted relation writes its arrow, and a row without a quantity writes none.**
+        // Every row of a world carries one; **a `{refused}` row is a pattern and need not** - the
+        // first one that did not was `the-sun-reaches-an-ark-once-a-turn`, whose refusal names an
+        // ark by where it is and what it still has. Writing ` -> ` with nothing after it produced
+        // a row whose quantity was the empty string, and the round trip caught it.
+        if let Some(quantity) = quantity
+            && let Some(how_many) = row.value(quantity)
+        {
+            out.push_str(&format!(" -> {how_many}"));
         }
         out
     }

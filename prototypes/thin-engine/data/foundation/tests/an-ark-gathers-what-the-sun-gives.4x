@@ -1,0 +1,35 @@
+# A sun of density three and one ark: three energy.
+#
+# **Sean, 2026-09-20**: *think of the sun as providing unlimited capacity for extractors, and the
+# ark as an extractor for solar energy.* So the sun is a deposit of energy standing in the orbit,
+# and `gather` reads its density exactly as `work` reads a deposit's - what an ark takes is what the
+# sun gives, and the number is the world's rather than the rule's.
+#
+# **An ark is not an extractor.** `{limit held:extractor by:deposit}` counts extractors against
+# deposits and an ark counts against nothing, which is where *unlimited capacity for extractors*
+# comes from: not a number, but the ark not being one of them.
+#
+# **Three is gathered and three is still standing**, because nothing here ends a turn. What an ark
+# can keep is a different question and `an-ark-holds-one-energy-and-the-rest-is-lost` is where it is
+# asked - the two numbers are not the same and that is the point.
+#
+# **Its `moving` is read back rather than stated.** An `add` must name every column, and writing
+# `moving:1` would hand a spent move back for free to an ark that had already crossed.
+
+{test name:an-ark-gathers-what-the-sun-gives}
+
+{given}
+{territory id:1}
+{place id:1 of:1 layer:orbit}
+{deposit where:1 what:50 density:3 quantity:1}
+{ark where:1 moving:1 gathering:1 quantity:1}
+
+{when}
+{gather where:1}
+
+{then}
+{territory id:1}
+{place id:1 of:1 layer:orbit}
+{deposit where:1 what:50 density:3 quantity:1}
+{ark where:1 moving:1 gathering:0 quantity:1}
+{energy where:1 quantity:3}

@@ -7,14 +7,17 @@ a-bin-cannot-be-built-where-the-capacity-is-taken
 old state
   - root
     - adjacency
+    - ark
     - bin
       - {bin where:place-1 what:metal} -> 2
     - capacity
       - {capacity of:place for:bin what:metal per:place} -> 2
       - {capacity of:place for:bin what:food per:place} -> 2
+      - {capacity of:place for:bin what:energy per:place} -> 2
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -40,13 +43,16 @@ a-bin-is-built-from-labor-and-metal
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
       - {capacity of:place for:bin what:metal per:place} -> 4
       - {capacity of:place for:bin what:food per:place} -> 4
+      - {capacity of:place for:bin what:energy per:place} -> 4
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -69,14 +75,17 @@ command  {build-bin where:place-1 what:metal}
 new state
   - root
     - adjacency
+    - ark
     - bin
       - {bin where:place-1 what:metal} -> 1
     - capacity
       - {capacity of:place for:bin what:metal per:place} -> 4
       - {capacity of:place for:bin what:food per:place} -> 4
+      - {capacity of:place for:bin what:energy per:place} -> 4
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -97,12 +106,14 @@ a-citizen-eats-and-one-there-is-no-food-for-starves
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
       - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 3
     - consumes
     - deposit
+    - energy
     - extractor
     - food
       - {food where:place-1} -> 2
@@ -121,7 +132,7 @@ command  {end-turn}
   took   {food where:place-1} -> 1
   took   {citizen where:place-1 hungry:1} -> 1
   took   {food where:place-1} -> 1
-  took   {citizen where:place-1 hungry:1} -> 
+  took   {citizen where:place-1 hungry:1}
   took   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
   made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
   made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
@@ -130,12 +141,14 @@ command  {end-turn}
 new state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
       - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 2
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -156,6 +169,7 @@ a-citizen-s-labor-works-an-extractor
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
@@ -163,6 +177,7 @@ old state
     - consumes
     - deposit
       - {deposit where:place-1 what:food density:6} -> 1
+    - energy
     - extractor
       - {extractor where:place-1 what:food working:1} -> 1
     - food
@@ -190,6 +205,7 @@ command  {work where:place-1 what:food}
 new state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
@@ -197,6 +213,7 @@ new state
     - consumes
     - deposit
       - {deposit where:place-1 what:food density:6} -> 1
+    - energy
     - extractor
       - {extractor where:place-1 what:food working:0} -> 1
     - food
@@ -219,6 +236,7 @@ a-food-extractor-and-a-metal-extractor-do-not-interfere
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
@@ -226,6 +244,7 @@ old state
     - deposit
       - {deposit where:place-1 what:metal density:2} -> 1
       - {deposit where:place-1 what:food density:6} -> 1
+    - energy
     - extractor
       - {extractor where:place-1 what:metal working:1} -> 1
       - {extractor where:place-1 what:food working:1} -> 1
@@ -250,6 +269,7 @@ command  {work where:place-1 what:food}
 new state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
@@ -257,6 +277,7 @@ new state
     - deposit
       - {deposit where:place-1 what:metal density:2} -> 1
       - {deposit where:place-1 what:food density:6} -> 1
+    - energy
     - extractor
       - {extractor where:place-1 what:metal working:1} -> 1
       - {extractor where:place-1 what:food working:0} -> 1
@@ -282,11 +303,13 @@ old state
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
       - {adjacency id:2 from:territory-2 to:territory-3}
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -317,11 +340,13 @@ old state
   - root
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -346,11 +371,13 @@ new state
   - root
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -375,6 +402,7 @@ old state
   - root
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
+    - ark
     - bin
     - capacity
     - citizen
@@ -382,6 +410,7 @@ old state
       - {consumes kind:scout what:berth} -> 1
       - {consumes kind:transport what:berth} -> 2
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -411,6 +440,7 @@ old state
   - root
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
+    - ark
     - bin
     - capacity
     - citizen
@@ -418,6 +448,7 @@ old state
       - {consumes kind:scout what:berth} -> 1
       - {consumes kind:transport what:berth} -> 2
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -444,6 +475,7 @@ new state
   - root
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
+    - ark
     - bin
     - capacity
     - citizen
@@ -451,6 +483,7 @@ new state
       - {consumes kind:scout what:berth} -> 1
       - {consumes kind:transport what:berth} -> 2
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -478,11 +511,13 @@ old state
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
       - {adjacency id:2 from:territory-2 to:territory-1}
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -509,19 +544,24 @@ a-transport-and-a-bin-give-room-together
 old state
   - root
     - adjacency
+    - ark
     - bin
       - {bin where:place-1 what:metal} -> 1
     - capacity
       - {capacity of:transport for:metal what:metal per:place} -> 10
       - {capacity of:transport for:food what:food per:place} -> 10
+      - {capacity of:transport for:energy what:energy per:place} -> 10
       - {capacity of:bin for:metal what:metal per:place} -> 10
       - {capacity of:bin for:food what:food per:place} -> 10
+      - {capacity of:bin for:energy what:energy per:place} -> 10
       - {capacity of:place for:bin what:metal per:place} -> 4
       - {capacity of:place for:bin what:food per:place} -> 4
+      - {capacity of:place for:bin what:energy per:place} -> 4
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:metal density:6} -> 1
+    - energy
     - extractor
       - {extractor where:place-1 what:metal working:1} -> 1
     - food
@@ -547,19 +587,24 @@ command  {work where:place-1 what:metal}
 new state
   - root
     - adjacency
+    - ark
     - bin
       - {bin where:place-1 what:metal} -> 1
     - capacity
       - {capacity of:transport for:metal what:metal per:place} -> 10
       - {capacity of:transport for:food what:food per:place} -> 10
+      - {capacity of:transport for:energy what:energy per:place} -> 10
       - {capacity of:bin for:metal what:metal per:place} -> 10
       - {capacity of:bin for:food what:food per:place} -> 10
+      - {capacity of:bin for:energy what:energy per:place} -> 10
       - {capacity of:place for:bin what:metal per:place} -> 4
       - {capacity of:place for:bin what:food per:place} -> 4
+      - {capacity of:place for:bin what:energy per:place} -> 4
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:metal density:6} -> 1
+    - energy
     - extractor
       - {extractor where:place-1 what:metal working:0} -> 1
     - food
@@ -578,17 +623,137 @@ new state
 as expected
 
 ==============================================================================
+an-ark-gathers-what-the-sun-gives
+
+old state
+  - root
+    - adjacency
+    - ark
+      - {ark where:place-1 moving:1 gathering:1} -> 1
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+      - {deposit where:place-1 what:energy density:3} -> 1
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:orbit name:place-1}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+command  {gather where:place-1}
+  took   {ark where:place-1 gathering:1} -> 1
+  made   {ark where:place-1 moving:1 gathering:0} -> 1
+  made   {energy where:place-1} -> 3
+
+new state
+  - root
+    - adjacency
+    - ark
+      - {ark where:place-1 moving:1 gathering:0} -> 1
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+      - {deposit where:place-1 what:energy density:3} -> 1
+    - energy
+      - {energy where:place-1} -> 3
+    - extractor
+    - food
+    - labor
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:orbit name:place-1}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+as expected
+
+==============================================================================
+an-ark-holds-one-energy-and-the-rest-is-lost
+
+old state
+  - root
+    - adjacency
+    - ark
+      - {ark where:place-1 moving:1 gathering:1} -> 1
+    - bin
+    - capacity
+      - {capacity of:ark for:energy what:energy per:place} -> 1
+    - citizen
+    - consumes
+    - deposit
+    - energy
+      - {energy where:place-1} -> 3
+    - extractor
+    - food
+    - labor
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:orbit name:place-1}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+command  {end-turn}
+  took   {energy where:place-1} -> 3
+  made   {energy where:place-1} -> 1
+
+new state
+  - root
+    - adjacency
+    - ark
+      - {ark where:place-1 moving:1 gathering:1} -> 1
+    - bin
+    - capacity
+      - {capacity of:ark for:energy what:energy per:place} -> 1
+    - citizen
+    - consumes
+    - deposit
+    - energy
+      - {energy where:place-1} -> 1
+    - extractor
+    - food
+    - labor
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:orbit name:place-1}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+as expected
+
+==============================================================================
 an-extractor-cannot-be-built-where-the-deposits-are-taken
 
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:food density:6} -> 1
+    - energy
     - extractor
       - {extractor where:place-1 what:food working:0} -> 1
     - food
@@ -615,11 +780,13 @@ an-extractor-cannot-be-built-where-there-is-no-deposit
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -645,12 +812,14 @@ an-extractor-cannot-be-worked-twice-on-one-readiness
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:food density:6} -> 1
+    - energy
     - extractor
       - {extractor where:place-1 what:food working:1} -> 1
     - food
@@ -676,12 +845,14 @@ an-extractor-cannot-be-worked-without-labor
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:food density:6} -> 1
+    - energy
     - extractor
       - {extractor where:place-1 what:food working:1} -> 1
     - food
@@ -706,12 +877,14 @@ an-extractor-is-built-from-labor-and-metal
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:food density:6} -> 1
+    - energy
     - extractor
     - food
     - labor
@@ -734,12 +907,14 @@ command  {build-extractor where:place-1 what:food}
 new state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:food density:6} -> 1
+    - energy
     - extractor
       - {extractor where:place-1 what:food working:0} -> 1
     - food
@@ -761,12 +936,14 @@ an-extractor-pulls-its-deposits-density
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:food density:6} -> 1
+    - energy
     - extractor
       - {extractor where:place-1 what:food working:1} -> 1
     - food
@@ -790,12 +967,14 @@ command  {work where:place-1 what:food}
 new state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:food density:6} -> 1
+    - energy
     - extractor
       - {extractor where:place-1 what:food working:0} -> 1
     - food
@@ -818,12 +997,14 @@ breeding-does-not-reach-the-citizens-it-just-made
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
       - {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
     - consumes
     - deposit
+    - energy
     - extractor
     - food
       - {food where:place-1} -> 5
@@ -848,12 +1029,14 @@ command  {breed}
 new state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
       - {citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 4
     - consumes
     - deposit
+    - energy
     - extractor
     - food
       - {food where:place-1} -> 3
@@ -875,12 +1058,14 @@ breeding-stops-when-the-food-does
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
       - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 3
     - consumes
     - deposit
+    - energy
     - extractor
     - food
       - {food where:place-1} -> 5
@@ -920,12 +1105,14 @@ command  {end-turn}
 new state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
       - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 5
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -946,16 +1133,20 @@ discarding-disorder-can-be-fired-on-its-own
 old state
   - root
     - adjacency
+    - ark
     - bin
       - {bin where:place-1 what:metal} -> 2
     - capacity
       - {capacity of:bin for:metal what:metal per:place} -> 10
       - {capacity of:bin for:food what:food per:place} -> 10
+      - {capacity of:bin for:energy what:energy per:place} -> 10
       - {capacity of:place for:bin what:metal per:place} -> 4
       - {capacity of:place for:bin what:food per:place} -> 4
+      - {capacity of:place for:bin what:energy per:place} -> 4
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -976,16 +1167,20 @@ command  {discard-disorder}
 new state
   - root
     - adjacency
+    - ark
     - bin
       - {bin where:place-1 what:metal} -> 2
     - capacity
       - {capacity of:bin for:metal what:metal per:place} -> 10
       - {capacity of:bin for:food what:food per:place} -> 10
+      - {capacity of:bin for:energy what:energy per:place} -> 10
       - {capacity of:place for:bin what:metal per:place} -> 4
       - {capacity of:place for:bin what:food per:place} -> 4
+      - {capacity of:place for:bin what:energy per:place} -> 4
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -1007,12 +1202,14 @@ ending-a-turn-restores-a-scout-and-an-extractor
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:food density:6} -> 2
+    - energy
     - extractor
       - {extractor where:place-1 what:food working:0} -> 1
       - {extractor where:place-1 what:food working:1} -> 1
@@ -1038,12 +1235,14 @@ command  {end-turn}
 new state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:food density:6} -> 2
+    - energy
     - extractor
       - {extractor where:place-1 what:food working:1} -> 2
     - food
@@ -1066,16 +1265,20 @@ ending-a-turn-takes-what-is-in-disorder
 old state
   - root
     - adjacency
+    - ark
     - bin
       - {bin where:place-1 what:metal} -> 2
     - capacity
       - {capacity of:bin for:metal what:metal per:place} -> 10
       - {capacity of:bin for:food what:food per:place} -> 10
+      - {capacity of:bin for:energy what:energy per:place} -> 10
       - {capacity of:place for:bin what:metal per:place} -> 4
       - {capacity of:place for:bin what:food per:place} -> 4
+      - {capacity of:place for:bin what:energy per:place} -> 4
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -1096,16 +1299,20 @@ command  {end-turn}
 new state
   - root
     - adjacency
+    - ark
     - bin
       - {bin where:place-1 what:metal} -> 2
     - capacity
       - {capacity of:bin for:metal what:metal per:place} -> 10
       - {capacity of:bin for:food what:food per:place} -> 10
+      - {capacity of:bin for:energy what:energy per:place} -> 10
       - {capacity of:place for:bin what:metal per:place} -> 4
       - {capacity of:place for:bin what:food per:place} -> 4
+      - {capacity of:place for:bin what:energy per:place} -> 4
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -1127,17 +1334,21 @@ metal-beyond-what-the-bins-hold-is-in-disorder
 old state
   - root
     - adjacency
+    - ark
     - bin
       - {bin where:place-1 what:metal} -> 2
     - capacity
       - {capacity of:bin for:metal what:metal per:place} -> 10
       - {capacity of:bin for:food what:food per:place} -> 10
+      - {capacity of:bin for:energy what:energy per:place} -> 10
       - {capacity of:place for:bin what:metal per:place} -> 4
       - {capacity of:place for:bin what:food per:place} -> 4
+      - {capacity of:place for:bin what:energy per:place} -> 4
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:metal density:6} -> 1
+    - energy
     - extractor
       - {extractor where:place-1 what:metal working:1} -> 1
     - food
@@ -1162,17 +1373,21 @@ command  {work where:place-1 what:metal}
 new state
   - root
     - adjacency
+    - ark
     - bin
       - {bin where:place-1 what:metal} -> 2
     - capacity
       - {capacity of:bin for:metal what:metal per:place} -> 10
       - {capacity of:bin for:food what:food per:place} -> 10
+      - {capacity of:bin for:energy what:energy per:place} -> 10
       - {capacity of:place for:bin what:metal per:place} -> 4
       - {capacity of:place for:bin what:food per:place} -> 4
+      - {capacity of:place for:bin what:energy per:place} -> 4
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:metal density:6} -> 1
+    - energy
     - extractor
       - {extractor where:place-1 what:metal working:0} -> 1
     - food
@@ -1195,17 +1410,21 @@ metal-in-disorder-can-still-be-spent
 old state
   - root
     - adjacency
+    - ark
     - bin
       - {bin where:place-1 what:metal} -> 2
     - capacity
       - {capacity of:bin for:metal what:metal per:place} -> 10
       - {capacity of:bin for:food what:food per:place} -> 10
+      - {capacity of:bin for:energy what:energy per:place} -> 10
       - {capacity of:place for:bin what:metal per:place} -> 4
       - {capacity of:place for:bin what:food per:place} -> 4
+      - {capacity of:place for:bin what:energy per:place} -> 4
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:metal density:6} -> 2
+    - energy
     - extractor
       - {extractor where:place-1 what:metal working:0} -> 1
     - food
@@ -1229,17 +1448,21 @@ command  {build-extractor where:place-1 what:metal}
 new state
   - root
     - adjacency
+    - ark
     - bin
       - {bin where:place-1 what:metal} -> 2
     - capacity
       - {capacity of:bin for:metal what:metal per:place} -> 10
       - {capacity of:bin for:food what:food per:place} -> 10
+      - {capacity of:bin for:energy what:energy per:place} -> 10
       - {capacity of:place for:bin what:metal per:place} -> 4
       - {capacity of:place for:bin what:food per:place} -> 4
+      - {capacity of:place for:bin what:energy per:place} -> 4
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:metal density:6} -> 2
+    - energy
     - extractor
       - {extractor where:place-1 what:metal working:0} -> 2
     - food
@@ -1262,6 +1485,7 @@ one-extractors-readiness-is-not-anothers
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
@@ -1269,6 +1493,7 @@ old state
     - deposit
       - {deposit where:place-1 what:metal density:2} -> 1
       - {deposit where:place-1 what:food density:6} -> 1
+    - energy
     - extractor
       - {extractor where:place-1 what:metal working:1} -> 1
       - {extractor where:place-1 what:food working:1} -> 1
@@ -1295,11 +1520,13 @@ one-refresh-reaches-a-scout-and-a-transport
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -1325,11 +1552,13 @@ command  {refresh what:unit trait:moving}
 new state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -1353,11 +1582,13 @@ old state
   - root
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -1381,11 +1612,13 @@ new state
   - root
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -1410,6 +1643,7 @@ one-territorys-food-does-not-feed-anothers-citizens
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
@@ -1418,6 +1652,7 @@ old state
       - {citizen where:place-2 hungry:1 bearing:1 laboring:1} -> 1
     - consumes
     - deposit
+    - energy
     - extractor
     - food
       - {food where:place-1} -> 1
@@ -1445,6 +1680,7 @@ command  {upkeep}
 new state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
@@ -1453,6 +1689,7 @@ new state
       - {citizen where:place-2 hungry:0 bearing:1 laboring:1} -> 1
     - consumes
     - deposit
+    - energy
     - extractor
     - food
       - {food where:place-2} -> 4
@@ -1476,12 +1713,14 @@ refresh-lets-a-spent-extractor-work-again
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:food density:6} -> 1
+    - energy
     - extractor
       - {extractor where:place-1 what:food working:1} -> 1
     - food
@@ -1515,12 +1754,14 @@ command  {work where:place-1 what:food}
 new state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:food density:6} -> 1
+    - energy
     - extractor
       - {extractor where:place-1 what:food working:0} -> 1
     - food
@@ -1543,11 +1784,13 @@ refresh-makes-one-entry-of-a-spent-scout-and-a-fresh-one
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -1569,11 +1812,13 @@ command  {refresh what:scout trait:moving}
 new state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -1595,6 +1840,7 @@ the-hungry-perish-after-upkeep-and-not-before
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
@@ -1602,6 +1848,7 @@ old state
       - {citizen where:place-2 hungry:1 bearing:1 laboring:1} -> 2
     - consumes
     - deposit
+    - energy
     - extractor
     - food
       - {food where:place-1} -> 2
@@ -1625,8 +1872,8 @@ command  {end-turn}
   took   {food where:place-1} -> 1
   took   {citizen where:place-2 hungry:1} -> 1
   took   {food where:place-2} -> 1
-  took   {citizen where:place-1 hungry:1} -> 
-  took   {citizen where:place-2 hungry:1} -> 
+  took   {citizen where:place-1 hungry:1}
+  took   {citizen where:place-2 hungry:1}
   took   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
   took   {citizen where:place-2 hungry:0 bearing:1 laboring:1} -> 1
   made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
@@ -1638,6 +1885,7 @@ command  {end-turn}
 new state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
@@ -1645,6 +1893,7 @@ new state
       - {citizen where:place-2 hungry:1 bearing:1 laboring:1} -> 1
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -1668,6 +1917,7 @@ old state
   - root
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
+    - ark
     - bin
     - capacity
     - citizen
@@ -1675,6 +1925,7 @@ old state
       - {consumes kind:scout what:berth} -> 1
       - {consumes kind:transport what:berth} -> 2
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -1704,6 +1955,7 @@ the-same-territory-has-room-for-a-bin-of-another-resource
 old state
   - root
     - adjacency
+    - ark
     - bin
       - {bin where:place-1 what:metal} -> 2
     - capacity
@@ -1712,6 +1964,7 @@ old state
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -1734,6 +1987,7 @@ command  {build-bin where:place-1 what:food}
 new state
   - root
     - adjacency
+    - ark
     - bin
       - {bin where:place-1 what:metal} -> 2
       - {bin where:place-1 what:food} -> 1
@@ -1743,6 +1997,7 @@ new state
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -1765,11 +2020,13 @@ old state
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
       - {adjacency id:2 from:territory-2 to:territory-3}
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -1800,11 +2057,13 @@ old state
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
       - {adjacency id:2 from:territory-2 to:territory-3}
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -1839,11 +2098,13 @@ new state
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
       - {adjacency id:2 from:territory-2 to:territory-3}
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -1871,11 +2132,13 @@ old state
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
       - {adjacency id:2 from:territory-2 to:territory-3}
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -1902,11 +2165,13 @@ new state
     - adjacency
       - {adjacency id:1 from:territory-1 to:territory-2}
       - {adjacency id:2 from:territory-2 to:territory-3}
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -1927,17 +2192,51 @@ new state
 as expected
 
 ==============================================================================
+the-sun-reaches-an-ark-once-a-turn
+
+old state
+  - root
+    - adjacency
+    - ark
+      - {ark where:place-1 moving:1 gathering:1} -> 1
+    - bin
+    - capacity
+    - citizen
+    - consumes
+    - deposit
+      - {deposit where:place-1 what:energy density:3} -> 1
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - place
+      - {place id:1 of:territory-1 layer:orbit name:place-1}
+    - provides
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+
+refused
+  `gather` needs {ark where:1 gathering:1} and it is not
+
+as expected
+
+==============================================================================
 three-citizens-and-ten-food-become-six
 
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
       - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 3
     - consumes
     - deposit
+    - energy
     - extractor
     - food
       - {food where:place-1} -> 10
@@ -1979,12 +2278,14 @@ command  {end-turn}
 new state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
       - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 6
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -2005,6 +2306,7 @@ toil-works-the-unworked-citizens-of-one-place
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
@@ -2013,6 +2315,7 @@ old state
       - {citizen where:place-2 hungry:1 bearing:1 laboring:1} -> 1
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -2038,6 +2341,7 @@ command  {toil where:place-1}
 new state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
@@ -2045,6 +2349,7 @@ new state
       - {citizen where:place-2 hungry:1 bearing:1 laboring:1} -> 1
     - consumes
     - deposit
+    - energy
     - extractor
     - food
     - labor
@@ -2068,12 +2373,14 @@ two-extractors-in-one-territory-pull-the-density-twice
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:food density:6} -> 2
+    - energy
     - extractor
       - {extractor where:place-1 what:food working:1} -> 2
     - food
@@ -2103,12 +2410,14 @@ command  {work where:place-1 what:food}
 new state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:food density:6} -> 2
+    - energy
     - extractor
       - {extractor where:place-1 what:food working:0} -> 2
     - food
@@ -2131,12 +2440,14 @@ unspent-labor-does-not-survive-the-turn
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:food density:1} -> 1
+    - energy
     - extractor
     - food
     - labor
@@ -2164,12 +2475,14 @@ command  {end-turn}
 new state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
     - consumes
     - deposit
       - {deposit where:place-1 what:food density:1} -> 1
+    - energy
     - extractor
       - {extractor where:place-1 what:food working:1} -> 1
     - food
@@ -2191,12 +2504,14 @@ upkeep-feeds-as-many-as-there-are-citizens
 old state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
       - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 2
     - consumes
     - deposit
+    - energy
     - extractor
     - food
       - {food where:place-1} -> 10
@@ -2221,12 +2536,14 @@ command  {upkeep}
 new state
   - root
     - adjacency
+    - ark
     - bin
     - capacity
     - citizen
       - {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
     - consumes
     - deposit
+    - energy
     - extractor
     - food
       - {food where:place-1} -> 8

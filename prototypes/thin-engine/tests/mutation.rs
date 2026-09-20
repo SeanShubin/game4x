@@ -145,11 +145,13 @@ fn check(files: &InMemory) -> Result<(), String> {
         // not be is comparing nothing, which is what this rules out.
         let state = [
             "adjacency",
+            "ark",
             "bin",
             "capacity",
             "citizen",
             "consumes",
             "deposit",
+            "energy",
             "extractor",
             "food",
             "labor",
@@ -319,7 +321,7 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
     Ok(())
 }
 
-const REFERENCES: usize = 63;
+const REFERENCES: usize = 67;
 
 /// **References no test world can violate**, because nothing points at them there.
 ///
@@ -509,6 +511,14 @@ fn the_data_as_it_stands_passes_every_check() {
 #[test]
 fn no_row_can_be_deleted_without_breaking_something() {
     let files = originals();
+    // **The control first, or this test lies.** When `check` fails on unmutated data every
+    // mutation fails too, so nothing survives and the list comes back empty - which reads exactly
+    // like *everything is load-bearing* and is nothing of the kind. **It has happened twice**, both
+    // times a `{reference ...}` row added without `REFERENCES` being bumped, and both times the
+    // empty list was the first thing a reader saw. `the_data_as_it_stands_passes_every_check` says
+    // it plainly; this makes sure it is said here too, before the number that would mislead.
+    check(&InMemory(files.clone())).expect("the data as it stands");
+
     // **The jobs are described rather than built.** Holding four thousand mutated copies of the
     // data at once is a lot of memory for no reason; a job is a file, a line, and what to call it.
     let jobs: Vec<(String, usize, String)> = files
@@ -612,15 +622,9 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// **Marking a deposit's `density` is load-bearing everywhere**: without it `density` rejoins the
 /// deposit's key, the deposit and the extractor stop sharing one, and `{limit held:extractor
 /// by:deposit}` has nothing to compare.
-const DELETABLE: [&str; 12] = [
-    // **One of `breed`'s four bindings is read by nothing**: the one tying the food it consumes to
-    // the place it acts in. **No test breeds in two territories at once** - both two-territory
-    // tests have run out of food by the time breeding runs - so a pattern naming no place still
-    // found exactly one food row. `backlog.md` carries it as a test worth writing.
-    "6 rules.4x binding",
-    // **And two of `breed`'s literals**, the same shape of gap: no world states the case where the
-    // value they name is the one telling two rows apart.
-    "5 rules.4x literal",
+const DELETABLE: [&str; 15] = [
+    "8 rules.4x binding",
+    "8 rules.4x literal",
     "2 schema.4x attribute",
     // **`stock`'s `quantity`, and it is read by `tests/structure.rs` rather than by `data/`.** A
     // family's columns are what its members must have, so declaring `quantity` is what stops a
@@ -632,6 +636,18 @@ const DELETABLE: [&str; 12] = [
     // test in `data/` reads it***, and the check that does read it was written because this entry
     // appeared - the sweep pointing at a column and finding an unwritten test behind it.
     "1 schema.4x column",
+    // **One membership nothing reads.** Which one is not measured here - the sweep counts and does
+    // not name - and the candidates are `ark` in `unit` and `energy` in `resource`, each of which
+    // buys something no test has asked for yet: moving an ark, or a transport's templated
+    // container covering fuel.
+    "1 schema.4x member",
+    // **Both `{stands-in ...}` rows, and only `tests/structure.rs` reads them.** A `.4x` test states
+    // a world, and a world that breaks this rule is not one - so no test in `data/` can exercise
+    // it, and `nothing_stands_where_its_kind_may_not` is where both halves live.
+    //
+    // **Same shape as `schema.4x column` above**: the sweep runs the `.4x` tests and the reference
+    // checks, not the Rust suite.
+    "2 schema.4x stands-in",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x move",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x scout",
     "1 tests/a-scout-that-has-moved-cannot-move-again.4x move",
@@ -643,12 +659,28 @@ const DELETABLE: [&str; 12] = [
     // place standing on it is a row the test never uses, exactly like the adjacency one line up.
     "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x place",
     "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x scout",
+    // **The ark itself, in the test about an ark.** With no ark at all the *first* `gather` is
+    // refused for exactly the reason the second one is - no ark has a `gathering` - so the refusal
+    // is the same and the row leaves no trace.
+    //
+    // **The test still proves what it says**: delete the second `{gather ...}` and nothing is
+    // refused. It is the given that cannot be pinned, and it is the third time this shape has
+    // appeared - *what is destroyed leaves no trace*, said about an allowance rather than a row.
+    "1 tests/the-sun-reaches-an-ark-once-a-turn.4x ark",
 ];
 
 /// **Every value matters**: change any one of them and something fails.
 #[test]
 fn no_value_can_be_changed_without_breaking_something() {
     let files = originals();
+    // **The control first, or this test lies.** When `check` fails on unmutated data every
+    // mutation fails too, so nothing survives and the list comes back empty - which reads exactly
+    // like *everything is load-bearing* and is nothing of the kind. **It has happened twice**, both
+    // times a `{reference ...}` row added without `REFERENCES` being bumped, and both times the
+    // empty list was the first thing a reader saw. `the_data_as_it_stands_passes_every_check` says
+    // it plainly; this makes sure it is said here too, before the number that would mislead.
+    check(&InMemory(files.clone())).expect("the data as it stands");
+
     // **One job per value**, carrying the two things to try in its place. **Counted as before**:
     // a job that tries two values is two attempts, so the floor below still means what it meant.
     let mut jobs: Vec<(String, usize, Row, String, Vec<String>)> = Vec::new();
@@ -717,22 +749,22 @@ fn no_value_can_be_changed_without_breaking_something() {
 ///
 /// **A `moving` that never moves is the other shape here.** The berth tests hold vehicles to count
 /// them, not to move them, so what those rows say about moves is read by nothing.
-const NOT_LOAD_BEARING: [&str; 42] = [
+const NOT_LOAD_BEARING: [&str; 43] = [
     // **The one `assigns` row's id is read by nothing.** There were two, and changing one id
     // to the other's collided on the key; with one row there is nothing to collide with.
     // **`assigns` may not need an `id` at all** - keyed by `(clause, input, value)` it could not
     // state two assignments of one input on one clause, which is the rule rather than a
     // restriction. That is in `backlog.md` rather than done here.
     "1 rules.4x assigns.id",
-    "27 rules.4x clause.seq",
+    "32 rules.4x clause.seq",
     // **A scoped input's name is read by nothing, and the other eleven are read by name.** A
     // command finds its argument by the input's name and so does a part; an input the engine fills
     // is looked up by neither, because nothing outside the engine ever names it. **So `upkeep`'s
     // `where` and `perish`'s are the two**, and what their names are for is the friendly notation
     // and a person reading the rule.
     "3 rules.4x input.name",
-    "15 rules.4x input.seq",
-    "3 rules.4x part.seq",
+    "16 rules.4x input.seq",
+    "4 rules.4x part.seq",
     // **`reading.id` was on this list until `upkeep` grew a second reading.** With one row there
     // was nothing for an id to collide with, so changing it to anything at all was unnoticed; with
     // two, taking the other's value is a key the structure refuses. **A thing that was decoration
@@ -781,22 +813,23 @@ const NOT_LOAD_BEARING: [&str; 42] = [
     "2 tests/a-scout-cannot-move-where-every-berth-is-taken.4x place.layer",
     "1 tests/a-scout-cannot-move-where-every-berth-is-taken.4x transport.moving",
     "2 tests/a-scout-that-has-moved-cannot-move-again.4x place.layer",
+    // **A `{refused}` test reads very little of its given**, and the ark ones are no exception: the
+    // rule says what it said about the world, and there is no `then` world to differ from. So a
+    // value is read only if some clause reads it, and `moving`, `gathering`, a density and a count
+    // are none of them once the refusal has been reached.
+    "1 tests/an-ark-holds-one-energy-and-the-rest-is-lost.4x ark.gathering",
+    "1 tests/an-ark-holds-one-energy-and-the-rest-is-lost.4x ark.moving",
     "1 tests/an-extractor-cannot-be-built-where-the-deposits-are-taken.4x deposit.density",
     "1 tests/an-extractor-cannot-be-built-where-the-deposits-are-taken.4x extractor.working",
-    "1 tests/an-extractor-cannot-be-built-where-the-deposits-are-taken.4x place.layer",
-    "1 tests/an-extractor-cannot-be-built-where-there-is-no-deposit.4x place.layer",
     "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x deposit.density",
     "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x extractor.quantity",
     "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x extractor.working",
-    "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x place.layer",
     "1 tests/an-extractor-cannot-be-worked-without-labor.4x deposit.density",
-    "1 tests/an-extractor-cannot-be-worked-without-labor.4x place.layer",
     "1 tests/breeding-does-not-reach-the-citizens-it-just-made.4x citizen.laboring",
     "1 tests/breeding-stops-when-the-food-does.4x citizen.laboring",
     "2 tests/one-extractors-readiness-is-not-anothers.4x deposit.density",
     "2 tests/one-extractors-readiness-is-not-anothers.4x extractor.quantity",
     "2 tests/one-extractors-readiness-is-not-anothers.4x extractor.working",
-    "1 tests/one-extractors-readiness-is-not-anothers.4x place.layer",
     "2 tests/the-hungry-perish-after-upkeep-and-not-before.4x citizen.bearing",
     "2 tests/the-hungry-perish-after-upkeep-and-not-before.4x citizen.laboring",
     "1 tests/the-same-free-space-admits-one-kind-and-refuses-another.4x adjacency.id",
@@ -806,5 +839,9 @@ const NOT_LOAD_BEARING: [&str; 42] = [
     "3 tests/the-scout-cannot-cross-where-there-is-no-border.4x place.layer",
     "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x scout.moving",
     "1 tests/the-scout-cannot-cross-where-there-is-no-border.4x scout.quantity",
+    "1 tests/the-sun-reaches-an-ark-once-a-turn.4x ark.gathering",
+    "1 tests/the-sun-reaches-an-ark-once-a-turn.4x ark.moving",
+    "1 tests/the-sun-reaches-an-ark-once-a-turn.4x deposit.density",
+    "1 tests/the-sun-reaches-an-ark-once-a-turn.4x deposit.quantity",
     "1 tests/three-citizens-and-ten-food-become-six.4x citizen.laboring",
 ];

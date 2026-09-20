@@ -56,6 +56,7 @@ const CLAUSE: &str = "clause";
 const REPEATS: &str = "repeats";
 const ROLE: &str = "role";
 const REMOVE: &str = "remove";
+const STANDS_IN: &str = "stands-in";
 const TRAIT: &str = "trait";
 const CARRIES: &str = "carries";
 const SUPPLY: &str = "supply";
@@ -252,6 +253,21 @@ pub enum Malformed {
     /// answers, and would leave the order between its clauses and its parts to whatever the
     /// engine happened to do first.
     BothLeafAndComposite { rule: String },
+    /// A thing stands somewhere its kind may not.
+    ///
+    /// **`{stands-in kind:K per:P ...}` says which places a kind may stand in**, and every column
+    /// after those two is a constraint on the place's row, matched by name. So an ark is in orbit
+    /// and an extractor is on the ground, and neither is the other's.
+    ///
+    /// **`spec/orbit.md`**: *an orbit is not a territory: it has capacity for no extractors, and
+    /// nothing is extracted there.* This is that, said from the kind's side.
+    StandsElsewhere {
+        kind: String,
+        at: String,
+        column: String,
+        wanted: String,
+        found: String,
+    },
     /// A rule repeats and takes nothing out of the world, so the repetition has no bound.
     ///
     /// **A repetition draws from a pool that only shrinks**, and this is the rule with no pool: it
@@ -382,6 +398,16 @@ impl std::fmt::Display for Malformed {
                     "`{rule}` has clauses and parts, and a rule has one or the other"
                 )
             }
+            Malformed::StandsElsewhere {
+                kind,
+                at,
+                column,
+                wanted,
+                found,
+            } => write!(
+                out,
+                "a `{kind}` stands in `{at}`, whose `{column}` is `{found}` and not `{wanted}`"
+            ),
             Malformed::NeverStops { rule } => {
                 write!(
                     out,
@@ -461,6 +487,76 @@ impl std::fmt::Display for Malformed {
             }
         }
     }
+}
+
+/// Nothing stands where its kind may not.
+///
+/// **A kind says which places it may stand in, and `per` is what makes that answerable.** Following
+/// a reference is not enough - an extractor points at a place and at a resource - so the row names
+/// which of the kind's columns is the place, the way `{capacity ... per:place}` does, and the same
+/// `place_of` reads it.
+///
+/// **Every column after `kind` and `per` is a constraint, matched by name against the place's row.**
+/// The engine never learns what a layer is: it reads this relation's own columns out of the schema,
+/// which is the same move `{assigns ... input:trait}` makes when a trait's name is a column's name.
+/// **A second kind of constraint would need no code here at all.**
+fn nothing_stands_where_it_may_not(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
+    let Some(declared) = schema.relation(STANDS_IN) else {
+        return Ok(());
+    };
+    let named: BTreeMap<&str, &str> = rows
+        .rows()
+        .iter()
+        .filter(|row| row.relation == RELATION)
+        .filter_map(|row| Some((row.value(ID)?, row.value(NAME)?)))
+        .collect();
+    let name_of = |id: &str| named.get(id).copied().unwrap_or(id).to_string();
+
+    for said in rows.rows().iter().filter(|row| row.relation == STANDS_IN) {
+        let (Some(kind), Some(per)) = (said.value(KIND), said.value(PER)) else {
+            continue;
+        };
+        let (kind, per) = (name_of(kind), name_of(per));
+        let Some((_, column)) = place_of(schema, &kind, &per) else {
+            continue;
+        };
+        let Some(places) = schema.relation(&per) else {
+            continue;
+        };
+        for standing in rows.rows().iter().filter(|row| row.relation == kind) {
+            let Some(at) = standing.value(&column) else {
+                continue;
+            };
+            let Some(stands) = rows
+                .rows()
+                .iter()
+                .find(|row| row.relation == per && row.value(places.identity()) == Some(at))
+            else {
+                continue;
+            };
+            for constraint in declared
+                .columns
+                .iter()
+                .filter(|it| it.name != KIND && it.name != PER)
+            {
+                let (Some(wanted), Some(found)) =
+                    (said.value(&constraint.name), stands.value(&constraint.name))
+                else {
+                    continue;
+                };
+                if wanted != found {
+                    return Err(Malformed::StandsElsewhere {
+                        kind: kind.clone(),
+                        at: at.to_string(),
+                        column: constraint.name.clone(),
+                        wanted: wanted.to_string(),
+                        found: found.to_string(),
+                    });
+                }
+            }
+        }
+    }
+    Ok(())
 }
 
 /// A `seq` as the number it is, with anything that is not a number last.
@@ -1173,6 +1269,7 @@ pub fn check(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
     // nothing has and the extractors over it are suddenly over nothing - so a check that ran
     // first would answer *too many extractors* to a question about a dangling reference, and
     // `tests/mutation.rs` said exactly that. **The narrower fault is the one to report.**
+    nothing_stands_where_it_may_not(schema, rows)?;
     only_what_is_fungible_lies_loose(schema, rows)?;
     held_within_what_holds_it(schema, rows)?;
     nothing_crowds_a_place(schema, rows)?;

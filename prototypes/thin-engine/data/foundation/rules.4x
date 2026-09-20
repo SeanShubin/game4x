@@ -199,6 +199,7 @@
 {part id:5 of:5 is:4 seq:7}
 {part id:8 of:5 is:4 seq:8}
 {part id:9 of:5 is:4 seq:9}
+{part id:10 of:5 is:4 seq:10}
 
 {argument id:1 part:1 input:11 value:26}
 {argument id:2 part:1 input:12 value:1}
@@ -210,6 +211,8 @@
 {argument id:8 part:8 input:12 value:4}
 {argument id:9 part:9 input:11 value:47}
 {argument id:10 part:9 input:12 value:5}
+{argument id:11 part:10 input:11 value:51}
+{argument id:12 part:10 input:12 value:6}
 
 # **`build-bin` says nothing about how many will fit**, the same way `build-extractor` says
 # nothing about deposits. That a territory has room for only so many is a fact about the world,
@@ -455,3 +458,71 @@
 
 {reading id:5 clause:33 column:131 of:31 takes:131}
 {reading id:6 clause:33 column:133 of:31 takes:133}
+
+# **It is `gather` and not `collect`, and `tests/isolation.rs` is why.** `collect` is a bare word
+# in `src/engine.rs` a dozen times over - it is how Rust ends an iterator - so *no game noun appears
+# in a line that runs* cannot hold for it. **This is `store` becoming `bin` again**, and the game
+# gives way for the same reason: the engine's use is structural and unavoidable, and the game has
+# another word. `gather` pairs with `gathering` as `work` pairs with `working`.
+#
+# **`gather` is an ark spending its `gathering` on the sun.** Sean, 2026-09-20: *ark can gather 1
+# energy from the sun each turn.* It is `toil` with the nouns changed - a thing spending a per-turn
+# allowance to make a resource - and the two may yet be one rule over a kind, a trait and a
+# resource, the way `refresh` is one rule over a kind and a trait.
+#
+# **The sun is not in the world and does not need to be.** `spec/invariants.md`: *a source is named,
+# and a named source is not a gain. A star's energy and a planet's material [are endless].* So
+# nothing is taken from anything: the ark spends what the turn gave it, and the energy arrives.
+#
+# **It is the player's, not the turn's**, which is the correction Sean made for labour and which
+# holds here for the same reason: *I was expecting citizens to generate labor during a regular
+# turn.* An ark nobody touches does not fuel itself.
+#
+# **One command gathers for every ark in the place**, because it repeats - once per ark that still
+# has its `gathering`, and stopping when none has.
+#
+# **It reads back the `moving` it was given.** An `add` must name every column, and writing
+# `moving:1` would hand a spent move back for free to an ark that had already crossed.
+
+# **It is shaped like `work`, and Sean said why.** 2026-09-20: *think of the sun as providing
+# unlimited capacity for extractors, and the ark as an extractor for solar energy; the ark can only
+# store 1 energy so excess is wasted, the sun may have a density higher than 1, also wasted because
+# the ark can't store it. An ark isn't an extractor, but it can do some things an extractor does.*
+#
+# **So the sun is a deposit of energy and the rule reads its density**, exactly as `work` reads a
+# deposit's. What an ark gathers is what the sun gives, and what it keeps is what it can hold -
+# those are two different numbers and the difference is wasted at the turn's end.
+#
+# **It does not repeat, and that is the other half of matching `work`.** A second command on a
+# spent ark is refused rather than quietly doing nothing, which is what makes *once a turn*
+# something a test can see: a no-op leaves no trace, and a refusal is a trace.
+#
+# **An ark is not an extractor.** `{limit held:extractor by:deposit}` counts extractors against
+# deposits, and an ark counts against nothing - which is the *unlimited capacity for extractors*
+# the sun has, arriving by the ark not being one.
+
+{rule id:12 name:gather}
+
+{input id:19 rule:12 seq:1 name:where of:48}
+
+{clause id:39 rule:12 seq:1 role:1 relation:18}
+{clause id:35 rule:12 seq:2 role:1 relation:51}
+{clause id:36 rule:12 seq:3 role:2 relation:51}
+{clause id:37 rule:12 seq:4 role:3 relation:51}
+{clause id:38 rule:12 seq:5 role:3 relation:50}
+
+{binding id:52 clause:39 column:51 input:19}
+{binding id:48 clause:35 column:142 input:19}
+{binding id:49 clause:36 column:142 input:19}
+{binding id:50 clause:37 column:142 input:19}
+{binding id:51 clause:38 column:140 input:19}
+
+{literal id:49 clause:35 column:144 value:1}
+{literal id:50 clause:36 column:144 value:1}
+{literal id:51 clause:36 column:145 value:1}
+{literal id:52 clause:37 column:144 value:0}
+{literal id:53 clause:37 column:145 value:1}
+{literal id:55 clause:39 column:52 value:50}
+
+{reading id:8 clause:37 column:143 of:35 takes:143}
+{reading id:9 clause:38 column:141 of:39 takes:53}

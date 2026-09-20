@@ -344,12 +344,15 @@
 {family relation:stock}
 
 {member kind:scout family:unit}
+{member kind:ark family:unit}
 {member kind:transport family:unit}
 {member kind:metal family:resource}
 {member kind:food family:resource}
+{member kind:energy family:resource}
 {member kind:metal family:stock}
 {member kind:food family:stock}
 {member kind:labor family:stock}
+{member kind:energy family:stock}
 
 
 ## What a deposit's density is, and what a deposit holds
@@ -732,6 +735,80 @@
 #
 # **A kind may belong to two families**, because `{member ...}` is keyed by both its columns - so
 # metal is a resource and a stock, and neither statement is a copy of the other.
+
+{relation id:50 name:energy}
+
+{column id:140 relation:energy seq:1 name:where}
+{column id:141 relation:energy seq:2 name:quantity}
+
+{reference id:71 column:140 to:place}
+
+{state id:19 relation:energy}
+
+# **An ark is a unit that can only be in orbit.** Sean, 2026-09-20: *ark can only be in orbit; can
+# spend one energy and one move to move from orbit to orbit; contains a storage container for 1
+# energy; can collect 1 energy from the sun each turn.*
+#
+# **It joins `unit`, so `move`, the refresh of `moving` and the berth pool all reach it** without a
+# word being added anywhere. `gathering` is the second allowance it carries - the one it spends on
+# the sun - and it is a gerund because it is a capacity rather than an obligation.
+#
+# **It consumes no berths, and nothing says otherwise yet.** A kind with no `{consumes ...}` row
+# contributes nothing to a pool, so an orbit holds as many arks as anyone states. That is a row
+# waiting for a test rather than an oversight.
+
+{relation id:51 name:ark}
+
+{column id:142 relation:ark seq:1 name:where}
+{column id:143 relation:ark seq:2 name:moving}
+{column id:144 relation:ark seq:3 name:gathering}
+{column id:145 relation:ark seq:4 name:quantity}
+
+{reference id:72 column:142 to:place}
+
+{state id:20 relation:ark}
+
+{trait id:6 name:gathering}
+
+{carries kind:ark trait:moving}
+{carries kind:ark trait:gathering}
+
+# **`{stands-in ...}` says which layer a kind may stand in, and it is how an orbit has capacity for
+# no extractors.** `spec/orbit.md`: *an orbit is not a territory: it has capacity for no extractors,
+# and nothing is extracted there.*
+#
+# **`per` says which of the kind's columns is the place**, because following a reference is not
+# enough: an extractor points at a place and at a resource, and choosing between them is the
+# guessing this engine refuses. It is the same word `{capacity ... per:place}` and
+# `{supply ... per:place}` already use, read by the same `place_of`.
+#
+# **Everything after `kind` and `per` is a constraint on the place's row, matched by column name.**
+# So `layer` is never a word the engine knows - it is read off this relation's own columns, the way
+# a trait's name is the column's name - and a second constraint would need no code at all.
+#
+# **A kind with no row may stand anywhere.** With two layers that is the same as *either*, and it
+# stops being the same at three - which is worth knowing before a third arrives.
+
+{relation id:52 name:stands-in}
+
+{column id:146 relation:stands-in seq:1 name:kind}
+{column id:147 relation:stands-in seq:2 name:per}
+{column id:148 relation:stands-in seq:3 name:layer}
+
+{reference id:73 column:146 to:relation}
+{reference id:74 column:147 to:relation}
+
+{stands-in kind:ark per:place layer:orbit}
+{stands-in kind:extractor per:place layer:surface}
+
+# **`energy` is what a star gives and a recipe spends, and *fuel* is what it is called in a tank.**
+# Sean, 2026-09-20: *fuel is the same thing as energy, when I say fuel I tend to mean energy that
+# happens to be used for movement in this context.* So there is one relation and one capacity to
+# reason about, which is what makes a transport's two containers sum.
+#
+# **It is a resource and a stock**: a recipe may name it, and it lies loose, so what a place holds
+# beyond its room is lost at the turn's end. `spec/invariants.md` calls the source endless - *a
+# star's energy and a planet's material* - and an endless source is not a gain.
 
 {relation id:49 name:stock}
 

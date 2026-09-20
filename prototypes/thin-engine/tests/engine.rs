@@ -91,8 +91,8 @@ fn the_words_the_data_delegates_are_the_words_the_engine_implements() {
 
     assert_eq!(
         implemented.len(),
-        59,
-        "59 words, and the count is written down so that adding one is a decision somebody makes rather than a line somebody adds"
+        60,
+        "60 words, and the count is written down so that adding one is a decision somebody makes rather than a line somebody adds"
     );
 }
 

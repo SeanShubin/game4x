@@ -1,0 +1,28 @@
+# Told to gather twice, an ark is refused the second time.
+#
+# **`gathering` is an allowance like `moving` and `working`** - one per turn, restored by the turn,
+# spent by acting. The second command finds no ark that still has one and says so.
+#
+# **A refusal is the only evidence there is.** A first draft let `gather` repeat, so the second
+# command quietly did nothing - and the mutation sweep said both commands could be deleted, because
+# a spent allowance leaves no trace and *nothing happened* looks the same as *nothing was asked*.
+# **Matching `work` is what made it visible**: `an-extractor-cannot-be-worked-twice-on-one-readiness`
+# is this test with different nouns, and for the same reason.
+#
+# **What is rationed is the ark and not the star.** `spec/invariants.md` calls a star's energy
+# endless; nothing here limits how much sun there is, only how often an ark may turn to it.
+
+{test name:the-sun-reaches-an-ark-once-a-turn}
+
+{given}
+{territory id:1}
+{place id:1 of:1 layer:orbit}
+{deposit where:1 what:50 density:3 quantity:1}
+{ark where:1 moving:1 gathering:1 quantity:1}
+
+{when}
+{gather where:1}
+{gather where:1}
+
+{refused}
+{ark where:1 gathering:1}

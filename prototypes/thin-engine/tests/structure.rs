@@ -64,8 +64,8 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
     assert_eq!(checked, 29, "twenty-nine relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        44,
-        "forty-four in all - those twenty-nine, and the game's fifteen: six kinds, three families,\n         a territory, a place, an adjacency, a deposit, an extractor and a citizen"
+        47,
+        "forty-seven in all - those thirty, and the game's seventeen: eight kinds, three families,\n         a territory, a place, an adjacency, a deposit, an extractor, a citizen and an ark"
     );
 }
 
@@ -614,9 +614,9 @@ fn a_trait_and_the_column_that_holds_it_are_checked_both_ways() {
             .iter()
             .filter(|row| row.relation == "carries")
             .count(),
-        7,
-        "unit, scout and transport carry `moving`; extractor carries `working`; citizen carries
-         `hungry`, `bearing` and `laboring`"
+        9,
+        "unit, scout, transport and ark carry `moving`; extractor carries `working`; citizen
+         carries `hungry`, `bearing` and `laboring`; ark carries `gathering`"
     );
 }
 
@@ -656,8 +656,56 @@ fn a_rule_that_repeats_and_removes_nothing_is_refused() {
             .filter(|row| row.relation == "repeats")
             .count(),
         4,
-        "`upkeep`, `perish`, `breed` and `toil` are what repeat"
+        "`upkeep`, `perish`, `breed` and `toil` are what repeat; `gather` is shaped like `work`"
     );
+}
+
+/// **A kind stands where its `{stands-in ...}` row says and nowhere else.**
+///
+/// **Both halves are here because neither implies the other.** An ark that may only be in orbit and
+/// an extractor that may only be on the ground are one relation used twice, and a check that had
+/// only ever seen one of them would pass over a rule that read `per` backwards.
+#[test]
+fn nothing_stands_where_its_kind_may_not() {
+    // **`1` is the surface place every test states.** An ark on it is a world that cannot be, which
+    // is why this is here and not a `{refused}` test: a `given` states a world, and there is no
+    // such world to state.
+    assert_eq!(
+        with("{ark where:1 moving:1 gathering:1 quantity:1}")
+            .expect_err("an ark can only be in orbit"),
+        Malformed::StandsElsewhere {
+            kind: "ark".to_string(),
+            at: "1".to_string(),
+            column: "layer".to_string(),
+            wanted: "orbit".to_string(),
+            found: "surface".to_string()
+        }
+    );
+
+    // **And the other way.** `spec/orbit.md`: *an orbit is not a territory: it has capacity for no
+    // extractors, and nothing is extracted there.*
+    assert_eq!(
+        with(
+            "{place id:9 of:1 layer:orbit}
+{extractor where:9 what:30 working:1 quantity:1}"
+        )
+        .expect_err("nothing is extracted in orbit"),
+        Malformed::StandsElsewhere {
+            kind: "extractor".to_string(),
+            at: "9".to_string(),
+            column: "layer".to_string(),
+            wanted: "surface".to_string(),
+            found: "orbit".to_string()
+        }
+    );
+
+    // **The control is a kind that says nothing**, which may stand anywhere - and with two layers
+    // that is the same as *either*. It stops being the same at three.
+    with(
+        "{place id:9 of:1 layer:orbit}
+{scout where:9 moving:1 quantity:1}",
+    )
+    .expect("a scout says nothing about where it may be");
 }
 
 /// **A family's columns are what its members must have, and this is the check that says so.**
@@ -773,9 +821,9 @@ fn the_tree_is_what_the_file_says_it_is() {
         .collect();
     assert_eq!(
         rules.len(),
-        11,
+        12,
         "move, build-extractor, work, refresh, end-turn, build-bin, discard-disorder,
-         upkeep, perish, breed, toil"
+         upkeep, perish, breed, toil, gather"
     );
     // **At least once, not exactly once.** `refresh` appears twice because `end-turn` names it
     // twice - two steps of one order - and asserting *once* said the tree was wrong when it was
@@ -788,8 +836,8 @@ fn the_tree_is_what_the_file_says_it_is() {
     }
     assert_eq!(
         shown.matches("refresh").count(),
-        5,
-        "and refresh is there five times, once per trait the turn restores"
+        6,
+        "and refresh is there six times, once per trait the turn restores"
     );
 
     // **And a step the engine fans out says so.** `upkeep` and `perish` are handed nothing, so
@@ -829,6 +877,7 @@ fn a_family_named_where_a_member_belongs_is_each_member() {
         vec![
             "{capacity of:42 for:30 what:30 per:13 quantity:10}",
             "{capacity of:42 for:31 what:31 per:13 quantity:10}",
+            "{capacity of:42 for:50 what:50 per:13 quantity:10}",
         ],
         "one row per resource, the same member on both sides"
     );

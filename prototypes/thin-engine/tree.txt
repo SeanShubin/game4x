@@ -17,7 +17,10 @@ end-turn
     7. refresh  what:citizen trait:hungry
     8. refresh  what:citizen trait:bearing
     9. refresh  what:citizen trait:laboring
+    10. refresh  what:ark trait:gathering
 
 build-bin  where:place what:resource
 
 toil  where:place
+
+gather  where:place

@@ -127,6 +127,7 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
         "loose",
         "repeats",
         "scope",
+        "stands-in",
         "part",
         "argument",
         "primitive",
@@ -166,8 +167,8 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
     }
     assert_eq!(
         nouns.len(),
-        26,
-        "twenty-six nouns the game has - territory, place, adjacency, deposit, extractor, unit, resource, stock, scout, transport, labor, metal, food, bin, citizen, move, build-extractor, work, refresh, end-turn, build-bin, discard-disorder, upkeep, perish, breed, toil; this found {nouns:?}"
+        29,
+        "twenty-nine nouns the game has - territory, place, adjacency, deposit, extractor, unit, resource, stock, energy, ark, scout, transport, labor, metal, food, bin, citizen, move, build-extractor, work, refresh, end-turn, build-bin, discard-disorder, upkeep, perish, breed, toil, gather; this found {nouns:?}"
     );
 
     let mut looked = 0;
@@ -197,5 +198,5 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
             looked += 1;
         }
     }
-    assert_eq!(looked, 208, "twenty-six nouns over eight modules");
+    assert_eq!(looked, 232, "twenty-nine nouns over eight modules");
 }
