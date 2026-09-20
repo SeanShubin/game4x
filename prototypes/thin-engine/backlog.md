@@ -294,6 +294,81 @@ says so.
 **Sean, 2026-09-19, on keeping the two apart**: *keeping breeding and hunger separate is the right
 call, the apparent connection is coincidental.*
 
+
+## Orbit as part of a territory, not a territory of its own
+
+**Sean, 2026-09-20**: *I no longer think orbits should be separate territories with adjacencies
+like they are in the mainline spec. I think orbits should be part of the territory. So we need a way
+to tell if something is in orbit, and the orbital area will have different containment rules than
+the surface.*
+
+**The mainline already agrees on the main point, which is worth knowing before anything moves.**
+`spec/orbit.md`: *An orbit is not a territory: it has capacity for no extractors, and nothing is
+extracted there.* And `spec/console.md`: *A place worked out from another is not open - the orbit
+above a territory is named by naming the territory.* **So this is choosing a representation for
+something the specification already asserts**, not overturning it. What the spec does treat as a
+graph is only crossing: an orbit is next to the territory below it and next to the orbits above that
+territory's neighbours, and a unit crosses orbit boundaries or crosses none.
+
+## The containment difference is a split already drawn
+
+**Surface is per-kind capacity and orbit is shared capacity.** Sean, 2026-09-19, on why the berth
+pool and the capacity table should not be unified: *Territories contain structures that don't move
+so I don't want tradeoffs there, but armies do move and the tradeoffs of what to move where is the
+whole point of a military simulation.* That is the two layers, and *Refresh, what is left of it*
+above calls it a design boundary rather than a missing feature. **Orbit is what gives the boundary a
+name.**
+
+**And `capacity.per` is the column for it.** Sean asked in September whether `per` would always be
+`territory` and nothing then could produce a case where it was not. **This is the case.**
+
+## What Sean's answers settle
+
+|                                         |                                                                                                                                                                                                                                                                                                        |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Can a citizen be in orbit?**          | **No.** So citizens never need to know layers exist - `upkeep` scoped per *place* behaves exactly as per *territory*, because orbital places hold no citizens and the repetition fires zero times there                                                                                                |
+| **Does orbit match the surface graph?** | **Yes.** So no new adjacency rows: all three moves consult the territory graph that is already there                                                                                                                                                                                                   |
+| **Is crossing layers a move?**          | **Undecided, and thematically both.** Sean: *thematically it is a move in the sense of changing position, but also the moves are very different kinds of things, moving between two orbits, moving between two surfaces, and moving between surface and orbit all require very different capabilities* |
+
+**Two and three together mean the graph is one thing and the capability is three.** Surface to
+surface and orbit to orbit are the *same* adjacency clause; surface to orbit is the two places
+sharing a territory. What differs is which capability the rule demands.
+
+## Where names a place, and what that costs
+
+**Sean is leaning towards places as rows** - `{place id:1 of:territory-1 layer:surface}`, with
+things saying `where:place`. **No clause changes**, because every clause already binds one `where`,
+and it is what `spec/orbit.md` describes: the orbit is derived from the territory rather than listed
+beside it.
+
+**The cost it hides is getting from a place to its territory.** `move` binds `from:place to:place`
+and the adjacency clause wants the territories, which is a join - `{reading ...}`, the machinery
+`work` uses for a deposit's density and `upkeep` now uses for a parent's bearing. **Two readings,
+one per side**, landing in the rule that is already the most complicated.
+
+**The alternative is adjacency between places**: no readings, three times the rows, and an
+`adjacency.kind` column to keep the three moves apart. **Rows in the world against readings in the
+rule** - and the readings look right, because the graph stays one thing.
+
+## Three steps, because the review has to be one kind of change at a time
+
+**Sean, 2026-09-20**: *this will require just about every test changed. I will want to ensure this is
+the only change when I review the tests so I can do so quickly without mixing other kinds of
+changes.*
+
+1. **Places exist and nothing else changes.** Every territory gets one surface place; every
+   `where:territory-1` becomes `where:surface-1`. No new rule, no capacity change, no orbit, and
+   **every test's answer byte-identical to today's**. Per test the diff is two mechanical shapes -
+   one added `{place ...}` row per territory, and renamed `where` values - and no others. **It
+   cannot be one shape**, because a place depends on a territory and tests state territories.
+2. **Orbital places**, and `capacity.per` telling the two layers apart.
+3. **The move rules**, and whichever answer step 3 above gets.
+
+**Step two forces an open item to be settled.** *It has capacity for no extractors* is a capacity of
+zero, and omitting a capacity currently means unconstrained - see *Refresh, what is left of it*,
+where Sean already ruled it should mean none. **It was deferred for want of a user and orbit is the
+user**: an orbit saying nothing about extractors would admit any number of them.
+
 ## Smaller things, each with the reason it is not done
 
 **A constant limit of the plain sort.** `{limit container:territory contained:garrison n:1}` -
