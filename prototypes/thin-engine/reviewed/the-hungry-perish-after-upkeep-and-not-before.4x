@@ -25,9 +25,9 @@
 {place id:1 of:territory-1 layer:surface name:place-1}
 {territory id:2 name:territory-2}
 {place id:2 of:territory-2 layer:surface name:place-2}
-{citizen where:place-1 hungry:1 bearing:1} -> 3
+{citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 3
 {food where:place-1} -> 2
-{citizen where:place-2 hungry:1 bearing:1} -> 2
+{citizen where:place-2 hungry:1 bearing:1 laboring:1} -> 2
 {food where:place-2} -> 1
 
 {when}
@@ -38,5 +38,5 @@
 {place id:1 of:territory-1 layer:surface name:place-1}
 {territory id:2 name:territory-2}
 {place id:2 of:territory-2 layer:surface name:place-2}
-{citizen where:place-1 hungry:1 bearing:1} -> 2
-{citizen where:place-2 hungry:1 bearing:1} -> 1
+{citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 2
+{citizen where:place-2 hungry:1 bearing:1 laboring:1} -> 1

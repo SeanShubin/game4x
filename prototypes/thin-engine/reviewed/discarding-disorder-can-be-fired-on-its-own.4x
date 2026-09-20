@@ -16,6 +16,10 @@
 # **It is also what the mutation sweep asked for**: with no test naming `discard-disorder`, the
 # rule's name is read by nothing, and the sweep says so.
 #
+# **It names nothing, because there is nothing to name.** The clause names `stock` - the family of
+# everything that may lie loose - so the rule trims all of it and the turn fires it once. There is
+# no *which*: whatever is in disorder goes.
+#
 # **Two bins at ten apiece is twenty, and twenty-two is two over.**
 
 {test name:discarding-disorder-can-be-fired-on-its-own}
