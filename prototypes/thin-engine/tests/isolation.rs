@@ -167,7 +167,7 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
     assert_eq!(
         nouns.len(),
         23,
-        "twenty-three nouns the game has - territory, adjacency, deposit, extractor, unit, resource, scout, transport, labor, metal, food, bin, citizen, move, build-extractor, work, refresh, end-turn, build-bin, lose-what-is-not-kept, upkeep, perish, adjust-population; this found {nouns:?}"
+        "twenty-three nouns the game has - territory, adjacency, deposit, extractor, unit, resource, scout, transport, labor, metal, food, bin, citizen, move, build-extractor, work, refresh, end-turn, build-bin, discard-disorder, upkeep, perish, adjust-population; this found {nouns:?}"
     );
 
     let mut looked = 0;

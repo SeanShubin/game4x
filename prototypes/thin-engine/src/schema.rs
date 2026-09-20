@@ -1402,7 +1402,7 @@ pub fn loose_kinds(schema: &Schema, rows: &Store) -> Vec<String> {
 ///
 /// **A capacity is a maximum unless the thing it holds is loose**, and then it is a threshold: what
 /// is beyond it is in disorder, still spendable, and taken at the turn's end by
-/// `lose-what-is-not-kept`. Sean, 2026-09-19: *structures behave differently from resources in this
+/// `discard-disorder`. Sean, 2026-09-19: *structures behave differently from resources in this
 /// regard [...] structures are intentionally built for the purpose of having that structure there,
 /// while resources are mined to be spent or stored.*
 ///

@@ -11,7 +11,7 @@ end-turn
     1. adjust-population
         1. upkeep  per:territory
         2. perish  per:territory
-    2. lose-what-is-not-kept
+    2. discard-disorder
     3. refresh  what:unit trait:moving
     4. refresh  what:extractor trait:working
     5. refresh  what:citizen trait:hungry

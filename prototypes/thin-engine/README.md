@@ -2718,8 +2718,8 @@ and on why over capacity has to remain usable:
 > i am going to have mechanics that allow for stuff over capacity to be used in other recipies to
 > avoid the waste
 
-**`{loose kind:resource}` is the whole of the difference**, and `lose-what-is-not-kept` - the turn's
-first part, in `spec/turn.md`'s own words - takes what is over.
+**`{loose kind:resource}` is the whole of the difference**, and `discard-disorder` - the turn's
+second step, after the population is adjusted - takes what is over.
 
 ## Only what is fungible may lie loose, and this should not need finding twice
 

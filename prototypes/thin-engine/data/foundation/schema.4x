@@ -545,7 +545,7 @@
 #
 # **So a capacity is a maximum unless the thing it holds is loose.** `{loose kind:resource}` names
 # the kinds that may exceed one, and there is nothing else it does: the check stops refusing, and
-# `lose-what-is-not-kept` takes the excess at the turn's end.
+# `discard-disorder` takes the excess at the turn's end.
 #
 # **Over capacity is still usable, which is the point.** Sean: *i am going to have mechanics that
 # allow for stuff over capacity to be used in other recipies to avoid the waste.*

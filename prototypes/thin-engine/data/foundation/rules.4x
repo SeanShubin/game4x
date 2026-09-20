@@ -195,10 +195,18 @@
 {literal id:21 clause:18 column:81 value:1}
 {literal id:22 clause:19 column:120 value:1}
 
-# **`lose-what-is-not-kept` is `spec/turn.md`'s third step, in its own words**: *what expires
-# expires, and what was not kept in order is lost*. **It comes before the refreshes**, which is the
-# order that document states - upkeep, then growth, then this, then what nature reclaims, and time
-# restoring the counts last.
+# **`discard-disorder` is `spec/turn.md`'s third step**: *what expires expires, and what was not
+# kept in order is lost*. **It comes after the population is adjusted and before the refreshes**,
+# which is the order that document states - upkeep, then growth, then this, then what nature
+# reclaims, and time restoring the counts last.
+#
+# **It was called `discard-disorder`, which was that sentence**, and a rule's name being its
+# own citation is worth something. **It cost more than it bought**: the turn's other steps are
+# verbs - `upkeep`, `perish`, `refresh`, `adjust-population` - and this was the one clause, and by
+# some way the longest thing a player reads in `tree.txt`. Sean, 2026-09-19, naming the concept it
+# takes its name from instead: *everything over capacity is in disorder. There will be an end turn
+# mechanic that discards everything in disorder.* **The sentence it was named for is right here**,
+# one line up, which is where the citation lives now.
 #
 # **Its one clause has the role `keep`**, which bounds a quantity to the room there is for it. That
 # is the fifth role and the first that reads a capacity: `require` and `remove` match, `add` makes,
@@ -213,7 +221,7 @@
 # **So the input, the `relation-of` and the argument are all gone**, and the rule says what it does.
 # If a second family is ever loose, the argument comes back - and then it will be doing something.
 
-{rule id:7 name:lose-what-is-not-kept}
+{rule id:7 name:discard-disorder}
 
 {clause id:20 rule:7 seq:1 role:5 relation:27}
 

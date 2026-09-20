@@ -1,4 +1,4 @@
-# The turn's first part, fired on its own: the metal over capacity goes.
+# One step of the turn, fired on its own: the metal over capacity goes.
 #
 # **A part is a rule and a test may name it.** Sean, 2026-09-18: *it will be easier to test the end
 # turn command itself if i can test its parts.* `ending-a-turn-takes-what-is-in-disorder` fires the
@@ -13,12 +13,12 @@
 # do something no rule of its shape could do. Sean, 2026-09-19: *it seems to test that we don't do
 # something we wouldn't do anyways.* The scout is gone.
 #
-# **It is also what the mutation sweep asked for**: with no test naming `lose-what-is-not-kept`, the
-# rule's name and its input's name were read by nothing, and the sweep said so.
+# **It is also what the mutation sweep asked for**: with no test naming `discard-disorder`, the
+# rule's name is read by nothing, and the sweep says so.
 #
 # **Two bins at ten apiece is twenty, and twenty-two is two over.**
 
-{test name:losing-what-is-not-kept-is-the-turn-s-first-part}
+{test name:discarding-disorder-can-be-fired-on-its-own}
 
 {given}
 {territory id:1}
@@ -28,7 +28,7 @@
 {metal where:1 quantity:22}
 
 {when}
-{lose-what-is-not-kept}
+{discard-disorder}
 
 {then}
 {territory id:1}

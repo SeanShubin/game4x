@@ -1,18 +1,21 @@
 # Twenty-two metal where there is room for twenty, a turn ends, and twenty are left.
 #
-# **`lose-what-is-not-kept` is the turn's first part**, which is the order `spec/turn.md` states:
-# upkeep, then growth or starvation, then *what expires expires, and what was not kept in order is
-# lost*, then what nature reclaims, and time restoring the counts last. **Only this one and the
-# refreshes are built**, and the tree in `tree.txt` is where the order can be read.
+# **`discard-disorder` is the turn's second part**, after the population is adjusted - which is
+# the order `spec/turn.md` states: upkeep, then growth or starvation, then *what expires expires,
+# and what was not kept in order is lost*, then what nature reclaims, and time restoring the counts
+# last. **Only what nature reclaims is missing**, and the tree in `tree.txt` is where the order can
+# be read.
 #
 # **Nothing says which two metal went.** A place holds one number for a kind, so there is no metal
 # in disorder to pick out - the number is bounded and what is above the bound is gone. Sean,
 # 2026-09-17: *we only lose what we don't have the storage for, without tracking what is stored
 # where.*
 #
-# **The refreshes do nothing here**, because nothing in this world carries a `moving` or a
-# `working` to restore. That is `put` being a no-op where nothing matches, and it is why the turn
-# can be tested one part at a time.
+# **Every other step does nothing here.** Nothing in this world is a citizen, so adjusting the
+# population finds nobody to feed and nobody to take; and nothing carries a `moving` or a `working`,
+# so the refreshes are `put` matching nothing. **That is why the whole turn leaves the world one
+# step of it leaves**, and it is what makes this and `discarding-disorder-can-be-fired-on-its-own` a
+# pair rather than a duplicate.
 
 {test name:ending-a-turn-takes-what-is-in-disorder}
 

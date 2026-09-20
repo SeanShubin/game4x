@@ -52,7 +52,7 @@ ones, and the world's are the whole automatic half of the game: upkeep, breed, p
 refresh, muster, hold, reclaim, renew, take.
 
 **Three and a half of `spec/turn.md`'s five steps are built.** *Time restores every count* is
-`refresh`; *what was not kept in order is lost* is `lose-what-is-not-kept`; *upkeep is paid* is
+`refresh`; *what was not kept in order is lost* is `discard-disorder`; *upkeep is paid* is
 `upkeep`, and the starving half of *a population grows on surplus food or starves for want of it*
 is `perish`. Still missing: **breeding**, and *nature takes back what is no longer held*. **Each is
 a rule the order has room for**, which is what the tree buys - adding one is a `{part ...}` row and
@@ -77,7 +77,7 @@ the section below is the working.
 is about what a rule does and not about when it may fire, so guards only remove firings: **nogain
 stays sound and only becomes conservative.** What a zero test costs is reachability and termination.
 
-**One thing this predicted is built and untested.** `upkeep` runs before `lose-what-is-not-kept`, so
+**One thing this predicted is built and untested.** `upkeep` runs before `discard-disorder`, so
 a citizen eats food that is over capacity - Sean's *use stuff over capacity in other recipies to
 avoid the waste*, happening automatically. **No test states food in disorder and then ends a turn**,
 so the order is asserted by the tree and by nothing that runs.

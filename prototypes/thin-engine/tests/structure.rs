@@ -728,7 +728,7 @@ fn the_tree_is_what_the_file_says_it_is() {
     assert_eq!(
         rules.len(),
         10,
-        "move, build-extractor, work, refresh, end-turn, build-bin, lose-what-is-not-kept,
+        "move, build-extractor, work, refresh, end-turn, build-bin, discard-disorder,
          upkeep, perish, adjust-population"
     );
     // **At least once, not exactly once.** `refresh` appears twice because `end-turn` names it
