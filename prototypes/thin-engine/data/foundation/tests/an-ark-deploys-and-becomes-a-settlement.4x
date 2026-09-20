@@ -1,0 +1,46 @@
+# An ark in orbit, a metal deposit and a food deposit on the ground below, and the ark spent on a
+# settlement.
+#
+# **Sean, 2026-09-20**, whole: *ark can deploy to the surface, which entails destruction of the ark,
+# along with creation of 1 metal extractor, 1 food extractor, and 2 citizens.*
+#
+# **The ground is found by matching, the same way the orbit is when an ark launches.** The command
+# names the orbit the ark is in; the rule reads that place's territory and asks for the one place
+# that has it and is a surface. **What would be an equality test is a pattern**, which is the move
+# this engine makes everywhere a comparison would do.
+#
+# **Nothing crossed a layer.** The ark was removed from orbit and what it became was added to the
+# ground - a transformation rather than a journey, which is what lets
+# `nothing-moves-between-the-layers` forbid crossing without forbidding this.
+#
+# **The two extractors fit because there is a deposit for each.** They are soft lines, and a soft
+# line that has room takes all of it - so this test says nothing about softness that
+# `a-deployment-with-nowhere-to-mine-still-costs-the-ark` does not say better.
+#
+# **The citizens arrive the way a newborn does** - `hungry:0`, `bearing:0`, `laboring:1` - so they
+# may work the turn they land and may not breed until the turn restores them.
+
+{test name:an-ark-deploys-and-becomes-a-settlement}
+
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{place id:2 of:1 layer:orbit}
+{capacity of:18 for:19 what:27 per:48 quantity:1}
+{deposit where:1 what:30 density:6 quantity:1}
+{deposit where:1 what:31 density:6 quantity:1}
+{ark where:2 moving:1 gathering:1 quantity:1}
+
+{when}
+{deploy where:2}
+
+{then}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{place id:2 of:1 layer:orbit}
+{capacity of:18 for:19 what:27 per:48 quantity:1}
+{deposit where:1 what:30 density:6 quantity:1}
+{deposit where:1 what:31 density:6 quantity:1}
+{extractor where:1 what:30 working:0 quantity:1}
+{extractor where:1 what:31 working:0 quantity:1}
+{citizen where:1 hungry:0 bearing:0 laboring:1 quantity:2}

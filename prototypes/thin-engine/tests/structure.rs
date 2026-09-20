@@ -48,6 +48,7 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         "loose",
         "repeats",
         "scope",
+        "soft",
         "primitive",
     ] {
         let declared = game
@@ -60,11 +61,11 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         );
         checked += 1;
     }
-    assert_eq!(checked, 28, "twenty-eight relations describe the structure");
+    assert_eq!(checked, 29, "twenty-nine relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        46,
-        "forty-six in all - those twenty-eight, and the game's eighteen: eight kinds, three\n         families, a territory, a place, an adjacency, a deposit, an extractor, a citizen and an\n         ark"
+        47,
+        "forty-seven in all - those twenty-nine, and the game's eighteen: eight kinds, three\n         families, a territory, a place, an adjacency, a deposit, an extractor, a citizen and an\n         ark"
     );
 }
 
@@ -847,9 +848,9 @@ fn the_tree_is_what_the_file_says_it_is() {
         .collect();
     assert_eq!(
         rules.len(),
-        13,
+        14,
         "move, build-extractor, work, refresh, end-turn, build-bin, discard-disorder,
-         upkeep, perish, breed, toil, gather, launch"
+         upkeep, perish, breed, toil, gather, launch, deploy"
     );
     // **At least once, not exactly once.** `refresh` appears twice because `end-turn` names it
     // twice - two steps of one order - and asserting *once* said the tree was wrong when it was

@@ -1,0 +1,43 @@
+# Two territories with ground, one orbit, and the settlement lands under the ark rather than on the
+# other one.
+#
+# **The ground is found by matching and this is what says so.** The command names the orbit; the
+# rule reads that place's territory and asks for the place that has it and is a surface. **Take the
+# reading away and the clause matches both surfaces** - and because a clause several rows answer
+# remembers none of them, the rule is refused rather than guessing. **The engine has no way to pick
+# and does not have one here either.**
+#
+# **The mutation sweep asked for this test.** Every other deployment world has one surface place, so
+# the reading was masked: with nothing else to match, a clause that reads a territory and a clause
+# that reads none agree. Sean, 2026-09-15: *We should never have non-determinism from what row
+# happens to be encountered first.*
+#
+# **The second territory has the deposits and gets nothing**, which is the sharpest version: the
+# rule does not go looking for good ground, it goes to the ground below.
+
+{test name:an-ark-deploys-onto-the-ground-below-it}
+
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{place id:2 of:1 layer:orbit}
+{territory id:2}
+{place id:3 of:2 layer:surface}
+{capacity of:18 for:19 what:27 per:48 quantity:1}
+{deposit where:3 what:30 density:6 quantity:1}
+{deposit where:3 what:31 density:6 quantity:1}
+{ark where:2 moving:1 gathering:1 quantity:1}
+
+{when}
+{deploy where:2}
+
+{then}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{place id:2 of:1 layer:orbit}
+{territory id:2}
+{place id:3 of:2 layer:surface}
+{capacity of:18 for:19 what:27 per:48 quantity:1}
+{deposit where:3 what:30 density:6 quantity:1}
+{deposit where:3 what:31 density:6 quantity:1}
+{citizen where:1 hungry:0 bearing:0 laboring:1 quantity:2}

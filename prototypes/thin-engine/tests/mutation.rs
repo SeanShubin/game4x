@@ -321,7 +321,7 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
     Ok(())
 }
 
-const REFERENCES: usize = 65;
+const REFERENCES: usize = 66;
 
 /// **References no test world can violate**, because nothing points at them there.
 ///
@@ -622,8 +622,8 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// have_two_densities` in `tests/structure.rs` is what holds it, and the sweep runs the `.4x`
 /// tests and the reference checks rather than the Rust suite.
 const DELETABLE: [&str; 23] = [
-    "12 rules.4x binding",
-    "12 rules.4x literal",
+    "14 rules.4x binding",
+    "14 rules.4x literal",
     "3 schema.4x attribute",
     // **`stock`'s `quantity`, and it is read by `tests/structure.rs` rather than by `data/`.** A
     // family's columns are what its members must have, so declaring `quantity` is what stops a
@@ -779,21 +779,21 @@ fn no_value_can_be_changed_without_breaking_something() {
 ///
 /// **A `moving` that never moves is the other shape here.** The berth tests hold vehicles to count
 /// them, not to move them, so what those rows say about moves is read by nothing.
-const NOT_LOAD_BEARING: [&str; 48] = [
+const NOT_LOAD_BEARING: [&str; 56] = [
     // **The one `assigns` row's id is read by nothing.** There were two, and changing one id
     // to the other's collided on the key; with one row there is nothing to collide with.
     // **`assigns` may not need an `id` at all** - keyed by `(clause, input, value)` it could not
     // state two assignments of one input on one clause, which is the rule rather than a
     // restriction. That is in `backlog.md` rather than done here.
     "1 rules.4x assigns.id",
-    "37 rules.4x clause.seq",
+    "42 rules.4x clause.seq",
     // **A scoped input's name is read by nothing, and the other eleven are read by name.** A
     // command finds its argument by the input's name and so does a part; an input the engine fills
     // is looked up by neither, because nothing outside the engine ever names it. **So `upkeep`'s
     // `where` and `perish`'s are the two**, and what their names are for is the friendly notation
     // and a person reading the rule.
     "3 rules.4x input.name",
-    "17 rules.4x input.seq",
+    "18 rules.4x input.seq",
     "4 rules.4x part.seq",
     // **`reading.id` was on this list until `upkeep` grew a second reading.** With one row there
     // was nothing for an id to collide with, so changing it to anything at all was unnoticed; with
@@ -834,6 +834,17 @@ const NOT_LOAD_BEARING: [&str; 48] = [
     // class as the `citizen.bearing` above it**, which is unread for the same reason in the tests
     // where nothing breeds.
     "1 tests/a-citizen-eats-and-one-there-is-no-food-for-starves.4x citizen.laboring",
+    // **Every ark that deploys, in both of its readinesses.** `deploy` requires an ark and reads
+    // neither `moving` nor `gathering`, because it destroys the one it takes - a rule that spends
+    // a move on a thing that will not exist afterwards is spending nothing.
+    //
+    // **The values have to be something and the world has to say what**, which is the same reason
+    // a citizen that never breeds still states a `bearing`. It is the schema forcing a value
+    // rather than a test stating one.
+    "1 tests/a-deployment-places-what-the-ground-has-room-for.4x ark.gathering",
+    "1 tests/a-deployment-places-what-the-ground-has-room-for.4x ark.moving",
+    "1 tests/a-deployment-with-nowhere-to-mine-still-costs-the-ark.4x ark.gathering",
+    "1 tests/a-deployment-with-nowhere-to-mine-still-costs-the-ark.4x ark.moving",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x scout.quantity",
     "1 tests/a-scout-cannot-move-where-every-berth-is-taken.4x adjacency.id",
     "1 tests/a-scout-cannot-move-where-every-berth-is-taken.4x transport.moving",
@@ -846,6 +857,10 @@ const NOT_LOAD_BEARING: [&str; 48] = [
     // rule says what it said about the world, and there is no `then` world to differ from. So a
     // value is read only if some clause reads it, and `moving`, `gathering`, a density and a count
     // are none of them once the refusal has been reached.
+    "1 tests/an-ark-deploys-and-becomes-a-settlement.4x ark.gathering",
+    "1 tests/an-ark-deploys-and-becomes-a-settlement.4x ark.moving",
+    "1 tests/an-ark-deploys-onto-the-ground-below-it.4x ark.gathering",
+    "1 tests/an-ark-deploys-onto-the-ground-below-it.4x ark.moving",
     "1 tests/an-ark-holds-one-energy-and-the-rest-is-lost.4x ark.gathering",
     "1 tests/an-ark-holds-one-energy-and-the-rest-is-lost.4x ark.moving",
     "1 tests/an-extractor-cannot-be-built-where-the-deposits-are-taken.4x deposit.density",

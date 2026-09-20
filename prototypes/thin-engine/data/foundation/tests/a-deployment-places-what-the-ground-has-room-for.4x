@@ -1,0 +1,37 @@
+# Metal in the ground and no food, and the deployment places the metal extractor and not the food
+# one.
+#
+# **Two soft lines and they do not share a fate.** Each takes the room there is where it would
+# stand, and a capacity names one resource - so what holds metal extractors says nothing about food
+# ones. **This is the test that says softness is per line**, which the barren one and the settled
+# one cannot say between them.
+#
+# **Nothing here is a choice the engine made.** The metal line asks for one and there is room for
+# one; the food line asks for one and there is room for none. A soft line has no preference and no
+# order - it takes what fits and the rest of the rule goes on.
+#
+# **The settlement it leaves cannot feed itself**, which is the point of the whole mechanism rather
+# than a defect in it. Sean, 2026-09-20: *consequences of legal moves may be disastrous, but that is
+# player choice.*
+
+{test name:a-deployment-places-what-the-ground-has-room-for}
+
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{place id:2 of:1 layer:orbit}
+{capacity of:18 for:19 what:27 per:48 quantity:1}
+{deposit where:1 what:30 density:6 quantity:1}
+{ark where:2 moving:1 gathering:1 quantity:1}
+
+{when}
+{deploy where:2}
+
+{then}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{place id:2 of:1 layer:orbit}
+{capacity of:18 for:19 what:27 per:48 quantity:1}
+{deposit where:1 what:30 density:6 quantity:1}
+{extractor where:1 what:30 working:0 quantity:1}
+{citizen where:1 hungry:0 bearing:0 laboring:1 quantity:2}

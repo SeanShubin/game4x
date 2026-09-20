@@ -64,6 +64,8 @@ const PART: &str = "part";
 const ARGUMENT: &str = "argument";
 const IS: &str = "is";
 const REPEATS: &str = "repeats";
+const SOFT: &str = "soft";
+const WHAT: &str = "what";
 const SCOPE: &str = "scope";
 
 /// Every row there is, and the structure read out of them.
@@ -341,8 +343,47 @@ fn apply(
         match game.named(ROLE, role).unwrap_or(role) {
             REQUIRE | REMOVE | PUT | KEEP => continue,
             ADD => {
+                // **A soft line takes the room there is, and a hard one insists on all of it.**
+                // Sean, 2026-09-20, on a deployment that lands where there is nothing to mine:
+                // *it is legal to deploy an ark anywhere, individual rules may fail but the
+                // deployment succeeds. Consequences of legal moves may be disastrous, but that is
+                // player choice.*
+                //
+                // **Nothing else in a rule can say that.** Every other role refuses the world it
+                // would leave, which is one rule failing where the player asked for several
+                // things at once.
+                let soft = game
+                    .of_relation(SOFT)
+                    .into_iter()
+                    .any(|row| row.value(CLAUSE) == clause.value(ID));
                 for relation in relations_of(game, clause, bound) {
-                    let made = row_of(game, clause, bound, &rule, WHOLE, &matched, &relation)?;
+                    let mut made = row_of(game, clause, bound, &rule, WHOLE, &matched, &relation)?;
+                    if soft {
+                        let schema = Schema::of(after.rows()).map_err(|why| Refused::Broke {
+                            rule: rule.clone(),
+                            why: Box::new(why),
+                        })?;
+                        // **None is unbounded and zero is no room**, which are different answers
+                        // and the reason this is an `Option`. A kind nothing gives room for is not
+                        // in the arithmetic at all, so a soft line about it is a plain one.
+                        if let Some(space) = room_for(&schema, &after, &made, &relation) {
+                            let Some(quantity) = counted(game, &made) else {
+                                continue;
+                            };
+                            let asked = made
+                                .value(&quantity)
+                                .and_then(|it| it.parse::<i64>().ok())
+                                .unwrap_or(0);
+                            let fits = asked.min(space.max(0));
+                            // **Nothing is made rather than a row of none**, because a row at
+                            // quantity zero is never written - which is the same sentence a full
+                            // deposit and an absent one are told apart by.
+                            if fits <= 0 {
+                                continue;
+                            }
+                            made.values.insert(quantity, fits.to_string());
+                        }
+                    }
                     after.put(made.clone(), counted(game, &made).as_deref());
                     effect.made.push(made);
                 }
@@ -433,6 +474,40 @@ fn apply(
         schema,
         rows: after,
     })
+}
+
+/// How much room is left for this row where it would stand, or `None` where nothing bounds it.
+///
+/// **The same arithmetic the check reads and `keep` reads**, from [`crate::schema::rooming`], so
+/// no third reading of what fits can disagree with the other two.
+///
+/// **A kind named in no capacity row has no question asked about it**, and that is `None` rather
+/// than zero: *nothing says how much room there is* and *there is no room* are different worlds,
+/// and only the first one lets a soft line through whole.
+fn room_for(
+    schema: &Schema,
+    rows: &crate::store::Store,
+    made: &Row,
+    relation: &str,
+) -> Option<i64> {
+    for asked in crate::schema::rooming(schema, rows) {
+        if asked.held != *relation {
+            continue;
+        }
+        // **A capacity names one trait value, so the question has to be the row's own.** A metal
+        // extractor is bounded by what holds metal extractors and by nothing else.
+        if let Some(carried) = made.value(WHAT)
+            && schema.relation_named(carried).unwrap_or(carried) != asked.what
+        {
+            continue;
+        }
+        let (_, column) = crate::schema::place_of(schema, relation, &asked.per)?;
+        let at = made.value(&column)?;
+        let there = asked.room.get(at).copied().unwrap_or(0);
+        let used = asked.used.get(at).copied().unwrap_or(0);
+        return Some(there - used);
+    }
+    None
 }
 
 /// The column a relation counts by, where it counts.

@@ -629,14 +629,36 @@
 
 {relation id:45 name:repeats}
 {relation id:46 name:scope}
+{relation id:53 name:soft}
 
 {column id:127 relation:45 seq:1 name:rule}
 {column id:128 relation:46 seq:1 name:rule}
 {column id:129 relation:46 seq:2 name:input}
+{column id:149 relation:53 seq:1 name:clause}
 
 {reference id:66 column:127 to:6}
 {reference id:67 column:128 to:6}
 {reference id:68 column:129 to:7}
+{reference id:75 column:149 to:8}
+
+
+## A line that takes what room there is
+
+# **Sean, 2026-09-20**, on an ark that lands where there is nothing to mine: *it is legal to deploy
+# an ark anywhere, individual rules may fail but the deployment succeeds. Consequences of legal
+# moves may be disastrous, but that is player choice.*
+#
+# **Every other role refuses the world it would leave**, which is the right default and the wrong
+# answer here: a deployment that cannot place a food extractor would place nothing at all, and the
+# ark would be spent on nothing or not spent at all. **`{soft clause:C}` says that one line takes
+# the room there is** - all of it, some of it, or none - and the rest of the rule goes on.
+#
+# **It reads the same arithmetic the world check reads**, so what a soft line fits and what the
+# world would refuse cannot disagree.
+#
+# **A kind nothing gives room for is unbounded, and a soft line about it is a plain one.** *Nothing
+# says how much room there is* and *there is no room* are different worlds - which is why two
+# citizens always land and two extractors may not.
 
 
 ## A citizen, and the hunger a turn gives it

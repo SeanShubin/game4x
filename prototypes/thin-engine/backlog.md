@@ -518,12 +518,21 @@ of. That restructure has to land before softness can, and it is a correctness fi
 **Soft needs `deploy`, `deploy` needs the ark, and the ark needs orbit.** Building any of them
 earlier is vocabulary with no user, which the sweep would report and be right to.
 
-1. **Orbit exists and the ark sits in it**: orbital places, `ark` as a member of `unit`,
-   `{stands-in ...}` and the check that refuses a kind standing in the wrong layer, `energy`, the
-   ark's capacity for one, and collecting from the sun.
-2. **`move` becomes require and `put`**, and splits by layer - surface to surface, orbit to orbit,
-   and crossing between them - each spending what it spends.
-3. **`deploy` and `{soft ...}`, arriving together** so that softness has its first user.
+1. ~~**Orbit exists and the ark sits in it**~~ - **built**: orbital places, `ark` as a member of
+   `unit`, `{stands-in ...}` and the check that refuses a kind standing in the wrong layer,
+   `energy`, the ark's capacity for one, and collecting from the sun.
+2. ~~**`move` splits by layer**~~ - **built, and smaller than this said.** The whole of it was one
+   `{reading ...}`: the `to` place takes its `layer` from the `from` place's, so surface and orbit
+   never match. **`move` did not become require and `put`** - that was wanted so a soft `move` could
+   not destroy a unit, and nothing moves softly, so it is still ahead rather than done.
+3. ~~**`deploy` and `{soft ...}`, arriving together**~~ - **built**, and softness had its user the
+   day it was written.
+
+**What is left of the arc is the loop as one test**: an ark deploys, the settlement develops, and
+an ark launches. **It is arithmetic rather than mechanism** - every rule it needs exists - and the
+arithmetic is the work: two citizens make two labours a turn, a turn's food is eaten before
+anything is stored, and what has no bin is in disorder when the turn ends. **Four turns is the
+shortest version found so far**, and the reason it is four is that a built extractor arrives spent.
 
 **`capacity.layer` waits.** Sean approved it, and nothing yet asks for orbit and surface to differ
 in *amount* rather than in what is allowed - `{stands-in ...}` answers both cases named so far.
@@ -578,10 +587,16 @@ step and the only one this prototype had not built - **the turn is now four step
 rather than four of five. The mainline's `deploy-ark` requires a force and produces a garrison; this
 one does neither.
 
-**The loop is the acceptance test, and `deploy` is the only piece missing.** Starting with an ark is
-a world a `given` can state; developing a planet is `toil`, `work`, `breed`, `build-extractor` and
-`build-bin`, all built and reviewed; launching is `launch`. **Deploying is what joins the end to the
-beginning**, and when it lands the whole arc can be one test.
+**The loop is the acceptance test, and every piece of it now exists.** Starting with an ark is a
+world a `given` can state; developing a planet is `toil`, `work`, `breed`, `build-extractor` and
+`build-bin`; launching is `launch`; and `deploy` is what joins the end to the beginning. **What is
+left is the arc as one test**, which is arithmetic rather than mechanism.
+
+**The shortest arc found is four turns, and what makes it four is that a built extractor arrives
+spent.** Turn one deploys and ends; turn two feeds and breeds; turn three works metal and builds
+the energy extractor it cannot yet work; turn four works it and launches. **Nothing carries between
+turns without a bin**, so the shortest version stores nothing and mines what it needs in the turn
+it spends it.
 
 ## The deposit limit folded, 2026-09-20, and what it turned out to cost
 

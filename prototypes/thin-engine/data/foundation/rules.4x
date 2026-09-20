@@ -590,3 +590,62 @@
 
 {reading id:11 clause:41 column:135 of:40 takes:135}
 {reading id:12 clause:45 column:142 of:41 takes:134}
+
+
+## What an ark becomes when it comes down
+
+# **Sean, 2026-09-20**, whole: *ark can deploy to the surface, which entails destruction of the ark,
+# along with creation of 1 metal extractor, 1 food extractor, and 2 citizens.*
+#
+# **The ark is spent before anything is made**, which is the clause order and is deliberate. Sean:
+# *it is legal to deploy an ark anywhere, individual rules may fail but the deployment succeeds.*
+# So a deployment onto barren ground still costs the ark, and
+# `a-deployment-with-nowhere-to-mine-still-costs-the-ark` is what says so.
+#
+# **The two extractors are soft and the two citizens are not.** An extractor stands in a deposit and
+# there may be none; nothing gives room for a citizen, so a citizen can never be short - **and it is
+# the absence of a capacity row that says that**, rather than anything written here.
+#
+# **The ground is found by matching, the same way `launch` finds the orbit.** An orbit names the
+# territory it belongs to, and the surface of that territory is the place whose `of` is the same -
+# so the equality is a pattern and never a comparison.
+#
+# **Nothing crosses a layer.** An ark in orbit is removed and what it becomes is added to the
+# ground; `nothing-moves-between-the-layers` is the rule that makes this a transformation rather
+# than a journey.
+
+{rule id:14 name:deploy}
+
+{input id:21 rule:14 seq:1 name:where of:48}
+
+{clause id:46 rule:14 seq:1 role:1 relation:48}
+{clause id:47 rule:14 seq:2 role:1 relation:48}
+{clause id:48 rule:14 seq:3 role:2 relation:51}
+{clause id:49 rule:14 seq:4 role:3 relation:19}
+{clause id:50 rule:14 seq:5 role:3 relation:19}
+{clause id:51 rule:14 seq:6 role:3 relation:47}
+
+{soft clause:49}
+{soft clause:50}
+
+{binding id:57 clause:46 column:134 input:21}
+{binding id:58 clause:48 column:142 input:21}
+
+{literal id:64 clause:46 column:136 value:orbit}
+{literal id:65 clause:47 column:136 value:surface}
+{literal id:66 clause:48 column:145 value:1}
+{literal id:67 clause:49 column:56 value:30}
+{literal id:68 clause:49 column:101 value:0}
+{literal id:69 clause:49 column:57 value:1}
+{literal id:70 clause:50 column:56 value:31}
+{literal id:71 clause:50 column:101 value:0}
+{literal id:72 clause:50 column:57 value:1}
+{literal id:73 clause:51 column:131 value:0}
+{literal id:74 clause:51 column:133 value:0}
+{literal id:75 clause:51 column:137 value:1}
+{literal id:76 clause:51 column:132 value:2}
+
+{reading id:13 clause:47 column:135 of:46 takes:135}
+{reading id:14 clause:49 column:55 of:47 takes:134}
+{reading id:15 clause:50 column:55 of:47 takes:134}
+{reading id:16 clause:51 column:130 of:47 takes:134}
