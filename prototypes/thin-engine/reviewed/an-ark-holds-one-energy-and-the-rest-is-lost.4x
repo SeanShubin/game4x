@@ -1,0 +1,38 @@
+# Three energy in an orbit with one ark, a turn ends, and one is left.
+#
+# **Sean, 2026-09-20**: *the ark can only store 1 energy so excess is wasted, the sun may have a
+# density higher than 1, also wasted because the ark can't store it.* Two of the three go, and
+# nothing new does it: energy is loose, the ark is the only thing in an orbit that holds any, and
+# `discard-disorder` takes what will not fit.
+#
+# **Where the three came from is not this test's business.** `an-ark-gathers-what-the-sun-gives` is
+# where a sun of density three hands them over; here they are simply standing, because **what an ark
+# can take and what an ark can keep are two different numbers** and each deserves its own world.
+#
+# **A unit is the container**, which is the transport's twelve in miniature - `rooming` counts the
+# arks and multiplies, the same arithmetic that sums a transport's two rows for fuel. It is why
+# answering *fuel is the same thing as energy* cost nothing to build.
+#
+# **The ark is not storing the energy.** `spec/logistics.md` is plain that a resource in a place is
+# in that place and not in a container inside it: **the things in it that can hold that kind
+# contribute capacity and hold nothing.** Take the ark away and all three would go, because a loose
+# kind nothing gives room for has no room.
+
+{test name:an-ark-holds-one-energy-and-the-rest-is-lost}
+
+{given}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:orbit name:place-1}
+{ark where:place-1 moving:1 gathering:1} -> 1
+{capacity of:ark for:energy what:energy per:place} -> 1
+{energy where:place-1} -> 3
+
+{when}
+{end-turn}
+
+{then}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:orbit name:place-1}
+{ark where:place-1 moving:1 gathering:1} -> 1
+{capacity of:ark for:energy what:energy per:place} -> 1
+{energy where:place-1} -> 1

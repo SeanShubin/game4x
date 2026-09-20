@@ -1,0 +1,33 @@
+# An ark in orbit, told to gather: one energy, and its gathering spent.
+#
+# **Sean, 2026-09-20**: *ark can gather 1 energy from the sun each turn.* The sun is not in this
+# world and does not need to be - `spec/invariants.md` says *a source is named, and a named source
+# is not a gain*, and a star's energy is endless. So nothing is taken from anything: the ark spends
+# the allowance the turn gave it, and the energy arrives.
+#
+# **The place is an orbit, and the ark could stand nowhere else.** `{stands-in kind:ark per:place
+# layer:orbit}` says so, and a world putting one on the ground is not a world - which is why that
+# half is a structure test and not a test here.
+#
+# **It is the player's command and not a step of the turn.** An ark nobody touches does not fuel
+# itself, which is the same correction Sean made about citizens and labour: *I was expecting
+# citizens to generate labor during a regular turn.*
+#
+# **Its `moving` is read back rather than stated.** An `add` must name every column, and writing
+# `moving:1` would hand a spent move back for free to an ark that had already crossed.
+
+{test name:an-ark-gathers-an-energy-from-the-sun}
+
+{given}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:orbit name:place-1}
+{ark where:place-1 moving:1 gathering:1} -> 1
+
+{when}
+{gather where:place-1}
+
+{then}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:orbit name:place-1}
+{ark where:place-1 moving:1 gathering:0} -> 1
+{energy where:place-1} -> 1
