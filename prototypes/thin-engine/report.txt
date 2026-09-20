@@ -969,7 +969,7 @@ old state
       - {territory id:1 name:territory-1}
     - transport
 
-command  {discard-disorder what:resource}
+command  {discard-disorder}
   took   {metal where:place-1} -> 22
   made   {metal where:place-1} -> 20
 

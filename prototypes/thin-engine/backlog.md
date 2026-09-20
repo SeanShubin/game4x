@@ -434,6 +434,101 @@ limits how many machines a place may hold, which it already does through
 **One thing to avoid when the day comes**: a second `work` rule. That is the `metal-bin, food-bin`
 shape Sean has ruled out twice, and the family route costs less than it looks.
 
+
+## The ark, and what orbit turns out to need
+
+**Sean, 2026-09-20**, stating it whole:
+
+> **Ark** - can only be in orbit; can spend one energy and one move to move from orbit to orbit;
+> contains a storage container for 1 energy; can collect 1 energy from the sun each turn; can deploy
+> to the surface, which entails destruction of the ark, along with creation of 1 metal extractor,
+> 1 food extractor, and 2 citizens.
+> **Scout** - contains a storage container for 2 fuel.
+> **Pioneer** - contains a storage container for 2 fuel; can deploy with the same result as an ark.
+> **Transport** - contains a storage container for 2 fuel; templated storage container for 10 of a
+> resource, which in the case of fuel would result in 12 capacity for fuel across 2 containers.
+
+## What is already built
+
+**The transport's twelve is free.** `rooming` groups by what is held, what it is of and where, and
+**sums the containers** - so `{capacity of:transport for:resource what:resource per:place} -> 10`
+reified for energy, plus `{capacity of:transport for:energy what:energy per:place} -> 2`, is twelve.
+**That summing is the defect Sean found in September** with this same question, and the answer he got
+then is what makes this free now. The scout's two and the ark's one are one row each.
+
+**Collecting from the sun is `toil` with the nouns changed** - a unit spending a per-turn allowance
+to make a resource. It may be the same rule parameterised over kind, trait and resource, the way
+`refresh` is over kind and trait.
+
+**Deploying needs no new join.** Require the place the unit stands in, read its `of`, require the
+surface place with that same `of` - the pattern that makes *the same territory* a match rather than
+a comparison. `spec/data/line.4x` writes it `place-above:where`.
+
+## Four answers that settle the design
+
+|                                                  |                                                                                                                                                                                                       |
+| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Is fuel the same as energy?**                  | **Yes.** Sean: *when I say fuel I tend to mean energy that happens to be used for movement in this context.* One relation, `energy`, a member of `resource` and of `stock`; *fuel* stays vocabulary   |
+| **How do the layers differ?**                    | **Both A and D are approved.** `{stands-in kind:K layer:L}` says where a kind may stand; a `layer` on `{capacity ...}` says how much room a layer gives                                               |
+| **Where does a pioneer deploy from?**            | **Where it stands** - surface to surface. So one `deploy` rule serves both: from the unit's place to the surface of the same territory, and for a pioneer those are the same place                    |
+| **What if a deployment cannot make everything?** | **It happens anyway.** Sean: *it is legal to deploy an ark anywhere, individual rules may fail but the deployment succeeds, consequences of legal moves may be disastrous, but that is player choice* |
+
+## The mainline already answers the fourth, and better than a marker on a part
+
+`spec/console.md`: *A line may carry an attachment, written in brackets after its amount -
+`-1 [soft]`. It says what to do when the line cannot do all of what it says.* **A line with no
+attachment does all of what it says, or the rule does nothing** - so the default is what this engine
+already does, and softness is opt-in per line.
+
+**`spec/invariants.md` fences it twice.** *A line that makes may be soft, and a line that takes may
+not.* And the one that matters most: **soft means what holds it will not take another, never there
+is one already** - a capacity check and explicitly not a zero test, which is the decidability line
+this prototype has held throughout.
+
+**`deploy-ark` is already written there**, and is Sean's list:
+
+```text
+{line block:deploy-ark seq:3 role:consume qty:1 kind:ark place-above:where}
+{line block:deploy-ark seq:4 role:produce qty:1 kind:garrison}
+{line block:deploy-ark seq:5 role:produce qty:2 kind:citizen}
+{line block:deploy-ark seq:6 role:produce qty:1 kind:extractor}
+{line block:deploy-ark seq:7 role:produce qty:1 kind:extractor}
+```
+
+**In this prototype it is one relation - `{soft clause:N}` - and the `add` branch capping its
+quantity at the room `rooming` already computes.** The comparison that needs is the one `keep`
+already makes.
+
+## And a prerequisite the mainline does not have
+
+**`move` here is remove-then-add, so a soft add would destroy a unit** moving into a full place.
+The mainline avoids it by never making a unit at all:
+
+```text
+{line block:move seq:3 role:require qty:1 kind:unit place-bound:from}
+{line block:move seq:4 role:put      kind:unit place-bound:to}
+```
+
+**Require and `put` - the unit is relocated rather than produced**, so there is nothing to be short
+of. That restructure has to land before softness can, and it is a correctness fix in its own right.
+
+## The order, and why it is forced
+
+**Soft needs `deploy`, `deploy` needs the ark, and the ark needs orbit.** Building any of them
+earlier is vocabulary with no user, which the sweep would report and be right to.
+
+1. **Orbit exists and the ark sits in it**: orbital places, `ark` as a member of `unit`,
+   `{stands-in ...}` and the check that refuses a kind standing in the wrong layer, `energy`, the
+   ark's capacity for one, and collecting from the sun.
+2. **`move` becomes require and `put`**, and splits by layer - surface to surface, orbit to orbit,
+   and crossing between them - each spending what it spends.
+3. **`deploy` and `{soft ...}`, arriving together** so that softness has its first user.
+
+**`capacity.layer` waits.** Sean approved it, and nothing yet asks for orbit and surface to differ
+in *amount* rather than in what is allowed - `{stands-in ...}` answers both cases named so far.
+**A can fake D with a zero and D cannot fake A at all**, so it is the more general of the two and
+still the one with no user.
+
 ## Smaller things, each with the reason it is not done
 
 **A constant limit of the plain sort.** `{limit container:territory contained:garrison n:1}` -

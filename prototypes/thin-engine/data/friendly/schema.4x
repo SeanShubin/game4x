@@ -341,11 +341,15 @@
 
 {family relation:unit}
 {family relation:resource}
+{family relation:stock}
 
 {member kind:scout family:unit}
 {member kind:transport family:unit}
 {member kind:metal family:resource}
 {member kind:food family:resource}
+{member kind:metal family:stock}
+{member kind:food family:stock}
+{member kind:labor family:stock}
 
 
 ## What a deposit's density is, and what a deposit holds
@@ -561,14 +565,13 @@
 # not sure our thin-engine needs that theme yet.* **There are no sources here**, so nothing has
 # anywhere to return to, and the theme is noted rather than built.
 
-{loose kind:resource}
+{loose kind:stock}
 
 # **Labour is loose and nothing holds it, which together are the whole of *unspent labour is lost*.**
 # Sean, 2026-09-20: *unspent labor does not survive the turn* and *excess labor to be removed the
 # same as discard-disorder.* **No capacity row says nothing holds it**; the absence of one does,
 # because a loose kind nothing gives room for has no room.
 
-{loose kind:labor}
 
 
 ## A rule that fires as many times as it can, and the place it fires in
@@ -711,6 +714,29 @@
 # **Only the surface exists yet.** `layer` carries one value, which is honest rather than useful -
 # what it buys is that orbit is a row and not a change. The rules that tell the layers apart, and
 # the capacity that gives them different room, are the two increments after this one.
+
+# **`stock` is what a place holds a number of, and it is the set that may lie loose.** Metal, food
+# and labour: each is somewhere, each is a count, and each piles up beyond what there is room for.
+# `resource` is the two a recipe may name - `work what:food` is a sentence and `work what:labor` is
+# not - so the two families overlap and are not the same set.
+#
+# **It exists so that what may lie loose is stated once.** Sean, 2026-09-20, on the rule that
+# discards it: *always discard whatever is in disorder, so no need to specify `what:resource`.*
+# **There had been two statements of the set** - `{loose ...}` saying what may exceed a capacity,
+# and a `{part ...}` per kind saying what gets trimmed - and nothing made them agree. Add a loose
+# kind and forget the part, and it may exceed its capacity forever while every check passes.
+#
+# **The sweep could not have caught that**, and not by oversight: it deletes rows and changes
+# values, and never adds one. **A mistake with no instrument pointed at it** is the kind this
+# prototype exists to find, so the answer is a shape where it cannot be made.
+#
+# **A kind may belong to two families**, because `{member ...}` is keyed by both its columns - so
+# metal is a resource and a stock, and neither statement is a copy of the other.
+
+{relation id:49 name:stock}
+
+{column id:138 relation:stock seq:1 name:where}
+{column id:139 relation:stock seq:2 name:quantity}
 
 {relation id:48 name:place}
 

@@ -194,12 +194,11 @@
 {part id:6 of:5 is:9 seq:2}
 {part id:7 of:5 is:10 seq:3}
 {part id:3 of:5 is:7 seq:4}
-{part id:9 of:5 is:7 seq:5}
-{part id:1 of:5 is:4 seq:6}
-{part id:2 of:5 is:4 seq:7}
-{part id:5 of:5 is:4 seq:8}
-{part id:8 of:5 is:4 seq:9}
-{part id:10 of:5 is:4 seq:10}
+{part id:1 of:5 is:4 seq:5}
+{part id:2 of:5 is:4 seq:6}
+{part id:5 of:5 is:4 seq:7}
+{part id:8 of:5 is:4 seq:8}
+{part id:9 of:5 is:4 seq:9}
 
 {argument id:1 part:1 input:11 value:26}
 {argument id:2 part:1 input:12 value:1}
@@ -209,10 +208,8 @@
 {argument id:6 part:5 input:12 value:3}
 {argument id:7 part:8 input:11 value:47}
 {argument id:8 part:8 input:12 value:4}
-{argument id:9 part:10 input:11 value:47}
-{argument id:10 part:10 input:12 value:5}
-{argument id:11 part:3 input:19 value:27}
-{argument id:12 part:9 input:19 value:29}
+{argument id:9 part:9 input:11 value:47}
+{argument id:10 part:9 input:12 value:5}
 
 # **`build-bin` says nothing about how many will fit**, the same way `build-extractor` says
 # nothing about deposits. That a territory has room for only so many is a fact about the world,
@@ -250,11 +247,6 @@
 # takes its name from instead: *everything over capacity is in disorder. There will be an end turn
 # mechanic that discards everything in disorder.* **The sentence it was named for is right here**,
 # one line up, which is where the citation lives now.
-#
-# **Its one clause has the role `keep`**, which bounds a quantity to the room there is for it. That
-# is the fifth role and the first that reads a capacity: `require` and `remove` match, `add` makes,
-# `put` assigns, and this one takes away what will not fit.
-
 # **It takes no argument, and the sweep is what said so.** It had a `what`, and
 # `{relation-of clause:clause-20 input:what}` to read it - but the clause already declares
 # `relation:resource`, and `resource` is the only loose family, so the argument could only ever be
@@ -264,18 +256,21 @@
 # **So the input, the `relation-of` and the argument are all gone**, and the rule says what it does.
 # If a second family is ever loose, the argument comes back - and then it will be doing something.
 
-# **Its argument is back, and the comment that deleted it said this day would come.** *If a second
-# family is ever loose, the argument comes back - and then it will be doing something.* Labour is
-# the second, so `discard-disorder` is fired twice by the turn, once per loose kind - which is the
-# same shape as the five refreshes and for the same reason.
+# **It takes no argument, and names the family of everything that may lie loose.** Sean, 2026-09-20:
+# *always discard whatever is in disorder, so no need to specify `what:resource`.* The clause names
+# `stock`, `relations_of` expands it to its members, and the turn fires this once.
+#
+# **The argument came back for a day and is gone again**, and the day was worth it: it showed that
+# the set had two statements - this rule's parts, and `{loose ...}` - with nothing making them
+# agree. **One family is the fix, and the clause naming it is what makes it one.**
+#
+# **Its one clause has the role `keep`**, which bounds a quantity to the room there is for it. That
+# is the fifth role and the first that reads a capacity: `require` and `remove` match, `add` makes,
+# `put` assigns, and this one takes away what will not fit.
 
 {rule id:7 name:discard-disorder}
 
-{input id:19 rule:7 seq:1 name:what of:1}
-
-{clause id:20 rule:7 seq:1 role:5 relation:27}
-
-{relation-of clause:20 input:19}
+{clause id:20 rule:7 seq:1 role:5 relation:49}
 
 # **`upkeep` is `spec/turn.md`'s first step**: *upkeep is paid*. One citizen eats one food and is
 # no longer hungry, and it repeats - so as many eat as there is food for, and nothing anywhere

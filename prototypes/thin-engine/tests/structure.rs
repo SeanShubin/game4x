@@ -64,8 +64,8 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
     assert_eq!(checked, 29, "twenty-nine relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        43,
-        "forty-three in all - those twenty-nine, and the game's fourteen: six kinds, two families,\n         a territory, a place, an adjacency, a deposit, an extractor and a citizen"
+        44,
+        "forty-four in all - those twenty-nine, and the game's fifteen: six kinds, three families,\n         a territory, a place, an adjacency, a deposit, an extractor and a citizen"
     );
 }
 
@@ -464,7 +464,13 @@ fn an_extractor_needs_a_deposit_to_stand_in() {
 /// held by one container, which is a restriction no one chose either.
 #[test]
 fn a_kind_can_belong_to_two_families() {
-    // **`30` is `metal`, already a `resource`, and `29` is `labor` made a family for this.**
+    // **`30` is `metal`, already a `resource` and a `stock`, and `29` is `labor` made a family
+    // for this.**
+    //
+    // **The game demonstrates this on its own now**, which it did not when the test was written:
+    // `stock` is the family of what may lie loose and `resource` is what a recipe may name, and
+    // metal is in both. The poison makes a third, which is what keeps the test about the rule
+    // rather than about the data that happens to satisfy it.
     //
     // **It used to put a scout in `resource` and cannot any more**, which is a later rule
     // arriving rather than this one weakening: `{loose kind:resource}` makes every resource
@@ -483,7 +489,10 @@ fn a_kind_can_belong_to_two_families() {
         .iter()
         .filter(|row| row.relation == "member" && row.value("kind") == Some("30"))
         .count();
-    assert_eq!(how_many, 2, "metal is a resource and a labor, in two rows");
+    assert_eq!(
+        how_many, 3,
+        "metal is a resource, a stock, and now a labor - three rows"
+    );
 }
 
 /// **What the key rule was right about is kept right by marking a column.**
@@ -649,6 +658,35 @@ fn a_rule_that_repeats_and_removes_nothing_is_refused() {
         4,
         "`upkeep`, `perish`, `breed` and `toil` are what repeat"
     );
+}
+
+/// **A family's columns are what its members must have, and this is the check that says so.**
+///
+/// **It had no test until 2026-09-20**, and the mutation sweep is what said so - not directly,
+/// because it cannot see an unwritten check, but by reporting that `stock`'s `quantity` column
+/// could be deleted and nothing failed. **A column of a family is a constraint on membership**, and
+/// a constraint nothing tries to violate is a constraint nobody has checked.
+#[test]
+fn a_member_has_every_column_its_family_declares() {
+    // **A relation that is somewhere and is not a count.** `49` is `stock`, whose members are
+    // metal, food and labour - each of them a `where` and a `quantity`.
+    assert_eq!(
+        with(
+            "{relation id:990 name:floater}
+{column id:990 relation:990 seq:1 name:where}
+{member kind:990 family:49}"
+        )
+        .expect_err("a stock is a number of something, somewhere"),
+        Malformed::UnlikeShape {
+            family: "stock".to_string(),
+            member: "floater".to_string(),
+            column: "quantity".to_string()
+        }
+    );
+
+    // **The control is a relation that has both**, so what is refused above is the missing column
+    // and not the joining.
+    with("{member kind:42 family:49}").expect("a bin is somewhere and is a number of something");
 }
 
 /// **The rules are a tree, and the three ways they could stop being one are refused.**
@@ -840,7 +878,7 @@ fn a_template_and_a_row_written_out_cannot_disagree() {
             .iter()
             .filter(|row| row.relation == "member" && row.value("kind") == Some("30"))
             .count(),
-        2,
+        3,
         "two memberships, not one per member of the family named"
     );
 }
@@ -876,7 +914,7 @@ fn only_what_is_fungible_may_lie_loose() {
     with("{loose kind:42}").expect("a bin is where it is and what it is of, and nothing more");
 
     // **And the loose kinds the game has are accepted**, which is `before()` loading at all:
-    // `{loose kind:resource}` names a family, so `metal` and `food` are both checked and both
+    // `{loose kind:stock}` names a family, so `metal`, `food` and `labor` are all checked and all
     // keyed by `where` alone.
     assert_eq!(
         before()
@@ -885,7 +923,7 @@ fn only_what_is_fungible_may_lie_loose() {
             .iter()
             .filter(|row| row.relation == "loose")
             .count(),
-        2,
-        "two rows - the family, and labour, which is a kind and not a family"
+        1,
+        "one row, naming the family of everything that may lie loose"
     );
 }

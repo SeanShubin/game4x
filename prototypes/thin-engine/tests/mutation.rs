@@ -612,7 +612,7 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// **Marking a deposit's `density` is load-bearing everywhere**: without it `density` rejoins the
 /// deposit's key, the deposit and the extractor stop sharing one, and `{limit held:extractor
 /// by:deposit}` has nothing to compare.
-const DELETABLE: [&str; 11] = [
+const DELETABLE: [&str; 12] = [
     // **One of `breed`'s four bindings is read by nothing**: the one tying the food it consumes to
     // the place it acts in. **No test breeds in two territories at once** - both two-territory
     // tests have run out of food by the time breeding runs - so a pattern naming no place still
@@ -622,6 +622,16 @@ const DELETABLE: [&str; 11] = [
     // value they name is the one telling two rows apart.
     "5 rules.4x literal",
     "2 schema.4x attribute",
+    // **`stock`'s `quantity`, and it is read by `tests/structure.rs` rather than by `data/`.** A
+    // family's columns are what its members must have, so declaring `quantity` is what stops a
+    // relation that is merely somewhere from being a stock - and
+    // `a_member_has_every_column_its_family_declares` is the poison that says so.
+    //
+    // **The sweep cannot see that**, for the same reason it calls `perish`'s name unread: it runs
+    // the `.4x` tests and the reference checks, not the Rust suite. **What this list means is *no
+    // test in `data/` reads it***, and the check that does read it was written because this entry
+    // appeared - the sweep pointing at a column and finding an unwritten test behind it.
+    "1 schema.4x column",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x move",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x scout",
     "1 tests/a-scout-that-has-moved-cannot-move-again.4x move",
@@ -721,8 +731,8 @@ const NOT_LOAD_BEARING: [&str; 42] = [
     // `where` and `perish`'s are the two**, and what their names are for is the friendly notation
     // and a person reading the rule.
     "3 rules.4x input.name",
-    "16 rules.4x input.seq",
-    "4 rules.4x part.seq",
+    "15 rules.4x input.seq",
+    "3 rules.4x part.seq",
     // **`reading.id` was on this list until `upkeep` grew a second reading.** With one row there
     // was nothing for an id to collide with, so changing it to anything at all was unnoticed; with
     // two, taking the other's value is a key the structure refuses. **A thing that was decoration
