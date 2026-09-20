@@ -73,30 +73,71 @@ fn escaped(raw: &str) -> String {
 /// **Whole file, whitespace collapsed.** A comment reworded counts, because in the workflow this
 /// is for it is this lane that rewords it - *I don't want to miss anything*. Only formatting is
 /// ignored, which is what makes a difference a non-syntax one.
+///
+/// # Both sides are labelled, and that is not a flourish
+///
+/// **Only the approved side used to be**, so the other had to be inferred - and with six
+/// near-identical citizen rows on each side there was nothing to infer it from. Sean, 2026-09-20:
+/// *why does the diff section list both sides as not what I read? Shouldn't I have read at least
+/// one of them.* **He had read one of them**, and the report gave him no way to tell which.
+///
+/// # And each line says which section it stands in
+///
+/// **A row in a `given` and the same row in a `then` differ only by a quantity**, so six lines of
+/// citizens were six lines of citizens and telling them apart meant counting. The section is read
+/// off the `{given}`, `{when}`, `{then}` and `{refused}` markers while the file is walked.
+///
+/// **Everything above the first marker is `note`** - the prose that says what the test is for,
+/// which drifts as readily as the rows and matters as much.
 fn review_of(stem: &str) -> (&'static str, Vec<String>) {
     let now = std::fs::read_to_string(mine().join(format!("data/friendly/tests/{stem}.4x")))
         .unwrap_or_default();
     let Ok(read) = std::fs::read_to_string(mine().join(format!("reviewed/{stem}.4x"))) else {
         return ("never reviewed", Vec::new());
     };
-    let bare = |text: &str| -> Vec<String> {
-        text.lines()
-            .map(|l| l.split_whitespace().collect::<Vec<_>>().join(" "))
-            .filter(|l| !l.is_empty())
-            .collect()
+    let bare = |text: &str| -> Vec<(String, String)> {
+        let mut section = "note";
+        let mut out: Vec<(String, String)> = Vec::new();
+        for line in text.lines() {
+            let line = line.split_whitespace().collect::<Vec<_>>().join(" ");
+            if line.is_empty() {
+                continue;
+            }
+            if let Some(marker) = line.strip_prefix('{').and_then(|it| it.strip_suffix('}'))
+                && matches!(marker, "given" | "when" | "then" | "refused")
+            {
+                section = match marker {
+                    "given" => "given",
+                    "when" => "when",
+                    "then" => "then",
+                    _ => "refused",
+                };
+            }
+            out.push((section.to_string(), line));
+        }
+        out
     };
     let (was, is) = (bare(&read), bare(&now));
     if was == is {
         return ("reviewed", Vec::new());
     }
     // **The lines are a hint and the status is the fact.** Equality above catches everything,
-    // ordering included; this set difference is only to show a reader where to look, and a
-    // reordering with no other change would leave it empty while the status still says drifted.
-    let mut said: Vec<String> = is.iter().filter(|l| !was.contains(l)).cloned().collect();
+    // ordering included; this difference is only to show a reader where to look, and a reordering
+    // with no other change would leave it empty while the status still says drifted.
+    //
+    // **A line now carries its section, so the comparison is finer than it was.** A row deleted
+    // from a `then` while an identical row stands in the `given` used to match and be hidden.
+    let shown =
+        |side: &str, (section, line): &(String, String)| format!("{side}: {section:<7} {line}");
+    let mut said: Vec<String> = is
+        .iter()
+        .filter(|it| !was.contains(it))
+        .map(|it| shown("now", it))
+        .collect();
     said.extend(
         was.iter()
-            .filter(|l| !is.contains(l))
-            .map(|l| format!("was: {l}")),
+            .filter(|it| !is.contains(it))
+            .map(|it| shown("was", it)),
     );
     ("drifted", said)
 }
