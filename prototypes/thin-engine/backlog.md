@@ -261,10 +261,10 @@ in.
 **As a rule it is what `upkeep` already is, one trait along:**
 
 ```text
-breed   remove citizen[hunger:0 bearing:1], remove food  ->  add citizen[hunger:0 bearing:0] x2
+breed   remove citizen[hungry:0 bearing:1], remove food  ->  add citizen[hungry:0 bearing:0] x2
 ```
 
-**`bearing` is what stops one citizen breeding with the whole surplus**, the same way `hunger` stops
+**`bearing` is what stops one citizen breeding with the whole surplus**, the same way `hungry` stops
 one citizen eating all the food - and it is a capacity rather than an obligation, so it is a gerund.
 **Removing the parent and adding two is how it gets its own `bearing` spent** without a `put` beside
 a `remove`.

@@ -10,7 +10,7 @@
 #
 # **The fed citizen is in the `given` and not an outcome**, which is the other thing this asserts.
 # Two citizen rows stand in one place, and *remove a citizen* would match both - so the clause says
-# `hunger:1`, and the one that has already eaten is not fed twice. Take that away and the rule is
+# `hungry:1`, and the one that has already eaten is not fed twice. Take that away and the rule is
 # refused for not having said which, rather than feeding whichever row came first.
 
 {test name:one-territorys-food-does-not-feed-anothers-citizens}
@@ -18,10 +18,10 @@
 {given}
 {territory id:1}
 {territory id:2}
-{citizen where:1 hunger:1 quantity:2}
-{citizen where:1 hunger:0 quantity:1}
+{citizen where:1 hungry:1 quantity:2}
+{citizen where:1 hungry:0 quantity:1}
 {food where:1 quantity:1}
-{citizen where:2 hunger:1 quantity:1}
+{citizen where:2 hungry:1 quantity:1}
 {food where:2 quantity:5}
 
 {when}
@@ -30,7 +30,7 @@
 {then}
 {territory id:1}
 {territory id:2}
-{citizen where:1 hunger:1 quantity:1}
-{citizen where:1 hunger:0 quantity:2}
-{citizen where:2 hunger:0 quantity:1}
+{citizen where:1 hungry:1 quantity:1}
+{citizen where:1 hungry:0 quantity:2}
+{citizen where:2 hungry:0 quantity:1}
 {food where:2 quantity:4}

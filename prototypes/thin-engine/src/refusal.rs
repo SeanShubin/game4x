@@ -57,7 +57,7 @@ pub enum Refused {
     /// another. That is nondeterminism and it should be possible to structure the code to make
     /// nondeterminism impossible by raising an error instead.*
     ///
-    /// **A clause reaches this by not naming a trait.** Two citizens differing in `hunger` are two
+    /// **A clause reaches this by not naming a trait.** Two citizens differing in `hungry` are two
     /// rows, and *remove one citizen* does not say which - so the answer is the clause saying more,
     /// not the engine choosing.
     NotOneToTake {

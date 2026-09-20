@@ -226,7 +226,7 @@
 # clause would name no place, match a citizen in every territory at once, and be refused for not
 # having said which - `Refused::NotOneToTake`.
 #
-# **Both clauses name every trait they mean.** `hunger:1` is what makes one of the two citizen rows
+# **Both clauses name every trait they mean.** `hungry:1` is what makes one of the two citizen rows
 # in a place the one meant, and it is why nothing here has to choose.
 
 {rule id:8 name:upkeep}
@@ -250,7 +250,7 @@
 {literal id:26 clause:23 column:131 value:0}
 {literal id:27 clause:23 column:132 value:1}
 
-# **`perish` is the consequence `hunger` does not carry.** A trait says what a thing may do; what
+# **`perish` is the consequence `hungry` does not carry.** A trait says what a thing may do; what
 # happens to a thing that did not is a step of the turn, with a name a player can read.
 #
 # **It takes the row rather than one of them**, which is what a `remove` clause naming no quantity

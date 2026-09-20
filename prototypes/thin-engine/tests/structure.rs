@@ -606,7 +606,7 @@ fn a_trait_and_the_column_that_holds_it_are_checked_both_ways() {
             .filter(|row| row.relation == "carries")
             .count(),
         5,
-        "unit, scout and transport carry `moving`; extractor carries `working`; citizen carries `hunger`"
+        "unit, scout and transport carry `moving`; extractor carries `working`; citizen carries `hungry`"
     );
 }
 

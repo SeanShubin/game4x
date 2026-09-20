@@ -2865,8 +2865,8 @@ specification by promotion through the spec lane, the normal way - building it d
 rules, two words and one citizen:
 
 ```text
-upkeep   remove citizen[hunger:1], remove food  ->  add citizen[hunger:0]      repeats, per territory
-perish   remove citizen[hunger:1]               ->  gone                       repeats, per territory
+upkeep   remove citizen[hungry:1], remove food  ->  add citizen[hungry:0]      repeats, per territory
+perish   remove citizen[hungry:1]               ->  gone                       repeats, per territory
 
 adjust-population
     1. upkeep
@@ -2962,7 +2962,7 @@ of Sean's loop - *each remaining (citizen, food) produces an additional citizen*
 what kept this increment's tests about hunger, and `backlog.md` carries the design.
 
 **`Refused::NotOneToTake` is still reachable by no rule.** Every clause names every trait it means,
-which is exactly what avoids it - `hunger:1` is what makes one of two citizen rows in a place the
+which is exactly what avoids it - `hungry:1` is what makes one of two citizen rows in a place the
 one meant. It is a refusal that exists so that a clause which says too little fails loudly, and
 nothing says too little yet.
 
@@ -2983,7 +2983,7 @@ binding away and the pattern still matched exactly one row. **So the order test 
 territory**, and without the binding it is now refused for matching two hungry citizens and not
 saying which.
 
-**A literal that no test needed.** `upkeep`'s remove names `hunger:1`, and no world reached the
+**A literal that no test needed.** `upkeep`'s remove names `hungry:1`, and no world reached the
 state where that matters: a firing's output is held aside, so the pool never holds a fed citizen
 and a hungry one at once. **So the scope test now starts with a fed citizen in its `given`** rather
 than producing one, and the literal is what keeps it from being fed twice.

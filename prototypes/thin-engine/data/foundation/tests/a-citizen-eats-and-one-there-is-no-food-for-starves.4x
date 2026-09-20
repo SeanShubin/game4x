@@ -15,7 +15,7 @@
 
 {given}
 {territory id:1}
-{citizen where:1 hunger:1 quantity:3}
+{citizen where:1 hungry:1 quantity:3}
 {food where:1 quantity:2}
 
 {when}
@@ -23,4 +23,4 @@
 
 {then}
 {territory id:1}
-{citizen where:1 hunger:1 quantity:2}
+{citizen where:1 hungry:1 quantity:2}

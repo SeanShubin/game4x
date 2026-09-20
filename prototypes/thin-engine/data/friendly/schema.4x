@@ -614,15 +614,28 @@
 # **A citizen is not one person.** `spec/population.md`: *It is the smallest group that can sustain
 # reproduction.* A count of them is a density across a territory, the same way a deposit is.
 #
-# **`hunger` is an obligation where `moving` and `working` are capacities.** The machinery is the
+# **`hungry` is an obligation where `moving` and `working` are capacities.** The machinery is the
 # same - one per turn, restored by the turn, spent by acting - and the difference is what unspent
 # means: a scout that did not move is fine, and a citizen that did not eat is dead.
 #
 # **That consequence lives in `perish`**, a named step of the turn, rather than in the trait. Sean,
 # 2026-09-19: *Hungry seems like not so much a capacity as it does a need, it seems the difference
-# is relevant and why it doesn't read as well as bearing.* **So the grammar says which it is**: a
-# capacity is a gerund - `moving`, `working` - and an obligation is a noun. A citizen *has a
-# hunger*, and discharges it by eating.
+# is relevant and why it doesn't read as well as bearing.*
+#
+# **It was `hunger` for a day, and a noun was the wrong part of speech.** The rule that chose it
+# was sound - a capacity is a gerund, `moving` and `working` and `bearing`, and an obligation is
+# not one - but **a noun takes an amount**. `hunger:1` reads as *how much a citizen eats*, which is
+# the one thing it does not mean: every citizen eats exactly one food and the trait is one bit.
+#
+# **An adjective cannot be misread that way.** You can have two hunger; you cannot be two hungry.
+# **The evidence is as good as naming evidence gets** - Sean read it back as *so hunger is how much
+# a citizen eats?* on 2026-09-20, having been handed the model the day before. A name that misleads
+# the person it was explained to is a name that misleads.
+#
+# **The distinction the noun was for survives**, because an adjective among gerunds is still a
+# visibly different part of speech. **What it costs is the turn**: `refresh what:citizen
+# trait:hungry` reads less well than *restore hunger* - one use against the two clauses that match
+# on it, which is why it was the trade to take.
 #
 # **`{state ...}` says a citizen is something a world holds**, which two things read: templating,
 # so that a row naming a family becomes one per member, and the test harness, which refuses a
@@ -632,13 +645,13 @@
 {relation id:47 name:citizen}
 
 {column id:130 relation:citizen seq:1 name:where}
-{column id:131 relation:citizen seq:2 name:hunger}
+{column id:131 relation:citizen seq:2 name:hungry}
 {column id:132 relation:citizen seq:3 name:quantity}
 
 {reference id:69 column:130 to:territory}
 
 {state id:17 relation:citizen}
 
-{trait id:3 name:hunger}
+{trait id:3 name:hungry}
 
-{carries kind:citizen trait:hunger}
+{carries kind:citizen trait:hungry}
