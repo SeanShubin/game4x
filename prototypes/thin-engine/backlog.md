@@ -644,6 +644,32 @@ names the container where one more of them could have stood, and the capacity wh
 **Both existing refusal tests kept their `{refused}` row unchanged**, which is what said the
 arithmetic had not moved.
 
+## Soft caps at room, and `stands-in` is not a room
+
+**The deposit limit was the first non-room check a soft line could not consult, and it is not the
+last.** `{stands-in kind:extractor per:place layer:surface}` refuses a world where an extractor
+stands in an orbit, and `room_for` reads `rooming` and nothing else - so a soft add into a place
+the kind may not stand in would be capped at whatever room was there and then refused outright.
+**Softness would not save it**, which is the whole thing softness is for.
+
+**Nothing can reach it today.** `deploy` requires `layer:surface` of the place it builds on, so no
+rule aims a soft line at an orbit. **So this is where to look rather than a defect** - it has
+caught nothing, and it is written down because the last instance of the same shape cost an
+increment to fold away.
+
+**The fold is not available this time.** A deposit's limit folded because it was arithmetic wearing
+a different hat; where a kind may stand is not an amount, and a capacity of zero would say *no room
+here* where the truth is *not here, at any number*. **A soft line would have to ask both questions**,
+which is a third reading of what fits and the thing `rooming` exists to prevent - or `room_for`
+returns zero for a kind that may not stand there, which is one reading answering two questions and
+is probably the right answer.
+
+**Sean asked the question that found it**, 2026-09-20: *I don't want extractors in orbit, would it
+make sense to replace `per:place` with `per:territory`?* It would not - `per` says where room is
+counted and not where a thing may stand, and `extractor` has no column pointing at a territory, so
+the question would count nothing and extractors would be unbounded. **Measured**: making that
+change in one test prints *nothing was refused*.
+
 ## Smaller things, each with the reason it is not done
 
 **A constant limit of the plain sort.** `{limit container:territory contained:garrison n:1}` -
