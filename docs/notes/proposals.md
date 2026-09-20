@@ -69,6 +69,42 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-138 - `pad-tables` writes into `temporary-notes/`, and this lane found it by doing it
+
+**to** code · **status** open · **raised** 2026-09-20 · **source** observed
+
+**`CLAUDE.md`: *`temporary-notes/` is Sean's and no instance writes there*.** `scripts/pad-tables.sh`
+does, and any lane that runs the padder before an edit - which `CLAUDE.md` also tells it to do -
+writes there without intending to.
+
+```
+$ bash scripts/pad-tables.sh
+  Padded: D:/keep/github/sean/game4x\temporary-notes\first-test.md
+1 file(s).
+```
+
+**Measured just now by this lane, which reformatted that file.** It is untracked, so there is no
+diff and no restoring it; what changed is markdown table column widths and nothing else. Sean has
+been told.
+
+## Why nothing caught it
+
+`tools/pad-tables/src/main.rs:8` states the walk: *walking skips `.git`, `target`, `node_modules`,
+and any dot-prefixed directory.* **`temporary-notes/` is in none of those classes**, and the
+directory it must not touch is the one the rule names rather than one a path pattern excludes.
+
+**The padder predates the rule** - `CLAUDE.md` records it as written from this lane before the
+split existed - so this is a rule arriving after a tool rather than a tool breaking one.
+
+## What is yours
+
+`tools/` that is not a lane's own is the code lane's, and so is the fix. **The obvious one is to
+skip `temporary-notes/` by name**; whether anything else deserves the same treatment is a question
+about the walk rather than about this directory, and this lane is not answering it.
+
+**A check would be a padder run asserting that no file under `temporary-notes/` is touched** - and
+it cannot be written as a count over the tree, because the directory is untracked and can be empty.
+
 ### S-137 - `C-128` is read and implies no proposal, and re-deriving it found two things that did
 
 **to** code · **status** acted · **acted** 2026-09-14 · **cited** `78159640` · **raised** 2026-09-14 · **source** `C-128`

@@ -11,6 +11,54 @@ of it needs you.
 
 ## Open
 
+### P-520 - `R-6` says it is built, and eleven lines down says this lane has not recorded it as such
+
+**to** sean · **status** open · **raised** 2026-09-20 · **kind** measured · **shape** text · **asks** approval · **into** `releases/first-release.md` -> R-6
+
+**One item makes both claims.** Found reading the queue for what is open and addressed to you.
+
+```
+first-release.md:404   **to** sean - **status** **built** 2026-09-11
+first-release.md:434   **The code lane does not set this `built` and this lane has not
+                       recorded it as such.**
+```
+
+## The measurement is sound and the sentence wrapped around it is about a wording you deleted
+
+At `21deef50` the *vetted when* read *a scenario reaches a fully exploited planet and launches an
+Ark*. **Its first half was the fully exploited planet**, and `C-95` measured that it did not hold.
+
+**Then the clause changed and the item did not.** The *vetted when* now says the scenario takes a
+first territory from orbit, takes a second by land, launches an Ark, and **does not win** - *and
+that is the win condition working*. `R-6` went to `built` in `2c89457d`, thirty-six commits after
+`21deef50` and on the same day. **The bullet was never touched.**
+
+**So the numbers in it are still true and both sentences around them are not**: the half it says
+fails is a half that no longer exists, and the failure it once recorded is now the capability
+working.
+
+**Re-derived here rather than taken from the item**: `{deploy-ark territory:1}` at
+`scenario/commands/play.4x:19`, `{found-by-land territory:2}` at `:154`, `{launch-ark territory:1}`
+at `:164`.
+
+## What lands
+
+The bullet at lines 430 to 434 becomes:
+
+> - **Measured 2026-09-11.** `C-95`, in `d7ed1e8`: running `setup.4x`, `{start}` and `play.4x` and
+>   asking the model gives **twelve claimable territories, two founded, none at maximum output**,
+>   with `is_fully_exploited` and `has_won` both false. It does launch an Ark, at line 164 of a
+>   133-command scenario. **Measured against a *vetted when* that has since changed** - it asked
+>   for a fully exploited planet, and yours asks that the scenario launch and not win, which is
+>   what these numbers show.
+
+## What it costs
+
+**Nothing left in the file will say `R-6` was once measured as unbuilt.** That record is in
+`21deef50` and in the history, and not in front of a reader of the release. **If you would rather
+it stayed visible, the other version keeps both sentences and marks them superseded** - longer, and
+it leaves a *not built* in an item whose status line says built.
+
 ### P-519 - One clause is stated twice in `spec/console.md`, and the invariants forbid exactly that
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
