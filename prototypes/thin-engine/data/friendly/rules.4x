@@ -172,10 +172,12 @@
 
 {part id:4 of:end-turn is:upkeep seq:1 name:part-4}
 {part id:6 of:end-turn is:perish seq:2 name:part-6}
-{part id:3 of:end-turn is:discard-disorder seq:3 name:part-3}
-{part id:1 of:end-turn is:refresh seq:4 name:part-1}
-{part id:2 of:end-turn is:refresh seq:5 name:part-2}
-{part id:5 of:end-turn is:refresh seq:6 name:part-5}
+{part id:7 of:end-turn is:breed seq:3 name:part-7}
+{part id:3 of:end-turn is:discard-disorder seq:4 name:part-3}
+{part id:1 of:end-turn is:refresh seq:5 name:part-1}
+{part id:2 of:end-turn is:refresh seq:6 name:part-2}
+{part id:5 of:end-turn is:refresh seq:7 name:part-5}
+{part id:8 of:end-turn is:refresh seq:8 name:part-8}
 
 {argument id:1 part:part-1 input:what value:unit}
 {argument id:2 part:part-1 input:trait value:moving}
@@ -183,6 +185,8 @@
 {argument id:4 part:part-2 input:trait value:working}
 {argument id:5 part:part-5 input:what value:citizen}
 {argument id:6 part:part-5 input:trait value:hungry}
+{argument id:7 part:part-8 input:what value:citizen}
+{argument id:8 part:part-8 input:trait value:bearing}
 
 # **`build-bin` says nothing about how many will fit**, the same way `build-extractor` says
 # nothing about deposits. That a territory has room for only so many is a fact about the world,
@@ -250,6 +254,16 @@
 # **Both clauses name every trait they mean.** `hungry:1` is what makes one of the two citizen rows
 # in a place the one meant, and it is why nothing here has to choose.
 
+# **Its `add` reads the parent's `bearing` rather than stating one.** A citizen carries two traits
+# now, and an `add` must name every column - so eating has to say what the fed citizen's `bearing`
+# is. **Writing `1` would be right only because the turn restores it last**, and would quietly hand
+# a free breeding to any citizen that ate with its bearing already spent.
+#
+# **So a `require` goes first, to be read from.** It is the shape `work` already uses to produce
+# *the density here* rather than a number somebody typed, and it puts the coupling where it can
+# fail loudly: two citizen rows differing in `bearing` make the reading ambiguous, and `NotOne`
+# says so instead of the engine picking one.
+
 {rule id:8 name:upkeep}
 
 {input id:15 rule:upkeep seq:1 name:where of:territory}
@@ -257,19 +271,24 @@
 {scope rule:upkeep input:where}
 {repeats rule:upkeep}
 
-{clause id:21 rule:upkeep seq:1 role:remove relation:citizen name:clause-21}
-{clause id:22 rule:upkeep seq:2 role:remove relation:food name:clause-22}
-{clause id:23 rule:upkeep seq:3 role:add relation:citizen name:clause-23}
+{clause id:28 rule:upkeep seq:1 role:require relation:citizen name:clause-28}
+{clause id:21 rule:upkeep seq:2 role:remove relation:citizen name:clause-21}
+{clause id:22 rule:upkeep seq:3 role:remove relation:food name:clause-22}
+{clause id:23 rule:upkeep seq:4 role:add relation:citizen name:clause-23}
 
+{binding id:41 clause:clause-28 column:130 input:where}
 {binding id:34 clause:clause-21 column:130 input:where}
 {binding id:35 clause:clause-22 column:82 input:where}
 {binding id:36 clause:clause-23 column:130 input:where}
 
+{literal id:36 clause:clause-28 column:131 value:1}
 {literal id:23 clause:clause-21 column:131 value:1}
 {literal id:24 clause:clause-21 column:132 value:1}
 {literal id:25 clause:clause-22 column:83 value:1}
 {literal id:26 clause:clause-23 column:131 value:0}
 {literal id:27 clause:clause-23 column:132 value:1}
+
+{reading id:2 clause:clause-23 column:133 of:clause-28 takes:133}
 
 # **`perish` is the consequence `hungry` does not carry.** A trait says what a thing may do; what
 # happens to a thing that did not is a step of the turn, with a name a player can read.
@@ -311,3 +330,43 @@
 # hungry and has a `bearing` makes another. It is the half of `spec/turn.md`'s second step that
 # grows where `perish` shrinks, and keeping it out is what keeps this increment's tests about
 # hunger.
+
+# **`breed` is `spec/turn.md`'s second step, the half that grows**: *a population grows on surplus
+# food or starves for want of it.* `perish` is the other half, and the two are neighbours in the
+# turn because the document puts them in one step.
+#
+# **Excess is a position in the order and not a comparison.** Whatever food is standing when this
+# runs is by construction the surplus - `upkeep` has already taken what the citizens owed - so
+# nothing anywhere subtracts, and nothing asks whether there is more food than citizens.
+#
+# **The parent is consumed and returns as one of two.** That is what spends its `bearing` without a
+# `put` beside a `remove`, and it is why no citizen breeds twice in a turn. Sean, 2026-09-19, on
+# the loop: *each remaining (citizen, food) produces an additional citizen.*
+#
+# **So the increase is the smaller of the food to spare and the citizens that can bear**, and
+# nothing computes a minimum: it repeats until one of the two clauses stops matching. Three
+# citizens and ten food give six; three and five give five; three and two give two, because one
+# starved and none bred.
+
+{rule id:10 name:breed}
+
+{input id:17 rule:breed seq:1 name:where of:territory}
+
+{scope rule:breed input:where}
+{repeats rule:breed}
+
+{clause id:25 rule:breed seq:1 role:remove relation:citizen name:clause-25}
+{clause id:26 rule:breed seq:2 role:remove relation:food name:clause-26}
+{clause id:27 rule:breed seq:3 role:add relation:citizen name:clause-27}
+
+{binding id:38 clause:clause-25 column:130 input:where}
+{binding id:39 clause:clause-26 column:82 input:where}
+{binding id:40 clause:clause-27 column:130 input:where}
+
+{literal id:29 clause:clause-25 column:131 value:0}
+{literal id:30 clause:clause-25 column:133 value:1}
+{literal id:31 clause:clause-25 column:132 value:1}
+{literal id:32 clause:clause-26 column:83 value:1}
+{literal id:33 clause:clause-27 column:131 value:0}
+{literal id:34 clause:clause-27 column:133 value:0}
+{literal id:35 clause:clause-27 column:132 value:2}

@@ -605,8 +605,9 @@ fn a_trait_and_the_column_that_holds_it_are_checked_both_ways() {
             .iter()
             .filter(|row| row.relation == "carries")
             .count(),
-        5,
-        "unit, scout and transport carry `moving`; extractor carries `working`; citizen carries `hungry`"
+        6,
+        "unit, scout and transport carry `moving`; extractor carries `working`; citizen carries
+         `hungry` and `bearing`"
     );
 }
 
@@ -645,8 +646,8 @@ fn a_rule_that_repeats_and_removes_nothing_is_refused() {
             .iter()
             .filter(|row| row.relation == "repeats")
             .count(),
-        2,
-        "`upkeep` and `perish` are what repeat"
+        3,
+        "`upkeep`, `perish` and `breed` are what repeat"
     );
 }
 
@@ -734,9 +735,9 @@ fn the_tree_is_what_the_file_says_it_is() {
         .collect();
     assert_eq!(
         rules.len(),
-        9,
+        10,
         "move, build-extractor, work, refresh, end-turn, build-bin, discard-disorder,
-         upkeep, perish"
+         upkeep, perish, breed"
     );
     // **At least once, not exactly once.** `refresh` appears twice because `end-turn` names it
     // twice - two steps of one order - and asserting *once* said the tree was wrong when it was
@@ -749,8 +750,8 @@ fn the_tree_is_what_the_file_says_it_is() {
     }
     assert_eq!(
         shown.matches("refresh").count(),
-        3,
-        "and refresh is there three times, once per trait the turn restores"
+        4,
+        "and refresh is there four times, once per trait the turn restores"
     );
 
     // **And a step the engine fans out says so.** `upkeep` and `perish` are handed nothing, so
@@ -758,8 +759,8 @@ fn the_tree_is_what_the_file_says_it_is() {
     // person reading it would get wrong.
     assert_eq!(
         shown.matches("per:territory").count(),
-        2,
-        "`upkeep` and `perish` each happen once per territory"
+        3,
+        "`upkeep`, `perish` and `breed` each happen once per territory"
     );
 }
 

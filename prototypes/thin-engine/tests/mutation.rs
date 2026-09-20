@@ -612,8 +612,14 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// deposit's key, the deposit and the extractor stop sharing one, and `{limit held:extractor
 /// by:deposit}` has nothing to compare.
 const DELETABLE: [&str; 10] = [
-    "5 rules.4x binding",
-    "3 rules.4x literal",
+    // **One of `breed`'s four bindings is read by nothing**: the one tying the food it consumes to
+    // the place it acts in. **No test breeds in two territories at once** - both two-territory
+    // tests have run out of food by the time breeding runs - so a pattern naming no place still
+    // found exactly one food row. `backlog.md` carries it as a test worth writing.
+    "6 rules.4x binding",
+    // **And two of `breed`'s literals**, the same shape of gap: no world states the case where the
+    // value they name is the one telling two rows apart.
+    "5 rules.4x literal",
     "2 schema.4x attribute",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x move",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x scout",
@@ -696,21 +702,21 @@ fn no_value_can_be_changed_without_breaking_something() {
 ///
 /// **A `moving` that never moves is the other shape here.** The berth tests hold vehicles to count
 /// them, not to move them, so what those rows say about moves is read by nothing.
-const NOT_LOAD_BEARING: [&str; 25] = [
+const NOT_LOAD_BEARING: [&str; 26] = [
     // **The one `assigns` row's id is read by nothing.** There were two, and changing one id
     // to the other's collided on the key; with one row there is nothing to collide with.
     // **`assigns` may not need an `id` at all** - keyed by `(clause, input, value)` it could not
     // state two assignments of one input on one clause, which is the rule rather than a
     // restriction. That is in `backlog.md` rather than done here.
     "1 rules.4x assigns.id",
-    "20 rules.4x clause.seq",
+    "24 rules.4x clause.seq",
     // **A scoped input's name is read by nothing, and the other eleven are read by name.** A
     // command finds its argument by the input's name and so does a part; an input the engine fills
     // is looked up by neither, because nothing outside the engine ever names it. **So `upkeep`'s
     // `where` and `perish`'s are the two**, and what their names are for is the friendly notation
     // and a person reading the rule.
-    "2 rules.4x input.name",
-    "13 rules.4x input.seq",
+    "3 rules.4x input.name",
+    "14 rules.4x input.seq",
     // **Three of the six parts' `seq` are read by something and three are not.** This entry said
     // *neither of the two* until 2026-09-19, and predicted which step would change it - *upkeep
     // must be paid before a population grows on what is left*, which is what landed.
@@ -727,10 +733,15 @@ const NOT_LOAD_BEARING: [&str; 25] = [
     // **So the turn states six steps of order and enforces one of them.** That is worth saying
     // rather than letting `tree.txt` imply the rest is holding something up.
     "3 rules.4x part.seq",
-    "1 rules.4x reading.id",
+    // **`reading.id` was on this list until `upkeep` grew a second reading.** With one row there
+    // was nothing for an id to collide with, so changing it to anything at all was unnoticed; with
+    // two, taking the other's value is a key the structure refuses. **A thing that was decoration
+    // stopped being decoration**, and nothing but the sweep would have said so.
+    //
     // **`perish` is never fired by name, and it is the only rule that is not.** A rule's name is
-    // read when a command names it, and `perish` is reached only through `adjust-population` - so
-    // renaming it changes nothing any `.4x` test can see.
+    // read when a command names it, and `perish` is reached only through the turn - so renaming it
+    // changes nothing any `.4x` test can see. **`breed` is fired by name** and `upkeep` is, which
+    // is why this is one and not three.
     //
     // **It is not decoration, and the sweep cannot say so.** `tree.txt` prints it, and
     // `the_tree_is_what_the_file_says_it_is` compares that file - but the sweep runs the `.4x`
@@ -738,6 +749,12 @@ const NOT_LOAD_BEARING: [&str; 25] = [
     // `data/` reads it***, which is narrower than *nothing reads it*.
     "1 rules.4x rule.name",
     "1 schema.4x supply.name",
+    // **A `bearing` no world reads, in the two tests where nothing breeds.** Both run out of food
+    // before `breed` reaches them, so whether their citizens could bear never comes up - and a
+    // world row must name every column its relation declares, so the value has to be *something*.
+    // **This is the schema forcing a value rather than a test stating one**, which is the same
+    // reason a spent scout's quantity is further down this list.
+    "1 tests/a-citizen-eats-and-one-there-is-no-food-for-starves.4x citizen.bearing",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x scout.quantity",
     "1 tests/a-scout-cannot-move-where-every-berth-is-taken.4x adjacency.id",
     "1 tests/a-scout-cannot-move-where-every-berth-is-taken.4x transport.moving",
@@ -750,6 +767,7 @@ const NOT_LOAD_BEARING: [&str; 25] = [
     "2 tests/one-extractors-readiness-is-not-anothers.4x deposit.density",
     "2 tests/one-extractors-readiness-is-not-anothers.4x extractor.quantity",
     "2 tests/one-extractors-readiness-is-not-anothers.4x extractor.working",
+    "2 tests/the-hungry-perish-after-upkeep-and-not-before.4x citizen.bearing",
     "1 tests/the-same-free-space-admits-one-kind-and-refuses-another.4x adjacency.id",
     "1 tests/the-same-free-space-admits-one-kind-and-refuses-another.4x scout.moving",
     "1 tests/the-same-free-space-admits-one-kind-and-refuses-another.4x transport.moving",

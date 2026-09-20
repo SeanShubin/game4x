@@ -51,12 +51,12 @@ holds a kind is a store for that kind.*
 ones, and the world's are the whole automatic half of the game: upkeep, breed, perish, age, spoil,
 refresh, muster, hold, reclaim, renew, take.
 
-**Three and a half of `spec/turn.md`'s five steps are built.** *Time restores every count* is
-`refresh`; *what was not kept in order is lost* is `discard-disorder`; *upkeep is paid* is
-`upkeep`, and the starving half of *a population grows on surplus food or starves for want of it*
-is `perish`. Still missing: **breeding**, and *nature takes back what is no longer held*. **Each is
-a rule the order has room for**, which is what the tree buys - adding one is a `{part ...}` row and
-a leaf, not a change to `end-turn`.
+**Four of `spec/turn.md`'s five steps are built.** *Time restores every count* is `refresh`;
+*what was not kept in order is lost* is `discard-disorder`; *upkeep is paid* is `upkeep`; and *a
+population grows on surplus food or starves for want of it* is `breed` and `perish`, which are one
+step in that document and two neighbouring rules here. **Only *nature takes back what is no longer
+held* is missing**, and the order has room for it - adding one is a `{part ...}` row and a leaf,
+not a change to `end-turn`.
 
 **`{part ... seq:N}` is load-bearing now**, which this said upkeep would be the thing to make it -
 and it was, though by a different pairing. It is `upkeep` before `perish` inside
@@ -249,19 +249,30 @@ amounts it was added for. It is how a step of the turn does nothing in a world i
 in.
 
 
-## Breeding, which is the half of the loop that is not built
+## Breeding, built 2026-09-20, and the two tests it still wants
 
-**Sean's loop, 2026-09-19**, of which the first three lines are built and the fourth is not:
+**Sean's loop, 2026-09-19**, of which everything but the food extractor is now the turn:
 
 > citizen works food extractor / food extractor generates enough food for more than one citizen /
 > each citizen cosumes 1 food or perishes / **each remaining (citizen, food) produces an additional
 > citizen**
 
-**As a rule it is what `upkeep` already is, one trait along:**
+**It is what `upkeep` already is, one trait along, and it landed as written:**
 
 ```text
 breed   remove citizen[hungry:0 bearing:1], remove food  ->  add citizen[hungry:0 bearing:0] x2
 ```
+
+**Two things the mutation sweep says no test reaches**, both the same shape and both worth a test
+rather than a shrug:
+
+- **`breed`'s food binding** - the clause tying the food it consumes to the place it acts in. Both
+  two-territory tests have run out of food by the time breeding runs, so nothing states a world
+  where breeding happens in two places at once and the surplus must not travel. **`upkeep` has
+  exactly that test** - `one-territorys-food-does-not-feed-anothers-citizens` - and breeding has
+  no equivalent.
+- **Two of `breed`'s literals**, for want of a world where the value they name is what tells two
+  citizen rows apart.
 
 **`bearing` is what stops one citizen breeding with the whole surplus**, the same way `hungry` stops
 one citizen eating all the food - and it is a capacity rather than an obligation, so it is a gerund.
@@ -272,8 +283,13 @@ a `remove`.
 rather than a comparison: whatever food is left when breeding runs is by construction the surplus.
 The increase is `min(food to spare, citizens that can bear)` with nothing computing a minimum.
 
-**What it costs every citizen row is a second trait**, and every clause that names a citizen has to
-name it - which is the churn this increment deliberately did not pay while nothing needed it.
+**What it cost every citizen row is a second trait**, and it cost `upkeep` a clause. An `add`
+must name every column, so eating had to say what the fed citizen's `bearing` is - and writing `1`
+would have been correct only because the turn restores it last, quietly handing a free breeding to
+any citizen that ate with its bearing already spent. **So `upkeep` reads the parent's bearing from
+a `require`**, which is the shape `work` uses for a deposit's density, and the coupling fails loudly
+instead of silently: two citizen rows differing in `bearing` make the reading ambiguous and `NotOne`
+says so.
 
 **Sean, 2026-09-19, on keeping the two apart**: *keeping breeding and hunger separate is the right
 call, the apparent connection is coincidental.*

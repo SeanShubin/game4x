@@ -18,10 +18,10 @@
 {given}
 {territory id:1 name:territory-1}
 {territory id:2 name:territory-2}
-{citizen where:territory-1 hungry:1} -> 2
-{citizen where:territory-1 hungry:0} -> 1
+{citizen where:territory-1 hungry:1 bearing:1} -> 2
+{citizen where:territory-1 hungry:0 bearing:1} -> 1
 {food where:territory-1} -> 1
-{citizen where:territory-2 hungry:1} -> 1
+{citizen where:territory-2 hungry:1 bearing:1} -> 1
 {food where:territory-2} -> 5
 
 {when}
@@ -30,7 +30,7 @@
 {then}
 {territory id:1 name:territory-1}
 {territory id:2 name:territory-2}
-{citizen where:territory-1 hungry:1} -> 1
-{citizen where:territory-1 hungry:0} -> 2
-{citizen where:territory-2 hungry:0} -> 1
+{citizen where:territory-1 hungry:1 bearing:1} -> 1
+{citizen where:territory-1 hungry:0 bearing:1} -> 2
+{citizen where:territory-2 hungry:0 bearing:1} -> 1
 {food where:territory-2} -> 4

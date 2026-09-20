@@ -1,0 +1,31 @@
+# The whole loop in one turn: three citizens and ten food become six citizens and four food.
+#
+# **This is Sean's core loop**, 2026-09-19: *citizen works food extractor / food extractor generates
+# enough food for more than one citizen / each citizen cosumes 1 food or perishes / each remaining
+# (citizen, food) produces an additional citizen.* The first two are `work`, which this test does
+# not fire; the last two are the turn.
+#
+# **Three eaten and three bred is six taken from ten.** `upkeep` fires three times and stops when
+# the citizens run out, and `breed` fires three times and stops for the same reason - there is food
+# for seven more and nobody left to bear.
+#
+# **Nothing computes the six.** Each firing takes one citizen and one food and gives two citizens
+# back, and how many times it fired is the whole of the arithmetic.
+#
+# **The survivors are fertile and hungry again**, because the turn restores every count last - so
+# the world is in the shape it started in, with twice the citizens and less food.
+
+{test name:three-citizens-and-ten-food-become-six}
+
+{given}
+{territory id:1 name:territory-1}
+{citizen where:territory-1 hungry:1 bearing:1} -> 3
+{food where:territory-1} -> 10
+
+{when}
+{end-turn}
+
+{then}
+{territory id:1 name:territory-1}
+{citizen where:territory-1 hungry:1 bearing:1} -> 6
+{food where:territory-1} -> 4

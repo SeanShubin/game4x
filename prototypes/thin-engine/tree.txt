@@ -10,9 +10,11 @@ work  where:territory what:resource
 end-turn
     1. upkeep  per:territory
     2. perish  per:territory
-    3. discard-disorder
-    4. refresh  what:unit trait:moving
-    5. refresh  what:extractor trait:working
-    6. refresh  what:citizen trait:hungry
+    3. breed  per:territory
+    4. discard-disorder
+    5. refresh  what:unit trait:moving
+    6. refresh  what:extractor trait:working
+    7. refresh  what:citizen trait:hungry
+    8. refresh  what:citizen trait:bearing
 
 build-bin  where:territory what:resource

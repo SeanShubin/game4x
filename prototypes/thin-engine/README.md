@@ -3087,3 +3087,78 @@ running the suite:
 mutations are bigger moves than a swap: `mutated` sorts after every digit, so a part goes last, and
 taking another row's value puts two parts on one number. **Both numbers are in
 `tests/mutation.rs` and neither is offered as the other.**
+
+
+## Breeding, and the clause it cost `upkeep`
+
+**Sean, 2026-09-20**: *starvation looks good, now lets move on to breeding.* One rule, and it is
+`upkeep` one trait along:
+
+```text
+breed   remove citizen[hungry:0 bearing:1], remove food  ->  add citizen[hungry:0 bearing:0] x2
+        repeats, per territory
+```
+
+| start               | after one turn      | bound by                                                            |
+| ------------------- | ------------------- | ------------------------------------------------------------------- |
+| 3 citizens, 10 food | 6 citizens, 4 food  | the citizens - there is food for seven more and nobody left to bear |
+| 3 citizens, 5 food  | 5 citizens, no food | the food                                                            |
+| 3 citizens, 2 food  | 2 citizens          | one starved and none bred                                           |
+
+**The increase is `min(food to spare, citizens that can bear)`, and nothing computes a minimum.**
+The rule cannot tell which bound it hit and does not need to: it fires until a clause stops
+matching, and how often it fired is the whole of the arithmetic.
+
+**Excess is a position in the order rather than a comparison.** Whatever food is standing when
+breeding runs is by construction the surplus, because `upkeep` has already taken what the citizens
+owed. Nothing subtracts, and nothing asks whether there is more food than citizens.
+
+## `bearing`, and why the parent is consumed
+
+**`bearing` is a capacity where `hungry` is an obligation**, which the grammar says: a gerund for
+something a thing may do, an adjective for something it owes.
+
+**The parent is removed and returns as one of two**, with its bearing spent. That is what stops one
+citizen breeding with the whole surplus, exactly as `hungry` stops one eating all the food - and
+**it is what replaces `borrow` and the mainline's `fertility` token**. A borrowed citizen can be
+borrowed again; a consumed one that comes back spent cannot. Sean, 2026-09-19, choosing:
+*clarity is more important than conciseness, so yes, lets not have borrow, and lean on traits.*
+
+**So *at most doubling* is stated nowhere.** It falls out of the rule consuming the citizen it
+breeds from, and `breeding-does-not-reach-the-citizens-it-just-made` is where it can be seen: fired
+on its own, breeding stops at two with three food standing. **That test fires `breed` by hand for a
+reason** - in a whole turn the last two steps restore both traits and every citizen looks alike
+again, so a spent `bearing` is unreadable anywhere else.
+
+## What it cost `upkeep`, which is the part worth reading
+
+**A citizen now carries two traits, so a place can hold two citizen rows**, and an `add` must name
+every column. So eating had to say what the fed citizen's `bearing` is.
+
+**Writing `1` would have been correct only because the turn restores it last.** It would have
+handed a free breeding to any citizen that ate with its bearing already spent - a bug held off by
+an invariant maintained in a different rule, which is the kind that survives until it does not.
+
+**So `upkeep` reads the parent's bearing instead**, using the shape `work` already had for a
+deposit's density:
+
+```text
+require citizen[hungry:1]                    <- matches one row, and is read from
+remove  citizen[hungry:1] x1
+remove  food x1
+add     citizen[hungry:0 bearing:<from the require>] x1
+```
+
+**That moves the coupling to where it fails loudly.** Two citizen rows differing in `bearing` make
+the reading ambiguous, and `NotOne` says so rather than the engine picking one. **The invariant is
+still there and is no longer load-bearing in silence.**
+
+## And a thing that stopped being decoration
+
+**`reading.id` had been on the sweep's unread list** since readings existed: with one row there was
+nothing for an id to collide with, so changing it to anything at all was unnoticed. **`upkeep`'s
+second reading ended that** - taking the other's value is now a key the structure refuses.
+
+**Nothing edited that entry; a second row moved under it.** It is the same class as the numbers
+`CLAUDE.md` warns go stale without anyone touching them, caught here because the sweep re-derives
+its whole list every run rather than trusting the last one.

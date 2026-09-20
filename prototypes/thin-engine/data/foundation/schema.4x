@@ -642,16 +642,39 @@
 # `given` stating anything that is not a world. **The second is what caught its absence** - this
 # lane left the row out on the strength of the first reader alone.
 
+# **`bearing` is a capacity where `hungry` is an obligation**, and the grammar says which: a gerund
+# for something a thing may do, a noun or an adjective for something it owes. Sean, 2026-09-19:
+# *Bearing is their capacity to reproduce, that makes sense to me.*
+#
+# **It is what stops one citizen breeding with the whole surplus**, exactly as `hungry` stops one
+# eating all the food. `breed` consumes the parent and returns it as one of two, with its bearing
+# spent - so no citizen breeds twice in a turn, and *at most doubling* falls out of the rule rather
+# than being stated anywhere.
+#
+# **That is what replaces `borrow` and the mainline's `fertility` token.** Sean, 2026-09-19,
+# choosing: *clarity is more important than conciseness, so yes, lets not have borrow, and lean on
+# traits.* A borrowed citizen could be borrowed again; a consumed one that comes back spent cannot.
+#
+# **A citizen now has two traits, so a place can hold two citizen rows**, and a clause that matches
+# citizens without naming both is ambiguous. **`upkeep` and `perish` name only `hungry` and are
+# safe because `bearing` is uniform when they run** - the turn restores it last, so every citizen
+# enters a turn fertile and the split exists only between `breed` and the refreshes. **If that ever
+# stops being true the engine refuses rather than guessing**, which is `Refused::NotOneToTake` doing
+# the job it was built for.
+
 {relation id:47 name:citizen}
 
 {column id:130 relation:47 seq:1 name:where}
 {column id:131 relation:47 seq:2 name:hungry}
-{column id:132 relation:47 seq:3 name:quantity}
+{column id:133 relation:47 seq:3 name:bearing}
+{column id:132 relation:47 seq:4 name:quantity}
 
 {reference id:69 column:130 to:13}
 
 {state id:17 relation:47}
 
 {trait id:3 name:hungry}
+{trait id:4 name:bearing}
 
 {carries kind:47 trait:3}
+{carries kind:47 trait:4}
