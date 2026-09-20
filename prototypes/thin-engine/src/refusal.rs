@@ -49,6 +49,22 @@ pub enum Refused {
         clause: String,
         found: usize,
     },
+    /// The rule removes something several rows match, so it did not say which.
+    ///
+    /// **The taking side of `NotOne`.** A reading from a clause that matched several rows is
+    /// already refused rather than guessed at; taking still found the first. Sean, 2026-09-19: *I
+    /// would like it to be an error condition to ever return one row when you could have returned
+    /// another. That is nondeterminism and it should be possible to structure the code to make
+    /// nondeterminism impossible by raising an error instead.*
+    ///
+    /// **A clause reaches this by not naming a trait.** Two citizens differing in `hunger` are two
+    /// rows, and *remove one citizen* does not say which - so the answer is the clause saying more,
+    /// not the engine choosing.
+    NotOneToTake {
+        rule: String,
+        wanted: String,
+        found: usize,
+    },
     /// The rule removes something no row matches, so the rule contradicts itself.
     NothingToRemove { rule: String, wanted: String },
     /// A `put` would assign a trait to a kind that does not carry one.
@@ -107,6 +123,14 @@ impl std::fmt::Display for Refused {
             } => write!(
                 out,
                 "`{rule}`.`{clause}` is read from and matched {found} rows, not one"
+            ),
+            Refused::NotOneToTake {
+                rule,
+                wanted,
+                found,
+            } => write!(
+                out,
+                "`{rule}` removes {wanted} and {found} rows match, so it has not said which"
             ),
             Refused::NothingToRemove { rule, wanted } => {
                 write!(out, "`{rule}` removes {wanted} and nothing matched")

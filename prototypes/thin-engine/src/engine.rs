@@ -232,6 +232,20 @@ fn apply(
                         }
                     }
                     _ => {
+                        // **A pattern that several rows answer has not said which**, so it is
+                        // refused rather than taken from whichever the store holds first. Sean,
+                        // 2026-09-19: *it should be possible to structure the code to make
+                        // nondeterminism impossible by raising an error instead.* **`NotOne`
+                        // already does this for a reading**; this is the same answer for a take.
+                        let how_many =
+                            after.how_many_match(&wanted, counted(game, &wanted).as_deref());
+                        if how_many > 1 {
+                            return Err(Refused::NotOneToTake {
+                                rule,
+                                wanted: game.schema.write(&wanted),
+                                found: how_many,
+                            });
+                        }
                         let Some(took) = after.take(&wanted, counted(game, &wanted).as_deref())
                         else {
                             return Err(Refused::NothingToRemove {

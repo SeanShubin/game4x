@@ -98,6 +98,27 @@ impl Store {
     ///
     /// **`quantity` is handed in rather than looked up.** Which column counts is a fact about the
     /// schema, and a store holds rows - so the caller asks the schema and this does the arithmetic.
+    /// How many rows a pattern could take from, ignoring how many it asks for.
+    ///
+    /// **Taking is the one place left that chose.** [`Store::take`] finds the first row a pattern
+    /// describes, so a clause that did not say enough took from whichever row the store happened
+    /// to hold first. **A caller asks this before taking and refuses rather than picking** - the
+    /// same answer `Refused::NotOne` gives a reading that matched several.
+    ///
+    /// **Sean, 2026-09-19**: *I would like it to be an error condition to ever return one row when
+    /// you could have returned another. That is nondeterminism and it should be possible to
+    /// structure the code to make nondeterminism impossible by raising an error instead.*
+    pub fn how_many_match(&self, wanted: &Row, quantity: Option<&str>) -> usize {
+        let Some(quantity) = quantity else {
+            return self.rows().iter().filter(|row| *row == wanted).count();
+        };
+        let description = description(wanted, quantity);
+        self.rows()
+            .iter()
+            .filter(|row| describes(row, &description))
+            .count()
+    }
+
     pub fn take(&mut self, wanted: &Row, quantity: Option<&str>) -> Option<Row> {
         let Some(quantity) = quantity else {
             return (self.remove(wanted) != 0).then(|| wanted.clone());
@@ -185,6 +206,40 @@ fn matches(row: &Row, wanted: &Row) -> bool {
 mod tests {
     use super::*;
     use crate::notation::read;
+
+    /// **A pattern two rows answer is counted, so a caller can refuse rather than pick.**
+    ///
+    /// `take` finds the first row a pattern describes. **That is the last place this engine chose
+    /// between rows**, and Sean, 2026-09-19, ruled it out: *I would like it to be an error
+    /// condition to ever return one row when you could have returned another.*
+    ///
+    /// **No clause under-specifies today**, because every one names its traits - `moving:1` in
+    /// `move`, `working:1` in `work`. So this is checked here, where it is reachable, and
+    /// `Refused::NotOneToTake` gets a test of its own with the first clause that could.
+    #[test]
+    fn a_pattern_two_rows_answer_is_counted_rather_than_picked() {
+        let store = Store::of(
+            read("{scout where:1 moving:1 quantity:2}\n{scout where:1 moving:0 quantity:3}")
+                .expect("two descriptions of scout in one place"),
+        );
+
+        // **Naming the trait names one row**, which is what every clause does today.
+        let one = read("{scout where:1 moving:1 quantity:1}").expect("a pattern")[0].clone();
+        assert_eq!(store.how_many_match(&one, Some("quantity")), 1);
+
+        // **Leaving it out names both**, and taking would silently have picked the first.
+        let loose = read("{scout where:1 quantity:1}").expect("a pattern")[0].clone();
+        assert_eq!(
+            store.how_many_match(&loose, Some("quantity")),
+            2,
+            "two scouts of one place differ by `moving`, and this pattern says nothing about it"
+        );
+
+        // **The quantity is not part of the description**, so asking for more than any row holds
+        // still matches both - being unable to take is a different answer from not knowing which.
+        let plenty = read("{scout where:1 quantity:9}").expect("a pattern")[0].clone();
+        assert_eq!(store.how_many_match(&plenty, Some("quantity")), 2);
+    }
 
     /// Matching is the same relation and at least these values, and both halves are checked.
     #[test]
