@@ -38,9 +38,6 @@ const NAME: &str = "name";
 const SEQ: &str = "seq";
 const TO: &str = "to";
 const ATTRIBUTE: &str = "attribute";
-const LIMIT: &str = "limit";
-const HELD: &str = "held";
-const BY: &str = "by";
 const FAMILY: &str = "family";
 const MEMBER: &str = "member";
 const KIND: &str = "kind";
@@ -189,19 +186,6 @@ pub enum Malformed {
     /// same logical model.* They are one slot - whether a row is one thing or a count of them -
     /// so carrying both says a row is identified and counted at once, and nothing can be.
     IdAndQuantity { relation: String },
-    /// More of a held thing somewhere than there is room for it.
-    ///
-    /// **One variant for both ways of having no room**, because a row at quantity zero is not
-    /// written: a deposit that is full and a deposit that does not exist differ only in the
-    /// number, and `wanted` says which by naming the row that would have had to be there.
-    Overfull {
-        held: String,
-        by: String,
-        /// The row of `by` that would have had to exist, written out.
-        wanted: String,
-        /// How much room there actually is, which is `0` where the row is absent.
-        room: String,
-    },
     /// More of a supply consumed in a place than is provided there.
     ///
     /// **One number for many kinds**: two transports and two scouts are six berths, and the
@@ -290,11 +274,14 @@ pub enum Malformed {
         contained: String,
         used: i64,
         room: i64,
-        /// The capacity that would have had to be there, written out.
+        /// The row that would have had to be there, written out.
         ///
-        /// **The same answer `Overfull` and `Crowded` give**, and for the same reason: not *this
-        /// is too many* but *there is no capacity this large*. It is what a `{refused}` section
-        /// states, so a test can say what was missing rather than quoting a sentence.
+        /// **The same answer `Crowded` gives**, and for the same reason: not *this is too many*
+        /// but *there is nothing here this large*. It is what a `{refused}` section states, so a
+        /// test can say what was missing rather than quoting a sentence.
+        ///
+        /// **It is a container where one more of those could have stood, and a capacity where one
+        /// could not** - which is decided where it is written rather than here.
         wanted: String,
     },
     /// A kind that is not fungible is declared loose.
@@ -310,11 +297,6 @@ pub enum Malformed {
     /// refusal when `keep` fired, then a count of the rows in a world - and both guarded a
     /// situation instead of forbidding what allows it.
     LooseAndNotFungible { relation: String, by: String },
-    /// A limit between two relations whose keys are not the same columns.
-    ///
-    /// **Held and holder are compared key for key**, so a limit between relations that do not
-    /// agree about what a row is keyed by has nothing to compare.
-    CannotLimit { held: String, by: String },
     /// A value in a column that points at a row nothing states.
     NoSuchRow {
         relation: String,
@@ -341,17 +323,6 @@ impl std::fmt::Display for Malformed {
             }
             Malformed::NoColumns { relation } => {
                 write!(out, "`{relation}` declares no columns, so it has no key")
-            }
-            Malformed::Overfull {
-                held,
-                by,
-                wanted,
-                room,
-            } => {
-                write!(
-                    out,
-                    "`{held}` needs {wanted} and there is room for {room} in `{by}`"
-                )
             }
             Malformed::Crowded {
                 supply,
@@ -428,12 +399,6 @@ impl std::fmt::Display for Malformed {
                 out,
                 "`{relation}` is not fungible - it is told apart by `{by}` - so it may not lie loose"
             ),
-            Malformed::CannotLimit { held, by } => {
-                write!(
-                    out,
-                    "`{held}` is limited by `{by}` and the two are not keyed alike"
-                )
-            }
             Malformed::BadOrder { relation, seq } => {
                 write!(
                     out,
@@ -611,14 +576,6 @@ pub struct Schema {
     /// from the caller's rows answers a question about the caller's rows**, which is not the
     /// question anybody was asking.
     named: BTreeMap<String, String>,
-    /// Which relation is held by which: `(extractor, deposit)` says there cannot be more
-    /// extractors somewhere than there are deposits to hold them.
-    ///
-    /// **A constraint on the world rather than on a rule.** Sean, 2026-09-17: *We can't place an
-    /// extractor if there are no available deposits* - and *the situation should be detectible and
-    /// therefore preventable*. Detectable is this; preventable follows, because every rule already
-    /// refuses the world it would leave if that world does not fit.
-    limits: Vec<(String, String)>,
 }
 
 impl Schema {
@@ -723,16 +680,6 @@ impl Schema {
             }
         }
 
-        let mut limits: Vec<(String, String)> = Vec::new();
-        for row in rows.iter().filter(|row| row.relation == LIMIT) {
-            let held = row.value(HELD).unwrap_or_default();
-            let by = row.value(BY).unwrap_or_default();
-            limits.push((
-                named.get(held).cloned().unwrap_or_else(|| held.to_string()),
-                named.get(by).cloned().unwrap_or_else(|| by.to_string()),
-            ));
-        }
-
         for (of, mut columns) in numbered {
             columns.sort_by_key(|(seq, _)| ordinal(seq));
             let seq: Vec<String> = columns.iter().map(|it| it.0.clone()).collect();
@@ -811,7 +758,6 @@ impl Schema {
             relations,
             by_id,
             families,
-            limits,
         })
     }
 
@@ -1271,7 +1217,6 @@ pub fn check(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
     // `tests/mutation.rs` said exactly that. **The narrower fault is the one to report.**
     nothing_stands_where_it_may_not(schema, rows)?;
     only_what_is_fungible_lies_loose(schema, rows)?;
-    held_within_what_holds_it(schema, rows)?;
     nothing_crowds_a_place(schema, rows)?;
     nothing_holds_more_than_there_is_room_for(schema, rows)?;
     Ok(())
@@ -1602,40 +1547,69 @@ fn nothing_holds_more_than_there_is_room_for(
             if *used <= there {
                 continue;
             }
-            // **The refusal names a capacity that would have had to be there**, the way a full
-            // deposit and a crowded place already do.
-            //
-            // **One kind gives room, and it is named**: what its containers would each have to
-            // hold to close the whole gap, which is exact.
-            //
-            // **Several kinds give room, and none of them is the answer** - so rather than pick
-            // one, the refusal names the *place itself* granting the shortfall. Sean, 2026-09-15:
-            // *We should never have non-determinism from what row happens to be encountered
-            // first*, which is why `NotOne` refuses instead of choosing.
             let (raw_held, raw_what, raw_per) = &asked.written;
-            let (of, each_would_be) = match asked.gives.as_slice() {
-                [(only, _)] => {
-                    let mine = schema
-                        .relation_named(only)
-                        .and_then(|it| place_of(schema, it, &asked.per).map(|_| it))
-                        .map(|it| count_in(schema, rows, it, &asked.what, &asked.per, at))
-                        .unwrap_or(0);
-                    let apiece = match mine {
-                        0 => *used,
-                        how_many => {
-                            used.div_euclid(how_many) + i64::from(used.rem_euclid(how_many) != 0)
-                        }
-                    };
-                    (only.clone(), apiece)
-                }
-                _ => (raw_per.clone(), used - there),
+            // **The refusal names what would have had to be there**, the way a crowded place
+            // already does - and which row that is follows from the container rather than being
+            // chosen. **A container that stands *in* the place can be multiplied**: another
+            // deposit is a world a player can reach, so the answer is how many of them it would
+            // have taken. **A container that *is* the place cannot**: there is one of it and there
+            // always will be, so the only thing that could have differed is how much it gives.
+            let one = match asked.gives.as_slice() {
+                [(only, each)] => schema.relation_named(only).map(|it| (it, *each)),
+                _ => None,
             };
-            let mut wanted = BTreeMap::new();
-            wanted.insert(OF.to_string(), of);
-            wanted.insert(FOR.to_string(), raw_held.clone());
-            wanted.insert(WHAT.to_string(), raw_what.clone());
-            wanted.insert(PER.to_string(), raw_per.clone());
-            wanted.insert(QUANTITY.to_string(), each_would_be.to_string());
+            let standing = one
+                .and_then(|(container, each)| {
+                    place_of(schema, container, &asked.per)
+                        .map(|(is_place, column)| (container, each, is_place, column))
+                })
+                .filter(|(_, _, is_place, _)| !is_place);
+            let wanted = match standing {
+                // **The container, at the place, in the number it would have taken.** A deposit
+                // that is full and a deposit that is not there at all are one answer with a
+                // different number, because a row at quantity zero is never written.
+                Some((container, each, _, column)) => {
+                    let apiece = each.max(1);
+                    let how_many =
+                        used.div_euclid(apiece) + i64::from(used.rem_euclid(apiece) != 0);
+                    let declared = schema.relation(container).expect("named just above");
+                    let mut values = BTreeMap::new();
+                    values.insert(column, at.clone());
+                    if declared.columns.iter().any(|it| it.name == WHAT) {
+                        values.insert(WHAT.to_string(), raw_what.clone());
+                    }
+                    if let Some(quantity) = declared.quantity() {
+                        values.insert(quantity.to_string(), how_many.to_string());
+                    }
+                    schema.write(&Row {
+                        relation: container.to_string(),
+                        values,
+                    })
+                }
+                // **Otherwise it is the capacity that would have had to differ.** One kind gives
+                // room and it is named: what it would have had to hold to close the whole gap.
+                //
+                // **Several kinds give room, and none of them is the answer** - so rather than
+                // pick one, the refusal names the *place itself* granting the shortfall. Sean,
+                // 2026-09-15: *We should never have non-determinism from what row happens to be
+                // encountered first*, which is why `NotOne` refuses instead of choosing.
+                None => {
+                    let (of, each_would_be) = match asked.gives.as_slice() {
+                        [(only, _)] => (only.clone(), *used),
+                        _ => (raw_per.clone(), used - there),
+                    };
+                    let mut values = BTreeMap::new();
+                    values.insert(OF.to_string(), of);
+                    values.insert(FOR.to_string(), raw_held.clone());
+                    values.insert(WHAT.to_string(), raw_what.clone());
+                    values.insert(PER.to_string(), raw_per.clone());
+                    values.insert(QUANTITY.to_string(), each_would_be.to_string());
+                    schema.write(&Row {
+                        relation: CAPACITY.to_string(),
+                        values,
+                    })
+                }
+            };
             return Err(Malformed::NoRoom {
                 // **The place is a row of `per` and not a relation**, so it is shown as its kind
                 // and its key.
@@ -1643,43 +1617,11 @@ fn nothing_holds_more_than_there_is_room_for(
                 contained: asked.held.clone(),
                 used: *used,
                 room: there,
-                wanted: schema.write(&Row {
-                    relation: CAPACITY.to_string(),
-                    values: wanted,
-                }),
+                wanted,
             });
         }
     }
     Ok(())
-}
-
-/// How many rows of `relation` carrying `what` stand in one place.
-fn count_in(schema: &Schema, rows: &Store, relation: &str, what: &str, per: &str, at: &str) -> i64 {
-    let Some((is_place, column)) = place_of(schema, relation, per) else {
-        return 0;
-    };
-    let Some(declared) = schema.relation(relation) else {
-        return 0;
-    };
-    let carries_what = declared.columns.iter().any(|it| it.name == WHAT);
-    let mut found = 0;
-    for row in rows.rows().iter().filter(|it| it.relation == relation) {
-        if carries_what && schema.relation_named(row.value(WHAT).unwrap_or_default()) != Some(what)
-        {
-            continue;
-        }
-        if row.value(&column) != Some(at) {
-            continue;
-        }
-        found += match declared.quantity() {
-            Some(quantity) if !is_place => row
-                .value(quantity)
-                .and_then(|it| it.parse::<i64>().ok())
-                .unwrap_or(0),
-            _ => 1,
-        };
-    }
-    found
 }
 
 /// No place consumes more of a supply than is provided there, each kind counting at its own rate.
@@ -1828,100 +1770,6 @@ fn nothing_crowds_a_place(schema: &Schema, rows: &Store) -> Result<(), Malformed
     Ok(())
 }
 
-/// No more of a held thing anywhere than there is room for it.
-///
-/// **This is a reference with a number on it.** An ordinary reference asks whether the row it
-/// points at exists; this asks whether it exists *and has room*, and the two are the same question
-/// where the room is one. **Both halves come out of the same comparison**, because a row at
-/// quantity zero is never written - so a deposit that is full and a deposit that is not there at
-/// all differ only in what the number is.
-///
-/// **No rule says any of this.** `build-extractor` adds an extractor and nothing else; every rule
-/// already refuses the world it would leave when that world does not fit, so a rule written
-/// tomorrow is bound by this without knowing it exists.
-fn held_within_what_holds_it(schema: &Schema, rows: &Store) -> Result<(), Malformed> {
-    for (held, by) in &schema.limits {
-        let (Some(holder), Some(holds)) = (schema.relation(held), schema.relation(by)) else {
-            return Err(Malformed::CannotLimit {
-                held: held.clone(),
-                by: by.clone(),
-            });
-        };
-        let (Some(counted), Some(room_in)) = (holder.quantity(), holds.quantity()) else {
-            return Err(Malformed::CannotLimit {
-                held: held.clone(),
-                by: by.clone(),
-            });
-        };
-        // **The container's key must be part of the held thing's.** A deposit is keyed by
-        // `(where, what)` and an extractor by `(where, what, working)`, and the extractors of one
-        // deposit are every row that agrees on the deposit's columns - so a subset rather than
-        // equality, and a limit between relations that share no key at all still says so.
-        let key = holds.key();
-        if !key.iter().all(|column| holder.key().contains(column)) {
-            return Err(Malformed::CannotLimit {
-                held: held.clone(),
-                by: by.clone(),
-            });
-        }
-
-        // **The held rows are summed over the container's key.** They were matched key for key
-        // until an extractor gained a `working` column: a deposit holds an extractor whatever
-        // state it is in, so one spent and one fresh are two rows of the same deposit. **The sum
-        // is what stops two groups each fitting while together they do not.**
-        let mut taken: BTreeMap<Vec<String>, i64> = BTreeMap::new();
-        for row in rows.rows().iter().filter(|it| it.relation == *held) {
-            let Some(values) = key
-                .iter()
-                .map(|column| row.value(column).map(str::to_string))
-                .collect::<Option<Vec<String>>>()
-            else {
-                continue;
-            };
-            *taken.entry(values).or_default() += row
-                .value(counted)
-                .and_then(|it| it.parse::<i64>().ok())
-                .unwrap_or(0);
-        }
-
-        for (values, how_many) in taken {
-            let there = rows
-                .rows()
-                .iter()
-                .filter(|it| it.relation == *by)
-                .find(|it| {
-                    key.iter()
-                        .zip(&values)
-                        .all(|(column, value)| it.value(column) == Some(value.as_str()))
-                });
-            let room: i64 = there
-                .and_then(|it| it.value(room_in))
-                .and_then(|it| it.parse().ok())
-                .unwrap_or(0);
-            if how_many <= room {
-                continue;
-            }
-            // **The refusal names the row that would have had to be there**, which is what a test
-            // can state and what a reader can act on: not *this is too many* but *there is no
-            // deposit with room for this many*.
-            let mut wanted = BTreeMap::new();
-            for (column, value) in key.iter().zip(&values) {
-                wanted.insert(column.to_string(), value.clone());
-            }
-            wanted.insert(room_in.to_string(), how_many.to_string());
-            return Err(Malformed::Overfull {
-                held: held.clone(),
-                by: by.clone(),
-                wanted: schema.write(&Row {
-                    relation: by.clone(),
-                    values: wanted,
-                }),
-                room: room.to_string(),
-            });
-        }
-    }
-    Ok(())
-}
 #[cfg(test)]
 mod tests {
     /// **A tenth step comes after the ninth, and as text it came after the first.**

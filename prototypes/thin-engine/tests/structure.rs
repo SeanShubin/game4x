@@ -32,7 +32,6 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         "binding",
         "literal",
         "reading",
-        "limit",
         "attribute",
         "relation-of",
         "family",
@@ -61,11 +60,11 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
         );
         checked += 1;
     }
-    assert_eq!(checked, 29, "twenty-nine relations describe the structure");
+    assert_eq!(checked, 28, "twenty-eight relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        47,
-        "forty-seven in all - those thirty, and the game's seventeen: eight kinds, three families,\n         a territory, a place, an adjacency, a deposit, an extractor, a citizen and an ark"
+        46,
+        "forty-six in all - those twenty-eight, and the game's eighteen: eight kinds, three\n         families, a territory, a place, an adjacency, a deposit, an extractor, a citizen and an\n         ark"
     );
 }
 
@@ -417,39 +416,61 @@ fn a_deposit_cannot_have_two_densities() {
 /// **Sean, 2026-09-17**: *the situation should be detectible and therefore preventable.* This is
 /// the detectable half, and prevention is the same check running after a rule - which is why no
 /// rule mentions capacity.
+///
+/// **What holds an extractor is a capacity row like any other**, and that is the whole of what
+/// folding the deposit limit into the table changed. **A world that says nothing about what holds
+/// extractors bounds them at nothing**, which is already true of bins - so `ROOM` is stated here
+/// the way every test that states an extractor now states it.
 #[test]
 fn an_extractor_needs_a_deposit_to_stand_in() {
+    // **A deposit gives room for one extractor of its resource.** `18` is `deposit`, `19` is
+    // `extractor`, `27` is the `resource` family and `48` is `place`.
+    const ROOM: &str = "{capacity of:18 for:19 what:27 per:48 quantity:1}";
+
     assert_eq!(
-        with("{extractor where:1 what:31 working:0 quantity:1}")
-            .expect_err("no deposit of food here"),
-        Malformed::Overfull {
-            held: "extractor".to_string(),
-            by: "deposit".to_string(),
+        with(&format!(
+            "{ROOM}\n{{extractor where:1 what:31 working:0 quantity:1}}"
+        ))
+        .expect_err("no deposit of food here"),
+        Malformed::NoRoom {
+            at: "place 1".to_string(),
+            contained: "extractor".to_string(),
+            used: 1,
+            room: 0,
             wanted: "{deposit where:1 what:31 quantity:1}".to_string(),
-            room: "0".to_string()
         },
         "the refusal names the deposit that would have had to be there"
     );
 
     // The control: the same extractor over a deposit with room is fine, so the refusal is about
     // the room rather than about extractors.
-    with("{deposit where:1 what:31 density:6 quantity:1}\n{extractor where:1 what:31 working:0 quantity:1}")
-        .expect("one extractor in one deposit");
+    with(&format!(
+        "{ROOM}\n{{deposit where:1 what:31 density:6 quantity:1}}\n{{extractor where:1 what:31 working:0 quantity:1}}"
+    ))
+    .expect("one extractor in one deposit");
 
     // And one more than there is room for is refused by the number, not by the absence.
     assert_eq!(
-        with(
-            "{deposit where:1 what:31 density:6 quantity:1}\n{extractor where:1 what:31 working:0 quantity:2}"
-        )
+        with(&format!(
+            "{ROOM}\n{{deposit where:1 what:31 density:6 quantity:1}}\n{{extractor where:1 what:31 working:0 quantity:2}}"
+        ))
         .expect_err("two extractors in one deposit"),
-        Malformed::Overfull {
-            held: "extractor".to_string(),
-            by: "deposit".to_string(),
+        Malformed::NoRoom {
+            at: "place 1".to_string(),
+            contained: "extractor".to_string(),
+            used: 2,
+            room: 1,
             wanted: "{deposit where:1 what:31 quantity:2}".to_string(),
-            room: "1".to_string()
         },
         "a full deposit and an absent one are one refusal with a different number"
     );
+
+    // And the second control, which is what the fold is for: with nothing saying what holds an
+    // extractor, nothing bounds one. **The deposit limit was a structural fact and this is a row
+    // of the world**, so a world that omits it is a world that has not said anything - the same
+    // answer a place with no bin capacity already gave.
+    with("{extractor where:1 what:31 working:0 quantity:1}")
+        .expect("nothing says a deposit is what holds an extractor");
 }
 
 /// **A relation with no id is keyed by its whole row, so a kind may belong to two families.**
@@ -515,10 +536,15 @@ fn a_column_is_an_attribute_of_one_relation() {
     // The control: marking a different column is fine, so the refusal is about the key rather
     // than about adding an attribute at all.
     //
-    // **Not just any column, and the first attempt found out why.** Marking `extractor.what`
-    // takes it out of the extractor's key, and the deposit limit then has nothing to compare -
-    // `CannotLimit`. So the control marks a column of a relation keyed by an id, where the key
-    // does not move.
+    // **A column of an identified relation, so the mark moves nothing else.** Taking a column out
+    // of a key changes what two rows may be told apart by, and a relation keyed by an `id` has no
+    // key to move - so this control says one thing and not two.
+    //
+    // **The first attempt marked `extractor.what`, and the reason it failed has since gone.** The
+    // deposit limit compared extractor and deposit key for key and refused when they stopped
+    // agreeing; it was folded into the capacity table on 2026-09-20, and a capacity reads the
+    // column rather than the key. The control is unchanged because its own reason never was that
+    // one.
     with("{attribute column:42 relation:15}").expect("a column of an identified relation");
 }
 

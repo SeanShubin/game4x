@@ -20,6 +20,7 @@
 {given}
 {territory id:1 name:territory-1}
 {place id:1 of:territory-1 layer:surface name:place-1}
+{capacity of:deposit for:extractor what:resource per:place} -> 1
 {capacity of:place for:bin what:resource per:place} -> 4
 {capacity of:bin for:resource what:resource per:place} -> 10
 {deposit where:place-1 what:metal density:6} -> 1
@@ -34,6 +35,7 @@
 {then}
 {territory id:1 name:territory-1}
 {place id:1 of:territory-1 layer:surface name:place-1}
+{capacity of:deposit for:extractor what:resource per:place} -> 1
 {capacity of:place for:bin what:resource per:place} -> 4
 {capacity of:bin for:resource what:resource per:place} -> 10
 {deposit where:place-1 what:metal density:6} -> 1

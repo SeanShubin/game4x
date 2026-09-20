@@ -19,7 +19,7 @@ declares none of its own, and what a place holds beyond its capacity is lost at 
 |                                                                                                                                         | What it needs                                                                                                                                                                                                           |
 | --------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ~~**A store is a thing a place holds**~~ - **built** as `{bin where:territory-1 what:metal} -> 4`                                       | nothing, and nothing is what it took                                                                                                                                                                                    |
-| ~~**A territory holds only so many stores of each resource**~~ - **built** as `{limit held:bin by:capacity}`                            | **nothing, and this entry was wrong about that.** It said the cap had to be per description and that the pool could not say it - both true, and both about the pool. The limit keys on `(where, what)` and always could |
+| ~~**A territory holds only so many stores of each resource**~~ - **built** as `{capacity of:place for:bin ...}`                         | **nothing, and this entry was wrong about that.** It said the cap had to be per description and that the pool could not say it - both true, and both about the pool. The limit keys on `(where, what)` and always could |
 | ~~**A store contributes capacity for its resource**~~ - **built** as `{capacity of:bin for:resource what:resource per:territory} -> 10` | the sum, which `rooming` does                                                                                                                                                                                           |
 | ~~**A vehicle carries capacity that travels with it**~~ - **built**, and it was one row                                                 | nothing. Sean reframed it and the reframing is what made it free                                                                                                                                                        |
 | ~~**What a place holds beyond its capacity is lost at the turn's end**~~ - **built** as disorder                                        | no comparison after all: `keep` bounds a quantity rather than testing one                                                                                                                                               |
@@ -37,7 +37,7 @@ the next time an entry says a thing needs building - **the entry is a claim like
 **Two rows are struck out and the first four words of this section are why**: *most of this is
 already in `spec/logistics.md`* was true, and so was the part nobody checked - the mechanism was
 already in `schema.4x`. **The entry that said what was needed had named the wrong instrument**, and
-it took looking at `held_within_what_holds_it` to find out. That is worth remembering the next time
+it took looking at the check already there to find out. That is worth remembering the next time
 an entry here says a thing needs building.
 
 **The thing is a `bin` and not a `store`.** `store` is the engine's own word - `src/store.rs`, and
@@ -429,7 +429,8 @@ clause, and a family cannot paper over it, because members of a family must shar
 
 **If yield moves onto the machine, `deposit` stops being what `work` reads** and becomes only what
 limits how many machines a place may hold, which it already does through
-`{limit held:extractor by:deposit}`. That is a clean separation and is the likely end state.
+`{capacity of:deposit for:extractor what:resource per:place}`. That is a clean separation and is
+the likely end state.
 
 **One thing to avoid when the day comes**: a second `work` rule. That is the `metal-bin, food-bin`
 shape Sean has ruled out twice, and the family route costs less than it looks.
@@ -582,22 +583,50 @@ a world a `given` can state; developing a planet is `toil`, `work`, `breed`, `bu
 `build-bin`, all built and reviewed; launching is `launch`. **Deploying is what joins the end to the
 beginning**, and when it lands the whole arc can be one test.
 
-## The one thing `deploy` needs that does not exist
+## The deposit limit folded, 2026-09-20, and what it turned out to cost
 
-**Softness caps a line at the room there is, and the deposit limit is not a room.** Sean:
+**Softness caps a line at the room there is, and the deposit limit was not a room.** Sean:
 *it is legal to deploy an ark anywhere, individual rules may fail but the deployment succeeds.* So
 the metal extractor a deployment makes has to fall short where there is no metal deposit - and
-`{limit held:extractor by:deposit}` is a separate check that refuses the whole world, which a soft
-line cannot consult.
+`{limit ...}` was a separate check that refused the whole world, which a soft line cannot consult.
 
-**The answer is to fold the deposit limit into the capacity table**, which *Refresh, what is left of
-it* above already found was possible: **the deposit limit folds; the berth pool does not.** A
-deposit gives room for one extractor of its resource, `rooming` sums it like anything else, and the
-limit check stops being a second mechanism.
+**So it folded into the capacity table**, which *Refresh, what is left of it* above had already
+found was possible: **the deposit limit folds; the berth pool does not.** A deposit gives room for
+one extractor of its resource, `rooming` sums it like anything else, and the whole second mechanism
+went with it - the relation, its two columns, two references, three engine words, a check and two
+`Malformed` variants.
 
-**That is its own increment and a large one** - every test that states a deposit gains a capacity row
-- so it comes before `deploy` rather than inside it. **Two changes, one kind each**, which is what
-the review needs.
+**Where the row goes took three tries, and the third is the one with a reason.** The prediction
+here - *every test that states a deposit gains a capacity row* - turned out right, and it was right
+for a reason nobody had written down.
+
+**First: only where it bites.** Deleting a capacity row only ever makes more things legal, so it is
+load-bearing exactly where something is refused - and two tests were refused. Every other world
+stopped bounding extractors at all, because **a kind named in no capacity row has no room question
+asked about it**, which was already true of bins. The sweep priced it: four deposit quantities and
+one deposit row stopped being read.
+
+**Second: in `schema.4x`, beside where the limit used to be.** One row, nothing forgotten, no
+churn - and the suite refused it in one run. `{state relation:capacity}` makes a capacity part of
+what a world *is*, and a world is what a `then` compares, so the row would have had to appear in
+every `then` in the suite. **A structural row is one no world states**; `{loose ...}`,
+`{stands-in ...}` and `{supply ...}` are, and a capacity is not.
+
+**That is the rule the increment actually produced**, and it is worth more than the row: *a stated
+relation belongs to a world, and only what is never stated belongs in `schema.4x`.* It also says
+why the bootstrap in `tests/directories.rs` could go on reading the friendly schema in one pass -
+the file carries no arrow because it carries nothing counted.
+
+**Third: in all sixteen worlds where a deposit and an extractor meet**, in the `given` and the
+`then` alike. A capacity row in a test with a `then` is load-bearing by the comparison whether or
+not anything is refused, so the wide version is the one the sweep can hold.
+
+**And the refusal had to learn which row to name.** *There is no capacity this large* is the right
+answer when the container is the place itself, and the wrong one when the container is a deposit -
+raising a capacity nobody can reach rather than naming the deposit that is missing. So `NoRoom`
+names the container where one more of them could have stood, and the capacity where one could not.
+**Both existing refusal tests kept their `{refused}` row unchanged**, which is what said the
+arithmetic had not moved.
 
 ## Smaller things, each with the reason it is not done
 

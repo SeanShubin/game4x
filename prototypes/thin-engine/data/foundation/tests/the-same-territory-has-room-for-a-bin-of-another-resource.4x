@@ -5,9 +5,8 @@
 # what `a-bin-cannot-be-built-where-the-capacity-is-taken` cannot say on its own - a cap that was
 # counted per territory would refuse this too, and the pair is what tells the two apart.
 #
-# **It needed no mechanism.** `{limit held:bin by:capacity}` sums the held rows over the
-# container's key, and that key is `(where, what)` - so the metal bins and the food ones are
-# counted against different rows without anything being said about resources.
+# **It needed no mechanism.** A capacity names a `what`, so the metal bins and the food ones are
+# counted against different questions without anything being said about resources.
 #
 # **The metal is spent on a food bin**, which is what a bin costs rather than what it holds:
 # building is one labor and one metal whatever the bin is for.

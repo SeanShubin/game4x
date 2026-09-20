@@ -112,7 +112,6 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
         "binding",
         "literal",
         "reading",
-        "limit",
         "attribute",
         "relation-of",
         "family",

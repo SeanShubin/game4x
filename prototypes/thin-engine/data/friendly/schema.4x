@@ -32,7 +32,6 @@
 {relation id:17 name:literal}
 {relation id:18 name:deposit}
 {relation id:19 name:extractor}
-{relation id:20 name:limit}
 {relation id:21 name:reading}
 {relation id:22 name:attribute}
 {relation id:23 name:relation-of}
@@ -110,8 +109,6 @@
 {column id:56 relation:extractor seq:2 name:what}
 {column id:101 relation:extractor seq:3 name:working}
 {column id:57 relation:extractor seq:4 name:quantity}
-{column id:58 relation:limit seq:1 name:held}
-{column id:59 relation:limit seq:2 name:by}
 
 {column id:60 relation:reading seq:1 name:id}
 {column id:61 relation:reading seq:2 name:clause}
@@ -179,8 +176,8 @@
 # the game can ask, because extractors are fungible.
 #
 # **One relation per kind of readiness**, named for the activity, which is what `spec/data/traits.4x`
-# does with `working`, `moving`, `laboring` and `bearing`. Each is keyed like the thing that has
-# it, so `{limit ...}` says an allowance cannot exceed the things holding it.
+# does with `working`, `moving`, `laboring` and `bearing`. Each is a column of the thing that has
+# it, so a readiness cannot outnumber the things holding it without anything saying so.
 
 {column id:102 relation:assigns seq:1 name:id}
 {column id:103 relation:assigns seq:2 name:clause}
@@ -268,8 +265,6 @@
 {reference id:23 column:52 to:resource}
 {reference id:24 column:55 to:place}
 {reference id:25 column:56 to:resource}
-{reference id:26 column:58 to:relation}
-{reference id:27 column:59 to:relation}
 
 {reference id:28 column:61 to:clause}
 {reference id:29 column:62 to:column}
@@ -373,10 +368,32 @@
 
 
 # **An extractor stands in a deposit, so there cannot be more of them than there are deposits.**
-# Sean: *We can't place an extractor if there are no available deposits.* No rule says so - every
-# rule already refuses the world it would leave, so this binds rules that do not exist yet.
+# Sean: *We can't place an extractor if there are no available deposits.* **That is a capacity and
+# nothing else**, and every world that states an extractor says so:
+#
+# ```text
+# {capacity of:deposit for:extractor what:resource per:place} -> 1
+# ```
+#
+# **It was a second mechanism until 2026-09-20.** `{limit held:extractor by:deposit}` compared the
+# two relations key for key and refused the world outright - the same arithmetic reached by a
+# different road, and a road `{soft ...}` cannot walk down, because softness caps a line at the
+# room there is and a limit is not a room.
+#
+# **What it cost is that the row is stated in a world rather than here, and that is not a choice.**
+# `{state relation:capacity}` makes a capacity part of what a world is, and a world is what a test
+# states and what its `then` compares - so a capacity row sitting beside this paragraph would have
+# to appear in every `then` section in the suite. **A structural row is one no world states**, which
+# `{loose ...}`, `{stands-in ...}` and `{supply ...}` are and this is not.
+#
+# **It was tried the other way first and the suite said so at once**: every test compared a world
+# three capacity rows short. **The rule that came out of it is worth more than the row** - a stated
+# relation belongs to a world, and only what is never stated belongs in this file.
+#
+# **So every world holding a deposit and an extractor says what a deposit holds.** That is more
+# places than the structural fact took, and it is also what Sean asked for everywhere else: *I need
+# see what the actual numbers are, not some hidden default.*
 
-{limit held:extractor by:deposit}
 
 
 ## What a supply is, and what it is measured in
@@ -560,8 +577,8 @@
 # it is in disorder or in order.*
 #
 # **A family names its members**, so one row covers every resource. It is not `{state ...}` and so
-# is not reified - a structural fact belongs beside `{limit ...}` and `{supply ...}` rather than in
-# every test's `given`.
+# is not reified - a structural fact belongs beside `{supply ...}` and `{stands-in ...}` rather than
+# in every test's `given`.
 #
 # **What is lost is lost, and does not go anywhere.** `spec/resources.md` says disorder *returns to
 # its source*; Sean, 2026-09-19: *This was a thematic statement rather than a mechanical one, I am

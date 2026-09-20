@@ -380,14 +380,12 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
                     Refused::Broke { why: broke, .. }
                         if matches!(
                             **broke,
-                            crate::schema::Malformed::Overfull { .. }
-                                | crate::schema::Malformed::Crowded { .. }
+                            crate::schema::Malformed::Crowded { .. }
                                 | crate::schema::Malformed::NoRoom { .. }
                         ) =>
                     {
                         match broke.as_ref() {
-                            crate::schema::Malformed::Overfull { wanted, .. }
-                            | crate::schema::Malformed::Crowded { wanted, .. }
+                            crate::schema::Malformed::Crowded { wanted, .. }
                             | crate::schema::Malformed::NoRoom { wanted, .. } => wanted.clone(),
                             _ => unreachable!("guarded above"),
                         }

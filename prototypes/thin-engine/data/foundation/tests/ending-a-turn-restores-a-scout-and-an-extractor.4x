@@ -16,15 +16,17 @@
 # the test passed having restored nothing. This is the same slack, in the same shape, one test
 # after it was fixed in `one-refresh-reaches-a-scout-and-a-transport`.
 #
-# **The deposit holds two because two extractors stand in it** - `{limit held:extractor by:deposit}`
-# sums the extractors over a deposit's key whatever state they are in, and refuses a world with
-# more of them than there is room for.
+# **The deposit holds two because two extractors stand in it** - the room a deposit gives is summed
+# over the extractors standing in it whatever state they are in, and a world with more of them than
+# there is room for is refused. **Nothing here has to say so**, because this test states no capacity
+# for extractors at all and a world that says nothing bounds nothing.
 
 {test name:ending-a-turn-restores-a-scout-and-an-extractor}
 
 {given}
 {territory id:1}
 {place id:1 of:1 layer:surface}
+{capacity of:18 for:19 what:27 per:48 quantity:1}
 {deposit where:1 what:31 density:6 quantity:2}
 {extractor where:1 what:31 working:0 quantity:1}
 {extractor where:1 what:31 working:1 quantity:1}
@@ -37,6 +39,7 @@
 {then}
 {territory id:1}
 {place id:1 of:1 layer:surface}
+{capacity of:18 for:19 what:27 per:48 quantity:1}
 {deposit where:1 what:31 density:6 quantity:2}
 {extractor where:1 what:31 working:1 quantity:2}
 {scout where:1 moving:1 quantity:3}

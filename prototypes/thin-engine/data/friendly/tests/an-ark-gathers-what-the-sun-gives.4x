@@ -5,8 +5,8 @@
 # and `gather` reads its density exactly as `work` reads a deposit's - what an ark takes is what the
 # sun gives, and the number is the world's rather than the rule's.
 #
-# **An ark is not an extractor.** `{limit held:extractor by:deposit}` counts extractors against
-# deposits and an ark counts against nothing, which is where *unlimited capacity for extractors*
+# **An ark is not an extractor.** `{capacity of:deposit for:extractor ...}` counts extractors
+# against deposits and an ark counts against nothing, which is where *unlimited capacity for extractors*
 # comes from: not a number, but the ark not being one of them.
 #
 # **Three is gathered and three is still standing**, because nothing here ends a turn. What an ark

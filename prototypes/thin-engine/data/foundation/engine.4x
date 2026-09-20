@@ -43,9 +43,6 @@
 {primitive id:32 word:reading}
 {primitive id:33 word:takes}
 {primitive id:34 word:attribute}
-{primitive id:35 word:by}
-{primitive id:36 word:held}
-{primitive id:37 word:limit}
 {primitive id:38 word:family}
 {primitive id:39 word:kind}
 {primitive id:40 word:member}

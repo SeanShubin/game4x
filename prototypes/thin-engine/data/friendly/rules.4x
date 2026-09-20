@@ -511,9 +511,9 @@
 # spent ark is refused rather than quietly doing nothing, which is what makes *once a turn*
 # something a test can see: a no-op leaves no trace, and a refusal is a trace.
 #
-# **An ark is not an extractor.** `{limit held:extractor by:deposit}` counts extractors against
-# deposits, and an ark counts against nothing - which is the *unlimited capacity for extractors*
-# the sun has, arriving by the ark not being one.
+# **An ark is not an extractor.** `{capacity of:deposit for:extractor ...}` counts extractors
+# against deposits, and an ark counts against nothing - which is the *unlimited capacity for
+# extractors* the sun has, arriving by the ark not being one.
 
 {rule id:12 name:gather}
 

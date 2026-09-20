@@ -321,7 +321,7 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
     Ok(())
 }
 
-const REFERENCES: usize = 67;
+const REFERENCES: usize = 65;
 
 /// **References no test world can violate**, because nothing points at them there.
 ///
@@ -594,13 +594,6 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// `value:metal` - and a clause's relation says that now, so they are gone rather than dead. Two
 /// bindings went the same way: `move` no longer binds a `what` column, because what is moved is
 /// the relation the clause is about.
-/// **`{limit held:working by:extractor}` is here and it is not dead.** What this check measures
-/// is whether a *data test* reads a row, and no data test can: a world stating more works than
-/// extractors does not load, and a test whose world does not load is not a test with an outcome.
-/// **`an_allowance_cannot_exceed_the_things_that_have_it` in `tests/structure.rs` is what holds
-/// it** - which is worth saying out loud, because this list otherwise reads as *nothing needs
-/// this*.
-///
 /// **And three tests state a readiness they do not spend.** Each is a refusal: two of them refuse
 /// before reaching the readiness clause, and the third refuses on the readiness whether it was
 /// stated as one or as none. **They are there so a reader can see the refusal is about the one
@@ -619,13 +612,19 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// what each is doing. Marking `attribute.relation` and `relation-of.input` keeps those two
 /// relations keyed by their first column as they were before the key rule changed - and no data
 /// test states a second row that would collide, so only `tests/structure.rs` holds them.
-/// **Marking a deposit's `density` is load-bearing everywhere**: without it `density` rejoins the
-/// deposit's key, the deposit and the extractor stop sharing one, and `{limit held:extractor
-/// by:deposit}` has nothing to compare.
-const DELETABLE: [&str; 20] = [
+/// **All three `{attribute ...}` rows are deletable now, and the deposit's `density` is the one
+/// that changed.** It was load-bearing everywhere while the deposit limit compared extractor and
+/// deposit key for key: without the mark, `density` rejoined the deposit's key and there was
+/// nothing to compare. **A capacity reads the column and not the key**, so folding the limit into
+/// the table on 2026-09-20 took the last `.4x` reader of that mark away.
+///
+/// **It is not decoration, and this is the third entry that has to say so**: `a_deposit_cannot_
+/// have_two_densities` in `tests/structure.rs` is what holds it, and the sweep runs the `.4x`
+/// tests and the reference checks rather than the Rust suite.
+const DELETABLE: [&str; 23] = [
     "12 rules.4x binding",
     "12 rules.4x literal",
-    "2 schema.4x attribute",
+    "3 schema.4x attribute",
     // **`stock`'s `quantity`, and it is read by `tests/structure.rs` rather than by `data/`.** A
     // family's columns are what its members must have, so declaring `quantity` is what stops a
     // relation that is merely somewhere from being a stock - and
@@ -660,7 +659,18 @@ const DELETABLE: [&str; 20] = [
     "1 tests/a-territory-with-no-orbit-cannot-launch.4x energy",
     "1 tests/a-territory-with-no-orbit-cannot-launch.4x labor",
     "1 tests/a-territory-with-no-orbit-cannot-launch.4x metal",
+    // **The capacity row in the three refusal tests, and the same sentence covers all three.** A
+    // `{refused}` test states a `given` and asserts what the rule said about it; there is no `then`
+    // to differ, so a row is read only if the refusal turns on it - and in these three the refusal
+    // is about labour, or a readiness, or a key.
+    //
+    // **They are stated because a world with a deposit and an extractor in it says what a deposit
+    // holds**, which is what the fold made every such world do. **The two tests where a deposit
+    // being full *is* the refusal are not on this list**, which is what says the row does work
+    // where there is work to do.
+    "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x capacity",
     "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x extractor",
+    "1 tests/an-extractor-cannot-be-worked-without-labor.4x capacity",
     // **The adjacency and the scout, in the test about layers**, and the clause order is why:
     // `move` requires the `from` place, then the `to` place - which takes its layer from the first
     // - and only then the adjacency and the unit. **The second clause is where this test stops**,
@@ -671,6 +681,7 @@ const DELETABLE: [&str; 20] = [
     // *there was nothing to move*, and the engine needs neither to say it.
     "1 tests/nothing-moves-between-the-layers.4x adjacency",
     "1 tests/nothing-moves-between-the-layers.4x scout",
+    "1 tests/one-extractors-readiness-is-not-anothers.4x capacity",
     "2 tests/one-extractors-readiness-is-not-anothers.4x extractor",
     "2 tests/the-scout-cannot-cross-where-there-is-no-border.4x adjacency",
     // **A place nothing stands in and nothing points at.** The scout crosses from the first
@@ -768,7 +779,7 @@ fn no_value_can_be_changed_without_breaking_something() {
 ///
 /// **A `moving` that never moves is the other shape here.** The berth tests hold vehicles to count
 /// them, not to move them, so what those rows say about moves is read by nothing.
-const NOT_LOAD_BEARING: [&str; 45] = [
+const NOT_LOAD_BEARING: [&str; 48] = [
     // **The one `assigns` row's id is read by nothing.** There were two, and changing one id
     // to the other's collided on the key; with one row there is nothing to collide with.
     // **`assigns` may not need an `id` at all** - keyed by `(clause, input, value)` it could not
@@ -839,9 +850,13 @@ const NOT_LOAD_BEARING: [&str; 45] = [
     "1 tests/an-ark-holds-one-energy-and-the-rest-is-lost.4x ark.moving",
     "1 tests/an-extractor-cannot-be-built-where-the-deposits-are-taken.4x deposit.density",
     "1 tests/an-extractor-cannot-be-built-where-the-deposits-are-taken.4x extractor.working",
+    // **And their quantities, for the reason their rows are deletable.** The rows are a few lines
+    // up with the sentence that covers both.
+    "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x capacity.quantity",
     "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x deposit.density",
     "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x extractor.quantity",
     "1 tests/an-extractor-cannot-be-worked-twice-on-one-readiness.4x extractor.working",
+    "1 tests/an-extractor-cannot-be-worked-without-labor.4x capacity.quantity",
     "1 tests/an-extractor-cannot-be-worked-without-labor.4x deposit.density",
     "1 tests/breeding-does-not-reach-the-citizens-it-just-made.4x citizen.laboring",
     "1 tests/breeding-stops-when-the-food-does.4x citizen.laboring",
@@ -852,6 +867,7 @@ const NOT_LOAD_BEARING: [&str; 45] = [
     "1 tests/nothing-moves-between-the-layers.4x adjacency.id",
     "1 tests/nothing-moves-between-the-layers.4x scout.moving",
     "1 tests/nothing-moves-between-the-layers.4x scout.quantity",
+    "1 tests/one-extractors-readiness-is-not-anothers.4x capacity.quantity",
     "2 tests/one-extractors-readiness-is-not-anothers.4x deposit.density",
     "2 tests/one-extractors-readiness-is-not-anothers.4x extractor.quantity",
     "2 tests/one-extractors-readiness-is-not-anothers.4x extractor.working",

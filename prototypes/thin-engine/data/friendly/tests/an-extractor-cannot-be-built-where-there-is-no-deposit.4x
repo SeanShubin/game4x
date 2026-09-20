@@ -10,6 +10,7 @@
 {given}
 {territory id:1 name:territory-1}
 {place id:1 of:territory-1 layer:surface name:place-1}
+{capacity of:deposit for:extractor what:resource per:place} -> 1
 {labor where:place-1} -> 1
 {metal where:place-1} -> 1
 
