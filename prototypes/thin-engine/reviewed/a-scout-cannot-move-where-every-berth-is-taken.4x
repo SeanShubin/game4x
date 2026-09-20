@@ -7,17 +7,19 @@
 {test name:a-scout-cannot-move-where-every-berth-is-taken}
 
 {given}
-{provides kind:territory what:berth} -> 6
+{provides kind:place what:berth} -> 6
 {consumes kind:scout what:berth} -> 1
 {consumes kind:transport what:berth} -> 2
 {territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
 {territory id:2 name:territory-2}
+{place id:2 of:territory-2 layer:surface name:place-2}
 {adjacency id:1 from:territory-1 to:territory-2}
-{scout where:territory-1 moving:1} -> 1
-{transport where:territory-2 moving:1} -> 3
+{scout where:place-1 moving:1} -> 1
+{transport where:place-2 moving:1} -> 3
 
 {when}
-{move what:scout from:territory-1 to:territory-2}
+{move what:scout from:place-1 to:place-2}
 
 {refused}
-{provides kind:territory what:berth} -> 7
+{provides kind:place what:berth} -> 7

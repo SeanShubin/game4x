@@ -21,17 +21,19 @@
 
 {given}
 {territory id:1 name:territory-1}
-{capacity of:territory for:bin what:resource per:territory} -> 4
-{capacity of:bin for:resource what:resource per:territory} -> 10
-{bin where:territory-1 what:metal} -> 2
-{metal where:territory-1} -> 22
+{place id:1 of:territory-1 layer:surface name:place-1}
+{capacity of:place for:bin what:resource per:place} -> 4
+{capacity of:bin for:resource what:resource per:place} -> 10
+{bin where:place-1 what:metal} -> 2
+{metal where:place-1} -> 22
 
 {when}
 {end-turn}
 
 {then}
 {territory id:1 name:territory-1}
-{capacity of:territory for:bin what:resource per:territory} -> 4
-{capacity of:bin for:resource what:resource per:territory} -> 10
-{bin where:territory-1 what:metal} -> 2
-{metal where:territory-1} -> 20
+{place id:1 of:territory-1 layer:surface name:place-1}
+{capacity of:place for:bin what:resource per:place} -> 4
+{capacity of:bin for:resource what:resource per:place} -> 10
+{bin where:place-1 what:metal} -> 2
+{metal where:place-1} -> 20
