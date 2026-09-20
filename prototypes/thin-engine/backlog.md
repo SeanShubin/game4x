@@ -346,9 +346,30 @@ and the adjacency clause wants the territories, which is a join - `{reading ...}
 `work` uses for a deposit's density and `upkeep` now uses for a parent's bearing. **Two readings,
 one per side**, landing in the rule that is already the most complicated.
 
-**The alternative is adjacency between places**: no readings, three times the rows, and an
-`adjacency.kind` column to keep the three moves apart. **Rows in the world against readings in the
-rule** - and the readings look right, because the graph stays one thing.
+**The alternative was adjacency between places** - no readings, three times the rows, and an
+`adjacency.kind` column to keep the three moves apart. **Sean, 2026-09-20, ruled it out**: *I don't
+want to be "stating adjacency between places".* So the graph stays one thing and the rule pays the
+join.
+
+## What that choice buys, which is more than it costs
+
+**Two readings get `move` from a place to its territory**, one per side, and they feed one
+`require adjacency` clause - `row_of` walks every reading on a clause, so two sources into one
+pattern is what it already does.
+
+**And crossing between layers needs no comparison at all.** Launching wants the two places to share
+a territory, which reads like an equality test and is not one:
+
+```text
+require place[id:$from layer:surface]           -> read its `of`
+require place[id:$to   layer:orbit  of:<that>]  <- a pattern, not a comparison
+```
+
+**A place above a different territory simply does not match**, and the rule is refused. That is the
+same move the whole engine makes: what looks like an operator is a pattern that matches or does not.
+
+**The layer needs no reading either** - it is a literal on the require clause, so `move-on-surface`
+and `move-in-orbit` differ by one written value and share every other clause.
 
 ## Three steps, because the review has to be one kind of change at a time
 
