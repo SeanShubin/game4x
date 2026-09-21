@@ -538,6 +538,30 @@ in *amount* rather than in what is allowed - `{stands-in ...}` answers both case
 still the one with no user.
 
 
+## What `spec/` already said, and the prototype kept proposing back to it
+
+**Twice in one day, and the second time was the interesting one.** When `C-134` carried six
+differences to the specification lane, **three of them were already stated there** - things created
+at full capability is `spec/turn.md` verbatim, a legal deployment succeeding where a part falls
+short is `spec/console.md`'s `[soft]` with two fences in `spec/invariants.md`, and fuel being energy
+is how both files already read.
+
+**And the architecture rules were the same shape.** `C-136` asked whether a later implementation
+might hand-write its rules in Rust, and said to reject the item if so. It cannot:
+`spec/invariants.md` already requires *a recipe is data*, *every rule has a text form, and the text
+is the rule*, and *the console parses, and its grammar is the primitive list*. **The question had an
+answer before it was asked.**
+
+**So the prototype's value is not where this lane kept looking for it.** It was not finding what the
+specification had wrong; it was **building the instrument for what the specification already said
+and could not observe**. `spec/invariants.md` has said since 2026-09-12 - two days before this
+prototype's first commit - that *the primitives are a closed list [...] decided once and
+deliberately*, and nothing ever checked it. `tests/engine.rs` does.
+
+**The habit that falls out**: when this prototype reports a difference, re-derive it against `spec/`
+before calling it one. **It has been wrong about that four times out of seven**, which is a rate
+worth remembering rather than a rule worth writing.
+
 ## What the prototype has settled that `spec/` has not caught up with
 
 **`spec/` is not the authority this answers to.** Sean, 2026-09-20, twice, after this lane cited it

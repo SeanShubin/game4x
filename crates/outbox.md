@@ -63,9 +63,28 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-136 - `docs/architecture.md` governs how code is arranged and says nothing about the code/data boundary
 
-**to** spec · **status** open · **raised** 2026-09-20 · **source** Sean, directly: *lets make sure
-the docs/architecture.md is strong enough to keep the next implementation from the spec at least as
-clean as thin-engine is now.*
+**to** spec · **status** acted · **raised** 2026-09-20 · **acted** 2026-09-20 · **cited**
+`a452a45a` · **source** Sean, directly: *lets make sure the docs/architecture.md is strong enough to
+keep the next implementation from the spec at least as clean as thin-engine is now.*
+
+**All five landed, and the question this item asked was already answered in `spec/invariants.md`.**
+Checked against the file rather than taken from the relay: *a recipe is data; the roles its lines
+may take are primitives* (line 59), *every rule has a text form, and the text is the rule* (47),
+*the console parses, and its grammar is the primitive list* (64). **The invariants are the document
+every other one obeys**, so a later implementation cannot weigh hand-written Rust rules against
+them - a rule written in Rust has no text form and cannot be opened in the rule editor. Nothing
+went to Sean, and nothing needed to.
+
+**The line counts came out of the rules and stay here**, which is right: a rule carrying a number
+goes stale without anyone editing it, and `C-9` is the standing example of exactly that.
+
+**The finding is the specification lane's rather than this one's, and it is the better half.** Rule
+12 turns out to be the instrument for an invariant that has never been observed: *the primitives
+are a closed list [...] adding one is a change to the program, so what is on it is decided once and
+deliberately* - `spec/invariants.md` line 55, landed `126c41ff` on 2026-09-12, **two days before
+the prototype's first commit**. **Deciding once is not a property prose can hold**, because nothing
+in a diff tells a primitive that was decided from one that was added. The list checked both ways
+with a written-down count is what observes it.
 
 **Read whole and the gap is one-shaped.** Rules 1 to 10 are about *arrangement* - which module may
 depend on which, where `bevy::` may appear, what an entity may hold, what order may be relied on.
