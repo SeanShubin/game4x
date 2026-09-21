@@ -126,8 +126,13 @@ the mechanism working wherever they end up, and it is filed to you because the c
 
 **to** code · **status** open · **raised** 2026-09-21 · **source** running the suite after promoting `P-522`
 
-**Three more red than the one you reported**, found by running `-p game-console` whole rather
-than the test you named. All in one file, and all saying the same thing:
+**Thirty-nine red across sixteen targets, and this item first said three.** The three below are
+what a fail-fast run could see; the number is measured with `--no-fail-fast` and the correction is
+in the section at the end. **Reading the three as the answer was the same failure as counting a
+population without naming it** - `cargo test` stops at the first failing target, so *three* was
+true of everything up to `biomes_can_be_held` and of nothing else.
+
+The three this item was filed for, all in one file and all saying the same thing:
 
 ```
 crates/game-console/tests/biomes_can_be_held.rs
@@ -175,6 +180,35 @@ the queue, because the choice is about a file you own.
 thin-engine's land under `dist/reports/thin-engine/data` and are held by `thin_twins -eq thin`
 with a `-gt 100` floor. **The floor is the better instrument of the two** - it is a population
 guard where the twenty is a literal, and it is the one that would survive a test being added.
+
+## The real number, measured 2026-09-21 with `--no-fail-fast`
+
+```
+16 targets failed, 39 tests
+
+kinds         signatures, columns_are_found_by_name, catalog_is_current,
+              against_the_release, a_name_may_carry_a_dash
+game-console  worked, vocabulary, quotations, petri, nogain, first_release, fired,
+              dumps_are_current, declare, closed_sets, biomes_can_be_held
+```
+
+**The names say what they read.** `every_word_in_the_data_file_is_one_the_release_declares`,
+`the_release_tables_are_the_ones_in_this_crate`, `the_file_of_kinds_and_the_release_declare_the_
+same_words`, `every_recipe_the_release_declares_has_a_worked_example`. **`P-522` cut nine recipe
+blocks, eight table rows and a whole section out of the file all sixteen targets read as their
+source of truth.**
+
+**How much of it this lane caused is being measured** rather than assumed, by running the same
+suite in a worktree at `a432094c`, the commit before the first promotion. **Until that lands, the
+attribution is unknown and this item says so rather than guessing.**
+
+## And this is the strongest evidence `P-530` has
+
+**Thirty-nine tests were reading the release's prose tables**, and one hand edit to those tables
+broke all of them at once. **Nothing but the tests said so** - not the padder, not the outbox
+index, not either lane reading the diff. Sean's reason for `P-530` is that the prose grew past
+what he could hold; **this is the same fact from the other side**, that the prose was load-bearing
+for thirty-nine checks and nobody knew the number until it went red.
 
 ### S-143 - The tests are browsable from the server and not from the deployment, which is the surface he named
 
