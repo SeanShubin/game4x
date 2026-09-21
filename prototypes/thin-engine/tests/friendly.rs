@@ -4,8 +4,10 @@
 //! why it may name anything it likes and why `data/engine.4x` does not grow a word for it.
 
 mod common;
-use common::friendly::Names;
+use common::friendly::{Change, Names, compared};
 use common::{game_rows, rows};
+use thin_engine::notation::Row;
+use thin_engine::schema::Schema;
 
 /// **`given.4x` renders as Sean wrote it**, line for line.
 #[test]
@@ -199,4 +201,96 @@ fn a_counted_relation_renders_with_an_arrow() {
         .find(|row| row.relation == "territory")
         .expect("a territory");
     assert_eq!(names.row(territory), "{territory id:1 name:territory-1}");
+}
+
+/// **A test states two worlds, and the report says which rows moved between them.**
+///
+/// **Sean, 2026-09-20**: *I need the report to visually indicate somehow the difference between
+/// lines that are identical in given and then, from lines that are different.* This is the half
+/// that decides; the marking up is `examples/report.rs` and reads off what this returns.
+///
+/// **The fourth case is the one worth having.** Two extractors over one deposit, one spent and one
+/// fresh, become two fresh ones - and which became which has no answer, so neither is reported as
+/// having changed. **`ending-a-turn-restores-a-scout-and-an-extractor` is that world**, and it is
+/// in the suite rather than invented here.
+#[test]
+fn what_moved_between_two_worlds_is_paired_only_where_the_pairing_is_forced() {
+    let game = game_rows();
+    let names = Names::of(&game);
+    let schema = Schema::of(&game).expect("a schema");
+    let world = |lines: &str| -> Vec<Row> {
+        lines
+            .lines()
+            .map(|line| {
+                names
+                    .parse(line.trim())
+                    .unwrap_or_else(|why| panic!("{why}"))
+            })
+            .collect()
+    };
+
+    // **Unchanged, changed in a readiness, changed in a quantity, gone, and new** - the five
+    // answers, in one pair of worlds.
+    let (was, now) = compared(
+        &schema,
+        &world(
+            "{deposit where:place-1 what:metal density:6} -> 1
+{extractor where:place-1 what:metal working:1} -> 1
+{metal where:place-1} -> 16
+{labor where:place-1} -> 1",
+        ),
+        &world(
+            "{deposit where:place-1 what:metal density:6} -> 1
+{extractor where:place-1 what:metal working:0} -> 1
+{metal where:place-1} -> 22
+{food where:place-1} -> 3",
+        ),
+    );
+    assert_eq!(
+        was,
+        vec![
+            Change::Same,
+            Change::Changed(vec!["working".to_string()]),
+            Change::Changed(vec!["quantity".to_string()]),
+            Change::Gone,
+        ],
+        "a deposit that did not move, an extractor that was spent, metal that grew, labour that went"
+    );
+    assert_eq!(
+        now,
+        vec![
+            Change::Same,
+            Change::Changed(vec!["working".to_string()]),
+            Change::Changed(vec!["quantity".to_string()]),
+            Change::New,
+        ],
+        "and the same four from the other side, with food arriving where labour left"
+    );
+
+    // **The pairing is refused where there is a choice**, which is the whole of what makes this
+    // deterministic. Both extractors stand in one deposit, so neither *is* the one that ends
+    // fresh, and saying either had changed would be picking.
+    let (was, now) = compared(
+        &schema,
+        &world(
+            "{extractor where:place-1 what:metal working:0} -> 1
+{extractor where:place-1 what:metal working:1} -> 1",
+        ),
+        &world("{extractor where:place-1 what:metal working:1} -> 2"),
+    );
+    assert_eq!(was, vec![Change::Gone, Change::Gone]);
+    assert_eq!(now, vec![Change::New]);
+
+    // The control: one on each side and the same pairing is forced rather than refused, so the
+    // two above are unpaired for having a choice rather than for being extractors.
+    let (was, now) = compared(
+        &schema,
+        &world("{extractor where:place-1 what:metal working:0} -> 1"),
+        &world("{extractor where:place-1 what:metal working:1} -> 2"),
+    );
+    let both = vec![Change::Changed(vec![
+        "quantity".to_string(),
+        "working".to_string(),
+    ])];
+    assert_eq!((was, now), (both.clone(), both));
 }

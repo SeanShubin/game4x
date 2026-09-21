@@ -68,6 +68,54 @@ fn escaped(raw: &str) -> String {
         .replace('>', "&gt;")
 }
 
+/// One friendly line, with the cells that differ between the two worlds marked.
+///
+/// **Sean, 2026-09-20**, asking for this as the bonus half: *split a single line into what is
+/// different about it, but only if it can be done deterministically.* **It is**, because the line
+/// is already a list of cells - `{relation column:value ...}` and an arrow - and which of them
+/// differ is what [`friendly::compared`] hands over.
+///
+/// **The quantity is a cell too, and is written as an arrow rather than as `quantity:n`.** So it
+/// is marked by where it sits rather than by its name, which is the one place this has to know how
+/// the friendly form writes a row.
+/// A friendly line and the row it is, so a marking can be found by the line it belongs to.
+type Stated = (String, Row);
+
+fn celled(line: &str, differ: &[String], counted: Option<&str>) -> String {
+    let (Some(open), Some(close)) = (line.find('{'), line.find('}')) else {
+        return escaped(line);
+    };
+    let mut out = escaped(&line[..=open]);
+    for (at, token) in line[open + 1..close].split(' ').enumerate() {
+        if at > 0 {
+            out.push(' ');
+        }
+        // **The relation is the first token and names no column**, so it is never a cell that
+        // differs - two rows of different relations are never paired at all.
+        let column = token.split_once(':').map(|(name, _)| name).unwrap_or("");
+        if at > 0 && differ.iter().any(|it| it == column) {
+            out.push_str(&format!("<span class=\"cell\">{}</span>", escaped(token)));
+        } else {
+            out.push_str(&escaped(token));
+        }
+    }
+    let tail = &line[close..];
+    match counted.filter(|it| differ.iter().any(|was| was == it)) {
+        Some(_) => match tail.find("->") {
+            Some(arrow) => {
+                out.push_str(&escaped(&tail[..arrow]));
+                out.push_str(&format!(
+                    "<span class=\"cell\">{}</span>",
+                    escaped(&tail[arrow..])
+                ));
+            }
+            None => out.push_str(&escaped(tail)),
+        },
+        None => out.push_str(&escaped(tail)),
+    }
+    out
+}
+
 /// Whether the version of a test Sean read is the version that is there.
 ///
 /// **Whole file, whitespace collapsed.** A comment reworded counts, because in the workflow this
@@ -445,6 +493,52 @@ not as expected
             _ => BTreeMap::new(),
         };
 
+        // **What moved between the two worlds a test states.** A test says what was there and
+        // what is there afterwards, and most of the second is the first - so the report says which
+        // is which rather than leaving a reader to compare six citizen rows by eye.
+        //
+        // **Only where there are two worlds.** A `{refused}` test states one, and a line of it is
+        // neither the same as nor different from anything.
+        let schema = thin_engine::schema::Schema::of(&whole).ok();
+        let mut marks: BTreeMap<(String, String), (friendly::Change, Option<String>)> =
+            BTreeMap::new();
+        if let Some(schema) = &schema {
+            let (mut given, mut ends): (Vec<Stated>, Vec<Stated>) = (Vec::new(), Vec::new());
+            let mut at = "";
+            for line in source.lines() {
+                let bare = line.trim();
+                if matches!(bare, "{given}" | "{when}" | "{then}" | "{refused}") {
+                    at = bare;
+                    continue;
+                }
+                let holder = match at {
+                    "{given}" => &mut given,
+                    "{then}" => &mut ends,
+                    _ => continue,
+                };
+                if bare.starts_with('{')
+                    && let Ok(row) = names.parse(bare)
+                {
+                    holder.push((bare.to_string(), row));
+                }
+            }
+            if !given.is_empty() && !ends.is_empty() {
+                let only = |these: &[Stated]| -> Vec<Row> {
+                    these.iter().map(|it| it.1.clone()).collect()
+                };
+                let (was, now) = friendly::compared(schema, &only(&given), &only(&ends));
+                for (side, these, changes) in [("{given}", &given, was), ("{then}", &ends, now)] {
+                    for ((line, row), change) in these.iter().zip(changes) {
+                        let counted = schema
+                            .relation(&row.relation)
+                            .and_then(|it| it.quantity())
+                            .map(str::to_string);
+                        marks.insert((side.to_string(), line.clone()), (change, counted));
+                    }
+                }
+            }
+        }
+
         // **A row is marked in the section it is asserted in, and nowhere else.** Marking by text
         // alone put *wanted, not got* on a `{given}` line that happened to read the same as the
         // `{then}` line it was about - the given says what was there, and nothing about it can be
@@ -471,7 +565,25 @@ not as expected
             // keeps the newlines in its text and these spans are `display: block`, so a `\n`
             // between them ended the line a second time and every row rendered with a blank one
             // beneath it. **The block is what ends the line**; the newline was a second ending.
-            body.push_str(&format!("<span class=\"{kind}\">{}</span>", escaped(line)));
+            // **What became of this row, where there are two worlds to compare.** It is a second
+            // class rather than a different one, so a line the run disagrees about keeps the mark
+            // that says so - the run's quarrel with the test is the louder thing.
+            let (mut moved, mut shown) = (String::new(), escaped(line));
+            if kind == "row"
+                && let Some((change, counted)) = marks.get(&(section.to_string(), bare.to_string()))
+            {
+                moved = match change {
+                    friendly::Change::Same => " same",
+                    friendly::Change::Changed(differ) => {
+                        shown = celled(line, differ, counted.as_deref());
+                        " changed"
+                    }
+                    friendly::Change::Gone => " gone",
+                    friendly::Change::New => " new",
+                }
+                .to_string();
+            }
+            body.push_str(&format!("<span class=\"{kind}{moved}\">{shown}</span>"));
         }
         if let Outcome::Differed { extra, .. } = &outcome {
             for one in extra {
@@ -529,7 +641,7 @@ not as expected
         String::new()
     };
     let page = format!(
-        "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>thin-engine tests</title>\n<style>{STYLE}</style>\n</head>\n<body{body_attribute}>\n<h1>thin-engine</h1>\n<p class=\"tally\"><strong>{total}</strong> tests &middot; <span class=\"ok\">{passed} as expected</span> &middot; <span class=\"red\">{red} red</span> &middot; <span class=\"seen\" data-tally=\"seen\">{reviewed} reviewed</span> &middot; <span class=\"unseen\" data-tally=\"unseen\">{unreviewed} to read</span></p>\n<p class=\"note\">Generated by <code>cargo run --example report</code>. Each test is shown whole, in the friendly form. A line the run wanted and did not get is marked <span class=\"key missing\">so</span>; one it got and did not want is marked <span class=\"key extra\">so</span>.</p>\n{cards}{script}</body>\n</html>\n"
+        "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>thin-engine tests</title>\n<style>{STYLE}</style>\n</head>\n<body{body_attribute}>\n<h1>thin-engine</h1>\n<p class=\"tally\"><strong>{total}</strong> tests &middot; <span class=\"ok\">{passed} as expected</span> &middot; <span class=\"red\">{red} red</span> &middot; <span class=\"seen\" data-tally=\"seen\">{reviewed} reviewed</span> &middot; <span class=\"unseen\" data-tally=\"unseen\">{unreviewed} to read</span></p>\n<p class=\"note\">Generated by <code>cargo run --example report</code>. Each test is shown whole, in the friendly form. A line the run wanted and did not get is marked <span class=\"key missing\">so</span>; one it got and did not want is marked <span class=\"key extra\">so</span>.</p>\n<p class=\"note\">Between a test's two worlds: a row that did not change is <span class=\"key same\">dimmed</span>, a row that did has the cells that differ marked <span class=\"cell\">so</span>, and a row in one world and not the other says which. <b>Two rows that are the same thing are paired only where there is exactly one of them on each side</b> - so a spent extractor and a fresh one over one deposit are reported as gone and new rather than as one of them changing, because which became which has no answer.</p>\n{cards}{script}</body>\n</html>\n"
     );
     Built {
         page,
@@ -735,10 +847,20 @@ pre {
   margin: 0; overflow-x: auto; background: rgba(127,127,127,.08);
   padding: .7rem .9rem; border-radius: .25rem;
 }
-pre span { display: block; padding: 0 .3rem; border-left: 3px solid transparent }
+pre > span { display: block; padding: 0 .3rem; border-left: 3px solid transparent }
 .said { opacity: .55 }
 .gap { height: .8em }
 .mark { font-weight: 700 }
+.same { opacity: .5 }
+.changed { border-left-color: rgba(90,130,220,.75) }
+.cell { background: rgba(90,130,220,.28); border-radius: .2rem; padding: 0 .15rem }
+.gone { border-left-color: rgba(140,140,140,.9) }
+.gone::after { content: " <- gone by then"; opacity: .55; font-size: .8em }
+.new { border-left-color: rgba(40,150,110,.9) }
+.new::after { content: " <- new in then"; opacity: .55; font-size: .8em }
+@media (prefers-color-scheme: dark) {
+  .cell { background: rgba(120,160,250,.3) }
+}
 .missing { background: rgba(200,40,40,.16); border-left-color: rgb(190 50 50) }
 .missing::after { content: " <- wanted, not got"; opacity: .7; font-size: .8em }
 .extra { background: rgba(210,130,0,.18); border-left-color: rgb(200 120 0) }

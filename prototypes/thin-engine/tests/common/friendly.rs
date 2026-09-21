@@ -726,3 +726,118 @@ impl Names {
 pub fn shown(row: &Row) -> String {
     thin_engine::notation::write(row)
 }
+
+/// What a row *is*, as a value that can be compared and ordered: its relation, and the columns
+/// that name something.
+type Standing = (String, Vec<(String, String)>);
+
+/// How one row of a world stands to the same world later.
+///
+/// **Sean, 2026-09-20**: *I need the report to visually indicate somehow the difference between
+/// lines that are identical in given and then, from lines that are different.* A test states two
+/// worlds and most of the second is the first; what a reader wants is the part that moved.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum Change {
+    /// In both worlds, unchanged.
+    Same,
+    /// In both worlds, and these columns differ.
+    Changed(Vec<String>),
+    /// In the first world and not the second.
+    Gone,
+    /// In the second world and not the first.
+    New,
+}
+
+/// What a row *is*, as against what is true of it: its `id`, and what it points at.
+///
+/// **Nothing here is a judgement about which columns matter.** A column that references another
+/// relation names a thing, and an `id` is what other rows name this one by - so two rows agreeing
+/// on all of them are the same thing, and everything else is a fact about it that may change.
+///
+/// **It falls out right without saying so.** An extractor is where it is and what it mines, so its
+/// `working` may move; a deposit is where it is and what it is of, so its `density` may; a place
+/// has an `id`, so its `layer` may. **The readinesses are exactly the columns that are left**, and
+/// no list of them is written anywhere.
+fn stands_as(schema: &Schema, row: &Row) -> Option<Standing> {
+    let declared = schema.relation(&row.relation)?;
+    let mut named = Vec::new();
+    for column in &declared.columns {
+        // **`id` by name, the way the engine names it.** `Relation::identity` is the first column
+        // whatever it is called, which is a different question from *does this relation carry an
+        // id*.
+        if column.references.is_none() && column.name != "id" {
+            continue;
+        }
+        named.push((column.name.clone(), row.value(&column.name)?.to_string()));
+    }
+    Some((row.relation.clone(), named))
+}
+
+/// Two worlds, paired row for row, saying of each what became of it.
+///
+/// # Pairing two rows that are not identical is a choice, so it is refused where there is one
+///
+/// **A row pairs with a row that is the same thing**, by [`stands_as`] - and only when there is
+/// exactly one candidate on each side. `ending-a-turn-restores-a-scout-and-an-extractor` states a
+/// spent extractor and a fresh one over the same deposit and ends with two fresh ones: which
+/// became which is a question with no answer, and both are reported as gone and new rather than
+/// as one of them changing. **The same answer `NotOne` gives**, for the same reason - Sean,
+/// 2026-09-15: *We should never have non-determinism from what row happens to be encountered
+/// first.*
+///
+/// **Identical rows are matched first**, so a pairing can never take a row that is simply still
+/// there away from the row it is still there as.
+pub fn compared(schema: &Schema, before: &[Row], after: &[Row]) -> (Vec<Change>, Vec<Change>) {
+    let mut left: Vec<Option<Change>> = vec![None; before.len()];
+    let mut right: Vec<Option<Change>> = vec![None; after.len()];
+
+    for (i, one) in before.iter().enumerate() {
+        for (j, other) in after.iter().enumerate() {
+            if left[i].is_none() && right[j].is_none() && one == other {
+                left[i] = Some(Change::Same);
+                right[j] = Some(Change::Same);
+            }
+        }
+    }
+
+    let standing = |rows: &[Row], taken: &[Option<Change>]| {
+        let mut found: BTreeMap<Standing, Vec<usize>> = BTreeMap::new();
+        for (at, row) in rows.iter().enumerate() {
+            if taken[at].is_some() {
+                continue;
+            }
+            if let Some(key) = stands_as(schema, row) {
+                found.entry(key).or_default().push(at);
+            }
+        }
+        found
+    };
+    let mine = standing(before, &left);
+    let theirs = standing(after, &right);
+
+    for (key, ours) in &mine {
+        let (Some(yours), [i]) = (theirs.get(key), ours.as_slice()) else {
+            continue;
+        };
+        let [j] = yours.as_slice() else { continue };
+        let (one, other) = (&before[*i], &after[*j]);
+        let mut differ: Vec<String> = Vec::new();
+        for column in one.values.keys().chain(other.values.keys()) {
+            if one.value(column) != other.value(column) && !differ.contains(column) {
+                differ.push(column.clone());
+            }
+        }
+        left[*i] = Some(Change::Changed(differ.clone()));
+        right[*j] = Some(Change::Changed(differ));
+    }
+
+    (
+        left.into_iter()
+            .map(|it| it.unwrap_or(Change::Gone))
+            .collect(),
+        right
+            .into_iter()
+            .map(|it| it.unwrap_or(Change::New))
+            .collect(),
+    )
+}
