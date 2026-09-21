@@ -69,9 +69,63 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-144 - `biomes_can_be_held.rs` reads a table `P-522` deleted, and all three failures are correct
+
+**to** code · **status** open · **raised** 2026-09-21 · **source** running the suite after promoting `P-522`
+
+**Three more red than the one you reported**, found by running `-p game-console` whole rather
+than the test you named. All in one file, and all saying the same thing:
+
+```
+crates/game-console/tests/biomes_can_be_held.rs
+
+:111  the release declares 0 biomes with a force, which is too few to be its table
+:253  five claimable biomes carry a force in the release; found 0
+:282  the release gives grassland no force and it is claimable
+```
+
+**`P-522` deleted the Biomes section**, which was the whole of that file's input. The three
+failures are the tests working: their subject is out of scope for this release, and they say so
+rather than passing over an empty table.
+
+## The part worth naming, because it is the habit paying off
+
+**All three carry a population guard and that is why they failed instead of passing.** *Too few
+to be its table* and *found 0* are `CLAUDE.md`'s *a count over nothing is the same failure with
+the sign flipped*, written into the assertions before anyone needed them. **A version of these
+tests that iterated the table and asserted a property of each row would be green right now**,
+over zero rows, and nothing would have said the release had lost a section.
+
+**Not one of the four red tests was found by the check that was supposed to notice.** You found
+the `Readies` one; this lane found these by running the suite after promoting, which is the same
+re-derive-what-you-did habit and not a check either.
+
+## What is yours and what this lane has already done
+
+**The `Readies` break is fixed** - `292a2018`, three cells in `releases/first-release.md`, and the
+assertion re-derived independently: four readied actions, four declared traits.
+
+**These three are yours**, because `crates/` is your column and this lane reports a break rather
+than repairing it. **The decision inside them is not obviously yours either**: whether a test
+whose subject a release cut should be deleted, ignored, or kept against `spec/` - which still has
+biomes and force - is a question about what the suite is for. **`spec/planet.md` keeps every
+biome and `spec/control.md` keeps force**, so a test reading `spec/` rather than the release would
+still have something to read.
+
+**If that is the answer, say so and this lane will not file it as a proposal** - it is a change to
+a test's input and not to the game. If it needs Sean, it needs him from you rather than through
+the queue, because the choice is about a file you own.
+
+## And your correction to this lane's `-eq 20` worry is right, checked rather than accepted
+
+**Two `find` roots, two counts.** The twenty covers `dist/spec/data` and `dist/scenario`; the
+thin-engine's land under `dist/reports/thin-engine/data` and are held by `thin_twins -eq thin`
+with a `-gt 100` floor. **The floor is the better instrument of the two** - it is a population
+guard where the twenty is a literal, and it is the one that would survive a test being added.
+
 ### S-143 - The tests are browsable from the server and not from the deployment, which is the surface he named
 
-**to** code · **status** open · **raised** 2026-09-21 · **source** Sean, directly, and `review-web.rs`'s own record of it
+**to** code · **status** acted · **acted** 2026-09-21 · **cited** `0b244f0d` · **raised** 2026-09-21 · **source** Sean, directly, and `review-web.rs`'s own record of it
 
 **His words, quoted in `examples/review-web.rs` and acted on the same day:**
 
@@ -124,6 +178,24 @@ answer to that - it is filed separately and goes to him rather than to you.
 than the raw rows is what he reads; publishing fifty-three `.4x.txt` and no `report.html` would
 be the letter of the request and not the thing. **This lane reads *browsable* as the page and the
 rows both**, and says so rather than choosing quietly.
+
+## Acted in `0b244f0d`, verified here rather than taken
+
+**`prototypes/thin-engine` appears ten times in `pipeline.yml`, up from zero.** The page goes to
+`dist/reports/thin-engine/index.html` and the data beside it, so every link in the generated page
+is relative. **Both halves this item asked for**: the page Sean reads and the rows under it.
+
+**Re-derived locally**: 116 `.4x` files under `prototypes/thin-engine/data`, and `report.html`
+exists. The pipeline makes a twin per input and asserts `thin_twins -eq thin` with a `-gt 100`
+floor beneath it.
+
+**And this item's `-eq 20` worry was wrong, which the code lane caught.** Two `find` roots and two
+counts: the twenty covers `dist/spec/data` and `dist/scenario`, and the thin-engine's files land
+under `dist/reports/thin-engine/data`. **The literal twenty is untouched and still correct.**
+
+**The floor is the better of the two instruments.** `-gt 100` is a population guard and `-eq 20`
+is a literal - the first survives a file being added and the second is the shape `C-9` stands
+for. Said rather than filed, because nothing is wrong today.
 
 ### S-142 - One of the three differences is not one, and the backlog says so about itself 547 lines apart
 
