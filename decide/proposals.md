@@ -58,6 +58,41 @@ Rule 3 becomes:
 >    **Where prose and a test disagree, the test is right and the prose is a defect.** Prose is
 >    the one of the three that can drift without anything noticing.
 
+## The half this proposal was missing, and the prototype already has it
+
+**Raised by the code lane, and it is right.** *Where they disagree the test is right* means
+nothing without a record of **which version you approved** - otherwise the rule says a test is
+right because it is a test, which is not what you said.
+
+**The prototype has the mechanism.** `reviewed/` holds a byte-for-byte copy of the test as you
+read it; the report compares the current test against that copy, normalized on whitespace, and
+says *never reviewed*, *reviewed*, or shows where it drifted. **That is `promote` made
+continuous** - the protocol in `CLAUDE.md` gets the same guarantee once, at the moment of
+copying, and this gets it on every build.
+
+**It is not offered as words above** because it belongs with the answer to where the tests live,
+and that is still open. **Named here so the rule is not approved without it**: a test being
+primary and a record of your approval are one mechanism, not two.
+
+**And it is one-directional today**, which this lane found by checking it: 54 records against 53
+tests, two records pointing at tests that no longer exist and one test with no record. The report
+walks tests and nothing walks records. **Filed to the code lane as `S-145`** - small today,
+load-bearing if this rule lands.
+
+## Where the tests live, and the code lane's view on it
+
+**This proposal leaves it open and the code lane has argued a position**, recorded here rather
+than adopted because it is yours:
+
+> A test he writes and approves is normative - it is the thing the prose obeys - so it cannot
+> live where either producer edits it freely. That rules out `prototypes/` and `crates/` as much
+> as anything of the specification lane's. The prototype has already demonstrated the split: the
+> test is data and the thing that runs it is code. So the tests belong in a column governed like
+> `spec/` - his, changed only by promotion - with the runner in `crates/`.
+
+**This lane agrees and is not the one to say so**, which is why it is quoted rather than written
+into the rule.
+
 ## What this does not decide, and each is a separate question
 
 **Where the tests live.** They are in `prototypes/thin-engine/data/friendly/tests` today, and a

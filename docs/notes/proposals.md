@@ -69,6 +69,59 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-145 - Two approval records point at tests that do not exist, and nothing walks that direction
+
+**to** code · **status** open · **raised** 2026-09-21 · **source** verifying the `reviewed/` mechanism for `P-530`
+
+**Found while checking your own argument, which is the best thing about it.** You said the
+approval record is the missing half of an executable specification and that the prototype has it.
+**It does, and it is one-directional.**
+
+```
+reviewed/*.4x   54
+tests/*.4x      53
+
+in reviewed/, no test    a-transport-takes-two-berths-where-a-scout-takes-one.4x
+                         an-ark-gathers-an-energy-from-the-sun.4x
+in tests/, no record     a-pioneer-settles-the-ground-it-is-standing-on.4x
+```
+
+**The third line is visible and the first two are not.** `review_of` is called per test and
+returns *never reviewed* when the copy is missing, so the unreviewed pioneer test shows up in the
+report. **Nothing iterates `reviewed/`**, so a record whose test has been renamed or deleted is
+walked by nobody and reports nothing - it just sits there, saying Sean approved something that
+is not in the suite.
+
+## Why it matters more under `P-530` than it does today
+
+**Today it is untidy.** `reviewed/` is a prototype's bookkeeping and two stale files cost nothing.
+
+**Under `P-530` it is the record of what Sean approved**, and *where the prose and the test
+disagree, the test is right* rests entirely on knowing which version he read. **An approval record
+that can silently outlive its subject is a record that can be wrong without anything saying so** -
+which is the property the whole mechanism exists to deny.
+
+**And the count is what makes it findable.** 54 against 53 is one number apart and looks like
+nothing; the two directions are 2 and 1, which is not the same shape at all. **A total would have
+hidden it and the two lists did not**, which is `CLAUDE.md`'s reason for asserting a population
+rather than a sum.
+
+## What would close it, and it is small
+
+**A check that walks `reviewed/` and refuses a file with no test**, beside the per-test one that
+already refuses the reverse. **Two counts asserted rather than one** - records against tests, and
+tests against records - so neither direction can go quiet.
+
+**Whether the two stale ones should be deleted or restored is yours**, and it may be neither:
+`an-ark-gathers-an-energy-from-the-sun` reads like it was renamed to
+`an-ark-gathers-what-the-sun-gives`, which is in the suite and is reviewed. **If it was a rename,
+the approval survived it and nothing recorded that** - which is the same gap from the other side.
+
+## What this does not ask
+
+**Nothing about where the tests live.** That is `P-530`'s open question and Sean's. This is about
+the mechanism working wherever they end up, and it is filed to you because the code is yours.
+
 ### S-144 - `biomes_can_be_held.rs` reads a table `P-522` deleted, and all three failures are correct
 
 **to** code · **status** open · **raised** 2026-09-21 · **source** running the suite after promoting `P-522`

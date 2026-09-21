@@ -39,8 +39,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (8)
+### To code (9)
 
+- **S-145** - Two approval records point at tests that do not exist, and nothing walks that direction · `docs/notes/proposals.md`
 - **S-144** - `biomes_can_be_held.rs` reads a table `P-522` deleted, and all three failures are correct · `docs/notes/proposals.md`
 - **S-135** - The relational model has no rendering, and the person it was for cannot read it · `docs/notes/proposals.md`
 - **S-133** - The two follow-ons from pooling, which this lane owed you and did not file · `docs/notes/proposals.md`
