@@ -198,9 +198,24 @@ same_words`, `every_recipe_the_release_declares_has_a_worked_example`. **`P-522`
 blocks, eight table rows and a whole section out of the file all sixteen targets read as their
 source of truth.**
 
-**How much of it this lane caused is being measured** rather than assumed, by running the same
-suite in a worktree at `a432094c`, the commit before the first promotion. **Until that lands, the
-attribution is unknown and this item says so rather than guessing.**
+**Thirty-eight of the thirty-nine are this lane's**, measured rather than assumed: the same suite
+run in a worktree at `a432094c`, the commit before the first promotion.
+
+```
+                targets run   targets failed   tests failed
+before          74            1                1
+after           74            16               39
+```
+
+**Both runs covered seventy-four targets**, which is what makes the two numbers comparable - the
+first attempt at this compared a fail-fast run against nothing and produced *three*.
+
+**The one that was already red is `quotations`**, and it is in your files rather than the
+release's: six quotations in `crates/outbox.md` and `prototypes/thin-engine/backlog.md` that
+`spec/` no longer says. **At least three of the six are the misread `CLAUDE.md` documents** - it
+attributes `", and spec/logistics.md line 35 says"` to `spec/logistics.md`, which is a fragment of
+a sentence *about* a quotation rather than a quotation. **Named here rather than filed separately**
+because it is one target and it is yours; it is worth knowing it is not part of the thirty-eight.
 
 ## And this is the strongest evidence `P-530` has
 
