@@ -255,6 +255,34 @@ jobs:
           test -f crates/game4x/dist/lenses/research/formulas.html
           test -f crates/game4x/dist/tools/research/formulas/data.json
           test -f crates/game4x/dist/tools/research/formulas/results.json
+          # **The thin-engine's tests, served where they are asked for.** Sean, 2026-09-21:
+          # *can I render the tests from somewhere under
+          # https://seanshubin.github.io/game4x/reports/*. They land at
+          # `/game4x/reports/thin-engine/`, and the data beside the page so that every link in
+          # it is relative and resolves at any subpath - the same property the other reports
+          # already turn on.
+          #
+          # **The twins are `S-134` again and not a second decision.** A `.4x` is served as a
+          # download here and as text by `review-web`, so the page links `.4x.txt` when it is a
+          # file and `/data/...4x` when something is serving - and says which, because a clone's
+          # copy has links that resolve only once deployed.
+          #
+          # **The page is copied as committed**, so it is as fresh as the last
+          # `cargo run --example report`. Nothing compares it against a generator, which is why
+          # this says so rather than asserting it.
+          mkdir -p crates/game4x/dist/reports/thin-engine
+          cp prototypes/thin-engine/report.html crates/game4x/dist/reports/thin-engine/index.html
+          cp -r prototypes/thin-engine/data crates/game4x/dist/reports/thin-engine/data
+          find crates/game4x/dist/reports/thin-engine/data -name '*.4x' \
+            -exec sh -c 'cp "$1" "$1.txt"' _ {} \;
+          # **Every twin against every input**, so a copy that made none fails here rather than
+          # on the site - the same count the twenty above are held by.
+          thin=$(find crates/game4x/dist/reports/thin-engine/data -name '*.4x' | wc -l)
+          thin_twins=$(find crates/game4x/dist/reports/thin-engine/data -name '*.4x.txt' | wc -l)
+          test "$thin" -gt 100
+          test "$thin_twins" -eq "$thin"
+          test -f crates/game4x/dist/reports/thin-engine/index.html
+          echo "Published $thin thin-engine inputs with $thin_twins twins"
           echo "Published $(find crates/game4x/dist/reports -type f | wc -l) report files"
 
       - name: Upload Pages artifact

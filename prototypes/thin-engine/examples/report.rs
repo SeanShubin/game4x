@@ -605,7 +605,14 @@ not as expected
                 "<p class=\"raw\">on disk: <a href=\"/data/friendly/tests/{stem}.4x\">data/friendly/tests/{stem}.4x</a> · <a href=\"/data/foundation/tests/{stem}.4x\">foundation</a></p>\n"
             )
         } else {
-            String::new()
+            // **A `.txt` twin, because a published `.4x` is a download.** Measured in the
+            // mainline and ruled on by Sean as `S-134`: GitHub Pages picks the type from the
+            // extension, does not know this one, and offers no way to override it. The twin is
+            // written at deploy and committed nowhere, so **these two links resolve on the site
+            // and not in a clone** - which the note under the tally says out loud.
+            format!(
+                "<p class=\"raw\">on disk: <a href=\"data/friendly/tests/{stem}.4x.txt\">data/friendly/tests/{stem}.4x</a> · <a href=\"data/foundation/tests/{stem}.4x.txt\">foundation</a></p>\n"
+            )
         };
         let said = if why.is_empty() {
             String::new()
@@ -654,7 +661,9 @@ not as expected
     let browse = if live {
         " <a href=\"/data\">Browse the data files</a>."
     } else {
-        ""
+        // **The same sentence `reports/index.html` carries**, for the same reason: a generated
+        // copy is not canonical, and a link to one that is written at deploy is dead in a clone.
+        " Each test links to its source as a <code>.txt</code> twin, which is written when the          site is deployed and committed nowhere - so those links resolve at          <code>/game4x/reports/thin-engine/</code> and not in a clone."
     };
     let body_attribute = if live { " data-live" } else { "" };
     let script = if live {
