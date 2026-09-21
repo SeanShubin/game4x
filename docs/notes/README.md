@@ -63,3 +63,4 @@ disagree, the spec is right and the note needs a superseded marker.
 - [Every option was the same move](../postmortems/every-option-was-the-same-move.md) - **moved to the postmortems**, 2026-09-13
 - [Recording a failure found a second one](2026-09-14-recording-a-failure-found-a-second-one.md) - a habit catching something it did not come from, which is the bar `CLAUDE.md` sets
 - [Four counts in one day](2026-09-20-four-counts-in-one-day.md) - none was a miscount; every one omitted which population it was over
+- [Thirty-eight checks read a rendering](2026-09-21-thirty-eight-checks-read-a-rendering.md) - one approved edit to a markdown table broke 38 checks, and the count did not exist until it did

@@ -121,6 +121,29 @@ invites you to check rather than accept.
 reason is stated and this lane has not improved on it: the document grew past what one person
 could hold, and a test you have read is a piece of the game you are certain of.
 
+## And the argument arrived as a measurement the day after it was written
+
+**Promoting `P-522` broke thirty-eight checks across fifteen targets**, measured against a
+baseline so the attribution is real: 74 targets run before and after, 1 failing test before and
+39 after, and the one that was already red is unrelated.
+
+**All thirty-eight read `releases/first-release.md`'s markdown tables as their source.**
+`CLAUDE.md` already forbids exactly that - *a table of game data in markdown is a rendering and
+never a source* - and the rule was being broken thirty-eight times over, by checks that each
+looked reasonable on its own. **The count did not exist until something went red.**
+
+**Nothing but the tests noticed.** Not the padder, not the outbox index, not two lanes reading the
+diff. **That is the case for this rule stated as an event rather than as an argument**, and it is
+stronger than anything either lane wrote in favour of it.
+
+**It also bears on where the tests live.** The code lane's sentence, 2026-09-21: *a test that
+reads a prose table is reading a rendering as a source, and thirty-eight of them did.* **Whatever
+column the tests end up in, what they read has to be a stating form** - so the home question and
+this one are the same question.
+
+The measurement is in
+[thirty-eight checks read a rendering](../docs/notes/2026-09-21-thirty-eight-checks-read-a-rendering.md).
+
 ### P-528 - One fact about adjacency is now stated three times, in two files
 
 **to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** approval · **into** `spec/orbit.md` -> Crossing between layers, and `spec/planet.md` -> Distance
