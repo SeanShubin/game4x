@@ -87,6 +87,19 @@ fn collect(directory: &Path, into: &mut Vec<PathBuf>) {
             if name != "target" && name != "dist" {
                 collect(&path, into);
             }
+        } else if path.file_name().unwrap_or_default() == "report.html" {
+            // **A generated copy, by the rule two branches up.** `prototypes/thin-engine`
+            // renders every test into one page, comments and all - and reading it reports
+            // findings that are not there, because the renderer puts each line in its own
+            // element and this reads straight through the markup. One it reported was
+            // `</span><span class="said">#` spliced into the middle of a sentence
+            // `spec/turn.md` does say.
+            //
+            // **What it rendered is not read at its source either**, and that is the finding
+            // rather than this line: `.4x` is not among the extensions below, so every
+            // quotation in the prototype's data comments is unchecked. `C-137` carries what
+            // turning it on costs.
+            continue;
         } else if matches!(
             path.extension().and_then(|e| e.to_str()),
             Some("rs") | Some("md") | Some("html") | Some("sh") | Some("ps1")
@@ -105,10 +118,17 @@ fn flattened(text: &str) -> String {
     let mut out = String::new();
     for line in text.lines() {
         let line = line.trim();
+        // **`#` is the comment marker of the `.4x` notation**, and it has to come off for the
+        // same reason `//` does. Without it a quotation wrapped across two comment lines reads
+        // with a `#` spliced into the middle of it - *what expires expires, # and what was not
+        // kept in order is lost* - which is a sentence `spec/turn.md` does say, reported as one
+        // it does not. **Every multi-line quotation in a `.4x` file was that**, which is why
+        // reading those files needed this line and not only the extension.
         let line = line
             .strip_prefix("//!")
             .or_else(|| line.strip_prefix("///"))
             .or_else(|| line.strip_prefix("//"))
+            .or_else(|| line.strip_prefix('#'))
             .unwrap_or(line);
         if !out.is_empty() {
             out.push(' ');

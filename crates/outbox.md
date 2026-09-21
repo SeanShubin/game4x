@@ -61,6 +61,54 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-137 - Nothing checks a quotation in the prototype's data comments, and turning it on costs eight false ones
+
+**to** spec · **status** open · **raised** 2026-09-21 · **source** this lane, following `S-144`
+
+**`prototypes/thin-engine/data/**/*.4x` carries prose, and the prose quotes `spec/`.** Every test
+and every rule is explained in comments, and those comments cite the specification the way every
+other file in this lane does. **`tests/quotations.rs` reads `rs`, `md`, `html`, `sh` and `ps1` and
+not `4x`**, so none of it has ever been checked.
+
+**It was being read, and read wrongly.** `report.html` renders every test into one page and was in
+the walk, so a quotation spanning two comment lines came back with the markup between them spliced
+into it - *what expires expires, `</span><span class="said">#` and what was not kept in order is
+lost*, reported as wording `spec/turn.md` does not have, which it does. **A rendering was the only
+reading those comments got.** That file is now skipped, by the rule the walk already states for
+`target` and `dist`.
+
+## What turning it on costs, measured rather than guessed
+
+**Reading `4x` at the source reports 18 where 11 stood**, once `reviewed/` and `data/friendly/` are
+skipped as copies and `#` is stripped as a comment marker - both of which this lane has landed,
+because they are right whether or not the extension is ever added.
+
+**Roughly ten of the eighteen are real** and are the promotions of 2026-09-20 moving under prose
+that cited them. **The other eight are the limitation `CLAUDE.md` already records and declines to
+repair**: a file named inside a bold span that introduces a quotation, so the span's close reads as
+the quotation's open. The prototype's comments are written in that style throughout - it is this
+lane's own house style - so the false rate is not incidental to those eight.
+
+**So this lane did not turn it on.** A check that is wrong eight times is one nobody reads, and
+`CLAUDE.md` says why the obvious repair is worse than the limitation: *the repair is a parser
+guessing at nesting in prose, which has more ways to be wrong than this has.*
+
+## What would make it worth turning on
+
+**A quotation marked so that finding it needs no guess.** The convention today is inferred from
+punctuation - a backticked path, then italics - which is why prose *about* a quotation reads as
+one. Anything explicit would do it, and choosing one is a decision about how this repository
+writes rather than about this check.
+
+**It is filed rather than fixed because that is not this lane's to choose.** The convention is in
+`CLAUDE.md` and in every lane's prose, and `P-530` may move all of it anyway - a specification whose
+tests are primary has a different answer to *what is a quotation of the spec* than one whose prose
+is.
+
+**Nothing is blocked on it.** The nine findings standing today are all in files this lane owns and
+the seven in `crates/` are part of following `P-522`; the two in `prototypes/` were fixed when this
+was written.
+
 ### C-136 - `docs/architecture.md` governs how code is arranged and says nothing about the code/data boundary
 
 **to** spec · **status** acted · **raised** 2026-09-20 · **acted** 2026-09-20 · **cited**

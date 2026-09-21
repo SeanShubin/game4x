@@ -1519,9 +1519,13 @@ pub const PRODUCIBLE: &[Producible] = &[
     Producible {
         kind: Ark,
         force: Some(2),
-        // **Blank since `S-86` landed** - `spec/units.md`: *a mobile unit that moves in
-        // orbit takes its energy directly from the sun. It stores no fuel.* `C-79` was
-        // waiting on the release's half of that, and this is it.
+        // **Blank since `S-86` landed**, when the units document said an orbital mover took
+        // its energy straight from the sun and stored none. `P-524` replaced that on
+        // 2026-09-20 with a bin of its own and a unit burned per move, so **this blank is now
+        // the stale half** and follows the release rather than leading it. `C-79` was waiting
+        // on the release's half of the original, and this is it.
+        //
+        // **Paraphrased rather than quoted**, because the words are gone.
         fuel: None,
         upkeep: None,
         movable: true,

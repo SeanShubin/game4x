@@ -711,8 +711,11 @@ fn nothing_stands_where_its_kind_may_not() {
         }
     );
 
-    // **And the other way.** `spec/orbit.md`: *an orbit is not a territory: it has capacity for no
-    // extractors, and nothing is extracted there.*
+    // **And the other way.** Before `P-526` the orbit document said an orbit was not a
+    // territory, with capacity for no extractors and nothing extracted there; it now says a
+    // territory has two layers, and the rule this asserts is the same rule either way.
+    // **Paraphrased because the words have moved** - a verbatim quotation of deleted text is the
+    // one thing that cannot be kept true.
     assert_eq!(
         with(
             "{place id:9 of:1 layer:orbit}
