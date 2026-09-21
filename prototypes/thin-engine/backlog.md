@@ -559,8 +559,21 @@ prototype's first commit - that *the primitives are a closed list [...] decided 
 deliberately*, and nothing ever checked it. `tests/engine.rs` does.
 
 **The habit that falls out**: when this prototype reports a difference, re-derive it against `spec/`
-before calling it one. **It has been wrong about that four times out of seven**, which is a rate
-worth remembering rather than a rule worth writing.
+before calling it one.
+
+**And no fraction, because the first one this lane wrote was wrong twice over.** *Four times out of
+seven* counted the three already-stated things in `C-134` in its numerator - and those were **Sean's
+own statements**, relayed by this lane rather than found by the prototype. Finding that `spec/`
+already holds his words says nothing about the prototype proposing anything. **Two populations, one
+denominator.** Caught by the specification lane in `S-142`, and it is the same failure `CLAUDE.md`
+names: the instrument answered a narrower question than the one asked and returned a plausible
+number.
+
+**So the members rather than a rate.** Of what the prototype itself reported, `spec/` already said
+outright: that a bin is a thing, and that the rules are data. It had said half of: the board's
+twelve faces, and a Pioneer that founds. **Naming them and refusing the fraction is the honest
+instrument** - which is how the specification lane handled the count it could not cleanly take, and
+this lane should have done the same before writing one down.
 
 ## What the prototype has settled that `spec/` has not caught up with
 
@@ -589,8 +602,22 @@ what it did and what that cost, and let the prototype decide.
 | what the prototype does                                        | what `spec/` says                                                                                                                           |
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | An ark stores one energy and spends one to move between orbits | `spec/units.md`: *a mobile unit that moves in orbit takes its energy directly from the sun. It stores no fuel, and moving costs it nothing* |
-| A bin is a thing a place holds                                 | `spec/logistics.md` calls it a store; the prototype renamed it because `store` is `src/store.rs` and a bare word in five of eight modules   |
 | A territory declares its own capacity for bins                 | `spec/logistics.md`: *a place declares none of its own* - kept because Sean needs the numbers visible in a test                             |
+
+**A third row stood here and was never a difference.** It said *`spec/logistics.md` calls it a
+store*, and `spec/logistics.md` line 35 says **A bin is a thing.** *What holds a kind is a store for
+that kind, and a thing with two bins holds two stores.* **The thing is a bin there and the role is a
+store** - the line the prototype drew, drawn first.
+
+**This file already knew.** *Storage*, five hundred lines up, quotes that same sentence to say the
+two agree. **One file saying both**, and the half that was wrong is the half that travelled: it went
+to the specification lane as a difference to promote. Found by that lane re-deriving a number of
+this one's - `S-142`.
+
+**The rename was still right and for a reason `spec/` cannot hold.** `store` is the engine's own
+word, so `tests/isolation.rs` could not keep a game noun out of running code while the game used
+it. **That is a fact about the artifact, not a disagreement about the game**, and it belongs where
+it already was rather than in a table of differences.
 
 **The orbital one shows what the difference is worth.** The spec's two clauses were written before
 anything gathered. *Takes its energy directly from the sun* now has a mechanism - `gather` - and once
