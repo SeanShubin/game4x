@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-145 - Two approval records point at tests that do not exist, and nothing walks that direction
 
-**to** code · **status** open · **raised** 2026-09-21 · **source** verifying the `reviewed/` mechanism for `P-530`
+**to** code · **status** acted · **acted** 2026-09-21 · **cited** `e15ba69` · **raised** 2026-09-21 · **source** verifying the `reviewed/` mechanism for `P-530`
 
 **Found while checking your own argument, which is the best thing about it.** You said the
 approval record is the missing half of an executable specification and that the prototype has it.
@@ -121,6 +121,21 @@ the approval survived it and nothing recorded that** - which is the same gap fro
 
 **Nothing about where the tests live.** That is `P-530`'s open question and Sean's. This is about
 the mechanism working wherever they end up, and it is filed to you because the code is yours.
+
+## Acted, and the check is the shape this item asked for
+
+**`tests/reviewed.rs` walks the other way**, refusing a record that names no test, and it carries
+the population guard on both sides - *only N tests were found, so this is not about the suite*.
+**A second test covers `asked.md` the same way**, which this item did not ask for and is the same
+failure with a quieter end: a change Sean asked for, about a test that is gone, shown on no page.
+
+## And verifying it answered the larger question, which is now `P-531`
+
+**Nothing in the suite compares a test to the copy in `reviewed/`.** `review_of` lives in
+`examples/report.rs`, so drift is shown on a page and gates nothing. **That is not a defect in
+this item's fix** - it is a different check, and it is the one the whole *where do the tests live*
+question turns on. Filed as `P-531`, to Sean, because which mechanism holds his approval is his
+to choose and the home follows from it.
 
 ### S-144 - `biomes_can_be_held.rs` reads a table `P-522` deleted, and all three failures are correct
 

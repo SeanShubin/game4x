@@ -11,6 +11,113 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
+### P-531 - Where the tests live, and the question it turns out to be instead
+
+**to** sean · **status** open · **raised** 2026-09-21 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `P-530`, and wherever the tests end up
+
+**`P-530` left this open and you asked to puzzle it through.** Having read `../vote`'s scenario
+test and `../code-structure`'s regression test, **the *where* turns out to follow from something
+else**, and that something else is a fact measured today.
+
+## First, the thing you already have
+
+**You described two kinds of test and this repository already has both shapes.**
+
+```
+behavioural, thin-engine   data/foundation/tests/*.4x    {given} {when} {then} {refused}
+regression, code-structure scenario/commands/*.4x        commands, and a frozen dump beside them
+                           scenario/expected/*.4x
+```
+
+**`../code-structure`'s `RegressionTest` and this repository's scenario are the same mechanism.**
+Both run everything over one input, freeze the output, and compare directory against directory;
+both seed the expectation from the actual run the first time. `P-225` already gives you the
+protocol for changing your mind about it - **delete the expected data, and absence means
+acceptance.** So the regression half is designed and running, and this item is about the other
+half.
+
+## The three artifacts answer three questions, and none of them is a copy
+
+**This is your last question answered first**, because the rest depends on it.
+
+| artifact                  | canonical for                 | authored, or derived          |
+| ------------------------- | ----------------------------- | ----------------------------- |
+| a behavioural test        | **is this right?**            | authored - you say the `then` |
+| a frozen expected output  | **did anything change?**      | derived - seeded from a run   |
+| the record in `reviewed/` | **which version did I read?** | derived - from your keypress  |
+
+**A frozen expected output cannot be evidence of correctness and it is important that it is not
+asked to be.** `../code-structure` proves it in one function: `seedExpectationIfNecessary` copies
+`actual/` into `expected/` when `expected/` is absent. **Nobody wrote those 291 files.** They
+answer *did this change* perfectly and *is this right* not at all.
+
+**An authored `then` answers both**, which is why it is the primary statement and the frozen dump
+is not. **So there is no copy of one fact in two places** - there are three artifacts, and asking
+any of them the other's question is the mistake.
+
+## Where each belongs, and only one of the three is hard
+
+**The runner is code.** It names no game noun; `tests/isolation.rs` already enforces that.
+
+**The frozen output is generated**, and `CLAUDE.md` says a generated file has no owner. It sits
+beside the scenario and is reseeded deliberately.
+
+**The behavioural test is the hard one**, and it is hard for the reason you named: executable
+leans code, looked-at leans specification. **But `spec/data/*.4x` already settles that shape** -
+data in `spec/`, engine in `crates/` - so *executable* does not argue for `crates/` at all. A
+runner reaching a file is not the same as the file living beside the runner.
+
+## So the real question is not where, it is which mechanism holds your approval
+
+**Two mechanisms exist and they give the same guarantee differently.**
+
+**Promotion prevents.** The specification lane may not introduce an idea into `spec/`; you say
+*promote* and the words are copied verbatim. **Checked once, at the moment of copying.**
+
+**`review-web` detects.** A test is drafted, you read it, you press `r`, and a byte-for-byte copy
+lands in `reviewed/`. **Checked on every build, forever** - which is strictly stronger, *if
+anything fails when the two disagree.*
+
+**Measured today: nothing does.** `review_of` lives in `examples/report.rs`, so drift is shown on
+a page and gates nothing. `tests/reviewed.rs` refuses a record naming no test - the code lane
+built it this morning - and no test in the suite compares a test's content to the copy you
+approved.
+
+**That is the whole decision.** If drift turns the build red, an approved test cannot be changed
+under you without the gate saying so, and the tests are safe in a column a producer drafts into.
+If it does not, only promotion protects them, and they must live in `spec/`.
+
+## The three answers
+
+**`T1` - the tests live in `spec/`, promotion-gated, runner in `crates/`.** The strongest
+prevention and the shape `spec/data/` already has. **The cost is `review-web`**: every new test
+becomes a proposal you read in a queue rather than a page you press a key on, and there are
+fifty-three of them already.
+
+**`T2` - the tests live in a column of their own, `reviewed/` is the approval record, and drift
+fails the gate.** Keeps the workflow that convinced you. **The cost is that prevention becomes
+detection** - a producer can edit an approved test, and what stops it shipping is a red build
+rather than a rule.
+
+**`T3` - the approved copy is the specification, and the working copy is a proposal.** The suite
+runs `reviewed/`; `data/.../tests/` is where a draft sits until you have read it. **Drift stops
+being a defect and becomes an unpromoted proposal**, which is the protocol you already have with
+`review-web` as its interface. **The cost is that a test takes effect only when you have read
+it**, so a fix the code lane makes to a test it wrote is inert until you look - which is either
+exactly right or intolerable, and that is yours.
+
+## What this lane would say
+
+**`T3`, and it is the one the evidence points at rather than the one that was obvious.** It is
+`CLAUDE.md`'s promotion protocol with a keypress instead of a sentence and a check on every build
+instead of one at the moment of copying. **It also makes the *where* stop mattering**: the draft
+can live in the code lane's column because a draft is not normative, and the normative copy is
+the one your reading created.
+
+**What it needs before it could be chosen is one test**, in either column: that the suite runs the
+approved copies, or fails when a working copy has drifted from one. **`T2` needs the same test.**
+Only `T1` needs no new mechanism, which is the honest argument for it.
+
 ### P-529 - Three lines of the release still name what `P-522` cut, and one of them is a vetted capability
 
 **to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** a decision · **into** `releases/first-release.md`
