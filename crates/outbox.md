@@ -61,11 +61,85 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-136 - `docs/architecture.md` governs how code is arranged and says nothing about the code/data boundary
+
+**to** spec · **status** open · **raised** 2026-09-20 · **source** Sean, directly: *lets make sure
+the docs/architecture.md is strong enough to keep the next implementation from the spec at least as
+clean as thin-engine is now.*
+
+**Read whole and the gap is one-shaped.** Rules 1 to 10 are about *arrangement* - which module may
+depend on which, where `bevy::` may appear, what an entity may hold, what order may be relied on.
+**Not one of them says anything about what belongs in code at all**, nor about how a check is kept
+honest. So an implementation could satisfy every rule in that file and still put the game's rules in
+Rust, grow the engine a word at a time with nobody noticing, and carry data nothing reads.
+
+**None of what follows is a new idea.** Each is a property the prototype holds, each is held by a
+check rather than by prose, and the checks read the data rather than a hand list, so they widen
+themselves as the game grows.
+
+## The rules this lane would propose, each with what enforces it
+
+**11. The rules are data, and the engine does not know the game.** No relation or rule name the data
+declares appears in engine code that runs. *Enforced by* `tests/isolation.rs`, which reads the names
+out of `data/` and refuses them in `src/`, comments and `#[cfg(test)]` exempt. *Has caught*: a local
+named `found`; `place` reintroduced by the very check that exists because places have layers; the
+game renaming `collect` and `store` when they collided with Rust's own words - **the game gave way,
+not the engine.** None of those was the case it was written for.
+
+**12. What the engine implements is a list, and the list is checked both ways.** A constant the
+engine branches on with no row in the list fails; a row with no constant fails. **The count is
+written down**, so adding a word is a decision somebody makes rather than a line somebody adds.
+*Enforced by* `tests/engine.rs` against `data/engine.4x`. **This is the rule that keeps the others
+true over time** - thinness is not a state that is reached but a rate that is held, and this is the
+only mechanism here that makes *growing* the engine visible.
+
+**13. Every row and every value in the game's data is load-bearing.** Delete each row and change
+each value in turn; anything that survives with the suite still green is a finding, and is written
+down with the reason it survived. Sean, 2026-09-15: *there should not be a single value I can change
+or delete that doesn't end up breaking something.* *Enforced by* `tests/mutation.rs`. *Has caught*
+**two missing tests rather than two dead rows** - a refusal nothing tested, and a test that asserted
+nothing at all.
+
+**14. A check asserts the size of the population it checked.** *A count over nothing is the same
+failure with the sign flipped.* `CLAUDE.md` says this about reports; this is the code-side half, and
+every check in the prototype carries one - lines of code per module, rows left after a filter,
+relations walked. **Without it a filter that silently empties passes in the same words as one that
+works.**
+
+**15. Where a rule could pick, it refuses.** Rule 9 says nothing may depend on execution order and
+that a sequence is canonicalised. **This is the other half**: where two rows answer a question that
+needs one, the answer is a refusal and not a resolution. Sean, 2026-09-15: *We should never have
+non-determinism from what row happens to be encountered first.* *Enforced by* `NotOne`,
+`NotOneToTake`, and by the report pairing two worlds' rows only where the pairing is forced.
+
+## What it costs, measured
+
+**The engine is 4,513 lines and the checks that keep it honest are 2,492**, over five files, against
+1,668 lines of data. **Roughly one line of check for every two of engine**, and the largest single
+piece is the mutation sweep at 923.
+
+## The question that decides which of these apply
+
+**Is the next implementation data-driven, or does it hand-write the rules in Rust?** Rules 11 and 12
+only mean anything if the rules are data; 13 only means much if the game's content is data. **If the
+mainline keeps its rules in Rust, this item is mostly noise and should be rejected rather than
+trimmed** - and that is Sean's call rather than this lane's, which is why it is asked here instead
+of assumed.
+
+**C-135 is folded into this and withdrawn.** It proposed rule 11 alone, which is true and is not
+enough on its own: naming no game noun keeps the engine from learning the game, and nothing in it
+keeps the engine from learning *more*.
+
 ### C-135 - The rules engine names no noun the game has, and that wants to be a numbered rule
 
-**to** spec · **status** open · **raised** 2026-09-20 · **source** Sean, directly: *I will also want
-to make sure we keep the engine thin, so that idea needs to exist somewhere it wont get overlooked.
-Does that belong in the spec or in the coding instance?*
+**to** spec · **status** withdrawn · **raised** 2026-09-20 · **withdrawn** 2026-09-20 · **source**
+Sean, directly: *I will also want to make sure we keep the engine thin, so that idea needs to exist
+somewhere it wont get overlooked. Does that belong in the spec or in the coding instance?*
+
+**Folded into `C-136` the same day and withdrawn rather than left to be read twice.** This rule is
+true and is not enough on its own: it keeps the engine from learning the game, and nothing in it
+keeps the engine from learning *more*. `C-136` carries it as rule 11, with the four that hold the
+line it cannot hold alone.
 
 **Neither, and both.** `spec/` is normative about the game and this is a property of the artifact,
 so it is not a rule of the game. **`docs/architecture.md` already holds ten rules of exactly this

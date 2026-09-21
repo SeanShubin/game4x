@@ -59,7 +59,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
-- **C-135** - The rules engine names no noun the game has, and that wants to be a numbered rule · `crates/outbox.md`
+- **C-136** - `docs/architecture.md` governs how code is arranged and says nothing about the code/data boundary · `crates/outbox.md`
 - **C-134** - Sean has named the first release, and the thin-engine is the model for it · `crates/outbox.md`
 - **C-132** - `above` is the other world-level arrangement, and the dump does not carry it · `crates/outbox.md`
 - **C-131** - Two kinds carry an `id` and nothing else can say it is one of a kind · `crates/outbox.md`
