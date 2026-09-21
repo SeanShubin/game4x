@@ -670,6 +670,53 @@ counted and not where a thing may stand, and `extractor` has no column pointing 
 the question would count nothing and extractors would be unbounded. **Measured**: making that
 change in one test prints *nothing was refused*.
 
+## What a thing is born with, and the one rule that is not behind it
+
+**Sean, 2026-09-20**, reviewing `a-deployment-places-what-the-ground-has-room-for`: *how do we
+determine the starting values for working, hungry, bearing, laboring?* **Nothing determines them.**
+An `add` must name every column, so each is a `{literal ...}` on the clause that makes the row, and
+`deploy`'s four were copied from the two rules that already made these kinds - `build-extractor`
+for an extractor's `working:0`, and `breed`'s newborn for a citizen's `hungry:0 bearing:0
+laboring:1`.
+
+**A rule that would cover all four is available and is not the one in force**: *a thing that comes
+into being during a turn has already had its turn.* It gives the extractor `working:0`, the ark
+`moving:0 gathering:0`, the citizen `hungry:0` and `bearing:0` - and then it gives the citizen
+`laboring:0`, which is not what `breed` says or what `deploy` copied.
+
+**Measured, rather than argued.** Flipping each of `deploy`'s four and running the suite:
+
+| value        | what notices                        |
+| ------------ | ----------------------------------- |
+| `working:0`  | its own two deployment tests        |
+| `hungry:0`   | its own four, **and the loop test** |
+| `bearing:0`  | its own four                        |
+| `laboring:1` | its own four                        |
+
+**Only `hungry:0` is felt by anything but an assertion about itself.** If it were `1`, two citizens
+would owe a meal at the end of the turn they land in and there is nothing to feed them - a food
+extractor arrives spent - so they would perish and a deployment would be fatal by default. **The
+other three are washed out by the first `end-turn`**, which refreshes them before anything reads
+them.
+
+**So `bearing:0` against `bearing:1` is free today.** Nothing can breed on the turn it lands
+whatever it says, because breeding costs a food and there is none.
+
+## Breeding hands a spent citizen its labour back
+
+**Measured**: one citizen and one food, `toil` then `breed` then `toil`, leaves **three labours**
+and two citizens. `breed` matches a parent on `hungry:0 bearing:1` and says nothing about
+`laboring`, then adds two citizens at `laboring:1` - so the parent's spent labour comes back with
+the child's.
+
+**No player can reach it.** `breed` is a part of `end-turn` and `offered` skips anything a part
+names, so only `fire` by name gets there, which is tests. **And inside a turn it is invisible**,
+because `refresh` runs after `breed` and would have restored the labour anyway.
+
+**It is written down because the day `breed` becomes something a player fires, it is a food that
+buys a labour** - and because the same shape is available to any rule that rebuilds a row it
+matched without constraining what it rebuilds.
+
 ## Smaller things, each with the reason it is not done
 
 **A constant limit of the plain sort.** `{limit container:territory contained:garrison n:1}` -
