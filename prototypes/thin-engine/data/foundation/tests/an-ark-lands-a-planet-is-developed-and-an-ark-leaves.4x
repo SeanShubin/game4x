@@ -60,7 +60,7 @@
 {ark where:2 moving:1 gathering:1 quantity:1}
 
 {when}
-{deploy where:2}
+{deploy where:2 what:51}
 {toil where:1}
 {work where:1 what:31}
 {end-turn}

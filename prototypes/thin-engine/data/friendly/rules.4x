@@ -631,10 +631,13 @@
 {rule id:14 name:deploy}
 
 {input id:21 rule:deploy seq:1 name:where of:place}
+{input id:22 rule:deploy seq:2 name:what of:founder}
+
+{relation-of clause:clause-48 input:what}
 
 {clause id:46 rule:deploy seq:1 role:require relation:place name:clause-46}
 {clause id:47 rule:deploy seq:2 role:require relation:place name:clause-47}
-{clause id:48 rule:deploy seq:3 role:remove relation:ark name:clause-48}
+{clause id:48 rule:deploy seq:3 role:remove relation:founder name:clause-48}
 {clause id:49 rule:deploy seq:4 role:add relation:extractor name:clause-49}
 {clause id:50 rule:deploy seq:5 role:add relation:extractor name:clause-50}
 {clause id:51 rule:deploy seq:6 role:add relation:citizen name:clause-51}
@@ -643,11 +646,10 @@
 {soft clause:clause-50}
 
 {binding id:57 clause:clause-46 column:134 input:where}
-{binding id:58 clause:clause-48 column:142 input:where}
+{binding id:58 clause:clause-48 column:153 input:where}
 
-{literal id:64 clause:clause-46 column:136 value:orbit}
 {literal id:65 clause:clause-47 column:136 value:surface}
-{literal id:66 clause:clause-48 column:145 value:1}
+{literal id:66 clause:clause-48 column:154 value:1}
 {literal id:67 clause:clause-49 column:56 value:metal}
 {literal id:68 clause:clause-49 column:101 value:1}
 {literal id:69 clause:clause-49 column:57 value:1}

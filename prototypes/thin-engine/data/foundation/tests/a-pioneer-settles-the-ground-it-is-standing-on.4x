@@ -1,0 +1,45 @@
+# A pioneer standing on the ground, and the settlement it becomes standing where it stood.
+#
+# **Sean, 2026-09-20**: *Pioneer [...] can deploy with the same result as an ark*, and *pioneer
+# deploys from same territory, surface deploys to surface.*
+#
+# **Both of those sentences are consequences here rather than rules.** `deploy` asks for the place
+# it is given and then for the surface of that place's territory - for an ark in orbit those are two
+# places, and for a pioneer already on the surface they are **one place, matched twice**. Nothing in
+# the rule distinguishes the cases and nothing needs to.
+#
+# **What made one rule serve both was taking a literal away.** `deploy` used to require the place it
+# was given to be an orbit. It no longer says, because `{stands-in ...}` already does: an ark may
+# only be in an orbit and a pioneer only on a surface, so what each can be asked to do was settled
+# before the rule was asked.
+#
+# **The founder is an argument, which is what keeps this from being a second rule.** Sean, twice:
+# *we are never taking a solution of the 'metal-bin, food-bin, metal-transport' shape, we are always
+# keeping parameterization.* A third kind that founds is a `{member ...}` row.
+#
+# **This is the piece the win condition needs.** Launching from a space other than the one the ark
+# came down on takes a second settlement, and nothing else in the game can make one: a citizen is
+# not a `unit`, so `move` cannot carry one.
+
+{test name:a-pioneer-settles-the-ground-it-is-standing-on}
+
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{capacity of:18 for:19 what:27 per:48 quantity:1}
+{deposit where:1 what:30 density:6 quantity:1}
+{deposit where:1 what:31 density:6 quantity:1}
+{pioneer where:1 moving:1 quantity:1}
+
+{when}
+{deploy where:1 what:54}
+
+{then}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{capacity of:18 for:19 what:27 per:48 quantity:1}
+{deposit where:1 what:30 density:6 quantity:1}
+{deposit where:1 what:31 density:6 quantity:1}
+{extractor where:1 what:30 working:1 quantity:1}
+{extractor where:1 what:31 working:1 quantity:1}
+{citizen where:1 hungry:0 bearing:1 laboring:1 quantity:2}

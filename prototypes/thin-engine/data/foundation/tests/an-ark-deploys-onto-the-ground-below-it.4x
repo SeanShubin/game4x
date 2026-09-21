@@ -39,7 +39,7 @@
 {ark where:2 moving:1 gathering:1 quantity:1}
 
 {when}
-{deploy where:2}
+{deploy where:2 what:51}
 
 {then}
 {territory id:1}

@@ -863,3 +863,49 @@
 {reference id:70 column:135 to:13}
 
 {state id:18 relation:48}
+
+
+## A pioneer, and what it shares with an ark
+
+# **Sean, 2026-09-20**: *Pioneer [...] can deploy with the same result as an ark*, and *pioneer
+# deploys from same territory, surface deploys to surface.*
+#
+# **`founder` is the family of what a deployment spends**, and it exists so that `deploy` is one
+# rule rather than two. An ark stands in an orbit and the ground it settles is the surface below; a
+# pioneer stands on that surface and the ground it settles is the one it is standing on. **Both are
+# *the surface of the place's territory***, so the rule that finds one finds the other, and neither
+# case is written down.
+#
+# **What made it one rule was taking a literal away.** `deploy` required the place it is given to be
+# an orbit; it no longer says, and the two sentences of Sean's above fall out of `{stands-in ...}`
+# instead - an ark may only be in orbit and a pioneer may only be on a surface, so what each of them
+# can be asked to do is already decided.
+#
+# **A pioneer is a unit and a founder both**, which a kind may be: `{member ...}` is keyed by both
+# its columns. It moves, so `move` carries it with no change; it does not gather, because turning to
+# the sun is what an ark is for.
+#
+# **Its store of two fuel is not here.** Sean asked for one, and a capacity is a row of a world
+# rather than a structural fact - so it belongs in the test that needs it, and no test does yet.
+
+{relation id:54 name:pioneer}
+{relation id:55 name:founder}
+
+{column id:150 relation:54 seq:1 name:where}
+{column id:151 relation:54 seq:2 name:moving}
+{column id:152 relation:54 seq:3 name:quantity}
+{column id:153 relation:55 seq:1 name:where}
+{column id:154 relation:55 seq:2 name:quantity}
+
+{reference id:76 column:150 to:48}
+
+{state id:21 relation:54}
+
+{family relation:55}
+{member kind:54 family:26}
+{member kind:54 family:55}
+{member kind:51 family:55}
+
+{carries kind:54 trait:1}
+
+{stands-in kind:54 per:48 layer:surface}

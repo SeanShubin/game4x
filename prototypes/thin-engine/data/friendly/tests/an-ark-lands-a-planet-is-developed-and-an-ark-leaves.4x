@@ -60,7 +60,7 @@
 {ark where:place-2 moving:1 gathering:1} -> 1
 
 {when}
-{deploy where:place-2}
+{deploy where:place-2 what:ark}
 {toil where:place-1}
 {work where:place-1 what:food}
 {end-turn}

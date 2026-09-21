@@ -64,8 +64,10 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
     assert_eq!(checked, 29, "twenty-nine relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        47,
-        "forty-seven in all - those twenty-nine, and the game's eighteen: eight kinds, three\n         families, a territory, a place, an adjacency, a deposit, an extractor, a citizen and an\n         ark"
+        49,
+        "forty-nine in all - those twenty-nine, and the game's twenty: nine kinds, four
+         families, a territory, a place, an adjacency, a deposit, an extractor, a citizen and
+         an ark"
     );
 }
 
@@ -641,9 +643,9 @@ fn a_trait_and_the_column_that_holds_it_are_checked_both_ways() {
             .iter()
             .filter(|row| row.relation == "carries")
             .count(),
-        9,
-        "unit, scout, transport and ark carry `moving`; extractor carries `working`; citizen
-         carries `hungry`, `bearing` and `laboring`; ark carries `gathering`"
+        10,
+        "unit, scout, transport, ark and pioneer carry `moving`; extractor carries `working`;
+         citizen carries `hungry`, `bearing` and `laboring`; ark carries `gathering`"
     );
 }
 
@@ -719,6 +721,28 @@ fn nothing_stands_where_its_kind_may_not() {
         .expect_err("nothing is extracted in orbit"),
         Malformed::StandsElsewhere {
             kind: "extractor".to_string(),
+            at: "9".to_string(),
+            column: "layer".to_string(),
+            wanted: "surface".to_string(),
+            found: "orbit".to_string()
+        }
+    );
+
+    // **And a pioneer is the ark's mirror**, which is what lets `deploy` be one rule. It asks for
+    // the place it is given and then for the surface of that place's territory, and says nothing
+    // about the layer of the first - **because these two rows already have.** An ark can only be
+    // asked to deploy from an orbit and a pioneer only from a surface, so the rule needs no literal
+    // to tell the cases apart and the two sentences Sean wrote - *pioneer deploys from same
+    // territory*, *surface deploys to surface* - are consequences rather than rules.
+    //
+    // **Without this the claim rests on nothing.** The `.4x` suite cannot hold it: a world with a
+    // pioneer in orbit is not a world, so no test can state one, and the mutation sweep reports all
+    // three `{stands-in ...}` rows as deletable for exactly that reason.
+    assert_eq!(
+        with("{place id:9 of:1 layer:orbit}\n{pioneer where:9 moving:1 quantity:1}")
+            .expect_err("a pioneer stands on the ground"),
+        Malformed::StandsElsewhere {
+            kind: "pioneer".to_string(),
             at: "9".to_string(),
             column: "layer".to_string(),
             wanted: "surface".to_string(),

@@ -631,10 +631,13 @@
 {rule id:14 name:deploy}
 
 {input id:21 rule:14 seq:1 name:where of:48}
+{input id:22 rule:14 seq:2 name:what of:55}
+
+{relation-of clause:48 input:22}
 
 {clause id:46 rule:14 seq:1 role:1 relation:48}
 {clause id:47 rule:14 seq:2 role:1 relation:48}
-{clause id:48 rule:14 seq:3 role:2 relation:51}
+{clause id:48 rule:14 seq:3 role:2 relation:55}
 {clause id:49 rule:14 seq:4 role:3 relation:19}
 {clause id:50 rule:14 seq:5 role:3 relation:19}
 {clause id:51 rule:14 seq:6 role:3 relation:47}
@@ -643,11 +646,10 @@
 {soft clause:50}
 
 {binding id:57 clause:46 column:134 input:21}
-{binding id:58 clause:48 column:142 input:21}
+{binding id:58 clause:48 column:153 input:21}
 
-{literal id:64 clause:46 column:136 value:orbit}
 {literal id:65 clause:47 column:136 value:surface}
-{literal id:66 clause:48 column:145 value:1}
+{literal id:66 clause:48 column:154 value:1}
 {literal id:67 clause:49 column:56 value:30}
 {literal id:68 clause:49 column:101 value:1}
 {literal id:69 clause:49 column:57 value:1}

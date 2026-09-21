@@ -27,4 +27,4 @@ gather  where:place
 
 launch  where:place
 
-deploy  where:place
+deploy  where:place what:founder

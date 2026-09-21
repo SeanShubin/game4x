@@ -156,6 +156,7 @@ fn check(files: &InMemory) -> Result<(), String> {
             "food",
             "labor",
             "metal",
+            "pioneer",
             "place",
             "provides",
             "scout",
@@ -321,7 +322,7 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
     Ok(())
 }
 
-const REFERENCES: usize = 66;
+const REFERENCES: usize = 67;
 
 /// **References no test world can violate**, because nothing points at them there.
 ///
@@ -627,8 +628,8 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// have_two_densities` in `tests/structure.rs` is what holds it, and the sweep runs the `.4x`
 /// tests and the reference checks rather than the Rust suite.
 const DELETABLE: [&str; 23] = [
-    "14 rules.4x binding",
-    "11 rules.4x literal",
+    "13 rules.4x binding",
+    "10 rules.4x literal",
     "3 schema.4x attribute",
     // **`stock`'s `quantity`, and it is read by `tests/structure.rs` rather than by `data/`.** A
     // family's columns are what its members must have, so declaring `quantity` is what stops a
@@ -640,18 +641,28 @@ const DELETABLE: [&str; 23] = [
     // test in `data/` reads it***, and the check that does read it was written because this entry
     // appeared - the sweep pointing at a column and finding an unwritten test behind it.
     "1 schema.4x column",
-    // **One membership nothing reads.** Which one is not measured here - the sweep counts and does
-    // not name - and the candidates are `ark` in `unit` and `energy` in `resource`, each of which
-    // buys something no test has asked for yet: moving an ark, or a transport's templated
-    // container covering fuel.
-    "1 schema.4x member",
-    // **Both `{stands-in ...}` rows, and only `tests/structure.rs` reads them.** A `.4x` test states
-    // a world, and a world that breaks this rule is not one - so no test in `data/` can exercise
-    // it, and `nothing_stands_where_its_kind_may_not` is where both halves live.
+    // **Two memberships nothing reads.** Which two is not measured here - the sweep counts and
+    // does not name - and the candidates are `ark` in `unit`, `pioneer` in `unit`, and `energy` in
+    // `resource`, each of which buys something no test has asked for yet: moving an ark, moving a
+    // pioneer, or a transport's templated container covering fuel.
+    //
+    // **`pioneer` in `founder` and `ark` in `founder` are not among them**, because `deploy` takes
+    // a founder as its argument and a member of no family is not one.
+    "2 schema.4x member",
+    // **All three `{stands-in ...}` rows, and only `tests/structure.rs` reads them.** A `.4x` test
+    // states a world, and a world that breaks this rule is not one - so no test in `data/` can
+    // exercise it, and `nothing_stands_where_its_kind_may_not` is where every half lives.
+    //
+    // **The pioneer's row is the one that carries an argument.** `deploy` says nothing about the
+    // layer of the place it is given, because an ark may only be asked from an orbit and a pioneer
+    // only from a surface - so *pioneer deploys from same territory* and *surface deploys to
+    // surface* are consequences of these rows rather than rules of that one. **The claim rests on
+    // a row this sweep calls dead**, which is why the Rust check was widened the day the pioneer
+    // landed rather than left for later.
     //
     // **Same shape as `schema.4x column` above**: the sweep runs the `.4x` tests and the reference
     // checks, not the Rust suite.
-    "2 schema.4x stands-in",
+    "3 schema.4x stands-in",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x move",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x scout",
     "1 tests/a-scout-that-has-moved-cannot-move-again.4x move",
@@ -784,7 +795,7 @@ fn no_value_can_be_changed_without_breaking_something() {
 ///
 /// **A `moving` that never moves is the other shape here.** The berth tests hold vehicles to count
 /// them, not to move them, so what those rows say about moves is read by nothing.
-const NOT_LOAD_BEARING: [&str; 58] = [
+const NOT_LOAD_BEARING: [&str; 59] = [
     // **The one `assigns` row's id is read by nothing.** There were two, and changing one id
     // to the other's collided on the key; with one row there is nothing to collide with.
     // **`assigns` may not need an `id` at all** - keyed by `(clause, input, value)` it could not
@@ -798,7 +809,7 @@ const NOT_LOAD_BEARING: [&str; 58] = [
     // `where` and `perish`'s are the two**, and what their names are for is the friendly notation
     // and a person reading the rule.
     "3 rules.4x input.name",
-    "18 rules.4x input.seq",
+    "19 rules.4x input.seq",
     // **Five of `end-turn`'s ten steps are in an order nothing depends on, and that is a fact
     // about the turn rather than a gap.** Measured on 2026-09-20 by moving each part to the end on
     // its own: `upkeep`, `perish` and `breed` are read - a citizen must eat before it starves and
@@ -864,6 +875,10 @@ const NOT_LOAD_BEARING: [&str; 58] = [
     "1 tests/a-deployment-places-what-the-ground-has-room-for.4x ark.moving",
     "1 tests/a-deployment-with-nowhere-to-mine-still-costs-the-ark.4x ark.gathering",
     "1 tests/a-deployment-with-nowhere-to-mine-still-costs-the-ark.4x ark.moving",
+    // **A pioneer's `moving`, for the reason an ark's is unread in every deployment**: `deploy`
+    // spends what it is given rather than a move, and a thing that will not exist afterwards has
+    // no move worth taking.
+    "1 tests/a-pioneer-settles-the-ground-it-is-standing-on.4x pioneer.moving",
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x scout.quantity",
     "1 tests/a-scout-cannot-move-where-every-berth-is-taken.4x adjacency.id",
     "1 tests/a-scout-cannot-move-where-every-berth-is-taken.4x transport.moving",
