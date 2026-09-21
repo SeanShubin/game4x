@@ -185,8 +185,11 @@ hand-written so that results are identical on every platform, which is what make
    what keep it there. Before taking one, ask which kind it is: a home needs a boundary
    crate before it needs a version number, because the question is not whether it is good
    but how much of your design it will make.
-11. **The rules engine names no noun the game has.** A relation or a rule the data declares
-   may not appear in engine code that runs. What a thing *is* belongs to the data; the engine
+11. **The rules are data, and the rules engine names no noun the game has.** That the rules are
+   data is not a choice this file makes - `spec/invariants.md` already requires it: *a recipe is
+   data; the roles its lines may take are primitives*, and *every rule has a text form, and the
+   text is the rule*. **Rules 11 to 15 are what hold that boundary in code.** A relation or a rule
+   the data declares may not appear in engine code that runs. What a thing *is* belongs to the data; the engine
    moves rows around without knowing what any of them mean, so **a second rule is rows and no
    code** — and that is the test of whether this holds. The check reads every relation and rule
    name out of the data rather than carrying a list of its own, so it widens as the game does:
@@ -196,6 +199,36 @@ hand-written so that results are identical on every platform, which is what make
    places have layers; and `collect` and `store` colliding with Rust's own words, where the
    *game* gave way rather than the engine. Today it exists only in the prototype; carrying it
    to `crates/` is the code lane's work and is blocked on nothing.
+12. **What the engine implements is a list, and the list is checked both ways.** A constant the
+   engine branches on with no row in the list fails; a row with no constant fails. **The count is
+   written down**, so adding a word to the engine is a decision somebody makes rather than a line
+   somebody adds. This is the check `spec/invariants.md` has been asking for and never had: *the
+   primitives are a closed list, and keeping it short is a goal rather than an accident. Adding
+   one is a change to the program, so what is on it is decided once and deliberately.* **Deciding
+   it once is not a property prose can hold**, because nothing in a diff distinguishes a primitive
+   that was decided from one that was added. *Enforced by* `prototypes/thin-engine/tests/engine.rs`
+   against `data/engine.4x`. **It is the rule that keeps the other four true over time** — thinness
+   is not a state that is reached but a rate that is held, and this is the only mechanism here that
+   makes *growing* the engine visible.
+13. **Every row and every value in the game's data is load-bearing.** Delete each row and change
+   each value in turn; anything that survives with the suite still green is a finding, and is
+   written down with the reason it survived. Sean, 2026-09-15: *there should not be a single value
+   I can change or delete that doesn't end up breaking something.* *Enforced by*
+   `prototypes/thin-engine/tests/mutation.rs`. **What it has caught is two missing tests rather
+   than two dead rows** — a refusal nothing tested, and a test that asserted nothing at all — which
+   is the sweep reporting on the checks rather than on the data.
+14. **A check asserts the size of the population it checked.** *A count over nothing is the same
+   failure with the sign flipped*, and without the population a filter that silently empties passes
+   in the same words as one that works. [CLAUDE.md](../CLAUDE.md) says this about a report; **this
+   is the code-side half**, and every check in the prototype carries one — lines of code per
+   module, rows left after a filter, relations walked.
+15. **Where a rule could pick, it refuses.** Rule 9 says nothing may depend on execution order and
+   that a sequence is canonicalised by sorting on a data-derived key. **This is the other half**:
+   where two rows answer a question that needs one, the answer is a refusal and not a resolution.
+   Sean, 2026-09-15: *we should never have non-determinism from what row happens to be encountered
+   first.* Rule 9 makes an order reproducible; this says which questions may not be answered by an
+   order at all. *Enforced by* the prototype's `NotOne` and `NotOneToTake`, and by its report
+   pairing two worlds' rows only where the pairing is forced.
 
 ## Open questions
 
