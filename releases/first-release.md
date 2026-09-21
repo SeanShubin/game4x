@@ -161,14 +161,14 @@ a raw material returns to its source.
 
 ## Units and structures
 
-| Thing         | Strength | Fuel | Upkeep          | Crosses      | Readies                            | Movable |
-| ------------- | -------- | ---- | --------------- | ------------ | ---------------------------------- | ------- |
-| **citizen**   | 1        |      | 1 food per turn |              | bearing 1, defending 1, laboring 1 |         |
-| **extractor** |          |      |                 |              | working 1                          |         |
-| **yard**      |          |      |                 |              |                                    |         |
-| **store**     |          |      |                 |              |                                    |         |
-| **ark**       | 2        |      |                 | orbit border | defending 1, moving 1              | 1       |
-| **pioneer**   | 2        | 2    |                 | border       | defending 1, moving 1              | 1       |
+| Thing         | Strength | Fuel | Upkeep          | Crosses      | Readies               | Movable |
+| ------------- | -------- | ---- | --------------- | ------------ | --------------------- | ------- |
+| **citizen**   | 1        |      | 1 food per turn |              | bearing 1, laboring 1 |         |
+| **extractor** |          |      |                 |              | working 1             |         |
+| **yard**      |          |      |                 |              |                       |         |
+| **store**     |          |      |                 |              |                       |         |
+| **ark**       | 2        |      |                 | orbit border | moving 1              | 1       |
+| **pioneer**   | 2        | 2    |                 | border       | moving 1              | 1       |
 
 An Ark can invade land from orbit. Nothing outside this table
 readies.
