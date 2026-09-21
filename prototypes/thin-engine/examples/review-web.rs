@@ -34,6 +34,17 @@
 //! and the second means the worst a bad request can do is get a refusal, rather than leave a copy
 //! in `reviewed/` that no test will ever be compared against.
 //!
+//! **Every `.4x` file is browsable at the path it has on disk**, as `text/plain`. Sean, 2026-09-21:
+//! *lets also make sure the tests are browsable from the deployment, bearing in mind that the .4x
+//! extension my not render in a browser as text without the proper mime type, we may need to create
+//! .txt files for rendering purposes.* **No second copy was needed**: the media type is this
+//! server's to declare, and a `.txt` beside every `.4x` would be a third representation of every
+//! test on top of the two `tests/directories.rs` already keeps from drifting.
+//!
+//! **The whitelist is the traversal defence, and it is not a separate one.** The paths are listed
+//! from the disk at startup and a request that is not one of them is refused - so no path is ever
+//! built from what a request said, which is the same shape as refusing a name that is not a test.
+//!
 //! **This lane still never marks anything reviewed** - `review.rs` says why. Running the server is
 //! Sean's, the same as running the command.
 
@@ -63,11 +74,12 @@ fn main() {
         .iter()
         .map(|file| file.trim_end_matches(".4x").to_string())
         .collect();
+    let browsable = browsable();
     println!("http://{at}  -  {} tests", known.len());
     println!("arrows move, Enter opens, r reviewed, x needs changing, u unreview. Ctrl-C to stop.");
     for coming in listening.incoming() {
         match coming {
-            Ok(stream) => serve(stream, &known),
+            Ok(stream) => serve(stream, &known, &browsable),
             Err(why) => eprintln!("{why}"),
         }
     }
@@ -77,7 +89,7 @@ fn main() {
 ///
 /// **One at a time, and that is enough.** One person is reading one page; a thread pool would be
 /// machinery in a prototype whose whole point is having as little as possible.
-fn serve(mut stream: TcpStream, known: &[String]) {
+fn serve(mut stream: TcpStream, known: &[String], browsable: &[String]) {
     let Ok(peer) = stream.try_clone() else { return };
     let mut reading = BufReader::new(peer);
 
@@ -110,7 +122,7 @@ fn serve(mut stream: TcpStream, known: &[String]) {
     }
     let body = String::from_utf8_lossy(&body).to_string();
 
-    let (status, kind, said) = answer(&method, &path, &body, known);
+    let (status, kind, said) = answer(&method, &path, &body, known, browsable);
     let head = format!(
         "HTTP/1.1 {status}\r\nContent-Type: {kind}\r\nContent-Length: {}\r\nCache-Control: no-store\r\nConnection: close\r\n\r\n",
         said.len()
@@ -128,10 +140,28 @@ fn answer(
     path: &str,
     body: &str,
     known: &[String],
+    browsable: &[String],
 ) -> (String, &'static str, String) {
     let ok = |kind, said| ("200 OK".to_string(), kind, said);
     match (method, path) {
         ("GET", "/") => ok(HTML, report::build(true).page),
+        ("GET", "/data") => ok(HTML, index(browsable)),
+        // **Served at the path it has on disk**, which is the shortest answer to *where is this
+        // file*: the address is the answer. **`text/plain` is why no `.txt` copy exists** - a
+        // browser shows a `.4x` as text when something tells it to, and this is the something.
+        ("GET", _) if path.starts_with("/data/") => {
+            let wanted = path.trim_start_matches('/');
+            // **A path not on the list is refused rather than resolved.** Nothing here joins a
+            // request to a directory, so `..` is not a case to handle - it is a string that
+            // matches nothing.
+            if !browsable.iter().any(|it| it == wanted) {
+                return ("404 Not Found".to_string(), PLAIN, format!("no {wanted}"));
+            }
+            match std::fs::read_to_string(mine().join(wanted)) {
+                Ok(text) => ok(PLAIN, text),
+                Err(why) => ("500".to_string(), PLAIN, format!("{wanted}: {why}")),
+            }
+        }
         ("POST", "/reviewed") | ("POST", "/unreview") | ("POST", "/asked") => {
             let Some(name) = field(body, "name") else {
                 return ("400 Bad Request".to_string(), PLAIN, "no name".to_string());
@@ -184,6 +214,58 @@ fn answer(
             format!("no {method} {path}"),
         ),
     }
+}
+
+/// Every `.4x` file under `data/`, as the path it has on disk.
+///
+/// **Listed from the disk rather than written down**, so a test added tomorrow is browsable
+/// without anyone remembering - and so the list cannot say a file is there when it is not.
+fn browsable() -> Vec<String> {
+    let mut found = Vec::new();
+    for flavour in ["foundation", "friendly"] {
+        for under in ["", "tests"] {
+            let at = mine().join("data").join(flavour).join(under);
+            let Ok(entries) = std::fs::read_dir(&at) else {
+                continue;
+            };
+            for entry in entries.filter_map(|it| it.ok()) {
+                let path = entry.path();
+                if path.extension().and_then(|it| it.to_str()) != Some("4x") {
+                    continue;
+                }
+                let Some(name) = path.file_name().and_then(|it| it.to_str()) else {
+                    continue;
+                };
+                found.push(match under {
+                    "" => format!("data/{flavour}/{name}"),
+                    _ => format!("data/{flavour}/{under}/{name}"),
+                });
+            }
+        }
+    }
+    found.sort();
+    found
+}
+
+/// A page of links, so that browsing needs no directory listing from the file system.
+fn index(browsable: &[String]) -> String {
+    let mut out = String::from(
+        "<!doctype html>\n<html lang=\"en\"><head><meta charset=\"utf-8\">\n<title>thin-engine data</title>\n<style>body{font:15px/1.7 ui-monospace,Menlo,monospace;margin:2rem auto;max-width:62rem;padding:0 1rem}a{display:block}h2{font-size:1rem;margin:1.2rem 0 .3rem}</style>\n</head><body>\n<h1>data</h1>\n<p><a href=\"/\">back to the report</a></p>\n",
+    );
+    let mut heading = "";
+    for one in browsable {
+        let under = match one.rsplit_once('/') {
+            Some((at, _)) => at,
+            None => "",
+        };
+        if under != heading {
+            heading = under;
+            out.push_str(&format!("<h2>{heading}</h2>\n"));
+        }
+        out.push_str(&format!("<a href=\"/{one}\">{one}</a>\n"));
+    }
+    out.push_str("</body></html>\n");
+    out
 }
 
 /// One string field of a flat JSON object.
