@@ -1,6 +1,12 @@
 # Two fed citizens and five food, breeding fired on its own: four citizens and three food.
 #
-# **It stops at two with three food standing.** The two newborns arrive with their `bearing` already
+# **It stops at two with three food standing, and the food is the evidence.** Were the newborns
+# reached, five food would have gone rather than two. **They arrive at `bearing:1` and it changes
+# nothing**, because `repeats` holds what a firing made aside - so what stops this is the repetition
+# and never the value, which was measured on 2026-09-20 by setting it the other way and finding the
+# same four citizens and the same three food.
+#
+# **The two newborns arrive with their `bearing` already
 # spent, so they are not parents this turn - and the parents that made them spent theirs in the
 # making. **That is *at most doubling*, and nothing states it**: it falls out of the rule consuming
 # the citizen it breeds from.
@@ -27,5 +33,5 @@
 {then}
 {territory id:1}
 {place id:1 of:1 layer:surface}
-{citizen where:1 hungry:0 bearing:0 laboring:1 quantity:4}
+{citizen where:1 hungry:0 bearing:1 laboring:1 quantity:4}
 {food where:1 quantity:3}

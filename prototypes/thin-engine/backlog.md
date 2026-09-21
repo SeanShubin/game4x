@@ -528,9 +528,9 @@ earlier is vocabulary with no user, which the sweep would report and be right to
 3. ~~**`deploy` and `{soft ...}`, arriving together**~~ - **built**, and softness had its user the
    day it was written.
 
-4. ~~**The loop as one test**~~ - **built**, and it passed the first time it ran. The arithmetic
-   was the whole of the work and it held: four turns, fourteen commands, and every number in the
-   end state a consequence of what each rule costs.
+4. ~~**The loop as one test**~~ - **built**, and it passed the first time it ran. It was four
+   turns and fourteen commands; making everything arrive at full capability cut it to two turns and
+   nine, and one turn is refused for want of labour.
 
 **`capacity.layer` waits.** Sean approved it, and nothing yet asks for orbit and surface to differ
 in *amount* rather than in what is allowed - `{stands-in ...}` answers both cases named so far.
@@ -586,14 +586,15 @@ rather than four of five. The mainline's `deploy-ark` requires a force and produ
 one does neither.
 
 **The loop is the acceptance test and it is built.**
-`an-ark-lands-a-planet-is-developed-and-an-ark-leaves` is four turns and fourteen commands: turn
-one deploys and ends, turn two feeds and breeds, turn three works metal and builds the energy
-extractor it cannot yet work, turn four works it and launches.
+`an-ark-lands-a-planet-is-developed-and-an-ark-leaves` is two turns and nine commands: turn one
+lands the ark and mines the food that lets the settlement breed, turn two mines the metal, builds
+the energy extractor, mines the energy and launches.
 
-**What makes it four turns is that a built thing arrives spent**, which is the same shape as an ark
-arriving with no move. **Nothing carries between turns without a bin**, so the shortest version
-stores nothing and mines what it needs in the turn it spends it - and the `build-bin` that the
-longer version would need is checked by its own tests rather than by this one.
+**What makes it two turns is labour**, and one turn is refused rather than argued about: the second
+turn spends four labours and two citizens make two, so a turn has to pass for them to breed.
+**Nothing carries between turns without a bin**, so it stores nothing and mines what it needs in
+the turn it spends it - and the `build-bin` a longer version would need is checked by its own tests
+rather than by this one.
 
 **The prototype has now answered the question it was built to answer.** Sean, 2026-09-20: *start
 with an ark -> develop a planet -> launch an ark.* **Everything after this is tuning, or a thing
@@ -670,37 +671,42 @@ counted and not where a thing may stand, and `extractor` has no column pointing 
 the question would count nothing and extractors would be unbounded. **Measured**: making that
 change in one test prints *nothing was refused*.
 
-## What a thing is born with, and the one rule that is not behind it
+## Everything made arrives at full capability, and `hungry` is why `fed` keeps coming up
 
 **Sean, 2026-09-20**, reviewing `a-deployment-places-what-the-ground-has-room-for`: *how do we
-determine the starting values for working, hungry, bearing, laboring?* **Nothing determines them.**
-An `add` must name every column, so each is a `{literal ...}` on the clause that makes the row, and
-`deploy`'s four were copied from the two rules that already made these kinds - `build-extractor`
-for an extractor's `working:0`, and `breed`'s newborn for a citizen's `hungry:0 bearing:0
-laboring:1`.
+determine the starting values for working, hungry, bearing, laboring?* Nothing determined them. An
+`add` must name every column, so each was a `{literal ...}` on the clause that made the row, and
+`deploy`'s were copied from `build-extractor` and from `breed`'s newborn without a rule behind them.
 
-**A rule that would cover all four is available and is not the one in force**: *a thing that comes
-into being during a turn has already had its turn.* It gives the extractor `working:0`, the ark
-`moving:0 gathering:0`, the citizen `hungry:0` and `bearing:0` - and then it gives the citizen
-`laboring:0`, which is not what `breed` says or what `deploy` copied.
+**There is a rule now and it is his**: *Generally i want things created with full capability.* A
+built extractor may be worked the turn it is built, a launched ark may move and gather, a citizen
+off an ark or out of a breeding may labour and bear.
 
-**Measured, rather than argued.** Flipping each of `deploy`'s four and running the suite:
+**It took two turns out of the loop.** The arc was four turns because a built extractor was idle
+until the turn restored it; it is two now, and one turn is refused for want of labour. **That is
+the measure of the rule** - it was not a tidying.
 
-| value        | what notices                        |
-| ------------ | ----------------------------------- |
-| `working:0`  | its own two deployment tests        |
-| `hungry:0`   | its own four, **and the loop test** |
-| `bearing:0`  | its own four                        |
-| `laboring:1` | its own four                        |
+## `fed` instead of `hungry`, and where the polarity goes
 
-**Only `hungry:0` is felt by anything but an assertion about itself.** If it were `1`, two citizens
-would owe a meal at the end of the turn they land in and there is nothing to feed them - a food
-extractor arrives spent - so they would perish and a deployment would be fatal by default. **The
-other three are washed out by the first `end-turn`**, which refreshes them before anything reads
-them.
+**Sean, 2026-09-20**: *which is why my inclination to have "fed" instead of "hungry" keeps coming
+up.* **He is right about what it buys**: under the rule above, *everything starts at one* is true of
+`working`, `moving`, `gathering`, `laboring` and `bearing`, and false of `hungry`, which starts at
+nought. One word would make the sentence whole.
 
-**So `bearing:0` against `bearing:1` is free today.** Nothing can breed on the turn it lands
-whatever it says, because breeding costs a food and there is none.
+**And the polarity does not go away; it moves.** Measured: `refresh` carries exactly one assignment,
+`{assigns id:1 clause:clause-15 input:trait value:1}`, so the turn's restoration is literally *put
+this trait back to 1*. Under `fed` the turn would have to put that one back to **0**, because a turn
+imposes an obligation where it restores a capacity - so `refresh` would need a mirror, a second part
+that spends rather than restores.
+
+**Which is arguably the better shape.** Today one rule means *restore* for five traits and *impose*
+for the sixth, and nothing says so; two rules would say it. **The cost is a rule and the churn of
+every citizen row in the suite**, which is why it is here rather than done.
+
+**Not to be confused with a default.** Sean, 2026-09-20: *specifying things fully gives me full
+control either way, I have been avoiding having the concept of defaults until I get a game actually
+working. I want to feel the pain of not having defaults before I add them.* **So nothing here
+proposes one**, and an `add` still names every column.
 
 ## Breeding hands a spent citizen its labour back
 

@@ -17,8 +17,11 @@
 # line that has room takes all of it - so this test says nothing about softness that
 # `a-deployment-with-nowhere-to-mine-still-costs-the-ark` does not say better.
 #
-# **The citizens arrive the way a newborn does** - `hungry:0`, `bearing:0`, `laboring:1` - so they
-# may work the turn they land and may not breed until the turn restores them.
+# **The citizens arrive at full capability** - `bearing:1`, `laboring:1`, and `hungry:0`, which is
+# the same thing said backwards because a citizen that owes no meal is a citizen that has eaten.
+# Sean, 2026-09-20: *Generally i want things created with full capability.*
+#
+# **So do the extractors**, at `working:1`, and either may be worked the turn the ark comes down.
 
 {test name:an-ark-deploys-and-becomes-a-settlement}
 
@@ -41,6 +44,6 @@
 {capacity of:18 for:19 what:27 per:48 quantity:1}
 {deposit where:1 what:30 density:6 quantity:1}
 {deposit where:1 what:31 density:6 quantity:1}
-{extractor where:1 what:30 working:0 quantity:1}
-{extractor where:1 what:31 working:0 quantity:1}
-{citizen where:1 hungry:0 bearing:0 laboring:1 quantity:2}
+{extractor where:1 what:30 working:1 quantity:1}
+{extractor where:1 what:31 working:1 quantity:1}
+{citizen where:1 hungry:0 bearing:1 laboring:1 quantity:2}

@@ -8,37 +8,39 @@
 # on its own already - and a suite of pieces can pass entire while the arc they are pieces of does
 # not close, because no test of a piece ever looks at the next one.
 #
-# **Four turns, and what makes it four is that a built thing arrives spent.** `build-extractor`
-# leaves an extractor with `working:0`, so the energy it wants cannot be mined until the turn
-# restores it - which is the same shape as an ark arriving with no move.
+# ## Two turns, and one turn is refused
+#
+# **The bound is labour.** The second turn spends four - metal, the energy extractor, the energy,
+# and the launch - and two citizens make two. **So a turn has to pass for them to breed**, which is
+# the only thing the first turn is for once the ark is down.
+#
+# **One turn was tried and refused**: *`work` removes {labor where:1 quantity:1} and nothing
+# matched.* That is the floor, measured rather than reasoned.
+#
+# **It was four turns until 2026-09-20**, when everything made began arriving at full capability -
+# Sean: *Generally i want things created with full capability.* A built extractor used to be idle
+# until the turn restored it, so the energy could not be mined on the turn its extractor was built,
+# and neither could the ark be launched on the turn the energy was mined. **The rule took two turns
+# out of the arc**, which is the clearest measure of it there is.
 #
 # ## What each turn is for
 #
-# **Turn one is the landing.** The ark becomes two extractors and two citizens, and nothing else can
-# happen: both extractors are spent and both citizens have no `bearing` yet. Ending the turn is the
-# whole of the turn.
+# **Turn one is the landing and the food.** The ark becomes two extractors and two citizens, both of
+# which may work at once. Two labours: one mines six food and the other is wasted, and the waste is
+# the point - nothing eats at `upkeep`, because a citizen off an ark owes no meal yet, so all six
+# are there for `breed` to spend. **Four citizens by the end of it**, and the two food left over go
+# with everything else loose, because nothing here has a bin.
 #
-# **Turn two is food.** Two citizens make two labours; one is spent on the food extractor and the
-# other is wasted, because there is nothing else worth doing with it. **The waste is the point of
-# the turn**: six food feeds two citizens at `upkeep` and the four left over let `breed` fire twice,
-# so the settlement is four citizens by the end of it.
-#
-# **Turn three is the energy extractor.** Four labours: one for food, one for metal, one to build,
-# and one wasted. The six metal that `work` produced is spent down to five and then discarded at the
-# turn's end, because nothing here has a bin - and none of it is needed, because turn four mines its
-# own.
-#
-# **Turn four is the launch.** Six labours, of which three are used: metal, energy, and the launch
-# itself. **The ark it leaves is spent**, `moving:0` and `gathering:0`, which is what an ark always
-# is on the turn it is made.
+# **Turn two is the planet and the launch.** Four labours, all four spent: metal out of the ground,
+# an energy extractor built from it, energy out of the ground, and an ark built from the three.
 #
 # ## What the end state says
 #
-# **Six citizens, no food, and three labours standing.** The settlement that built the ark is still
-# there and still hungry - a launch is not a departure, it is a thing built. **What happens to them
-# next is the next turn's problem**, and nothing here pretends otherwise.
+# **Four citizens, no food, and every labour spent.** The settlement that built the ark is still
+# there and hungry - a launch is not a departure, it is a thing built. **What happens to them next
+# is the next turn's problem**, and nothing here pretends otherwise.
 #
-# **Nothing is stored.** Five metal and five energy lie loose and would go at the turn's end; the
+# **Nothing is stored.** Four metal and five energy lie loose and would go at the turn's end; the
 # test stops before that, because what it is about is the arc rather than the housekeeping.
 #
 # **This test is brittle and that is correct.** Every number in it is a consequence of every rule's
@@ -59,17 +61,12 @@
 
 {when}
 {deploy where:2}
-{end-turn}
 {toil where:1}
 {work where:1 what:31}
-{end-turn}
-{toil where:1}
-{work where:1 what:31}
-{work where:1 what:30}
-{build-extractor where:1 what:50}
 {end-turn}
 {toil where:1}
 {work where:1 what:30}
+{build-extractor where:1 what:50}
 {work where:1 what:50}
 {launch where:1}
 
@@ -84,8 +81,7 @@
 {extractor where:1 what:30 working:0 quantity:1}
 {extractor where:1 what:31 working:1 quantity:1}
 {extractor where:1 what:50 working:0 quantity:1}
-{citizen where:1 hungry:1 bearing:1 laboring:0 quantity:6}
-{labor where:1 quantity:3}
-{metal where:1 quantity:5}
+{citizen where:1 hungry:1 bearing:1 laboring:0 quantity:4}
+{metal where:1 quantity:4}
 {energy where:1 quantity:5}
-{ark where:2 moving:0 gathering:0 quantity:1}
+{ark where:2 moving:1 gathering:1 quantity:1}

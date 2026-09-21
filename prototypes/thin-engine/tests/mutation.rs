@@ -799,7 +799,21 @@ const NOT_LOAD_BEARING: [&str; 58] = [
     // and a person reading the rule.
     "3 rules.4x input.name",
     "18 rules.4x input.seq",
-    "4 rules.4x part.seq",
+    // **Five of `end-turn`'s ten steps are in an order nothing depends on, and that is a fact
+    // about the turn rather than a gap.** Measured on 2026-09-20 by moving each part to the end on
+    // its own: `upkeep`, `perish` and `breed` are read - a citizen must eat before it starves and
+    // starve before it breeds - and the other seven commute, because `discard-disorder` takes what
+    // is over capacity and a `refresh` restores a readiness, and neither can change what the other
+    // finds.
+    //
+    // **The sweep holds two of those seven anyway**, by swapping a `seq` for another rather than
+    // by moving one to the end, which is the second mutation earning its place.
+    //
+    // **It was four until the loop test shortened.** Measured: the count moved when
+    // `an-ark-lands-a-planet-is-developed-and-an-ark-leaves` went from four turns to two. I think
+    // the reason is that a shorter arc ends fewer turns and so pins fewer orderings, but the only
+    // thing measured is the count.
+    "5 rules.4x part.seq",
     // **`reading.id` was on this list until `upkeep` grew a second reading.** With one row there
     // was nothing for an id to collide with, so changing it to anything at all was unnoticed; with
     // two, taking the other's value is a key the structure refuses. **A thing that was decoration

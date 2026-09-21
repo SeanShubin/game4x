@@ -101,7 +101,7 @@
 
 {literal id:4 clause:5 column:79 value:1}
 {literal id:6 clause:6 column:81 value:1}
-{literal id:15 clause:7 column:101 value:0}
+{literal id:15 clause:7 column:101 value:1}
 {literal id:8 clause:7 column:57 value:1}
 
 {rule id:3 name:work}
@@ -396,7 +396,13 @@
 # citizens and ten food give six; three and five give five; three and two give two, because one
 # starved and none bred.
 
-# **A newborn arrives able to work and has missed today's shift.** `toil` is the turn's second part
+# **A newborn arrives able to work and to bear**, which is the rule everything made follows -
+# Sean, 2026-09-20: *Generally i want things created with full capability.* **Breeding does not run
+# away on it**, because `repeats` holds what a firing made aside and the next firing never sees it;
+# `breeding-does-not-reach-the-citizens-it-just-made` is what says so, and it says it by the food it
+# did not eat rather than by a `bearing` of nought.
+#
+# **`toil` is the turn's second part
 # and breeding is its fifth, so a citizen born here contributes no labour this turn whatever its
 # `laboring` says - and `refresh` sets it at the turn's end regardless. **So the value is only ever
 # read when `breed` is fired on its own**, and `laboring:1` is the honest one: it has not worked,
@@ -422,7 +428,7 @@
 {literal id:31 clause:25 column:132 value:1}
 {literal id:32 clause:26 column:83 value:1}
 {literal id:33 clause:27 column:131 value:0}
-{literal id:34 clause:27 column:133 value:0}
+{literal id:34 clause:27 column:133 value:1}
 {literal id:48 clause:27 column:137 value:1}
 {literal id:35 clause:27 column:132 value:2}
 
@@ -556,8 +562,16 @@
 # to be separate, for now I am making everything cheap.* Each is one, and each is taken from the
 # ground rather than from the sky.
 #
-# **The ark arrives spent**, with no move and no gathering, which is what `build-extractor` does with
-# `working:0`. The turn restores both, so it is idle for the rest of the turn it was made in.
+# **Everything made arrives at full capability**, which is Sean's rule rather than this rule's.
+# Sean, 2026-09-20: *Generally i want things created with full capability.* So a built extractor may
+# be worked the turn it is built, a launched ark may move and gather, and a citizen off an ark or
+# out of a breeding may labour and bear.
+#
+# **`hungry` is the one that cannot say it that way**, and that is the whole of why a rename to
+# `fed` keeps coming up: a capacity at full is `1` and an obligation at full is `0`, so *everything
+# starts at one* is true of five columns and false of the sixth. **The polarity does not go away
+# under the other name**; it moves to the turn, which restores a capacity and imposes an obligation
+# with the one word `refresh`.
 #
 # **It names no kind, and one day it will.** Only an ark launches today; a second launchable kind
 # turns the rule's output into an argument, the way `discard-disorder` grew one the day a second
@@ -584,8 +598,8 @@
 {literal id:58 clause:42 column:79 value:1}
 {literal id:59 clause:43 column:81 value:1}
 {literal id:60 clause:44 column:141 value:1}
-{literal id:61 clause:45 column:143 value:0}
-{literal id:62 clause:45 column:144 value:0}
+{literal id:61 clause:45 column:143 value:1}
+{literal id:62 clause:45 column:144 value:1}
 {literal id:63 clause:45 column:145 value:1}
 
 {reading id:11 clause:41 column:135 of:40 takes:135}
@@ -635,13 +649,13 @@
 {literal id:65 clause:47 column:136 value:surface}
 {literal id:66 clause:48 column:145 value:1}
 {literal id:67 clause:49 column:56 value:30}
-{literal id:68 clause:49 column:101 value:0}
+{literal id:68 clause:49 column:101 value:1}
 {literal id:69 clause:49 column:57 value:1}
 {literal id:70 clause:50 column:56 value:31}
-{literal id:71 clause:50 column:101 value:0}
+{literal id:71 clause:50 column:101 value:1}
 {literal id:72 clause:50 column:57 value:1}
 {literal id:73 clause:51 column:131 value:0}
-{literal id:74 clause:51 column:133 value:0}
+{literal id:74 clause:51 column:133 value:1}
 {literal id:75 clause:51 column:137 value:1}
 {literal id:76 clause:51 column:132 value:2}
 

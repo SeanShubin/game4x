@@ -40,4 +40,4 @@
 {capacity of:deposit for:extractor what:resource per:place} -> 1
 {deposit where:place-3 what:metal density:6} -> 1
 {deposit where:place-3 what:food density:6} -> 1
-{citizen where:place-1 hungry:0 bearing:0 laboring:1} -> 2
+{citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2

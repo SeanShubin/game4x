@@ -13,8 +13,9 @@
 # The rule reads that place's territory and asks for the one place that has it and is an orbit -
 # **found by matching, so a territory with no orbit above it simply cannot launch.**
 #
-# **The ark arrives spent**, with neither a move nor a gathering, which is what `build-extractor`
-# does with `working:0`. It can do nothing until the turn restores both.
+# **The ark arrives able to move and to gather**, which is what everything made here does. Sean,
+# 2026-09-20: *Generally i want things created with full capability.* So it may turn to the sun on
+# the turn it was built.
 
 {test name:an-ark-is-launched-from-the-ground-into-the-orbit-above}
 
@@ -33,4 +34,4 @@
 {territory id:1 name:territory-1}
 {place id:1 of:territory-1 layer:surface name:place-1}
 {place id:2 of:territory-1 layer:orbit name:place-2}
-{ark where:place-2 moving:0 gathering:0} -> 1
+{ark where:place-2 moving:1 gathering:1} -> 1
