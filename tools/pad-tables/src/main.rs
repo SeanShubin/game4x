@@ -5,8 +5,20 @@
 //! ```
 //!
 //! Each PATH is a directory to walk or a single `.md` file; with none, walks the current
-//! directory. Walking skips `.git`, `target`, `node_modules`, and any dot-prefixed
-//! directory. Only files that actually change are written.
+//! directory. Walking skips `.git`, `target`, `node_modules`, `temporary-notes`, and any
+//! dot-prefixed directory. Only files that actually change are written.
+//!
+//! **`temporary-notes` is skipped because it is Sean's and no instance writes there** -
+//! `CLAUDE.md`. It is not tracked, so nothing downstream would have shown the edit: a file of
+//! his was reformatted by a walk that had no business in the directory, and neither `git
+//! status` nor a diff would have said so. **A named directory rather than a rule about
+//! tracking**, because the tool has no git and should not grow one to know whose a file is.
+//!
+//! **Naming it here rather than in the two scripts** is what makes it hold for every caller.
+//! The pre-commit hook was never exposed - it passes the staged files, and an untracked file
+//! is never staged - so the whole of the exposure was a person running the script with no
+//! arguments, which is the documented way to run it. Filed as `S-138` by the specification
+//! lane, found by running it.
 //!
 //! `--check` writes nothing and exits non-zero if anything would change, so the tool can
 //! back a CI gate or a pre-push hook without either existing yet.
@@ -92,7 +104,11 @@ fn visit_dir(dir: &Path, check: bool, changed: &mut Vec<String>) {
         if path.is_dir() {
             let name = entry.file_name();
             let name = name.to_string_lossy();
-            if name.starts_with('.') || name == "target" || name == "node_modules" {
+            if name.starts_with('.')
+                || name == "target"
+                || name == "node_modules"
+                || name == "temporary-notes"
+            {
                 continue;
             }
             visit_dir(&path, check, changed);

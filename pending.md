@@ -57,7 +57,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (38)
+### To spec (37)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -66,7 +66,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
 - **C-136** - `docs/architecture.md` governs how code is arranged and says nothing about the code/data boundary · `crates/outbox.md`
-- **C-134** - Sean has named the first release, and the thin-engine is the model for it · `crates/outbox.md`
 - **C-132** - `above` is the other world-level arrangement, and the dump does not carry it · `crates/outbox.md`
 - **C-131** - Two kinds carry an `id` and nothing else can say it is one of a kind · `crates/outbox.md`
 - **C-130** - `R-8` says eighteen kinds and 153 pairs; the report it rests on says 19 and 171 · `crates/outbox.md`

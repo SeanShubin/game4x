@@ -132,9 +132,21 @@ keeps the engine from learning *more*.
 
 ### C-135 - The rules engine names no noun the game has, and that wants to be a numbered rule
 
-**to** spec · **status** withdrawn · **raised** 2026-09-20 · **withdrawn** 2026-09-20 · **source**
-Sean, directly: *I will also want to make sure we keep the engine thin, so that idea needs to exist
-somewhere it wont get overlooked. Does that belong in the spec or in the coding instance?*
+**to** spec · **status** acted · **raised** 2026-09-20 · **acted** 2026-09-20 · **cited**
+`f711f33f` · **source** Sean, directly: *I will also want to make sure we keep the engine thin, so
+that idea needs to exist somewhere it wont get overlooked. Does that belong in the spec or in the
+coding instance?*
+
+**Landed as architecture rule 11**, near-verbatim, `docs/` being the shared layer and needing no
+proposal. **One sentence came out** - the one citing `spec/interface.md` on the policy layer,
+because that text is still open as `P-523` and a rule in `docs/` may not lean on words Sean has
+not read. **The closing sentence stayed**: the check exists only in the prototype, and carrying it
+to `crates/` is this lane's and is blocked on nothing.
+
+**Withdrawn here in favour of `C-136` before that landed, and the withdrawal was wrong to be
+silent.** It went out in the same hour the specification lane was acting on it, which is the race
+`CLAUDE.md` describes: a message is never the record, and this lane changed the record without
+saying so. **Marked acted rather than withdrawn**, because acted is what happened.
 
 **Folded into `C-136` the same day and withdrawn rather than left to be read twice.** This rule is
 true and is not enough on its own: it keeps the engine from learning the game, and nothing in it
@@ -175,8 +187,21 @@ file it belongs in is not this lane's to write.
 
 ### C-134 - Sean has named the first release, and the thin-engine is the model for it
 
-**to** spec · **status** open · **raised** 2026-09-20 · **source** Sean, directly, at the end of
-reviewing all fifty-two thin-engine tests
+**to** spec · **status** acted · **raised** 2026-09-20 · **acted** 2026-09-20 · **cited**
+`f711f33f` · **source** Sean, directly, at the end of reviewing all fifty-two thin-engine tests
+
+**Answered as `S-139`, and became `P-521` through `P-526`.** Nothing is promoted, so nothing in
+them is buildable yet - Sean has not said the word on any. **Three of the six facts this item
+carried were already stated in `spec/`**, re-derived by that lane rather than taken from here:
+things created at full capability is `spec/turn.md` verbatim; a legal deployment succeeding where
+a part cannot is `spec/console.md`'s `[soft]` and two fences in `spec/invariants.md`; and fuel
+being energy is how both files already read. **This lane was proposing what the specification had
+already said**, which is worth knowing the next time the prototype reports a difference.
+
+**And one thing to expect rather than be surprised by**: if `P-522` lands, nine of the release's
+thirty-six recipe blocks go with four rows across Kinds, Traits, and Units and structures - so
+`spec/data/` will disagree with the release until the rows follow, and the gate will be red in
+between.
 
 **This lane cannot promote anything, which is why it is here.** `spec/` and `decide/` are the
 specification lane's column and `hooks/pre-commit` refuses a commit that spans two. **What Sean
