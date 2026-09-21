@@ -3797,3 +3797,28 @@ and orbit all require very different capabilities.*
 nothing about which capability a crossing demands, which is this question. It is not in
 `decide/questions.md` because nothing is blocked on it: the graph is one thing under either answer,
 and only the capability differs.
+
+## Recorded 2026-09-20: where each of the prototype's three differences went
+
+**Written because one of them went nowhere and nothing said so.** The table in
+`prototypes/thin-engine/backlog.md` -> *What the prototype has settled that `spec/` has not caught
+up with* has three rows. Two became proposals; the third was read, judged already-stated, and
+recorded in no file at all. **Silence and *nobody has looked yet* are the same bytes.**
+
+| the difference                                  | where it went                                              |
+| ----------------------------------------------- | ---------------------------------------------------------- |
+| an ark stores one energy and spends one to move | `P-524`                                                    |
+| a bin is a thing a place holds                  | **not a difference** - `spec/logistics.md` already says it |
+| a territory declares its own capacity for bins  | `P-525`                                                    |
+
+**The middle row is refuted by the file that reports it.** Its reason reads *`spec/logistics.md`
+calls it a store*, and `spec/logistics.md` says: *a bin is a thing. What holds a kind is a store
+for that kind, and a thing with two bins holds two stores.* **The thing is a bin there and the role
+is a store**, which is exactly the line the prototype drew - and its own Storage section, 547 lines
+earlier in the same file, quotes that sentence to say the two agree.
+
+**The rename was still right and for a reason `spec/` cannot hold**: `store` is the engine's own
+word, so the prototype's isolation check could not keep a game noun out of code that runs while the
+game used it. **That is a fact about the artifact and not a change to the game.**
+
+Filed to the code lane as `S-142`, with the disposition of the other four things `C-134` offered.
