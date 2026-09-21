@@ -1,19 +1,26 @@
 # Two territories with ground, one orbit, and the settlement lands under the ark rather than on the
 # other one.
 #
-# **The ground is found by matching and this is what says so.** The command names the orbit; the
-# rule reads that place's territory and asks for the place that has it and is a surface. **Take the
-# reading away and the clause matches both surfaces** - and because a clause several rows answer
-# remembers none of them, the rule is refused rather than guessing. **The engine has no way to pick
-# and does not have one here either.**
+# **`where` is where the ark is, not where the settlement goes.** The command names the orbit,
+# because that is where the thing being spent is standing - the same way `launch` names the surface
+# the resources are on and puts the ark it makes in the orbit above.
+#
+# **The ground is found by matching and this is what says so.** The rule reads the orbit's territory
+# and asks for the place that has it and is a surface. **Take the reading away and the clause
+# matches both surfaces** - and because a clause several rows answer remembers none of them, the
+# rule is refused rather than guessing. **The engine has no way to pick and does not have one here
+# either.**
 #
 # **The mutation sweep asked for this test.** Every other deployment world has one surface place, so
 # the reading was masked: with nothing else to match, a clause that reads a territory and a clause
 # that reads none agree. Sean, 2026-09-15: *We should never have non-determinism from what row
 # happens to be encountered first.*
 #
-# **The second territory has the deposits and gets nothing**, which is the sharpest version: the
-# rule does not go looking for good ground, it goes to the ground below.
+# **Nothing is mined, and that is the point twice over.** Both deposits are on the other
+# territory's ground, so the two soft extractor lines find no room where the ark comes down and
+# place nothing; what lands is the two citizens. **The rule does not go looking for good ground, it
+# goes to the ground below** - and had it gone looking, the extractors would be standing on
+# `place-3` with the citizens beside them.
 
 {test name:an-ark-deploys-onto-the-ground-below-it}
 
