@@ -723,6 +723,67 @@ because `refresh` runs after `breed` and would have restored the labour anyway.
 buys a labour** - and because the same shape is available to any rule that rebuilds a row it
 matched without constraining what it rebuilds.
 
+## Upkeep as a table of costs per kind
+
+**Sean, 2026-09-20**, brainstorming: *a unit with upkeep 5*A, 2*B, 3*C. If any upkeep cost is not
+paid at turn transition the unit perishes. At turn transition we reset the upkeep-paid back to
+zero.* **The form he settled on**, and it needs no new idea:
+
+```text
+{upkeep kind:expensive-unit what:metal}  -> 5
+{upkeep kind:expensive-unit what:food}   -> 2
+{upkeep kind:expensive-unit what:energy} -> 3
+```
+
+**Most of it is already here.** That is `{consumes kind:scout what:berth} -> 1` with another name.
+*Pay all or pay none* is the engine's default, because every `require` and `remove` in a rule must
+succeed or the rule is refused and nothing is taken. `paid:0` perishing is `hungry:1` perishing. A
+clause firing once per resource is what a family-typed clause already does - `{keep
+relation:stock}`. Reading a number out of a row and spending it is what `work` does with a density.
+
+**One thing blocks it, and it is that the last two do not compose.** `matched` is recorded only
+when a clause names exactly one relation:
+
+```text
+if let [one] = found[..] && alone {
+```
+
+So a family-typed `require` remembers nothing, and the per-resource number cannot reach the
+per-resource `remove`. **The fix is to key `matched` by `(clause, relation)`** and resolve a
+reading against the member being walked; the non-determinism the comment beside it guards against
+is gone once the reading is resolved inside the same per-member step, because there is no longer a
+choice about which member it meant. **Without it this needs one rule per resource**, which is the
+`metal-bin, food-bin` shape.
+
+**Two questions it leaves open.** Is paying a player's choice or the turn's - today `upkeep` is a
+part of `end-turn` and nobody fires it, and `hungry` exists only to make the repetition stop.
+And is upkeep rent or wages: a standing *requirement* would need no rule at all, because
+`nothing_crowds_a_place` already sums a table like this per place and refuses, but a requirement
+does not consume.
+
+**And it wants a set-to-zero step, which is the second thing to want one.** `refresh` sets a trait
+to `1`; *reset the upkeep-paid back to zero* does not. `fed` wants the same mirror.
+
+## Nesting a bundle into a row - deferred, 2026-09-20
+
+**Sean asked what `{expensive-unit upkeep:{resource-bundle resource-a:5 ...}}` would cost**, and
+then struck it out himself: *I am not sold on it yet, it may be a lot of complexity now when I
+should be focusing on getting a playable game.*
+
+**Recorded because his mitigation is a real one.** The objection was that nesting touches
+everything that addresses a column - `{binding ...}`, `{reading ...}`, keys, the renderer, the
+sweep. He answered: *could be mitigated by a nested addressing scheme,
+`expensive-unit.upkeep.metal`.* **A path is still a word**, so every one of those readers keeps
+working on flat values - which is the right answer to that objection and worth having written down.
+
+**What the path does not answer** is that the resources become column names rather than values, so
+a `{reference ... to:resource}` has nothing to check and a fourth resource is a schema change
+instead of a row.
+
+**The case that would argue for nesting has not arrived**: a cost that has to be a *value*
+somewhere - handed to a rule as an argument, say. Until then a bundle is a view of rows, and
+`CLAUDE.md` already says where a view belongs.
+
 ## Smaller things, each with the reason it is not done
 
 **A constant limit of the plain sort.** `{limit container:territory contained:garrison n:1}` -
