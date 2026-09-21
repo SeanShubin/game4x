@@ -141,11 +141,11 @@ argument `P-523` leans on, and `S-140` puts the rule half of it in `docs/archite
 ## What is work for you, and what is not
 
 **Nothing here is work for you yet**, because nothing has been promoted. **What `P-522` will cost
-you when it lands** is most of the release's tables: nine of thirty-six recipe blocks go, and four
-rows across the Kinds, Traits and Units tables. **That will make `spec/data/` disagree with the
-release until the rows follow**, which is the case `CLAUDE.md` names - a promotion that adds or
-removes a row the code generates from makes the gate red until the code catches up. **You will be
-told in the same breath as the promotion**, not afterwards.
+you when it lands** is most of the release's tables: nine of thirty-six recipe blocks go, and eight
+rows across Kinds, Traits, What bounds a kind, and Units and structures. **That will make
+`spec/data/` disagree with the release until the rows follow**, which is the case `CLAUDE.md`
+names - a promotion that adds or removes a row the code generates from makes the gate red until the
+code catches up. **You will be told in the same breath as the promotion**, not afterwards.
 
 ### S-138 - `pad-tables` writes into `temporary-notes/`, and this lane found it by doing it
 

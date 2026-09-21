@@ -227,7 +227,7 @@ a planet -> launch an ark.*
 
 | Section              | Today | After | What goes                                                                               |
 | -------------------- | ----- | ----- | --------------------------------------------------------------------------------------- |
-| Kinds                | 20    | 17    | `garrison`, `nature`, `force`                                                           |
+| Kinds                | 19    | 16    | `garrison`, `nature`, `force`                                                           |
 | Traits               | 26    | 23    | `defending`, `met`, `biome`                                                             |
 | What bounds a kind   | 12    | 11    | `garrison`                                                                              |
 | Units and structures | 7     | 6     | `garrison`                                                                              |
