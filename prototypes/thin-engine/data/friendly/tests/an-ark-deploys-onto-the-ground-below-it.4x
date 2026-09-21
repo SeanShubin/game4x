@@ -1,5 +1,5 @@
-# Two territories with ground, one orbit, and the settlement lands under the ark rather than on the
-# other one.
+# Two territories, both with ground and both with deposits, one orbit - and the settlement lands
+# under the ark rather than on the other one.
 #
 # **`where` is where the ark is, not where the settlement goes.** The command names the orbit,
 # because that is where the thing being spent is standing - the same way `launch` names the surface
@@ -16,11 +16,12 @@
 # that reads none agree. Sean, 2026-09-15: *We should never have non-determinism from what row
 # happens to be encountered first.*
 #
-# **Nothing is mined, and that is the point twice over.** Both deposits are on the other
-# territory's ground, so the two soft extractor lines find no room where the ark comes down and
-# place nothing; what lands is the two citizens. **The rule does not go looking for good ground, it
-# goes to the ground below** - and had it gone looking, the extractors would be standing on
-# `place-3` with the citizens beside them.
+# **Both grounds are equally good, which is what makes the answer mean anything.** Each territory
+# has a metal deposit and a food one, so the settlement is not on `place-1` for having the
+# resources - it is there for being under the ark. **A first draft put the deposits on the far
+# territory only** and the deployment placed no extractors at all, which read as a failure and told
+# nobody anything: it excluded a rule that goes looking for good ground, and no such rule is
+# available to an engine that matches patterns.
 
 {test name:an-ark-deploys-onto-the-ground-below-it}
 
@@ -31,6 +32,8 @@
 {territory id:2 name:territory-2}
 {place id:3 of:territory-2 layer:surface name:place-3}
 {capacity of:deposit for:extractor what:resource per:place} -> 1
+{deposit where:place-1 what:metal density:6} -> 1
+{deposit where:place-1 what:food density:6} -> 1
 {deposit where:place-3 what:metal density:6} -> 1
 {deposit where:place-3 what:food density:6} -> 1
 {ark where:place-2 moving:1 gathering:1} -> 1
@@ -45,6 +48,10 @@
 {territory id:2 name:territory-2}
 {place id:3 of:territory-2 layer:surface name:place-3}
 {capacity of:deposit for:extractor what:resource per:place} -> 1
+{deposit where:place-1 what:metal density:6} -> 1
+{deposit where:place-1 what:food density:6} -> 1
 {deposit where:place-3 what:metal density:6} -> 1
 {deposit where:place-3 what:food density:6} -> 1
+{extractor where:place-1 what:metal working:1} -> 1
+{extractor where:place-1 what:food working:1} -> 1
 {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2

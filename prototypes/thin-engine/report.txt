@@ -890,6 +890,8 @@ old state
     - citizen
     - consumes
     - deposit
+      - {deposit where:place-1 what:metal density:6} -> 1
+      - {deposit where:place-1 what:food density:6} -> 1
       - {deposit where:place-3 what:metal density:6} -> 1
       - {deposit where:place-3 what:food density:6} -> 1
     - energy
@@ -910,6 +912,8 @@ old state
 
 command  {deploy where:place-2}
   took   {ark where:place-2} -> 1
+  made   {extractor where:place-1 what:metal working:1} -> 1
+  made   {extractor where:place-1 what:food working:1} -> 1
   made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
 
 new state
@@ -925,10 +929,14 @@ new state
       - {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
     - consumes
     - deposit
+      - {deposit where:place-1 what:metal density:6} -> 1
+      - {deposit where:place-1 what:food density:6} -> 1
       - {deposit where:place-3 what:metal density:6} -> 1
       - {deposit where:place-3 what:food density:6} -> 1
     - energy
     - extractor
+      - {extractor where:place-1 what:metal working:1} -> 1
+      - {extractor where:place-1 what:food working:1} -> 1
     - food
     - labor
     - metal
