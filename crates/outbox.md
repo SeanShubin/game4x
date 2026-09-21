@@ -61,6 +61,66 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-134 - Sean has named the first release, and the thin-engine is the model for it
+
+**to** spec · **status** open · **raised** 2026-09-20 · **source** Sean, directly, at the end of
+reviewing all fifty-two thin-engine tests
+
+**This lane cannot promote anything, which is why it is here.** `spec/` and `decide/` are the
+specification lane's column and `hooks/pre-commit` refuses a commit that spans two. **What Sean
+said, verbatim**, so that nothing is lost between his words and a proposal:
+
+> I think we have proven enough to promote this to the main spec, here is what I want to do
+>
+> - Generate a game board from a 12 space goldberg polyhedron.
+> - Start me out with an ark in orbit
+> - Win condition is to deploy my ark to one space and launch an ark from a different space
+> - Cut many features from first release, no nature, no biomes, no force
+> - We are going to want to limit offers to end results, so we don't offer spending labor, the user
+>   decided to build a pioneer, or build a storage bin, or move a unit. Spending labor happens
+>   automatically to pay labor costs, and at end of turn if there is space in storage bins the
+>   extractors work automatically to fill them, automatically spending labor and exhausting citizens
+>   to generating labor as needed.
+> - The options on offer is going to be a separate layer from the rules engine, there are no rules
+>   to automatically top off storage bins, this is a policy layer that generates the proper commands
+>   to execute player wishes and automatically do obvious tasks.
+
+**What the prototype settled is already listed** - `prototypes/thin-engine/backlog.md`, *What the
+prototype has settled that `spec/` has not caught up with*. It is a table of differences with the
+reason for each, and it is the thing to turn into proposals rather than this item.
+
+## What the code lane observes, offered as facts rather than as opinions
+
+**The board needs nothing new from the model.** A place and an adjacency are rows, and the engine
+has no notion of geometry at all - so a generator is a tool that writes rows. Twelve pentagonal
+faces is **12 territories, 30 adjacencies and 24 places**, because an orbit is a place of the same
+territory rather than a territory of its own. `crates/sphere-tessellation` already exists.
+
+**The win condition needs something that does not.** *Launch an ark from a different space* needs a
+second settlement, and today nothing can make one: `deploy` requires the ark to be in an orbit, and
+a citizen is not a `unit`, so `move` cannot carry one. **The pioneer is the piece that closes it** -
+Sean, 2026-09-20: *Pioneer [...] can deploy with the same result as an ark*, and *pioneer deploys
+from same territory, surface deploys to surface.* `pioneer` appears nowhere in the prototype's data.
+
+**The seam the policy layer wants already exists and is already enforced.** A policy that tops off
+bins must name bins, extractors and labour; `tests/isolation.rs` refuses any relation or rule the
+game names appearing in code that runs in `src/`. **So a policy layer cannot be in the engine even
+by accident**, which is the property the prototype was built to demonstrate.
+
+**It is a layer above `offered` rather than a replacement for it.** `offered` is generic - it walks
+rules and inputs and names no game noun - and answers *what is legal*. What Sean is describing
+answers *what is worth showing, and what should happen without being asked*, which is a different
+question and a game-specific one. Both can stand.
+
+**Two things the automation has to decide, and they are not in the engine's gift.** The order in
+which the player's wishes and the automatic top-off compete for labour - a turn that fills bins
+first may leave nothing to build with. And whether automatic work may exhaust a citizen the player
+was saving. **`crate::schema::rooming` already answers *is there space in the bins*** with the same
+arithmetic the world check uses, so the question needs no new mechanism, only a policy.
+
+**What this lane can do without waiting**: the board generator, the pioneer, and the policy layer
+are all `prototypes/` or `crates/` work. What it cannot do is write any of it into `spec/`.
+
 ### C-133 - Is a deposit's density part of its description? Two files answer differently
 
 **to** spec · **status** withdrawn · **raised** 2026-09-17 · **withdrawn** 2026-09-17 · **source**
