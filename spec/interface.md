@@ -47,4 +47,18 @@ choosing a planet size - never require a gesture or a key the platform may lack.
 - An action that would waste part of what it costs says so before it is taken, and says how much
 - A control that chooses among alternatives shows which one is chosen, and names the others.
 
+## What is offered
+
+**What the player is offered is an end result and not a step towards one.** Building a Pioneer,
+building a bin and moving a unit are offered; spending the labour they cost is not. **What a
+choice costs is paid by whatever the rules require**, without being chosen a second time.
+
+**And what is obvious is done without being asked.** Ending a turn is the player saying they
+have finished choosing, so at that point every extractor with somewhere to put what it makes is
+worked - spending labour, and spending citizens to make labour, as far as it will go.
+
+**None of this is a rule of the game.** There is no rule that tops off a bin. What is offered,
+and what is done unasked, is a layer above the rules that writes the commands a player would
+have written. **The rules say what is legal; this says what is worth showing.**
+
 ## Open questions

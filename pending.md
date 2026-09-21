@@ -8,9 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-529** - Three lines of the release still name what `P-522` cut, and one of them is a vetted capability · `decide/proposals.md`
 - **P-528** - One fact about adjacency is now stated three times, in two files · `decide/proposals.md`
-- **P-523** - What is offered is an end result, and the thing that offers it is not a rule · `decide/proposals.md`
-- **P-522** - The first release is the loop the prototype closed, and the cuts are most of it · `decide/proposals.md`
 - **P-520** - `R-6` says it is built, and eleven lines down says this lane has not recorded it as such · `decide/proposals.md`
 - **P-519** - One clause is stated twice in `spec/console.md`, and the invariants forbid exactly that · `decide/proposals.md`
 - **P-518** - `{name field:value ...}` does not say whether the fields may be none, and seven forms are · `decide/proposals.md`

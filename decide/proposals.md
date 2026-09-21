@@ -11,6 +11,68 @@ of it needs you.
 
 ## Open
 
+### P-529 - Three lines of the release still name what `P-522` cut, and one of them is a vetted capability
+
+**to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** a decision · **into** `releases/first-release.md`
+
+**Filed the moment `P-522` landed.** Its instruction named six tables and a section and carried
+them out exactly; **it did not name these three, and they survive saying things the release no
+longer has.** Measured by grepping the file after the edit.
+
+```
+:14   Scope    A mobile unit may move across a boundary, usually to conquer and start
+               another self-contained territory
+:63   Kinds    territory | a place things are in, which has a biome, a force of nature, and
+               a density and a capacity per resource
+:329  R-4      A biome per territory - vetted 2026-09-03
+```
+
+## Two of them are wording and one is not
+
+**Line 14 and line 63 are the easy half.** *Conquer* is force, and a territory's *biome* and
+*force of nature* are two of the three cuts, sitting in a cell describing what a territory is.
+**Neither states a rule the release still has**, so both are stale text rather than open
+questions - and this lane could fix them as rephrasing if they were only rephrasing, which they
+are not: removing *conquer* changes what the bullet says a unit moves across a boundary **for**.
+
+**`R-4` is the one that is yours.** It is `vetted`, on 2026-09-03, against a drawing that exists.
+Nothing about the drawing has changed. **But the release now says biomes are out of scope and
+carries a vetted capability that delivered them**, which is a file disagreeing with itself.
+
+## The three answers for `R-4`
+
+**`B1` - leave it vetted and say why.** Work observed is work observed; add one line to `R-4`
+saying biomes were delivered before the cut and the cut is about rules rather than about the
+drawing. **The release stays honest about its own history.**
+
+**`B2` - move it to the log.** `releases/README.md` -> Shipped is where a delivered capability
+goes, and the log is empty. **The cost is that the log is meant for whole releases**, not for one
+capability leaving early.
+
+**`B3` - cut it with the rest.** **The cost is that it deletes the record of something a person
+looked at and approved**, which is the one kind of evidence this process treats as final.
+
+## What this lane would say
+
+**`B1`.** It is the only one of the three that does not lose information, and the disagreement is
+between a scope statement and a history, which a sentence can resolve. **`B2` and `B3` both
+answer a bookkeeping question by discarding an observation**, and observations are the scarce
+thing here.
+
+## And the two wording lines, once you have said
+
+```
+- A mobile unit may move across a boundary to start another self-contained territory
+```
+
+```
+| **territory** | a place things are in, which has a density and a capacity per resource |
+```
+
+**Offered as words rather than carried out**, because the first changes what the bullet claims a
+move is for, and `CLAUDE.md` says where a change would alter what a line claims, raise it rather
+than make it.
+
 ### P-528 - One fact about adjacency is now stated three times, in two files
 
 **to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** approval · **into** `spec/orbit.md` -> Crossing between layers, and `spec/planet.md` -> Distance
@@ -77,141 +139,6 @@ heading that says so, rather than in a document a reader of orbits has no reason
 **So the choice `S-74` was holding open has closed by itself.** It asked whether `spec/orbit.md`
 should keep its own sentence or point at `spec/planet.md`; the answer is neither, because the
 sentence now lives in `spec/orbit.md` and it is `spec/planet.md` that was restating.
-
-### P-523 - What is offered is an end result, and the thing that offers it is not a rule
-
-**to** sean · **status** open · **raised** 2026-09-20 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/interface.md` -> a new section, *What is offered*, after *What an action shows*
-
-**Your words, 2026-09-20**, the last two of the five things you said you wanted promoted:
-
-```
-We are going to want to limit offers to end results, so we don't offer spending labor, the
-user decided to build a pioneer, or build a storage bin, or move a unit. Spending labor
-happens automatically to pay labor costs, and at end of turn if there is space in storage
-bins the extractors work automatically to fill them, automatically spending labor and
-exhausting citizens to generating labor as needed.
-
-The options on offer is going to be a separate layer from the rules engine, there are no
-rules to automatically top off storage bins, this is a policy layer that generates the
-proper commands to execute player wishes and automatically do obvious tasks.
-```
-
-## What lands
-
-A new section, after *What an action shows*:
-
-> **What the player is offered is an end result and not a step towards one.** Building a Pioneer,
-> building a bin and moving a unit are offered; spending the labour they cost is not. **What a
-> choice costs is paid by whatever the rules require**, without being chosen a second time.
->
-> **And what is obvious is done without being asked.** Ending a turn is the player saying they
-> have finished choosing, so at that point every extractor with somewhere to put what it makes is
-> worked - spending labour, and spending citizens to make labour, as far as it will go.
->
-> **None of this is a rule of the game.** There is no rule that tops off a bin. What is offered,
-> and what is done unasked, is a layer above the rules that writes the commands a player would
-> have written. **The rules say what is legal; this says what is worth showing.**
-
-## Why the last paragraph is in the specification at all, given that it is about the artifact
-
-**Because the negative is a fact about the game.** *There is no rule that tops off a bin* is a
-statement about what the rule set contains, and a reader of `spec/` who found topping-off
-happening would otherwise go looking for the rule that did it. **The layer itself is
-architecture**, and it is being written into `docs/architecture.md` as the eleventh rule there,
-which needs no approval from you.
-
-## What the code lane offers as a fact, and it removes the worry you had
-
-**Nothing competes.** Your own settling of it: *the user will decide on actions, when pressing end
-turn they have decided no more actions, so thats when topping off storage occurs, no possibility
-of competition.* **And the seam already exists and is already enforced** - the prototype's
-isolation test refuses any noun the game's data names from appearing in engine code that runs, so
-a policy that must name bins, extractors and labour cannot drift into the engine even by
-accident.
-
-### P-522 - The first release is the loop the prototype closed, and the cuts are most of it
-
-**to** sean · **status** open · **raised** 2026-09-20 · **kind** recovered · **shape** an instruction · **asks** approval · **into** `releases/first-release.md`
-
-**Your words, 2026-09-20**, the first, second and fourth of the five:
-
-```
-Generate a game board from a 12 space goldberg polyhedron.
-Start me out with an ark in orbit
-Cut many features from first release, no nature, no biomes, no force
-```
-
-**And the reason, said to the prototype**: *I am cutting nature and force from this prototype
-because I don't think they are necessary to vet the core game loop: start with an ark -> develop
-a planet -> launch an ark.*
-
-## What the cuts come to, measured in the file rather than estimated
-
-| Section              | Today | After | What goes                                                                               |
-| -------------------- | ----- | ----- | --------------------------------------------------------------------------------------- |
-| Kinds                | 19    | 16    | `garrison`, `nature`, `force`                                                           |
-| Traits               | 26    | 23    | `defending`, `met`, `biome`                                                             |
-| What bounds a kind   | 12    | 11    | `garrison`                                                                              |
-| Units and structures | 7     | 6     | `garrison`                                                                              |
-| Recipes, as blocks   | 36    | 27    | `muster`, `stand`, `hold`, `reclaim`, `take`, one `renew`, one `discard`, two `refresh` |
-| Biomes               | 1     | 0     | the whole section                                                                       |
-
-**The two `refresh` blocks that go are the ones restoring `defending`**, leaving four; the `renew`
-and the `discard` are the ones naming `nature` and `force`. **And `deploy ark` and `found by land`
-each lose two rows** - a `require force` and a `produce garrison`. Every count above was read off
-the tables as they stand today.
-
-## What replaces *Scope* and *The loop*
-
-**Scope** keeps its first line and the rule editor's exclusion, and gains:
-
-```
-The twelve territories and the thirty adjacencies between them are generated from the
-twelve-faced Goldberg polyhedron rather than stated by hand.
-```
-
-**The loop** becomes three steps in place of today's seven:
-
-```
-1. Start with an ark in orbit
-2. Land it, and develop the territory it lands on
-3. Reach a second territory, build a Yard there, and launch an ark from it
-```
-
-**Measured: the board is 12 territories, 30 adjacencies and 24 places. I read *board* as those
-rows and not as the resource table** - *Territory resources* keeps its twelve rows and their
-densities, because nothing you said touches them and the balance note rests on them. **If you
-meant the resources generated too, say so and that table goes as well.**
-
-## An *Out of scope* section, which this release has never had
-
-`releases/README.md` asks for one - *whole areas of the spec this release does not touch, so the
-omission reads as deliberate* - and this is the first release with whole areas to name: nature,
-biomes and force, each with your reason. **`spec/` keeps all three**; this is scheduling and not a
-change to the game.
-
-## What this depends on, and what it leaves alone
-
-**It depends on `P-521`.** A release may not state a win condition the specification does not
-have, so the win condition lands in `spec/control.md` first and the release points at it.
-
-**`R-1` through `R-5` stay vetted and are not reopened.** `R-4` recorded a biome per territory in
-a drawing that exists; cutting biomes is about the rules, not about work already observed. **If
-you read that differently, `R-4` is the one to say so about.**
-
-**`P-512` is also open against this file**, in *Where things are*, and this instruction does not
-touch that section. If both land, that section is re-read whole before either closes.
-
-## How to tell it was carried out
-
-**The six counts in the table above**, read off the file after the edit. **No `## Biomes`
-heading.** **An `## Out of scope` section naming nature, biomes and force.** **`The loop` has
-three steps.** And **`Scope` names the polyhedron.**
-
-**One thing is deliberately left in, and it is worth your eye.** The `Strength` column of *Units
-and structures* survives, and with force gone nothing in the release reads it. It stays because
-`spec/units.md` says every unit has a strength and `spec/combat.md` is where it is spent. **If you
-want it cut too, that is one more column.**
 
 ### P-520 - `R-6` says it is built, and eleven lines down says this lane has not recorded it as such
 

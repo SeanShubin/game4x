@@ -13,6 +13,8 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - Each territory is self-contained. No resource and no citizen crosses a territory boundary
 - A mobile unit may move across a boundary, usually to conquer and start another self-contained
   territory
+- The twelve territories and the thirty adjacencies between them are generated from the
+  twelve-faced Goldberg polyhedron rather than stated by hand
 - The rule editor is not in this release
 
 ### Territory resources
@@ -40,20 +42,15 @@ Every territory has capacity for at least one food extractor.
 
 ## The loop
 
-1. No presence on the planet
-2. Land the ark on a territory from orbit, claiming it
-3. Work the food extractor to grow the population
-4. Build extractors for metal and energy
-5. Produce pioneers and spread across the planet by land
-6. Build a Yard
-7. Build and launch an Ark, which is one act
+1. Start with an ark in orbit
+2. Land it, and develop the territory it lands on
+3. Reach a second territory, build a Yard there, and launch an ark from it
 
 ## Kinds
 
 | Kind          | What it is                                                                                             |
 | ------------- | ------------------------------------------------------------------------------------------------------ |
 | **citizen**   | a person: provides labor, eats, and grows on surplus                                                   |
-| **garrison**  | what holds a territory; a territory has at most one                                                    |
 | **extractor** | built for one resource, and worked to produce it                                                       |
 | **yard**      | where an Ark is produced                                                                               |
 | **store**     | built to hold one resource, and holds nothing else                                                     |
@@ -69,8 +66,6 @@ Every territory has capacity for at least one food extractor.
 | **adjacency** | two places that share an edge, held by the thing that holds them                                       |
 | **game**      | every thing is in it, and it is the one thing that is in nothing                                       |
 | **fertility** | a citizen's capacity to raise one more, spent by raising one and renewed each turn                     |
-| **nature**    | what a territory's ground resists with; held by the territory, and met by force each turn              |
-| **force**     | what a territory presents to hold or take ground; mustered each turn and swept at its end              |
 
 ## Families
 
@@ -118,7 +113,6 @@ are listed.
 | **laboring**    | a number                                                          | each thing |
 | **working**     | a number                                                          | each thing |
 | **bearing**     | a number                                                          | each thing |
-| **defending**   | a number                                                          | each thing |
 | **resource**    | one of the resources                                              | each thing |
 | **strength**    | a number                                                          | the kind   |
 | **fuel**        | how much energy its tank holds                                    | the kind   |
@@ -130,8 +124,6 @@ are listed.
 | **occupied**    | a number                                                          | each thing |
 | **free**        | a number: its capacity less what it holds                         | each thing |
 | **control**     | held by a player, or unclaimed: a citizen of that player is there | each thing |
-| **biome**       | one of the biomes                                                 | each thing |
-| **met**         | a number                                                          | each thing |
 | **from**        | a place                                                           | each thing |
 | **to**          | a place                                                           | each thing |
 | **keeps**       | the number of turns it will last                                  | each thing |
@@ -147,7 +139,6 @@ Food is made with `keeps` 1.
 | Kind          | Bounded by                                               |
 | ------------- | -------------------------------------------------------- |
 | **citizen**   | the food produced here, through upkeep                   |
-| **garrison**  | a capacity of 1                                          |
 | **extractor** | a capacity, from *Territory resources*                   |
 | **store**     | as many as the extractors of its resource                |
 | **yard**      | a capacity of 1                                          |
@@ -173,7 +164,6 @@ a raw material returns to its source.
 | Thing         | Strength | Fuel | Upkeep          | Crosses      | Readies                            | Movable |
 | ------------- | -------- | ---- | --------------- | ------------ | ---------------------------------- | ------- |
 | **citizen**   | 1        |      | 1 food per turn |              | bearing 1, defending 1, laboring 1 |         |
-| **garrison**  | 0        |      |                 |              |                                    |         |
 | **extractor** |          |      |                 |              | working 1                          |         |
 | **yard**      |          |      |                 |              |                                    |         |
 | **store**     |          |      |                 |              |                                    |         |
@@ -217,9 +207,7 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 | Recipe              | Owner  | Role    | Qty                                  | Kind      | Traits                                        | Where          |
 | ------------------- | ------ | ------- | ------------------------------------ | --------- | --------------------------------------------- | -------------- |
 | **deploy ark**      | player | require | 1                                    | territory |                                               | `$where`       |
-|                     |        | require | 1                                    | force     |                                               |                |
 |                     |        | consume | 1                                    | ark       |                                               | above `$where` |
-|                     |        | produce | 1                                    | garrison  |                                               |                |
 |                     |        | produce | 2                                    | citizen   |                                               |                |
 |                     |        | produce | 1                                    | extractor | food                                          |                |
 |                     |        | produce | 1                                    | extractor | metal                                         |                |
@@ -229,8 +217,6 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 |                     |        | put     |                                      | unit      | moving one less                               | `$to`          |
 |                     |        | consume | 1                                    | energy    |                                               | `$from`        |
 | **found by land**   | player | consume | 1                                    | pioneer   |                                               |                |
-|                     |        | require | 1                                    | force     |                                               |                |
-|                     |        | produce | 1                                    | garrison  |                                               |                |
 |                     |        | produce | 2                                    | citizen   |                                               |                |
 |                     |        | produce | 1                                    | extractor | food                                          |                |
 |                     |        | produce | 1                                    | extractor | metal                                         |                |
@@ -286,49 +272,8 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 | **refresh**         | world  | put     |                                      | citizen   | laboring at its maximum                       |                |
 | **refresh**         | world  | put     |                                      | citizen   | bearing at its maximum                        |                |
 | **refresh**         | world  | put     |                                      | extractor | working at its maximum                        |                |
-| **muster**          | world  | require | 1                                    | garrison  |                                               |                |
-|                     |        | require | 1                                    | citizen   | defending at least 1                          |                |
-|                     |        | put     |                                      | citizen   | defending one less                            |                |
-|                     |        | produce | that citizen's strength              | force     |                                               |                |
-| **stand**           | world  | require | 1                                    | unit      | defending at least 1                          |                |
-|                     |        | put     |                                      | unit      | defending one less                            |                |
-|                     |        | produce | that unit's strength                 | force     |                                               |                |
-| **refresh**         | world  | put     |                                      | citizen   | defending at its maximum                      |                |
-| **refresh**         | world  | put     |                                      | unit      | defending at its maximum                      |                |
-| **hold**            | world  | require | 1                                    | nature    | met 0                                         |                |
-|                     |        | consume | 1                                    | force     |                                               |                |
-|                     |        | put     |                                      | nature    | met at its maximum                            |                |
-| **reclaim**         | world  | require | 1                                    | nature    | met 0                                         |                |
-|                     |        | consume | 1                                    | citizen   |                                               |                |
-| **renew**           | world  | require | 1                                    | nature    |                                               |                |
-|                     |        | put     |                                      | nature    | met 0                                         |                |
 | **renew**           | world  | require | 1                                    | citizen   |                                               |                |
 |                     |        | put     |                                      | citizen   | paid 0                                        |                |
-| **take**            | world  | require | 1                                    | nature    |                                               |                |
-|                     |        | consume | 1                                    | nature    |                                               |                |
-|                     |        | consume | 1                                    | force     |                                               |                |
-| **discard**         | world  | consume | 1                                    | force     |                                               |                |
-
-## Biomes
-
-What a biome is like, so that a territory's numbers can be chosen to suit it. **The numbers here
-guide and do not bind; a territory's own are in *Territory resources*. Force of nature is the one
-column that binds.** Ocean is not claimable and carries nothing.
-
-**Force of nature is how many `nature` the territory holds at the start.** A territory with two
-needs two force to hold it, and each one force meets is marked until the turn ends.
-
-| Biome     | Food  | Metal | Energy | Force of nature |
-| --------- | ----- | ----- | ------ | --------------- |
-| Ocean     | -     | -     | -      | -               |
-| Ice       | 1 x 2 | 3 x 5 | 1 x 2  | 1               |
-| Desert    | 2 x 4 | 3 x 4 | 5 x 6  | 1               |
-| Grassland | 5 x 6 | 2 x 3 | 1 x 3  | 1               |
-| Jungle    | 6 x 6 | 1 x 2 | 1 x 2  | 2               |
-| Mountain  | 1 x 3 | 5 x 7 | 2 x 3  | 1               |
-
-`5 x 6` is capacity for five extractors, each yielding six. Every biome except ocean has
-capacity for at least one food extractor at density two or more.
 
 ## Controls
 
@@ -572,5 +517,22 @@ generated view does.
   written**, which is why the capability could be built and still not deliver it. **It is about the
   published site and not the repository view** - *I don't necessarily need it to be rendered when I
   browse it as source*.
+
+## Out of scope
+
+Whole areas of the specification this release does not touch, so the omission reads as deliberate.
+**`spec/` keeps all three**; this is scheduling and not a change to the game.
+
+Sean, 2026-09-20: *I am cutting nature and force from this prototype because I don't think they are
+necessary to vet the core game loop: start with an ark -> develop a planet -> launch an ark.*
+
+- **Nature** - `spec/control.md` -> Force, *every territory has a force of nature, inherent to it*.
+  Nothing resists a claim in this release, so `reclaim`, `renew` and `take` are not built
+- **Force** - `spec/control.md` -> Producing force, and *gaining and holding ground*. No garrison,
+  no muster, and `deploy ark` and `found by land` neither require force nor produce a garrison.
+  **`spec/turn.md`'s *nature takes back what is no longer held* goes with it**, so a turn in this
+  release has four steps rather than five
+- **Biomes** - `spec/planet.md`, *each territory has a biome*. A territory's numbers are stated
+  directly in *Territory resources* rather than guided by a biome
 
 ## Open questions
