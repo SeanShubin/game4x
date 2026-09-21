@@ -8,9 +8,14 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 ## The orbital layer
 
-- A planet has an orbit above each of its territories. An orbit is not a territory: it has capacity
-  for no extractors, and nothing is extracted there
-- Nothing orbits a planet without being above a particular territory
+- **A territory has two layers: its surface and its orbit.** A place is one layer of one
+  territory, and a thing is in orbit by being in the orbital place of the territory it is
+  above. **Nothing is in orbit without being above a particular territory.**
+- **Adjacency is stated between territories and nowhere else.** Two places on the same layer
+  are adjacent when their territories are, and a territory's surface and its orbit are
+  adjacent by being layers of one territory. Neither is a further rule.
+- **The layers do not admit the same things.** What may stand in a layer, and how much room a
+  layer gives, are declared per layer. An orbit admits no extractor and no citizen.
 
 ## What sits in orbit
 

@@ -3704,7 +3704,9 @@ moment he is spending it.
 
 ### S-74 - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why
 
-**to** spec - **status** open - **raised** 2026-09-07 - **source** `P-349`, promoted in this turn
+**to** spec - **status** acted - **acted** 2026-09-21 - **folded into** `P-528` - **raised** 2026-09-07 - **source** `P-349`, promoted in this turn
+
+**Retired by `P-528`, which is the proposal this item said it would draft.** `P-526` added a third statement of the same fact and closed the choice this was holding open: `spec/orbit.md` keeps the sentence and `spec/planet.md` stops restating it, because the orbital case now lives in the file about orbits. **Open for two weeks because it was waiting for a decision that a later promotion made for it.**
 
 **Mine, filed against myself, because `P-349` made it stale the moment it landed.**
 `spec/orbit.md:20` reads *an orbit is next to the territory below it, and next to the orbits above

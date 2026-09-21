@@ -11,150 +11,72 @@ of it needs you.
 
 ## Open
 
-### P-526 - An orbit is part of a territory rather than a place beside it
+### P-528 - One fact about adjacency is now stated three times, in two files
 
-**to** sean · **status** open · **raised** 2026-09-20 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/orbit.md` -> The orbital layer
+**to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** approval · **into** `spec/orbit.md` -> Crossing between layers, and `spec/planet.md` -> Distance
 
-**Your words, 2026-09-20, recorded in the prototype's backlog:**
+**Filed the moment `P-526` landed**, and it retires `S-74`, which found the first two in September
+and could not close because the third had not arrived.
+
+*Two places on the same layer are adjacent when their territories are, and a place is adjacent to
+the place above it* is now written in three places:
 
 ```
-I no longer think orbits should be separate territories with adjacencies like they are in
-the mainline spec. I think orbits should be part of the territory. So we need a way to tell
-if something is in orbit, and the orbital area will have different containment rules than
-the surface.
+spec/orbit.md    The orbital layer   Two places on the same layer are adjacent when their
+                                     territories are, and a territory's surface and its orbit
+                                     are adjacent by being layers of one territory
+spec/orbit.md    Crossing between    An orbit is next to the territory below it, and next to
+                 layers              the orbits above that territory's neighbours
+spec/planet.md   Distance            A territory is adjacent to the space above it, and two
+                                     spaces are adjacent when the territories below them are
 ```
 
-## What the specification says today, and how much of it already agrees
-
-`spec/orbit.md` already says an orbit is **not** a territory - *it has capacity for no
-extractors, and nothing is extracted there* - and `spec/console.md` says *the orbit above a
-territory is named by naming the territory*. **So the disagreement is narrower than it sounds**:
-what changes is that an orbit stops being a second place in the adjacency graph.
-
-Two of your answers settle the rest. **Can a citizen be in orbit? No.** **Does orbit match the
-surface graph? Yes** - so no orbital adjacency is stated, because it is already derivable.
+**Two of them are in one file, eight lines apart.** `spec/invariants.md` -> A fact is stated once
+forbids exactly this, and says which way to resolve it: *the shorter specification is the one that
+says each thing once, so removing the second form is better than checking it.*
 
 ## What lands
 
-The section becomes:
+**The first bullet of `Crossing between layers` goes.** It says what the section above it now
+says, in a fourth vocabulary - `P-349` settled that *edge, border and boundary name that shared
+thing*, and `next to` is anchored to nothing. **The `orbit boundary` bullet beside it stays
+untouched**: it defines a boundary a unit may or may not cross, which is a different fact and the
+one that section is for.
 
-> - **A territory has two layers: its surface and its orbit.** A place is one layer of one
->   territory, and a thing is in orbit by being in the orbital place of the territory it is
->   above. **Nothing is in orbit without being above a particular territory.**
-> - **Adjacency is stated between territories and nowhere else.** Two places on the same layer
->   are adjacent when their territories are, and a territory's surface and its orbit are
->   adjacent by being layers of one territory. Neither is a further rule.
-> - **The layers do not admit the same things.** What may stand in a layer, and how much room a
->   layer gives, are declared per layer. An orbit admits no extractor and no citizen.
-
-## What it does not settle, and it is the one you left open
-
-**Whether crossing between layers is a move.** Your own answer was *thematically it is a move in
-the sense of changing position, but also the moves are very different kinds of things* - so the
-text above says which places are adjacent and says nothing about which capability a crossing
-demands. `spec/orbit.md` -> Crossing between layers keeps its `orbit boundary` rule untouched.
-
-## What goes stale, and it is one sentence
-
-`spec/planet.md` -> Distance says *a territory is adjacent to the space above it, and two spaces
-are adjacent when the territories below them are*. **That survives as a derivation and stops
-being a statement about two kinds of place.** If this lands, the cleanup is filed against that
-sentence rather than left.
-
-### P-525 - A place declares no capacity of its own, and the prototype has two that do
-
-**to** sean · **status** open · **raised** 2026-09-20 · **kind** measured · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment
-
-**One sentence of the specification is false of the model you approved fifty-two tests of.**
+**And the whole middle paragraph of `spec/planet.md` -> Distance goes** - both its sentences,
+because the second is about the first:
 
 ```
-spec/logistics.md   A place's capacity for a kind is the sum of what is in it that can hold
-                    that kind, and a place declares none of its own. This holds of every place
+A territory is adjacent to the space above it, and two spaces are adjacent when the territories
+below them are. Neither is a further rule; both are what sharing a boundary comes to when one
+place is above another.
 ```
 
-**Measured in the prototype's data, two rows contradict it:**
+**The paragraphs around it stay** - *adjacency is a shared boundary*, and *to cross is to pass
+through a shared boundary* - because both are about adjacency in general and neither mentions
+layers.
 
-```
-{capacity of:place   for:bin       ...}                       a territory's room for bins
-{capacity of:deposit for:extractor what:resource per:place}   a deposit's room for extractors
-```
+## How to tell it was carried out
 
-## Why the sentence was right when it was written, and is wrong now
+**`spec/orbit.md` -> Crossing between layers has one bullet**, the `orbit boundary` one, with its
+wording unchanged.
 
-**It was written when every container was a thing somebody built.** A bin gives room for metal, a
-tank gives room for fuel, and the place is only the sum - that is still exactly true of
-resources, and the rule is worth keeping for them.
+**`spec/planet.md` -> Distance contains no occurrence of *above*.** Measured today: two, both in
+the paragraph being removed.
 
-**What broke it is ground.** A deposit is not a thing anybody put there, and it bounds how many
-extractors may stand on it; a territory's room for bins is the same shape. **Neither is the sum
-of anything inside**, and both arrived by folding a separate mechanism away rather than by adding
-one: the prototype's `limit` relation - two columns, three engine words, a check and two failure
-modes - all went when the deposit limit became a capacity row.
+**And *next to* appears once in `spec/`, down from twice.** The survivor is
+`spec/logistics.md` -> Containment, *a thing says which of the things in it are next to which* -
+which is about what a container states, not about places, and is untouched.
 
-## What lands
+## What it costs, and why this is approval rather than a decision
 
-The bullet becomes:
+**A reader of `spec/planet.md` alone loses the orbital case.** That is the cost `S-74` could not
+resolve, and `P-526` resolves it: the orbital case is now stated in the file about orbits, under a
+heading that says so, rather than in a document a reader of orbits has no reason to open.
 
-> - **A place's capacity for a kind is the sum of what is in it that can hold that kind**, and
->   for a kind a place can hold, a place declares none of its own. **What a place has room to
->   stand is a different question**, and a place does declare that: ground states how many of a
->   kind may be built on it, and nothing inside it changes the number. **This holds of every
->   place**: an orbit has room for the fuel its units carry and for nothing else, because that is
->   what is in it.
-
-## What it costs
-
-**Two questions now wear one word.** *How much of this may this place hold* and *how many of
-these may stand here* are both capacity, answered by one table, and the text above is what tells
-a reader which is which. **The alternative is a second word for the second question** - which is
-the mechanism the prototype just removed, and removing it is what let a deployment fall short
-where there is no metal deposit instead of being refused outright.
-
-### P-524 - An ark gathers its fuel and spends it, where the spec says orbit is free
-
-**to** sean · **status** open · **raised** 2026-09-20 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/units.md` -> What a unit is
-
-**Your words, 2026-09-20, stating the ark whole:**
-
-```
-Ark - can only be in orbit; can spend one energy and one move to move from orbit to orbit;
-contains a storage container for 1 energy; can collect 1 energy from the sun each turn
-```
-
-**What the specification says:**
-
-```
-spec/units.md   A mobile unit that moves in orbit takes its energy directly from the sun.
-                It stores no fuel, and moving costs it nothing
-```
-
-## What free movement was for, and what replaced it
-
-**Both clauses were written before anything gathered.** *Takes its energy directly from the sun*
-had no mechanism, so *moving costs it nothing* was the only way to say that orbital movement is
-not paid for out of a territory. **The prototype built the mechanism** - a unit spends a per-turn
-allowance and makes a resource, which is the rule that already works an extractor - and once the
-sun is a source, free movement stops being what says so.
-
-**A thing that gathers and spends is a game; a thing that moves for free is a rule.** The ark now
-has a bin, a rate and a cost, so an ark that has spent its fuel this turn is something the player
-can see.
-
-## What lands
-
-The bullet becomes:
-
-> - **A mobile unit that moves in orbit gathers its energy from the sun**, a fixed amount each
->   turn, and holds it in a bin of its own. **Moving in orbit burns a unit of it**, and one with
->   an empty bin cannot move. **The sun is where that energy comes from**, so orbital movement is
->   never paid for out of a territory.
-
-## What it does not change
-
-**The bullet above it is untouched** - a unit that moves over the ground is still built with its
-bin full, and the energy is still paid where it is built. **What the two now share is the
-shape**: a bin, a cost per move, and a refusal when the bin is empty. They differ in where the
-fuel comes from, which is the fact the old sentence was carrying.
+**So the choice `S-74` was holding open has closed by itself.** It asked whether `spec/orbit.md`
+should keep its own sentence or point at `spec/planet.md`; the answer is neither, because the
+sentence now lives in `spec/orbit.md` and it is `spec/planet.md` that was restating.
 
 ### P-523 - What is offered is an end result, and the thing that offers it is not a rule
 
