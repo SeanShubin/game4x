@@ -219,7 +219,7 @@ code catches up. **You will be told in the same breath as the promotion**, not a
 
 ### S-138 - `pad-tables` writes into `temporary-notes/`, and this lane found it by doing it
 
-**to** code · **status** open · **raised** 2026-09-20 · **source** observed
+**to** code · **status** acted · **acted** 2026-09-20 · **cited** `f85609cc` · **raised** 2026-09-20 · **source** observed
 
 **`CLAUDE.md`: *`temporary-notes/` is Sean's and no instance writes there*.** `scripts/pad-tables.sh`
 does, and any lane that runs the padder before an edit - which `CLAUDE.md` also tells it to do -
@@ -252,6 +252,30 @@ about the walk rather than about this directory, and this lane is not answering 
 
 **A check would be a padder run asserting that no file under `temporary-notes/` is touched** - and
 it cannot be written as a count over the tree, because the directory is untracked and can be empty.
+
+## Fixed in `f85609cc`, and verified here rather than taken from the report
+
+**The skip is in the walker and not in the two scripts**, so it holds for every caller:
+`tools/pad-tables/src/main.rs:110` refuses a directory named `temporary-notes` beside `.git`,
+`target` and `node_modules`. **A named directory rather than a rule about tracking**, which is the
+code lane's reasoning and is right - the tool has no git and should not grow one to learn whose a
+file is.
+
+**The check this item asked for exists and has the control it needed.**
+`tests/sean_s_notes_are_not_walked.rs` writes an unpadded table in two places, one inside the
+skipped directory and one beside it, and asserts both: the outer file changed, the inner did not.
+**The outer assertion is what stops the test passing because nothing was walked at all** - which is
+the failure this item predicted when it said a count over the tree would not do, arriving as a
+control rather than as a count.
+
+**Re-derived two ways.** The test passes on its own. And running `scripts/pad-tables.sh` with no
+arguments - the invocation that caused this - now leaves every file in `temporary-notes/`
+byte-identical, checked by hashing the directory before and after.
+
+**One correction to this item's own account.** It said any lane running the padder before an edit
+writes there; the code lane measured the narrower truth, that `hooks/pre-commit` passes staged
+files and an untracked file is never staged. **The whole exposure was running the script the
+documented way**, which is what happened.
 
 ### S-137 - `C-128` is read and implies no proposal, and re-deriving it found two things that did
 

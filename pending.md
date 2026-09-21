@@ -36,15 +36,14 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-138** - `f85609c` S-138: the walk does not enter Sean's notes, and a test says so · still open in `docs/notes/proposals.md`
+- **C-136** - `a452a45` C-136's question is answered in the invariants, and rules 12 to 15 land · still open in `crates/outbox.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (8)
+### To code (7)
 
-- **S-138** - `pad-tables` writes into `temporary-notes/`, and this lane found it by doing it · `docs/notes/proposals.md`
 - **S-135** - The relational model has no rendering, and the person it was for cannot read it · `docs/notes/proposals.md`
 - **S-133** - The two follow-ons from pooling, which this lane owed you and did not file · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
