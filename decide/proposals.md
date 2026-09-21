@@ -79,7 +79,7 @@ spec/logistics.md   A place's capacity for a kind is the sum of what is in it th
 {capacity of:deposit for:extractor what:resource per:place}   a deposit's room for extractors
 ```
 
-## Why the sentence was right and is not
+## Why the sentence was right when it was written, and is wrong now
 
 **It was written when every container was a thing somebody built.** A bin gives room for metal, a
 tank gives room for fuel, and the place is only the sum - that is still exactly true of
@@ -128,7 +128,7 @@ spec/units.md   A mobile unit that moves in orbit takes its energy directly from
                 It stores no fuel, and moving costs it nothing
 ```
 
-## Why the old sentence was the only way to say it and is not now
+## Why free movement was the only way to say *the sun pays*, and is not now
 
 **Both clauses were written before anything gathered.** *Takes its energy directly from the sun*
 had no mechanism, so *moving costs it nothing* was the only way to say that orbital movement is
