@@ -291,58 +291,6 @@ and structures* survives, and with force gone nothing in the release reads it. I
 `spec/units.md` says every unit has a strength and `spec/combat.md` is where it is spent. **If you
 want it cut too, that is one more column.**
 
-### P-521 - The win condition is two settlements, not a finished planet
-
-**to** sean · **status** open · **raised** 2026-09-20 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Winning
-
-**Your words, 2026-09-20**, opening *I think we have proven enough to promote this to the main
-spec, here is what I want to do*:
-
-```
-Win condition is to deploy my ark to one space and launch an ark from a different space
-```
-
-**What the specification says today:**
-
-```
-spec/control.md   A player wins by launching an Ark from a fully exploited planet.
-```
-
-## What lands
-
-That bullet becomes:
-
-> - A player wins by deploying an Ark to one territory and launching an Ark from a different one.
-
-## What this is instead of, and why it is the harder condition to fake
-
-**The old condition is a state of the whole planet** - every territory taken, every territory at
-its greatest output, every store full. **The new one is two acts in two places**, which cannot be
-reached without a second settlement, and a second settlement cannot be reached without crossing
-ground and founding. **It tests the loop rather than the totals.**
-
-**It is also reachable, which the old one measured as not being.** `C-95` ran the committed
-scenario and got twelve claimable territories, two founded and none at maximum output - so `R-6`'s
-scenario launches an Ark and does not win. **Under this condition it wins**, because it deploys to
-territory 1 and founds territory 2.
-
-## What goes stale, and the cleanup is filed rather than folded in
-
-**Four bullets above it define *fully exploited*, and nothing in `spec/` would then read them.**
-Measured: the phrase appears twice in `spec/`, in the definition and in the bullet being replaced.
-**Outside `spec/` it has readers** - `R-6`'s evidence, and `is_fully_exploited` across
-`crates/game-model` and `crates/game-console`, including a test named for it.
-
-**So they are not deleted here.** The definition is still true, and still the thing `C-9` made
-decidable from a territory alone; what it loses is the rule that used it. **A cleanup proposal is
-filed the moment this lands**, asking whether the definition stays as vocabulary or goes.
-
-## What it does not change
-
-**Losing is untouched** - no citizens and nothing that becomes one. **And nothing about force**:
-taking and holding ground read as they do, and this release cutting force is `P-522` rather than
-this.
-
 ### P-520 - `R-6` says it is built, and eleven lines down says this lane has not recorded it as such
 
 **to** sean · **status** open · **raised** 2026-09-20 · **kind** measured · **shape** text · **asks** approval · **into** `releases/first-release.md` -> R-6

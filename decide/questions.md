@@ -11,6 +11,53 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
+### P-527 - *Fully exploited* is defined in four bullets and now read by nothing in `spec/`
+
+**to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** a decision · **into** `spec/control.md` -> Winning
+
+**Filed the moment `P-521` landed**, which is what that proposal said would happen.
+
+`spec/control.md` -> Winning now opens with four bullets defining *fully exploited* and closes
+with a win condition that does not use the phrase. **Measured after the promotion: the phrase
+appears once in `spec/`, in its own definition.**
+
+```
+A planet is fully exploited when every territory that can be taken has been taken, every
+territory is producing the greatest output it can, and every storage structure on it is full.
+Exploiting a territory is putting labor to work at its extractors. ...
+What that greatest output is follows from the territory's own permanent facts ...
+A territory that cannot feed a citizen has no output to reach ...
+```
+
+## Why this is a decision and not a tidy-up
+
+**The definition is still true and something still reads it.** `is_fully_exploited` is built
+across `crates/game-model` and `crates/game-console`, with a test named for it, and `R-6`'s
+evidence quotes the old win condition to explain why the committed scenario does not win.
+**Deleting the words does not delete any of that.**
+
+## The three answers
+
+**`W1` - keep all four, as vocabulary.** *Fully exploited* stays a defined term the game can use
+later - for scoring, for an end-of-game report, for a second win condition. **The cost is four
+bullets at the top of a section whose subject is now something else**, and a reader who looks for
+what reads them and finds nothing.
+
+**`W2` - cut all four.** The section becomes one bullet and says exactly what winning is.
+**The cost is the built code**, which then implements a term the specification does not define,
+and `R-6`'s evidence stops resolving.
+
+**`W3` - move them, and keep them.** They are a statement about a territory's output rather than
+about winning, so they would sit in `spec/economy.md` or `spec/planet.md`. **The cost is a move
+that has to pick a home**, and this lane will not pick one without you.
+
+## What this lane would say
+
+**`W3` if the term survives your new direction, `W2` if it does not** - and that is the part
+this lane cannot see. Under an executable specification the question is whether a test will ever
+assert *the planet is fully exploited*; if none will, the words are prose with no reader and `W2`
+is honest. **You are the one who knows whether that test is coming.**
+
 ### P-517 - `spec/data/` states the cases, and the rules are what you wanted to read
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `spec/data/`, and `C-114`

@@ -54,7 +54,7 @@ How a territory is claimed and held. Weapons and their ranges are in [combat](co
   this turn, and not whether any particular game happened to reach it.
 - A territory that cannot feed a citizen has no output to reach, and never holds the condition
   open.
-- A player wins by launching an Ark from a fully exploited planet.
+- A player wins by deploying an Ark to one territory and launching an Ark from a different one.
 
 ## Losing
 
