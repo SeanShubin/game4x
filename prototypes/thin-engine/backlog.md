@@ -302,11 +302,13 @@ like they are in the mainline spec. I think orbits should be part of the territo
 to tell if something is in orbit, and the orbital area will have different containment rules than
 the surface.*
 
-**The mainline already agrees on the main point, which is worth knowing before anything moves.**
-`spec/orbit.md`: *An orbit is not a territory: it has capacity for no extractors, and nothing is
-extracted there.* And `spec/console.md`: *A place worked out from another is not open - the orbit
-above a territory is named by naming the territory.* **So this is choosing a representation for
-something the specification already asserts**, not overturning it. What the spec does treat as a
+**The mainline already agreed on the main point, which was worth knowing before anything moved.**
+Before `P-526`, the orbit document said an orbit was not a territory, with capacity for no
+extractors and nothing extracted there; the console document said a place worked out from another
+was not open, an orbit being named by naming the territory under it. **So this was choosing a
+representation for something already asserted**, not overturning it. **Both are paraphrased because
+the words have moved**: `P-526` landed this on 2026-09-20 and the specification now says a territory
+has two layers. What the spec does treat as a
 graph is only crossing: an orbit is next to the territory below it and next to the orbits above that
 territory's neighbours, and a unit crosses orbit boundaries or crosses none.
 
@@ -599,15 +601,23 @@ day came out of it** - `[soft]` is better than what this lane had designed, and 
 unit rather than remaking it is a shape worth stealing. **What to drop is the *therefore***: report
 what it did and what that cost, and let the prototype decide.
 
-| what the prototype does                                        | what `spec/` says                                                                                                                           |
-| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| An ark stores one energy and spends one to move between orbits | `spec/units.md`: *a mobile unit that moves in orbit takes its energy directly from the sun. It stores no fuel, and moving costs it nothing* |
-| A territory declares its own capacity for bins                 | `spec/logistics.md`: *a place declares none of its own* - kept because Sean needs the numbers visible in a test                             |
+**Both of them are promoted and the table is empty, which is the outcome rather than the end of
+it.** Sean promoted `P-521` to `P-526` on 2026-09-20:
 
-**A third row stood here and was never a difference.** It said *`spec/logistics.md` calls it a
-store*, and `spec/logistics.md` line 35 says **A bin is a thing.** *What holds a kind is a store for
-that kind, and a thing with two bins holds two stores.* **The thing is a bin there and the role is a
-store** - the line the prototype drew, drawn first.
+- **An ark stores fuel and spends it to move.** `spec/units.md` had said an orbital unit took its
+  energy straight from the sun, stored none and moved for nothing; `P-524` replaced that with a
+  bin of its own and a unit of it burned per move.
+- **A place declares what may stand on it.** `spec/logistics.md` had said a place declared none of
+  its own capacity; `P-525` replaced that.
+
+**So the prototype has no live disagreement with `spec/` left.** Every difference it found was
+either promoted or turned out to have been already stated - which is the whole record of what this
+file was for.
+
+**A third row stood here and was never a difference.** It claimed the specification called a bin a
+store. `spec/logistics.md` line 35 draws the same line the prototype does, and draws it first: the
+thing is a bin, and what holds a kind is a store for that kind. **The row was refuted by the file it
+cited.**
 
 **This file already knew.** *Storage*, five hundred lines up, quotes that same sentence to say the
 two agree. **One file saying both**, and the half that was wrong is the half that travelled: it went
@@ -631,9 +641,9 @@ by building the first and noticing the second had nothing left to do.
 **Sean, 2026-09-20**: *I am cutting nature and force from this prototype because I don't think they
 are necessary to vet the core game loop: start with an ark -> develop a planet -> launch an ark.*
 
-**So no garrison, no force, and no *what nature reclaims*.** That last one was `spec/turn.md`'s fifth
-step and the only one this prototype had not built - **the turn is now four steps and finished**,
-rather than four of five. The mainline's `deploy-ark` requires a force and produces a garrison; this
+**So no garrison, no force, and no *what nature reclaims*.** That last one is the fifth step of the
+turn in the mainline, and the only one this prototype had not built. **The turn here is four steps
+and finished**, rather than four of five. The mainline's `deploy-ark` requires a force and produces a garrison; this
 one does neither.
 
 **The loop is the acceptance test and it is built.**

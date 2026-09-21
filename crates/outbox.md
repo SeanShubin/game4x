@@ -307,9 +307,10 @@ the thing may be left out*. Read together, a deposit's description includes its 
 deposits at one territory for one resource with different densities are two descriptions and both
 are legal.
 
-**`spec/planet.md` says there is one**: *For each resource, a territory has capacity for some
-number of extractors, and a density that each of them yields.* One density per territory per
-resource, so the second row cannot arise.
+**There is one**, and `spec/planet.md` is where it says so: *For each resource, a territory has
+capacity for some number of extractors, and a density that each of them yields.*
+
+One density per territory per resource, so the second row cannot arise.
 
 **Both cannot be the rule at once, and which one it is decides whether a model can refuse the
 second row.** If density is part of the description, two densities for one resource in one
@@ -341,8 +342,9 @@ What sits directly inside `{game phase:play}` is **territory** (12), **orbit** (
 (30) - two things the world contains and one way it arranges them.
 
 **`above` is the second arrangement and it is nowhere in the dump.** `spec/data/above.4x` states all
-twelve - `{above orbit:1 territory:1}` - and `spec/orbit.md` says *nothing orbits a planet without
-being above a particular territory*. **The dump writes `{orbit id:1}` through `{orbit id:12}` and
+twelve - `{above orbit:1 territory:1}` - and the orbit document says nothing is in orbit without
+being above a particular territory. **Paraphrased since `P-526`**, which kept that sentence and
+changed the words around it. **The dump writes `{orbit id:1}` through `{orbit id:12}` and
 never says which territory any of them is above.**
 
 **The dump's own source says how the twelve are made**, and it is not from `above.4x`: *an orbit per
