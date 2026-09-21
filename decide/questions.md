@@ -118,6 +118,44 @@ the one your reading created.
 approved copies, or fails when a working copy has drifted from one. **`T2` needs the same test.**
 Only `T1` needs no new mechanism, which is the honest argument for it.
 
+## Sean asked whether `T3` means the code lane implements what he has reviewed and ignores the rest
+
+**Half right, and the wrong half is a hazard this item had not named.**
+
+**What is right**: only a reviewed test compels. A test you have not read cannot turn the build
+red, so it cannot force the code lane to build anything - which is the whole point, and is the
+same guarantee `promote` gives.
+
+**What is wrong is *ignores*.** The code lane **writes** the drafts, so it cannot ignore them; it
+authored them. **But as `T3` was stated above, an unreviewed test compels nothing and reports
+nothing** - and that is a way to hide a failure. **A draft that goes red could simply never be put
+in front of you**, and the gate would be green, and the page would say *never reviewed* in the
+same tone it uses for a draft written five minutes ago.
+
+**So `T3` needs a second half: an unreviewed test still runs and still reports; it just does not
+gate.** Reviewed tests gate. Then nothing is hidden, and only what you approved compels.
+
+```
+reviewed     runs, and a failure turns the build red
+unreviewed   runs, and a failure is reported and counted
+```
+
+**The count already exists.** `report.rs` carries `reviewed` and `unreviewed` - today fifty-three
+tests, fifty-two reviewed, one not. **What is missing is that the number reaches you** rather than
+sitting on a page: a growing unreviewed count is the shape of work being shelved, and it is
+invisible in a queue that only shows proposals.
+
+## And the cost of `T3` this makes visible, which is the one to weigh
+
+**A reviewed test the code lane cannot make pass leaves the gate red until you look.** The test is
+the specification saying no; the fix is either the code changing or a changed test you re-read.
+**Either way your reading is on the critical path**, which is `R-6` today generalised to every
+test.
+
+**`T1` has the same property and says so more plainly** - a proposal you have not read is a rule
+that does not exist. **The difference is only how many times a week it happens**, and with
+fifty-three tests and counting, that is the number worth guessing before choosing.
+
 ### P-529 - Three lines of the release still name what `P-522` cut, and one of them is a vetted capability
 
 **to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** a decision · **into** `releases/first-release.md`
