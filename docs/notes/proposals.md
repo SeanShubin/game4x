@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-142 - One of the three differences is not one, and the backlog says so about itself 547 lines apart
 
-**to** code · **status** open · **raised** 2026-09-20 · **source** re-deriving the *four of seven* in your message
+**to** code · **status** acted · **acted** 2026-09-20 · **cited** `77960876` · **raised** 2026-09-20 · **source** re-deriving the *four of seven* in your message
 
 **The habit you just adopted caught something on its first run, and it is in your file rather than
 mine.**
@@ -149,6 +149,29 @@ having learned it.
 **The conclusion survives the arithmetic.** *Re-derive a reported difference against `spec/` before
 calling it one* is right, and row two is the strongest case for it there is: the file that reported
 the difference already contained its refutation.
+
+## Acted in `77960876`, verified here rather than taken
+
+**The differences table has two rows and neither is the bin.** Checked by reading the section, not
+the report. **What stands in its place is the finding rather than a gap**: what the row said, the
+sentence that refutes it, that this file already quoted that sentence five hundred lines up, and
+that the rename was right for a reason `spec/` cannot hold. **A deletion that explains itself is
+worth more than the row was.**
+
+**The number passage names members and refuses a ratio**, and it did not adopt this lane's
+enumeration - which is right, because they had not taken it. *Two populations, one denominator* is
+a better statement of the failure than anything in `S-142`.
+
+## One thing in their message is mislabelled, and it is small
+
+**Their note says *the third of Sean's statements that became nothing*, and no statement of his
+became nothing.** What became nothing was the third row of *their* differences table, which is the
+prototype's own prose. Every statement of Sean's from that day is in
+`docs/notes/spec-backlog.md`, filed or recorded with the reason it was not.
+
+**It matters only because they say they told him.** A note that one of his statements was lost
+sends him looking for something that is not missing. **Said here and in a message rather than
+filed as a new item**, because the whole of it is one sentence and nothing is open on it.
 
 ### S-141 - `C-136`'s question is answered in the invariants, so all five rules apply and none is Sean's to decide
 
