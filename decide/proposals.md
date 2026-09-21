@@ -11,6 +11,338 @@ of it needs you.
 
 ## Open
 
+### P-526 - An orbit is part of a territory rather than a place beside it
+
+**to** sean · **status** open · **raised** 2026-09-20 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/orbit.md` -> The orbital layer
+
+**Your words, 2026-09-20, recorded in the prototype's backlog:**
+
+```
+I no longer think orbits should be separate territories with adjacencies like they are in
+the mainline spec. I think orbits should be part of the territory. So we need a way to tell
+if something is in orbit, and the orbital area will have different containment rules than
+the surface.
+```
+
+## What the specification says today, and how much of it already agrees
+
+`spec/orbit.md` already says an orbit is **not** a territory - *it has capacity for no
+extractors, and nothing is extracted there* - and `spec/console.md` says *the orbit above a
+territory is named by naming the territory*. **So the disagreement is narrower than it sounds**:
+what changes is that an orbit stops being a second place in the adjacency graph.
+
+Two of your answers settle the rest. **Can a citizen be in orbit? No.** **Does orbit match the
+surface graph? Yes** - so no orbital adjacency is stated, because it is already derivable.
+
+## What lands
+
+The section becomes:
+
+> - **A territory has two layers: its surface and its orbit.** A place is one layer of one
+>   territory, and a thing is in orbit by being in the orbital place of the territory it is
+>   above. **Nothing is in orbit without being above a particular territory.**
+> - **Adjacency is stated between territories and nowhere else.** Two places on the same layer
+>   are adjacent when their territories are, and a territory's surface and its orbit are
+>   adjacent by being layers of one territory. Neither is a further rule.
+> - **The layers do not admit the same things.** What may stand in a layer, and how much room a
+>   layer gives, are declared per layer. An orbit admits no extractor and no citizen.
+
+## What it does not settle, and it is the one you left open
+
+**Whether crossing between layers is a move.** Your own answer was *thematically it is a move in
+the sense of changing position, but also the moves are very different kinds of things* - so the
+text above says which places are adjacent and says nothing about which capability a crossing
+demands. `spec/orbit.md` -> Crossing between layers keeps its `orbit boundary` rule untouched.
+
+## What goes stale, and it is one sentence
+
+`spec/planet.md` -> Distance says *a territory is adjacent to the space above it, and two spaces
+are adjacent when the territories below them are*. **That survives as a derivation and stops
+being a statement about two kinds of place.** If this lands, the cleanup is filed against that
+sentence rather than left.
+
+### P-525 - A place declares no capacity of its own, and the prototype has two that do
+
+**to** sean · **status** open · **raised** 2026-09-20 · **kind** measured · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment
+
+**One sentence of the specification is false of the model you approved fifty-two tests of.**
+
+```
+spec/logistics.md   A place's capacity for a kind is the sum of what is in it that can hold
+                    that kind, and a place declares none of its own. This holds of every place
+```
+
+**Measured in the prototype's data, two rows contradict it:**
+
+```
+{capacity of:place   for:bin       ...}                       a territory's room for bins
+{capacity of:deposit for:extractor what:resource per:place}   a deposit's room for extractors
+```
+
+## Why the sentence was right and is not
+
+**It was written when every container was a thing somebody built.** A bin gives room for metal, a
+tank gives room for fuel, and the place is only the sum - that is still exactly true of
+resources, and the rule is worth keeping for them.
+
+**What broke it is ground.** A deposit is not a thing anybody put there, and it bounds how many
+extractors may stand on it; a territory's room for bins is the same shape. **Neither is the sum
+of anything inside**, and both arrived by folding a separate mechanism away rather than by adding
+one: the prototype's `limit` relation - two columns, three engine words, a check and two failure
+modes - all went when the deposit limit became a capacity row.
+
+## What lands
+
+The bullet becomes:
+
+> - **A place's capacity for a kind is the sum of what is in it that can hold that kind**, and
+>   for a kind a place can hold, a place declares none of its own. **What a place has room to
+>   stand is a different question**, and a place does declare that: ground states how many of a
+>   kind may be built on it, and nothing inside it changes the number. **This holds of every
+>   place**: an orbit has room for the fuel its units carry and for nothing else, because that is
+>   what is in it.
+
+## What it costs
+
+**Two questions now wear one word.** *How much of this may this place hold* and *how many of
+these may stand here* are both capacity, answered by one table, and the text above is what tells
+a reader which is which. **The alternative is a second word for the second question** - which is
+the mechanism the prototype just removed, and removing it is what let a deployment fall short
+where there is no metal deposit instead of being refused outright.
+
+### P-524 - An ark gathers its fuel and spends it, where the spec says orbit is free
+
+**to** sean · **status** open · **raised** 2026-09-20 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/units.md` -> What a unit is
+
+**Your words, 2026-09-20, stating the ark whole:**
+
+```
+Ark - can only be in orbit; can spend one energy and one move to move from orbit to orbit;
+contains a storage container for 1 energy; can collect 1 energy from the sun each turn
+```
+
+**What the specification says:**
+
+```
+spec/units.md   A mobile unit that moves in orbit takes its energy directly from the sun.
+                It stores no fuel, and moving costs it nothing
+```
+
+## Why the old sentence was the only way to say it and is not now
+
+**Both clauses were written before anything gathered.** *Takes its energy directly from the sun*
+had no mechanism, so *moving costs it nothing* was the only way to say that orbital movement is
+not paid for out of a territory. **The prototype built the mechanism** - a unit spends a per-turn
+allowance and makes a resource, which is the rule that already works an extractor - and once the
+sun is a source, free movement stops being what says so.
+
+**A thing that gathers and spends is a game; a thing that moves for free is a rule.** The ark now
+has a bin, a rate and a cost, so an ark that has spent its fuel this turn is something the player
+can see.
+
+## What lands
+
+The bullet becomes:
+
+> - **A mobile unit that moves in orbit gathers its energy from the sun**, a fixed amount each
+>   turn, and holds it in a bin of its own. **Moving in orbit burns a unit of it**, and one with
+>   an empty bin cannot move. **The sun is where that energy comes from**, so orbital movement is
+>   never paid for out of a territory.
+
+## What it does not change
+
+**The bullet above it is untouched** - a unit that moves over the ground is still built with its
+bin full, and the energy is still paid where it is built. **What the two now share is the
+shape**: a bin, a cost per move, and a refusal when the bin is empty. They differ in where the
+fuel comes from, which is the fact the old sentence was carrying.
+
+### P-523 - What is offered is an end result, and the thing that offers it is not a rule
+
+**to** sean · **status** open · **raised** 2026-09-20 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/interface.md` -> a new section, *What is offered*, after *What an action shows*
+
+**Your words, 2026-09-20**, the last two of the five things you said you wanted promoted:
+
+```
+We are going to want to limit offers to end results, so we don't offer spending labor, the
+user decided to build a pioneer, or build a storage bin, or move a unit. Spending labor
+happens automatically to pay labor costs, and at end of turn if there is space in storage
+bins the extractors work automatically to fill them, automatically spending labor and
+exhausting citizens to generating labor as needed.
+
+The options on offer is going to be a separate layer from the rules engine, there are no
+rules to automatically top off storage bins, this is a policy layer that generates the
+proper commands to execute player wishes and automatically do obvious tasks.
+```
+
+## What lands
+
+A new section, after *What an action shows*:
+
+> **What the player is offered is an end result and not a step towards one.** Building a Pioneer,
+> building a bin and moving a unit are offered; spending the labour they cost is not. **What a
+> choice costs is paid by whatever the rules require**, without being chosen a second time.
+>
+> **And what is obvious is done without being asked.** Ending a turn is the player saying they
+> have finished choosing, so at that point every extractor with somewhere to put what it makes is
+> worked - spending labour, and spending citizens to make labour, as far as it will go.
+>
+> **None of this is a rule of the game.** There is no rule that tops off a bin. What is offered,
+> and what is done unasked, is a layer above the rules that writes the commands a player would
+> have written. **The rules say what is legal; this says what is worth showing.**
+
+## Why the last paragraph is in the specification at all, given that it is about the artifact
+
+**Because the negative is a fact about the game.** *There is no rule that tops off a bin* is a
+statement about what the rule set contains, and a reader of `spec/` who found topping-off
+happening would otherwise go looking for the rule that did it. **The layer itself is
+architecture**, and it is being written into `docs/architecture.md` as the eleventh rule there,
+which needs no approval from you.
+
+## What the code lane offers as a fact, and it removes the worry you had
+
+**Nothing competes.** Your own settling of it: *the user will decide on actions, when pressing end
+turn they have decided no more actions, so thats when topping off storage occurs, no possibility
+of competition.* **And the seam already exists and is already enforced** - the prototype's
+isolation test refuses any noun the game's data names from appearing in engine code that runs, so
+a policy that must name bins, extractors and labour cannot drift into the engine even by
+accident.
+
+### P-522 - The first release is the loop the prototype closed, and the cuts are most of it
+
+**to** sean · **status** open · **raised** 2026-09-20 · **kind** recovered · **shape** an instruction · **asks** approval · **into** `releases/first-release.md`
+
+**Your words, 2026-09-20**, the first, second and fourth of the five:
+
+```
+Generate a game board from a 12 space goldberg polyhedron.
+Start me out with an ark in orbit
+Cut many features from first release, no nature, no biomes, no force
+```
+
+**And the reason, said to the prototype**: *I am cutting nature and force from this prototype
+because I don't think they are necessary to vet the core game loop: start with an ark -> develop
+a planet -> launch an ark.*
+
+## What the cuts come to, measured in the file rather than estimated
+
+| Section              | Today | After | What goes                                                                               |
+| -------------------- | ----- | ----- | --------------------------------------------------------------------------------------- |
+| Kinds                | 20    | 17    | `garrison`, `nature`, `force`                                                           |
+| Traits               | 26    | 23    | `defending`, `met`, `biome`                                                             |
+| What bounds a kind   | 12    | 11    | `garrison`                                                                              |
+| Units and structures | 7     | 6     | `garrison`                                                                              |
+| Recipes, as blocks   | 36    | 27    | `muster`, `stand`, `hold`, `reclaim`, `take`, one `renew`, one `discard`, two `refresh` |
+| Biomes               | 1     | 0     | the whole section                                                                       |
+
+**The two `refresh` blocks that go are the ones restoring `defending`**, leaving four; the `renew`
+and the `discard` are the ones naming `nature` and `force`. **And `deploy ark` and `found by land`
+each lose two rows** - a `require force` and a `produce garrison`. Every count above was read off
+the tables as they stand today.
+
+## What replaces *Scope* and *The loop*
+
+**Scope** keeps its first line and the rule editor's exclusion, and gains:
+
+```
+The twelve territories and the thirty adjacencies between them are generated from the
+twelve-faced Goldberg polyhedron rather than stated by hand.
+```
+
+**The loop** becomes three steps in place of today's seven:
+
+```
+1. Start with an ark in orbit
+2. Land it, and develop the territory it lands on
+3. Reach a second territory, build a Yard there, and launch an ark from it
+```
+
+**Measured: the board is 12 territories, 30 adjacencies and 24 places. I read *board* as those
+rows and not as the resource table** - *Territory resources* keeps its twelve rows and their
+densities, because nothing you said touches them and the balance note rests on them. **If you
+meant the resources generated too, say so and that table goes as well.**
+
+## An *Out of scope* section, which this release has never had
+
+`releases/README.md` asks for one - *whole areas of the spec this release does not touch, so the
+omission reads as deliberate* - and this is the first release with whole areas to name: nature,
+biomes and force, each with your reason. **`spec/` keeps all three**; this is scheduling and not a
+change to the game.
+
+## What this depends on, and what it leaves alone
+
+**It depends on `P-521`.** A release may not state a win condition the specification does not
+have, so the win condition lands in `spec/control.md` first and the release points at it.
+
+**`R-1` through `R-5` stay vetted and are not reopened.** `R-4` recorded a biome per territory in
+a drawing that exists; cutting biomes is about the rules, not about work already observed. **If
+you read that differently, `R-4` is the one to say so about.**
+
+**`P-512` is also open against this file**, in *Where things are*, and this instruction does not
+touch that section. If both land, that section is re-read whole before either closes.
+
+## How to tell it was carried out
+
+**The six counts in the table above**, read off the file after the edit. **No `## Biomes`
+heading.** **An `## Out of scope` section naming nature, biomes and force.** **`The loop` has
+three steps.** And **`Scope` names the polyhedron.**
+
+**One thing is deliberately left in, and it is worth your eye.** The `Strength` column of *Units
+and structures* survives, and with force gone nothing in the release reads it. It stays because
+`spec/units.md` says every unit has a strength and `spec/combat.md` is where it is spent. **If you
+want it cut too, that is one more column.**
+
+### P-521 - The win condition is two settlements, not a finished planet
+
+**to** sean · **status** open · **raised** 2026-09-20 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Winning
+
+**Your words, 2026-09-20**, opening *I think we have proven enough to promote this to the main
+spec, here is what I want to do*:
+
+```
+Win condition is to deploy my ark to one space and launch an ark from a different space
+```
+
+**What the specification says today:**
+
+```
+spec/control.md   A player wins by launching an Ark from a fully exploited planet.
+```
+
+## What lands
+
+That bullet becomes:
+
+> - A player wins by deploying an Ark to one territory and launching an Ark from a different one.
+
+## What this is instead of, and why it is the harder condition to fake
+
+**The old condition is a state of the whole planet** - every territory taken, every territory at
+its greatest output, every store full. **The new one is two acts in two places**, which cannot be
+reached without a second settlement, and a second settlement cannot be reached without crossing
+ground and founding. **It tests the loop rather than the totals.**
+
+**It is also reachable, which the old one measured as not being.** `C-95` ran the committed
+scenario and got twelve claimable territories, two founded and none at maximum output - so `R-6`'s
+scenario launches an Ark and does not win. **Under this condition it wins**, because it deploys to
+territory 1 and founds territory 2.
+
+## What goes stale, and the cleanup is filed rather than folded in
+
+**Four bullets above it define *fully exploited*, and nothing in `spec/` would then read them.**
+Measured: the phrase appears twice in `spec/`, in the definition and in the bullet being replaced.
+**Outside `spec/` it has readers** - `R-6`'s evidence, and `is_fully_exploited` across
+`crates/game-model` and `crates/game-console`, including a test named for it.
+
+**So they are not deleted here.** The definition is still true, and still the thing `C-9` made
+decidable from a territory alone; what it loses is the rule that used it. **A cleanup proposal is
+filed the moment this lands**, asking whether the definition stays as vocabulary or goes.
+
+## What it does not change
+
+**Losing is untouched** - no citizens and nothing that becomes one. **And nothing about force**:
+taking and holding ground read as they do, and this release cutting force is `P-522` rather than
+this.
+
 ### P-520 - `R-6` says it is built, and eleven lines down says this lane has not recorded it as such
 
 **to** sean · **status** open · **raised** 2026-09-20 · **kind** measured · **shape** text · **asks** approval · **into** `releases/first-release.md` -> R-6

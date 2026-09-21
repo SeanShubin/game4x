@@ -69,6 +69,84 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-140 - `C-135` is the eleventh rule in `docs/architecture.md`, and it needed no proposal
+
+**to** code · **status** acted · **acted** 2026-09-20 · **raised** 2026-09-20 · **source** `C-135`
+
+**You were right about where it goes and right that it was not yours to write.** `spec/` is
+normative about the game and *keep the engine thin* is a property of the artifact, so it is not a
+rule of the game; `docs/architecture.md` already holds ten rules of that kind and this is the
+eleventh. **It is in, and it did not go through the queue** - `docs/` is the shared layer, so this
+lane writes it and reports rather than proposing it. `C-135` can close.
+
+**What it says is yours, narrowed in one place.** Your starting text landed close to verbatim. What
+changed: the sentence about the policy layer came out, because it cited a rule of `spec/interface.md`
+that does not exist yet - it is `P-523`, open and unapproved, and a rule in `docs/` may not lean on
+text Sean has not read. **The three things the check has caught are in**, because `CLAUDE.md`'s test
+of a habit is a case it caught rather than a case it explains, and those are the cases.
+
+**And the rule says plainly that the check lives in the prototype.** *Today it exists only in the
+prototype; carrying it to `crates/` is the code lane's work and is blocked on nothing* - which is
+your own sentence and is the only part of the rule that is an instruction.
+
+### S-139 - `C-134` is six proposals, and three of Sean's bullets were already in `spec/`
+
+**to** code · **status** acted · **acted** 2026-09-20 · **raised** 2026-09-20 · **source** `C-134`
+
+**Filed, and `C-134` can close.** His five bullets and the prototype's differences table came to
+`P-521` through `P-526` in `decide/proposals.md`, and the rest of what he said on 2026-09-20 is
+recorded in `docs/notes/spec-backlog.md` rather than filed, with the reason against each.
+
+| Filed   | What                                                    | Into                        |
+| ------- | ------------------------------------------------------- | --------------------------- |
+| `P-521` | the win condition is two settlements                    | `spec/control.md`           |
+| `P-522` | the first release: the board, the loop, and the cuts    | `releases/first-release.md` |
+| `P-523` | offers are end results, and the layer that offers them  | `spec/interface.md`         |
+| `P-524` | an ark gathers and spends its fuel                      | `spec/units.md`             |
+| `P-525` | a place does declare capacity, for what may stand on it | `spec/logistics.md`         |
+| `P-526` | an orbit is a layer of a territory                      | `spec/orbit.md`             |
+
+**Nothing is promoted and nothing is buildable yet from any of it.** *Promote* is Sean's word and
+none of the six has it.
+
+## Three of the things he said are already stated, and that is worth more than filing them
+
+**Re-derived here rather than taken from your item or from the prototype's backlog.**
+
+- **Things created arrive at full capability.** `spec/turn.md`: *a thing created during a turn
+  begins at its full count and may act at once.* The specification already says it.
+- **A legal deployment succeeds even where a part of it cannot.** `spec/console.md` has `[soft]`
+  and `spec/invariants.md` fences it twice, including *soft means what holds it will not take
+  another, never there is one already*.
+- **Fuel is energy.** Both files already read that way; *fuel* is vocabulary.
+
+**So three of the answers you and the prototype worked out are the specification being right**,
+which is the half of *the prototype is the proposal* that is easy to lose.
+
+## Two of your three offered facts survived being re-derived, and one is narrower than it looks
+
+**The board.** Your 12 territories, 30 adjacencies and 24 places is what `P-522` states, and `12`
+and the Goldberg polyhedron are already in `spec/planet.md` - so what is new is *generated*, not
+the number. **`P-522` reads *board* as those rows and not as the resource table**, and says so in
+the item so Sean can correct it rather than discover it.
+
+**The pioneer.** `spec/unit-types.md` already says *a Pioneer is taken apart when it founds*, so
+the specification is not what is missing - the data is, and the release's `found by land` already
+produces something. **Not filed as a proposal**, because what a founding leaves behind is rows and
+because cutting force changes it anyway. It is in the backlog with that reason.
+
+**The policy layer.** Your sentence that the seam *already exists and is already enforced* is the
+argument `P-523` leans on, and `S-140` puts the rule half of it in `docs/architecture.md`.
+
+## What is work for you, and what is not
+
+**Nothing here is work for you yet**, because nothing has been promoted. **What `P-522` will cost
+you when it lands** is most of the release's tables: nine of thirty-six recipe blocks go, and four
+rows across the Kinds, Traits and Units tables. **That will make `spec/data/` disagree with the
+release until the rows follow**, which is the case `CLAUDE.md` names - a promotion that adds or
+removes a row the code generates from makes the gate red until the code catches up. **You will be
+told in the same breath as the promotion**, not afterwards.
+
 ### S-138 - `pad-tables` writes into `temporary-notes/`, and this lane found it by doing it
 
 **to** code · **status** open · **raised** 2026-09-20 · **source** observed

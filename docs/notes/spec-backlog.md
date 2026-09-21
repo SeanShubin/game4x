@@ -3677,3 +3677,123 @@ goes from twenty-one lines to twenty-four.** A kind may only name a declared tra
 data file is a kind, a trait, or one of a trait's values* - so `metal-in-it`, `control` and `surplus`
 must be declared. **`P-457`'s exception is superseded rather than broken**: it was right while
 nothing named them.
+
+## Said 2026-09-20: the spec is the thing under suspicion, and the prototype is the proposal
+
+Twice in one day, after this lane cited `spec/` as authority over the thin-engine prototype:
+
+*this is a prototype not bound by the spec. I use the spec for inspiration, but the whole point of
+not being bound to the spec is so that I can come up with appropriate changes to the spec.*
+
+And the reason:
+
+*I lost executive control of the spec and am re-asserting that control with precise tests.*
+
+**This inverts the direction every earlier entry in this file assumed.** The backlog has always been
+*things Sean said that have not reached the spec*; this says the spec itself is the thing being
+checked, and a test he has read and approved outranks a sentence he has not re-read. **Where the
+prototype and `spec/` disagree, the prototype is the proposal.**
+
+**And it is not a licence to ignore the document.** His own qualification, the same day: *sometimes
+the spec was correct, and I will sometimes ask questions about what the spec did to decide if we
+should do the same thing here, it is just not the authority when it comes to thin-engine.* What to
+drop is the *therefore* - report what the spec did and what it cost, and let the prototype decide.
+
+## Said 2026-09-20: the first release, in five bullets
+
+Relayed verbatim by the code lane in `C-134`, at the end of reviewing all fifty-two thin-engine
+tests, opening *I think we have proven enough to promote this to the main spec, here is what I want
+to do*:
+
+- Generate a game board from a 12 space goldberg polyhedron.
+- Start me out with an ark in orbit
+- Win condition is to deploy my ark to one space and launch an ark from a different space
+- Cut many features from first release, no nature, no biomes, no force
+- We are going to want to limit offers to end results, so we don't offer spending labor, the user
+  decided to build a pioneer, or build a storage bin, or move a unit. Spending labor happens
+  automatically to pay labor costs, and at end of turn if there is space in storage bins the
+  extractors work automatically to fill them, automatically spending labor and exhausting citizens
+  to generating labor as needed.
+- The options on offer is going to be a separate layer from the rules engine, there are no rules to
+  automatically top off storage bins, this is a policy layer that generates the proper commands to
+  execute player wishes and automatically do obvious tasks.
+
+**Filed as `P-521` through `P-523`, and `P-522` for the release.** The cuts are scheduling and go to
+`releases/first-release.md`; the win condition and the offers layer are the main spec, because
+*promote this to the main spec* is the sentence they arrived under.
+
+**One thing they are not**: a statement about `spec/planet.md`. The twelve-face Goldberg polyhedron
+and the tiny planet size are already written there, and what is new is that the board's places and
+adjacencies are **generated** rather than stated by hand.
+
+## Said 2026-09-20: keep the engine thin, somewhere it will not get overlooked
+
+*I will also want to make sure we keep the engine thin, so that idea needs to exist somewhere it
+wont get overlooked. Does that belong in the spec or in the coding instance?*
+
+**Neither, and it is now the eleventh rule in [architecture](../architecture.md).** `spec/` is
+normative about the game and this is a property of the artifact, so it is not a rule of the game;
+rules 6 through 10 of that file are all about what the code may do rather than what the game is, and
+this is one more of those. **It needed no proposal** - `docs/` is the shared layer and this lane
+writes it - which is why it is recorded here rather than in the queue.
+
+## Said 2026-09-20: the ark, the scout, the pioneer and the transport, stated whole
+
+> **Ark** - can only be in orbit; can spend one energy and one move to move from orbit to orbit;
+> contains a storage container for 1 energy; can collect 1 energy from the sun each turn; can deploy
+> to the surface, which entails destruction of the ark, along with creation of 1 metal extractor,
+> 1 food extractor, and 2 citizens.
+> **Scout** - contains a storage container for 2 fuel.
+> **Pioneer** - contains a storage container for 2 fuel; can deploy with the same result as an ark.
+> **Transport** - contains a storage container for 2 fuel; templated storage container for 10 of a
+> resource, which in the case of fuel would result in 12 capacity for fuel across 2 containers.
+
+**Only the ark's first clause is filed**, as `P-524`, because it is the one that contradicts a
+sentence of `spec/`. The rest is either already stated or is data:
+
+- **The quantities are data.** `spec/README.md` rule 7 puts the game's numbers in `spec/data/`, not
+  in prose, so *1 energy*, *2 fuel* and *10 of a resource* are rows rather than rules.
+- **The pioneer deploying like an ark is nearly stated.** `spec/unit-types.md` already says *an Ark
+  is taken apart when it deploys, having chosen its landing zone from orbit. A Pioneer is taken
+  apart when it founds* - what differs is what each leaves behind, and the release's `deploy ark`
+  and `found by land` already produce different things. **Left unfiled because the difference is
+  rows**, and because cutting force changes both.
+- **The transport's twelve is a sum**, not a new rule: two containers for one kind add up, which
+  `spec/logistics.md` already says.
+
+## Said 2026-09-20: fuel is energy, and *fuel* is vocabulary
+
+*when I say fuel I tend to mean energy that happens to be used for movement in this context.*
+
+**One relation and one resource**, and `fuel` stays a word people use rather than a thing the game
+has. `spec/units.md` and `spec/logistics.md` both already read this way; nothing needs filing.
+
+## Said 2026-09-20: things are created with full capability
+
+*Generally i want things created with full capability.*
+
+**Already in `spec/turn.md`**, and this is the specification being right rather than a change: *a
+thing created during a turn begins at its full count and may act at once.* **The prototype measured
+what it is worth** - the acceptance loop was four turns because a built extractor stayed idle until
+the turn restored it, and is two now. Recorded rather than filed.
+
+## Said 2026-09-20: a legal deployment succeeds even when parts of it cannot
+
+*it is legal to deploy an ark anywhere, individual rules may fail but the deployment succeeds,
+consequences of legal moves may be disastrous, but that is player choice.*
+
+**`spec/console.md` already has the mechanism** - a line may carry `[soft]`, saying what to do when
+it cannot do all of what it says - and `spec/invariants.md` fences it twice: *a line that makes may
+be soft, and a line that takes may not*, and **soft means what holds it will not take another, never
+there is one already**. Nothing to file; recorded so that the answer and its mechanism sit together.
+
+## Open, 2026-09-20: whether crossing between layers is a move
+
+*thematically it is a move in the sense of changing position, but also the moves are very different
+kinds of things, moving between two orbits, moving between two surfaces, and moving between surface
+and orbit all require very different capabilities.*
+
+**Left open deliberately.** `P-526` proposes that an orbit is a layer of a territory and says
+nothing about which capability a crossing demands, which is this question. It is not in
+`decide/questions.md` because nothing is blocked on it: the graph is one thing under either answer,
+and only the capability differs.

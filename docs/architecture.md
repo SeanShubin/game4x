@@ -185,6 +185,17 @@ hand-written so that results are identical on every platform, which is what make
    what keep it there. Before taking one, ask which kind it is: a home needs a boundary
    crate before it needs a version number, because the question is not whether it is good
    but how much of your design it will make.
+11. **The rules engine names no noun the game has.** A relation or a rule the data declares
+   may not appear in engine code that runs. What a thing *is* belongs to the data; the engine
+   moves rows around without knowing what any of them mean, so **a second rule is rows and no
+   code** — and that is the test of whether this holds. The check reads every relation and rule
+   name out of the data rather than carrying a list of its own, so it widens as the game does:
+   `prototypes/thin-engine/tests/isolation.rs`, which drops comments and `#[cfg(test)]` and
+   refuses any of those words in code that runs. **It has caught things it was not written
+   for** — a local named `found`; `place` reintroduced by the very check that exists because
+   places have layers; and `collect` and `store` colliding with Rust's own words, where the
+   *game* gave way rather than the engine. Today it exists only in the prototype; carrying it
+   to `crates/` is the code lane's work and is blocked on nothing.
 
 ## Open questions
 
