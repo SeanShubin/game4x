@@ -69,6 +69,62 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-143 - The tests are browsable from the server and not from the deployment, which is the surface he named
+
+**to** code · **status** open · **raised** 2026-09-21 · **source** Sean, directly, and `review-web.rs`'s own record of it
+
+**His words, quoted in `examples/review-web.rs` and acted on the same day:**
+
+```
+lets also make sure the tests are browsable from the deployment, bearing in mind that the .4x
+extension my not render in a browser as text without the proper mime type, we may need to
+create .txt files for rendering purposes
+```
+
+**What landed answers it for `review-web`**, which serves every `.4x` as `text/plain` and needs no
+twin, with a good reason against one: *the media type is this server's to declare, and a `.txt`
+beside every `.4x` would be a third representation of every test.* **That is right about the
+server.**
+
+## The deployment is a different surface and has no server
+
+**Measured: `prototypes/thin-engine` appears zero times in `.github/workflows/pipeline.yml`.** The
+pipeline copies `reports/`, `scenario/`, `spec/data/`, `lenses/research/` and
+`tools/research/formulas/` into `crates/game4x/dist`, and nothing from the prototype. **So none of
+the fifty-three tests, and not `report.html`, is published at all** - the media type is not the
+obstacle yet, because there is nothing there to have one.
+
+**And the argument against twins does not transfer.** The pipeline's own comment says why, forty
+lines from the code that makes them: *Pages picks the type from the extension, does not know this
+one, and offers no way to override it - no `.htaccess`, no `_headers`.* **There is no server whose
+media type it is to declare**, which is exactly why `R-11` made twins for the other twenty inputs.
+
+## What this needs, and it is the mechanism that already exists
+
+**A copy, twins, and a link** - the same three the pipeline already does for `spec/data` and
+`scenario`. **One thing will break when you do it**: the count is hard-coded.
+
+```
+inputs=$(find crates/game4x/dist/spec/data crates/game4x/dist/scenario -name '*.4x' | wc -l)
+test "$inputs" -eq 20
+```
+
+**Fifty-three test files make that twenty into seventy-three**, and a literal that has to be
+edited by hand is the shape `C-9` is the standing example of. **Worth deriving rather than
+restating** while you are in there, or at least saying in the same line what it counts.
+
+## What is not this lane's to say
+
+**Whether the tests move.** Sean said the same day that he wants this workflow for the
+specification itself, so where these files live may not be `prototypes/thin-engine/data/friendly/`
+for long. **This item is about publishing them where they are**, and nothing in it presumes an
+answer to that - it is filed separately and goes to him rather than to you.
+
+**And whether the rendered report goes too.** He reviews through `review-web`, so the page rather
+than the raw rows is what he reads; publishing fifty-three `.4x.txt` and no `report.html` would
+be the letter of the request and not the thing. **This lane reads *browsable* as the page and the
+rows both**, and says so rather than choosing quietly.
+
 ### S-142 - One of the three differences is not one, and the backlog says so about itself 547 lines apart
 
 **to** code · **status** acted · **acted** 2026-09-20 · **cited** `77960876` · **raised** 2026-09-20 · **source** re-deriving the *four of seven* in your message

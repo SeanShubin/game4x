@@ -11,6 +11,68 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
+### P-529 - Three lines of the release still name what `P-522` cut, and one of them is a vetted capability
+
+**to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** a decision · **into** `releases/first-release.md`
+
+**Filed the moment `P-522` landed.** Its instruction named six tables and a section and carried
+them out exactly; **it did not name these three, and they survive saying things the release no
+longer has.** Measured by grepping the file after the edit.
+
+```
+:14   Scope    A mobile unit may move across a boundary, usually to conquer and start
+               another self-contained territory
+:63   Kinds    territory | a place things are in, which has a biome, a force of nature, and
+               a density and a capacity per resource
+:329  R-4      A biome per territory - vetted 2026-09-03
+```
+
+## Two of them are wording and one is not
+
+**Line 14 and line 63 are the easy half.** *Conquer* is force, and a territory's *biome* and
+*force of nature* are two of the three cuts, sitting in a cell describing what a territory is.
+**Neither states a rule the release still has**, so both are stale text rather than open
+questions - and this lane could fix them as rephrasing if they were only rephrasing, which they
+are not: removing *conquer* changes what the bullet says a unit moves across a boundary **for**.
+
+**`R-4` is the one that is yours.** It is `vetted`, on 2026-09-03, against a drawing that exists.
+Nothing about the drawing has changed. **But the release now says biomes are out of scope and
+carries a vetted capability that delivered them**, which is a file disagreeing with itself.
+
+## The three answers for `R-4`
+
+**`B1` - leave it vetted and say why.** Work observed is work observed; add one line to `R-4`
+saying biomes were delivered before the cut and the cut is about rules rather than about the
+drawing. **The release stays honest about its own history.**
+
+**`B2` - move it to the log.** `releases/README.md` -> Shipped is where a delivered capability
+goes, and the log is empty. **The cost is that the log is meant for whole releases**, not for one
+capability leaving early.
+
+**`B3` - cut it with the rest.** **The cost is that it deletes the record of something a person
+looked at and approved**, which is the one kind of evidence this process treats as final.
+
+## What this lane would say
+
+**`B1`.** It is the only one of the three that does not lose information, and the disagreement is
+between a scope statement and a history, which a sentence can resolve. **`B2` and `B3` both
+answer a bookkeeping question by discarding an observation**, and observations are the scarce
+thing here.
+
+## And the two wording lines, once you have said
+
+```
+- A mobile unit may move across a boundary to start another self-contained territory
+```
+
+```
+| **territory** | a place things are in, which has a density and a capacity per resource |
+```
+
+**Offered as words rather than carried out**, because the first changes what the bullet claims a
+move is for, and `CLAUDE.md` says where a change would alter what a line claims, raise it rather
+than make it.
+
 ### P-527 - *Fully exploited* is defined in four bullets and now read by nothing in `spec/`
 
 **to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** a decision · **into** `spec/control.md` -> Winning
