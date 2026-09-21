@@ -61,6 +61,44 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-135 - The rules engine names no noun the game has, and that wants to be a numbered rule
+
+**to** spec · **status** open · **raised** 2026-09-20 · **source** Sean, directly: *I will also want
+to make sure we keep the engine thin, so that idea needs to exist somewhere it wont get overlooked.
+Does that belong in the spec or in the coding instance?*
+
+**Neither, and both.** `spec/` is normative about the game and this is a property of the artifact,
+so it is not a rule of the game. **`docs/architecture.md` already holds ten rules of exactly this
+kind** - 6, 7, 8, 9 and 10 are all about what the code may do rather than what the game is - and
+this is the eleventh. That file is the specification lane's column, which is why this is an item
+rather than an edit.
+
+**What it would say**, offered as a starting point rather than as words to promote:
+
+> **The rules engine names no noun the game has.** A relation or a rule the data declares may not
+> appear in engine code that runs. What a thing *is* belongs to the data; the engine moves rows
+> around without knowing what they mean. **A second rule is rows and no code**, and that is the
+> test of whether this holds.
+
+**The check is what makes it a rule rather than a habit**, and it exists:
+`prototypes/thin-engine/tests/isolation.rs` reads every relation and rule name out of `data/`,
+drops comments and `#[cfg(test)]`, and refuses any of them appearing in code that runs. **The word
+list is read out of the data rather than written in the test**, so it widens itself.
+
+**It has caught things it was not written for**, which is `CLAUDE.md`'s test of a habit earning its
+place: a local named `found`; `place` reintroduced into the engine by the very check that exists
+because places have layers; `collect` and `store` colliding with Rust's own words and the *game*
+giving way rather than the engine. **None of those was the case it came from.**
+
+**And it is what makes the policy layer safe.** Sean, 2026-09-20: *the options on offer is going to
+be a separate layer from the rules engine [...] this is a policy layer.* A policy that tops off
+storage bins must name bins, extractors and labour - so this rule is what stops it drifting into
+the engine, by refusing rather than by anyone remembering.
+
+**The code lane's half is the check, and it does not exist outside the prototype.** Carrying it to
+`crates/` is this lane's work and is not blocked on anything; the rule is filed here because the
+file it belongs in is not this lane's to write.
+
 ### C-134 - Sean has named the first release, and the thin-engine is the model for it
 
 **to** spec · **status** open · **raised** 2026-09-20 · **source** Sean, directly, at the end of
@@ -112,11 +150,12 @@ rules and inputs and names no game noun - and answers *what is legal*. What Sean
 answers *what is worth showing, and what should happen without being asked*, which is a different
 question and a game-specific one. Both can stand.
 
-**Two things the automation has to decide, and they are not in the engine's gift.** The order in
-which the player's wishes and the automatic top-off compete for labour - a turn that fills bins
-first may leave nothing to build with. And whether automatic work may exhaust a citizen the player
-was saving. **`crate::schema::rooming` already answers *is there space in the bins*** with the same
-arithmetic the world check uses, so the question needs no new mechanism, only a policy.
+**The competition this lane worried about does not exist, and Sean settled it the same day**: *the
+user will decide on actions, when pressing end turn they have decided no more actions, so thats when
+topping off storage occurs, no possibility of competition.* **Ending the turn is the statement that
+the player is finished**, so the automation spends what is left rather than racing for it.
+**`crate::schema::rooming` already answers *is there space in the bins*** with the same arithmetic
+the world check uses, so the top-off needs no new mechanism, only a policy.
 
 **What this lane can do without waiting**: the board generator, the pioneer, and the policy layer
 are all `prototypes/` or `crates/` work. What it cannot do is write any of it into `spec/`.
