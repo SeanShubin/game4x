@@ -156,6 +156,48 @@ test.
 that does not exist. **The difference is only how many times a week it happens**, and with
 fifty-three tests and counting, that is the number worth guessing before choosing.
 
+## Sean's requirement: once reviewed, an error state until the code behaves that way
+
+**All three give you that, and the requirement selects on something none of them names.** Each
+runs the reviewed test and each turns the build red when it fails. **What separates them is the
+escape hatch** - whether the red can be cleared without the code changing.
+
+**And the mechanism already allows the state you are describing.** Measured: `review-web`'s
+`/reviewed` copies the test with no check that it passes, so you can approve a test that is not
+built. **Approval is a statement of intent, and red is the correct answer until it is met.**
+
+|          | how the red could be cleared without the code changing                                                                                      |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`T1`** | edit or delete the test in `spec/` - **which the code lane may not write at all**, and `hooks/pre-commit` refuses a commit spanning columns |
+| **`T2`** | edit the test **and** the record - editing the test alone makes it drift, which is also red                                                 |
+| **`T3`** | edit the record - editing the test is inert, because the suite runs the approved copy                                                       |
+
+**So the question your requirement actually asks is: who may write the approval record?**
+
+**`T1` answers it for free**, because `spec/` already has that property and a hook already
+enforces it.
+
+**`T2` and `T3` answer it only if `reviewed/` moves.** Today it is
+`prototypes/thin-engine/reviewed/`, which `hooks/pre-commit` maps to the **code lane's** column -
+**so today, the lane whose work the test constrains may edit the record of your approval.** That
+is the hole, and it is not in where the tests live.
+
+**`T3` is one moving part better than `T2`.** Under `T2` the escape is two edits and under `T3` it
+is one, because editing a test that nothing runs achieves nothing. **Neither is safe while the
+record is theirs; both are as strong as `T1` the moment it is not.**
+
+## What would have to be true, and it is small
+
+**`reviewed/` sits in a column no instance writes**, like `temporary-notes/` but tracked -
+written by `review-web` running on your machine when you press a key, and by nothing else.
+**`hooks/pre-commit` has to learn that column**, which is the code lane's file and one `case`
+line; an unrecognised path is currently *unassigned*, which is listed in a refusal and never
+causes one.
+
+**Then `T3` gives you your requirement with the same strength as `T1`** and keeps the page you
+review from. **Choosing `T1` gets it today and costs `review-web`; choosing `T3` gets it after one
+line in a hook and one decision about where the record lives.**
+
 ### P-529 - Three lines of the release still name what `P-522` cut, and one of them is a vetted capability
 
 **to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** a decision · **into** `releases/first-release.md`
