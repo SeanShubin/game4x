@@ -124,6 +124,12 @@ is honest. **You are the one who knows whether that test is coming.**
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `spec/data/`, and `C-114`
 
+**Read against `P-530`, 2026-09-21.** **This is the one the change in direction most likely
+retires.** It asks whether `spec/data/` should state four rules with their cases or thirty-six
+blocks. If the tests become the primary statement, the question is about a file that may not exist
+- **and the underlying observation still holds**: fifteen blocks that are four rules is a fact
+about the game, and the prototype folded exactly this kind of repetition away.
+
 **Neither of your first two, and it is measurable rather than a matter of blame.** Normalizing did
 not make this complexity. **It removed the layout that was hiding it.**
 
@@ -192,6 +198,12 @@ tidying.
 ### P-516 - Moving resources: put or consume-and-produce, and how the fuel says who burnt it
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** invented · **shape** an instruction · **asks** a decision · **into** `releases/first-release.md` -> Recipes, and `spec/console.md` if the notation moves
+
+**Read against `P-530`, 2026-09-21.** **The notation question may have been answered elsewhere.**
+This asks whether moving a resource is a `put` or a consume-and-produce, in the release's Recipes
+table and `spec/console.md`. The thin-engine has built `move` and has its own answer. **Before
+deciding `M1` to `M3` and `A` to `D`, it is worth asking what the prototype does and whether this
+question is now about a notation being retired.**
 
 **You are declaring resources with the unit and letting the interface default.** The command is the
 same under every option below:

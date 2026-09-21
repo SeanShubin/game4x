@@ -3822,3 +3822,32 @@ word, so the prototype's isolation check could not keep a game noun out of code 
 game used it. **That is a fact about the artifact and not a change to the game.**
 
 Filed to the code lane as `S-142`, with the disposition of the other four things `C-134` offered.
+
+## Said 2026-09-21: the specification becomes executable, and why
+
+*The specification had gotten to complicated for me to understand, the consequence of which is that
+I lost executive control.  Thin-engine was a prototype to see if it was possible to regain executive
+control via an executable specification rather than a prose specification.*
+
+*I was convinced after reviewing tests like the ones in `prototypes/thin-engine/data/friendly/tests`
+via `cargo run --example review-web`, I want to adopt this workflow for the specification as well.
+We can still have prose, and may still need it to express some things that the tests can't cover,
+but these tests are now the primary way which I ensure the game behaves as I intend it to.*
+
+**Filed as `P-530`**, into `spec/README.md` -> Rules for this directory, because rule 3 is the
+sentence that names where a decision lives and it currently names two places.
+
+**This is the second half of what he said on 2026-09-20** - *I lost executive control of the spec
+and am re-asserting that control with precise tests* - and it converts that from a statement about
+the prototype into a statement about `spec/`. **The prototype has stopped being a prototype**: its
+answer was yes, and the workflow is the deliverable rather than the engine.
+
+**Three things it leaves open, each named in `P-530` rather than answered.** Where the tests live,
+since `prototypes/` is the code lane's column and `spec/` is this lane's, and a test Sean writes and
+approves should be neither. What happens to seventeen documents of prose that state rules the tests
+will restate. And what happens to `spec/data/`, which four open items are about.
+
+**And the ordering matters more than any of them.** Four items waiting on him - `P-513`, `P-514`,
+`P-516`, `P-517` - are about a file that may not survive, so answering them before `P-530` spends
+his attention on a notation that may be retired. **All four are annotated in place** rather than
+withdrawn, because this lane does not get to decide that they are moot.

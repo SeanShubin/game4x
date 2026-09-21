@@ -11,6 +11,81 @@ of it needs you.
 
 ## Open
 
+### P-530 - The specification is executable, and prose is what the tests cannot say
+
+**to** sean · **status** open · **raised** 2026-09-21 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/README.md` -> Rules for this directory
+
+**Your words, 2026-09-21:**
+
+```
+The specification had gotten to complicated for me to understand, the consequence of which is
+that I lost executive control.  Thin-engine was a prototype to see if it was possible to regain
+executive control via an executable specification rather than a prose specification.
+
+I was convinced after reviewing tests like the ones in
+prototypes/thin-engine/data/friendly/tests via `cargo run --example review-web`, I want to adopt
+this workflow for the specification as well.  We can still have prose, and may still need it to
+express some things that the tests can't cover, but these tests are now the primary way which I
+ensure the game behaves as I intend it to.
+```
+
+## What `spec/README.md` says today, and which sentence this changes
+
+```
+3. **If it is not here, it is not decided.** Discussion is not decision.
+
+   A rule is decided here. **The game's data is decided in its data file**, reviewed by hand and
+   locked by the scenario test. Neither is decided in a discussion, in a note, or in a rendering
+   of either one.
+```
+
+**That rule already has two homes for a decision - prose and a data file - and this adds the third
+and makes it first.** It is the smallest change that says what you said.
+
+## What lands
+
+Rule 3 becomes:
+
+> 3. **If it is not here, it is not decided.** Discussion is not decision.
+>
+>    **A test is the primary statement.** What the game does is decided by a test that runs, read
+>    and approved one at a time, and a rule the tests assert is not written in prose as well.
+>    **Prose says what a test cannot** - what a thing is for, why a rule is the shape it is, and
+>    anything with no observable behaviour to assert. **The game's data is decided in its data
+>    file**, reviewed by hand and locked by the scenario test. None of the three is decided in a
+>    discussion, in a note, or in a rendering of any of them.
+>
+>    **Where prose and a test disagree, the test is right and the prose is a defect.** Prose is
+>    the one of the three that can drift without anything noticing.
+
+## What this does not decide, and each is a separate question
+
+**Where the tests live.** They are in `prototypes/thin-engine/data/friendly/tests` today, and a
+prototype directory is the code lane's column. **Moving them into `spec/` would make them this
+lane's to write, which is the opposite of what you want** - so the home is a real question and
+this proposal does not answer it.
+
+**What happens to the prose already here.** Seventeen documents state rules the tests will
+restate, and *a rule the tests assert is not written in prose as well* makes most of them
+candidates for deletion. **That is a large, slow read and not a promotion**; this lane will file
+it as a plan rather than as one change.
+
+**What happens to `spec/data/`.** Four of the twelve items waiting on you are about it -
+`P-513`, `P-514`, `P-516` and `P-517` - and the thin-engine has its own notation for the same
+facts. **They are annotated rather than withdrawn**, because whether `spec/data/` survives is
+part of the question above and not this lane's to settle.
+
+## Why this is worth its own proposal rather than being folded in
+
+**It is the sentence that decides what every other item in the queue is worth.** A proposal that
+adds prose to `spec/` is a different thing under this rule than it was yesterday - `P-518`, for
+one, argues that *a test cannot say what a written form means*, which is an argument this rule
+invites you to check rather than accept.
+
+**And it is the one thing here that is about your own control rather than about the game.** Your
+reason is stated and this lane has not improved on it: the document grew past what one person
+could hold, and a test you have read is a piece of the game you are certain of.
+
 ### P-528 - One fact about adjacency is now stated three times, in two files
 
 **to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** approval · **into** `spec/orbit.md` -> Crossing between layers, and `spec/planet.md` -> Distance
@@ -181,6 +256,13 @@ telling.
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `spec/console.md` -> Commands
 
+**Read against `P-530`, 2026-09-21.** **Its central argument is the one `P-530` invites you to
+check.** It says *a test cannot say what a written form means*, and so a clause about empty fields
+belongs in prose. **Under an executable specification that is exactly the claim to test**: seven
+forms take no fields and every one is exercised. **If a test showing `{end-turn}` parse is enough,
+this proposal is unnecessary** - and if it is not, this is a clean example of what prose is still
+for.
+
 **One clause, on a case the committed scenario runs fourteen times.**
 
 `spec/console.md` says: *A command is written `{name field:value ...}`. **Its name is one word**,
@@ -289,6 +371,11 @@ The working-out is in
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
 
+**Read against `P-530`, 2026-09-21.** **Same as `P-513`: right about `spec/data/`, and
+`spec/data/` is in question.** The defect it reports is real either way - three rows cannot be
+read back - so if those files are replaced this is fixed by the replacement rather than by this
+proposal. **The third row it could not fix is the part worth keeping**, whatever notation wins.
+
 **`P-497`'s migration wrote three rows that cannot be read back.** Found by the code lane building a
 generator against the same data.
 
@@ -346,6 +433,11 @@ relational form writes what they already say, and about one row it still cannot.
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
 
+**Read against `P-530`, 2026-09-21.** **This may not survive the change in direction.** It says a
+relation of `spec/data/` must declare its column order. The thin-engine states the same facts in
+its own notation, and whether `spec/data/` survives at all is open - so this is right about the
+file it names and the file may go. **Worth answering `P-530` first.**
+
 **`spec/data/` is the source now and nothing states what order its words go in.** `spec/console.md`
 fixes the order for a **description** - *`id` first, then every other trait alphabetically, then
 `occupied`, `free` and `capacity` last* - and **that rule describes none of the eight relations**.
@@ -393,6 +485,11 @@ should say.
 ### P-512 - *Where things are* still says a tank holds fuel, and one row of it changes the game
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** entailed · **shape** an instruction · **asks** approval · **into** `releases/first-release.md` -> Where things are
+
+**Read against `P-530`, 2026-09-21.** **Still applies, and its target moved under it.** `P-522`
+cut nine recipe blocks and four table rows from `releases/first-release.md`, and *Where things
+are* was not one of the sections touched - this lane checked. **Re-read the section whole before
+promoting**, which is the trigger `CLAUDE.md` names for a second proposal landing in one section.
 
 **The code lane filed `C-125` and cannot proceed past it.** `P-509` and the release now disagree
 about whether a unit's tank holds anything, and the disagreement is load-bearing rather than
