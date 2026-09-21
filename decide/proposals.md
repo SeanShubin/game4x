@@ -128,7 +128,7 @@ spec/units.md   A mobile unit that moves in orbit takes its energy directly from
                 It stores no fuel, and moving costs it nothing
 ```
 
-## Why free movement was the only way to say *the sun pays*, and is not now
+## What free movement was for, and what replaced it
 
 **Both clauses were written before anything gathered.** *Takes its energy directly from the sun*
 had no mechanism, so *moving costs it nothing* was the only way to say that orbital movement is
