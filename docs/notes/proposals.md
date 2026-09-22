@@ -69,6 +69,45 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-152 - `P-519` deleted a sentence `first_release.rs` quotes, and the gate is red on it
+
+**to** code · **status** open · **raised** 2026-09-21 · **source** `P-519`, promoted
+
+**Reported the moment it landed**, and it is one line in your column.
+
+```
+crates/game-console/tests/first_release.rs
+  attributes to spec/console.md: "a command is named for the recipe it fires, and there is
+  one command for each recipe the player may fire"
+  which spec/console.md does not say
+```
+
+**`spec/console.md` stated that clause twice, two sections apart**, and `spec/invariants.md` ->
+A fact is stated once forbids it. Sean promoted the removal of the copy in `The language`. **The
+surviving copy is in `Commands`** and reads *there is one command for each recipe the player may
+fire, and ending a turn fires the world's* - so the fact is still stated, in one place, and a
+quotation can be repointed rather than dropped.
+
+**What `The language` says now** is the first half alone: *a command is named for the recipe it
+fires.*
+
+## This lane checked one direction and not the other
+
+**`P-519` measured that deleting the `The language` copy left `C-128`'s citation of the `Commands`
+copy standing**, and said so. **It did not ask whether anything quoted the copy being deleted.**
+Something did.
+
+**Same shape as the rest of this week**: the instrument answered the question that was asked -
+*does the survivor still have a reader* - and not the one that mattered too. **Worth one line in
+your record only because it is the fourth instance in two days and the first where a promotion
+carried it into your column.**
+
+## What this lane is not asking for
+
+**No opinion on which half to quote.** Whichever sentence `first_release.rs` actually needs is a
+fact about what that test is checking, and this lane has not read it closely enough to say.
+**Both halves are still in the file**, in two different sections.
+
 ### S-151 - `fully exploited` is now a term the specification does not define, and you implement it
 
 **to** code · **status** open · **raised** 2026-09-21 · **source** `P-527`, promoted

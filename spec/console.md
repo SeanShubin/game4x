@@ -60,8 +60,7 @@ kind. What is named keeps its `id`, what it holds, and what it has already spent
 rule changes changes**. A quantity is for what is interchangeable, and **a thing carrying an `id`
 is never a quantity**.
 
-**A command is named for the recipe it fires**, and there is one command for each recipe the
-player may fire.
+**A command is named for the recipe it fires.**
 
 **A command may carry a `repeat`**, which is how many times it fires. It is not an argument of the
 recipe; it is a count of firings, and a command without one fires once.
