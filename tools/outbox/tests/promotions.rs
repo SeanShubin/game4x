@@ -612,6 +612,27 @@ pub fn check(shape: &str, block: &str, destination: &str) -> Verdict {
 /// instead of asserted.
 const KNOWN: &[(&str, &str)] = &[
     (
+        "P-496",
+        "names two destinations and offers two row blocks, and the second destination is a \
+         directory. **`into` reads `releases/first-release.md` -> Recipes and Traits, and \
+         `spec/data/`**, which `destinations` parses to two entries - measured, not inferred: \
+         `[\"releases/first-release.md\", \"spec/data/\"]`. Two blocks and two files takes the \
+         zip branch, so the Traits table is compared against `git show <commit>:spec/data/`, \
+         which renders a **tree listing** rather than a document. `Trait` is not in a list of \
+         file names, so the cell is reported missing. **Both tables landed in the release**, \
+         and the `spec/data/` half of the `into` is where a generator writes rather than where \
+         a quotation lands. Sixth mislabel and a sixth direction, after `P-195`, `P-236`, \
+         `P-465`, `P-466` and `P-474`: a destination that is a directory. \
+         \
+         **The reason offered for this was that a later promotion removed what it landed**, \
+         and it is wrong in a way worth keeping. `P-522` did cut every row `P-496` offered, \
+         so the story fits what a reader sees - but the verdict is computed against the \
+         **promoting commit** at `promotions.rs:840`, not against `HEAD`, and `| Trait |` is \
+         in `releases/first-release.md` at `574906c6` and at its parent. Two facts, each \
+         enough on its own to refute it. It was believed by two lanes before anybody ran \
+         `destinations` on the string.",
+    ),
+    (
         "P-474",
         "declared `shape rows and text` and offers no text. Its `into` names `releases/first-release.md` alone, and the blockquote it carries is `spec/logistics.md`'s own rule - *what is stored is the room left* - quoted as the contradiction's evidence. **The sentence is in `spec/logistics.md` and in no destination this proposal names**, which is what this reports, correctly. `CLAUDE.md`: *the indented quotation is reserved for what is being offered* - so quoting a rule and offering it are the same bytes, and the specification lane caught that by running `spec show` before promoting rather than by anything failing. The rows landed and the label is what is wrong. **Fifth mislabel and a fifth direction**: `text` declared where nothing at all is offered, after `P-195` text-for-instruction, `P-236` text-for-rows and `P-465` rows-for-instruction. `C-107`.",
     ),
