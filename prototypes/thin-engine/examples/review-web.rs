@@ -75,6 +75,7 @@ fn main() {
         .map(|file| file.trim_end_matches(".4x").to_string())
         .collect();
     let browsable = browsable();
+    every_test_is_browsable(&known, &browsable);
     println!("http://{at}  -  {} tests", known.len());
     println!("arrows move, Enter opens, r reviewed, x needs changing, u unreview. Ctrl-C to stop.");
     for coming in listening.incoming() {
@@ -83,6 +84,44 @@ fn main() {
             Err(why) => eprintln!("{why}"),
         }
     }
+}
+
+/// Every test the page shows has an address, and refuse to serve if one does not.
+///
+/// **This is the check that was missing, and it is about the outcome rather than the input.**
+/// Counting the files under a directory says what is on the disk; this asks whether the link the
+/// page is about to print will answer, which is the thing that was false for fifty-four of them
+/// between `P-532` and now.
+///
+/// **It reads `browsable` rather than the disk**, so it fails for a directory that moved, a
+/// directory that could not be read, and a root somebody forgot to list - all of which are the
+/// same defect from the reader's side and none of which raises anything on its own.
+///
+/// **Loudly, at startup, before the first page.** A server that answers 404 on every link looks
+/// exactly like one that is working until somebody clicks, and nothing in the suite is about what
+/// an address answers.
+fn every_test_is_browsable(known: &[String], browsable: &[String]) {
+    let missing: Vec<&String> = known
+        .iter()
+        .filter(|name| {
+            let wanted = format!("spec/tests/{name}.4x");
+            !browsable.contains(&wanted)
+        })
+        .collect();
+    assert!(
+        missing.is_empty(),
+        "{} of {} tests have no address, so the page would link at nothing: {:?}",
+        missing.len(),
+        known.len(),
+        missing
+    );
+    // **A count over nothing is the same failure with the sign flipped** - `CLAUDE.md`. With no
+    // tests found, every test would be browsable vacuously.
+    assert!(
+        known.len() > 40,
+        "only {} tests were found, so this checked almost nothing",
+        known.len()
+    );
 }
 
 /// Read one request, answer it, and close.
@@ -149,7 +188,7 @@ fn answer(
         // **Served at the path it has on disk**, which is the shortest answer to *where is this
         // file*: the address is the answer. **`text/plain` is why no `.txt` copy exists** - a
         // browser shows a `.4x` as text when something tells it to, and this is the something.
-        ("GET", _) if path.starts_with("/data/") => {
+        ("GET", _) if path.starts_with("/data/") || path.starts_with("/spec/") => {
             let wanted = path.trim_start_matches('/');
             // **A path not on the list is refused rather than resolved.** Nothing here joins a
             // request to a directory, so `..` is not a case to handle - it is a string that
@@ -157,7 +196,7 @@ fn answer(
             if !browsable.iter().any(|it| it == wanted) {
                 return ("404 Not Found".to_string(), PLAIN, format!("no {wanted}"));
             }
-            match std::fs::read_to_string(mine().join(wanted)) {
+            match std::fs::read_to_string(on_disk(wanted)) {
                 Ok(text) => ok(PLAIN, text),
                 Err(why) => ("500".to_string(), PLAIN, format!("{wanted}: {why}")),
             }
@@ -225,31 +264,59 @@ fn answer(
     }
 }
 
-/// Every `.4x` file under `data/`, as the path it has on disk.
+/// Where a browsable path is, given the root that owns it.
+///
+/// **Two roots, because the move gave the two forms two owners.** `data/` is this prototype's and
+/// `spec/tests/` is the repository's - `P-532` - so an address is the path from whichever root
+/// owns the file, and this is the only place that knows which.
+fn on_disk(wanted: &str) -> std::path::PathBuf {
+    match wanted.starts_with("spec/") {
+        true => mine().join("../..").join(wanted),
+        false => mine().join(wanted),
+    }
+}
+
+/// Every `.4x` file this serves, as the path it has under the root that owns it.
+///
+/// **One directory each, and never recursively**, so the address of a file is the directory it
+/// was listed from plus its name - no path is assembled from a request.
 ///
 /// **Listed from the disk rather than written down**, so a test added tomorrow is browsable
 /// without anyone remembering - and so the list cannot say a file is there when it is not.
+///
+/// # It stopped listing the friendly tests silently, and every link to one was dead
+///
+/// **This walked `data/friendly/tests` until 2026-09-21**, when `P-532` moved those files to
+/// `spec/tests/` and made them the specification. The walk `continue`s on a directory it cannot
+/// read, so nothing failed and nothing said anything: the browse index simply lost a heading, and
+/// **all fifty-four of the report's *on disk* links answered 404** - the links Sean asked for when
+/// he asked where the tests were on disk.
+///
+/// **Found by driving the launcher rather than by reading it.** The suite says the two notations
+/// agree and `tests/reviewed.rs` says every record names a test; neither is about what an address
+/// answers, and a server that 404s is not a test failure anywhere.
 fn browsable() -> Vec<String> {
     let mut found = Vec::new();
-    for flavour in ["foundation", "friendly"] {
-        for under in ["", "tests"] {
-            let at = mine().join("data").join(flavour).join(under);
-            let Ok(entries) = std::fs::read_dir(&at) else {
+    for (root, under) in [
+        (mine(), "data/foundation"),
+        (mine(), "data/foundation/tests"),
+        // **The five shared files still have a friendly side and it is still generated** -
+        // `examples/render.rs` writes them and only them. What left the prototype was the tests.
+        (mine(), "data/friendly"),
+        (mine().join("../.."), "spec/tests"),
+    ] {
+        let Ok(entries) = std::fs::read_dir(root.join(under)) else {
+            continue;
+        };
+        for entry in entries.filter_map(|it| it.ok()) {
+            let path = entry.path();
+            if path.extension().and_then(|it| it.to_str()) != Some("4x") {
+                continue;
+            }
+            let Some(name) = path.file_name().and_then(|it| it.to_str()) else {
                 continue;
             };
-            for entry in entries.filter_map(|it| it.ok()) {
-                let path = entry.path();
-                if path.extension().and_then(|it| it.to_str()) != Some("4x") {
-                    continue;
-                }
-                let Some(name) = path.file_name().and_then(|it| it.to_str()) else {
-                    continue;
-                };
-                found.push(match under {
-                    "" => format!("data/{flavour}/{name}"),
-                    _ => format!("data/{flavour}/{under}/{name}"),
-                });
-            }
+            found.push(format!("{under}/{name}"));
         }
     }
     found.sort();

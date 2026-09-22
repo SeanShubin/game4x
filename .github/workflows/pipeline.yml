@@ -270,19 +270,33 @@ jobs:
           # **The page is copied as committed**, so it is as fresh as the last
           # `cargo run --example report`. Nothing compares it against a generator, which is why
           # this says so rather than asserting it.
-          mkdir -p crates/game4x/dist/reports/thin-engine
+          #
+          # **Two roots since `P-532`, because the tests moved out of the prototype.** The page
+          # links `spec/tests/<name>.4x.txt` for the form Sean reads and `data/foundation/...`
+          # for the form the engine runs, and both are relative to this directory - so both roots
+          # are copied under it. **Copying only `data/` published a page whose every *on disk*
+          # link was dead**, which is what this step looked like between the move and now.
+          mkdir -p crates/game4x/dist/reports/thin-engine/spec
           cp prototypes/thin-engine/report.html crates/game4x/dist/reports/thin-engine/index.html
           cp -r prototypes/thin-engine/data crates/game4x/dist/reports/thin-engine/data
-          find crates/game4x/dist/reports/thin-engine/data -name '*.4x' \
+          cp -r spec/tests crates/game4x/dist/reports/thin-engine/spec/tests
+          find crates/game4x/dist/reports/thin-engine -name '*.4x' \
             -exec sh -c 'cp "$1" "$1.txt"' _ {} \;
           # **Every twin against every input**, so a copy that made none fails here rather than
           # on the site - the same count the twenty above are held by.
-          thin=$(find crates/game4x/dist/reports/thin-engine/data -name '*.4x' | wc -l)
-          thin_twins=$(find crates/game4x/dist/reports/thin-engine/data -name '*.4x.txt' | wc -l)
+          thin=$(find crates/game4x/dist/reports/thin-engine -name '*.4x' | wc -l)
+          thin_twins=$(find crates/game4x/dist/reports/thin-engine -name '*.4x.txt' | wc -l)
           test "$thin" -gt 100
           test "$thin_twins" -eq "$thin"
+          # **The tests counted against the repository rather than against a number**, so a root
+          # that failed to copy fails here even if the other one grew enough to cover it. The
+          # total above could not tell those apart: it was `-gt 100` while `data/` alone was 118,
+          # and the move took it to 64 without anyone editing this file.
+          published=$(find crates/game4x/dist/reports/thin-engine/spec/tests -name '*.4x' | wc -l)
+          test "$published" -eq "$(find spec/tests -name '*.4x' | wc -l)"
+          test "$published" -gt 40
           test -f crates/game4x/dist/reports/thin-engine/index.html
-          echo "Published $thin thin-engine inputs with $thin_twins twins"
+          echo "Published $thin thin-engine inputs with $thin_twins twins, $published of them tests"
           echo "Published $(find crates/game4x/dist/reports -type f | wc -l) report files"
 
       - name: Upload Pages artifact
