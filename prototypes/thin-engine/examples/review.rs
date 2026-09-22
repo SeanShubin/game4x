@@ -33,19 +33,31 @@
 
 use std::path::PathBuf;
 
+/// Where the approved tests live, and where the record of reading them does.
+///
+/// **`P-532`, 2026-09-21**: both left this prototype for the repository root. Spelled out here
+/// rather than borrowed from `report`, because this example shares no code with it and a
+/// `#[path]` include to reach two functions would be the larger coupling.
+fn tests_at() -> PathBuf {
+    mine().join("..").join("..").join("spec").join("tests")
+}
+
+fn records_at() -> PathBuf {
+    mine().join("..").join("..").join("reviewed")
+}
+
 fn mine() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 }
 
 /// Every test, by stem, read rather than listed.
 fn every_test() -> Vec<String> {
-    let mut found: Vec<String> =
-        std::fs::read_dir(mine().join("data").join("friendly").join("tests"))
-            .expect("data/friendly/tests")
-            .filter_map(|it| it.ok())
-            .filter_map(|it| it.file_name().to_str().map(str::to_string))
-            .filter_map(|name| name.strip_suffix(".4x").map(str::to_string))
-            .collect();
+    let mut found: Vec<String> = std::fs::read_dir(tests_at())
+        .expect("spec/tests")
+        .filter_map(|it| it.ok())
+        .filter_map(|it| it.file_name().to_str().map(str::to_string))
+        .filter_map(|name| name.strip_suffix(".4x").map(str::to_string))
+        .collect();
     found.sort();
     found
 }
@@ -62,17 +74,17 @@ fn main() {
         std::process::exit(2);
     }
 
-    let reviewed = mine().join("reviewed");
+    let reviewed = records_at();
     std::fs::create_dir_all(&reviewed).expect("reviewed/");
 
     for name in &asked {
         // **A name that is not a test is refused rather than guessed at.** Approving a file that
         // does not exist would leave a copy nothing is ever compared against.
         if !known.contains(name) {
-            eprintln!("`{name}` is not a test - there is no data/friendly/tests/{name}.4x");
+            eprintln!("`{name}` is not a test - there is no spec/tests/{name}.4x");
             std::process::exit(2);
         }
-        let from = mine().join(format!("data/friendly/tests/{name}.4x"));
+        let from = tests_at().join(format!("{name}.4x"));
         let text = std::fs::read_to_string(&from).expect("the test");
         let to = reviewed.join(format!("{name}.4x"));
         let was = std::fs::read_to_string(&to).unwrap_or_default();

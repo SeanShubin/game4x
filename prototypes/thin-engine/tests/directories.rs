@@ -90,6 +90,14 @@ fn of(from: &str, file: &str, _of_game: bool) -> Vec<Row> {
     if from == "foundation" {
         return rows(&at);
     }
+    // **A test's friendly side left this prototype on 2026-09-21** - `P-532` put it in
+    // `spec/tests/`, where it is the specification rather than a rendering of one. **The shared
+    // files did not**, so `data/friendly/` still holds five of them and the path a test is found
+    // at is now the one thing this function has to know about the split.
+    let at = match at.strip_prefix("data/friendly/tests/") {
+        Some(name) => format!("../../spec/tests/{name}"),
+        None => at,
+    };
     // **Always the game's schema.** Only a game row carries `-> n`, so a script row passes through
     // untouched and a section row inside a script file is still folded correctly.
     let schema = Schema::of(&rows("data/friendly/schema.4x")).expect("a schema");

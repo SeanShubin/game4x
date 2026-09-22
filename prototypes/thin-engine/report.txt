@@ -772,6 +772,323 @@ refused
 as expected
 
 ==============================================================================
+a-second-settlement-launches-the-ark-the-first-could-not
+
+old state
+  - root
+    - adjacency
+      - {adjacency id:1 from:territory-1 to:territory-2}
+    - ark
+      - {ark where:place-2 moving:1 gathering:1} -> 1
+    - bin
+    - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
+    - citizen
+    - consumes
+      - {consumes kind:pioneer what:berth} -> 1
+    - deposit
+      - {deposit where:place-1 what:metal density:6} -> 1
+      - {deposit where:place-1 what:food density:6} -> 1
+      - {deposit where:place-3 what:metal density:6} -> 1
+      - {deposit where:place-3 what:food density:6} -> 1
+      - {deposit where:place-3 what:energy density:6} -> 1
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-1 layer:orbit name:place-2}
+      - {place id:3 of:territory-2 layer:surface name:place-3}
+      - {place id:4 of:territory-2 layer:orbit name:place-4}
+    - provides
+      - {provides kind:place what:berth} -> 6
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
+    - transport
+
+command  {deploy where:place-2 what:ark}
+  took   {ark where:place-2} -> 1
+  made   {extractor where:place-1 what:metal working:1} -> 1
+  made   {extractor where:place-1 what:food working:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
+
+command  {toil where:place-1}
+  took   {citizen where:place-1 laboring:1} -> 1
+  took   {citizen where:place-1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+
+command  {work where:place-1 what:food}
+  took   {extractor where:place-1 what:food working:1} -> 1
+  took   {labor where:place-1} -> 1
+  made   {extractor where:place-1 what:food working:0} -> 1
+  made   {food where:place-1} -> 6
+
+command  {end-turn}
+  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {food where:place-1} -> 4
+  took   {labor where:place-1} -> 1
+  took   {extractor where:place-1 what:food working:0} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 4
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
+  made   {extractor where:place-1 what:food working:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 4
+
+command  {toil where:place-1}
+  took   {citizen where:place-1 laboring:1} -> 1
+  took   {citizen where:place-1 laboring:1} -> 1
+  took   {citizen where:place-1 laboring:1} -> 1
+  took   {citizen where:place-1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+
+command  {work where:place-1 what:food}
+  took   {extractor where:place-1 what:food working:1} -> 1
+  took   {labor where:place-1} -> 1
+  made   {extractor where:place-1 what:food working:0} -> 1
+  made   {food where:place-1} -> 6
+
+command  {work where:place-1 what:metal}
+  took   {extractor where:place-1 what:metal working:1} -> 1
+  took   {labor where:place-1} -> 1
+  made   {extractor where:place-1 what:metal working:0} -> 1
+  made   {metal where:place-1} -> 6
+
+command  {build-pioneer where:place-1}
+  took   {labor where:place-1} -> 1
+  took   {metal where:place-1} -> 1
+  made   {pioneer where:place-1 moving:1} -> 1
+
+command  {move what:pioneer from:place-1 to:place-3}
+  took   {pioneer where:place-1 moving:1} -> 1
+  made   {pioneer where:place-3 moving:0} -> 1
+
+command  {end-turn}
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {metal where:place-1} -> 5
+  took   {labor where:place-1} -> 1
+  took   {pioneer where:place-3 moving:0} -> 1
+  took   {extractor where:place-1 what:food working:0} -> 1
+  took   {extractor where:place-1 what:metal working:0} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 2
+  took   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 4
+  took   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 2
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
+  made   {pioneer where:place-3 moving:1} -> 1
+  made   {extractor where:place-1 what:food working:1} -> 1
+  made   {extractor where:place-1 what:metal working:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 2
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 4
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 2
+
+command  {deploy where:place-3 what:pioneer}
+  took   {pioneer where:place-3} -> 1
+  made   {extractor where:place-3 what:metal working:1} -> 1
+  made   {extractor where:place-3 what:food working:1} -> 1
+  made   {citizen where:place-3 hungry:0 bearing:1 laboring:1} -> 2
+
+command  {toil where:place-1}
+  took   {citizen where:place-1 laboring:1} -> 1
+  took   {citizen where:place-1 laboring:1} -> 1
+  took   {citizen where:place-1 laboring:1} -> 1
+  took   {citizen where:place-1 laboring:1} -> 1
+  took   {citizen where:place-1 laboring:1} -> 1
+  took   {citizen where:place-1 laboring:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-1} -> 1
+
+command  {work where:place-1 what:food}
+  took   {extractor where:place-1 what:food working:1} -> 1
+  took   {labor where:place-1} -> 1
+  made   {extractor where:place-1 what:food working:0} -> 1
+  made   {food where:place-1} -> 6
+
+command  {toil where:place-3}
+  took   {citizen where:place-3 laboring:1} -> 1
+  took   {citizen where:place-3 laboring:1} -> 1
+  made   {citizen where:place-3 hungry:0 bearing:1 laboring:0} -> 1
+  made   {labor where:place-3} -> 1
+  made   {citizen where:place-3 hungry:0 bearing:1 laboring:0} -> 1
+  made   {labor where:place-3} -> 1
+
+command  {work where:place-3 what:food}
+  took   {extractor where:place-3 what:food working:1} -> 1
+  took   {labor where:place-3} -> 1
+  made   {extractor where:place-3 what:food working:0} -> 1
+  made   {food where:place-3} -> 6
+
+command  {end-turn}
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-1 hungry:1} -> 1
+  took   {food where:place-1} -> 1
+  took   {citizen where:place-3 hungry:0 bearing:1} -> 1
+  took   {food where:place-3} -> 1
+  took   {citizen where:place-3 hungry:0 bearing:1} -> 1
+  took   {food where:place-3} -> 1
+  took   {food where:place-3} -> 4
+  took   {labor where:place-1} -> 5
+  took   {labor where:place-3} -> 1
+  took   {extractor where:place-1 what:food working:0} -> 1
+  took   {extractor where:place-3 what:food working:0} -> 1
+  took   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 6
+  took   {citizen where:place-3 hungry:0 bearing:1 laboring:1} -> 4
+  took   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 6
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
+  made   {citizen where:place-3 hungry:0 bearing:1 laboring:1} -> 2
+  made   {citizen where:place-3 hungry:0 bearing:1 laboring:1} -> 2
+  made   {extractor where:place-1 what:food working:1} -> 1
+  made   {extractor where:place-3 what:food working:1} -> 1
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 6
+  made   {citizen where:place-3 hungry:1 bearing:1 laboring:1} -> 4
+  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 6
+
+command  {toil where:place-3}
+  took   {citizen where:place-3 laboring:1} -> 1
+  took   {citizen where:place-3 laboring:1} -> 1
+  took   {citizen where:place-3 laboring:1} -> 1
+  took   {citizen where:place-3 laboring:1} -> 1
+  made   {citizen where:place-3 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-3} -> 1
+  made   {citizen where:place-3 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-3} -> 1
+  made   {citizen where:place-3 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-3} -> 1
+  made   {citizen where:place-3 hungry:1 bearing:1 laboring:0} -> 1
+  made   {labor where:place-3} -> 1
+
+command  {work where:place-3 what:metal}
+  took   {extractor where:place-3 what:metal working:1} -> 1
+  took   {labor where:place-3} -> 1
+  made   {extractor where:place-3 what:metal working:0} -> 1
+  made   {metal where:place-3} -> 6
+
+command  {build-extractor where:place-3 what:energy}
+  took   {labor where:place-3} -> 1
+  took   {metal where:place-3} -> 1
+  made   {extractor where:place-3 what:energy working:1} -> 1
+
+command  {work where:place-3 what:energy}
+  took   {extractor where:place-3 what:energy working:1} -> 1
+  took   {labor where:place-3} -> 1
+  made   {extractor where:place-3 what:energy working:0} -> 1
+  made   {energy where:place-3} -> 6
+
+command  {launch where:place-3}
+  took   {labor where:place-3} -> 1
+  took   {metal where:place-3} -> 1
+  took   {energy where:place-3} -> 1
+  made   {ark where:place-4 moving:1 gathering:1} -> 1
+
+new state
+  - root
+    - adjacency
+      - {adjacency id:1 from:territory-1 to:territory-2}
+    - ark
+      - {ark where:place-4 moving:1 gathering:1} -> 1
+    - bin
+    - capacity
+      - {capacity of:deposit for:extractor what:metal per:place} -> 1
+      - {capacity of:deposit for:extractor what:food per:place} -> 1
+      - {capacity of:deposit for:extractor what:energy per:place} -> 1
+    - citizen
+      - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 6
+      - {citizen where:place-3 hungry:1 bearing:1 laboring:0} -> 4
+    - consumes
+      - {consumes kind:pioneer what:berth} -> 1
+    - deposit
+      - {deposit where:place-1 what:metal density:6} -> 1
+      - {deposit where:place-1 what:food density:6} -> 1
+      - {deposit where:place-3 what:metal density:6} -> 1
+      - {deposit where:place-3 what:food density:6} -> 1
+      - {deposit where:place-3 what:energy density:6} -> 1
+    - energy
+      - {energy where:place-3} -> 5
+    - extractor
+      - {extractor where:place-1 what:metal working:1} -> 1
+      - {extractor where:place-1 what:food working:1} -> 1
+      - {extractor where:place-3 what:metal working:0} -> 1
+      - {extractor where:place-3 what:food working:1} -> 1
+      - {extractor where:place-3 what:energy working:0} -> 1
+    - food
+    - labor
+    - metal
+      - {metal where:place-3} -> 4
+    - pioneer
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+      - {place id:2 of:territory-1 layer:orbit name:place-2}
+      - {place id:3 of:territory-2 layer:surface name:place-3}
+      - {place id:4 of:territory-2 layer:orbit name:place-4}
+    - provides
+      - {provides kind:place what:berth} -> 6
+    - scout
+    - territory
+      - {territory id:1 name:territory-1}
+      - {territory id:2 name:territory-2}
+    - transport
+
+as expected
+
+==============================================================================
 a-territory-with-no-orbit-cannot-launch
 
 old state

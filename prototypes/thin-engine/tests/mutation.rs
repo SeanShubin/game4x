@@ -628,8 +628,8 @@ fn no_row_can_be_deleted_without_breaking_something() {
 /// have_two_densities` in `tests/structure.rs` is what holds it, and the sweep runs the `.4x`
 /// tests and the reference checks rather than the Rust suite.
 const DELETABLE: [&str; 23] = [
-    "13 rules.4x binding",
-    "10 rules.4x literal",
+    "12 rules.4x binding",
+    "12 rules.4x literal",
     "3 schema.4x attribute",
     // **`stock`'s `quantity`, and it is read by `tests/structure.rs` rather than by `data/`.** A
     // family's columns are what its members must have, so declaring `quantity` is what stops a
@@ -648,7 +648,7 @@ const DELETABLE: [&str; 23] = [
     //
     // **`pioneer` in `founder` and `ark` in `founder` are not among them**, because `deploy` takes
     // a founder as its argument and a member of no family is not one.
-    "2 schema.4x member",
+    "1 schema.4x member",
     // **All three `{stands-in ...}` rows, and only `tests/structure.rs` reads them.** A `.4x` test
     // states a world, and a world that breaks this rule is not one - so no test in `data/` can
     // exercise it, and `nothing_stands_where_its_kind_may_not` is where every half lives.
@@ -795,21 +795,21 @@ fn no_value_can_be_changed_without_breaking_something() {
 ///
 /// **A `moving` that never moves is the other shape here.** The berth tests hold vehicles to count
 /// them, not to move them, so what those rows say about moves is read by nothing.
-const NOT_LOAD_BEARING: [&str; 59] = [
+const NOT_LOAD_BEARING: [&str; 61] = [
     // **The one `assigns` row's id is read by nothing.** There were two, and changing one id
     // to the other's collided on the key; with one row there is nothing to collide with.
     // **`assigns` may not need an `id` at all** - keyed by `(clause, input, value)` it could not
     // state two assignments of one input on one clause, which is the rule rather than a
     // restriction. That is in `backlog.md` rather than done here.
     "1 rules.4x assigns.id",
-    "42 rules.4x clause.seq",
+    "45 rules.4x clause.seq",
     // **A scoped input's name is read by nothing, and the other eleven are read by name.** A
     // command finds its argument by the input's name and so does a part; an input the engine fills
     // is looked up by neither, because nothing outside the engine ever names it. **So `upkeep`'s
     // `where` and `perish`'s are the two**, and what their names are for is the friendly notation
     // and a person reading the rule.
     "3 rules.4x input.name",
-    "19 rules.4x input.seq",
+    "20 rules.4x input.seq",
     // **Five of `end-turn`'s ten steps are in an order nothing depends on, and that is a fact
     // about the turn rather than a gap.** Measured on 2026-09-20 by moving each part to the end on
     // its own: `upkeep`, `perish` and `breed` are read - a citizen must eat before it starves and
@@ -882,6 +882,10 @@ const NOT_LOAD_BEARING: [&str; 59] = [
     "1 tests/a-scout-arriving-does-not-lend-a-move-to-one-that-has-spent-its-own.4x scout.quantity",
     "1 tests/a-scout-cannot-move-where-every-berth-is-taken.4x adjacency.id",
     "1 tests/a-scout-cannot-move-where-every-berth-is-taken.4x transport.moving",
+    // **The ark that starts the win-condition arc, in both its readinesses.** `deploy` reads
+    // neither, for the reason the four deployment tests above record: it destroys what it takes.
+    "1 tests/a-second-settlement-launches-the-ark-the-first-could-not.4x ark.gathering",
+    "1 tests/a-second-settlement-launches-the-ark-the-first-could-not.4x ark.moving",
     // **The quantities of what a launch costs, in the test that never reaches the removing.** The
     // rows themselves are on the deletable list above, with the clause order that explains both.
     "1 tests/a-territory-with-no-orbit-cannot-launch.4x energy.quantity",

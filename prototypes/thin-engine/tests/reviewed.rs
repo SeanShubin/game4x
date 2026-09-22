@@ -25,7 +25,11 @@ use std::collections::BTreeSet;
 mod common;
 use common::mine;
 
-/// The stem of every `.4x` in a directory of this prototype.
+/// The stem of every `.4x` in a directory, named from this prototype.
+///
+/// **Both of these left the prototype on 2026-09-21** - `P-532` put the tests in `spec/tests/`
+/// and the records in `reviewed/`, at the repository root, where they are the specification and
+/// the record of Sean having read it. **What this checks did not change**; only where it looks.
 fn stems(under: &str) -> BTreeSet<String> {
     let at = mine().join(under);
     let Ok(entries) = std::fs::read_dir(&at) else {
@@ -45,8 +49,8 @@ fn stems(under: &str) -> BTreeSet<String> {
 
 #[test]
 fn every_record_of_a_reading_names_a_test_that_is_there() {
-    let tests = stems("data/foundation/tests");
-    let records = stems("reviewed");
+    let tests = stems("../../spec/tests");
+    let records = stems("../../reviewed");
 
     // **A count over nothing is the same failure with the sign flipped** - `CLAUDE.md`. With no
     // records read, every record would name a test vacuously, and this would pass in the same
@@ -77,8 +81,8 @@ fn every_record_of_a_reading_names_a_test_that_is_there() {
 /// Sean asked for that nobody will ever read.
 #[test]
 fn every_note_is_about_a_test_that_is_there() {
-    let tests = stems("data/foundation/tests");
-    let Ok(text) = std::fs::read_to_string(mine().join("reviewed/asked.md")) else {
+    let tests = stems("../../spec/tests");
+    let Ok(text) = std::fs::read_to_string(mine().join("../../reviewed/asked.md")) else {
         return;
     };
     let named: Vec<String> = text

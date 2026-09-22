@@ -665,3 +665,39 @@
 {reading id:14 clause:49 column:55 of:47 takes:134}
 {reading id:15 clause:50 column:55 of:47 takes:134}
 {reading id:16 clause:51 column:130 of:47 takes:134}
+
+
+## Building the thing that settles a second place
+
+# **The win condition needs two settlements and only one thing can make the second.** Sean,
+# 2026-09-20: *win condition is to deploy my ark to one space and launch an ark from a different
+# space.* An ark comes down once; a citizen is not a `unit`, so `move` cannot carry one. **A pioneer
+# is built, walks, and settles**, and that is the whole route to a second place.
+#
+# **It costs what everything costs here.** Sean: *Tuning is going to be separate, for now i am
+# making everything cheap.* A labour and a metal, the same as an extractor and the same as a bin.
+#
+# **And that makes it the strongest move in the game, which is worth saying rather than fixing.** A
+# pioneer yields two extractors and two citizens for what one extractor costs, so nothing would ever
+# build an extractor by hand. **This is the first place where *everything is cheap* produces a
+# dominant move rather than a fast one** - a fact about the numbers and not about the rules, and his
+# to price when tuning stops being separate.
+#
+# **It arrives able to move**, which is what everything made here does.
+
+{rule id:15 name:build-pioneer}
+
+{input id:23 rule:15 seq:1 name:where of:48}
+
+{clause id:52 rule:15 seq:1 role:2 relation:29}
+{clause id:53 rule:15 seq:2 role:2 relation:30}
+{clause id:54 rule:15 seq:3 role:3 relation:54}
+
+{binding id:59 clause:52 column:78 input:23}
+{binding id:60 clause:53 column:80 input:23}
+{binding id:61 clause:54 column:150 input:23}
+
+{literal id:77 clause:52 column:79 value:1}
+{literal id:78 clause:53 column:81 value:1}
+{literal id:79 clause:54 column:151 value:1}
+{literal id:80 clause:54 column:152 value:1}

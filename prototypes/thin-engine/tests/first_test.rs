@@ -181,9 +181,13 @@ fn the_ruleset_states_no_world() {
 #[test]
 fn a_test_sets_its_sections_apart() {
     let mut checked = 0;
-    for directory in ["foundation", "friendly"] {
+    // **Both spellings of a test, and one of them left the prototype on 2026-09-21.** `P-532`
+    // put the friendly side in `spec/tests/`, where it is the specification; the foundation side
+    // stayed, being converted from it. **The sections have to be apart in both**, because a
+    // reader reads one and the engine runs the other.
+    for directory in ["data/foundation/tests", "../../spec/tests"] {
         for file in every_test() {
-            let named = file.replace("data/foundation/", &format!("data/{directory}/"));
+            let named = file.replace("data/foundation/tests", directory);
             let text = std::fs::read_to_string(mine().join(&named)).expect(&named);
             let lines: Vec<&str> = text.lines().collect();
             for (at, line) in lines.iter().enumerate() {

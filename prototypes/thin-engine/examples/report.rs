@@ -33,6 +33,27 @@ fn mine() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 }
 
+/// Where the approved tests live, which is no longer inside this prototype.
+///
+/// **`P-532`, 2026-09-21**: Sean moved them to `spec/tests/` and their approval records to
+/// `reviewed/`, both at the repository root. **They are the specification now** - `CLAUDE.md`,
+/// promoted the same day: a test in `spec/tests/` arrives the way everything in `spec/` arrives,
+/// which is that he has read it.
+///
+/// **Named once rather than spelled out ten times**, which is what the move cost when they were
+/// spelled out: ten files, four of them tests, and nothing to change in one place.
+pub fn tests_at() -> PathBuf {
+    mine().join("..").join("..").join("spec").join("tests")
+}
+
+/// Where the record of what Sean has read lives.
+///
+/// **No instance writes it** - `CLAUDE.md`. The review application does, acting as him, and that
+/// application is this prototype's.
+pub fn records_at() -> PathBuf {
+    mine().join("..").join("..").join("reviewed")
+}
+
 fn text(at: &str) -> String {
     std::fs::read_to_string(mine().join(at)).unwrap_or_else(|why| panic!("{at}: {why}"))
 }
@@ -135,7 +156,7 @@ fn orphaned() -> Vec<String> {
         .iter()
         .map(|file| (file.trim_end_matches(".4x").to_string(), ()))
         .collect();
-    let Ok(entries) = std::fs::read_dir(mine().join("reviewed")) else {
+    let Ok(entries) = std::fs::read_dir(records_at()) else {
         return Vec::new();
     };
     let mut found: Vec<String> = entries
@@ -175,9 +196,8 @@ fn orphaned() -> Vec<String> {
 /// **Everything above the first marker is `note`** - the prose that says what the test is for,
 /// which drifts as readily as the rows and matters as much.
 fn review_of(stem: &str) -> (&'static str, Vec<(&'static str, String)>) {
-    let now = std::fs::read_to_string(mine().join(format!("data/friendly/tests/{stem}.4x")))
-        .unwrap_or_default();
-    let Ok(read) = std::fs::read_to_string(mine().join(format!("reviewed/{stem}.4x"))) else {
+    let now = std::fs::read_to_string(tests_at().join(format!("{stem}.4x"))).unwrap_or_default();
+    let Ok(read) = std::fs::read_to_string(records_at().join(format!("{stem}.4x"))) else {
         return ("never reviewed", Vec::new());
     };
     let bare = |text: &str| -> Vec<(String, String)> {
@@ -239,7 +259,7 @@ fn review_of(stem: &str) -> (&'static str, Vec<(&'static str, String)>) {
 /// written by the page, read here, and edited by hand without a format to learn.
 pub fn asked() -> BTreeMap<String, Vec<String>> {
     let mut found: BTreeMap<String, Vec<String>> = BTreeMap::new();
-    let Ok(text) = std::fs::read_to_string(mine().join("reviewed/asked.md")) else {
+    let Ok(text) = std::fs::read_to_string(records_at().join("asked.md")) else {
         return found;
     };
     let mut stem = String::new();
@@ -522,7 +542,8 @@ not as expected
         }
 
         // **The whole file, line for line**, so nothing about the test is off the page.
-        let source = text(&format!("data/friendly/tests/{file}"));
+        let source = std::fs::read_to_string(tests_at().join(&file))
+            .unwrap_or_else(|why| panic!("spec/tests/{file}: {why}"));
         let wanted: BTreeMap<String, ()> = match &outcome {
             Outcome::Differed { missing, .. } => {
                 missing.iter().map(|it| (it.clone(), ())).collect()
@@ -639,7 +660,7 @@ not as expected
         // server declares `text/plain` and no `.txt` copy exists.
         let raw = if live {
             format!(
-                "<p class=\"raw\">on disk: <a href=\"/data/friendly/tests/{stem}.4x\">data/friendly/tests/{stem}.4x</a> · <a href=\"/data/foundation/tests/{stem}.4x\">foundation</a></p>\n"
+                "<p class=\"raw\">on disk: <a href=\"/spec/tests/{stem}.4x\">spec/tests/{stem}.4x</a> · <a href=\"/data/foundation/tests/{stem}.4x\">foundation</a></p>\n"
             )
         } else {
             // **A `.txt` twin, because a published `.4x` is a download.** Measured in the
@@ -648,7 +669,7 @@ not as expected
             // written at deploy and committed nowhere, so **these two links resolve on the site
             // and not in a clone** - which the note under the tally says out loud.
             format!(
-                "<p class=\"raw\">on disk: <a href=\"data/friendly/tests/{stem}.4x.txt\">data/friendly/tests/{stem}.4x</a> · <a href=\"data/foundation/tests/{stem}.4x.txt\">foundation</a></p>\n"
+                "<p class=\"raw\">on disk: <a href=\"spec/tests/{stem}.4x.txt\">spec/tests/{stem}.4x</a> · <a href=\"data/foundation/tests/{stem}.4x.txt\">foundation</a></p>\n"
             )
         };
         let said = if why.is_empty() {

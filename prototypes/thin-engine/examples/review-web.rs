@@ -177,7 +177,7 @@ fn answer(
             // application, acting as Sean.* **What may be taken back is what is there**, so this
             // asks the disk rather than the list of tests.
             let recorded =
-                path == "/unreview" && mine().join(format!("reviewed/{name}.4x")).is_file();
+                path == "/unreview" && report::records_at().join(format!("{name}.4x")).is_file();
             if !recorded && !known.contains(&name) {
                 return (
                     "400 Bad Request".to_string(),
@@ -187,12 +187,12 @@ fn answer(
             }
             match path {
                 "/reviewed" => {
-                    let from = mine().join(format!("data/friendly/tests/{name}.4x"));
+                    let from = report::tests_at().join(format!("{name}.4x"));
                     let text = match std::fs::read_to_string(&from) {
                         Ok(text) => text,
                         Err(why) => return ("500".to_string(), PLAIN, format!("{name}: {why}")),
                     };
-                    let into = mine().join("reviewed");
+                    let into = report::records_at();
                     let _ = std::fs::create_dir_all(&into);
                     match std::fs::write(into.join(format!("{name}.4x")), text) {
                         Ok(()) => ok(PLAIN, "reviewed".to_string()),
@@ -200,7 +200,7 @@ fn answer(
                     }
                 }
                 "/unreview" => {
-                    let at = mine().join(format!("reviewed/{name}.4x"));
+                    let at = report::records_at().join(format!("{name}.4x"));
                     // **Already gone is the answer, not an error.** The page and the disk can
                     // disagree for a moment; saying so would be reporting a race as a fault.
                     let _ = std::fs::remove_file(at);
@@ -307,7 +307,7 @@ fn field(body: &str, name: &str) -> Option<String> {
 /// **Rebuilt from its own lines rather than appended to.** A second note about one test belongs in
 /// that test's section, and a file that is also edited by hand cannot be written to blind.
 fn file(name: &str, note: &str) {
-    let at = mine().join("reviewed/asked.md");
+    let at = report::records_at().join("asked.md");
     let _ = std::fs::create_dir_all(mine().join("reviewed"));
     let text = std::fs::read_to_string(&at).unwrap_or_else(|_| HEAD.to_string());
     let mut lines: Vec<String> = text.lines().map(str::to_string).collect();

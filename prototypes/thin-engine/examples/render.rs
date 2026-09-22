@@ -10,6 +10,21 @@
 //! up after a change lands in the foundation, and `tests/directories.rs` is what says they agree
 //! however each was produced.
 //!
+//! # It writes the five shared files and no test, since 2026-09-21
+//!
+//! **`P-532` moved every test's friendly side to `spec/tests/`**, where `CLAUDE.md` makes it the
+//! specification: a test arrives there the way everything in `spec/` arrives, which is that Sean
+//! has read it. **So this may not write one.** It is another lane's column, and worse than that
+//! it is an approved artifact - regenerating a test from the foundation would let an edit to the
+//! generated side silently rewrite the thing that was approved, which is the direction the whole
+//! arrangement exists to forbid.
+//!
+//! **Which leaves the tests with no generator at all, and that is the gap rather than this
+//! line.** The foundation side is converted from the friendly side - Sean, 2026-09-15, quoted in
+//! `tests/directories.rs` - so what is needed now is the inverse of this program for tests only:
+//! `spec/tests/*.4x` read, and `data/foundation/tests/*.4x` written from it. Until that exists, a
+//! test he approves does not reach the engine, and `tests/directories.rs` is what would say so.
+//!
 //! `cargo run --example render`
 
 use std::path::PathBuf;
@@ -98,6 +113,12 @@ fn main() {
 
     let mut changed = 0;
     for (file, game) in files() {
+        // **A test's friendly side is not this program's to write** - see the note at the top.
+        // Skipped rather than filtered out of `files()`, because the store above is built from
+        // every file and a test's rows are most of what the names are drawn from.
+        if file.starts_with("tests/") {
+            continue;
+        }
         let from = format!("data/foundation/{file}");
         let text = std::fs::read_to_string(mine().join(&from)).expect(&from);
         // **A merged test file spans two stores**, so which `Names` reads a row is a fact about

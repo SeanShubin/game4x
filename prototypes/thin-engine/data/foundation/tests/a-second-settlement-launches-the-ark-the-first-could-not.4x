@@ -1,0 +1,114 @@
+# The win condition, whole: an ark comes down on one territory and an ark leaves from another.
+#
+# **Sean, 2026-09-20**: *win condition is to deploy my ark to one space and launch an ark from a
+# different space.* **Nothing in the game could do this two days ago.** An ark comes down once; a
+# citizen is not a `unit`, so `move` cannot carry one; and only a settlement can build. **The
+# pioneer is the whole route** - built where the ark landed, walked across a border, and spent on
+# ground that had nobody on it.
+#
+# **This is the test the loop test cannot be.**
+# `an-ark-lands-a-planet-is-developed-and-an-ark-leaves` launches from the territory the ark came
+# down on, and would satisfy a rule that said *an ark leaves*. **The ark here leaves from `place-4`,
+# the orbit of the second territory**, and every extractor and every citizen under it came out of
+# the pioneer.
+#
+# ## Four turns, and what each is for
+#
+# **Turn one is the landing.** The ark becomes two extractors and two citizens; one labour mines
+# six food and nothing eats it, because a citizen off an ark owes no meal yet - so all six go to
+# `breed` and the settlement is four by the end of it.
+#
+# **Turn two is the pioneer.** Four labours: food to stay alive, metal to build from, the pioneer
+# itself, and one spare. It walks the border the same turn it is made, because everything made here
+# arrives at full capability.
+#
+# **Turn three is two settlements at once, and that is the turn that is easy to get wrong.** The
+# first one still eats every turn whether or not anything interesting is happening to it - a turn
+# that forgets it loses six citizens to `perish` and the arc with them. **The ground that never
+# built anything is the ground that has to keep being fed.**
+#
+# **Turn four is the launch**, from the second territory: metal out of the ground, an energy
+# extractor built from it, energy out of the ground, and an ark built from the three.
+#
+# ## What the end state says
+#
+# **Two settlements, one ark in orbit above the second, and nothing stored anywhere.** Six citizens
+# on the first territory and four on the second, all of them hungry, and five energy and four metal
+# lying loose that the next turn's end would take. **A launch is not a departure**; it is a thing
+# built, and what happens to the people who built it is the next turn's problem.
+#
+# **The second territory keeps its food extractor unworked at `working:1`** - it was worked in turn
+# three and the turn gave it back - while its metal and energy extractors are spent. That asymmetry
+# is the whole record of which turn did what.
+
+{test name:a-second-settlement-launches-the-ark-the-first-could-not}
+
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{place id:2 of:1 layer:orbit}
+{territory id:2}
+{place id:3 of:2 layer:surface}
+{place id:4 of:2 layer:orbit}
+{adjacency id:1 from:1 to:2}
+{capacity of:18 for:19 what:27 per:48 quantity:1}
+{provides kind:48 what:1 quantity:6}
+{consumes kind:54 what:1 quantity:1}
+{deposit where:1 what:30 density:6 quantity:1}
+{deposit where:1 what:31 density:6 quantity:1}
+{deposit where:3 what:30 density:6 quantity:1}
+{deposit where:3 what:31 density:6 quantity:1}
+{deposit where:3 what:50 density:6 quantity:1}
+{ark where:2 moving:1 gathering:1 quantity:1}
+
+{when}
+{deploy where:2 what:51}
+{toil where:1}
+{work where:1 what:31}
+{end-turn}
+{toil where:1}
+{work where:1 what:31}
+{work where:1 what:30}
+{build-pioneer where:1}
+{move what:54 from:1 to:3}
+{end-turn}
+{deploy where:3 what:54}
+{toil where:1}
+{work where:1 what:31}
+{toil where:3}
+{work where:3 what:31}
+{end-turn}
+{toil where:3}
+{work where:3 what:30}
+{build-extractor where:3 what:50}
+{work where:3 what:50}
+{launch where:3}
+
+{then}
+{adjacency id:1 from:1 to:2}
+{ark where:4 moving:1 gathering:1 quantity:1}
+{capacity of:18 for:19 what:30 per:48 quantity:1}
+{capacity of:18 for:19 what:31 per:48 quantity:1}
+{capacity of:18 for:19 what:50 per:48 quantity:1}
+{citizen where:1 hungry:1 bearing:1 laboring:1 quantity:6}
+{citizen where:3 hungry:1 bearing:1 laboring:0 quantity:4}
+{consumes kind:54 what:1 quantity:1}
+{deposit where:1 what:30 density:6 quantity:1}
+{deposit where:1 what:31 density:6 quantity:1}
+{deposit where:3 what:30 density:6 quantity:1}
+{deposit where:3 what:31 density:6 quantity:1}
+{deposit where:3 what:50 density:6 quantity:1}
+{energy where:3 quantity:5}
+{extractor where:1 what:30 working:1 quantity:1}
+{extractor where:1 what:31 working:1 quantity:1}
+{extractor where:3 what:30 working:0 quantity:1}
+{extractor where:3 what:31 working:1 quantity:1}
+{extractor where:3 what:50 working:0 quantity:1}
+{metal where:3 quantity:4}
+{place id:1 of:1 layer:surface}
+{place id:2 of:1 layer:orbit}
+{place id:3 of:2 layer:surface}
+{place id:4 of:2 layer:orbit}
+{provides kind:48 what:1 quantity:6}
+{territory id:1}
+{territory id:2}
