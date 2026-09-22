@@ -1,4 +1,4 @@
-//! Print the *Families* data file rule 7 asks for, so the specification lane can promote it.
+//! Print the *Families* data file rule 8 asks for, so the specification lane can promote it.
 //!
 //! ```text
 //! cargo run -q -p game-console --example declared-families

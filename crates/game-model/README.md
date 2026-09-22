@@ -73,7 +73,7 @@ does not depend on how the work was split.
 
 ## Where the numbers come from
 
-`spec/README.md` rule 7 puts relationships in the specification and values in a release.
+`spec/README.md` rule 8 puts relationships in the specification and values in a release.
 The tuning constants here — what a Pioneer costs, what an Ark costs, how many cells a move
 spends — are the ones `releases/first-release.md` states. Nothing keeps a constant in Rust
 and a figure in a markdown table in step except a test, and that test is

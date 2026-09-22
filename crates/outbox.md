@@ -2538,7 +2538,7 @@ again, which is what `P-465` said was missing.
 for a view on which half of each of the four is data, before drafting rather than after
 
 **derived from** state the game's data in several files in a directory of their own, in the notation
-rather than in a table - `spec/README.md`, rule 7
+rather than in a table - `spec/README.md`, rule 8
 
 **Counted over the cells rather than judged.** Rule 7 sends relationships to prose and data to a
 data file, and three of the four have so little data that they do not need a file at all - their
@@ -2582,7 +2582,7 @@ the two-valued set `P-457` is deciding, with `Readies` also being `P-459`.
 
 **Their data is of-the-kind traits and belongs on the kind's line in `kinds.4x`**, which is where
 `P-451` puts a trait of the kind and where `3A` already sends *Units and structures*. What is left
-of each is a relationship, and rule 7 leaves a relationship in prose.
+of each is a relationship, and rule 8 leaves a relationship in prose.
 
 **One number moves that nothing else has claimed**: the store's `10`. It is a capacity rather than
 a trait the Traits table lists, so it needs a name before it can ride on a line - and that is a
@@ -2614,7 +2614,7 @@ five numbers as of-the-kind traits, which is the thing that item says they are n
 **So *Where things are* is the one of the four that genuinely wants a file**, and the
 recommendation above is wrong about it. What stands is the rest of that table: *its free capacity
 for that kind* and *the unit's fuel* are declared traits and need nothing, and eight of the twelve
-bounds are relationships rule 7 leaves in prose.
+bounds are relationships rule 8 leaves in prose.
 
 **And *Units and structures* does not fold as cleanly as this item said.** Ten columns; five are
 declared traits - `Strength`, `Fuel`, `Upkeep`, `Movable`, and `Readies` once `P-459` is answered.

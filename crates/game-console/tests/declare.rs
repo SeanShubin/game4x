@@ -77,7 +77,7 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
         // `["family", "name"]`, which was the shape before that.
         //
         // **The prose column still stays prose**, which is what the assertion was really
-        // guarding and what rule 7 says. So `What it is` must not appear, and the way to say
+        // guarding and what rule 8 says. So `What it is` must not appear, and the way to say
         // that without listing the traits here is that every key is `name`, `family`, or a
         // trait the release declares.
         let declared: std::collections::BTreeSet<String> =

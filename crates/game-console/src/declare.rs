@@ -16,7 +16,7 @@
 //!
 //! **`Kinds` is here because `P-443` wrote the example**, and nothing about its shape is this
 //! lane's invention: a row is a name, and the name is the whole of what the notation carries.
-//! The *What it is* column stays where rule 7 puts it - *relationships in prose* - so this
+//! The *What it is* column stays where rule 8 puts it - *relationships in prose* - so this
 //! file is the vocabulary and the sentences remain sentences.
 //!
 //! **`Families` and `Traits` declare too and are not here**, because each has a cell holding
@@ -537,7 +537,7 @@ fn named(what: &'static str, name: &str, family: Option<&str>) -> Description {
 /// **`thing` is skipped and writes nothing.** `spec/console.md`: *`thing` is the family every
 /// kind is in, and no line says so kind by kind - a kind added tomorrow is a `thing` because it
 /// is a kind.* The table spells it *every kind above*, which is a rule about the table rather
-/// than a list, and a rule belongs in prose where rule 7 puts it.
+/// than a list, and a rule belongs in prose where rule 8 puts it.
 ///
 /// **A kind in two families would have nowhere to put the second**, because a key takes one
 /// value - so this refuses rather than picking. It cannot happen in this release and the
@@ -664,7 +664,7 @@ pub fn biomes(document: &str) -> String {
 /// **A number, however the cell describes what it counts.** *A number* five times, and four
 /// more that are a number with a sentence about what it counts - *how much energy its tank
 /// holds*, *food per turn*, *the number of turns it will last*, and `id`'s *unique among
-/// things of its kind*. The sentence is a relationship and rule 7 leaves it in prose.
+/// things of its kind*. The sentence is a relationship and rule 8 leaves it in prose.
 ///
 /// **Or the name of whatever already declares the values.** A family where they are kinds -
 /// `one of the resources` is the `resource` family, `a place` is the `place` family - and the
