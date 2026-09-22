@@ -756,7 +756,8 @@ be, because the two documents disagree about the thing it changes.**
 
 `releases/first-release.md` -> *Where things are*, unchanged:
 
-> Every thing but the game is in another thing, and this release has three sorts of capacity.
+> Every thing but the game is in another thing, and this release has two sorts of thing that
+> give a place room.
 
 | Container     | Holds  | Up to           |
 | ------------- | ------ | --------------- |

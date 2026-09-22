@@ -81,11 +81,19 @@ pub struct Game {
     pub units: Vec<Unit>,
     /// Whether this game has been won.
     ///
-    /// State rather than a question asked later, because winning happens at a *moment*:
-    /// `spec/control.md` says a player wins by launching an Ark from a fully exploited
-    /// planet, and once the Ark is in orbit the launch is over. Recomputing it afterwards
-    /// would ask whether the planet is fully exploited *now*, which is a different
-    /// question and would keep answering yes long after nobody launched anything.
+    /// State rather than a question asked later, because winning happens at a *moment*: the
+    /// win is a launch, and once the Ark is in orbit the launch is over. Recomputing it
+    /// afterwards would ask whether the condition holds *now*, which is a different question
+    /// and would keep answering yes long after nobody launched anything. **That reason holds
+    /// whichever condition is being tested**, which is why this field survives the change
+    /// below.
+    ///
+    /// **`P-527` cut the definition of *fully exploited* out of `spec/control.md`, and `P-520`
+    /// replaced the win condition with it.** The specification now says: *a player wins by
+    /// deploying an Ark to one territory and launching an Ark from a different one.* **This
+    /// code still implements the old one**, which is a divergence rather than a stale comment -
+    /// reported as `S-151` and left, because changing what winning means reseeds
+    /// `scenario/expected/play.4x` and moves `R-6`, and neither is this lane's to decide.
     pub won: bool,
 }
 
@@ -201,9 +209,11 @@ impl Game {
 
     // -- acting -------------------------------------------------------------
 
-    /// `spec/control.md`: *a planet is fully exploited when every territory that can be taken
-    /// has been taken, every territory is producing the greatest output it can, and every
-    /// storage structure on it is full.*
+    /// What *fully exploited* means, as `spec/control.md` defined it until `P-527`: *a planet
+    /// is fully exploited when every territory that can be taken has been taken, every
+    /// territory is producing the greatest output it can, and every storage structure on it is
+    /// full.* **That sentence is no longer in the specification** and is quoted here as what
+    /// this function was built to, not as what the specification says - `S-151`.
     ///
     /// **The middle clause changed under `P-361` and it is the whole of this function.** It
     /// used to require every structure to have been built everywhere it could be, which counts
@@ -272,8 +282,10 @@ mod tests {
             .collect()
     }
 
-    /// `spec/control.md`: *a player wins by launching an Ark from a fully exploited
-    /// planet.*
+    /// What `spec/control.md` said until `P-520` replaced it: *a player wins by launching an
+    /// Ark from a fully exploited planet.* **It now says a player wins by deploying an Ark to
+    /// one territory and launching an Ark from a different one**, and this code has not
+    /// followed - `S-151`.
     ///
     /// The whole condition, built by hand: every claimable territory taken, every node
     /// worked, a yard everywhere. Then launching wins, and it is the launch that does it.
@@ -671,7 +683,7 @@ mod tests {
         // **`S-55`, and the check it says does not exist.** `land` took any unit for which
         // `in_orbit()` held and put it on any territory named - there was no relation between
         // the two to compare, because `Location::Orbit` carried nothing. `spec/orbit.md`:
-        // *nothing orbits a planet without being above a particular territory*, and landing is
+        // *nothing is in orbit without being above a particular territory*, and landing is
         // a move, so the only ground an Ark can reach is the ground beneath it.
         // `designed` puts the one Ark in the orbit above territory 1.
         let game = started();

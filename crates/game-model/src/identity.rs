@@ -112,8 +112,13 @@ impl UnitKind {
     ///
     /// **An Ark carries none, since `S-86` blanked its Fuel cell** - the release half `C-79`
     /// was waiting on, and this is the other half changed in the same breath. `spec/units.md`:
-    /// *a mobile unit that moves in orbit takes its energy directly from the sun. It stores no
-    /// fuel.*
+    /// *a mobile unit that moves in orbit gathers its energy from the sun*, a fixed amount each
+    /// turn, *and holds it in a bin of its own*.
+    ///
+    /// **The sentence moved under this comment and the consequence held.** It read *it stores
+    /// no fuel*; it now gives such a unit a bin of its own, filled from the sun rather than
+    /// from a territory - so what an Ark is *built* carrying is still none, which is the fact
+    /// this cell is about.
     ///
     /// **It costs an Ark nothing, which is why this is safe rather than merely correct.** An
     /// Ark reaches the ground by landing and is consumed by `deploy ark`; `Game::land` asks

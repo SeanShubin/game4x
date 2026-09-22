@@ -5,8 +5,8 @@ use crate::identity::{TerritoryId, UnitId, UnitKind};
 /// Where a unit is: on a territory, or in the orbit above one.
 ///
 /// **`S-55`: an orbit is above a particular territory, and this variant carried nothing.**
-/// `spec/orbit.md` forbids the state outright - *nothing orbits a planet without being above
-/// a particular territory* - and `releases/first-release.md` -> *Where things are* says there
+/// `spec/orbit.md` forbids the state outright - *nothing is in orbit without being above a
+/// particular territory* - and `releases/first-release.md` -> *Where things are* says there
 /// are twelve territories and twelve orbits. A bare `Orbit` made *above nowhere* the only
 /// thing a unit in orbit could be.
 ///

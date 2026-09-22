@@ -318,8 +318,8 @@ pub fn tables(game: &Game) -> Vec<Table> {
     }
     kinds.push(vec!["territory".into(), game.territories.len().to_string()]);
     kinds.push(vec!["adjacency".into(), adjacency.rows.len().to_string()]);
-    // **An orbit per territory** - `spec/orbit.md`: *a planet has an orbit above each of its
-    // territories*. It was named only by a unit standing in one, so when `P-342` stopped
+    // **An orbit per territory** - `spec/orbit.md`: *a territory has two layers: its surface
+    // and its orbit*. It was named only by a unit standing in one, so when `P-342` stopped
     // launching putting anything into orbit the scenario left none and the word vanished from
     // the dump. **A kind's presence is not a fact about one run**, and a reader looking for
     // `orbit` should find it whether or not anything is up there.

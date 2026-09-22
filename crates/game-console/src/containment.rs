@@ -652,8 +652,12 @@ pub fn tree(game: &Game) -> Entry {
         children.push(entry);
 
         // **An orbit is a place beside its territory, not inside it.** `spec/orbit.md`: *a
-        // planet has an orbit above each of its territories*, and *an orbit is next to the
-        // territory below it* - next to, which is adjacency rather than containment.
+        // territory has two layers: its surface and its orbit*, and *a territory's surface and
+        // its orbit are adjacent by being layers of one territory* - adjacent, which is not
+        // containment. **The wording moved and the fact did not**: it read *a planet has an
+        // orbit above each of its territories* and *an orbit is next to the territory below
+        // it* until the layers rewrite, which says the same thing about a place rather than
+        // about a planet.
         //
         // **It carries the id of the territory it is above**, which is derivation rather
         // than a second copy: there is exactly one orbit per territory, so naming the pair

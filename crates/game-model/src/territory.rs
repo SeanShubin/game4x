@@ -453,10 +453,14 @@ impl Territory {
 
     /// The greatest output this territory can ever reach, as the state that produces it.
     ///
-    /// `spec/control.md`: *a territory produces the greatest output it can when as many
-    /// citizens as it can feed are working, as many of them at its food extractors as those
-    /// will take - which is what sets the population - and every remaining citizen at a metal
-    /// or an energy extractor, the player choosing how they divide.*
+    /// What `spec/control.md` said until `P-527`: *a territory produces the greatest output
+    /// it can when as many citizens as it can feed are working, as many of them at its food
+    /// extractors as those will take - which is what sets the population - and every remaining
+    /// citizen at a metal or an energy extractor, the player choosing how they divide.*
+    ///
+    /// **`P-527` cut these sentences out of `spec/control.md`**, along with the definition of
+    /// *fully exploited* they served. They are quoted here as what this code was built to and
+    /// not as what the specification says - `S-151`.
     ///
     /// Returned as `(citizens, food extractors, other extractors)`, because the condition is
     /// about a state rather than a number: the output itself is not stored anywhere, and what
@@ -465,7 +469,7 @@ impl Territory {
     ///
     /// # Why it is not simply capacity times density
     ///
-    /// `spec/control.md` says the answer follows from *how many extractors it has
+    /// That sentence said the answer follows from *how many extractors it has
     /// capacity for, and their densities* - and two of the release's twelve territories reach
     /// a ceiling below that, for reasons that are themselves permanent facts rather than
     /// history.
@@ -590,10 +594,14 @@ impl Territory {
 
     /// Whether this territory can ever build an extractor, from its nodes alone.
     ///
-    /// `spec/control.md`: *what that greatest output is follows from the territory's own
-    /// permanent facts: how many extractors it has capacity for, and their densities.
-    /// Not whether the player can afford it this turn, and not whether any particular game
-    /// happened to reach it.*
+    /// What `spec/control.md` said until `P-527`: *what that greatest output is follows from
+    /// the territory's own permanent facts: how many extractors it has capacity for, and their
+    /// densities. Not whether the player can afford it this turn, and not whether any
+    /// particular game happened to reach it.*
+    ///
+    /// **`P-527` cut these sentences out of `spec/control.md`**, along with the definition of
+    /// *fully exploited* they served. They are quoted here as what this code was built to and
+    /// not as what the specification says - `S-151`.
     ///
     /// **`P-361` rewrote that sentence and left this rule alone.** It used to say a
     /// *structure* can be built where those facts allow it; it now says the greatest

@@ -104,12 +104,16 @@ fn ending_a_turn_runs_exactly_the_recipes_the_release_calls_the_worlds() {
     // standing there.
     //
     // **Fifteen since `P-494` and `P-495`**, which gave the force rule four recipes where it
-    // had a comparison: `hold`, `take`, `reclaim` and `renew`. What that buys is a net with no
-    // inhibitor arc in it - `Game::end_turn_observed` carries the argument.
+    // had a comparison: `hold`, `take`, `reclaim` and `renew`.
+    //
+    // **Ten since `P-522`.** `muster`, `stand`, `hold`, `take` and `reclaim` went with force,
+    // and `renew` stayed - the block that clears the mark `upkeep` puts on a citizen survives,
+    // where the one that cleared `hold`'s mark on a nature did not. So a name the force rule
+    // brought outlives it, which is why this counts names rather than subtracting five.
     assert_eq!(
         worlds.len(),
-        15,
-        "fifteen world recipes; the release has {}",
+        10,
+        "ten world recipes; the release has {}",
         worlds.len()
     );
 }

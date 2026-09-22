@@ -220,9 +220,16 @@ impl Game {
     /// while firing nothing the release declared. **Launching is not a move now** - the cost
     /// is consumed, the Yard is required, and nothing is put anywhere.
     ///
-    /// `spec/control.md`: *a player wins by launching an Ark from a fully exploited planet.*
-    /// Asked before the cost is paid, because it is the planet as it stands that has to have
-    /// been finished - and paying first would take two citizens off it.
+    /// **Asked before the cost is paid**, because it is the planet as it stands that has to
+    /// meet the condition - and paying first would take two citizens off it. That is true of
+    /// either condition and is why the order is what it is.
+    ///
+    /// **`P-527` cut the definition of *fully exploited* out of `spec/control.md`, and `P-520`
+    /// replaced the win condition with it.** The specification now says: *a player wins by
+    /// deploying an Ark to one territory and launching an Ark from a different one.* **This
+    /// code still implements the old one**, which is a divergence rather than a stale comment -
+    /// reported as `S-151` and left, because changing what winning means reseeds
+    /// `scenario/expected/play.4x` and moves `R-6`, and neither is this lane's to decide.
     fn launch(&mut self, territory: TerritoryId) -> Result<(), Rejection> {
         let place = self.territory(territory)?;
         if place.yards() == 0 {
