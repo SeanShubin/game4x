@@ -1,12 +1,8 @@
 {carries kind:citizen trait:bearing}
-{carries kind:citizen trait:defending}
 {carries kind:citizen trait:laboring}
 {carries kind:citizen trait:paid}
 {carries kind:citizen trait:strength}
 {carries kind:citizen trait:upkeep}
-{carries kind:garrison trait:binding}
-{carries kind:garrison trait:metal-in-it}
-{carries kind:garrison trait:strength}
 {carries kind:extractor trait:binding}
 {carries kind:extractor trait:metal-in-it}
 {carries kind:extractor trait:resource}
@@ -17,14 +13,12 @@
 {carries kind:store trait:metal-in-it}
 {carries kind:store trait:resource}
 {carries kind:ark trait:binding}
-{carries kind:ark trait:defending}
 {carries kind:ark trait:fuel}
 {carries kind:ark trait:metal-in-it}
 {carries kind:ark trait:movable}
 {carries kind:ark trait:moving}
 {carries kind:ark trait:strength}
 {carries kind:pioneer trait:binding}
-{carries kind:pioneer trait:defending}
 {carries kind:pioneer trait:fuel}
 {carries kind:pioneer trait:metal-in-it}
 {carries kind:pioneer trait:movable}
@@ -32,7 +26,6 @@
 {carries kind:pioneer trait:strength}
 {carries kind:food trait:surplus}
 {carries kind:territory trait:id}
-{carries kind:territory trait:biome}
 {carries kind:territory trait:control}
 {carries kind:orbit trait:id}
 {carries kind:deposit trait:density}
@@ -42,4 +35,3 @@
 {carries kind:adjacency trait:from}
 {carries kind:adjacency trait:to}
 {carries kind:game trait:phase}
-{carries kind:nature trait:met}
