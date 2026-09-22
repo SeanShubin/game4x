@@ -42,8 +42,8 @@ fn every_recipe_is_either_drawn_or_named_as_not_drawn() {
     // second block: it clears the mark on a citizen as well as the one on a nature, which
     // is one rule applied to two kinds - `stow` and `discard`'s shape.
     assert_eq!(
-        // **Thirty-six under twenty-five names since `P-511`**, which deleted `refuel`:
-        // one block under one name.
+        // **Twenty-seven under twenty names since `P-522`**, which cut nine blocks under
+        // five names of their own.
         net.recipes,
         36,
         "the release states thirty-six blocks of recipe rows and the parse found {}",
@@ -641,14 +641,14 @@ fn every_bound_the_release_states_is_classified() {
         }
     }
 
-    // Twelve since `P-380` gave `fertility` its own row - *the citizens that make it, one
-    // each per turn*, which is `labor`'s word for word. It was eleven, and the number is
+    // **Eleven since `P-522` took the garrison row**, which bounded it at a capacity of 1.
+    // `P-380` had taken it to twelve by giving `fertility` a row of its own. The number is
     // written rather than counted from the same table the loop above counts, because a test
     // comparing a count with itself agrees with any release at all.
     assert_eq!(
         rows.len(),
-        12,
-        "the release bounds twelve kinds and this found {}: {rows:?}",
+        11,
+        "the release bounds eleven kinds and this found {}: {rows:?}",
         rows.len()
     );
 

@@ -50,13 +50,13 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
         .iter()
         .map(|row| row[0].trim().trim_matches('*').trim().to_string())
         .collect();
-    // **Nineteen since `P-494` made `nature` a kind**, which is what took the zero test out
-    // of the force rule: a territory holds one per point of resistance, and *force below
-    // nature* became *a nature nobody met*.
+    // **Sixteen since `P-522`**, which cut the Biomes section, the force rule and every
+    // recipe that produced, spent or swept a force - nine blocks under five names of
+    // their own. Sean cut force from the first release; `spec/control.md` keeps it.
     assert_eq!(
         table.len(),
-        19,
-        "nineteen kinds in the release when this was written; it has {} ({table:?})",
+        16,
+        "sixteen kinds in the release when this was written; it has {} ({table:?})",
         table.len()
     );
 
@@ -106,9 +106,10 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
         // **So a count of failing assertions is not a count of wrong assertions**, which is
         // the same shape as a reader nobody calls: absence of a failure is not evidence, and
         // the gate cannot tell the two apart.
+        // **Twenty-three since `P-522`.**
         assert_eq!(
             declared.len(),
-            26,
+            23,
             "the Traits table is the population here"
         );
         for key in row.traits.keys() {
@@ -223,7 +224,11 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
         .iter()
         .filter_map(|row| row.traits.get("name").cloned())
         .collect();
-    assert_eq!(declared_traits.len(), 26, "twenty-six traits are declared");
+    assert_eq!(
+        declared_traits.len(),
+        23,
+        "twenty-three traits are declared"
+    );
 
     // **Read from `carries.4x` since `P-497`, and it is the same join by a different route.**
     // A kind's line held the traits it carries as bare words; they are one row each now, and
@@ -639,10 +644,12 @@ fn the_traits_file_declares_what_a_data_file_needs() {
     // **`P-470` is why it was twenty-four rather than twenty-one.** `P-457` declared a derived
     // trait only where a recipe named it, which left three out; then a kind's line gained the
     // traits it carries, and a kind may only name a declared trait.
+    // **Twenty-three since `P-522`**, which cut `defending`, `biome` and `met` with the
+    // force rule and the Biomes section.
     assert_eq!(
         read.len(),
-        26,
-        "twenty-six traits, one per row of the release's table; this read {}",
+        23,
+        "twenty-three traits, one per row of the release's table; this read {}",
         read.len()
     );
     assert_eq!(
@@ -846,8 +853,8 @@ fn every_bare_word_in_every_data_file_is_a_declared_trait() {
     .collect();
     assert_eq!(
         declared.len(),
-        26,
-        "twenty-six traits are declared; this read {declared:?}"
+        23,
+        "twenty-three traits are declared; this read {declared:?}"
     );
 
     let mut files: Vec<PathBuf> = std::fs::read_dir(&data)
@@ -955,8 +962,8 @@ fn the_blocks_the_release_implies_are_the_blocks_in_the_file() {
     // **Both sides non-empty before comparing**, or two failures to read agree with each other.
     assert_eq!(
         generated.lines().count(),
-        36,
-        "thirty-six blocks since `P-511`; the generator wrote {}",
+        27,
+        "twenty-seven blocks since `P-522`; the generator wrote {}",
         generated.lines().count()
     );
     assert_eq!(
@@ -971,7 +978,7 @@ fn the_blocks_the_release_implies_are_the_blocks_in_the_file() {
         .into_iter()
         .map(|block| block.id)
         .collect();
-    assert_eq!(ids.len(), 36, "two blocks share an id");
+    assert_eq!(ids.len(), 27, "two blocks share an id");
     // `refresh` is the name that needs all three parts, and `discard` the one that needs two.
     assert!(
         ids.contains("refresh-extractor-working"),
@@ -1007,12 +1014,12 @@ fn every_release_derived_relation_round_trips() {
         .unwrap_or_else(|why| panic!("cannot read spec/data/{name}: {why}"))
     };
 
-    // **Thirty-six blocks, ninety-two lines, twenty-eight constraints, six `for`s** - the
-    // shape `P-511` left. Each is the population its relation is derived over.
+    // **The shape `P-522` left.** Each is the population its relation is derived over, and
+    // each is written down rather than counted from the generator it checks.
     for (name, generated, expected) in [
-        ("block.4x", declare::blocks(&document), 36),
-        ("line.4x", declare::lines(&document), 92),
-        ("constraint.4x", declare::constraints(&document), 28),
+        ("block.4x", declare::blocks(&document), 27),
+        ("line.4x", declare::lines(&document), 68),
+        ("constraint.4x", declare::constraints(&document), 18),
         ("for.4x", declare::fors(&document), 6),
     ] {
         assert_eq!(

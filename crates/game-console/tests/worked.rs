@@ -85,9 +85,9 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
     // **Thirty-seven since `P-498`**, and no new name with it: `renew` clears the mark on a
     // citizen as well as the one on a nature, which is one rule applied to two kinds.
     assert_eq!(
-        // **Thirty-six under twenty-five names since `P-511`**, which deleted `refuel`.
+        // **Twenty-seven under twenty names since `P-522`**, which cut nine blocks.
         blocks.len(),
-        36,
+        27,
         "the release states thirty-six blocks of recipe rows; it has {} ({blocks:?})",
         blocks.len()
     );

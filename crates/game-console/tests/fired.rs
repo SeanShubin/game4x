@@ -397,10 +397,11 @@ fn every_recipe_the_release_declares_fires_while_the_scenario_runs() {
     // **Twenty-six since `P-494` and `P-495`** added `hold`, `reclaim`, `renew` and `take`.
     //
     // **Twenty-five since `P-511`.** P-511 deleted `refuel`: pooling left it moving an energy into a unit with nowhere to move it to, and its qualifier always true.
+    // **Twenty since `P-522`**, which cut `muster`, `stand`, `hold`, `reclaim` and `take`.
     assert_eq!(
         distinct.len(),
-        25,
-        "twenty-five recipes by name when this was written; the release declares {} \
+        20,
+        "twenty recipes by name when this was written; the release declares {} \
          ({distinct:?})",
         distinct.len()
     );

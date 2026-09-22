@@ -639,10 +639,11 @@ fn every_strength_the_release_states_is_the_strength_the_model_musters() {
                 )
             })
             .collect();
+    // **Six since `P-522` took the garrison row.**
     assert_eq!(
         stated.len(),
-        7,
-        "seven things in *Units and structures*; the release lists {stated:?}"
+        6,
+        "six things in *Units and structures*; the release lists {stated:?}"
     );
 
     // **Every row, and the blank ones are the check as much as the numbered ones.** A thing
@@ -1464,9 +1465,11 @@ fn the_readies_column_declares_the_maximum_this_reads() {
         readying, 4,
         "four things ready - a citizen, an extractor and the two units - and {readying} do"
     );
+    // **Five since `P-522` took `defending` out of all three Readies cells**: a citizen
+    // readies `bearing` and `laboring`, an extractor `working`, and each unit `moving`.
     assert_eq!(
-        pairs, 8,
-        "eight kind-and-action pairs declare a maximum - a citizen's three, an extractor's \
-         one, and two each for the two units - and {pairs} do"
+        pairs, 5,
+        "five kind-and-action pairs declare a maximum - a citizen's two, an extractor's \
+         one, and one each for the two units - and {pairs} do"
     );
 }
