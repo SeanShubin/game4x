@@ -11,6 +11,63 @@ of it needs you.
 
 ## Open
 
+### P-539 - `spec/` splits into what the game is and what it will be
+
+**to** sean · **status** open · **raised** 2026-09-21 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/README.md` -> Rules for this directory
+
+**Your words, 2026-09-21:** *this may entail moving a lot of the current spec into future plans.*
+**This is the rule that lets the move happen**; the move itself is a later, larger piece of work
+and is not in this proposal.
+
+## What is there now, measured
+
+**Eighteen documents, 1,144 lines**, and a large part of them describe a game nothing is
+building:
+
+```
+combat, weapons, missiles      3 spec files each mention them; the release, none
+starbases, roads, portals      1 spec file each; the release, none
+force and garrisons            spec/control.md keeps them; P-522 cut them from the release
+```
+
+**Against that, `spec/invariants.md` and `spec/console.md` are 485 of the 1,144 lines** and are
+about how the game is *expressed* rather than what it contains - which is the half thin-engine
+has been proving out and the half that is live.
+
+**So `spec/` today mixes three things**: rules a test asserts, rules nothing builds yet, and the
+notation both are written in. **Only the first is what `P-530` made primary.**
+
+## What lands
+
+A fourth rule in `spec/README.md`, after *if it is not here, it is not decided*:
+
+> 4. **A document says what the game is, or it says what the game will be, and it says which.**
+>    What is built and asserted by a test is the specification. **What is wanted and unbuilt is a
+>    future plan** - kept, linked and findable, and not mistaken for a rule anything obeys today.
+>    **The two are told apart by where a document sits**, not by a reader remembering which is
+>    which.
+
+The rules that follow renumber.
+
+## What it does not decide
+
+**Which documents move.** That is a read of all eighteen and a decision per document, and this
+lane will file it as a plan rather than as one change. **`spec/combat.md` is the obvious case and
+`spec/control.md` is the hard one** - it holds force, which is deferred, next to winning, which
+is current.
+
+**And not where they go.** `spec/future/`, a sibling directory, or something else is a naming
+question, and this proposal deliberately says only *where a document sits* so that the answer can
+be chosen once and applied to all of them.
+
+## Why a rule rather than just moving them
+
+**Because the reason a document is in `spec/` has to be checkable.** Today a reader cannot tell
+`spec/combat.md` from `spec/turn.md` by looking - both are present tense, both normative, and one
+is asserted by fifty-four tests while the other is asserted by nothing. **A rule that says which
+is which makes the difference visible**, and makes it a defect for a document to sit in the wrong
+place rather than a matter of taste.
+
 ### P-538 - The staging bullet says the column check twice, and the second one carries a fact the first does not
 
 **to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** text · **asks** approval · **into** `CLAUDE.md` -> Perspectives
@@ -58,7 +115,12 @@ read as a zero without looking at the hits.
 
 ### P-514 - Three rows of `spec/data/line.4x` are unwritable, and this lane's own check said there was one
 
-**to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+**to** sean · **status** withdrawn · **withdrawn** 2026-09-21 · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**Withdrawn 2026-09-21, and the reason is his.** *I am fine with dumping all rules and replacing them with thin engine* - so the form `spec/data/` should take stops being a question for him and becomes whatever the engine reads. **This item asks how to write a file whose writer is being replaced.**
+
+**And the engine's data has none of these.** Measured across `spec/tests/`: zero rows carry a quantity of more than one word, against three in `spec/data/line.4x`. The shape the engine uses already avoids what this item reports.
+**Kept rather than deleted**, because `CLAUDE.md` says a rejection is recorded with its reason or the same item is filed again. **It comes back if the engine's own data turns out to have the same gap** - and for three of the five, measurement says it does not.
 
 **Read against `P-530`, 2026-09-21.** **Same as `P-513`: right about `spec/data/`, and
 `spec/data/` is in question.** The defect it reports is real either way - three rows cannot be
@@ -120,7 +182,12 @@ strength of the thing at row two*; it is a density indexed by which resource the
 relational form writes what they already say, and about one row it still cannot.
 ### P-513 - A relation names its columns, and nothing says so
 
-**to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+**to** sean · **status** withdrawn · **withdrawn** 2026-09-21 · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**Withdrawn 2026-09-21, and the reason is his.** *I am fine with dumping all rules and replacing them with thin engine* - so the form `spec/data/` should take stops being a question for him and becomes whatever the engine reads. **This item asks how to write a file whose writer is being replaced.**
+
+**And the engine's notation does not have this gap.** Every field in `prototypes/thin-engine/data/` is named, so a relation's column order is a canonical-form question rather than a parsing one - two writers cannot disagree about what a row means, only about how it looks.
+**Kept rather than deleted**, because `CLAUDE.md` says a rejection is recorded with its reason or the same item is filed again. **It comes back if the engine's own data turns out to have the same gap** - and for three of the five, measurement says it does not.
 
 **Read against `P-530`, 2026-09-21.** **This may not survive the change in direction.** It says a
 relation of `spec/data/` must declare its column order. The thin-engine states the same facts in

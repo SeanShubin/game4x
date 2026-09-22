@@ -69,6 +69,61 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-153 - The mainline keeps the rendering and loses the rules, and thin-engine stops being a prototype
+
+**to** code · **status** open · **raised** 2026-09-21 · **source** Sean, directly, in his own message
+
+**His words, and the second sentence is the one to read twice:**
+
+```
+We need to be more like thin-engine. This may entail moving a lot of the current spec into
+future plans. I want the main game to be data driven.
+
+All I really care about on the mainline is the rendering work, I am fine with dumping all
+rules and replacing them with thin engine.
+```
+
+**And incrementality is explicitly waived**: *I am not as worried about being incremental because
+we have thin-engine to fall back on.*
+
+## What that means for your column, measured rather than characterised
+
+```
+crates/game-model/src/          5,623 lines, of which rules.rs is 1,198 - the rules, as Rust
+prototypes/thin-engine/src/     4,513 lines of engine that names no game noun
+  data/friendly/                1,752 lines - 15 rules, as data
+spec/tests/                     1,983 lines - 54 tests he has read and approved
+```
+
+**`rules.rs` already knows.** Its header: *it is still Rust rather than a reading of
+`spec/data/`. The rules are data now.* **That sentence has been true on paper and false in the
+file**, and he has just said which way to resolve it.
+
+## What this lane has done and what it has not
+
+**`docs/architecture.md` has a seventeenth rule**, written rather than proposed because `docs/` is
+the shared layer: *the game's rules are data, and the mainline keeps the rendering* - and **a rule
+written in Rust is a defect and not a stage**, so the measure is that `crates/game-model` stops
+holding rules rather than holds fewer.
+
+**Five items are withdrawn**, all asking how `spec/data/` should be written: `P-513`, `P-514`,
+`P-516`, `P-517` and `P-536`. **They asked how to write a file whose writer is being replaced.**
+
+**What is not decided and is not this lane's**: how thin-engine gets from `prototypes/` to being
+the engine, what happens to `crates/game-model`, and in what order. **He said order does not
+matter and that a fallback exists**, which is as close to a free hand as this repository gives.
+
+## Two things worth saying before you start
+
+**`spec/tests/` and `reviewed/` are already his and already outside your column.** The 54 tests
+and their records moved there today. **So the engine arriving in `crates/` does not bring its
+specification with it** - the specification is already where it belongs and the engine reads it.
+
+**And `S-149`'s comparison is the gate that makes this safe.** The suite runs what he has
+approved, drift is red, and unread is counted and skipped. **Whatever replaces `rules.rs` is held
+to fifty-four tests he has read**, which is a stronger position than the one the old rules were
+ever in.
+
 ### S-152 - `P-519` deleted a sentence `first_release.rs` quotes, and the gate is red on it
 
 **to** code · **status** open · **raised** 2026-09-21 · **source** `P-519`, promoted

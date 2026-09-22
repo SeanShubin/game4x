@@ -3885,3 +3885,36 @@ said so.
 **So a stale data file was propping up stale expectations**, and neither could be seen while the
 other stood. **This lane deleted `defending` from `traits.4x` without checking what referenced it**
 and reached the same place from the other end.
+
+## Said 2026-09-21: be more like thin-engine, and the mainline keeps the rendering
+
+*We need to be more like thin-engine. This may entail moving a lot of the current spec into future
+plans. I want the main game to be data driven.*
+
+And, asked whether the split was right and in what order:
+
+*Yes, this is the right split, order doesn't matter, I want all 3, and I am not as worried about
+being incremental because we have thin-engine to fall back on. All I really care about on the
+mainline is the rendering work, I am fine with dumping all rules and replacing them with thin
+engine.*
+
+**The three he means**, put to him in that order and all three accepted:
+
+1. **The main game's rules become data.** `crates/game-model/src/rules.rs` is 1,198 lines of Rust
+   that *are* the rules; thin-engine's 4,513 lines of engine name no game noun and 15 rules live
+   in 1,752 lines of data. **The shapes are opposite**, and `rules.rs` says so in its own header:
+   *it is still Rust rather than a reading of `spec/data/`.*
+2. **`spec/` splits into what the game is now and what it will be.** Measured: 18 documents, 1,144
+   lines, of which `spec/combat.md`, the force apparatus and the orbital furniture describe a game
+   nothing is building - combat, weapons, missiles, starbases, roads and portals appear in `spec/`
+   and nowhere in the release.
+3. **`spec/data/` resolves.** Today it is a second transcription of the release that nothing
+   executes; under his answer the engine's data is the game's data.
+
+**What is new beyond the three, and it is the sharpest thing he said**: *all I really care about
+on the mainline is the rendering work.* **So `crates/` keeps the drawing and loses the rules**,
+and thin-engine stops being a prototype and becomes the engine.
+
+**And incrementality is explicitly not required.** *We have thin-engine to fall back on* - which
+is the prototype paying for itself a second way: it was built to answer whether an executable
+specification was possible, and it now makes a large replacement safe to attempt.

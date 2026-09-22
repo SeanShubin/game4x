@@ -240,6 +240,13 @@ hand-written so that results are identical on every platform, which is what make
    of the model was measured at 134 sites across 23 files and a reseed that would have left
    `R-6` unreviewed. **Relayed to this lane by the code lane rather than said to it**, and
    recorded as relayed.
+17. **The game's rules are data, and the mainline keeps the rendering.** `crates/` draws the
+   planet, serves the reports and runs the console; **what a rule does is read rather than
+   compiled**, by the engine rules 11 to 16 describe. Sean, 2026-09-21: *all I really care about
+   on the mainline is the rendering work, I am fine with dumping all rules and replacing them
+   with thin engine.* **So a rule written in Rust is a defect and not a stage** — the measure of
+   this rule is that `crates/game-model` stops holding rules, not that it holds fewer. Relayed
+   through no one; said in his own message.
 
 ## Open questions
 

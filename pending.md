@@ -8,12 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-539** - `spec/` splits into what the game is and what it will be · `decide/proposals.md`
 - **P-538** - The staging bullet says the column check twice, and the second one carries a fact the first does not · `decide/proposals.md`
-- **P-514** - Three rows of `spec/data/line.4x` are unwritable, and this lane's own check said there was one · `decide/proposals.md`
-- **P-513** - A relation names its columns, and nothing says so · `decide/proposals.md`
-- **P-536** - `spec/data/` sits in `spec/` and holds the release's data, and your ruling today made the two differ · `decide/questions.md`
-- **P-517** - `spec/data/` states the cases, and the rules are what you wanted to read · `decide/questions.md`
-- **P-516** - Moving resources: put or consume-and-produce, and how the fuel says who burnt it · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -35,8 +31,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (13)
+### To code (14)
 
+- **S-153** - The mainline keeps the rendering and loses the rules, and thin-engine stops being a prototype · `docs/notes/proposals.md`
 - **S-152** - `P-519` deleted a sentence `first_release.rs` quotes, and the gate is red on it · `docs/notes/proposals.md`
 - **S-151** - `fully exploited` is now a term the specification does not define, and you implement it · `docs/notes/proposals.md`
 - **S-150** - `P-512` landed: a unit no longer moves out of a place with no energy · `docs/notes/proposals.md`

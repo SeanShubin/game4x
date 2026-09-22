@@ -13,7 +13,12 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ### P-536 - `spec/data/` sits in `spec/` and holds the release's data, and your ruling today made the two differ
 
-**to** sean · **status** open · **raised** 2026-09-21 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `spec/data/`
+**to** sean · **status** withdrawn · **withdrawn** 2026-09-21 · **raised** 2026-09-21 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `spec/data/`
+
+**Withdrawn 2026-09-21, and the reason is his.** *I am fine with dumping all rules and replacing them with thin engine* - so the form `spec/data/` should take stops being a question for him and becomes whatever the engine reads. **This item asks how to write a file whose writer is being replaced.**
+
+**And it stops being a divergence once the engine's data is the game's data.** This item reported that `spec/data/` holds the release's facts while `spec/` keeps more; under his answer neither file is the source and the question dissolves rather than being decided.
+**Kept rather than deleted**, because `CLAUDE.md` says a rejection is recorded with its reason or the same item is filed again. **It comes back if the engine's own data turns out to have the same gap** - and for three of the five, measurement says it does not.
 
 **You ruled today that the model keeps what `spec/` keeps and a release may defer it.**
 **`spec/data/` is generated from the release**, so it now holds less than `spec/` does, while
@@ -72,7 +77,12 @@ otherwise be discovered rather than reported.
 
 ### P-517 - `spec/data/` states the cases, and the rules are what you wanted to read
 
-**to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `spec/data/`, and `C-114`
+**to** sean · **status** withdrawn · **withdrawn** 2026-09-21 · **raised** 2026-09-14 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `spec/data/`, and `C-114`
+
+**Withdrawn 2026-09-21, and the reason is his.** *I am fine with dumping all rules and replacing them with thin engine* - so the form `spec/data/` should take stops being a question for him and becomes whatever the engine reads. **This item asks how to write a file whose writer is being replaced.**
+
+**And the engine already folds.** Its 15 rules are each named once - `refresh` appears one time, not four - so `F1` is what the thing that runs does, and `spec/data/`'s four `refresh` blocks are the unfolded form of a rule the engine states once.
+**Kept rather than deleted**, because `CLAUDE.md` says a rejection is recorded with its reason or the same item is filed again. **It comes back if the engine's own data turns out to have the same gap** - and for three of the five, measurement says it does not.
 
 **Read against `P-530`, 2026-09-21.** **This is the one the change in direction most likely
 retires.** It asks whether `spec/data/` should state four rules with their cases or thirty-six
@@ -147,7 +157,12 @@ restructuring you have not decided, and this lane would rather name that than sm
 tidying.
 ### P-516 - Moving resources: put or consume-and-produce, and how the fuel says who burnt it
 
-**to** sean · **status** open · **raised** 2026-09-14 · **kind** invented · **shape** an instruction · **asks** a decision · **into** `releases/first-release.md` -> Recipes, and `spec/console.md` if the notation moves
+**to** sean · **status** withdrawn · **withdrawn** 2026-09-21 · **raised** 2026-09-14 · **kind** invented · **shape** an instruction · **asks** a decision · **into** `releases/first-release.md` -> Recipes, and `spec/console.md` if the notation moves
+
+**Withdrawn 2026-09-21, and the reason is his.** *I am fine with dumping all rules and replacing them with thin engine* - so the form `spec/data/` should take stops being a question for him and becomes whatever the engine reads. **This item asks how to write a file whose writer is being replaced.**
+
+**And the engine has already answered it by building.** `move` exists in `prototypes/thin-engine/data/friendly/rules.4x` with its clauses written out; whichever of `M1` to `M3` and `A` to `D` it amounts to is a fact to read off the rule rather than a choice to make.
+**Kept rather than deleted**, because `CLAUDE.md` says a rejection is recorded with its reason or the same item is filed again. **It comes back if the engine's own data turns out to have the same gap** - and for three of the five, measurement says it does not.
 
 **Read against `P-530`, 2026-09-21.** **The notation question may have been answered elsewhere.**
 This asks whether moving a resource is a `put` or a consume-and-produce, in the release's Recipes
