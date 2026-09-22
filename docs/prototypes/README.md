@@ -13,7 +13,7 @@ question is answered — not when it is polished.
 | [Kinds](../../prototypes/kinds/README.md)                   | What do the inputs to the gameplay logic actually look like?                                                                                                          | **Answered** 2026-08-31, below                                  |
 | [Gap view](../../prototypes/gap-view/README.md)             | Can a player set a destination anywhere on the world with one mouse gesture, without rotating anything?                                                               | Built ([code](../../prototypes/gap-view/README.md))             |
 | [Hex torus view](../../prototypes/hex-torus-view/README.md) | At the sizes the game would use, does a flat isotropic hex torus read as a world, and how visible is the wrapping? **Not whether a torus should be the game's shape** | Being built ([code](../../prototypes/hex-torus-view/README.md)) |
-| [Thin engine](../../prototypes/thin-engine/README.md)       | Can a rule run from rows of data, against an engine that names no game noun? **`C-114`'s open half, answered by existing rather than decided**                        | **Answered** 2026-09-14, below                                  |
+| [Thin engine](../../crates/thin-engine/README.md)           | Can a rule run from rows of data, against an engine that names no game noun? **`C-114`'s open half, answered by existing rather than decided**                        | **Answered** 2026-09-14, below                                  |
 | [Goldberg move](../../prototypes/goldberg-move/README.md)   | Can a player lay out a move of any length across a sphere by clicking, without the interface ever having to guess which way round he meant to go?                     | Being built ([code](../../prototypes/goldberg-move/README.md))  |
 
 ## Conventions
@@ -73,7 +73,7 @@ read added to `src/`, and `{adjacent from:1 to:3}` added to the world - each fai
 should have. **The isolation is asserted rather than promised.**
 
 Recorded from the code lane's `C-126`; the argument is in
-[`prototypes/thin-engine/README.md`](../../prototypes/thin-engine/README.md).
+[`crates/thin-engine/README.md`](../../crates/thin-engine/README.md).
 
 ## Goldberg view: answered 2026-08-30
 

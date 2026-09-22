@@ -3801,7 +3801,7 @@ and only the capability differs.
 ## Recorded 2026-09-20: where each of the prototype's three differences went
 
 **Written because one of them went nowhere and nothing said so.** The table in
-`prototypes/thin-engine/backlog.md` -> *What the prototype has settled that `spec/` has not caught
+`crates/thin-engine/backlog.md` -> *What the prototype has settled that `spec/` has not caught
 up with* has three rows. Two became proposals; the third was read, judged already-stated, and
 recorded in no file at all. **Silence and *nobody has looked yet* are the same bytes.**
 
@@ -3829,7 +3829,7 @@ Filed to the code lane as `S-142`, with the disposition of the other four things
 I lost executive control.  Thin-engine was a prototype to see if it was possible to regain executive
 control via an executable specification rather than a prose specification.*
 
-*I was convinced after reviewing tests like the ones in `prototypes/thin-engine/data/friendly/tests`
+*I was convinced after reviewing tests like the ones in `crates/thin-engine/data/friendly/tests`
 via `cargo run --example review-web`, I want to adopt this workflow for the specification as well.
 We can still have prose, and may still need it to express some things that the tests can't cover,
 but these tests are now the primary way which I ensure the game behaves as I intend it to.*

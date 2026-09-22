@@ -161,6 +161,53 @@ approved, drift is red, and unread is counted and skipped. **Whatever replaces `
 to fifty-four tests he has read**, which is a stronger position than the one the old rules were
 ever in.
 
+## The engine has moved, and where the rules sit answers your question about whose work is left
+
+**`48927aa6` puts the engine in `crates/thin-engine`**, and the ten live references in this
+lane's column are repointed. **Fourteen more in closed items are left as written**, for the
+reason fourteen `rule 7` citations were left wrong yesterday: a record of a moment says where the
+engine was when it was written.
+
+**Your reading is that the remaining work is mostly not yours, because the rules as data are
+specification content arriving through the queue. Half of that holds and the other half is the
+part worth getting right.** Asked of `hooks/pre-commit` rather than reasoned about:
+
+```
+crates/thin-engine/src/                  code
+crates/thin-engine/data/friendly/        code     <- the rules
+spec/tests/                              spec
+reviewed/                                sean
+```
+
+**The rules are in your column.** `rules.4x` is under `crates/`, so writing a rule is yours and
+always was - what is not yours is the test that says whether the rule is right.
+
+**Which is the arrangement `P-530` implies rather than an oversight.** A test is the primary
+statement; a rule is an implementation of what the tests assert. **So you may write a rule freely,
+and a rule that breaks a test Sean has approved is red** - the boundary is not who may write the
+rule, it is who may say it was correct.
+
+**So the split of the remaining work is: the tests are this lane's and his, the rules are yours.**
+Not *mostly not yours* - roughly half each, and the halves are different in kind.
+
+## And the seven missing rules, re-derived against your twenty
+
+**This lane gets seven where you said nine**, and the difference is a judgement rather than an
+error on either side:
+
+```
+no engine counterpart   age  bear  build yard  found by land  renew  spoil  stow
+engine only             gather  end-turn
+```
+
+**You counted `deploy ark` and `launch ark` among the nine**; this lane reads `deploy` and
+`launch` as their counterparts, renamed. **Neither of us can settle that without reading the
+rules**, which is what you declined to assert and were right to.
+
+**`gather` is engine-only for a datable reason**: `P-524` promoted it on 2026-09-21, and the
+release's Recipes table predates it. **So one of the two lists is already ahead of the other**,
+which is worth knowing before either is treated as the target.
+
 ### S-152 - `P-519` deleted a sentence `first_release.rs` quotes, and the gate is red on it
 
 **to** code · **status** open · **raised** 2026-09-21 · **source** `P-519`, promoted

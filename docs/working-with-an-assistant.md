@@ -1,6 +1,6 @@
 # Working with an assistant
 
-**Derived.** Written by Claude, 2026-09-18, from one long session on `prototypes/thin-engine`. **The
+**Derived.** Written by Claude, 2026-09-18, from one long session on `crates/thin-engine`. **The
 method is Sean's and the analysis is Claude's**, which is the honest split: he stated the two rules
 and applied them, and what follows is a record of where they bit and why they worked.
 
@@ -123,7 +123,7 @@ And 2026-09-17, on where numbers must live:
 
 **That second one overturned a layer boundary.** The assistant had put an allowance in the ruleset,
 where a test could not show it; keeping the tests auditable was worth more than keeping the layer
-clean, and `prototypes/thin-engine/layers.md` now records the precedence.
+clean, and `crates/thin-engine/layers.md` now records the precedence.
 
 **The review mechanism is the same constraint made mechanical.** Every test carries a copy of the
 version he last read, and it says *drifted* the moment the test changes. He named its value himself

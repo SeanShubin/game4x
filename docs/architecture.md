@@ -193,7 +193,7 @@ hand-written so that results are identical on every platform, which is what make
    moves rows around without knowing what any of them mean, so **a second rule is rows and no
    code** — and that is the test of whether this holds. The check reads every relation and rule
    name out of the data rather than carrying a list of its own, so it widens as the game does:
-   `prototypes/thin-engine/tests/isolation.rs`, which drops comments and `#[cfg(test)]` and
+   `crates/thin-engine/tests/isolation.rs`, which drops comments and `#[cfg(test)]` and
    refuses any of those words in code that runs. **It has caught things it was not written
    for** — a local named `found`; `place` reintroduced by the very check that exists because
    places have layers; and `collect` and `store` colliding with Rust's own words, where the
@@ -206,7 +206,7 @@ hand-written so that results are identical on every platform, which is what make
    primitives are a closed list, and keeping it short is a goal rather than an accident. Adding
    one is a change to the program, so what is on it is decided once and deliberately.* **Deciding
    it once is not a property prose can hold**, because nothing in a diff distinguishes a primitive
-   that was decided from one that was added. *Enforced by* `prototypes/thin-engine/tests/engine.rs`
+   that was decided from one that was added. *Enforced by* `crates/thin-engine/tests/engine.rs`
    against `data/engine.4x`. **It is the rule that keeps the other four true over time** — thinness
    is not a state that is reached but a rate that is held, and this is the only mechanism here that
    makes *growing* the engine visible.
@@ -214,7 +214,7 @@ hand-written so that results are identical on every platform, which is what make
    each value in turn; anything that survives with the suite still green is a finding, and is
    written down with the reason it survived. Sean, 2026-09-15: *there should not be a single value
    I can change or delete that doesn't end up breaking something.* *Enforced by*
-   `prototypes/thin-engine/tests/mutation.rs`. **What it has caught is two missing tests rather
+   `crates/thin-engine/tests/mutation.rs`. **What it has caught is two missing tests rather
    than two dead rows** — a refusal nothing tested, and a test that asserted nothing at all — which
    is the sweep reporting on the checks rather than on the data.
 14. **A check asserts the size of the population it checked.** *A count over nothing is the same
