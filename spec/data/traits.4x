@@ -3,7 +3,6 @@
 {trait name:laboring admits:number kept:thing}
 {trait name:working admits:number kept:thing}
 {trait name:bearing admits:number kept:thing}
-{trait name:defending admits:number kept:thing}
 {trait name:resource admits:resource kept:thing}
 {trait name:strength admits:number kept:kind}
 {trait name:fuel admits:number kept:kind}
@@ -15,8 +14,6 @@
 {trait name:occupied admits:number kept:thing}
 {trait name:free admits:number kept:thing}
 {trait name:control admits:number kept:thing}
-{trait name:biome admits:value kept:thing}
-{trait name:met admits:number kept:thing}
 {trait name:from admits:place kept:thing}
 {trait name:to admits:place kept:thing}
 {trait name:keeps of:thing admits:number kept:thing}

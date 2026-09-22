@@ -3,7 +3,6 @@
 {kind name:family}
 {kind name:value}
 {kind name:citizen}
-{kind name:garrison}
 {kind name:extractor}
 {kind name:yard}
 {kind name:store}
@@ -19,5 +18,3 @@
 {kind name:adjacency}
 {kind name:game}
 {kind name:fertility}
-{kind name:nature}
-{kind name:force}

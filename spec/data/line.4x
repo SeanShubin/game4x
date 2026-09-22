@@ -1,21 +1,17 @@
 {line block:deploy-ark seq:1 role:require qty:1 kind:territory place-bound:where}
-{line block:deploy-ark seq:2 role:require qty:1 kind:force}
-{line block:deploy-ark seq:3 role:consume qty:1 kind:ark place-above:where}
-{line block:deploy-ark seq:4 role:produce qty:1 kind:garrison}
-{line block:deploy-ark seq:5 role:produce qty:2 kind:citizen}
-{line block:deploy-ark seq:6 role:produce qty:1 kind:extractor}
-{line block:deploy-ark seq:7 role:produce qty:1 kind:extractor}
+{line block:deploy-ark seq:2 role:consume qty:1 kind:ark place-above:where}
+{line block:deploy-ark seq:3 role:produce qty:2 kind:citizen}
+{line block:deploy-ark seq:4 role:produce qty:1 kind:extractor}
+{line block:deploy-ark seq:5 role:produce qty:1 kind:extractor}
 {line block:move seq:1 role:require qty:1 kind:place place-bound:from}
 {line block:move seq:2 role:require qty:1 kind:place place-bound:to}
 {line block:move seq:3 role:require qty:1 kind:unit place-bound:from}
 {line block:move seq:4 role:put kind:unit place-bound:to}
 {line block:move seq:5 role:consume qty:1 kind:energy place-bound:from}
 {line block:found-by-land seq:1 role:consume qty:1 kind:pioneer}
-{line block:found-by-land seq:2 role:require qty:1 kind:force}
-{line block:found-by-land seq:3 role:produce qty:1 kind:garrison}
-{line block:found-by-land seq:4 role:produce qty:2 kind:citizen}
-{line block:found-by-land seq:5 role:produce qty:1 kind:extractor}
-{line block:found-by-land seq:6 role:produce qty:1 kind:extractor}
+{line block:found-by-land seq:2 role:produce qty:2 kind:citizen}
+{line block:found-by-land seq:3 role:produce qty:1 kind:extractor}
+{line block:found-by-land seq:4 role:produce qty:1 kind:extractor}
 {line block:build-extractor seq:1 role:consume qty:1 kind:labor}
 {line block:build-extractor seq:2 role:consume qty:1 kind:metal}
 {line block:build-extractor seq:3 role:produce qty:1 kind:extractor}
@@ -68,25 +64,5 @@
 {line block:refresh-citizen-laboring seq:1 role:put kind:citizen}
 {line block:refresh-citizen-bearing seq:1 role:put kind:citizen}
 {line block:refresh-extractor-working seq:1 role:put kind:extractor}
-{line block:muster seq:1 role:require qty:1 kind:garrison}
-{line block:muster seq:2 role:require qty:1 kind:citizen}
-{line block:muster seq:3 role:put kind:citizen}
-{line block:muster seq:4 role:produce qty:that citizen's strength kind:force}
-{line block:stand seq:1 role:require qty:1 kind:unit}
-{line block:stand seq:2 role:put kind:unit}
-{line block:stand seq:3 role:produce qty:that unit's strength kind:force}
-{line block:refresh-citizen-defending seq:1 role:put kind:citizen}
-{line block:refresh-unit-defending seq:1 role:put kind:unit}
-{line block:hold seq:1 role:require qty:1 kind:nature}
-{line block:hold seq:2 role:consume qty:1 kind:force}
-{line block:hold seq:3 role:put kind:nature}
-{line block:reclaim seq:1 role:require qty:1 kind:nature}
-{line block:reclaim seq:2 role:consume qty:1 kind:citizen}
-{line block:renew-nature seq:1 role:require qty:1 kind:nature}
-{line block:renew-nature seq:2 role:put kind:nature}
-{line block:renew-citizen seq:1 role:require qty:1 kind:citizen}
-{line block:renew-citizen seq:2 role:put kind:citizen}
-{line block:take seq:1 role:require qty:1 kind:nature}
-{line block:take seq:2 role:consume qty:1 kind:nature}
-{line block:take seq:3 role:consume qty:1 kind:force}
-{line block:discard-force seq:1 role:consume qty:1 kind:force}
+{line block:renew seq:1 role:require qty:1 kind:citizen}
+{line block:renew seq:2 role:put kind:citizen}

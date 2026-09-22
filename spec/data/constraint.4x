@@ -15,14 +15,4 @@
 {constraint block:refresh-citizen-laboring seq:1 trait:laboring compare:at-maximum}
 {constraint block:refresh-citizen-bearing seq:1 trait:bearing compare:at-maximum}
 {constraint block:refresh-extractor-working seq:1 trait:working compare:at-maximum}
-{constraint block:muster seq:2 trait:defending compare:at-least n:1}
-{constraint block:muster seq:3 trait:defending compare:one-less}
-{constraint block:stand seq:1 trait:defending compare:at-least n:1}
-{constraint block:stand seq:2 trait:defending compare:one-less}
-{constraint block:refresh-citizen-defending seq:1 trait:defending compare:at-maximum}
-{constraint block:refresh-unit-defending seq:1 trait:defending compare:at-maximum}
-{constraint block:hold seq:1 trait:met compare:exactly n:0}
-{constraint block:hold seq:3 trait:met compare:at-maximum}
-{constraint block:reclaim seq:1 trait:met compare:exactly n:0}
-{constraint block:renew-nature seq:2 trait:met compare:exactly n:0}
-{constraint block:renew-citizen seq:2 trait:paid compare:exactly n:0}
+{constraint block:renew seq:2 trait:paid compare:exactly n:0}
