@@ -371,16 +371,14 @@ that used to be kept is lost at a turn's end. `scenario/expected/play.4x` was re
 - **Vetted when** - the scenario takes a first territory from orbit, takes a second by land, and
   launches an Ark; and **every recipe in the release fires at least once while it runs**, measured
   by what fired rather than by what the file says. **It does not win, and that is the win condition
-  working**: `spec/control.md` gives victory for launching from a fully exploited planet, and this
-  planet is not one
+  working**: victory takes a launch from a territory other than the one the Ark deployed to, and
+  this scenario deploys to territory 1 and launches from territory 1
 
 - **Nothing in the code blocks it, as of 2026-09-05.** `C-7` was withdrawn on the 31st; `C-11` landed in `05097a6` and a territory's stores carry; `C-9` landed in `ec96bc9` and *fully exploited* is decidable from a territory alone. **What is now in question is not whether it can be played but how much of it has to be** - `P-422`.
-- **Measured 2026-09-11, and the first half of the *vetted when* does not hold.** `C-95`, in
-  `d7ed1e8`: running `setup.4x`, `{start}` and `play.4x` and asking the model gives **twelve
-  claimable territories, two founded, none at maximum output**, with `is_fully_exploited` and
-  `has_won` both false. It does launch an Ark, at line 164 of a 133-command scenario, so the second
-  half holds. **The code lane does not set this `built` and this lane has not recorded it as
-  such.**
+- **Measured 2026-09-11.** Running `setup.4x`, `{start}` and `play.4x` and asking the model
+  gives **twelve claimable territories, two founded, none at maximum output**. It launches an
+  Ark at line 164. **These numbers were taken against an older *vetted when*** that asked for a
+  fully exploited planet, which the release no longer requires.
 - **The gap is not a near miss**, which is the part a summary loses. `tests/fully_exploited.rs:410`
   derives **57 buildings**, which is **114 commands and counts nothing else** - each building is the
   labor that pays for it and the building, read off the predicate at `:404`. **It is a floor**, and
