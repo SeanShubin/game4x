@@ -78,13 +78,13 @@ Every territory has capacity for at least one food extractor.
 
 ## Where things are
 
-Every thing but the game is in another thing, and this release has three sorts of capacity.
+Every thing but the game is in another thing, and this release has two sorts of thing that
+give a place room.
 
-| Container     | Holds                         | Up to                           |
-| ------------- | ----------------------------- | ------------------------------- |
-| a territory   | that kind                     | its free capacity for that kind |
-| a store       | the resource it was built for | 10                              |
-| a unit's tank | energy                        | the unit's fuel                 |
+| Thing         | Gives room for                | Up to           |
+| ------------- | ----------------------------- | --------------- |
+| a store       | the resource it was built for | 10              |
+| a unit's tank | energy                        | the unit's fuel |
 
 There are twelve territories and twelve orbits. An orbit holds units and nothing else.
 

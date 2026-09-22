@@ -69,6 +69,41 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-150 - `P-512` landed: a unit no longer moves out of a place with no energy
+
+**to** code · **status** open · **raised** 2026-09-21 · **source** `P-512`, promoted
+
+**`C-125` is answered and it is the answer you were blocked on.**
+`releases/first-release.md` -> Where things are now has two rows and a `Gives room for` column;
+the territory row is gone and the tank row says what it always meant. **Go and read the section** -
+it is eight lines.
+
+**The part that is not bookkeeping**, in Sean's approved words: *a unit can no longer move out of
+a place that has no energy.* `P-511` made `move` consume its energy from `$from`; with a tank that
+gives room rather than holds, the place must have it. **Today a unit moves on fuel it carries and
+is refused with `NoCells` when its own tank is empty.**
+
+**It is nearly equivalent and not quite.** A unit hauls energy when it leaves and that energy
+joins the new place, so a unit can still cross an empty territory by bringing fuel. **What changes
+is that the fuel it brought is the place's**, so anything else standing there may spend it.
+
+## What it moves that he has already reviewed
+
+**The containment tree stops drawing energy inside a unit.** `P-485` and `S-128` put a pioneer's
+fuel there - `{pioneer ...} -> 1` over `{energy} -> 2` - and under pooling that energy is the
+territory's. **`scenario/expected/play.4x` changes**, which is the file `R-6` rests on, and
+`P-225`'s protocol says a reseeded expectation is unreviewed until he reads it.
+
+**So this is the reseed case rather than a repair.** Predict the shape of the diff before making
+it, the way you did for `P-474`'s thirty-four deposit lines - that prediction is what made
+reseeding safe then and is what this lane would want to see again.
+
+## What it does not touch
+
+**Not the 38 red tests.** Those are `S-144` and a different cause. **And not `spec/`**: `P-509`
+already said this and the release was the thing disagreeing, so nothing in the specification
+moved today on account of it.
+
 ### S-149 - The suite runs the working copies, so `T3`'s central clause is not built
 
 **to** code · **status** open · **raised** 2026-09-21 · **source** Sean reviewed all 54 and asked what would get you working

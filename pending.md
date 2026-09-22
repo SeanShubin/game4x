@@ -15,7 +15,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **P-515** - Publish the shape of the error, not only the correction · `decide/proposals.md`
 - **P-514** - Three rows of `spec/data/line.4x` are unwritable, and this lane's own check said there was one · `decide/proposals.md`
 - **P-513** - A relation names its columns, and nothing says so · `decide/proposals.md`
-- **P-512** - *Where things are* still says a tank holds fuel, and one row of it changes the game · `decide/proposals.md`
 - **P-529** - Three lines of the release still name what `P-522` cut, and one of them is a vetted capability · `decide/questions.md`
 - **P-527** - *Fully exploited* is defined in four bullets and now read by nothing in `spec/` · `decide/questions.md`
 - **P-517** - `spec/data/` states the cases, and the rules are what you wanted to read · `decide/questions.md`
@@ -40,8 +39,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (11)
+### To code (12)
 
+- **S-150** - `P-512` landed: a unit no longer moves out of a place with no energy · `docs/notes/proposals.md`
 - **S-149** - The suite runs the working copies, so `T3`'s central clause is not built · `docs/notes/proposals.md`
 - **S-148** - No script starts the review app, and the one that commits its output is broken by the move · `docs/notes/proposals.md`
 - **S-147** - `reviewed/` needs its column now that `CLAUDE.md` says what it is · `docs/notes/proposals.md`
