@@ -11,41 +11,6 @@ of it needs you.
 
 ## Open
 
-### P-534 - One sentence still says *no instance writes it*, flatly
-
-**to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** text · **asks** approval · **into** `CLAUDE.md` -> Perspectives
-
-**Filed the moment `P-533` landed**, which is what that proposal's own rule requires.
-
-`P-533` defined what writing a record means - creating, deleting, or changing what one says - and
-said plainly that committing is none of those. **The paragraph before it still opens with the
-undefined version.**
-
-```
-**`reviewed/` is the record of what Sean has read, and no instance writes it.**
-```
-
-**Read in order the reader meets the broad claim first and the narrowing three sentences later**,
-which is the order that produced the question you asked: *isn't this problem going to keep coming
-up as I review tests?* **A reader who stops at the first paragraph concludes it will.**
-
-## What lands
-
-That opening clause becomes:
-
-> **`reviewed/` is the record of what Sean has read, and no instance creates or deletes one.**
-
-## What it costs, which is one shade of emphasis
-
-**The broad sentence is more forbidding and that was its appeal.** *No instance writes it* is easy
-to remember and hard to misread in the direction that matters. **What it cost was one review
-session's records going untracked and eight before that** - so the memorable version is the one
-that was not followed, and the precise version is the one that can be.
-
-**Nothing else in the four paragraphs needs it.** The fourth says *a lane that could write the
-record could approve its own work*, which is true under the narrowed meaning and reads the same
-way.
-
 ### P-528 - One fact about adjacency is now stated three times, in two files
 
 **to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** approval · **into** `spec/orbit.md` -> Crossing between layers, and `spec/planet.md` -> Distance

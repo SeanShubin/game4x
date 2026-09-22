@@ -79,9 +79,9 @@ application, and the key that records the reading is *promote* said another way.
 is the same and is checked more often** - a promotion is verified once, at the moment of
 copying, and a test is compared against the record on every build.
 
-**`reviewed/` is the record of what Sean has read, and no instance writes it.** A copy of a test
-as he approved it lands there when he says so, and nothing else puts a file there or takes one
-away. **It is tracked, which is what makes it different from `temporary-notes/`**: that
+**`reviewed/` is the record of what Sean has read, and no instance creates or deletes one.** A
+copy of a test as he approved it lands there when he says so, and nothing else puts a file there
+or takes one away. **It is tracked, which is what makes it different from `temporary-notes/`**: that
 directory is addressed to nobody, and this one is what every lane is measured against.
 **The suite runs the copies in it**, so a test nobody has read constrains nothing and a test he
 has read is red until the code obeys it.
