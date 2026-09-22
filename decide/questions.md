@@ -11,6 +11,67 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
+### P-532 - Fifty-three tests have to cross a column boundary, and nothing may carry them
+
+**to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** a decision · **into** `spec/tests/`, `reviewed/`, and the prototype
+
+**Filed the moment `P-530` and `P-531` landed**, which is what both said would happen.
+
+**`CLAUDE.md` now says a test lives in `spec/tests/` and the suite runs the copies in
+`reviewed/`. Neither directory exists.** The fifty-three tests you have read are in
+`prototypes/thin-engine/data/foundation/tests`, and the records of your reading them are in
+`prototypes/thin-engine/reviewed` - **both in the code lane's column, and `spec/` is this lane's.**
+
+```
+prototypes/thin-engine/data/foundation/tests/*.4x   53   code lane's column
+prototypes/thin-engine/reviewed/*.4x                52   code lane's column
+```
+
+## Why nobody can simply do it
+
+**`hooks/pre-commit` refuses a commit that spans two columns**, and a move is a delete in one and
+an add in the other. **So the move is two commits by two lanes**, or one by whoever you say.
+
+**And the records are the harder half.** A test file is just bytes; **a record is the evidence
+that you read something**, and it is the one artifact `CLAUDE.md` now says no instance may write.
+**Copying fifty-two of them is writing them**, which is exactly what the rule forbids - so this
+cannot be done under the rule it is implementing.
+
+## The three ways
+
+**`M1` - they stay where they are, and the prototype becomes the home.** `spec/tests/` is a name
+for `prototypes/thin-engine/data/foundation/tests`, reached by whatever runs it. **No move, no
+records copied, and the rule is satisfied by renaming a column rather than moving a file.** The
+cost is that the tests sit inside a directory called `prototypes`, which says the opposite of what
+they now are.
+
+**`M2` - you move them.** The rule says no instance writes `reviewed/`; **you are not an
+instance.** A copy by hand, or a one-off run of the review application against the new location,
+and the records are yours from the first byte. The cost is your afternoon.
+
+**`M3` - the records are rebuilt rather than moved.** Nothing is copied; you re-approve fifty-three
+tests through the application in its new home. **The strongest, because every record is then one
+you made under the rule**, and the most expensive - it is the reading you have already done, done
+again.
+
+## What this lane would say
+
+**`M1` now and `M2` or `M3` when the application moves**, because the thing that makes the tests
+awkward where they are is a directory name rather than anything real. **The prototype has stopped
+being a prototype** - its question was answered, its differences table is empty, and what is left
+in it is the specification and the tool that reads it.
+
+**But `M1` needs one thing to be honest**: `prototypes/README.md` says what a prototype is, and a
+directory holding the specification is not one. **Renaming it is a bigger change than this
+proposal** and it is the shape the answer probably takes.
+
+## What follows either way, and it is not small
+
+**Rule 3 now says a rule the tests assert is not written in prose as well.** Seventeen documents
+in `spec/` state rules that fifty-three tests assert. **Nothing is duplicated today**, because no
+test is in `spec/` yet - **the moment one is, that rule starts cutting**, and working out which
+prose goes is a read this lane will file as a plan rather than as one change.
+
 ### P-529 - Three lines of the release still name what `P-522` cut, and one of them is a vetted capability
 
 **to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** a decision · **into** `releases/first-release.md`

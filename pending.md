@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-532** - Fifty-three tests have to cross a column boundary, and nothing may carry them · `decide/proposals.md`
 - **P-528** - One fact about adjacency is now stated three times, in two files · `decide/proposals.md`
 - **P-520** - `R-6` says it is built, and eleven lines down says this lane has not recorded it as such · `decide/proposals.md`
 - **P-519** - One clause is stated twice in `spec/console.md`, and the invariants forbid exactly that · `decide/proposals.md`
@@ -17,6 +16,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **P-514** - Three rows of `spec/data/line.4x` are unwritable, and this lane's own check said there was one · `decide/proposals.md`
 - **P-513** - A relation names its columns, and nothing says so · `decide/proposals.md`
 - **P-512** - *Where things are* still says a tank holds fuel, and one row of it changes the game · `decide/proposals.md`
+- **P-532** - Fifty-three tests have to cross a column boundary, and nothing may carry them · `decide/questions.md`
 - **P-529** - Three lines of the release still name what `P-522` cut, and one of them is a vetted capability · `decide/questions.md`
 - **P-527** - *Fully exploited* is defined in four bullets and now read by nothing in `spec/` · `decide/questions.md`
 - **P-517** - `spec/data/` states the cases, and the rules are what you wanted to read · `decide/questions.md`
