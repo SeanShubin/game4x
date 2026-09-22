@@ -200,7 +200,23 @@ fn only_a_generator_or_a_check_reads_a_report() {
             // shipping binary's `main.rs` is now inside the sighted region too, and the path
             // cannot tell a generator from a consumer. What holds that down is the
             // population below.
-            let generator = relative.contains("/src/bin/") || relative.ends_with("/src/main.rs");
+            // **An example is a generator here too, and this is the second widening.**
+            // `crates/thin-engine/examples/report.rs` writes `report.html`, and the nine
+            // `crates/game-console/examples/declared-*.rs` write the `spec/data/` files -
+            // so an example that prints a generated artifact is this repository's ordinary
+            // form for a generator with no reason to be a second binary.
+            //
+            // **It surfaced when the engine moved out of `prototypes/` on 2026-09-22.**
+            // `S-153` put it under `crates/`, where this check looks; nothing about the file
+            // changed. So the rule had a hole the whole time and a move is what walked into
+            // it, which is worth more than the one line it costs to close.
+            //
+            // **Said rather than done quietly, for the reason the paragraph above says it**:
+            // this widens the sighted region again, and what holds it down is still the
+            // population below rather than the shape of a path.
+            let generator = relative.contains("/src/bin/")
+                || relative.ends_with("/src/main.rs")
+                || relative.contains("/examples/");
             let check = relative.contains("/tests/");
             if !generator && !check {
                 trespass.push(relative);
@@ -209,12 +225,16 @@ fn only_a_generator_or_a_check_reads_a_report() {
     }
 
     readers.sort();
+    // **Thirteen since `S-153`**, where the floor was seven: the engine's own report reader
+    // arrived with the move into `crates/`. Raised rather than left, because a floor set for
+    // one population is a literal about a different one the moment the population moves.
     assert!(
-        readers.len() >= 7,
+        readers.len() >= 13,
         "only {} file(s) name the reports directory, and there were seven - {readers:?}. \
          A predicate that finds nothing passes while checking nothing, and one that finds \
          most of them passes while missing the rest, which is `Q-56` exactly. If a reader \
-         was deliberately removed, lower this with it and say so.",
+         was deliberately removed, lower this with it and say so. It was seven until the \
+         engine moved into `crates/`.",
         readers.len()
     );
     assert!(
