@@ -11,6 +11,54 @@ of it needs you.
 
 ## Open
 
+### P-537 - The window is mostly the hook's own run, and it is now closed
+
+**to** sean · **status** open · **raised** 2026-09-21 · **kind** measured · **shape** text · **asks** approval · **into** `CLAUDE.md` -> Perspectives
+
+**This is the last one and it can wait as long as you like.** Nothing depends on it and the
+hazard it describes is already fixed in the hook. It is filed because the sentence below is now
+telling a reader something that has stopped being true.
+
+```
+CLAUDE.md   the window is between your `git add` and your `git commit`, and checking for the
+            lock falls before it
+```
+
+**True, and it hides where the seconds are.** Measured today, after the race swallowed twenty
+lines of the code lane's work into a promotion commit of this lane's:
+
+```
+hooks/pre-commit   the column check   line 107
+                   356 lines long
+                   ~2 seconds on an empty index, longer with files staged
+```
+
+**So the index is read near the start and the commit is built after the end**, with the padder,
+`tools/outbox` three times and `tools/spec` in between. **The window was not an instant - it was
+most of a hook run**, and a `git add` from another lane landing in it goes into a commit the hook
+has already approved.
+
+**The code lane closed it**: the column check is now a function called twice, once before the
+tools and once after, and it says which call refused, because *the index changed while this hook
+was running* is a different thing for a reader to act on.
+
+## What lands
+
+The sentence becomes:
+
+> **Staging by name bounds what you add and not what you commit**, so no amount of care closes
+> it: the window runs from your `git add` to the moment git builds the commit, and most of it is
+> `hooks/pre-commit`'s own run. **The hook checks the columns twice for that reason**, before its
+> tools and after them, and `hooks/post-commit` reports the instant after it returns, which is
+> the only part nothing can refuse.
+
+## Why it is worth the read at all
+
+**Because the old sentence says no amount of care closes it, and now most of it is closed.** A
+lane reading the file today learns that the race is unavoidable and that staging by name is the
+only defence. **It is neither of those things any more**, and the next instance would be an
+instant rather than ten seconds.
+
 ### P-514 - Three rows of `spec/data/line.4x` are unwritable, and this lane's own check said there was one
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
