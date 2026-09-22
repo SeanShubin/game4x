@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-531** - `T3`: the approved copy is the specification, and three columns follow · `decide/proposals.md`
 - **P-530** - The specification is executable, and prose is what the tests cannot say · `decide/proposals.md`
 - **P-528** - One fact about adjacency is now stated three times, in two files · `decide/proposals.md`
 - **P-520** - `R-6` says it is built, and eleven lines down says this lane has not recorded it as such · `decide/proposals.md`
@@ -17,7 +18,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **P-514** - Three rows of `spec/data/line.4x` are unwritable, and this lane's own check said there was one · `decide/proposals.md`
 - **P-513** - A relation names its columns, and nothing says so · `decide/proposals.md`
 - **P-512** - *Where things are* still says a tank holds fuel, and one row of it changes the game · `decide/proposals.md`
-- **P-531** - Where the tests live, and the question it turns out to be instead · `decide/questions.md`
 - **P-529** - Three lines of the release still name what `P-522` cut, and one of them is a vetted capability · `decide/questions.md`
 - **P-527** - *Fully exploited* is defined in four bullets and now read by nothing in `spec/` · `decide/questions.md`
 - **P-517** - `spec/data/` states the cases, and the rules are what you wanted to read · `decide/questions.md`
@@ -35,13 +35,15 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-531** - `1b71e8e` P-531: the workflow is T3, and bulk approval needs a classifier nothing has · still open in `decide/proposals.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (8)
+### To code (9)
 
+- **S-146** - `reviewed/` needs a column in `hooks/pre-commit`, which is one `case` line · `docs/notes/proposals.md`
 - **S-144** - `biomes_can_be_held.rs` reads a table `P-522` deleted, and all three failures are correct · `docs/notes/proposals.md`
 - **S-135** - The relational model has no rendering, and the person it was for cannot read it · `docs/notes/proposals.md`
 - **S-133** - The two follow-ons from pooling, which this lane owed you and did not file · `docs/notes/proposals.md`

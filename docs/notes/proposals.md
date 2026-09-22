@@ -69,6 +69,43 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-146 - `reviewed/` needs a column in `hooks/pre-commit`, which is one `case` line
+
+**to** code · **status** open · **raised** 2026-09-21 · **source** `P-531`, and the measurement under it
+
+**Sean chose `T3`**: the approved copy of a test is the specification, the suite runs it, and
+`reviewed/` is written by no instance. **The rule is in `P-531` and unpromoted; this is the half
+that is yours and is not waiting on him**, because the line is harmless before the rule and
+required after it.
+
+```
+hooks/pre-commit, column_of()
+  temporary-notes/*) echo "sean" ;;
+  <reviewed's path>) echo "sean" ;;     <- this, or a column of its own
+```
+
+**Today an unrecognised path is *unassigned***, which the hook lists in a refusal and never
+refuses for. **So a commit touching the approval record alongside anything else is allowed**, and
+after `P-531` that is the one commit shape the whole guarantee turns on.
+
+## Why it is `sean` rather than a new word, and why that may be wrong
+
+**`temporary-notes/` already means *his, and no instance writes here***, which is the property
+wanted. **But the two differ in a way that may matter to you**: that one is untracked and
+addressed to nobody, and this one is tracked and is what every lane is measured against. **If a
+distinct column buys a better refusal message, take it** - this lane is naming the property, not
+the implementation.
+
+## What it does not ask for
+
+**Nothing about where `reviewed/` sits.** `P-531` guesses at a name and says plainly that the
+name is not load-bearing. **The line can be written against whatever path it ends up at**, and
+writing it against the prototype's current one today would be a fair reading of this item.
+
+**And nothing about running the approved copies.** That is the other half of `T3` and it is a
+change to what the suite reads; it waits on the promotion, because before it the rule does not
+exist and after it the rule says so.
+
 ### S-145 - Two approval records point at tests that do not exist, and nothing walks that direction
 
 **to** code · **status** acted · **acted** 2026-09-21 · **cited** `e15ba69` · **raised** 2026-09-21 · **source** verifying the `reviewed/` mechanism for `P-530`

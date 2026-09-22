@@ -11,6 +11,80 @@ of it needs you.
 
 ## Open
 
+### P-531 - `T3`: the approved copy is the specification, and three columns follow
+
+**to** sean · **status** open · **raised** 2026-09-21 · **kind** recovered · **shape** text · **asks** approval · **into** `CLAUDE.md` -> Perspectives
+
+**You chose `T3` on 2026-09-21**, having read the options and the workflow reading of them. **This
+is the rewrite that answer requires**: an answered question is not a promotion, so what follows is
+words to read rather than a decision already made. The reasoning is in
+[`docs/notes/decisions.md`](../docs/notes/decisions.md).
+
+**This file is the one no instance may carry an approval for**, so *promote P-531* has to arrive
+from you in your own message. Written into the item rather than left to be remembered, because the
+moment it would be easiest to skip is this one.
+
+## What lands, and it is three paragraphs in one section
+
+Into `CLAUDE.md` -> Perspectives, after the paragraph about `temporary-notes/`:
+
+> **A test in `spec/tests/` arrives the way everything in `spec/` arrives: Sean has read it.**
+> What differs is the interface. A proposal is read in the queue and a test is read in the review
+> application, and the key that records the reading is *promote* said another way. **The guarantee
+> is the same and is checked more often** - a promotion is verified once, at the moment of
+> copying, and a test is compared against the record on every build.
+
+> **`reviewed/` is the record of what Sean has read, and no instance writes it.** A copy of a test
+> as he approved it lands there when he says so, and nothing else puts a file there or takes one
+> away. **It is tracked, which is what makes it different from `temporary-notes/`**: that
+> directory is addressed to nobody, and this one is what every lane is measured against.
+> **The suite runs the copies in it**, so a test nobody has read constrains nothing and a test he
+> has read is red until the code obeys it.
+
+> **It is neither producer's, for a different reason each.** The specification lane writes the
+> tests, so a lane that could also write the record could approve its own work. The code lane is
+> what the tests constrain, so a lane that could write the record could clear a failure by editing
+> the approval instead of the code. **The record is the one artifact whose whole value is that
+> nobody judged by it can touch it** - which is why the review application is the code lane's, the
+> same reason a lens never edits what it reviews.
+
+## What it changes for each lane, stated so you can check it against the table above it
+
+**The specification lane gains a job and loses nothing.** `spec/tests/` is already inside `spec/`,
+so the *Writes* column needs no edit; what changes is that this lane turns your prose into tests
+rather than only into prose.
+
+**The code lane loses an escape and gains a constraint it cannot argue with.** It cannot edit a
+test - not its column, and `hooks/pre-commit` refuses a commit that spans two. **A red test is the
+specification saying no**, and the only ways out are changing the code or your re-reading a changed
+test.
+
+**And one lane gains nothing, which is the point.** Neither writes `reviewed/`.
+
+## What this does not settle
+
+**Whether `spec/tests/` and `reviewed/` are the right names.** Both are this lane's guess and
+neither is load-bearing; say other words and they become other words.
+
+**How the tests get there from the prototype.** Fifty-three exist in
+`prototypes/thin-engine/data/foundation/tests`, every one read and approved by you, and moving
+them is work rather than a rule. **It is not in this proposal** because the rule should be true
+before anything moves under it.
+
+**Bulk approval.** You set it aside and nothing here depends on it. **One test at a time is the
+only scale at which *no other kinds of changes* is something you have checked**, and that stays
+true until the application can classify a change set.
+
+**And `P-530` is still open.** That one says the test is the primary statement and prose says what
+a test cannot; this one says where the tests live and who may touch the record. **They are
+independent** - either can land without the other - **and neither is complete alone.**
+
+## What the code lane has to do before the rule is enforced rather than stated
+
+**One `case` line in `hooks/pre-commit`**, so that `reviewed/` is a column rather than an
+unassigned path - today an unrecognised path is listed in a refusal and never causes one.
+**Filed to them as `S-146` in the commit that files this**, so it is not waiting on the promotion.
+
 ### P-530 - The specification is executable, and prose is what the tests cannot say
 
 **to** sean · **status** open · **raised** 2026-09-21 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/README.md` -> Rules for this directory

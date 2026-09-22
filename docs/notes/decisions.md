@@ -26,6 +26,261 @@ ones, for their reasoning.
 
 ## Answered, kept for the reasoning
 
+## The working behind `P-531`, answered `T3` on 2026-09-21
+
+**Not an item, deliberately.** `P-531` is one proposal and it lives in
+[`decide/proposals.md`](../../decide/proposals.md); a second heading carrying the same id would
+make a cited id resolve to two things, which `tools/outbox` refuses and which is the whole reason
+an item lives in one file at a time. **This is the working that produced the answer** - the two
+sibling repositories read, the three artifacts and their three questions, the escape-hatch table,
+and the workflow reading that made `T3` the one Sean's own sentences described.
+
+**Raised** 2026-09-21 · **answered** 2026-09-21, `T3` · **kind** measured
+
+**`P-530` left this open and you asked to puzzle it through.** Having read `../vote`'s scenario
+test and `../code-structure`'s regression test, **the *where* turns out to follow from something
+else**, and that something else is a fact measured today.
+
+## First, the thing you already have
+
+**You described two kinds of test and this repository already has both shapes.**
+
+```
+behavioural, thin-engine   data/foundation/tests/*.4x    {given} {when} {then} {refused}
+regression, code-structure scenario/commands/*.4x        commands, and a frozen dump beside them
+                           scenario/expected/*.4x
+```
+
+**`../code-structure`'s `RegressionTest` and this repository's scenario are the same mechanism.**
+Both run everything over one input, freeze the output, and compare directory against directory;
+both seed the expectation from the actual run the first time. `P-225` already gives you the
+protocol for changing your mind about it - **delete the expected data, and absence means
+acceptance.** So the regression half is designed and running, and this item is about the other
+half.
+
+## The three artifacts answer three questions, and none of them is a copy
+
+**This is your last question answered first**, because the rest depends on it.
+
+| artifact                  | canonical for                 | authored, or derived          |
+| ------------------------- | ----------------------------- | ----------------------------- |
+| a behavioural test        | **is this right?**            | authored - you say the `then` |
+| a frozen expected output  | **did anything change?**      | derived - seeded from a run   |
+| the record in `reviewed/` | **which version did I read?** | derived - from your keypress  |
+
+**A frozen expected output cannot be evidence of correctness and it is important that it is not
+asked to be.** `../code-structure` proves it in one function: `seedExpectationIfNecessary` copies
+`actual/` into `expected/` when `expected/` is absent. **Nobody wrote those 291 files.** They
+answer *did this change* perfectly and *is this right* not at all.
+
+**An authored `then` answers both**, which is why it is the primary statement and the frozen dump
+is not. **So there is no copy of one fact in two places** - there are three artifacts, and asking
+any of them the other's question is the mistake.
+
+## Where each belongs, and only one of the three is hard
+
+**The runner is code.** It names no game noun; `tests/isolation.rs` already enforces that.
+
+**The frozen output is generated**, and `CLAUDE.md` says a generated file has no owner. It sits
+beside the scenario and is reseeded deliberately.
+
+**The behavioural test is the hard one**, and it is hard for the reason you named: executable
+leans code, looked-at leans specification. **But `spec/data/*.4x` already settles that shape** -
+data in `spec/`, engine in `crates/` - so *executable* does not argue for `crates/` at all. A
+runner reaching a file is not the same as the file living beside the runner.
+
+## So the real question is not where, it is which mechanism holds your approval
+
+**Two mechanisms exist and they give the same guarantee differently.**
+
+**Promotion prevents.** The specification lane may not introduce an idea into `spec/`; you say
+*promote* and the words are copied verbatim. **Checked once, at the moment of copying.**
+
+**`review-web` detects.** A test is drafted, you read it, you press `r`, and a byte-for-byte copy
+lands in `reviewed/`. **Checked on every build, forever** - which is strictly stronger, *if
+anything fails when the two disagree.*
+
+**Measured today: nothing does.** `review_of` lives in `examples/report.rs`, so drift is shown on
+a page and gates nothing. `tests/reviewed.rs` refuses a record naming no test - the code lane
+built it this morning - and no test in the suite compares a test's content to the copy you
+approved.
+
+**That is the whole decision.** If drift turns the build red, an approved test cannot be changed
+under you without the gate saying so, and the tests are safe in a column a producer drafts into.
+If it does not, only promotion protects them, and they must live in `spec/`.
+
+## The three answers
+
+**`T1` - the tests live in `spec/`, promotion-gated, runner in `crates/`.** The strongest
+prevention and the shape `spec/data/` already has. **The cost is `review-web`**: every new test
+becomes a proposal you read in a queue rather than a page you press a key on, and there are
+fifty-three of them already.
+
+**`T2` - the tests live in a column of their own, `reviewed/` is the approval record, and drift
+fails the gate.** Keeps the workflow that convinced you. **The cost is that prevention becomes
+detection** - a producer can edit an approved test, and what stops it shipping is a red build
+rather than a rule.
+
+**`T3` - the approved copy is the specification, and the working copy is a proposal.** The suite
+runs `reviewed/`; `data/.../tests/` is where a draft sits until you have read it. **Drift stops
+being a defect and becomes an unpromoted proposal**, which is the protocol you already have with
+`review-web` as its interface. **The cost is that a test takes effect only when you have read
+it**, so a fix the code lane makes to a test it wrote is inert until you look - which is either
+exactly right or intolerable, and that is yours.
+
+## What this lane would say
+
+**`T3`, and it is the one the evidence points at rather than the one that was obvious.** It is
+`CLAUDE.md`'s promotion protocol with a keypress instead of a sentence and a check on every build
+instead of one at the moment of copying. **It also makes the *where* stop mattering**: the draft
+can live in the code lane's column because a draft is not normative, and the normative copy is
+the one your reading created.
+
+**What it needs before it could be chosen is one test**, in either column: that the suite runs the
+approved copies, or fails when a working copy has drifted from one. **`T2` needs the same test.**
+Only `T1` needs no new mechanism, which is the honest argument for it.
+
+## Sean asked whether `T3` means the code lane implements what he has reviewed and ignores the rest
+
+**Half right, and the wrong half is a hazard this item had not named.**
+
+**What is right**: only a reviewed test compels. A test you have not read cannot turn the build
+red, so it cannot force the code lane to build anything - which is the whole point, and is the
+same guarantee `promote` gives.
+
+**What is wrong is *ignores*.** The code lane **writes** the drafts, so it cannot ignore them; it
+authored them. **But as `T3` was stated above, an unreviewed test compels nothing and reports
+nothing** - and that is a way to hide a failure. **A draft that goes red could simply never be put
+in front of you**, and the gate would be green, and the page would say *never reviewed* in the
+same tone it uses for a draft written five minutes ago.
+
+**So `T3` needs a second half: an unreviewed test still runs and still reports; it just does not
+gate.** Reviewed tests gate. Then nothing is hidden, and only what you approved compels.
+
+```
+reviewed     runs, and a failure turns the build red
+unreviewed   runs, and a failure is reported and counted
+```
+
+**The count already exists.** `report.rs` carries `reviewed` and `unreviewed` - today fifty-three
+tests, fifty-two reviewed, one not. **What is missing is that the number reaches you** rather than
+sitting on a page: a growing unreviewed count is the shape of work being shelved, and it is
+invisible in a queue that only shows proposals.
+
+## And the cost of `T3` this makes visible, which is the one to weigh
+
+**A reviewed test the code lane cannot make pass leaves the gate red until you look.** The test is
+the specification saying no; the fix is either the code changing or a changed test you re-read.
+**Either way your reading is on the critical path**, which is `R-6` today generalised to every
+test.
+
+**`T1` has the same property and says so more plainly** - a proposal you have not read is a rule
+that does not exist. **The difference is only how many times a week it happens**, and with
+fifty-three tests and counting, that is the number worth guessing before choosing.
+
+## Sean's requirement: once reviewed, an error state until the code behaves that way
+
+**All three give you that, and the requirement selects on something none of them names.** Each
+runs the reviewed test and each turns the build red when it fails. **What separates them is the
+escape hatch** - whether the red can be cleared without the code changing.
+
+**And the mechanism already allows the state you are describing.** Measured: `review-web`'s
+`/reviewed` copies the test with no check that it passes, so you can approve a test that is not
+built. **Approval is a statement of intent, and red is the correct answer until it is met.**
+
+|          | how the red could be cleared without the code changing                                                                                      |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`T1`** | edit or delete the test in `spec/` - **which the code lane may not write at all**, and `hooks/pre-commit` refuses a commit spanning columns |
+| **`T2`** | edit the test **and** the record - editing the test alone makes it drift, which is also red                                                 |
+| **`T3`** | edit the record - editing the test is inert, because the suite runs the approved copy                                                       |
+
+**So the question your requirement actually asks is: who may write the approval record?**
+
+**`T1` answers it for free**, because `spec/` already has that property and a hook already
+enforces it.
+
+**`T2` and `T3` answer it only if `reviewed/` moves.** Today it is
+`prototypes/thin-engine/reviewed/`, which `hooks/pre-commit` maps to the **code lane's** column -
+**so today, the lane whose work the test constrains may edit the record of your approval.** That
+is the hole, and it is not in where the tests live.
+
+**`T3` is one moving part better than `T2`.** Under `T2` the escape is two edits and under `T3` it
+is one, because editing a test that nothing runs achieves nothing. **Neither is safe while the
+record is theirs; both are as strong as `T1` the moment it is not.**
+
+## What would have to be true, and it is small
+
+**`reviewed/` sits in a column no instance writes**, like `temporary-notes/` but tracked -
+written by `review-web` running on your machine when you press a key, and by nothing else.
+**`hooks/pre-commit` has to learn that column**, which is the code lane's file and one `case`
+line; an unrecognised path is currently *unassigned*, which is listed in a refusal and never
+causes one.
+
+**Then `T3` gives you your requirement with the same strength as `T1`** and keeps the page you
+review from. **Choosing `T1` gets it today and costs `review-web`; choosing `T3` gets it after one
+line in a hook and one decision about where the record lives.**
+
+## The workflow you described is `T3`, and it moves one thing in the analysis above
+
+**Two of your sentences settle what was open.** *I expect the spec lane to convert my prose into
+tests for me to review* says who drafts, and *I want some kind of application to present what I
+need to review* says the approval is made in a page rather than in a queue. **That is `T3` with
+the specification lane holding the pen.**
+
+**And it changes the escape hatch, in your favour.** The table above assumed the code lane drafts
+the tests. **If this lane drafts them and the code lane is the one they constrain, the code lane
+cannot clear a red by editing a test at all** - it is not their column, and the hook refuses it.
+
+**What that leaves is a narrower risk and a worse one.** This lane would then both write the tests
+and own the directory they sit in, so **the only thing separating *Claude wrote this* from *Sean
+approved this* is the record in `reviewed/`.** It follows that the record cannot be this lane's
+either - **not the code lane's because they are constrained by it, and not this lane's because it
+writes what the record is about.**
+
+**Which also says who builds the application**, and it is not this lane. An instrument that shows
+you this lane's work, and that writes the record of your approving it, is the one thing this lane
+must not control - the same reason a lens may not edit what it reviews. **The code lane builds it,
+which is where `review-web` already is.**
+
+## The part nothing here can do yet, and it is your last sentence
+
+**Bulk approval after a spot check is safe exactly when *no other kinds of changes* is measured
+rather than assumed**, and today it is neither - it is not even askable.
+
+**What exists**: per test, a status and a list of lines that differ, each marked *what you read* or
+*not what you read*. **What does not exist is a sentence about the whole set** - *these forty
+differ only in this one mechanical way, and no test differs in any other way, and here is the
+count of each*.
+
+**Without that, a spot check of three is evidence about three.** `CLAUDE.md` already has the rule
+this is an instance of: *check the rule over every case, not on one case, and assert how many
+cases there were.* **The count is what tells a real sweep from a lucky sample.**
+
+**It is also exactly what this lane did to your release and got right.** `P-522` predicted the
+shape of its own change before making it - nine recipe blocks, eight table rows, one section - and
+the counts were re-derived after. **The same instrument applied to a hundred drifted tests is what
+makes *mark all reviewed* an act rather than a hope.**
+
+**So the application has a third job**, beside presenting and filtering: **classify a change set
+and assert its population.** Group the drifted tests by what kind of difference they carry, show
+the count of each group, and show that the groups cover every drifted test. **Then a spot check of
+three in a group of forty is a claim about forty**, and *no other kinds of changes* is something
+you read rather than something you hope.
+
+## What this lane would now say, given the workflow
+
+**`T3`, and the three homes fall out of your own sentences rather than from a preference.**
+
+```
+the draft test        the specification lane's column - it writes them from your prose
+the approval record   a column no instance writes - it is the only thing that says you read it
+the application       the code lane's - it must not be built by the lane whose work it shows
+```
+
+**And one requirement that is not about homes at all**: until the application can classify a change
+set and assert its population, **bulk approval should be one test at a time**, because that is the
+only scale at which *no other kinds of changes* is something you have checked.
+
 ### P-510 - Pooling cannot be universal, and the choice is now two
 
 **to** sean · **status** **answered** 2026-09-14 · `G3`: an orbit holds what its units can hold, and pooling has no exception · **raised** 2026-09-14 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `P-509`, before it is promoted
