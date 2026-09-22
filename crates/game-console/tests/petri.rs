@@ -45,13 +45,13 @@ fn every_recipe_is_either_drawn_or_named_as_not_drawn() {
         // **Twenty-seven under twenty names since `P-522`**, which cut nine blocks under
         // five names of their own.
         net.recipes,
-        36,
-        "the release states thirty-six blocks of recipe rows and the parse found {}",
+        27,
+        "the release states twenty-seven blocks of recipe rows and the parse found {}",
         net.recipes
     );
     assert_eq!(
-        net.names, 25,
-        "those blocks are stated under twenty-five distinct names and the parse found {}",
+        net.names, 20,
+        "those blocks are stated under twenty distinct names and the parse found {}",
         net.names
     );
     // **The deduplication has to remove something**, or a version that stopped deduplicating
@@ -72,18 +72,24 @@ fn every_recipe_is_either_drawn_or_named_as_not_drawn() {
         net.recipes
     );
 
-    // **One block is excluded and it is `stand`** - its produce row is *that unit's strength*,
-    // and `unit` is a family with two members, so there is no single number for the arc.
+    // **Nothing is excluded since `P-522`, and that is the strongest this has ever been.**
+    // `stand` was the one block the drawing left out - its produce row was *that unit's
+    // strength*, and `unit` is a family with two members, so no single number named the arc.
+    // The force rule went and took it, so **every block the release states is drawn.**
     //
     // **`move` was the excluded one until `P-411`, and `C-88` is answered rather than
     // outstanding.** `P-421` added `put` to the release's roles and defined it: a put *names
     // a thing that is already there and says what is true of it afterwards*, and *has no
     // quantity, because nothing is made or taken*. So what a put moves is read from the row
     // rather than assumed, and the reading this file was built on is the rule.
+    //
+    // **An empty list is asserted against a population and not on its own** - the equality
+    // above, `blocks_drawn + excluded == recipes`, is what makes *nothing excluded* mean
+    // *everything drawn* rather than *nothing parsed*.
     assert_eq!(
         net.excluded.iter().map(|one| &one.name).collect::<Vec<_>>(),
-        [&"stand".to_string()],
-        "the excluded blocks are not the one expected"
+        Vec::<&String>::new(),
+        "the excluded blocks are not the ones expected"
     );
 
     // **An empty exclusion list means something only because the unfolding is doing work.**
@@ -209,9 +215,12 @@ fn the_density_rule_is_spelled_out_against_the_planet_it_describes() {
     //
     // **Seventeen since `P-498`**, which is the same trick on the other mark: `upkeep` puts
     // `paid at its maximum` and `renew` clears it.
+    // **Eleven since `P-522`**, which cut six: `hold` marked a nature met and the `renew`
+    // over a nature cleared the mark, and the two `refresh` rows over `defending` and
+    // `muster` and `stand`'s puts went with them.
     assert_eq!(
-        puts, 17,
-        "{puts} `put` rows were skipped; the release states seventeen"
+        puts, 11,
+        "{puts} `put` rows were skipped; the release states eleven"
     );
 
     let expected: Vec<&String> = names
@@ -219,40 +228,38 @@ fn the_density_rule_is_spelled_out_against_the_planet_it_describes() {
         .filter(|name| has_expression.get(*name).copied().unwrap_or(false))
         .collect();
 
-    // **Three, and it was one until `P-414`.** `work`'s quantity is *`$where`'s density for
-    // that resource*, and `muster` and `stand` produce *that citizen's force* and *that
-    // unit's force* - a trait of the kind rather than a number in the row. The saturating
-    // rewrite had taken the other three out: `grow` is gone entirely - `P-379` - and the two
-    // capacity clamps became `stow` and `discard`, which carry a constant weight.
+    // **One again since `P-522`.** `work`'s quantity is *`$where`'s density for that
+    // resource*, a trait of the kind rather than a number in the row. `muster` and `stand`
+    // were the other two - *that citizen's strength* and *that unit's strength* - and went
+    // with the force rule. Before `P-414` it was one for the same reason it is one now.
     assert_eq!(
         expected,
-        [
-            &"work".to_string(),
-            &"muster".to_string(),
-            &"stand".to_string()
-        ],
+        [&"work".to_string()],
         "the table says these have a quantity that is not a number: {expected:?}"
     );
 
-    // **`work` and `muster` are drawn and `stand` is not**, and the three are asserted
-    // together because the reason differs. `work`'s quantity is a density and is spelled out
-    // per case; `muster`'s is *that citizen's force*, which is a trait **of the kind** since
-    // `P-435` and so one number; `stand`'s is *that unit's strength*, and `unit` is a family
-    // with two members. Reading either member's number would draw a game that is right only
-    // because the two agree today.
+    // **`work` is drawn, and since `P-522` it is the only one of the three there was.**
+    // `muster`'s quantity was *that citizen's strength*, a trait of the kind and so one
+    // number; `stand`'s was *that unit's strength*, and `unit` is a family with two members,
+    // which is why `stand` was the one block the drawing left out. Both rules went with the
+    // force rule, so the exclusion went with them - see below.
     assert_eq!(
         net.excluded.iter().map(|one| &one.name).collect::<Vec<_>>(),
-        [&"stand".to_string()],
+        Vec::<&String>::new(),
         "the excluded blocks are not the ones expected"
     );
+    // **`work` is what this used to say about `muster`.** The claim was that a quantity
+    // naming a trait **of the kind** is drawn rather than refused as a state, and `muster`'s
+    // *that citizen's strength* was the witness. `P-522` cut it; `work`'s *`$where`'s density
+    // for that resource* makes the same claim about the same code path, and it is the row the
+    // rest of this test is already about.
     assert!(
-        net.excluded[0].because.contains("that unit's strength"),
-        "`stand` is excluded and the reason does not carry the cell that caused it: {}",
-        net.excluded[0].because
-    );
-    assert!(
-        net.transitions.iter().any(|name| name == "muster"),
-        "`muster` is not drawn, so a quantity naming a trait of the kind was refused as though it were a state: {:?}",
+        // **`work` is unfolded per case**, so the drawing names `work (energy x2)` and the
+        // rest rather than `work` - which is the unfolding this test is about, one assertion
+        // further down.
+        net.transitions.iter().any(|name| name.starts_with("work")),
+        "`work` is not drawn, so a quantity naming a trait of the kind was refused as though \
+         it were a state: {:?}",
         net.transitions
     );
 
@@ -377,10 +384,45 @@ fn what_the_exclusions_cost_is_visible_rather_than_implied() {
         "what excluding {:?} costs the drawing is {cost:?}",
         net.excluded.iter().map(|one| &one.name).collect::<Vec<_>>()
     );
+
+    // **The exclusion list is empty since `P-522`, so this says the thing the cost was
+    // standing in for.** *What leaving a block out costs is nothing* was a fact about a
+    // non-empty list and is now a fact about an empty one, where it holds vacuously - so the
+    // guard that made it mean something has nothing left to guard.
+    //
+    // **What replaces it is the population the cost was always about**: every kind the release
+    // names in a Recipes row is in the drawing's vocabulary. That was what *costs nothing*
+    // asserted by a longer route, it is true whether anything is excluded or not, and it fails
+    // the day a block stops being drawn and takes a kind with it.
     assert!(
-        !net.excluded.is_empty(),
-        "nothing is excluded, so the cost above was counted against an empty population and \
-         means nothing"
+        net.excluded.is_empty(),
+        "{:?} is excluded, so the case below is not the one this release is in",
+        net.excluded.iter().map(|one| &one.name).collect::<Vec<_>>()
+    );
+    let drawn: Vec<&str> = net.places.iter().map(|place| place.kind.as_str()).collect();
+    let mut named: Vec<String> = game_console::recipes::body_under(&document, "## Recipes")
+        .iter()
+        .map(|row| game_console::recipes::plain(row.get(4).map(String::as_str).unwrap_or("")))
+        .filter(|kind| !kind.is_empty())
+        // **A family is not a place.** The Kind column admits a kind or a family, and the
+        // drawing holds one place per concrete kind - so `resource` naming no place is the
+        // families table doing its job rather than the drawing missing something.
+        .filter(|kind| !["thing", "unit", "resource", "place"].contains(&kind.as_str()))
+        .collect();
+    named.sort();
+    named.dedup();
+    assert!(
+        named.len() > 10,
+        "only {} kinds are named in the Recipes table, so this counted against nearly nothing",
+        named.len()
+    );
+    let unreached: Vec<&String> = named
+        .iter()
+        .filter(|kind| !drawn.contains(&kind.as_str()))
+        .collect();
+    assert!(
+        unreached.is_empty(),
+        "the Recipes table names {unreached:?} and the drawing has no place for them"
     );
 
     // **`resource` is no longer a place, and that is the unfolding rather than a loss.**
@@ -430,15 +472,19 @@ fn what_the_exclusions_cost_is_visible_rather_than_implied() {
     // working.** It is written under `net.excluded.is_empty()`, so `move` falling out took the
     // claim with it rather than leaving a reassurance nobody re-checked. Asserted in the
     // direction that fails if the claim comes back while something is still missing.
+    // **The page says nothing is left out, and since `P-522` that is true.** This asserted
+    // the opposite for as long as one block was excluded, and the assertion was written under
+    // `net.excluded.is_empty()` so that a block falling out would take the claim with it
+    // rather than leave a reassurance nobody re-checked. **That is what has happened**, and
+    // the direction flips with it.
     assert!(
-        !page.contains("Nothing is left out"),
-        "the page says nothing is left out while `{}` is",
-        net.excluded[0].name
+        net.excluded.is_empty(),
+        "{:?} is excluded, so the page should be naming it rather than saying nothing is",
+        net.excluded.iter().map(|one| &one.name).collect::<Vec<_>>()
     );
     assert!(
-        page.contains(&net.excluded[0].name),
-        "`{}` is excluded and the page does not name it",
-        net.excluded[0].name
+        page.contains("Nothing is left out"),
+        "nothing is excluded and the page does not say so"
     );
     assert!(
         page.contains("became") && page.contains("transitions"),
@@ -505,8 +551,11 @@ fn the_limit_role_is_declared_and_no_row_carries_it() {
                 .any(|role| line.contains(role))
         })
         .count();
+    // **Fifty since `P-522` cut nine blocks**, where the floor was sixty. A floor set for
+    // one population is a literal about a different one the moment the population moves, so
+    // this one is written with the cut named beside it rather than as a bare number.
     assert!(
-        all > 60,
+        all > 50,
         "only {all} rows carry any role at all, so *no limit rows* is a statement about an \
          empty table rather than about the release"
     );
@@ -866,9 +915,12 @@ fn a_block_that_names_a_count_carries_it_in_its_label() {
         }
         checked += 1;
     }
+    // **Four since `P-522`**: `refresh` is four blocks rather than six, having lost the two
+    // that restored `defending`, and `renew` is one rather than two, having lost the one that
+    // cleared the mark on a nature.
     assert_eq!(
-        checked, 8,
-        "eight blocks carry a count in their label - the six `refresh` rows and `renew`'s two -          and {checked} did"
+        checked, 4,
+        "four blocks carry a count in their label - the four `refresh` rows - and {checked} did"
     );
 
     // **Eight since `P-494` and `P-498`**, which is `renew` clearing two marks - `met` on a

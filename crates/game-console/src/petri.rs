@@ -188,8 +188,9 @@ impl Place {
 /// recording, so the classification is written down and
 /// `every_bound_the_release_states_is_classified` asserts that every row of the table is in
 /// one list or the other.
-pub const BOUNDED: [(&str, &str); 6] = [
-    ("garrison", "a capacity of 1"),
+pub const BOUNDED: [(&str, &str); 5] = [
+    // **`garrison` was the first row here and `P-522` cut it**, with the whole of force. It
+    // was bounded at a capacity of 1; the release no longer declares the kind.
     ("extractor", "a capacity, from Territory resources"),
     ("store", "as many as the extractors of its resource"),
     ("yard", "a capacity of 1"),

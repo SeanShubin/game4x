@@ -88,13 +88,13 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
         // **Twenty-seven under twenty names since `P-522`**, which cut nine blocks.
         blocks.len(),
         27,
-        "the release states thirty-six blocks of recipe rows; it has {} ({blocks:?})",
+        "the release states twenty-seven blocks of recipe rows; it has {} ({blocks:?})",
         blocks.len()
     );
     assert_eq!(
         declared.len(),
-        25,
-        "those blocks are stated under twenty-five names; there are {} ({declared:?})",
+        20,
+        "those blocks are stated under twenty names; there are {} ({declared:?})",
         declared.len()
     );
     assert!(
@@ -147,13 +147,18 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
     // world's eleven.
     //
     // **Thirteen since `P-494` and `P-495`, across two examples rather than one.** The force
-    // rule's four are the world's too, and one `{end-turn}` fires them - but they need ground
-    // that resists, ground that is losing and ground nobody has founded, which the first
-    // example does not have. So `hold` carries `take`, `reclaim` and `renew` on a second one,
-    // and the sum is over every example for exactly that reason.
+    // rule's four were the world's too, and needed ground that resists, ground that is losing
+    // and ground nobody has founded - which the first example does not have. So `hold`
+    // carried `take`, `reclaim` and `renew` on a second one.
+    //
+    // **Nine since `P-522`, back on one example.** The force rule went and took `hold`,
+    // `take` and `reclaim` with it; `renew` survives, clearing the mark `upkeep` puts on a
+    // citizen rather than the one `hold` put on a nature, and it is fired by the same
+    // `{end-turn}` as the rest. **The sum is still over every example**, because it is the
+    // shape that survives a second one arriving rather than a fact about there being one.
     assert_eq!(
-        shared, 13,
-        "two examples carry thirteen recipes besides their own"
+        shared, 9,
+        "one example carries nine recipes besides its own"
     );
 }
 

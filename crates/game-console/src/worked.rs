@@ -331,9 +331,14 @@ pub fn examples() -> Vec<Example> {
         // needs upkeep to have gone unpaid, and one territory's food cannot be both. Upkeep is
         // per territory, so a planet can do both in one ending and a territory cannot.
         Example {
+            // **`muster` and `stand` left with `P-522`.** They were the world's two force
+            // rules and there is no force in this release to muster, so the ending is eight
+            // rules rather than ten.
+            // **`renew` is here since `P-522`.** It was shown under the force rule's example,
+            // clearing the mark on a nature; the block that survives clears the mark `upkeep`
+            // puts on a citizen, which is a world rule fired by this same `{end-turn}`.
             also: &[
-                "bear", "breed", "perish", "age", "spoil", "stow", "discard", "refresh", "muster",
-                "stand",
+                "bear", "breed", "perish", "age", "spoil", "stow", "discard", "refresh", "renew",
             ],
             recipe: "upkeep",
             command: "{end-turn}",
@@ -428,54 +433,11 @@ pub fn examples() -> Vec<Example> {
                 game
             },
         },
-        // **The force rule's four, on one `{end-turn}`** - `P-494` and `P-495`, and `P-332`'s
-        // rule for why they share one: no command fires a world recipe alone.
-        //
-        // **Three territories, because the four recipes do three different things and a
-        // territory can only be in one of the three cases.** Ground held with force enough,
-        // ground held with force short, and ground nobody has founded.
-        Example {
-            also: &["take", "reclaim", "renew"],
-            recipe: "hold",
-            command: "{end-turn}",
-            case: Some(
-                "the force rule, with every case of it in one ending. **Territory 1 resists                  with two and two citizens muster two**, so `hold` spends both to mark both                  natures `met` and `reclaim` finds none unmet - the territory survives, and                  the two food it started with are what `upkeep` ate. **Territory 2 resists                  with three and its one citizen musters one**, so `hold` can mark only one                  and two natures are left unmet: `reclaim` fires on the presence of one and                  takes the population, the garrison and everything held. **Territory 3 is                  founded by nobody**, and the pioneer standing on it musters two through                  `stand` - `take` consumes a nature per force, so its resistance of two is                  gone and `found by land` has ground it can require a force against.                  **`renew` is why territory 1's natures read `met:0` after as well as                  before**: the marks are cleared at the end of every ending, so no committed                  state holds one, and what `hold` did is visible in what `reclaim` did not do                  rather than in a trait. **Nothing here is a comparison** - the whole rule is                  the presence or absence of a token, which is `P-373`'s trick and the reason                  the net has no inhibitor arc in it",
-            ),
-            before: || {
-                // Territory 1: resists with two, and musters two.
-                let mut game = founded(&[], &[(Kind::Citizen, 2), (Kind::Food, 2)]);
-                game.territories[0].set_force_of_nature(2);
-
-                // Territory 2: resists with three, and musters one.
-                let mut short =
-                    game_model::Territory::empty(TerritoryId(2), game_model::Biome::Jungle);
-                short.set_garrison(Some(game_model::territory::Garrison { force: 0 }));
-                short.put(Kind::Citizen, 1);
-                short.put(Kind::Food, 1);
-                short.set_force_of_nature(3);
-                game.territories.push(short);
-
-                // Territory 3: nobody has founded it, and a pioneer stands on it.
-                let mut open =
-                    game_model::Territory::empty(TerritoryId(3), game_model::Biome::Grassland);
-                open.set_force_of_nature(2);
-                game.territories.push(open);
-                game.adjacency = vec![
-                    vec![TerritoryId(2)],
-                    vec![TerritoryId(1), TerritoryId(3)],
-                    vec![TerritoryId(2)],
-                ];
-
-                let mut pioneer = game_model::Unit::new(
-                    game_model::UnitId(1),
-                    game_model::UnitKind::Pioneer,
-                    TerritoryId(3),
-                );
-                pioneer.location = game_model::Location::On(TerritoryId(3));
-                game.units.push(pioneer);
-                game
-            },
-        },
+        // **The force rule's worked example stood here and `P-522` cut its subject.** It
+        // showed `hold`, `take`, `reclaim` and `renew` on one `{end-turn}` over three
+        // territories - ground held with force enough, ground held with force short, and
+        // ground nobody had founded - and all four rules went with the force rule. It is one
+        // commit back in the history and returns with them.
         Example {
             also: &[],
             recipe: "launch ark",

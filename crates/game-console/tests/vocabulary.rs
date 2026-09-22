@@ -280,10 +280,12 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
     // kind is not a trait. `P-461` added `binding` for the twenty-fourth: the *Binding* column
     // of *Units and structures* had been a number `metal in it` referred to and no trait
     // declared, which is the dangling reference this lane reported.
+    // **Twenty-three since `P-522`**: `defending` went with the force rule, and `biome` and
+    // `met` with the Biomes section and the nature it marked.
     assert_eq!(
         traits.len(),
-        26,
-        "twenty-six traits; the release lists {:?}",
+        23,
+        "twenty-three traits; the release lists {:?}",
         traits.keys().collect::<Vec<_>>()
     );
     let closed = traits
@@ -309,9 +311,12 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
     // **What moved before that:** `P-399` took `ready` and `spent` out and added `for`;
     // `P-411` took `for` out again and added the five counts; `P-417` deleted `kind`, because
     // a kind is not a trait.
+    // **Two since `P-522` cut `biome`**, which was the one naming a set written out in a
+    // table of its own. `resource` and `phase` name theirs in the Families table and in the
+    // turn's phases.
     assert_eq!(
-        closed, 3,
-        "three traits name a closed set - `resource`, `biome` and `phase`; {closed} do"
+        closed, 2,
+        "two traits name a closed set - `resource` and `phase`; {closed} do"
     );
 
     let session = played();
@@ -543,10 +548,11 @@ fn every_trait_the_ordering_names_is_declared() {
 
     // **The population, named.** A check that every name is in an empty set passes for the
     // wrong reason, which is the failure with the sign flipped.
+    // **Twenty-three since `P-522`**, which cut `defending`, `biome` and `met`.
     assert_eq!(
         declared.len(),
-        26,
-        "spec/data/traits.4x declares {} traits and this check was written against 26. If the \
+        23,
+        "spec/data/traits.4x declares {} traits and this check was written against 23. If the \
          release gained or lost one, that is fine - say so here.",
         declared.len()
     );
