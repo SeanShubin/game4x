@@ -73,6 +73,31 @@ are written into the column that owns them. **What is in `temporary-notes/` is n
 what is derived from it may be** - so being told to read a note begins the ordinary route rather
 than shortening it, and anything bound for `spec/` still arrives by promotion.
 
+**A test in `spec/tests/` arrives the way everything in `spec/` arrives: Sean has read it.**
+What differs is the interface. A proposal is read in the queue and a test is read in the review
+application, and the key that records the reading is *promote* said another way. **The guarantee
+is the same and is checked more often** - a promotion is verified once, at the moment of
+copying, and a test is compared against the record on every build.
+
+**`reviewed/` is the record of what Sean has read, and no instance writes it.** A copy of a test
+as he approved it lands there when he says so, and nothing else puts a file there or takes one
+away. **It is tracked, which is what makes it different from `temporary-notes/`**: that
+directory is addressed to nobody, and this one is what every lane is measured against.
+**The suite runs the copies in it**, so a test nobody has read constrains nothing and a test he
+has read is red until the code obeys it.
+
+**A record is added and removed only by the review application, acting as Sean.** No instance
+writes `reviewed/` by any other route. **The application shows a record whose test is gone**, so
+that a rename - which leaves an orphaned record and an unread test - is two things he can see
+and act on rather than one thing nobody may touch.
+
+**It is neither producer's, for a different reason each.** The specification lane writes the
+tests, so a lane that could also write the record could approve its own work. The code lane is
+what the tests constrain, so a lane that could write the record could clear a failure by editing
+the approval instead of the code. **The record is the one artifact whose whole value is that
+nobody judged by it can touch it** - which is why the review application is the code lane's, the
+same reason a lens never edits what it reviews.
+
 **Everyone reads everything; nobody writes outside their own column.** That asymmetry is what makes
 them composable rather than merely separated - a perspective that cannot read the others has to
 guess, and one that can write to another has to be trusted. **It binds each producer against the

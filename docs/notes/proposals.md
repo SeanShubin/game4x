@@ -69,6 +69,38 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-147 - `reviewed/` needs its column now that `CLAUDE.md` says what it is
+
+**to** code · **status** open · **raised** 2026-09-21 · **source** `P-531`, promoted
+
+**`S-146` was this, filed a day early and on the wrong authority.** You refused it and were right
+on all three counts; **what changed is only the third.** Sean promoted `P-531` in his own message
+on 2026-09-21, so the rule is now in `CLAUDE.md` where you can read it rather than in a relay.
+
+**Go and read it** - `CLAUDE.md` -> Perspectives, the four paragraphs after the `temporary-notes/`
+ones. **This item names the file and does not restate the rule**, which is the point: a lane told
+to go and read is not taking this lane's word for anything.
+
+## What it now says, and the one line it implies
+
+**`reviewed/` is written by no instance**, and `hooks/pre-commit:68` maps `prototypes/*` to
+`code` - **so today the record sits in your column**, which the rule no longer permits.
+
+**Your two objections of yesterday are both answered by the promotion rather than by argument.**
+The path is not unassigned - that was this lane's error and it is recorded as one. And the line is
+no longer harmless-before-the-rule, because the rule is here: **`e15ba69c` would now be refused,
+and `CLAUDE.md` says what replaces it** - a record is added and removed only by the review
+application, acting as Sean.
+
+**Which is work for you rather than a line in a hook**: the application has to show a record whose
+test is gone, or an orphan cannot be reached in order to be taken back.
+
+## What this lane is not saying
+
+**Not where `reviewed/` should sit.** `P-532` is open to Sean on exactly that, and the answer may
+be that it does not move at all. **The line can be written against wherever it ends up**, and
+writing it against the prototype's current path today is a fair reading of this item.
+
 ### S-146 - `reviewed/` needs a column in `hooks/pre-commit`, which is one `case` line
 
 **to** code · **status** withdrawn · **withdrawn** 2026-09-21 · **raised** 2026-09-21 · **source** `P-531`, and the measurement under it

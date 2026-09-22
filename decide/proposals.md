@@ -11,247 +11,66 @@ of it needs you.
 
 ## Open
 
-### P-531 - `T3`: the approved copy is the specification, and three columns follow
+### P-532 - Fifty-three tests have to cross a column boundary, and nothing may carry them
 
-**to** sean · **status** open · **raised** 2026-09-21 · **kind** recovered · **shape** text · **asks** approval · **into** `CLAUDE.md` -> Perspectives
+**to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** a decision · **into** `spec/tests/`, `reviewed/`, and the prototype
 
-**You chose `T3` on 2026-09-21**, having read the options and the workflow reading of them. **This
-is the rewrite that answer requires**: an answered question is not a promotion, so what follows is
-words to read rather than a decision already made. The reasoning is in
-[`docs/notes/decisions.md`](../docs/notes/decisions.md).
+**Filed the moment `P-530` and `P-531` landed**, which is what both said would happen.
 
-**This file is the one no instance may carry an approval for**, so *promote P-531* has to arrive
-from you in your own message. Written into the item rather than left to be remembered, because the
-moment it would be easiest to skip is this one.
-
-## What lands, and it is three paragraphs in one section
-
-Into `CLAUDE.md` -> Perspectives, after the paragraph about `temporary-notes/`:
-
-> **A test in `spec/tests/` arrives the way everything in `spec/` arrives: Sean has read it.**
-> What differs is the interface. A proposal is read in the queue and a test is read in the review
-> application, and the key that records the reading is *promote* said another way. **The guarantee
-> is the same and is checked more often** - a promotion is verified once, at the moment of
-> copying, and a test is compared against the record on every build.
-
-> **`reviewed/` is the record of what Sean has read, and no instance writes it.** A copy of a test
-> as he approved it lands there when he says so, and nothing else puts a file there or takes one
-> away. **It is tracked, which is what makes it different from `temporary-notes/`**: that
-> directory is addressed to nobody, and this one is what every lane is measured against.
-> **The suite runs the copies in it**, so a test nobody has read constrains nothing and a test he
-> has read is red until the code obeys it.
-
-> **It is neither producer's, for a different reason each.** The specification lane writes the
-> tests, so a lane that could also write the record could approve its own work. The code lane is
-> what the tests constrain, so a lane that could write the record could clear a failure by editing
-> the approval instead of the code. **The record is the one artifact whose whole value is that
-> nobody judged by it can touch it** - which is why the review application is the code lane's, the
-> same reason a lens never edits what it reviews.
-
-## What it changes for each lane, stated so you can check it against the table above it
-
-**The specification lane gains a job and loses nothing.** `spec/tests/` is already inside `spec/`,
-so the *Writes* column needs no edit; what changes is that this lane turns your prose into tests
-rather than only into prose.
-
-**The code lane loses an escape and gains a constraint it cannot argue with.** It cannot edit a
-test - not its column, and `hooks/pre-commit` refuses a commit that spans two. **A red test is the
-specification saying no**, and the only ways out are changing the code or your re-reading a changed
-test.
-
-**And one lane gains nothing, which is the point.** Neither writes `reviewed/`.
-
-## What this does not settle
-
-**Whether `spec/tests/` and `reviewed/` are the right names.** Both are this lane's guess and
-neither is load-bearing; say other words and they become other words.
-
-**How the tests get there from the prototype.** Fifty-three exist in
-`prototypes/thin-engine/data/foundation/tests`, every one read and approved by you, and moving
-them is work rather than a rule. **It is not in this proposal** because the rule should be true
-before anything moves under it.
-
-**Bulk approval.** You set it aside and nothing here depends on it. **One test at a time is the
-only scale at which *no other kinds of changes* is something you have checked**, and that stays
-true until the application can classify a change set.
-
-**And `P-530` is still open.** That one says the test is the primary statement and prose says what
-a test cannot; this one says where the tests live and who may touch the record. **They are
-independent** - either can land without the other - **and neither is complete alone.**
-
-## The case a record and the tests can disagree about, and nothing may act on it
-
-**Raised by the code lane against this draft, with its own commit as the evidence.** `e15ba69c`
-deleted two records in `reviewed/` that named tests which no longer existed - a rename had left
-them behind, **and a later test given one of those names would have opened as *reviewed* with
-nobody having read a line of it.** That was correct work.
-
-**Under the rule above it is illegal.** If no instance writes `reviewed/`, then no instance may
-remove a stale record either, and the false approval it enables has no way out. **The one case
-where the record and the tests can disagree is the one case nothing is allowed to fix.**
-
-**The answer is not an exception, it is the application.** The record is written when you press a
-key and removed when you press the other one; `u` already does that for a test you can see.
-**What is missing is that an orphaned record has no test to navigate to**, so it cannot be reached
-in order to be taken back.
-
-> **A record is added and removed only by the review application, acting as Sean.** No instance
-> writes `reviewed/` by any other route. **The application shows a record whose test is gone**, so
-> that a rename - which leaves an orphaned record and an unread test - is two things he can see
-> and act on rather than one thing nobody may touch.
-
-**A rename is the common case rather than an exotic one**, which is what makes this worth a
-sentence in the rule: it is a delete and an add, and it orphans a record every time.
-
-## What has to change in `hooks/pre-commit`, and it is not a separate item
-
-**One `case` line**, so that `reviewed/` is its own column rather than the code lane's.
-**Measured, and this lane had it wrong**: `hooks/pre-commit:68` maps `prototypes/*` to `code`, so
-the record sits in the code lane's column today - not, as an earlier draft of this said, in no
-column at all.
-
-**It is not filed to the code lane and this lane was wrong to file it.** Which column a path
-belongs to is a statement about who may write what, which this file reserves for you. **The code
-lane refused it on exactly that ground** - not doubting the relay, but unable to check it, which
-is the reason the rule exists. `S-146` is withdrawn and the line lives here, where the rule it
-serves is.
-
-**It also changes what commits are legal today**, before anything is promoted: `e15ba69c` would
-have been refused by it. **That is an argument for landing the line with the rule and not before
-it**, rather than an argument against the line.
-
-### P-530 - The specification is executable, and prose is what the tests cannot say
-
-**to** sean · **status** open · **raised** 2026-09-21 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/README.md` -> Rules for this directory
-
-**Your words, 2026-09-21:**
+**`CLAUDE.md` now says a test lives in `spec/tests/` and the suite runs the copies in
+`reviewed/`. Neither directory exists.** The fifty-three tests you have read are in
+`prototypes/thin-engine/data/foundation/tests`, and the records of your reading them are in
+`prototypes/thin-engine/reviewed` - **both in the code lane's column, and `spec/` is this lane's.**
 
 ```
-The specification had gotten to complicated for me to understand, the consequence of which is
-that I lost executive control.  Thin-engine was a prototype to see if it was possible to regain
-executive control via an executable specification rather than a prose specification.
-
-I was convinced after reviewing tests like the ones in
-prototypes/thin-engine/data/friendly/tests via `cargo run --example review-web`, I want to adopt
-this workflow for the specification as well.  We can still have prose, and may still need it to
-express some things that the tests can't cover, but these tests are now the primary way which I
-ensure the game behaves as I intend it to.
+prototypes/thin-engine/data/foundation/tests/*.4x   53   code lane's column
+prototypes/thin-engine/reviewed/*.4x                52   code lane's column
 ```
 
-## What `spec/README.md` says today, and which sentence this changes
+## Why nobody can simply do it
 
-```
-3. **If it is not here, it is not decided.** Discussion is not decision.
+**`hooks/pre-commit` refuses a commit that spans two columns**, and a move is a delete in one and
+an add in the other. **So the move is two commits by two lanes**, or one by whoever you say.
 
-   A rule is decided here. **The game's data is decided in its data file**, reviewed by hand and
-   locked by the scenario test. Neither is decided in a discussion, in a note, or in a rendering
-   of either one.
-```
+**And the records are the harder half.** A test file is just bytes; **a record is the evidence
+that you read something**, and it is the one artifact `CLAUDE.md` now says no instance may write.
+**Copying fifty-two of them is writing them**, which is exactly what the rule forbids - so this
+cannot be done under the rule it is implementing.
 
-**That rule already has two homes for a decision - prose and a data file - and this adds the third
-and makes it first.** It is the smallest change that says what you said.
+## The three ways
 
-## What lands
+**`M1` - they stay where they are, and the prototype becomes the home.** `spec/tests/` is a name
+for `prototypes/thin-engine/data/foundation/tests`, reached by whatever runs it. **No move, no
+records copied, and the rule is satisfied by renaming a column rather than moving a file.** The
+cost is that the tests sit inside a directory called `prototypes`, which says the opposite of what
+they now are.
 
-Rule 3 becomes:
+**`M2` - you move them.** The rule says no instance writes `reviewed/`; **you are not an
+instance.** A copy by hand, or a one-off run of the review application against the new location,
+and the records are yours from the first byte. The cost is your afternoon.
 
-> 3. **If it is not here, it is not decided.** Discussion is not decision.
->
->    **A test is the primary statement.** What the game does is decided by a test that runs, read
->    and approved one at a time, and a rule the tests assert is not written in prose as well.
->    **Prose says what a test cannot** - what a thing is for, why a rule is the shape it is, and
->    anything with no observable behaviour to assert. **The game's data is decided in its data
->    file**, reviewed by hand and locked by the scenario test. None of the three is decided in a
->    discussion, in a note, or in a rendering of any of them.
->
->    **Where prose and a test disagree, the test is right and the prose is a defect.** Prose is
->    the one of the three that can drift without anything noticing.
+**`M3` - the records are rebuilt rather than moved.** Nothing is copied; you re-approve fifty-three
+tests through the application in its new home. **The strongest, because every record is then one
+you made under the rule**, and the most expensive - it is the reading you have already done, done
+again.
 
-## The half this proposal was missing, and the prototype already has it
+## What this lane would say
 
-**Raised by the code lane, and it is right.** *Where they disagree the test is right* means
-nothing without a record of **which version you approved** - otherwise the rule says a test is
-right because it is a test, which is not what you said.
+**`M1` now and `M2` or `M3` when the application moves**, because the thing that makes the tests
+awkward where they are is a directory name rather than anything real. **The prototype has stopped
+being a prototype** - its question was answered, its differences table is empty, and what is left
+in it is the specification and the tool that reads it.
 
-**The prototype has the mechanism.** `reviewed/` holds a byte-for-byte copy of the test as you
-read it; the report compares the current test against that copy, normalized on whitespace, and
-says *never reviewed*, *reviewed*, or shows where it drifted. **That is `promote` made
-continuous** - the protocol in `CLAUDE.md` gets the same guarantee once, at the moment of
-copying, and this gets it on every build.
+**But `M1` needs one thing to be honest**: `prototypes/README.md` says what a prototype is, and a
+directory holding the specification is not one. **Renaming it is a bigger change than this
+proposal** and it is the shape the answer probably takes.
 
-**It is not offered as words above** because it belongs with the answer to where the tests live,
-and that is still open. **Named here so the rule is not approved without it**: a test being
-primary and a record of your approval are one mechanism, not two.
+## What follows either way, and it is not small
 
-**And it is one-directional today**, which this lane found by checking it: 54 records against 53
-tests, two records pointing at tests that no longer exist and one test with no record. The report
-walks tests and nothing walks records. **Filed to the code lane as `S-145`** - small today,
-load-bearing if this rule lands.
-
-## Where the tests live, and the code lane's view on it
-
-**This proposal leaves it open and the code lane has argued a position**, recorded here rather
-than adopted because it is yours:
-
-> A test he writes and approves is normative - it is the thing the prose obeys - so it cannot
-> live where either producer edits it freely. That rules out `prototypes/` and `crates/` as much
-> as anything of the specification lane's. The prototype has already demonstrated the split: the
-> test is data and the thing that runs it is code. So the tests belong in a column governed like
-> `spec/` - his, changed only by promotion - with the runner in `crates/`.
-
-**This lane agrees and is not the one to say so**, which is why it is quoted rather than written
-into the rule.
-
-## What this does not decide, and each is a separate question
-
-**Where the tests live.** They are in `prototypes/thin-engine/data/friendly/tests` today, and a
-prototype directory is the code lane's column. **Moving them into `spec/` would make them this
-lane's to write, which is the opposite of what you want** - so the home is a real question and
-this proposal does not answer it.
-
-**What happens to the prose already here.** Seventeen documents state rules the tests will
-restate, and *a rule the tests assert is not written in prose as well* makes most of them
-candidates for deletion. **That is a large, slow read and not a promotion**; this lane will file
-it as a plan rather than as one change.
-
-**What happens to `spec/data/`.** Four of the twelve items waiting on you are about it -
-`P-513`, `P-514`, `P-516` and `P-517` - and the thin-engine has its own notation for the same
-facts. **They are annotated rather than withdrawn**, because whether `spec/data/` survives is
-part of the question above and not this lane's to settle.
-
-## Why this is worth its own proposal rather than being folded in
-
-**It is the sentence that decides what every other item in the queue is worth.** A proposal that
-adds prose to `spec/` is a different thing under this rule than it was yesterday - `P-518`, for
-one, argues that *a test cannot say what a written form means*, which is an argument this rule
-invites you to check rather than accept.
-
-**And it is the one thing here that is about your own control rather than about the game.** Your
-reason is stated and this lane has not improved on it: the document grew past what one person
-could hold, and a test you have read is a piece of the game you are certain of.
-
-## And the argument arrived as a measurement the day after it was written
-
-**Promoting `P-522` broke thirty-eight checks across fifteen targets**, measured against a
-baseline so the attribution is real: 74 targets run before and after, 1 failing test before and
-39 after, and the one that was already red is unrelated.
-
-**All thirty-eight read `releases/first-release.md`'s markdown tables as their source.**
-`CLAUDE.md` already forbids exactly that - *a table of game data in markdown is a rendering and
-never a source* - and the rule was being broken thirty-eight times over, by checks that each
-looked reasonable on its own. **The count did not exist until something went red.**
-
-**Nothing but the tests noticed.** Not the padder, not the outbox index, not two lanes reading the
-diff. **That is the case for this rule stated as an event rather than as an argument**, and it is
-stronger than anything either lane wrote in favour of it.
-
-**It also bears on where the tests live.** The code lane's sentence, 2026-09-21: *a test that
-reads a prose table is reading a rendering as a source, and thirty-eight of them did.* **Whatever
-column the tests end up in, what they read has to be a stating form** - so the home question and
-this one are the same question.
-
-The measurement is in
-[thirty-eight checks read a rendering](../docs/notes/2026-09-21-thirty-eight-checks-read-a-rendering.md).
+**Rule 3 now says a rule the tests assert is not written in prose as well.** Seventeen documents
+in `spec/` state rules that fifty-three tests assert. **Nothing is duplicated today**, because no
+test is in `spec/` yet - **the moment one is, that rule starts cutting**, and working out which
+prose goes is a read this lane will file as a plan rather than as one change.
 
 ### P-528 - One fact about adjacency is now stated three times, in two files
 
