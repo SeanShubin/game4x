@@ -86,7 +86,18 @@ column_of() {
     esac
 }
 
-about_to_commit=$(git diff --cached --name-only --diff-filter=ACMR)
+# **Deletions are included here and nowhere else in this file.** The checks below read file
+# contents - padding, rustfmt - and a deleted file has none, which is why `staged()` leaves `D`
+# out. **The column check reads names**, and a name is all it needs.
+#
+# **Leaving `D` out put the hole in the direction that mattered.** Adding a record to `reviewed/`
+# was refused and removing one was not, and removing is the operation `CLAUDE.md` forbids. Two
+# such deletions rode in `e15ba69c` unseen, in the very commit whose subject was the record.
+#
+# **Measured rather than reasoned**: `git show --name-only --diff-filter=ACMR e15ba69c` lists one
+# file where `git show --name-only e15ba69c` lists three. Found by the specification lane reading
+# this line and saying it had not tested it.
+about_to_commit=$(git diff --cached --name-only --diff-filter=ACMRD)
 if [ -n "$about_to_commit" ]; then
     columns=""
     for file in $about_to_commit; do
