@@ -87,7 +87,7 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
         .iter()
         .filter(|cells| cells[5].contains("at its maximum"))
         .count();
-    let names: std::collections::BTreeSet<&str> = rows
+    let _names: std::collections::BTreeSet<&str> = rows
         .iter()
         .filter(|cells| cells[0].starts_with("**"))
         .map(|cells| cells[0].trim_matches('*'))
@@ -100,29 +100,29 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
     let stated = [
         Stated {
             document: "docs/designing-rules.md",
-            says: "92 role cells",
+            says: "68 role cells",
             derived: rows.len(),
         },
         Stated {
             document: "docs/designing-rules.md",
-            says: "17 are blank",
+            says: "11 are blank",
             derived: blank.len(),
         },
         Stated {
             document: "docs/designing-rules.md",
-            says: "seventeen `put` rows",
+            says: "eleven `put` rows",
             derived: puts.len(),
         },
         Stated {
             document: "docs/designing-rules.md",
-            says: "75 cells carry a quantity",
+            says: "57 cells carry a quantity",
             derived: rows.len() - blank.len(),
         },
-        Stated {
-            document: "docs/designing-rules.md",
-            says: "25 recipes",
-            derived: names.len(),
-        },
+        // **`25 recipes` was here and is gone.** It matched a sentence recording what
+        // `P-494`, `P-495` and `C-115` took the table to - history, compared against the
+        // present, which is the one thing this list must not do. The document states no live
+        // recipe count, by choice: *how many rules that comes to is in the report and
+        // deliberately not here.*
     ];
 
     for Stated {
@@ -143,6 +143,7 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
                 // **Spelled-out numbers, added one at a time as documents use them.** A
                 // missing word fails loudly - *no number in "fifteen `put` rows"* - rather
                 // than reading as zero, which is the only property this list needs.
+                s if s.contains("eleven") => Some(11),
                 s if s.contains("seventeen") => Some(17),
                 s if s.contains("fifteen") => Some(15),
                 s if s.contains("thirteen") => Some(13),
@@ -158,15 +159,17 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
 
     // Counted here rather than only in prose, so the two that are not a bare count still move
     // the test when they move.
-    // **Six were `refresh`'s and the seventh is `hold`'s** - `P-494`, `P-495` and `C-115`.
-    // The old message said *all of which should be `refresh`'s*, which stopped being true the
-    // moment the force rule landed, and the count is what said so.
+    // **Four `refresh`'s and `upkeep`'s `paid`** - `P-522` cut two `refresh`'s with
+    // `defending` and `hold` entire, taking eight to five. The old message named `hold`, which
+    // stopped existing, and the count is what said so - twice now, in the same assertion.
     assert_eq!(
-        maxima, 8,
-        "`put ... at its maximum` rows: six `refresh`'s, `hold`'s `met`, `upkeep`'s `paid`"
+        maxima, 5,
+        "`put ... at its maximum` rows: four `refresh`'s and `upkeep`'s `paid`"
     );
+    // **One since `P-522`**, which cut `muster` and `stand` and took the two strength reads
+    // with them. What is left is `work`'s density.
     assert_eq!(
-        reads_a_trait, 3,
+        reads_a_trait, 1,
         "quantities that read a trait rather than being a number"
     );
     assert_eq!(

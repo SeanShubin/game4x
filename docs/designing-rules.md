@@ -72,20 +72,22 @@ token carries a colour, and an arc that preserves the colour is an ordinary arc.
 an extension of the formalism - it is the coloured version of what `consume`/`produce` was
 approximating badly, and it buys identity **at no cost to any guarantee in this document**.
 
-**The twelve rows split six and six, and only one half is interesting.**
+**The eleven rows split five, five and one, and only the second half is interesting.**
 
-- **Six write *one less*** - `move`, `create labor`, `work`, `bear`, `muster`, `stand`. Each is
+- **Five write *one less*** - `move`, `create labor`, `work`, `bear` and `age`. Each is
   preceded by a `require ... at least 1`, so the value is known before it is written. **An ordinary
-  decrement arc**, and four of the six are player recipes
-- **Six write *at its maximum*** - all of them `refresh`, which is a **world** recipe. **The test is
-  what the amount is, not what the row looks like**: *at its maximum* is **how much is missing**, so
-  the amount depends on the current marking. *One less* is a fixed decrement and reads nothing.
-  **This is the reset arc, and it is confined to the one rule that restores what time gives back**
+  decrement arc**, and three of the five are player recipes
+- **Five write *at its maximum*** - four `refresh`'s and `upkeep`'s `paid`, both **world**
+  recipes. **The test is what the amount is, not what the row looks like**: *at its maximum* is
+  **how much is missing**, so the amount depends on the current marking. *One less* is a fixed
+  decrement and reads nothing. **This is the reset arc, and it is confined to the rules that
+  restore what time gives back**
+- **One writes neither**, and is a state change that is not a count
 
-**Two rows look like marking reads and are not**, which is the same distinction from the other
-side. `work` produces *`$where`'s density for that resource* and `muster` produces *that citizen's
-force*. **A density is a trait of the place and a force is a trait of the kind - both constant, and
-both colours.** What makes an amount illegal is depending on *how much is there*, not on being
+**One row looks like a marking read and is not**, which is the same distinction from the other
+side. `work` produces *`$where`'s density for that resource*. **A density is a trait of the place -
+constant, and a colour.** `muster` produced *that citizen's force* and was the second such row
+until `P-522` cut force from the release. What makes an amount illegal is depending on *how much is there*, not on being
 written as a phrase instead of a number.
 
 
@@ -94,10 +96,11 @@ one of three sources - *anything that exhausts draws on time for a turn: it spen
 carries, and only the turn's end restores that count.* **`refresh` is that sentence written as
 rows**, and it is the only rule in the game that writes a count upward from nothing.
 
-**Counted from the Qty and Traits columns of the *Recipes* table, over its 92 role cells**, so it
-can be re-run: **75 cells carry a quantity and 17 are blank, and the seventeen blanks are exactly
-the seventeen `put` rows.** Of the 75, three read a trait - *that citizen's strength*, *that unit's
-strength*, *`$where`'s density for that resource* - which is a colour rather than a marking read.
+**Counted from the Qty and Traits columns of the *Recipes* table, over its 68 role cells**, so it
+can be re-run: **57 cells carry a quantity and 11 are blank, and the eleven blanks are exactly
+the eleven `put` rows.** Of the 57, one reads a trait - *`$where`'s density for that resource* - which is a colour
+rather than a marking read. **It was three until `P-522`**, which cut `muster` and `stand` and
+took the two strength reads with them.
 
 **Corrected 2026-09-12, and both numbers went stale from promotions this lane made.** It read 81
 cells and twelve `put` rows. **`P-427` took four `store` rows out of founding**, so 81 became 77;
