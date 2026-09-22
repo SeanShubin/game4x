@@ -30,7 +30,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-147** - `1ef0c07` S-147: reviewed/ is a column, and an orphaned record can be reached · still open in `docs/notes/proposals.md`
-- **S-144** - `f8f026b` S-144: the three biome tests become one that asserts the cut · still open in `docs/notes/proposals.md`
+- **S-144** - `db57107` S-144: ten world recipes, and fourteen quotations say which wording they quote · still open in `docs/notes/proposals.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
 

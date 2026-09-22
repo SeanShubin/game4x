@@ -2758,7 +2758,9 @@ name = "goldberg-move"
 version = "0.1.0"
 dependencies = [
  "bevy",
+ "graph-coloring",
  "planet-bevy",
+ "planet-model",
  "planet-render",
  "sphere-tessellation",
 ]

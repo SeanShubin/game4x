@@ -16,6 +16,7 @@
 //! `pitch * yaw * upright` and `upright` is derived from `Direction::NORTH_POLE`, which is
 //! public - so this can reproduce it exactly and cannot drift from it by guessing.
 
+use bevy::gizmos::config::{DefaultGizmoConfigGroup, GizmoConfigStore, GizmoLineStyle};
 use bevy::prelude::*;
 use bevy::window::{PresentMode, PrimaryWindow};
 
@@ -48,6 +49,15 @@ const ABOVE: f32 = 1.035;
 /// A drag that moves the cursor further than this is turning the globe, not clicking it.
 const A_CLICK_IS_STILL: f32 = 4.0;
 
+/// How many segments each step of the route is drawn with.
+///
+/// **Per step rather than per route**, so a long move is drawn as smoothly as a short one.
+/// Eight is where a step stops reading as a straight line: the widest border here is 31.7
+/// degrees at the narrowest and a step is about 0.55 of a radius long, so a segment is under
+/// 0.07 and its own sag is below a thousandth of a radius - far under the 0.0033 a whole step
+/// sank by.
+const PER_STEP: usize = 8;
+
 fn main() {
     let (m, n) = ARRANGEMENT;
     let board = Board::goldberg(m, n);
@@ -72,11 +82,16 @@ fn main() {
             said: "click a disk to pick it up".to_string(),
         })
         .insert_resource(Pressed::default())
-        .add_systems(Startup, (ids_on, lay_the_disks_out))
+        .insert_resource(Turning::default())
+        .add_systems(
+            Startup,
+            (ids_on, the_route_reads_as_an_intention, lay_the_disks_out),
+        )
         .add_systems(
             Update,
             (
                 a_click_is_a_territory,
+                turn_toward_the_destination,
                 carry_the_markers_with_the_globe,
                 draw_the_route,
                 say_what_happened,
@@ -115,6 +130,25 @@ struct Status;
 /// readable as one.
 fn ids_on(mut ids: ResMut<ShowIds>) {
     ids.0 = true;
+}
+
+/// A route is an intention, so it is drawn like one.
+///
+/// **`X-38`, and it is a setting rather than code.** Bevy's gizmo defaults are a two pixel
+/// solid line, which is what a debug overlay looks like - the thing being drawn here is what
+/// the player *means to do*, and a dashed line reads as intended where a solid one reads as
+/// done. Sean asked about representing movement intentions; this is the half of the answer
+/// that costs nothing.
+///
+/// **Wider, too.** Two pixels at this zoom is thinner than the grooves between the panels, so
+/// the route competes with the board's own lines instead of sitting on top of them.
+fn the_route_reads_as_an_intention(mut store: ResMut<GizmoConfigStore>) {
+    let (config, _) = store.config_mut::<DefaultGizmoConfigGroup>();
+    config.line.width = 4.0;
+    config.line.style = GizmoLineStyle::Dashed {
+        gap_scale: 1.2,
+        line_scale: 2.4,
+    };
 }
 
 fn lay_the_disks_out(
@@ -171,7 +205,8 @@ fn a_click_is_a_territory(
     cameras: Query<(&Camera, &GlobalTransform)>,
     mut pressed: ResMut<Pressed>,
     mut table: ResMut<Table>,
-    mut orbit: ResMut<Orbit>,
+    mut turning: ResMut<Turning>,
+    orbit: Res<Orbit>,
 ) {
     let Ok(window) = windows.single() else { return };
     let Some(cursor) = window.cursor_position() else {
@@ -214,7 +249,7 @@ fn a_click_is_a_territory(
     // Recentre on wherever the move has reached, which is what makes a long move possible: the
     // next destination is in front of you rather than round the back.
     if matches!(said, Said::Reached { .. } | Said::Moved { .. }) {
-        centre_on(&mut orbit, facing(board, face));
+        centre_on(&mut turning, facing(board, face));
     }
     table.said = words(&said, face);
 }
@@ -237,30 +272,46 @@ fn carry_the_markers_with_the_globe(
     }
 }
 
-/// The move so far: a line from territory to territory, and a ring on each one stepped onto.
+/// The move so far: an arc over the ground from territory to territory, and a ring on each one
+/// stepped onto.
+///
+/// **The arc is computed in `board::along` and only drawn here** - `X-38`. A straight line
+/// between two centres is a chord through the planet, and on half of `GP(2,0)`'s borders it
+/// passes under the ground it is drawn over. **The points are computed apart from the drawing
+/// because a gizmo cannot be read back**, so geometry that lived in this function would be
+/// geometry no test could reach; `tests/curvature.rs` holds the check.
 fn draw_the_route(mut gizmos: Gizmos, table: Res<Table>, orbit: Res<Orbit>) {
-    let route = table.plan.route();
     let Some(disk) = table.plan.disk() else {
         return;
     };
     let turn = globe_transform(&orbit).rotation;
-    let at = |face: Where| turn * facing(&table.board, face) * ABOVE;
 
-    let mut from = at(table.disks[disk].standing);
-    gizmos.circle(
-        Isometry3d::new(from, Quat::from_rotation_arc(Vec3::Z, from.normalize())),
-        0.11,
-        Color::srgb(1.0, 1.0, 1.0),
-    );
-    for &step in route {
-        let to = at(step);
-        gizmos.line(from, to, Color::srgb(1.0, 0.95, 0.4));
-        gizmos.circle(
-            Isometry3d::new(to, Quat::from_rotation_arc(Vec3::Z, to.normalize())),
-            0.09,
+    // The whole route as territory centres, the disk's own first.
+    let mut faces = vec![table.disks[disk].standing];
+    faces.extend(table.plan.route());
+    // **Through the borders and not only the centres**, so the route is seen to cross each
+    // boundary rather than skip between the middles of territories.
+    let centres = table.board.through(&faces);
+
+    for pair in goldberg_move::board::along(&centres, ABOVE as f64, PER_STEP).windows(2) {
+        gizmos.line(
+            turn * to_view(pair[0]),
+            turn * to_view(pair[1]),
             Color::srgb(1.0, 0.95, 0.4),
         );
-        from = to;
+    }
+
+    for (at, &face) in faces.iter().enumerate() {
+        let point = turn * facing(&table.board, face) * ABOVE;
+        let (size, colour) = match at {
+            0 => (0.11, Color::srgb(1.0, 1.0, 1.0)),
+            _ => (0.09, Color::srgb(1.0, 0.95, 0.4)),
+        };
+        gizmos.circle(
+            Isometry3d::new(point, Quat::from_rotation_arc(Vec3::Z, point.normalize())),
+            size,
+            colour,
+        );
     }
 }
 
@@ -319,16 +370,68 @@ fn nearest(board: &Board, direction: Vec3) -> Option<Where> {
         .map(|(at, _)| at as Where)
 }
 
+/// Where the planet is turning to, and how fast.
+///
+/// **`X-38`, and the highest-frequency of the three.** `centre_on` assigned yaw and pitch
+/// directly - a jump cut - and it fires on nearly every click. Heer and Robertson, TVCG 2007:
+/// animated transitions significantly improve graphical perception, and staged ones more so.
+/// Google Earth and Cesium turn along the great circle between the two points rather than
+/// cutting, which is what a player reads as *the planet turned* rather than *the picture
+/// changed*.
+///
+/// **Yaw is turned the short way round.** Interpolating 350 degrees to 10 the direct way spins
+/// the planet the long way about its axis, which is the one artefact this is meant to remove
+/// rather than introduce.
+#[derive(Resource, Default)]
+struct Turning(Option<(f32, f32)>);
+
+/// How much of the remaining turn is taken each second.
+///
+/// **A fraction rather than a rate**, so a small correction settles as quickly as a large one
+/// starts - the ease-out that makes a turn read as one movement instead of a slide.
+const HOW_FAST: f32 = 9.0;
+
+/// Moves the planet toward where the last click pointed it.
+fn turn_toward_the_destination(
+    time: Res<Time>,
+    mut turning: ResMut<Turning>,
+    mut orbit: ResMut<Orbit>,
+) {
+    let Some((yaw, pitch)) = turning.0 else {
+        return;
+    };
+    // **The short way round the axis**, which is what makes 350 to 10 a twenty degree turn.
+    let round = std::f32::consts::TAU;
+    let short = (yaw - orbit.0.yaw).rem_euclid(round);
+    let toward = orbit.0.yaw
+        + if short > round / 2.0 {
+            short - round
+        } else {
+            short
+        };
+
+    let how_much = (HOW_FAST * time.delta_secs()).min(1.0);
+    orbit.0.yaw += (toward - orbit.0.yaw) * how_much;
+    orbit.0.pitch += (pitch - orbit.0.pitch) * how_much;
+
+    // **Arrived rather than nearly**, so the planet does not creep for ever and `apply_orbit`
+    // stops being woken by a change too small to see.
+    if (toward - orbit.0.yaw).abs() < 1e-4 && (pitch - orbit.0.pitch).abs() < 1e-4 {
+        orbit.0.yaw = toward;
+        orbit.0.pitch = pitch;
+        turning.0 = None;
+    }
+}
+
 /// Turns the globe so that a direction faces the camera.
 ///
 /// The camera sits on `+z` looking at the origin, so *facing the camera* is the model direction
 /// landing on `+z` after `pitch * yaw * upright`. Solving that for the two angles is two
 /// `atan2`s and no search: yaw brings the point into the `y-z` plane, and pitch lifts it onto
 /// the axis.
-fn centre_on(orbit: &mut Orbit, direction: Vec3) {
+fn centre_on(turning: &mut Turning, direction: Vec3) {
     let u = upright() * direction;
-    orbit.0.yaw = (-u.x).atan2(u.z);
-    orbit.0.pitch = u.y.atan2(u.x.hypot(u.z));
+    turning.0 = Some(((-u.x).atan2(u.z), u.y.atan2(u.x.hypot(u.z))));
 }
 
 /// A disk lying flat on the surface at a territory's centre.
