@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-538** - The staging bullet says the column check twice, and the second one carries a fact the first does not · `decide/proposals.md`
 - **P-514** - Three rows of `spec/data/line.4x` are unwritable, and this lane's own check said there was one · `decide/proposals.md`
 - **P-513** - A relation names its columns, and nothing says so · `decide/proposals.md`
 - **P-536** - `spec/data/` sits in `spec/` and holds the release's data, and your ruling today made the two differ · `decide/questions.md`

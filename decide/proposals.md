@@ -11,6 +11,51 @@ of it needs you.
 
 ## Open
 
+### P-538 - The staging bullet says the column check twice, and the second one carries a fact the first does not
+
+**to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** text · **asks** approval · **into** `CLAUDE.md` -> Perspectives
+
+**Left by `P-537` and raised rather than settled**, because it needs a rewrite and not a deletion.
+
+The bullet now ends with two sentences about the same check:
+
+```
+**The hook checks the columns twice for that reason**, before its tools and after them ...
+
+**`hooks/pre-commit` refuses a commit whose files span two perspectives' columns**, which is
+the shape of the race and of writing outside your own column alike.
+```
+
+**The second one's first half is now redundant and its second half is not.** *The shape of the
+race and of writing outside your own column alike* says the check serves two purposes, and
+nothing else in the bullet says that. **So deleting the sentence loses a fact; keeping it states
+the check twice.**
+
+## What lands
+
+The last two sentences of the bullet become one:
+
+> It has happened three times - twenty-six lines, then twenty-one, then twenty - and every time
+> the work survived and the commit message was what was lost. **That check serves two purposes**:
+> it is the shape of the race, and the shape of writing outside your own column.
+
+## What it costs
+
+**A reader skimming for the mechanism loses a sentence naming `hooks/pre-commit`.** The
+paragraph above it names the hook twice already, so the loss is a repetition rather than the
+fact.
+
+**And nothing live leans on the deleted wording**, which is the check `P-519` did not make and
+should have. **Measured, and this lane's first attempt at it was wrong**: the phrase appears
+twice outside `CLAUDE.md`, in `crates/outbox.md` and `docs/notes/proposals.md`. **Both are closed
+items recording the check being built** - one of them arguing that the file described a mechanism
+that did not yet exist - so neither is a reader that would go wrong, and both are history rather
+than citation.
+
+**The first draft of this paragraph said *quoted nowhere*.** It was written in the same breath as
+the boast about `P-519`, and it failed the same way: a grep that returned what this lane expected,
+read as a zero without looking at the hits.
+
 ### P-514 - Three rows of `spec/data/line.4x` are unwritable, and this lane's own check said there was one
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
