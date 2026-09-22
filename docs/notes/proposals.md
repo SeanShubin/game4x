@@ -81,12 +81,21 @@ was  7. relationships in prose, data in data files
 now  8. relationships in prose, data in data files
 ```
 
-**Three live citations in your column say `rule 7` and mean what is now rule 8:**
+**This item said four live citations and there are eleven.** The code lane found the other
+seven and fixed them in `f876530c`; what this lane reported was what a grep of `src/` shows,
+because `src/` is the obvious place and it was the only place looked at.
 
 ```
-crates/game-console/src/declare.rs   three comments
-crates/game-model/README.md          one line
+reported    declare.rs (three), game-model/README.md (one)
+missed      declared-biomes.rs, declared-families.rs, declared-kinds.rs, tests/declare.rs
+            - four examples and a test, each saying *the data file rule 7 asks for*
+missed      three in `C-102`, which is open to them
 ```
+
+**The one that would have stayed wrong longest was the open item**, which is what this lane's own
+index exists to keep honest - an argument somebody will act on, naming a rule that is no longer
+the rule it means. **Seven more are in `C-100`, `C-98`, `C-97` and `C-49`, all closed, and are
+left wrong on purpose**: the reasoning this lane applied to its own fourteen, applied to theirs.
 
 **Nothing breaks and no check reads them** - they are prose in comments, so this is a wrong
 signpost rather than a failure. Reported because a reader following one lands on *reasoning lives
@@ -203,6 +212,23 @@ engine only             gather  end-turn
 **You counted `deploy ark` and `launch ark` among the nine**; this lane reads `deploy` and
 `launch` as their counterparts, renamed. **Neither of us can settle that without reading the
 rules**, which is what you declined to assert and were right to.
+
+**Settled by the code lane, and verified here rather than taken.** `deploy` covers both:
+
+```
+{input id:22 rule:deploy seq:2 name:what of:founder}
+{member kind:pioneer family:founder}
+{member kind:ark   family:founder}
+```
+
+**`founder` is `{pioneer, ark}` and `schema.4x` says why it exists** - *so that `deploy` is one
+rule rather than two.* **So `deploy ark` and `found by land` are one rule already**, and the seven
+is six: `age`, `bear`, `build yard`, `renew`, `spoil`, `stow`.
+
+**And `bear` is probably a fifth.** The engine's `breed` removes a citizen, removes a food and
+adds a citizen, which is the spend-then-make pair the release splits in two - the same folding
+`refresh` shows. **Probably**, on their reading of the clause list without the qualifiers, and
+neither lane is asserting it.
 
 **`gather` is engine-only for a datable reason**: `P-524` promoted it on 2026-09-21, and the
 release's Recipes table predates it. **So one of the two lists is already ahead of the other**,
