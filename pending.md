@@ -30,7 +30,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-147** - `1ef0c07` S-147: reviewed/ is a column, and an orphaned record can be reached · still open in `docs/notes/proposals.md`
-- **S-144** - `27ec31f` S-144: petri, worked and vocabulary follow the cut, and the drawing leaves nothing out · still open in `docs/notes/proposals.md`
+- **S-144** - `e3eea68` S-144: nogain and first_release follow the cut, and the force test asserts it · still open in `docs/notes/proposals.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
 
