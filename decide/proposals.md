@@ -13,6 +13,24 @@ of it needs you.
 
 ### P-520 - `R-6` says it is built, and eleven lines down says this lane has not recorded it as such
 
+**A second thing is wrong with `R-6` and it arrived on 2026-09-21**, after `P-521` and `P-527`
+landed. **Its evidence explains why the committed scenario does not win by quoting a rule that
+`spec/` no longer contains** - *a player wins by launching an Ark from a fully exploited planet* -
+and the four bullets defining that term went with `P-527`.
+
+**The observation survives and the reason does not.** Measured: `{deploy-ark territory:1}` at
+`play.4x:19`, `{launch-ark territory:1}` at `:164`. **Both acts are in territory 1**, so under
+`P-521`'s condition the scenario still does not win - for a different reason than the evidence
+gives. `{found-by-land territory:2}` founds a second settlement and nothing launches from it.
+
+**This lane said the opposite twice on 2026-09-21** - in `P-521`'s own argument, which Sean read
+while approving it, and in `S-151` an hour later - **writing *it deploys to territory 1 and founds
+territory 2* as though founding were launching.** Both are corrected in place.
+
+**Whether this item grows to cover it or a second one is filed is worth one line from you**; this
+lane has folded it in rather than adding to the queue, and the two are the same capability's
+account of itself being wrong in two ways.
+
 **to** sean · **status** open · **raised** 2026-09-20 · **kind** measured · **shape** text · **asks** approval · **into** `releases/first-release.md` -> R-6
 
 **One item makes both claims.** Found reading the queue for what is open and addressed to you.

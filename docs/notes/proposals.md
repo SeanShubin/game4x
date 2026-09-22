@@ -100,10 +100,23 @@ game. **It may well earn its place** - *fully exploited* is the kind of thing a 
 a later victory rule wants, and it is cheaper to keep than to rebuild.
 
 **And `R-6` is the one to look at rather than the code.** Its evidence explains why the committed
-scenario does not win by quoting a rule that no longer exists. **Under the new condition it
-does win** - it deploys to territory 1 and founds territory 2 - so the capability's own account
-of itself is now wrong in the other direction. **That is this lane's to repair**, in the release,
-and it is named here so you are not surprised by it when you next read `R-6`.
+scenario does not win by quoting a rule that no longer exists.
+
+**The paragraph that stood here said it now wins, and it does not.** Measured after writing it:
+`{deploy-ark territory:1}` at `play.4x:19` and `{launch-ark territory:1}` at `:164` - **the same
+territory**. `{found-by-land territory:2}` founds a second settlement and nothing launches from
+it. **Founding is not launching**, and this lane wrote *it deploys to territory 1 and founds
+territory 2* as though it were.
+
+**So `R-6`'s observation still holds and its reason has changed.** The scenario launches and does
+not win; under the old condition because the planet was not fully exploited, under the new one
+because both acts are in territory 1. **The capability's account of itself needs repairing either
+way** and that is this lane's, in the release.
+
+**The same claim is in `P-521`, which Sean has already promoted.** The landed rule is unaffected -
+it is his sentence and it says what he meant - but the argument he read while approving it said
+the scenario would now win, and that was false. **Recorded here rather than quietly fixed**,
+because he read it.
 
 ### S-150 - `P-512` landed: a unit no longer moves out of a place with no energy
 
