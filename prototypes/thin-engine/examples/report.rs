@@ -187,6 +187,21 @@ fn orphaned() -> Vec<String> {
 /// *why does the diff section list both sides as not what I read? Shouldn't I have read at least
 /// one of them.* **He had read one of them**, and the report gave him no way to tell which.
 ///
+/// # The gate reads this too, since 2026-09-21
+///
+/// **`tests/reviewed.rs` calls this, so the page and the gate cannot disagree about what drift
+/// is.** `S-149`: the suite ran the working copies and nothing anywhere compared a test to its
+/// record - so Sean's reading changed what the gate did by nothing at all.
+///
+/// **The alternative was to run `reviewed/` instead of `spec/tests/`, and comparing is stronger.**
+/// A runner pointed at the records does not run a test that has no record, and the orphan check
+/// walks records to tests rather than the other way - so an unread test would simply not run, and
+/// the suite would be green while proving less. **This one is red and says which.**
+///
+/// **Normalized the same way for both, which is the point of it being one function.** A gate
+/// stricter than the display would call a test drifted on a page that says it is reviewed, and a
+/// reader would have no way to tell which was lying.
+///
 /// # And each line says which section it stands in
 ///
 /// **A row in a `given` and the same row in a `then` differ only by a quantity**, so six lines of
@@ -195,9 +210,26 @@ fn orphaned() -> Vec<String> {
 ///
 /// **Everything above the first marker is `note`** - the prose that says what the test is for,
 /// which drifts as readily as the rows and matters as much.
-fn review_of(stem: &str) -> (&'static str, Vec<(&'static str, String)>) {
+pub fn review_of(stem: &str) -> (&'static str, Vec<(&'static str, String)>) {
     let now = std::fs::read_to_string(tests_at().join(format!("{stem}.4x"))).unwrap_or_default();
-    let Ok(read) = std::fs::read_to_string(records_at().join(format!("{stem}.4x"))) else {
+    let read = std::fs::read_to_string(records_at().join(format!("{stem}.4x"))).ok();
+    drift(read.as_deref(), &now)
+}
+
+/// The same comparison over the text rather than over the disk.
+///
+/// **Split out so it can be shown failing.** `review_of` reads two directories that belong to
+/// other columns - `spec/tests/` is the specification and `reviewed/` is Sean's - so a test that
+/// demonstrated drift by editing one of them would be writing outside this lane. **This takes the
+/// two texts**, and `tests/reviewed.rs` shows a changed row, a whitespace-only change and a
+/// missing record on strings it owns.
+///
+/// **The wiring needs no such demonstration, because both ways of getting it wrong are red.** A
+/// records directory that pointed at nothing would answer *never reviewed* for all fifty-four and
+/// a tests directory that pointed at nothing would answer *drifted* for all fifty-four - so the
+/// gate passing is already a statement that both are found and that they agree.
+pub fn drift(read: Option<&str>, now: &str) -> (&'static str, Vec<(&'static str, String)>) {
+    let Some(read) = read else {
         return ("never reviewed", Vec::new());
     };
     let bare = |text: &str| -> Vec<(String, String)> {
@@ -222,7 +254,7 @@ fn review_of(stem: &str) -> (&'static str, Vec<(&'static str, String)>) {
         }
         out
     };
-    let (was, is) = (bare(&read), bare(&now));
+    let (was, is) = (bare(read), bare(now));
     if was == is {
         return ("reviewed", Vec::new());
     }

@@ -55,6 +55,39 @@ pub fn every_test() -> Vec<String> {
     found
 }
 
+/// Every test Sean has read, which is the set the suite runs.
+///
+/// **`CLAUDE.md`**: *the suite runs the copies in `reviewed/`, so a test nobody has read
+/// constrains nothing and a test he has read is red until the code obeys it.* `S-149`, 2026-09-21:
+/// it ran every file in the directory instead, so his reading changed what the gate did by
+/// nothing at all.
+///
+/// **What executes is still the foundation notation**, because that is what the engine reads.
+/// **What makes those the read bytes is `tests/reviewed.rs`**, which fails when a test and its
+/// record differ, on top of `tests/directories.rs` holding the two notations together. So the
+/// chain is: the engine runs the foundation, the foundation is the friendly source, and the
+/// friendly source is what he approved.
+///
+/// **A test with no record is left out rather than failed**, which is the half of the rule that is
+/// easy to get backwards. Drafting a test is not an error; it is a thing that constrains nothing
+/// until he has read it - so this returns fewer files and the runner says how many and which.
+///
+/// **Every other check still walks every file.** Whether a test is spaced the way Sean spaces
+/// them, and whether its two notations agree, are true of a draft as much as of an approved test -
+/// only *does the engine have to satisfy it* waits on a reading.
+pub fn every_read_test() -> (Vec<String>, Vec<String>) {
+    let record = mine().join("..").join("..").join("reviewed");
+    let (mut read, mut unread) = (Vec::new(), Vec::new());
+    for file in every_test() {
+        let name = file.rsplit('/').next().unwrap_or(&file).to_string();
+        match record.join(&name).is_file() {
+            true => read.push(file),
+            false => unread.push(name),
+        }
+    }
+    (read, unread)
+}
+
 pub fn game_rows() -> Vec<Row> {
     let mut all = Vec::new();
     for file in LOADED {

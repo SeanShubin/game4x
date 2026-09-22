@@ -16,7 +16,7 @@ use std::path::PathBuf;
 use thin_engine::script::{Files, Report, run_test};
 
 mod common;
-use common::{every_test, mine, rows};
+use common::{every_read_test, every_test, mine, rows};
 use thin_engine::notation::Row;
 
 /// The directory, as something the engine can ask for a file by name.
@@ -231,7 +231,27 @@ fn every_test_gets_from_its_given_to_its_then() {
     // shape for red/green/refactor: a run that is meant to be red is a run where you want to see
     // every test that is.
     let mut red = Vec::new();
-    for file in every_test() {
+    // **The read ones, and the unread ones are named rather than skipped in silence.** `S-149`:
+    // `CLAUDE.md` says a test nobody has read constrains nothing, and a test that quietly does not
+    // run looks exactly like one that passed.
+    let (reading, unread) = every_read_test();
+    if !unread.is_empty() {
+        println!(
+            "{} of {} tests have not been read and did not run: {}",
+            unread.len(),
+            every_test().len(),
+            unread.join(", ")
+        );
+    }
+    // **A count over nothing is the same failure with the sign flipped** - `CLAUDE.md`. With every
+    // record missing this would run no test and say every one of them reached its `then`.
+    assert!(
+        reading.len() > 40,
+        "only {} of {} tests have been read, so a pass proves almost nothing - is reviewed/ there?",
+        reading.len(),
+        every_test().len()
+    );
+    for file in reading.clone() {
         // **A test that will not run is red too**, and unwrapping here hid every test after the
         // first one that could not.
         match run_test(&script_of(&file), &data()) {
@@ -249,9 +269,9 @@ fn every_test_gets_from_its_given_to_its_then() {
 
     assert!(
         red.is_empty(),
-        "{} of {} tests did not reach their `then`:\n\n{}",
+        "{} of {} read tests did not reach their `then`:\n\n{}",
         red.len(),
-        every_test().len(),
+        reading.len(),
         red.join("\n\n")
     );
 }
