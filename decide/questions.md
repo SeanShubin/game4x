@@ -198,6 +198,67 @@ causes one.
 review from. **Choosing `T1` gets it today and costs `review-web`; choosing `T3` gets it after one
 line in a hook and one decision about where the record lives.**
 
+## The workflow you described is `T3`, and it moves one thing in the analysis above
+
+**Two of your sentences settle what was open.** *I expect the spec lane to convert my prose into
+tests for me to review* says who drafts, and *I want some kind of application to present what I
+need to review* says the approval is made in a page rather than in a queue. **That is `T3` with
+the specification lane holding the pen.**
+
+**And it changes the escape hatch, in your favour.** The table above assumed the code lane drafts
+the tests. **If this lane drafts them and the code lane is the one they constrain, the code lane
+cannot clear a red by editing a test at all** - it is not their column, and the hook refuses it.
+
+**What that leaves is a narrower risk and a worse one.** This lane would then both write the tests
+and own the directory they sit in, so **the only thing separating *Claude wrote this* from *Sean
+approved this* is the record in `reviewed/`.** It follows that the record cannot be this lane's
+either - **not the code lane's because they are constrained by it, and not this lane's because it
+writes what the record is about.**
+
+**Which also says who builds the application**, and it is not this lane. An instrument that shows
+you this lane's work, and that writes the record of your approving it, is the one thing this lane
+must not control - the same reason a lens may not edit what it reviews. **The code lane builds it,
+which is where `review-web` already is.**
+
+## The part nothing here can do yet, and it is your last sentence
+
+**Bulk approval after a spot check is safe exactly when *no other kinds of changes* is measured
+rather than assumed**, and today it is neither - it is not even askable.
+
+**What exists**: per test, a status and a list of lines that differ, each marked *what you read* or
+*not what you read*. **What does not exist is a sentence about the whole set** - *these forty
+differ only in this one mechanical way, and no test differs in any other way, and here is the
+count of each*.
+
+**Without that, a spot check of three is evidence about three.** `CLAUDE.md` already has the rule
+this is an instance of: *check the rule over every case, not on one case, and assert how many
+cases there were.* **The count is what tells a real sweep from a lucky sample.**
+
+**It is also exactly what this lane did to your release and got right.** `P-522` predicted the
+shape of its own change before making it - nine recipe blocks, eight table rows, one section - and
+the counts were re-derived after. **The same instrument applied to a hundred drifted tests is what
+makes *mark all reviewed* an act rather than a hope.**
+
+**So the application has a third job**, beside presenting and filtering: **classify a change set
+and assert its population.** Group the drifted tests by what kind of difference they carry, show
+the count of each group, and show that the groups cover every drifted test. **Then a spot check of
+three in a group of forty is a claim about forty**, and *no other kinds of changes* is something
+you read rather than something you hope.
+
+## What this lane would now say, given the workflow
+
+**`T3`, and the three homes fall out of your own sentences rather than from a preference.**
+
+```
+the draft test        the specification lane's column - it writes them from your prose
+the approval record   a column no instance writes - it is the only thing that says you read it
+the application       the code lane's - it must not be built by the lane whose work it shows
+```
+
+**And one requirement that is not about homes at all**: until the application can classify a change
+set and assert its population, **bulk approval should be one test at a time**, because that is the
+only scale at which *no other kinds of changes* is something you have checked.
+
 ### P-529 - Three lines of the release still name what `P-522` cut, and one of them is a vetted capability
 
 **to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** a decision · **into** `releases/first-release.md`
