@@ -168,9 +168,12 @@ Four things the perspectives make necessary, all of which have teeth:
   changes - so a file you stage is committed by whoever commits next, under a message about
   something else. This is not a caution about your own carefulness; the hazard is someone else.
   **Staging by name bounds what you add and not what you commit**, so no amount of care closes
-  it: the window is between your `git add` and your `git commit`, and checking for the lock
-  falls before it. It has happened three times - twenty-six lines, then twenty-one, then
-  twenty - and every time the work survived and the commit message was what was lost.
+  it: the window runs from your `git add` to the moment git builds the commit, and most of it is
+  `hooks/pre-commit`'s own run. **The hook checks the columns twice for that reason**, before its
+  tools and after them, and `hooks/post-commit` reports the instant after it returns, which is
+  the only part nothing can refuse. It has happened three times - twenty-six lines, then
+  twenty-one, then twenty - and every time the work survived and the commit message was what was
+  lost.
   **`hooks/pre-commit` refuses a commit whose files span two perspectives' columns**, which is
   the shape of the race and of writing outside your own column alike.
 - **Never amend a commit here.** `git commit --amend` replaces a hash, and another perspective may
