@@ -86,10 +86,12 @@ directory is addressed to nobody, and this one is what every lane is measured ag
 **The suite runs the copies in it**, so a test nobody has read constrains nothing and a test he
 has read is red until the code obeys it.
 
-**A record is added and removed only by the review application, acting as Sean.** No instance
-writes `reviewed/` by any other route. **The application shows a record whose test is gone**, so
-that a rename - which leaves an orphaned record and an unread test - is two things he can see
-and act on rather than one thing nobody may touch.
+**A record is created and deleted only by the review application, acting as Sean.** Committing
+records the application has already written is publishing rather than approving, and any lane
+may do it. **No lane creates a record, deletes one, or changes what one says** - the bytes are
+yours and the history of them is everybody's. **The application shows a record whose test is
+gone**, so that a rename - which leaves an orphaned record and an unread test - is two things he
+can see and act on rather than one thing nobody may touch.
 
 **It is neither producer's, for a different reason each.** The specification lane writes the
 tests, so a lane that could also write the record could approve its own work. The code lane is

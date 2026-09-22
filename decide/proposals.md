@@ -11,61 +11,40 @@ of it needs you.
 
 ## Open
 
-### P-533 - *No instance writes it* stops the record being committed, and it has already cost two
+### P-534 - One sentence still says *no instance writes it*, flatly
 
-**to** sean · **status** open · **raised** 2026-09-21 · **kind** measured · **shape** text · **asks** approval · **into** `CLAUDE.md` -> Perspectives
+**to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** text · **asks** approval · **into** `CLAUDE.md` -> Perspectives
 
-**You found this and you are right: it comes up every time you review.** The rule landed
-yesterday and the friction is already measurable twice.
+**Filed the moment `P-533` landed**, which is what that proposal's own rule requires.
+
+`P-533` defined what writing a record means - creating, deleting, or changing what one says - and
+said plainly that committing is none of those. **The paragraph before it still opens with the
+undefined version.**
 
 ```
-CLAUDE.md   **`reviewed/` is the record of what Sean has read, and no instance writes it.**
-            A record is added and removed only by the review application, acting as Sean.
+**`reviewed/` is the record of what Sean has read, and no instance writes it.**
 ```
 
-**Read strictly, no lane may `git add` a record either**, so every review session ends with a
-commit only you can make. **Eight review sessions are in the history** - *Reviewed 44 tests*,
-*Reviewed 41 tests*, *Reviewed 2 tests*, and so on - so this is the common case rather than an
-edge.
-
-## It has already failed twice, and both times the same way
-
-**Eight of the fifty-two records were never committed at all** before the move: the
-deployment-and-ark ones. **And all fifty-two are untracked right now**, because the move script
-copied them and nothing added them. **Both are the same failure** - a record that exists on your
-disk and in no clone - and the second one was found by you asking for a status rather than by
-anything noticing.
-
-**A rule whose observance depends on remembering a commit will be observed sometimes**, which for
-a record of what you approved is worse than not having the rule.
+**Read in order the reader meets the broad claim first and the narrowing three sentences later**,
+which is the order that produced the question you asked: *isn't this problem going to keep coming
+up as I review tests?* **A reader who stops at the first paragraph concludes it will.**
 
 ## What lands
 
-The second sentence of that paragraph becomes:
+That opening clause becomes:
 
-> **A record is created and deleted only by the review application, acting as Sean.** Committing
-> records the application has already written is publishing rather than approving, and any lane
-> may do it. **No lane creates a record, deletes one, or changes what one says** - the bytes are
-> yours and the history of them is everybody's.
+> **`reviewed/` is the record of what Sean has read, and no instance creates or deletes one.**
 
-## Why this gives up nothing, which is the part worth checking
+## What it costs, which is one shade of emphasis
 
-**The write rule was never what made the record trustworthy.** A record is a copy of a test, and
-any lane can produce those bytes; nothing in a file says a key was pressed. **What the rule buys
-is a boundary somebody could cross without meaning to**, and publishing is not that boundary.
+**The broad sentence is more forbidding and that was its appeal.** *No instance writes it* is easy
+to remember and hard to misread in the direction that matters. **What it cost was one review
+session's records going untracked and eight before that** - so the memorable version is the one
+that was not followed, and the precise version is the one that can be.
 
-**And a forged record cannot hide a failure.** The suite runs the approved copy, so a test that
-fails is red whether or not a record says you read it. **What a forged record can do is make a
-test you have not read binding**, which is why *creating* one is the act that is forbidden and
-*committing* one is not.
-
-## What it does not change
-
-**The other three paragraphs stand.** The record still lives where no lane may create one, the
-application still shows a record whose test is gone, and the application is still the code lane's.
-
-**And this is `CLAUDE.md` again**, so *promote P-533* has to come from you in your own message.
-Said because the item before it needed the same and you gave it; not said because it is in doubt.
+**Nothing else in the four paragraphs needs it.** The fourth says *a lane that could write the
+record could approve its own work*, which is true under the narrowed meaning and reads the same
+way.
 
 ### P-528 - One fact about adjacency is now stated three times, in two files
 
