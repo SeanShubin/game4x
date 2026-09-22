@@ -65,7 +65,7 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 **to** spec · **status** open · **raised** 2026-09-21 · **source** this lane, following `S-144`
 
-**`prototypes/thin-engine/data/**/*.4x` carries prose, and the prose quotes `spec/`.** Every test
+**`crates/thin-engine/data/**/*.4x` carries prose, and the prose quotes `spec/`.** Every test
 and every rule is explained in comments, and those comments cite the specification the way every
 other file in this lane does. **`tests/quotations.rs` reads `rs`, `md`, `html`, `sh` and `ps1` and
 not `4x`**, so none of it has ever been checked.
@@ -234,7 +234,7 @@ rather than an edit.
 > test of whether this holds.
 
 **The check is what makes it a rule rather than a habit**, and it exists:
-`prototypes/thin-engine/tests/isolation.rs` reads every relation and rule name out of `data/`,
+`crates/thin-engine/tests/isolation.rs` reads every relation and rule name out of `data/`,
 drops comments and `#[cfg(test)]`, and refuses any of them appearing in code that runs. **The word
 list is read out of the data rather than written in the test**, so it widens itself.
 
@@ -289,7 +289,7 @@ said, verbatim**, so that nothing is lost between his words and a proposal:
 >   to automatically top off storage bins, this is a policy layer that generates the proper commands
 >   to execute player wishes and automatically do obvious tasks.
 
-**What the prototype settled is already listed** - `prototypes/thin-engine/backlog.md`, *What the
+**What the prototype settled is already listed** - `crates/thin-engine/backlog.md`, *What the
 prototype has settled that `spec/` has not caught up with*. It is a table of differences with the
 reason for each, and it is the thing to turn into proposals rather than this item.
 
@@ -532,7 +532,7 @@ it was there* - written about `cited()` in `tools/outbox`, after exactly this ha
 ### C-128 - The thin engine stayed flat for three concepts and grew 48% at the fourth, and 26 of 36 blocks are on the far side of it
 
 **to** spec · **status** acted · **acted** 2026-09-14 · **cited** `2ab9e811` · **raised**
-2026-09-14 · **source** building the four concepts `prototypes/thin-engine/README.md` listed, and
+2026-09-14 · **source** building the four concepts `crates/thin-engine/README.md` listed, and
 finding the recorded answer no longer says what it said
 
 **Read, and it implies no proposal - `S-137`.** The specification lane re-derived every number
@@ -606,7 +606,7 @@ recording with it: the prototype inherits the cliff `docs/designing-rules.md` id
 escaping it - where the thing is bounded the absence is a row, and where it is not there is no row
 to write. **No proposal is implied and none is asked for**; if one is, it is yours to write.
 
-**derived from** `prototypes/thin-engine/README.md` at `2610ae0`, whose measurements are the
+**derived from** `crates/thin-engine/README.md` at `2610ae0`, whose measurements are the
 answer - the 232 and the 343 are lines that are neither blank nor `//`, taken before
 `#[cfg(test)]`, summed over the four modules - and from `spec/data/block.4x` as `2610ae0` left it,
 counted by `owner:`
@@ -670,7 +670,7 @@ not. Verified by reading the commit rather than by being told.
 
 **What this asks for is one entry.** `docs/prototypes/README.md` is that lane's file and it is
 where a recorded answer becomes findable; `CLAUDE.md` makes reachability the test of existing at
-all. **The answer is written and is in `prototypes/thin-engine/README.md`** - this item exists so
+all. **The answer is written and is in `crates/thin-engine/README.md`** - this item exists so
 that the index catches up with it, and carries the one line the index needs.
 
 ## The answer, in one line

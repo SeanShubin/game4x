@@ -10,6 +10,7 @@ members = [
     "crates/game-console",
     "crates/game-front",
     "crates/game-globe",
+    "crates/thin-engine",
     "crates/sphere-tessellation",
     "crates/graph-coloring",
     "crates/planet-model",

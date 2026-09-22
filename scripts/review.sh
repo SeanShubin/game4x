@@ -17,5 +17,5 @@ root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # Debug, unlike every other launcher here: it serves one page to one reader on one machine, and a
 # release build would cost a minute of waiting to save milliseconds nobody is watching for.
-exec cargo run --quiet --manifest-path "$root/prototypes/thin-engine/Cargo.toml" \
+exec cargo run --quiet --manifest-path "$root/crates/thin-engine/Cargo.toml" \
   --example review-web -- "$@"

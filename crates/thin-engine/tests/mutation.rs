@@ -509,7 +509,18 @@ fn the_data_as_it_stands_passes_every_check() {
 }
 
 /// **Every row matters**: delete any one of them and something fails.
+/// **`#[ignore]` since 2026-09-22, and it is a schedule rather than a demotion.** This file is
+/// about twenty minutes and the engine joined the workspace gate today - `S-153` - so without
+/// this every push by every lane pays it. Sean chose that over the two alternatives he was
+/// given: paying it on each push, and leaving the engine outside the gate entirely now that the
+/// mainline is to depend on it.
+///
+/// **Run it with `cargo test -p thin-engine -- --ignored`**, and CI runs it on every push to
+/// the mainline. `the_data_as_it_stands_passes_every_check` is *not* ignored, so the control
+/// still runs on every push - which is the half that would otherwise make a mutation look
+/// load-bearing for a reason of its own.
 #[test]
+#[ignore = "twenty minutes; run with --ignored, and CI runs it"]
 fn no_row_can_be_deleted_without_breaking_something() {
     let files = originals();
     // **The control first, or this test lies.** When `check` fails on unmutated data every
@@ -716,7 +727,18 @@ const DELETABLE: [&str; 23] = [
 ];
 
 /// **Every value matters**: change any one of them and something fails.
+/// **`#[ignore]` since 2026-09-22, and it is a schedule rather than a demotion.** This file is
+/// about twenty minutes and the engine joined the workspace gate today - `S-153` - so without
+/// this every push by every lane pays it. Sean chose that over the two alternatives he was
+/// given: paying it on each push, and leaving the engine outside the gate entirely now that the
+/// mainline is to depend on it.
+///
+/// **Run it with `cargo test -p thin-engine -- --ignored`**, and CI runs it on every push to
+/// the mainline. `the_data_as_it_stands_passes_every_check` is *not* ignored, so the control
+/// still runs on every push - which is the half that would otherwise make a mutation look
+/// load-bearing for a reason of its own.
 #[test]
+#[ignore = "twenty minutes; run with --ignored, and CI runs it"]
 fn no_value_can_be_changed_without_breaking_something() {
     let files = originals();
     // **The control first, or this test lies.** When `check` fails on unmutated data every

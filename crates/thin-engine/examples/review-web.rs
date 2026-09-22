@@ -4,7 +4,7 @@
 //! decisions quickly.*
 //!
 //! ```text
-//! cd prototypes/thin-engine
+//! cd crates/thin-engine
 //! cargo run --example review-web
 //! ```
 //!

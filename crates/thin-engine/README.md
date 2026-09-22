@@ -1554,7 +1554,7 @@ The isolation is checked rather than promised, by `tests/isolation.rs`:
 ## Running it
 
 ```
-cd prototypes/thin-engine
+cd crates/thin-engine
 cargo test --no-fail-fast      # every binary, not just up to the first that fails
 cargo run --example report     # report.html: every test, whole, failures marked
 cargo run --example render     # data/friendly/ from data/foundation/
@@ -1687,7 +1687,7 @@ Sean, 2026-09-16: *Lets explore the idea of marking things as reviewed from the 
 goal is to be able to look through everything quickly and express my decisions quickly.*
 
 ```
-cd prototypes/thin-engine
+cd crates/thin-engine
 cargo run --example review-web
   http://127.0.0.1:7878  -  6 tests
 ```

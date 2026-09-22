@@ -17,7 +17,7 @@
 
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
-prototype="$root/prototypes/thin-engine"
+prototype="$root/crates/thin-engine"
 
 # **Staging is publishing, and `git commit` commits the index rather than your changes.** So a
 # file somebody else staged would be committed under this message. Refuse rather than carry it.

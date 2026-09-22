@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
 # Commit the thin-engine tests you have marked reviewed.
 #
-# The review server writes a copy of each test into prototypes/thin-engine/reviewed/ as you
+# The review server writes a copy of each test into crates/thin-engine/reviewed/ as you
 # approve it, and that copy is the marker: a later edit makes the two differ and the test shows
 # as drifted until you read it again. The copies are only on your disk until they are committed.
 #
@@ -15,11 +15,11 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 $root = Split-Path -Parent $PSScriptRoot
-$prototype = Join-Path $root "prototypes/thin-engine"
+$prototype = Join-Path $root "crates/thin-engine"
 
 # **Staging is publishing, and `git commit` commits the index rather than your changes.** So a
 # file somebody else staged would be committed under this message. Refuse rather than carry it.
-$mine = @("prototypes/thin-engine/reviewed/", "prototypes/thin-engine/report.html", "prototypes/thin-engine/report.txt")
+$mine = @("crates/thin-engine/reviewed/", "crates/thin-engine/report.html", "crates/thin-engine/report.txt")
 $strays = @(git -C $root diff --cached --name-only | Where-Object {
     $path = $_
     -not ($mine | Where-Object { $path.StartsWith($_) })
@@ -31,7 +31,7 @@ if ($strays.Count -gt 0) {
   exit 1
 }
 
-$pending = @(git -C $root status --porcelain -- "prototypes/thin-engine/reviewed")
+$pending = @(git -C $root status --porcelain -- "crates/thin-engine/reviewed")
 if ($pending.Count -eq 0) {
   Write-Host "no review to record - every copy in reviewed/ is already committed."
   exit 0
@@ -53,11 +53,11 @@ try {
 finally { Pop-Location }
 
 git -C $root add -- `
-  "prototypes/thin-engine/reviewed" `
-  "prototypes/thin-engine/report.html" `
-  "prototypes/thin-engine/report.txt"
+  "crates/thin-engine/reviewed" `
+  "crates/thin-engine/report.html" `
+  "crates/thin-engine/report.txt"
 
-$names = @(git -C $root diff --cached --name-only -- "prototypes/thin-engine/reviewed" |
+$names = @(git -C $root diff --cached --name-only -- "crates/thin-engine/reviewed" |
     ForEach-Object { [IO.Path]::GetFileNameWithoutExtension($_) })
 
 $title = if ($args.Count -gt 0) { $args[0] }

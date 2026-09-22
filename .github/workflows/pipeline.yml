@@ -157,6 +157,21 @@ jobs:
       - name: Test (the engine-facing crates)
         run: cargo test -p planet-ecs -p planet-bevy -p planet-flat -p game-globe -p game4x -p planet-view -p goldberg-view
 
+      # The mutation sweep, which is `#[ignore]`d for the push gate and not for this.
+      #
+      # **It is about twenty minutes and it is the strongest check in the tree**: it deletes
+      # each row of the game's data and changes each value, re-runs the suite, and compares the
+      # survivors against a written-down list. `docs/architecture.md` rule 13 is what it
+      # enforces - every row and every value in the game's data is load-bearing.
+      #
+      # **Sean chose this split on 2026-09-22**, when the engine joined the workspace and the
+      # sweep would otherwise have been paid by every lane on every push. Here is where it is
+      # paid instead, so the guarantee is kept and nobody waits for it.
+      #
+      # Release, because twenty minutes is the debug figure and this is the same work.
+      - name: Test (the mutation sweep, which the push gate skips)
+        run: cargo test --release -p thin-engine -- --ignored
+
       # Run from the crate directory: Trunk resolves the cargo manifest from its working
       # directory, and the workspace root is a virtual manifest with no root package.
       # --public-url makes asset URLs resolve under the project subpath at
@@ -277,8 +292,8 @@ jobs:
           # are copied under it. **Copying only `data/` published a page whose every *on disk*
           # link was dead**, which is what this step looked like between the move and now.
           mkdir -p crates/game4x/dist/reports/thin-engine/spec
-          cp prototypes/thin-engine/report.html crates/game4x/dist/reports/thin-engine/index.html
-          cp -r prototypes/thin-engine/data crates/game4x/dist/reports/thin-engine/data
+          cp crates/thin-engine/report.html crates/game4x/dist/reports/thin-engine/index.html
+          cp -r crates/thin-engine/data crates/game4x/dist/reports/thin-engine/data
           cp -r spec/tests crates/game4x/dist/reports/thin-engine/spec/tests
           find crates/game4x/dist/reports/thin-engine -name '*.4x' \
             -exec sh -c 'cp "$1" "$1.txt"' _ {} \;

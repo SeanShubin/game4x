@@ -13,7 +13,7 @@
 # Ctrl-C stops it. Arguments pass straight through.
 
 $ErrorActionPreference = 'Stop'
-$manifest = Join-Path (Split-Path -Parent $PSScriptRoot) 'prototypes/thin-engine/Cargo.toml'
+$manifest = Join-Path (Split-Path -Parent $PSScriptRoot) 'crates/thin-engine/Cargo.toml'
 
 # Debug, unlike every other launcher here: it serves one page to one reader on one machine, and a
 # release build would cost a minute of waiting to save milliseconds nobody is watching for.

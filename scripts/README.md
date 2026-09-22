@@ -18,7 +18,7 @@ remembering a cargo incantation.
 | `push.ps1` / `.sh` | the gate, then `git push`, then the pipeline | Returns when the published page is serving this commit. See below |
 | `gate.ps1` / `.sh` | `hooks/pre-push` - fmt, clippy, the test suite, the tools, the engine-facing crates | The gate on its own, without pushing. Names what is dirty first, because the tree is shared. `Q-91` |
 | `kinds.ps1` / `.sh` | [the kinds prototype](../prototypes/kinds/README.md) | Prints the release's kinds and transformations from the Rust data that holds them |
-| `reviewed.ps1` / `.sh` | `git`, over `prototypes/thin-engine/reviewed/` | Commits the tests you have marked reviewed in the review server. Regenerates the report first so its tally matches, and refuses if anything else is staged |
+| `reviewed.ps1` / `.sh` | `git`, over `crates/thin-engine/reviewed/` | Commits the tests you have marked reviewed in the review server. Regenerates the report first so its tally matches, and refuses if anything else is staged |
 ```
 scripts/planet-view.ps1                       # PowerShell
 bash scripts/planet-view.sh                   # POSIX shell

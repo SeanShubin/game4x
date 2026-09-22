@@ -1,0 +1,29 @@
+# A workspace member since 2026-09-22, which is the whole of `S-153` in one line.
+#
+# **It was deliberately outside**, with its own `[workspace]` rather than a line in the root
+# manifest - `S-136`. The reason was that a thing stripped to nothing and grown one concept at a
+# time reddens the shared gate at every intermediate state, and every lane commits in this tree.
+#
+# **That reason expired when it stopped being grown and started being the engine.** Sean,
+# 2026-09-21: *all I really care about on the mainline is the rendering work, I am fine with
+# dumping all rules and replacing them with thin engine.* A thing the mainline depends on that
+# the gate never runs is the worse of the two states, and it is the one the old arrangement
+# would now produce.
+#
+# **The mutation sweep is `#[ignore]`d rather than dropped**, and `tests/mutation.rs` says why:
+# it is twenty minutes and it runs on demand and in CI. Sean chose that over paying it on every
+# push by every lane, and over the gate not covering the engine at all.
+#
+# **No dependencies, and the empty table is still deliberate.** Sean: *I don't want any
+# dependencies or assumptions creeping in from existing code, even the notation.* So there is no
+# `crates/command-language` here and no path dependency of any kind - see `README.md` for why the
+# notation is re-implemented rather than borrowed. **Joining the workspace does not change
+# that**: membership is about which gate runs it, not about what it may reach for.
+
+[package]
+name = "thin-engine"
+version.workspace = true
+edition.workspace = true
+publish = false
+
+[dependencies]
