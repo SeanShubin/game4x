@@ -26,6 +26,123 @@ ones, for their reasoning.
 
 ## Answered, kept for the reasoning
 
+## The working behind `P-527`, answered `W2` on 2026-09-21
+
+**Not an item, deliberately.** `P-527` is one proposal and it lives in
+[`decide/proposals.md`](../../decide/proposals.md); a second heading carrying the same id
+would make a cited id resolve to two things. **The question it asked was:** *Fully exploited* is defined in four bullets and now read by nothing in `spec/`
+
+**to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** a decision · **into** `spec/control.md` -> Winning
+
+**Filed the moment `P-521` landed**, which is what that proposal said would happen.
+
+`spec/control.md` -> Winning now opens with four bullets defining *fully exploited* and closes
+with a win condition that does not use the phrase. **Measured after the promotion: the phrase
+appears once in `spec/`, in its own definition.**
+
+```
+A planet is fully exploited when every territory that can be taken has been taken, every
+territory is producing the greatest output it can, and every storage structure on it is full.
+Exploiting a territory is putting labor to work at its extractors. ...
+What that greatest output is follows from the territory's own permanent facts ...
+A territory that cannot feed a citizen has no output to reach ...
+```
+
+## Why this is a decision and not a tidy-up
+
+**The definition is still true and something still reads it.** `is_fully_exploited` is built
+across `crates/game-model` and `crates/game-console`, with a test named for it, and `R-6`'s
+evidence quotes the old win condition to explain why the committed scenario does not win.
+**Deleting the words does not delete any of that.**
+
+## The three answers
+
+**`W1` - keep all four, as vocabulary.** *Fully exploited* stays a defined term the game can use
+later - for scoring, for an end-of-game report, for a second win condition. **The cost is four
+bullets at the top of a section whose subject is now something else**, and a reader who looks for
+what reads them and finds nothing.
+
+**`W2` - cut all four.** The section becomes one bullet and says exactly what winning is.
+**The cost is the built code**, which then implements a term the specification does not define,
+and `R-6`'s evidence stops resolving.
+
+**`W3` - move them, and keep them.** They are a statement about a territory's output rather than
+about winning, so they would sit in `spec/economy.md` or `spec/planet.md`. **The cost is a move
+that has to pick a home**, and this lane will not pick one without you.
+
+## What this lane would say
+
+**`W3` if the term survives your new direction, `W2` if it does not** - and that is the part
+this lane cannot see. Under an executable specification the question is whether a test will ever
+assert *the planet is fully exploited*; if none will, the words are prose with no reader and `W2`
+is honest. **You are the one who knows whether that test is coming.**
+
+## The working behind `P-529`, answered `B1` on 2026-09-21
+
+**Not an item, deliberately.** `P-529` is one proposal and it lives in
+[`decide/proposals.md`](../../decide/proposals.md); a second heading carrying the same id
+would make a cited id resolve to two things. **The question it asked was:** Three lines of the release still name what `P-522` cut, and one of them is a vetted capability
+
+**to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** a decision · **into** `releases/first-release.md`
+
+**Filed the moment `P-522` landed.** Its instruction named six tables and a section and carried
+them out exactly; **it did not name these three, and they survive saying things the release no
+longer has.** Measured by grepping the file after the edit.
+
+```
+:14   Scope    A mobile unit may move across a boundary, usually to conquer and start
+               another self-contained territory
+:63   Kinds    territory | a place things are in, which has a biome, a force of nature, and
+               a density and a capacity per resource
+:329  R-4      A biome per territory - vetted 2026-09-03
+```
+
+## Two of them are wording and one is not
+
+**Line 14 and line 63 are the easy half.** *Conquer* is force, and a territory's *biome* and
+*force of nature* are two of the three cuts, sitting in a cell describing what a territory is.
+**Neither states a rule the release still has**, so both are stale text rather than open
+questions - and this lane could fix them as rephrasing if they were only rephrasing, which they
+are not: removing *conquer* changes what the bullet says a unit moves across a boundary **for**.
+
+**`R-4` is the one that is yours.** It is `vetted`, on 2026-09-03, against a drawing that exists.
+Nothing about the drawing has changed. **But the release now says biomes are out of scope and
+carries a vetted capability that delivered them**, which is a file disagreeing with itself.
+
+## The three answers for `R-4`
+
+**`B1` - leave it vetted and say why.** Work observed is work observed; add one line to `R-4`
+saying biomes were delivered before the cut and the cut is about rules rather than about the
+drawing. **The release stays honest about its own history.**
+
+**`B2` - move it to the log.** `releases/README.md` -> Shipped is where a delivered capability
+goes, and the log is empty. **The cost is that the log is meant for whole releases**, not for one
+capability leaving early.
+
+**`B3` - cut it with the rest.** **The cost is that it deletes the record of something a person
+looked at and approved**, which is the one kind of evidence this process treats as final.
+
+## What this lane would say
+
+**`B1`.** It is the only one of the three that does not lose information, and the disagreement is
+between a scope statement and a history, which a sentence can resolve. **`B2` and `B3` both
+answer a bookkeeping question by discarding an observation**, and observations are the scarce
+thing here.
+
+## And the two wording lines, once you have said
+
+```
+- A mobile unit may move across a boundary to start another self-contained territory
+```
+
+```
+| **territory** | a place things are in, which has a density and a capacity per resource |
+```
+
+**Offered as words rather than carried out**, because the first changes what the bullet claims a
+move is for, and `CLAUDE.md` says where a change would alter what a line claims, raise it rather
+than make it.
+
 ### P-532 - Fifty-three tests have to cross a column boundary, and nothing may carry them
 
 **to** sean · **status** answered · **answered** 2026-09-21, `M2` · **raised** 2026-09-21 · **kind** entailed · **into** `spec/tests/`, `reviewed/`, and the prototype

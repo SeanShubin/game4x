@@ -11,87 +11,87 @@ of it needs you.
 
 ## Open
 
-### P-528 - One fact about adjacency is now stated four times, in three files
+### P-529 - `B1`: `R-4` stays vetted and says why, and two lines lose what was cut
 
-**to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** approval · **into** `spec/orbit.md` -> Crossing between layers, and `spec/planet.md` -> Distance
+**to** sean · **status** open · **raised** 2026-09-21 · **kind** recovered · **shape** text · **asks** approval · **into** `releases/first-release.md` -> R-4, Scope, Kinds
 
-**Filed the moment `P-526` landed**, and it retires `S-74`, which found the first two in September
-and could not close because the third had not arrived.
+**You answered `B1` on 2026-09-21.** An answer is not a promotion, so this is the rewrite -
+**words you have not seen yet**, because `B1` asks for a sentence rather than a deletion.
 
-*Two places on the same layer are adjacent when their territories are, and a place is adjacent to
-the place above it* is now written in four places, three of them in `spec/`:
+## What lands, and the first is the one that is new
+
+**A line added to `R-4`, after its `Vetted when`:**
+
+> - **Biomes were delivered before they were cut.** `P-522` puts them out of scope for this
+>   release, and this capability was observed on 2026-09-03 against a drawing that still exists.
+>   **The cut is about which rules are built and not about what was seen**, so the vetting stands.
+
+**The Scope bullet loses *conquer*:**
+
+> - A mobile unit may move across a boundary to start another self-contained territory
+
+**And the Kinds row for `territory` loses the biome and the force of nature:**
+
+> | **territory** | a place things are in, which has a density and a capacity per resource |
+
+## What each one costs
+
+**`R-4`** gains three lines in a file that is meant to be read once. **What it buys is that the
+release stops disagreeing with itself** - it says biomes are out of scope and carries a
+capability that delivered them, and without the sentence a reader has to work out which is
+wrong.
+
+**The Scope bullet** loses the reason a unit crosses a boundary. *To conquer* is force, which is
+out; *to start another self-contained territory* is what is left and is what this release does.
+
+**The Kinds row** is the smallest and the most mechanical: two of the three cuts were sitting in
+a cell describing what a territory is.
+
+## What it does not touch
+
+**`R-1` through `R-3` and `R-5`.** Only `R-4` names something that was cut.
+
+**And the `Strength` column**, which `P-522` left in and flagged. Nothing in the release reads it
+now that force is out; it stays because `spec/units.md` says every unit has a strength. **Still
+yours if you want it gone, and still not in this proposal.**
+
+### P-527 - `W2`: the four bullets defining *fully exploited* go
+
+**to** sean · **status** open · **raised** 2026-09-21 · **kind** recovered · **shape** an instruction · **asks** approval · **into** `spec/control.md` -> Winning
+
+**You answered `W2` on 2026-09-21: cut all four.** An answer is not a promotion, so this is the
+rewrite. **It offers no new words** - every word in the resulting section is one you have already
+approved - which is why it is an instruction rather than text.
+
+## What the section becomes, whole
 
 ```
-spec/orbit.md    The orbital layer   Two places on the same layer are adjacent when their
-                                     territories are, and a territory's surface and its orbit
-                                     are adjacent by being layers of one territory
-spec/orbit.md    Crossing between    An orbit is next to the territory below it, and next to
-                 layers              the orbits above that territory's neighbours
-spec/planet.md   Distance            A territory is adjacent to the space above it, and two
-                                     spaces are adjacent when the territories below them are
+## Winning
+
+- A player wins by deploying an Ark to one territory and launching an Ark from a different one.
 ```
 
-**And a fourth, found on 2026-09-21** by re-reading `releases/first-release.md` -> Where things
-are whole before promoting `P-512` into it - which is the trigger `CLAUDE.md` names and this is
-the trigger paying:
-
-```
-releases/first-release.md -> Where things are
-   Territory adjacency is stated once, and orbital adjacency is derived from it - an orbit is
-   next to its territory and to the orbits above that territory's neighbours
-```
-
-**That one is not offered for deletion here.** It sits in a release rather than the
-specification, and it is explaining why the dump omits orbital adjacency rather than stating the
-rule for its own sake. **Named so the count is four and the reader can decide**; if you want it
-gone too, say so and it goes with the others.
-
-**Two of the first three are in one file, eight lines apart.** `spec/invariants.md` -> A fact is
-stated once forbids exactly this, and says which way to resolve it: *the shorter specification is the one that
-says each thing once, so removing the second form is better than checking it.*
-
-## What lands
-
-**The first bullet of `Crossing between layers` goes.** It says what the section above it now
-says, in a fourth vocabulary - `P-349` settled that *edge, border and boundary name that shared
-thing*, and `next to` is anchored to nothing. **The `orbit boundary` bullet beside it stays
-untouched**: it defines a boundary a unit may or may not cross, which is a different fact and the
-one that section is for.
-
-**And the whole middle paragraph of `spec/planet.md` -> Distance goes** - both its sentences,
-because the second is about the first:
-
-```
-A territory is adjacent to the space above it, and two spaces are adjacent when the territories
-below them are. Neither is a further rule; both are what sharing a boundary comes to when one
-place is above another.
-```
-
-**The paragraphs around it stay** - *adjacency is a shared boundary*, and *to cross is to pass
-through a shared boundary* - because both are about adjacency in general and neither mentions
-layers.
+**That bullet is `P-521`, promoted 2026-09-20.** The four above it go: the definition of *fully
+exploited*, what exploiting a territory is, what the greatest output follows from, and the one
+about a territory that cannot feed a citizen.
 
 ## How to tell it was carried out
 
-**`spec/orbit.md` -> Crossing between layers has one bullet**, the `orbit boundary` one, with its
-wording unchanged.
+**`spec/control.md` -> Winning holds one bullet**, and the phrase *fully exploited* appears
+nowhere in `spec/`. Measured today: once, in the definition being removed.
 
-**`spec/planet.md` -> Distance contains no occurrence of *above*.** Measured today: two, both in
-the paragraph being removed.
+## What it costs, which you have already weighed and which is worth restating once
 
-**And *next to* appears once in `spec/`, down from twice.** The survivor is
-`spec/logistics.md` -> Containment, *a thing says which of the things in it are next to which* -
-which is about what a container states, not about places, and is untouched.
+**Built code implements a term the specification will not define.** `is_fully_exploited` is in
+`crates/game-model` and `crates/game-console` with a test named for it, and `R-6`'s evidence
+quotes the old win condition to explain why the committed scenario does not win.
 
-## What it costs, and why this is approval rather than a decision
+**None of that breaks.** The code keeps working and the test keeps passing; what changes is that
+a reader of the code finds no rule behind the name. **This lane will tell the code lane in the
+commit that lands it**, so the orphaned term is reported rather than discovered.
 
-**A reader of `spec/planet.md` alone loses the orbital case.** That is the cost `S-74` could not
-resolve, and `P-526` resolves it: the orbital case is now stated in the file about orbits, under a
-heading that says so, rather than in a document a reader of orbits has no reason to open.
-
-**So the choice `S-74` was holding open has closed by itself.** It asked whether `spec/orbit.md`
-should keep its own sentence or point at `spec/planet.md`; the answer is neither, because the
-sentence now lives in `spec/orbit.md` and it is `spec/planet.md` that was restating.
+**And under `P-530` that is the right way round.** A term no test will ever assert is prose with
+no reader, and prose is the one of the three that drifts without anything noticing.
 
 ### P-520 - `R-6` says it is built, and eleven lines down says this lane has not recorded it as such
 

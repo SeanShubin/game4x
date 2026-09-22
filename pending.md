@@ -8,15 +8,14 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-528** - One fact about adjacency is now stated four times, in three files · `decide/proposals.md`
+- **P-529** - `B1`: `R-4` stays vetted and says why, and two lines lose what was cut · `decide/proposals.md`
+- **P-527** - `W2`: the four bullets defining *fully exploited* go · `decide/proposals.md`
 - **P-520** - `R-6` says it is built, and eleven lines down says this lane has not recorded it as such · `decide/proposals.md`
 - **P-519** - One clause is stated twice in `spec/console.md`, and the invariants forbid exactly that · `decide/proposals.md`
 - **P-518** - `{name field:value ...}` does not say whether the fields may be none, and seven forms are · `decide/proposals.md`
 - **P-515** - Publish the shape of the error, not only the correction · `decide/proposals.md`
 - **P-514** - Three rows of `spec/data/line.4x` are unwritable, and this lane's own check said there was one · `decide/proposals.md`
 - **P-513** - A relation names its columns, and nothing says so · `decide/proposals.md`
-- **P-529** - Three lines of the release still name what `P-522` cut, and one of them is a vetted capability · `decide/questions.md`
-- **P-527** - *Fully exploited* is defined in four bullets and now read by nothing in `spec/` · `decide/questions.md`
 - **P-517** - `spec/data/` states the cases, and the rules are what you wanted to read · `decide/questions.md`
 - **P-516** - Moving resources: put or consume-and-produce, and how the fuel says who burnt it · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
