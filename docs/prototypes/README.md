@@ -14,6 +14,7 @@ question is answered — not when it is polished.
 | [Gap view](../../prototypes/gap-view/README.md)             | Can a player set a destination anywhere on the world with one mouse gesture, without rotating anything?                                                               | Built ([code](../../prototypes/gap-view/README.md))             |
 | [Hex torus view](../../prototypes/hex-torus-view/README.md) | At the sizes the game would use, does a flat isotropic hex torus read as a world, and how visible is the wrapping? **Not whether a torus should be the game's shape** | Being built ([code](../../prototypes/hex-torus-view/README.md)) |
 | [Thin engine](../../prototypes/thin-engine/README.md)       | Can a rule run from rows of data, against an engine that names no game noun? **`C-114`'s open half, answered by existing rather than decided**                        | **Answered** 2026-09-14, below                                  |
+| [Goldberg move](../../prototypes/goldberg-move/README.md)   | Can a player lay out a move of any length across a sphere by clicking, without the interface ever having to guess which way round he meant to go?                     | Being built ([code](../../prototypes/goldberg-move/README.md))  |
 
 ## Conventions
 
