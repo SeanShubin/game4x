@@ -126,6 +126,38 @@ fn every_view_has_a_diffable_sibling() {
     }
 }
 
+/// A kind the played state shows and the catalog has no section for, and why.
+///
+/// # This is a dead link on a page and it is tolerated rather than unnoticed
+///
+/// **The catalog is generated from the release's Kinds table and the state from the model**,
+/// and Sean chose on 2026-09-21 to leave the model with what `spec/` keeps rather than cut
+/// `garrison`, `biome` and `force` out of it to match a release that defers them. So the state
+/// report stands up a garrison, `browse::kind_at` links it to `catalog.html#garrison` the way
+/// it links every kind, and the catalog has no such section.
+///
+/// **The cost is real and small**: clicking a garrison in the state report does nothing, which
+/// is exactly the silent failure this test exists to catch. It is written down here rather
+/// than excused by a weakened assertion, so a reader of the report knows why, and a second one
+/// arriving is a finding.
+///
+/// **Both directions bite.** A link to a deferred anchor that the catalog *does* have fails,
+/// so the entry cannot outlive the gap; and any other missing anchor fails as before.
+const DEFERRED: [(&str, &str); 3] = [
+    (
+        "garrison",
+        "`P-522` deferred the kind; the model keeps it because `spec/control.md` does",
+    ),
+    (
+        "force",
+        "`P-522` deferred the force rule; `spec/control.md` keeps force",
+    ),
+    (
+        "nature",
+        "`P-522` deferred it with the force rule; `spec/planet.md` keeps it",
+    ),
+];
+
 /// Every link a page makes lands on a file that exists, and on an anchor that is in it.
 ///
 /// **The half that matters is the anchor.** A link to a file is checked by the file being
@@ -136,7 +168,7 @@ fn every_view_has_a_diffable_sibling() {
 #[test]
 fn every_link_lands_on_something_that_is_there() {
     let files = everything();
-    let mut checked = 0;
+    let (mut checked, mut dead) = (0, 0);
     for (name, text) in &files {
         if !name.ends_with(".html") {
             continue;
@@ -159,10 +191,22 @@ fn every_link_lands_on_something_that_is_there() {
                 .find(|(named, _)| named == file)
                 .unwrap_or_else(|| panic!("{name} links to {file}, which nothing generates"));
             if let Some(anchor) = anchor {
-                assert!(
-                    found.1.contains(&format!("id=\"{anchor}\"")),
-                    "{name} links to {target}, and {file} has no id {anchor:?}"
-                );
+                let deferred = DEFERRED.iter().any(|(word, _)| *word == anchor);
+                match deferred {
+                    false => assert!(
+                        found.1.contains(&format!("id=\"{anchor}\"")),
+                        "{name} links to {target}, and {file} has no id {anchor:?}"
+                    ),
+                    // **Asserted the other way round**, so an exception that has been repaired
+                    // fails here rather than passing quietly for ever.
+                    true => {
+                        assert!(
+                            !found.1.contains(&format!("id=\"{anchor}\"")),
+                            "{file} has id {anchor:?} now, so delete its entry in `DEFERRED`"
+                        );
+                        dead += 1;
+                    }
+                }
             }
             checked += 1;
         }
@@ -171,6 +215,20 @@ fn every_link_lands_on_something_that_is_there() {
         checked > 200,
         "only {checked} links were followed, which is too few for this to be about the \
          reports rather than about one of them"
+    );
+
+    // **The dead links are counted, not merely allowed.** Three entries in `DEFERRED` can
+    // excuse any number of links, and *some link somewhere is dead* is not what that list
+    // claims.
+    //
+    // **Twenty-seven, over three anchors**, which is what a state report of twelve
+    // territories costs: a garrison, a nature and a force cell each, wherever the played
+    // scenario stood one up. **The number is the thing to watch** - the three anchors stay
+    // three while a promotion defers nothing new, and this moves the moment the scenario
+    // changes what it builds, which is the reseed `S-150` is about.
+    assert_eq!(
+        dead, 27,
+        "twenty-seven links land on one of the three deferred anchors and {dead} did"
     );
 }
 

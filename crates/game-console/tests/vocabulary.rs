@@ -233,12 +233,44 @@ fn declared_traits(document: &str) -> BTreeMap<String, Admits> {
 /// cannot outlive itself and cannot be closed by quietly weakening the assertion. The pattern
 /// is `closed_sets.rs`'s, and its warning holds here too: past about two, a list of
 /// exceptions is the thing being checked written twice.
-/// **It is empty, and that is the finding rather than a check with nothing to do.** Both
-/// entries were `C-46`'s two words: `game`, which `P-351` declared, and `manned`, which Sean
-/// deleted in `S-72`. **An empty list is a claim** - that every word in the data file is one
-/// the release declares - and the count below states it, so emptying this stays a deliberate
-/// act rather than somewhere a weakened test could arrive.
-const UNDECLARED: [(&str, &str); 0] = [];
+/// **It was empty, and `P-522` put five words in it.** Both original entries were `C-46`'s:
+/// `game`, which `P-351` declared, and `manned`, which Sean deleted in `S-72`. **An empty list
+/// is a claim** - that every word in the data file is one the release declares - and it held
+/// until a release deferred part of the model rather than the model getting ahead of one.
+///
+/// # These five are a schedule, not a gap
+///
+/// Sean, 2026-09-21, choosing between cutting `garrison`, `biome` and `force` out of the model
+/// and narrowing the checks: **the model keeps what `spec/` keeps**, `spec/planet.md` keeps
+/// every biome and `spec/control.md` keeps force, and a release saying *not this one* is a
+/// schedule. So the played state still stands up garrisons and gives territories biomes, and
+/// the release declares neither.
+///
+/// **That is different in kind from the two this list used to hold.** Those were words the
+/// data used and nothing declared anywhere - a real gap, closed by declaring one and deleting
+/// the other. These are declared in `spec/` and deferred by a release, which is why the reason
+/// column says so rather than saying *not yet declared*.
+///
+/// **Five is over the two the warning above names**, and deliberately: an exemption list long
+/// enough to be the thing checked written twice is the hazard, and these five are one
+/// promotion rather than five findings. **They come out together or not at all**, which is
+/// what makes them one entry with five spellings rather than five exceptions.
+const UNDECLARED: [(&str, &str); 5] = [
+    (
+        "garrison",
+        "`P-522` deferred it; `spec/control.md` keeps it",
+    ),
+    ("nature", "`P-522` deferred it with the force rule"),
+    (
+        "biome",
+        "`P-522` cut the Biomes table; `spec/planet.md` keeps every biome",
+    ),
+    ("met", "the mark `hold` put on a nature, deferred with it"),
+    (
+        "defending",
+        "what a thing spends to muster a force, deferred with force",
+    ),
+];
 
 /// Every word of every description in the played state is one the release declares.
 #[test]
@@ -379,10 +411,20 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
             "`{word}` is declared now, so delete its exception: {why}"
         );
     }
+    // **Five, and the number is asserted so that the list cannot grow quietly.** It was zero
+    // and the claim it carried was that every word in the data file is declared; `P-522`
+    // deferred five and the claim is now that these five and no others are deferred. **A
+    // sixth is a finding** - either the model has got ahead of the specification, which is
+    // what this check has always been for, or another promotion deferred something and the
+    // reason belongs beside it.
+    //
+    // **The loop above is the other direction** and is what stops this being a weakening: a
+    // word that stops being wrong fails there, so the day the release declares `garrison`
+    // again the entry has to come out.
     assert_eq!(
         UNDECLARED.len(),
-        0,
-        "every word in the data file is declared; an entry here is a finding rather than an allowance"
+        5,
+        "five words are deferred by `P-522`; a sixth is a finding rather than an allowance"
     );
 }
 

@@ -112,30 +112,95 @@ fn every_value_a_trait_admits_is_a_row_in_the_table_that_lists_them() {
     ];
     assert_eq!(closed.len(), 2, "two sets are closed and written down");
 
-    let mut compared = 0;
+    // **The model keeps what the specification keeps, and a release may defer it.** Sean,
+    // 2026-09-21, choosing between cutting `garrison`, `biome` and `force` out of the model
+    // and narrowing this check: the model follows `spec/`, which keeps all three, and a
+    // release saying *not this one* is a schedule rather than a deletion.
+    //
+    // **So the equality became a containment, and that is a weaker check** - which is why the
+    // difference is named rather than tolerated. Every kind the release lists must be in the
+    // model, as before; a kind the model has and the release does not must be one of these,
+    // by name.
+    //
+    // **Both directions still bite.** A model kind that is neither listed nor named here
+    // fails, so nothing new slips in; and the day the release lists one of these again, the
+    // name comes out of this list or it fails as unnecessary. A deferral that never expires
+    // is the failure this is written to avoid.
+    let deferred: [(&str, &str); 4] = [
+        ("kind", "garrison"),
+        ("kind", "nature"),
+        ("kind", "force"),
+        ("biome", "*"),
+    ];
+
+    let (mut compared, mut whole_sets_deferred) = (0, 0);
     for (set, heading, admits) in &closed {
         let listed: BTreeSet<String> = named_under(&document, heading).into_iter().collect();
         let admits: BTreeSet<String> = admits.iter().cloned().collect();
 
         assert!(
-            !listed.is_empty(),
-            "{heading} lists nothing, so it would agree with any model at all"
-        );
-        assert!(
             !admits.is_empty(),
             "the model admits no `{set}`, so this would agree with any table at all"
         );
 
-        let unwritten: Vec<&String> = admits.difference(&listed).collect();
+        // **A set the release defers whole has no table to be compared against**, and the
+        // emptiness is the thing to check rather than the thing to work around: the section
+        // has to be absent, not present and empty. `P-522` deleted `## Biomes` outright.
+        if deferred
+            .iter()
+            .any(|(which, what)| which == set && *what == "*")
+        {
+            assert!(
+                !document.contains(heading),
+                "`{set}` is deferred as a whole set and {heading} is in the release, so one \
+                 of the two is wrong"
+            );
+            assert!(
+                listed.is_empty(),
+                "{heading} is absent and something listed {listed:?} under it"
+            );
+            whole_sets_deferred += 1;
+            continue;
+        }
+
+        assert!(
+            !listed.is_empty(),
+            "{heading} lists nothing, so it would agree with any model at all"
+        );
+
+        // **What the release lists, the model has to have** - unchanged, and the direction
+        // that catches the model falling behind a promotion.
         let unbuilt: Vec<&String> = listed.difference(&admits).collect();
+
+        // **What the model has and the release does not list has to be deferred by name.**
+        // `*` defers a whole set, which is what `P-522` did to the biomes: the release has no
+        // Biomes table at all, so every biome the model admits is unlisted and naming twelve
+        // of them here would be the model's own list written twice.
+        let unwritten: Vec<&String> = admits
+            .difference(&listed)
+            .filter(|name| {
+                !deferred
+                    .iter()
+                    .any(|(which, what)| which == set && (*what == "*" || *what == name.as_str()))
+            })
+            .collect();
+
         assert!(
             unwritten.is_empty() && unbuilt.is_empty(),
             "the model's `{set}` and {heading} admit different sets:\n  \
-             the model has and {heading} does not list: {unwritten:?}\n  \
+             the model has, {heading} does not list, and nothing defers: {unwritten:?}\n  \
              {heading} lists and the model does not have: {unbuilt:?}"
         );
         compared += admits.len();
     }
+
+    // **One set compared and one deferred whole**, said out loud so that a release deferring
+    // both would not satisfy every assertion above by running the loop zero useful times.
+    assert_eq!(
+        (closed.len() - whole_sets_deferred, whole_sets_deferred),
+        (1, 1),
+        "one of the two closed sets is compared against a table and one is deferred whole"
+    );
 
     // Over every case, and how many cases there were. Twelve kinds and six biomes; a run
     // that compared two empty sets twice would satisfy everything above it.
@@ -152,9 +217,14 @@ fn every_value_a_trait_admits_is_a_row_in_the_table_that_lists_them() {
     // trait was renamed to `strength` rather than the kind being dropped.
     // **The seventh is `nature`**, declared by `P-494`: it was a trait of a territory, and
     // making it a kind is what took the zero test out of the force rule.
+    // **Nineteen since `P-522`, and the number fell without the model losing anything.** The
+    // six biomes are no longer compared because the release has no table to compare them
+    // against, not because the model stopped admitting them - Sean, 2026-09-21, choosing to
+    // leave the model with what `spec/` keeps. So this counts what was actually held against
+    // a table, and `whole_sets_deferred` above counts what was not.
     assert_eq!(
-        compared, 25,
-        "nineteen kinds and six biomes were compared when this was written; {compared} were"
+        compared, 19,
+        "nineteen kinds were compared when this was written; {compared} were"
     );
 }
 

@@ -10,7 +10,7 @@
 
 **`P-426` and `P-427` have since decided that question elsewhere**, which is what the gap looks like when somebody closes it by hand: the Kinds row now says metal is *drawn from the planet, and conserved once above ground*, reconciling it with the planet being an endless source, and the four `produce 1 store` rows are gone from both founding recipes - which were creating five metal of binding while consuming three. **Both were found by re-deriving from the Binding column, not here.**
 
-**55 rules**, ground from **36** blocks of recipe rows: a family becomes its members, a density becomes its cases. **26 of them draw on a source** - the planet, the star or time - and a source is a place they take from rather than an exemption from the arithmetic. That is what keeps them in the check instead of out of it.
+**44 rules**, ground from **27** blocks of recipe rows: a family becomes its members, a density becomes its cases. **22 of them draw on a source** - the planet, the star or time - and a source is a place they take from rather than an exemption from the arithmetic. That is what keeps them in the check instead of out of it.
 
 ## A weighting exists, so nothing comes back round with more
 
@@ -18,34 +18,27 @@ Every rule is non-increasing under the weighting below, so any sequence of them 
 
 | Place              | Weight | What it is               |
 | ------------------ | ------ | ------------------------ |
-| ark, defending     | 18     | a count, spent by acting |
-| citizen, laboring  | 18     | a count, spent by acting |
-| extractor, working | 18     | a count, spent by acting |
-| pioneer, defending | 18     | a count, spent by acting |
-| time               | 18     | an endless well          |
-| ark                | 15     | a thing                  |
-| pioneer            | 15     | a thing                  |
-| citizen, defending | 9      | a count, spent by acting |
-| force              | 9      | a thing                  |
+| the planet         | 18     | an endless well          |
+| the star           | 18     | an endless well          |
+| ark                | 12     | a thing                  |
+| pioneer            | 12     | a thing                  |
 | food               | 4      | a thing                  |
 | ark, moving        | 3      | a count, spent by acting |
 | citizen            | 3      | a thing                  |
 | citizen, bearing   | 3      | a count, spent by acting |
+| citizen, laboring  | 3      | a count, spent by acting |
 | citizen, paid      | 3      | a state a thing is in    |
 | energy             | 3      | a thing                  |
 | extractor          | 3      | a thing                  |
+| extractor, working | 3      | a count, spent by acting |
 | fertility          | 3      | a thing                  |
 | food, keeps        | 3      | a state a thing is in    |
 | food, keeps 0      | 3      | a state a thing is in    |
-| garrison           | 3      | a thing                  |
 | labor              | 3      | a thing                  |
 | metal              | 3      | a thing                  |
-| nature             | 3      | a thing                  |
-| nature, met        | 3      | a state a thing is in    |
 | pioneer, moving    | 3      | a count, spent by acting |
 | store              | 3      | a thing                  |
-| the planet         | 3      | an endless well          |
-| the star           | 3      | an endless well          |
+| time               | 3      | an endless well          |
 | yard               | 3      | a thing                  |
 
 ## Every rule, and what it nets
@@ -54,16 +47,16 @@ Made minus taken, per place. A `require` row moves nothing and is absent rather 
 
 | Rule                            | Nets                                                        | Worth |
 | ------------------------------- | ----------------------------------------------------------- | ----- |
-| deploy ark                      | +1 garrison · +2 citizen · +2 extractor · -1 ark            | 0     |
+| deploy ark                      | +2 citizen · +2 extractor · -1 ark                          | 0     |
 | move (ark moving)               | -1 ark, moving · -1 energy                                  | -6    |
 | move (pioneer moving)           | -1 energy · -1 pioneer, moving                              | -6    |
-| found by land                   | +1 garrison · +2 citizen · +2 extractor · -1 pioneer        | 0     |
+| found by land                   | +2 citizen · +2 extractor · -1 pioneer                      | 0     |
 | build extractor                 | +1 extractor · -1 labor · -1 metal                          | -3    |
 | build store                     | +1 store · -1 labor · -1 metal                              | -3    |
 | build yard                      | +1 yard · -1 labor · -15 metal                              | -45   |
-| produce pioneer                 | +1 pioneer · -2 citizen · -2 energy · -3 metal              | -6    |
-| launch ark                      | +1 ark · -12 energy · -2 citizen · -3 metal                 | -36   |
-| create labor (citizen laboring) | +1 labor · -1 citizen, laboring                             | -15   |
+| produce pioneer                 | +1 pioneer · -2 citizen · -2 energy · -3 metal              | -9    |
+| launch ark                      | +1 ark · -12 energy · -2 citizen · -3 metal                 | -39   |
+| create labor (citizen laboring) | +1 labor · -1 citizen, laboring                             | 0     |
 | work (energy x2)                | +2 energy · -1 extractor, working · -1 labor · -1 the star  | -18   |
 | work (energy x4)                | +4 energy · -1 extractor, working · -1 labor · -1 the star  | -12   |
 | work (energy x5)                | +5 energy · -1 extractor, working · -1 labor · -1 the star  | -9    |
@@ -80,7 +73,7 @@ Made minus taken, per place. A `require` row moves nothing and is absent rather 
 | work (metal x5)                 | +5 metal · -1 extractor, working · -1 labor · -1 the planet | -9    |
 | work (metal x6)                 | +6 metal · -1 extractor, working · -1 labor · -1 the planet | -6    |
 | work (metal x8)                 | +8 metal · -1 extractor, working · -1 labor · -1 the planet | 0     |
-| upkeep (citizen paid)           | +1 citizen, paid · -1 food · -1 time                        | -19   |
+| upkeep (citizen paid)           | +1 citizen, paid · -1 food · -1 time                        | -4    |
 | bear (citizen bearing)          | +1 fertility · -1 citizen, bearing                          | 0     |
 | breed                           | +1 citizen · -1 fertility · -1 food                         | -4    |
 | perish                          | -1 citizen                                                  | -3    |
@@ -92,22 +85,11 @@ Made minus taken, per place. A `require` row moves nothing and is absent rather 
 | discard                         | -1 energy                                                   | -3    |
 | discard                         | -1 labor                                                    | -3    |
 | discard                         | -1 fertility                                                | -3    |
-| refresh (ark moving)            | +1 ark, moving · -1 time                                    | -15   |
-| refresh (pioneer moving)        | +1 pioneer, moving · -1 time                                | -15   |
+| refresh (ark moving)            | +1 ark, moving · -1 time                                    | 0     |
+| refresh (pioneer moving)        | +1 pioneer, moving · -1 time                                | 0     |
 | refresh (citizen laboring)      | +1 citizen, laboring · -1 time                              | 0     |
-| refresh (citizen bearing)       | +1 citizen, bearing · -1 time                               | -15   |
+| refresh (citizen bearing)       | +1 citizen, bearing · -1 time                               | 0     |
 | refresh (extractor working)     | +1 extractor, working · -1 time                             | 0     |
-| muster (citizen defending)      | +1 force · -1 citizen, defending                            | 0     |
-| stand (ark defending)           | +2 force · -1 ark, defending                                | 0     |
-| stand (pioneer defending)       | +2 force · -1 pioneer, defending                            | 0     |
-| refresh (citizen defending)     | +1 citizen, defending · -1 time                             | -9    |
-| refresh (ark defending)         | +1 ark, defending · -1 time                                 | 0     |
-| refresh (pioneer defending)     | +1 pioneer, defending · -1 time                             | 0     |
-| hold (nature met)               | +1 nature, met · -1 force · -1 time                         | -24   |
-| reclaim                         | -1 citizen                                                  | -3    |
-| renew (nature met)              | -1 nature, met                                              | -3    |
 | renew (citizen paid)            | -1 citizen, paid                                            | -3    |
-| take                            | -1 force · -1 nature                                        | -12   |
-| discard                         | -1 force                                                    | -9    |
 
 **A rule that nets nothing is kept rather than dropped.** `stow` moves a resource into a store, and a store is a container rather than a state - so at this granularity it does nothing, and a reader looking for it should find it saying so rather than find it missing.
