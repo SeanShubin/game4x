@@ -175,6 +175,9 @@ A command is written `{name field:value ...}`. **Its name is one word**, dashed 
 more, and its arguments are named. **A value is a word, a number, or another command in the same
 form**, so a command may carry a tree.
 
+**A command may carry no fields at all**, and seven of them do. Its name is the whole of it, and
+`{end-turn}` is a command exactly as `{move unit:scout from:1 to:2}` is.
+
 **A command names a recipe and binds what that recipe leaves open**: every place it leaves open,
 **every ingredient it names by family rather than by kind**, and any ingredient or trait value it
 names with a `$`. **A recipe acting in one place need not
