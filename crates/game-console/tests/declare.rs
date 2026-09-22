@@ -168,11 +168,13 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
         "the file declares {invented:?} and the release does not - a word this lane invented, \
          which is what `C-49` says a transcription may never do"
     );
-    // **Nineteen since `P-494` declared `nature`.**
+    // **Sixteen since `P-522`**, which cut `garrison`, `nature` and `force`. The file lists
+    // twenty names and four of them are the vocabulary's own - `kind`, `trait`, `family`,
+    // `value` - which the filter above sets aside.
     assert_eq!(
         from_file.len(),
-        19,
-        "eighteen compared, and the count is here so that two empty sets cannot agree"
+        16,
+        "sixteen compared, and the count is here so that two empty sets cannot agree"
     );
 
     // **The generator writes the file, byte for byte.** `P-455` landed `spec/data/kinds.4x`
@@ -533,19 +535,63 @@ fn the_families_file_names_every_family_and_invents_none() {
 ///
 /// **It reads `spec/data/biomes.4x`, which `P-455` landed.** Until then it held the generator
 /// against the release and asserted the file's absence, for the reason its sibling gives.
+///
+/// # The release cut its subject, and the cut is what is checked now
+///
+/// **`P-522` deleted the Biomes section**, so there is no table to hold the file against. Sean
+/// cut biomes from the first release; `spec/planet.md` keeps every one of them, so this comes
+/// back rather than being wrong.
+///
+/// **The cut is asserted whole rather than the test being deleted or pointed at `spec/`.**
+/// Deleting it loses work that returns with the feature. Pointing it at `spec/` would assert
+/// that this crate implements something the release says it does not, which is a different
+/// failure wearing the same colour. So what is left is the statement the release actually
+/// makes: **there is no Biomes table, and nothing anywhere in the release mentions a biome.**
+///
+/// **Half a cut is what an empty hand list hides**, and it is the thing this can still catch: a
+/// release that deleted the table while leaving a trait saying *one of the biomes*, or a `biome`
+/// column in *Kinds*, fails here. So does the day the table returns, which is when the rest of
+/// this test is wanted again and is sitting in the history one commit back.
+///
+/// `spec/data/biomes.4x` is left alone, and deliberately. It is the specification lane's, its
+/// generator refuses to run against an empty table - correctly - and a data file for a feature
+/// that is out of scope for one release costs nothing by being there.
 #[test]
 fn the_biomes_file_carries_nature_and_leaves_the_guiding_numbers_out() {
     let document = release();
+    let declared: Vec<String> = game_console::recipes::body_under(&document, "## Biomes")
+        .iter()
+        .map(|row| row[0].trim().trim_matches('*').trim().to_lowercase())
+        .collect();
+    if declared.is_empty() {
+        // **The tables and not the prose.** A release that deleted `## Biomes` while leaving a
+        // Traits row saying *one of the biomes*, or a `biome` kind, or a territory whose
+        // description still names one, is half-cut - and every one of those is a table cell.
+        //
+        // **Its prose may still say the word and that is not a fault**: `R-4` is a capability
+        // that was delivered and then put out of scope, and a release explaining why something
+        // went is not the release stating it. Sweeping the prose too found eight such lines
+        // and every one of them was a record rather than a rule.
+        let left: Vec<&str> = document
+            .lines()
+            .filter(|line| line.trim_start().starts_with('|'))
+            .filter(|line| line.to_lowercase().contains("biome"))
+            .collect();
+        assert!(
+            left.is_empty(),
+            "the release has no Biomes table and {} of its table rows still say `biome`, so \
+             the section was cut and something that read from it was not: {left:?}",
+            left.len()
+        );
+        return;
+    }
+
     let at = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data/biomes.4x");
     let file = std::fs::read_to_string(&at)
         .unwrap_or_else(|why| panic!("cannot read {}: {why}", at.display()));
     let read = state::declarations(&file)
         .unwrap_or_else(|why| panic!("{} does not parse: {why}", at.display()));
 
-    let declared: Vec<String> = game_console::recipes::body_under(&document, "## Biomes")
-        .iter()
-        .map(|row| row[0].trim().trim_matches('*').trim().to_lowercase())
-        .collect();
     assert_eq!(
         declared.len(),
         6,
@@ -808,10 +854,12 @@ fn the_traits_file_declares_what_a_data_file_needs() {
             .filter(|row| row.traits.get("kept").map(String::as_str) == Some(what))
             .count()
     };
+    // **Sixteen and seven since `P-522`**: `defending`, `biome` and `met` were all kept by
+    // each thing, so the kind's seven are untouched and only the first number moved.
     assert_eq!(
         (kept_by("thing"), kept_by("kind"), kept_by("nothing")),
-        (19, 7, 0),
-        "nineteen belong to each thing, seven to the kind, and **none to nothing** - `P-476`          removed the third, because `kept` says where a value belongs and never whether one          is held. The zero is asserted rather than dropped, so a `nothing` reaching the          file fails here"
+        (16, 7, 0),
+        "sixteen belong to each thing, seven to the kind, and **none to nothing** - `P-476`          removed the third, because `kept` says where a value belongs and never whether one          is held. The zero is asserted rather than dropped, so a `nothing` reaching the          file fails here"
     );
 }
 
@@ -824,21 +872,24 @@ fn the_traits_file_declares_what_a_data_file_needs() {
 ///
 /// # What it finds, and why a vocabulary check nearly missed it
 ///
-/// Three cells of `line.4x` hold a quantity that is a sentence:
+/// A cell of `line.4x` can hold a quantity that is a sentence:
 ///
 /// ```text
-/// {line block:muster seq:4 role:produce qty:that citizen's strength kind:force}
+/// {line block:work seq:5 role:produce qty:`$where`'s density for that resource kind:resource}
 /// ```
 ///
-/// **A key takes one token**, so this reads `qty:that` and leaves `citizen's` and `strength`
-/// as bare words. The quantity the release states - *that citizen's strength* - has become the
-/// word `that`, and nothing said so.
+/// **A key takes one token**, so this reads ``qty:`$where`'s`` and leaves `density`, `for`,
+/// `that` and `resource` as bare words. The quantity the release states has become one token
+/// of itself, and nothing said so.
 ///
-/// **Four of the eight fragments are real trait names.** `strength`, `density` and `resource`
-/// are declared, so a check asking *is this token a declared trait* passes on half of each
-/// sentence and fails on the other half - `for`, `that`, `citizen's`, `unit's`. **Had the
-/// sentences used only words that happen to be traits, this would be green and wrong**, which
-/// is why the count below is of bare words rather than of failures.
+/// **Two of the four fragments are real trait names.** `density` and `resource` are declared,
+/// so a check asking *is this token a declared trait* passes on half the sentence and fails on
+/// the other half. **Had the sentence used only words that happen to be traits, this would be
+/// green and wrong**, which is why the count below is of bare words rather than of failures.
+///
+/// **There were eight until `P-522`**, two each in `muster` and `stand` - *that citizen's
+/// strength* and *that unit's strength* - and the cut took both rules with the force rule. The
+/// four that are left are all one row's.
 ///
 /// `C-120` carries it. The rows are the specification lane's; the sweep is this lane's.
 #[test]
@@ -895,26 +946,29 @@ fn every_bare_word_in_every_data_file_is_a_declared_trait() {
     }
 
     // **The population is bare words and not files**, because eleven of the twelve have none
-    // and a sweep over them would agree with anything. Eight is what `P-497` left: two in each
-    // of `muster` and `stand`, four in `work`.
+    // and a sweep over them would agree with anything. **Four since `P-522`**: `muster` and
+    // `stand` carried two each and went with the force rule, so what is left is `work`'s four
+    // - all of them in `line.4x`, and the other eleven relations still have none.
     assert_eq!(
-        bare, 8,
-        "eight bare words across `spec/data/`, which is the population this counted against"
+        bare, 4,
+        "four bare words across `spec/data/`, which is the population this counted against"
     );
     // **The four are excepted by name and the exception is the failing half of the report** -
     // `C-61`'s pattern, and the reason it is a set rather than a count is that both directions
     // have to bite. A fifth appearing fails here; the four being repaired fails here too, and
     // that is when the exception comes out rather than being widened.
     //
-    // **They are three cells of `line.4x` and not four words of it.** *`$where`'s density for
-    // that resource*, *that citizen's strength*, *that unit's strength* - each is a quantity
-    // the release states as a phrase, and a key takes one token. `C-120` is open on what the
+    // **They are one cell of `line.4x` and not two words of it.** *`$where`'s density for that
+    // resource* is a quantity the release states as a phrase, and a key takes one token.
+    //
+    // **`citizen's` and `unit's` were excused here until `P-522`**, from *that citizen's
+    // strength* and *that unit's strength* in `muster` and `stand`. Both rules went with the
+    // force rule, so two of the four came out - the exception shrinking because the release
+    // moved rather than because anything was repaired, which is worth the difference in words. `C-120` is open on what the
     // data should say instead, which is a rule and therefore the specification lane's.
     let excused: BTreeSet<String> = [
-        "line.4x: a `line` row carries bare `citizen's`",
         "line.4x: a `line` row carries bare `for`",
         "line.4x: a `line` row carries bare `that`",
-        "line.4x: a `line` row carries bare `unit's`",
     ]
     .into_iter()
     .map(String::from)
@@ -923,7 +977,7 @@ fn every_bare_word_in_every_data_file_is_a_declared_trait() {
     assert_eq!(
         found, excused,
         "a word in a data file is neither a kind, a trait, nor a trait's value - \
-         `spec/console.md` says every word is one of the three, and the four in the second set \
+         `spec/console.md` says every word is one of the three, and the two in the second set \
          are `C-120`'s, excused until the rows say a quantity in one token"
     );
 }
@@ -984,8 +1038,12 @@ fn the_blocks_the_release_implies_are_the_blocks_in_the_file() {
         ids.contains("refresh-extractor-working"),
         "a repeated name is spelled the same way for every one of its blocks"
     );
+    // **`discard-force` was the example here until `P-522` cut the block.** `discard` still
+    // sweeps four kinds, so the rule it demonstrates is unchanged and only the witness moved -
+    // which is the shape of a test whose subject a release cut, in the one case where the
+    // subject survived and the example did not.
     assert!(
-        ids.contains("discard-force"),
+        ids.contains("discard-fertility"),
         "a name repeated over kinds is qualified by the kind"
     );
     assert!(
