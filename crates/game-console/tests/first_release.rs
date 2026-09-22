@@ -1187,10 +1187,22 @@ fn every_way_the_state_can_change_is_a_command() {
 
 /// Every recipe the player may fire has exactly one command named for it.
 ///
-/// **`spec/console.md`: *a command is named for the recipe it fires, and there is one command
-/// for each recipe the player may fire*.** A stated rule with nothing holding the two lists
-/// together until now - `every_way_the_state_can_change_is_a_command` compares the grammar to
-/// the **model's** transitions, which is a different pair.
+/// **This test needs two clauses and `spec/console.md` states them two sections apart.** *The
+/// language*: **a command is named for the recipe it fires.** *Commands*: **there is one
+/// command for each recipe the player may fire**, and ending a turn fires the world's.
+///
+/// **They were one sentence in both sections until `P-519`**, which deleted the copy in *The
+/// language* because `spec/invariants.md` says a fact is stated once. The surviving copy is
+/// the load-bearing one - the paragraph under it opens with a *therefore* that reaches back to
+/// it - and *The language* kept the first half alone.
+///
+/// **So this quotes each half where it now lives rather than one sentence that no longer
+/// exists.** Both are still stated; what changed is that they are no longer stated together,
+/// and a test that needs both has to say where both are. `S-152`.
+///
+/// A stated rule with nothing holding the two lists together until now -
+/// `every_way_the_state_can_change_is_a_command` compares the grammar to the **model's**
+/// transitions, which is a different pair.
 ///
 /// # What it guards, and it has happened
 ///

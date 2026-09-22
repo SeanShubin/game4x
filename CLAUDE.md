@@ -399,6 +399,11 @@ the same sentence as the measurement that found it, and the inference was wrong 
 the next reader to widen a rule that was never narrow. **No instrument can catch that**, because the
 explanation is not what any check reads.
 
+**Publish the shape of the error, not only the correction.** A reader can apply a shape to their
+own work; a correction is only something to trust. **An account of how a thing was wrong is a
+tool and a fixed number is not** - so when a defect is reported, the report says what the
+instrument asked, not merely what the right answer turned out to be.
+
 **Research's evidence is the answer, written where it will be found.**
 [`docs/prototypes/README.md`](docs/prototypes/README.md) already says it for prototypes - *that
 answer is the deliverable; the code is a byproduct* - and it generalises: the question is stated, the
