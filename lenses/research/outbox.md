@@ -1513,6 +1513,68 @@ lattice and the orientation are things to look at; *pole to pole without crossin
 the thing to decide about, and no arrangement of hexes changes it.
 
 
+### X-38 - the route is drawn as straight chords, and all 240 of them pass under the planet
+
+**to** code · **status** open · **raised** 2026-09-21 · **source** Sean, asking what modern games do to represent a movement intention and whether they handle the curvature of a sphere · **found by** measuring what `draw_the_route` puts on screen, after reading what the practice does instead
+
+**The defect is one call and the repair is one call.** `prototypes/goldberg-move/src/main.rs:257`
+joins two territory centres with `gizmos.line`, which is a straight chord in three dimensions, and
+floats both ends at `ABOVE = 1.035`. A chord between two points at radius `r` passes closest to the
+centre at `r · cos(θ/2)`, so at `1.035` it stays outside the unit sphere only while
+`θ ≤ 29.886°`. **On `GP(2, 0)` the smallest neighbour separation is `31.717°`**, so it never does:
+the line sags to between `0.9843` and `0.9956` of a radius while the disks it joins float at
+`1.035`, which is **up to 5.1% of a radius below the arc it stands for**.
+
+**The population is 240 and is asserted rather than trusted** - `30T` edges with `T = 4` is 120,
+counted from both ends. `tools/research/chord-sag.py` re-derives the forty-two centres from the
+icosahedron rather than reading them out of `sphere-tessellation`, so it is a second derivation and
+not a copy of what it checks.
+
+**Measured: under radius 1.0 for every step. Not measured: whether it is under the drawn panel
+too.** The panels are flat and dip inside the sphere as well, and `PlanetMesh::deepest()` at
+`crates/planet-render/src/mesh.rs:81` already computes exactly that number - one call, where this
+lane would be guessing.
+
+**`Gizmos::short_arc_3d_between` is already in the dependency** - `bevy_gizmos-0.19.1/src/arcs.rs:223`
+- and the globe's transform is a rotation about the origin, so the centre is `Vec3::ZERO` and both
+ends are at exactly `1.035`. One caution that will not fail loudly: it takes its radius from `from`
+alone, `arcs.rs:303`, so it lands on `to` only while both ends share one.
+
+**Three more that are settings rather than code, and none of them is set.** Bevy's gizmo defaults
+are `width: 2.0` px, `perspective: false`, `style: Solid`, `joints: None` -
+`bevy_gizmos-0.19.1/src/config.rs:267-276`. **A 2 px solid line is what a debug gizmo looks like**,
+not what an intention looks like. `GizmoLineStyle::Dashed { gap_scale, line_scale }` exists at
+`config.rs:46-52`, and a dashed line reads as *intended* where a solid one reads as *drawn* -
+which is the distinction Sean asked for by *movement intentions*.
+
+**And the highest-frequency one is not about the line at all.** `centre_on`, `main.rs:328-332`,
+assigns yaw and pitch directly - a jump cut - and it fires on nearly every click,
+`main.rs:216-217`. Heer and Robertson, TVCG 2007, found animated transitions significantly improve
+graphical perception and staged ones more so; Google Earth and Cesium do this case as incremental
+rotation along the great circle between the two coordinates.
+
+**What the practice settles, with the citations, is in [the report](2026-09-21-a-move-drawn-on-a-sphere.md).**
+Great-circle interpolation is a flag in `deck.gl` rather than a debate; occlusion has a three-setting
+recipe - draw after the bodies, depth test on, **depth write off**, which is what stops a wide line
+eating its own corners; `KSP` puts direction along the whole line rather than at its end; and a
+path's width is a screen-space quantity, because a ribbon on a sphere foreshortens to nothing
+exactly at the limb, which is where a long move is heading.
+
+**One thing that is Sean's and not this lane's, recorded so the silence is not mistaken for
+agreement.** Nothing found refuses an ambiguous destination; the shipped answer is to commit a
+canonical route and let the player steer it, as `XCOM 2` does with `Ctrl` held. **That is not an
+argument against his rule**, which the prototype exists to test. What the comparison gives is that
+**the refusal is a sentence where every shipped route UI is a picture** - three translucent arcs
+fanning out would answer *which intermediate do I click* by pointing at it, and `Board` already
+computes the routes that `Reach::Many` currently only counts.
+
+**Whether.** **Four worth doing now**: the arc, the width, the dash, the eased recentre. Not one
+adds a concept the prototype does not have. **Two eventually**: path vertices at the boundaries as
+well as the centres, and the far side, where recentring is one of three shipped answers. **One
+noted and deliberately not**: drawing the ambiguity instead of counting it, which changes what the
+prototype asks.
+
+
 ## Resolved
 
 **Refused on 2026-09-10, and the refusal found something this item had not.** The code lane built

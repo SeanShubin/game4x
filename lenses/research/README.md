@@ -60,6 +60,16 @@ reader can tell whether a finding was acted on or merely forgotten.
 
 Newest first.
 
+- [A move drawn on a sphere, and what the established practice already settles](2026-09-21-a-move-drawn-on-a-sphere.md)
+  - 2026-09-21. **Addressed to `code`**, carrying `X-38`. What `goldberg-move` draws, measured:
+    the route is straight chords and all 240 neighbour separations on `GP(2, 0)` put them under
+    the planet, up to 5.1% of a radius below the arc they stand for. Six things the practice has
+    settled - great-circle interpolation as a flag rather than a debate, the three-setting
+    occlusion recipe, direction along the line instead of at its end, width as a screen-space
+    quantity, an eased recentre rather than a jump cut, and path vertices at the boundaries. And
+    one that is Sean's: nothing shipped refuses an ambiguous destination, but the refusal here is
+    a sentence where every shipped route UI is a picture.
+
 - [What the encoding never reached, and what the notation cannot say](2026-09-10-the-edges-of-the-encoding.md)
   - 2026-09-10. **Addressed to `spec`**, answering `S-81`'s questions 3, 5 and 6. Every rule in
     `spec/` read and placed: which regions the encoding reached, which it never touched, and seven

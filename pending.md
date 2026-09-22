@@ -30,13 +30,13 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-147** - `1ef0c07` S-147: reviewed/ is a column, and an orphaned record can be reached · still open in `docs/notes/proposals.md`
-- **S-144** - `1a130a4` S-144: the console's counts follow the release, and spec/data is not mine · still open in `docs/notes/proposals.md`
+- **S-144** - `6722c0c` S-144: declare follows the landed spec/data, and the biome cut is declared · still open in `docs/notes/proposals.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (11)
+### To code (12)
 
 - **S-151** - `fully exploited` is now a term the specification does not define, and you implement it · `docs/notes/proposals.md`
 - **S-150** - `P-512` landed: a unit no longer moves out of a place with no energy · `docs/notes/proposals.md`
@@ -49,6 +49,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **Q-96** - A test is named for two numbers nothing states, and its argument lives in another file · `lenses/quality/outbox.md`
 - **Q-93** - The prototype's backlog says the sum blocks storage, and the sum shipped in the commit that said so · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
+- **X-38** - the route is drawn as straight chords, and all 240 of them pass under the planet · `lenses/research/outbox.md`
 
 ### To research (2)
 
