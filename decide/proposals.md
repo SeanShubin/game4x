@@ -11,71 +11,86 @@ of it needs you.
 
 ## Open
 
-### P-520 - `R-6` says it is built, and eleven lines down says this lane has not recorded it as such
+### P-520 - `R-6` is wrong about itself in three places, and none of them is about the game
 
-**to** sean · **status** open · **raised** 2026-09-20 · **kind** measured · **shape** text · **asks** approval · **into** `releases/first-release.md` -> R-6
+**to** sean · **status** open · **raised** 2026-09-20 · **kind** measured · **shape** an instruction · **asks** approval · **into** `releases/first-release.md` -> R-6
 
-**A second thing is wrong with `R-6` and it arrived on 2026-09-21**, after `P-521` and `P-527`
-landed. **Its evidence explains why the committed scenario does not win by quoting a rule that
-`spec/` no longer contains** - *a player wins by launching an Ark from a fully exploited planet* -
-and the four bullets defining that term went with `P-527`.
+**`R-6` is the capability that says the game can be played through.** It is marked `built` and is
+one of the six waiting for you to look. **Nothing below questions whether it was built** - the
+scenario does what it says, and this lane re-ran every clause. **What is wrong is the account
+`R-6` gives of itself**, in three places, all written at different times and none updated when
+the next thing happened.
 
-**The observation survives and the reason does not.** Measured: `{deploy-ark territory:1}` at
-`play.4x:19`, `{launch-ark territory:1}` at `:164`. **Both acts are in territory 1**, so under
-`P-521`'s condition the scenario still does not win - for a different reason than the evidence
-gives. `{found-by-land territory:2}` founds a second settlement and nothing launches from it.
-
-**This lane said the opposite twice on 2026-09-21** - in `P-521`'s own argument, which Sean read
-while approving it, and in `S-151` an hour later - **writing *it deploys to territory 1 and founds
-territory 2* as though founding were launching.** Both are corrected in place.
-
-**Whether this item grows to cover it or a second one is filed is worth one line from you**; this
-lane has folded it in rather than adding to the queue, and the two are the same capability's
-account of itself being wrong in two ways.
-
-**One item makes both claims.** Found reading the queue for what is open and addressed to you.
+## One: it says it is not built
 
 ```
-first-release.md:404   **to** sean - **status** **built** 2026-09-11
-first-release.md:434   **The code lane does not set this `built` and this lane has not
-                       recorded it as such.**
+status line   **status** **built** 2026-09-11
+a bullet      The code lane does not set this `built` and this lane has not
+              recorded it as such.
 ```
 
-## The measurement is sound and the sentence wrapped around it is about a wording you deleted
+**The bullet was written earlier the same day and was true then.** The capability was set `built`
+thirty-six commits later, and nobody went back. **The bullet is simply out of date.**
 
-At `21deef50` the *vetted when* read *a scenario reaches a fully exploited planet and launches an
-Ark*. **Its first half was the fully exploited planet**, and `C-95` measured that it did not hold.
+## Two: its evidence explains a failure using a rule you have since deleted
 
-**Then the clause changed and the item did not.** The *vetted when* now says the scenario takes a
-first territory from orbit, takes a second by land, launches an Ark, and **does not win** - *and
-that is the win condition working*. `R-6` went to `built` in `2c89457d`, thirty-six commits after
-`21deef50` and on the same day. **The bullet was never touched.**
+The same bullet says *the first half of the vetted when does not hold*, and gives numbers -
+twelve claimable territories, two founded, none at maximum output. **Those numbers are correct.**
 
-**So the numbers in it are still true and both sentences around them are not**: the half it says
-fails is a half that no longer exists, and the failure it once recorded is now the capability
-working.
+**But the half it says fails no longer exists.** That *vetted when* used to ask for a fully
+exploited planet. **You deleted the definition of *fully exploited* today**, and the win
+condition that used it. **So the bullet reports the failure of a requirement the release no
+longer makes.**
 
-**Re-derived here rather than taken from the item**: `{deploy-ark territory:1}` at
-`scenario/commands/play.4x:19`, `{found-by-land territory:2}` at `:154`, `{launch-ark territory:1}`
-at `:164`.
+## Three: the *vetted when* itself now cites a deleted rule
+
+```
+It does not win, and that is the win condition working: spec/control.md gives victory for
+launching from a fully exploited planet, and this planet is not one
+```
+
+**`spec/control.md` says no such thing any more.** It says a player wins by deploying an Ark to
+one territory and launching an Ark from a different one.
+
+**And the scenario still does not win**, so the clause is right and its reason is wrong:
+
+```
+{deploy-ark territory:1}     play.4x:19
+{found-by-land territory:2}           :154
+{launch-ark territory:1}              :164
+```
+
+**Both the deploy and the launch are in territory 1.** The scenario founds a second settlement
+and never launches from it. **That is why it does not win**, and it is a more interesting reason
+than the old one: the loop reaches two settlements and stops one act short of victory.
 
 ## What lands
 
-The bullet at lines 430 to 434 becomes:
+**The stale bullet becomes:**
 
-> - **Measured 2026-09-11.** `C-95`, in `d7ed1e8`: running `setup.4x`, `{start}` and `play.4x` and
->   asking the model gives **twelve claimable territories, two founded, none at maximum output**,
->   with `is_fully_exploited` and `has_won` both false. It does launch an Ark, at line 164 of a
->   133-command scenario. **Measured against a *vetted when* that has since changed** - it asked
->   for a fully exploited planet, and yours asks that the scenario launch and not win, which is
->   what these numbers show.
+> - **Measured 2026-09-11.** Running `setup.4x`, `{start}` and `play.4x` and asking the model
+>   gives **twelve claimable territories, two founded, none at maximum output**. It launches an
+>   Ark at line 164. **These numbers were taken against an older *vetted when*** that asked for a
+>   fully exploited planet, which the release no longer requires.
 
-## What it costs
+**And the *vetted when*'s last clause becomes:**
 
-**Nothing left in the file will say `R-6` was once measured as unbuilt.** That record is in
-`21deef50` and in the history, and not in front of a reader of the release. **If you would rather
-it stayed visible, the other version keeps both sentences and marks them superseded** - longer, and
-it leaves a *not built* in an item whose status line says built.
+> **It does not win, and that is the win condition working**: victory takes a launch from a
+> territory other than the one the Ark deployed to, and this scenario deploys to territory 1 and
+> launches from territory 1.
+
+## What this changes about whether you can vet it
+
+**Nothing, and that is worth saying plainly.** The three observable things `R-6` asks for are
+unchanged: a first territory from orbit, a second by land, every recipe firing. **All three still
+hold.** What changes is that the document stops explaining them with a rule that is gone.
+
+## One correction this lane owes you
+
+**When you approved the new win condition, this lane's argument for it said the committed
+scenario would now win.** It does not - both acts are in territory 1, and founding a second
+settlement is not launching from it. **You read that while deciding.** The rule you approved is
+unaffected; the reason given for it was wrong, and this is where it is corrected.
 
 ### P-519 - One clause is stated twice in `spec/console.md`, and the invariants forbid exactly that
 

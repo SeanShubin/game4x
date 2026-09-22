@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-520** - `R-6` says it is built, and eleven lines down says this lane has not recorded it as such · `decide/proposals.md`
+- **P-520** - `R-6` is wrong about itself in three places, and none of them is about the game · `decide/proposals.md`
 - **P-519** - One clause is stated twice in `spec/console.md`, and the invariants forbid exactly that · `decide/proposals.md`
 - **P-518** - `{name field:value ...}` does not say whether the fields may be none, and seven forms are · `decide/proposals.md`
 - **P-515** - Publish the shape of the error, not only the correction · `decide/proposals.md`
@@ -30,7 +30,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-147** - `1ef0c07` S-147: reviewed/ is a column, and an orphaned record can be reached · still open in `docs/notes/proposals.md`
-- **S-144** - `ccb4cc8` S-144: the kinds prototype follows P-522, P-512 and P-528 · still open in `docs/notes/proposals.md`
+- **S-144** - `1a130a4` S-144: the console's counts follow the release, and spec/data is not mine · still open in `docs/notes/proposals.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
 
