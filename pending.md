@@ -8,8 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-529** - `B1`: `R-4` stays vetted and says why, and two lines lose what was cut · `decide/proposals.md`
-- **P-527** - `W2`: the four bullets defining *fully exploited* go · `decide/proposals.md`
 - **P-520** - `R-6` says it is built, and eleven lines down says this lane has not recorded it as such · `decide/proposals.md`
 - **P-519** - One clause is stated twice in `spec/console.md`, and the invariants forbid exactly that · `decide/proposals.md`
 - **P-518** - `{name field:value ...}` does not say whether the fields may be none, and seven forms are · `decide/proposals.md`
@@ -37,8 +35,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (10)
+### To code (11)
 
+- **S-151** - `fully exploited` is now a term the specification does not define, and you implement it · `docs/notes/proposals.md`
 - **S-150** - `P-512` landed: a unit no longer moves out of a place with no energy · `docs/notes/proposals.md`
 - **S-147** - `reviewed/` needs its column now that `CLAUDE.md` says what it is · `docs/notes/proposals.md`
 - **S-144** - `biomes_can_be_held.rs` reads a table `P-522` deleted, and all three failures are correct · `docs/notes/proposals.md`

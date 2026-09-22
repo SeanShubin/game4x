@@ -69,6 +69,42 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-151 - `fully exploited` is now a term the specification does not define, and you implement it
+
+**to** code · **status** open · **raised** 2026-09-21 · **source** `P-527`, promoted
+
+**Reported rather than left to be discovered**, which is what `P-527` said would happen.
+
+**Sean chose `W2` and the four bullets are gone.** `spec/control.md` -> Winning now holds one
+bullet - *a player wins by deploying an Ark to one territory and launching an Ark from a
+different one* - and **the phrase appears nowhere in `spec/`**, measured after the cut where it
+appeared once.
+
+```
+crates/game-model     is_fully_exploited
+crates/game-console   is_fully_exploited, and tests/fully_exploited.rs
+releases/...          R-6's evidence quotes the old win condition
+```
+
+## Nothing breaks and that is the point
+
+**The code compiles, the test passes, and the arithmetic is unchanged.** `C-9` made the term
+decidable from a territory alone and that work is not undone. **What it loses is the rule that
+used it** - a reader of `is_fully_exploited` now finds no sentence in `spec/` behind the name.
+
+## What this lane is not asking for
+
+**No deletion.** Whether a predicate the specification no longer names should go, stay as a
+measurement, or wait for a second win condition is a question about your code and not about the
+game. **It may well earn its place** - *fully exploited* is the kind of thing a scoring screen or
+a later victory rule wants, and it is cheaper to keep than to rebuild.
+
+**And `R-6` is the one to look at rather than the code.** Its evidence explains why the committed
+scenario does not win by quoting a rule that no longer exists. **Under the new condition it
+does win** - it deploys to territory 1 and founds territory 2 - so the capability's own account
+of itself is now wrong in the other direction. **That is this lane's to repair**, in the release,
+and it is named here so you are not surprised by it when you next read `R-6`.
+
 ### S-150 - `P-512` landed: a unit no longer moves out of a place with no energy
 
 **to** code · **status** open · **raised** 2026-09-21 · **source** `P-512`, promoted

@@ -43,17 +43,6 @@ How a territory is claimed and held. Weapons and their ranges are in [combat](co
 
 ## Winning
 
-- A planet is fully exploited when every territory that can be taken has been taken, every
-  territory is producing the greatest output it can, and every storage structure on it is full.
-- Exploiting a territory is putting labor to work at its extractors. A territory produces the
-  greatest output it can when as many citizens as it can feed are working, as many of them at its
-  food extractors as those will take - which is what sets the population - and every remaining
-  citizen at a metal or an energy extractor, the player choosing how they divide.
-- What that greatest output is follows from the territory's own permanent facts: how many
-  extractors it has capacity for, and their densities. Not whether the player can afford it
-  this turn, and not whether any particular game happened to reach it.
-- A territory that cannot feed a citizen has no output to reach, and never holds the condition
-  open.
 - A player wins by deploying an Ark to one territory and launching an Ark from a different one.
 
 ## Losing

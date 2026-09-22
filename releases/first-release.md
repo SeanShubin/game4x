@@ -11,8 +11,7 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - A single planet
 - Tiny, which is 12 territories
 - Each territory is self-contained. No resource and no citizen crosses a territory boundary
-- A mobile unit may move across a boundary, usually to conquer and start another self-contained
-  territory
+- A mobile unit may move across a boundary to start another self-contained territory
 - The twelve territories and the thirty adjacencies between them are generated from the
   twelve-faced Goldberg polyhedron rather than stated by hand
 - The rule editor is not in this release
@@ -48,24 +47,24 @@ Every territory has capacity for at least one food extractor.
 
 ## Kinds
 
-| Kind          | What it is                                                                                             |
-| ------------- | ------------------------------------------------------------------------------------------------------ |
-| **citizen**   | a person: provides labor, eats, and grows on surplus                                                   |
-| **extractor** | built for one resource, and worked to produce it                                                       |
-| **yard**      | where an Ark is produced                                                                               |
-| **store**     | built to hold one resource, and holds nothing else                                                     |
-| **ark**       | carries a landing, and can invade from orbit                                                           |
-| **pioneer**   | founds a territory                                                                                     |
-| **food**      | eaten by citizens; expires                                                                             |
-| **metal**     | what things are built from; drawn from the planet, and conserved once above ground                     |
-| **energy**    | what moves things; neither conserved nor expiring                                                      |
-| **labor**     | what working a machine takes; a citizen provides it each turn                                          |
-| **territory** | a place things are in, which has a biome, a force of nature, and a density and a capacity per resource |
-| **orbit**     | a place above one territory, which holds units and nothing else                                        |
-| **deposit**   | what a territory's ground offers of one resource, and how richly                                       |
-| **adjacency** | two places that share an edge, held by the thing that holds them                                       |
-| **game**      | every thing is in it, and it is the one thing that is in nothing                                       |
-| **fertility** | a citizen's capacity to raise one more, spent by raising one and renewed each turn                     |
+| Kind          | What it is                                                                         |
+| ------------- | ---------------------------------------------------------------------------------- |
+| **citizen**   | a person: provides labor, eats, and grows on surplus                               |
+| **extractor** | built for one resource, and worked to produce it                                   |
+| **yard**      | where an Ark is produced                                                           |
+| **store**     | built to hold one resource, and holds nothing else                                 |
+| **ark**       | carries a landing, and can invade from orbit                                       |
+| **pioneer**   | founds a territory                                                                 |
+| **food**      | eaten by citizens; expires                                                         |
+| **metal**     | what things are built from; drawn from the planet, and conserved once above ground |
+| **energy**    | what moves things; neither conserved nor expiring                                  |
+| **labor**     | what working a machine takes; a citizen provides it each turn                      |
+| **territory** | a place things are in, which has a density and a capacity per resource             |
+| **orbit**     | a place above one territory, which holds units and nothing else                    |
+| **deposit**   | what a territory's ground offers of one resource, and how richly                   |
+| **adjacency** | two places that share an edge, held by the thing that holds them                   |
+| **game**      | every thing is in it, and it is the one thing that is in nothing                   |
+| **fertility** | a citizen's capacity to raise one more, spent by raising one and renewed each turn |
 
 ## Families
 
@@ -334,6 +333,9 @@ only one who can move them.
   terrain gives it*
 - **Vetted when** - `show territory 5` names a biome, and no other biome covers more of that
   ground in the realistic drawing
+- **Biomes were delivered before they were cut.** `P-522` puts them out of scope for this
+  release, and this capability was observed on 2026-09-03 against a drawing that still exists.
+  **The cut is about which rules are built and not about what was seen**, so the vetting stands.
 
 ### R-5 - Terrain resolved as finely as it is shown
 
