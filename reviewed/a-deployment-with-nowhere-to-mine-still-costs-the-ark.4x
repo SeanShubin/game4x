@@ -1,0 +1,39 @@
+# An ark deployed onto ground with nothing to mine: the ark is spent, the citizens land, and
+# neither extractor is placed.
+#
+# **Sean, 2026-09-20**: *it is legal to deploy an ark anywhere, individual rules may fail but the
+# deployment succeeds. Consequences of legal moves may be disastrous, but that is player choice.*
+# **This is the disaster**, and the engine lets the player have it.
+#
+# **The ark is removed before anything is made**, which is the clause order, so a deployment that
+# places no extractor still costs an ark. **That is the whole reason the two lines are soft**: a
+# rule refuses the world it would leave, and refusing here would have meant a deployment onto
+# barren ground could not happen at all.
+#
+# **The capacity row is what makes this a refusal to place rather than a free pass.** With no
+# capacity for extractors stated, nothing bounds them and both would land - *nothing says how much
+# room there is* and *there is no room* are different worlds. This test states the first so that it
+# can be the second.
+#
+# **The citizens are not soft and land anyway.** Nothing gives room for a citizen, so a citizen can
+# never be short - and it is the absence of a capacity row that says so rather than anything in the
+# rule.
+
+{test name:a-deployment-with-nowhere-to-mine-still-costs-the-ark}
+
+{given}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{place id:2 of:territory-1 layer:orbit name:place-2}
+{capacity of:deposit for:extractor what:resource per:place} -> 1
+{ark where:place-2 moving:1 gathering:1} -> 1
+
+{when}
+{deploy where:place-2}
+
+{then}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{place id:2 of:territory-1 layer:orbit name:place-2}
+{capacity of:deposit for:extractor what:resource per:place} -> 1
+{citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2

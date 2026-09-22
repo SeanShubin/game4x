@@ -1,0 +1,45 @@
+# One command refreshes two kinds, because `unit` is the family they both belong to.
+#
+# **Sean, 2026-09-18**: *I should be able to declare separate things with separate commands, as
+# well as explicitly declare group commands. So i can refresh a scout, refresh a transport,
+# refresh all movable, refresh all workable, and their intersections.* This is the group form;
+# `refresh-makes-one-entry-of-a-spent-scout-and-a-fresh-one` is the separate one, and the two are
+# the same rule with a different argument.
+#
+# **Two kinds and not two rules is the whole point.** `what:unit` denotes every member of the
+# family, so adding a third kind of unit changes nothing here - where a rule per kind would need
+# a fourth rule and a fifth.
+#
+# **Each kind starts with a spent group and a fresh one**, so the two join and the count is the
+# sum: two scouts and one, three; one transport and two, three. **The numbers are crossed between
+# the kinds** - 2 and 1 for the scout, 1 and 2 for the transport - so a test that read one kind's
+# row for the other's would not add up.
+#
+# **Every value in the `given` is load-bearing, and the mutation sweep is what says so.** An
+# earlier draft started both kinds wholly spent; changing either `moving:0` to `moving:1` then
+# made the command a no-op and the `then` a copy of the `given`, and the test passed having
+# refreshed nothing. **A spent group beside a fresh one is what closes that** - flipping either
+# value now puts two rows of one kind on one key, which the structure refuses.
+#
+# **Poisoned three ways besides.** Refreshing `what:scout` leaves the transports spent;
+# refreshing `what:transport` leaves the scouts spent; and `trait:working` is refused, because no
+# unit carries one.
+
+{test name:one-refresh-reaches-a-scout-and-a-transport}
+
+{given}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{scout where:place-1 moving:0} -> 2
+{scout where:place-1 moving:1} -> 1
+{transport where:place-1 moving:0} -> 1
+{transport where:place-1 moving:1} -> 2
+
+{when}
+{refresh what:unit trait:moving}
+
+{then}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{scout where:place-1 moving:1} -> 3
+{transport where:place-1 moving:1} -> 3
