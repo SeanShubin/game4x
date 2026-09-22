@@ -169,7 +169,16 @@ fn answer(
             // **A name that is not a test is refused rather than guessed at**, which is the same
             // refusal `review.rs` makes for the same reason: a copy of nothing is compared against
             // nothing, forever.
-            if !known.contains(&name) {
+            //
+            // **Taking a reading back is the exception, and it is the whole point of it.** A record
+            // whose test is gone is exactly a name that is not a test, so refusing it here would
+            // make the one thing that can remove an orphan the one thing that cannot -
+            // `CLAUDE.md`, promoted 2026-09-21: *a record is added and removed only by the review
+            // application, acting as Sean.* **What may be taken back is what is there**, so this
+            // asks the disk rather than the list of tests.
+            let recorded =
+                path == "/unreview" && mine().join(format!("reviewed/{name}.4x")).is_file();
+            if !recorded && !known.contains(&name) {
                 return (
                     "400 Bad Request".to_string(),
                     PLAIN,

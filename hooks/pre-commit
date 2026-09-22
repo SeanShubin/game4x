@@ -65,6 +65,16 @@ column_of() {
             name=$(printf '%s' "$1" | cut -d/ -f2)
             if [ -d "lenses/$name" ]; then echo "lens:$name"; else echo "code"; fi ;;
         temporary-notes/*) echo "sean" ;;
+        # **The record of what Sean has read, and no instance writes it** - `CLAUDE.md`,
+        # promoted 2026-09-21. It sits under `prototypes/` today, which the case below would
+        # call code, so it is named before that one or the rule would not hold where the record
+        # actually is. **Both spellings**, because `P-532` may move it to the repository root and
+        # a rule that stopped applying on the day it moved would be worse than no rule.
+        #
+        # **A column of its own is what refuses the commit shape the guarantee turns on**: a
+        # record added or removed beside the code it judges. Until this line, that commit was
+        # allowed - `e15ba69c` was one, and it was right under the rules of its day.
+        reviewed/*|*/reviewed/*) echo "sean" ;;
         crates/*|web/*|commands/*|prototypes/*|scenario/*|reports/*) echo "code" ;;
                 hooks/*|scripts/*|.github/*|Cargo.toml|Cargo.lock) echo "code" ;;
         .gitignore|.gitattributes) echo "code" ;;
