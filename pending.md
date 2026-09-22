@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-535** - `R-6` cites the deleted win condition three more times, and one of them is red · `decide/proposals.md`
 - **P-519** - One clause is stated twice in `spec/console.md`, and the invariants forbid exactly that · `decide/proposals.md`
 - **P-518** - `{name field:value ...}` does not say whether the fields may be none, and seven forms are · `decide/proposals.md`
 - **P-515** - Publish the shape of the error, not only the correction · `decide/proposals.md`

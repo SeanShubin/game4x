@@ -367,14 +367,18 @@ that used to be kept is lost at a turn's end. `scenario/expected/play.4x` was re
 `P-225`'s protocol and is **unreviewed, and says so**.
 
 
-- **In** - `spec/control.md`, *a player wins by launching an Ark from a fully exploited planet*
+- **In** - `spec/control.md`, *a player wins by deploying an Ark to one territory and launching
+  an Ark from a different one*
 - **Vetted when** - the scenario takes a first territory from orbit, takes a second by land, and
   launches an Ark; and **every recipe in the release fires at least once while it runs**, measured
   by what fired rather than by what the file says. **It does not win, and that is the win condition
   working**: victory takes a launch from a territory other than the one the Ark deployed to, and
   this scenario deploys to territory 1 and launches from territory 1
 
-- **Nothing in the code blocks it, as of 2026-09-05.** `C-7` was withdrawn on the 31st; `C-11` landed in `05097a6` and a territory's stores carry; `C-9` landed in `ec96bc9` and *fully exploited* is decidable from a territory alone. **What is now in question is not whether it can be played but how much of it has to be** - `P-422`.
+- **Nothing in the code blocks it, as of 2026-09-05.** Earlier doubts were settled: a
+  territory's stores carry, and the output a territory can reach is decidable from the
+  territory alone. **What is now in question is not whether it can be played but how much of
+  it has to be.**
 - **Measured 2026-09-11.** Running `setup.4x`, `{start}` and `play.4x` and asking the model
   gives **twelve claimable territories, two founded, none at maximum output**. It launches an
   Ark at line 164. **These numbers were taken against an older *vetted when*** that asked for a
@@ -403,9 +407,9 @@ that used to be kept is lost at a turn's end. `scenario/expected/play.4x` was re
  **Re-run by this lane rather than taken from
   the report**: `the_committed_scenario_launches_an_ark_and_does_not_finish_the_planet` passes on
   `(12, 2, 0)`.
-- **One thing this proved that nothing had asserted.** Launching from an unfinished planet did not
-  win, so `spec/control.md`'s *from a fully exploited planet* is doing work rather than being
-  incidentally true, and that is now a check rather than an observation.
+- **One thing this proved that nothing had asserted.** The scenario reaches a second
+  settlement and launches anyway from the first, so a launch is not a victory by itself - and
+  that is now a check rather than an observation.
 
 
 

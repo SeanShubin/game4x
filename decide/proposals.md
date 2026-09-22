@@ -11,61 +11,6 @@ of it needs you.
 
 ## Open
 
-### P-535 - `R-6` cites the deleted win condition three more times, and one of them is red
-
-**to** sean · **status** open · **raised** 2026-09-21 · **kind** measured · **shape** text · **asks** approval · **into** `releases/first-release.md` -> R-6
-
-**`P-520` said three places and there are six.** It fixed two; this is the rest, filed the moment
-it landed. **The count was this lane's and it was short** - measured properly only after the
-promotion, which is the wrong order and is why this exists.
-
-## The one that is breaking a test
-
-```
-- **In** - `spec/control.md`, *a player wins by launching an Ark from a fully exploited planet*
-```
-
-**An `In` line is the release quoting the rule it delivers**, and there is a check that the
-quotation matches the file. **It does not, since you cut that rule.** Driven, not read:
-`1 In line quotation(s) are of wording the cited file does not have.`
-
-**It becomes:**
-
-> - **In** - `spec/control.md`, *a player wins by deploying an Ark to one territory and launching
->   an Ark from a different one*
-
-## The two that are only wrong
-
-**A bullet dated 2026-09-05** ends *`C-9` landed and `fully exploited` is decidable from a
-territory alone*. **That is history and it happened**, but the term it names is gone from the
-specification. **It becomes:**
-
-> - **Nothing in the code blocks it, as of 2026-09-05.** Earlier doubts were settled: a
->   territory's stores carry, and the output a territory can reach is decidable from the
->   territory alone. **What is now in question is not whether it can be played but how much of
->   it has to be.**
-
-**And a bullet near the end** says *launching from an unfinished planet did not win, so
-`spec/control.md`'s from a fully exploited planet is doing work rather than being incidentally
-true*. **The observation it draws is now false** - the scenario does not win because it launches
-from the territory it landed on, not because the planet is unfinished. **It becomes:**
-
-> - **One thing this proved that nothing had asserted.** The scenario reaches a second
->   settlement and launches anyway from the first, so a launch is not a victory by itself - and
->   that is now a check rather than an observation.
-
-## What this costs, and it is the same cost as `P-520`
-
-**Nothing observable.** The three things `R-6` asks you to look at are unchanged. **This is the
-release's account of itself catching up with a rule you changed**, and the first of the three is
-the one the gate cares about.
-
-## Why it is a separate item rather than a correction to `P-520`
-
-**`P-520` is promoted.** Its words are in the file and you approved them; folding these in would
-mean the text you read and the text in the release are not the same text. **A second item is the
-cheaper honesty.**
-
 ### P-519 - One clause is stated twice in `spec/console.md`, and the invariants forbid exactly that
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
