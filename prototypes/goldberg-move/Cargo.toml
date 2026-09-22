@@ -1,0 +1,11 @@
+[package]
+name = "goldberg-move"
+version.workspace = true
+edition.workspace = true
+description = "Prototype: laying out a move of any length across a Goldberg planet by clicking, where a destination is only clickable when one shortest route reaches it."
+
+[dependencies]
+planet-render.workspace = true
+planet-bevy.workspace = true
+sphere-tessellation.workspace = true
+bevy = { version = "0.19", default-features = false, features = ["2d", "3d", "ui"] }
