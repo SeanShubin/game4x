@@ -97,8 +97,17 @@ column_of() {
 # **Measured rather than reasoned**: `git show --name-only --diff-filter=ACMR e15ba69c` lists one
 # file where `git show --name-only e15ba69c` lists three. Found by the specification lane reading
 # this line and saying it had not tested it.
-about_to_commit=$(git diff --cached --name-only --diff-filter=ACMRD)
-if [ -n "$about_to_commit" ]; then
+# Refuse a commit whose files span two columns, reading the index as it stands now.
+#
+# **Called twice, at the top of this hook and again at the bottom**, because the index it
+# reads is shared and this hook takes seconds to run. See `refuse_if_two_columns` at the end
+# of the file for what that second call is for and the commit that made it necessary.
+refuse_if_two_columns() {
+    when="$1"
+    about_to_commit=$(git diff --cached --name-only --diff-filter=ACMRD)
+    if [ -z "$about_to_commit" ]; then
+        return 0
+    fi
     columns=""
     for file in $about_to_commit; do
         column=$(column_of "$file")
@@ -115,7 +124,7 @@ if [ -n "$about_to_commit" ]; then
     # `set --` rather than an array, because this is `sh`.
     set -- $columns
     if [ "$#" -gt 1 ]; then
-        echo "pre-commit: REFUSED - this commit spans $# perspectives' columns:" >&2
+        echo "pre-commit: REFUSED - this commit spans $# perspectives' columns$when:" >&2
         for file in $about_to_commit; do
             column=$(column_of "$file")
             if [ -z "$column" ]; then column="(unassigned)"; fi
@@ -128,7 +137,9 @@ if [ -n "$about_to_commit" ]; then
         echo "pre-commit: Commit one column's files with: git commit -- <paths>" >&2
         exit 1
     fi
-fi
+}
+
+refuse_if_two_columns ""
 
 # Run the outbox tool and say so if it could not run.
 #
@@ -317,3 +328,29 @@ if [ -n "$rust" ]; then
     echo "$rust" | xargs rustfmt --edition 2024
     echo "$rust" | xargs git add --
 fi
+
+# And again, because the index this hook reads is shared and this hook is slow.
+#
+# # The window is this hook's own run, not the instant after it
+#
+# **The check at the top reads the index and then this file runs for seconds.** `tools/outbox`
+# alone takes about 3.3 seconds and is invoked three times; `tools/spec chains` takes 2.8; the
+# padder runs over every staged markdown file. Measured 2026-09-21. So between the column
+# check and this hook returning there is the better part of ten seconds in which another lane's
+# `git add` can land in the index that git is about to commit.
+#
+# **That is not a theory.** `b055da2b` is a promotion of the specification lane's carrying
+# twenty lines of `crates/game-console/tests/first_release.rs`. The top check saw one column
+# and passed; the code lane staged its file while the tools ran; git committed both.
+#
+# **The hook said so and nobody read it.** That commit's output ends *rustfmt on staged Rust
+# files*, which this hook prints only when `staged '*.rs'` is non-empty - on a promotion that
+# should have carried two markdown files and nothing else. **A tell somebody has to notice is
+# exactly what a check exists to replace**, which is the specification lane's own account of
+# it and the argument for this call rather than for reading more carefully.
+#
+# **It narrows the window rather than closing it.** Nothing can run between this hook
+# returning and git reading the index, so a commit can still be raced in that instant -
+# `hooks/post-commit` reports that case afterwards, which is all anything can do about it. What
+# this removes is the ten seconds, which is where the one instance anybody has caught happened.
+refuse_if_two_columns " - the index changed while this hook was running"

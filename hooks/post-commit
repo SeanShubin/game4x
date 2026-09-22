@@ -43,22 +43,36 @@ fi
 
 # Say when a commit spanned two columns after all, which `pre-commit` cannot catch.
 #
-# **`pre-commit` refuses that shape and it is not enough.** The hook reads the index, then
-# returns, and *then* git reads the index to build the tree. **Nothing runs in between** - so a
-# `git add` from another lane that lands in that gap puts a file into a commit the hook already
-# approved, and the hook is not wrong, it is early.
+# **`pre-commit` refuses that shape and it cannot be enough.** It reads the index, returns,
+# and *then* git reads the index to build the tree - and nothing runs in between. A `git add`
+# from another lane landing in that instant puts a file into a commit the hook already
+# approved. The hook is not wrong; it is early.
 #
-# **It happened on 2026-09-21 and nothing said so.** `b055da2b` is a promotion of the
-# specification lane's carrying `crates/game-console/tests/first_release.rs`, which was this
-# lane's and was staged seconds before. The work survived and the commit message was lost,
-# which `CLAUDE.md` records happening twice before - twenty-six lines, then twenty-one. **This
-# is the third and the first anybody noticed at the time**, and only because the lane whose
-# file it was happened to look at `git log` for an unrelated reason.
+# **It happened on 2026-09-21.** `b055da2b` is a promotion of the specification lane's
+# carrying twenty lines of `crates/game-console/tests/first_release.rs`, which was this lane's,
+# staged seconds before and still uncommitted when its author hit the index lock. The work
+# survived and the commit message was lost, which `CLAUDE.md` records happening twice before.
 #
-# **Detection rather than prevention, deliberately.** Nothing can run between the hook and the
-# write, so the race cannot be closed from here. What can change is that it stops being
-# silent: the commit exists either way, and a lane that is told immediately can say so in the
-# next commit rather than finding out a week later or never.
+# **My first version of this comment said nothing had said so, and that was wrong.** The
+# specification lane went and looked: that commit's output ends *pre-commit: rustfmt on staged
+# Rust files*, and `pre-commit` prints that line only when `staged '*.rs'` is non-empty - on a
+# promotion that should have carried two markdown files and nothing else. **The hook told it
+# and it read past.** So the record was silent and the terminal was not, which are two
+# different claims and only the first is true.
+#
+# **That strengthens the case for this check rather than weakening it.** A tell somebody has
+# to notice is exactly what a check exists to replace, and this one needs nobody to spot an odd
+# line in twenty of output.
+#
+# **And it located the window, which was the more useful half.** The line proving Rust was
+# staged is printed near the end of `pre-commit`, where the column check runs near the start -
+# so the file arrived during the hook's own run, not after it. `pre-commit` now checks the
+# columns a second time before returning, which removes those seconds.
+#
+# **What is left is detection, and that is all anything can be.** Nothing runs between the
+# hook returning and git reading the index, so a commit can still be raced in that instant.
+# The commit exists either way; what changes is that a lane is told at once rather than finding
+# out later or never.
 #
 # **`column_of` is read out of `pre-commit` rather than copied.** A second copy is the thing
 # being checked written twice, and the copy is what rots - which is the argument

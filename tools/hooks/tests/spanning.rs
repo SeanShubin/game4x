@@ -1,32 +1,45 @@
-//! The race `pre-commit` cannot catch, and the thing that says it happened.
+//! The race `pre-commit` did not catch, where it actually was, and what now reports it.
 //!
-//! # What `pre-commit` guarantees, and what it does not
+//! # What `pre-commit` guarantees, and what it did not
 //!
 //! **It refuses a commit whose files span two columns**, which `tests/columns.rs` holds it to.
-//! What that check reads is the index, at the moment the hook runs. Then the hook returns and
-//! git reads the index to build the tree, and **nothing runs in between** - so a `git add` from
-//! another lane landing in that gap puts a file into a commit the hook already approved.
+//! What that check reads is the index, at the moment it runs. **The hook then runs for
+//! seconds** - `tools/outbox` three times at about 3.3 seconds each, `tools/spec chains` at
+//! 2.8, the padder over every staged markdown file, all measured 2026-09-21 - and the index it
+//! read is shared by three lanes.
 //!
-//! **The hook is not wrong; it is early.** `CLAUDE.md` says as much: *staging by name bounds
+//! **The hook is not wrong; it was early.** `CLAUDE.md` says as much: *staging by name bounds
 //! what you add and not what you commit, so no amount of care closes it: the window is between
 //! your `git add` and your `git commit`.*
 //!
-//! # It has happened three times and was silent every time
+//! # Three times, and the third was not silent
 //!
-//! Twice before - twenty-six lines, then twenty-one - both recorded in `CLAUDE.md` and both
-//! found afterwards. The third is `b055da2b` on 2026-09-21, a promotion of the specification
-//! lane's carrying `crates/game-console/tests/first_release.rs`, which the code lane had staged
-//! seconds earlier and was about to commit when it hit the index lock.
+//! Twice before - twenty-six lines, then twenty-one - both recorded in `CLAUDE.md`. The third
+//! is `b055da2b`, a promotion of the specification lane's carrying twenty lines of
+//! `crates/game-console/tests/first_release.rs`, which the code lane had staged seconds
+//! earlier and was about to commit when it hit the index lock.
 //!
-//! **Nothing reported any of the three.** The third was noticed only because the lane whose
-//! file it was read `git log` for an unrelated reason a minute later.
+//! **The first draft of this file said nothing had reported it. That was wrong.** The
+//! specification lane checked and found the hook had said so: that commit's output ends
+//! *pre-commit: rustfmt on staged Rust files*, which `pre-commit` prints only when Rust is
+//! staged, on a promotion that should have carried two markdown files. **The record was silent
+//! and the terminal was not**, which are two claims and only the first holds.
 //!
-//! # So `post-commit` says so, and this is what says it would have
+//! **That located the window, which was the more useful half of it.** The rustfmt line is near
+//! the end of the hook and the column check near the start, so the file arrived *during* the
+//! hook's run rather than after it - inside ten seconds of tool runs rather than in an
+//! instant.
 //!
-//! Detection rather than prevention, because nothing can run between the hook and the write.
+//! # So the hook checks twice, and `post-commit` reports what is left
+//!
+//! The second check removes the seconds. Nothing removes the instant between the hook
+//! returning and git reading the index, so `post-commit` counts the columns of what landed and
+//! says so afterwards - detection, which is all anything can be there.
+//!
 //! **The evidence is a check that would have failed before it existed**, which is the bar
-//! `CLAUDE.md` sets - and this one names the commit it would have caught, so it rests on a
-//! failure that actually occurred rather than on one imagined for it.
+//! `CLAUDE.md` sets, and it names the commit it would have caught rather than one imagined for
+//! it. **A tell somebody has to notice is what a check exists to replace**, which is the
+//! specification lane's own account of reading past that line.
 
 use std::process::Command;
 
@@ -113,5 +126,85 @@ fn post_commit_extracts_the_mapping_from_pre_commit() {
     assert!(
         text.contains("spans $# perspectives' columns"),
         "`hooks/post-commit` no longer reports a commit that spanned two columns"
+    );
+}
+
+/// `pre-commit` counts the columns twice, and the second time is the one that would have
+/// caught `b055da2b`.
+///
+/// # Where the window actually was
+///
+/// **The check at the top reads the index and then the hook runs for seconds.** Measured on
+/// 2026-09-21: `tools/outbox` takes about 3.3 seconds and the hook invokes it three times,
+/// `tools/spec chains` takes 2.8, and the padder runs over every staged markdown file. So the
+/// gap between the column check and the hook returning is the better part of ten seconds.
+///
+/// **`b055da2b` is inside that gap rather than after it, and the hook's own output says so.**
+/// It ends *pre-commit: rustfmt on staged Rust files*, which `pre-commit` prints only when
+/// `staged '*.rs'` is non-empty - on a promotion that carried two markdown files and a Rust
+/// test. The Rust file was therefore in the index by the time the hook reached that line, and
+/// not in it when the hook reached the column check two hundred lines earlier.
+///
+/// **So the second call removes the seconds, and nothing removes the instant.** A commit can
+/// still be raced between the hook returning and git reading the index; `hooks/post-commit`
+/// reports that case after the fact, which is all anything can do.
+#[test]
+fn pre_commit_counts_the_columns_again_before_it_returns() {
+    let at = root().join("hooks/pre-commit");
+    let text = std::fs::read_to_string(&at)
+        .unwrap_or_else(|why| panic!("cannot read {}: {why}", at.display()));
+
+    let calls = text.matches("\nrefuse_if_two_columns ").count();
+    assert_eq!(
+        calls, 2,
+        "`pre-commit` calls `refuse_if_two_columns` {calls} times; it needs one before its \
+         tools run and one after, because the index it reads is shared and the tools are slow"
+    );
+
+    // **One implementation, called twice.** Two copies of the count would be the thing being
+    // checked written twice, which is the argument `column_of_source` already makes.
+    assert_eq!(
+        text.matches("refuse_if_two_columns() {").count(),
+        1,
+        "`refuse_if_two_columns` is defined more than once"
+    );
+
+    // The second call has to come after the slow tools, or it is the first check again.
+    let last_tool = text
+        .rfind("cargo run --quiet --manifest-path tools/")
+        .expect("`pre-commit` runs a tool from `tools/`");
+    let last_call = text
+        .rfind("\nrefuse_if_two_columns ")
+        .expect("`pre-commit` calls the check");
+    assert!(
+        last_call > last_tool,
+        "the last column check runs before the last tool, so it cannot see an index that \
+         changed while that tool was running"
+    );
+}
+
+/// And the line that was the tell is still conditional, so it is still a tell.
+///
+/// **This is the premise the account above rests on**, re-derived rather than taken: if
+/// `pre-commit` printed *rustfmt on staged Rust files* unconditionally, that line in
+/// `b055da2b`'s output would have said nothing about what was staged, and the window would be
+/// unlocated. It is inside an `if`, so it says what it was read to say.
+#[test]
+fn the_rustfmt_line_is_printed_only_when_rust_is_staged() {
+    let at = root().join("hooks/pre-commit");
+    let text = std::fs::read_to_string(&at)
+        .unwrap_or_else(|why| panic!("cannot read {}: {why}", at.display()));
+
+    let at_line = text
+        .find("echo \"pre-commit: rustfmt on staged Rust files\"")
+        .expect("`pre-commit` announces the rustfmt step");
+    let before = &text[..at_line];
+    let guard = before
+        .rfind("rust=$(staged '*.rs')")
+        .expect("`pre-commit` reads the staged Rust files");
+    assert!(
+        before[guard..].contains("if [ -n \"$rust\" ]; then"),
+        "the rustfmt announcement is no longer guarded by there being staged Rust, so its \
+         presence in a commit's output no longer says a Rust file was staged"
     );
 }
