@@ -88,9 +88,11 @@ fn a_count_is_spent_by_acting_and_the_counts_do_not_pool() {
 
     // The counts are read from the Traits table, where `P-411` declares them.
     let counts = nogain::counts(&document);
+    // **Four since `P-522` cut `defending`**, which was the count a thing spent to muster a
+    // force. The other four are spent by moving, labouring, working and bearing.
     assert_eq!(
         counts,
-        ["moving", "laboring", "working", "bearing", "defending"],
+        ["moving", "laboring", "working", "bearing"],
         "the traits whose values are `0 or 1` are the counts a thing carries"
     );
 
@@ -161,10 +163,12 @@ fn a_count_is_spent_by_acting_and_the_counts_do_not_pool() {
         .map(|place| place.state.as_str())
         .filter(|state| counts.iter().any(|count| count == state))
         .collect();
+    // **Two since `P-522` cut `defending`**, and two is still the point: two citizens
+    // differing only in what they have left to do are two descriptions and two places.
     assert_eq!(
         citizen_counts,
-        ["bearing", "defending", "laboring"].into_iter().collect(),
-        "a citizen's counts are three separate places"
+        ["bearing", "laboring"].into_iter().collect(),
+        "a citizen's counts are separate places"
     );
 
     // **A qualified thing is two places and a count is one**, which is the distinction that
@@ -185,72 +189,60 @@ fn a_count_is_spent_by_acting_and_the_counts_do_not_pool() {
     );
 }
 
-/// Force is mustered from a count and swept in the same ending, and the arithmetic sees it.
+/// Nothing musters a force, because this release has none to muster.
 ///
-/// **`P-414`, and it is the one thing in the release whose quantity is not a number.**
-/// `muster` produces *that citizen's force* and `stand` *that unit's force*, so a check that
-/// could only read a number would have dropped both rows and reported a game where force is
-/// made from nothing - the exact shape `spec/invariants.md` exists to refuse.
+/// # What stood here, and why it is a cut rather than a deletion
+///
+/// **`P-414` made force mustered rather than computed**, and this was the check that the
+/// arithmetic saw it: `muster` produced *that citizen's strength* and `stand` *that unit's
+/// strength*, the one pair of quantities in the release that were not numbers, and a reader
+/// that could only read a number would have dropped both rows and reported a game where force
+/// is made from nothing - the exact shape `spec/invariants.md` exists to refuse.
+///
+/// **`P-522` cut the force rule from this release.** Sean cut force; `spec/control.md` keeps
+/// it, so the rules and this check return together, and the version that ran against them is
+/// one commit back.
+///
+/// # The cut is asserted, not assumed
+///
+/// **An empty hand list is what hides half a cut**, so this reads the release: no rule the
+/// arithmetic grounds touches a `force` place, and no recipe is named `muster` or `stand`. A
+/// release that deleted the recipes while leaving a `force` row somewhere fails here, and so
+/// does the day they come back - which is when the rest of this test is wanted again.
+///
+/// **The quantity that is not a number still has a witness**, and it is not this test's job:
+/// `work` produces *`$where`'s density for that resource*, and `tests/petri.rs` asserts it is
+/// drawn rather than refused as a state.
 #[test]
-fn force_is_mustered_from_a_count_and_costs_what_it_takes() {
+fn nothing_musters_a_force_in_this_release() {
     let document = release();
     let rules = nogain::rules(&document);
-    let force = Place {
-        kind: "force".to_string(),
-        state: String::new(),
-    };
 
-    // The release's own numbers: a citizen is force 1, an ark and a pioneer 2.
-    let forces = nogain::forces(&document);
-    assert_eq!(forces.get("citizen"), Some(&1));
-    assert_eq!(forces.get("ark"), Some(&2));
-    assert_eq!(forces.get("pioneer"), Some(&2));
-
-    let muster = rules
-        .iter()
-        .find(|rule| rule.name.starts_with("muster"))
-        .expect("`muster` is a rule");
-    assert_eq!(
-        muster.delta.get(&force),
-        Some(&1),
-        "`muster` makes one citizen's force: {:?}",
-        muster.delta
-    );
-    assert_eq!(
-        muster.delta.get(&Place {
-            kind: "citizen".to_string(),
-            state: "defending".to_string()
-        }),
-        Some(&-1),
-        "and it costs the citizen's capacity to defend: {:?}",
-        muster.delta
-    );
-
-    let stood: Vec<&nogain::Rule> = rules
-        .iter()
-        .filter(|rule| rule.name.starts_with("stand ("))
-        .collect();
-    assert_eq!(
-        stood.len(),
-        2,
-        "`stand` names the family `unit`, which is an ark and a pioneer: {:?}",
-        stood.iter().map(|rule| &rule.name).collect::<Vec<_>>()
-    );
-    for rule in &stood {
-        assert_eq!(
-            rule.delta.get(&force),
-            Some(&2),
-            "`{}` makes that unit's force, which the release says is two",
-            rule.name
-        );
-    }
-
-    // And it is swept in the same ending, so nothing carries force from one turn to the next.
+    // A count over nothing is the same failure with the sign flipped - `CLAUDE.md`.
     assert!(
-        rules
-            .iter()
-            .any(|rule| rule.name.starts_with("discard") && rule.delta.get(&force) == Some(&-1)),
-        "nothing discards force, so it would accumulate across turns"
+        rules.len() > 20,
+        "only {} rules ground out of the release, so this said almost nothing",
+        rules.len()
+    );
+
+    let touching: Vec<&str> = rules
+        .iter()
+        .filter(|rule| rule.delta.keys().any(|place| place.kind == "force"))
+        .map(|rule| rule.name.as_str())
+        .collect();
+    assert!(
+        touching.is_empty(),
+        "these rules move a force and `P-522` cut force from this release: {touching:?}"
+    );
+
+    let named: Vec<&str> = rules
+        .iter()
+        .filter(|rule| rule.name.starts_with("muster") || rule.name.starts_with("stand"))
+        .map(|rule| rule.name.as_str())
+        .collect();
+    assert!(
+        named.is_empty(),
+        "the release still states {named:?}, so the force rule was half cut"
     );
 }
 
@@ -365,10 +357,13 @@ fn every_block_becomes_at_least_one_rule() {
     let document = release();
     let rules = nogain::rules(&document);
 
-    // **`refresh` grounds per block again, and the blocks are what `P-414` left.** Six of
-    // them: four counts put back on a citizen or an extractor, and two on a unit - which is
-    // a family, so each of those two becomes an ark and a pioneer. Eight rules from six
-    // blocks, and every one of them names the count it puts back.
+    // **`refresh` grounds per block, and the blocks are what `P-522` left.** Four of them:
+    // three counts put back on a citizen or an extractor, and one on a unit - which is a
+    // family, so that one becomes an ark and a pioneer. Five rules from four blocks, and
+    // every one of them names the count it puts back.
+    //
+    // **It was eight from six until `P-522`**, which cut the two blocks that put `defending`
+    // back - on a citizen and on a unit, the second of those being two rules.
     let refreshed: Vec<&str> = rules
         .iter()
         .filter(|rule| rule.name.starts_with("refresh ("))
@@ -382,9 +377,6 @@ fn every_block_becomes_at_least_one_rule() {
             "refresh (citizen laboring)",
             "refresh (citizen bearing)",
             "refresh (extractor working)",
-            "refresh (citizen defending)",
-            "refresh (ark defending)",
-            "refresh (pioneer defending)",
         ],
         "`refresh` ground to {refreshed:?}"
     );
@@ -411,8 +403,6 @@ fn every_block_becomes_at_least_one_rule() {
         "bear",
         "breed",
         "refresh",
-        "muster",
-        "stand",
     ] {
         assert!(
             rules
@@ -593,10 +583,14 @@ fn every_recipe_row_names_a_count_rather_than_readiness() {
     // `renew` gained a whole block for the citizen it clears it on.
     //
     // **Ninety-two since `P-511`**, which took `refuel`'s four rows out. P-511 deleted `refuel`: pooling left it moving an energy into a unit with nowhere to move it to, and its qualifier always true.
+    // **Sixty-eight since `P-522`**, which cut nine blocks of twenty-four rows between them.
+    // Derived twice and the two agreed: the release's own table has sixty-eight rows carrying
+    // a role, and `spec/data/line.4x` - generated from it by another lane - has sixty-eight
+    // lines.
     assert_eq!(
         rows.len(),
-        92,
-        "ninety-two recipe rows is the population this counted against"
+        68,
+        "sixty-eight recipe rows is the population this counted against"
     );
     assert!(
         saying.is_empty(),
@@ -606,10 +600,13 @@ fn every_recipe_row_names_a_count_rather_than_readiness() {
     // **And the counts are what replaced it**, asserted here so that *no row says ready* cannot
     // be satisfied by a table that says nothing about readiness at all.
     let counts = game_console::nogain::counts(&document);
+    // **Four since `P-522` cut `defending`**, and the point is unchanged: what replaced the
+    // one flag is a count per action, so *no row says ready* cannot be satisfied by a table
+    // that says nothing about readiness at all.
     assert_eq!(
         counts,
-        ["moving", "laboring", "working", "bearing", "defending"],
-        "five counts replaced the one flag, and they are what a recipe row names instead"
+        ["moving", "laboring", "working", "bearing"],
+        "four counts replaced the one flag, and they are what a recipe row names instead"
     );
     let naming = rows
         .iter()

@@ -682,9 +682,12 @@ fn every_strength_the_release_states_is_the_strength_the_model_musters() {
             }
         }
     }
+    // **Three since `P-522` took the garrison row**, which was the fourth: a citizen's one,
+    // and two each for the ark and the pioneer. The Strength column survives the cut of
+    // force, because *Units and structures* still states it.
     assert_eq!(
-        compared, 4,
-        "four things have a strength, and all four are compared"
+        compared, 3,
+        "three things have a strength, and all three are compared"
     );
     assert_eq!(
         blank, 3,
