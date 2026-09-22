@@ -11,7 +11,7 @@ of it needs you.
 
 ## Open
 
-### P-528 - One fact about adjacency is now stated three times, in two files
+### P-528 - One fact about adjacency is now stated four times, in three files
 
 **to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** approval · **into** `spec/orbit.md` -> Crossing between layers, and `spec/planet.md` -> Distance
 
@@ -19,7 +19,7 @@ of it needs you.
 and could not close because the third had not arrived.
 
 *Two places on the same layer are adjacent when their territories are, and a place is adjacent to
-the place above it* is now written in three places:
+the place above it* is now written in four places, three of them in `spec/`:
 
 ```
 spec/orbit.md    The orbital layer   Two places on the same layer are adjacent when their
