@@ -13,9 +13,40 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ### P-532 - Fifty-three tests have to cross a column boundary, and nothing may carry them
 
-**to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** a decision · **into** `spec/tests/`, `reviewed/`, and the prototype
+**to** sean · **status** answered · **answered** 2026-09-21, `M2` · **raised** 2026-09-21 · **kind** entailed · **into** `spec/tests/`, `reviewed/`, and the prototype
 
 **Filed the moment `P-530` and `P-531` landed**, which is what both said would happen.
+
+**Answered `M2` on 2026-09-21: he moves them himself.** The scripts are asked of the code lane,
+because `scripts/` is their column, and he runs them from the project root. **Nothing here is a
+proposal** - there is no text to promote, only a move, so this item closes when the directories
+exist rather than becoming words for him to approve.
+
+**What the answer resolves, and it is the thing this item said was impossible.** `CLAUDE.md` now
+says a record is added and removed only by the review application acting as Sean; **a relocation
+is neither, so no instance may carry it.** `M2` resolves it because he is not an instance. **The
+scripts are written by a lane and run by him**, which is the whole of the difference.
+
+**Measured for the move, 2026-09-21:**
+
+```
+prototypes/thin-engine/data/friendly/tests/   54 .4x, 244K  ->  spec/tests/
+prototypes/thin-engine/reviewed/              52 .4x, 232K  ->  reviewed/
+```
+
+**`data/foundation/` does not move**: `tests/directories.rs` opens with *`data/friendly/` is the
+source and `data/foundation/` is what it converts to*, his words of 2026-09-15 - so it is
+generated, and `CLAUDE.md` says a generated file has no owner.
+
+**And five files stay behind that are not tests** - `engine.4x`, `rules.4x`, `schema.4x`,
+`script.4x`, `setup.4x`. **They are the game's data and the engine's declaration**, and
+`spec/data/` already holds twelve files of the older relational form. **Two representations of one
+game in one directory is a decision**, and `P-517` is the open question about which survives.
+
+**The two unreviewed tests are `a-pioneer-settles-the-ground-it-is-standing-on` and
+`a-second-settlement-launches-the-ark-the-first-could-not`**, both from the code lane's pioneer
+work. **Fifty-four tests against fifty-two records is correct** and is the number to expect on the
+other side.
 
 **`CLAUDE.md` now says a test lives in `spec/tests/` and the suite runs the copies in
 `reviewed/`. Neither directory exists.** The fifty-three tests you have read are in
