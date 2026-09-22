@@ -8,8 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-539** - `spec/` splits into what the game is and what it will be · `decide/proposals.md`
-- **P-538** - The staging bullet says the column check twice, and the second one carries a fact the first does not · `decide/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -31,8 +29,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (14)
+### To code (15)
 
+- **S-154** - `spec/README.md`'s rules renumbered, and three of your comments cite the old numbers · `docs/notes/proposals.md`
 - **S-153** - The mainline keeps the rendering and loses the rules, and thin-engine stops being a prototype · `docs/notes/proposals.md`
 - **S-152** - `P-519` deleted a sentence `first_release.rs` quotes, and the gate is red on it · `docs/notes/proposals.md`
 - **S-151** - `fully exploited` is now a term the specification does not define, and you implement it · `docs/notes/proposals.md`

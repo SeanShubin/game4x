@@ -48,11 +48,16 @@ Add a file when a topic firms up. Add its row here first.
 
    **Where prose and a test disagree, the test is right and the prose is a defect.** Prose is
    the one of the three that can drift without anything noticing.
-4. **Reasoning lives in [notes](../docs/notes/README.md).** State the rule here; link down
+4. **A document says what the game is, or it says what the game will be, and it says which.**
+   What is built and asserted by a test is the specification. **What is wanted and unbuilt is a
+   future plan** - kept, linked and findable, and not mistaken for a rule anything obeys today.
+   **The two are told apart by where a document sits**, not by a reader remembering which is
+   which.
+5. **Reasoning lives in [notes](../docs/notes/README.md).** State the rule here; link down
    for why. Keep this directory short enough to hold in your head.
-5. **Open questions go at the bottom of the file**, under that heading, never scattered.
-6. **Record what was rejected** when the rejection is load-bearing.
-7. **Relationships in prose, data in data files, and both are in this directory.** State that a
+6. **Open questions go at the bottom of the file**, under that heading, never scattered.
+7. **Record what was rejected** when the rejection is load-bearing.
+8. **Relationships in prose, data in data files, and both are in this directory.** State that a
    predator has more force than a scavenger; **state the game's data in several files in a
    directory of their own**, in the notation rather than in a table. **What the specification
    states is the default.** Tuning happens in the editor and does not touch the specification, and

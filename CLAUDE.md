@@ -171,11 +171,10 @@ Four things the perspectives make necessary, all of which have teeth:
   it: the window runs from your `git add` to the moment git builds the commit, and most of it is
   `hooks/pre-commit`'s own run. **The hook checks the columns twice for that reason**, before its
   tools and after them, and `hooks/post-commit` reports the instant after it returns, which is
-  the only part nothing can refuse. It has happened three times - twenty-six lines, then
-  twenty-one, then twenty - and every time the work survived and the commit message was what was
-  lost.
-  **`hooks/pre-commit` refuses a commit whose files span two perspectives' columns**, which is
-  the shape of the race and of writing outside your own column alike.
+  the only part nothing can refuse. It has happened three times - twenty-six lines, then twenty-one,
+  then twenty - and every time the work survived and the commit message was what was lost.
+  **That check serves two purposes**: it is the shape of the race, and the shape of writing
+  outside your own column.
 - **Never amend a commit here.** `git commit --amend` replaces a hash, and another perspective may
   already have read the old one and written it into an outbox. **The window between committing and
   amending is not one anyone can observe** - on 2026-09-12 it was seconds, before any push, and the

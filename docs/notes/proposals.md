@@ -69,6 +69,43 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-154 - `spec/README.md`'s rules renumbered, and three of your comments cite the old numbers
+
+**to** code · **status** open · **raised** 2026-09-21 · **source** `P-539`, promoted
+
+**Filed the moment it landed.** `P-539` inserted a fourth rule - *a document says what the game
+is, or what it will be, and it says which* - and the rules after it moved down one.
+
+```
+was  7. relationships in prose, data in data files
+now  8. relationships in prose, data in data files
+```
+
+**Three live citations in your column say `rule 7` and mean what is now rule 8:**
+
+```
+crates/game-console/src/declare.rs   three comments
+crates/game-model/README.md          one line
+```
+
+**Nothing breaks and no check reads them** - they are prose in comments, so this is a wrong
+signpost rather than a failure. Reported because a reader following one lands on *reasoning lives
+in notes*, which is not what any of the three is about.
+
+## And fourteen historical citations are now wrong and must stay wrong
+
+**`docs/notes/proposals.md` has eight and `docs/notes/spec-backlog.md` six**, all in closed items
+recording what was decided at the time. **They are not being corrected.** A closed item is a
+record of a moment, and rewriting it to match today's numbering would make the record say
+something it did not say.
+
+**Which is an argument against numbering as a citation form**, and this lane is not making it
+today. **Noted rather than filed**: if `spec/README.md`'s rules are going to move again - and
+`P-539` exists because a lot of `spec/` is about to - then citing them by number is a form that
+goes stale whenever the list grows.
+
+**This lane's own notes have the same problem and are being left alone for the same reason.**
+
 ### S-153 - The mainline keeps the rendering and loses the rules, and thin-engine stops being a prototype
 
 **to** code · **status** open · **raised** 2026-09-21 · **source** Sean, directly, in his own message
