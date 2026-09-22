@@ -217,9 +217,11 @@ fn the_four_cells_the_old_matcher_could_not_read_now_reach_their_kinds() {
         // and `paid` is what `upkeep` puts on a citizen it feeds.
         ("paid", &["citizen"][..], &["yard", "territory"][..]),
         // *whatever is built*, whose column `P-466` had already removed.
+        // **`garrison` led this list until `P-522` cut the kind.** Five things are built and
+        // bound in this release rather than six.
         (
             "binding",
-            &["garrison", "extractor", "yard", "store", "ark", "pioneer"][..],
+            &["extractor", "yard", "store", "ark", "pioneer"][..],
             &["citizen", "food", "territory"][..],
         ),
         // *whatever moves*, and *a citizen or a unit* - a cell naming a family and not only it.
@@ -252,10 +254,11 @@ fn the_four_cells_the_old_matcher_could_not_read_now_reach_their_kinds() {
             checked += 1;
         }
     }
-    // **Four traits since `P-522` took `defending`**: ten kinds carry one of the four and
-    // nine do not, which is nineteen assertions where it was twenty-five.
+    // **Four traits since `P-522` took `defending`**, and five kinds carrying `binding` since
+    // it took `garrison` as well: nine kinds carry one of the four and nine do not, which is
+    // eighteen assertions where it was twenty-five.
     assert_eq!(
-        checked, 19,
-        "four traits: ten kinds that carry one and nine that do not"
+        checked, 18,
+        "four traits: nine kinds that carry one and nine that do not"
     );
 }

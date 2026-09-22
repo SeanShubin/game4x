@@ -273,9 +273,22 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
     // **Still forty-five after `P-497` moved them**, which is the normalization doing what it
     // claims: the same facts in a shape with no repeating group, and the number that says so
     // is this one being unchanged by a change that rewrote every line.
+    //
+    // **Thirty-seven since `P-522`**, which is eight rows: `defending` on a citizen, an ark and
+    // a pioneer; `binding`, `metal-in-it` and `strength` on a garrison; `biome` on a territory;
+    // and `met` on a nature. **Every one of those names a trait or a kind the release stopped
+    // declaring**, so this is the same number doing the same job rather than a literal moved to
+    // make a test pass.
+    //
+    // **It is the count that found them**, and by the slower of the two routes available.
+    // Deleting `defending` from `traits.4x` left three rows here referring to it, and
+    // `carries.4x` is the one file under `spec/data/` with no generator - so regenerating the
+    // derived files caught none of it, and what said so was a kind's line naming a trait that
+    // is not declared. Re-derived here before being written down: thirty-seven rows in the
+    // file, thirty-seven `trait:` references, one per row.
     assert_eq!(
-        mentions, 45,
-        "forty-five trait names across `carries.4x`; this read {mentions}"
+        mentions, 37,
+        "thirty-seven trait names across `carries.4x`; this read {mentions}"
     );
     // **Seven memberships, in `member.4x` rather than on a kind's line** - `P-497` again, and
     // the count is the one that was here when `family:` was a key.

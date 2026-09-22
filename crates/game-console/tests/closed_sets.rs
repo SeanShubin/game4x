@@ -310,9 +310,14 @@ fn every_trait_of_a_territory_is_shown_in_the_dump() {
     // a flat map; `nature` went because *force below nature* had to stop being a comparison,
     // and a territory holds one `nature` per point now. **So the count fell for a third
     // distinct reason**, which is why this names them as well as counting them.
+    // **Two since `P-522` cut `biome`**, and it is the fourth distinct reason this count has
+    // fallen: `density` and `capacity` went to the deposit because a description is a flat
+    // map, `nature` went by becoming a kind, and `biome` went because the release stopped
+    // having biomes at all. **Which is why they are named as well as counted** - two is two
+    // whichever two they are.
     assert_eq!(
         of_a_territory,
-        ["biome", "control", "id"],
+        ["control", "id"],
         "`spec/data/carries.4x` names the traits a territory carries"
     );
 
