@@ -169,10 +169,10 @@ Four things the perspectives make necessary, all of which have teeth:
   something else. This is not a caution about your own carefulness; the hazard is someone else.
   **Staging by name bounds what you add and not what you commit**, so no amount of care closes
   it: the window is between your `git add` and your `git commit`, and checking for the lock
-  falls before it. It has happened twice - twenty-six lines, then twenty-one - and both times
-  the work survived and the commit message was what was lost. **`hooks/pre-commit` refuses a
-  commit whose files span two perspectives' columns**, which is the shape of the race and of
-  writing outside your own column alike.
+  falls before it. It has happened three times - twenty-six lines, then twenty-one, then
+  twenty - and every time the work survived and the commit message was what was lost.
+  **`hooks/pre-commit` refuses a commit whose files span two perspectives' columns**, which is
+  the shape of the race and of writing outside your own column alike.
 - **Never amend a commit here.** `git commit --amend` replaces a hash, and another perspective may
   already have read the old one and written it into an outbox. **The window between committing and
   amending is not one anyone can observe** - on 2026-09-12 it was seconds, before any push, and the
