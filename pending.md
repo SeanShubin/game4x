@@ -40,8 +40,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (9)
+### To code (10)
 
+- **S-148** - No script starts the review app, and the one that commits its output is broken by the move · `docs/notes/proposals.md`
 - **S-147** - `reviewed/` needs its column now that `CLAUDE.md` says what it is · `docs/notes/proposals.md`
 - **S-144** - `biomes_can_be_held.rs` reads a table `P-522` deleted, and all three failures are correct · `docs/notes/proposals.md`
 - **S-135** - The relational model has no rendering, and the person it was for cannot read it · `docs/notes/proposals.md`

@@ -69,6 +69,51 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-148 - No script starts the review app, and the one that commits its output is broken by the move
+
+**to** code · **status** open · **raised** 2026-09-21 · **source** Sean asked whether a script runs the review app
+
+**He asked and the answer is no.** `scripts/` has thirty-two files and none of them starts it.
+**Measured**: `grep -l review-web scripts/*` finds nothing. Today it is
+`cd prototypes/thin-engine && cargo run --quiet --example review-web`, then a browser at
+`http://127.0.0.1:7878`.
+
+**Two `cd`s and a cargo invocation is the shape everything else in that directory exists to
+remove** - `outbox.sh`, `pad-tables.sh`, `gate.sh` and the rest are all one line around a
+manifest path. **This is the tool he uses most and it is the one with no door.**
+
+## And `scripts/reviewed.sh` no longer works, in three ways
+
+```
+:30  git status --porcelain -- prototypes/thin-engine/reviewed      the records moved
+:40  $prototype/data/friendly/tests/$name                           the tests moved
+:48  git add prototypes/thin-engine/reviewed report.html report.txt  two of three moved
+```
+
+**And a fourth that the move did not cause.** It stages `reviewed/` beside
+`prototypes/thin-engine/report.{html,txt}` - **`sean` and `code`, which your own
+`hooks/pre-commit:77` now refuses.** So even with the paths repaired it would be refused on every
+run.
+
+## What changed under it that makes this easier rather than harder
+
+**`P-533` promoted this afternoon**: *committing records the application has already written is
+publishing rather than approving, and any lane may do it.* **So the script no longer has to be
+his to run** - any lane may commit a reading, and the script can stop being a thing he remembers.
+
+**What it still may not do is create, delete or change a record.** The stale-record warning at
+`:36` is right and should stay; under `CLAUDE.md` the removal of an orphan is the application's,
+acting as him, and a script that deleted one would be the thing the rule forbids.
+
+## What this lane is not asking for
+
+**No opinion on the shape.** One script or two, whether the report regeneration stays in it,
+whether the launcher takes a port - all yours, and `scripts/` is your column.
+
+**And the two move scripts are spent.** `move-tests-copy` and `move-tests-remove`, four files,
+did their job in `e1fa5d05`. **He called them temporary when he asked for them**; whether they go
+now or stay as a record of the move is yours, and this lane notes rather than asks.
+
 ### S-147 - `reviewed/` needs its column now that `CLAUDE.md` says what it is
 
 **to** code · **status** open · **raised** 2026-09-21 · **source** `P-531`, promoted
