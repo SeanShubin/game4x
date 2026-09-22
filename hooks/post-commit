@@ -40,3 +40,55 @@ if ! git diff --cached --quiet -- pending.md 2>/dev/null; then
     echo "post-commit: the regenerated file stays in the working tree - it is not lost"
     git reset --quiet -- pending.md
 fi
+
+# Say when a commit spanned two columns after all, which `pre-commit` cannot catch.
+#
+# **`pre-commit` refuses that shape and it is not enough.** The hook reads the index, then
+# returns, and *then* git reads the index to build the tree. **Nothing runs in between** - so a
+# `git add` from another lane that lands in that gap puts a file into a commit the hook already
+# approved, and the hook is not wrong, it is early.
+#
+# **It happened on 2026-09-21 and nothing said so.** `b055da2b` is a promotion of the
+# specification lane's carrying `crates/game-console/tests/first_release.rs`, which was this
+# lane's and was staged seconds before. The work survived and the commit message was lost,
+# which `CLAUDE.md` records happening twice before - twenty-six lines, then twenty-one. **This
+# is the third and the first anybody noticed at the time**, and only because the lane whose
+# file it was happened to look at `git log` for an unrelated reason.
+#
+# **Detection rather than prevention, deliberately.** Nothing can run between the hook and the
+# write, so the race cannot be closed from here. What can change is that it stops being
+# silent: the commit exists either way, and a lane that is told immediately can say so in the
+# next commit rather than finding out a week later or never.
+#
+# **`column_of` is read out of `pre-commit` rather than copied.** A second copy is the thing
+# being checked written twice, and the copy is what rots - which is the argument
+# `tools/hooks/src/lib.rs` already makes for extracting the same function by text.
+root=$(git rev-parse --show-toplevel)
+if [ -f "$root/hooks/pre-commit" ]; then
+    eval "$(sed -n '/^column_of() {/,/^}$/p' "$root/hooks/pre-commit")"
+    landed=$(git show --name-only --format= HEAD | grep . || true)
+    columns=""
+    for file in $landed; do
+        column=$(column_of "$file")
+        if [ -n "$column" ]; then
+            case " $columns " in
+                *" $column "*) ;;
+                *) columns="$columns $column" ;;
+            esac
+        fi
+    done
+    set -- $columns
+    if [ "$#" -gt 1 ]; then
+        echo "post-commit: this commit spans $# perspectives' columns:" >&2
+        for file in $landed; do
+            column=$(column_of "$file")
+            if [ -z "$column" ]; then column="(unassigned)"; fi
+            echo "  $column  $file" >&2
+        done
+        echo "post-commit: pre-commit approved an index that changed before git read it -" >&2
+        echo "post-commit: somebody else's git add landed in the gap. The work is committed" >&2
+        echo "post-commit: and nothing is lost; what is wrong is the message it landed under." >&2
+        echo "post-commit: Say so, and never amend - CLAUDE.md: a hash is the one citation" >&2
+        echo "post-commit: here that cannot be re-derived." >&2
+    fi
+fi
