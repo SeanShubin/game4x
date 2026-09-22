@@ -14,6 +14,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **P-515** - Publish the shape of the error, not only the correction · `decide/proposals.md`
 - **P-514** - Three rows of `spec/data/line.4x` are unwritable, and this lane's own check said there was one · `decide/proposals.md`
 - **P-513** - A relation names its columns, and nothing says so · `decide/proposals.md`
+- **P-536** - `spec/data/` sits in `spec/` and holds the release's data, and your ruling today made the two differ · `decide/questions.md`
 - **P-517** - `spec/data/` states the cases, and the rules are what you wanted to read · `decide/questions.md`
 - **P-516** - Moving resources: put or consume-and-produce, and how the fuel says who burnt it · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
@@ -30,7 +31,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-147** - `1ef0c07` S-147: reviewed/ is a column, and an orphaned record can be reached · still open in `docs/notes/proposals.md`
-- **S-144** - `5c39114` S-144: the counts follow carries.4x, which the spec lane fixed after I found it · still open in `docs/notes/proposals.md`
+- **S-144** - `58a6ba1` S-144: the model keeps what spec/ keeps, and the checks say which release defers what · still open in `docs/notes/proposals.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
 - **X-38** - `fec232b` X-38: the route is drawn on the sphere, and the lens's unmeasured number is measured · still open in `lenses/research/outbox.md`

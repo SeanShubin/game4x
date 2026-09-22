@@ -229,6 +229,17 @@ hand-written so that results are identical on every platform, which is what make
    first.* Rule 9 makes an order reproducible; this says which questions may not be answered by an
    order at all. *Enforced by* the prototype's `NotOne` and `NotOneToTake`, and by its report
    pairing two worlds' rows only where the pairing is forced.
+16. **The model keeps what `spec/` keeps, and a release may defer it.** A release saying a
+   thing is out of scope narrows what is *built for a delivery*; it does not remove the thing
+   from the model. **So a check comparing the model against a release names what is deferred
+   rather than asserting the two are equal** — and it fails in both directions: a model kind
+   that is neither listed nor deferred fails, and a deferred entry whose release row has come
+   back fails as unnecessary. **A set deferred whole asserts the section's absence**, rather
+   than working around an empty list, so that a half-cut release is caught too. Sean,
+   2026-09-21, choosing to narrow rather than cut: cutting `garrison`, `biome` and `force` out
+   of the model was measured at 134 sites across 23 files and a reseed that would have left
+   `R-6` unreviewed. **Relayed to this lane by the code lane rather than said to it**, and
+   recorded as relayed.
 
 ## Open questions
 

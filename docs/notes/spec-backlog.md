@@ -3851,3 +3851,37 @@ will restate. And what happens to `spec/data/`, which four open items are about.
 `P-516`, `P-517` - are about a file that may not survive, so answering them before `P-530` spends
 his attention on a notation that may be retired. **All four are annotated in place** rather than
 withdrawn, because this lane does not get to decide that they are moot.
+
+## Said 2026-09-21: the model keeps what `spec/` keeps, and a release may defer it
+
+**Relayed by the code lane** rather than said to this lane, so it is recorded as relayed and is
+open to correction by him. They put two options to him with the cost measured, and he chose to
+narrow rather than to cut.
+
+**What cutting would have cost**: `garrison`, `biome` and `force` out of the model is 134 sites
+across 23 files, deleting `scenario/commands/{biomes,forces}.4x`, and reseeding 25 of
+`scenario/expected/play.4x`'s 125 lines - which under `P-225` leaves `R-6` unreviewed until he
+reads it.
+
+**Half of it is already written.** `releases/README.md` has **Out** - *deliberately not in this
+release, listed so a reader knows it was considered, not forgotten* - which is the deferral. **The
+new half is that a release deferring something does not remove it from the model**, and that is a
+property of the artifact rather than a rule of the game, so it goes to
+[architecture](../architecture.md) rather than the queue.
+
+**What it changed in the code lane's checks is the more useful half.** `closed_sets`, `vocabulary`
+and `browsable` now name what is deferred rather than asserting equality with the release, and
+each fails in both directions: a model kind that is neither listed nor deferred fails, and a
+deferred entry whose release row comes back fails as unnecessary. **A set deferred whole - biomes -
+asserts the section's absence** rather than working around an empty list.
+
+## Observed 2026-09-21: a file the release had outrun was holding two test expectations up
+
+**The code lane's finding, and it is the twin of this lane's.** Two of their counts were only wrong
+*after* `carries.4x` was fixed: `garrison` sat in a `binding` list in `prototypes/kinds` and
+`biome` in a territory's in `closed_sets`, and both were green the whole time the data file still
+said so.
+
+**So a stale data file was propping up stale expectations**, and neither could be seen while the
+other stood. **This lane deleted `defending` from `traits.4x` without checking what referenced it**
+and reached the same place from the other end.

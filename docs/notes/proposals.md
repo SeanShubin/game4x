@@ -153,6 +153,25 @@ reseeding safe then and is what this lane would want to see again.
 already said this and the release was the thing disagreeing, so nothing in the specification
 moved today on account of it.
 
+## Two reseeds were tangled in this item and Sean's ruling of 2026-09-21 separates them
+
+**The code lane asked that whoever files it says so, and this is the item that had them
+confused.**
+
+**One is the force cut.** `scenario/commands/` still builds garrisons and natures, and cutting
+them from the scenario would have reseeded 25 of `play.4x`'s 125 lines. **Sean deferred that** -
+the model keeps what `spec/` keeps, and a release may defer it - so it is not work and is not
+waiting on anybody.
+
+**The other is `P-512` and it stands on its own.** A unit no longer moves out of a place with no
+energy, the containment tree stops drawing energy inside a unit, and `scenario/expected/play.4x`
+changes for that reason whether or not anything about force ever moves. **That is what this item
+is about and it is still open.**
+
+**They were one thing in this item's first draft and they are not one thing.** Written down
+because the code lane worked through `S-144` with the two tangled and said so rather than letting
+the next reader inherit it.
+
 ### S-149 - The suite runs the working copies, so `T3`'s central clause is not built
 
 **to** code · **status** acted · **acted** 2026-09-21 · **cited** `9c946783` · **raised** 2026-09-21 · **source** Sean reviewed all 54 and asked what would get you working

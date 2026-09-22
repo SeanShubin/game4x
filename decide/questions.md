@@ -11,6 +11,65 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
+### P-536 - `spec/data/` sits in `spec/` and holds the release's data, and your ruling today made the two differ
+
+**to** sean · **status** open · **raised** 2026-09-21 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `spec/data/`
+
+**You ruled today that the model keeps what `spec/` keeps and a release may defer it.**
+**`spec/data/` is generated from the release**, so it now holds less than `spec/` does, while
+living inside it.
+
+```
+                  named in spec/*.md   declared in spec/data/
+force                      yes                  no
+garrison                   yes                  no
+nature                     yes                  no
+biome                      yes                  no
+```
+
+**`spec/control.md` still has Force and Producing force. `spec/planet.md` still gives every
+territory a biome.** None of the four is declared in `spec/data/` any more, because this lane
+regenerated those files from the cut release this afternoon - which was right for the release and
+is now wrong for the directory's name.
+
+## The thing that makes it more than tidiness
+
+**Your own rule of `spec/README.md`**: *the game's data is decided in its data file*. **If that
+file is the release's, then the game's data is decided per delivery** - and a deferred feature has
+no data anywhere, not even the part of it `spec/` still states.
+
+**The code lane is living with the consequence today.** Its state report stands up a garrison
+because the model keeps one, and links `catalog.html#garrison`, which the catalog does not have
+because the catalog is generated from the release. **Twenty-seven dead links over three anchors**,
+asserted as a number so a fourth is a finding.
+
+## The three answers
+
+**`D1` - `spec/data/` holds the specification's data, and the release's is generated separately.**
+Then `force` and `biome` come back, the catalog and the state report agree, and a release's
+narrowing lives only in the release. **The cost is a second generated set and a name for it.**
+
+**`D2` - `spec/data/` holds the release's data and is renamed to say so.** Nothing regenerates;
+the directory moves or is called something that does not claim to be the specification. **The
+cost is that `spec/README.md`'s *the game's data is decided in its data file* stops having a file
+under `spec/` to point at.**
+
+**`D3` - leave it and accept that the specification's data is the current release's.** Cheapest,
+and it means a feature you have deferred has no data written down anywhere. **The twenty-seven
+dead links stay until the release grows back.**
+
+## What this lane would say, and it is weaker than usual
+
+**`D1` is the one that matches what you ruled**, and it is the most work. **`D3` is what is true
+today and nobody has to do anything.**
+
+**What tips it is `P-530`.** Under an executable specification, the tests in `spec/tests/` are the
+primary statement and `spec/data/` is a second form of the same facts. **If the tests carry the
+game, the question may be which of these files survives rather than which release they follow** -
+and `P-517` has been open on that since before today. **So this may be worth leaving until you
+answer `P-517`**, and this lane files it now because the divergence is real today and would
+otherwise be discovered rather than reported.
+
 ### P-517 - `spec/data/` states the cases, and the rules are what you wanted to read
 
 **to** sean · **status** open · **raised** 2026-09-14 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `spec/data/`, and `C-114`
