@@ -79,11 +79,46 @@ true until the application can classify a change set.
 a test cannot; this one says where the tests live and who may touch the record. **They are
 independent** - either can land without the other - **and neither is complete alone.**
 
-## What the code lane has to do before the rule is enforced rather than stated
+## The case a record and the tests can disagree about, and nothing may act on it
 
-**One `case` line in `hooks/pre-commit`**, so that `reviewed/` is a column rather than an
-unassigned path - today an unrecognised path is listed in a refusal and never causes one.
-**Filed to them as `S-146` in the commit that files this**, so it is not waiting on the promotion.
+**Raised by the code lane against this draft, with its own commit as the evidence.** `e15ba69c`
+deleted two records in `reviewed/` that named tests which no longer existed - a rename had left
+them behind, **and a later test given one of those names would have opened as *reviewed* with
+nobody having read a line of it.** That was correct work.
+
+**Under the rule above it is illegal.** If no instance writes `reviewed/`, then no instance may
+remove a stale record either, and the false approval it enables has no way out. **The one case
+where the record and the tests can disagree is the one case nothing is allowed to fix.**
+
+**The answer is not an exception, it is the application.** The record is written when you press a
+key and removed when you press the other one; `u` already does that for a test you can see.
+**What is missing is that an orphaned record has no test to navigate to**, so it cannot be reached
+in order to be taken back.
+
+> **A record is added and removed only by the review application, acting as Sean.** No instance
+> writes `reviewed/` by any other route. **The application shows a record whose test is gone**, so
+> that a rename - which leaves an orphaned record and an unread test - is two things he can see
+> and act on rather than one thing nobody may touch.
+
+**A rename is the common case rather than an exotic one**, which is what makes this worth a
+sentence in the rule: it is a delete and an add, and it orphans a record every time.
+
+## What has to change in `hooks/pre-commit`, and it is not a separate item
+
+**One `case` line**, so that `reviewed/` is its own column rather than the code lane's.
+**Measured, and this lane had it wrong**: `hooks/pre-commit:68` maps `prototypes/*` to `code`, so
+the record sits in the code lane's column today - not, as an earlier draft of this said, in no
+column at all.
+
+**It is not filed to the code lane and this lane was wrong to file it.** Which column a path
+belongs to is a statement about who may write what, which this file reserves for you. **The code
+lane refused it on exactly that ground** - not doubting the relay, but unable to check it, which
+is the reason the rule exists. `S-146` is withdrawn and the line lives here, where the rule it
+serves is.
+
+**It also changes what commits are legal today**, before anything is promoted: `e15ba69c` would
+have been refused by it. **That is an argument for landing the line with the rule and not before
+it**, rather than an argument against the line.
 
 ### P-530 - The specification is executable, and prose is what the tests cannot say
 

@@ -71,7 +71,32 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-146 - `reviewed/` needs a column in `hooks/pre-commit`, which is one `case` line
 
-**to** code · **status** open · **raised** 2026-09-21 · **source** `P-531`, and the measurement under it
+**to** code · **status** withdrawn · **withdrawn** 2026-09-21 · **raised** 2026-09-21 · **source** `P-531`, and the measurement under it
+
+**Withdrawn the same day, and two of its three premises were false.** The code lane held it and
+checked it; everything below the withdrawal is what the item said when it was filed.
+
+**One - `reviewed/` is not an unassigned path.** `hooks/pre-commit:68` maps `prototypes/*` to
+`code`, and `prototypes/thin-engine/reviewed/` is under it. **It has a column and that column is
+the code lane's.** This lane read the catch-all's comment - *a path this does not recognise is
+new* - and applied it to a path that matches an earlier case. **A true sentence about the wrong
+path**, which is the third premise of this shape it has got wrong in two days.
+
+**Two - it was not harmless before the rule.** `e15ba69c` committed two `reviewed/` deletions
+alongside `tests/reviewed.rs`, all under `prototypes/` and so all one column. **The proposed line
+would have refused that commit** - work both lanes agreed was right, refused under a rule Sean has
+not promoted.
+
+**Three - and this is the one that would have mattered even if the first two held.** Which column a
+path belongs to is a statement about who may write what, and `CLAUDE.md` reserves that for Sean
+directly. **The code lane was right to refuse it on this ground alone**, and right that the reason
+is not doubt: *a reader has no way to tell a relayed approval from an invented one.* **This lane
+filed a column change on its own authority and should not have.**
+
+**The line itself is not wrong and is now part of `P-531`**, where it belongs - a consequence of
+the rule rather than an item that runs ahead of it.
+
+**What it said when filed:**
 
 **Sean chose `T3`**: the approved copy of a test is the specification, the suite runs it, and
 `reviewed/` is written by no instance. **The rule is in `P-531` and unpromoted; this is the half

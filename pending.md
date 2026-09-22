@@ -41,9 +41,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (9)
+### To code (8)
 
-- **S-146** - `reviewed/` needs a column in `hooks/pre-commit`, which is one `case` line · `docs/notes/proposals.md`
 - **S-144** - `biomes_can_be_held.rs` reads a table `P-522` deleted, and all three failures are correct · `docs/notes/proposals.md`
 - **S-135** - The relational model has no rendering, and the person it was for cannot read it · `docs/notes/proposals.md`
 - **S-133** - The two follow-ons from pooling, which this lane owed you and did not file · `docs/notes/proposals.md`
