@@ -61,7 +61,9 @@ fn the_release_tables_are_the_ones_in_this_crate() {
     let tables: [(&str, usize, Vec<Vec<String>>); 7] = [
         ("## Kinds", 12, kinds::kinds_table()),
         ("## Families", 3, kinds::families_table()),
-        ("## Where things are", 3, kinds::capacities_table()),
+        // **Two rows since `P-512`**, so the floor is two: a parser finding nothing still
+        // agrees with anything, and three would now refuse the table that is there.
+        ("## Where things are", 2, kinds::capacities_table()),
         ("## Traits", 17, kinds::traits_table()),
         (
             "## What bounds a kind in a territory",
@@ -112,8 +114,10 @@ fn there_are_thirty_two_recipe_blocks_under_twenty_two_names() {
     // **Thirty-seven blocks under twenty-six names since `P-498`**, which gave `renew` a
     // second block: it clears the mark on a citizen as well as the one on a nature, which
     // is one rule applied to two kinds - `stow` and `discard`'s shape.
-    // **Thirty-six since `P-511`**, which deleted `refuel`.
-    assert_eq!(kinds::RECIPES.len(), 36);
+    // **Twenty-seven since `P-522`**, which cut nine blocks with force: `muster`, `stand`,
+    // the two `refresh` rows over `defending`, and the force rule's `hold`, `reclaim`,
+    // `renew` over a nature and `take`.
+    assert_eq!(kinds::RECIPES.len(), 27);
 
     let mut names: Vec<&str> = kinds::RECIPES.iter().map(|recipe| recipe.name).collect();
     names.sort_unstable();
@@ -122,11 +126,12 @@ fn there_are_thirty_two_recipe_blocks_under_twenty_two_names() {
     // one per action, because readiness is a count a thing carries again - and `muster` and
     // `stand` are new. Eight names are stated more than once.
     // **Twenty-six since `P-494` and `P-495`.**
-    // **Twenty-five since `P-511`.**
+    // **Twenty since `P-522`**: `muster`, `stand`, `hold`, `reclaim` and `take` were five
+    // names of their own, and `refresh` and `renew` lost blocks without losing their names.
     assert_eq!(
         names.len(),
-        25,
-        "twenty-five distinct names, and these are {names:?}"
+        20,
+        "twenty distinct names, and these are {names:?}"
     );
 
     assert!(
@@ -179,10 +184,13 @@ fn every_kind_a_recipe_names_is_declared() {
     //
     // **Nineteen since `P-494`**, which is `nature` - and unlike `force` when it arrived,
     // this one is declared, so it adds a name here and nothing to `undeclared` above.
+    // **Sixteen since `P-522`**: twelve kinds and the four families. `force` was the one
+    // name here that no table declared, and it went with the section that used it - so the
+    // `undeclared` check above now has nothing expected in it.
     assert_eq!(
         used.len(),
-        19,
-        "nineteen distinct names across the recipes' Kind column, and these are {used:?}"
+        16,
+        "sixteen distinct names across the recipes' Kind column, and these are {used:?}"
     );
 }
 
@@ -419,12 +427,11 @@ fn a_role_says_what_becomes_of_what_a_recipe_names() {
             // **`refuel` was here between `P-489` and `P-511`** and kept the unit it
             // filled. Pooling deleted the recipe: there is no unit to fill, because a tank
             // contributes capacity and holds nothing.
-            // **`found by land` is back, and `P-495` is why.** It left this list when
-            // `P-385` deleted its `limit 0 garrison` row - the one ingredient it did not
-            // eat - and it requires a force now, which it also does not eat. **The
-            // comment above records it leaving and this records it returning**, which is
-            // the same list answering the same question about a different release.
-            "found by land",
+            // **`found by land` came back with `P-495` and left again with `P-522`.** It
+            // requires nothing it does not eat in this release: the force it required is
+            // cut, and the `limit 0 garrison` row `P-385` deleted is not coming back to
+            // this release either. **Three entries about one name across three releases**,
+            // which is the same list answering the same question each time one moves.
             "launch ark",
             "create labor",
             "work",
@@ -439,22 +446,16 @@ fn a_role_says_what_becomes_of_what_a_recipe_names() {
             "refresh",
             "refresh",
             "refresh",
-            "muster",
-            "stand",
-            "refresh",
-            "refresh",
-            // **The force rule's four, and every one of them keeps what it names** -
-            // `P-494` and `P-495`. `hold` requires a nature and marks it; `reclaim`
-            // requires one and eats a citizen instead; `renew` requires one and puts the
-            // mark back. **`take` is here for the row it does not eat**: it requires a
-            // nature and consumes a nature, which the release states as two rows.
-            "hold",
-            "reclaim",
-            // **Twice since `P-498`.** `renew` clears the mark on a nature and the mark on a
-            // citizen, and both blocks require the thing they put to - so both keep it.
-            "renew",
-            "renew",
-            "take"
+            // **`muster`, `stand`, two more `refresh` rows and the force rule's four stood
+            // here, and `P-522` cut all nine.** Every one of them kept what it named -
+            // `muster` kept the garrison and the citizen, `hold` marked a nature rather than
+            // eating it, `take` required one and consumed a different one - which is why
+            // this list lost nine entries to a cut of nine blocks rather than some smaller
+            // number. They return with force.
+            //
+            // **`renew` is one entry rather than two now**, the surviving block being the one
+            // that clears the mark `upkeep` put on a citizen.
+            "renew"
         ]
     );
 
@@ -576,7 +577,6 @@ fn metal_in_it_is_its_binding_plus_its_parts() {
     let mut checked = 0;
     for (name, want) in [
         ("citizen", None),
-        ("garrison", None),
         ("extractor", Some(1)),
         ("yard", Some(15)),
         ("store", Some(1)),
@@ -629,11 +629,11 @@ fn what_a_trait_says_its_values_are_is_borne_out_by_the_table() {
 
     // The traits that name a closed set, and the table each set is written out in.
     //
-    // **`kind` left this list when `P-417` deleted its row**, because a kind is not a trait:
-    // `spec/console.md` lists them as different categories and no recipe writes `kind:`. So
-    // one trait names a closed set in a table, and the population below says so - a check over
-    // one case is thin, and saying it is thin is better than pretending otherwise.
-    let counted: [(&str, &str, &str); 1] = [("biome", "## Biomes", "biomes")];
+    // **`kind` left this list when `P-417` deleted its row**, because a kind is not a trait,
+    // and **`biome` left it with `P-522`**, which cut the Biomes section out of this release.
+    // So there are none, and *none* is the thing this test now has to establish rather than
+    // assume - see below.
+    let counted: [(&str, &str, &str); 0] = [];
 
     let after_of_the = |said: &str| -> Option<String> {
         let at = said.find("of the ")? + "of the ".len();
@@ -678,14 +678,40 @@ fn what_a_trait_says_its_values_are_is_borne_out_by_the_table() {
 
     let mut named = 0usize;
     let mut with_a_count = 0usize;
-    // **One, and it is stated as a number rather than as *not empty*.** `kind` was the other
-    // until `P-417` took it out of the Traits table - a kind is not a trait - and a list this
-    // short is one a reader should see the size of, not merely be told is non-empty.
+
+    // **The list is empty and that is checked rather than declared.** `P-522` cut the last
+    // entry, and an empty list is the one state where *everything below runs over it* proves
+    // nothing at all - so the emptiness is established from the document instead: no trait in
+    // the Traits table points at a table in this release.
+    //
+    // **The whole cut, rather than part of it.** A release that kept a trait saying *one of
+    // the biomes* while deleting `## Biomes` would be half-cut, and half-cut is exactly what
+    // an empty hand list hides. This finds any Values cell whose *of the* word names a
+    // section, and there is none.
+    let points_at_a_table: Vec<String> = table_under(&document, "## Traits")
+        .into_iter()
+        .skip(1)
+        .filter_map(|row| {
+            let name = row.first()?.trim_matches('*').to_string();
+            let at = column_of(&document, "## Traits", "Values");
+            let word = after_of_the(row.get(at)?)?;
+            let heading = format!("## {word}");
+            document
+                .lines()
+                .any(|line| line.trim().eq_ignore_ascii_case(&heading))
+                .then(|| format!("`{name}` says {word:?}, and {heading} is in the release"))
+        })
+        .collect();
     assert_eq!(
-        counted.len(),
-        1,
-        "one trait names a set written out in a table, and everything below runs over it"
+        (counted.len(), points_at_a_table.clone()),
+        (0, Vec::new()),
+        "no trait names a set written out in a table since `P-522`, so the list above is \
+         empty - and if one does again, the list is what has to grow: {points_at_a_table:?}"
     );
+
+    // **The arms below are exercised by `the_check_catches_a_miscount_and_accepts_a_named_set`,
+    // over documents written for it.** That is why an empty list here is untidy rather than a
+    // hole: the machinery has a test of its own and this one has no case to run it on.
 
     for (trait_name, heading, set) in counted {
         let row = table_under(&document, "## Traits")
@@ -732,16 +758,13 @@ fn what_a_trait_says_its_values_are_is_borne_out_by_the_table() {
         }
     }
 
-    // Both arms are real code and only one of them runs today, so this says which - a run
-    // where neither fired would be a run over no traits at all.
-    // **One since `P-417` deleted the `kind` row.** The counting arm is now unexercised and
-    // says so, rather than reading as though it holds: `biome` names its set without stating
-    // a number, so nothing today compares a stated count with a row count. The arm stays
-    // because a trait may state one again, and this is what would notice.
+    // **Neither arm fires since `P-522`**, and this says so rather than reading as though one
+    // does. It was `(1, 0)` while `biome` named its set without stating a number.
     assert_eq!(
         (named, with_a_count),
-        (1, 0),
-        "one trait names a closed set; {named} named one and {with_a_count} counted one"
+        (0, 0),
+        "no trait names a closed set in this release; {named} named one and \
+         {with_a_count} counted one"
     );
 }
 

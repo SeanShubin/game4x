@@ -28,11 +28,13 @@ fn the_groups_partition_the_kinds() {
     let document = release();
     let declared = kinds::catalog::Declared::from_spec();
     let kinds = every_kind(&document);
-    // **Nineteen since `P-494` declared `nature`.**
+    // **Sixteen since `P-522`**, which cut the Biomes section and with it `nature`, `force`
+    // and `biome`. **Nineteen was right until 2026-09-21** and the number is kept as a number
+    // rather than derived, because a count read off the table it is checking is not a check.
     assert_eq!(
         kinds.len(),
-        19,
-        "the release declares nineteen kinds; every count below is against that population"
+        16,
+        "the release declares sixteen kinds; every count below is against that population"
     );
 
     let mut grouped: Vec<String> = signatures(&document, &declared)
@@ -100,8 +102,8 @@ fn a_pair_shares_a_group_exactly_when_it_shares_a_signature() {
     }
     assert_eq!(
         pairs,
-        19 * 18 / 2,
-        "every pair of the nineteen kinds is compared, and there are 171 of them"
+        16 * 15 / 2,
+        "every pair of the sixteen kinds is compared, and there are 120 of them"
     );
 
     // **The population this check ran against, said out loud.** Every assertion above is

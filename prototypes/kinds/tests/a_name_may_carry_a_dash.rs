@@ -77,11 +77,11 @@ fn every_kind_keeps_its_signature_when_its_name_carries_a_dash() {
         .iter()
         .map(|row| plain(&row[0]))
         .collect();
-    // **Nineteen since `P-494` declared `nature`.**
+    // **Sixteen since `P-522` cut the Biomes section**, and with it `nature`.
     assert_eq!(
         kinds.len(),
-        19,
-        "the release declares nineteen kinds; the count below is against that population"
+        16,
+        "the release declares sixteen kinds; the count below is against that population"
     );
 
     // **The declarations are renamed with the document, and that is `P-473`'s change showing
@@ -146,7 +146,7 @@ fn every_kind_keeps_its_signature_when_its_name_carries_a_dash() {
     }
 
     assert_eq!(
-        checked, 19,
+        checked, 16,
         "a kind was skipped, so the rule is unchecked on it"
     );
     assert!(
@@ -179,12 +179,13 @@ fn hyphenating_every_kind_merges_none_of_them() {
         .collect();
     let declared = kinds::catalog::Declared::from_spec();
     let before = signatures(&document, &declared).len();
-    // **Nineteen since `P-494`, and still one group each** - `nature` carries `met` and
-    // nothing else does, so it shares a signature with none of the others.
+    // **Sixteen since `P-522`, and still one group each.** The three that went - `nature`,
+    // `force` and `biome` - took no group with them that another kind was sharing, which is
+    // what this equality says: one group per kind, before and after.
     assert_eq!(
         (kinds.len(), before),
-        (19, 19),
-        "nineteen kinds in nineteen groups is the baseline this compares against"
+        (16, 16),
+        "sixteen kinds in sixteen groups is the baseline this compares against"
     );
 
     let mut hyphenated = document.clone();

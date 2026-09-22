@@ -39,13 +39,14 @@ fn release() -> String {
 fn every_container_the_release_declares_is_gathered_under_a_kind() {
     let document = release();
     let rows = body_under(&document, "## Where things are");
-    // **Three again since `P-411` took the fourth out.** Readiness is a count a thing carries,
-    // so what bounds it is the trait's own values - `0 or 1` - rather than a capacity to hold
-    // something.
+    // **Two since `P-512` took the territory row out.** A store gives room for the resource
+    // it was built for, and a unit's tank gives room for energy; a territory gives room for
+    // nothing of its own any more. `P-411` had already taken the readiness row, readiness
+    // being a count a thing carries rather than a capacity to hold something.
     assert_eq!(
         rows.len(),
-        3,
-        "three sorts of capacity in this release; *Where things are* has {} ({rows:?})",
+        2,
+        "two sorts of capacity in this release; *Where things are* has {} ({rows:?})",
         rows.len()
     );
 
@@ -56,13 +57,13 @@ fn every_container_the_release_declares_is_gathered_under_a_kind() {
         .collect();
     // Four, because *a unit's tank* is carried to both members of the `unit` family.
     //
-    // **Four again since `P-411`.** The readiness row was declared of *a thing, per action*,
-    // and every kind is a thing - so it reached all eighteen sections. It is gone and so are
-    // the eighteen.
+    // **Three since `P-512`**, which took the territory row: a store reaches one section and
+    // the tank reaches both members of the `unit` family. `P-411` had already taken the
+    // readiness row, which was declared of *a thing, per action* and so reached every kind.
     assert_eq!(
         held.len(),
-        4,
-        "three rows reach four sections - a store, a territory, and both units; {} lines were \
+        3,
+        "two rows reach three sections - a store and both units; {} lines were \
          written ({held:?})",
         held.len()
     );
@@ -123,11 +124,13 @@ fn a_bound_that_is_not_a_number_is_not_called_a_fact_about_the_kind() {
             panic!("a Holds line says neither which it is: {line}");
         }
     }
-    // One again since `P-411`: the store's ten, against three that depend on the thing.
+    // **One and two since `P-512`**: the store's ten is still the only number stated of the
+    // kind, and what depends on the thing is now each unit's fuel rather than that and a
+    // territory's capacity.
     assert_eq!(
         (constant, per_thing),
-        (1, 3),
-        "one constant - the store's ten - and three that depend on the thing"
+        (1, 2),
+        "one constant - the store's ten - and two that depend on the thing"
     );
 }
 

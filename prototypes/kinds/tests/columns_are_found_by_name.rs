@@ -68,7 +68,8 @@ fn a_signature_does_not_depend_on_which_column_a_value_sits_in() {
         .iter()
         .map(|row| plain(&row[0]))
         .collect();
-    assert_eq!(kinds.len(), 19, "nineteen kinds is the population here");
+    // **Sixteen since `P-522`.**
+    assert_eq!(kinds.len(), 16, "sixteen kinds is the population here");
 
     // Recipe, Owner, Role, Qty, Kind, Traits, Where -> reversed, which moves all seven.
     let shuffled = reordered(&document, "## Recipes", &[6, 5, 4, 3, 2, 1, 0]);
@@ -92,7 +93,7 @@ fn a_signature_does_not_depend_on_which_column_a_value_sits_in() {
         pairs_seen += before.pairs.len();
         compared += 1;
     }
-    assert_eq!(compared, 19, "a kind was skipped");
+    assert_eq!(compared, 16, "a kind was skipped");
     assert!(
         pairs_seen > 0,
         "no kind had a single (recipe, role) pair, so the columns under test were never read"
@@ -171,7 +172,8 @@ fn a_trait_of_a_family_reaches_its_members() {
         .iter()
         .map(|row| plain(&row[0]))
         .collect();
-    assert_eq!(kinds.len(), 19, "nineteen kinds is the population here");
+    // **Sixteen since `P-522`.**
+    assert_eq!(kinds.len(), 16, "sixteen kinds is the population here");
     for kind in &kinds {
         assert!(
             signature(&document, &declared, kind)
@@ -222,11 +224,10 @@ fn the_four_cells_the_old_matcher_could_not_read_now_reach_their_kinds() {
         ),
         // *whatever moves*, and *a citizen or a unit* - a cell naming a family and not only it.
         ("movable", &["ark", "pioneer"][..], &["citizen", "yard"][..]),
-        (
-            "defending",
-            &["citizen", "ark", "pioneer"][..],
-            &["yard", "store", "territory"][..],
-        ),
+        // **`defending` was the fourth cell and `P-522` cut it with force.** Sean cut force
+        // from the first release, so the release's Traits table no longer declares the trait
+        // and no kind's signature can carry it. **Kept as a comment rather than deleted**,
+        // because the cell is what this test is named for and it comes back with force.
     ] {
         for kind in carried_by {
             assert!(
@@ -251,8 +252,10 @@ fn the_four_cells_the_old_matcher_could_not_read_now_reach_their_kinds() {
             checked += 1;
         }
     }
+    // **Four traits since `P-522` took `defending`**: ten kinds carry one of the four and
+    // nine do not, which is nineteen assertions where it was twenty-five.
     assert_eq!(
-        checked, 25,
-        "five traits: thirteen kinds that carry one and twelve that do not"
+        checked, 19,
+        "four traits: ten kinds that carry one and nine that do not"
     );
 }
