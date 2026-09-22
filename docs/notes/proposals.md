@@ -106,7 +106,7 @@ moved today on account of it.
 
 ### S-149 - The suite runs the working copies, so `T3`'s central clause is not built
 
-**to** code · **status** open · **raised** 2026-09-21 · **source** Sean reviewed all 54 and asked what would get you working
+**to** code · **status** acted · **acted** 2026-09-21 · **cited** `9c946783` · **raised** 2026-09-21 · **source** Sean reviewed all 54 and asked what would get you working
 
 **`CLAUDE.md` says the suite runs `reviewed/`. It runs `spec/tests/`.** Measured just now:
 
@@ -153,9 +153,25 @@ point of what he chose; it is also invisible until the two directories differ. *
 would get you working; this is the item this lane would put first**, because everything else on
 your list is repair and this is the mechanism.
 
+## Acted in `9c946783`, and the shape is better than this item's
+
+**Compared, with the approved copy preferred - not the runner repointed**, which is what this
+item left open and the code lane closed with an argument this lane had not seen: **a runner
+pointed at `reviewed/` does not run a test that has no record**, and the orphan check walks
+records to tests rather than the other way, **so an unread test would simply not run and the
+suite would be green while proving less.** Comparing is red and says which.
+
+**And `CLAUDE.md` constrained it more than this item admitted.** They built a gate that failed on
+an unread test first, then found line 86: *a test nobody has read constrains nothing*. **Unread
+is now counted, named and skipped; only drift is red.** `common::every_read_test` is the skip and
+it refuses below forty tests, which is the population guard.
+
+**This item said *not how* and the how was partly decided already.** Worth recording: a `to code`
+item that declines to specify can still be wrong about how much room it is leaving.
+
 ### S-148 - No script starts the review app, and the one that commits its output is broken by the move
 
-**to** code · **status** open · **raised** 2026-09-21 · **source** Sean asked whether a script runs the review app
+**to** code · **status** acted · **acted** 2026-09-21 · **cited** `bd3498f` · **raised** 2026-09-21 · **source** Sean asked whether a script runs the review app
 
 **He asked and the answer is no.** `scripts/` has thirty-two files and none of them starts it.
 **Measured**: `grep -l review-web scripts/*` finds nothing. Today it is
@@ -222,6 +238,48 @@ for, and `reviewed.sh` is the whole of what the move broke.
 rather than `report::records_at()` - so a note filed with `x` would land in
 `prototypes/thin-engine/reviewed/`, which is now an empty directory nothing reads. **Not
 exercised**: this lane fetched the page and pressed nothing, because pressing writes.
+
+## That last paragraph is wrong, and the code lane caught it
+
+**The write was already at `records_at()` when this item was filed.** Checked at `f2b95df7`, the
+commit that filed it:
+
+```
+let at = report::records_at().join("asked.md");
+let _ = std::fs::create_dir_all(mine().join("reviewed"));
+```
+
+**This lane grepped for `mine().join("reviewed")`, found it, and inferred the write target from
+it** - without reading the line above, which is the write. **A note filed with `x` has always
+landed in the right place.**
+
+**What is actually there is a vestigial `create_dir_all`**, still at `:378` today: it makes an
+empty directory in the prototype that nothing then writes to. **A leftover rather than a fault**,
+and worth a line only because this item claimed something worse.
+
+**The shape is the one this repository keeps recording.** The instrument answered a narrower
+question than the one asked - *where does this path appear* rather than *where does the write
+go* - and returned a plausible answer. **Found by the lane whose file it was, reading the
+function.**
+
+## Acted in `bd3498f`, verified here rather than taken
+
+**`scripts/review.sh` and `scripts/review.ps1` exist**, and the header says what the item asked
+for and one thing better: *this is the only thing that writes `reviewed/`*, cited to `CLAUDE.md`.
+
+**And driving it found two faults neither lane had reported.** All fifty-four *on disk* links
+answered 404 - `report.rs` linked `/spec/tests/`, `browsable()` still walked the emptied
+`data/friendly/tests`, and the walk `continue`s on an unreadable directory, so the index lost a
+heading and every link died silently. `every_test_is_browsable` now refuses to start the server
+when a test has no address.
+
+## And the `-gt 100` floor was wrong, which is this lane's note coming back
+
+**This lane called the floor the better instrument of the two** - a population guard where
+`-eq 20` is a literal. **It is a population guard and the population moved out from under it**:
+`pipeline.yml` copied `data/` alone, that tree is 64 files since the move, and `test "$thin" -gt
+100` failed the deployment. **A floor set for one population is a literal about a different
+one**, which is the code lane's sentence and is better than the note it corrects.
 
 ### S-147 - `reviewed/` needs its column now that `CLAUDE.md` says what it is
 
