@@ -114,6 +114,31 @@ whether the launcher takes a port - all yours, and `scripts/` is your column.
 did their job in `e1fa5d05`. **He called them temporary when he asked for them**; whether they go
 now or stay as a record of the move is yours, and this lane notes rather than asks.
 
+## The app itself is fine, measured rather than assumed
+
+**Driven, not read.** Built, started, and fetched over HTTP, then stopped:
+
+```
+$ cargo run --quiet --example review-web
+http://127.0.0.1:7878  -  54 tests
+
+$ curl http://127.0.0.1:7878/
+status 200, 193191 bytes
+drifted 5, never reviewed 2
+```
+
+**Fifty-four tests, five drifted, two never reviewed** - which is what this lane derived from the
+files before starting it, so the app is reading `spec/tests/` and `reviewed/` at their new homes
+and agreeing with the disk. **`tests_at()` and `records_at()` work.**
+
+**So nothing is broken and one thing is missing.** The launcher is the whole of what Sean asked
+for, and `reviewed.sh` is the whole of what the move broke.
+
+**The `asked.md` path at `review-web.rs:311` is still the old base** - `mine().join("reviewed")`
+rather than `report::records_at()` - so a note filed with `x` would land in
+`prototypes/thin-engine/reviewed/`, which is now an empty directory nothing reads. **Not
+exercised**: this lane fetched the page and pressed nothing, because pressing writes.
+
 ### S-147 - `reviewed/` needs its column now that `CLAUDE.md` says what it is
 
 **to** code · **status** open · **raised** 2026-09-21 · **source** `P-531`, promoted
