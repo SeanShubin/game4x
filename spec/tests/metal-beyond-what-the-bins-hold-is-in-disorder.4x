@@ -1,0 +1,44 @@
+# Two bins hold twenty metal, and twenty-two is a world that exists.
+#
+# **Over capacity is not refused; it is disorder.** Sean, 2026-09-19: *We will be able to have
+# things in a territory over capacity, and everything over capacity is in disorder. There will be
+# an end turn mechanic that discards everything in disorder.* **This test used to assert the
+# opposite** - that twenty-two metal could not exist - and it was the intent that was wrong rather
+# than the arithmetic.
+#
+# **`{loose kind:resource}` is what makes the difference**, and structures do not have it: a third
+# bin where there is room for two is still refused, which
+# `a-bin-cannot-be-built-where-the-capacity-is-taken` states. Sean: *structures are intentionally
+# built for the purpose of having that structure there, while resources are mined to be spent or
+# stored.*
+#
+# **Sixteen and six is twenty-two, against room for twenty** - so two are in disorder, and
+# `ending-a-turn-takes-what-is-in-disorder` is what happens to them.
+
+{test name:metal-beyond-what-the-bins-hold-is-in-disorder}
+
+{given}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{capacity of:deposit for:extractor what:resource per:place} -> 1
+{capacity of:place for:bin what:resource per:place} -> 4
+{capacity of:bin for:resource what:resource per:place} -> 10
+{deposit where:place-1 what:metal density:6} -> 1
+{extractor where:place-1 what:metal working:1} -> 1
+{labor where:place-1} -> 1
+{bin where:place-1 what:metal} -> 2
+{metal where:place-1} -> 16
+
+{when}
+{work where:place-1 what:metal}
+
+{then}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{capacity of:deposit for:extractor what:resource per:place} -> 1
+{capacity of:place for:bin what:resource per:place} -> 4
+{capacity of:bin for:resource what:resource per:place} -> 10
+{deposit where:place-1 what:metal density:6} -> 1
+{extractor where:place-1 what:metal working:0} -> 1
+{bin where:place-1 what:metal} -> 2
+{metal where:place-1} -> 22

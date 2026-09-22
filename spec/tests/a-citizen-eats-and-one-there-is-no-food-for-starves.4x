@@ -1,0 +1,28 @@
+# Three citizens, two food, a turn ends, and two citizens are left.
+#
+# **This is the core loop Sean stated**, 2026-09-19: *each citizen cosumes 1 food or perishes*.
+# Nothing here computes a minimum - `upkeep` fires as many times as it can, and it can fire twice
+# because there are two food. The third citizen is still hungry when `perish` runs.
+#
+# **The survivors are hungry again at the end**, because the turn's last step restores every count
+# the same way it restores a scout's move. So a citizen that ate this turn must eat again next
+# turn, and the world is back in the shape it started in.
+#
+# **The food is gone rather than at zero.** An entry is never zero - `spec/console.md` - so a row
+# taken down to nothing is not written.
+
+{test name:a-citizen-eats-and-one-there-is-no-food-for-starves}
+
+{given}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 3
+{food where:place-1} -> 2
+
+{when}
+{end-turn}
+
+{then}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 2

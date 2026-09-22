@@ -1,0 +1,52 @@
+# A bin holds ten metal and a transport holds ten, and twenty metal fits in the two of them.
+#
+# **A place's room is the sum of what stands in it**, which is `spec/logistics.md`'s sentence:
+# *a place's capacity for a kind is the sum of what is in it that can hold that kind*. **The first
+# version of the check compared each capacity row on its own** and refused this world, and no test
+# caught it because none had two kinds of container for one resource.
+#
+# **Sean, 2026-09-19**, on what a transport does, which is what found it: *transport would not
+# automatically take what they haul, they would provide the capacity necessary to move the resource
+# they haul.* So a transport is a bin that moves - it gives room where it stands and holds nothing,
+# and nothing has to track which container a resource is in.
+#
+# **Exactly full is the point.** Twenty in twenty passes only if the two are added; under the
+# version that compared one row at a time, twenty against ten was refused. **Deleting either
+# capacity row makes this red**, which is what says the sum is being tested rather than mentioned.
+#
+# **The metal is the territory's and not the transport's.** When the transport leaves, the room
+# leaves with it and the metal stays - `spec/logistics.md`: *nothing falls loose, because nothing
+# was inside it*. What is then over the line is lost at the turn's end, which is the step the turn
+# does not have yet.
+
+{test name:a-transport-and-a-bin-give-room-together}
+
+{given}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{capacity of:deposit for:extractor what:resource per:place} -> 1
+{capacity of:place for:bin what:resource per:place} -> 4
+{capacity of:bin for:resource what:resource per:place} -> 10
+{capacity of:transport for:resource what:resource per:place} -> 10
+{deposit where:place-1 what:metal density:6} -> 1
+{extractor where:place-1 what:metal working:1} -> 1
+{labor where:place-1} -> 1
+{bin where:place-1 what:metal} -> 1
+{transport where:place-1 moving:1} -> 1
+{metal where:place-1} -> 14
+
+{when}
+{work where:place-1 what:metal}
+
+{then}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{capacity of:deposit for:extractor what:resource per:place} -> 1
+{capacity of:place for:bin what:resource per:place} -> 4
+{capacity of:bin for:resource what:resource per:place} -> 10
+{capacity of:transport for:resource what:resource per:place} -> 10
+{deposit where:place-1 what:metal density:6} -> 1
+{extractor where:place-1 what:metal working:0} -> 1
+{bin where:place-1 what:metal} -> 1
+{transport where:place-1 moving:1} -> 1
+{metal where:place-1} -> 20

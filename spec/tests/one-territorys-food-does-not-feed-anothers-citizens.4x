@@ -1,0 +1,40 @@
+# Two hungry citizens and a fed one here with one food, one citizen and five food there, and
+# neither the surplus nor the meal travels.
+#
+# **This is what the scope buys.** `upkeep` takes a citizen and a food *from the same territory*,
+# which is the join every other rule makes through an argument - and a world-owned rule has no
+# caller to hand it one. The engine fires it once per territory instead.
+#
+# **One citizen here is left hungry with five food a territory away**, which is the whole point: a
+# surplus is local until something moves it, and nothing here moves food.
+#
+# **The fed citizen is in the `given` and not an outcome**, which is the other thing this asserts.
+# Two citizen rows stand in one place, and *remove a citizen* would match both - so the clause says
+# `hungry:1`, and the one that has already eaten is not fed twice. Take that away and the rule is
+# refused for not having said which, rather than feeding whichever row came first.
+
+{test name:one-territorys-food-does-not-feed-anothers-citizens}
+
+{given}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{territory id:2 name:territory-2}
+{place id:2 of:territory-2 layer:surface name:place-2}
+{citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 2
+{citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 1
+{food where:place-1} -> 1
+{citizen where:place-2 hungry:1 bearing:1 laboring:1} -> 1
+{food where:place-2} -> 5
+
+{when}
+{upkeep}
+
+{then}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{territory id:2 name:territory-2}
+{place id:2 of:territory-2 layer:surface name:place-2}
+{citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 1
+{citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
+{citizen where:place-2 hungry:0 bearing:1 laboring:1} -> 1
+{food where:place-2} -> 4

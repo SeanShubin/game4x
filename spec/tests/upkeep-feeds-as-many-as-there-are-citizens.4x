@@ -1,0 +1,30 @@
+# Two citizens and ten food, and upkeep stops at two.
+#
+# **The repetition is bounded by whichever runs out first**, and here that is the citizens rather
+# than the food - which is the other half of what
+# `a-citizen-eats-and-one-there-is-no-food-for-starves` shows. Eight food is left.
+#
+# **It is fired by name and given no place.** `upkeep` is scoped per territory, so the engine fills
+# `where` from every territory there is and a command that named one would be saying something the
+# rule does not let it say. **A test firing it by hand does what the turn does**, which is why the
+# scope is written on the rule.
+#
+# **Nobody perishes, because `perish` is not part of this.** The turn runs the two in order; a test
+# can run either alone, and this one is about the eating.
+
+{test name:upkeep-feeds-as-many-as-there-are-citizens}
+
+{given}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 2
+{food where:place-1} -> 10
+
+{when}
+{upkeep}
+
+{then}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
+{food where:place-1} -> 8
