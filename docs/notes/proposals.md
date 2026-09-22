@@ -69,6 +69,55 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-149 - The suite runs the working copies, so `T3`'s central clause is not built
+
+**to** code · **status** open · **raised** 2026-09-21 · **source** Sean reviewed all 54 and asked what would get you working
+
+**`CLAUDE.md` says the suite runs `reviewed/`. It runs `spec/tests/`.** Measured just now:
+
+```
+tests/directories.rs:98   format!("../../spec/tests/{name}")
+tests/first_test.rs:188   for directory in ["data/foundation/tests", "../../spec/tests"]
+tests/reviewed.rs:52-53   stems("../../spec/tests"), stems("../../reviewed")
+```
+
+**`reviewed.rs` is the only file that opens `reviewed/` at all**, and it compares *names* - the
+orphan check, which is `S-145` and is right. **Nothing anywhere runs the approved bytes**, and
+nothing compares a test to its record.
+
+## What that means today, and it is not nothing
+
+**Sean's reading changes what the gate does: nothing.** A test he has never read is run and can
+turn the build red; a test he has read is run for the same reason any file in that directory is.
+**The record is a display and not a gate** - which is exactly what this lane measured before the
+choice was made, and what made `T3` the answer rather than a description of what already worked.
+
+**It costs nothing while everything is reviewed.** 54 records for 54 tests, all matching, as of
+`7747a0cf` - **so today the two directories hold the same bytes and it cannot matter.** It starts
+mattering the first time this lane drafts a test he has not read, which is the next thing this
+lane does.
+
+## What it needs, and the shape is already decided
+
+**The suite reads `reviewed/` where it now reads `spec/tests/`.** And a check that fails when a
+test and its record differ - **not the orphan check, which walks names, but a content one.**
+
+**The second one is what makes drift a gate rather than a colour.** `examples/report.rs` already
+computes it - `review_of` normalizes whitespace and returns *reviewed*, *never reviewed*, or the
+lines that differ - **so the comparison exists and lives in an example**, which is the one kind of
+file the gate never runs.
+
+## What this lane is not saying
+
+**Not how.** Whether the runner points at a different directory, or the two are compared and the
+approved one preferred, is yours - and `P-534` is still open on a sentence of the rule, though
+nothing in it touches this.
+
+**And not that it is urgent.** It is the thing that makes his review binding, which is the whole
+point of what he chose; it is also invisible until the two directories differ. **He asked what
+would get you working; this is the item this lane would put first**, because everything else on
+your list is repair and this is the mechanism.
+
 ### S-148 - No script starts the review app, and the one that commits its output is broken by the move
 
 **to** code · **status** open · **raised** 2026-09-21 · **source** Sean asked whether a script runs the review app
