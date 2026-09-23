@@ -217,33 +217,51 @@ game data for biome at all** - it reads the terrain, and the terrain is generate
 **Every mention of `biomes.4x` in `crates/` is a comment or a link**, not a read. Checked across
 the tree.
 
-## So biome needs nothing from you, and one thing needs saying
+## Answered `B2` on 2026-09-23, and the reason is what protects it
 
-**The drawing you are unwilling to give up is safe** and was never at risk from the mechanical
-cut. **What is actually incoherent is `spec/data/biomes.4x`**: it declares six values of a trait
-that `traits.4x` no longer declares, because this lane deleted the trait on the 21st and left the
-values. **Six rows declaring values of nothing.**
+**Your words**: *I want to keep the data in the code and enforced specification lean, so no
+garrison, force, or nature, but I do want to keep biome because it is needed to render the planet
+realistically.*
 
-**Two ways to make it honest, and this is the only biome decision left:**
+**So the trait comes back**, and `spec/data/biomes.4x` stops declaring six values of nothing -
+which is the state this lane left it in on the 21st by deleting the trait and keeping the values.
 
-**`B1` - the values go too.** The list that matters is the Rust enum and the terrain field;
-`biomes.4x` is a seventh copy of a list nothing reads.
+**Into `spec/data/traits.4x`:**
 
-**`B2` - the trait comes back.** `{trait name:biome admits:value kept:thing}` returns, and a
-territory carries a biome in the data again - **for the drawing's sake rather than the rules'**,
-which is a reason the data has never had before.
+```
+{trait name:biome admits:value kept:thing}
+```
 
-**`B2`, and the fourth file is why.** `scenario/commands/biomes.4x` assigns a biome to each of the
-twelve territories and is compiled into `game-front`, so **a territory's biome is already a fact
-the game holds** - stated by the scenario, not implied by terrain. **`B1` would leave the values
-of that fact declared nowhere**, which is the position `spec/data/` is in today and the thing this
-proposal is repairing.
+**And into `spec/planet.md`, beside *each territory has a biome*:**
 
-**The question `B1` would have been right for** is whether the biome should be a game fact at all;
-that was settled by the scenario stating it, and `spec/planet.md` still says every territory has
-one. **So the trait comes back, and the reason is the one you gave** - it earns its place by the
-drawing rather than by the rules, which is a reason the data has not had before and is worth
-writing down where the trait is declared.
+> **A biome has no mechanical effect and is not dead weight.** It is what the realistic drawing
+> reads to make a territory look like the place it is, so **it earns its place by being shown
+> rather than by being obeyed** - which is a reason to keep a fact that nothing else in this
+> specification has.
+
+## Why that sentence and not just the trait row
+
+**Because this lane already cut it once for having no mechanical effect.** `P-522` removed force,
+garrison, nature and biome from the release; regenerating `spec/data/` from the cut release took
+the biome trait with them, and nothing in the file said not to.
+
+**A sweep for unused data would do it again.** Every other fact in `spec/data/` is there because a
+rule reads it, so *no rule reads this* is normally a reason to remove a row. **Biome is the one
+exception and the exception has to be written where the sweeper will meet it.**
+
+## The three that go, and they are a record rather than a deletion
+
+**Your reason, which changes what `spec/future/` is**: *garrison, force, and nature are out of
+scope for now but I will want a historic record because I intend to get to them once I play the
+game.*
+
+**So `spec/future/force.md` is not a graveyard.** `P-539`'s rule already says such a document is
+*kept, linked and findable*; **your sentence says why it is kept**, which is worth carrying in the
+file's own opening line so a reader knows it is waiting rather than abandoned.
+
+> **These rules are not built and are not abandoned.** They are here because the game wants them
+> once it can be played, and the first release cannot be played while it is building them.
+
 
 ### P-540 - One sentence so a test can say what the status bar said
 

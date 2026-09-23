@@ -4062,3 +4062,28 @@ equal**, which neither existing clause carries.
 **And `spec/interface.md` said what the rule editor shows and never what it is for** - *the rules
 the player has, read and changed*. Automation to the player's preference is the purpose, and it is
 the reason the first release excludes it: there is nothing to automate yet.
+
+## Said 2026-09-23: lean data and an enforced specification, with biome kept for the drawing
+
+*I want to keep the data in the code and enforced specification lean, so no garrison, force, or
+nature, but I do want to keep biome because it is needed to render the planet realistically.*
+
+*Garrison, force, and nature are out of scope for now but I will want a historic record because I
+intend to get to them once I play the game.*
+
+**Answers `P-541` with `B2`**, and adds two things the item did not have.
+
+**One - *enforced specification* is a phrase worth keeping.** It draws the line `P-539` drew: what
+is built and asserted by a test, against what is wanted and unbuilt. **The data and the enforced
+specification are lean; the historic record is not part of either.**
+
+**Two - biome now has a written reason, and it needs one.** Every other fact in `spec/data/` is
+there because a rule reads it, so *no rule reads this* is normally grounds to remove a row.
+**This lane removed the biome trait on the 21st for exactly that reason**, by regenerating
+`spec/data/` from a release that had cut it. **The sentence protecting it has to sit where a sweep
+would meet it**, which is why `P-541` now offers one into `spec/planet.md` rather than only
+restoring the row.
+
+**And `spec/future/` is a record rather than a graveyard**, which his last clause settles: he
+intends to get to them. **That belongs in the file's opening line**, so the next reader knows the
+rules are waiting rather than discarded.
