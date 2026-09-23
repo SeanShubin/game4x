@@ -11,6 +11,72 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
+### P-543 - Prose is shown and never read; a name is read and never shown
+
+**to** sean · **status** open · **raised** 2026-09-23 · **kind** recovered · **shape** text · **asks** a decision · **into** `spec/console.md` -> The language
+
+**Your words, 2026-09-23:** *making it a requirement that the user ONLY ever sees prose. So a
+quoted string is only displayed to the user and never has a mechanical effect, and anything with a
+mechanical effect is never displayed to the user.*
+
+**This is the converse of `P-540`'s sentence and it is the larger half.** `P-540` says prose is
+never compared; this says a name is never shown. **Together they are a total separation**, and a
+test can check both: a displayed value that is not prose fails, and a compared value that is
+prose fails.
+
+## It collides with exactly one surface, and it is the console
+
+**The console is where the player types the notation**, so the player necessarily reads it:
+
+```
+help [<command>]     list every command, or give one command's syntax
+show <subject>       reports what is true of it and what can be done with it
+a rejection          names what was wrong, where, and what was expected instead
+```
+
+**`help` displays command names by definition.** `spec/interface.md` says so - *the console,
+typing commands, with help listing every command and its syntax.* **And a rejection shows the
+player what they typed**, which under `size:small-12` means showing a name that does not exist.
+
+**`spec/invariants.md` makes this unavoidable rather than accidental**: *anything the player can do
+through a surface can be done by typing*, and *every change to game state is representable and
+executable as a console command.* **If the player can type a name, the player can read one.**
+
+## So the question is how the console is excepted
+
+**`C1` - the console is exempt, and the rule binds every other surface.** *In the console the
+player addresses the machine in the machine's language; everywhere else they read prose.* **One
+sentence, and the boundary is a surface rather than a judgement.**
+
+**`C2` - the rule binds everywhere and the console shows prose too.** `help` lists sentences, a
+rejection describes rather than quotes. **The cost is that the player cannot see the words they
+must type**, which contradicts *anything the player can do through a surface can be done by
+typing*.
+
+**`C3` - the rule binds everywhere except where the player supplied the word.** A rejection may
+echo what was typed, because the player wrote it; `help` may not, because the game chose it.
+**Finer, and it is a judgement per message rather than a surface.**
+
+## What this lane would say
+
+**`C1`.** It is the only one of the three where the rule is checkable without reading intent:
+**a surface is a fact and *who supplied the word* is not.** And it matches what the console is for
+- `spec/interface.md` already sets it apart as the surface with no gestures, where typing reaches
+exactly as far as choosing.
+
+**`C2` is the one to rule out in writing**, because it sounds like the strictest reading of what
+you said and it breaks a promoted invariant.
+
+## What it costs under `C1`, measured
+
+**Every user-visible word outside the console needs a prose value.** Today the interface has none,
+because there is no interface yet - **so this is a cost on work not yet done rather than a
+migration.** The five planet sizes, four menu items and four regions of your sketch are nine
+prose values, and they do not exist in any form yet.
+
+**And one thing it buys that is worth more than the tidiness**: a name can then be changed freely.
+`tiny-12` becoming `tiny-twelve` touches no display, because no display reads it.
+
 ### P-542 - `generate-planet`, and what the log shows when a command writes commands
 
 **to** sean · **status** open · **raised** 2026-09-23 · **kind** invented · **shape** an instruction · **asks** a decision · **into** `spec/console.md` -> Commands
