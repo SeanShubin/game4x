@@ -57,25 +57,59 @@ typing*.
 echo what was typed, because the player wrote it; `help` may not, because the game chose it.
 **Finer, and it is a judgement per message rather than a surface.**
 
-## What this lane would say
+## Answered `C1` on 2026-09-23, and your reason is better than the one offered
 
-**`C1`.** It is the only one of the three where the rule is checkable without reading intent:
-**a surface is a fact and *who supplied the word* is not.** And it matches what the console is for
-- `spec/interface.md` already sets it apart as the surface with no gestures, where typing reaches
-exactly as far as choosing.
+**Your words**: *the console is exempt because it is a different type of surface. It is an
+admin/debug tool rather than a gameplay surface.*
 
-**`C2` is the one to rule out in writing**, because it sounds like the strictest reading of what
-you said and it breaks a promoted invariant.
+**That classifies rather than excepts**, which is stronger: the rule binds gameplay surfaces and
+the exemption is a kind of surface rather than one named surface. **`C2` and `C3` are ruled out.**
 
-## What it costs under `C1`, measured
+## But it reaches further than the console, and `spec/interface.md` has five surfaces
 
-**Every user-visible word outside the console needs a prose value.** Today the interface has none,
-because there is no interface yet - **so this is a cost on work not yet done rather than a
-migration.** The five planet sizes, four menu items and four regions of your sketch are nine
-prose values, and they do not exist in any form yet.
+**Three are admin or debug by your reading and two are gameplay:**
 
-**And one thing it buys that is worth more than the tidiness**: a name can then be changed freely.
-`tiny-12` becoming `tiny-twelve` touches no display, because no display reads it.
+```
+the game itself     gameplay        the planet, its territories, what the player does with them
+the rule editor     gameplay        the rules the player has, read and changed
+the console         admin/debug     your words
+the data browser    admin/debug     the game's own data, read directly
+the debug view      admin/debug     already excepted in its own words - an output and not a path
+```
+
+**The rule editor is the one that costs.** `spec/invariants.md` puts it inside play - *rules are
+specified through the interface; playing the game never requires writing a program* - so it is a
+gameplay surface, and **a player cannot edit a rule without seeing the kinds and traits it names.**
+
+## So the cost is much larger than this item first said, and here it is measured
+
+**This item said nine prose values.** That was the cost if only your two sketched screens bind.
+**Under your own classification the rule editor binds too, and then every mechanical word the
+player can see needs prose:**
+
+```
+kinds        20        traits      23        families      4
+members       7        biomes       6        recipe names 20
+                                             -----------------
+                                             80 words, before roles and comparisons
+```
+
+**Eighty rather than nine**, and this lane got it wrong by assuming only the screens you had
+sketched were in scope.
+
+## What that leaves you, and it is one question rather than a cost to accept
+
+**`E1` - the rule editor is a gameplay surface and the eighty words get prose.** The rule holds
+everywhere it should, and the player never reads a machine word.
+
+**`E2` - the rule editor joins the admin surfaces.** A player editing rules is doing something
+closer to administration than to playing, and `spec/invariants.md`'s *playing the game never
+requires writing a program* is satisfied by never *requiring* it. **Then the cost really is nine
+words** and the rule binds the game surface alone.
+
+**This lane has no recommendation worth the name.** `E2` is what makes the rule cheap and `E1` is
+what makes it mean what you said. **Which the rule editor is, is a question about who a player is**
+- and that is further from anything measurable than this lane should guess at.
 
 ### P-542 - `generate-planet`, and what the log shows when a command writes commands
 
