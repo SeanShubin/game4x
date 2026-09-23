@@ -4007,3 +4007,37 @@ says `{status-bar shows:new-game}` and the English lives outside the specificati
 becomes something the notation carries and *nothing is quoted* gains an exception. **His sketch
 reaches for the second** - he wrote the English out twice - and it is the larger change, touching
 the notation every lane reads rather than only the interface.
+
+## Said 2026-09-23: force, garrison and nature leave the data; biome stays for the drawing
+
+*I want to push force, garrison, and nature out of the data. It should be somewhere we can reach it
+for future design, but it should not influence the code.*
+
+*The biome is a bit trickier, it doesn't affect game mechanics anymore, but it does affect the
+realistic rendering of the planet and I am not willing to give this up just because it has no
+mechanical effect.*
+
+**Filed as `P-541`**, and the measurement changed half of it.
+
+**The first three are already out of the data** - `spec/data/` declares none of them, because this
+lane regenerated those files from the cut release on the 21st. **What is left is `spec/` prose**,
+and `P-539` is the rule that lets it move rather than be deleted: a document says what the game is
+or what it will be, and it says which.
+
+**And the biome he is unwilling to give up is not in the data and never was.** Three things carry
+that name:
+
+```
+spec/data/biomes.4x                 6 value rows      read by nothing
+crates/planet-model/src/biome.rs    enum Biome        the list actually in use
+the terrain field                                     what the drawing samples
+```
+
+**`planet-render/src/realistic.rs` says it in its own comment**: *the biome comes from the field,
+sampled here rather than taken from the model.* **So the realistic rendering reads no game data for
+biome**, and the mechanical cut never threatened it. Every mention of `biomes.4x` under `crates/`
+is a comment or a link.
+
+**What is actually incoherent is this lane's own doing.** `biomes.4x` declares six values of a
+trait `traits.4x` no longer has, because the trait was deleted on the 21st and the values were
+left. **Six rows declaring values of nothing**, and that is the only biome decision left.

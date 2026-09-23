@@ -11,6 +11,84 @@ of it needs you.
 
 ## Open
 
+### P-541 - Force, garrison and nature leave the data; biome was never in it
+
+**to** sean · **status** open · **raised** 2026-09-23 · **kind** recovered · **shape** an instruction · **asks** approval · **into** `spec/future/`, `spec/control.md`, `spec/planet.md`
+
+**Your words, 2026-09-23:** *I want to push force, garrison, and nature out of the data. It should
+be somewhere we can reach it for future design, but it should not influence the code.* And:
+*the biome is a bit trickier, it doesn't affect game mechanics anymore, but it does affect the
+realistic rendering of the planet and I am not willing to give this up.*
+
+## The first three are half done and the half that is left is prose
+
+**They are already out of the data.** `spec/data/` declares no `force`, `garrison` or `nature` -
+this lane regenerated those files from the cut release on the 21st. **What is left is `spec/`
+prose**, which still states all three as rules of the game:
+
+```
+spec/control.md   ## Force, ## Producing force, and three bullets of Gaining and holding ground
+spec/planet.md    a territory's force of nature
+```
+
+**`P-539` gave you the rule for this**: *a document says what the game is, or it says what the
+game will be, and it says which.* **So these sections move rather than being deleted**, which is
+what *somewhere we can reach it for future design* asks for.
+
+## What lands
+
+**A new directory, `spec/future/`**, and the three sections move into it whole:
+
+```
+spec/future/force.md      Force, Producing force, and the force clauses of Gaining and holding
+                          ground - taken from spec/control.md
+```
+
+**`spec/control.md` keeps Winning and Losing**, which is what the release builds. **`spec/planet.md`
+loses *a territory's force of nature*** and keeps everything else.
+
+**Nothing is rewritten.** The sections arrive in `spec/future/force.md` as they are, under a
+heading saying they are not built and what would have to happen for them to be.
+
+## Biome: the thing you are unwilling to give up is not in the data and never was
+
+**Measured, and this is the part that changes your answer.** Three different things are called
+biome:
+
+```
+spec/data/biomes.4x                 6 value rows        read by nothing
+crates/planet-model/src/biome.rs    enum Biome          the list actually in use
+the terrain field                                       what the drawing samples
+```
+
+**`planet-render/src/realistic.rs:117` says it in its own comment**: *the biome comes from the
+field, sampled here rather than taken from the model.* **So the realistic rendering does not read
+game data for biome at all** - it reads the terrain, and the terrain is generated.
+
+**Every mention of `biomes.4x` in `crates/` is a comment or a link**, not a read. Checked across
+the tree.
+
+## So biome needs nothing from you, and one thing needs saying
+
+**The drawing you are unwilling to give up is safe** and was never at risk from the mechanical
+cut. **What is actually incoherent is `spec/data/biomes.4x`**: it declares six values of a trait
+that `traits.4x` no longer declares, because this lane deleted the trait on the 21st and left the
+values. **Six rows declaring values of nothing.**
+
+**Two ways to make it honest, and this is the only biome decision left:**
+
+**`B1` - the values go too.** The list that matters is the Rust enum and the terrain field;
+`biomes.4x` is a seventh copy of a list nothing reads.
+
+**`B2` - the trait comes back.** `{trait name:biome admits:value kept:thing}` returns, and a
+territory carries a biome in the data again - **for the drawing's sake rather than the rules'**,
+which is a reason the data has never had before.
+
+**`B1` unless you want a territory's biome to be a fact the game holds** rather than a fact the
+terrain implies. **That is a real question about the game and not about tidiness**: if the biome
+is only ever sampled from terrain, two territories can disagree with their own drawing and
+nothing notices.
+
 ### P-540 - One sentence so a test can say what the status bar said
 
 **to** sean · **status** open · **raised** 2026-09-22 · **kind** invented · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
