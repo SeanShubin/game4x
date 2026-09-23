@@ -3973,3 +3973,37 @@ is a claim over every screen, which is a check over the set - and `CLAUDE.md` is
 rule shown on one example stops meaning anything the moment that example is edited away. **So the
 layout rules are a check over all screens, not prose and not one test**, and `P-540`'s three
 candidates differ in exactly how much of that is checkable.
+
+## Said 2026-09-22: the interface tests are scoped to capabilities, not to positions
+
+*I am thinking of scoping the tests to capabilities rather than visual positioning.*
+
+Four named regions, his words:
+
+```
+status-bar    the line at the bottom for tooltips
+menu          the list of names for the menu items
+actions       the list of buttons corresponding to actions the user may take
+main-screen   background for menus, planet view or territory view for game
+```
+
+And: *I would have to specify the visual layout another way.*
+
+**So `U1` and `U2` of `P-540` are answered and the live question narrowed.** A test says a thing is
+in the menu and never where the menu is.
+
+**His sketch needs three things the notation does not have and one it forbids**, measured rather
+than recalled:
+
+- **Nothing in a data file is quoted** - `spec/console.md`, and there is not one quoted string in
+  any data row anywhere in the repository. Every quote in the tree is inside a `#` comment.
+- **Every argument is named**, so `{status-bar "start new game"}` has a value with no key.
+- **There is no list form.** `[ new-game exit-game ]` has never been carried; one row per fact is
+  how the notation says a set.
+- **A tree it does have**, so his first sketch's nesting is legal where his second's list is not.
+
+**What that leaves is one question and it is a real one: where do the words live.** Either a test
+says `{status-bar shows:new-game}` and the English lives outside the specification, or prose
+becomes something the notation carries and *nothing is quoted* gains an exception. **His sketch
+reaches for the second** - he wrote the English out twice - and it is the larger change, touching
+the notation every lane reads rather than only the interface.

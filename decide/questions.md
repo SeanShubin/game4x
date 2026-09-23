@@ -113,6 +113,82 @@ to say what contains what.
 for rules: a family. `{region of:screen name:...}` repeated in every test is the same shape as
 `{territory id:1}` repeated in every game test, and nobody has minded that.
 
+## Scoped to capabilities, 2026-09-22, and four named regions
+
+**You narrowed it**: *I am thinking of scoping the tests to capabilities rather than visual
+positioning*, with four regions - `status-bar`, `menu`, `actions`, `main-screen` - and *I would
+have to specify the visual layout another way.*
+
+**That is `U3` with the regions named**, which is better than `U3` was: a test can say *this is in
+the menu* without saying where the menu is. **`U1` and `U2` are answered and this section is the
+live question.**
+
+## Your sketch needs three things the notation does not have, and one it forbids
+
+```
+{ menu [ new-game exit-game ] }          a list
+{status-bar "start new game"}            a quoted sentence, and an unnamed argument
+```
+
+**One - nothing in a data file is quoted.** `spec/console.md`, and it is not a convention:
+**measured, there is not one quoted string in any data row anywhere in the repository.** The only
+quotes are inside `#` comments. A name is `start-new-game`, dash-joined, because *where it needs
+more than one word, the words are joined with dashes*.
+
+**Two - every argument is named.** `{status-bar "start new game"}` has a value and no key, and the
+rule is *its arguments are named*. What a value is has to be readable from the key beside it.
+
+**Three - there is no list.** `[ new-game exit-game ]` is a form the notation has never carried.
+**What it has instead is one row per fact**, which is how `{member kind:ark family:unit}` says a
+family's membership rather than listing it.
+
+**A tree it does have**: *a value is a word, a number, or another command in the same form*, so
+your first sketch's nesting is legal and your second sketch's list is not.
+
+## Your test, written in the notation as it stands
+
+```
+{test name:hovering-new-game-explains-it}
+
+{given}
+{menu}
+{item of:menu seq:1 name:new-game}
+{item of:menu seq:2 name:exit-game}
+
+{when}
+{hover item:new-game}
+
+{then}
+{status-bar shows:new-game}
+```
+
+**`shows:new-game` rather than a sentence.** The status bar shows *the tooltip of the thing named*,
+and **where the words live is the question your sketch raises and does not answer.**
+
+## So the real question is where the words live, and there are two answers
+
+**`W1` - the words are not in the specification at all.** A test says `{status-bar
+shows:new-game}` and the English lives wherever the interface keeps its text. **A test then
+cannot be wrong about the wording**, only about which tooltip appears.
+
+**`W2` - prose becomes a thing the notation carries**, with a form for it, and `spec/console.md`'s
+*nothing in a data file is quoted* gains an exception. **Then a test can assert the sentence**, and
+you review the words you will actually read on screen.
+
+**`W2` is what your sketch reaches for** - you wrote the English out, twice - and it is the larger
+change: it touches the notation every lane reads, not just the interface.
+
+## What this lane would say, and it is less certain than the last recommendation
+
+**`W1` for the first screens and `W2` only if the words turn out to matter to you.** A tooltip is
+the one part of an interface whose wrongness is obvious on sight and harmless in the moment - you
+will see a bad tooltip the first time you hover, and nothing downstream depends on it.
+
+**Against that**: *this will provide tool tips for where the cursor is hovering or what the player
+needs to do* is the status bar's whole purpose, and a capability-scoped test that cannot say what
+the bar said has given up on the thing the bar is for. **That is the argument for `W2` and it is
+yours to weigh, not this lane's.**
+
 ### P-536 - `spec/data/` sits in `spec/` and holds the release's data, and your ruling today made the two differ
 
 **to** sean · **status** withdrawn · **withdrawn** 2026-09-21 · **raised** 2026-09-21 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `spec/data/`
