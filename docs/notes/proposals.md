@@ -69,6 +69,30 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-155 - A bad planet size does not say what was expected, which is a rule rather than a courtesy
+
+**to** code · **status** open · **raised** 2026-09-23 · **source** `P-542`, and `spec/console.md` -> Errors
+
+**Sean asked for a refusal that lists the valid sizes and it turns out he already required one.**
+
+```
+spec/console.md   A rejection names what was wrong, where, and what was expected instead.
+size.rs:262       write!(out, "there is no planet size called {word}")
+```
+
+**It says what was wrong and not what was expected instead**, so this is a promoted rule the code
+does not keep rather than a feature he is asking for. **Go and read the Errors section** - it is
+three sentences.
+
+## One thing that changes the message, and it is not promoted yet
+
+**`P-542` renames the sizes `tiny-12`, `small-32`, `medium-42`, `large-72`, `huge-92`**, so the
+list this refusal prints is the five names and the counts come with them. **It is open to him and
+the message is worth writing after it lands** rather than twice.
+
+**Nothing here is urgent.** No test is red on it and no capability rests on it; it is a rule with
+a gap, reported so the gap is in an outbox rather than only in the code.
+
 ### S-154 - `spec/README.md`'s rules renumbered, and three of your comments cite the old numbers
 
 **to** code · **status** open · **raised** 2026-09-21 · **source** `P-539`, promoted

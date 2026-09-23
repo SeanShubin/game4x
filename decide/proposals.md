@@ -11,6 +11,60 @@ of it needs you.
 
 ## Open
 
+### P-542 - `generate-planet`, and a size named for its count
+
+**to** sean · **status** open · **raised** 2026-09-23 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/planet.md` -> Shape, and `spec/console.md` -> Commands
+
+**You answered `L3` and `S3`.** This is the rewrite; the working is in
+[`docs/notes/decisions.md`](../docs/notes/decisions.md).
+
+**The refusal is not here and needs nothing from you.** `spec/console.md` already requires *a
+rejection names what was wrong, where, and what was expected instead*, so listing the five sizes
+is a rule you promoted and the code is in breach of. **Filed to the code lane as `S-155`.**
+
+## What lands
+
+**`spec/planet.md` -> Shape**, replacing the five-line list:
+
+> - There are 5 planet sizes, corresponding to the 5 smallest Goldberg polyhedrons, and **each is
+>   named for its count**: `tiny-12`, `small-32`, `medium-42`, `large-72`, `huge-92`. **The number
+>   in the name is the number of territories**, so the pairing is stated once and a name that
+>   disagrees with its polyhedron is a defect rather than a choice.
+
+**`spec/console.md` -> Commands**, among the commands available before `start`:
+
+> - `{generate-planet size:<size> policy:<policy> seed:<seed>}` - make a planet and everything a
+>   designed one needs, choosing what is not specified according to a policy. **The same seed and
+>   the same policy give the same planet.**
+
+**And `spec/console.md`, beside `run`:**
+
+> **A command that writes commands appears as a comment.** What it wrote is the history - those
+> are the commands that ran, and running the history again does what happened again. **The command
+> that wrote them is a `#` line above them**, so a reader sees where they came from and a replay
+> steps over it.
+
+## What each block is doing
+
+**The first collapses a triplication.** The pairing of a name to a count is stated three times
+today - `spec/planet.md`, and twice in `planet-model/src/size.rs`, in `territory_count()` and in
+`name()`. **After this the name is the pairing.**
+
+**The second is the command**, and its last sentence is not new: `docs/architecture.md` already
+promises *same seed, same world* as a guarantee rather than a hope. **It is stated here because
+the command is where a player meets it.**
+
+**The third is `L3`**, and it earns its place by ruling out the reading that a log should contain
+what the player did. **It cannot, because this log is also an input.**
+
+## One thing this lane is not fixing here
+
+**`spec/console.md`'s command list writes names with spaces where the commands use dashes** -
+`create planet <size>` against `{create-planet size:tiny}`. **The new entry above is written in
+the notation**, because that is what is real, which makes it the only entry in the list that is.
+**Reported rather than repaired**: making the other entries agree is a separate change and a
+larger one than this proposal.
+
 ### P-544 - The rule editor is for automation, and the game needs neither it nor typing
 
 **to** sean · **status** open · **raised** 2026-09-23 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/interface.md` -> Surfaces, and `spec/invariants.md` -> Everything is expressible
