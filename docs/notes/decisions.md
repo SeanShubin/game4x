@@ -26,6 +26,123 @@ ones, for their reasoning.
 
 ## Answered, kept for the reasoning
 
+## The working behind `P-543`, answered `C1` and then a third kind on 2026-09-23
+
+**Not an item** - `P-543` is one proposal and it lives in
+[`decide/proposals.md`](../../decide/proposals.md).
+
+**The part worth keeping is a wrong number and why it was wrong.** This item first said the
+prose rule would cost nine values - the planet sizes, menu items and regions Sean had
+sketched. **Then his own classification made the rule editor a gameplay surface**, and the
+cost measured 80: twenty kinds, twenty-three traits, four families, seven members, six
+biomes and twenty recipe names, before roles and comparisons. **Then he made the rule editor
+a third kind and the eighty went away again.**
+
+**So the number moved twice and neither move was a measurement error.** Nine was right for
+the scope this lane assumed, eighty was right for the scope his first answer implied, and
+nine is right again. **What changed each time was which surfaces were in the population**,
+which is the thing this repository keeps finding: a count is only as good as the population
+it names, and this one never named it until the third try.
+
+
+**to** sean · **status** open · **raised** 2026-09-23 · **kind** recovered · **shape** text · **asks** a decision · **into** `spec/console.md` -> The language
+
+**Your words, 2026-09-23:** *making it a requirement that the user ONLY ever sees prose. So a
+quoted string is only displayed to the user and never has a mechanical effect, and anything with a
+mechanical effect is never displayed to the user.*
+
+**This is the converse of `P-540`'s sentence and it is the larger half.** `P-540` says prose is
+never compared; this says a name is never shown. **Together they are a total separation**, and a
+test can check both: a displayed value that is not prose fails, and a compared value that is
+prose fails.
+
+## It collides with exactly one surface, and it is the console
+
+**The console is where the player types the notation**, so the player necessarily reads it:
+
+```
+help [<command>]     list every command, or give one command's syntax
+show <subject>       reports what is true of it and what can be done with it
+a rejection          names what was wrong, where, and what was expected instead
+```
+
+**`help` displays command names by definition.** `spec/interface.md` says so - *the console,
+typing commands, with help listing every command and its syntax.* **And a rejection shows the
+player what they typed**, which under `size:small-12` means showing a name that does not exist.
+
+**`spec/invariants.md` makes this unavoidable rather than accidental**: *anything the player can do
+through a surface can be done by typing*, and *every change to game state is representable and
+executable as a console command.* **If the player can type a name, the player can read one.**
+
+## So the question is how the console is excepted
+
+**`C1` - the console is exempt, and the rule binds every other surface.** *In the console the
+player addresses the machine in the machine's language; everywhere else they read prose.* **One
+sentence, and the boundary is a surface rather than a judgement.**
+
+**`C2` - the rule binds everywhere and the console shows prose too.** `help` lists sentences, a
+rejection describes rather than quotes. **The cost is that the player cannot see the words they
+must type**, which contradicts *anything the player can do through a surface can be done by
+typing*.
+
+**`C3` - the rule binds everywhere except where the player supplied the word.** A rejection may
+echo what was typed, because the player wrote it; `help` may not, because the game chose it.
+**Finer, and it is a judgement per message rather than a surface.**
+
+## Answered `C1` on 2026-09-23, and your reason is better than the one offered
+
+**Your words**: *the console is exempt because it is a different type of surface. It is an
+admin/debug tool rather than a gameplay surface.*
+
+**That classifies rather than excepts**, which is stronger: the rule binds gameplay surfaces and
+the exemption is a kind of surface rather than one named surface. **`C2` and `C3` are ruled out.**
+
+## But it reaches further than the console, and `spec/interface.md` has five surfaces
+
+**Three are admin or debug by your reading and two are gameplay:**
+
+```
+the game itself     gameplay        the planet, its territories, what the player does with them
+the rule editor     gameplay        the rules the player has, read and changed
+the console         admin/debug     your words
+the data browser    admin/debug     the game's own data, read directly
+the debug view      admin/debug     already excepted in its own words - an output and not a path
+```
+
+**The rule editor is the one that costs.** `spec/invariants.md` puts it inside play - *rules are
+specified through the interface; playing the game never requires writing a program* - so it is a
+gameplay surface, and **a player cannot edit a rule without seeing the kinds and traits it names.**
+
+## So the cost is much larger than this item first said, and here it is measured
+
+**This item said nine prose values.** That was the cost if only your two sketched screens bind.
+**Under your own classification the rule editor binds too, and then every mechanical word the
+player can see needs prose:**
+
+```
+kinds        20        traits      23        families      4
+members       7        biomes       6        recipe names 20
+                                             -----------------
+                                             80 words, before roles and comparisons
+```
+
+**Eighty rather than nine**, and this lane got it wrong by assuming only the screens you had
+sketched were in scope.
+
+## What that leaves you, and it is one question rather than a cost to accept
+
+**`E1` - the rule editor is a gameplay surface and the eighty words get prose.** The rule holds
+everywhere it should, and the player never reads a machine word.
+
+**`E2` - the rule editor joins the admin surfaces.** A player editing rules is doing something
+closer to administration than to playing, and `spec/invariants.md`'s *playing the game never
+requires writing a program* is satisfied by never *requiring* it. **Then the cost really is nine
+words** and the rule binds the game surface alone.
+
+**This lane has no recommendation worth the name.** `E2` is what makes the rule cheap and `E1` is
+what makes it mean what you said. **Which the rule editor is, is a question about who a player is**
+- and that is further from anything measurable than this lane should guess at.
+
 ## The working behind `P-540`, answered `U2` and `N1` on 2026-09-22
 
 **Not an item, deliberately** - `P-540` is one proposal and it lives in

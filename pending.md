@@ -8,9 +8,10 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-544** - The rule editor is for automation, and the game needs neither it nor typing · `decide/proposals.md`
+- **P-543** - What the player reads and what the game reads are disjoint · `decide/proposals.md`
 - **P-541** - Force, garrison and nature leave the data; biome was never in it · `decide/proposals.md`
 - **P-540** - One sentence so a test can say what the status bar said · `decide/proposals.md`
-- **P-543** - Prose is shown and never read; a name is read and never shown · `decide/questions.md`
 - **P-542** - `generate-planet`, and what the log shows when a command writes commands · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
@@ -29,6 +30,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-153** - `48927aa` S-153: thin-engine stops being a prototype and joins the gate · still open in `docs/notes/proposals.md`
 - **S-147** - `1ef0c07` S-147: reviewed/ is a column, and an orphaned record can be reached · still open in `docs/notes/proposals.md`
 - **S-144** - `58a6ba1` S-144: the model keeps what spec/ keeps, and the checks say which release defers what · still open in `docs/notes/proposals.md`
+- **P-543** - `1058534` P-543 answered C1, and the cost was nine words when it is eighty · still open in `decide/proposals.md`
 - **P-540** - `294cb85` P-540: one notation or two, and my own precedent check narrowed the case against · still open in `decide/proposals.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`

@@ -11,6 +11,95 @@ of it needs you.
 
 ## Open
 
+### P-544 - The rule editor is for automation, and the game needs neither it nor typing
+
+**to** sean · **status** open · **raised** 2026-09-23 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/interface.md` -> Surfaces, and `spec/invariants.md` -> Everything is expressible
+
+**Your words, 2026-09-23.** `spec/interface.md` says only *the rules the player has, read and
+changed*, which says what it shows and not what it is for.
+
+## What lands, and the second block is in a different file
+
+Into `spec/interface.md`, replacing the rule editor's line in the surface list:
+
+> - **The rule editor** - the rules the player has, read and changed. **It is for automating the
+>   game to the player's preference**: how a scout behaves, a script for taking a planet, a supply
+>   line. **It is the only gameplay surface where the player types text to name things**, and the
+>   game can be played through without ever opening it.
+
+Into `spec/invariants.md` -> Everything is expressible, after *anything the player can do through
+a surface can be done by typing*:
+
+> - **And the whole game can be played without typing.** The surfaces are as capable as the
+>   console, not merely covered by it - so the two clauses together say the two are equal rather
+>   than one containing the other.
+
+## Why the second block is not a restatement
+
+**The existing invariant runs one way.** *Anything the player can do through a surface can be done
+by typing* says the console is at least as capable as the surfaces. **It does not say the surfaces
+are at least as capable as the console**, and your sentence does. **Both directions together make
+them equal**, which is what *the entire game can be played without typing* claims and what neither
+existing clause carries.
+
+## What it settles in `P-543`, which is why this is filed first
+
+**`P-543` asked whether the rule editor is a gameplay surface or an admin one, and your answer is
+neither.** A third kind, and the reason is in the block above: **it is the only gameplay place
+where the player types names.** So the prose rule binds the game surface and not this one, and the
+eighty words this lane measured are not owed.
+
+## And one line of the release moves
+
+**`releases/first-release.md` says *the rule editor is not in this release* in `Scope`.** Since
+`P-522` the release has an `Out of scope` section, and that is where an exclusion goes. **One line
+moves, with your reason attached**: it is for automation, and the first release has nothing to
+automate.
+
+### P-543 - What the player reads and what the game reads are disjoint
+
+**to** sean · **status** open · **raised** 2026-09-23 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**You answered `C1` and then made it a three-way split**, so this is the rewrite. The working -
+the five surfaces classified, and the eighty words that turned out not to be owed - is in
+[`docs/notes/decisions.md`](../docs/notes/decisions.md).
+
+## What lands
+
+After `P-540`'s sentence about a trait admitting prose:
+
+> **What the player reads and what the game reads are disjoint.** A quoted value is shown to a
+> person and never compared; **a name is compared and never shown.** So a displayed value that is
+> not prose is a defect, and a compared value that is prose is another.
+>
+> **This binds the gameplay surfaces and there are two it does not bind.** An **admin or debug**
+> surface shows the machine's words because addressing the machine is what it is for - the
+> console, the data browser, the debug view. And the **rule editor** is the one gameplay surface
+> where the player types names, so it shows them.
+
+## What makes it checkable, which is the reason to state it rather than intend it
+
+**Both halves fail loudly and in opposite directions.** Under `P-540` a trait declares whether it
+admits prose, so **a quotation where prose is not admitted is nameable by a tool**, and so is a
+displayed value whose trait admits none.
+
+**And the exemptions are surfaces rather than judgements.** A surface is a fact about where a
+value is rendered; *whether this word is really user-facing* is not. **That is why the exemption
+is stated as three kinds and not as a list of cases.**
+
+## What it costs
+
+**Every word a gameplay surface shows needs prose.** For the game surface that is small and
+unwritten - your sketch's planet sizes, menu items and regions - **because there is no interface
+yet, so this is a cost on work not yet done.**
+
+**It was eighty words until you answered.** This lane measured every kind, trait, family, member,
+biome and recipe name on the assumption the rule editor bound too; your third kind removes all
+eighty, and `P-544` is where that lands.
+
+**What it buys is that a name becomes free to rename.** `tiny-12` to `tiny-twelve` touches no
+display, because no display reads one.
+
 ### P-541 - Force, garrison and nature leave the data; biome was never in it
 
 **to** sean · **status** open · **raised** 2026-09-23 · **kind** recovered · **shape** an instruction · **asks** approval · **into** `spec/future/`, `spec/control.md`, `spec/planet.md`

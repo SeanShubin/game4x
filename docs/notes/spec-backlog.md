@@ -4041,3 +4041,24 @@ is a comment or a link.
 **What is actually incoherent is this lane's own doing.** `biomes.4x` declares six values of a
 trait `traits.4x` no longer has, because the trait was deleted on the 21st and the values were
 left. **Six rows declaring values of nothing**, and that is the only biome decision left.
+
+## Said 2026-09-23: the rule editor is a third kind of surface, and is for automation
+
+*There is a deeper point about the rule editor, it is actually a 3rd kind of thing. It is the only
+gameplay place where the user types text to give things names.*
+
+*The entire game can be played without typing, and without ever invoking the rule editor. The rule
+editor is for automating the game according to the users prefrences, scouting behaivor, planet
+conquest scripts, supply lines, etc. The rule editor is also out of scope for first release.*
+
+**Filed as `P-544`**, and it settles `P-543` by answering neither of its two options.
+
+**One clause of it is a new invariant rather than a restatement.** `spec/invariants.md` says
+*anything the player can do through a surface can be done by typing* - the console is at least as
+capable as the surfaces. **It does not say the surfaces are at least as capable as the console**,
+and *the entire game can be played without typing* does. **Both directions together make them
+equal**, which neither existing clause carries.
+
+**And `spec/interface.md` said what the rule editor shows and never what it is for** - *the rules
+the player has, read and changed*. Automation to the player's preference is the purpose, and it is
+the reason the first release excludes it: there is nothing to automate yet.
