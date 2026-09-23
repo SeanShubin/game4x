@@ -3918,3 +3918,58 @@ and thin-engine stops being a prototype and becomes the engine.
 **And incrementality is explicitly not required.** *We have thin-engine to fall back on* - which
 is the prototype paying for itself a second way: it was built to answer whether an executable
 specification was possible, and it now makes a large replacement safe to attempt.
+
+## Said 2026-09-22: it is time to model the user interface, and it will have tests
+
+*It is time to start modeling the user interface. I want to make sure we communicate this
+accurately, so we need to use a precise notation like we do with the game rules. All of the user
+interface will have tests.*
+
+**The layout rules, verbatim:**
+
+- *The layout will always have a status bar at the very bottom containing a single line, this will
+  provide tool tips for where the cursor is hovering or what the player needs to do*
+- *Game actions will generally be buttons on the bottom right, above the status bar*
+- *The menu items will be in the middle of the screen, same size, one above the other*
+
+**And the first two screens he sketched:**
+
+```
+Initial State          menu centered buttons: new game, load game, exit game
+                       load game absent if none exists
+New game               menu to choose planet size: tiny, small, medium, large, huge, back
+```
+
+**Filed as `P-540`**, which asks the one thing that has to be settled before anything can be
+written: what a screen looks like in the notation. **Three candidates, with his own two tests
+written out in each.**
+
+## And the observation he opened with, which is sharper than it looks
+
+*It occurs to me that I may end up reviewing a lot of these things indirectly once the user
+interface is properly modeled.*
+
+**Right, and the line falls in a particular place.** A test can assert the **mechanism** and
+cannot assert that the result **looks right**. `R-10` is the clean case and it is already half
+measured: *every label in `reports/petri.html` declares a fill, counted at 295 of 295*. **The
+counting is done; what waits on him is whether it reads well in his theme.**
+
+**So a modelled interface removes the mechanical half of every presentation capability and leaves
+the aesthetic half.** Five of the six capabilities open to him - `R-7` to `R-11` - are about
+reports rather than about the game, and for each the same split applies: the links resolve, the
+sections exist, the counts agree, **and whether it is worth looking at is his.**
+
+**Which is an argument for modelling the interface and not an argument that vetting goes away.**
+The thing it would end is him checking whether a thing is *there*.
+
+## What his own rule 3 does to the layout rules, which he may not have intended
+
+**`spec/README.md` rule 3, promoted 2026-09-21**: *a rule the tests assert is not written in prose
+as well.* **Every interface test would assert the status bar**, so the three layout rules are
+candidates for being checks rather than prose.
+
+**But *always* is a universal and a test is one case.** *The layout will always have a status bar*
+is a claim over every screen, which is a check over the set - and `CLAUDE.md` is explicit that a
+rule shown on one example stops meaning anything the moment that example is edited away. **So the
+layout rules are a check over all screens, not prose and not one test**, and `P-540`'s three
+candidates differ in exactly how much of that is checkable.

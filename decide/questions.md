@@ -11,6 +11,108 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
+### P-540 - A notation for the interface, and three candidates with your two tests written in each
+
+**to** sean · **status** open · **raised** 2026-09-22 · **kind** invented · **shape** an instruction · **asks** a decision · **into** a new notation, and `spec/tests/`
+
+**You said to use a precise notation like the game rules use, and the game notation does not
+reach this yet.** A test today is `{given}` rows, a `{when}` command and `{then}` rows, where
+every row is a thing in a place. **A screen is things in positions, which is the same shape with a
+different idea of *where***.
+
+**Your two tests below, written three ways.** They are the same two either way; what differs is
+what a row says.
+
+## `U1` - a screen is a list of things, and position is a trait
+
+```
+{test name:the-first-screen-offers-three-things}
+
+{given}
+{game phase:none}
+
+{then}
+{menu at:centre}
+{button of:menu seq:1 label:new-game}
+{button of:menu seq:2 label:exit-game}
+{status-bar at:bottom lines:1}
+```
+
+**`seq` is the order down the screen and `at` is the region.** Nothing says pixels. **A menu
+button's size is not stated** because your rule is that they are all the same, which is a check
+over the set rather than a fact per button.
+
+**What it costs**: *centre*, *bottom* and *bottom-right* become a closed list of regions, which is
+a new vocabulary the game notation does not have.
+
+## `U2` - a screen is a tree, and containment does the placing
+
+```
+{test name:the-first-screen-offers-three-things}
+
+{given}
+{game phase:none}
+
+{then}
+{screen}
+{region of:screen name:centre}
+{region of:screen name:status-bar}
+{menu of:centre}
+{button of:menu seq:1 label:new-game}
+{button of:menu seq:2 label:exit-game}
+{line of:status-bar} -> 1
+```
+
+**This is the containment the game already uses** - *every thing but the game is in another thing*
+- so `rooming`, `stands-in` and the capacity checks apply unchanged. **A status bar with two lines
+fails the way a territory with two densities fails.**
+
+**What it costs**: three rows to say what `U1` says in one, and every test carries the screen's
+skeleton.
+
+## `U3` - a screen is what the player can reach, and layout is checked once and never stated
+
+```
+{test name:the-first-screen-offers-three-things}
+
+{given}
+{game phase:none}
+
+{then}
+{offered label:new-game}
+{offered label:exit-game}
+{tooltip for:new-game}
+```
+
+**Nothing about position appears in a test at all.** Your three layout rules become three checks
+over every screen: a status bar of one line at the bottom, game actions bottom-right, menu items
+centred and equal. **A test says what is reachable and the checks say where things sit.**
+
+**What it costs**: a test cannot say *this button is in the wrong place*, because no test mentions
+place. **You would review reachability and trust the layout checks**, which is the opposite of
+what you have been doing with the rules.
+
+## What your draft already decides, whichever wins
+
+**Load game is absent rather than disabled.** *This menu item absent if none exists* - so the
+first screen has two buttons or three, and **the test is two tests**, not one with a condition.
+
+**And the planet sizes are not unknown.** Your draft has `?` for four of them; `spec/planet.md`
+states all five: **tiny 12, small 32, medium 42, large 72, huge 92.** The `?`s are answerable from
+the specification rather than by you.
+
+## What this lane would say
+
+**`U2`, and not because it is prettiest.** It is the only one of the three where **a layout
+mistake fails a test you have read**, rather than failing a check somebody wrote. Your whole
+reason for the executable specification was that a test you approved is a piece of the game you
+are certain of; `U3` moves the layout out of that set, and `U1` states position without being able
+to say what contains what.
+
+**The cost of `U2` is real and is verbosity**, and the answer to it is the answer you already gave
+for rules: a family. `{region of:screen name:...}` repeated in every test is the same shape as
+`{territory id:1}` repeated in every game test, and nobody has minded that.
+
 ### P-536 - `spec/data/` sits in `spec/` and holds the release's data, and your ruling today made the two differ
 
 **to** sean · **status** withdrawn · **withdrawn** 2026-09-21 · **raised** 2026-09-21 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `spec/data/`
