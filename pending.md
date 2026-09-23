@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-540** - A notation for the interface, and three candidates with your two tests written in each · `decide/questions.md`
+- **P-540** - One sentence so a test can say what the status bar said · `decide/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -26,6 +26,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-153** - `48927aa` S-153: thin-engine stops being a prototype and joins the gate · still open in `docs/notes/proposals.md`
 - **S-147** - `1ef0c07` S-147: reviewed/ is a column, and an orphaned record can be reached · still open in `docs/notes/proposals.md`
 - **S-144** - `58a6ba1` S-144: the model keeps what spec/ keeps, and the checks say which release defers what · still open in `docs/notes/proposals.md`
+- **P-540** - `294cb85` P-540: one notation or two, and my own precedent check narrowed the case against · still open in `decide/proposals.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
 - **X-38** - `fec232b` X-38: the route is drawn on the sphere, and the lens's unmeasured number is measured · still open in `lenses/research/outbox.md`

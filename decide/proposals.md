@@ -11,6 +11,64 @@ of it needs you.
 
 ## Open
 
+### P-540 - One sentence so a test can say what the status bar said
+
+**to** sean · **status** open · **raised** 2026-09-22 · **kind** invented · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**You chose `U2` and `N1`.** A screen is a tree, containment places things, and there is one
+notation extended rather than a second. **This is what is left to approve**, and the working
+behind it is in [`docs/notes/decisions.md`](../docs/notes/decisions.md).
+
+## What lands
+
+After *nothing in a data file is quoted*:
+
+> **A trait may admit prose, and a value of one is quoted.** That is the one exception, and it is
+> narrow on purpose: **a quoted value whose trait does not admit prose is a defect**, and so is an
+> unquoted sentence. **Prose is shown to a person and never compared** - nothing sorts it, matches
+> on it, or reads a word out of it.
+
+## Why the exception is where it is
+
+**`admits` already says what a value may be** - a number, a family, or `value` where the values
+declare themselves. **Prose is a fourth**, and putting it there makes the edge checkable: the
+trait says which fields may be quoted, so a tool can name a quotation in the wrong place.
+
+**It is invented.** You asked for the words to be sayable and did not ask for this shape; if you
+want prose carried another way, this is the paragraph to change.
+
+## The three constraints your sketch tripped, which still hold under `U2`
+
+**Two of the three are unchanged by this proposal and worth having in front of you**, because your
+sketch used all three:
+
+```
+no list form       [ new-game exit-game ]  is not a thing the notation carries
+                   one row per fact is how it says a set
+arguments named    {status-bar "start new game"} has a value with no key
+prose quoted       this proposal, and only where a trait admits it
+```
+
+## Two facts your draft left blank, answerable from `spec/`
+
+**The planet sizes are stated**: tiny 12, small 32, medium 42, large 72, huge 92.
+
+**And *load game absent if none exists* makes the first screen two tests**, not one with a
+condition - because absent is not disabled, and a test asserts one screen.
+
+## What `U2` costs, stated once so you have accepted it knowingly
+
+**Every interface test carries the screen's skeleton** - a `{screen}`, its regions, then its
+contents. Three rows before anything interesting. **It is the same repetition as `{territory
+id:1}` in every game test**, which has never bothered you, and it is the price of a layout mistake
+failing a test you read rather than a check somebody wrote.
+
+## What happens next needs nothing from this queue
+
+**The first interface tests are drafted by this lane and read by you in the review application.**
+`P-531` settled that: a test is not a proposal. **So your queue stays empty while the screens get
+written.**
+
 ### P-514 - Three rows of `spec/data/line.4x` are unwritable, and this lane's own check said there was one
 
 **to** sean · **status** withdrawn · **withdrawn** 2026-09-21 · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
