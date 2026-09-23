@@ -10,6 +10,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 - **P-541** - Force, garrison and nature leave the data; biome was never in it · `decide/proposals.md`
 - **P-540** - One sentence so a test can say what the status bar said · `decide/proposals.md`
+- **P-542** - `generate-planet`, and what the log shows when a command writes commands · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`

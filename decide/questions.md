@@ -11,6 +11,77 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
+### P-542 - `generate-planet`, and what the log shows when a command writes commands
+
+**to** sean · **status** open · **raised** 2026-09-23 · **kind** invented · **shape** an instruction · **asks** a decision · **into** `spec/console.md` -> Commands
+
+**Two of your three points are already settled and the third is the real question.**
+
+## What exists, so the new part is small
+
+```
+{create-planet size:tiny}       the scenario's own first line - takes a name, not a number
+{run file:world}                one command standing for the commands in a file
+```
+
+**`spec/console.md` already gives `run` the rule you want for the log**: *run the commands in a
+file, **as though they had been typed in its place***. And **the refusal you describe is already
+required**: *a rejection names what was wrong, where, and what was expected instead.* Today it
+says *there is no planet size called tiny* and does not list them, so **listing is a repair to an
+existing rule rather than a new one.**
+
+## So `generate-planet` adds three things, and one is a choice
+
+**`policy` and `seed` are new and uncontroversial.** `docs/architecture.md` already promises
+*same seed, same world* as a guarantee rather than a hope, and a policy name is a word like any
+other.
+
+**`size` is the choice.** Your sketch says `size:123`; the command today says `size:tiny`.
+
+- **`S1` - a name.** Five words, and the valid set is the vocabulary rather than a rule. **No
+  arithmetic can be wrong** and `size:123` never parses.
+- **`S2` - a number.** Matches your sketch, and the refusal listing 12, 32, 42, 72, 92 becomes
+  load-bearing rather than a courtesy. **`spec/planet.md` states the formula** - `10T + 2` where
+  `T = m² + mn + n²` - so a sixth size is a fact about geometry rather than a new word.
+
+**`S2` is what you wrote and `S1` is what is built.** The difference is whether a planet size is a
+word the game knows or a number it checks.
+
+## The log, which is the part you asked to discuss
+
+**Your priority, in your words**: *I must have the resulting commands, and it would be nice to know
+how they were generated, but that is not as important.*
+
+**`L1` - like `run`: only the generated commands appear.** The rule exists and nothing new is
+needed. **Replay works and provenance is lost.**
+
+**`L2` - both appear.** Then replaying the history runs the generator **and** its output, and the
+planet is made twice. **This one is wrong and is here to be ruled out rather than weighed.**
+
+**`L3` - the generated commands appear, and the generator appears as a comment.**
+
+```
+# {generate-planet size:42 policy:earth-like seed:12345}
+{create-planet size:42}
+{set-biome territory:1 biome:grassland}
+...
+```
+
+**`#` begins a comment and history is a file `run` can execute**, so a comment costs nothing and
+replay ignores it. **You get the commands as facts and the provenance as a note**, which is the
+priority you stated, in that order.
+
+## What this lane would say
+
+**`L3`, and it is nearly free.** The one thing to notice is that **the seed makes provenance
+recoverable even under `L1`** - `same seed, same world` means the comment is a convenience rather
+than the only record. **So `L3` is worth having and is not load-bearing**, which is the honest
+version of *nice to know*.
+
+**And `L2` should be ruled out in writing**, because it is the reading someone reaches for first:
+a log of what happened ought to contain what the player did. **The reason it fails is that this
+log is also an input.**
+
 ### P-536 - `spec/data/` sits in `spec/` and holds the release's data, and your ruling today made the two differ
 
 **to** sean · **status** withdrawn · **withdrawn** 2026-09-21 · **raised** 2026-09-21 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `spec/data/`
