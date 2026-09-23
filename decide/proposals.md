@@ -52,14 +52,20 @@ heading saying they are not built and what would have to happen for them to be.
 
 ## Biome: the thing you are unwilling to give up is not in the data and never was
 
-**Measured, and this is the part that changes your answer.** Three different things are called
-biome:
+**Measured, and this is the part that changes your answer.** **Four** different things are called
+biome, and two of them are files of that name:
 
 ```
 spec/data/biomes.4x                 6 value rows        read by nothing
+scenario/commands/biomes.4x         43 lines            compiled into game-front by include_str!
 crates/planet-model/src/biome.rs    enum Biome          the list actually in use
 the terrain field                                       what the drawing samples
 ```
+
+**The second one is read and this lane nearly missed it.** A first pass said *every mention of
+`biomes.4x` under `crates/` is a comment or a link*, which was true of `spec/data/biomes.4x` and
+false of the other. `crates/game-front/src/library.rs:22` compiles
+`scenario/commands/biomes.4x` into the binary.
 
 **`planet-render/src/realistic.rs:117` says it in its own comment**: *the biome comes from the
 field, sampled here rather than taken from the model.* **So the realistic rendering does not read
@@ -84,10 +90,17 @@ values. **Six rows declaring values of nothing.**
 territory carries a biome in the data again - **for the drawing's sake rather than the rules'**,
 which is a reason the data has never had before.
 
-**`B1` unless you want a territory's biome to be a fact the game holds** rather than a fact the
-terrain implies. **That is a real question about the game and not about tidiness**: if the biome
-is only ever sampled from terrain, two territories can disagree with their own drawing and
-nothing notices.
+**`B2`, and the fourth file is why.** `scenario/commands/biomes.4x` assigns a biome to each of the
+twelve territories and is compiled into `game-front`, so **a territory's biome is already a fact
+the game holds** - stated by the scenario, not implied by terrain. **`B1` would leave the values
+of that fact declared nowhere**, which is the position `spec/data/` is in today and the thing this
+proposal is repairing.
+
+**The question `B1` would have been right for** is whether the biome should be a game fact at all;
+that was settled by the scenario stating it, and `spec/planet.md` still says every territory has
+one. **So the trait comes back, and the reason is the one you gave** - it earns its place by the
+drawing rather than by the rules, which is a reason the data has not had before and is worth
+writing down where the trait is declared.
 
 ### P-540 - One sentence so a test can say what the status bar said
 
