@@ -189,6 +189,77 @@ needs to do* is the status bar's whole purpose, and a capability-scoped test tha
 the bar said has given up on the thing the bar is for. **That is the argument for `W2` and it is
 yours to weigh, not this lane's.**
 
+## One notation or two, 2026-09-22, and your precedent is narrower than it reads
+
+**You said it**: *it may need to be a different notation, balancing the need for consistency with
+the convenience of using the best tool for the job.*
+
+**`spec/console.md` opens by forbidding that**, and the sentence is yours:
+
+```
+There is one notation. A command and a description of game state are written in the same form.
+The notation is the game notation. A command, a state and a data file are written in it, and
+there is nothing else to write them in.
+```
+
+**But the reason given for it is about something else.** Four lines down: *two notations would
+cost more to maintain and more to read than one, and a command that takes a tree is expected
+rather than hypothetical.* **That argument is flat-versus-tree inside one notation** - whether
+simple commands get a simpler form - and it was settled by making everything carry a tree.
+**It is not an argument about a second notation for a different domain, and this lane will not
+pretend it is.**
+
+**What does bind is the broad clause**: *a command, a state and a data file are written in it, and
+there is nothing else to write them in.* **An interface test would live in `spec/tests/` as a
+`.4x` file**, which makes it a data file, which makes it bound. **So the rule reaches this whether
+or not its stated reason does.**
+
+## What a second notation costs, measured
+
+```
+193   .4x files in the tree
+  7   modules that parse or render the notation
+        command-language/parse.rs      game-console/petri.rs   game-console/state.rs
+        thin-engine/engine.rs          thin-engine/schema.rs   thin-engine/script.rs
+        thin-engine/store.rs
+  1   review application, which reads tests through report.rs
+```
+
+**The review application is the cost that matters and it is not the parser.** `scripts/review.sh`
+shows you a test, records that you read it, and compares the current test with the copy you
+approved. **A second notation means either a second review path or one app that reads both** - and
+the app is the thing your whole executive control rests on.
+
+## Three answers, and the middle one is new
+
+**`N1` - one notation, extended.** Give it a form for prose and nothing else; lists stay one row
+per fact. **The smallest change that lets an interface test say what the status bar said**, and a
+UI test and a game test sit in one directory, read by one app, compared the same way.
+
+**`N2` - two notations.** The interface gets one fitted to it - lists, quoted sentences, unnamed
+arguments where position is obvious. **`spec/console.md` gains a sentence saying where each one
+applies.** The cost is a second parser and a second path through the review app, and the risk is
+that you end up reviewing two kinds of thing in two ways.
+
+**`N3` - one notation unchanged.** Interface tests say `{status-bar shows:new-game}` and the words
+live outside the specification. **Nothing new to build and the tooltips are never reviewed.**
+
+## What this lane would say
+
+**`N1`, and the reason is the review app rather than the notation.** The thing that makes your
+tests worth anything is that you read them one at a time in one place and a record says you did.
+**`N2` puts a second kind of thing in front of you**, and the failure mode is not a bad parser -
+it is that one of the two sets quietly stops being reviewed.
+
+**And `N1` is smaller than it sounds**, because prose is the only thing your sketch needs that
+one row per fact cannot already say. Lists you do not need; unnamed arguments you do not need.
+**One form for a sentence is the whole of it.**
+
+**What would change this lane's answer** is if the interface turns out to need more than prose -
+geometry, ordering by pixel, anything continuous. **Then `N2` stops being a convenience and
+becomes honest**, and `spec/invariants.md` already says why: *a value that would be compared
+across rows is a column; a value that would not may be a node in a cell.*
+
 ### P-536 - `spec/data/` sits in `spec/` and holds the release's data, and your ruling today made the two differ
 
 **to** sean · **status** withdrawn · **withdrawn** 2026-09-21 · **raised** 2026-09-21 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `spec/data/`
