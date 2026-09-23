@@ -38,14 +38,34 @@ other.
 
 **`size` is the choice.** Your sketch says `size:123`; the command today says `size:tiny`.
 
-- **`S1` - a name.** Five words, and the valid set is the vocabulary rather than a rule. **No
-  arithmetic can be wrong** and `size:123` never parses.
-- **`S2` - a number.** Matches your sketch, and the refusal listing 12, 32, 42, 72, 92 becomes
-  load-bearing rather than a courtesy. **`spec/planet.md` states the formula** - `10T + 2` where
-  `T = m² + mn + n²` - so a sixth size is a fact about geometry rather than a new word.
+- **`S1` - a name.** `size:tiny`, as built. **The valid set is the vocabulary** and `size:123`
+  never parses.
+- **`S2` - a number.** `size:12`, as your first sketch. The refusal listing 12, 32, 42, 72, 92
+  becomes load-bearing, and a sixth size is geometry rather than a new word.
+- **`S3` - the name carries the number.** `size:tiny-12`, which you are leaning towards. **One
+  word, so the notation needs nothing** - *a name is one word, dashed where it needs more* - and
+  `small-12` is a name that does not exist, so the refusal lists the five that do.
 
-**`S2` is what you wrote and `S1` is what is built.** The difference is whether a planet size is a
-word the game knows or a number it checks.
+## `S3` removes a duplication, which is the argument for it
+
+**The pairing of a name to a count is currently stated three times:**
+
+```
+spec/planet.md:20              - tiny: 12
+planet-model/src/size.rs:40    Self::Tiny => 12        in territory_count()
+planet-model/src/size.rs:50    Self::Tiny => "tiny"    in name()
+```
+
+**Under `S3` the name is the pairing** and all three collapse to one. `spec/planet.md`'s list
+becomes the five names, and the counts are in them.
+
+**The one check it needs**: every size name's suffix equals the count its polyhedron gives.
+`spec/planet.md` has the formula - `10T + 2` where `T = m² + mn + n²` - so the check derives the
+number rather than holding a second list, and **a name reading `tiny-13` fails rather than lying.**
+
+**The one thing to decide with it** is whether `tiny-12` is also what a player reads. Under
+`P-540`'s prose form the menu can show a sentence while the value stays `tiny-12`, so **the name
+being terse costs the interface nothing** - but that is a choice and not a consequence.
 
 ## The log, which is the part you asked to discuss
 
@@ -71,7 +91,7 @@ planet is made twice. **This one is wrong and is here to be ruled out rather tha
 replay ignores it. **You get the commands as facts and the provenance as a note**, which is the
 priority you stated, in that order.
 
-## What this lane would say
+## Answered `L3` on 2026-09-23
 
 **`L3`, and it is nearly free.** The one thing to notice is that **the seed makes provenance
 recoverable even under `L1`** - `same seed, same world` means the comment is a convenience rather
