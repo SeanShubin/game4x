@@ -24,7 +24,9 @@ is a rule you promoted and the code is in breach of. **Filed to the code lane as
 
 ## What lands
 
-**`spec/planet.md` -> Shape**, replacing the five-line list:
+**`spec/planet.md` -> Shape**, replacing the bullet *There are 5 planet sizes, corresponding to
+the 5 smallest Goldberg polyhedrons* **and its five sub-bullets** - six lines, because the
+replacement says that sentence again and leaving the parent would state it twice:
 
 > - There are 5 planet sizes, corresponding to the 5 smallest Goldberg polyhedrons, and **each is
 >   named for its count**: `tiny-12`, `small-32`, `medium-42`, `large-72`, `huge-92`. **The number
@@ -122,14 +124,26 @@ the five surfaces classified, and the eighty words that turned out not to be owe
 
 After `P-540`'s sentence about a trait admitting prose:
 
-> **What the player reads and what the game reads are disjoint.** A quoted value is shown to a
-> person and never compared; **a name is compared and never shown.** So a displayed value that is
-> not prose is a defect, and a compared value that is prose is another.
+> **And the converse holds: a name is compared and never shown.** So what the player reads and
+> what the game reads are disjoint - a displayed value that is not prose is a defect, and a
+> compared value that is prose is another.
 >
-> **This binds the gameplay surfaces and there are two it does not bind.** An **admin or debug**
-> surface shows the machine's words because addressing the machine is what it is for - the
-> console, the data browser, the debug view. And the **rule editor** is the one gameplay surface
-> where the player types names, so it shows them.
+> **Three kinds of surface, and this binds one of them.** It binds every surface that shows the
+> player the game - the map, a territory, a menu, the status bar. It does not bind an **admin or
+> debug** surface, because addressing the machine is what one is for: the console, the data
+> browser, the debug view. And it does not bind the **rule editor**, because the names it shows
+> are the ones the player typed into it.
+
+## Two things this lane changed after you last read it
+
+**The first clause was `P-540`'s sentence said twice.** `P-540` already lands *prose is shown to a
+person and never compared*, and these two blocks sit next to each other in the same section - so
+this one opens on the converse, which is the half that is new.
+
+**And the scope contradicted its own exemption.** It bound *the gameplay surfaces* and then
+exempted the rule editor as *the one gameplay surface* that shows names - which a tool reading the
+rule would resolve the other way. **The three kinds are now named by what they show**, so nothing
+turns on whether the rule editor counts as gameplay, and `P-544` can go on calling it one.
 
 ## What makes it checkable, which is the reason to state it rather than intend it
 
@@ -154,7 +168,7 @@ eighty, and `P-544` is where that lands.
 **What it buys is that a name becomes free to rename.** `tiny-12` to `tiny-twelve` touches no
 display, because no display reads one.
 
-### P-541 - Force, garrison and nature leave the data; biome was never in it
+### P-541 - Force, garrison and nature leave the specification; biome comes back to the data
 
 **to** sean · **status** open · **raised** 2026-09-23 · **kind** recovered · **shape** an instruction · **asks** approval · **into** `spec/future/`, `spec/control.md`, `spec/planet.md`
 
@@ -163,59 +177,50 @@ be somewhere we can reach it for future design, but it should not influence the 
 *the biome is a bit trickier, it doesn't affect game mechanics anymore, but it does affect the
 realistic rendering of the planet and I am not willing to give this up.*
 
-## The first three are half done and the half that is left is prose
-
-**They are already out of the data.** `spec/data/` declares no `force`, `garrison` or `nature` -
-this lane regenerated those files from the cut release on the 21st. **What is left is `spec/`
-prose**, which still states all three as rules of the game:
-
-```
-spec/control.md   ## Force, ## Producing force, and three bullets of Gaining and holding ground
-spec/planet.md    a territory's force of nature
-```
-
-**`P-539` gave you the rule for this**: *a document says what the game is, or it says what the
-game will be, and it says which.* **So these sections move rather than being deleted**, which is
-what *somewhere we can reach it for future design* asks for.
-
 ## What lands
 
-**A new directory, `spec/future/`**, and the three sections move into it whole:
+**A new directory, `spec/future/`**, and the rules move into it whole. **Six places, measured
+rather than remembered** - this lane first wrote two and one of the two was wrong:
 
 ```
-spec/future/force.md      Force, Producing force, and the force clauses of Gaining and holding
-                          ground - taken from spec/control.md
+from                    what moves
+spec/control.md         Force, Producing force, and the force clauses of Gaining and
+                        holding ground
+spec/structures.md      Garrison
+spec/console.md:211     set force <territory> <force>
+spec/turn.md:24         nature takes back what is no longer held
+spec/data/limit.4x:1    {limit container:territory contained:garrison n:1}
+spec/data/biomes.4x     the nature:N field, from five of the six values
 ```
 
-**`spec/control.md` keeps Winning and Losing**, which is what the release builds. **`spec/planet.md`
-loses *a territory's force of nature*** and keeps everything else.
+**`spec/control.md` keeps Winning and Losing**, which is what the release builds.
 
-**Nothing is rewritten.** The sections arrive in `spec/future/force.md` as they are, under a
-heading saying they are not built and what would have to happen for them to be.
+**Nothing is rewritten, with one exception that cannot be moved whole.** `spec/turn.md`'s clause
+is one of five in a single bullet about ending a turn, so it leaves by deletion and the bullet
+keeps the other four. **Everything else arrives in `spec/future/force.md` as it is**, under the
+heading below.
 
-## Biome: the thing you are unwilling to give up is not in the data and never was
+## The last row is where your two answers meet, and it is the only one that needed thinking about
 
-**Measured, and this is the part that changes your answer.** **Four** different things are called
-biome, and two of them are files of that name:
+**`spec/data/biomes.4x` says a biome sets a force of nature** - `{value name:jungle of:biome
+nature:2}`. **That is the mechanical effect you are cutting, written into the fact you are
+keeping**, so the values stay and the field goes:
 
 ```
-spec/data/biomes.4x                 6 value rows        read by nothing
-scenario/commands/biomes.4x         43 lines            compiled into game-front by include_str!
-crates/planet-model/src/biome.rs    enum Biome          the list actually in use
-the terrain field                                       what the drawing samples
+{value name:jungle of:biome}
 ```
 
-**The second one is read and this lane nearly missed it.** A first pass said *every mention of
-`biomes.4x` under `crates/` is a comment or a link*, which was true of `spec/data/biomes.4x` and
-false of the other. `crates/game-front/src/library.rs:22` compiles
-`scenario/commands/biomes.4x` into the binary.
+## Three places keep the words, because they are examples rather than rules
 
-**`planet-render/src/realistic.rs:117` says it in its own comment**: *the biome comes from the
-field, sampled here rather than taken from the model.* **So the realistic rendering does not read
-game data for biome at all** - it reads the terrain, and the terrain is generated.
+```
+spec/console.md:142     `t.nature` as the example of what a path reads
+spec/invariants.md:81   a garrison, twice, as the example of an invariant that reads as a contortion
+spec/README.md:27       the Control row, which stops being accurate
+```
 
-**Every mention of `biomes.4x` in `crates/` is a comment or a link**, not a read. Checked across
-the tree.
+**The first two would have to be rewritten to illustrate the notation with something else**, which
+is work for no gain. **The third is a wrong index entry and this lane's to fix**, needing nothing
+from you.
 
 ## Answered `B2` on 2026-09-23, and the reason is what protects it
 
@@ -234,10 +239,20 @@ which is the state this lane left it in on the 21st by deleting the trait and ke
 
 **And into `spec/planet.md`, beside *each territory has a biome*:**
 
-> **A biome has no mechanical effect and is not dead weight.** It is what the realistic drawing
-> reads to make a territory look like the place it is, so **it earns its place by being shown
-> rather than by being obeyed** - which is a reason to keep a fact that nothing else in this
-> specification has.
+> **A biome earns its place by being shown rather than by being obeyed.** It is what the realistic
+> drawing reads to make a territory look like the place it is - which is a reason to keep a fact
+> that nothing else in this specification has, and the reason a sweep for data no rule reads must
+> not remove it.
+
+## Why it no longer says *no mechanical effect*, which is your words and not this lane's
+
+**Because `spec/planet.md` four lines below it says one.** *No territory can be claimed whose
+biome is ocean* - a rule that reads a biome, in the section this sentence lands in.
+
+**It is out of the release and in the specification**, which is why you are right about the game
+you are building and the sentence was still wrong about the file. **Nothing needs deciding**: the
+clause is gone and the protective half is intact. If you want the ocean rule to leave the
+specification too, that is a separate proposal and this lane has not filed one.
 
 ## Why that sentence and not just the trait row
 
@@ -261,6 +276,17 @@ file's own opening line so a reader knows it is waiting rather than abandoned.
 
 > **These rules are not built and are not abandoned.** They are here because the game wants them
 > once it can be played, and the first release cannot be played while it is building them.
+
+## How to tell it was carried out
+
+**Four assertions, run in the promoting commit.** Every moved line is in `spec/future/force.md`
+byte for byte as its source had it; none of them is still in the source; `spec/data/traits.4x`
+holds the biome row and `spec/data/biomes.4x` holds six values and no `nature`; and both
+quotations above are present where they were offered.
+
+**And the gate goes red until the code lane follows**, because `spec/data/` is what the engine
+loads. **That is expected rather than a surprise**, and `spec/data/limit.4x` losing its only row
+is the part most likely to need them.
 
 
 ### P-540 - One sentence so a test can say what the status bar said

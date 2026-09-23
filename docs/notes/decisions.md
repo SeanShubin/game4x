@@ -26,6 +26,52 @@ ones, for their reasoning.
 
 ## Answered, kept for the reasoning
 
+## The working behind `P-541`, answered `B2` on 2026-09-23
+
+**Not an item** - `P-541` is one proposal and lives in
+[`decide/proposals.md`](../../decide/proposals.md). **These two sections argued for a
+decision that is now made**, and the proposal is shorter without them.
+
+## The first three are half done and the half that is left is prose
+
+**They are already out of the data.** `spec/data/` declares no `force`, `garrison` or `nature` -
+this lane regenerated those files from the cut release on the 21st. **What is left is `spec/`
+prose**, which still states all three as rules of the game:
+
+```
+spec/control.md   ## Force, ## Producing force, and three bullets of Gaining and holding ground
+spec/planet.md    a territory's force of nature
+```
+
+**`P-539` gave you the rule for this**: *a document says what the game is, or it says what the
+game will be, and it says which.* **So these sections move rather than being deleted**, which is
+what *somewhere we can reach it for future design* asks for.
+
+## Biome: the thing you are unwilling to give up is not in the data and never was
+
+**Measured, and this is the part that changes your answer.** **Four** different things are called
+biome, and two of them are files of that name:
+
+```
+spec/data/biomes.4x                 6 value rows        read by nothing
+scenario/commands/biomes.4x         43 lines            compiled into game-front by include_str!
+crates/planet-model/src/biome.rs    enum Biome          the list actually in use
+the terrain field                                       what the drawing samples
+```
+
+**The second one is read and this lane nearly missed it.** A first pass said *every mention of
+`biomes.4x` under `crates/` is a comment or a link*, which was true of `spec/data/biomes.4x` and
+false of the other. `crates/game-front/src/library.rs:22` compiles
+`scenario/commands/biomes.4x` into the binary.
+
+**`planet-render/src/realistic.rs:117` says it in its own comment**: *the biome comes from the
+field, sampled here rather than taken from the model.* **So the realistic rendering does not read
+game data for biome at all** - it reads the terrain, and the terrain is generated.
+
+**Every mention of `biomes.4x` in `crates/` is a comment or a link**, not a read. Checked across
+the tree.
+
+
 ## The working behind `P-542`, answered `L3` and `S3` on 2026-09-23
 
 **Not an item** - `P-542` is one proposal and lives in

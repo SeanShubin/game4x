@@ -11,7 +11,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **P-542** - `generate-planet`, and a size named for its count · `decide/proposals.md`
 - **P-544** - The rule editor is for automation, and the game needs neither it nor typing · `decide/proposals.md`
 - **P-543** - What the player reads and what the game reads are disjoint · `decide/proposals.md`
-- **P-541** - Force, garrison and nature leave the data; biome was never in it · `decide/proposals.md`
+- **P-541** - Force, garrison and nature leave the specification; biome comes back to the data · `decide/proposals.md`
 - **P-540** - One sentence so a test can say what the status bar said · `decide/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
