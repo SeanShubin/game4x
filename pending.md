@@ -35,7 +35,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **P-540** - `294cb85` P-540: one notation or two, and my own precedent check narrowed the case against · still open in `decide/proposals.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
-- **X-38** - `fec232b` X-38: the route is drawn on the sphere, and the lens's unmeasured number is measured · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
@@ -56,7 +55,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **Q-96** - A test is named for two numbers nothing states, and its argument lives in another file · `lenses/quality/outbox.md`
 - **Q-93** - The prototype's backlog says the sum blocks storage, and the sum shipped in the commit that said so · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
-- **X-38** - the route is drawn as straight chords, and all 240 of them pass under the planet · `lenses/research/outbox.md`
+- **X-39** - the border's midpoint is not where the step is lowest, and the test says it is · `lenses/research/outbox.md`
 
 ### To research (2)
 

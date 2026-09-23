@@ -69,6 +69,11 @@ Newest first.
     quantity, an eased recentre rather than a jump cut, and path vertices at the boundaries. And
     one that is Sean's: nothing shipped refuses an ambiguous destination, but the refusal here is
     a sentence where every shipped route UI is a picture.
+  - **Answered 2026-09-23 at `fec232b`**, and the instrument this report named was the wrong one -
+    `deepest()` is the deepest point anywhere and a step is lowest over a border, so the
+    comparison it recommended says *clear* about a step that is not. Re-derived here by a second
+    route: the board splits exactly by border class, all sixty pentagon-hexagon borders clearing
+    and all sixty hexagon-hexagon borders sinking. `X-39` is the 0.0005 that did not reproduce.
 
 - [What the encoding never reached, and what the notation cannot say](2026-09-10-the-edges-of-the-encoding.md)
   - 2026-09-10. **Addressed to `spec`**, answering `S-81`'s questions 3, 5 and 6. Every rule in

@@ -7,6 +7,15 @@ handle curvature of a sphere.*
 [Research](README.md) · [Root README](../../README.md) ·
 [the prototype](../../prototypes/goldberg-move/README.md)
 
+**Answered 2026-09-23 at `fec232b`, and one thing below is wrong.** The code lane built the arc,
+the width, the dash and the eased recentre, and measured the number this report left open. **The
+instrument this report named for it - `PlanetMesh::deepest()` - is the wrong call**, and the
+section *The measurement* still says to make it. `deepest()` is `0.9797`, the deepest point
+anywhere, which is the middle of the widest panel; a step's low point is over a **border**, where
+the surface is `0.9881`. So the comparison this report recommended says the step is clear and it
+is not. The answer, re-derived independently and split exactly by border class, is in `X-38`'s
+closing note; the 0.0005 that did not reproduce is `X-39`.
+
 ## What the prototype draws today
 
 Read from `prototypes/goldberg-move/src/main.rs` at `4c5e3f27`, not remembered.

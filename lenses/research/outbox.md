@@ -1515,7 +1515,7 @@ the thing to decide about, and no arrangement of hexes changes it.
 
 ### X-38 - the route is drawn as straight chords, and all 240 of them pass under the planet
 
-**to** code · **status** open · **raised** 2026-09-21 · **source** Sean, asking what modern games do to represent a movement intention and whether they handle the curvature of a sphere · **found by** measuring what `draw_the_route` puts on screen, after reading what the practice does instead
+**to** code · **status** **acted** 2026-09-23 · `fec232b` — `board::along` replaces the chord with spherical interpolation at eight segments a step, computed apart from the drawing so a test can reach it; the route now runs through each border rather than centre to centre; the line is 4 px and dashed and the recentre eases. `the_arc_clears_every_border_it_crosses` is the check that did not exist before, and it was **driven rather than argued** - at one segment it reduces to the old chord and fails. Verified here by re-deriving the geometry a second way rather than reading the commit: see the closing note below · **raised** 2026-09-21 · **source** Sean, asking what modern games do to represent a movement intention and whether they handle the curvature of a sphere · **found by** measuring what `draw_the_route` puts on screen, after reading what the practice does instead
 
 **The defect is one call and the repair is one call.** `prototypes/goldberg-move/src/main.rs:257`
 joins two territory centres with `gizmos.line`, which is a straight chord in three dimensions, and
@@ -1573,6 +1573,95 @@ adds a concept the prototype does not have. **Two eventually**: path vertices at
 well as the centres, and the far side, where recentring is one of three shipped answers. **One
 noted and deliberately not**: drawing the ambiguity instead of counting it, which changes what the
 prototype asks.
+
+## Closed, and the instrument this item recommended was the wrong one
+
+**The code lane answered the number this item left open, and in doing so refuted the way it
+told them to get it.** This item said *`PlanetMesh::deepest()` already computes exactly that
+number - one call, where this lane would be guessing.* It does not. `deepest()` is **0.9797**,
+the deepest point *anywhere*, which is the middle of the widest panel - and a step's low point
+is not there. It is over the **border between two territories**, where the surface is much
+higher. Comparing a step's low of `0.9843` against `0.9797` says the step is clear, and the
+step is not clear.
+
+**That is this lane's own named failure class, aimed at itself**: the instrument answers a
+narrower question than the one asked, and returns a plausible number rather than an error. The
+item was right to refuse to guess and wrong about which call to make.
+
+**Re-derived here rather than taken.** `tools/research/border-clearance.py` rebuilds the eighty
+corners as Voronoi circumcentres of the forty-two seeds and measures every border, independently
+of `sphere-tessellation`. It reproduces three of the code lane's four figures exactly:
+
+| quantity                         | code lane | here        |
+| -------------------------------- | --------- | ----------- |
+| borders under, of 240 directed   | 120       | **120**     |
+| lowest surface over any border   | 0.9809    | **0.9809**  |
+| highest a step clears its border | +0.0148   | **+0.0148** |
+| deepest a step sinks under it    | -0.0033   | **-0.0038** |
+
+**And the structure both numbers hide is an exact split.** There are two border classes and
+nothing between them: the sixty pentagon-hexagon borders are `31.717` degrees apart and every
+one of them **clears** by `+0.014751`; the sixty hexagon-hexagon borders are `36.000` degrees
+apart and every one of them **sinks** by `-0.003791`. Not *half the board* as a coincidence of
+counting - one whole class passes and the other whole class fails.
+
+**The fourth figure differs, and the cause is exact rather than numerical.** See `X-39`.
+
+**What this item got right and wrong, recorded so neither is guessed at later.** Right: that the
+chord sinks, that it is all 240 steps, that the repair is spherical interpolation, and that the
+panel question needed a producer rather than a lens. Wrong: the instrument. The three settings -
+width, dash, eased recentre - all landed as offered.
+
+
+### X-39 - the border's midpoint is not where the step is lowest, and the test says it is
+
+**to** code · **status** open · **raised** 2026-09-23 · **source** re-deriving `X-38`'s answer in `fec232b` and finding three figures of four reproduce · **found by** chasing a 0.0005 disagreement instead of rounding it away
+
+**Where.** `prototypes/goldberg-move/tests/curvature.rs:151-157`, and the same construction again
+at `:257`.
+
+**What.** The surface over a border is sampled at **the midpoint of the two corners** - *where the
+drawn surface is over the middle of that border*. On a hexagon-hexagon border the step's low point
+does not project there. It projects to **`t = 0.401077`** along the border, and the two radii
+differ: `0.987649` at the midpoint against `0.988135` where the step actually crosses.
+
+**Why this is worth one line rather than a fix.** It understates the deepest sag by **`0.00049`**,
+which is 13% of the figure:
+
+| measured at                         | gap                     |
+| ----------------------------------- | ----------------------- |
+| the border's midpoint, `t = 0.5`    | `-0.003305085682482001` |
+| where the step's low point projects | `-0.003791461139841079` |
+
+**The commit reports `-0.003305085682482445`**, which agrees with the midpoint figure to twelve
+significant figures and differs from it by `4e-16`. So this is not noise and not a different
+board - it is the same quantity measured at a point that is not the extremum.
+
+**Nothing concludes differently, and that is measured rather than assumed.**
+`tools/research/border-clearance.py` gets the same **120 of 240** by the other route, and the same
+exact class split - all sixty pentagon-hexagon borders clear, all sixty hexagon-hexagon borders
+sink. The sign never changes, so no count moves.
+
+**The part that is a premise rather than a number.** The test's own comment at `:265` says *the
+midpoint of each segment is where this has to look*. On the **arc** that is right, because a
+segment's chord is lowest at its own midpoint. On the **border** it is not, and the two sentences
+sit four lines apart doing different work. **A future change could make the gap matter** - a
+smaller `ABOVE`, a different solid, or a segment count chosen against a measured margin rather
+than a visual one - and the comment would still read as though the sample point had been
+established.
+
+**Whether. Noted, and not worth doing now.** The repair clears by roughly two orders of magnitude
+more than this error, so nothing it asserts is at risk - *measured: the error is `0.00049` and the
+split is unchanged; inferred, because this lane did not run the suite: that the arc's margin is
+around `0.046`.* What would be worth doing, if anything, is deleting the word *middle* rather than
+moving the sample - the number is fine as a characterisation and only the premise is wrong.
+
+**And the symmetry is the reason this is filed at all.** `X-38` told this lane to call
+`deepest()`, which answers a narrower question than the one asked and returns a plausible number;
+the code lane caught it. This is the same class, four lines away, in the other direction. **Twice
+on one item in two days, in both lanes** - which is `CLAUDE.md`'s *the instrument answers a
+narrower question than the one asked* earning its place again rather than being explained by the
+case that produced it.
 
 
 ## Resolved
