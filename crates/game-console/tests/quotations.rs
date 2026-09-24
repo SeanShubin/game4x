@@ -95,23 +95,52 @@ const OURS: [&str; 5] = ["crates", "prototypes", "scripts", "tools", "hooks"];
 /// goes stale in another lane's tool directory is caught by nothing here. That is a real loss
 /// and it is not evenly spread.
 ///
-/// Counted 2026-09-24 over the Rust files of each, asking how many lines name a file of the
-/// specification, of a release or of the documentation:
+/// Counted 2026-09-24, asking how many lines name a file of the specification, of a release
+/// or of the documentation - **split by whether this sweep reads that extension at all**,
+/// since it takes `rs`, `md`, `html`, `sh` and `ps1` and nothing else:
 ///
-/// - `tools/spec` - 55 such lines, 6 of which open an emphasis span after the name
-/// - `tools/research` - none, and none
-/// - `tools/quality` - none, and none
+/// | | in an extension this reads | opening a span | in one it never reads |
+/// | - | - | - | - |
+/// | `tools/spec` | 55 | 6 | 0 |
+/// | `tools/research` | 3 | 0 | 54 |
+/// | `tools/quality` | 0 | 0 | 0 |
 ///
-/// **So the whole of the loss is one lane's**, and the two lenses would be instruments over a
-/// population of zero. It becomes real for a lens the first time one of them quotes the
-/// specification in a tool of its own.
+/// **So what the exclusion costs is `tools/spec`'s**, and what a wider extension list would
+/// cost is the research lens's - 54 lines of Python and JSON that nothing here would read
+/// even if the directory were swept. The two are different losses and only the first is this
+/// change's.
 ///
-/// **The quality lens counted the same thing and got 57 and 9.** The zeros agree exactly and
-/// the two larger figures do not, because the predicates differ rather than the data: this one
-/// wants a name ending `.md` and an emphasis marker later on the same line, and a doc comment
-/// that wraps puts the marker on the next one. **Neither number is the number**, and the
-/// figures are kept here with what was asked rather than reconciled into one that claims more
-/// than either measured.
+/// # What the instrument says, which is one
+///
+/// **Every number above counts lines with the shape, and none of them counts a finding.**
+/// Measured by turning the exclusion below off and running this test over all three
+/// directories: it reports **one**. A line naming a file of the specification is a candidate;
+/// a failure is a candidate whose quoted words are no longer in that file, and almost all of
+/// the 55 quote something that is still there.
+///
+/// **So the cost of excluding these three, today, is one stale quotation** - the one that
+/// reddened the gate and prompted all of this. **What the exclusion gives up in future
+/// coverage is not measured here**, because that would need a count of the quotations this
+/// verifies rather than of the lines it might, and nothing reports that.
+///
+/// # Four predicates, three lanes, and the instrument was not asked until last
+///
+/// **This counted 55 and 6, the quality lens 57 and 9, the specification lane 10, and the
+/// checker itself 1.** The first three are true numbers about sets the checker never reads,
+/// each arrived at by pattern-matching a directory instead of running the thing under
+/// discussion. **A population is defined by its instrument and not by its directory**, and
+/// three lanes measured the directory.
+///
+/// **A first count here said the research lens had none, and that was a filter reported as a
+/// finding.** It globbed Rust files and that lens has no Rust at all. The filter was stated
+/// and the conclusion drawn from it - *a population of zero* - was not true of the
+/// population. The specification lane is who said the research lens is not zero.
+///
+/// **And the span counts differ for a reason none of the three hypotheses named.** The one
+/// candidate in the research lens is a file name followed by an *italic* quotation, and this
+/// count asked for a bold marker - so the measure written to find the trigger did not match
+/// the trigger. The figures are kept with what each asked rather than reconciled, because
+/// what they disagree about is the question.
 fn other_lanes() -> Vec<String> {
     let mut out = vec!["spec".to_string()];
     if let Ok(entries) = std::fs::read_dir(root().join("lenses")) {
