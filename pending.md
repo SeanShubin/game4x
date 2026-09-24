@@ -23,17 +23,13 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-158** - `58add27` S-158: the asks check reads the open items of the two files that are queues · still open in `docs/notes/proposals.md`
-- **S-157** - `1be88be` S-157: the gate follows P-541, measured rather than assumed · still open in `docs/notes/proposals.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (14)
+### To code (12)
 
-- **S-158** - `misfiled_by_asks` routes closed items, and its two files are the ones from before `decide/` · `docs/notes/proposals.md`
-- **S-157** - `P-541` changed `spec/data/` three ways, and one of them withdraws half of `S-144` · `docs/notes/proposals.md`
 - **S-155** - A bad planet size does not say what was expected, which is a rule rather than a courtesy · `docs/notes/proposals.md`
 - **S-152** - `P-519` deleted a sentence `first_release.rs` quotes, and the gate is red on it · `docs/notes/proposals.md`
 - **S-151** - `fully exploited` is now a term the specification does not define, and you implement it · `docs/notes/proposals.md`

@@ -114,7 +114,7 @@ explanation stays**, with the diagram and the layer discussion where they are.
 
 ### S-158 - `misfiled_by_asks` routes closed items, and its two files are the ones from before `decide/`
 
-**to** code · **status** open · **raised** 2026-09-23 · **source** `hooks/pre-commit` firing on three withdrawn items this lane moved into the record
+**to** code · **status** acted · **acted** 2026-09-23 · **cited** `58add27b` · **raised** 2026-09-23 · **source** `hooks/pre-commit` firing on three withdrawn items this lane moved into the record
 
 **It fires on three items and all three are correctly placed.**
 
@@ -179,7 +179,7 @@ three offences that are not offences.
 
 ### S-157 - `P-541` changed `spec/data/` three ways, and one of them withdraws half of `S-144`
 
-**to** code · **status** open · **raised** 2026-09-23 · **source** `P-541`, promoted
+**to** code · **status** acted · **acted** 2026-09-23 · **cited** `1be88be2` · **raised** 2026-09-23 · **source** `P-541`, promoted
 
 **Filed the moment it landed**, because `spec/data/` is what the engine loads.
 
@@ -203,9 +203,17 @@ entry, so the rewritten test is unaffected by this promotion. `S-144` is closed.
 
 ## What this lane has not measured
 
-**Whether the gate is red.** Three data files changed and this lane has not run the suite; the
-figure that matters is yours and takes about fourteen minutes. **Expect red rather than assume
-it** - `CLAUDE.md` says a promotion into data the code generates from makes the gate red until the
+**Whether the gate is red - answered by the code lane in `1be88be2`: it was.** Seven tests across
+four targets, fixed and re-measured at 89 targets green with clippy clean. **Two counts re-derived
+here rather than taken**: `spec/data/traits.4x` has 24 trait rows and 17 carry `kept:thing`, where
+`P-522` left 23 and 16.
+
+**And the deferral they found is the more interesting half.** `spec/data/traits.4x` and the
+release's Traits table have stopped being the same length, which is correct rather than broken -
+the file declares `biome` because the drawing needs it and the table omits it because this release
+has no biomes. **The equality became a named difference that fails in both directions.**
+
+**What this lane originally wrote here** - `CLAUDE.md` says a promotion into data the code generates from makes the gate red until the
 code follows, and saying so is this item.
 
 ## And force, garrison and nature left `spec/` proper
