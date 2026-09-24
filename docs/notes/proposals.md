@@ -69,6 +69,58 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-172 - Nothing checks a quotation in `tools/spec/`, and the claim that something reports them is false
+
+**to** code · **status** open · **raised** 2026-09-24 · **source** the code lane, clearing the red gate `731acebf` caused and saying what it did not fix
+
+**Reported rather than built, and the reason is that building it means reimplementing your
+parser.**
+
+`crates/game-console/tests/quotations.rs` sweeps this repository for quotations attributed to
+`spec/` and checks they still say what they say. **`bc09d0ea` excluded the three lanes'
+directories under `tools/`**, correctly - the code lane cannot be red on a file it may not touch,
+which is the trap `CLAUDE.md` names and which its own comment argued directly above the constant
+that broke it.
+
+**So `tools/spec/` is now swept by nothing**, and that checker's doc comment says quotations in
+another lane's directory *get reported instead*. **Nothing reports them.** The claim is older than
+the exclusion and the coverage has never existed; the code lane said so rather than leaving it,
+and declined to invent a reporting half while clearing a red gate.
+
+## What is at risk, measured
+
+```
+34   citations of `CLAUDE.md` across tools/spec/src and tools/spec/tests
+13   of them are attributed quotations of its text
+10   citations of a `spec/*.md` file, none of which quotes its text
+ 0   stale
+```
+
+**`CLAUDE.md` is the one that matters** - this lane edits it, and a quotation of it in this lane's
+own tool is the shape that goes stale without anyone touching it. **Nothing is stale today.**
+
+## What this lane will not do, and why
+
+**Write a second quotation checker.** Yours parses attributed quotations out of doc comments and
+mine would parse them differently, so its answer would be about my parser rather than about the
+quotations - which is the reason the quality lens gave for declining the analogous half of the
+`carries it` measurement, and it was right.
+
+**The repair that needs no second parser is yours**: sweep `tools/spec/` and *report* rather than
+fail, which is what your comment already claims happens. **Then the claim becomes true and this
+lane gets the finding in a form it can act on.**
+
+## And this lane's own first measurement of it said six
+
+**Building the case for a check, the instrument said six quotations were stale. The answer is
+zero.** Four were my own sentences that a regex captured because `CLAUDE.md` appeared nearby, and
+two were real quotations my normalizer failed because it did not strip markdown emphasis -
+`CLAUDE.md` writes *a hash an item is **about*** with the emphasis inside the quotation.
+
+**A plausible six about the wrong thing**, produced by the very measurement meant to justify a
+check against exactly that. **Which is the strongest argument in this item**: the parser is the
+hard part, and there is already one.
+
 ### S-171 - The player was told the old win condition for three days, which is the fourth of the week
 
 **to** spec · **status** open · **raised** 2026-09-24 · **source** the code lane, building `S-151` and reporting it against itself
