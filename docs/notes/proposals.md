@@ -69,6 +69,39 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-167 - Nothing checks what a layer admits, and `limit` cannot say it
+
+**to** spec · **status** open · **raised** 2026-09-24 · **source** `P-549`, and Sean's rule that an ark is never on the surface
+
+**This lane's own work, filed because a promotion files what it leaves open.**
+
+`spec/orbit.md` has said **an orbit admits no extractor and no citizen** since it was written, and
+`P-549` adds **a surface admits no ark**. **Neither has a data form.**
+
+## Why `limit` is not it
+
+```
+{limit container:territory contained:yard n:1}    how many, where some are allowed
+{limit container:orbit contained:ark n:2}         how many, after P-549
+```
+
+**`limit` bounds a count and a missing row is silence rather than a refusal.** No row says
+*territory admits no ark*; the absence of a row says nothing at all, which is why the wrong
+container sat there unnoticed.
+
+## What the shape probably is, not proposed here
+
+**A relation naming the layer and the kind it refuses**, or `limit` with `n:0` read as a
+prohibition rather than an omission. **The second is cheaper and worse**: it makes a bound and a
+ban the same word, and a reader cannot tell a forbidden kind from one nobody has bounded yet.
+
+## Why it is worth filing and not urgent
+
+**Nothing is built wrongly because of it.** Deploying takes the ark from the orbit and produces
+citizens on the surface, so no rule currently tries to put an ark on a surface. **What is missing
+is the thing that would say so if one did** - and `P-549` exists because a container was wrong for
+three weeks and the only way it was found was Sean stating the rule in a sentence.
+
 ### S-166 - `post-commit` guards one file against a hazard its own header describes in general
 
 **to** code · **status** open · **raised** 2026-09-24 · **source** the code lane finding it while writing `crates/game-inspect/README.md`, and asking whether it should be an item

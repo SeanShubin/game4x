@@ -11,6 +11,52 @@ of it needs you.
 
 ## Open
 
+### P-549 - An ark is never on the surface, which makes one row of the data wrong
+
+**to** sean · **status** open · **raised** 2026-09-24 · **kind** recovered · **shape** an instruction · **asks** approval · **into** `spec/orbit.md` -> The layers, `spec/data/limit.4x`, and `releases/first-release.md` -> What bounds a kind
+
+**You answered `K1` and added a rule.** *Yes launching leaves the ark in orbit. We spend materials
+from the surface and end up with an ark in orbit. **An ark is never on the surface.*** That last
+sentence is not in `spec/` and it makes something wrong that this item had not looked at.
+
+## What lands
+
+**Into `spec/orbit.md`, beside *an orbit admits no extractor and no citizen*:**
+
+> **An ark is never on the surface.** Launching spends materials from the surface and ends with an
+> ark in orbit; deploying spends the ark and ends with citizens and extractors on the surface. **A
+> surface admits no ark**, which is the layer rule above said from the other side.
+
+## And one row of the data is wrong, which is the instruction
+
+```
+is    {limit container:territory contained:ark n:2}
+to    {limit container:orbit contained:ark n:2}
+```
+
+**`orbit` is a kind and a member of the `place` family**, so the row is expressible as it stands.
+**And `releases/first-release.md` says *an ark: a capacity of 2* under what bounds a kind**, which
+follows the container rather than stating a different number.
+
+**Nothing else changes.** The release and `spec/data/line.4x` already produce an ark above
+`$where`, which is what you confirmed - so `K1` needed no correction to either.
+
+## How to tell it was carried out
+
+**Three assertions.** The sentence is present in `spec/orbit.md`; `limit.4x` holds four rows with
+the ark's container reading `orbit` and no row containing `contained:ark` under `territory`; and
+the release's capacity row names the orbit.
+
+**The gate goes red until the code follows**, because `spec/data/` is what the engine loads and a
+container that moves changes where the engine looks. **Said in the same breath as the rule**, and
+the lane that has to fix it is not the only lane the gate stops.
+
+## What this leaves open, filed rather than noted
+
+**Nothing checks what a layer admits.** `spec/orbit.md` has said *an orbit admits no extractor and
+no citizen* for weeks with no data form, and this sentence joins it. **`limit` bounds how many, not
+which** - a container with no row for a kind is silent rather than forbidding. Filed as `S-167`.
+
 ### P-550 - A check that pins the present state cannot report a gap against what should be
 
 **to** sean · **status** open · **raised** 2026-09-24 · **kind** measured · **shape** text · **asks** approval · **into** `CLAUDE.md` -> What done means
