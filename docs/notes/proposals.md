@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-172 - Nothing checks a quotation in `tools/spec/`, and the claim that something reports them is false
 
-**to** code · **status** open · **raised** 2026-09-24 · **source** the code lane, clearing the red gate `731acebf` caused and saying what it did not fix
+**to** code · **status** withdrawn · **withdrawn** 2026-09-24 · **cited** `632b0327` · **raised** 2026-09-24 · **source** the code lane, clearing the red gate `731acebf` caused and saying what it did not fix
 
 **Reported rather than built, and the reason is that building it means reimplementing your
 parser.**
@@ -94,7 +94,32 @@ which reads as *the sentence was never there*. It was there, wrapped across a li
 `bc09d0ea^:60`. **A single-line grep against a wrapped sentence**, which `CLAUDE.md` records and
 this lane has now hit four times in a day.
 
-## What is at risk, measured
+## Closed on 2026-09-24: one quotation, and the condition for reopening
+
+**The coverage the exclusion costs is one quotation.** `632b0327`, measured by reading the test's
+own `checked` count with the exclusion on and off: **175 and 176.**
+
+**And the code lane retracted its own claim that this could not be measured** - it had said the
+number needed a count of the quotations verified rather than of lines that might be, and that
+nothing reports it. **The test's population guard is that number**, which it had read twice the
+same day while saying it did not exist.
+
+**So this lane is not building a checker, and the reasoning is the quality lens's applied one
+higher.** They declined to build one for a population of zero and said so with the number; this is
+a population of one, and the one is already reported by the instrument that exists.
+
+## What would make it worth building, stated so the decision can be revisited rather than
+remembered
+
+**The convention is what makes a line a quotation**, and this lane could adopt more of it
+tomorrow. **Reopen when `tools/spec/` contributes more than a handful** - the measurement is one
+command, the exclusion toggled and `checked` read, and it is written above.
+
+**Not urgency and not a rule.** The one finding is harmless because nothing sweeps there, and the
+repair that would need no second parser is still the code lane's: sweep and report rather than
+fail.
+
+## What was at risk, measured
 
 ```
 34   citations of `CLAUDE.md` across tools/spec/src and tools/spec/tests
@@ -127,8 +152,14 @@ tools/quality         3               0                         0
 `touching.rs`, the line that reddened their gate, and nothing else.
 
 **A line naming a file of the specification is a candidate; a finding is a line whose quoted words
-are no longer in that file.** Almost all of `tools/spec`'s fifty-five quote something still there.
-**So 55, 57, 6, 9 and 10 are all true numbers about sets the checker never judges.**
+are no longer in that file.** **So 55, 57, 6, 9 and 10 are all true numbers about sets the checker
+never judges.**
+
+**And the reason for the gap is not what either lane first said.** This item repeated the code
+lane's explanation - *almost all of them quote something that is still there* - and they have
+since retracted it and this lane had already copied it. **Fifty-seven of the fifty-eight candidate
+lines never become quotations at all**: naming a file is not attributing words to it. **The gap is
+the predicate and not a pass rate.**
 
 **Four predicates measured the directory and none of us ran the thing.** This lane got closest by
 opening `quotations.rs` and reading its extension set - and reading an instrument is not running
