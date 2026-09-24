@@ -208,3 +208,47 @@ haul** - so a unit arrives with nothing. The code lane built the table and says 
 build the general rule. **Whether hauling fires in this release is a separate question** and this
 proposal does not ask it; under `F1` an Ark is unaffected, because the orbit it arrives in has its
 own income.
+
+### P-553 - Does winning need the deploy before the launch? Your sentence does not say, and a release line assumes it does
+
+**to** sean · **status** open · **raised** 2026-09-24 · **kind** entailed · **shape** a decision · **asks** a decision · **into** `spec/control.md` -> Winning, or `releases/first-release.md` -> `R-6`
+
+**One question, and it exists because the code lane declined to assume an answer.**
+
+## The three statements
+
+```
+spec/control.md      A player wins by deploying an Ark to one territory and launching an
+                     Ark from a different one.
+releases/... R-6     victory takes a launch from a territory other than the one the Ark
+                     deployed to
+the model            won latches after either act, and a test fires them both ways round
+```
+
+**Your sentence names two acts and says nothing about which comes first.** `R-6`'s *vetted when* -
+this lane's wording, not yours - says *the one the Ark deployed to*, **which presupposes the deploy
+already happened.** The model permits either order.
+
+## The two answers
+
+**`W1` - either order wins.** Launching from territory 1 and later deploying to territory 2 is a
+win. **`R-6`'s line is this lane's to reword**, since it assumed more than your rule says.
+
+**`W2` - the deploy comes first.** *A player wins by launching an Ark from a territory other than
+one an Ark has been deployed to* - one sentence, and `R-6` is already right.
+
+## What this lane would say, and it is weak
+
+**`W2` reads like the game you described** - *start with an ark, develop a planet, launch an ark* -
+where leaving comes last. **But `W1` is what your sentence says**, and a rule that means less than
+it says is the safer of the two mistakes to leave standing.
+
+**So this is genuinely yours.** The narrative points one way and the promoted words point the
+other, and this lane will not pick between your fiction and your sentence.
+
+## Why it is worth asking at all
+
+**It changes what the game does**, not only what a document says: under `W1` a player can win
+without ever developing the second territory they launch from. **And the code is already built
+either way** - `won` latches after either act today, so `W2` is a condition added and `W1` is
+nothing to do.

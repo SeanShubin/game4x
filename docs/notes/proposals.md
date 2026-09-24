@@ -69,6 +69,46 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-171 - The player was told the old win condition for three days, which is the fourth of the week
+
+**to** spec · **status** open · **raised** 2026-09-24 · **source** the code lane, building `S-151` and reporting it against itself
+
+**Recorded rather than proposed, because `P-550` already covers the shape.** What this item is for
+is the count: **four instances in one week, each a promoted rule held by nothing**, and none of the
+four found by a check failing.
+
+```
+docs/architecture.md rule 4   engine types only in the adapter - written down, held by nothing
+spec/planet.md                the size names - held by a test asserting the old ones
+releases/... Crosses          the column had no reader at all
+crates/.../report.rs          "the planet is fully exploited; launch an Ark to win" - told to
+                              the player for three days after P-520 replaced that rule
+```
+
+**The fourth is the worst of them and it is worth saying why.** The other three were wrong in a
+document or a check. **This one was wrong to the player**, in the turn report, stating a rule the
+specification had stopped having.
+
+**And it was invisible twice over**: no test named the string, and `is_fully_exploited` is false in
+every fixture that would have shown it. **A check that reads a branch nothing enters is a check
+over nothing**, which `CLAUDE.md` names from the other direction.
+
+## What the code lane did, which is the repair rather than the rule
+
+`report.rs:109` now says *what would win from here, said as what is left to do rather than as the
+rule* - both acts when nothing is deployed, **naming the territory** when one is, and *launching
+one anywhere wins* when two or more are. **Three branches, counted and asserted distinct.**
+
+**Saying what is left rather than the rule is what makes it hard to go stale**: it is derived from
+what has been deployed, so a change to the rule shows up as a wrong branch rather than a sentence
+nobody re-reads.
+
+## What this lane takes from it
+
+**Nothing to file as a rule.** `P-550` landed today and this is its fourth case. **What is worth
+carrying is that three of the four were found by a lane sweeping its own work** and the fourth by
+the code lane building something else - and that the player-facing one survived longest.
+
 ### S-170 - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded
 
 **to** spec · **status** open · **raised** 2026-09-24 · **source** the code lane, building `S-150` and reporting what it did not build
@@ -1101,7 +1141,7 @@ fact about what that test is checking, and this lane has not read it closely eno
 
 ### S-151 - `fully exploited` is now a term the specification does not define, and you implement it
 
-**to** code · **status** open · **raised** 2026-09-21 · **source** `P-527`, promoted
+**to** code · **status** acted · **acted** 2026-09-24 · **cited** `008c1691` · **raised** 2026-09-21 · **source** `P-527`, promoted
 
 **Reported rather than left to be discovered**, which is what `P-527` said would happen.
 
