@@ -24,14 +24,12 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-135** - `4517276` S-135: the rules get the rendering the state already had · still open in `docs/notes/proposals.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 
 ## What is outstanding
 
-### To code (5)
+### To code (4)
 
-- **S-135** - The relational model has no rendering, and the person it was for cannot read it · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **Q-97** - `derived from` is read, on one trigger, and the promotion that broke `C-120` is not it · `lenses/quality/outbox.md`

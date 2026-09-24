@@ -2158,7 +2158,7 @@ engine run the game from data?* - and that entry is this lane's to write from wh
 
 ### S-135 - The relational model has no rendering, and the person it was for cannot read it
 
-**to** code · **status** open · **cited** `87a8fc0` · **raised** 2026-09-14 · **source** Sean, on being shown `{line …}` rows: *I am less familiar with "line", "block", and "constraint". Are these data rows rather than commands?*
+**to** code · **status** acted · **acted** 2026-09-24 · **cited** `45172760` · **cited** `87a8fc0` · **raised** 2026-09-14 · **source** Sean, on being shown `{line …}` rows: *I am less familiar with "line", "block", and "constraint". Are these data rows rather than commands?*
 
 **`P-497` normalized `spec/data/` on an argument about reviewing**, in Sean's own words: *I find
 normalized data a lot easier to review because it makes the relationships apparent and has less
@@ -6856,6 +6856,26 @@ own command, and `move` and `found by land` are two, which is the cost this item
 time this paragraph has gone stale without anybody editing it. The world's are fifteen.
 **The numbers above are the state on 2026-09-03** and are left as written rather than edited,
 because what the item recorded is what was true then.
+
+## Stale a third time on 2026-09-24, and it went back to what it first said
+
+**Ten player recipes and ten commands.** `P-511` deleted `refuel` and `C-112` was withdrawn in
+`08cedac5` - the recipe went rather than the gap closing - so the one-for-one this paragraph
+records as broken holds again.
+
+```
+2026-09-03   ten and ten, one-for-one
+later        eleven and ten, refuel the exception
+2026-09-24   ten and ten, one-for-one
+```
+
+**Reported by the code lane, who found it building something else.**
+`crates/game-console/tests/first_release.rs` says it in its own words: *no recipe is exempt from
+having a command since `P-511`*.
+
+**Three staleness events, no edits, and the sentence read correctly throughout** - which is why
+this item now carries its own history rather than a current number. **A number an item derives
+names the rule it came from**, and this one's rule has now moved twice in opposite directions.
 
 **`P-213` is the only live half.** A kind can be written down - `spec/data/kinds.4x` - and nothing
 fires a definition as a transition, so *arrives in one transition* still has nothing to test

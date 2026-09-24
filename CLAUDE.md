@@ -690,8 +690,8 @@ scoping ids and poles out of it. **Firing too often is the correct error here**:
 re-reading ten bullets, and the miss cost two days.
 
 **A promotion can withdraw a finding as easily as it can create work, and both need saying.** After
-promoting, check the index for open items that cite the destination file - `outbox` lists them - and
-tell their owner. **A rule that moves under an open item makes it wrong without touching it**, and
+promoting, check the index for open items that cite the destination file - `spec touching <file>`
+lists them, over every outbox - and tell their owner. **A rule that moves under an open item makes it wrong without touching it**, and
 nothing else will notice: the item still reads correctly, its evidence is still quoted accurately, and
 only its conclusion has stopped being true.
 
