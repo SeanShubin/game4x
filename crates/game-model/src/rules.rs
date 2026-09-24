@@ -31,7 +31,7 @@
 //! and bounding the stores - are stated in no row, because the release bounds a store by *as
 //! many as the extractors of its resource*. `C-114` counts eight such relationships in twelve.
 
-use crate::game::cost;
+use crate::game::{Recorded, cost};
 use crate::identity::{Resource, StructureKind, TerritoryId, UnitId, UnitKind};
 use crate::rejection::Rejection;
 use crate::territory::{Deposit, Garrison, Territory};
@@ -211,7 +211,15 @@ impl Game {
             brought,
             &[Resource::Food, Resource::Metal],
             2,
-        )
+        )?;
+        // **Deploying is half the win condition** - `spec/control.md`: *a player wins by
+        // deploying an Ark to one territory and launching an Ark from a different one.* Which
+        // territory took its Ark cannot be read off the state afterwards, because `found by
+        // land` leaves the same two citizens and two extractors, so it is recorded here.
+        //
+        // **Recorded after the founding rather than before**, so a refusal records nothing.
+        self.record(Recorded::DeployArk, territory);
+        Ok(())
     }
     /// `launch ark`: an Ark's cost is paid at a Yard, and an Ark is what comes back.
     ///
@@ -241,12 +249,24 @@ impl Game {
     /// meet the condition - and paying first would take two citizens off it. That is true of
     /// either condition and is why the order is what it is.
     ///
-    /// **`P-527` cut the definition of *fully exploited* out of `spec/control.md`, and `P-520`
-    /// replaced the win condition with it.** The specification now says: *a player wins by
-    /// deploying an Ark to one territory and launching an Ark from a different one.* **This
-    /// code still implements the old one**, which is a divergence rather than a stale comment -
-    /// reported as `S-151` and left, because changing what winning means reseeds
-    /// `scenario/expected/play.4x` and moves `R-6`, and neither is this lane's to decide.
+    /// # What winning stopped being, and `S-151` is the catching up
+    ///
+    /// **`P-527` cut the definition of *fully exploited* out of `spec/control.md` and `P-520`
+    /// replaced the win condition with it**: *a player wins by deploying an Ark to one
+    /// territory and launching an Ark from a different one.* This asked
+    /// `Game::is_fully_exploited` until 2026-09-24, which is a rule the specification no longer
+    /// has.
+    ///
+    /// **The two reasons for leaving it have both expired.** `releases/first-release.md` ->
+    /// `R-6` cited the old condition and now cites the new one, so the release has moved; and
+    /// `scenario/expected/play.4x` does not change, because `won` is not in the containment
+    /// tree - it is a fact about what was done rather than a thing in a place.
+    ///
+    /// **The scenario still does not win and the reason is different.** It deployed to
+    /// territory 1 and launches from territory 1, so the two acts are in one place; before
+    /// this, it failed because the planet was unfinished. **`R-6`'s *vetted when* already says
+    /// the new reason**, which is how a reader can tell this followed the release rather than
+    /// the release following this.
     fn launch(&mut self, territory: TerritoryId) -> Result<(), Rejection> {
         let place = self.territory(territory)?;
         if place.yards() == 0 {
@@ -267,7 +287,6 @@ impl Game {
                 kind: Kind::Ark,
             });
         }
-        let won = self.is_fully_exploited();
         self.spend(territory, Resource::Metal, cost::ARK_METAL)?;
         self.spend(territory, Resource::Energy, cost::ARK_ENERGY)?;
         self.territories[territory.index()].remove(Kind::Citizen, cost::ARK_CITIZENS);
@@ -276,7 +295,11 @@ impl Game {
         // place it ever is.
         let id = UnitId(self.units.len() as u32 + 1);
         self.units.push(Unit::new(id, UnitKind::Ark, territory));
-        self.won = won;
+        // **Recorded last, so nothing is recorded for a launch that was refused.** `record`
+        // latches the win if this is the act that completes it - see
+        // [`Game::the_win_condition_holds`], which asks about both acts rather than about this
+        // one, because the sentence names no order between them.
+        self.record(Recorded::LaunchArk, territory);
         Ok(())
     }
     /// **`P-460`: the player says where the unit is standing, and the model no longer

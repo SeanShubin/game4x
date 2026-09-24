@@ -82,6 +82,35 @@ pub enum Phase {
     Play,
 }
 
+/// A recipe whose firing a later rule asks about.
+///
+/// **Two of the release's twenty-six are here**, and a recipe joins them when a rule needs to
+/// know that it happened rather than what it left behind. `spec/control.md`'s win condition is
+/// the only such rule today: *a player wins by deploying an Ark to one territory and launching
+/// an Ark from a different one.*
+///
+/// **Neither act can be read off the state afterwards, which is why anything is recorded at
+/// all.** `deploy ark` and `found by land` leave the same two citizens and two extractors, so a
+/// founded territory does not say which took it - that is `S-165`'s finding from the other
+/// side. And an Ark in an orbit may have been launched there, placed there while the world was
+/// designed, or have moved there, so the Ark does not say where it came from either.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Recorded {
+    DeployArk,
+    LaunchArk,
+}
+
+/// One firing of a recorded recipe, and the place it fired in.
+///
+/// **The place is the `$where` the command named**, which for both of these is a territory: an
+/// Ark is deployed *to* a territory and launched *from* one, and the orbit each act touches is
+/// worked out from it.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct Firing {
+    pub recipe: Recorded,
+    pub at: TerritoryId,
+}
+
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Game {
     pub phase: Phase,
@@ -100,13 +129,18 @@ pub struct Game {
     /// whichever condition is being tested**, which is why this field survives the change
     /// below.
     ///
-    /// **`P-527` cut the definition of *fully exploited* out of `spec/control.md`, and `P-520`
-    /// replaced the win condition with it.** The specification now says: *a player wins by
-    /// deploying an Ark to one territory and launching an Ark from a different one.* **This
-    /// code still implements the old one**, which is a divergence rather than a stale comment -
-    /// reported as `S-151` and left, because changing what winning means reseeds
-    /// `scenario/expected/play.4x` and moves `R-6`, and neither is this lane's to decide.
+    /// **`P-527` cut the definition of *fully exploited* out of `spec/control.md`, `P-520`
+    /// replaced the win condition with it, and `S-151` is this code catching up.** It latched
+    /// on a fully exploited planet until 2026-09-24; it latches on
+    /// [`Game::the_win_condition_holds`] now, which is the sentence the specification has.
     pub won: bool,
+    /// Every firing of a recipe that a rule asks about afterwards.
+    ///
+    /// **State the state cannot otherwise answer for**, which is the whole reason it is here -
+    /// see [`Recorded`]. It is not a history: nothing records a turn, an order, or the
+    /// twenty-four recipes no rule asks about, and `Session::history` is the thing that keeps
+    /// what was typed.
+    pub firings: Vec<Firing>,
 }
 
 impl Default for Game {
@@ -124,6 +158,7 @@ impl Game {
             territories: Vec::new(),
             adjacency: Vec::new(),
             units: Vec::new(),
+            firings: Vec::new(),
             won: false,
         }
     }
@@ -264,6 +299,41 @@ impl Game {
         self.won
     }
 
+    /// Whether the win condition holds of what has been done so far.
+    ///
+    /// **`spec/control.md`, the whole of it**: *a player wins by deploying an Ark to one
+    /// territory and launching an Ark from a different one.*
+    ///
+    /// **Two acts and one inequality, and the order between them is deliberately not asked.**
+    /// The sentence names two things a player does and says nothing about which comes first, so
+    /// this asks whether both are among what was done - which is why [`Game::won`] is latched
+    /// after either of them rather than only after the launch.
+    ///
+    /// **It is a question and the field is the answer at a moment.** Asking it later would ask
+    /// whether the condition holds *now*, and it would keep answering yes forever, which is the
+    /// reason `won` is stored and was the reason before the condition changed.
+    pub fn the_win_condition_holds(&self) -> bool {
+        let at = |recipe: Recorded| {
+            self.firings
+                .iter()
+                .filter(move |firing| firing.recipe == recipe)
+                .map(|firing| firing.at)
+        };
+        at(Recorded::DeployArk)
+            .any(|deployed| at(Recorded::LaunchArk).any(|launched| launched != deployed))
+    }
+
+    /// Record a firing, and latch the win if it has just become true.
+    ///
+    /// **Latched here rather than at each call site**, so that a recipe added to [`Recorded`]
+    /// cannot be recorded by one and forgotten by the other.
+    pub(crate) fn record(&mut self, recipe: Recorded, at: TerritoryId) {
+        self.firings.push(Firing { recipe, at });
+        if self.the_win_condition_holds() {
+            self.won = true;
+        }
+    }
+
     /// **No citizens anywhere and no units left** - and it used to be *no usable unit*.
     ///
     /// `P-367` made nature destroy what stands on a territory it takes back, which was the
@@ -350,61 +420,113 @@ mod tests {
             .collect()
     }
 
-    /// What `spec/control.md` said until `P-520` replaced it: *a player wins by launching an
-    /// Ark from a fully exploited planet.* **It now says a player wins by deploying an Ark to
-    /// one territory and launching an Ark from a different one**, and this code has not
-    /// followed - `S-151`.
+    /// Winning takes a deploy and a launch, in two different territories.
     ///
-    /// The whole condition, built by hand: every claimable territory taken, every node
-    /// worked, a yard everywhere. Then launching wins, and it is the launch that does it.
+    /// # The check that would have failed before this
+    ///
+    /// **`S-151`, and the first case is the one that used to win.** The code latched the win on
+    /// `is_fully_exploited` - what `spec/control.md` said until `P-520` replaced it - so **a
+    /// launch from a finished planet was a win whatever had been deployed anywhere**. It is
+    /// not: *a player wins by deploying an Ark to one territory and launching an Ark from a
+    /// different one.*
+    ///
+    /// **The old condition was read before the cost was paid**, so the state it judged is the
+    /// one before the launch, and that is where this asserts it.
+    ///
+    /// # Why the finished planet and the deploy cannot be in one fixture
+    ///
+    /// **A fully exploited planet has no ground left to deploy to.** Every claimable territory
+    /// is taken, so `deploy ark` is refused with `AlreadyControlled` - which is why the cases
+    /// below are built separately rather than as one sequence. **That is a fact about the two
+    /// conditions rather than about this test**: the rule that was replaced and the rule that
+    /// replaced it cannot both be satisfied by the same planet at the same instant.
     #[test]
-    fn launching_an_ark_from_a_finished_planet_wins() {
-        let mut game = designed().after(&Transition::Start).unwrap();
-        game = game
-            .after(&Transition::Land {
-                kind: UnitKind::Ark,
-                territory: TerritoryId(1),
-            })
-            .unwrap();
-        assert!(
-            !game.is_fully_exploited(),
-            "one territory of three is not a planet"
-        );
-
-        // Finish the planet by hand rather than by playing it, so the test is about the
-        // condition rather than about the economy.
-        for place in &mut game.territories {
-            // A citizen is what holds it, since `S-19` made control derived. Setting a flag
-            // beside an empty territory used to do this, which is the disagreement that
-            // rule removes.
-            finish(place);
-        }
-        assert!(game.is_fully_exploited());
-        assert!(!game.has_won(), "nobody has launched anything yet");
-
-        // An Ark has to be on the planet to leave it.
-        // **What a launch costs, where an Ark used to be pushed.** `P-342` made launching one
-        // recipe: the cost is paid at a Yard and nothing comes back, so what has to be there
-        // is the cost rather than a unit.
-        {
-            let place = &mut game.territories[0];
+    fn winning_takes_a_deploy_and_a_launch_in_two_different_territories() {
+        let launch = |at: u32| Transition::Launch {
+            territory: TerritoryId(at),
+        };
+        let deploy = |at: u32| Transition::Land {
+            kind: UnitKind::Ark,
+            territory: TerritoryId(at),
+        };
+        // What a launch costs, put on a territory by hand.
+        let afford = |place: &mut Territory| {
             place.set_count(Kind::Yard, 1);
-            // **Never fewer than it already has** - `P-361`. This was `set_count(.., 2)`, and
-            // now that a finished territory is one with the population its food supports,
-            // setting two on a territory that had twelve un-finished the planet a line before
-            // it was asked whether the planet was finished. Paying a cost is what `Launch`
-            // does; this only has to make it affordable.
             let enough = place.citizens().max(cost::ARK_CITIZENS);
             place.set_count(Kind::Citizen, enough);
             place.add(Resource::Metal, cost::ARK_METAL);
             place.add(Resource::Energy, cost::ARK_ENERGY);
-        }
-        let won = game
-            .after(&Transition::Launch {
-                territory: TerritoryId(1),
-            })
-            .unwrap();
-        assert!(won.has_won(), "the planet was finished and an Ark left it");
+        };
+
+        // -- the case that changed: a finished planet, launched from, nothing deployed.
+        let finished = {
+            let mut game = designed().after(&Transition::Start).unwrap();
+            game.units.clear();
+            for place in &mut game.territories {
+                finish(place);
+                afford(place);
+            }
+            game
+        };
+        assert!(
+            finished.is_fully_exploited(),
+            "the old condition read this state, so it has to hold or the case is not the case"
+        );
+        let launched = finished.after(&launch(1)).expect("a yard and the cost");
+        assert!(
+            !launched.has_won(),
+            "a launch from a finished planet with nothing deployed used to be the whole win"
+        );
+        assert!(
+            launched
+                .firings
+                .iter()
+                .any(|firing| firing.recipe == Recorded::LaunchArk),
+            "the launch happened, so the refusal above is the rule and not a failed command"
+        );
+
+        // -- two acts, one place: territory 2 is left unclaimed with an Ark above it.
+        let open = || {
+            let mut game = designed().after(&Transition::Start).unwrap();
+            game.units.clear();
+            game.units
+                .push(Unit::new(UnitId(1), UnitKind::Ark, TerritoryId(2)));
+            for at in [0, 2] {
+                finish(&mut game.territories[at]);
+                afford(&mut game.territories[at]);
+            }
+            game
+        };
+        let mut same = open().after(&deploy(2)).expect("territory 2 is unclaimed");
+        afford(&mut same.territories[1]);
+        let same = same.after(&launch(2)).expect("territory 2 can pay now");
+        assert!(
+            !same.has_won(),
+            "deployed to territory 2 and launched from territory 2 is one place, not two"
+        );
+
+        // -- two acts, two places.
+        let apart = open()
+            .after(&deploy(2))
+            .expect("territory 2 is unclaimed")
+            .after(&launch(1))
+            .expect("territory 1 has a yard and the cost");
+        assert!(
+            apart.has_won(),
+            "deployed to territory 2 and launched from territory 1 is the win condition"
+        );
+
+        // **And the order between them is not asked**, because the sentence names none: the
+        // same two acts the other way round are the same win.
+        let reversed = open()
+            .after(&launch(1))
+            .expect("territory 1 can pay")
+            .after(&deploy(2))
+            .expect("territory 2 is unclaimed");
+        assert!(
+            reversed.has_won(),
+            "launching first and deploying second is the same two acts in two places"
+        );
     }
 
     /// An Ark is found by `move`, and what refuses it is the orbit's energy.
@@ -612,56 +734,63 @@ mod tests {
     }
 
     /// Winning is a moment, not a standing condition. Once it has happened it stays
-    /// happened, and it does not start being true later because the planet still looks
-    /// finished.
+    /// happened, and nothing that changes afterwards takes it back.
+    ///
+    /// **The reason survives the condition changing, which is why this test did.** It used to
+    /// take the planet apart under a winner and check the win held; the condition is now two
+    /// acts rather than a state, so what is taken apart is the ground the Ark was deployed to -
+    /// **nature reclaiming territory 2 does not un-deploy the Ark that took it.**
+    ///
+    /// **This used to check another half that `P-342` took away** rather than answering: that a
+    /// *Pioneer* leaving wins nothing. There is one launch recipe and it is `launch ark`, so a
+    /// pioneer launching is a state the language cannot express.
     #[test]
-    fn winning_is_the_launch_rather_than_the_state_afterwards() {
+    fn winning_is_a_moment_rather_than_the_state_afterwards() {
         let mut game = designed().after(&Transition::Start).unwrap();
-        for place in &mut game.territories {
+        game.units.clear();
+        let id = UnitId(1);
+        game.units
+            .push(Unit::new(id, UnitKind::Ark, TerritoryId(2)));
+        // **Territory 2 is left unclaimed**, because that is the only kind of ground an Ark
+        // can be deployed to.
+        for at in [0, 2] {
+            let place = &mut game.territories[at];
             // A citizen is what holds it, since `S-19` made control derived. Setting a flag
             // beside an empty territory used to do this, which is the disagreement that
             // rule removes.
             finish(place);
-        }
-        // A finished planet nobody has launched from is not a win.
-        assert!(game.is_fully_exploited());
-        assert!(!game.has_won());
-
-        // **And it stays a win once it is one, however the planet changes afterwards.**
-        //
-        // This used to check the other half - that a *Pioneer* leaving wins nothing - and
-        // `P-342` took that case away rather than answering it: there is one launch recipe and
-        // it is `launch ark`, so a pioneer launching is a state the language cannot express.
-        // The half that survives is the one the name is about.
-        {
-            let place = &mut game.territories[0];
-            place.set_count(Kind::Yard, 1);
-            // **Never fewer than it already has** - `P-361`. This was `set_count(.., 2)`, and
-            // now that a finished territory is one with the population its food supports,
-            // setting two on a territory that had twelve un-finished the planet a line before
-            // it was asked whether the planet was finished. Paying a cost is what `Launch`
+            // **Never fewer than it already has** - `P-361`. Paying a cost is what `Launch`
             // does; this only has to make it affordable.
             let enough = place.citizens().max(cost::ARK_CITIZENS);
             place.set_count(Kind::Citizen, enough);
             place.add(Resource::Metal, cost::ARK_METAL);
             place.add(Resource::Energy, cost::ARK_ENERGY);
         }
+        // Deployed and launched but nothing done yet is not a win.
+        assert!(!game.has_won());
+
         let after = game
+            .after(&Transition::Land {
+                kind: UnitKind::Ark,
+                territory: TerritoryId(2),
+            })
+            .expect("the Ark is above territory 2")
             .after(&Transition::Launch {
                 territory: TerritoryId(1),
             })
-            .unwrap();
-        assert!(after.has_won(), "an Ark left a finished planet");
+            .expect("territory 1 has a yard and the cost");
+        assert!(after.has_won(), "two places, which is the condition");
 
-        // Take the planet apart underneath it: the win has already happened.
+        // Take the deployed-to territory apart underneath it: the win has already happened.
         let mut later = after.clone();
-        later.territories[0]
-            .held
-            .retain(|thing| thing.kind != Kind::Extractor);
-        assert!(!later.is_fully_exploited(), "the planet is unfinished now");
+        later.territories[1].held.clear();
+        assert!(
+            !later.territory(TerritoryId(2)).unwrap().founded(),
+            "territory 2 is not held any more, or nothing was taken apart"
+        );
         assert!(
             later.has_won(),
-            "and it was won when the Ark left, which is a moment"
+            "and it was won when the two acts met, which is a moment"
         );
     }
 
