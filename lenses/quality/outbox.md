@@ -626,6 +626,19 @@ not deciding that. **What does not change is the duplication**: `movable` and th
 state one fact twice, or are two facts nothing distinguishes, and neither the prototype nor the
 shift touches that.
 
+**And a correction to how the re-check above was confirmed.** This lens also ran
+`spec touching spec/data/traits.4x` and reported *nothing has moved under `Q-94`*. **That sweep was
+blind to six items**: `touching` filters `item.status != "open"` at `tools/spec/src/main.rs:316`
+while `outbox::OUTSTANDING` is `["open", "built"]`, so the six `built` release capabilities are
+invisible to it - 48 against the index's 54, and the difference is exactly `R-6` through `R-11`.
+Found by the code lane and reported to the specification lane, whose tool it is.
+
+**The conclusion survives and the method did not cover what it claimed.** The six were read by
+hand: between them they name `spec/control.md`, `spec/data/above.4x`, `spec/data/kinds.4x`,
+`spec/future/force.md`, `spec/interface.md`, `spec/invariants.md`, `spec/planet.md` and
+`spec/turn.md` - **and neither `traits.4x` nor `carries.4x`**. So nothing has moved under this item,
+which is what was claimed, reached by a route that was not the one given.
+
 ### Q-93 - The prototype's backlog says the sum blocks storage, and the sum shipped in the commit that said so
 
 **to** code · **status** **withdrawn** 2026-09-24 · **cited** `b74f25c` · **raised** 2026-09-18 · **source**
