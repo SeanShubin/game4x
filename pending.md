@@ -8,8 +8,10 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-546** - The architecture check lives in `tools/spec/`, where the lane it constrains cannot edit it · `decide/proposals.md`
 - **P-545** - `spec/` covers the shape of the artifact, not only the rules of the game · `decide/proposals.md`
-- **P-546** - Where the architecture check lives, given that it may not be weakened by the lane it constrains · `decide/questions.md`
+- **P-547** - Rule 4 says engine types live in *the* adapter, and four crates outside it name `bevy::` · `decide/questions.md`
+- **P-548** - Every directory and who writes it, and three cells `CLAUDE.md` never assigns · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -23,13 +25,15 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-546** - `0de3cce` P-546: four locations, and two of them are already in use · still open in `decide/proposals.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (12)
+### To code (13)
 
+- **S-160** - `planet-bevy`'s README says it is the only crate that knows an engine exists, and four others name `bevy::` · `docs/notes/proposals.md`
 - **S-155** - A bad planet size does not say what was expected, which is a rule rather than a courtesy · `docs/notes/proposals.md`
 - **S-152** - `P-519` deleted a sentence `first_release.rs` quotes, and the gate is red on it · `docs/notes/proposals.md`
 - **S-151** - `fully exploited` is now a term the specification does not define, and you implement it · `docs/notes/proposals.md`

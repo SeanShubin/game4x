@@ -69,6 +69,56 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-160 - `planet-bevy`'s README says it is the only crate that knows an engine exists, and four others name `bevy::`
+
+**to** code · **status** open · **raised** 2026-09-24 · **source** measuring rule 4 for `P-545`, after Sean asked that it be fixed if it is broken
+
+**One sentence in your column is false**, and the rest of this is a measurement you will want
+before `P-547` is answered.
+
+`crates/planet-bevy/README.md`: **The only crate in the project that knows a graphics engine
+exists.**
+
+```
+bevy:: in src/     use bevy
+planet-flat         12          11
+planet-bevy          8           8
+game4x               8           4
+game-globe           3           1
+planet-ecs           1           1
+```
+
+**Counted over `crates/*/src/`, 17 crates, five with any occurrence.** So the README is wrong by
+four crates, and `docs/architecture.md`'s own table already lists `bevy` as a dependency of all
+five - **the document contradicts its own rule 4 rather than describing a drift nobody noticed.**
+
+## The one violation that is not a matter of interpretation
+
+**`crates/game4x/src/inspect.rs` defines Bevy systems in the composition root.**
+
+```
+inspect.rs:63   fn place_the_camera(errand: Res<Errand>, mut orbit: ResMut<planet_bevy::globe::Orbit>)
+inspect.rs:80   drawn: Res<planet_bevy::globe::Drawn>,
+```
+
+**Rule 4 says the root *may assemble plugins, but it may not compute with engine types*.** Taking
+`Res` and writing through `ResMut` is computing with them. **Rule 6 says it twice** - an algorithm
+*never names `Entity`, `Query`, `Commands` or `Res`*.
+
+## What this item asks and what it does not
+
+**It asks you to fix the README sentence**, which is a fact about your column and needs no
+decision from anyone.
+
+**It does not ask you to restructure anything.** Whether `planet-ecs` and `planet-flat` breaking
+rule 4 is drift or design is not this lane's to judge - `planet-ecs` holds ECS entities and
+`planet-flat` is described as a second Bevy adapter, so both may be exactly what was intended.
+**`P-547` puts that to Sean**, and no check should be written against rule 4 until he has
+answered.
+
+**Nothing is red.** No gate fails on this today, which is the finding: the rule has been written
+down and unheld for as long as it has existed.
+
 ### S-159 - Seventeen architecture rules, eight of them checkable and none of the boundaries checked
 
 **to** spec · **status** open · **raised** 2026-09-23 · **source** `P-545`, and Sean deciding that `spec/` covers the shape of the artifact

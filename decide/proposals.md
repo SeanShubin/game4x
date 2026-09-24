@@ -11,6 +11,40 @@ of it needs you.
 
 ## Open
 
+### P-546 - The architecture check lives in `tools/spec/`, where the lane it constrains cannot edit it
+
+**to** sean · **status** open · **raised** 2026-09-24 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/README.md` -> Rules for this directory
+
+**You chose `C1`.** This is the rewrite; the working, including the false premise the first
+version nearly carried, is in [`docs/notes/decisions.md`](../docs/notes/decisions.md).
+
+## What lands
+
+**Appended to rule 8**, which `P-545` adds:
+
+> **The check that holds a boundary lives outside the column it constrains.** A constraint the
+> constrained lane may weaken is a constraint nobody is holding, so an architecture check is the
+> specification's and not the code's - and it runs in the same gate, because a check the
+> constrained lane never runs is no better.
+
+## Why this is one sentence and not a path
+
+**A path in `spec/` would go stale the first time a tool moved.** The rule is the property -
+outside the column, inside the gate - and `tools/spec/tests/architecture.rs` is where that
+property is satisfied today. **`docs/architecture.md` records the location**, which is the layer
+that may change without your approval.
+
+## What it commits you to
+
+**A failure the code lane cannot repair.** They report it and leave it, which is already the rule
+in the other direction: this lane does not edit code *even to fix an obvious break*. **`C1` makes
+the arrangement symmetric**, and the round trip is the cost.
+
+**And the first such failure is already waiting.** Rule 4 is broken - measured, four crates, filed
+as `S-160` - and `P-547` asks you what rule 4 should say before a check is written to enforce it.
+**A check written against a rule that turns out to be wrong is worse than no check**, because it
+makes the rule look held.
+
 ### P-545 - `spec/` covers the shape of the artifact, not only the rules of the game
 
 **to** sean · **status** open · **raised** 2026-09-23 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/README.md` -> the opening line, and Rules for this directory
