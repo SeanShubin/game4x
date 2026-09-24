@@ -2,6 +2,17 @@
 # Not /target/ - packages outside the workspace (tools/pad-tables) have their own target
 # directory, and a root-anchored rule silently misses them.
 target/
+# **And a lane's own target directory, whatever it called it.** Several instances build at
+# once and each keeps its own `CARGO_TARGET_DIR` so they do not evict each other's artifacts -
+# this lane's is `target/claude`, which the rule above already covers, and `tools/spec/target2`
+# appeared beside it. **An untracked build directory in `git status` is not merely noise**: the
+# hazard this repository guards hardest is staging something you did not mean to, and the
+# defence is reading `git status` before every `git add`. A list with a build tree in it is one
+# nobody reads.
+#
+# Nothing tracked begins with `target`, measured before writing this, so the glob takes only
+# build output.
+target*/
 **/*.rs.bk
 *.pdb
 
