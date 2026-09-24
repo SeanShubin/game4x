@@ -167,6 +167,18 @@ This is carries it to `C-85`, which now owns it.
         "the cue itself still reads, or this test proves nothing"
     );
 
+    // **The leading edge, which nothing in the corpus exercises** - 61 cue occurrences across
+    // the nine outboxes and none preceded by a letter, so this case is constructed rather than
+    // found. It is here because `not sprung today` is the state `carries it` was in.
+    let discovered = "## A section
+
+The cause was discovered by reading it, and `C-85` says so.
+";
+    assert!(
+        handed_to("X-1", discovered).is_empty(),
+        "`discovered by` contains `covered by` and is not a cue"
+    );
+
     // **The population, because the guard is only worth having if the corpus contains the trap.**
     let root = Path::new(env!("CARGO_MANIFEST_DIR"))
         .parent()

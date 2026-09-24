@@ -474,20 +474,41 @@ pub fn handed_to(me: &str, body: &str) -> Vec<String> {
     found
 }
 
-/// `needle` in `haystack`, but not as the start of a longer word.
+/// `needle` in `haystack` as a whole phrase, not as part of a longer word at either end.
 ///
 /// **The cue list has a prefix of ordinary prose in it** - `carries it` against *carries its
-/// own* - so `contains` reads a sentence about something else as a handoff. What follows the
-/// cue has to be the end of the text or a character that is not a letter.
+/// own* - so `contains` reads a sentence about something else as a handoff. That is what bit:
+/// 28 of the 61 cue occurrences in the outboxes are `carries it`, and ten phantom handoffs came
+/// of it.
+///
+/// **Both edges are guarded, and only one of them has ever been exercised.** The first version
+/// of this asked what followed and nothing about what preceded, so `covered by` inside
+/// *discovered by* or `tracked by` inside *backtracked by* would have read as a cue. **Measured
+/// across the nine outboxes: 61 cue occurrences, none preceded by a letter**, and
+/// `discovered by`, `recovered by`, `uncovered by`, `backtracked by` and `rediscovered by`
+/// appear zero times between them.
+///
+/// So the leading guard has caught nothing and is here because *not sprung today* is the state
+/// `carries it` was in until somebody wrote *carries its own*. **Found by the code lane reading
+/// the fix rather than running it**, and reported as where to look rather than as a defect - the
+/// symmetry was a line, so it is a line.
 fn said_at_a_boundary(haystack: &str, needle: &str) -> bool {
     let mut from = 0;
     while let Some(at) = haystack[from..].find(needle) {
-        let end = from + at + needle.len();
-        match haystack[end..].chars().next() {
-            None => return true,
-            Some(next) if !next.is_alphabetic() => return true,
-            _ => from = from + at + 1,
+        let start = from + at;
+        let end = start + needle.len();
+        let before_is_letter = haystack[..start]
+            .chars()
+            .next_back()
+            .is_some_and(char::is_alphabetic);
+        let after_is_letter = haystack[end..]
+            .chars()
+            .next()
+            .is_some_and(char::is_alphabetic);
+        if !before_is_letter && !after_is_letter {
+            return true;
         }
+        from = start + 1;
     }
     false
 }
