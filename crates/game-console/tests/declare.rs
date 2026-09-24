@@ -226,11 +226,10 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
         .iter()
         .filter_map(|row| row.traits.get("name").cloned())
         .collect();
-    assert_eq!(
-        declared_traits.len(),
-        23,
-        "twenty-three traits are declared"
-    );
+    // **Twenty-four since `P-541`**, which brought `biome` back and declared it - Sean's
+    // ruling is that it stays because the realistic drawing needs it. Twenty-three between
+    // `P-522` cutting it and `P-541` restoring it.
+    assert_eq!(declared_traits.len(), 24, "twenty-four traits are declared");
 
     // **Read from `carries.4x` since `P-497`, and it is the same join by a different route.**
     // A kind's line held the traits it carries as bare words; they are one row each now, and
@@ -704,18 +703,59 @@ fn the_traits_file_declares_what_a_data_file_needs() {
     // trait only where a recipe named it, which left three out; then a kind's line gained the
     // traits it carries, and a kind may only name a declared trait.
     // **Twenty-three since `P-522`**, which cut `defending`, `biome` and `met` with the
-    // force rule and the Biomes section.
+    // force rule and the Biomes section. **Twenty-four since `P-541`**, which brought `biome`
+    // back and declared it.
     assert_eq!(
         read.len(),
-        23,
-        "twenty-three traits, one per row of the release's table; this read {}",
+        24,
+        "twenty-four traits, and the release's table has one fewer; this read {}",
         read.len()
     );
-    assert_eq!(
-        read.len(),
-        game_console::recipes::body_under(&document, "## Traits").len(),
-        "the file and the table declare a different number of traits"
+
+    // **The file and the table stopped being the same length on 2026-09-23, and that is the
+    // deferral rather than a defect.** `P-541` declares `biome` in `spec/data/traits.4x`
+    // because the realistic drawing needs it, and leaves the release's Traits table without
+    // it because this release has no biomes. So the file is what `spec/` keeps and the table
+    // is what this release ships, which is the shape Sean chose on 2026-09-21 for the model.
+    //
+    // **Named rather than counted, and both directions bite.** A trait the file has and the
+    // table does not must be in this list; a trait the table has and the file does not fails
+    // as before; and a deferred name that reappears in the table fails as unnecessary.
+    let deferred = ["biome"];
+    let listed: std::collections::BTreeSet<String> =
+        game_console::recipes::body_under(&document, "## Traits")
+            .iter()
+            .filter_map(|row| row.first())
+            // **Spaces to dashes**, because the release writes `metal in it` where the data
+            // file writes `metal-in-it` - one name in two spellings, which the rest of this
+            // file already normalises the same way.
+            .map(|cell| cell.trim().trim_matches('*').trim().replace(' ', "-"))
+            .collect();
+    let in_file: std::collections::BTreeSet<String> = read
+        .iter()
+        .filter_map(|row| row.traits.get("name").cloned())
+        .collect();
+
+    let missing: Vec<&String> = listed.difference(&in_file).collect();
+    assert!(
+        missing.is_empty(),
+        "the release's Traits table names {missing:?} and `spec/data/traits.4x` does not"
     );
+    let extra: Vec<&String> = in_file
+        .difference(&listed)
+        .filter(|name| !deferred.contains(&name.as_str()))
+        .collect();
+    assert!(
+        extra.is_empty(),
+        "`spec/data/traits.4x` declares {extra:?}, the release's table does not list them, \
+         and nothing defers them"
+    );
+    for name in deferred {
+        assert!(
+            !listed.contains(name),
+            "the release's table lists `{name}` again, so delete its deferral"
+        );
+    }
     let named: Vec<&str> = read
         .iter()
         .filter_map(|row| row.traits.get("name"))
@@ -836,11 +876,28 @@ fn the_traits_file_declares_what_a_data_file_needs() {
     // reaches - twenty-three lines, and the reader can see which one it does not.
     let written = declare::traits(&document);
     let generated: Vec<&str> = written.lines().collect();
-    let stated: Vec<&str> = file.lines().collect();
+
+    // **A second line the generator cannot write, and `P-541` is why.** It declares `biome` in
+    // `spec/data/traits.4x` and leaves the release's Traits table without it - Sean's ruling:
+    // the data keeps `biome` because the realistic drawing needs it, and the release has no
+    // biomes. So the generator, which reads the release, has nothing to write it from.
+    //
+    // **Named and removed rather than tolerated**, for the reason the paragraph above gives:
+    // a byte comparison with named exceptions is still a byte comparison, and one with a
+    // tolerance is not. The line has to be *there* or the exception is hiding its absence.
+    const DEFERRED: &str = "{trait name:biome admits:value kept:thing}";
+    let all: Vec<&str> = file.lines().collect();
+    assert!(
+        all.contains(&DEFERRED),
+        "`spec/data/traits.4x` no longer states {DEFERRED:?}, so delete this exception - \
+         `P-541` put it there and the generator cannot write it"
+    );
+    let stated: Vec<&str> = all.into_iter().filter(|line| *line != DEFERRED).collect();
+
     assert_eq!(
         generated.len(),
         stated.len(),
-        "the generator writes {} lines and the file has {}",
+        "the generator writes {} lines and the file has {} beside the deferred one",
         generated.len(),
         stated.len()
     );
@@ -869,10 +926,12 @@ fn the_traits_file_declares_what_a_data_file_needs() {
     };
     // **Sixteen and seven since `P-522`**: `defending`, `biome` and `met` were all kept by
     // each thing, so the kind's seven are untouched and only the first number moved.
+    // **Seventeen since `P-541` brought `biome` back**, which is kept by each thing. The
+    // kind's seven are untouched, as they were when `P-522` took three away.
     assert_eq!(
         (kept_by("thing"), kept_by("kind"), kept_by("nothing")),
-        (16, 7, 0),
-        "sixteen belong to each thing, seven to the kind, and **none to nothing** - `P-476`          removed the third, because `kept` says where a value belongs and never whether one          is held. The zero is asserted rather than dropped, so a `nothing` reaching the          file fails here"
+        (17, 7, 0),
+        "seventeen belong to each thing, seven to the kind, and **none to nothing** - `P-476`          removed the third, because `kept` says where a value belongs and never whether one          is held. The zero is asserted rather than dropped, so a `nothing` reaching the          file fails here"
     );
 }
 
@@ -917,8 +976,8 @@ fn every_bare_word_in_every_data_file_is_a_declared_trait() {
     .collect();
     assert_eq!(
         declared.len(),
-        23,
-        "twenty-three traits are declared; this read {declared:?}"
+        24,
+        "twenty-four traits are declared; this read {declared:?}"
     );
 
     let mut files: Vec<PathBuf> = std::fs::read_dir(&data)

@@ -593,8 +593,8 @@ fn every_trait_the_ordering_names_is_declared() {
     // **Twenty-three since `P-522`**, which cut `defending`, `biome` and `met`.
     assert_eq!(
         declared.len(),
-        23,
-        "spec/data/traits.4x declares {} traits and this check was written against 23. If the \
+        24,
+        "spec/data/traits.4x declares {} traits and this check was written against 24. If the \
          release gained or lost one, that is fine - say so here.",
         declared.len()
     );

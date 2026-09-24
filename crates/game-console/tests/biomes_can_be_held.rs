@@ -2,7 +2,7 @@
 //!
 //! # What this file asked, and what it asks now
 //!
-//! **`S-42`.** `spec/control.md`: *taking a territory takes force greater than the existing
+//! **`S-42`.** `spec/future/force.md` since `P-541`: *taking a territory takes force greater than the existing
 //! force*, and *holding a territory takes force equal to its force of nature*. Nature's force
 //! was per biome and the release's *Biomes* table set it; the force a player can bring is per
 //! unit and *Units and structures* sets it. **Nothing had ever asked whether the second
@@ -12,7 +12,7 @@
 //!
 //! **`P-522` cut the Biomes section and the whole of force from this release.** So there is no
 //! table to read, no nature to hold ground with, and no claim left for those three tests to
-//! make. `spec/planet.md` keeps every biome and `spec/control.md` keeps force, so the question
+//! make. `spec/planet.md` keeps every biome and `spec/future/force.md` keeps force, so the question
 //! is deferred rather than answered, and the tests that asked it are one commit back.
 //!
 //! # Why the cut is asserted rather than the file deleted

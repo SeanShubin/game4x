@@ -477,7 +477,7 @@ impl Game {
     }
     /// Takes a territory with a unit of this force, founding it.
     ///
-    /// `spec/control.md`: taking a territory takes force greater than the existing force.
+    /// `spec/future/force.md` since `P-541`: taking a territory takes force greater than the existing force.
     fn take(&mut self, territory: TerritoryId, force: u32) -> Result<(), Rejection> {
         let defending = self.defending_force(territory);
         if self.territory(territory)?.founded() {
@@ -734,12 +734,25 @@ impl Game {
         }
         Ok(())
     }
-    /// The five things ending a turn does, in the order `spec/turn.md` gives them.
+    /// The five things ending a turn does, in the order the specification gives them.
+    ///
+    /// `spec/turn.md` has four of them, and **the file name is outside the bold span
+    /// deliberately** - `CLAUDE.md` records that the promotion checker reads the `**` closing
+    /// a span as the start of the quotation, and reports a correct quotation as wrong:
     ///
     /// > everything with upkeep pays it; then a population grows on surplus food or starves
-    /// > for want of it; **what expires expires, and what was not kept in order is lost**;
-    /// > then **nature takes back what is no longer held**; and **time restores every count to
-    /// > the number that thing's kind declares**
+    /// > for want of it; **what expires expires, and what was not kept in order is lost**; and
+    /// > **time restores every count to the number that thing's kind declares**
+    ///
+    /// **And the fifth is in `spec/future/force.md`** - *nature takes back what is no longer
+    /// held*. `P-541` moved force, garrison and nature out of `spec/` proper and into the
+    /// future plan, and took that clause of the bullet with them, so the sentence this list
+    /// came from is four clauses where it was five.
+    ///
+    /// **The list stays five, and that is Sean's ruling rather than an oversight.** He chose
+    /// on 2026-09-21 that the model keeps what `spec/` keeps and a release may defer it, and
+    /// `spec/future/force.md` is `spec/`. So `end_turn` still runs the phase and the turn
+    /// report still names its section; what changed is which file states it.
     ///
     /// **One list, read by two callers** - `S-125`. `end_turn` runs them and the turn report
     /// names its sections from them, so a phase added to the rule adds a section and a section
@@ -858,7 +871,7 @@ impl Game {
                 continue;
             }
             // **Destroyed, where they used to be marked unusable** - `P-367`.
-            // `spec/control.md` now reads *its entire population perishes, and every unit
+            // `spec/future/force.md` reads *its entire population perishes, and every unit
             // on it is destroyed*; it said *any ark on it becomes unusable*. The old
             // behaviour left a state the release cannot describe: a unit that is
             // somewhere, owned, and can never act, reading in a hand derivation exactly
@@ -870,7 +883,7 @@ impl Game {
             // accident that happened to be right.
             //
             // **Neither half is in `reclaim`'s rows**, which say only `consume 1 citizen`.
-            // `spec/control.md` says the population perishes *and every unit on it is
+            // `spec/future/force.md` says the population perishes *and every unit on it is
             // destroyed*, and the garrison goes with the founding; the rows reach the first
             // and name neither of the others. Reported in `C-117` rather than dropped.
             self.units.retain(|unit| !unit.is_on(id));
@@ -928,7 +941,7 @@ impl Territory {
     /// `take`: force wears the ground's resistance down, one nature per force.
     ///
     /// **Fires `min(force, nature)` times, and the strict inequality falls out of what is
-    /// left over.** `spec/control.md` asks for force *greater than* the existing force, which
+    /// left over.** `spec/future/force.md` asks for force *greater than* the existing force, which
     /// is a comparison between two variable quantities and the worse half of the force rule.
     /// Consuming a nature per force leaves at least one force where it was greater and none
     /// where it was equal - and `found by land` requires one, which is a presence test.

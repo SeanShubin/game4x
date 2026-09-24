@@ -140,7 +140,7 @@ impl Game {
 
     /// All the force present in a territory.
     ///
-    /// **Mustered, and `P-416` left nothing else.** `spec/control.md` says *force is
+    /// **Mustered, and `P-416` left nothing else.** `spec/future/force.md` says *force is
     /// mustered each turn and does not outlast it*, and there is no *highest* case anywhere
     /// in the game any more. `P-414` writes the two recipes that produce it: `muster`
     /// requires a garrison and fires once per citizen, `stand` requires none and fires once

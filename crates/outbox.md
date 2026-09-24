@@ -1396,7 +1396,7 @@ planet before, 13 after, and `{nature met:0}` is absent from territory 2 in
 `scenario/expected/play.4x`. **That is the rule the rows describe**, reached on the narrowest
 reading of them, and it is a rule nobody wrote down.
 
-**`reclaim` says only `consume 1 citizen`.** `spec/control.md` says *its entire population
+**`reclaim` says only `consume 1 citizen`.** `spec/future/force.md` says *its entire population
 perishes, and every unit on it is destroyed*, and a founding takes the garrison with it. The
 model does all three and the rows reach one. Not a defect in the game - a gap between the rows
 and the sentence they were written from.
@@ -1548,7 +1548,7 @@ release's *its entire population perishes* needs no quantity.
 
 ## Taking has the same shape and this item does not cover it
 
-**`spec/control.md` states two rules and the rows above answer one.**
+**`spec/future/force.md` states two rules and the rows above answer one.**
 
 > Taking a territory takes force greater than the existing force, be that nature, a player, or
 > anything else not already controlled by you
@@ -4058,12 +4058,12 @@ territory had metal, not whether it could ever work it*. The twelve rows in
 whose second half is built and whose first half is this
 
 **derived from** its entire population perishes and any ark on it becomes unusable -
-`spec/control.md`, Holding
+`spec/future/force.md`, Holding - `spec/control.md` until `P-541` moved it
 
 **What Sean said**, 2026-09-09, relayed by the research lens: *what losing control means is an
 interesting question, but I think for now we just delete the units.*
 
-**What the specification says**, read this morning rather than remembered - `spec/control.md` -> Holding:
+**What the specification says**, read this morning rather than remembered - `spec/future/force.md` -> Holding, which was `spec/control.md` until `P-541`:
 its entire population perishes and **any ark on it becomes unusable**. Deleting a unit and marking
 it unusable are different rules, and the second one is the one that is written down.
 
@@ -6584,7 +6584,7 @@ biome is taken and immediately lost*; it now asserts none is, with the five that
 against a jungle's nature of 2, so it falls. Asked of the model: it is taken, and then
 `force_in` reports **1** against a nature of **2**.
 
-`spec/control.md`: *should the force in a territory fall below its force of nature, nature takes it
+`spec/future/force.md`: *should the force in a territory fall below its force of nature, nature takes it
 back. Its entire population perishes.*
 
 So the jungle was claimed and lost on the same turn, and
@@ -6865,7 +6865,7 @@ biome can be held at all by what the release provides, and said the interesting 
 *no, and here is why*. The answer is that it can be built, it is built, and **jungle does not
 pass**.
 
-`spec/control.md`: *taking a territory takes force greater than the existing force*. `P-253` gave
+`spec/future/force.md`: *taking a territory takes force greater than the existing force*. `P-253` gave
 jungle a nature of **2**. The release's *Units and structures* table gives an ark force **2** and a
 pioneer force **2**, and they are the only two things that take ground. Asked of the model rather
 than of arithmetic about it, the refusal is: **`taking territory 2 needs more than 2 force, and you
