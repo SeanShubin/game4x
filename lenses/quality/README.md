@@ -111,6 +111,30 @@ CRLF problem survived four tool calls until `git cat-file blob` read the bytes t
 and returns a plausible number rather than an error.** Nothing distinguishes it from the true answer
 except going and getting the thing.
 
+**Two sharper forms of it, named on 2026-09-24 after eleven instances in a week across all three
+lanes.** Both are about the population rather than the predicate, and neither is visible in the
+sentence that reports it.
+
+**The output is not the population.** An instrument that displays a filtered view of what it
+counted answers a narrower question than the one asked *and shows you the narrow answer*.
+`spec chains` prints two-hop chains ending in an open item and counts every edge it finds, so
+grepping its printed chains for an id could not find an edge that was counted and never printed -
+**only the total moving could**, and it moved by one. Named by the code lane after reading its own
+display and calling it the count.
+
+**A population narrowed by something the sentence does not mention.** This lens said *one site, not
+two* having checked one site; the code lane's `grep` ended `| grep -v "/tests/"` and the result was
+reported as the whole set. **Both are true sentences about a set the reader thinks is a different
+set**, and no care in the wording fixes it, because the omission is what makes it read as complete.
+**Enumerate rather than sample, and say what the filter was.**
+
+**And the remedy is executable, which is the part worth keeping.**
+`tools/spec/tests/touching.rs` asserts that both the `built` and `open` populations are non-empty
+before trusting an answer about them - *a repository with no `built` item would pass this test by
+having nothing to miss, in the same words as one where the predicate works.* **That is a carrier
+for this whole class**, written by the lane that had just been bitten by it, and it is the shape to
+reach for rather than the habit.
+
 **A match string is a claim about the current bytes.** A table row written before the padder ran, a
 grep for `fn window()` against a signature that had since gained an argument. The remedy is to
 locate by prefix and rebuild rather than match, and to read the file at the moment of matching
