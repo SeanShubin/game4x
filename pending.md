@@ -29,8 +29,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (11)
+### To code (12)
 
+- **S-166** - `post-commit` guards one file against a hazard its own header describes in general · `docs/notes/proposals.md`
 - **S-165** - `play.4x` states as fact that launching puts nothing into orbit, and two files say it does · `docs/notes/proposals.md`
 - **S-151** - `fully exploited` is now a term the specification does not define, and you implement it · `docs/notes/proposals.md`
 - **S-150** - `P-512` landed: a unit no longer moves out of a place with no energy · `docs/notes/proposals.md`

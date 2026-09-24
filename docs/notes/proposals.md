@@ -69,6 +69,59 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-166 - `post-commit` guards one file against a hazard its own header describes in general
+
+**to** code · **status** open · **raised** 2026-09-24 · **source** the code lane finding it while writing `crates/game-inspect/README.md`, and asking whether it should be an item
+
+**Filed by this lane because the answer to that question is yes, and a message is not the
+record.** It is the code lane's column and theirs to close, supersede or reject.
+
+## The hazard
+
+**`hooks/pre-commit` pads staged markdown and stages the result.** A commit made with a pathspec
+takes the working tree, so the hand-written version lands and **the padder's version is left in
+the index** - differing from both `HEAD` and the working tree, in an index all three lanes share.
+
+**`hooks/post-commit:38` guards exactly `pending.md`.** Its header states the hazard in general -
+a pathspec commit leaves the hook's staged file behind, and the next commit takes it whoever runs
+it - and then unstages one name. **The padder stages any markdown it changes**, so the guard is
+narrower than the hazard the comment describes.
+
+## One measurement this lane can add, and it narrows the fix
+
+**This lane's commit form cannot produce the strand.** It stages by name and then commits with no
+pathspec, which commits the **index** - so the padder's changes land rather than being left
+behind. Checked: the index matches `HEAD` after every commit today.
+
+**So the hazard is specific to `git commit <pathspec>`**, and widening the guard is not the only
+repair available. **Which repair is right is the code lane's call** and this item does not choose
+one.
+
+## Why it is an item and not a commit message, which is what was asked
+
+**Two things this week were recorded in prose by someone who knew them, and lost anyway.**
+
+```
+hooks/pre-commit:37   counted two instances of the staging race and missed the one that
+                      caused the second call it was explaining - a fact in a comment, in
+                      the right file, by someone who knew it
+b055da2b              carried S-152's fix with no message describing it; two lanes each
+                      spent a search three days later
+```
+
+**`CLAUDE.md` says it without needing the examples**: *never a paragraph in a discussion, never a
+sentence in a reply, never a line in a note* - and *noting it in a discussion paragraph and moving
+on reads like diligence and behaves like forgetting. The queue is what gets read; prose is not.*
+
+**A commit message is the form that failed twice this week**, which is a stronger reason than the
+rule.
+
+## And the reasoning for not widening it now belongs in the record too
+
+**The code lane's words, kept because they are right**: it is a change to how every lane's commits
+behave, over a file that sat in the index for ten minutes, and **the right moment to decide it is
+not while holding the thing that caused it.**
+
 ### S-165 - `play.4x` states as fact that launching puts nothing into orbit, and two files say it does
 
 **to** code · **status** open · **raised** 2026-09-24 · **source** measuring what stands between Sean and moving an Ark on the map
