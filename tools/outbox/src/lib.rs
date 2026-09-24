@@ -347,12 +347,33 @@ pub fn misfiled_by_asks(items: &[Item]) -> (usize, Vec<String>) {
     let mut population = 0;
     let mut wrong = Vec::new();
     for item in items {
+        // **Only what is in a queue**, because *is this in the right queue* has no meaning for
+        // an item that is in none. `S-158`: three withdrawn items moved out of
+        // `decide/questions.md` into the record were reported as misfiled on every commit,
+        // and all three were correctly placed. **An `asks` field records what the item asked
+        // while it was open**; it stops being a routing instruction when the item closes.
+        //
+        // **The cost of not doing this was not the three false lines.** They share the output
+        // that reports the cross-column staging race, and work has been lost to that race
+        // three times - so a check that cries wolf on every commit trains every lane to skim
+        // the one place a real warning appears. It also grew: each withdrawn item moved into
+        // the record added a line.
+        if item.status != "open" {
+            continue;
+        }
         let home = match item.outbox.as_str() {
-            "docs/notes/proposals.md" | "decide/proposals.md" => "approval",
-            // **`questions.md` is `decisions.md` under its new name** - `S-132`. What a file
-            // holds decides what its items may ask, and both names hold the same thing: a
-            // choice only Sean can make.
-            "docs/notes/decisions.md" | "decide/questions.md" => "a decision",
+            // **The two files addressed to Sean, which moved on 2026-09-14** - `S-132`. These
+            // were `docs/notes/proposals.md` and `docs/notes/decisions.md` until the queue
+            // moved to `decide/`, and naming the old pair here meant **the record inherited a
+            // routing rule written for a queue**: a withdrawn item asking approval passed
+            // because the record's filename is `proposals.md`, which is the right answer
+            // reached by reading a file name rather than by the rule holding.
+            //
+            // **`questions.md` is `decisions.md` under its new name.** What a file holds
+            // decides what its items may ask, and both names held the same thing: a choice
+            // only Sean can make.
+            "decide/proposals.md" => "approval",
+            "decide/questions.md" => "a decision",
             _ => continue,
         };
         // `field` takes one word, and `a decision` is two.
@@ -1338,8 +1359,8 @@ Not closed, so not orphaned.
 
 **to** sean · **status** open · **asks** approval
 ";
-        let mut items = parse(asking_approval, "docs/notes/proposals.md");
-        items.extend(parse(asking_a_decision, "docs/notes/decisions.md"));
+        let mut items = parse(asking_approval, "decide/proposals.md");
+        items.extend(parse(asking_a_decision, "decide/questions.md"));
         let (population, wrong) = misfiled_by_asks(&items);
         assert_eq!(population, 2, "both carry an `asks` field");
         assert!(
@@ -1348,8 +1369,8 @@ Not closed, so not orphaned.
         );
 
         // Now each in the other's file, which is the pair of failures.
-        let mut swapped = parse(asking_a_decision, "docs/notes/proposals.md");
-        swapped.extend(parse(asking_approval, "docs/notes/decisions.md"));
+        let mut swapped = parse(asking_a_decision, "decide/proposals.md");
+        swapped.extend(parse(asking_approval, "decide/questions.md"));
         let (population, wrong) = misfiled_by_asks(&swapped);
         assert_eq!(population, 2);
         assert_eq!(
@@ -1359,13 +1380,88 @@ Not closed, so not orphaned.
              while approvals piled up where he never looks for them: {wrong:?}"
         );
         assert!(wrong[0].contains("P-311") && wrong[0].contains("proposals.md"));
-        assert!(wrong[1].contains("P-312") && wrong[1].contains("decisions.md"));
+        assert!(wrong[1].contains("P-312") && wrong[1].contains("questions.md"));
 
         // An item in neither file is not this check's business, and an item with no `asks`
         // is not in the population - zero offences over zero items is a green that means
         // nothing.
         let elsewhere = parse(asking_a_decision, "crates/outbox.md");
         assert_eq!(misfiled_by_asks(&elsewhere), (0, Vec::new()));
+    }
+
+    /// A closed item is in no queue, so asking which queue it belongs in means nothing.
+    ///
+    /// **This is the half that was reporting three offences that were not offences.**
+    /// `P-536`, `P-517` and `P-516` asked a decision and were moved out of
+    /// `decide/questions.md` into the record when they were withdrawn, because `decide/` holds
+    /// what waits on a person and a withdrawn item waits on nobody. The `asks` field records
+    /// what the item asked **while it was open**.
+    ///
+    /// **And the cost was not the three lines.** They shared the output that reports the
+    /// cross-column staging race, and work has been lost to that race three times - so a
+    /// check that cries wolf on every commit trains every lane to skim the one place a real
+    /// warning appears. `S-158`.
+    #[test]
+    fn a_closed_item_is_in_no_queue_and_is_not_routed() {
+        let withdrawn = "\
+### P-516 - a choice only Sean can make, withdrawn
+
+**to** sean · **status** withdrawn · **asks** a decision
+";
+        let open = "\
+### P-600 - a choice only Sean can make
+
+**to** sean · **status** open · **asks** a decision
+";
+        // Both in the file for approvals, so both are misfiled if both are routed.
+        let mut items = parse(withdrawn, "decide/proposals.md");
+        items.extend(parse(open, "decide/proposals.md"));
+        let (population, wrong) = misfiled_by_asks(&items);
+        assert_eq!(
+            population, 1,
+            "the withdrawn one is in no queue and is not counted"
+        );
+        assert_eq!(
+            wrong.len(),
+            1,
+            "only the open one is routed, and it is misfiled: {wrong:?}"
+        );
+        assert!(wrong[0].contains("P-600"), "{wrong:?}");
+    }
+
+    /// The record is not one of the two files addressed to Sean, and naming it was the defect.
+    ///
+    /// **This is the half that was passing for the wrong reason, and nothing caught it for
+    /// nine days.** The `home` map read `docs/notes/proposals.md` as *the file that holds what
+    /// asks approval*, which it was until the queue moved to `decide/` on 2026-09-14. So five
+    /// withdrawn items asking approval, sitting in the record, passed - because the record's
+    /// **file name** is `proposals.md`, not because any rule held.
+    ///
+    /// **A right answer reached by reading a file name is the failure this whole check is
+    /// about**, one level up: it is the instrument answering a narrower question than the one
+    /// asked and returning a plausible result rather than an error.
+    #[test]
+    fn the_record_is_not_a_queue_and_its_items_are_not_routed() {
+        let misfiled = "\
+### P-601 - a choice only Sean can make
+
+**to** sean · **status** open · **asks** a decision
+";
+        // In the record, whose name says `proposals` and which holds neither queue.
+        let items = parse(misfiled, "docs/notes/proposals.md");
+        let (population, wrong) = misfiled_by_asks(&items);
+        assert_eq!(
+            (population, wrong.len()),
+            (0, 0),
+            "the record is not addressed to Sean, so nothing in it is routed: {wrong:?}"
+        );
+
+        // And the same item in the queue it names is routed, so this is not passing by
+        // finding nothing anywhere.
+        let in_queue = parse(misfiled, "decide/proposals.md");
+        let (population, wrong) = misfiled_by_asks(&in_queue);
+        assert_eq!(population, 1);
+        assert_eq!(wrong.len(), 1, "{wrong:?}");
     }
 
     /// An id that is in both of Sean's files during a move is reported.

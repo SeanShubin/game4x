@@ -451,6 +451,17 @@ fn complain(all: &Outboxes) -> Vec<Note> {
     // Advisory for the same reason: both of Sean's files are the specification lane's, and
     // this lane must not stop them committing over one. `S-53`.
     let (asked, misfiled) = misfiled_by_asks(&all.items);
+    // **Zero offences over zero items is the same green as a rule that holds**, which is why
+    // `misfiled_by_asks` returns the population at all - and until now nothing read it. After
+    // `S-158` narrowed the population to the open items of the two `decide/` files, today's
+    // population is zero: the queue is empty. **So the check is now green over nothing and
+    // says so**, rather than the caller reporting a clean result it did not earn.
+    if asked == 0 {
+        notes.push(Note::Advisory(
+            "no open item in `decide/` carries an `asks` field, so the check that each is in              the right one of the two files addressed to Sean ran over nothing. That is the              good state when the queue is empty and a hole when it is not."
+                .to_string(),
+        ));
+    }
     if !misfiled.is_empty() {
         notes.push(Note::Advisory(format!(
             "{} of {} item(s) carrying an `asks` field are in the wrong one of the two files \
