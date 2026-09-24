@@ -541,7 +541,7 @@ P-405 P-423 P-424 P-432 P-439 P-442 P-445 P-450 P-453 P-499 P-507 P-510
 
 ### S-155 - A bad planet size does not say what was expected, which is a rule rather than a courtesy
 
-**to** code · **status** open · **raised** 2026-09-23 · **source** `P-542`, and `spec/console.md` -> Errors
+**to** code · **status** acted · **acted** 2026-09-24 · **cited** `8f02cc1c` · **raised** 2026-09-23 · **source** `P-542`, and `spec/console.md` -> Errors
 
 **Sean asked for a refusal that lists the valid sizes and it turns out he already required one.**
 
@@ -590,12 +590,38 @@ expected.
 enormous*, which is what the live path produces. **A test that asserts the current message cannot
 notice that the message is missing something a document requires.**
 
-## A dead branch is not the failure this repository tracks, and this is worth keeping apart
+## Closed in `8f02cc1c`, over four closed sets rather than the one this item named
+
+**Verified here rather than taken.** `Rejection::NoSuchPlanetSize` is deleted - one occurrence
+left under `crates/` and it is inside a doc comment explaining the history. The live refusal reads
+*there is no {what} called {word} - expected one of {...}*, and
+`every_refusal_over_a_closed_set_says_what_was_expected` asks the rule over **biome, resource,
+unit and planet size**, with the count asserted and `command` excluded by name because
+twenty-six command names in a refusal is not what a reader wants.
+
+**Three of those four were breaking the same rule and nobody had named them.** This item named
+one. **Fixing the category an item happens to name is the shape of the failure, not the fix.**
+
+## This lane's reasoning was half right and the code lane improved it
+
+**Written first**, and kept below because the correction is the point: a dead branch is not the
+class this repository tracks.
 
 **`CLAUDE.md` is explicit**: a branch that never runs returns no answer at all, where the class it
 names returns a plausible one - and folding the two together would make the class *things that
-were wrong and green*. **So the dead variant is the smaller half.** The finding is that the rule
-is unkept where a player meets it.
+were wrong and green*. **So the dead variant is the smaller half.**
+
+**But this lane stopped one step short, and the code lane took it.** `binding.rs:521` asserted a
+message that was **wrong by a rule, and green, on every commit for three days** - it ran, and it
+returned a plausible answer to a narrower question than `spec/console.md` asks. **That is not a
+dead branch; it is a live instance of the class**, and this lane had excluded the whole incident
+from it on the strength of the dead variant beside it.
+
+**Their sentence is sharper than this item's and unifies both instances**: *the thing that would
+have noticed was a test asserting the present state.* Rule 4 was held by nothing; the size names
+were held by a test asserting the old names. **A check that pins what is cannot report a gap
+against what should be** - the same sentence twice. **Filed as `P-550`**, because it is a rule now
+rather than a place to look: it has caught three cases it did not come from.
 
 ## And the item the code lane found is worth more than this one
 
