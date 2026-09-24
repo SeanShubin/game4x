@@ -11,6 +11,51 @@ of it needs you.
 
 ## Open
 
+### P-548 - Two sentences close the gaps in who writes what, and a check keeps them closed
+
+**to** sean · **status** open · **raised** 2026-09-24 · **kind** recovered · **shape** text · **asks** approval · **into** `CLAUDE.md` -> Perspectives
+
+**You answered both cells, and gave a better reason than this lane's for one of them.** The 43-row
+table is not what lands - it restates what the columns already say and goes stale the next time a
+directory is added. **What lands is your two sentences and a check.** The table is kept in
+[`docs/notes/decisions.md`](../docs/notes/decisions.md) as the measurement it was.
+
+## What lands
+
+**After the column table:**
+
+> **`decide/` is the specification lane's.** The specification puts things there for Sean to read,
+> and they are removed from there according to his interactions with that lane - so it is written
+> by the lane whose queue it is, and nothing is filed there for another instance.
+
+**And after the production-support paragraph:**
+
+> **The pipeline and the local build belong to the code lane too.** `.gitignore`,
+> `.gitattributes`, `.git/`, `.idea/` and `target/` are mechanical details of how things get
+> implemented rather than production support proper, **and that is near enough** - the lane that
+> implements owns how implementing works.
+
+## What the check does, and what it would have caught
+
+**`tools/spec` asserts that every top-level path is owned by exactly one column**, reading the
+directory rather than a list. **A list is the thing that went stale**: the Code row named
+`commands/` for nineteen days after `ddbaed66` deleted it.
+
+```
+would have caught   .idea/, lenses/, tools/, .git/    four paths this lane missed
+                    by hand, and the assertion caught
+will catch          the next directory anybody adds
+```
+
+**This is the half that makes the sentences worth landing rather than just being true.** Written
+after `P-546` lands, since that settles where such a check lives.
+
+## Why not the table
+
+**`CLAUDE.md` says a consequence belongs in the spec only when another rule leans on it**, and no
+rule leans on *`docs/theory/` is the specification lane's* - it follows from `docs/`. **Forty-three
+rows would need editing on every new directory**, which is the failure the check removes.
+
 ### P-546 - The architecture check lives in `tools/spec/`, where the lane it constrains cannot edit it
 
 **to** sean · **status** open · **raised** 2026-09-24 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/README.md` -> Rules for this directory

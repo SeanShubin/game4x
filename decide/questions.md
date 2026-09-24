@@ -11,142 +11,67 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
-### P-547 - Rule 4 says engine types live in *the* adapter, and four crates outside it name `bevy::`
+### P-547 - `adapter` in rule 4 means the layer, and the only real violation is a plugin written in the composition root
 
-**to** sean · **status** open · **raised** 2026-09-24 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `docs/architecture.md` -> Rules, then `spec/architecture.md`
+**to** sean · **status** open · **raised** 2026-09-24 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `docs/architecture.md` -> The layers and Rules
 
-**You asked that rule 4 be fixed if it is broken. It is broken, and the first question is which
-of the two things is wrong** - the rule or the code. That one is yours, because the rule's content
-is yours.
+**This item offered three answers and two of them were answers to the wrong question.** Reading
+`docs/architecture.md` -> The layers rather than only its Rules changed what is broken. **The
+question left is one row of a table.**
 
-## What rule 4 says today
-
-```
-4. Engine types live only in the adapter. No `bevy::` anywhere else, including in
-   the composition root's own logic - the root may assemble plugins, but it may
-   not compute with engine types.
-```
-
-## What is measured
+## What the layer table already says
 
 ```
-bevy:: in src/   what docs/architecture.md calls it
-planet-bevy       8    view        "The Bevy adapter"
-planet-flat      12    view        "The Bevy adapter for the flat projection"
-planet-ecs        1    entities    "Game entities, as ECS entities. Contains no rules"
-game4x            8    binary      "A composition root and nothing else"
-game-globe        3    binding     "Binds the globe to the one game"
+Layer              Knows about                   Does not know about
+Supporting crates  Spheres, graphs, integers     Pixels, windows, engines
+Rendering          Pixels, cameras, projections  Windows, input devices, engines
+Engine adapter     Bevy, windows, input, vsync   How anything actually works
+Composition root   All of the above, briefly     Nothing else; it holds no logic
 ```
 
-**Two of the four look like design rather than drift.** `planet-ecs` exists to hold ECS entities,
-and `planet-flat` is called an adapter in the same document that says there is one. **Two look
-like drift**: `game-globe`, and `game4x/src/inspect.rs`, which defines Bevy systems taking `Res`
-and `ResMut` in the composition root - the one case the rule forbids in so many words.
+**`Engine adapter` is a layer, not a crate.** So `planet-bevy` and `planet-flat` both sitting in
+it was never a violation - the document calls both of them adapters because both are adapters, and
+rule 4's *the adapter* is this row. **This lane read the rule and not the table**, and reported
+four violations where the table already excused two.
 
-## The three answers
+## What is actually left, and it is two things of different sizes
 
-**`R1` - the rule names a layer, not a crate.** *Engine types live only in the adapter layer* -
-`planet-bevy`, `planet-flat` and `planet-ecs` - and nowhere above or below it. The two drifts
-become defects, and a check is writable today.
+**One: `game-globe` and `planet-ecs` are engine-side and the layer row does not fit them.**
+`planet-ecs` holds ECS entities, which rule 6 says *exist where the engine needs something to draw
+or to receive input* - engine-side by definition. `game-globe` is a Bevy plugin crate whose whole
+job is to make the globe follow **the** game.
 
-**`R2` - the rule names the crates.** The list is the rule, and adding a crate to it is a
-decision rather than an edit. Sharpest check; goes stale when a crate is added, which is the
-point.
+**So both know Bevy and both know how things work**, and the `Engine adapter` row says the layer
+*does not know about how anything actually works*. **That sentence is what is wrong**, not the
+crates.
 
-**`R3` - the rule keeps its wording and the code changes.** `planet-ecs` and `planet-flat` fold
-into `planet-bevy`, or gain a boundary that keeps `bevy::` out of them. Truest to what is written
-and by far the largest.
+**Two: `crates/game4x/src/inspect.rs` writes a plugin in the composition root.** 166 lines,
+`InspectPlugin`, two systems taking `Res` and `ResMut`. **Rule 4 permits the root to assemble
+plugins and not to write them**, and the layer table says the root *holds no logic*.
+
+## The decision, which is smaller than what this item first asked
+
+**`A1` - widen the layer's description.** `Engine adapter` knows *Bevy, windows, input, vsync, and
+what the game is when a surface has to follow it*. One row, no code moves, and `planet-ecs` and
+`game-globe` stop being violations because they never were.
+
+**`A2` - split the layer in two.** `Engine adapter` stays engine-only for `planet-bevy`,
+`planet-flat` and `planet-ecs`; a fifth row above it holds engine code that knows the game, which
+today is `game-globe` alone. Sharper, and a layer with one crate in it.
 
 ## What this lane would say
 
-**`R1`.** It is the only one of the three that makes the document stop contradicting itself
-without moving any code, and it leaves both real drifts red rather than legalising them.
-**`R3` may still be right later** - a second engine is the test of whether the boundary was real,
-and that is the doc's own words - but it is a restructuring and not a repair.
+**`A1`, and it is the smaller claim.** `A2` describes a distinction that is real - `planet-bevy`
+knows nothing about a game and `game-globe` exists to know one - but a layer per crate is a table
+that has stopped being a layering.
 
-**And the ordering matters.** `P-546` puts an architecture check in `tools/spec/`. **A check
-written against rule 4 before you answer this would make a rule look held while enforcing the
-wrong thing**, which is worse than no check.
+## And `inspect.rs` needs no decision from you
 
-### P-548 - Every directory and who writes it, and three cells `CLAUDE.md` never assigns
+**The fix is a crate boundary, not a rewrite.** Its own header says what matters: *nothing here is
+compiled differently from what ships - the same binary plays and poses*, and **that survives the
+move intact.** A crate of its own that `game4x` adds as a plugin keeps every word of that true and
+puts the systems in the adapter layer where they belong.
 
-**to** sean · **status** open · **raised** 2026-09-24 · **kind** measured · **shape** rows · **asks** a decision · **into** `CLAUDE.md` -> Perspectives
-
-**You asked for the full list.** Here it is, built against the filesystem and asserted: every
-top-level directory and every tracked root file appears exactly once.
-
-**It asks a decision rather than approval because three cells are this lane's choice**, not
-something derivable from what the file already says. They are the bold ones.
-
-| Path                | Who writes it                                  | Where that comes from      |
-| ------------------- | ---------------------------------------------- | -------------------------- |
-| `spec/`             | Specification, by promotion                    | stated                     |
-| `spec/data/`        | Specification, by promotion                    | stated, as `spec/`         |
-| `spec/future/`      | Specification, by promotion                    | stated, as `spec/`         |
-| `spec/tests/`       | Specification drafts, Sean approves            | stated                     |
-| `releases/`         | Specification, by promotion                    | stated                     |
-| `docs/`             | Specification                                  | stated                     |
-| `docs/notes/`       | Specification                                  | stated, as Claude's        |
-| `docs/postmortems/` | Specification                                  | stated, as `docs/`         |
-| `docs/prototypes/`  | Specification                                  | stated, as `docs/`         |
-| `docs/recipes/`     | Specification                                  | stated, as `docs/`         |
-| `docs/theory/`      | Specification                                  | stated, as `docs/`         |
-| `decide/`           | **Specification**                              | **nowhere**                |
-| `tools/spec/`       | Specification                                  | stated                     |
-| `README.md`         | Specification                                  | stated                     |
-| `CLAUDE.md`         | Specification, and its columns need Sean       | stated                     |
-| `crates/`           | Code                                           | stated                     |
-| `web/`              | Code                                           | stated                     |
-| `prototypes/`       | Code                                           | stated                     |
-| `scenario/`         | Code                                           | stated                     |
-| `reports/`          | Code                                           | stated                     |
-| `hooks/`            | Code, production support                       | stated                     |
-| `scripts/`          | Code, production support                       | stated                     |
-| `.github/`          | Code, production support                       | stated, as CI              |
-| `tools/anchor/`     | Code, production support                       | stated                     |
-| `tools/hooks/`      | Code, production support                       | stated                     |
-| `tools/outbox/`     | Code, production support                       | stated                     |
-| `tools/pad-tables/` | Code, production support                       | stated                     |
-| `Cargo.toml`        | Code                                           | stated, as cargo           |
-| `Cargo.lock`        | Code                                           | stated, as cargo           |
-| `.gitignore`        | **Code**                                       | **nowhere**                |
-| `.gitattributes`    | **Code**                                       | **nowhere**                |
-| `lenses/quality/`   | The quality lens                               | stated                     |
-| `tools/quality/`    | The quality lens                               | stated                     |
-| `lenses/research/`  | The research lens                              | stated                     |
-| `tools/research/`   | The research lens                              | stated                     |
-| `reviewed/`         | Nobody. The review application, acting as Sean | stated                     |
-| `temporary-notes/`  | Sean, and no instance reads it uninvited       | stated                     |
-| `pending.md`        | Nobody. Generated from every outbox            | stated                     |
-| `target/`           | Nobody. Untracked build output                 | not mentioned, not tracked |
-| `lenses/`           | Nobody at its root. Each lens writes its own   | stated, per lens           |
-| `tools/`            | Nobody at its root. Each entry is owned        | stated, per entry          |
-| `.git/`             | Nobody. Git's own                              | not mentioned, not tracked |
-| `.idea/`            | Nobody. Ignored by `.gitignore:17`             | not mentioned, not tracked |
-
-## The three that come from nowhere
-
-**`decide/` has no writer.** `CLAUDE.md` names it four times and says what it is for - *it holds
-what waits on a person* - and never says who may write it. **This lane has been writing it all
-along**, which is the obvious reading and still a choice nobody approved.
-
-**`.gitignore` and `.gitattributes` are not mentioned at all.** Production support covers
-*`hooks/`, `scripts/`, CI, and everything in `tools/` that is not a lane's own*, and a dotfile in
-the root is none of those.
-
-**Nothing else needed a guess.** The four `docs/` subdirectories and `spec/data/`, `spec/future/`
-follow from their parent, and every `tools/` entry follows from the production-support sentence or
-from a lane's name.
-
-## One thing this lane changed rather than asked about
-
-**The Code row named `commands/`, which was deleted on 2026-09-05** - `ddbaed66` moved those files
-into `scenario/commands/`, already covered by `scenario/`. **A path that names nothing grants
-nothing**, so removing it changes no permission, and `CLAUDE.md` makes paths this lane's to settle
-and report. Reported here.
-
-## What it does not do
-
-**It does not say what a lane may write into another's directory, because the answer is nothing.**
-The three asymmetric rules under Perspectives already cover that and this table does not restate
-them.
+**Filed to the code lane in `S-160`**, which this lane will narrow to say so once you have answered
+the row above - because *where* the plugin should go depends on whether there are four layers or
+five.

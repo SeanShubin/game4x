@@ -26,6 +26,98 @@ ones, for their reasoning.
 
 ## Answered, kept for the reasoning
 
+## The working behind `P-548`, answered on 2026-09-24
+
+**Not an item** - `P-548` is a proposal and lives in
+[`decide/proposals.md`](../../decide/proposals.md).
+
+**The table is kept because it is the measurement**, and because the rewrite deliberately
+does not land it: a 43-row list of directories restates what the columns already say and
+goes stale the next time one is added. **What lands instead is the two missing sentences
+and a check.**
+
+
+**to** sean · **status** open · **raised** 2026-09-24 · **kind** measured · **shape** rows · **asks** a decision · **into** `CLAUDE.md` -> Perspectives
+
+**You asked for the full list.** Here it is, built against the filesystem and asserted: every
+top-level directory and every tracked root file appears exactly once.
+
+**It asks a decision rather than approval because three cells are this lane's choice**, not
+something derivable from what the file already says. They are the bold ones.
+
+| Path                | Who writes it                                  | Where that comes from      |
+| ------------------- | ---------------------------------------------- | -------------------------- |
+| `spec/`             | Specification, by promotion                    | stated                     |
+| `spec/data/`        | Specification, by promotion                    | stated, as `spec/`         |
+| `spec/future/`      | Specification, by promotion                    | stated, as `spec/`         |
+| `spec/tests/`       | Specification drafts, Sean approves            | stated                     |
+| `releases/`         | Specification, by promotion                    | stated                     |
+| `docs/`             | Specification                                  | stated                     |
+| `docs/notes/`       | Specification                                  | stated, as Claude's        |
+| `docs/postmortems/` | Specification                                  | stated, as `docs/`         |
+| `docs/prototypes/`  | Specification                                  | stated, as `docs/`         |
+| `docs/recipes/`     | Specification                                  | stated, as `docs/`         |
+| `docs/theory/`      | Specification                                  | stated, as `docs/`         |
+| `decide/`           | **Specification**                              | **nowhere**                |
+| `tools/spec/`       | Specification                                  | stated                     |
+| `README.md`         | Specification                                  | stated                     |
+| `CLAUDE.md`         | Specification, and its columns need Sean       | stated                     |
+| `crates/`           | Code                                           | stated                     |
+| `web/`              | Code                                           | stated                     |
+| `prototypes/`       | Code                                           | stated                     |
+| `scenario/`         | Code                                           | stated                     |
+| `reports/`          | Code                                           | stated                     |
+| `hooks/`            | Code, production support                       | stated                     |
+| `scripts/`          | Code, production support                       | stated                     |
+| `.github/`          | Code, production support                       | stated, as CI              |
+| `tools/anchor/`     | Code, production support                       | stated                     |
+| `tools/hooks/`      | Code, production support                       | stated                     |
+| `tools/outbox/`     | Code, production support                       | stated                     |
+| `tools/pad-tables/` | Code, production support                       | stated                     |
+| `Cargo.toml`        | Code                                           | stated, as cargo           |
+| `Cargo.lock`        | Code                                           | stated, as cargo           |
+| `.gitignore`        | **Code**                                       | **nowhere**                |
+| `.gitattributes`    | **Code**                                       | **nowhere**                |
+| `lenses/quality/`   | The quality lens                               | stated                     |
+| `tools/quality/`    | The quality lens                               | stated                     |
+| `lenses/research/`  | The research lens                              | stated                     |
+| `tools/research/`   | The research lens                              | stated                     |
+| `reviewed/`         | Nobody. The review application, acting as Sean | stated                     |
+| `temporary-notes/`  | Sean, and no instance reads it uninvited       | stated                     |
+| `pending.md`        | Nobody. Generated from every outbox            | stated                     |
+| `target/`           | Nobody. Untracked build output                 | not mentioned, not tracked |
+| `lenses/`           | Nobody at its root. Each lens writes its own   | stated, per lens           |
+| `tools/`            | Nobody at its root. Each entry is owned        | stated, per entry          |
+| `.git/`             | Nobody. Git's own                              | not mentioned, not tracked |
+| `.idea/`            | Nobody. Ignored by `.gitignore:17`             | not mentioned, not tracked |
+
+## The three that come from nowhere
+
+**`decide/` has no writer.** `CLAUDE.md` names it four times and says what it is for - *it holds
+what waits on a person* - and never says who may write it. **This lane has been writing it all
+along**, which is the obvious reading and still a choice nobody approved.
+
+**`.gitignore` and `.gitattributes` are not mentioned at all.** Production support covers
+*`hooks/`, `scripts/`, CI, and everything in `tools/` that is not a lane's own*, and a dotfile in
+the root is none of those.
+
+**Nothing else needed a guess.** The four `docs/` subdirectories and `spec/data/`, `spec/future/`
+follow from their parent, and every `tools/` entry follows from the production-support sentence or
+from a lane's name.
+
+## One thing this lane changed rather than asked about
+
+**The Code row named `commands/`, which was deleted on 2026-09-05** - `ddbaed66` moved those files
+into `scenario/commands/`, already covered by `scenario/`. **A path that names nothing grants
+nothing**, so removing it changes no permission, and `CLAUDE.md` makes paths this lane's to settle
+and report. Reported here.
+
+## What it does not do
+
+**It does not say what a lane may write into another's directory, because the answer is nothing.**
+The three asymmetric rules under Perspectives already cover that and this table does not restate
+them.
+
 ## The working behind `P-546`, answered `C1` on 2026-09-24
 
 **Not an item** - `P-546` is a proposal and lives in

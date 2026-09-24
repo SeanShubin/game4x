@@ -110,11 +110,21 @@ inspect.rs:80   drawn: Res<planet_bevy::globe::Drawn>,
 **It asks you to fix the README sentence**, which is a fact about your column and needs no
 decision from anyone.
 
-**It does not ask you to restructure anything.** Whether `planet-ecs` and `planet-flat` breaking
-rule 4 is drift or design is not this lane's to judge - `planet-ecs` holds ECS entities and
-`planet-flat` is described as a second Bevy adapter, so both may be exactly what was intended.
-**`P-547` puts that to Sean**, and no check should be written against rule 4 until he has
-answered.
+**It does not ask you to restructure anything, and this lane has narrowed what it claims.**
+`docs/architecture.md` -> The layers lists **`Engine adapter` as a layer**, not a crate - so
+`planet-bevy` and `planet-flat` both sitting in it was never a violation, and this item first said
+otherwise because it read the Rules and not the table. **Corrected here rather than left for you
+to find.**
+
+**What is left is `game-globe` and `planet-ecs` against one sentence of that table** - the
+`Engine adapter` row says the layer *does not know about how anything actually works*, and both
+of them do. **`P-547` puts that row to Sean** and no check should be written against rule 4 until
+he has answered, because the row decides whether there are four layers or five.
+
+**And `inspect.rs` has a fix that needs no decision: a crate boundary rather than a rewrite.** Its
+header says *nothing here is compiled differently from what ships - the same binary plays and
+poses*, and **a crate of its own that `game4x` adds as a plugin keeps that true.** 166 lines and
+two systems move; the root goes back to assembling.
 
 **Nothing is red.** No gate fails on this today, which is the finding: the rule has been written
 down and unheld for as long as it has existed.

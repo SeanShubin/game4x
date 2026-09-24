@@ -8,10 +8,10 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-548** - Two sentences close the gaps in who writes what, and a check keeps them closed · `decide/proposals.md`
 - **P-546** - The architecture check lives in `tools/spec/`, where the lane it constrains cannot edit it · `decide/proposals.md`
 - **P-545** - `spec/` covers the shape of the artifact, not only the rules of the game · `decide/proposals.md`
-- **P-547** - Rule 4 says engine types live in *the* adapter, and four crates outside it name `bevy::` · `decide/questions.md`
-- **P-548** - Every directory and who writes it, and three cells `CLAUDE.md` never assigns · `decide/questions.md`
+- **P-547** - `adapter` in rule 4 means the layer, and the only real violation is a plugin written in the composition root · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
