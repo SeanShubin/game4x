@@ -134,19 +134,19 @@ Food is made with `keeps` 1.
 
 ## What bounds a kind in a territory
 
-| Kind          | Bounded by                                               |
-| ------------- | -------------------------------------------------------- |
-| **citizen**   | the food produced here, through upkeep                   |
-| **extractor** | a capacity, from *Territory resources*                   |
-| **store**     | as many as the extractors of its resource                |
-| **yard**      | a capacity of 1                                          |
-| **ark**       | a capacity of 2                                          |
-| **pioneer**   | a capacity of 2                                          |
-| **labor**     | the citizens that make it, one each per turn             |
-| **fertility** | the citizens that make it, one each per turn             |
-| **food**      | the things in it that hold it, and it keeps for one turn |
-| **metal**     | the things in it that hold it                            |
-| **energy**    | the things in it that hold it                            |
+| Kind          | Bounded by                                                            |
+| ------------- | --------------------------------------------------------------------- |
+| **citizen**   | the food produced here, through upkeep                                |
+| **extractor** | a capacity, from *Territory resources*                                |
+| **store**     | as many as the extractors of its resource                             |
+| **yard**      | a capacity of 1                                                       |
+| **ark**       | a capacity of 2 in the orbit, which is the only place that admits one |
+| **pioneer**   | a capacity of 2                                                       |
+| **labor**     | the citizens that make it, one each per turn                          |
+| **fertility** | the citizens that make it, one each per turn                          |
+| **food**      | the things in it that hold it, and it keeps for one turn              |
+| **metal**     | the things in it that hold it                                         |
+| **energy**    | the things in it that hold it                                         |
 
 A territory declares **no limit** for a resource. It declares capacity for the things that hold
 them - a store holds what it was built to hold, and an extractor holds nothing. **A raw material

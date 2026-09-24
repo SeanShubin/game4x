@@ -16,6 +16,9 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
   adjacent by being layers of one territory. Neither is a further rule.
 - **The layers do not admit the same things.** What may stand in a layer, and how much room a
   layer gives, are declared per layer. An orbit admits no extractor and no citizen.
+- **An ark is never on the surface.** Launching spends materials from the surface and ends with an
+  ark in orbit; deploying spends the ark and ends with citizens and extractors on the surface. **A
+  surface admits no ark**, which is the layer rule above said from the other side.
 
 ## What sits in orbit
 
