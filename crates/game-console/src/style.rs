@@ -199,6 +199,35 @@ mod tests {
         out
     }
 
+    /// A class this crate can write that the committed scenario does not reach.
+    ///
+    /// **`blank` is the one, and what put it here is a game rule rather than a page.**
+    /// `dump.rs` writes it on a table with no rows and `browse.rs` on a territory with no
+    /// borders, and until `S-165` the scenario ended with an empty `unit` table - launching
+    /// paid an Ark's cost and produced nothing, so the last state of the game had no unit in
+    /// it. **The Ark it now leaves in orbit fills that table**, and the class stopped being
+    /// reached by any page.
+    ///
+    /// **Which is the check telling the truth about its own reach.** It asks whether the
+    /// committed scenario's pages use a class, not whether this crate can write one - a
+    /// narrower question than the name, and the narrowness only shows when the answers
+    /// differ. Deleting the rule would be worse than the exception: `dump.rs` would go on
+    /// writing `class="blank"` and the first empty table would trip the other half.
+    const UNREACHED: [&str; 1] = ["blank"];
+
+    /// Where each exception is written, so it cannot outlive the code that writes it.
+    fn emitters() -> String {
+        let src = Path::new(env!("CARGO_MANIFEST_DIR")).join("src");
+        let mut out = String::new();
+        for entry in std::fs::read_dir(&src).expect("this crate has a src directory") {
+            let path = entry.expect("a readable entry").path();
+            if path.extension().is_some_and(|it| it == "rs") {
+                out.push_str(&std::fs::read_to_string(&path).expect("a readable source file"));
+            }
+        }
+        out
+    }
+
     /// Every class the stylesheets define is used by some page, and the other way round.
     ///
     /// **This is the check the three inline blocks could not have.** A rule that nothing uses
@@ -206,6 +235,10 @@ mod tests {
     /// merging, and neither is visible while the rules live in the file that uses them. Both
     /// directions, over every class, with both populations asserted - two empty sets compare
     /// equal and mean nothing.
+    ///
+    /// **[`UNREACHED`] is set aside and each one is asserted present first**, so an exception
+    /// cannot outlive the code that earns it: a class nothing writes any more is a rule to
+    /// delete, and this would go on excusing it.
     #[test]
     fn every_class_is_both_defined_and_used() {
         let defined = defined();
@@ -223,7 +256,32 @@ mod tests {
             unstyled.is_empty(),
             "these classes are used by a page and no stylesheet defines them: {unstyled:?}"
         );
-        let unused: Vec<&String> = defined.iter().filter(|it| !used.contains(it)).collect();
+
+        // **Present before it is set aside.** Each exception has to be a class this crate
+        // still writes, or the exception is what is stale rather than the stylesheet.
+        let source = emitters();
+        for class in UNREACHED {
+            assert!(
+                source.contains(&format!("class=\\\"{class}\\\"")),
+                "`{class}` is excused as unreachable by the scenario and nothing in this \
+                 crate writes it - so the rule is dead and the exception is hiding it"
+            );
+            assert!(
+                defined.contains(&class.to_string()),
+                "`{class}` is excused and no stylesheet defines it, so there is nothing to \
+                 excuse"
+            );
+            assert!(
+                !used.contains(&class.to_string()),
+                "`{class}` is reached by a page after all - drop it from `UNREACHED` rather \
+                 than carrying an exception that excuses nothing"
+            );
+        }
+
+        let unused: Vec<&String> = defined
+            .iter()
+            .filter(|it| !used.contains(it) && !UNREACHED.contains(&it.as_str()))
+            .collect();
         assert!(
             unused.is_empty(),
             "these classes are defined and no page uses them: {unused:?}"

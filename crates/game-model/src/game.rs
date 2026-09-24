@@ -57,6 +57,14 @@ pub mod cost {
     // of a garrison: no recipe is named for one, so those two figures were stated there and
     // nowhere else and are now stated nowhere. **Nothing here ever charged them**, which is
     // `P-467`'s finding and why deleting them changes no game.
+    /// How many Arks one orbit admits.
+    ///
+    /// **`P-549` moved this bound's container and not its number.** The release says *a
+    /// capacity of 2 in the orbit, which is the only place that admits one*, and
+    /// `spec/data/limit.4x` says `{limit container:orbit contained:ark n:2}`. It bounded the
+    /// territory until 2026-09-24 and nothing read it either way, because nothing produced an
+    /// Ark - which is `S-165`.
+    pub const ARKS_IN_AN_ORBIT: u32 = 2;
     /// A move costs one energy, **taken from the place the unit leaves**.
     ///
     /// **`$from` is the whole of `S-150`.** `releases/first-release.md` -> Recipes gives
@@ -180,6 +188,22 @@ impl Game {
 
     pub fn units_in_orbit(&self) -> Vec<&Unit> {
         self.units.iter().filter(|unit| unit.in_orbit()).collect()
+    }
+
+    /// How many Arks are in the orbit above a territory.
+    ///
+    /// **One orbit, not all of them** - `releases/first-release.md` bounds an Ark by *a
+    /// capacity of 2 in the orbit*, and `spec/data/limit.4x` says `container:orbit`, so the
+    /// container is one orbit rather than the sky. A count over every orbit would refuse the
+    /// third launch of a game wherever it happened.
+    pub fn arks_above(&self, id: TerritoryId) -> u32 {
+        self.units
+            .iter()
+            .filter(|unit| {
+                unit.kind == crate::identity::UnitKind::Ark
+                    && unit.location == crate::unit::Location::Orbit(id)
+            })
+            .count() as u32
     }
 
     /// All the force present in a territory.
@@ -381,6 +405,98 @@ mod tests {
             })
             .unwrap();
         assert!(won.has_won(), "the planet was finished and an Ark left it");
+    }
+
+    /// Launching leaves an Ark in the orbit above where it was launched, up to two.
+    ///
+    /// # The check that would have failed before this
+    ///
+    /// **`launch` fired four of its recipe's five rows and nothing said so.** The release
+    /// gives `launch ark` a **produce 1 ark above `$where`** row and `spec/data/line.4x`
+    /// writes the same row; the model paid the metal, the energy and the citizens, required
+    /// the Yard, and produced nothing. **Every test of launching asked what it cost or whether
+    /// it won**, so all of them passed over the missing half.
+    ///
+    /// **Sean settled it as `P-549`**: *yes launching leaves the ark in orbit, we spend
+    /// materials from the surface and end up with an ark in orbit, and an ark is never on the
+    /// surface.* `S-165` is the comment in `scenario/commands/play.4x` that said the opposite
+    /// and was believed.
+    ///
+    /// # Both halves, because the bound had no reader either
+    ///
+    /// **Where it goes, and how many one orbit takes.** An Ark appears above the territory the
+    /// launch named and above no other, which is what *above `$where`* means; and the third
+    /// launch from the same place is refused, which is the release's *a capacity of 2 in the
+    /// orbit*. **The bound was unreadable while nothing produced an Ark** - it bounded the
+    /// territory until `P-549` and no code looked at it either way.
+    #[test]
+    fn launching_leaves_an_ark_in_the_orbit_above_it() {
+        let mut game = designed().after(&Transition::Start).unwrap();
+        let afford = |game: &mut Game, at: usize, launches: u32| {
+            let place = &mut game.territories[at];
+            place.set_count(Kind::Yard, 1);
+            let enough = place.citizens().max(cost::ARK_CITIZENS * launches);
+            place.set_count(Kind::Citizen, enough);
+            place.add(Resource::Metal, cost::ARK_METAL * launches);
+            place.add(Resource::Energy, cost::ARK_ENERGY * launches);
+        };
+        // Three launches' worth, so the third is refused by the orbit rather than by the bill.
+        afford(&mut game, 0, cost::ARKS_IN_AN_ORBIT + 1);
+        // **`designed()` puts an Ark in orbit 1 already**, and this test is about the Ark a
+        // launch makes rather than the one a designer placed. Cleared rather than counted
+        // from, so the orbit's bound is reached by launching three times and not by two.
+        assert!(
+            !game.units.is_empty(),
+            "the fixture placed a unit, and clearing an empty list would hide a change to it"
+        );
+        game.units.clear();
+        assert_eq!(
+            game.arks_above(TerritoryId(1)),
+            0,
+            "the sky is empty to start with, or the count below says nothing"
+        );
+
+        let launch = Transition::Launch {
+            territory: TerritoryId(1),
+        };
+        let once = game.after(&launch).expect("the first launch is affordable");
+        assert_eq!(
+            once.arks_above(TerritoryId(1)),
+            1,
+            "launching leaves an Ark in the orbit above where it was launched"
+        );
+        assert!(
+            once.units.iter().all(|unit| unit.in_orbit()),
+            "an ark is never on the surface - `P-549`"
+        );
+        assert_eq!(
+            once.arks_above(TerritoryId(2)),
+            0,
+            "above `$where` and above nowhere else"
+        );
+
+        let twice = once.after(&launch).expect("two fit in one orbit");
+        assert_eq!(twice.arks_above(TerritoryId(1)), cost::ARKS_IN_AN_ORBIT);
+
+        let refused = twice
+            .after(&launch)
+            .expect_err("the orbit holds two, and the third has nowhere to go");
+        assert_eq!(
+            refused,
+            Rejection::NoRoomForAnother {
+                territory: TerritoryId(1),
+                kind: Kind::Ark,
+            },
+            "refused by the orbit rather than by what it costs"
+        );
+        assert!(
+            twice
+                .territory(TerritoryId(1))
+                .unwrap()
+                .store(Resource::Metal)
+                >= cost::ARK_METAL,
+            "the third launch was affordable, so the refusal above is about the room"
+        );
     }
 
     /// Launching off an unfinished planet is just leaving.

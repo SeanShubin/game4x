@@ -122,10 +122,13 @@ fn the_normalized_view_has_no_nested_cells() {
         cells.iter().map(|(table, _, _)| table).collect();
     assert_eq!(
         tables.len(),
-        10,
-        "ten tables in state.md with rows under them; {} were read ({tables:?}). \
-         `unit` is the eleventh and is empty - the ark deploys and `P-342` made launching \
-         put nothing into orbit, so the scenario ends with no unit at all",
+        11,
+        "eleven tables in state.md with rows under them; {} were read ({tables:?}). \
+         `unit` is the eleventh and it was empty until `S-165` - the ark deploys, and a \
+         comment in the scenario said `P-342` made launching put nothing into orbit. It does \
+         not: `launch ark` carries a `produce 1 ark above $where` row the model was not \
+         firing, and Sean settled it as `P-549`. So the scenario ends with one Ark, in orbit \
+         above territory 1",
         tables.len()
     );
 }

@@ -258,6 +258,55 @@ fn cost_of(thing: &str, what: &str) -> u32 {
         .0
 }
 
+/// The number in a kind's cell of *What bounds a kind in a territory*.
+///
+/// **A bound is not a cost and this table is not the Recipes table**, which is why it has a
+/// reader of its own rather than an arm of `cost_of`. `ARKS_IN_AN_ORBIT` is the first constant
+/// in `game::cost` that states a capacity, and a capacity is stated here.
+///
+/// **The cell is prose and the number is read out of it**, because that is how the release
+/// writes this column - *a capacity of 2 in the orbit, which is the only place that admits
+/// one*. Refused rather than guessed at when the cell carries more than one number, since a
+/// second would make which one is the bound a choice this reader is not entitled to make.
+fn bound_of(kind: &str) -> u32 {
+    let text = std::fs::read_to_string(
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../releases/first-release.md"),
+    )
+    .expect("the release document");
+    let heading = "## What bounds a kind in a territory";
+    let rows = game_console::recipes::body_under(&text, heading);
+    assert!(
+        !rows.is_empty(),
+        "the bound table parsed to nothing, so every bound would read as zero"
+    );
+    let bounded_at = game_console::recipes::column_of(&text, heading, "Bounded by");
+    let cell = rows
+        .iter()
+        .find(|row| {
+            row.first()
+                .map(|name| game_console::recipes::plain(name))
+                .as_deref()
+                == Some(kind)
+        })
+        .unwrap_or_else(|| panic!("the bound table has no `{kind}` row"))
+        .get(bounded_at)
+        .unwrap_or_else(|| panic!("the `{kind}` row has no `Bounded by` cell"))
+        .clone();
+    let numbers: Vec<u32> = cell
+        .split(|c: char| !c.is_ascii_digit())
+        .filter(|part| !part.is_empty())
+        .filter_map(|part| part.parse().ok())
+        .collect();
+    assert_eq!(
+        numbers.len(),
+        1,
+        "`{kind}` is bounded by {cell:?}, which carries {} numbers - which one is the bound is \
+         not this reader's to choose",
+        numbers.len()
+    );
+    numbers[0]
+}
+
 fn run(session: &mut Session, line: &str) -> Outcome {
     session
         .run(line, &Files::commands())
@@ -454,7 +503,7 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
     // that happen to be 2 - `cost::PIONEER_ENERGY` is what `produce pioneer` spends and
     // `UnitKind::fuel()` is the room the tank gives. **A second constant can disagree with the
     // Units table again**, and this row is what would say so.
-    let checked: [(&str, u32, &str, &str); 13] = [
+    let checked: [(&str, u32, &str, &str); 14] = [
         ("STORE_LABOR", cost::STORE_LABOR, "store", "labor"),
         ("STORE_METAL", cost::STORE_METAL, "store", "metal"),
         ("YARD_LABOR", cost::YARD_LABOR, "yard", "labor"),
@@ -489,21 +538,28 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
             "metal",
         ),
         ("MOVE_ENERGY", cost::MOVE_ENERGY, "move", "energy"),
+        // **A bound rather than a cost, and the third reader is why it is here** - `S-165`.
+        // `launch ark` produces an Ark now, so the orbit's capacity has a reader for the first
+        // time; a figure in `game::cost` that nothing compares with the release is exactly what
+        // the set assertion below exists to name.
+        ("ARKS_IN_AN_ORBIT", cost::ARKS_IN_AN_ORBIT, "bound", "ark"),
     ];
 
     for (name, held, thing, what) in checked {
-        let stated = if thing == "move" {
-            recipe_consumes(thing)
-                .into_iter()
-                .find(|(_, cell)| cell == what)
-                .unwrap_or_else(|| panic!("`{thing}` consumes no {what}"))
-                .0
-        } else {
-            cost_of(thing, what)
+        let stated = match thing {
+            "move" => {
+                recipe_consumes(thing)
+                    .into_iter()
+                    .find(|(_, cell)| cell == what)
+                    .unwrap_or_else(|| panic!("`{thing}` consumes no {what}"))
+                    .0
+            }
+            "bound" => bound_of(what),
+            _ => cost_of(thing, what),
         };
         assert_eq!(
             held, stated,
-            "`cost::{name}` is {held} and the release says `{thing}` takes {stated} {what}"
+            "`cost::{name}` is {held} and the release says {stated} for `{thing}` `{what}`"
         );
     }
 

@@ -2966,8 +2966,9 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 - {territory id:2 biome:grassland} {deposit density:6 resource:food occupied:0 free:2 capacity:2} -> 1
 - {territory id:2 biome:grassland} {pioneer id:1 defending:1 moving:1} -> 1
 
-**new** (13)
+**new** (14)
 
+- {orbit id:1} {ark id:1 defending:1 moving:1} -> 1
 - {territory id:1 biome:grassland} {citizen bearing:1 defending:1 laboring:0 paid:0} -> 3
 - {territory id:1 biome:grassland} {extractor resource:energy working:0} -> 1
 - {territory id:1 biome:grassland} {extractor resource:food working:0} -> 3
@@ -3072,7 +3073,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 | phase | territories | units |
 | ----- | ----------- | ----- |
-| play  | 12          | 0     |
+| play  | 12          | 1     |
 
 1 row(s)
 
@@ -3274,8 +3275,9 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 | id  | kind | in-kind | in-id | fuel | ready |
 | --- | ---- | ------- | ----- | ---- | ----- |
+| 1   | ark  | orbit   | 1     | 0    | yes   |
 
-*(empty) 0 rows*
+1 row(s)
 
 ### adjacency
 
@@ -3326,7 +3328,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | extractor | 11      |
 | garrison  | 2       |
 | yard      | 1       |
-| ark       | 0       |
+| ark       | 1       |
 | pioneer   | 0       |
 | territory | 12      |
 | adjacency | 30      |
@@ -3454,7 +3456,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 | phase | territories | units |
 | ----- | ----------- | ----- |
-| play  | 12          | 0     |
+| play  | 12          | 1     |
 
 1 row(s)
 
@@ -3656,8 +3658,9 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 | id  | kind | in-kind | in-id | fuel | ready |
 | --- | ---- | ------- | ----- | ---- | ----- |
+| 1   | ark  | orbit   | 1     | 0    | yes   |
 
-*(empty) 0 rows*
+1 row(s)
 
 ### adjacency
 
@@ -3708,7 +3711,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | extractor | 11      |
 | garrison  | 2       |
 | yard      | 1       |
-| ark       | 0       |
+| ark       | 1       |
 | pioneer   | 0       |
 | territory | 12      |
 | adjacency | 30      |

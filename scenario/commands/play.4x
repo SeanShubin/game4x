@@ -167,8 +167,19 @@
 
 {end-turn}
 
-# Turn 10. No Ark crosses: `P-342` made launching one recipe that pays an Ark's cost at a Yard
-# and puts nothing into orbit, so there is no Ark to move. The pioneer's crossing on turn 8 is
+# Turn 10. No Ark crosses, and the reason is not the one written here until `S-165`.
+#
+# **The comment said launching puts nothing into orbit and that was false.** `P-342` made
+# launching one recipe that pays an Ark's cost at a Yard, and that recipe has always carried a
+# `produce 1 ark above $where` row - the model fired four of its five. Sean settled it in
+# `P-549`: *yes launching leaves the ark in orbit, we spend materials from the surface and end
+# up with an ark in orbit, and an ark is never on the surface.*
+#
+# **So there is an Ark, and it does not cross because nothing here tells it to.** An Ark moves
+# in orbit and lands by `deploy-ark`; this scenario launches one on turn 10 and stops, so the
+# state it leaves has an Ark above territory 1. **What is untested is orbital movement**, which
+# is a gap in the scenario rather than a fact about the rules - and it was reported as one for
+# three days because a comment explained the absence. The pioneer's crossing on turn 8 is
 # the move this file fires, and it fires because founding needs it rather than because a case
 # was written to exercise it - `C-63` answered by `S-76`.
 # The farms are worked first, as always: a population that gathers nothing this turn starves

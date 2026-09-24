@@ -213,12 +213,29 @@ impl Game {
             2,
         )
     }
-    /// `launch ark`: an Ark's cost is paid at a Yard, and nothing comes back.
+    /// `launch ark`: an Ark's cost is paid at a Yard, and an Ark is what comes back.
     ///
     /// **`P-342`, and it answers the second half of `C-54`.** There were two recipes and one
     /// of them was not a recipe: `produce ark` built an Ark, and `launch` moved it to orbit
     /// while firing nothing the release declared. **Launching is not a move now** - the cost
-    /// is consumed, the Yard is required, and nothing is put anywhere.
+    /// is consumed, the Yard is required, and the Ark is made where it ends up.
+    ///
+    /// # The Ark in orbit, which this did not produce until `S-165`
+    ///
+    /// **Sean, 2026-09-24, answering `P-549`**: *yes launching leaves the ark in orbit, we
+    /// spend materials from the surface and end up with an ark in orbit, and an ark is never
+    /// on the surface.* The release had said so all along - `launch ark` carries a **produce
+    /// 1 ark above `$where`** row, and `spec/data/line.4x` writes the same row - and this
+    /// function fired four of the five and stopped.
+    ///
+    /// **What made it look deliberate was a comment.** `scenario/commands/play.4x` said *no
+    /// Ark crosses: `P-342` made launching one recipe that pays an Ark's cost at a Yard and
+    /// puts nothing into orbit, so there is no Ark to move*, which is the explanation a reader
+    /// reaches for when a case is absent. `S-165` is that comment, and it was false.
+    ///
+    /// **`P-549` also says where an Ark may be**, and the bound below is the release's
+    /// *a capacity of 2 in the orbit, which is the only place that admits one*. Nothing
+    /// needed it while launching produced nothing; a recipe that makes one does.
     ///
     /// **Asked before the cost is paid**, because it is the planet as it stands that has to
     /// meet the condition - and paying first would take two citizens off it. That is true of
@@ -242,10 +259,23 @@ impl Game {
                 needed: cost::ARK_CITIZENS,
             });
         }
+        // **The orbit's room is asked with the Yard and the citizens**, before anything is
+        // spent, so a refused launch costs nothing.
+        if self.arks_above(territory) >= cost::ARKS_IN_AN_ORBIT {
+            return Err(Rejection::NoRoomForAnother {
+                territory,
+                kind: Kind::Ark,
+            });
+        }
         let won = self.is_fully_exploited();
         self.spend(territory, Resource::Metal, cost::ARK_METAL)?;
         self.spend(territory, Resource::Energy, cost::ARK_ENERGY)?;
         self.territories[territory.index()].remove(Kind::Citizen, cost::ARK_CITIZENS);
+        // **Above `$where`, which is the row's own *Where* cell.** `Unit::new` puts a unit in
+        // the orbit over the territory it names, which is where an Ark belongs and the only
+        // place it ever is.
+        let id = UnitId(self.units.len() as u32 + 1);
+        self.units.push(Unit::new(id, UnitKind::Ark, territory));
         self.won = won;
         Ok(())
     }

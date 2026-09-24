@@ -288,6 +288,7 @@ Before:
 
 ```
 {game phase:play}
+  {orbit id:1} -> 1
   {territory id:1 biome:grassland} -> 1
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {energy} -> 12
@@ -302,6 +303,8 @@ After:
 
 ```
 {game phase:play}
+  {orbit id:1} -> 1
+    {ark id:1 defending:1 moving:1} -> 1
   {territory id:1 biome:grassland} -> 1
     {garrison} -> 1
     {yard} -> 1

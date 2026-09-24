@@ -150,19 +150,29 @@ fn the_entity_view_names_every_kind_and_admits_what_it_cannot_name() {
     let kinds: Vec<&str> = tables.iter().map(|t| t.kind.as_str()).collect();
     assert_eq!(kinds, ["game", "territory", "unit"]);
 
-    // **The scenario leaves no unit, and the table is there anyway** - which is the whole
-    // point of the renderer naming what is empty.
+    // **The table is there whatever the scenario leaves in it**, which is the whole point of
+    // the renderer naming what is empty.
     //
-    // It has been both. It left none, then `S-14` extended it through `produce ark` and
-    // `launch` and it left one, and `P-342` made launching produce nothing so it leaves none
-    // again. **What is asserted here is the table rather than the count**, because the count
-    // is a fact about how far the scenario goes and the table is a fact about the renderer -
-    // and `an_empty_table_is_named_rather_than_omitted` shows the renderer against a fresh
-    // game, where emptiness is not an accident of coverage.
+    // It has been both, three times now. It left none; `S-14` extended it through `produce
+    // ark` and `launch` and it left one; `P-342` made launching produce nothing so it left
+    // none again; and `S-165` found that `P-342` never said that - the release's `launch ark`
+    // has always carried a `produce 1 ark above $where` row, the model fired four of its five,
+    // and Sean settled it in `P-549`. **So it leaves one Ark, in orbit above territory 1.**
+    //
+    // **The comment above this said what to assert and the assertion said something else.**
+    // *What is asserted here is the table rather than the count, because the count is a fact
+    // about how far the scenario goes and the table is a fact about the renderer* - and then
+    // it asserted the count, which is why this test went red on a change to the rules rather
+    // than to the renderer. **It now asserts what it said it was asserting**, and the count
+    // that is a fact about the scenario is named rather than required to be zero.
+    //
+    // `an_empty_table_is_named_rather_than_omitted` shows the renderer against a fresh game,
+    // where emptiness is not an accident of coverage, and that is where the empty case lives.
     let unit = tables.iter().find(|t| t.kind == "unit").expect("listed");
-    assert!(
-        unit.rows.is_empty(),
-        "the ark deployed and nothing was launched into orbit after it"
+    assert_eq!(
+        unit.rows.len(),
+        1,
+        "the scenario deploys one Ark and launches one, and the launched one is in orbit"
     );
     let text = dump::entities_markdown(&session.game, "after");
     assert!(text.contains("## unit"), "and it has a table regardless");
