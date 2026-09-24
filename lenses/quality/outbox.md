@@ -546,6 +546,24 @@ than eventually.
 of `movable` and Readies is canonical is Sean's, and the honest form of the question is that one of
 them is a duplicate or neither is defined.
 
+## Re-checked 2026-09-24, and the shape of the answer has moved
+
+**The claim still holds, verified rather than assumed.** `readies` is still nowhere in `spec/`;
+`{trait name:movable admits:number kept:kind}` is still in `spec/data/traits.4x`, carried by `ark`
+and `pioneer` alone at `carries.4x:18` and `:24` - the lines moved from 23 and 30 and nothing else
+did; and the release still carries the **Readies** column.
+
+**What moved is what the repair should be, and it happened two days after this was filed.** Sean,
+2026-09-20: *this is a prototype not bound by the spec... I lost executive control of the spec and
+am re-asserting that control with precise tests.* So `spec/` is what is under suspicion, and a
+proposal adding `readies` to it may be answering the older question. **The number is already in the
+prototype**, where it arrived as a test he has read.
+
+**So this lane should ask which artifact the answer belongs in before drafting**, and this lens is
+not deciding that. **What does not change is the duplication**: `movable` and the Readies column
+state one fact twice, or are two facts nothing distinguishes, and neither the prototype nor the
+shift touches that.
+
 ### Q-93 - The prototype's backlog says the sum blocks storage, and the sum shipped in the commit that said so
 
 **to** code · **status** **withdrawn** 2026-09-24 · **cited** `b74f25c` · **raised** 2026-09-18 · **source**
