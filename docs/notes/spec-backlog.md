@@ -8,6 +8,20 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+
+## 2026-09-24 - interface state, and what a command refers to
+
+**Sean**: *I think we are going to have to invent commands for controlling the user interface, but
+I still want a clean separation between user interface state and game mechanics state. The game
+mechanics are abstract rules while the user interface is how the user interacts with those rules.
+And the game mechanics should know nothing about the user interface. Perhaps this requires a
+different term to distinguish the game state in the rules from the state of the user interface.*
+
+**And**: *perhaps update our language to be clear about what commands refer to.*
+
+**Filed as `P-551`**, which measures the hole his two invariants leave between them and which words
+are already taken.
+
 ## Said 2026-09-13: organise the code so that little of it has to be read
 
 *I also think some of this can be solved by organizing the code so that I don't have to look at much
