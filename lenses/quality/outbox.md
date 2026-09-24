@@ -321,8 +321,22 @@ A terminator rather than a number would do it.
 
 ### Q-96 - A test is named for two numbers nothing states, and its argument lives in another file
 
-**to** code · **status** open · **raised** 2026-09-18 · **source**
+**to** code · **status** **acted** 2026-09-24 · `4f89b719` · **raised** 2026-09-18 · **source**
 [A test named for a number nothing states](2026-09-18-a-test-named-for-a-number-nothing-states.md)
+
+## Closed 2026-09-24, verified at the file rather than from the commit title
+
+**Both halves are addressed**, read at `spec/tests/the-same-free-space-admits-one-kind-and-refuses-another.4x`.
+The name is the mechanism. The header carries Sean's words, the point that `berth`, `scout` and
+`transport` are stated nowhere outside the prototype, and it **names**
+`a-scout-moves-where-there-is-a-berth-to-spare` with the reason the contrast has to live in two
+files - which was the half of the item that asked for something a later rename could find. That
+neighbour is still there, so the pointer lands.
+
+**The thing worth saying is what moved while this sat open.** The prototype is now
+`crates/thin-engine/`, its tests are `spec/tests/`, the record is `reviewed/` at the repository
+root, and the world has gained `place` and `layer` - so the item's own `data/friendly/tests/` path
+was stale by the time it closed. **The finding survived the move and the path did not.**
 
 **Where.** `data/friendly/tests/a-transport-takes-two-berths-where-a-scout-takes-one.4x` and its
 foundation copy - the `{test name:...}` line and the header comment. Raised by Sean, 2026-09-18:
@@ -463,8 +477,33 @@ them is a duplicate or neither is defined.
 
 ### Q-93 - The prototype's backlog says the sum blocks storage, and the sum shipped in the commit that said so
 
-**to** code · **status** open · **cited** `b74f25c` · **raised** 2026-09-18 · **source**
+**to** code · **status** **withdrawn** 2026-09-24 · **cited** `b74f25c` · **raised** 2026-09-18 · **source**
 [Storage is three-quarters built](2026-09-18-storage-is-built-and-the-turn-is-what-waits.md)
+
+## Withdrawn 2026-09-24: every line it was about has been rewritten, and the code lane found the same thing itself
+
+**This item is the failure it was written about, turned on itself.** It named three stale lines in
+a backlog, and six days later none of the three exists: `grep` for *blocks the rest*, *first real
+arithmetic* and `{store where:territory-1 what:metal}` in `crates/thin-engine/backlog.md` returns
+nothing. **Nothing edited this item and its subject went away.**
+
+**The backlog now says the finding in the code lane's own voice**, which is why this is withdrawn
+rather than acted: *the one this section said blocked the rest - the sum - was the smallest part of
+it*, and beside two struck-out rows, *this entry was wrong about that... The limit keys on
+`(where, what)` and always could*. **No commit cites `Q-93`**, so they reached it by doing the work
+rather than by reading this.
+
+**And the ordering half is overtaken entirely.** It recommended the turn before storage. Storage is
+done - all six rows struck out - and the turn is built: `spec/tests/` holds
+`ending-a-turn-restores-a-scout-and-an-extractor`, `ending-a-turn-takes-what-is-in-disorder` and
+`unspent-labor-does-not-survive-the-turn`. **The refuse-versus-lose point was the one that
+mattered** and it landed as *disorder*, which is neither of the two answers this item posed.
+
+**What it got right is worth keeping and what it got wrong is worth more.** The correction appended
+on 2026-09-18 - that 15 of the 28 constraint rows are `put` values rather than comparisons - held,
+and the backlog's *no comparison after all: `keep` bounds a quantity rather than testing one* is
+the same conclusion reached from the other side. **The item's paths were `prototypes/thin-engine/`
+and that directory no longer exists.**
 
 **Where.** `prototypes/thin-engine/backlog.md` - the Storage table, and line 28.
 
@@ -559,6 +598,25 @@ lens on its own framing.** It is a **different predicate rather than a weaker on
 catch a loss in the readable era that the text sweep misses: a title can keep its referent through a
 rewording the text comparison flags, and can lose one with no promotion touching the file at all.
 Both halves of the sweep above are blind to that.
+
+## Still open, and something has been built beside it - 2026-09-24
+
+**The claim holds unchanged**: `tools/outbox/tests/promotions.rs` still computes `Verdict::Repaired`
+against `HEAD`, and nothing asks whether approved prose is still in `spec/`. The code lane has read
+this and is not acting on it, which is what the item asks.
+
+**What is new is that the same guarantee now exists for a different artifact.**
+`crates/thin-engine/tests/reviewed.rs` compares `spec/tests/` against the records in `reviewed/` on
+every build - `CLAUDE.md` puts it as *a promotion is verified once, at the moment of copying, and a
+test is compared against the record on every build*, which is this item's sentence said about
+tests. **So the gap this item names is real enough that it was closed for tests without anyone
+citing this**, and there is now a working instrument to model the prose one on rather than a design
+to invent.
+
+**One thing in that file is worth a reader's attention and is not this lens's to file**: its own
+comment records `S-149` - *`CLAUDE.md` says the suite runs `reviewed/`. It ran `spec/tests/`* -
+found by the specification lane on 2026-09-21. **A document and the code disagreeing about which
+directory is authoritative is the same shape as this item**, one level up.
 
 ### Q-9 - Small duplication and dead code, six items
 
