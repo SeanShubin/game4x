@@ -822,6 +822,21 @@ quoting failure of that hour came from a `python -c` or a heredoc editing anothe
 them reporting *invalid escape sequence* and *anchor not found* together - two errors, one cause,
 and neither about the repository. **A file has one level of quoting.**
 
+**`tools/anchor` is the carrier for both of those rules, and this file has never named it.** It
+takes the anchor and the replacement as files, compares them with whitespace collapsed, maps the
+match back to the original bytes, and refuses a match of none or of two - so a wrapped sentence
+cannot hide and a padded row cannot either. `anchor edit <file> <edits-file>` applies several from
+one file, which its own comment explains was the point: *the carrier lost to the failure it
+prevents, because it was harder to use.*
+
+**This lane is the evidence rather than the reporter.** `C-129` was filed by the code lane on
+2026-09-15, after Sean asked whether the root cause could be addressed. On 2026-09-24 this lane
+spent a day hand-rolling a scratchpad script that normalizes both sides and refuses none-or-two -
+reimplementing `tools/anchor` without knowing it existed, and hitting a bug in the reimplementation
+that the real one does not have. **A rule stated without its tool is a rule whose tool nobody
+reaches for.**
+
+
 Rebuild a table from a declared list instead, and **assert** the result: that every item is
 accounted for exactly once, and that a list of files matches what is actually on disk. A
 scripted edit that cannot fail loudly will fail quietly.

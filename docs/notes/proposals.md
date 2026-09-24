@@ -121,6 +121,25 @@ tools/quality         3               0                         0
 **Counted with `quotations.rs`'s own extension set** - `rs`, `md`, `html`, `sh`, `ps1`, skipping
 `target`, `dist` and `report.html`.
 
+## The instrument says one, and every number below counts something else
+
+**The code lane turned the exclusion off and ran the checker: one finding.** `9d615858`. It is
+`touching.rs`, the line that reddened their gate, and nothing else.
+
+**A line naming a file of the specification is a candidate; a finding is a line whose quoted words
+are no longer in that file.** Almost all of `tools/spec`'s fifty-five quote something still there.
+**So 55, 57, 6, 9 and 10 are all true numbers about sets the checker never judges.**
+
+**Four predicates measured the directory and none of us ran the thing.** This lane got closest by
+opening `quotations.rs` and reading its extension set - and reading an instrument is not running
+it. **The step nobody took was the cheapest one available.**
+
+**What it means for this item**: the live cost today is one line, already harmless because nothing
+sweeps there. **The standing question is unchanged in kind and smaller in evidence.** And the code
+lane says plainly what it has *not* measured - what the exclusion gives up in future coverage,
+which needs a count of the quotations the checker verifies rather than of the lines it might. **So
+*one* is today's cost and not an argument that the gap is small.**
+
 ## Three lanes counted it and the numbers are three predicates
 
 ```
@@ -138,7 +157,17 @@ a bold span that a quotation follows, which is what their predicate looks for an
 **And the research lens is 0 over Rust files and 3 over what the sweep reads.** Both lanes counted
 Rust and got zero; the sweep also reads `.md`, and `tools/research/editor/README.md` was swept
 before the exclusion and is not now. **Three lines of real loss**, so *the entire loss is yours*
-is off by three. The quality lens's own column is genuinely empty either way.
+is off by three.
+
+**The quality lens's zero was not a measurement at all**, which it found and recorded: its command
+named `tools/research/src` and `tools/research/tests`, neither of which exists, and `2>/dev/null`
+swallowed grep's *no such file* so `wc -l` returned zero. **`C-43`'s shape in an ad-hoc command** -
+already recorded at `hooks/pre-commit:158`, in a comment that credits that lens with finding it.
+
+**And the span counts disagreed for a reason none of the three hypotheses named.** The one candidate
+in `tools/research` is a file name followed by an *italic* quotation, and the code lane's predicate
+asked for a **bold** marker - so the measure written to find its own trigger did not match its own
+trigger.
 
 ## What this lane will not do, and why
 
