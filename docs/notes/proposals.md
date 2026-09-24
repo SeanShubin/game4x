@@ -69,6 +69,46 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-170 - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded
+
+**to** spec · **status** open · **raised** 2026-09-24 · **source** the code lane, building `S-150` and reporting what it did not build
+
+**Their words, and they are a correction to this lane's item.** `S-150` said a unit hauls energy
+when it leaves and called the difference *nearly equivalent*. **It is further from equivalent than
+that**: a unit cannot cross into an empty territory at all now.
+
+```
+spec/logistics.md:40   A thing that leaves takes what it hauls ... The default is to fill
+releases/first-release.md   move's five rows carry no haul, and the command carries no amount
+```
+
+**So the general rule is in `spec/` and the release does not fire it.** A release saying less than
+the specification is allowed - that is what a release is - but this one changes what a player can
+do rather than deferring a feature.
+
+## Why this is not `P-552`
+
+**`P-552` asks where fuel lives** and recommends that an orbit gains energy from the sun, which
+makes an Ark immune to this: the orbit it arrives in has its own income. **A pioneer is not.** It
+crosses to a territory with no energy and stops.
+
+**So this is the ground half and it survives whatever `P-552` decides.** Drafted as a proposal
+once `P-552` is answered, because the wording depends on where fuel lives.
+
+## And the prediction the code lane owed was wrong twice, which is worth keeping
+
+**This lane asked them to predict the diff.** They predicted one line of
+`scenario/expected/play.4x` moving - territory 1's energy from 12 to 11 - and **the file did not
+change at all.**
+
+**Two errors cancelling**: they read the final state's headroom as though it were every turn's,
+where the clamp fires at every turn's end and the territory was over its room on the turns that
+matter; and the pioneer's tank raises what territory 1 carries from 20 to 22 on the turn it is
+built, which they also did not predict. **Both land inside the clamp.**
+
+**Reported by them against themselves**, with `reports/turns.md` carrying both, which is the shape
+a prediction is for: it is worth asking precisely because a wrong one is informative.
+
 ### S-169 - `intent` is 64 uses of the code's vocabulary and zero of the specification's
 
 **to** spec · **status** open · **raised** 2026-09-24 · **source** measuring common game-development terms for `P-551`
@@ -189,7 +229,7 @@ three weeks and the only way it was found was Sean stating the rule in a sentenc
 
 ### S-166 - `post-commit` guards one file against a hazard its own header describes in general
 
-**to** code · **status** open · **raised** 2026-09-24 · **source** the code lane finding it while writing `crates/game-inspect/README.md`, and asking whether it should be an item
+**to** code · **status** acted · **acted** 2026-09-24 · **cited** `285e2f18` · **raised** 2026-09-24 · **source** the code lane finding it while writing `crates/game-inspect/README.md`, and asking whether it should be an item
 
 **Filed by this lane because the answer to that question is yes, and a message is not the
 record.** It is the code lane's column and theirs to close, supersede or reject.
@@ -242,7 +282,7 @@ not while holding the thing that caused it.**
 
 ### S-165 - `play.4x` states as fact that launching puts nothing into orbit, and two files say it does
 
-**to** code · **status** open · **raised** 2026-09-24 · **source** measuring what stands between Sean and moving an Ark on the map
+**to** code · **status** acted · **acted** 2026-09-24 · **cited** `7a83e98c` · **raised** 2026-09-24 · **source** measuring what stands between Sean and moving an Ark on the map
 
 **One comment, and it is load-bearing.** `scenario/commands/play.4x:170`:
 
@@ -1095,7 +1135,7 @@ because he read it.
 
 ### S-150 - `P-512` landed: a unit no longer moves out of a place with no energy
 
-**to** code · **status** open · **raised** 2026-09-21 · **source** `P-512`, promoted
+**to** code · **status** acted · **acted** 2026-09-24 · **cited** `e8b98b2d` · **raised** 2026-09-21 · **source** `P-512`, promoted
 
 **`C-125` is answered and it is the answer you were blocked on.**
 `releases/first-release.md` -> Where things are now has two rows and a `Gives room for` column;

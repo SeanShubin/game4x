@@ -23,22 +23,16 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-166** - `285e2f1` S-166: post-commit says what a pathspec commit left staged · still open in `docs/notes/proposals.md`
-- **S-165** - `7a83e98` S-165: launching leaves an Ark in orbit, which the recipe always said · still open in `docs/notes/proposals.md`
-- **S-150** - `e8b98b2` S-150: a unit holds no fuel, and a move is paid by the place it leaves · still open in `docs/notes/proposals.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
 - **X-39** - `307d675` X-39: the border is sampled under the step, not at the midpoint of its corners · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
-### To code (13)
+### To code (10)
 
 - **S-168** - `move` takes two territories, so an Ark can never be selected to move · `docs/notes/proposals.md`
-- **S-166** - `post-commit` guards one file against a hazard its own header describes in general · `docs/notes/proposals.md`
-- **S-165** - `play.4x` states as fact that launching puts nothing into orbit, and two files say it does · `docs/notes/proposals.md`
 - **S-151** - `fully exploited` is now a term the specification does not define, and you implement it · `docs/notes/proposals.md`
-- **S-150** - `P-512` landed: a unit no longer moves out of a place with no energy · `docs/notes/proposals.md`
 - **S-135** - The relational model has no rendering, and the person it was for cannot read it · `docs/notes/proposals.md`
 - **S-133** - The two follow-ons from pooling, which this lane owed you and did not file · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
@@ -54,8 +48,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (38)
+### To spec (39)
 
+- **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
 - **S-169** - `intent` is 64 uses of the code's vocabulary and zero of the specification's · `docs/notes/proposals.md`
 - **S-167** - Nothing checks what a layer admits, and `limit` cannot say it · `docs/notes/proposals.md`
 - **S-162** - Twelve older proposals were answered and carried, and nothing records which id carried them · `docs/notes/proposals.md`
