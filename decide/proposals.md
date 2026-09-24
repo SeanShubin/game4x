@@ -45,19 +45,34 @@ reword it without approval is a constraint nobody is holding.
 
 ## What this promises that does not exist yet
 
-**There is no `spec/architecture.md`.** The rules are in `docs/architecture.md`, seventeen of them,
-and this lane classified them by one question - *can a program decide it by reading the
+**There is no `spec/architecture.md`.** The rules are in `docs/architecture.md`, seventeen of
+them, and this lane classified them by one question - *can a program decide it by reading the
 repository?*
 
 ```
-already checked      5   rules 11, 12, 13, 15, 16 - thin-engine and the mainline
-checkable, unchecked 8   rules 1, 2, 3, 4, 5, 6, 7, 17
-judgement            4   rules 8, 9, 10, 14
+already checked      7   11, 12, 13, 15, 16, and 3 and 5, which this lane first miscounted
+checkable, unchecked 6   1, 2, 4, 6, 7, 17
+judgement            4   8, 9, 10, 14
 ```
 
-**Measured: no test asserts any crate boundary today.** Nothing in `crates/*/tests/` mentions
-`bevy::` or `f32` as a confinement, so rules 3 and 4 - *no `bevy::` outside the adapter*,
-*floating point lives above the game logic* - are written down and unheld.
+**This lane first wrote that no test asserts any crate boundary, and that was wrong.** Three do:
+
+```
+rule 3  crates/game-model/src/lib.rs:57     no_floating_point_anywhere
+rule 3  crates/planet-model/src/lib.rs:98   the same check in the second model crate
+rule 5  tools/outbox/tests/architecture.rs  every workspace crate is named in the document
+```
+
+**The instrument searched `crates/*/tests/` and these are `#[cfg(test)]` tests inside `src/`.**
+So it answered *do the test directories mention it* and was read as *is it checked* - and it
+returned a plausible zero rather than an error, which is the failure this repository keeps
+naming.
+
+**What is not found is weaker than what is checked.** The six above are *no named check was
+found*, by searching for test functions that collect offences - not a proof that none exists.
+`bevy::` is the one worth a second look: **five crates name `bevy` in their `Cargo.toml`** -
+`game-globe`, `game4x`, `planet-bevy`, `planet-ecs`, `planet-flat` - where rule 4 says engine
+types live in *the* adapter, singular.
 
 **The migration is its own work and not this proposal.** Filed as `S-159` so the gap sits in an
 outbox rather than in this paragraph. **Promoting this makes `spec/` promise a document that is

@@ -84,16 +84,37 @@ constraining the code currently sit where Claude may reword them without Sean's 
 **Can a program decide it by reading the repository?**
 
 ```
-already checked      5   11, 12, 13, 15, 16   thin-engine's isolation and mutation, the model
-                                              against the release
-checkable, unchecked 8   1, 2, 3, 4, 5, 6, 7, 17
+already checked      7   11, 12, 13, 15, 16, 3, 5
+checkable, unchecked 6   1, 2, 4, 6, 7, 17
 judgement            4   8, 9, 10, 14
 ```
 
-**Measured, and this is the part worth acting on**: nothing in `crates/*/tests/` mentions `bevy::`
-or `f32` as a confinement, so rule 3 - *floating point lives above the game logic* - and rule 4 -
-*no `bevy::` anywhere else, including in the composition root's own logic* - are written down and
-held by nothing. **The population is 23 workspace members.**
+**The first version of this item said eight unchecked and that no test asserts any crate
+boundary.** Both were wrong, and the cause is one instrument: it searched `crates/*/tests/`,
+where the checks that exist are `#[cfg(test)]` blocks inside `src/`.
+
+```
+rule 3  crates/game-model/src/lib.rs:57     no_floating_point_anywhere, population asserted
+rule 3  crates/planet-model/src/lib.rs:98   the same, in the second model crate
+rule 5  tools/outbox/tests/architecture.rs  every workspace crate named in the document
+```
+
+**Rule 5's other half holds too and is worth recording**: all 17 crates have a `README.md`,
+counted rather than assumed.
+
+## The two things the corrected sweep turned up
+
+**Rule 4 may already be broken.** Five crates name `bevy` in `Cargo.toml` - `game-globe`,
+`game4x`, `planet-bevy`, `planet-ecs`, `planet-flat` - and rule 4 says engine types live in *the*
+adapter, singular, while `docs/architecture.md` describes *a library crate, one per engine*.
+**Whether five is the adapter plus its permitted neighbours or a drift is not this lane's to
+judge**, and it is the first thing a check would settle.
+
+**And `crates/game-model/src/lib.rs:57` is the pattern to copy.** It strips `#[cfg(test)]` before
+scanning, *because this very test has to name what it forbids in order to look for it*; it skips
+comment lines; and it asserts how many files it read, with a comment explaining that `read_dir`
+is not recursive so **a module moved into a subdirectory would be unscanned and it would stay
+green**. Three of the habits this repository has paid for, in one test.
 
 ## What the work is
 
