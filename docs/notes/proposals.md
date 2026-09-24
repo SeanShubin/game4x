@@ -82,10 +82,17 @@ directories under `tools/`**, correctly - the code lane cannot be red on a file 
 which is the trap `CLAUDE.md` names and which its own comment argued directly above the constant
 that broke it.
 
-**So `tools/spec/` is now swept by nothing**, and that checker's doc comment says quotations in
-another lane's directory *get reported instead*. **Nothing reports them.** The claim is older than
-the exclusion and the coverage has never existed; the code lane said so rather than leaving it,
-and declined to invent a reporting half while clearing a red gate.
+**So `tools/spec/` is now swept by nothing.** This item first said the checker's comment still
+claims such quotations *get reported instead* and that the claim was left standing. **It was
+removed in the same commit**, and `HEAD:95` states the loss accurately instead: *a quotation that
+goes stale in another lane's tool directory is caught by nothing here. That is a real loss.*
+
+**The code lane corrected itself** - it had written its message from the edit it set out to make
+rather than from the one it made, because a replace-this-with-that reads nothing back. **And this
+lane nearly contradicted the correction**: a grep for the phrase returned zero in *both* versions,
+which reads as *the sentence was never there*. It was there, wrapped across a line break, at
+`bc09d0ea^:60`. **A single-line grep against a wrapped sentence**, which `CLAUDE.md` records and
+this lane has now hit four times in a day.
 
 ## What is at risk, measured
 
@@ -112,13 +119,26 @@ tools/quality         3               0                         0
 ```
 
 **Counted with `quotations.rs`'s own extension set** - `rs`, `md`, `html`, `sh`, `ps1`, skipping
-`target`, `dist` and `report.html`. **That filter is the whole of the disagreement.**
-`tools/research` is Python and JavaScript apart from two documents, so a sweep over the directory
-finds 57 lines and a sweep over what the checker reads finds three.
+`target`, `dist` and `report.html`.
 
-**So *the entire loss is yours* is nearly true and not exactly**: the research lens loses three
-lines and one bold span. The quality lens's own column is genuinely empty, and its decision not to
-build a checker for a population of zero stands.
+## Three lanes counted it and the numbers are three predicates
+
+```
+              lines   span   predicate
+this lane       55     10    any `**` anywhere on the line
+the code lane   55      6    a `.md` name, then an emphasis marker later on the SAME line
+quality         57      9    not stated
+```
+
+**The 55 agrees twice**, because all nine of `tools/spec`'s swept files are `.rs`. **The span
+count is a range whose ends were asked different questions**, and the code lane's is the one to
+act on: `CLAUDE.md`'s *Quoting a specification file* describes the shape as a file named **inside**
+a bold span that a quotation follows, which is what their predicate looks for and mine does not.
+
+**And the research lens is 0 over Rust files and 3 over what the sweep reads.** Both lanes counted
+Rust and got zero; the sweep also reads `.md`, and `tools/research/editor/README.md` was swept
+before the exclusion and is not now. **Three lines of real loss**, so *the entire loss is yours*
+is off by three. The quality lens's own column is genuinely empty either way.
 
 ## What this lane will not do, and why
 
