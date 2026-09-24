@@ -63,7 +63,7 @@ Run by the **player**.
 
 ### An example
 
-moving spends one fuel and leaves the unit not ready.
+moving spends one energy where it stood and leaves the unit not ready.
 
 Before:
 
@@ -71,9 +71,9 @@ Before:
 {game phase:play}
   {territory id:1 biome:grassland} -> 1
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
+    {energy} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
   {territory id:2 biome:grassland} -> 1
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
@@ -92,7 +92,6 @@ After:
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:0} -> 1
-      {energy} -> 1
 ```
 
 ## found by land
@@ -116,7 +115,6 @@ Before:
     {deposit density:4 resource:food occupied:0 free:3 capacity:3} -> 1
     {deposit density:4 resource:metal occupied:0 free:3 capacity:3} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 `{found-by-land territory:2}`
@@ -129,7 +127,6 @@ After:
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
     {deposit density:4 resource:metal occupied:1 free:2 capacity:3} -> 1
-    {energy} -> 2
     {extractor resource:food working:1} -> 1
     {extractor resource:metal working:1} -> 1
     {garrison} -> 1
@@ -272,7 +269,6 @@ After:
     {energy} -> 4
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 ## launch ark
@@ -413,7 +409,6 @@ Before:
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 `{end-turn}`
@@ -431,7 +426,6 @@ After:
   {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 ## bear
@@ -463,7 +457,6 @@ Before:
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 `{end-turn}`
@@ -481,7 +474,6 @@ After:
   {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 ## breed
@@ -513,7 +505,6 @@ Before:
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 `{end-turn}`
@@ -531,7 +522,6 @@ After:
   {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 ### An example
@@ -590,7 +580,6 @@ Before:
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 `{end-turn}`
@@ -608,7 +597,6 @@ After:
   {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 ## age
@@ -639,7 +627,6 @@ Before:
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 `{end-turn}`
@@ -657,7 +644,6 @@ After:
   {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 ## spoil
@@ -687,7 +673,6 @@ Before:
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 `{end-turn}`
@@ -705,7 +690,6 @@ After:
   {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 ## stow
@@ -736,7 +720,6 @@ Before:
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 `{end-turn}`
@@ -754,7 +737,6 @@ After:
   {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 ## stow
@@ -785,7 +767,6 @@ Before:
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 `{end-turn}`
@@ -803,7 +784,6 @@ After:
   {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 ## discard
@@ -833,7 +813,6 @@ Before:
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 `{end-turn}`
@@ -851,7 +830,6 @@ After:
   {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 ## discard
@@ -881,7 +859,6 @@ Before:
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 `{end-turn}`
@@ -899,7 +876,6 @@ After:
   {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 ## discard
@@ -929,7 +905,6 @@ Before:
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 `{end-turn}`
@@ -947,7 +922,6 @@ After:
   {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 ## discard
@@ -977,7 +951,6 @@ Before:
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 `{end-turn}`
@@ -995,7 +968,6 @@ After:
   {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 ## refresh
@@ -1025,7 +997,6 @@ Before:
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 `{end-turn}`
@@ -1043,7 +1014,6 @@ After:
   {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 ## refresh
@@ -1073,7 +1043,6 @@ Before:
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 `{end-turn}`
@@ -1091,7 +1060,6 @@ After:
   {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 ## refresh
@@ -1121,7 +1089,6 @@ Before:
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 `{end-turn}`
@@ -1139,7 +1106,6 @@ After:
   {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 ## refresh
@@ -1169,7 +1135,6 @@ Before:
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 `{end-turn}`
@@ -1187,7 +1152,6 @@ After:
   {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 ## renew
@@ -1218,7 +1182,6 @@ Before:
     {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```
 
 `{end-turn}`
@@ -1236,5 +1199,4 @@ After:
   {territory id:2 biome:grassland} -> 1
     {garrison} -> 1
     {pioneer id:1 defending:1 moving:1} -> 1
-      {energy} -> 2
 ```

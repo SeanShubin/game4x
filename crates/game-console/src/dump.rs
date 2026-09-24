@@ -232,7 +232,11 @@ pub fn tables(game: &Game) -> Vec<Table> {
                 Location::On(_) => "territory".to_string(),
             },
             flying.location.territory().0.to_string(),
-            flying.cells.to_string(),
+            // **The tank's size, which is all a tank is since `S-150`.** This read what was
+            // in the bin; a unit holds nothing now, so what the column can say is how much
+            // room the unit brings - `releases/first-release.md` -> Traits, **fuel**, *how
+            // much energy its tank holds*. Where that energy is is the territory's row.
+            flying.kind.fuel().to_string(),
             ready(flying.exhausted),
         ]);
     }
@@ -291,14 +295,15 @@ pub fn tables(game: &Game) -> Vec<Table> {
         // arithmetic rather than a matter of opinion. That is the same shape `P-485` was filed
         // about - a dump and an entity view disagreeing about a thing that holds something -
         // reappearing in a different pair of views, introduced by the fix for the first.
-        let in_bins: u32 = if resource == Resource::Energy {
-            game.units.iter().map(|unit| unit.cells).sum()
-        } else {
-            0
-        };
+        //
+        // **The addend is gone with `S-150` and the paragraph above is kept.** A unit holds
+        // nothing now, so summing the territories is summing everywhere a resource can be -
+        // which is what this row always meant and could not say for three days. **The two
+        // views agree again by there being one place to look** rather than by two sums being
+        // kept level, and the test named above is still what would say otherwise.
         kinds.push(vec![
             resource.name().to_string(),
-            (total(&|t| t.store(resource)) + in_bins).to_string(),
+            total(&|t| t.store(resource)).to_string(),
         ]);
     }
     for kind in StructureKind::ALL {

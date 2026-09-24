@@ -257,6 +257,25 @@ impl Game {
     /// **The complaints separate along the same line.** *There is no pioneer on territory 3*
     /// is now a different answer from *there is no pioneer anywhere*, because the player
     /// named the place; before this, only the second could be said.
+    ///
+    /// # Where the energy comes from, and what changed
+    ///
+    /// **`S-150`, which is `P-512` landed.** The `consume 1 energy` row of `move` has `$from`
+    /// in its *Where* cell, and `$from` is a place. **A unit no longer moves out of a place
+    /// that has no energy**, where before it moved on what it carried and was refused only
+    /// when its own tank was empty.
+    ///
+    /// **The refusal changes with it.** `Rejection::NoCells` said *that pioneer has no energy
+    /// cells left* and is gone; what refuses now is `spend`, which says which territory is
+    /// short, of what, how much it holds and how much was needed. **That is more than the old
+    /// one could say**, because the old one was about a unit with no number a player could
+    /// look up.
+    ///
+    /// **Nothing is hauled, and the release is why.** `spec/logistics.md` gives a general
+    /// rule, *a thing that leaves takes what it hauls*, defaulting to fill. **`move`'s five
+    /// rows in `releases/first-release.md` have no haul among them**, nor does the command
+    /// carry an amount to name one. So a unit crossing into an empty place arrives with
+    /// nothing, and the general rule waits for a release that fires it.
     fn move_unit(
         &mut self,
         kind: UnitKind,
@@ -271,10 +290,10 @@ impl Game {
         if !self.are_adjacent(from, to) {
             return Err(Rejection::NotAdjacent { from, to });
         }
-        // **Standing there is asked before a cell is**, so that "there is no pioneer on 3"
-        // and "it has already moved" stay different complaints.
-        let there = self.pick(kind, |unit| unit.location == Location::On(from));
-        if there.is_none() {
+        // **Standing there is asked before the energy is**, so that "there is no pioneer on
+        // 3" and "territory 3 has no energy" stay different complaints. `pick` takes only
+        // units that are `ready()`, which is where `moving at least 1` is enforced.
+        let Some(at) = self.pick(kind, |unit| unit.location == Location::On(from)) else {
             return Err(match self.pick(kind, |unit| !unit.in_orbit()) {
                 Some(_) => Rejection::NoUnitThere {
                     kind,
@@ -285,12 +304,10 @@ impl Game {
                     where_from: "on the planet",
                 },
             });
-        }
-        let at = self
-            .pick(kind, |unit| {
-                unit.location == Location::On(from) && unit.cells >= cost::MOVE_CELLS
-            })
-            .ok_or(Rejection::NoCells(kind))?;
+        };
+        // **The one energy is the place's** - `S-150`. Spent before the unit is moved, so a
+        // refusal leaves the state as it was.
+        self.spend(from, Resource::Energy, cost::MOVE_ENERGY)?;
 
         // **`P-214` still holds and this guard no longer serves it.** Moving is moving and
         // founding is a different command - that was the rule, and the guard existed because
@@ -301,7 +318,6 @@ impl Game {
         // before `found by land` can fire, so moving there is the only way to found at all,
         // and refusing it would make the recipe unreachable. Moving still founds nothing:
         // arriving leaves the ground unclaimed and the player still says which recipe.
-        self.units[at].cells -= cost::MOVE_CELLS;
         self.units[at].location = Location::On(to);
         self.units[at].exhausted = true;
         Ok(())
@@ -375,8 +391,13 @@ impl Game {
     /// which is `C-94`, resolved in the release's favour: only a garrison coordinates
     /// citizens, and a unit coordinates nobody but itself.
     ///
-    /// **What counts as brought is *able to arrive*** - adjacent, with a cell to spend. A
-    /// unit two territories away is not at the battle, and one with no fuel cannot cross.
+    /// **What counts as brought is *able to arrive*** - adjacent, and able to pay for the
+    /// crossing. A unit two territories away is not at the battle, and one standing in a place
+    /// with no energy cannot cross.
+    ///
+    /// **The second half moved with `S-150` and the sentence did not.** It used to read *one
+    /// with no fuel cannot cross*, and the fuel was the unit's; the energy a move spends is
+    /// now the place's, so what is asked is of the territory the unit is standing in.
     fn force_brought_to(&self, territory: TerritoryId) -> u32 {
         self.units
             .iter()
@@ -390,7 +411,8 @@ impl Game {
                 // arriving and founding are two acts.
                 Location::On(here) if here == territory => true,
                 Location::On(from) => {
-                    unit.cells >= cost::MOVE_CELLS && self.are_adjacent(from, territory)
+                    self.territories[from.index()].store(Resource::Energy) >= cost::MOVE_ENERGY
+                        && self.are_adjacent(from, territory)
                 }
                 // An Ark invades from orbit, which `spec/unit-types.md` allows and is how
                 // the first territory of a game is ever taken.
@@ -438,17 +460,16 @@ impl Game {
         // nothing observable moved - which is why the gate caught this as a stale quotation
         // rather than as a wrong answer.
         //
-        // **What has not followed is the model** - `C-124`. Under pooling a unit holds no
-        // fuel at all: `unit.cells` is still a number on the unit, and the specification says
-        // a place holds one number per kind and a bin only contributes capacity to it. The
-        // two agree on the state after a founding and disagree about where the fuel is before
-        // one, which is a change to `refuel`, to what a move spends, and to what the
-        // containment tree draws inside a pioneer.
-        let spare = self.units[unit_at].cells;
+        // **The model has followed, and `C-124` is what it owed** - `S-150`. A unit holds no
+        // fuel: the energy is the territory's before the founding and after it, and consuming
+        // the pioneer only lowers the room. **So there is no transfer here at all**, where
+        // there used to be one that moved the unit's remaining cells into the place.
+        //
+        // **The paragraph above is now the whole rule rather than a reading of it.** It said
+        // *both put the same number in the same place, so nothing observable moved*; what
+        // makes that true is that the number being moved is zero, and the line that moved it
+        // is gone.
         self.units.remove(unit_at);
-        if spare > 0 {
-            self.territories[territory.index()].add(Resource::Energy, spare);
-        }
 
         let place = &mut self.territories[territory.index()];
         // `spec/unit-types.md`: the structure a founding unit becomes has one less force
@@ -573,17 +594,26 @@ impl Game {
                 });
             }
             self.spend(territory, Resource::Metal, cost::PIONEER_METAL)?;
-            // **The fill and the payment are one number** - `P-486`: *it is built with
-            // that bin full, and the energy is paid where it is built.* So this is the
-            // bin's size read from the kind rather than a `PIONEER_ENERGY` beside it,
-            // which is the constant that could drift from the Units table's `Fuel`.
+            // **The cost is the recipe's row, and `S-150` is what separated it from the
+            // tank.** `releases/first-release.md` -> Recipes gives `produce pioneer` a
+            // *consume 2 energy* row, and `cost::PIONEER_ENERGY` is that row's figure -
+            // checked against the table by `the_costs_are_the_release_figures` in
+            // `crates/game-console/tests/first_release.rs`.
+            //
+            // **It read `kind.cells()` until today, and the reason it did has expired.**
+            // `P-486` made the fill and the payment one number - *it is built with that bin
+            // full, and the energy is paid where it is built* - so taking the bin's size was
+            // taking the only figure there was. Under pooling nothing is filled: the tank
+            // gives the place room and the two energy are simply spent. **The two numbers
+            // are both 2 and they are no longer the same number**, which is why this reads
+            // the cost and not the kind.
             //
             // **It was six and it is two, and the six was the last trace of a rule the
             // specification had stopped saying.** `P-66` promoted the fill; `0aca92d`
             // lost the sentence on 2026-09-01 and left the number, so a pioneer went on
             // paying for a bin nothing said got filled. Sean found it by asking why a
             // pioneer costs energy at all.
-            self.spend(territory, Resource::Energy, kind.cells())?;
+            self.spend(territory, Resource::Energy, cost::PIONEER_ENERGY)?;
             self.territory_mut(territory)?
                 .remove(Kind::Citizen, cost::PIONEER_CITIZENS);
         }
@@ -822,7 +852,11 @@ impl Game {
         // Nothing transforms here: founding happens when a unit arrives, so by the time a
         // turn ends there is never a unit waiting to become something.
         for id in &ids {
-            self.territories[id.index()].end_of_turn_losses();
+            // **The room is read before the territory is borrowed to change it**, which is
+            // why this is two lines. What stands on a territory gives it room - `S-150` - and
+            // the units live on the game rather than on the place.
+            let brought = self.brought_room_all(*id);
+            self.territories[id.index()].end_of_turn_losses(&brought);
         }
         seen(self, Self::END_OF_TURN_PHASES[2]);
 
@@ -998,7 +1032,14 @@ impl Territory {
     /// `fertility` line is `C-83`**: without it a territory that starved to nobody kept the
     /// fertility its last citizens made and repopulated from stock the moment food arrived,
     /// which `spec/population.md` forbids and a test here is named for.
-    pub fn end_of_turn_losses(&mut self) {
+    /// # What `brought` is, and why it is an argument
+    ///
+    /// **`S-150`: a territory's room for a kind is its own declaration plus what stands in
+    /// it**, and a `Territory` does not know what stands in it - the units are the game's.
+    /// So the caller reads [`Game::brought_room_all`] and hands it over, one pair per
+    /// resource. **A pioneer standing here keeps two energy over the turn's end** that would
+    /// otherwise be lost, which is the tank doing the one thing a tank now does.
+    pub fn end_of_turn_losses(&mut self, brought: &[(Resource, u32)]) {
         self.held.retain(|thing| {
             // Food keeps for one turn, so what is here at the end was made this turn and
             // expires now. The other two are transient - `P-381` - and `discard` is the
@@ -1007,7 +1048,12 @@ impl Territory {
         });
         for resource in [Resource::Metal, Resource::Energy] {
             let kind = Kind::from_resource(resource);
-            let over = self.count_of(kind).saturating_sub(self.capacity(resource));
+            let room = self.capacity(resource)
+                + brought
+                    .iter()
+                    .find(|(of, _)| *of == resource)
+                    .map_or(0, |(_, amount)| *amount);
+            let over = self.count_of(kind).saturating_sub(room);
             if over > 0 {
                 self.remove(kind, over);
             }

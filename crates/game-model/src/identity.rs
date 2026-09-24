@@ -108,7 +108,20 @@ impl UnitKind {
         }
     }
 
-    /// How many energy cells it carries when built. A move costs one.
+    /// How much room this kind's tank gives the place it stands in, for energy.
+    ///
+    /// **It was `cells()` and it was what the unit carried** - `S-150`, and the rename is the
+    /// change. `spec/logistics.md` -> Containment: *the things in it that can hold that kind
+    /// contribute capacity and hold nothing*, so a pioneer's bin holds no energy and the two
+    /// it used to carry are the territory's. **The number did not move and its meaning did**:
+    /// a pioneer's `Fuel` is 2 either way, and it is now a capacity rather than a charge.
+    ///
+    /// **`releases/first-release.md` -> Where things are is what this is read from**, which
+    /// gives a unit's tank as a thing that *gives room for* energy *up to the unit's fuel* -
+    /// one of the release's three sorts of capacity, beside a store's.
+    ///
+    /// **And `spec/units.md` still says the bin is built full and moving burns a unit of
+    /// it**, which is `C-138`. The release is the work order and this follows the release.
     ///
     /// **An Ark carries none, since `S-86` blanked its Fuel cell** - the release half `C-79`
     /// was waiting on, and this is the other half changed in the same breath. `spec/units.md`:
@@ -124,10 +137,27 @@ impl UnitKind {
     /// Ark reaches the ground by landing and is consumed by `deploy ark`; `Game::land` asks
     /// where it is and not what it has left, and `move` is the only thing that spends a cell.
     /// So a bin of zero takes away a capacity nothing used.
-    pub fn cells(self) -> u32 {
+    pub fn fuel(self) -> u32 {
         match self {
             UnitKind::Ark => 0,
             UnitKind::Pioneer => 2,
+        }
+    }
+
+    /// How much room this kind gives the place it stands in, for one resource.
+    ///
+    /// **Written over every resource rather than for energy** - a bin for metal would be read
+    /// here without a word changing, which is the shape the rest of this model is in. The
+    /// match is exhaustive so that a resource added to the release has to be answered rather
+    /// than defaulting to nothing.
+    ///
+    /// **This is the rule `spec/logistics.md` states and the release instances**: *a place's
+    /// capacity for a kind is the sum of what is in it that can hold that kind*, and *Where
+    /// things are* gives a unit's tank as one of the three things that give a place room.
+    pub fn holds(self, resource: Resource) -> u32 {
+        match resource {
+            Resource::Energy => self.fuel(),
+            Resource::Food | Resource::Metal => 0,
         }
     }
 
@@ -226,13 +256,13 @@ mod tests {
     fn the_release_figures_are_what_the_release_says() {
         assert_eq!(UnitKind::Ark.force(), 2);
         assert_eq!(
-            UnitKind::Ark.cells(),
+            UnitKind::Ark.fuel(),
             0,
             "`S-86` blanked the Ark's Fuel cell: it takes its energy from the sun and stores              none"
         );
         assert_eq!(UnitKind::Ark.upkeep(), 0);
         assert_eq!(UnitKind::Pioneer.force(), 2);
-        assert_eq!(UnitKind::Pioneer.cells(), 2);
+        assert_eq!(UnitKind::Pioneer.fuel(), 2);
         assert_eq!(
             UnitKind::Pioneer.upkeep(),
             0,

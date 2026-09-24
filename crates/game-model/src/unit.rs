@@ -33,31 +33,25 @@ pub struct Unit {
     pub id: UnitId,
     pub kind: UnitKind,
     pub location: Location,
-    /// What a ground-moving unit has left to move on.
-    ///
-    /// `spec/units.md`: *a mobile unit that moves over the ground has a bin for fuel. **It is
-    /// built with that bin full, and the energy is paid where it is built.** Moving burns a
-    /// unit of it, and one with an empty bin cannot move.*
-    ///
-    /// **A counter in storage and a bin in the file** - `P-485`. `containment::entry_for_unit`
-    /// writes what is in here as an entry inside the unit, so a full pioneer reads
-    /// `{pioneer ...} -> 1` over `{energy} -> 2`, which is what a bin being containment means
-    /// to a reader. How it is held in memory is this crate's business; what the dump says is
-    /// the specification's.
-    ///
-    /// **`C-79`'s excuse has half expired.** It said a bin is filled from the territory it
-    /// stands in and no recipe fills one, so the refill had no moment to happen at. `P-486`
-    /// gave it one at the build - the bin is filled and paid for there - and `P-489` gave
-    /// refuelling a recipe. What is still missing is a command to fire that recipe, which is
-    /// `C-112`. The Ark's half - *a mobile unit that moves in orbit takes its energy directly
-    /// from the sun. It stores no fuel* - waits on the release blanking its Fuel cell, which
-    /// is `S-86`.
-    ///
-    /// **This comment quoted the sentence `P-365` replaced** - *a mobile unit carries energy
-    /// cells; moving spends them* - and `quotations.rs` did not catch it, because that check
-    /// looks for an attributed quotation in italics and this one was plain prose. Worth
-    /// knowing next time that check is touched.
-    pub cells: u32,
+    // **There is no fuel field here, and its absence is `S-150`.**
+    //
+    // This was `pub cells: u32` - what a ground-moving unit had left to move on, filled at the
+    // build and spent a unit at a time. `spec/logistics.md` -> Containment took it away: a
+    // resource in a place is in that place, not in a container inside it; what a place holds
+    // of a kind is one number; and the things in it that can hold that kind contribute
+    // capacity and hold nothing.
+    //
+    // **So a pioneer's bin is `UnitKind::fuel()` and nothing else**: a trait of the kind, read
+    // wherever a place's room for energy is summed, and the two units of energy it used to
+    // carry are the territory's. `move` consumes its energy at `$from`, which is why a unit
+    // can no longer leave a place that has none.
+    //
+    // **A field cannot be asserted absent, so the checks are where it showed.**
+    // `containment::entry_for_unit` draws a unit as a leaf, the `unit` table's `fuel` column
+    // reads the kind, and a territory's room for energy counts the tanks standing in it.
+    //
+    // **`spec/units.md` still describes the old bin** - it is built with that bin full, and
+    // moving burns a unit of it - which is `C-138`, filed rather than settled here.
     /// Whether this unit has already been used this turn. `spec/turn.md` calls this
     /// ready or exhausted; a thing that is merely used up for the turn is exhausted,
     /// where labor and energy cells are genuinely spent because they are consumed.
@@ -80,7 +74,6 @@ impl Unit {
             id,
             kind,
             location: Location::Orbit(above),
-            cells: kind.cells(),
             exhausted: false,
             stood: false,
         }
@@ -111,20 +104,31 @@ impl Unit {
 mod tests {
     use super::*;
 
+    /// A new unit starts in orbit, ready, and carrying nothing.
+    ///
+    /// **The charge it used to start with is gone** - `S-150`. A pioneer was built with two
+    /// energy in its bin; under `spec/logistics.md` the bin holds nothing and gives the place
+    /// two units of room. **What is asserted here is that the tank is a fact about the kind**,
+    /// which is the only place the number lives now.
     #[test]
-    fn a_new_unit_starts_in_orbit_with_a_full_charge() {
+    fn a_new_unit_starts_in_orbit_ready_and_carrying_nothing() {
         let unit = Unit::new(UnitId(1), UnitKind::Ark, TerritoryId(1));
         assert!(unit.in_orbit());
-        // **An Ark's charge is none, and that is the full one** - `S-86` blanked its Fuel
-        // cell, because a unit that moves in orbit takes its energy from the sun. It reaches
-        // the ground by landing, which asks where it is and not what it has left.
-        assert_eq!(unit.cells, 0);
         assert!(unit.ready());
         assert_eq!(unit.force(), 2);
+        // **An Ark's tank is none** - `S-86` blanked its Fuel cell, because a unit that moves
+        // in orbit takes its energy from the sun. It reaches the ground by landing, which asks
+        // where it is and not what it has left.
+        assert_eq!(unit.kind.fuel(), 0);
 
-        // A pioneer travels by land and carries the bin, so the two are asserted apart.
+        // A pioneer travels by land and its tank is the room it brings, so the two are
+        // asserted apart.
         let pioneer = Unit::new(UnitId(2), UnitKind::Pioneer, TerritoryId(1));
-        assert_eq!(pioneer.cells, 2, "a pioneer's Fuel cell still says two");
+        assert_eq!(
+            pioneer.kind.fuel(),
+            2,
+            "a pioneer's Fuel cell still says two, and it is room rather than a charge"
+        );
     }
 
     // **The test for an unusable unit is gone, and so is the state** - `P-367`. It asserted

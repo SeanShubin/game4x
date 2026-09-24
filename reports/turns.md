@@ -2211,7 +2211,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 - {territory id:1 biome:grassland} {extractor resource:food working:1} -> 3
 - {territory id:1 biome:grassland} {extractor resource:metal working:1} -> 3
 
-**new** (8)
+**new** (7)
 
 - {territory id:1 biome:grassland} {citizen bearing:1 defending:1 laboring:0 paid:0} -> 9
 - {territory id:1 biome:grassland} {extractor resource:energy working:0} -> 3
@@ -2220,7 +2220,6 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 - {territory id:1 biome:grassland} {food} -> 12
 - {territory id:1 biome:grassland} {labor} -> 1
 - {territory id:1 biome:grassland} {pioneer id:1 defending:1 moving:1} -> 1
-- {territory id:1 biome:grassland} {pioneer id:1 defending:1 moving:1} {energy} -> 2
 
 **changed** (4)
 
@@ -2267,10 +2266,6 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 - {territory id:1 biome:grassland} {fertility} -> 8
 - {territory id:1 biome:grassland} {labor} -> 1
-
-**changed** (1)
-
-- {territory id:1 biome:grassland} {energy} · 22 → 20
 
 ### nature takes back what is no longer held
 
@@ -2373,7 +2368,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | --------- | -------- | ------ |
 | 1         | food     | 0      |
 | 1         | metal    | 18     |
-| 1         | energy   | 20     |
+| 1         | energy   | 22     |
 | 2         | food     | 0      |
 | 2         | metal    | 0      |
 | 2         | energy   | 0      |
@@ -2586,13 +2581,12 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 ## what your commands did
 
-**gone** (3)
+**gone** (2)
 
 - {territory id:1 biome:grassland} {extractor resource:food working:1} -> 3
 - {territory id:1 biome:grassland} {pioneer id:1 defending:1 moving:1} -> 1
-- {territory id:1 biome:grassland} {pioneer id:1 defending:1 moving:1} {energy} -> 2
 
-**new** (7)
+**new** (6)
 
 - {territory id:1 biome:grassland} {citizen bearing:1 defending:1 laboring:0 paid:0} -> 5
 - {territory id:1 biome:grassland} {extractor resource:energy working:0} -> 1
@@ -2600,12 +2594,11 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 - {territory id:1 biome:grassland} {food} -> 12
 - {territory id:1 biome:grassland} {yard} -> 1
 - {territory id:2 biome:grassland} {pioneer id:1 defending:1 moving:0} -> 1
-- {territory id:2 biome:grassland} {pioneer id:1 defending:1 moving:0} {energy} -> 1
 
 **changed** (4)
 
 - {territory id:1 biome:grassland} {citizen bearing:1 defending:1 laboring:1 paid:0} · 12 → 7
-- {territory id:1 biome:grassland} {energy} · 20 → 24
+- {territory id:1 biome:grassland} {energy} · 22 → 25
 - {territory id:1 biome:grassland} {extractor resource:energy working:1} · 3 → 2
 - {territory id:1 biome:grassland} {metal} · 18 → 3
 
@@ -2645,7 +2638,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 **changed** (1)
 
-- {territory id:1 biome:grassland} {energy} · 24 → 20
+- {territory id:1 biome:grassland} {energy} · 25 → 20
 
 ### nature takes back what is no longer held
 
@@ -2655,19 +2648,17 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 ### time restores every count
 
-**gone** (5)
+**gone** (4)
 
 - {territory id:1 biome:grassland} {citizen bearing:1 defending:1 laboring:0 paid:0} -> 5
 - {territory id:1 biome:grassland} {extractor resource:energy working:0} -> 1
 - {territory id:1 biome:grassland} {extractor resource:food working:0} -> 3
 - {territory id:2 biome:grassland} {pioneer id:1 defending:1 moving:0} -> 1
-- {territory id:2 biome:grassland} {pioneer id:1 defending:1 moving:0} {energy} -> 1
 
-**new** (3)
+**new** (2)
 
 - {territory id:1 biome:grassland} {extractor resource:food working:1} -> 3
 - {territory id:2 biome:grassland} {pioneer id:1 defending:1 moving:1} -> 1
-- {territory id:2 biome:grassland} {pioneer id:1 defending:1 moving:1} {energy} -> 1
 
 **changed** (2)
 
@@ -2879,7 +2870,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 | id  | kind    | in-kind   | in-id | fuel | ready |
 | --- | ------- | --------- | ----- | ---- | ----- |
-| 1   | pioneer | territory | 2     | 1    | yes   |
+| 1   | pioneer | territory | 2     | 2    | yes   |
 
 1 row(s)
 
@@ -2928,7 +2919,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | labor     | 0       |
 | food      | 0       |
 | metal     | 3       |
-| energy    | 21      |
+| energy    | 20      |
 | extractor | 9       |
 | garrison  | 1       |
 | yard      | 1       |
@@ -2967,16 +2958,15 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 ## what your commands did
 
-**gone** (6)
+**gone** (5)
 
 - {territory id:1 biome:grassland} {extractor resource:food working:1} -> 3
 - {territory id:1 biome:grassland} {metal} -> 3
 - {territory id:2 biome:grassland} {deposit density:4 resource:metal occupied:0 free:2 capacity:2} -> 1
 - {territory id:2 biome:grassland} {deposit density:6 resource:food occupied:0 free:2 capacity:2} -> 1
 - {territory id:2 biome:grassland} {pioneer id:1 defending:1 moving:1} -> 1
-- {territory id:2 biome:grassland} {pioneer id:1 defending:1 moving:1} {energy} -> 1
 
-**new** (14)
+**new** (13)
 
 - {territory id:1 biome:grassland} {citizen bearing:1 defending:1 laboring:0 paid:0} -> 3
 - {territory id:1 biome:grassland} {extractor resource:energy working:0} -> 1
@@ -2987,7 +2977,6 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 - {territory id:2 biome:grassland} {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
 - {territory id:2 biome:grassland} {deposit density:4 resource:metal occupied:1 free:1 capacity:2} -> 1
 - {territory id:2 biome:grassland} {deposit density:6 resource:food occupied:1 free:1 capacity:2} -> 1
-- {territory id:2 biome:grassland} {energy} -> 1
 - {territory id:2 biome:grassland} {extractor resource:food working:0} -> 1
 - {territory id:2 biome:grassland} {extractor resource:metal working:1} -> 1
 - {territory id:2 biome:grassland} {food} -> 6
@@ -3046,11 +3035,10 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 ### what expires expires, and what was not kept in order is lost
 
-**gone** (4)
+**gone** (3)
 
 - {territory id:1 biome:grassland} {fertility} -> 8
 - {territory id:1 biome:grassland} {labor} -> 1
-- {territory id:2 biome:grassland} {energy} -> 1
 - {territory id:2 biome:grassland} {food} -> 2
 
 ### nature takes back what is no longer held

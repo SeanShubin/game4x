@@ -478,6 +478,18 @@ mod tests {
     ///
     /// `spec/logistics.md`: a kind declaring **no capacity** *holds nothing of that sort and
     /// never can* - so drawing it as an empty container says the opposite of the rule.
+    ///
+    /// # Why this counts the zeroes instead of requiring them all
+    ///
+    /// **It asserted that every energy capacity in the fixture was zero, and `S-150` made one
+    /// of them two.** A pioneer stands on territory 2 and its tank gives that place room for
+    /// its fuel - `releases/first-release.md` -> Where things are - so *the fixture's ground
+    /// offers no energy* stopped being true of the fixture while staying true of the ground.
+    ///
+    /// **The subject was never that they were all zero**, it was that a zero is not drawn. So
+    /// the zeroes are counted and the one that is not zero is named, which says more than the
+    /// old form did: a change that gave every capacity a number would have made the old
+    /// assertion fail loudly and this one fail on the count.
     #[test]
     fn a_kind_a_territory_cannot_hold_is_not_drawn_as_an_empty_container() {
         let game = every_relationship();
@@ -488,13 +500,22 @@ mod tests {
             .flat_map(|entry| entry.capacity.iter())
             .filter(|bound| bound.of.written().contains("energy"))
             .collect();
-        assert!(
-            !energy.is_empty(),
-            "the fixture declares no energy anywhere, so this checks nothing"
+        assert_eq!(
+            energy.len(),
+            6,
+            "two territories, each declaring extractors of energy, stores of energy and the \
+             energy itself - and a count over nothing is the failure with the sign flipped"
+        );
+        let empty = energy.iter().filter(|bound| bound.total() == 0).count();
+        assert_eq!(
+            empty, 5,
+            "five of the six offer nothing, and the sixth is the pioneer's tank on territory 2"
         );
         assert!(
-            energy.iter().all(|bound| bound.total() == 0),
-            "the fixture's ground offers no energy"
+            energy
+                .iter()
+                .any(|bound| bound.total() == game_model::UnitKind::Pioneer.fuel() as i64),
+            "the sixth is the tank, so this test's subject is the other five"
         );
         let text = page(&game, "containment");
         assert!(

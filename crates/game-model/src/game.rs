@@ -9,7 +9,7 @@
 //! types, because the rules needed every one of them; the state needs four. A file that has
 //! stopped reaching for `Transition` is a file that has stopped deciding anything.
 
-use crate::identity::TerritoryId;
+use crate::identity::{Resource, TerritoryId};
 use crate::rejection::Rejection;
 use crate::territory::Territory;
 use crate::unit::Unit;
@@ -57,8 +57,12 @@ pub mod cost {
     // of a garrison: no recipe is named for one, so those two figures were stated there and
     // nowhere else and are now stated nowhere. **Nothing here ever charged them**, which is
     // `P-467`'s finding and why deleting them changes no game.
-    /// A move costs one energy cell.
-    pub const MOVE_CELLS: u32 = 1;
+    /// A move costs one energy, **taken from the place the unit leaves**.
+    ///
+    /// **`$from` is the whole of `S-150`.** `releases/first-release.md` -> Recipes gives
+    /// `move` a *consume 1 energy* row whose *Where* cell is `$from`, and `$from` is a place.
+    /// It used to come off the unit's own tank, which is why this was `MOVE_CELLS`.
+    pub const MOVE_ENERGY: u32 = 1;
 }
 
 /// `spec/console.md`: a game has two phases. In the first the world is designed; in the
@@ -132,6 +136,46 @@ impl Game {
 
     pub fn units_on(&self, id: TerritoryId) -> Vec<&Unit> {
         self.units.iter().filter(|unit| unit.is_on(id)).collect()
+    }
+
+    /// The room a place has for a resource: what it declares, plus what stands in it.
+    ///
+    /// **One function, because the alternative has already cost a day** - `P-485`. A unit's
+    /// fuel was in two views that summed it differently and the state they described drifted
+    /// apart by two energy. **The room a tank gives is now read here by everything that asks**
+    /// - the turn's end, the containment tree's capacity rows, and the report.
+    ///
+    /// `spec/logistics.md` -> Containment: *a place's capacity for a kind is the sum of what
+    /// is in it that can hold that kind*, and a place *declares none of its own*. A
+    /// territory's stores are its own declaration in this release, which
+    /// [`Territory::capacity`] keeps; what this adds is everything standing on it.
+    pub fn room_for(&self, id: TerritoryId, resource: Resource) -> u32 {
+        let declared = match self.territory(id) {
+            Ok(place) => place.capacity(resource),
+            Err(_) => 0,
+        };
+        declared + self.brought_room(id, resource)
+    }
+
+    /// The room the things standing in a place give it, for one resource.
+    ///
+    /// **Units are the only such things in this release**, and `UnitKind::holds` is where a
+    /// kind says how much. A unit in orbit is not counted: `spec/logistics.md` gives an orbit
+    /// its own room for *the fuel its units carry*, and adding it to the ground beneath would
+    /// put an orbit's room on a territory.
+    pub fn brought_room(&self, id: TerritoryId, resource: Resource) -> u32 {
+        self.units_on(id)
+            .iter()
+            .map(|unit| unit.kind.holds(resource))
+            .sum()
+    }
+
+    /// What stands in a place, as the turn's end wants it: one pair per resource.
+    pub fn brought_room_all(&self, id: TerritoryId) -> Vec<(Resource, u32)> {
+        Resource::ALL
+            .iter()
+            .map(|resource| (*resource, self.brought_room(id, *resource)))
+            .collect()
     }
 
     pub fn units_in_orbit(&self) -> Vec<&Unit> {
@@ -538,7 +582,7 @@ mod tests {
             .unwrap()
     }
 
-    /// Producing a pioneer takes the bin's worth of energy out of the territory.
+    /// Producing a pioneer costs the territory the recipe's energy and fills nothing.
     ///
     /// **This is the check `P-486` left with nothing reading it, and its absence was this
     /// lane's doing.** `the_costs_in_the_model_are_the_costs_in_the_release` compared
@@ -547,34 +591,37 @@ mod tests {
     /// true, and left the payment itself compared with nothing. **The cost did not go away;
     /// only the comparison did.**
     ///
-    /// **What it rests on, stated because no row in the release states the cost.**
-    /// `spec/units.md`: *it is built with that bin full, and **the energy is paid where it is
-    /// built**.* Something pays, and this asserts that the territory is what pays and that it
-    /// pays exactly the bin. The Recipes table has no `consume` row for it - the quality lens
-    /// counted fifteen `put` rows, thirteen naming a count and two naming a quantity, and the
-    /// two are this pair, alone in the release in having a destination and no source. `C-113`
-    /// and `Q-89` are open on where the energy comes from.
+    /// # Two numbers that were one, and `S-150` separated them
     ///
-    /// **So this will fail if that question is answered differently**, which is the point of
-    /// writing it now rather than waiting: a cost the code pays, no document states and no
-    /// check reads is exactly the shape that survives for twelve days. `P-486` restored a
-    /// clause lost on 2026-09-01 and the six energy was its last trace.
+    /// **The cost is `PIONEER_ENERGY` and the tank is `UnitKind::fuel()`.** Both are 2, and
+    /// the whole of what changed is that they are no longer the same fact: the code read the
+    /// tank and called it the cost, because *it is built with that bin full, and the energy is
+    /// paid where it is built* made them one number. **Under pooling nothing is filled** - the
+    /// tank gives the place room and holds nothing - so the payment stands alone and is the
+    /// release's `consume 2 energy` row.
+    ///
+    /// **So this test asserts the cost against the cost**, and the half that asserted the fill
+    /// is replaced by the half that asserts the room. Paying without giving the place room
+    /// would leave a pioneer that changes nothing about where energy can be, which is what the
+    /// payment alone cannot tell apart - the same gap the old second half covered, moved to
+    /// where the fuel went.
     #[test]
-    fn a_pioneer_is_paid_for_where_it_is_built() {
+    fn a_pioneer_is_paid_for_where_it_is_built_and_fills_nothing() {
         let before = founded();
-        let bin = UnitKind::Pioneer.cells();
-        assert!(bin > 0, "a pioneer with no bin makes this check vacuous");
+        let paid = cost::PIONEER_ENERGY;
+        assert!(paid > 0, "a pioneer that costs nothing makes this vacuous");
 
         let place = TerritoryId(1);
         let held = |game: &Game| game.territory(place).unwrap().store(Resource::Energy);
         let stocked = {
             let mut game = before.clone();
-            game.territories[place.index()].add(Resource::Energy, bin + 3);
+            game.territories[place.index()].add(Resource::Energy, paid + 3);
             game.territories[place.index()].add(Resource::Metal, cost::PIONEER_METAL);
             game.territories[place.index()].put(Kind::Citizen, cost::PIONEER_CITIZENS);
             game
         };
         let energy_before = held(&stocked);
+        let room_before = stocked.room_for(place, Resource::Energy);
 
         let after = stocked
             .after(&Transition::ProducePioneer { territory: place })
@@ -582,20 +629,27 @@ mod tests {
 
         assert_eq!(
             held(&after),
-            energy_before - bin,
-            "the territory paid {} energy and a pioneer's bin is {bin}",
+            energy_before - paid,
+            "the territory paid {} energy where the recipe says {paid}",
             energy_before - held(&after)
         );
 
-        // **And the bin it paid for is full**, which is the other half of the same sentence.
-        // Paying without filling would satisfy the line above and leave a pioneer that cannot
-        // move, which is what the number alone cannot tell apart.
+        // **And the tank it paid for is room the territory now has**, which is what a tank
+        // does since `S-150`. The pioneer itself holds none of it.
         let made = after
             .units
             .iter()
             .find(|unit| unit.kind == UnitKind::Pioneer)
             .expect("the pioneer was produced");
-        assert_eq!(made.cells, bin, "it is built with that bin full");
+        assert_eq!(
+            after.room_for(place, Resource::Energy),
+            room_before + made.kind.fuel(),
+            "a pioneer's tank gives the place it stands in room for its fuel"
+        );
+        assert!(
+            made.kind.fuel() > 0,
+            "a pioneer with no tank makes the line above vacuous"
+        );
     }
 
     #[test]
@@ -1185,7 +1239,8 @@ mod tests {
             backwards.territories[id.index()].grow_or_starve(unpaid);
         }
         for id in &ids {
-            backwards.territories[id.index()].end_of_turn_losses();
+            let brought = backwards.brought_room_all(*id);
+            backwards.territories[id.index()].end_of_turn_losses(&brought);
         }
         for id in &ids {
             backwards.territories[id.index()].make_ready();
@@ -1303,6 +1358,12 @@ mod tests {
         game.territories[1].put(Kind::Citizen, 1);
         game.territories[2].set_garrison(Some(Garrison::from_founding_unit(2)));
         game.territories[2].put(Kind::Citizen, 1);
+        // **Both places can pay for a crossing** - `S-150`. A move consumes one energy at
+        // the place it leaves, so without this both directions are refused for a reason that
+        // has nothing to do with what the command named.
+        for at in [0, 1] {
+            game.territories[at].add(Resource::Energy, cost::MOVE_ENERGY);
+        }
 
         // Two pioneers, in two different places, both next to territory 3.
         for (id, at) in [(9u32, TerritoryId(1)), (10, TerritoryId(2))] {
@@ -1369,12 +1430,17 @@ mod tests {
     /// *a move spends a cell* - and the once-a-turn half had none, so this is the missing
     /// one rather than a repair.
     ///
-    /// # Why it is asserted against a unit with fuel left
+    /// # Why both territories are stocked with energy
     ///
-    /// **Otherwise it cannot tell the two limits apart.** A pioneer that had spent both cells
-    /// would be refused by the bin, and a test that watched that refusal would pass whether or
-    /// not `moving` was enforced at all. So the second move is attempted with one cell in
-    /// hand, and back the way it came, so adjacency cannot be the refusal either.
+    /// **Otherwise it cannot tell the two limits apart.** A move out of a place with no energy
+    /// is refused by the energy, and a test that watched that refusal would pass whether or
+    /// not `moving` was enforced at all. So both places are given more energy than two
+    /// crossings cost, and the second move is attempted back the way it came, so adjacency
+    /// cannot be the refusal either.
+    ///
+    /// **It used to be stated of the unit's own bin** - *a pioneer that had spent both cells
+    /// would be refused by the bin* - and `S-150` moved the fuel to the place. The shape of
+    /// the argument did not move with it.
     ///
     /// **This lane read the rule as unenforced before writing it**, which is worth leaving
     /// here. `move_unit`'s own closure tests `cells >= MOVE_CELLS` and adjacency and says
@@ -1384,12 +1450,18 @@ mod tests {
     /// and not the function it is handed to is how a rule looks missing when it is enforced**
     /// - the same shape as reading a check's predicate without asking what it is about.
     #[test]
-    fn a_unit_moves_once_a_turn_however_much_fuel_it_has() {
+    fn a_unit_moves_once_a_turn_however_much_energy_stands_behind_it() {
         let mut game = founded();
         game.territories[1].set_garrison(Some(Garrison::from_founding_unit(2)));
         game.territories[1].put(Kind::Citizen, 1);
         game.territories[2].set_garrison(Some(Garrison::from_founding_unit(2)));
         game.territories[2].put(Kind::Citizen, 1);
+        // **Both ends can pay, twice over** - `S-150`. A move consumes one energy at the place
+        // it leaves, so without this the first crossing is refused and the test asserts
+        // nothing about `moving`.
+        for at in [0, 1] {
+            game.territories[at].add(Resource::Energy, cost::MOVE_ENERGY * 2);
+        }
         let id = UnitId(game.units.len() as u32 + 1);
         let mut pioneer = Unit::new(id, UnitKind::Pioneer, TerritoryId(1));
         pioneer.location = Location::On(TerritoryId(1));
@@ -1407,11 +1479,17 @@ mod tests {
             .iter()
             .find(|unit| unit.kind == UnitKind::Pioneer)
             .expect("it is still a unit");
-        assert_eq!(moved.cells, 1, "one of two units of fuel spent");
         assert!(moved.exhausted, "and its `moving` is now 0");
+        assert!(
+            once.territory(TerritoryId(2))
+                .unwrap()
+                .store(Resource::Energy)
+                >= cost::MOVE_ENERGY,
+            "territory 2 can pay for a crossing, so energy cannot be what refuses the next one"
+        );
 
-        // **The fuel is not what refuses the second move**, which is the half that makes this
-        // about `moving` rather than about the bin: there is a cell left and it is refused.
+        // **The energy is not what refuses the second move**, which is the half that makes
+        // this about `moving`: the place it would leave can pay and it is refused anyway.
         // **Back the way it came**, so adjacency cannot be what refuses it: the first move
         // proved 1 and 2 are neighbours. A destination that merely happened not to be
         // adjacent would refuse for a reason that has nothing to do with `moving`, and this
@@ -1432,7 +1510,13 @@ mod tests {
     }
 
     #[test]
-    fn a_move_within_your_own_ground_spends_a_cell_and_keeps_the_unit() {
+    /// A move spends the energy of the place it leaves, and the unit arrives whole.
+    ///
+    /// **The two halves are the whole of `S-150`.** It read *spends a cell and keeps the
+    /// unit*, and the cell was the pioneer's; it is the territory's now, so what is asserted
+    /// is that territory 1 is one energy poorer and territory 2 is not - a unit hauls nothing,
+    /// because `move`'s five rows in `releases/first-release.md` have no haul among them.
+    fn a_move_spends_the_energy_of_the_place_it_leaves() {
         let mut game = founded();
         // Found territory 2 as well, so moving there is a move rather than a founding.
         // **A citizen is what founds it now** - `S-19`. The garrison came with a flag
@@ -1440,10 +1524,16 @@ mod tests {
         // being there.
         game.territories[1].set_garrison(Some(Garrison::from_founding_unit(2)));
         game.territories[1].put(Kind::Citizen, 1);
+        game.territories[0].add(Resource::Energy, 3);
         let id = UnitId(game.units.len() as u32 + 1);
         let mut pioneer = Unit::new(id, UnitKind::Pioneer, TerritoryId(1));
         pioneer.location = Location::On(TerritoryId(1));
         game.units.push(pioneer);
+
+        let held =
+            |game: &Game, id: TerritoryId| game.territory(id).unwrap().store(Resource::Energy);
+        let left_before = held(&game, TerritoryId(1));
+        let arrived_before = held(&game, TerritoryId(2));
 
         let moved = game
             .after(&Transition::Move {
@@ -1457,8 +1547,68 @@ mod tests {
             .iter()
             .find(|u| u.kind == UnitKind::Pioneer)
             .expect("it is still a unit");
-        assert_eq!(pioneer.cells, 1, "one cell spent");
         assert!(pioneer.is_on(TerritoryId(2)));
+        assert_eq!(
+            held(&moved, TerritoryId(1)),
+            left_before - cost::MOVE_ENERGY,
+            "the place it left paid for the crossing"
+        );
+        assert_eq!(
+            held(&moved, TerritoryId(2)),
+            arrived_before,
+            "and nothing arrived with it - `move` has no haul row"
+        );
+    }
+
+    /// A unit cannot leave a place that has no energy, and that is `P-512`.
+    ///
+    /// # The check that would have failed before this
+    ///
+    /// **It passed for the wrong reason and would have gone on passing.** Until `S-150` a
+    /// pioneer moved on what it carried, so this fixture - a place with no energy at all and a
+    /// pioneer built with a full tank standing on it - moved successfully. **The refusal is
+    /// the new fact**, and it names the territory rather than the unit, which is the other
+    /// half of the change: `Rejection::NoCells` could only say *that pioneer has no energy
+    /// cells left*.
+    ///
+    /// **Territory 2 is founded and territory 1 is emptied**, so neither adjacency nor the
+    /// destination can be what refuses it - the same move succeeds in
+    /// `a_move_spends_the_energy_of_the_place_it_leaves`, where the only difference is the
+    /// three energy.
+    #[test]
+    fn a_unit_cannot_leave_a_place_with_no_energy() {
+        let mut game = founded();
+        game.territories[1].set_garrison(Some(Garrison::from_founding_unit(2)));
+        game.territories[1].put(Kind::Citizen, 1);
+        let held = game.territories[0].store(Resource::Energy);
+        game.territories[0].take(Resource::Energy, held);
+        assert_eq!(
+            game.territories[0].store(Resource::Energy),
+            0,
+            "the fixture is a place with no energy, or this checks nothing"
+        );
+        let id = UnitId(game.units.len() as u32 + 1);
+        let mut pioneer = Unit::new(id, UnitKind::Pioneer, TerritoryId(1));
+        pioneer.location = Location::On(TerritoryId(1));
+        game.units.push(pioneer);
+
+        let why = game
+            .after(&Transition::Move {
+                kind: UnitKind::Pioneer,
+                from: TerritoryId(1),
+                to: TerritoryId(2),
+            })
+            .expect_err("a place with no energy cannot pay for a crossing");
+        assert_eq!(
+            why,
+            Rejection::NotEnoughResource {
+                territory: TerritoryId(1),
+                resource: Resource::Energy,
+                held: 0,
+                needed: cost::MOVE_ENERGY,
+            },
+            "the refusal names the place that is short, not the unit"
+        );
     }
 
     /// Founding needs the pioneer standing on the ground, and getting it there is a move.
@@ -1496,6 +1646,11 @@ mod tests {
 
         // **Moving onto unclaimed ground is allowed and founds nothing.** It was refused
         // until `S-76`, because arriving there used to *be* founding.
+        //
+        // **Territory 1 is given the energy the crossing costs** - `S-150`. Without it the
+        // move is refused for want of energy and the two refusals above would be the whole of
+        // what this test observed.
+        game.territories[0].add(Resource::Energy, cost::MOVE_ENERGY);
         let moved = game
             .after(&Transition::Move {
                 kind: UnitKind::Pioneer,
@@ -1544,6 +1699,70 @@ mod tests {
         assert_eq!(rejected, Rejection::NoSuchTerritory(TerritoryId(99)));
     }
 
+    /// A tank standing in a place is room the place keeps over the turn's end.
+    ///
+    /// # The check that would have failed before this
+    ///
+    /// **It would have failed on the number and passed on the shape.** Until `S-150` a
+    /// territory's room for a resource was its stores alone, so a territory with one store and
+    /// a pioneer on it kept ten energy of the twelve below and lost the rest. **What a tank
+    /// gives is now in the sum** - `spec/logistics.md`: *a place's capacity for a kind is the
+    /// sum of what is in it that can hold that kind* - so the same place keeps twelve.
+    ///
+    /// **The pair is what makes it about the tank.** The same turn is ended twice from the
+    /// same state, once with the pioneer standing there and once with it in orbit above, and
+    /// the difference between what survives is exactly its fuel. **One run alone would pass
+    /// against any capacity large enough**, which is the shape of a check that reads a
+    /// plausible number rather than the rule.
+    #[test]
+    fn a_tank_standing_in_a_place_is_room_that_place_keeps() {
+        let stocked = |on_the_ground: bool| {
+            let mut game = founded();
+            let place = &mut game.territories[0];
+            let held = place.store(Resource::Energy);
+            place.take(Resource::Energy, held);
+            place.add_store(Resource::Energy);
+            place.add(
+                Resource::Energy,
+                crate::territory::HOLDS + UnitKind::Pioneer.fuel(),
+            );
+            let id = UnitId(game.units.len() as u32 + 1);
+            let mut pioneer = Unit::new(id, UnitKind::Pioneer, TerritoryId(1));
+            if on_the_ground {
+                pioneer.location = Location::On(TerritoryId(1));
+            }
+            game.units.push(pioneer);
+            game
+        };
+
+        let held = |game: &Game| {
+            game.territory(TerritoryId(1))
+                .unwrap()
+                .store(Resource::Energy)
+        };
+        let put_by = crate::territory::HOLDS + UnitKind::Pioneer.fuel();
+        assert_eq!(held(&stocked(true)), put_by, "both fixtures start level");
+        assert_eq!(held(&stocked(false)), put_by);
+        assert!(
+            UnitKind::Pioneer.fuel() > 0,
+            "a pioneer with no tank makes the difference below zero either way"
+        );
+
+        let standing = stocked(true).after(&Transition::EndTurn).unwrap();
+        let aloft = stocked(false).after(&Transition::EndTurn).unwrap();
+
+        assert_eq!(
+            held(&standing) - held(&aloft),
+            UnitKind::Pioneer.fuel(),
+            "the pioneer on the ground kept its fuel's worth that the one in orbit did not"
+        );
+        assert_eq!(
+            held(&aloft),
+            crate::territory::HOLDS,
+            "a store is all the room a place with nothing standing on it has"
+        );
+    }
+
     /// A unit eats nothing, so an empty territory does not cost it anything.
     ///
     /// **This asserted the opposite until `P-339`** - *a pioneer that is not fed is lost* -
@@ -1560,7 +1779,8 @@ mod tests {
         // Nothing was gathered, so there is no food at all. **The resources only** -
         // `held.clear()` would take the citizens too, and the fixture would be about a
         // territory with nobody in it.
-        game.territories[0].end_of_turn_losses();
+        let brought = game.brought_room_all(TerritoryId(1));
+        game.territories[0].end_of_turn_losses(&brought);
 
         let after = game.after(&Transition::EndTurn).unwrap();
         let pioneer = after

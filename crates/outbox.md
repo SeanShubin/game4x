@@ -61,6 +61,69 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-138 - `spec/units.md` still gives a unit a bin that holds fuel, and pooling took it away
+
+**to** spec · **status** open · **raised** 2026-09-24 · **source** building `S-150`, reading the two
+files against each other before changing the model
+
+**derived from** *the things in it that can hold that kind contribute capacity and hold nothing* -
+`spec/logistics.md` -> Containment
+
+**Two files in `spec/` say different things about where a pioneer's fuel is**, and this lane had to
+pick one to build `S-150`. **It picked pooling and says so here rather than quietly.**
+
+`spec/units.md:17`:
+
+> A mobile unit that moves over the ground has a bin for fuel. **It is built with that bin full,
+> and the energy is paid where it is built.** Moving burns a unit of it, and one with an empty
+> bin cannot move
+
+`spec/logistics.md` -> Containment:
+
+> A resource in a place is in that place, not in a container inside it. What a place holds of a
+> kind is one number. **The things in it that can hold that kind contribute capacity and hold
+> nothing**
+
+**A bin that is built full and burns a unit of itself is a bin that holds something.** Under the
+second rule it holds nothing and contributes room, so *built with that bin full* has nothing to
+fill and *one with an empty bin cannot move* has no bin to be empty. **The two cannot both be
+carried out**, which is why this is a contradiction rather than two emphases.
+
+## What this lane built, and the assumption it proceeded under
+
+**Pooling wins, and the reason is the work order rather than a judgement about the game.**
+`releases/first-release.md` is what says what is being built now, and it agrees with
+`spec/logistics.md` twice:
+
+- *Where things are* gives **a unit's tank** as a thing that **gives room for** energy, up to the
+  unit's fuel - a capacity row, beside a store's
+- *Recipes* gives `move` a **consume 1 energy** row at **`$from`**, which is a place and not the
+  unit
+
+**So the two normative statements this lane builds against both pool, and `spec/units.md` is the
+only file that does not.** It is also the older of the two: `P-509`, `P-511` and `P-512` are what
+moved this, and none of them touched `spec/units.md`.
+
+## What it is not
+
+**Not a claim that the specification is wrong.** Which of the two Sean wants is his, and a bin
+that holds its own fuel is a perfectly good game - it is what this model did until today. **What
+cannot stand is both sentences at once**, and this lane can only report that.
+
+**And not `S-151`'s shape.** That one is a term the specification stopped defining while the code
+went on implementing it. This is two sentences in `spec/` that disagree with each other, with the
+code following one of them.
+
+## The orbital half says it too, and may want the same answer
+
+`spec/units.md:20` gives an orbital unit *a bin of its own*, filled from the sun. **The same
+question applies**, and `spec/logistics.md` already answers it in passing for the place rather
+than the unit: *an orbit has room for the fuel its units carry and for nothing else, because that
+is what is in it.* **That sentence is pooling stated about orbits**, so the two halves of
+`spec/units.md` are in the same position and this lane has not built either.
+
+---
+
 ### C-137 - Nothing checks a quotation in the prototype's data comments, and turning it on costs eight false ones
 
 **to** spec · **status** open · **raised** 2026-09-21 · **source** this lane, following `S-144`

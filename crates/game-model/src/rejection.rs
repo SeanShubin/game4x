@@ -70,7 +70,14 @@ pub enum Rejection {
     },
     NotControlled(TerritoryId),
     AlreadyControlled(TerritoryId),
-    NoCells(UnitKind),
+    // **`NoCells` was here and `S-150` deleted it.** It said *that pioneer has no energy cells
+    // left*, and under pooling a unit has no cells to be out of: the energy a move spends is
+    // the place's, so what refuses is `NotEnoughResource`, which names the territory, the
+    // resource, what it holds and what was needed.
+    //
+    // **Deleted rather than left unconstructed**, which is `S-155`'s lesson taken the once:
+    // `Rejection::NoSuchPlanetSize` sat here dead since `P-215` and drew an item to the wrong
+    // half of the code.
     /// Not enough force to take a territory from whoever holds it.
     NotEnoughForce {
         territory: TerritoryId,
@@ -179,7 +186,6 @@ impl fmt::Display for Rejection {
             ),
             Rejection::NotControlled(id) => write!(out, "you do not control territory {id}"),
             Rejection::AlreadyControlled(id) => write!(out, "you already control territory {id}"),
-            Rejection::NoCells(kind) => write!(out, "that {kind} has no energy cells left"),
             Rejection::NotEnoughForce {
                 territory,
                 force,

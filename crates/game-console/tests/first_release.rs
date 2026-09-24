@@ -440,14 +440,20 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
     use game_model::game::cost;
 
     // **`move` is read by recipe name and everything else by what the recipe makes** - `Q-83`.
-    // `MOVE_CELLS` is what a move consumes and `move` produces nothing, so a reader that finds
-    // a recipe by what it makes cannot reach it. A recipe that produces nothing is an ordinary
-    // shape - every one of the world's is - rather than an exception.
+    // `MOVE_ENERGY` is what a move consumes and `move` produces nothing, so a reader that
+    // finds a recipe by what it makes cannot reach it. A recipe that produces nothing is an
+    // ordinary shape - every one of the world's is - rather than an exception.
     // **`PIONEER_ENERGY` is gone and its absence is the point** - `P-486`. The pioneer's
     // energy is no longer a cost beside the bin: *it is built with that bin full, and the
     // energy is paid where it is built*, so the figure paid is the Units table's `Fuel` and a
     // second constant could only ever disagree with it. The row it compared against -
     // `consume 6 energy` - is not in the release any more either.
+    //
+    // **And the paragraph above expired with `S-150`, which is why the row below it is back a
+    // second time.** Under pooling nothing is filled, so the tank and the cost are two facts
+    // that happen to be 2 - `cost::PIONEER_ENERGY` is what `produce pioneer` spends and
+    // `UnitKind::fuel()` is the room the tank gives. **A second constant can disagree with the
+    // Units table again**, and this row is what would say so.
     let checked: [(&str, u32, &str, &str); 13] = [
         ("STORE_LABOR", cost::STORE_LABOR, "store", "labor"),
         ("STORE_METAL", cost::STORE_METAL, "store", "metal"),
@@ -482,7 +488,7 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
             "extractor",
             "metal",
         ),
-        ("MOVE_CELLS", cost::MOVE_CELLS, "move", "energy"),
+        ("MOVE_ENERGY", cost::MOVE_ENERGY, "move", "energy"),
     ];
 
     for (name, held, thing, what) in checked {

@@ -57,15 +57,15 @@
 <li><strong>consume</strong> 1 energy, in <code>$from</code></li>
 </ul>
 <h3 id="an-example">An example</h3>
-<p>moving spends one fuel and leaves the unit not ready.</p>
+<p>moving spends one energy where it stood and leaves the unit not ready.</p>
 <p>Before:</p>
 <pre>
 {game phase:play}
   {territory id:1 biome:grassland} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
+    {energy} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
   {territory id:2 biome:grassland} -&gt; 1
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
     {garrison} -&gt; 1
@@ -81,7 +81,6 @@
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:0} -&gt; 1
-      {energy} -&gt; 1
 </pre>
 <h2 id="found-by-land">found by land</h2>
 <p>Run by the <strong>player</strong>.</p>
@@ -100,7 +99,6 @@
     {deposit density:4 resource:food occupied:0 free:3 capacity:3} -&gt; 1
     {deposit density:4 resource:metal occupied:0 free:3 capacity:3} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <p><code>{found-by-land territory:2}</code></p>
 <p>After:</p>
@@ -110,7 +108,6 @@
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 2
     {deposit density:4 resource:food occupied:1 free:2 capacity:3} -&gt; 1
     {deposit density:4 resource:metal occupied:1 free:2 capacity:3} -&gt; 1
-    {energy} -&gt; 2
     {extractor resource:food working:1} -&gt; 1
     {extractor resource:metal working:1} -&gt; 1
     {garrison} -&gt; 1
@@ -225,7 +222,6 @@
     {energy} -&gt; 4
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <h2 id="launch-ark">launch ark</h2>
 <p>Run by the <strong>player</strong>.</p>
@@ -338,7 +334,6 @@
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <p><code>{end-turn}</code></p>
 <p>After:</p>
@@ -353,7 +348,6 @@
   {territory id:2 biome:grassland} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <h2 id="bear">bear</h2>
 <p>Run by the <strong>world</strong>.</p>
@@ -379,7 +373,6 @@
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <p><code>{end-turn}</code></p>
 <p>After:</p>
@@ -394,7 +387,6 @@
   {territory id:2 biome:grassland} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <h2 id="breed">breed</h2>
 <p>Run by the <strong>world</strong>.</p>
@@ -420,7 +412,6 @@
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <p><code>{end-turn}</code></p>
 <p>After:</p>
@@ -435,7 +426,6 @@
   {territory id:2 biome:grassland} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <h3 id="an-example">An example</h3>
 <p>the way the population settles when <strong>the citizens are the lesser</strong>. Two citizens eat two of the eight food, leaving six - but <code>bear</code> made only two fertility, one per citizen, so <code>breed</code> fires <strong>twice</strong> and stops, with four food it has no fertility left to spend. That is the doubling the old <code>grow</code> expression bounded in a word and the <code>spent</code> trait bounds in a rule: a population grows by at most itself, however much food there is. <strong>The four it did not spend are gone from the state after</strong>, and that is <code>age</code> and <code>spoil</code> rather than <code>breed</code> - food keeps for one turn, so what a territory is still holding when the turn ends expires with it.</p>
@@ -481,7 +471,6 @@
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <p><code>{end-turn}</code></p>
 <p>After:</p>
@@ -496,7 +485,6 @@
   {territory id:2 biome:grassland} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <h2 id="age">age</h2>
 <p>Run by the <strong>world</strong>.</p>
@@ -521,7 +509,6 @@
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <p><code>{end-turn}</code></p>
 <p>After:</p>
@@ -536,7 +523,6 @@
   {territory id:2 biome:grassland} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <h2 id="spoil">spoil</h2>
 <p>Run by the <strong>world</strong>.</p>
@@ -560,7 +546,6 @@
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <p><code>{end-turn}</code></p>
 <p>After:</p>
@@ -575,7 +560,6 @@
   {territory id:2 biome:grassland} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <h2 id="stow">stow</h2>
 <p>Run by the <strong>world</strong>.</p>
@@ -600,7 +584,6 @@
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <p><code>{end-turn}</code></p>
 <p>After:</p>
@@ -615,7 +598,6 @@
   {territory id:2 biome:grassland} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <h2 id="stow">stow</h2>
 <p>Run by the <strong>world</strong>.</p>
@@ -640,7 +622,6 @@
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <p><code>{end-turn}</code></p>
 <p>After:</p>
@@ -655,7 +636,6 @@
   {territory id:2 biome:grassland} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <h2 id="discard">discard</h2>
 <p>Run by the <strong>world</strong>.</p>
@@ -679,7 +659,6 @@
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <p><code>{end-turn}</code></p>
 <p>After:</p>
@@ -694,7 +673,6 @@
   {territory id:2 biome:grassland} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <h2 id="discard">discard</h2>
 <p>Run by the <strong>world</strong>.</p>
@@ -718,7 +696,6 @@
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <p><code>{end-turn}</code></p>
 <p>After:</p>
@@ -733,7 +710,6 @@
   {territory id:2 biome:grassland} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <h2 id="discard">discard</h2>
 <p>Run by the <strong>world</strong>.</p>
@@ -757,7 +733,6 @@
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <p><code>{end-turn}</code></p>
 <p>After:</p>
@@ -772,7 +747,6 @@
   {territory id:2 biome:grassland} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <h2 id="discard">discard</h2>
 <p>Run by the <strong>world</strong>.</p>
@@ -796,7 +770,6 @@
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <p><code>{end-turn}</code></p>
 <p>After:</p>
@@ -811,7 +784,6 @@
   {territory id:2 biome:grassland} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <h2 id="refresh">refresh</h2>
 <p>Run by the <strong>world</strong>.</p>
@@ -835,7 +807,6 @@
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <p><code>{end-turn}</code></p>
 <p>After:</p>
@@ -850,7 +821,6 @@
   {territory id:2 biome:grassland} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <h2 id="refresh">refresh</h2>
 <p>Run by the <strong>world</strong>.</p>
@@ -874,7 +844,6 @@
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <p><code>{end-turn}</code></p>
 <p>After:</p>
@@ -889,7 +858,6 @@
   {territory id:2 biome:grassland} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <h2 id="refresh">refresh</h2>
 <p>Run by the <strong>world</strong>.</p>
@@ -913,7 +881,6 @@
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <p><code>{end-turn}</code></p>
 <p>After:</p>
@@ -928,7 +895,6 @@
   {territory id:2 biome:grassland} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <h2 id="refresh">refresh</h2>
 <p>Run by the <strong>world</strong>.</p>
@@ -952,7 +918,6 @@
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <p><code>{end-turn}</code></p>
 <p>After:</p>
@@ -967,7 +932,6 @@
   {territory id:2 biome:grassland} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <h2 id="renew">renew</h2>
 <p>Run by the <strong>world</strong>.</p>
@@ -992,7 +956,6 @@
     {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 <p><code>{end-turn}</code></p>
 <p>After:</p>
@@ -1007,7 +970,6 @@
   {territory id:2 biome:grassland} -&gt; 1
     {garrison} -&gt; 1
     {pioneer id:1 defending:1 moving:1} -&gt; 1
-      {energy} -&gt; 2
 </pre>
 </body>
 </html>

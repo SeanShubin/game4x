@@ -46,7 +46,6 @@
 use std::collections::BTreeMap;
 
 use game_model::identity::Resource;
-use game_model::territory::HOLDS;
 use game_model::thing::{Kind, Thing, Trait};
 use game_model::{Game, Phase};
 
@@ -799,33 +798,25 @@ fn describe_unit(unit: &game_model::Unit) -> Description {
     .with("defending", u32::from(!unit.stood))
 }
 
-/// A unit, with what is in its bin.
+/// A unit, which holds nothing.
 ///
-/// **A bin is containment, so the fuel is an entry rather than a trait** - `P-485`, which began
-/// as the report that this dump showed nothing inside a pioneer while the entity view said
-/// `fuel 2`. One of the two was wrong about a thing that holds something, and it was this one.
+/// **It used to draw the bin's contents inside it** - `P-485` put `{energy} -> 2` under a full
+/// pioneer, because a bin is containment and the dump showed nothing inside one while the entity
+/// view said `fuel 2`. **`S-150` took the contents away rather than the bin.**
 ///
-/// > A mobile unit that moves over the ground has a bin for fuel. **It is built with that bin
-/// > full, and the energy is paid where it is built.** Moving burns a unit of it, and one with
-/// > an empty bin cannot move
+/// `spec/logistics.md` -> Containment: *a resource in a place is in that place, not in a
+/// container inside it. What a place holds of a kind is one number. **The things in it that can
+/// hold that kind contribute capacity and hold nothing**.* So a pioneer standing on territory 1
+/// adds two to that territory's room for energy - see [`capacities_of`] - and holds none of it.
 ///
-/// **`fuel` stays a trait of the kind and is a different fact.** The Units table's `Fuel` is how
-/// big the bin is - a pioneer's is 2 - and what is written here is what is in it now. A unit
-/// that has moved once reads `{energy} -> 1` under a kind whose `fuel` is still 2.
+/// **`P-485`'s finding survives its own fix.** What it reported is that two views disagreed
+/// about a thing that holds something; they agree now because neither draws anything inside a
+/// unit, and the fuel appears once, as room, where the rule puts it.
 ///
-/// **An empty bin writes nothing**, because `spec/console.md` says an entry is never zero. So a
-/// pioneer that cannot move holds nothing, which is the same shape as a territory with no food.
+/// **`fuel` stays a trait of the kind.** The Units table's `Fuel` is how big the tank is - a
+/// pioneer's is 2 - and it is now the whole of what a tank is.
 fn entry_for_unit(unit: &game_model::Unit) -> Entry {
-    let mut entry = Entry::leaf(describe_unit(unit));
-    if unit.cells > 0 {
-        entry.contents = vec![Entry {
-            description: Description::of(Kind::Energy),
-            quantity: unit.cells,
-            contents: Vec::new(),
-            capacity: Vec::new(),
-        }];
-    }
-    entry
+    Entry::leaf(describe_unit(unit))
 }
 
 /// What a territory may contain, per kind, with what it holds now.
@@ -840,7 +831,6 @@ fn entry_for_unit(unit: &game_model::Unit) -> Entry {
 /// containment capacity: `citizen` is bounded by *the food produced here, through upkeep*
 /// and a territory does not declare a number for it.
 fn capacities_of(game: &Game, place: &game_model::Territory) -> Vec<Capacity> {
-    let _ = game;
     let mut out = Vec::new();
     // **Room rather than total** - `P-474`. The caller states the bound because that is how
     // the release states it, and what is kept is what is left.
@@ -874,7 +864,12 @@ fn capacities_of(game: &Game, place: &game_model::Territory) -> Vec<Capacity> {
             // holds whatever room its stores have: `work` produces into the place and
             // `end_of_turn_losses` takes the excess at the turn's end, so between the two the
             // shortfall is real and is exactly what that ending will take.
-            room: (place.stores(resource) as i64 * HOLDS as i64) - place.store(resource) as i64,
+            // **The tanks standing here are room too, and the model is what says how much**
+            // - `S-150`. `Game::room_for` is read by the turn's end as well, which is the
+            // whole reason it is one function: `P-485` cost a day to two views summing a
+            // unit's fuel differently, and a second sum written here would be the same
+            // mistake with the numbers swapped.
+            room: game.room_for(place.id, resource) as i64 - place.store(resource) as i64,
             used: place.store(resource),
         });
     }

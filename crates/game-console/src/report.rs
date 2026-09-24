@@ -97,7 +97,15 @@ pub fn show(game: &Game, subject: &Subject) -> String {
                     // on a territory it takes back, so there is no wrecked unit to mark -
                     // and `usable` was a trait the release never declared, which is what
                     // made a wrecked unit unreadable in the file Sean derives by hand.
-                    format!("{} {} {place}, {} cells", unit.kind, unit.id, unit.cells)
+                    // **The tank's size rather than its contents** - `S-150`. A unit holds
+                    // no energy; what it brings is room, and the energy itself is on the
+                    // territory's own line.
+                    format!(
+                        "{} {} {place}, tank {}",
+                        unit.kind,
+                        unit.id,
+                        unit.kind.fuel()
+                    )
                 })
                 .collect::<Vec<_>>()
                 .join("\n")
@@ -151,8 +159,10 @@ fn territory(game: &Game, id: TerritoryId) -> String {
     }
     for unit in game.units_on(id) {
         lines.push(format!(
-            "  {} {} with {} cells",
-            unit.kind, unit.id, unit.cells
+            "  {} {} with a tank of {}",
+            unit.kind,
+            unit.id,
+            unit.kind.fuel()
         ));
     }
     lines.join("\n")
@@ -299,7 +309,12 @@ pub fn entities(game: &Game) -> Vec<Entry> {
                         Location::On(id) => format!("territory-{id}"),
                     },
                 ),
-                ("cells".to_string(), unit.cells.to_string()),
+                // **`fuel`, and it is the tank's size** - `S-150`. This was `cells`, what the
+                // unit had left to move on; a unit holds no energy now, so what there is to
+                // say about the tank is how much room it gives the place it stands in.
+                // `releases/first-release.md` -> Traits calls that `fuel`, which is why the
+                // component is renamed rather than kept under a word for a charge.
+                ("fuel".to_string(), unit.kind.fuel().to_string()),
                 ("force".to_string(), unit.force().to_string()),
                 ("exhausted".to_string(), unit.exhausted.to_string()),
             ],

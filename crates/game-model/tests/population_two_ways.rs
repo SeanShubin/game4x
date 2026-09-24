@@ -94,7 +94,10 @@ fn a_territory_that_starves_to_nobody_holds_nothing_to_breed_from() {
     );
 
     // **Before the sweep this was 2**, which is the whole of `C-83`.
-    territory.end_of_turn_losses();
+    //
+    // **Nothing stands here, so nothing brings room** - `S-150` made what a place can keep
+    // depend on that, and a bare `Territory` has no units on it to ask about.
+    territory.end_of_turn_losses(&[]);
     assert_eq!(
         territory.count_of(Kind::Fertility),
         0,

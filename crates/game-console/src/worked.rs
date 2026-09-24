@@ -263,7 +263,7 @@ pub fn examples() -> Vec<Example> {
             also: &[],
             recipe: "move",
             command: "{move unit:pioneer from:1 to:2}",
-            case: Some("moving spends one fuel and leaves the unit not ready"),
+            case: Some("moving spends one energy where it stood and leaves the unit not ready"),
             before: || {
                 let mut game = beside(true);
                 let mut unit = game_model::Unit::new(
@@ -273,6 +273,10 @@ pub fn examples() -> Vec<Example> {
                 );
                 unit.location = game_model::Location::On(TerritoryId(1));
                 game.units.push(unit);
+                // **The place pays, so the place has to have it** - `S-150`. `move`'s
+                // `consume 1 energy` row names `$from`, and this example used to run on the
+                // pioneer's own tank.
+                game.territories[0].add(Resource::Energy, 1);
                 game
             },
         },
