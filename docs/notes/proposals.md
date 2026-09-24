@@ -99,6 +99,27 @@ and declined to invent a reporting half while clearing a red gate.
 **`CLAUDE.md` is the one that matters** - this lane edits it, and a quotation of it in this lane's
 own tool is the shape that goes stale without anyone touching it. **Nothing is stale today.**
 
+## The coverage loss per lane, with the sweep's own filter
+
+**The quality lens measured this independently and one of its three figures is wrong**, which is
+worth having because the correction is about the population rather than the arithmetic.
+
+```
+                 files swept   lines naming a document   opening a bold span
+tools/spec            9              55                        10
+tools/research        2               3                         1
+tools/quality         3               0                         0
+```
+
+**Counted with `quotations.rs`'s own extension set** - `rs`, `md`, `html`, `sh`, `ps1`, skipping
+`target`, `dist` and `report.html`. **That filter is the whole of the disagreement.**
+`tools/research` is Python and JavaScript apart from two documents, so a sweep over the directory
+finds 57 lines and a sweep over what the checker reads finds three.
+
+**So *the entire loss is yours* is nearly true and not exactly**: the research lens loses three
+lines and one bold span. The quality lens's own column is genuinely empty, and its decision not to
+build a checker for a population of zero stands.
+
 ## What this lane will not do, and why
 
 **Write a second quotation checker.** Yours parses attributed quotations out of doc comments and
