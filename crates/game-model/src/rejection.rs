@@ -70,6 +70,19 @@ pub enum Rejection {
     },
     NotControlled(TerritoryId),
     AlreadyControlled(TerritoryId),
+    /// A unit in an orbit cannot pay for a crossing, because an orbit holds no energy.
+    ///
+    /// **`S-168`, and it is a gap reported rather than a rule.** `move` consumes one energy at
+    /// the place the unit leaves; an Ark leaves an orbit; `spec/data/carries.4x` gives an orbit
+    /// an `id` and nothing else, and the word *sun* appears in no data file. **`P-552` is the
+    /// decision** - `spec/units.md` says a unit moving in orbit gathers its energy from the
+    /// sun, and that sentence has no mechanism.
+    ///
+    /// **It names the orbit rather than the territory below it**, because the territory is not
+    /// what is short: nothing is wrong with the ground under a stranded Ark.
+    NothingFuelsAnOrbit {
+        above: TerritoryId,
+    },
     // **`NoCells` was here and `S-150` deleted it.** It said *that pioneer has no energy cells
     // left*, and under pooling a unit has no cells to be out of: the energy a move spends is
     // the place's, so what refuses is `NotEnoughResource`, which names the territory, the
@@ -183,6 +196,11 @@ impl fmt::Display for Rejection {
                 out,
                 "territory {territory} has as many {} things as it can hold",
                 kind.name()
+            ),
+            Rejection::NothingFuelsAnOrbit { above } => write!(
+                out,
+                "the orbit above territory {above} has no energy, and nothing in this release \
+                 puts any there - moving in orbit waits on where that energy comes from"
             ),
             Rejection::NotControlled(id) => write!(out, "you do not control territory {id}"),
             Rejection::AlreadyControlled(id) => write!(out, "you already control territory {id}"),

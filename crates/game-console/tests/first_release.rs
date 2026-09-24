@@ -681,6 +681,85 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
 /// **Two of them are zero or one**, which is the reason a check matters more here than it
 /// looks: a garrison's 0 and a citizen's 1 are exactly the values that keep a wrong join
 /// looking right, and `C-31` is what a wrong force total cost the last time.
+/// Every `Crosses` cell the release states is the layer the model moves that kind on.
+///
+/// # The check that would have failed before this
+///
+/// **The column had no reader at all, and `S-168` is what that cost.** `move` asked for
+/// `Location::On(from)` whatever the kind, and an Ark is never on the surface - `P-549` - so
+/// `{move unit:ark from:1 to:2}` was refused as though there were no Ark anywhere. **The cell
+/// saying *orbit border* had been sitting there the whole time.**
+///
+/// **Over the column rather than over the two kinds that move**, because the four blank cells
+/// are the half that would notice a border appearing on a store. A thing that crosses nothing
+/// has no `UnitKind`, and the count says how many of each there were.
+///
+/// **And the two names are asserted distinct**, because a comparison between two words that
+/// are the same word is satisfied by anything.
+#[test]
+fn every_border_the_release_states_is_the_layer_the_model_moves_a_kind_on() {
+    use game_model::UnitKind;
+    use game_model::identity::Border;
+
+    let document = std::fs::read_to_string(
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../releases/first-release.md"),
+    )
+    .expect("the release");
+    let at = game_console::recipes::column_of(&document, "## Units and structures", "Crosses");
+    let stated: BTreeMap<String, String> =
+        game_console::recipes::body_under(&document, "## Units and structures")
+            .iter()
+            .map(|row| {
+                (
+                    game_console::recipes::plain(&row[0]),
+                    row.get(at).cloned().unwrap_or_default().trim().to_string(),
+                )
+            })
+            .collect();
+    assert_eq!(
+        stated.len(),
+        6,
+        "six things in *Units and structures*; the release lists {stated:?}"
+    );
+
+    // **Every row, and the blank ones carry the check as much as the filled ones.** A thing
+    // that crosses nothing does not move, and the model gives it no `UnitKind` - so a cell
+    // filling in would fail here rather than being a border nothing reads.
+    let mut moving = 0;
+    let mut still = 0;
+    for (thing, cell) in &stated {
+        match UnitKind::named(thing) {
+            Some(kind) => {
+                assert_eq!(
+                    &kind.crosses().name(),
+                    cell,
+                    "`{thing}` crosses {cell:?} in the release and {:?} in the model",
+                    kind.crosses().name()
+                );
+                moving += 1;
+            }
+            None => {
+                assert!(
+                    cell.is_empty(),
+                    "`{thing}` crosses {cell:?} and is not a unit, so nothing moves it"
+                );
+                still += 1;
+            }
+        }
+    }
+    assert_eq!(
+        (moving, still),
+        (2, 4),
+        "two kinds that move and four things that do not, over the six rows above"
+    );
+    assert_eq!(
+        Border::Surface.name(),
+        "border",
+        "the two borders are distinct words, or the comparison above is satisfied by one"
+    );
+    assert_ne!(Border::Surface.name(), Border::Orbit.name());
+}
+
 #[test]
 fn every_strength_the_release_states_is_the_strength_the_model_musters() {
     use game_model::UnitKind;

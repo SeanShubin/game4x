@@ -164,6 +164,12 @@ pub fn grammar() -> Grammar {
             // **Two places since `P-460`, and `C-101` asked for them.** The recipe leaves
             // `$from` and `$to` open and a command binds every place a recipe leaves open,
             // so the player says which unit moves by saying where it is standing.
+            //
+            // **The two numbers are territories and what they mean is the kind's layer** -
+            // `S-168`. `spec/console.md`: *a place worked out from another is not open - the
+            // orbit above a territory is named by naming the territory.* So these same two
+            // fields name two orbits for an ark and two territories for a pioneer, and the
+            // form needs no word for an orbit.
             vec![
                 Term::Keyword("move"),
                 Term::required("unit", Kind::Name),
@@ -171,7 +177,7 @@ pub fn grammar() -> Grammar {
                 Term::required("to", Kind::Number),
                 Term::optional("repeat", Kind::Number),
             ],
-            "move a unit from the territory it stands on to an adjacent one, held or not",
+            "move a unit to an adjacent place on the layer it moves on, held or not",
         ),
         Form::new(
             form::FOUND_BY_LAND,

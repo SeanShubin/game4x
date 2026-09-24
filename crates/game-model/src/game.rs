@@ -407,6 +407,90 @@ mod tests {
         assert!(won.has_won(), "the planet was finished and an Ark left it");
     }
 
+    /// An Ark is found by `move`, and what refuses it is the orbit's energy.
+    ///
+    /// # The check that would have failed before this
+    ///
+    /// **`S-168`: `move` asked for `Location::On(from)` whatever the kind**, and an Ark is
+    /// never on the surface - `P-549`. So a move of an Ark was refused with *there is no ark
+    /// anywhere*, which is the shape of a wrong answer that invites no question: a true
+    /// sentence about the place it looked, and the wrong place.
+    ///
+    /// **Both halves, because either alone passes for the wrong reason.** The Ark is selected,
+    /// which is what `S-168` asked for; and it is refused for the orbit rather than for being
+    /// missing, which is what makes the selection worth anything. **A test asserting only that
+    /// the move is refused would have passed before this and after it.**
+    ///
+    /// **And a Pioneer in the same fixture still moves on the surface**, so the layer is read
+    /// from the kind rather than applied to everything.
+    ///
+    /// # What it does not assert
+    ///
+    /// **Not that an Ark moves**, because no Ark can: `move` burns one energy at the place it
+    /// leaves, an orbit holds none, and nothing in this release puts any there. That is
+    /// `P-552` and it is Sean's. **The refusal here is the gap said out loud**, and it will
+    /// have to change when he answers - which is the point of naming it rather than leaving
+    /// *there is no ark anywhere*.
+    #[test]
+    fn an_ark_is_found_in_its_orbit_and_refused_for_the_energy_that_is_not_there() {
+        let mut game = designed().after(&Transition::Start).unwrap();
+        game.units.clear();
+        let mut ark = Unit::new(UnitId(1), UnitKind::Ark, TerritoryId(1));
+        ark.location = Location::Orbit(TerritoryId(1));
+        game.units.push(ark);
+        assert!(
+            game.are_adjacent(TerritoryId(1), TerritoryId(2)),
+            "the fixture needs the two territories next door, or adjacency is the refusal"
+        );
+
+        let why = game
+            .after(&Transition::Move {
+                kind: UnitKind::Ark,
+                from: TerritoryId(1),
+                to: TerritoryId(2),
+            })
+            .expect_err("an orbit has no energy, so no Ark can pay for a crossing");
+        assert_eq!(
+            why,
+            Rejection::NothingFuelsAnOrbit {
+                above: TerritoryId(1)
+            },
+            "the Ark was found and refused for the orbit - it used to be refused as missing"
+        );
+        assert!(
+            !matches!(
+                why,
+                Rejection::NoUnitAvailable { .. } | Rejection::NoUnitThere { .. }
+            ),
+            "refused as though there were no Ark, which is what `S-168` reported"
+        );
+
+        // **The same fixture moves a Pioneer**, so the layer comes from the kind rather than
+        // from a change that put every unit in orbit.
+        let mut ground = game.clone();
+        let mut pioneer = Unit::new(UnitId(2), UnitKind::Pioneer, TerritoryId(1));
+        pioneer.location = Location::On(TerritoryId(1));
+        ground.units.push(pioneer);
+        ground.territories[0].add(Resource::Energy, cost::MOVE_ENERGY);
+        let moved = ground
+            .after(&Transition::Move {
+                kind: UnitKind::Pioneer,
+                from: TerritoryId(1),
+                to: TerritoryId(2),
+            })
+            .expect("a pioneer crosses on the surface, where its energy is");
+        assert!(
+            moved.units.iter().any(|unit| unit.kind == UnitKind::Pioneer
+                && unit.location == Location::On(TerritoryId(2))),
+            "the pioneer arrived on the ground rather than in an orbit"
+        );
+        assert!(
+            moved.units.iter().any(|unit| unit.kind == UnitKind::Ark
+                && unit.location == Location::Orbit(TerritoryId(1))),
+            "and the Ark stayed where it was"
+        );
+    }
+
     /// Launching leaves an Ark in the orbit above where it was launched, up to two.
     ///
     /// # The check that would have failed before this

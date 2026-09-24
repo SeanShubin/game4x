@@ -74,6 +74,34 @@ impl fmt::Display for Resource {
     }
 }
 
+/// A border a unit crosses when it moves, which is the layer it moves on.
+///
+/// **`releases/first-release.md` -> Units and structures, the `Crosses` column**, which was
+/// written down and read by nothing until `S-168`: an ark crosses an *orbit border*, a pioneer
+/// a *border*, and the four things that do not move cross nothing.
+///
+/// **`spec/orbit.md` is what makes this a layer rather than a pair of cases**: *an orbit
+/// boundary is one an orbit is on either side of*, and *two places on the same layer are
+/// adjacent when their territories are*. So the adjacency table already answers both, and a
+/// kind's border says which layer to read it on.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Border {
+    /// Between two territories.
+    Surface,
+    /// Between two orbits.
+    Orbit,
+}
+
+impl Border {
+    /// What the release's `Crosses` cell says, so the cell can be compared with this.
+    pub fn name(self) -> &'static str {
+        match self {
+            Border::Surface => "border",
+            Border::Orbit => "orbit border",
+        }
+    }
+}
+
 /// `releases/first-release.md` gives the Ark and the Pioneer. Both are founding units:
 /// `spec/unit-types.md` says an Ark arrives from orbit and a Pioneer from an adjacent
 /// territory, and each transforms into what a territory needs to sustain itself.
@@ -141,6 +169,24 @@ impl UnitKind {
         match self {
             UnitKind::Ark => 0,
             UnitKind::Pioneer => 2,
+        }
+    }
+
+    /// Which border this kind crosses when it moves, which is the layer it moves on.
+    ///
+    /// **`releases/first-release.md` -> Units and structures, the `Crosses` column** - an ark
+    /// crosses an *orbit border* and a pioneer a *border*. **The cell had no reader until
+    /// `S-168`**, which is why `move` looked on the surface for every kind and an ark could
+    /// never be found.
+    ///
+    /// **It is what lets a command name an orbit without a word for one.**
+    /// `spec/console.md`: *a place worked out from another is not open - the orbit above a
+    /// territory is named by naming the territory.* So `{move unit:ark from:1 to:2}` carries
+    /// two territory numbers and means two orbits, and this is what works that out.
+    pub fn crosses(self) -> Border {
+        match self {
+            UnitKind::Ark => Border::Orbit,
+            UnitKind::Pioneer => Border::Surface,
         }
     }
 

@@ -1,6 +1,6 @@
 //! Units, and where they are.
 
-use crate::identity::{TerritoryId, UnitId, UnitKind};
+use crate::identity::{Border, TerritoryId, UnitId, UnitKind};
 
 /// Where a unit is: on a territory, or in the orbit above one.
 ///
@@ -24,6 +24,22 @@ impl Location {
     pub fn territory(self) -> TerritoryId {
         match self {
             Location::Orbit(id) | Location::On(id) => id,
+        }
+    }
+
+    /// The place a unit of this kind is in, over a territory.
+    ///
+    /// **`S-168`, and it is a derivation rather than a choice.** A kind's `Crosses` cell says
+    /// which layer it moves on, and `spec/console.md` says *a place worked out from another is
+    /// not open - the orbit above a territory is named by naming the territory*. **So a
+    /// command carrying two territory numbers already names an ark's two orbits.**
+    ///
+    /// **`P-549` is what makes it total**: *an ark is never on the surface*, so no kind could
+    /// be in either place with something having to pick.
+    pub fn of(kind: UnitKind, territory: TerritoryId) -> Self {
+        match kind.crosses() {
+            Border::Orbit => Location::Orbit(territory),
+            Border::Surface => Location::On(territory),
         }
     }
 }

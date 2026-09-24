@@ -306,6 +306,30 @@ impl Game {
     /// rows in `releases/first-release.md` have no haul among them**, nor does the command
     /// carry an amount to name one. So a unit crossing into an empty place arrives with
     /// nothing, and the general rule waits for a release that fires it.
+    ///
+    /// # Which layer, and why the command needs no word for an orbit - `S-168`
+    ///
+    /// **This looked on the surface for every kind, so an Ark could never be selected.** An
+    /// Ark is always in an orbit - `P-549`, *an ark is never on the surface* - and this asked
+    /// for `Location::On(from)`, which no Ark is ever in. `{move unit:ark from:1 to:2}` was
+    /// refused as though there were no Ark anywhere.
+    ///
+    /// **The layer comes from the kind and the places from the command.**
+    /// `releases/first-release.md`'s `Crosses` column gives an ark an *orbit border* and a
+    /// pioneer a *border*, and `spec/console.md` says *a place worked out from another is not
+    /// open - the orbit above a territory is named by naming the territory*. So two territory
+    /// numbers name two orbits for an Ark and two territories for a Pioneer, and
+    /// [`Location::of`] is the whole of the translation.
+    ///
+    /// **Adjacency needs nothing new.** `spec/orbit.md`: *two places on the same layer are
+    /// adjacent when their territories are*. Both places here are on one layer, because both
+    /// come from one kind - so the territory table below answers for orbits unchanged.
+    ///
+    /// **And an Ark still cannot move, for a reason that is now the true one.** `move` burns
+    /// one energy at the place it leaves, an orbit holds none, and nothing puts any there -
+    /// `P-552`, which is with Sean. **The refusal names that** instead of claiming there is no
+    /// Ark, which is the whole of what `S-168` asked for: the model can express the move and
+    /// says exactly what is missing.
     fn move_unit(
         &mut self,
         kind: UnitKind,
@@ -314,30 +338,45 @@ impl Game {
     ) -> Result<(), Rejection> {
         self.territory(from)?;
         self.territory(to)?;
+        // **The two places, on the layer this kind moves on** - `S-168`. The command named
+        // two territories; what they mean is worked out from the kind.
+        let leaving = Location::of(kind, from);
+        let arriving = Location::of(kind, to);
         // Adjacency is asked of the two places the command named rather than of whatever
         // the model found, so "these are not adjacent" is about the move the player
-        // described.
+        // described. **Two places on the same layer are adjacent when their territories
+        // are** - `spec/orbit.md` - and both of these are on one layer.
         if !self.are_adjacent(from, to) {
             return Err(Rejection::NotAdjacent { from, to });
         }
         // **Standing there is asked before the energy is**, so that "there is no pioneer on
         // 3" and "territory 3 has no energy" stay different complaints. `pick` takes only
         // units that are `ready()`, which is where `moving at least 1` is enforced.
-        let Some(at) = self.pick(kind, |unit| unit.location == Location::On(from)) else {
-            return Err(match self.pick(kind, |unit| !unit.in_orbit()) {
+        let Some(at) = self.pick(kind, |unit| unit.location == leaving) else {
+            return Err(match self.pick(kind, |unit| unit.location != leaving) {
                 Some(_) => Rejection::NoUnitThere {
                     kind,
                     territory: from,
                 },
                 None => Rejection::NoUnitAvailable {
                     kind,
-                    where_from: "on the planet",
+                    where_from: "anywhere",
                 },
             });
         };
-        // **The one energy is the place's** - `S-150`. Spent before the unit is moved, so a
-        // refusal leaves the state as it was.
-        self.spend(from, Resource::Energy, cost::MOVE_ENERGY)?;
+        // **The one energy is the place's** - `S-150` - and the place is what the unit
+        // leaves, which for an Ark is an orbit.
+        //
+        // **An orbit holds no energy and nothing puts any there**, which is `P-552` and is
+        // Sean's to settle: `spec/units.md` says a unit moving in orbit gathers its energy
+        // from the sun, and no recipe, relation or data file in this repository names the
+        // sun. So the refusal says that rather than charging the territory below - **the
+        // surface paying for an orbital crossing is a rule nothing states**, and inventing it
+        // here would make an Ark move and make the reason unfindable.
+        match leaving {
+            Location::On(id) => self.spend(id, Resource::Energy, cost::MOVE_ENERGY)?,
+            Location::Orbit(above) => return Err(Rejection::NothingFuelsAnOrbit { above }),
+        }
 
         // **`P-214` still holds and this guard no longer serves it.** Moving is moving and
         // founding is a different command - that was the rule, and the guard existed because
@@ -348,7 +387,7 @@ impl Game {
         // before `found by land` can fire, so moving there is the only way to found at all,
         // and refusing it would make the recipe unreachable. Moving still founds nothing:
         // arriving leaves the ground unclaimed and the player still says which recipe.
-        self.units[at].location = Location::On(to);
+        self.units[at].location = arriving;
         self.units[at].exhausted = true;
         Ok(())
     }
