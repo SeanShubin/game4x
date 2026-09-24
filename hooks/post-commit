@@ -41,6 +41,39 @@ if ! git diff --cached --quiet -- pending.md 2>/dev/null; then
     git reset --quiet -- pending.md
 fi
 
+# Say what a pathspec commit left staged, because the next commit takes it.
+#
+# **`S-166`, and `pending.md` above is one instance of it.** `pre-commit` stages what it
+# changes - the regenerated index, and every markdown file `tools/pad-tables` repads - and a
+# pathspec commit takes the working tree rather than the index, so whatever the hook staged is
+# still staged afterwards. **The next `git commit` in this tree takes it**, whoever runs it and
+# whatever their commit is about, which is the hazard the paragraph above already states in
+# general and then guards for exactly one file.
+#
+# **It produced a real one on 2026-09-24.** `crates/game-inspect/README.md` was committed as I
+# had padded it by hand, and the padder's version - differing from both `HEAD` and the working
+# tree - was left in the index.
+#
+# **Reported rather than unstaged, and the difference matters.** Unstaging is right for
+# `pending.md`, which is generated, belongs to nobody, and stays in the working tree. It is
+# wrong here: in that instance the **index held the correct file and the working tree held the
+# wrong one**, so unstaging would have left a README the padder disagrees with and broken
+# `tools/pad-tables`'s own check later, one lane over.
+#
+# **And this lane's own form cannot produce it** - the specification lane measured that: staging
+# by name and committing with no pathspec takes the index, so the hook's changes land. So the
+# hazard is specific to `git commit <pathspec>`, which is the form the refusal message in
+# `pre-commit` recommends for getting out of a two-column index. **The two guards point in
+# opposite directions**, and that is worth a reader knowing rather than discovering.
+stranded=$(git diff --cached --name-only)
+if [ -n "$stranded" ]; then
+    echo "post-commit: these are staged and were not in that commit:" >&2
+    echo "$stranded" | sed 's/^/  /' >&2
+    echo "post-commit: a pathspec commit takes the working tree, so what pre-commit staged is" >&2
+    echo "post-commit: still staged - and the next commit in this tree takes it, whoever runs" >&2
+    echo "post-commit: it. Commit them or unstage them; do not leave them for somebody else." >&2
+fi
+
 # Say when a commit spanned two columns after all, which `pre-commit` cannot catch.
 #
 # **`pre-commit` refuses that shape and it cannot be enough.** It reads the index, returns,

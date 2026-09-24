@@ -208,3 +208,57 @@ fn the_rustfmt_line_is_printed_only_when_rust_is_staged() {
          presence in a commit's output no longer says a Rust file was staged"
     );
 }
+
+/// `post-commit` reports what a pathspec commit left staged, which is `S-166`.
+///
+/// # The guard was narrower than the hazard it described
+///
+/// **`pre-commit` stages what it changes** - the regenerated `pending.md`, and every markdown
+/// file `tools/pad-tables` repads - and a pathspec commit takes the working tree rather than
+/// the index. So whatever the hook staged is still staged afterwards, and the next commit in
+/// this tree takes it, whoever runs it.
+///
+/// **`post-commit`'s own header stated that in general and then guarded one file.** It
+/// unstages `pending.md` and said nothing about the rest, which held until
+/// `crates/game-inspect/README.md` was committed as it had been padded by hand and the
+/// padder's version was left in the index - differing from both `HEAD` and the working tree.
+///
+/// # Reported rather than unstaged, and that is not a smaller fix
+///
+/// Unstaging is right for `pending.md`: generated, owned by nobody, and it stays in the
+/// working tree. It would have been **wrong** in the instance that prompted this, where the
+/// index held the correct file and the working tree held the wrong one - so unstaging would
+/// have left a README the padder disagrees with and broken `tools/pad-tables`'s check a lane
+/// over.
+///
+/// # Demonstrated in a scratch repository, both ways
+///
+/// A pathspec commit with a second file staged reports it and leaves it staged; an ordinary
+/// commit of the same index reports nothing and strands nothing. **The second half is what
+/// stops this being a hook that fires on every commit**, and it is the specification lane's
+/// measurement: staging by name and committing with no pathspec takes the index, so the
+/// hook's own changes land.
+#[test]
+fn post_commit_reports_what_a_pathspec_commit_left_staged() {
+    let at = root().join("hooks/post-commit");
+    let text = std::fs::read_to_string(&at)
+        .unwrap_or_else(|why| panic!("cannot read {}: {why}", at.display()));
+
+    assert!(
+        text.contains("stranded=$(git diff --cached --name-only)"),
+        "`hooks/post-commit` no longer reads what is staged after a commit"
+    );
+    assert!(
+        text.contains("these are staged and were not in that commit"),
+        "`hooks/post-commit` no longer reports a stranded file"
+    );
+
+    // **Reported and not reset**, which is the decision rather than an implementation detail.
+    // `git reset` appears once in this file and it is `pending.md`'s.
+    assert_eq!(
+        text.matches("git reset").count(),
+        1,
+        "`hooks/post-commit` resets something other than `pending.md`, and unstaging is wrong \
+         wherever the index holds the file the working tree should have"
+    );
+}
