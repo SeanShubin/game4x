@@ -128,8 +128,19 @@ holds the biome row and `spec/data/biomes.4x` holds six values and no `nature`; 
 quotations above are present where they were offered.
 
 **And the gate goes red until the code lane follows**, because `spec/data/` is what the engine
-loads. **That is expected rather than a surprise**, and `spec/data/limit.4x` losing its only row
-is the part most likely to need them.
+loads. **That is expected rather than a surprise.** `spec/data/limit.4x` keeps four of its five
+rows - this lane first wrote *its only row*, having counted the rows that mention a garrison and
+read the answer as the size of the file.
+
+## Two things move with it that are nobody's idea, and are named so they are not surprises
+
+**`releases/first-release.md` cites the sections by their old home.** Its `Out of scope` entries
+name `spec/control.md` -> Force and -> Producing force, which is where they are today. **A link
+broken by a file move is this lane's to repair** and the entries keep saying exactly what they say.
+
+**And `spec/README.md` gains a row**, because its own rule is *add a file when a topic firms up,
+add its row here first* - and `P-539` requires the row to say which kind of document it is. **The
+`Control` row also stops being accurate**, which is the third of the three examples above.
 
 
 ### P-514 - Three rows of `spec/data/line.4x` are unwritable, and this lane's own check said there was one
