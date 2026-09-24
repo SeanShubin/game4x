@@ -45,14 +45,26 @@ impl PlanetSize {
         }
     }
 
-    pub fn name(self) -> &'static str {
-        match self {
+    /// What this size is called, which since `P-542` carries its count.
+    ///
+    /// **`spec/planet.md`**: *there are 5 planet sizes, corresponding to the 5 smallest
+    /// Goldberg polyhedrons, and each is named for its count* - `tiny-12`, `small-32`,
+    /// `medium-42`, `large-72`, `huge-92` - and *the number in the name is the number of
+    /// territories, so the pairing is stated once and a name that disagrees with its
+    /// polyhedron is a defect rather than a choice.*
+    ///
+    /// **Stated once means stated once**, so this is built from `territory_count` rather than
+    /// written out beside it. A name and a count that could disagree is exactly what the rule
+    /// forbids, and writing both by hand is how they would.
+    pub fn name(self) -> String {
+        let word = match self {
             Self::Tiny => "tiny",
             Self::Small => "small",
             Self::Medium => "medium",
             Self::Large => "large",
             Self::Huge => "huge",
-        }
+        };
+        format!("{word}-{}", self.territory_count())
     }
 
     /// The size with this many territories, if any. Most counts are not a planet size,

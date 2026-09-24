@@ -263,7 +263,7 @@ impl Console {
     /// nothing here has to bend to allow it.
     ///
     /// The new game is built the only way a game can be built, by running commands, and it
-    /// runs the same `world` file the release opens with - so `/new tiny` and the world
+    /// runs the same `world` file the release opens with - so `/new tiny-12` and the world
     /// this console opened on are the same world rather than two descriptions of it.
     ///
     /// The new fold is built to completion before the old one is let go. A size that names
@@ -411,7 +411,7 @@ mod tests {
             console
                 .session
                 .history()
-                .contains(&"{create-planet size:tiny}".to_string()),
+                .contains(&"{create-planet size:tiny-12}".to_string()),
             "{:?}",
             console.session.history()
         );
@@ -528,7 +528,7 @@ mod tests {
     #[test]
     fn starting_over_gives_a_planet_of_the_size_asked_for() {
         let mut console = Console::new();
-        for size in ["small", "medium", "large", "huge", "tiny"] {
+        for size in ["small-32", "medium-42", "large-72", "huge-92", "tiny-12"] {
             let said = spoke(&mut console, &format!("/new {size}"));
             assert!(said.contains(size), "{said}");
             assert_eq!(
@@ -554,7 +554,7 @@ mod tests {
         let before = console.session.history().len();
         assert!(before > 0);
 
-        console.submit("/new small");
+        console.submit("/new small-32");
 
         let after = console.session.history();
         assert!(
@@ -563,7 +563,7 @@ mod tests {
         );
         // The new fold's history is exactly what built it, and replays to the same game.
         assert!(
-            after.contains(&"{create-planet size:small}".to_string()),
+            after.contains(&"{create-planet size:small-32}".to_string()),
             "{after:?}"
         );
         let mut replayed = game_console::Session::new();
@@ -573,14 +573,14 @@ mod tests {
         assert_eq!(replayed.game, console.session.game);
     }
 
-    /// `/new tiny` and the world the console opened on are the same world, not two
+    /// `/new tiny-12` and the world the console opened on are the same world, not two
     /// descriptions of it. That is what splitting `world.4x` out of `setup.4x` buys.
     #[test]
     fn starting_over_on_tiny_is_the_world_the_release_opens_with() {
         let opened = Console::new();
         let mut restarted = Console::new();
         restarted.submit("{end-turn}");
-        restarted.submit("/new tiny");
+        restarted.submit("/new tiny-12");
         assert_eq!(restarted.session.game, opened.session.game);
     }
 
@@ -589,7 +589,7 @@ mod tests {
     fn starting_over_moves_the_counter_the_engine_watches() {
         let mut console = Console::new();
         let before = console.generation();
-        console.submit("/new huge");
+        console.submit("/new huge-92");
         assert!(console.generation() > before);
         assert_eq!(console.territory_count(), Some(92));
     }

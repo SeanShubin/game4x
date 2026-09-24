@@ -332,7 +332,7 @@ mod tests {
     #[test]
     fn every_design_command_in_the_specification_parses() {
         let examples = [
-            ("{create-planet size:tiny}", form::CREATE_PLANET),
+            ("{create-planet size:tiny-12}", form::CREATE_PLANET),
             (
                 "{set-resource territory:1 resource:food extractors:3 density:4}",
                 form::SET_RESOURCE,

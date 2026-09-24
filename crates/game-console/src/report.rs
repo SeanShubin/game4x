@@ -325,7 +325,7 @@ mod tests {
 
     fn tiny() -> Session {
         played(&[
-            "{create-planet size:tiny}",
+            "{create-planet size:tiny-12}",
             "{set-resource territory:1 resource:food extractors:1 density:4}",
             "{set-resource territory:1 resource:metal extractors:1 density:4}",
             "{set-force territory:1 force:1}",
@@ -445,7 +445,7 @@ mod tests {
             panic!();
         };
         let lines: Vec<&str> = text.lines().collect();
-        assert!(lines[0].contains("{create-planet size:tiny}"), "{text}");
+        assert!(lines[0].contains("{create-planet size:tiny-12}"), "{text}");
         assert!(lines.last().unwrap().contains("{start}"), "{text}");
     }
 

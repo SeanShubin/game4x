@@ -175,11 +175,11 @@ mod tests {
         assert_eq!(
             typed,
             [
-                "/new tiny",
-                "/new small",
-                "/new medium",
-                "/new large",
-                "/new huge",
+                "/new tiny-12",
+                "/new small-32",
+                "/new medium-42",
+                "/new large-72",
+                "/new huge-92",
             ]
         );
         // Ascending, so the digits read the way they look on the keyboard.

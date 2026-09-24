@@ -10,7 +10,7 @@ The hierarchy is flattened. `run setup` opens `setup.4x`, which opens others, an
 
 | #   | turn   | command                                                              | fires                                                                                      |
 | --- | ------ | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| 1   | design | `{create-planet size:tiny}`                                          | *design; `P-217`, not a recipe*                                                            |
+| 1   | design | `{create-planet size:tiny-12}`                                       | *design; `P-217`, not a recipe*                                                            |
 | 2   | design | `{set-resource territory:1 resource:food extractors:3 density:4}`    | *design; `P-217`, not a recipe*                                                            |
 | 3   | design | `{set-resource territory:1 resource:metal extractors:3 density:4}`   | *design; `P-217`, not a recipe*                                                            |
 | 4   | design | `{set-resource territory:1 resource:energy extractors:3 density:4}`  | *design; `P-217`, not a recipe*                                                            |

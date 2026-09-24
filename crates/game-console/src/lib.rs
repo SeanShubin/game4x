@@ -538,7 +538,7 @@ mod tests {
     fn history_lists_what_was_done_in_order() {
         let mut session = Session::new();
         session
-            .run("{create-planet size:tiny}", &NoLibrary)
+            .run("{create-planet size:tiny-12}", &NoLibrary)
             .unwrap();
         session
             .run("{set-force territory:1 force:1}", &NoLibrary)
@@ -546,7 +546,7 @@ mod tests {
         assert_eq!(
             session.history(),
             [
-                "{create-planet size:tiny}",
+                "{create-planet size:tiny-12}",
                 "{set-force territory:1 force:1}"
             ]
         );
@@ -558,7 +558,7 @@ mod tests {
     fn history_records_what_a_subroutine_did_rather_than_the_call_to_it() {
         let library = Embedded::of(&[(
             "world",
-            "{create-planet size:tiny}
+            "{create-planet size:tiny-12}
 {set-force territory:1 force:1}
 ",
         )]);
@@ -567,7 +567,7 @@ mod tests {
         assert_eq!(
             session.history(),
             [
-                "{create-planet size:tiny}",
+                "{create-planet size:tiny-12}",
                 "{set-force territory:1 force:1}"
             ]
         );
@@ -614,7 +614,7 @@ mod tests {
         assert!(matches!(at(&misread), Problem::Misread(_)), "{misread}");
 
         session
-            .run("{create-planet size:tiny}", &NoLibrary)
+            .run("{create-planet size:tiny-12}", &NoLibrary)
             .unwrap();
         session.run("{start}", &NoLibrary).unwrap();
         let rule = session
@@ -633,12 +633,12 @@ mod tests {
     fn a_refused_command_leaves_the_game_untouched() {
         let mut session = Session::new();
         session
-            .run("{create-planet size:tiny}", &NoLibrary)
+            .run("{create-planet size:tiny-12}", &NoLibrary)
             .unwrap();
         let before = session.game.clone();
         assert!(session.run("{deploy-ark territory:1}", &NoLibrary).is_err());
         assert_eq!(session.game, before);
-        assert_eq!(session.history(), ["{create-planet size:tiny}"]);
+        assert_eq!(session.history(), ["{create-planet size:tiny-12}"]);
     }
 
     /// `spec/console.md`: commands may be organized in a hierarchy of files, one file
@@ -646,7 +646,7 @@ mod tests {
     #[test]
     fn a_file_may_call_another_file() {
         let library = Embedded::of(&[
-            ("world", "{create-planet size:tiny}\n{run file:forces}\n"),
+            ("world", "{create-planet size:tiny-12}\n{run file:forces}\n"),
             (
                 "forces",
                 "{set-force territory:1 force:1}\n{set-force territory:2 force:1}\n",
@@ -694,7 +694,7 @@ mod tests {
     fn a_failure_inside_a_subroutine_names_its_own_line() {
         let library = Embedded::of(&[(
             "setup",
-            "{create-planet size:tiny}\n{deploy-ark territory:nowhere}\n",
+            "{create-planet size:tiny-12}\n{deploy-ark territory:nowhere}\n",
         )]);
         let mut session = Session::new();
         let problem = session.run("{run file:setup}", &library).unwrap_err();

@@ -239,7 +239,7 @@ carries a landing, and can invade from orbit.
 
 **In families** thing, unit
 
-**Traits of it** `moving` (a number), `strength` (a number), `fuel` (how much energy its tank holds), `binding` (a number: the metal the recipe that makes it consumes), `metal in it` (a number: its binding plus the metal in its parts), `keeps` (the number of turns it will last), `movable` (a number)
+**Traits of it** `moving` (a number), `strength` (a number), `fuel` (how much energy its tank gives room for), `binding` (a number: the metal the recipe that makes it consumes), `metal in it` (a number: its binding plus the metal in its parts), `keeps` (the number of turns it will last), `movable` (a number)
 
 **Signature** `s-5`
 
@@ -266,7 +266,7 @@ founds a territory.
 
 **In families** thing, unit
 
-**Traits of it** `moving` (a number), `strength` (a number), `fuel` (how much energy its tank holds), `binding` (a number: the metal the recipe that makes it consumes), `metal in it` (a number: its binding plus the metal in its parts), `keeps` (the number of turns it will last), `movable` (a number)
+**Traits of it** `moving` (a number), `strength` (a number), `fuel` (how much energy its tank gives room for), `binding` (a number: the metal the recipe that makes it consumes), `metal in it` (a number: its binding plus the metal in its parts), `keeps` (the number of turns it will last), `movable` (a number)
 
 **Signature** `s-6`
 

@@ -408,8 +408,8 @@ mod tests {
     #[test]
     fn creating_a_planet_twice_describes_the_same_world() {
         assert_eq!(
-            meaning("{create-planet size:small}"),
-            meaning("{create-planet size:small}")
+            meaning("{create-planet size:small-32}"),
+            meaning("{create-planet size:small-32}")
         );
     }
 
@@ -419,7 +419,7 @@ mod tests {
     #[test]
     fn a_planet_has_more_than_one_kind_of_ground() {
         let Meaning::Change(Transition::CreatePlanet { biomes, .. }) =
-            meaning("{create-planet size:huge}")
+            meaning("{create-planet size:huge-92}")
         else {
             panic!("not a create planet");
         };
@@ -434,7 +434,7 @@ mod tests {
             territories,
             adjacency,
             biomes,
-        }) = meaning("{create-planet size:tiny}")
+        }) = meaning("{create-planet size:tiny-12}")
         else {
             panic!("not a create planet");
         };
@@ -496,7 +496,7 @@ mod tests {
     #[test]
     fn adjacency_agrees_with_itself() {
         let Meaning::Change(Transition::CreatePlanet { adjacency, .. }) =
-            meaning("{create-planet size:tiny}")
+            meaning("{create-planet size:tiny-12}")
         else {
             panic!("not a create planet");
         };

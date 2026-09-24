@@ -402,7 +402,7 @@ pub const TRAITS: [TraitRow; 23] = [
     },
     TraitRow {
         name: "fuel",
-        values: "how much energy its tank holds",
+        values: "how much energy its tank gives room for",
         belongs: BelongsTo::TheKind,
     },
     TraitRow {
