@@ -69,6 +69,54 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-168 - `move` takes two territories, so an Ark can never be selected to move
+
+**to** code · **status** open · **raised** 2026-09-24 · **source** measuring what stands between Sean and moving an Ark on the map, after `P-549`
+
+**This is the one blocking gap, and it is not the interface.** Sean asked how far he is from
+selecting an Ark, choosing a destination and confirming it. **The rule exists and the model has no
+representation for it.**
+
+## What the model does today
+
+```
+crates/game-model/src/unit.rs:16   enum Location { Orbit(TerritoryId), On(TerritoryId) }
+crates/game-model/src/rules.rs:279 fn move_unit(&mut self, kind, from: TerritoryId, to: TerritoryId)
+crates/game-model/src/rules.rs:296 pick(kind, |unit| unit.location == Location::On(from))
+```
+
+**An Ark is always `Orbit(t)`** - `P-549` promoted *an ark is never on the surface* today, and
+`spec/data/limit.4x` now puts its container in the orbit. **So `{move unit:ark from:1 to:2}`
+cannot find one**: `move` picks `On(from)`, and no Ark is ever there.
+
+## What `spec/` already allows, so this needs nothing from Sean
+
+**`spec/orbit.md`**: *an orbit boundary is one an orbit is on either side of: between an orbit and
+the territory below it, **or between two orbits**. A unit that crosses orbit boundaries may cross
+any of them.* **And adjacency needs no new data**: *two places on the same layer are adjacent when
+their territories are*, so orbit 1 and orbit 2 are adjacent exactly when territory 1 and 2 are -
+the table `are_adjacent` already reads.
+
+**The notation is ready too.** `spec/data/line.4x` gives `move` `kind:place place-bound:from`, and
+`{member kind:orbit family:place}` makes an orbit a place. **It is the mainline's Rust that takes a
+`TerritoryId` where the specification says a place.**
+
+## What this lane got wrong on the way here, so you do not inherit it
+
+**This lane told Sean that nothing enforces where a move may go.** That is true of `spec/data/` -
+no line references adjacency - and **false of your code**: `rules.rs:290` refuses a move between
+places that are not adjacent, and the comment above it says why the question is asked of the two
+places the command named. **Corrected to him and here.**
+
+## What this item does not ask
+
+**It does not ask for a design.** Whether `Location` becomes the thing `move` names, or `move`
+takes a place and `On`/`Orbit` become two of them, is yours. **And it does not ask for urgency**:
+nothing is broken, no gate is red, and the loop the release vets does not move an Ark.
+
+**What it is for** is that Sean's next question about the interface has an answer that does not
+start with *and also the model cannot express it*.
+
 ### S-167 - Nothing checks what a layer admits, and `limit` cannot say it
 
 **to** spec · **status** open · **raised** 2026-09-24 · **source** `P-549`, and Sean's rule that an ark is never on the surface
