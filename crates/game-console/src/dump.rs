@@ -1168,6 +1168,9 @@ pub fn index(generated: &[(String, String)]) -> String {
                 "every recipe, with its own lines gathered under it and a worked example beside"
             }
             "state.md" => "the state after the scenario, one table per relation",
+            "relations.md" => {
+                "the rules as relations, one table for each of the twelve in spec/data"
+            }
             "entities.md" => "the same state as entities and their components",
             "turns.md" => "every turn: the commands that ran, what changed, and what was there",
             "commands.md" => {
@@ -1355,8 +1358,9 @@ pub fn index(generated: &[(String, String)]) -> String {
     // **Seven, and it read eight while one was listed twice.** The duplicate came in when
     // `R-7` moved `recipes.md` into `generated` while it was still named by hand below, and
     // this count accommodated it instead of catching it - which is the thing a count is for.
-    // Eight since `S-87` added the Petri net, nine since `S-93` added the no-gain check.
-    assert_eq!(listed, 9, "nine reports are linked");
+    // Eight since `S-87` added the Petri net, nine since `S-93` added the no-gain check, and
+    // ten since `S-135` added the rules as relations.
+    assert_eq!(listed, 10, "ten reports are linked");
     assert_eq!(
         paired, listed,
         "every report has its markdown beside it. `containment` was the one that did not, \
@@ -1591,6 +1595,9 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(String, String)> {
     );
 
     let state = "State after `scenario/commands/play.4x`";
+    // **Named for what it is over rather than for what it is** - the page beside it is the
+    // state as relations, and this is the rules as relations. `S-135`.
+    const RELATIONS: &str = "The rules, as relations";
     let things = "Entities after `scenario/commands/play.4x`";
 
     let mut per_turn = String::from("# Every turn of `scenario/commands/play.4x`\n\n");
@@ -1667,6 +1674,17 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(String, String)> {
         }
     }
 
+    // Read once and rendered twice, so the two pages cannot disagree about what is in
+    // `spec/data/` the way two readers of one subject have here before - `P-485`.
+    let relational = {
+        let at = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data");
+        let (found, spilled) = crate::relations::read(&at);
+        (
+            crate::relations::markdown(&found, &spilled),
+            html(&crate::relations::sections(&found), RELATIONS),
+        )
+    };
+
     let mut written: Vec<(String, String)> = vec![
         ("state.md", markdown(&session.game, state)),
         (
@@ -1686,6 +1704,11 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(String, String)> {
             "commands.md",
             crate::fired::markdown(&crate::fired::ran(commands)),
         ),
+        // **`S-135`: the rules as relations, which had a source and no rendering.** Read from
+        // `spec/data/` rather than from the model, because the subject is what the rules *are*
+        // and not what playing them left - `state.md` beside it is the other one.
+        ("relations.md", relational.0),
+        ("relations.html", relational.1),
     ]
     .into_iter()
     .map(|(name, text): (&str, String)| (name.to_string(), text))

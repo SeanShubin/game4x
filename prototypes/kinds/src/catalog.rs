@@ -47,6 +47,7 @@ pub fn catalog(document: &str) -> String {
     ));
 
     out.push_str(&groups(document, &declared));
+    out.push_str(&families(document));
 
     for row in &kinds {
         let name = plain(&row[0]);
@@ -592,6 +593,65 @@ fn signature_of(document: &str, declared: &Declared, kind: &str) -> String {
         .find(|(_, _, kinds)| kinds.iter().any(|k| k == kind))
         .map(|(name, _, _)| name)
         .unwrap_or_else(|| panic!("`{kind}` is in the Kinds table and in no signature"))
+}
+
+/// A section per family, with what is in it.
+///
+/// **`S-135` is what asked for these and the reason is a link that landed nowhere.** Every
+/// kind's section says *In families thing, unit*, and until now those words dead-ended: the
+/// catalog had a heading for each of the seventeen kinds and none for any of the four
+/// families. `reports/relations.html` renders `spec/data/` and links a kind name to this page,
+/// and **eleven of its hundred and eighteen links were the family names** - `thing`, `unit`,
+/// `place`, `resource` - landing on ids that did not exist.
+///
+/// **Linking some of them and not others is the worse repair**, because a reader learns the
+/// links are unreliable and stops using any of them. So the anchor is made rather than the
+/// link removed, and the section earns its place on its own: *what is in this family* is a
+/// question the Families table answers in a cell and no heading.
+///
+/// **`every kind above` is a membership and not a list** - that is how the release writes
+/// `thing` - so it is expanded here the same way [`section`] expands it when it asks which
+/// families one kind is in. The two readings live a hundred lines apart and agree because both
+/// ask the same cell the same question.
+fn families(document: &str) -> String {
+    let rows = body_under(document, "## Families");
+    if rows.is_empty() {
+        return String::new();
+    }
+    let kinds: Vec<String> = body_under(document, "## Kinds")
+        .iter()
+        .map(|row| plain(&row[0]))
+        .collect();
+
+    let mut out = String::new();
+    for row in &rows {
+        let name = plain(&row[0]);
+        let members = row.get(1).map(String::as_str).unwrap_or_default();
+        let held: Vec<&String> = kinds
+            .iter()
+            .filter(|kind| {
+                members.trim() == "every kind above"
+                    || members.split(',').any(|m| m.trim() == kind.as_str())
+            })
+            .collect();
+        out.push_str(&format!("## {name}\n\n"));
+        out.push_str(&format!(
+            "A family, and the release states it as `{}`.\n\n",
+            members.trim()
+        ));
+        match held.as_slice() {
+            [] => out.push_str("No kind is in it.\n\n"),
+            _ => out.push_str(&format!(
+                "{} kinds: {}\n\n",
+                held.len(),
+                held.iter()
+                    .map(|it| it.as_str())
+                    .collect::<Vec<_>>()
+                    .join(", ")
+            )),
+        }
+    }
+    out
 }
 
 fn section(document: &str, declared: &Declared, kind: &str, what_it_is: Option<&str>) -> String {

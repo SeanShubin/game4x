@@ -80,9 +80,10 @@ fn no_page_carries_a_script_or_a_handler() {
     // page: a Petri net is exactly the sort of thing every other project draws with a
     // client-side renderer, and `R-9` forbids it. The SVG arrives drawn.
     // **Twenty-two since `S-93`** added the no-gain check's own page.
+    // **Twenty-three since `S-135`** added the rules as relations.
     assert_eq!(
-        pages, 22,
-        "twenty-two pages were asked, and a claim about no pages is not a claim"
+        pages, 23,
+        "twenty-three pages were asked, and a claim about no pages is not a claim"
     );
 }
 
@@ -110,8 +111,8 @@ fn every_view_has_a_diffable_sibling() {
         paired += 1;
     }
     assert_eq!(
-        paired, 21,
-        "twenty-one views were asked - nine reports and twelve territories"
+        paired, 22,
+        "twenty-two views were asked - ten reports and twelve territories"
     );
 
     for name in &names {

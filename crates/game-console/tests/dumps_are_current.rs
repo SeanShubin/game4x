@@ -138,10 +138,12 @@ fn every_committed_dump_is_what_the_scenario_produces() {
     //
     // **Stated as a sum rather than as a number**, because thirty-nine on its own says
     // nothing about which of the three moved when it next changes.
+    // **Nineteen since `S-135`**, which added `relations.md` and `relations.html` - the
+    // rules as relations, beside `state.md`'s same view over the state.
     assert_eq!(
         generated.len(),
-        17 + 2 + 12 * 2,
-        "sixteen report files and the index, two stylesheets, and a page and a sibling for \
+        19 + 2 + 12 * 2,
+        "eighteen report files and the index, two stylesheets, and a page and a sibling for \
          each of the twelve territories; `dump::generated` returned {}",
         generated.len()
     );
@@ -161,7 +163,7 @@ fn every_committed_dump_is_what_the_scenario_produces() {
     }
     assert_eq!(
         generated.len(),
-        17 + 2 + 12 * 2 + 1,
+        19 + 2 + 12 * 2 + 1,
         "one more with `catalog.html`, which `prototypes/kinds` writes the markdown for"
     );
 
@@ -218,7 +220,7 @@ fn every_committed_dump_is_what_the_scenario_produces() {
     // The set was discovered, so it can be empty for the wrong reason. This says it was not.
     assert_eq!(
         on_disk.len(),
-        17 + 2 + 12 * 2 + 1,
+        19 + 2 + 12 * 2 + 1,
         "the same population again, counted from the directory rather than from the \
          program - `catalog.md` is the one file excluded, and it is `prototypes/kinds`'. \
          Found {} ({on_disk:?})",
@@ -244,7 +246,7 @@ fn the_scenario_produces_tables_rather_than_empty_files() {
     }
     assert_eq!(
         generated.len(),
-        17 + 2 + 12 * 2 + 1,
+        19 + 2 + 12 * 2 + 1,
         "the same population as the currency check above, and it is worth restating rather \
          than sharing: a helper that both read would make one number, and two checks over \
          one number is one check"
@@ -353,7 +355,7 @@ fn every_page_is_well_formed_enough_to_be_read_as_one() {
     // likeliest to drift from the rest.
     assert_eq!(
         pages,
-        10 + 12,
-        "ten pages and one per territory, and every one of them checked"
+        11 + 12,
+        "eleven pages and one per territory, and every one of them checked"
     );
 }

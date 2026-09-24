@@ -27,6 +27,7 @@ pub mod petri;
 pub mod petri_draw;
 pub mod petri_page;
 pub mod recipes;
+pub mod relations;
 pub mod report;
 pub mod state;
 pub mod style;

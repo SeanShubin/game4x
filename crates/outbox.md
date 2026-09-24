@@ -1227,16 +1227,30 @@ numbers**, and the check that would catch a wrong claim there is not a string co
 
 **The gate is green.** Twenty red at `241bb0f`, none now.
 
-### C-120 - Three quantities in `line.4x` are sentences, and a key takes one token
+### C-120 - One quantity in `line.4x` is a sentence, and a key takes one token
 
-**to** spec · **status** open · **raised** 2026-09-14 · **source** sweeping every file in
+**to** spec · **status** open · **raised** 2026-09-14 · **corrected** 2026-09-24, from three to one · **source** sweeping every file in
 `spec/data/` for the rule that was only ever asked of one of them
 
-**derived from** `{line block:muster seq:4 role:produce qty:that citizen's strength kind:force}`
-and two like it - `spec/data/line.4x`, promoted by `P-497`
+**derived from** `{line block:work seq:4 role:produce qty:$where's density for that resource kind:...}` - `spec/data/line.4x`, promoted by `P-497`
 
-**`P-497` is the right move and this is what it surfaces.** Three of the ninety-six rows carry a
-quantity the release states as a phrase, and the notation gives one token to a key. **The
+## The count was three and is one, and nothing edited this item
+
+**`P-522` cut `muster` and `stand` with the force rule**, and two of the three rows went with
+them. **Eight bare words became four**, all of them `work`'s. The sweep followed on the day and
+says `P-522`; this item did not, and read *three* for ten days.
+
+**It is the failure this outbox has a `derived from` line for**, and the line did not save it:
+it named two of the three rows, both of which are gone, and nothing reads a `derived from`
+looking for rows that have stopped existing. **Found by writing a second reader and asserting
+its count** - `crates/game-console/src/relations.rs` - which is *re-derive what you are told*
+catching an item's author telling himself.
+
+**The original wording is kept below**, because what it recorded is what was true then and the
+argument it makes does not depend on the number.
+
+**`P-497` is the right move and this is what it surfaces.** One of the sixty-eight rows carries
+a quantity the release states as a phrase, and the notation gives one token to a key. **The
 quantity reads as the word `that`.**
 
 ## What the reader actually gets
@@ -1251,15 +1265,16 @@ quantity reads as the word `that`.**
 **`qty` is `that`**, and `citizen's` and `strength` have become bare words - which in this
 notation means *a trait this row carries*.
 
-## The three cells
+## The cells, as they were when this was raised
 
-| Block    | The release's quantity               |
-| -------- | ------------------------------------ |
-| `work`   | `$where`'s density for that resource |
-| `muster` | that citizen's strength              |
-| `stand`  | that unit's strength                 |
+| Block               | The release's quantity               |
+| ------------------- | ------------------------------------ |
+| `work`              | `$where`'s density for that resource |
+| `muster` - **gone** | that citizen's strength              |
+| `stand` - **gone**  | that unit's strength                 |
 
-**Eight bare words between them**, which is the number the sweep counts against.
+**Eight bare words between them** when this was written, which is the number the sweep counted
+against. **Four now**, and all four are `work`'s row.
 
 ## The part worth your attention rather than the parse
 

@@ -128,6 +128,30 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 **Named by** `age put`, `age require`, `bear produce`, `breed consume`, `discard consume`, `spoil consume`
 
+## thing
+
+A family, and the release states it as `every kind above`.
+
+16 kinds: citizen, extractor, yard, store, ark, pioneer, food, metal, energy, labor, territory, orbit, deposit, adjacency, game, fertility
+
+## unit
+
+A family, and the release states it as `ark, pioneer`.
+
+2 kinds: ark, pioneer
+
+## resource
+
+A family, and the release states it as `food, metal, energy`.
+
+3 kinds: food, metal, energy
+
+## place
+
+A family, and the release states it as `territory, orbit`.
+
+2 kinds: territory, orbit
+
 ## citizen
 
 a person: provides labor, eats, and grows on surplus.
