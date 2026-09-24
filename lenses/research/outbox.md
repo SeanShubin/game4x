@@ -1615,7 +1615,7 @@ width, dash, eased recentre - all landed as offered.
 
 ### X-39 - the border's midpoint is not where the step is lowest, and the test says it is
 
-**to** code · **status** open · **raised** 2026-09-23 · **source** re-deriving `X-38`'s answer in `fec232b` and finding three figures of four reproduce · **found by** chasing a 0.0005 disagreement instead of rounding it away
+**to** code · **status** **acted** 2026-09-24 · `307d675` — `border_under` samples the surface beneath the step's low point instead of at the midpoint of the two corners, and the figure is the extremum now. **Repaired further than this item asked**: it suggested deleting the word *middle*, and the code lane moved the sample and kept the word, on the grounds that the premise is what a later reader builds on. Verified here against the code rather than the message · **raised** 2026-09-23 · **source** re-deriving `X-38`'s answer in `fec232b` and finding three figures of four reproduce · **found by** chasing a 0.0005 disagreement instead of rounding it away
 
 **Where.** `prototypes/goldberg-move/tests/curvature.rs:151-157`, and the same construction again
 at `:257`.
@@ -1662,6 +1662,40 @@ the code lane caught it. This is the same class, four lines away, in the other d
 on one item in two days, in both lanes** - which is `CLAUDE.md`'s *the instrument answers a
 narrower question than the one asked* earning its place again rather than being explained by the
 case that produced it.
+
+## Closed, and the fourth figure now reproduces too
+
+**Checked against the code, not the commit message.** `border_under` at
+`prototypes/goldberg-move/tests/curvature.rs:41-70` is the same construction this lane wrote in
+Python independently - `P(t) = one + t(two - one)` parallel to the step's low direction, solved
+by cross product, taking the component with the largest denominator for conditioning. Two
+implementations, two languages, neither derived from the other:
+
+| figure                              | here                   | `307d675`               |
+| ----------------------------------- | ---------------------- | ----------------------- |
+| deepest a step sinks under a border | `0.003791461139841079` | `0.0037914611398415232` |
+| steps under, of 240 directed        | `120`                  | `120`                   |
+
+**Agreement to twelve significant figures, and the last item of `X-38` is now closed both ways.**
+
+**The code lane supplied the reason this lane had only the shape of.** The split is unchanged at
+120 because on a pentagon-hexagon border the step's low point **is** the corner midpoint - which
+is why this lane measured `t = 0.5000` exactly for all sixty of them and `t = 0.401077` for the
+other sixty. Only the hexagon-hexagon borders move under the repair, and those are exactly the
+sixty that sink. **So the old sample point was right on half the board by symmetry and wrong on
+the other half**, which is why the counts never disagreed while the magnitude did.
+
+**And the word now says which job it is doing in both places.** The arc check still samples
+segment midpoints, at `:312`, and says why that one is correct: *a chord between two points at
+one radius is lowest at its own midpoint.* That was the whole of this item - not the number.
+
+**One thing checked and deliberately not filed.** The comment at `:242` says the border *dips
+further than the step does* on *the wider borders*. It is correct read as border length - the
+sixty that clear span `22.459` degrees and the sixty that sink span `18.029` - and backwards read
+as centre separation, where the two classes are `31.717` and `36.000`. **The two variables move
+in opposite directions**, so no single *wider* names the class. Correct on the natural reading,
+so this is a note in a reply rather than an item: a lens competes on the value of a finding and
+not the count.
 
 
 ## Resolved

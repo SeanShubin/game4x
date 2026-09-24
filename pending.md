@@ -10,6 +10,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 - **P-551** - Two invariants leave a hole exactly where you say a command is needed, and one word is taken twice · `decide/questions.md`
 - **P-552** - An Ark cannot move, because two rules of `spec/` disagree and the orbital half is the one it needs · `decide/questions.md`
+- **P-553** - Does winning need the deploy before the launch? Your sentence does not say, and a release line assumes it does · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -25,20 +26,17 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
-- **X-39** - `307d675` X-39: the border is sampled under the step, not at the midpoint of its corners · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
-### To code (8)
+### To code (6)
 
-- **S-151** - `fully exploited` is now a term the specification does not define, and you implement it · `docs/notes/proposals.md`
 - **S-135** - The relational model has no rendering, and the person it was for cannot read it · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **Q-96** - A test is named for two numbers nothing states, and its argument lives in another file · `lenses/quality/outbox.md`
 - **Q-93** - The prototype's backlog says the sum blocks storage, and the sum shipped in the commit that said so · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
-- **X-39** - the border's midpoint is not where the step is lowest, and the test says it is · `lenses/research/outbox.md`
 
 ### To research (3)
 
@@ -46,8 +44,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (39)
+### To spec (40)
 
+- **S-171** - The player was told the old win condition for three days, which is the fourth of the week · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
 - **S-169** - `intent` is 64 uses of the code's vocabulary and zero of the specification's · `docs/notes/proposals.md`
 - **S-167** - Nothing checks what a layer admits, and `limit` cannot say it · `docs/notes/proposals.md`
