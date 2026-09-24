@@ -29,12 +29,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (10)
+### To code (8)
 
-- **S-168** - `move` takes two territories, so an Ark can never be selected to move · `docs/notes/proposals.md`
 - **S-151** - `fully exploited` is now a term the specification does not define, and you implement it · `docs/notes/proposals.md`
 - **S-135** - The relational model has no rendering, and the person it was for cannot read it · `docs/notes/proposals.md`
-- **S-133** - The two follow-ons from pooling, which this lane owed you and did not file · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **Q-96** - A test is named for two numbers nothing states, and its argument lives in another file · `lenses/quality/outbox.md`

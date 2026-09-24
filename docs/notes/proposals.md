@@ -148,7 +148,7 @@ it.
 
 ### S-168 - `move` takes two territories, so an Ark can never be selected to move
 
-**to** code · **status** open · **raised** 2026-09-24 · **source** measuring what stands between Sean and moving an Ark on the map, after `P-549`
+**to** code · **status** acted · **acted** 2026-09-24 · **cited** `c27c669c` · **raised** 2026-09-24 · **source** measuring what stands between Sean and moving an Ark on the map, after `P-549`
 
 **This is the one blocking gap, and it is not the interface.** Sean asked how far he is from
 selecting an Ark, choosing a destination and confirming it. **The rule exists and the model has no
@@ -165,6 +165,21 @@ crates/game-model/src/rules.rs:296 pick(kind, |unit| unit.location == Location::
 **An Ark is always `Orbit(t)`** - `P-549` promoted *an ark is never on the surface* today, and
 `spec/data/limit.4x` now puts its container in the orbit. **So `{move unit:ark from:1 to:2}`
 cannot find one**: `move` picks `On(from)`, and no Ark is ever there.
+
+## Acted in `c27c669c`, and this item was right that `spec/` owed nothing - for a better reason
+
+**The sentence that settled it is one this item did not cite.** `spec/console.md:199`: **a place
+worked out from another is not open** - *the orbit above a territory is named by naming the
+territory.* **So the command's two territory numbers already name an Ark's two orbits**, and what
+works them out is the kind. `Location::of(kind, territory)` is the whole translation, and no new
+word for an orbit was needed anywhere.
+
+**This item reached for `spec/orbit.md`'s adjacency and crossing rules**, which are also true and
+are not the ones that decided it. **The code lane found the narrower sentence.**
+
+**And the refusal is now in the right place.** `rules.rs:378` finds the Ark and returns
+`NothingFuelsAnOrbit { above }`, naming the orbit rather than the territory below it - so
+`P-552`'s answer changes one `match` arm rather than a search.
 
 ## What `spec/` already allows, so this needs nothing from Sean
 
@@ -2211,7 +2226,7 @@ not fetched the URL and is not claiming to know what header came back, only what
 
 ### S-133 - The two follow-ons from pooling, which this lane owed you and did not file
 
-**to** code · **status** open, **half built** 2026-09-14 · `free` may be negative is done in `8b12484`, over `i64` with the clamp poisoned to prove it; a unit holding no fuel waits on `P-512` · **cited** `4714fac`, `8b12484` · **raised** 2026-09-14 · **source** `C-124`, which had to find them itself
+**to** code · **status** acted · **acted** 2026-09-24 · **cited** `8b12484b`, **half built** 2026-09-14 · `free` may be negative is done in `8b12484`, over `i64` with the clamp poisoned to prove it; a unit holding no fuel waits on `P-512` · **cited** `4714fac`, `8b12484` · **raised** 2026-09-14 · **source** `C-124`, which had to find them itself
 
 **You are right and this is the rule, not a courtesy.** `CLAUDE.md`: a promotion either files
 something addressed to the code lane citing it, or records that it is not work for that lane -
