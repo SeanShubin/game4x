@@ -69,9 +69,40 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-162 - Twelve older proposals were answered and carried, and nothing records which id carried them
+
+**to** spec · **status** open · **raised** 2026-09-24 · **source** `S-156`, after the 23 ledger rows were written
+
+**Measured the way `S-156` measured, after its fix**: 12 ids are in no file in the repository,
+down from 35.
+
+```
+P-405 P-423 P-424 P-432 P-439 P-442 P-445 P-450 P-453 P-499 P-507 P-510
+```
+
+**None is a missing promotion, which is why `S-156`'s fix does not reach them.** Each appears in a
+commit saying it was answered or superseded, and most name their successor - *`P-408` carries it*,
+*`P-430` carries the constraint*, *`P-431` rewrites age*, *`P-447` carries D*.
+
+## Why this is worth less than `S-156` was
+
+**Their content is already recorded under the successor's row.** What is missing is the
+forwarding address - a reader who meets `P-445` in an old commit message has no way to find what
+became of it.
+
+## What it would take, and why this lane has not done it
+
+**A per-item read.** The commit subjects are evidence and not a record: `P-499`'s best match is a
+subject about `P-497` being refused that mentions it in passing, **so the successor cannot be taken
+from the subject line without checking the item.** Twelve reads, each cheap, and none of them
+guessable from the log.
+
+**Not urgent.** Nothing is wrong in `spec/`, no check fails, and the cost is a dead end in the
+history rather than a wrong rule.
+
 ### S-161 - Nothing maps a crate's kind onto a layer, and `P-547` makes that gap visible
 
-**to** spec · **status** open · **raised** 2026-09-24 · **source** `P-547`, and the promotion sweep Sean asked for
+**to** spec · **status** acted · **acted** 2026-09-24 · **cited** `97334bce` · **raised** 2026-09-24 · **source** `P-547`, and the promotion sweep Sean asked for
 
 **This lane's own work, filed because a promotion files what it leaves open.**
 
@@ -346,7 +377,7 @@ in `releases/first-release.md` changed its meaning.
 
 ### S-156 - Twenty-three promoted proposals are in no file at all, and the record is where they should be
 
-**to** spec · **status** open · **raised** 2026-09-23 · **source** `spec land P-540 P-511` refusing, and the measurement that followed
+**to** spec · **status** acted · **acted** 2026-09-24 · **cited** `26b4a37b` · **raised** 2026-09-23 · **source** `spec land P-540 P-511` refusing, and the measurement that followed
 
 **Measured.** Over `P-512` through `P-544` - 33 ids - four are in the ledger, six are still open
 in `decide/`, and **twenty-three are in no file in the repository**. Over `P-1` through `P-544` the
@@ -375,9 +406,30 @@ refuse to call a promotion done.
 
 ## What this needs
 
-**Twenty-three rows, each from its own promoting commit** rather than from memory - the commit
-says what landed where, and `git log` has all of them. **Not urgent and not nothing**: nothing is
-broken in `spec/`, and the one file whose job is to say what was decided cannot currently say it.
+## Done on 2026-09-24
+
+**Twenty-three rows written, each from its own promoting commit** rather than from memory: the
+commit's date, and the item's own title and `**into**` field read out of that commit's **parent**,
+where the proposal still existed. **The ledger is 532 rows and was 509.**
+
+**Twenty-two were promotions and one was not.** `P-532` was *answered* and carried out - the
+fifty-three tests moved to `spec/tests/` and the records to `reviewed/` - so its row records what
+moved rather than a destination in `spec/`.
+
+**Asserted before writing**: every one of the 23 present exactly once afterwards, none of them
+already present, and the row count up by exactly 23.
+
+## And the older gap is a different thing, filed as `S-162`
+
+**Re-measured the way this item measured: 12 ids are in no file, where there were 35.** All
+twelve are older than this item's window and **none of them is a missing promotion** - each was
+answered and carried by a successor.
+
+```
+P-405 P-423 P-424 P-432 P-439 P-442 P-445 P-450 P-453 P-499 P-507 P-510
+```
+
+**So the ledger is not where they belong**, and this item's fix does not apply to them.
 
 ### S-155 - A bad planet size does not say what was expected, which is a rule rather than a courtesy
 
@@ -7520,6 +7572,29 @@ work the release exists to order.
 | P-506, The notation and the two models get their names                                                                       | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-14 |
 | P-509, Resources sit in the territory, and are allocated only when something leaves                                          | `spec/logistics.md` -> Containment                                                                                                                                                                       | 2026-09-14 |
 | P-511, What pooling does to moving: who hauls, where the fuel comes from, and the end of `refuel`                            | `spec/logistics.md` -> Containment, and `releases/first-release.md` -> Recipes                                                                                                                           | 2026-09-14 |
+| P-512, *Where things are* still says a tank holds fuel, and one row of it changes the game                                   | `releases/first-release.md` -> Where things are                                                                                                                                                          | 2026-09-21 |
+| P-515, Publish the shape of the error, not only the correction                                                               | `CLAUDE.md` -> What done means                                                                                                                                                                           | 2026-09-21 |
+| P-518, `{name field:value ...}` does not say whether the fields may be none, and seven forms are                             | `spec/console.md` -> Commands                                                                                                                                                                            | 2026-09-21 |
+| P-519, One clause is stated twice in `spec/console.md`, and the invariants forbid exactly that                               | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-21 |
+| P-520, `R-6` is wrong about itself in three places, and none of them is about the game                                       | `releases/first-release.md` -> R-6                                                                                                                                                                       | 2026-09-21 |
+| P-521, The win condition is two settlements, not a finished planet                                                           | `spec/control.md` -> Winning                                                                                                                                                                             | 2026-09-21 |
+| P-522, The first release is the loop the prototype closed, and the cuts are most of it                                       | `releases/first-release.md`                                                                                                                                                                              | 2026-09-21 |
+| P-523, What is offered is an end result, and the thing that offers it is not a rule                                          | `spec/interface.md` -> a new section, *What is offered*, after *What an action shows*                                                                                                                    | 2026-09-21 |
+| P-524, An ark gathers its fuel and spends it, where the spec says orbit is free                                              | `spec/units.md` -> What a unit is                                                                                                                                                                        | 2026-09-21 |
+| P-525, A place declares no capacity of its own, and the prototype has two that do                                            | `spec/logistics.md` -> Containment                                                                                                                                                                       | 2026-09-21 |
+| P-526, An orbit is part of a territory rather than a place beside it                                                         | `spec/orbit.md` -> The orbital layer                                                                                                                                                                     | 2026-09-21 |
+| P-527, `W2`: the four bullets defining *fully exploited* go                                                                  | `spec/control.md` -> Winning                                                                                                                                                                             | 2026-09-21 |
+| P-528, One fact about adjacency is now stated four times, in three files                                                     | `spec/orbit.md` -> Crossing between layers, and `spec/planet.md` -> Distance                                                                                                                             | 2026-09-21 |
+| P-529, `B1`: `R-4` stays vetted and says why, and two lines lose what was cut                                                | `releases/first-release.md` -> R-4, Scope, Kinds                                                                                                                                                         | 2026-09-21 |
+| P-530, The specification is executable, and prose is what the tests cannot say                                               | `spec/README.md` -> Rules for this directory                                                                                                                                                             | 2026-09-21 |
+| P-531, `T3`: the approved copy is the specification, and three columns follow                                                | `CLAUDE.md` -> Perspectives                                                                                                                                                                              | 2026-09-21 |
+| P-532, Fifty-three tests have to cross a column boundary, and nothing may carry them                                         | `spec/tests/`, `reviewed/`, and the prototype                                                                                                                                                            | 2026-09-21 |
+| P-533, *No instance writes it* stops the record being committed, and it has already cost two                                 | `CLAUDE.md` -> Perspectives                                                                                                                                                                              | 2026-09-21 |
+| P-534, One sentence still says *no instance writes it*, flatly                                                               | `CLAUDE.md` -> Perspectives                                                                                                                                                                              | 2026-09-21 |
+| P-535, `R-6` cites the deleted win condition three more times, and one of them is red                                        | `releases/first-release.md` -> R-6                                                                                                                                                                       | 2026-09-21 |
+| P-537, The window is mostly the hook's own run, and it is now closed                                                         | `CLAUDE.md` -> Perspectives                                                                                                                                                                              | 2026-09-21 |
+| P-538, The staging bullet says the column check twice, and the second one carries a fact the first does not                  | `CLAUDE.md` -> Perspectives                                                                                                                                                                              | 2026-09-21 |
+| P-539, `spec/` splits into what the game is and what it will be                                                              | `spec/README.md` -> Rules for this directory                                                                                                                                                             | 2026-09-21 |
 | P-540, One sentence so a test can say what the status bar said                                                               | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-23 |
 | P-542, `generate-planet`, and a size named for its count                                                                     | `spec/planet.md` -> Shape, and `spec/console.md` -> Commands                                                                                                                                             | 2026-09-24 |
 | P-543, What the player reads and what the game reads are disjoint                                                            | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-24 |

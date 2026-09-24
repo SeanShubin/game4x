@@ -21,7 +21,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-161** - `97334bc` S-161 and rule 4's check: the layer membership is stated, and now held · still open in `docs/notes/proposals.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
 - **X-39** - `307d675` X-39: the border is sampled under the step, not at the midpoint of its corners · still open in `lenses/research/outbox.md`
@@ -49,11 +48,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (39)
+### To spec (38)
 
-- **S-161** - Nothing maps a crate's kind onto a layer, and `P-547` makes that gap visible · `docs/notes/proposals.md`
+- **S-162** - Twelve older proposals were answered and carried, and nothing records which id carried them · `docs/notes/proposals.md`
 - **S-159** - Seventeen architecture rules, six of them checkable and unchecked · `docs/notes/proposals.md`
-- **S-156** - Twenty-three promoted proposals are in no file at all, and the record is where they should be · `docs/notes/proposals.md`
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
@@ -98,21 +96,22 @@ like; what this cannot tell you is whether they all still hold together, which i
 it exists to ask.
 
 - `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310, P-342, P-362, P-375, P-379, P-382, P-385, P-397, P-412, P-421, P-427, P-431, P-495, P-492, P-400
-- `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366, P-378, P-396, P-417, P-418, P-443, P-448, P-451, P-452, P-454, P-460, P-462, P-464, P-479, P-481, P-482, P-484, P-504, P-506, P-540, P-543
+- `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366, P-378, P-396, P-417, P-418, P-443, P-448, P-451, P-452, P-454, P-460, P-462, P-464, P-479, P-481, P-482, P-484, P-504, P-506, P-519, P-540, P-543
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229, P-230, P-250, P-251, P-263, P-266, P-283, P-404, P-406, P-415, P-403
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210, P-286, P-288, P-308, P-312, P-314, P-331, P-407, P-434, P-461
-- `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290, P-371, P-374, P-391, P-433, P-487, P-505, P-509
+- `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223, P-352, P-359, P-488, P-531, P-533, P-534, P-537, P-538, P-548
+- `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290, P-371, P-374, P-391, P-433, P-487, P-505, P-509, P-525
 - `spec/planet.md` -> Presentation - P-10, P-11, P-53, P-88, P-96, P-97, P-98, P-107, P-104, P-105
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122, P-330, P-333, P-335, P-395, P-398
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208, P-277, P-346, P-441
+- `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217, P-364, P-518
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119, P-172, P-392
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147, P-193, P-199, P-213, P-218, P-222, P-493
-- `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223, P-352, P-359, P-488, P-548
-- `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217, P-364
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185, P-390, P-408, P-480
+- `spec/control.md` -> Winning - P-77, P-81, P-125, P-361, P-468, P-521, P-527
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
 - `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306, P-313, P-410
-- `spec/control.md` -> Winning - P-77, P-81, P-125, P-361, P-468
+- `releases/first-release.md` -> Where things are - P-265, P-311, P-320, P-358, P-512
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216, P-472
 - `spec/invariants.md` -> What a rule may cost - P-373, P-376, P-386, P-430, P-387
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
@@ -122,7 +121,7 @@ it exists to ask.
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233, P-414
 - `releases/first-release.md` -> What bounds a kind in a territory - P-207, P-372, P-381, P-393
-- `releases/first-release.md` -> Where things are - P-265, P-311, P-320, P-358
+- `spec/README.md` -> Rules for this directory - P-440, P-530, P-539, P-546
 - `spec/resources.md` -> The list - P-49, P-65, P-338, P-389
 - `docs/process.md` -> All lanes - P-247, P-248, P-324
 - `docs/process.md`, a new section - P-204, P-211, P-401
@@ -130,18 +129,21 @@ it exists to ask.
 - `releases/first-release.md` -> Kinds, Traits - P-192, P-322, P-334
 - `spec/invariants.md` -> The game is one function - P-75, P-115, P-363
 - `spec/narrative.md` -> Violence and order - P-39, P-278, P-394
+- `spec/units.md` -> What a unit is - P-66, P-486, P-524
+- `CLAUDE.md` -> What done means - P-490, P-515
 - `docs/process.md` - P-289, P-291
 - `docs/process.md` -> Quality instance - P-244, P-294
 - `docs/process.md` -> Specification Instance - P-292, P-329
 - `docs/process.md` -> Starting the instances - P-268, P-273
 - `docs/process.md` -> What this document has to be - P-302, P-303
 - `docs/process.md` -> Who writes what - P-271, P-316
+- `releases/first-release.md` - P-85, P-522
 - `releases/first-release.md` -> Kinds - P-351, P-426
 - `releases/first-release.md` -> Kinds, Traits, Where things are, Recipes - P-399, P-411
+- `releases/first-release.md` -> R-6 - P-520, P-535
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186
 - `releases/first-release.md` -> What bounds a kind - P-258, P-270
-- `spec/README.md` -> Rules for this directory - P-440, P-546
 - `spec/console.md` - P-69, P-82
 - `spec/console.md` -> Phases - P-74, P-309
 - `spec/control.md` -> Gaining and holding ground - P-62, P-275
@@ -156,4 +158,3 @@ it exists to ask.
 - `spec/planet.md` -> Shape - P-1, P-6
 - `spec/population.md` -> Citizens - P-37, P-28
 - `spec/resources.md` -> The list, `spec/turn.md` -> Order of operations - P-126, P-138
-- `spec/units.md` -> What a unit is - P-66, P-486
