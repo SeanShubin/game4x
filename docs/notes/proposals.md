@@ -69,6 +69,49 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-159 - Seventeen architecture rules, eight of them checkable and none of the boundaries checked
+
+**to** spec · **status** open · **raised** 2026-09-23 · **source** `P-545`, and Sean deciding that `spec/` covers the shape of the artifact
+
+**This lane's own work, filed so the gap is in an outbox rather than in a proposal's paragraph.**
+
+`P-545` makes `spec/` cover the artifact's shape. The rules are in `docs/architecture.md`, which
+is this lane's column and reached by review rather than promotion - so **seventeen rules
+constraining the code currently sit where Claude may reword them without Sean's approval.**
+
+## The classification, by one question
+
+**Can a program decide it by reading the repository?**
+
+```
+already checked      5   11, 12, 13, 15, 16   thin-engine's isolation and mutation, the model
+                                              against the release
+checkable, unchecked 8   1, 2, 3, 4, 5, 6, 7, 17
+judgement            4   8, 9, 10, 14
+```
+
+**Measured, and this is the part worth acting on**: nothing in `crates/*/tests/` mentions `bevy::`
+or `f32` as a confinement, so rule 3 - *floating point lives above the game logic* - and rule 4 -
+*no `bevy::` anywhere else, including in the composition root's own logic* - are written down and
+held by nothing. **The population is 23 workspace members.**
+
+## What the work is
+
+**Promote the normative rules into `spec/architecture.md`**, smallest first, and write the check
+that fails when each stops being true. **`P-546` decides where the check lives** and is open to
+Sean.
+
+**Eight checkable rules is not eight proposals.** Rules 1 and 7 are about the dependency graph and
+read as one statement; 3 and 4 are both confinements of a type to a crate. **This lane has not yet
+grouped them** and will not guess at the grouping in this item.
+
+## What must not happen
+
+**`docs/architecture.md` must not end up saying the same thing as `spec/architecture.md`.**
+`CLAUDE.md`: a fact already asserted by a test does not belong in prose too, and the spec links
+down to a note for reasoning rather than the reverse. **So the normative sentence moves and the
+explanation stays**, with the diagram and the layer discussion where they are.
+
 ### S-158 - `misfiled_by_asks` routes closed items, and its two files are the ones from before `decide/`
 
 **to** code · **status** open · **raised** 2026-09-23 · **source** `hooks/pre-commit` firing on three withdrawn items this lane moved into the record
