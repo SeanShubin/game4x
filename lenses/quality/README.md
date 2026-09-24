@@ -453,6 +453,11 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [The carrier fires on the wrong event](2026-09-24-the-carrier-fires-on-the-wrong-event.md)
+  - 2026-09-24. The code lane reported that `derived from` did not save `C-120` because
+    nothing reads it. Something does - `sharing_a_rule`, on one trigger, an outbox item
+    closing - and a promotion is not that trigger. `CLAUDE.md:693` names a query `outbox`
+    does not have, so the promotion-side check is a manual scan of 53 items.
 - [A test named for a number nothing states](2026-09-18-a-test-named-for-a-number-nothing-states.md)
   - 2026-09-18. On Sean calling one berth test questionable. Its name makes the subject a game
     fact where the fact under test is an engine one, and neither number exists outside the

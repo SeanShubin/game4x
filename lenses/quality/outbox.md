@@ -319,6 +319,41 @@ silently** - the class the script was written about, in the script, at the small
 A terminator rather than a number would do it.
 
 
+### Q-97 - `derived from` is read, on one trigger, and the promotion that broke `C-120` is not it
+
+**to** code · **status** open · **raised** 2026-09-24 · **source**
+[The carrier fires on the wrong event](2026-09-24-the-carrier-fires-on-the-wrong-event.md)
+
+**Where.** `tools/outbox/src/lib.rs:656`, `sharing_a_rule`; and `CLAUDE.md:693`.
+
+**What.** The code lane reports that `C-120` read *three* for ten days and that the `derived from`
+convention did not save it, concluding *nothing reads a `derived from`*. **Something does** -
+`sharing_a_rule`, its only consumer, reached by `outbox --closing`. **The conclusion is worth
+correcting because it invites rebuilding an instrument that works.**
+
+**It fires on an outbox item closing, and matches one item's rule string against another's.**
+`C-120` met neither condition: `P-522` is a promotion and closes nothing, and the check relates
+items to items and never looks at the data. `C-9`, the case `P-250` was written from, went stale
+when `C-11` **closed** - the event this watches. **`C-120` is the first instance under the other
+trigger.**
+
+**And the promotion side names an instrument that cannot answer it.** `CLAUDE.md:693` says *check
+the index for open items that cite the destination file - `outbox` lists them*. It does not: no
+mode takes a path, and the plain listing carries an id, a subject and an outbox name, nothing about
+what a body cites. So that check is a manual scan of 53 items that nobody performs.
+
+**Why.** Ten days, and `C-120` was found by its own author writing a second reader and disagreeing
+with himself - not by the convention, the rule, or any check. **Counted, and the count is the
+population rather than the defect**: 101 items carry a `derived from` line in `crates/outbox.md`,
+15 in `docs/notes/proposals.md`, 2 in each lens's. Nothing here says any of them is stale.
+
+**Whether. Eventually**, and the honest ceiling is a query rather than a check: a mode taking a path
+and listing open items whose body mentions it makes `CLAUDE.md:693` performable in a second. It
+verifies nothing and will over-fire, which is the bargain `--settled` already makes. **A semantic
+version is not available** - `derived from` is prose, so nothing can ask whether a deleted row is
+one the prose was about, which is `P-245`'s wall. **The other repair is the sentence, and that is
+the specification lane's.**
+
 ### Q-96 - A test is named for two numbers nothing states, and its argument lives in another file
 
 **to** code · **status** **acted** 2026-09-24 · `4f89b719` · **raised** 2026-09-18 · **source**
