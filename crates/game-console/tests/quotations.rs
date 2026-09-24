@@ -110,23 +110,32 @@ const OURS: [&str; 5] = ["crates", "prototypes", "scripts", "tools", "hooks"];
 /// even if the directory were swept. The two are different losses and only the first is this
 /// change's.
 ///
-/// # What the instrument says, which is one
+/// # What the instrument says, which is one, and one again
 ///
-/// **Every number above counts lines with the shape, and none of them counts a finding.**
-/// Measured by turning the exclusion below off and running this test over all three
-/// directories: it reports **one**. A line naming a file of the specification is a candidate;
-/// a failure is a candidate whose quoted words are no longer in that file, and almost all of
-/// the 55 quote something that is still there.
+/// **Every number above counts lines with the shape, and none of them counts a quotation.**
+/// Measured by turning the exclusion below off and reading this test's own `checked`, which
+/// is how many attributed quotations it extracted: **175 with the exclusion on and 176 with
+/// it off, of which the one new one is the one that fails.**
 ///
-/// **So the cost of excluding these three, today, is one stale quotation** - the one that
-/// reddened the gate and prompted all of this. **What the exclusion gives up in future
-/// coverage is not measured here**, because that would need a count of the quotations this
-/// verifies rather than of the lines it might, and nothing reports that.
+/// **So all three directories together contribute a single quotation to this checker.** Not
+/// fifty-eight, and not fifty-eight of which fifty-seven pass - **fifty-seven of those lines
+/// never become quotations at all**, because naming a file is not attributing words to it.
+///
+/// **A first version of this paragraph said *almost all of the 55 quote something that is
+/// still there*.** That was an inference sitting beside a measurement, in the shape
+/// `CLAUDE.md` warns about: the *one* was measured and the reason offered for it was not, and
+/// the reason was wrong. The quality lens asked for the four words that mark a seam and the
+/// seam turned out to have a number behind it.
+///
+/// **So the cost of the exclusion is now measured in both directions.** Today it is one stale
+/// quotation - the one that reddened the gate. In coverage it is one quotation's worth, which
+/// is what `checked` moving by one says, and that is the whole of what these three directories
+/// offer this checker as they stand.
 ///
 /// # Four predicates, three lanes, and the instrument was not asked until last
 ///
 /// **This counted 55 and 6, the quality lens 57 and 9, the specification lane 10, and the
-/// checker itself 1.** The first three are true numbers about sets the checker never reads,
+/// checker itself 1 - out of a single quotation it had to judge.** The first three are true numbers about sets the checker never reads,
 /// each arrived at by pattern-matching a directory instead of running the thing under
 /// discussion. **A population is defined by its instrument and not by its directory**, and
 /// three lanes measured the directory.
