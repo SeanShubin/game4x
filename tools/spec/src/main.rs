@@ -310,15 +310,20 @@ fn land(root: &Path, id: &str, previous: &str) -> Result<String, String> {
 fn touching(root: &Path, what: &str) -> Result<String, String> {
     let all = outbox::read(root);
     let needle = what.trim_start_matches("./");
-    let mut said = Vec::new();
-    let mut looked = 0;
-    for item in &all.items {
-        if item.status != "open" {
-            continue;
-        }
-        looked += 1;
-        if item.body.contains(needle) {
-            said.push(format!(
+    let (found, looked) = spec::touching(&all.items, needle);
+    if looked == 0 {
+        return Err("no outstanding item in any outbox, so this counted over nothing".to_string());
+    }
+    if found.is_empty() {
+        return Ok(format!(
+            "nothing outstanding names {needle}, out of {looked} item(s) in {} outbox(es)",
+            all.files.len()
+        ));
+    }
+    let said: Vec<String> = found
+        .iter()
+        .map(|item| {
+            format!(
                 "  {} - to {} - {} - {}",
                 item.id,
                 if item.to.is_empty() {
@@ -328,37 +333,15 @@ fn touching(root: &Path, what: &str) -> Result<String, String> {
                 },
                 item.outbox,
                 item.title.trim().trim_start_matches(['-', ' '])
-            ));
-        }
-    }
-    if looked == 0 {
-        return Err("no open item in any outbox, so this counted over nothing".to_string());
-    }
-    if said.is_empty() {
-        return Ok(format!(
-            "nothing open names {needle}, out of {looked} open item(s) in {} outbox(es)",
-            all.files.len()
-        ));
-    }
+            )
+        })
+        .collect();
     Ok(format!(
-        "{} of {looked} open item(s) name {needle} - tell their owner:\n{}",
+        "{} of {looked} outstanding item(s) name {needle} - tell their owner:\n{}",
         said.len(),
         said.join("\n")
     ))
 }
-
-/// The cells of every table in a markdown text, as header rows only.
-///
-/// **A table is offered quoted or plain and this reads both.** `CLAUDE.md` reserves the indented
-/// quotation for what is being offered, so `> |` is the commoner form - and the first version of
-/// this tested `starts_with('|')` and skipped it, which made
-/// [`shape_is_rows_only_if_the_cells_land`] return `Ok` on an empty list rather than refuse.
-///
-/// **The demonstration missed it because `P-465` happened to write its table plainly**, so the
-/// probe landed inside the region the predicate already saw. `docs/process.md`: *a poison inside
-/// the region the predicate already sees goes red for the right reason and says nothing about the
-/// region it does not - and it reads exactly like evidence.* Found by the quality lens as `Q-85`,
-/// by driving the check rather than reading it, an hour after it was written.
 fn header_rows(text: &str) -> Vec<Vec<String>> {
     let bare = |line: &str| {
         line.trim_start()

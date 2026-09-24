@@ -15,6 +15,35 @@
 /// rather than 2026-09-01's, and the module says which is which.
 pub mod queue;
 
+/// The outstanding items whose body names `needle`, which is the promotion rule's other half.
+///
+/// **`open` is a status; outstanding is the question.** This read `status == "open"` until
+/// 2026-09-24 and so could not see a `built` capability - and `R-6` is the case that matters:
+/// `built`, addressed to Sean, with an `In` line quoting `spec/control.md`'s win condition.
+/// **`P-520` replaced that sentence**, and a promoter running this would not have been shown it.
+///
+/// `outbox::Item::is_outstanding` already existed, and its own comment records the same failure
+/// one level up: reading `open` alone made a capability vanish from `pending.md` at the moment it
+/// began waiting on Sean. **The narrower question was asked twice, in two tools, years apart in
+/// nothing but hours.**
+///
+/// Returns the matches and how many items were considered, because a filter that silently empties
+/// reports a clean answer in the same words as a real one.
+pub fn touching<'a>(items: &'a [outbox::Item], needle: &str) -> (Vec<&'a outbox::Item>, usize) {
+    let mut found = Vec::new();
+    let mut looked = 0;
+    for item in items {
+        if !item.is_outstanding() {
+            continue;
+        }
+        looked += 1;
+        if item.body.contains(needle) {
+            found.push(item);
+        }
+    }
+    (found, looked)
+}
+
 use std::fmt;
 
 /// What went wrong, in words a person can act on rather than a code.
