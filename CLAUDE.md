@@ -361,10 +361,27 @@ tells you what was written and nothing about what ran. A coverage check asking w
 scenario *begins with* each recipe's command was **satisfied for `move` by the line that founds** -
 nine of nine, green for weeks, and the recipe `move` had never once fired.
 
+**A check that pins the present state cannot report a gap against what should be.** A test
+asserting the exact words a program produces is the strongest possible statement about what it
+does and **says nothing about what it ought to do** - so it runs green while a document the code
+is meant to obey goes unkept. **What tells the two apart is what the assertion names**: the
+output, or the rule the output owes.
+
+**Two instances in one week and they are one sentence.** `docs/architecture.md`'s rule 4 -
+engine types only in the adapter - was written down and held by nothing. `P-542` renamed the
+planet sizes and the code said `tiny` for three days, **held by a test asserting the old
+names**. Neither was found by a check failing; both were found by somebody re-deriving a claim.
+
+**So a rule a document states gets a check that asks the rule, over every case it covers.**
+`every_refusal_over_a_closed_set_says_what_was_expected` is the shape: four closed sets rather
+than the one an item named, each asserted to say what was expected, the count asserted, and the
+fifth excluded by name with its reason. **Fixing the case an item happened to name would have
+left three others breaking the same rule.**
+
 **The tell is that the instrument answers a narrower question than the one asked, and returns a
 plausible number rather than an error.** A wrong number invites a question; **a right number about
-the wrong thing invites none.** It happened three times in a week and in all three lanes: that
-check; this lane counting one `move` and one `found by land` and concluding the `move` still
+the wrong thing invites none.** It happened three times in a week and in all three lanes: the
+coverage check above; this lane counting one `move` and one `found by land` and concluding the `move` still
 founded; the quality lens counting matches in `tests/` and calling a property untested that `src/`
 covered. Only one of the three was code, which is why the rule is here.
 

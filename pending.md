@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-550** - A check that pins the present state cannot report a gap against what should be · `decide/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -23,6 +22,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-166** - `285e2f1` S-166: post-commit says what a pathspec commit left staged · still open in `docs/notes/proposals.md`
+- **S-150** - `e8b98b2` S-150: a unit holds no fuel, and a move is paid by the place it leaves · still open in `docs/notes/proposals.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
 - **X-39** - `307d675` X-39: the border is sampled under the step, not at the midpoint of its corners · still open in `lenses/research/outbox.md`
@@ -124,6 +124,7 @@ it exists to ask.
 - `releases/first-release.md` -> What bounds a kind in a territory - P-207, P-372, P-381, P-393
 - `spec/README.md` -> Rules for this directory - P-440, P-530, P-539, P-546
 - `spec/resources.md` -> The list - P-49, P-65, P-338, P-389
+- `CLAUDE.md` -> What done means - P-490, P-515, P-550
 - `docs/process.md` -> All lanes - P-247, P-248, P-324
 - `docs/process.md`, a new section - P-204, P-211, P-401
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
@@ -131,7 +132,6 @@ it exists to ask.
 - `spec/invariants.md` -> The game is one function - P-75, P-115, P-363
 - `spec/narrative.md` -> Violence and order - P-39, P-278, P-394
 - `spec/units.md` -> What a unit is - P-66, P-486, P-524
-- `CLAUDE.md` -> What done means - P-490, P-515
 - `docs/process.md` - P-289, P-291
 - `docs/process.md` -> Quality instance - P-244, P-294
 - `docs/process.md` -> Specification Instance - P-292, P-329
