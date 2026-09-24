@@ -319,6 +319,41 @@ silently** - the class the script was written about, in the script, at the small
 A terminator rather than a number would do it.
 
 
+### Q-98 - `CLAUDE.md:693` tells every lane to run a query `outbox` does not have
+
+**to** spec · **status** open · **raised** 2026-09-24 · **source**
+[The carrier fires on the wrong event](2026-09-24-the-carrier-fires-on-the-wrong-event.md)
+
+**Where.** `CLAUDE.md:693`, in *A promotion can withdraw a finding as easily as it can create work*.
+
+**What.** The sentence reads *after promoting, check the index for open items that cite the
+destination file - `outbox` lists them - and tell their owner.* **`outbox` does not list them.** Its
+eleven modes are `--places`, `--to`, `--count`, `--check`, `--orphans`, `--waiting`, `--closing`,
+`--settled`, `--write`, `--sections` and `--item`; none takes a path, and the plain listing gives an
+id, a one-line subject and which outbox an item lives in, with nothing about what a body cites.
+
+**Why.** The step is one of two things standing between a promotion and an open item whose premise
+it moved, and `C-120` is what the gap costs - a number that read *three* against a true *one* for
+ten days, found by its own author writing a second reader rather than by the rule. **A rule naming
+a tool that cannot do the thing is worse than a rule naming no tool**, because the next reader stops
+looking for the gap. As written, the check is a manual scan of 40 open items addressed to this lane
+alone.
+
+**This is filed rather than fixed, and deliberately so.** `CLAUDE.md` is the specification lane's,
+and its own text says wording and consistency inside these rules are that lane's to settle and
+report. **This lens proposes no replacement sentence.**
+
+**Two repairs exist and they are alternatives, owned by different lanes.** `Q-97`, open to code,
+offers the other: a mode taking a path and listing open items whose body mentions it, over-firing
+the way `--settled` does. **Whichever lands makes the other unnecessary** - build the query and the
+sentence becomes true; reword the sentence and the query is optional. Each item names the other so
+that a reader of either finds both.
+
+**Whether.** Worth raising now rather than eventually, because the sentence binds every lane on
+every promotion and reads as covered. **Raised with the code lane's agreement and not at its
+request** - they said they thought it should be filed and would relay it as opinion only, which is
+the distinction `CLAUDE.md` draws between a fact and an authority.
+
 ### Q-97 - `derived from` is read, on one trigger, and the promotion that broke `C-120` is not it
 
 **to** code · **status** open · **raised** 2026-09-24 · **source**
@@ -352,7 +387,8 @@ and listing open items whose body mentions it makes `CLAUDE.md:693` performable 
 verifies nothing and will over-fire, which is the bargain `--settled` already makes. **A semantic
 version is not available** - `derived from` is prose, so nothing can ask whether a deleted row is
 one the prose was about, which is `P-245`'s wall. **The other repair is the sentence, and that is
-the specification lane's.**
+the specification lane's** - filed as `Q-98`. **The two are alternatives**: build this query and
+`CLAUDE.md:693` becomes true, so whichever lands first closes the other.
 
 ### Q-96 - A test is named for two numbers nothing states, and its argument lives in another file
 
