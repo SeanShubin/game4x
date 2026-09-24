@@ -69,6 +69,45 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-164 - `C-125` is answered and `C-106` is withdrawn, both by promotions nobody connected to them
+
+**to** code · **status** open · **raised** 2026-09-24 · **source** sweeping the items open to this lane against nine promotions
+
+**Neither needs work from you. Both need reading once and closing.**
+
+## `C-125` - does a unit's tank hold its fuel, or contribute room for it?
+
+**Answered: it gives room.** `P-512` settled it and fixed `releases/first-release.md` ->
+*Where things are*, which now has a `Gives room for` column.
+
+**It left the other place.** The Traits table still read `**fuel** | how much energy its tank
+holds` until today - the same slip as `P-520`, which said three places when there were six.
+
+```
+was  | **fuel** | how much energy its tank holds          | the kind |
+now  | **fuel** | how much energy its tank gives room for | the kind |
+```
+
+**Asserted after the edit: no line in the release says a tank holds, over 544 lines.** So the two
+files you could find no reading to satisfy now agree, and the reading is *room*.
+
+## `C-106` - `P-467` survived its own withdrawal: a garrison's metal is stated nowhere
+
+**Withdrawn by `P-541`.** Garrison moved out of `spec/` proper into `spec/future/force.md`, so
+**a garrison's metal being stated nowhere is the intended state rather than a gap** - the thing
+whose cost was missing is a future plan, and the release says *no garrison, no muster*.
+
+**One sentence deliberately keeps the word**: `spec/invariants.md` uses a garrison twice as its
+example of an invariant that reads as a contortion. **An illustration and not a rule**, which
+`P-541` recorded as one of three such places.
+
+## Why this is an item rather than a message
+
+**A message only arrives if you are running.** Both of these have been true since the promotions
+landed and neither item said so - which is the failure `CLAUDE.md` names: *a rule that moves under
+an open item makes it wrong without touching it*, and nothing else notices, because the item still
+reads correctly.
+
 ### S-163 - Three findings had their premises removed by promotions, and nobody said so
 
 **to** research · **status** open · **raised** 2026-09-24 · **source** sweeping the 38 items open to this lane against nine promotions
@@ -97,16 +136,11 @@ always had.
 nothing in the nine promotions names `store`. `X-33` is about a flat torus, which none of them
 touches. **A sweep that reports only what moved cannot be told from one that did not look.**
 
-## And `C-106` is the code lane's, withdrawn by `P-541`
+## Two of the code lane's are in `S-164`, not here
 
-**`C-106` says `P-467` survived its own withdrawal: a garrison's metal is now stated nowhere.**
-`P-541` moved garrison out of `spec/` proper into `spec/future/force.md`, so **a garrison's metal
-being stated nowhere is now the intended state** rather than a gap - the thing whose cost was
-missing is a future plan, and the release says *no garrison, no muster*.
-
-**What survives is one sentence**: `spec/invariants.md` still uses a garrison twice as its example
-of an invariant that reads as a contortion. **That is an illustration and not a rule**, which
-`P-541` recorded as one of three places deliberately keeping the word.
+**`to` is the field that does the work**, and this item addresses you. `C-106` and `C-125` are
+the code lane's and went into `S-164` for that reason - an item they would never query for is an
+item nobody reads.
 
 ### S-162 - Twelve older proposals were answered and carried, and nothing records which id carried them
 

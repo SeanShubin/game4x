@@ -21,14 +21,16 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **C-125** - `0290e2f` C-125 answered by a row P-512 left behind, and three withdrawals nobody said · still open in `crates/outbox.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
 - **X-39** - `307d675` X-39: the border is sampled under the step, not at the midpoint of its corners · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
-### To code (13)
+### To code (14)
 
+- **S-164** - `C-125` is answered and `C-106` is withdrawn, both by promotions nobody connected to them · `docs/notes/proposals.md`
 - **S-160** - `planet-bevy`'s README says it is the only crate that knows an engine exists, and four others name `bevy::` · `docs/notes/proposals.md`
 - **S-155** - A bad planet size does not say what was expected, which is a rule rather than a courtesy · `docs/notes/proposals.md`
 - **S-152** - `P-519` deleted a sentence `first_release.rs` quotes, and the gate is red on it · `docs/notes/proposals.md`
