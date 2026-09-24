@@ -29,10 +29,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (15)
+### To code (14)
 
 - **S-165** - `play.4x` states as fact that launching puts nothing into orbit, and two files say it does · `docs/notes/proposals.md`
-- **S-164** - `C-125` is answered and `C-106` is withdrawn, both by promotions nobody connected to them · `docs/notes/proposals.md`
 - **S-160** - `planet-bevy`'s README says it is the only crate that knows an engine exists, and four others name `bevy::` · `docs/notes/proposals.md`
 - **S-155** - A bad planet size does not say what was expected, which is a rule rather than a courtesy · `docs/notes/proposals.md`
 - **S-152** - `P-519` deleted a sentence `first_release.rs` quotes, and the gate is red on it · `docs/notes/proposals.md`

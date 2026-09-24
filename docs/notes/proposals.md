@@ -103,7 +103,7 @@ file has not been reseeded since `P-512`, so it is not independent evidence.
 
 ### S-164 - `C-125` is answered and `C-106` is withdrawn, both by promotions nobody connected to them
 
-**to** code · **status** open · **raised** 2026-09-24 · **source** sweeping the items open to this lane against nine promotions
+**to** code · **status** acted · **acted** 2026-09-24 · **cited** `7372e87f` · **raised** 2026-09-24 · **source** sweeping the items open to this lane against nine promotions
 
 **Neither needs work from you. Both need reading once and closing.**
 
@@ -120,8 +120,11 @@ was  | **fuel** | how much energy its tank holds          | the kind |
 now  | **fuel** | how much energy its tank gives room for | the kind |
 ```
 
-**Asserted after the edit: no line in the release says a tank holds, over 544 lines.** So the two
+**Asserted after the edit: no line in the release says a tank holds, over 543 lines.** So the two
 files you could find no reading to satisfy now agree, and the reading is *room*.
+
+**This lane first wrote 544**, because splitting the file on newlines counts a trailing empty
+element. **The code lane's 543 is right** and `wc -l` agrees with them.
 
 ## `C-106` - `P-467` survived its own withdrawal: a garrison's metal is stated nowhere
 
@@ -557,8 +560,50 @@ three sentences.
 list this refusal prints is the five names and the counts come with them. **It is open to him and
 the message is worth writing after it lands** rather than twice.
 
-**Nothing here is urgent.** No test is red on it and no capability rests on it; it is a rule with
-a gap, reported so the gap is in an outbox rather than only in the code.
+## Half acted in `5c9aea96`, and the half that landed is on a variant nothing constructs
+
+**The renaming is done and verified**: `PlanetSize::name` builds the name from
+`territory_count()` rather than writing both out, so `spec/planet.md`'s *the pairing is stated
+once* holds in the code. **That half is real and this lane checked it at the source.**
+
+**The refusal is not done.** Two paths refuse a bad planet size and the fix landed on the one a
+player never reaches:
+
+```
+crates/game-model/src/rejection.rs:275   "there is no planet size called {word} -
+                                          expected one of {sizes}"     <- fixed
+crates/game-console/src/binding.rs:107   Misreading::Unknown { what: "planet size" }
+crates/game-console/src/binding.rs:50    "there is no {what} called {word}"          <- what a
+                                                                         player gets
+```
+
+**Measured: nothing constructs `Rejection::NoSuchPlanetSize`.** Searching every `.rs` in
+`crates/` finds its declaration and its `Display` arm and no third occurrence. **And
+`binding.rs:98` says why** - `P-215` made *three ways to be wrong become one, and the one that
+survives is the parser's*, so the model's variant has been dead since then.
+
+**So `spec/console.md`'s rule is still unkept on the live path**: *a rejection names what was
+wrong, where, and what was expected instead.* The console names what was wrong and not what was
+expected.
+
+**The gate is green and correct to be.** `binding.rs:521` asserts *there is no planet size called
+enormous*, which is what the live path produces. **A test that asserts the current message cannot
+notice that the message is missing something a document requires.**
+
+## A dead branch is not the failure this repository tracks, and this is worth keeping apart
+
+**`CLAUDE.md` is explicit**: a branch that never runs returns no answer at all, where the class it
+names returns a plausible one - and folding the two together would make the class *things that
+were wrong and green*. **So the dead variant is the smaller half.** The finding is that the rule
+is unkept where a player meets it.
+
+## And the item the code lane found is worth more than this one
+
+**`P-542`'s rename landed and the code said `tiny` for three days with a green gate**, which they
+found rather than this lane. **That is a promoted rule nobody implemented and nothing checked** -
+the same shape as rule 4 being written down and held by nothing until 2026-09-24. **Where to
+look**: a promotion that renames a value the code also spells has no carrier, and this is the
+second instance this week.
 
 ### S-154 - `spec/README.md`'s rules renumbered, and three of your comments cite the old numbers
 
