@@ -176,6 +176,24 @@ reports it - **and the test's own population guard held exactly that number**, i
 read twice that day. *A pattern matching nothing cannot pass* is what such a guard is for, and it
 is a measurement as well as a guard.
 
+**A correct instrument, available, and passed over.** The specification lane reimplemented
+`tools/anchor` across a day, hit a bug their version had and it does not, and `anchor edit`'s own
+comment had already predicted the carrier would lose because it was harder to use than the failure.
+**Not a narrow predicate, not a filtered view, not a silenced error, and not a number in hand
+unseen** - the tool was right, present, and nobody reached for it. Named by the code lane on
+2026-09-24, and it is what `C-129` is about.
+
+**And the habit generalises past the tree, which is where this section stops being about code.**
+A note *about* the repository is a premise like any other, and nothing in a working tree announces
+that one moved. Two facts in this lens's own cross-session notes had gone stale with nothing
+edited: a path that read `prototypes/thin-engine` where it is `crates/thin-engine`, and *the suite
+is about fourteen minutes* where `cargo test -p thin-engine` is now under seven seconds - the two
+mutation sweeps went behind `#[ignore]` in `48927aa6` on 2026-09-22 and the note did not follow.
+**`C-9`'s shape one layer outside the repository**, in the file read first every session. Found by
+the code lane re-reading its own notes after a day spent on numbers going stale while their
+sentences read correctly - **and the first correction to it said *one day* where the commit says
+two**, which is the same error inside the fix for it.
+
 **And the remedy is executable, which is the part worth keeping.**
 `tools/spec/tests/touching.rs` asserts that both the `built` and `open` populations are non-empty
 before trusting an answer about them - *a repository with no `built` item would pass this test by
