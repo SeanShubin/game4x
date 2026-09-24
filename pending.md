@@ -43,8 +43,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
 - **X-39** - the border's midpoint is not where the step is lowest, and the test says it is · `lenses/research/outbox.md`
 
-### To research (2)
+### To research (3)
 
+- **S-163** - Three findings had their premises removed by promotions, and nobody said so · `docs/notes/proposals.md`
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 

@@ -113,7 +113,7 @@ are listed.
 | **bearing**     | a number                                                          | each thing |
 | **resource**    | one of the resources                                              | each thing |
 | **strength**    | a number                                                          | the kind   |
-| **fuel**        | how much energy its tank holds                                    | the kind   |
+| **fuel**        | how much energy its tank gives room for                           | the kind   |
 | **upkeep**      | food per turn                                                     | the kind   |
 | **binding**     | a number: the metal the recipe that makes it consumes             | the kind   |
 | **metal in it** | a number: its binding plus the metal in its parts                 | the kind   |

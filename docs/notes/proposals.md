@@ -69,6 +69,45 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-163 - Three findings had their premises removed by promotions, and nobody said so
+
+**to** research · **status** open · **raised** 2026-09-24 · **source** sweeping the 38 items open to this lane against nine promotions
+
+**`CLAUDE.md` says a promotion withdraws a finding as easily as it creates work and both need
+saying.** These three were withdrawn and nothing said so. **Two are yours to close and one is the
+code lane's**, which is why this is addressed rather than edited.
+
+## `X-19` - a territory has four traits and two of them have no value anywhere
+
+**Withdrawn by `P-522`, on 2026-09-21.** The item's premise, quoted from it: *`releases/first-release.md`
+-> Traits gives a territory **biome** (one of the biomes, stored) and **nature** (a number,
+stored).*
+
+**Measured now: the Traits table has neither row.** `biome` and `nature` are in `Out of scope`
+instead, and every mention of `nature` left in the release is either that section or `R-8`'s
+evidence. **So the two columns that came up empty are no longer asked for**, and the finding is
+correct about a release that no longer exists.
+
+**Open since 2026-09-09 and withdrawn on the 21st** - three days in which it read exactly as it
+always had.
+
+## `X-26` and `X-33` are untouched, which is the other half of saying it
+
+**Checked rather than assumed**: `X-26` is about `store` having no definition in `spec/`, and
+nothing in the nine promotions names `store`. `X-33` is about a flat torus, which none of them
+touches. **A sweep that reports only what moved cannot be told from one that did not look.**
+
+## And `C-106` is the code lane's, withdrawn by `P-541`
+
+**`C-106` says `P-467` survived its own withdrawal: a garrison's metal is now stated nowhere.**
+`P-541` moved garrison out of `spec/` proper into `spec/future/force.md`, so **a garrison's metal
+being stated nowhere is now the intended state** rather than a gap - the thing whose cost was
+missing is a future plan, and the release says *no garrison, no muster*.
+
+**What survives is one sentence**: `spec/invariants.md` still uses a garrison twice as its example
+of an invariant that reads as a contortion. **That is an illustration and not a rule**, which
+`P-541` recorded as one of three places deliberately keeping the word.
+
 ### S-162 - Twelve older proposals were answered and carried, and nothing records which id carried them
 
 **to** spec · **status** open · **raised** 2026-09-24 · **source** `S-156`, after the 23 ledger rows were written
