@@ -145,6 +145,22 @@ is yours*. **`2>/dev/null` over a path you are measuring converts *no such popul
 offences*** - which is this whole section's failure, self-inflicted, with the warning silenced by
 hand.
 
+**It is not a new class and it is not even a new mechanism - it is `C-43`, and this lens found
+it.** `hooks/pre-commit:158` records it in those words: *an empty answer from a tool that did not
+run reads exactly like an empty answer from a tool that found nothing*, and the comment credits
+this lens with finding the shape in the code lane's reporting before they found it in that file.
+**So the reminder carried this lens's own attribution and it still did not fire**, which is the
+strongest case in this file for the difference between a carrier and a reminder: proximity does not
+help, and neither does authorship.
+
+**The repair is in that same comment and it is what an ad-hoc measurement cannot do.** The
+committed version reads the exit status and says which branch it took - *this class is survivable
+exactly to the degree that the wrong branch is loud*. **A command typed into a shell has nowhere to
+say which branch it took**, so the discipline is not to suppress the one signal that distinguishes
+them. Twelve of the redirect survive in `hooks/` and `scripts/`, and the ones in `hooks/pre-commit`
+sit inside `outbox_says`, which reads the status and tells the tool failing from the tree being
+clean. **The committed code learned this; the fingers have not.**
+
 **And the remedy is executable, which is the part worth keeping.**
 `tools/spec/tests/touching.rs` asserts that both the `built` and `open` populations are non-empty
 before trusting an answer about them - *a repository with no `built` item would pass this test by
