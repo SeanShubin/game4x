@@ -14,6 +14,8 @@
 //! caught by deriving the answer a second way. A test that only shows a handoff being found
 //! would have passed for all three of them.
 
+use std::path::Path;
+
 use spec::handed_to;
 
 /// The cue and the successor in one sentence - `C-16`'s own shape.
@@ -132,4 +134,52 @@ fn a_shown_id_does_not_hide_a_real_one_on_the_same_line() {
     let body = "## Closing\n\n\
                 Unlike `` `S-30` ``, this one is tracked by `C-49` and stays open.";
     assert_eq!(handed_to("C-87", body), vec!["C-49".to_string()]);
+}
+
+/// **A cue that is a prefix of ordinary prose made ten handoffs that never happened.**
+///
+/// `carries it` is in the cue list and `carries its own` is an English phrase, so `contains`
+/// read a sentence about something else as a handoff. Found on 2026-09-24: the handoff count
+/// moved from 80 to 79 when an unrelated predicate was fixed, which the fix did not explain, and
+/// chasing the one edge found the class - 69 afterwards, and **one of the ten was printed**.
+///
+/// `X-11 (acted) -> C-85 is still open` was the claim, built from *a `change` carries its traits*
+/// and an incidental mention of `C-85` twelve lines away. **A handoff that never happened,
+/// asserted to a reader.**
+#[test]
+fn a_cue_does_not_match_the_start_of_a_longer_word() {
+    let carries = "## A section
+
+Every node carries its own colour, and `C-85` says why.
+";
+    assert!(
+        handed_to("X-1", carries).is_empty(),
+        "`carries its own` is prose and not a handoff"
+    );
+
+    let handed = "## A section
+
+This is carries it to `C-85`, which now owns it.
+";
+    assert_eq!(
+        handed_to("X-1", handed),
+        vec!["C-85".to_string()],
+        "the cue itself still reads, or this test proves nothing"
+    );
+
+    // **The population, because the guard is only worth having if the corpus contains the trap.**
+    let root = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .parent()
+        .and_then(Path::parent)
+        .expect("the repository root");
+    let all = outbox::read(root);
+    let traps = all
+        .items
+        .iter()
+        .filter(|item| item.body.to_lowercase().contains("carries its"))
+        .count();
+    assert!(
+        traps > 0,
+        "no item says `carries its`, so this guards against nothing in this repository"
+    );
 }

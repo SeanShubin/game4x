@@ -662,7 +662,15 @@ fn chains(root: &Path) -> Result<String, String> {
     let mut closed = 0;
     for item in &all.items {
         status.push((item.id.clone(), item.status.clone()));
-        if item.status == "open" {
+        // **`open` is a status; outstanding is the question** - the same narrower question this
+        // file asked in `touching` until `731acebf`, found by the code lane enumerating the
+        // predicate rather than looking twice where we had already looked. A `built` capability
+        // counted as closed here, so a handoff sourced from one would have printed *`R-n` is
+        // still open* about something waiting on Sean - the sentence `outbox::OUTSTANDING`
+        // exists to stop being said. **It fires on no edge today**: no `R-` id appears in this
+        // output as source or target, because `handed_to` needs a cue and an id in one section
+        // and none of the six carries one. Findable rather than found, and one predicate.
+        if item.is_outstanding() {
             continue;
         }
         closed += 1;

@@ -456,7 +456,13 @@ pub fn handed_to(me: &str, body: &str) -> Vec<String> {
             .collect::<Vec<String>>()
             .join("\n");
         let lowered = prose.to_lowercase();
-        if !CUES.iter().any(|cue| lowered.contains(cue)) {
+        // **A cue ends at a word boundary, because one of them is a prefix of ordinary prose.**
+        // `carries it` matched inside *every node carries its own* in `R-10`'s section, which
+        // made a phantom handoff out of a sentence about colour. Found on 2026-09-24 when the
+        // handoff count moved from 80 to 79 for a reason the predicate fix did not explain, and
+        // the count was what said so - no printed chain changed, because `R-10` is `built` and
+        // this only ever prints chains ending in an open item.
+        if !CUES.iter().any(|cue| said_at_a_boundary(&lowered, cue)) {
             continue;
         }
         for id in ids(&prose) {
@@ -466,6 +472,24 @@ pub fn handed_to(me: &str, body: &str) -> Vec<String> {
         }
     }
     found
+}
+
+/// `needle` in `haystack`, but not as the start of a longer word.
+///
+/// **The cue list has a prefix of ordinary prose in it** - `carries it` against *carries its
+/// own* - so `contains` reads a sentence about something else as a handoff. What follows the
+/// cue has to be the end of the text or a character that is not a letter.
+fn said_at_a_boundary(haystack: &str, needle: &str) -> bool {
+    let mut from = 0;
+    while let Some(at) = haystack[from..].find(needle) {
+        let end = from + at + needle.len();
+        match haystack[end..].chars().next() {
+            None => return true,
+            Some(next) if !next.is_alphabetic() => return true,
+            _ => from = from + at + 1,
+        }
+    }
+    false
 }
 
 /// Every `X-123` in the text, whether or not it is in backticks.
