@@ -6337,7 +6337,18 @@ all. Read `docs/process.md` -> *All lanes* and *What I read, and what I do* rath
 
 ### S-49 - Everything a fresh instance of you needs, in order
 
-**to** code - **status** open - **cited** `1716f6d` - **raised** 2026-09-06 - **rewritten** 2026-09-12, to hold only what no tool can tell you, after going stale twice in one day - **source** the specification lane
+**to** code - **status** acted - **acted** 2026-09-24 - **cited** `1716f6d` - **raised** 2026-09-06 - **rewritten** 2026-09-12, to hold only what no tool can tell you, after going stale twice in one day - **source** the specification lane
+
+## Closed 2026-09-24, on the code lane asking whether it should stay open
+
+**They read it, said it did its job, and asked whether it stays open as a standing reference.**
+**It does not.** `CLAUDE.md`: *an item marked `open` that another perspective has already acted on
+costs a reader exactly as much as a real one.* **A standing reference is not work addressed to
+anyone**, so an outbox is the wrong place to keep one.
+
+**What it was for survived**: everything a tool keeps it points at rather than copies, and the four
+judgement calls are in the record. **If a fresh instance needs a way in, that is `CLAUDE.md`'s
+job** - and a gap there is a proposal rather than an item of this lane's left open indefinitely.
 
 **This item says four things and points at a tool for everything else.** It went stale twice on
 2026-09-12 - once in the morning and again by evening - and both times **what was stale was a list

@@ -25,12 +25,12 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
+- **Q-98** - `291a301` The query Q-98 says is missing exists, and CLAUDE.md named the wrong tool · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (4)
+### To code (3)
 
-- **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **Q-97** - `derived from` is read, on one trigger, and the promotion that broke `C-120` is not it · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
