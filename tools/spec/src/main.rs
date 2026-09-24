@@ -651,6 +651,23 @@ fn root() -> PathBuf {
 /// `S-30` puts its cue in a `## Where the live half is` heading and the successor's id in the
 /// paragraph under it - a paragraph-scoped version returned a plausible zero and missed the
 /// one chain that matters.
+///
+/// **The third false edge was at the other end of the same predicate, and it took a year of
+/// this file's history to notice.** The id was made precise and **the cue was not**:
+/// `carries it` matched inside *every node in the net carries its own name*, so a sentence
+/// about colour became a handoff. `spec::handed_to` requires a word boundary now.
+///
+/// **Two lanes measured it separately and the numbers meet.** Thirteen cue matches across the
+/// nine outboxes are continued by a letter and every one is `carries it` inside `carries its` -
+/// `S-60`, `S-55`, `S-26`, `S-1`, `C-114`, `C-78`, `R-10` twice, `Q-91`, `X-11`, `X-12`,
+/// `X-32`, `X-17`. **Ten of them were producing an edge**, which this total said: 79 before the
+/// boundary and 69 after. One was printed - `X-11 (acted) -> C-85 is still open`, from *a
+/// `change` carries its traits* and a mention of `C-85` twelve lines away.
+///
+/// **And the count is what found it.** Fixing the `built` misclassification moved the total by
+/// one for a reason that fix did not explain; the printed chains were unchanged, because this
+/// prints only chains ending in an open item and `R-10` is `built`. **The output is not the
+/// population**, which is what made it invisible to reading it.
 fn chains(root: &Path) -> Result<String, String> {
     let all = outbox::read(root);
     if all.items.is_empty() {
