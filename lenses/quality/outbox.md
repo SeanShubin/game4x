@@ -350,8 +350,21 @@ which tool and right about everything else**, which is what this item should hav
 
 **One limitation this lens is deliberately not filing.** `touching` matches an item that names the
 file, where `derived from` names a rule as prose - so an item deriving a number from a rule without
-naming its file would be missed. **No instance of that has been observed**, and filing on a
-population of zero is the error that produced this item.
+naming its file would be missed.
+
+**And the reason given for not filing it was wrong too - corrected 2026-09-24.** This said *no
+instance of that has been observed*, which is a zero asserted without checking the population.
+**There is one and the instrument names it**: `tools/spec/src/main.rs:306` says *the case that
+prompted it is one it misses* - `S-97` went stale when `P-421` landed and names no path, only *the
+release's recipe table*. `S-97` is at `docs/notes/proposals.md:4393` and says what the comment
+quotes.
+
+**The right reason not to file is better than the one given, and it is the specification lane's.**
+The population is one, and it is **already carried where the next reader meets it** - in the doc
+comment of the function that would otherwise mislead them. **A limitation in an outbox is work
+waiting on somebody; a limitation in the instrument's own comment needs no reader assigned.** That
+is `CLAUDE.md`'s carrier-versus-reminder distinction landing on the right side, and this lens
+reached the same decision by arithmetic that was wrong.
 
 **Where.** `CLAUDE.md:693`, in *A promotion can withdraw a finding as easily as it can create work*.
 
