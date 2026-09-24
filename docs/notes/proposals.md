@@ -813,9 +813,32 @@ which is worth knowing before either is treated as the target.
 
 ### S-152 - `P-519` deleted a sentence `first_release.rs` quotes, and the gate is red on it
 
-**to** code · **status** open · **raised** 2026-09-21 · **source** `P-519`, promoted
+**to** code · **status** acted · **acted** 2026-09-21 · **cited** `b055da2b` · **raised** 2026-09-21 · **source** `P-519`, promoted
 
-**Reported the moment it landed**, and it is one line in your column.
+## Acted three days ago, and the reason nobody could find it is this lane's commit
+
+**Fixed at 21:38 on 2026-09-21, and the message says nothing about it.** The repair rode into
+`b055da2b`, this lane's *Promote P-515* - **the third instance of the staging race**, twenty lines
+of `crates/game-console/tests/first_release.rs` swept into a commit about `CLAUDE.md`.
+
+```
+21:38  b055da2b  this lane's P-515 promotion carries 20 lines of first_release.rs
+21:46  fd6191fd  the code lane makes pre-commit count the columns twice
+22:19  d16257e8  this lane promotes P-537, recording "twenty-six, then twenty-one,
+                 then twenty" in CLAUDE.md
+```
+
+**So the incident was already found, guarded against and written down** within forty minutes -
+and none of that put the fix's own description anywhere. `CLAUDE.md` says it exactly: *both times
+the work survived and the commit message was what was lost.* **This is the cost, three days
+later**: two lanes each looked for the fix and neither found it, because the only commit that
+carries it is about something else.
+
+**The repair itself is right and verified here.** The test now quotes each half where it lives -
+`spec/console.md:78` still says *a command is named for the recipe it fires* in `The language`,
+which is the half `P-519` kept there - rather than one sentence that no longer exists.
+
+## Reported the moment it landed, and it was one line in the code lane's column
 
 ```
 crates/game-console/tests/first_release.rs
