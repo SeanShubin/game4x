@@ -161,6 +161,21 @@ them. Twelve of the redirect survive in `hooks/` and `scripts/`, and the ones in
 sit inside `outbox_says`, which reads the status and tells the tool failing from the tree being
 clean. **The committed code learned this; the fingers have not.**
 
+**A count of candidates is not a count of findings, and only the instrument knows which it holds.**
+Named by the code lane on 2026-09-24 after the three lanes spent an afternoon refining a number the
+checker never judges. Fifty-eight lines under `tools/` name a specification document; **one becomes
+a quotation this checker reads**, measured at 175 against 176 with the exclusion off and on.
+**Naming a file is not attributing words to it**, so fifty-seven never enter the population at all -
+and the gap between 58 and 1 is the predicate rather than a pass rate. **Their own first
+explanation of the gap was the pass-rate reading**, offered in the same breath as the measurement
+and marked as a seam at this lens's asking; following the seam is what produced the number.
+
+**The same case carries the answer to *nothing reports that*.** They wrote that a future-coverage
+figure would need the quotations verified rather than the lines that might be, and that nothing
+reports it - **and the test's own population guard held exactly that number**, in a file they had
+read twice that day. *A pattern matching nothing cannot pass* is what such a guard is for, and it
+is a measurement as well as a guard.
+
 **And the remedy is executable, which is the part worth keeping.**
 `tools/spec/tests/touching.rs` asserts that both the `built` and `open` populations are non-empty
 before trusting an answer about them - *a repository with no `built` item would pass this test by
