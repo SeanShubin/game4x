@@ -6,8 +6,8 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 [Root README](../README.md) · [Documentation map](../docs/README.md) · [Notes](../docs/notes/README.md)
 
-What the game **is**, stated normatively. If a rule is not written here, it is not decided,
-no matter how thoroughly it was discussed.
+What the game **is**, stated normatively, **and the shape of the thing that runs it**. If a rule
+is not written here, it is not decided, no matter how thoroughly it was discussed.
 
 ## The documents
 
@@ -63,3 +63,12 @@ Add a file when a topic firms up. Add its row here first.
    directory of their own**, in the notation rather than in a table. **What the specification
    states is the default.** Tuning happens in the editor and does not touch the specification, and
    a tuned value becomes the default only when I say it does.
+9. **A document says what the game is, or how the thing that runs it is shaped.** Rule 4's two
+   kinds are about the game; an architecture document says what is true of the artifact. **A
+   boundary stated here is one the build keeps**, and the check that fails when it stops being
+   kept is part of stating it.
+
+   **A check on the artifact's shape lives outside the column it constrains.** A constraint the
+   constrained lane may weaken is a constraint nobody is holding, so an architecture check is the
+   specification's and not the code's - and it runs in the same gate, because a check the
+   constrained lane never runs is no better.

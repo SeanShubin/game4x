@@ -33,12 +33,12 @@ parallel without becoming unpredictable — is in
 [layers: intent to pixels](layers.md). This document covers the crate graph; that one
 covers why it is shaped this way.
 
-| Layer             | Knows about                  | Does not know about             |
-| ----------------- | ---------------------------- | ------------------------------- |
-| Supporting crates | Spheres, graphs, integers    | Pixels, windows, engines        |
-| Rendering         | Pixels, cameras, projections | Windows, input devices, engines |
-| Engine adapter    | Bevy, windows, input, vsync  | How anything actually works     |
-| Composition root  | All of the above, briefly    | Nothing else; it holds no logic |
+| Layer             | Knows about                                                                       | Does not know about             |
+| ----------------- | --------------------------------------------------------------------------------- | ------------------------------- |
+| Supporting crates | Spheres, graphs, integers                                                         | Pixels, windows, engines        |
+| Rendering         | Pixels, cameras, projections                                                      | Windows, input devices, engines |
+| Engine adapter    | Bevy, windows, input, vsync, and what the game is when a surface has to follow it | How anything actually works     |
+| Composition root  | All of the above, briefly                                                         | Nothing else; it holds no logic |
 
 That line has already paid for itself once. The prototype was built on `minifb` and
 then moved to Bevy; the model, the camera and the rasterizer did not change a line, and
@@ -157,9 +157,9 @@ hand-written so that results are identical on every platform, which is what make
    interfaces and on the modules below it.
 3. **Floating point lives above the game logic.** The game logic boundary is where
    `f32` and `f64` stop.
-4. **Engine types live only in the adapter.** No `bevy::` anywhere else, including in
-   the composition root's own logic — the root may assemble plugins, but it may not
-   compute with engine types.
+4. **Engine types live only in the adapter layer.** No `bevy::` anywhere else, including in
+   the composition root's own logic - the root may assemble plugins, but it may not compute
+   with engine types.
 5. **Each crate has a `README.md`** describing its purpose and its public surface,
    linked from this document.
 6. **Entities and algorithms are different kinds of thing.** Game state lives in the model

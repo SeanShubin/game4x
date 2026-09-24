@@ -60,6 +60,10 @@ code lane was the only one that cost nothing already being paid.**
 | **Code**                        | `crates/`, `web/`, `prototypes/`, `scenario/`, `reports/`, cargo     | everything |
 | **Quality**, and any other lens | its own directory under `lenses/`, and `tools/<its name>/`           | everything |
 
+**`decide/` is the specification lane's.** The specification puts things there for Sean to read,
+and they are removed from there according to his interactions with that lane - so it is written
+by the lane whose queue it is, and nothing is filed there for another instance.
+
 **`temporary-notes/` is Sean's and no instance writes there**, except to create a file he has
 asked for by name. It is not tracked - the files in it are transient, which is what the name says -
 and it is not `docs/notes/`, which is Claude's and is kept.
