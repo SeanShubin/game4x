@@ -33,9 +33,21 @@ export GIT_PAGER=cat
 # - **The shared-index race**, which is the one care cannot close. `git add` writes to an
 #   index all three perspectives share and `git commit` commits the index rather than the
 #   caller's changes, so a file you stage is committed by whoever commits next. Staging by
-#   name bounds what you *add* and not what you *commit*. It has happened twice - twenty-six
-#   lines, then twenty-one - and both times the swallowing commit spanned two columns, which
-#   is what makes it detectable here when no amount of care was going to close the window.
+#   name bounds what you *add* and not what you *commit*. It has happened three times -
+#   twenty-six lines, then twenty-one, then twenty - and every time the swallowing commit
+#   spanned two columns, which is what makes it detectable here when no amount of care was
+#   going to close the window.
+#
+#   **The third is `b055da2b` and it is why this file gained a second call.** It swallowed
+#   twenty lines of `crates/game-console/tests/first_release.rs` into a promotion, and the
+#   column check at the top of this hook had already passed - the file arrived during the
+#   hook's own run, in the several seconds its tools take. So the check runs again at the
+#   bottom, and `hooks/post-commit` reports what still gets through the instant after.
+#
+#   **And the cost of that one was paid three days later.** `S-152`'s fix was inside it, so
+#   no commit message anywhere described the fix, and two lanes each spent a search finding
+#   out where it had gone. `CLAUDE.md` says it exactly: the work survives and the commit
+#   message is what is lost.
 #
 # **What this sees is what will be committed**, in both commit shapes. An ordinary commit
 # commits the index and the hook sees the index; a pathspec commit - `git commit -- <paths>` -
