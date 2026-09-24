@@ -129,7 +129,11 @@ impl Kind {
             Kind::Extractor => "a capacity, from *Territory resources*",
             Kind::Store => "as many as the extractors of its resource",
             Kind::Yard => "a capacity of 1",
-            Kind::Ark => "a capacity of 2",
+            // **`P-549`: an ark is never on the surface.** The bound moved with the
+            // container - `spec/data/limit.4x` now says `container:orbit` - and the release's
+            // cell says where as well as how many. **This crate's copy is checked against
+            // that cell**, which is what went red the moment the promotion landed.
+            Kind::Ark => "a capacity of 2 in the orbit, which is the only place that admits one",
             Kind::Pioneer => "a capacity of 2",
             Kind::Labor => "the citizens that make it, one each per turn",
             // **`P-380` gave `fertility` this row, word for word with `labor`'s above**, and

@@ -243,7 +243,7 @@ carries a landing, and can invade from orbit.
 
 **Signature** `s-5`
 
-**Bounded by** a capacity of 2
+**Bounded by** a capacity of 2 in the orbit, which is the only place that admits one
 
 **As a thing** Strength: 2 · Crosses: orbit border · Readies: moving 1 · Movable: 1
 
