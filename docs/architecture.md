@@ -40,6 +40,23 @@ covers why it is shaped this way.
 | Engine adapter    | Bevy, windows, input, vsync, and what the game is when a surface has to follow it | How anything actually works     |
 | Composition root  | All of the above, briefly                                                         | Nothing else; it holds no logic |
 
+**Which crate is in which layer**, because the *Kind* column below does not decide it:
+
+| Layer             | Crates                                                                                                                                                   |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Supporting crates | `command-language`, `game-console`, `game-front`, `game-model`, `graph-coloring`, `planet-model`, `planet-terrain`, `sphere-tessellation`, `thin-engine` |
+| Rendering         | `planet-presentation`, `planet-raster`, `planet-render`                                                                                                  |
+| Engine adapter    | `game-globe`, `planet-bevy`, `planet-ecs`, `planet-flat`                                                                                                 |
+| Composition root  | `game4x`                                                                                                                                                 |
+
+**One kind spans two layers, which is why this table exists rather than a rule.** `game-console`
+and `game-globe` are both *binding*: the first is the command language bound to the game and names
+no engine, the second binds the globe to the game and is a Bevy plugin crate. **A kind says what a
+crate is for and a layer says what it may know about**, and those are different questions.
+
+**Seventeen crates, and every one is in exactly one layer.** The prototypes under `prototypes/`
+are each their own composition root and are not part of this layering.
+
 That line has already paid for itself once. The prototype was built on `minifb` and
 then moved to Bevy; the model, the camera and the rasterizer did not change a line, and
 the whole migration was contained in one new crate plus four lines of wiring.
