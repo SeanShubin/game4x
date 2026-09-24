@@ -93,12 +93,19 @@ carried out**, which is why this is a contradiction rather than two emphases.
 
 **Pooling wins, and the reason is the work order rather than a judgement about the game.**
 `releases/first-release.md` is what says what is being built now, and it agrees with
-`spec/logistics.md` twice:
+`spec/logistics.md` three times:
 
+- *Traits* defines **fuel** as *how much energy its tank **gives room for***, **of the kind** -
+  which is the sharpest of the three, because it says room rather than contents and says it of
+  the kind rather than of one unit
 - *Where things are* gives **a unit's tank** as a thing that **gives room for** energy, up to the
   unit's fuel - a capacity row, beside a store's
 - *Recipes* gives `move` a **consume 1 energy** row at **`$from`**, which is a place and not the
   unit
+
+**The first was found after this item was filed**, by reading `reports/catalog.html`'s rendering
+of a pioneer while committing something else. **It was filed saying twice and the number was
+wrong**, which is worth leaving visible: the count went up and the conclusion did not move.
 
 **So the two normative statements this lane builds against both pool, and `spec/units.md` is the
 only file that does not.** It is also the older of the two: `P-509`, `P-511` and `P-512` are what
