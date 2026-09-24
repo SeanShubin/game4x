@@ -39,7 +39,22 @@ pub enum Subject {
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Misreading {
     /// A word was in the right place but names nothing in the game.
-    Unknown { what: &'static str, word: String },
+    ///
+    /// `spec/console.md`: *a rejection names what was wrong, where, and what was expected
+    /// instead.* It named the first two - `S-155`, and the rule had been promoted and unkept.
+    ///
+    /// **Nothing bold sits between that file name and its quotation**, which is not a style
+    /// choice: `CLAUDE.md` records that the checker reads the `**` closing a span as the start
+    /// of the quoted text, and two drafts of this comment were reported wrong for it.
+    ///
+    /// **Every category here is a closed set**, so the list is read off the type rather than
+    /// written beside it. A list in a message is a second copy of the thing it describes, and
+    /// `P-542` renaming the planet sizes is what a copy would have survived wrongly.
+    Unknown {
+        what: &'static str,
+        word: String,
+        expected: Vec<String>,
+    },
     /// The binding table asked the syntax tree for something it does not carry.
     Malformed(Failure),
 }
@@ -47,7 +62,20 @@ pub enum Misreading {
 impl std::fmt::Display for Misreading {
     fn fmt(&self, out: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Misreading::Unknown { what, word } => write!(out, "there is no {what} called {word}"),
+            Misreading::Unknown {
+                what,
+                word,
+                expected,
+            } if expected.is_empty() => write!(out, "there is no {what} called {word}"),
+            Misreading::Unknown {
+                what,
+                word,
+                expected,
+            } => write!(
+                out,
+                "there is no {what} called {word} - expected one of {}",
+                expected.join(", ")
+            ),
             Misreading::Malformed(failure) => write!(out, "{failure}"),
         }
     }
@@ -69,6 +97,7 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
         Biome::named(word).ok_or_else(|| Misreading::Unknown {
             what: "biome",
             word: word.to_string(),
+            expected: Biome::ALL.iter().map(|it| it.name().to_string()).collect(),
         })
     };
     let resource = |hole: &str| -> Result<Resource, Misreading> {
@@ -76,6 +105,10 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
         Resource::named(word).ok_or_else(|| Misreading::Unknown {
             what: "resource",
             word: word.to_string(),
+            expected: Resource::ALL
+                .iter()
+                .map(|it| it.name().to_string())
+                .collect(),
         })
     };
     // **A word that has to name one of the two units, and it came back with `P-328`.**
@@ -87,6 +120,10 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
         UnitKind::named(word).ok_or_else(|| Misreading::Unknown {
             what: "unit",
             word: word.to_string(),
+            expected: UnitKind::ALL
+                .iter()
+                .map(|it| it.name().to_string())
+                .collect(),
         })
     };
 
@@ -106,6 +143,7 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
             let size = size_named(word).ok_or_else(|| Misreading::Unknown {
                 what: "planet size",
                 word: word.to_string(),
+                expected: PlanetSize::ALL.into_iter().map(|it| it.name()).collect(),
             })?;
             let seeds = seeds_for(size);
             let touching = sphere_tessellation::adjacency(&seeds);
@@ -219,9 +257,15 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
         // agreeing. Reported as data rather than panicking, because this layer promises
         // never to unwind on input.
         other => {
+            // **The one category that is not a closed set of values but of forms**, and
+            // it is unreachable while the grammar and this table agree - `crate::tests` is
+            // what keeps them agreeing. Left without a list rather than given an empty one,
+            // because twenty-six command names in a refusal is not what a reader wants and
+            // this refusal is a defect in the tables rather than in what was typed.
             return Err(Misreading::Unknown {
                 what: "command",
                 word: other.to_string(),
+                expected: Vec::new(),
             });
         }
     };
@@ -367,7 +411,10 @@ mod tests {
             .unwrap()
             .unwrap();
         let misread = interpret(&utterance).unwrap_err();
-        assert_eq!(misread.to_string(), "there is no resource called gold");
+        assert_eq!(
+            misread.to_string(),
+            "there is no resource called gold - expected one of food, metal, energy"
+        );
     }
 
     /// A kind that is not a kind never reaches the binding at all now.
@@ -400,7 +447,10 @@ mod tests {
         .unwrap()
         .unwrap();
         let misread = interpret(&utterance).unwrap_err();
-        assert_eq!(misread.to_string(), "there is no resource called metel");
+        assert_eq!(
+            misread.to_string(),
+            "there is no resource called metel - expected one of food, metal, energy"
+        );
     }
 
     /// The world is the same one every time, or a history would stop being a save file:
@@ -511,6 +561,68 @@ mod tests {
         }
     }
 
+    /// Every refusal over a closed set names what was expected, which is the rule rather than
+    /// the message.
+    ///
+    /// # Why the message test was not enough, measured
+    ///
+    /// **`spec/console.md`**: *a rejection names what was wrong, where, and what was expected
+    /// instead.* `a_size_that_is_not_a_planet_size_is_reported` asserts the exact string the
+    /// console produces, and it was green for as long as that string said only what was
+    /// wrong. **A test that pins the current message cannot notice the message is missing
+    /// something a document requires** - it is the strongest possible statement about what the
+    /// code does and says nothing about what it should do.
+    ///
+    /// **And the rule had been promoted and unkept**, which is how `S-155` came to be filed
+    /// against a variant nothing constructs: `Rejection::NoSuchPlanetSize` had been dead since
+    /// `P-215` folded three ways of being wrong into the parser's one, so the obvious place to
+    /// fix it was not the live path. The research lane measured that; this is what would have
+    /// said so.
+    ///
+    /// # Over every category and the count with it
+    ///
+    /// Four closed sets reach this refusal - biome, resource, unit, planet size - and each is
+    /// asked for a word it does not have. **`command` is the fifth and is excluded by name**:
+    /// it is unreachable while the grammar and the binding table agree, and twenty-six command
+    /// names in a refusal is not what a reader wants.
+    #[test]
+    fn every_refusal_over_a_closed_set_says_what_was_expected() {
+        let cases = [
+            ("{create-planet size:enormous}", "planet size", "tiny-12"),
+            ("{set-biome territory:1 biome:swamp}", "biome", "grassland"),
+            (
+                "{set-resource territory:1 resource:gold extractors:1 density:1}",
+                "resource",
+                "food",
+            ),
+            ("{move unit:dragon from:1 to:2}", "unit", "ark"),
+        ];
+        let mut checked = 0;
+        for (line, what, one_of) in cases {
+            let Ok(Some(utterance)) = parse_line(&grammar(), line, 1) else {
+                panic!("`{line}` does not parse, so this checks nothing");
+            };
+            let said = interpret(&utterance)
+                .expect_err(&format!("`{line}` should be refused"))
+                .to_string();
+            assert!(
+                said.contains(&format!("there is no {what} called")),
+                "`{line}` said {said:?}, which does not name what was wrong"
+            );
+            assert!(
+                said.contains("expected one of"),
+                "`{line}` said {said:?}, and `spec/console.md` asks for what was expected"
+            );
+            assert!(
+                said.contains(one_of),
+                "`{line}` said {said:?}, which does not list {one_of}"
+            );
+            checked += 1;
+        }
+        // A count over nothing is the same failure with the sign flipped - `CLAUDE.md`.
+        assert_eq!(checked, 4, "four closed sets reach this refusal");
+    }
+
     #[test]
     fn a_size_that_is_not_a_planet_size_is_reported() {
         let utterance = parse_line(&grammar(), "{create-planet size:enormous}", 1)
@@ -518,7 +630,8 @@ mod tests {
             .unwrap();
         assert_eq!(
             interpret(&utterance).unwrap_err().to_string(),
-            "there is no planet size called enormous"
+            "there is no planet size called enormous - expected one of tiny-12, small-32, \
+             medium-42, large-72, huge-92"
         );
     }
 }

@@ -935,7 +935,10 @@ fn a_player_is_told_what_went_wrong_and_where() {
     // own kind of failure still lives.
     match refuse(&mut session, "{build-extractor territory:1 resource:gold}") {
         Problem::Misread(misread) => {
-            assert_eq!(misread.to_string(), "there is no resource called gold")
+            assert_eq!(
+                misread.to_string(),
+                "there is no resource called gold - expected one of food, metal, energy"
+            )
         }
         other => panic!("expected a misreading, got {other}"),
     }

@@ -132,7 +132,6 @@ pub enum Rejection {
     /// The unit is not on the planet, so it cannot go up.
     NotOnThePlanet(UnitKind),
     PlanetAlreadyCreated,
-    NoSuchPlanetSize(String),
 }
 
 impl fmt::Display for Rejection {
@@ -258,24 +257,6 @@ impl fmt::Display for Rejection {
             }
             Rejection::NotOnThePlanet(kind) => write!(out, "that {kind} is not on the planet"),
             Rejection::PlanetAlreadyCreated => write!(out, "there is already a planet"),
-            // **`spec/console.md`**: *a rejection names what was wrong, where, and what was
-            // expected instead.* It named the first two and not the third - `S-155`, which is
-            // a promoted rule the code did not keep rather than a feature being asked for.
-            //
-            // **The five are read from `PlanetSize::ALL` rather than written out here.** A
-            // list in a message is a second copy of the thing it describes, and this one would
-            // have gone stale the day `P-542` renamed them - which is the day this was filed.
-            Rejection::NoSuchPlanetSize(word) => {
-                let sizes: Vec<String> = planet_model::PlanetSize::ALL
-                    .into_iter()
-                    .map(|size| size.name())
-                    .collect();
-                write!(
-                    out,
-                    "there is no planet size called {word} - expected one of {}",
-                    sizes.join(", ")
-                )
-            }
         }
     }
 }
