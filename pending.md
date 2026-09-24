@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-548** - One sentence refused during promotion, because it cites a rule that is below it · `decide/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -106,9 +105,9 @@ it exists to ask.
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208, P-277, P-346, P-441
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119, P-172, P-392
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147, P-193, P-199, P-213, P-218, P-222, P-493
+- `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223, P-352, P-359, P-488, P-548
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217, P-364
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185, P-390, P-408, P-480
-- `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223, P-352, P-359, P-488
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
 - `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306, P-313, P-410
 - `spec/control.md` -> Winning - P-77, P-81, P-125, P-361, P-468

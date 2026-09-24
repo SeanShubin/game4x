@@ -64,6 +64,13 @@ code lane was the only one that cost nothing already being paid.**
 and they are removed from there according to his interactions with that lane - so it is written
 by the lane whose queue it is, and nothing is filed there for another instance.
 
+**The pipeline and the local build belong to the code lane too.** `.gitignore` and
+`.gitattributes` are mechanical details of how things get implemented rather than production
+support proper, **and that is near enough** - the lane that implements owns how implementing
+works. **What a tool writes for itself is owned by nobody**, which is the generated-file rule
+below saying the same thing about a directory: `.git/`, `.idea/` and `target/` have no owner
+because no instance edits them.
+
 **`temporary-notes/` is Sean's and no instance writes there**, except to create a file he has
 asked for by name. It is not tracked - the files in it are transient, which is what the name says -
 and it is not `docs/notes/`, which is Claude's and is kept.
