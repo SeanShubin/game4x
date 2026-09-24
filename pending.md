@@ -23,6 +23,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-160** - `8628c43` S-160: the remote control becomes an adapter, and the README says what is true · still open in `docs/notes/proposals.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
 - **X-39** - `307d675` X-39: the border is sampled under the step, not at the midpoint of its corners · still open in `lenses/research/outbox.md`
