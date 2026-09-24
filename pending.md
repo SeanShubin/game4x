@@ -22,8 +22,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **C-125** - `24b36a9` S-164: C-125 and C-106 addressed to the lane that owns them · still open in `crates/outbox.md`
-- **C-106** - `24b36a9` S-164: C-125 and C-106 addressed to the lane that owns them · still open in `crates/outbox.md`
+- **S-155** - `5c9aea9` S-155: a planet size is named for its count, and a refusal says what was expected · still open in `docs/notes/proposals.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
 - **X-39** - `307d675` X-39: the border is sampled under the step, not at the midpoint of its corners · still open in `lenses/research/outbox.md`
@@ -54,7 +53,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (38)
+### To spec (36)
 
 - **S-162** - Twelve older proposals were answered and carried, and nothing records which id carried them · `docs/notes/proposals.md`
 - **S-159** - Seventeen architecture rules, six of them checkable and unchecked · `docs/notes/proposals.md`
@@ -68,7 +67,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-131** - Two kinds carry an `id` and nothing else can say it is one of a kind · `crates/outbox.md`
 - **C-130** - `R-8` says eighteen kinds and 153 pairs; the report it rests on says 19 and 171 · `crates/outbox.md`
 - **C-129** - `CLAUDE.md` states two rules and does not name the tool that carries them · `crates/outbox.md`
-- **C-125** - Does a unit's tank hold its fuel, or contribute room for it? Two files now differ · `crates/outbox.md`
 - **C-123** - What every recipe's code does that its rows do not say, measured over all twenty-six · `crates/outbox.md`
 - **C-122** - `S-131` is built: twenty red to none, and what each of the twenty was · `crates/outbox.md`
 - **C-120** - Three quantities in `line.4x` are sentences, and a key takes one token · `crates/outbox.md`
@@ -78,7 +76,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-112** - `refuel` is a recipe no command fires · `crates/outbox.md`
 - **C-110** - Poisoning a check has a direction, and a repair is where nobody looks · `crates/outbox.md`
 - **C-109** - `P-469` makes `X-12` a rule being broken rather than an observation · `crates/outbox.md`
-- **C-106** - `P-467` survived its own withdrawal: a garrison's metal is now stated nowhere · `crates/outbox.md`
 - **C-105** - *Of* is not a function of the kinds that carry it, so it cannot be regenerated as written · `crates/outbox.md`
 - **C-102** - Three of the four remaining tables fold; only *Recipes* needs a shape · `crates/outbox.md`
 - **C-82** - `P-373`'s soft-line check is one line, and the notation cannot write a soft line · `crates/outbox.md`

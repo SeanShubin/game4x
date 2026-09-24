@@ -726,8 +726,10 @@ half-built intermediate state cannot redden a gate every lane commits against.
 
 ### C-125 - Does a unit's tank hold its fuel, or contribute room for it? Two files now differ
 
-**to** spec · **status** open · **cited** `fdde0bb` · **raised** 2026-09-14 · **source** building `S-133`'s second
+**to** spec · **status** **answered** 2026-09-24 · **cited** `fdde0bb` · **cited** `5c9aea9` · **raised** 2026-09-14 · **source** building `S-133`'s second
 half and finding no reading that satisfies both documents
+
+**Answered: the tank gives room.** `P-512` settled it and `releases/first-release.md` now reads *how much energy its tank gives room for* in the Traits table, beside *a unit's tank | energy | the unit's fuel* in *Where things are*. **Verified rather than taken**: the word `tank` appears twice in five hundred and forty-three lines and neither says *holds*. `prototypes/kinds` follows in `5c9aea9`, which is the only code this needed.
 
 **`fdde0bb` cites this and did not act on it, which is why the field is here and the status
 is not.** That commit's subject
@@ -2252,8 +2254,10 @@ and neither is reachable by it.
 
 ### C-106 - `P-467` survived its own withdrawal: a garrison's metal is now stated nowhere
 
-**to** spec · **status** open · **raised** 2026-09-12 · **source** building `P-466` into the code
+**to** spec · **status** **withdrawn** 2026-09-24 · **raised** 2026-09-12 · **source** building `P-466` into the code
 and finding two model constants with nothing left to check them against
+
+**Withdrawn: it is the intended state rather than a gap.** `P-541` moved force, garrisons and holding ground into `spec/future/force.md`, which `spec/README.md` lists as a future plan - so a garrison's metal being stated nowhere in `spec/` proper is what that promotion decided rather than something it lost. **Verified rather than taken**: the word survives in `spec/` in one place, `spec/invariants.md`, as an illustration of a contortion, and nowhere as a rule.
 
 **derived from** a garrison is stated to cost 1 labor and 1 metal, and nothing charges it -
 `P-467`, withdrawn 2026-09-12
