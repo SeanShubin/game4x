@@ -21,26 +21,18 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-154** - `f876530` S-154: eleven citations follow P-539's renumbering, not the four reported · still open in `docs/notes/proposals.md`
-- **S-153** - `48927aa` S-153: thin-engine stops being a prototype and joins the gate · still open in `docs/notes/proposals.md`
-- **S-147** - `1ef0c07` S-147: reviewed/ is a column, and an orphaned record can be reached · still open in `docs/notes/proposals.md`
-- **S-144** - `58a6ba1` S-144: the model keeps what spec/ keeps, and the checks say which release defers what · still open in `docs/notes/proposals.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (17)
+### To code (13)
 
 - **S-157** - `P-541` changed `spec/data/` three ways, and one of them withdraws half of `S-144` · `docs/notes/proposals.md`
 - **S-155** - A bad planet size does not say what was expected, which is a rule rather than a courtesy · `docs/notes/proposals.md`
-- **S-154** - `spec/README.md`'s rules renumbered, and three of your comments cite the old numbers · `docs/notes/proposals.md`
-- **S-153** - The mainline keeps the rendering and loses the rules, and thin-engine stops being a prototype · `docs/notes/proposals.md`
 - **S-152** - `P-519` deleted a sentence `first_release.rs` quotes, and the gate is red on it · `docs/notes/proposals.md`
 - **S-151** - `fully exploited` is now a term the specification does not define, and you implement it · `docs/notes/proposals.md`
 - **S-150** - `P-512` landed: a unit no longer moves out of a place with no energy · `docs/notes/proposals.md`
-- **S-147** - `reviewed/` needs its column now that `CLAUDE.md` says what it is · `docs/notes/proposals.md`
-- **S-144** - `biomes_can_be_held.rs` reads a table `P-522` deleted, and all three failures are correct · `docs/notes/proposals.md`
 - **S-135** - The relational model has no rendering, and the person it was for cannot read it · `docs/notes/proposals.md`
 - **S-133** - The two follow-ons from pooling, which this lane owed you and did not file · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`

@@ -87,10 +87,11 @@ and Sean's ruling is that biome stays because the realistic drawing needs it.
 
 ## What it does to `S-144`
 
-**`S-144` said `biomes_can_be_held.rs` reads a table `P-522` deleted.** The table is still deleted
-and the release still has biomes out of scope, **so the failure stands** - but the reason *no rule
-reads a biome* no longer implies *nothing declares one*. **Worth re-reading before acting on it**
-rather than taken from here.
+**`S-144` was acted on in `58a6ba1` and this lane left it open.** The test was rewritten to
+assert what the release now says about biomes, which is nothing, so **there is no failure left to
+stand** - and this item first said there was, having read the item's status rather than the commit
+that closed it. **The release still has biomes out of scope** and `P-541` does not change that
+entry, so the rewritten test is unaffected by this promotion. `S-144` is closed.
 
 ## What this lane has not measured
 
@@ -171,7 +172,7 @@ a gap, reported so the gap is in an outbox rather than only in the code.
 
 ### S-154 - `spec/README.md`'s rules renumbered, and three of your comments cite the old numbers
 
-**to** code · **status** open · **raised** 2026-09-21 · **source** `P-539`, promoted
+**to** code · **status** acted · **acted** 2026-09-23 · **cited** `f876530c` · **raised** 2026-09-21 · **source** `P-539`, promoted
 
 **Filed the moment it landed.** `P-539` inserted a fourth rule - *a document says what the game
 is, or what it will be, and it says which* - and the rules after it moved down one.
@@ -217,7 +218,7 @@ goes stale whenever the list grows.
 
 ### S-153 - The mainline keeps the rendering and loses the rules, and thin-engine stops being a prototype
 
-**to** code · **status** open · **raised** 2026-09-21 · **source** Sean, directly, in his own message
+**to** code · **status** acted · **acted** 2026-09-23 · **cited** `48927aa` · **raised** 2026-09-21 · **source** Sean, directly, in his own message
 
 **His words, and the second sentence is the one to read twice:**
 
@@ -655,7 +656,7 @@ one**, which is the code lane's sentence and is better than the note it corrects
 
 ### S-147 - `reviewed/` needs its column now that `CLAUDE.md` says what it is
 
-**to** code · **status** open · **raised** 2026-09-21 · **source** `P-531`, promoted
+**to** code · **status** acted · **acted** 2026-09-23 · **cited** `1ef0c07` · **raised** 2026-09-21 · **source** `P-531`, promoted
 
 **`S-146` was this, filed a day early and on the wrong authority.** You refused it and were right
 on all three counts; **what changed is only the third.** Sean promoted `P-531` in his own message
@@ -817,7 +818,7 @@ to choose and the home follows from it.
 
 ### S-144 - `biomes_can_be_held.rs` reads a table `P-522` deleted, and all three failures are correct
 
-**to** code · **status** open · **raised** 2026-09-21 · **source** running the suite after promoting `P-522`
+**to** code · **status** acted · **acted** 2026-09-23 · **cited** `58a6ba1` · **raised** 2026-09-21 · **source** running the suite after promoting `P-522`
 
 **Thirty-nine red across sixteen targets, and this item first said three.** The three below are
 what a fail-fast run could see; the number is measured with `--no-fail-fast` and the correction is
@@ -7335,6 +7336,11 @@ again in a later session.
 
 | Proposal                                                                              | Why                                                                                                                                                                                                                                                                                                                                                         |            |
 | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |            |
+| P-514, "Three rows of `spec/data/line.4x` are unwritable, and this lane's own check said there was one" | Withdrawn 2026-09-21 - *I am fine with dumping all rules and replacing them with thin engine*, so the form `spec/data/` takes is no longer his to decide. Body kept above, moved out of `decide/` on 2026-09-23. |  |
+| P-513, "A relation names its columns, and nothing says so" | Withdrawn 2026-09-21 - *I am fine with dumping all rules and replacing them with thin engine*, so the form `spec/data/` takes is no longer his to decide. Body kept above, moved out of `decide/` on 2026-09-23. |  |
+| P-536, "`spec/data/` sits in `spec/` and holds the release's data, and your ruling today made the two differ" | Withdrawn 2026-09-21 - *I am fine with dumping all rules and replacing them with thin engine*, so the form `spec/data/` takes is no longer his to decide. Body kept above, moved out of `decide/` on 2026-09-23. |  |
+| P-517, "`spec/data/` states the cases, and the rules are what you wanted to read" | Withdrawn 2026-09-21 - *I am fine with dumping all rules and replacing them with thin engine*, so the form `spec/data/` takes is no longer his to decide. Body kept above, moved out of `decide/` on 2026-09-23. |  |
+| P-516, "Moving resources: put or consume-and-produce, and how the fuel says who burnt it" | Withdrawn 2026-09-21 - *I am fine with dumping all rules and replacing them with thin engine*, so the form `spec/data/` takes is no longer his to decide. Body kept above, moved out of `decide/` on 2026-09-23. |  |
 | P-467, "a garrison costs nothing and binds nothing" | Answered by Sean - *I don't have any strong opinions about costs* - and then subsumed. `P-466` removes the two cells this would have blanked, so the two could not be promoted at once and landing this first made it a no-op. **The answer is kept**: after `P-466` no file says a garrison costs anything, and `binding` is derived from the metal the recipe charges, which for a garrison is none. |  |
 | P-2, "twenty planet sizes are available below 500"                                    | Superseded by Sean's edit fixing the game at five named sizes.                                                                                                                                                                                                                                                                                              |            |
 | P-3, "no two territories are more than `3m` apart"                                    | Superseded by the per-size statement, and incomplete: `3m` holds for class I only, while the large planet is class III where the measured distance is 7.                                                                                                                                                                                                    |            |
@@ -7368,3 +7374,538 @@ again in a later session.
 | P-318, which document governs the tie-break | Withdrawn 2026-09-06: not a competing design but stale information. `docs/layers.md` predates `spec/turn.md`'s rule by a week and is superseded in that one respect; the rest of the section stands. Sean: the hole is understood and deferred, and `docs/notes/spec-backlog.md` holds it. The research lane's `X-2`. |
 | P-336, `age` is a declared recipe that fires in no state | Dissolved 2026-09-07 by `P-338`, which makes `age` fire on anything carrying the number. The code lane's `C-61` is the same finding and is answered with it. |
 | P-337, a starved unit is marked unusable and no artifact shows it | Dissolved 2026-09-07 by `P-339`: with no unit taking upkeep there is no starved unit, so the marking has nothing left to mark. Answers the code lane's `C-62`. |
+
+**Five withdrawn proposals moved out of `decide/` on 2026-09-23.** `decide/` holds what waits on a person** - Sean, 2026-09-14, asking for the documents he has to
+decide on to sit apart from what is settled or historical. **A withdrawn item waits on nobody**,
+and these five had been sitting there since they were withdrawn on the 21st - 523 lines of the two
+files whose whole purpose is to be short enough to read.
+
+**He asked whether everything in those files needed his attention.** Nothing did: all five were
+withdrawn, and both files are now empty of items.
+
+**All five were withdrawn for one reason, which is his**: *I am fine with dumping all rules and
+replacing them with thin engine* - so the form `spec/data/` should take stopped being a question
+for him. **Each body is kept below** because `CLAUDE.md` says a rejection is recorded with its
+reason or the same item is filed again.
+
+### P-514 - Three rows of `spec/data/line.4x` are unwritable, and this lane's own check said there was one
+
+**to** sean · **status** withdrawn · **withdrawn** 2026-09-21 · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**Withdrawn 2026-09-21, and the reason is his.** *I am fine with dumping all rules and replacing them with thin engine* - so the form `spec/data/` should take stops being a question for him and becomes whatever the engine reads. **This item asks how to write a file whose writer is being replaced.**
+
+**And the engine's data has none of these.** Measured across `spec/tests/`: zero rows carry a quantity of more than one word, against three in `spec/data/line.4x`. The shape the engine uses already avoids what this item reports.
+**Kept rather than deleted**, because `CLAUDE.md` says a rejection is recorded with its reason or the same item is filed again. **It comes back if the engine's own data turns out to have the same gap** - and for three of the five, measurement says it does not.
+
+**Read against `P-530`, 2026-09-21.** **Same as `P-513`: right about `spec/data/`, and
+`spec/data/` is in question.** The defect it reports is real either way - three rows cannot be
+read back - so if those files are replaced this is fixed by the replacement rather than by this
+proposal. **The third row it could not fix is the part worth keeping**, whatever notation wins.
+
+**`P-497`'s migration wrote three rows that cannot be read back.** Found by the code lane building a
+generator against the same data.
+
+```
+{line block:work seq:5 role:produce qty:`$where`'s density for that resource kind:resource}
+{line block:muster seq:4 role:produce qty:that citizen's strength kind:force}
+{line block:stand seq:3 role:produce qty:that unit's strength kind:force}
+```
+
+**A value with spaces in it cannot be told from the words after it.** `qty:that citizen's strength
+kind:force` reads as a `qty` of `that`, then four words belonging to nothing. **The notation has no
+multi-word value and these three rows assume one.**
+
+## And this lane's check reported exactly one such cell
+
+`P-497` asserted that precisely one cell of the release could not be represented - `move`'s *joined
+to `$from` by an edge the unit crosses* - and named it so that a second would fail the run.
+
+**It asked only about the Traits column.** Quantities were written straight through without being
+classified at all, so three unrepresentable cells passed a check built to catch exactly that, in the
+item that introduced the check. **A right answer about the wrong population**, inside the migration
+whose whole argument was that counts cannot ask whether each row is right.
+
+## What lands, and the shape is already in the file
+
+`spec/console.md` already has the thing these quantities are: **a path, which reads a trait of
+something a name is bound to.** And `P-497`'s `place-line:` already refers to another row of the
+same block by its sequence.
+
+> **A quantity that reads a trait names what it reads it from and what it reads.** Where a relation
+> writes such a quantity it uses two columns rather than one - which row of the block the thing came
+> from, and which trait of it is read. **A value is one word**, and a quantity that needs more than
+> one word is more than one fact.
+
+**So the three rows become:**
+
+```
+{line block:muster seq:4 role:produce qty-line:2 qty-trait:strength kind:force}
+{line block:stand  seq:3 role:produce qty-line:1 qty-trait:strength kind:force}
+```
+
+## The third one is not the same and is not fixed here
+
+**`$where`'s density for that resource reads a trait of a place, per resource.** It is not *the
+strength of the thing at row two*; it is a density indexed by which resource the block is for.
+**Two columns do not hold it**, and this lane is not inventing a third form for one row.
+
+**It is named rather than fixed**, which is the thing `P-497`'s check was supposed to do and did not.
+
+## What this costs you to read
+
+**Nothing in the game changes.** The release's Qty cells are untouched; this is about how the
+relational form writes what they already say, and about one row it still cannot.
+
+### P-513 - A relation names its columns, and nothing says so
+
+**to** sean · **status** withdrawn · **withdrawn** 2026-09-21 · **raised** 2026-09-14 · **kind** measured · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**Withdrawn 2026-09-21, and the reason is his.** *I am fine with dumping all rules and replacing them with thin engine* - so the form `spec/data/` should take stops being a question for him and becomes whatever the engine reads. **This item asks how to write a file whose writer is being replaced.**
+
+**And the engine's notation does not have this gap.** Every field in `prototypes/thin-engine/data/` is named, so a relation's column order is a canonical-form question rather than a parsing one - two writers cannot disagree about what a row means, only about how it looks.
+**Kept rather than deleted**, because `CLAUDE.md` says a rejection is recorded with its reason or the same item is filed again. **It comes back if the engine's own data turns out to have the same gap** - and for three of the five, measurement says it does not.
+
+**Read against `P-530`, 2026-09-21.** **This may not survive the change in direction.** It says a
+relation of `spec/data/` must declare its column order. The thin-engine states the same facts in
+its own notation, and whether `spec/data/` survives at all is open - so this is right about the
+file it names and the file may go. **Worth answering `P-530` first.**
+
+**`spec/data/` is the source now and nothing states what order its words go in.** `spec/console.md`
+fixes the order for a **description** - *`id` first, then every other trait alphabetically, then
+`occupied`, `free` and `capacity` last* - and **that rule describes none of the eight relations**.
+
+```
+carries      kind trait                          alphabetical would be: kind trait
+member       kind family                                                family kind
+limit        container contained n                                      contained container n
+above        orbit territory                                            orbit territory
+block        id recipe owner                                            id owner recipe
+line         block seq role qty kind place-bound                        block kind place-bound qty role seq
+constraint   block seq trait compare n                                  block compare n seq trait
+for          block seq kind                                             block kind seq
+```
+
+**Two of the eight happen to match and six do not** - `carries` and `above`, and nothing else -
+which is worse than none matching: the rule appears to hold until it is relied on. **This lane first
+wrote three**, from the table directly above it, and the code lane re-derived it to two.
+
+> **A relation names its columns, and a row gives them in that order.** The order is the relation's
+> own and is stated where the relation is declared. **A description's order is a different rule** -
+> it ranks traits because a description has no declaration to name them in.
+
+## What this is for, and it is the guarantee that is missing
+
+`spec/console.md` already says **the same state is always the same bytes**. **That covers a
+description and does not reach a relation row**, so two writers of `spec/data/` could disagree about
+column order and both be right. **The code lane hit it building a generator**: `Description::ordered`
+cannot write these files, because no single ranking gives both `carries` and `constraint` their
+order.
+
+## Where the measurement is weaker than the code lane's and stronger overall
+
+**Their example no longer separates the two.** They cited `carries` ordering kind before trait
+against `constraint` ordering trait before kind - and `constraint` has **no** `kind` column today,
+since `P-511` deleted the only row that had one. **The finding survives the example dying**: the
+eight orders above are measured from the files as they stand, and five of them the description rule
+gets wrong.
+
+## What it does not do
+
+**It does not choose the orders.** Each relation's is whatever it is declared to be, and the eight
+above are what the code lane's generator writes. **This says they must be declared**, not what they
+should say.
+
+### P-536 - `spec/data/` sits in `spec/` and holds the release's data, and your ruling today made the two differ
+
+**to** sean · **status** withdrawn · **withdrawn** 2026-09-21 · **raised** 2026-09-21 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `spec/data/`
+
+**Withdrawn 2026-09-21, and the reason is his.** *I am fine with dumping all rules and replacing them with thin engine* - so the form `spec/data/` should take stops being a question for him and becomes whatever the engine reads. **This item asks how to write a file whose writer is being replaced.**
+
+**And it stops being a divergence once the engine's data is the game's data.** This item reported that `spec/data/` holds the release's facts while `spec/` keeps more; under his answer neither file is the source and the question dissolves rather than being decided.
+**Kept rather than deleted**, because `CLAUDE.md` says a rejection is recorded with its reason or the same item is filed again. **It comes back if the engine's own data turns out to have the same gap** - and for three of the five, measurement says it does not.
+
+**You ruled today that the model keeps what `spec/` keeps and a release may defer it.**
+**`spec/data/` is generated from the release**, so it now holds less than `spec/` does, while
+living inside it.
+
+```
+                  named in spec/*.md   declared in spec/data/
+force                      yes                  no
+garrison                   yes                  no
+nature                     yes                  no
+biome                      yes                  no
+```
+
+**`spec/control.md` still has Force and Producing force. `spec/planet.md` still gives every
+territory a biome.** None of the four is declared in `spec/data/` any more, because this lane
+regenerated those files from the cut release this afternoon - which was right for the release and
+is now wrong for the directory's name.
+
+## The thing that makes it more than tidiness
+
+**Your own rule of `spec/README.md`**: *the game's data is decided in its data file*. **If that
+file is the release's, then the game's data is decided per delivery** - and a deferred feature has
+no data anywhere, not even the part of it `spec/` still states.
+
+**The code lane is living with the consequence today.** Its state report stands up a garrison
+because the model keeps one, and links `catalog.html#garrison`, which the catalog does not have
+because the catalog is generated from the release. **Twenty-seven dead links over three anchors**,
+asserted as a number so a fourth is a finding.
+
+## The three answers
+
+**`D1` - `spec/data/` holds the specification's data, and the release's is generated separately.**
+Then `force` and `biome` come back, the catalog and the state report agree, and a release's
+narrowing lives only in the release. **The cost is a second generated set and a name for it.**
+
+**`D2` - `spec/data/` holds the release's data and is renamed to say so.** Nothing regenerates;
+the directory moves or is called something that does not claim to be the specification. **The
+cost is that `spec/README.md`'s *the game's data is decided in its data file* stops having a file
+under `spec/` to point at.**
+
+**`D3` - leave it and accept that the specification's data is the current release's.** Cheapest,
+and it means a feature you have deferred has no data written down anywhere. **The twenty-seven
+dead links stay until the release grows back.**
+
+## What this lane would say, and it is weaker than usual
+
+**`D1` is the one that matches what you ruled**, and it is the most work. **`D3` is what is true
+today and nobody has to do anything.**
+
+**What tips it is `P-530`.** Under an executable specification, the tests in `spec/tests/` are the
+primary statement and `spec/data/` is a second form of the same facts. **If the tests carry the
+game, the question may be which of these files survives rather than which release they follow** -
+and `P-517` has been open on that since before today. **So this may be worth leaving until you
+answer `P-517`**, and this lane files it now because the divergence is real today and would
+otherwise be discovered rather than reported.
+
+### P-517 - `spec/data/` states the cases, and the rules are what you wanted to read
+
+**to** sean · **status** withdrawn · **withdrawn** 2026-09-21 · **raised** 2026-09-14 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `spec/data/`, and `C-114`
+
+**Withdrawn 2026-09-21, and the reason is his.** *I am fine with dumping all rules and replacing them with thin engine* - so the form `spec/data/` should take stops being a question for him and becomes whatever the engine reads. **This item asks how to write a file whose writer is being replaced.**
+
+**And the engine already folds.** Its 15 rules are each named once - `refresh` appears one time, not four - so `F1` is what the thing that runs does, and `spec/data/`'s four `refresh` blocks are the unfolded form of a rule the engine states once.
+**Kept rather than deleted**, because `CLAUDE.md` says a rejection is recorded with its reason or the same item is filed again. **It comes back if the engine's own data turns out to have the same gap** - and for three of the five, measurement says it does not.
+
+**Read against `P-530`, 2026-09-21.** **This is the one the change in direction most likely
+retires.** It asks whether `spec/data/` should state four rules with their cases or thirty-six
+blocks. If the tests become the primary statement, the question is about a file that may not exist
+- **and the underlying observation still holds**: fifteen blocks that are four rules is a fact
+about the game, and the prototype folded exactly this kind of repetition away.
+
+**Neither of your first two, and it is measurable rather than a matter of blame.** Normalizing did
+not make this complexity. **It removed the layout that was hiding it.**
+
+## What the data actually holds
+
+```
+{block id:refresh-citizen-bearing    recipe:refresh owner:world}
+{block id:refresh-citizen-defending  recipe:refresh owner:world}
+{block id:refresh-citizen-laboring   recipe:refresh owner:world}
+{block id:refresh-extractor-working  recipe:refresh owner:world}
+{block id:refresh-unit-defending     recipe:refresh owner:world}
+{block id:refresh-unit-moving        recipe:refresh owner:world}
+```
+
+**Six blocks, identical in every respect but a `(kind, trait)` pair.** They are one rule - *put that
+count back at its maximum* - written out six times.
+
+| Recipe      | Blocks | Differing only in |
+| ----------- | ------ | ----------------- |
+| **refresh** | 6      | `(kind, trait)`   |
+| **discard** | 5      | `kind`            |
+| **stow**    | 2      | `kind`            |
+| **renew**   | 2      | `(kind, trait)`   |
+
+**Fifteen blocks of thirty-six are four rules and their cases.** The other twenty-one are each the
+only one of their name.
+
+## And the repository already has the word for it
+
+`docs/designing-rules.md`, about `reports/nogain.md`: **a family becomes its members, a density
+becomes its cases.** That describes the unfolding `nogain` does **in order to check**, which means
+the folded form is the one it thinks of as the rules. **The data is the unfolded form.**
+
+## Why this is not `P-497`'s doing and not yours
+
+**The release was already unfolded.** `releases/first-release.md` -> Recipes has six `refresh`
+blocks and five `discard` blocks, and has had since long before `spec/data/` existed. **`P-497`
+transcribed faithfully, which is what a migration should do.**
+
+**What changed is that the layout stopped hiding it.** In the markdown table the six `refresh` blocks
+are six rows among ninety-two, separated by blank continuation cells, and read as one paragraph of a
+long table. **As rows they are six things with six names, and six is a number you can see.**
+
+**So the complexity was always there and was always the release's.** You asked for relational; what
+arrived is relational and correct; **and the first thing it showed you is a thing worth knowing.**
+
+## The decision
+
+**`F1` - state the rules and let the reader unfold.** One `refresh` block with six cases, one
+`discard` with five. **Thirty-six blocks become twenty-five**, and `block` stops needing a written id
+for the twenty-one that are the only one of their name.
+
+**`F2` - state the cases, as now.** Every block stands alone and nothing has to be unfolded to be
+read. **The cost is that `refresh` is six things and a reader must notice they are one.**
+
+## What this lane would say, and it is less a recommendation than a connection
+
+**`F1` is `C-114`'s engine argued from the data side.** Your own words there: *if the data itself
+explodes in complexity, that tells us something needs to be unified.* **Fifteen blocks that are four
+rules is that reading, taken off the instrument you asked for.**
+
+**But folding requires the engine to unfold**, and nothing reads these files at run time yet. **So
+`F1` is not a change to `spec/data/` that stands on its own** - it is the first half of the
+restructuring you have not decided, and this lane would rather name that than smuggle it in as
+tidying.
+
+### P-516 - Moving resources: put or consume-and-produce, and how the fuel says who burnt it
+
+**to** sean · **status** withdrawn · **withdrawn** 2026-09-21 · **raised** 2026-09-14 · **kind** invented · **shape** an instruction · **asks** a decision · **into** `releases/first-release.md` -> Recipes, and `spec/console.md` if the notation moves
+
+**Withdrawn 2026-09-21, and the reason is his.** *I am fine with dumping all rules and replacing them with thin engine* - so the form `spec/data/` should take stops being a question for him and becomes whatever the engine reads. **This item asks how to write a file whose writer is being replaced.**
+
+**And the engine has already answered it by building.** `move` exists in `prototypes/thin-engine/data/friendly/rules.4x` with its clauses written out; whichever of `M1` to `M3` and `A` to `D` it amounts to is a fact to read off the rule rather than a choice to make.
+**Kept rather than deleted**, because `CLAUDE.md` says a rejection is recorded with its reason or the same item is filed again. **It comes back if the engine's own data turns out to have the same gap** - and for three of the five, measurement says it does not.
+
+**Read against `P-530`, 2026-09-21.** **The notation question may have been answered elsewhere.**
+This asks whether moving a resource is a `put` or a consume-and-produce, in the release's Recipes
+table and `spec/console.md`. The thin-engine has built `move` and has its own answer. **Before
+deciding `M1` to `M3` and `A` to `D`, it is worth asking what the prototype does and whether this
+question is now about a notation being retired.**
+
+**You are declaring resources with the unit and letting the interface default.** The command is the
+same under every option below:
+
+```
+{move unit:transport from:1 to:2 metal:7 energy:2}
+```
+
+## First, the thing you were worried about is not a problem
+
+**Energy not balancing is correct and checked.** `spec/invariants.md`: *no sequence of rules ends
+holding **more** than it began with.* **Ending with less is not what that forbids.** A move burns
+fuel, the star is where fuel comes from, and the arithmetic that would fail is a rule that **made**
+energy from nothing.
+
+**So no option here has to make energy balance**, and one that did would be hiding the cost rather
+than paying it.
+
+## Second, and this lane had it wrong until Sean pushed on it
+
+**The first version of this item said: `put` for what has an `id`, `consume` and `produce` for what
+is counted.** Sean: *I am not so sure put applies to units anymore... if a 100 identical transports
+are moving 1000 resources it is not clear that there is any substantive difference between the units
+and the resources.*
+
+**He is right, and the measurement is worse than he put it.**
+
+```
+kinds carrying an `id`        territory, orbit
+put rows on either of them    0 of 17
+```
+
+`releases/first-release.md` justifies `put` as *the same thing and not a new one, **so what has an
+identity keeps it***. **That sentence is true of no row in the game.** Every put is on a `unit`, a
+`citizen`, an `extractor`, a `thing` or a `nature`, and not one of those carries an `id`.
+
+## What `put` is actually for, which is in the code and not in the release
+
+`crates/game-console/src/petri.rs`: **a count is a place of its own, and the kind's own place is
+untouched.** *A citizen that spends its `laboring` is the same citizen afterwards, so the arc is on
+`citizen laboring` and nothing goes in or out of `citizen`.* **Drawing it on the kind instead would
+show `create labor` eating a citizen.**
+
+**So `put` is about a state change not reading as a destruction**, and has nothing to do with
+identity. The release names the wrong reason, and names it in the one place a reader would look.
+
+## And that sharpens where the line falls
+
+```
+put rows that change a state, in place     16
+put rows that change a place               1     move, `moving one less` at `$to`
+```
+
+> **A `put` is a change of state where the thing already is. A change of place is a `consume` where
+> it was and a `produce` where it is.**
+
+**Sixteen of seventeen already obey that.** The exception is `move`, which crosses to `$to` with a
+put - and it is the row Sean was looking at when he said a unit and a resource are not different.
+**They are not.** Both are counted things changing place, so both are consumed at one end and
+produced at the other:
+
+| Recipe   | Owner  | Role    | Qty | Kind | Traits            | Where   |
+| -------- | ------ | ------- | --- | ---- | ----------------- | ------- |
+| **move** | player | consume | 1   | unit | moving at least 1 | `$from` |
+|          |        | produce | 1   | unit | moving one less   | `$to`   |
+
+**`put` then never names a place**, which is a check a tool can make.
+
+## `M1` - consume at one end and produce at the other
+
+| Recipe   | Owner  | Role    | Qty | Kind   | Traits            | Where   |
+| -------- | ------ | ------- | --- | ------ | ----------------- | ------- |
+| **move** | player | require | 1   | unit   | moving at least 1 | `$from` |
+|          |        | put     |     | unit   | moving one less   | `$to`   |
+|          |        | consume | 7   | metal  |                   | `$from` |
+|          |        | produce | 7   | metal  |                   | `$to`   |
+|          |        | consume | 1   | energy |                   | `$from` |
+
+**The metal balances inside the rule and the energy does not, and the reader can see which is
+which.** The cost of `M1` is that seven is a constant in a rule, and `spec/invariants.md` says *a
+rule's amounts are constants* - so a haul of seven and a haul of three are two rules, or one rule
+fired seven times and three times.
+
+## `M2` - give `put` a quantity and a place
+
+```
+|          |        | put     | 7   | metal  |                   | `$to`   |
+```
+
+**One row instead of two**, and it reads as what it is: the same metal, elsewhere. **It costs the
+sentence that says a put has no quantity**, and that sentence is what currently tells a reader that
+`put` never creates anything. **Relaxing it is a change to the notation, not to this recipe.**
+
+## `M3` - say nothing, because `P-509` already moved it
+
+**Rows mention no metal at all.** `spec/logistics.md`, promoted: *a unit moving out of a place is
+given an amount of each kind, no more than its own capacity for that kind, and that amount joins the
+number the new place holds.* **The haul is a containment rule and the command's argument feeds it.**
+
+**The cost is that the net cannot see it.** `reports/petri.md` draws what the rows say, so a haul
+would be invisible to the drawing and to the weighting - **which is safe, because moving conserves,
+and blind, because nothing would catch a haul that did not.**
+
+## And three ways to say whose fuel it was
+
+**`E1` - as now.** `consume 1 energy $from`. **Nothing says the vehicle paid**; a reader infers it
+from the rule being `move`.
+
+**`E2` - the consume names the payer.** The row points at the unit's row, the way `P-514` proposes a
+quantity point at a row: `qty-line:` for a quantity, and something like `by-line:` for a cost.
+**Explicit, and a new column for one use.**
+
+**`E3` - the move is free and being ready costs.** `move` spends `moving one less` and consumes
+nothing; `refresh` pays for putting it back:
+
+| Recipe      | Owner | Role    | Qty | Kind   | Traits                | Where |
+| ----------- | ----- | ------- | --- | ------ | --------------------- | ----- |
+| **refresh** | world | require | 1   | unit   |                       |       |
+|             |       | consume | 1   | energy |                       |       |
+|             |       | put     |     | unit   | moving at its maximum |       |
+
+**Then the energy is visibly what a vehicle burns to be able to move**, rather than a toll on the
+move itself, and `move` becomes purely a change of place. **The cost is that it is paid at the
+turn's end rather than when you move**, so a unit moves on credit and is charged later - and a unit
+that moved into a place with no energy stops being ready rather than being refused.
+
+## The four, in game notation
+
+**The command is the same under all four.**
+
+```
+{move unit:transport from:1 to:2 metal:7 energy:2}
+```
+
+**And writing them this way found something the relational tables hid** - it is the section below
+this one.
+
+**`A` - a place change is a consume and a produce, whatever is moving. `move` pays.**
+
+```
+{block id:move recipe:move owner:player}
+{line block:move seq:1 role:require qty:1 kind:place place-bound:from}
+{line block:move seq:2 role:require qty:1 kind:place place-bound:to}
+{line block:move seq:3 role:consume qty:1 kind:unit place-bound:from}
+{constraint block:move seq:3 trait:moving compare:at-least n:1}
+{line block:move seq:4 role:produce qty:1 kind:unit place-bound:to}
+{constraint block:move seq:4 trait:moving compare:exactly n:0}
+{line block:move seq:5 role:consume qty:7 kind:metal place-bound:from}
+{line block:move seq:6 role:produce qty:7 kind:metal place-bound:to}
+{line block:move seq:7 role:consume qty:1 kind:energy place-bound:from}
+```
+
+**`B` - `A` without `seq:7`, and `refresh` pays instead. RECOMMENDED.**
+
+```
+{block id:refresh-unit-moving recipe:refresh owner:world}
+{line block:refresh-unit-moving seq:1 role:require qty:1 kind:unit}
+{line block:refresh-unit-moving seq:2 role:consume qty:1 kind:energy}
+{line block:refresh-unit-moving seq:3 role:put kind:unit}
+{constraint block:refresh-unit-moving seq:3 trait:moving compare:at-maximum}
+```
+
+**`C` - the unit is put and the cargo is not. Closest to today.**
+
+```
+{line block:move seq:3 role:require qty:1 kind:unit place-bound:from}
+{constraint block:move seq:3 trait:moving compare:at-least n:1}
+{line block:move seq:4 role:put kind:unit place-bound:to}
+{constraint block:move seq:4 trait:moving compare:one-less}
+{line block:move seq:5 role:consume qty:7 kind:metal place-bound:from}
+{line block:move seq:6 role:produce qty:7 kind:metal place-bound:to}
+{line block:move seq:7 role:consume qty:1 kind:energy place-bound:from}
+```
+
+**`D` - a put may carry a quantity, and everything moving is put.**
+
+```
+{line block:move seq:4 role:put qty:1 kind:unit place-bound:to}
+{line block:move seq:5 role:put qty:7 kind:metal place-bound:to}
+{line block:move seq:6 role:consume qty:1 kind:energy place-bound:from}
+```
+
+## What the notation showed and the tables did not
+
+**`compare:one-less` cannot sit on a `produce` row.** *One less* is relative, and a produced thing is
+a new token - **there is nothing for it to be one less than.** Under `A` and `B` it has to become
+`compare:exactly n:0`, which is what the blocks above say.
+
+**That works here only because `moving` is 0 or 1.** `docs/designing-rules.md` measured it: *moving
+is 0 or 1 and `move` requires moving at least 1*. **So the exact value is writable for this game and
+not in general** - a counter with a range would need the produced row to refer to the consumed one,
+and nothing in the relation can say that.
+
+**`C` and `D` do not have the problem**, because a put changes a thing that is already there and
+*one less* has its referent. **That is a real point for `C` and `D` that the tables did not show**,
+and it is the first argument against the recommendation that came from the data rather than from
+taste.
+
+## What separates them, in one line each
+
+|         |                                                                                                                                                                           |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`A`** | a unit and a resource are the same kind of thing, which is what you said. Energy is still a toll on the move and nothing says who paid                                    |
+| **`B`** | the same, and the fuel is visibly what a vehicle burns to be ready. **`put` then never names a place**, which a tool can check                                            |
+| **`C`** | keeps `put` for the unit on a justification the release states and no row satisfies - zero of seventeen puts are on a kind carrying an `id`. **Keeps `one-less` working** |
+| **`D`** | one row per thing moved, and it costs the sentence *a put has no quantity*, which is what currently tells a reader that a put makes nothing                               |
+
+## What `B` costs, said plainly
+
+**The charge lands at the turn's end rather than when you move.** A unit moves on credit; a unit
+that moved into a place with no energy **stops being ready** next turn rather than being refused
+this one. **That is a different game, not a different notation**, and it is the part of `B` that is
+yours rather than this lane's.
+
+**And it does not help with scale.** `qty:1` on the unit row moves one, so a hundred transports is
+still `repeat:100` under every option here. **Your hundred-transports observation is answered as a
+question about sameness and not as one about firing**, and the second is still open.
+
+## What this lane would pick
+
+**`B`, and less confidently than an hour ago.** A change of place is not a change of state, and the
+net has two places to draw it between; the fuel stops needing an explanation once what is bought is
+readiness rather than distance.
+
+**What weakened it is the `one-less` finding**, and it came from writing the blocks in game notation
+rather than as tables. `B` can only say *one less* as *exactly zero*, and that is writable because
+`moving` is 0 or 1 today. **A trait with a range would break it and nothing in the relation could
+say what the produced thing is one less than.**
+
+**So `C` is the answer if you expect a counter with a range**, and `B` if you do not. **This lane
+does not know which**, and that is a question about the game rather than about the notation.
+
+**`M2` is the one to take if the seven matters more than the sentence**, and that is a judgement
+about how often a haul will be a constant rather than a repeat.
+*Nothing is open.*
