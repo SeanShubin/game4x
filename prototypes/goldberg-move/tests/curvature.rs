@@ -25,6 +25,50 @@ fn dot(one: Vec3, two: Vec3) -> f64 {
     one.x * two.x + one.y * two.y + one.z * two.z
 }
 
+/// Where the drawn surface is **directly under a direction**, on the border between two cells.
+///
+/// **`X-39`.** The first version of this test sampled the border at the midpoint of its two
+/// corners and called that *where the drawn surface is over the middle of that border*. A step
+/// crosses its border at the midpoint of the two **centres**, which is not the midpoint of the
+/// two **corners** - on a hexagon-hexagon border it projects to `t = 0.401` - so the number was
+/// the right quantity read at a point that is not the extremum.
+///
+/// **The border is a straight segment between two corners and the direction lies in its
+/// plane**, so the crossing is exact rather than searched for. A spherical Voronoi border lies
+/// on the great circle equidistant from the two centres, whose plane has normal `a - b`; the
+/// step's low direction is `a + b`, which is perpendicular to that normal and therefore in the
+/// plane the corners span. So a `t` always exists, and this solves for it.
+fn border_under(one: Vec3, two: Vec3, direction: Vec3) -> Vec3 {
+    // `P(t) = one + t(two - one)` is parallel to `direction` when `P × direction = 0`.
+    let along = Vec3::new(two.x - one.x, two.y - one.y, two.z - one.z);
+    let cross = |u: Vec3, v: Vec3| {
+        Vec3::new(
+            u.y * v.z - u.z * v.y,
+            u.z * v.x - u.x * v.z,
+            u.x * v.y - u.y * v.x,
+        )
+    };
+    let (top, bottom) = (cross(one, direction), cross(along, direction));
+    // **The component with the largest denominator**, because the other two can be near zero
+    // wherever the segment happens to lie, and dividing by one of those is where the exactness
+    // would be lost.
+    let pick = [
+        (bottom.x.abs(), -top.x / bottom.x),
+        (bottom.y.abs(), -top.y / bottom.y),
+        (bottom.z.abs(), -top.z / bottom.z),
+    ];
+    let t = pick
+        .iter()
+        .max_by(|a, b| a.0.total_cmp(&b.0))
+        .expect("three components")
+        .1;
+    Vec3::new(
+        one.x + along.x * t,
+        one.y + along.y * t,
+        one.z + along.z * t,
+    )
+}
+
 /// Every pair of neighbouring territories, from both ends.
 fn edges(board: &Board) -> Vec<(u32, u32)> {
     let mut found = Vec::new();
@@ -148,16 +192,8 @@ fn every_straight_step_passes_under_the_border_it_crosses() {
 
         let corner = |at: u32| solid.corners[at as usize].vector();
         let (one, two) = (corner(shared[0]), corner(shared[1]));
-        // Where the drawn surface is over the middle of that border.
-        let over = Vec3::new(
-            (one.x + two.x) * 0.5,
-            (one.y + two.y) * 0.5,
-            (one.z + two.z) * 0.5,
-        );
-        let surface = (over.x.powi(2) + over.y.powi(2) + over.z.powi(2)).sqrt();
-        border_lowest = border_lowest.min(surface);
 
-        // And where the straight step is over the same place.
+        // The straight step's low point, which is the midpoint of the two centres.
         let (a, b) = (board.centres[from as usize], board.centres[to as usize]);
         let middle = Vec3::new(
             (a.x + b.x) * 0.5 * ABOVE,
@@ -165,6 +201,12 @@ fn every_straight_step_passes_under_the_border_it_crosses() {
             (a.z + b.z) * 0.5 * ABOVE,
         );
         let step = (middle.x.powi(2) + middle.y.powi(2) + middle.z.powi(2)).sqrt();
+
+        // **The surface directly under that point** - `X-39`, and not the midpoint of the two
+        // corners, which is a different place on every hexagon-hexagon border.
+        let over = border_under(one, two, middle);
+        let surface = (over.x.powi(2) + over.y.powi(2) + over.z.powi(2)).sqrt();
+        border_lowest = border_lowest.min(surface);
 
         worst = worst.max(surface - step);
         least = least.min(surface - step);
@@ -183,6 +225,11 @@ fn every_straight_step_passes_under_the_border_it_crosses() {
     );
 
     // # The finding, and it is not the one this test first asserted
+    //
+    // **The deepest a step sinks below its border is `0.00379` of a radius** - measured at the
+    // point the step is actually lowest, since `X-39`. It read `0.00331` while the border was
+    // sampled at the midpoint of its two corners, which is a different place on every
+    // hexagon-hexagon border and understated the sag by 13%.
     //
     // **A step is under the border it crosses on some of the 240 and over it on others.** The
     // first draft of this test claimed *every* one and asserted the maximum, which is the
@@ -263,6 +310,11 @@ fn the_arc_clears_every_border_it_crosses() {
         // **The segments and not only their ends.** The ends are on the sphere by
         // construction; what a straight chord did wrong was happen between two points that
         // were both fine, so the midpoint of each segment is where this has to look.
+        //
+        // **A segment's midpoint is right here and was wrong four lines up** - `X-39`. A
+        // chord between two points at one radius is lowest at its own midpoint, which is why
+        // this samples there; a step's low point over a *border* is somewhere else entirely,
+        // and the first version of this file used the same word for both.
         for pair in points.windows(2) {
             let middle = Vec3::new(
                 (pair[0].x + pair[1].x) * 0.5,
