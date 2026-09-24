@@ -69,6 +69,43 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-169 - `intent` is 64 uses of the code's vocabulary and zero of the specification's
+
+**to** spec · **status** open · **raised** 2026-09-24 · **source** measuring common game-development terms for `P-551`
+
+**This lane's own work, filed because the measurement turned it up and it is not `P-551`'s
+question.**
+
+```
+intent   spec/*.md    0
+         crates/src  64
+```
+
+**`intent` is a standard term in simulation games** - input becomes an intent, which is validated
+and then applied to the simulation - and **the code leans on it while `spec/` never defines it.**
+`crates/planet-model/src/world.rs` has `no_intent_sees_another_intents_effect_within_a_turn`, which
+is a rule about how a turn resolves stated only in a test's name.
+
+## Why this is not `P-551`
+
+**`P-551` asks what to call interface state.** This is a word already in use on the other side of
+that line, and whatever `P-551` decides, **the specification will still owe a definition of a term
+its own artifact uses sixty-four times.**
+
+## What it probably needs, not proposed here
+
+**Either a promotion defining it** - an intent is what a command expresses before the rules have
+judged it - **or a finding that it is the code's internal word and should not appear in `spec/` at
+all.** The second is a real possibility: `spec/console.md` already has *a command*, and an intent
+may be an implementation step between parsing and applying.
+
+**What decides it is whether any rule in `spec/` needs to talk about the moment between the two.**
+`no_intent_sees_another_intents_effect_within_a_turn` suggests one does - simultaneity within a
+turn is a rule of the game - and `spec/turn.md` states it without the word.
+
+**Not urgent.** Nothing is wrong; a term is undefined in the document that governs the thing using
+it.
+
 ### S-168 - `move` takes two territories, so an Ark can never be selected to move
 
 **to** code · **status** open · **raised** 2026-09-24 · **source** measuring what stands between Sean and moving an Ark on the map, after `P-549`
