@@ -128,6 +128,23 @@ reported as the whole set. **Both are true sentences about a set the reader thin
 set**, and no care in the wording fixes it, because the omission is what makes it read as complete.
 **Enumerate rather than sample, and say what the filter was.**
 
+**The population is defined by the instrument, not by the directory.** Three lanes measured one
+coverage loss on 2026-09-24 and got three answers - 9 bold spans, 6, and 10 - because each wrote
+its own predicate. Only the last was right, and only because its author opened
+`crates/game-console/tests/quotations.rs` and read the extension set it actually sweeps:
+`rs`, `md`, `html`, `sh`, `ps1`. **`tools/research` is Python and JavaScript**, so a sweep of the
+directory finds 57 lines and a sweep of what the checker reads finds three. **A number measured
+over the directory is a true number about a set the checker never sees.**
+
+**And never suppress stderr on a path that is part of what you are counting.** This lens reported
+`tools/research` as *0 lines, 0 spans* from
+`grep -rn ... tools/research/src tools/research/tests 2>/dev/null | wc -l`. **There is no `src` and
+no `tests` there** - grep exited 2 saying so, `2>/dev/null` swallowed it, and `wc -l` said zero.
+The zero was the shell reporting a missing path, and it was used to tell two lanes *the entire loss
+is yours*. **`2>/dev/null` over a path you are measuring converts *no such population* into *no
+offences*** - which is this whole section's failure, self-inflicted, with the warning silenced by
+hand.
+
 **And the remedy is executable, which is the part worth keeping.**
 `tools/spec/tests/touching.rs` asserts that both the `built` and `open` populations are non-empty
 before trusting an answer about them - *a repository with no `built` item would pass this test by
