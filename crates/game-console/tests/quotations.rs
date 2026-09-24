@@ -88,6 +88,30 @@ const OURS: [&str; 5] = ["crates", "prototypes", "scripts", "tools", "hooks"];
 ///
 /// **`spec` is named**, because the specification lane has no `lenses/` entry to be found by.
 /// It is the one hand-written name here and it is the one that cannot be derived.
+///
+/// # What excluding them costs, measured rather than assumed
+///
+/// **Nothing sweeps these three.** There is no second pass and no listing, so a quotation that
+/// goes stale in another lane's tool directory is caught by nothing here. That is a real loss
+/// and it is not evenly spread.
+///
+/// Counted 2026-09-24 over the Rust files of each, asking how many lines name a file of the
+/// specification, of a release or of the documentation:
+///
+/// - `tools/spec` - 55 such lines, 6 of which open an emphasis span after the name
+/// - `tools/research` - none, and none
+/// - `tools/quality` - none, and none
+///
+/// **So the whole of the loss is one lane's**, and the two lenses would be instruments over a
+/// population of zero. It becomes real for a lens the first time one of them quotes the
+/// specification in a tool of its own.
+///
+/// **The quality lens counted the same thing and got 57 and 9.** The zeros agree exactly and
+/// the two larger figures do not, because the predicates differ rather than the data: this one
+/// wants a name ending `.md` and an emphasis marker later on the same line, and a doc comment
+/// that wraps puts the marker on the next one. **Neither number is the number**, and the
+/// figures are kept here with what was asked rather than reconciled into one that claims more
+/// than either measured.
 fn other_lanes() -> Vec<String> {
     let mut out = vec!["spec".to_string()];
     if let Ok(entries) = std::fs::read_dir(root().join("lenses")) {
