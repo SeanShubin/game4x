@@ -24,6 +24,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-161** - `97334bc` S-161 and rule 4's check: the layer membership is stated, and now held · still open in `docs/notes/proposals.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
+- **X-39** - `307d675` X-39: the border is sampled under the step, not at the midpoint of its corners · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
