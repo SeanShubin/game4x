@@ -25,6 +25,9 @@ specific rule.
 - Every change to game state is representable and executable as a console command
 - Anything the player can do through a surface can be done by typing. A surface may be quicker or
   clearer; it is never more capable.
+- **And the whole game can be played without typing.** The surfaces are as capable as the
+  console, not merely covered by it - so the two clauses together say the two are equal rather
+  than one containing the other.
 
 ## Control without tedium
 

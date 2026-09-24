@@ -16,12 +16,10 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
   neighbours, and exactly twelve have five
 - The smallest Goldberg polyhedron is the dodecahedron, at 12 territories, so 12 is the
   smallest planet size
-- There are 5 planet sizes, corresponding to the 5 smallest Goldberg polyhedrons
-  - tiny: 12
-  - small: 32
-  - medium: 42
-  - large: 72
-  - huge: 92
+- There are 5 planet sizes, corresponding to the 5 smallest Goldberg polyhedrons, and **each is
+  named for its count**: `tiny-12`, `small-32`, `medium-42`, `large-72`, `huge-92`. **The number
+  in the name is the number of territories**, so the pairing is stated once and a name that
+  disagrees with its polyhedron is a defect rather than a choice.
 
 ## Distance
 

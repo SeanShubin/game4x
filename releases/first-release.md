@@ -14,7 +14,6 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - A mobile unit may move across a boundary to start another self-contained territory
 - The twelve territories and the thirty adjacencies between them are generated from the
   twelve-faced Goldberg polyhedron rather than stated by hand
-- The rule editor is not in this release
 
 ### Territory resources
 
@@ -525,7 +524,7 @@ generated view does.
 ## Out of scope
 
 Whole areas of the specification this release does not touch, so the omission reads as deliberate.
-**`spec/` keeps all three**; this is scheduling and not a change to the game.
+**`spec/` keeps all four**; this is scheduling and not a change to the game.
 
 Sean, 2026-09-20: *I am cutting nature and force from this prototype because I don't think they are
 necessary to vet the core game loop: start with an ark -> develop a planet -> launch an ark.*
@@ -538,5 +537,7 @@ necessary to vet the core game loop: start with an ark -> develop a planet -> la
   release has four steps rather than five
 - **Biomes** - `spec/planet.md`, *each territory has a biome*. A territory's numbers are stated
   directly in *Territory resources* rather than guided by a biome
+- **The rule editor** - `spec/interface.md` -> Surfaces. It is for automating the game to the
+  player's preference, and this release has nothing to automate
 
 ## Open questions

@@ -43,6 +43,21 @@ hypothetical.
 A name is one word. **Where it needs more than one, the words are joined with dashes** - `in-play`,
 not `"in play"`. **Nothing in a data file is quoted.**
 
+**A trait may admit prose, and a value of one is quoted.** That is the one exception, and it is
+narrow on purpose: **a quoted value whose trait does not admit prose is a defect**, and so is an
+unquoted sentence. **Prose is shown to a person and never compared** - nothing sorts it, matches
+on it, or reads a word out of it.
+
+**And the converse holds: a name is compared and never shown.** So what the player reads and
+what the game reads are disjoint - a displayed value that is not prose is a defect, and a
+compared value that is prose is another.
+
+**Three kinds of surface, and this binds one of them.** It binds every surface that shows the
+player the game - the map, a territory, a menu, the status bar. It does not bind an **admin or
+debug** surface, because addressing the machine is what one is for: the console, the data
+browser, the debug view. And it does not bind the **rule editor**, because the names it shows
+are the ones the player typed into it.
+
 **A thing's own identifier is `id`.** A field named for a kind is a reference to one - so
 `{extractor territory:1}` is an extractor in territory 1, and `{territory id:1}` is the territory
 itself.
@@ -195,6 +210,11 @@ commands are the player's recipes, offered only while the phase is design. `show
 
 - `run <file>` - run the commands in a file, as though they had been typed in its place
 
+**A command that writes commands appears as a comment.** What it wrote is the history - those
+are the commands that ran, and running the history again does what happened again. **The command
+that wrote them is a `#` line above them**, so a reader sees where they came from and a replay
+steps over it.
+
 And three that change nothing:
 
 - `show <subject>` reports what is true of it and what can be done with it. For each action the
@@ -206,6 +226,9 @@ And three that change nothing:
 Available only before `start`:
 
 - `create planet <size>` - make a planet and its territories
+- `{generate-planet size:<size> policy:<policy> seed:<seed>}` - make a planet and everything a
+  designed one needs, choosing what is not specified according to a policy. **The same seed and
+  the same policy give the same planet.**
 - `set resource <territory> <resource> <extractors> <density>` - give a territory its
   capacity and its density for one resource
 - `set force <territory> <force>` - set a territory's force of nature

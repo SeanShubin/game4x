@@ -301,6 +301,26 @@ pub const NOTHING_OPEN: &str = "*Nothing is open. Everything filed has been deci
 /// goes on saying it**, which is the same shape as the absence assertions the code lane
 /// retired the same morning - and the fix is the same one: derive it from the section rather
 /// than remember to change it.
+/// Both sides of a landing, computed together so that neither is written unless both succeed.
+///
+/// **`land` used to write the queue first.** On 2026-09-23 a `previous` that named no ledger row
+/// took `P-540`'s block out of the queue and wrote no row, and the error spoke only of the
+/// ledger - which is how a promotion loses its record while reporting a failure about something
+/// else. **Returning a pair is what makes the all-or-nothing checkable**, because a caller with
+/// two strings in hand cannot half-apply them.
+pub fn landing(
+    queue: &str,
+    ledger: &str,
+    id: &str,
+    previous: &str,
+    row: &str,
+) -> Result<(String, String), Problem> {
+    let without = remove_block(queue, id)?;
+    let settled = say_if_empty(&without)?;
+    let with_row = insert_ledger_row(ledger, previous, row)?;
+    Ok((settled, with_row))
+}
+
 pub fn say_if_empty(text: &str) -> Result<String, Problem> {
     let lines: Vec<&str> = text.lines().collect();
     let Some(open) = lines.iter().position(|line| line.trim() == "## Open") else {
@@ -465,6 +485,39 @@ Some reasoning, which belongs to P-1.
         let twice = "### P-1 - one\n\n### P-1 - one again\n";
         assert!(block_of(twice, "P-1").is_err(), "two headings is a guess");
         assert!(remove_block(text, "P-1").is_ok());
+    }
+
+    /// **A landing that cannot write its ledger row does not take the block out either.**
+    ///
+    /// This is the check the defect of 2026-09-23 did not have. `land` wrote the queue, then
+    /// failed inserting the row, and `P-540` was gone from the queue with nothing in the record
+    /// to say where it went - the error naming only the ledger. **The test asserts the refusal
+    /// hands back nothing to write**, which is the property, rather than asserting the order of
+    /// two statements, which is the implementation.
+    #[test]
+    fn a_landing_whose_row_has_nowhere_to_go_keeps_the_block() {
+        let queue = "## Open
+
+### P-9 - a title
+
+> the approved words
+
+### P-8 - another
+";
+        let ledger = "| P-1, a thing | `spec/x.md` | 2026-09-01 |
+";
+        let row = "| P-9, a title | `spec/x.md` | 2026-09-23 |";
+
+        // P-7 names no ledger row, which is the mistake that was made.
+        let refused = landing(queue, ledger, "P-9", "P-7", row);
+        assert!(refused.is_err(), "a previous that names no row must refuse");
+
+        // And the good case gives both halves, so the caller cannot half-apply them.
+        let (settled, with_row) = landing(queue, ledger, "P-9", "P-1", row).expect("landable");
+        assert!(!settled.contains("### P-9 - "), "{settled}");
+        assert!(settled.contains("### P-8 - another"), "{settled}");
+        let rows = with_row.lines().filter(|l| l.starts_with("| P-9,")).count();
+        assert_eq!(rows, 1, "one row for P-9, over 2 rows: {with_row}");
     }
 
     /// The ledger grows by exactly one row, and the row is never matched whole.

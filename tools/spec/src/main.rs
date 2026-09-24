@@ -262,15 +262,17 @@ fn land(root: &Path, id: &str, previous: &str) -> Result<String, String> {
     // **The block and the ledger row are in two files now.** `decide/proposals.md` holds only
     // what waits on Sean, and the ledger of everything accepted is the record rather than a
     // queue - so landing removes from the one and writes to the other, and asserts both.
+    // **The row goes in before the block comes out.** Both halves are computed before either
+    // file is written, and the ledger is written first - so a bad `previous` refuses with
+    // nothing changed. Writing the queue first cost `P-540` its row on 2026-09-23: the item was
+    // gone, the insert failed on an id that names no row, and the error spoke only of the ledger.
     let queue_at = root.join(QUEUE);
-    let without = queue::remove_block(&read(&queue_at)?, id).map_err(|why| why.to_string())?;
-    let settled = queue::say_if_empty(&without).map_err(|why| why.to_string())?;
-    write(&queue_at, &settled)?;
-
     let ledger_at = root.join(OUTBOX);
-    let with_row =
-        queue::insert_ledger_row(&read(&ledger_at)?, previous, &row).map_err(|w| w.to_string())?;
+    let (settled, with_row) =
+        queue::landing(&read(&queue_at)?, &read(&ledger_at)?, id, previous, &row)
+            .map_err(|why| why.to_string())?;
     write(&ledger_at, &with_row)?;
+    write(&queue_at, &settled)?;
 
     if read(&queue_at)?.contains(&format!("### {id} - ")) {
         return Err(format!(

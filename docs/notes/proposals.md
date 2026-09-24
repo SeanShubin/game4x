@@ -69,6 +69,41 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-156 - Twenty-three promoted proposals are in no file at all, and the record is where they should be
+
+**to** spec · **status** open · **raised** 2026-09-23 · **source** `spec land P-540 P-511` refusing, and the measurement that followed
+
+**Measured.** Over `P-512` through `P-544` - 33 ids - four are in the ledger, six are still open
+in `decide/`, and **twenty-three are in no file in the repository**. Over `P-1` through `P-544` the
+same count is thirty-five.
+
+```
+nowhere  P-512 P-515 P-518 P-519 P-520 P-521 P-522 P-523 P-524 P-525 P-526 P-527
+         P-528 P-529 P-530 P-531 P-532 P-533 P-534 P-535 P-537 P-538 P-539
+```
+
+**`CLAUDE.md` says an open proposal lives in `decide/` and a landed one lives in the record.**
+These landed in `spec/` and left no row, so the ledger's last entry is `P-511` and dated
+2026-09-14 - which reads as *nothing has been promoted in nine days* and is false.
+
+## One cause is verified and the rest is not
+
+**Measured on `P-540` today**: `land` wrote the queue before the ledger, so a `previous` naming
+no row removed the block and wrote nothing, and the error message spoke only of the ledger.
+Fixed, and `queue::landing` now returns both halves so neither is written unless both succeed.
+
+**I think the reason for the other twenty-two is that `land` was simply never run** - `after` and
+`replacing` assert the text and say nothing about the ledger, so a promotion looks complete when
+it is not. **That half is an inference and not a measurement**, and the two are worth telling
+apart because they need different repairs: the first needed a fix, the second needs the tool to
+refuse to call a promotion done.
+
+## What this needs
+
+**Twenty-three rows, each from its own promoting commit** rather than from memory - the commit
+says what landed where, and `git log` has all of them. **Not urgent and not nothing**: nothing is
+broken in `spec/`, and the one file whose job is to say what was decided cannot currently say it.
+
 ### S-155 - A bad planet size does not say what was expected, which is a rule rather than a courtesy
 
 **to** code · **status** open · **raised** 2026-09-23 · **source** `P-542`, and `spec/console.md` -> Errors
@@ -7210,6 +7245,10 @@ work the release exists to order.
 | P-506, The notation and the two models get their names                                                                       | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-14 |
 | P-509, Resources sit in the territory, and are allocated only when something leaves                                          | `spec/logistics.md` -> Containment                                                                                                                                                                       | 2026-09-14 |
 | P-511, What pooling does to moving: who hauls, where the fuel comes from, and the end of `refuel`                            | `spec/logistics.md` -> Containment, and `releases/first-release.md` -> Recipes                                                                                                                           | 2026-09-14 |
+| P-540, One sentence so a test can say what the status bar said                                                               | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-23 |
+| P-542, `generate-planet`, and a size named for its count                                                                     | `spec/planet.md` -> Shape, and `spec/console.md` -> Commands                                                                                                                                             | 2026-09-24 |
+| P-543, What the player reads and what the game reads are disjoint                                                            | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-24 |
+| P-544, The rule editor is for automation, and the game needs neither it nor typing                                           | `spec/interface.md` -> Surfaces, and `spec/invariants.md` -> Everything is expressible                                                                                                                   | 2026-09-24 |
 | P-497, `spec/data/` normalized: seven relations, every count re-derived                                                      | `spec/data/`                                                                                                                                                                                             | 2026-09-14 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |

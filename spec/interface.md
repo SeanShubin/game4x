@@ -19,7 +19,10 @@ The game presents five surfaces, all reachable from the front end, in every buil
 - **The data browser** - the game's own data, read directly, in two views: every entity with its
   components, and the same facts normalized into a table for each relation. **Both name every
   table and every column, whether or not anything is in it.**
-- **The rule editor** - the rules the player has, read and changed
+- **The rule editor** - the rules the player has, read and changed. **It is for automating the
+  game to the player's preference**: how a scout behaves, a script for taking a planet, a supply
+  line. **It is the only gameplay surface where the player types text to name things**, and the
+  game can be played through without ever opening it.
 - **The debug view** - how the data is actually held, shown as it is held. **It is an output and
   not a path**: nothing in the game reads through it, and it is the one place the layout every
   other surface is shielded from can be seen

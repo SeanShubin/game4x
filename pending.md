@@ -8,11 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-542** - `generate-planet`, and a size named for its count · `decide/proposals.md`
-- **P-544** - The rule editor is for automation, and the game needs neither it nor typing · `decide/proposals.md`
-- **P-543** - What the player reads and what the game reads are disjoint · `decide/proposals.md`
 - **P-541** - Force, garrison and nature leave the specification; biome comes back to the data · `decide/proposals.md`
-- **P-540** - One sentence so a test can say what the status bar said · `decide/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -30,9 +26,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-153** - `48927aa` S-153: thin-engine stops being a prototype and joins the gate · still open in `docs/notes/proposals.md`
 - **S-147** - `1ef0c07` S-147: reviewed/ is a column, and an orphaned record can be reached · still open in `docs/notes/proposals.md`
 - **S-144** - `58a6ba1` S-144: the model keeps what spec/ keeps, and the checks say which release defers what · still open in `docs/notes/proposals.md`
-- **P-542** - `d0cff42` P-542: L3 answered, and size:tiny-12 removes a triplication · still open in `decide/proposals.md`
-- **P-543** - `1058534` P-543 answered C1, and the cost was nine words when it is eighty · still open in `decide/proposals.md`
-- **P-540** - `294cb85` P-540: one notation or two, and my own precedent check narrowed the case against · still open in `decide/proposals.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 - **Q-96** - `4f89b71` Q-96, a stronger refresh test, corrected evidence, and the arrows · still open in `lenses/quality/outbox.md`
 
@@ -62,8 +55,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (36)
+### To spec (37)
 
+- **S-156** - Twenty-three promoted proposals are in no file at all, and the record is where they should be · `docs/notes/proposals.md`
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
@@ -108,7 +102,7 @@ like; what this cannot tell you is whether they all still hold together, which i
 it exists to ask.
 
 - `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310, P-342, P-362, P-375, P-379, P-382, P-385, P-397, P-412, P-421, P-427, P-431, P-495, P-492, P-400
-- `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366, P-378, P-396, P-417, P-418, P-443, P-448, P-451, P-452, P-454, P-460, P-462, P-464, P-479, P-481, P-482, P-484, P-504, P-506
+- `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366, P-378, P-396, P-417, P-418, P-443, P-448, P-451, P-452, P-454, P-460, P-462, P-464, P-479, P-481, P-482, P-484, P-504, P-506, P-540, P-543
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229, P-230, P-250, P-251, P-263, P-266, P-283, P-404, P-406, P-415, P-403
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210, P-286, P-288, P-308, P-312, P-314, P-331, P-407, P-434, P-461
 - `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290, P-371, P-374, P-391, P-433, P-487, P-505, P-509
