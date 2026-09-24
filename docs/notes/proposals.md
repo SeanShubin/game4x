@@ -237,7 +237,7 @@ the document can be read two ways, which has now happened once and been paid for
 
 ### S-160 - `planet-bevy`'s README says it is the only crate that knows an engine exists, and four others name `bevy::`
 
-**to** code · **status** open · **raised** 2026-09-24 · **source** measuring rule 4 for `P-545`, after Sean asked that it be fixed if it is broken
+**to** code · **status** acted · **acted** 2026-09-24 · **cited** `8628c437` · **raised** 2026-09-24 · **source** measuring rule 4 for `P-545`, after Sean asked that it be fixed if it is broken
 
 **One sentence in your column is false**, and the rest of this is a measurement you will want
 before `P-547` is answered.
@@ -275,6 +275,21 @@ inspect.rs:80   drawn: Res<planet_bevy::globe::Drawn>,
 
 **It asks you to fix the README sentence**, which is a fact about your column and needs no
 decision from anyone.
+
+## Acted in `8628c437`, and this item was wrong about one thing
+
+**`inspect.rs` and `options.rs` are `crates/game-inspect` now**, an engine adapter, and the root
+is `main.rs` alone - three `bevy` mentions, all assembling, and none of rule 6's names. **The
+measurement reproduced exactly**: five crates of seventeen before the move.
+
+**This item called it undiscovered drift and `crates/game4x/src/main.rs` documents it as a
+deliberate exception** - *it has to drive the shipped binary. A harness that ran a special path
+would be evidence about the harness.* **The fix held anyway**, because a crate the binary depends
+on is still in the binary, and `options.rs` went with the plugin because it is what the plugin
+takes. **But this lane presented as a discovery something the file it was reading argues for.**
+
+**And the check this item leaned on was broken in the way the item describes.** The exception on
+`game4x` was supposed to delete itself when fixed, and could not: see `4bca6eee`.
 
 **It does not ask you to restructure anything, and this lane has narrowed what it claims.**
 `docs/architecture.md` -> The layers lists **`Engine adapter` as a layer**, not a crate - so
