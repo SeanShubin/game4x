@@ -57,17 +57,129 @@ fn root() -> PathBuf {
 /// It stops at this lane's own column deliberately. `spec/`, `releases/` and `docs/` belong
 /// to the documentation lane, and a stale quotation there is real but is not this lane's to
 /// repair - putting them in would red this lane's pre-push gate on a file it must not
-/// touch, which is the trap `CLAUDE.md` warns about. Quotations found there get reported
-/// instead.
+/// touch, which is the trap `CLAUDE.md` warns about.
+///
+/// **And `tools` is not one directory, which is what sprang that trap on 2026-09-24.**
+/// `CLAUDE.md` gives this lane *everything in `tools/` that is not a lane's own*, so the
+/// specification lane owns one directory under it and each lens owns another - and naming
+/// `tools` whole took all three.
+///
+/// **What it cost is a gate neither lane could clear.** The specification lane wrote an
+/// ordinary doc comment that named a file of the specification and then opened a bold span
+/// of prose about it. This reads such a span as an attributed quotation - the limitation
+/// `CLAUDE.md` records under *Quoting a specification file* - so the shared gate went red on
+/// a file this lane may not edit, and the other lane cannot be asked to write around a
+/// checker it does not own.
+///
+/// **The comment above had the rule right and the constant below did not**, which is the
+/// whole of the defect and the reason this paragraph is longer than the fix.
+///
+/// **This comment is written to pass its own checker**, which is worth knowing rather than
+/// discovering: the first draft reproduced the offending line to explain it and added three
+/// findings to the very list it was describing. **Naming a specification file and then
+/// emphasising anything is the shape** - so the shape is described here and not performed.
 const OURS: [&str; 5] = ["crates", "prototypes", "scripts", "tools", "hooks"];
 
+/// The directories under `tools/` that belong to another lane.
+///
+/// **A lens's is derived rather than listed**, from `lenses/`, so a lens started tomorrow is
+/// out of this sweep without anybody remembering to add it - `CLAUDE.md` says a lens writes
+/// `lenses/<name>/` and `tools/<its name>/`, so the first names the second.
+///
+/// **`spec` is named**, because the specification lane has no `lenses/` entry to be found by.
+/// It is the one hand-written name here and it is the one that cannot be derived.
+fn other_lanes() -> Vec<String> {
+    let mut out = vec!["spec".to_string()];
+    if let Ok(entries) = std::fs::read_dir(root().join("lenses")) {
+        for entry in entries.flatten() {
+            if entry.path().is_dir() {
+                out.push(entry.file_name().to_string_lossy().to_string());
+            }
+        }
+    }
+    out.sort();
+    out.dedup();
+    out
+}
+
 fn sources() -> Vec<PathBuf> {
+    let theirs: Vec<PathBuf> = other_lanes()
+        .iter()
+        .map(|lane| root().join("tools").join(lane))
+        .collect();
     let mut found = Vec::new();
     for directory in OURS {
         collect(&root().join(directory), &mut found);
     }
+    found.retain(|path| !theirs.iter().any(|lane| path.starts_with(lane)));
     found.sort();
     found
+}
+
+/// The sweep reaches this lane's own files and stops at every other lane's.
+///
+/// # The check that would have failed before this
+///
+/// **The constant said `tools` and the rule is *everything in `tools/` that is not a lane's
+/// own*.** So this swept the specification lane's directory and both lenses', and on
+/// 2026-09-24 it turned the shared pre-push gate red on a file this lane may not edit. The
+/// doc comment above the constant had already argued that this must not happen, for the other
+/// three directories, and nothing checked that the constant agreed with it.
+///
+/// # Both directions, because either alone passes for the wrong reason
+///
+/// **It reaches `tools/`**, or an exclusion that swallowed the whole directory would satisfy
+/// the half below while quietly checking nothing. **And it reaches none of the lanes'**, which
+/// is the new property. A sweep of no files satisfies the second on its own.
+///
+/// **The lenses are derived from `lenses/` and asserted found**, so this is a claim about the
+/// lanes that exist rather than about three names somebody typed.
+#[test]
+fn the_sweep_reaches_this_lanes_files_and_no_other_lanes() {
+    let lanes = other_lanes();
+    assert!(
+        lanes.len() > 1,
+        "only {lanes:?} - `spec` is hard-coded and the lenses are read from `lenses/`, so one \
+         name means the reading found nothing"
+    );
+    for named in ["quality", "research"] {
+        assert!(
+            lanes.iter().any(|it| it == named),
+            "`lenses/{named}` exists and {lanes:?} did not find it"
+        );
+    }
+
+    let swept = sources();
+    assert!(
+        swept.len() > 100,
+        "only {} files swept, which is too few to be this lane",
+        swept.len()
+    );
+
+    let under_tools: Vec<&PathBuf> = swept
+        .iter()
+        .filter(|path| path.starts_with(root().join("tools")))
+        .collect();
+    assert!(
+        !under_tools.is_empty(),
+        "nothing under `tools/` is swept, so the exclusion below has eaten the directory \
+         rather than three of its children"
+    );
+
+    let trespassing: Vec<String> = swept
+        .iter()
+        .filter(|path| {
+            lanes
+                .iter()
+                .any(|lane| path.starts_with(root().join("tools").join(lane)))
+        })
+        .map(|path| path.display().to_string())
+        .collect();
+    assert!(
+        trespassing.is_empty(),
+        "these belong to another lane and this lane's gate would go red on them: \
+         {trespassing:#?}"
+    );
 }
 
 fn collect(directory: &Path, into: &mut Vec<PathBuf>) {
