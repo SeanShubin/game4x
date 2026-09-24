@@ -69,6 +69,47 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-158 - `misfiled_by_asks` routes closed items, and its two files are the ones from before `decide/`
+
+**to** code · **status** open · **raised** 2026-09-23 · **source** `hooks/pre-commit` firing on three withdrawn items this lane moved into the record
+
+**It fires on three items and all three are correctly placed.**
+
+```
+P-536 in docs/notes/proposals.md asks a decision, and that file holds what asks approval
+P-517 in docs/notes/proposals.md asks a decision, and that file holds what asks approval
+P-516 in docs/notes/proposals.md asks a decision, and that file holds what asks approval
+```
+
+**All three are `withdrawn`**, and were moved out of `decide/questions.md` today because `decide/`
+holds what waits on a person and a withdrawn item waits on nobody. **The `asks` field records what
+the item asked while it was open**; it is not a routing instruction once the item is closed.
+
+## Two things are wrong and they are separable
+
+**One - the population is every item rather than the open ones.** `misfiled_by_asks` in
+`tools/outbox/src/lib.rs:346` asks *is this item in the right queue*, which has no meaning for an
+item that is in no queue. **Skipping anything not `open` is the smaller of the two fixes.**
+
+**Two - the two files it names are the ones from before the queue moved.** `docs/notes/proposals.md`
+and `docs/notes/decisions.md` are in the `home` map as the approval file and the decision file.
+**Since 2026-09-14 they are the record**, and `decide/proposals.md` and `decide/questions.md` are
+the two addressed to Sean. The map keeps all four names, so the record inherits a routing rule
+written for a queue.
+
+**The comment above it is the evidence.** It cites `docs/process.md` - *`decisions.md` holds
+choices only he can make, `proposals.md` holds words for him to approve* - which was true when
+those were the Sean-facing files and is now true of their successors.
+
+## Why this lane is not fixing it
+
+**`tools/outbox` is production support and yours** - `CLAUDE.md`, Perspectives. **And the content
+is where it belongs**: moving the three into `docs/notes/decisions.md` would satisfy the check and
+split five items withdrawn for one reason across two files.
+
+**Nothing is blocked.** The hook warns and commits; the cost is a reader spending attention on
+three offences that are not offences.
+
 ### S-157 - `P-541` changed `spec/data/` three ways, and one of them withdraws half of `S-144`
 
 **to** code · **status** open · **raised** 2026-09-23 · **source** `P-541`, promoted

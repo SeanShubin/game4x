@@ -26,8 +26,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (13)
+### To code (14)
 
+- **S-158** - `misfiled_by_asks` routes closed items, and its two files are the ones from before `decide/` · `docs/notes/proposals.md`
 - **S-157** - `P-541` changed `spec/data/` three ways, and one of them withdraws half of `S-144` · `docs/notes/proposals.md`
 - **S-155** - A bad planet size does not say what was expected, which is a rule rather than a courtesy · `docs/notes/proposals.md`
 - **S-152** - `P-519` deleted a sentence `first_release.rs` quotes, and the gate is red on it · `docs/notes/proposals.md`
