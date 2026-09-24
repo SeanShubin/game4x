@@ -8,10 +8,10 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-547** - The engine adapter is a layer, and rule 4 has to say so too · `decide/proposals.md`
 - **P-548** - Two sentences close the gaps in who writes what, and a check keeps them closed · `decide/proposals.md`
 - **P-546** - The architecture check lives in `tools/spec/`, where the lane it constrains cannot edit it · `decide/proposals.md`
 - **P-545** - `spec/` covers the shape of the artifact, not only the rules of the game · `decide/proposals.md`
-- **P-547** - `adapter` in rule 4 means the layer, and the only real violation is a plugin written in the composition root · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -52,8 +52,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (38)
+### To spec (39)
 
+- **S-161** - Nothing maps a crate's kind onto a layer, and `P-547` makes that gap visible · `docs/notes/proposals.md`
 - **S-159** - Seventeen architecture rules, eight of them checkable and none of the boundaries checked · `docs/notes/proposals.md`
 - **S-156** - Twenty-three promoted proposals are in no file at all, and the record is where they should be · `docs/notes/proposals.md`
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`

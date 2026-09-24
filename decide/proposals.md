@@ -11,6 +11,59 @@ of it needs you.
 
 ## Open
 
+### P-547 - The engine adapter is a layer, and rule 4 has to say so too
+
+**to** sean · **status** open · **raised** 2026-09-24 · **kind** recovered · **shape** an instruction · **asks** approval · **into** `docs/architecture.md` -> The layers, and Rules
+
+**You chose `A1`.** The working is in [`docs/notes/decisions.md`](../docs/notes/decisions.md).
+
+**Two blocks, and the second is why the promotion sweep was worth running.** Widening the layer
+row alone leaves rule 4 reading *engine types live only in **the** adapter* - the exact sentence
+that made this lane report four violations where there were two.
+
+## What lands
+
+**The `Engine adapter` row of the layer table**, in its *Knows about* cell:
+
+> Bevy, windows, input, vsync, and what the game is when a surface has to follow it
+
+**And rule 4's first sentence becomes:**
+
+> 4. **Engine types live only in the adapter layer.** No `bevy::` anywhere else, including in
+>    the composition root's own logic - the root may assemble plugins, but it may not compute
+>    with engine types.
+
+## How to tell it was carried out
+
+**Three assertions in the promoting commit.** The layer row's *Knows about* cell reads the new
+text; rule 4 says *the adapter layer*; and **the `bevy::` population is unchanged at five
+crates** - because this is a change to what is written and not to what is built.
+
+## What it settles and what it leaves red
+
+**Settled**: `planet-bevy`, `planet-flat` and `planet-ecs` are the adapter layer, and `game-globe`
+joins them - engine code that knows the game, which the widened row now admits.
+
+**Still red**: `crates/game4x/src/inspect.rs`, which writes a Bevy plugin in the composition root
+where rule 4 allows assembling one. **That is `S-160` and needs nothing further from you** - the
+fix is a crate of its own that `game4x` adds, keeping its header's promise that *the same binary
+plays and poses*.
+
+**And one sentence in the code lane's column is still false**: `crates/planet-bevy/README.md` says
+it is *the only crate in the project that knows a graphics engine exists*. Four others do. Also
+`S-160`.
+
+## What this does not settle, stated so it is not lost
+
+**Nothing maps a crate's *Kind* onto a layer.** The crate table uses seven kinds - algorithm,
+model, entities, view model, view, binding, binary - and the layer table has four layers, and no
+sentence connects them. **After this lands, `planet-ecs` is *entities* and `game-globe` is
+*binding* and both are the adapter layer**, which a reader can only work out the way this lane
+did: by reading rule 6 and inferring.
+
+**Filed as `S-161` rather than fixed here.** It is a table this lane can propose once, and it is
+not what you were asked about.
+
 ### P-548 - Two sentences close the gaps in who writes what, and a check keeps them closed
 
 **to** sean · **status** open · **raised** 2026-09-24 · **kind** recovered · **shape** text · **asks** approval · **into** `CLAUDE.md` -> Perspectives
@@ -30,10 +83,22 @@ directory is added. **What lands is your two sentences and a check.** The table 
 
 **And after the production-support paragraph:**
 
-> **The pipeline and the local build belong to the code lane too.** `.gitignore`,
-> `.gitattributes`, `.git/`, `.idea/` and `target/` are mechanical details of how things get
-> implemented rather than production support proper, **and that is near enough** - the lane that
-> implements owns how implementing works.
+> **The pipeline and the local build belong to the code lane too.** `.gitignore` and
+> `.gitattributes` are mechanical details of how things get implemented rather than production
+> support proper, **and that is near enough** - the lane that implements owns how implementing
+> works. **What a tool writes for itself is owned by nobody**, on the rule above: `.git/`,
+> `.idea/` and `target/` have no owner because no instance edits them.
+
+## Where this differs from your sentence, and why
+
+**You named five paths and this lands two.** `.git/`, `.idea/` and `target/` are written by git,
+an IDE and cargo, and nobody edits them - so giving them an owner contradicts the rule five
+paragraphs above, **a generated file has no owner... nobody edits it**. `.gitignore` and
+`.gitattributes` are hand-written and take your reason exactly.
+
+**The distinction is yours to overrule.** The effect either way is nil - nothing is at stake in
+who owns a directory no instance writes - but the two sentences would disagree, and this file is
+one a lane reads to find out what it may do.
 
 ## What the check does, and what it would have caught
 
@@ -65,12 +130,28 @@ version nearly carried, is in [`docs/notes/decisions.md`](../docs/notes/decision
 
 ## What lands
 
-**Appended to rule 8**, which `P-545` adds:
+**Appended to rule 9**, which `P-545` adds:
 
-> **The check that holds a boundary lives outside the column it constrains.** A constraint the
+> **A check on the artifact's shape lives outside the column it constrains.** A constraint the
 > constrained lane may weaken is a constraint nobody is holding, so an architecture check is the
 > specification's and not the code's - and it runs in the same gate, because a check the
 > constrained lane never runs is no better.
+
+## One word changed after the promotion sweep, and `P-548` is why
+
+**This said *the check that holds a boundary*, which is general enough to forbid `P-548`'s own
+check.** That one asserts every path in `CLAUDE.md` is owned, and `CLAUDE.md` is this lane's -
+so a general reading puts the check inside the column it constrains and makes the two proposals
+disagree.
+
+**Now it says *a check on the artifact's shape*.** The narrow claim is the one you chose: a
+boundary on the code, checked by somebody the code lane cannot overrule. **A lane checking its own
+completeness is a different thing** and this sentence no longer speaks to it.
+
+## It follows `P-545`, in order and in numbering
+
+**`P-545` has to land first**, because this sentence is appended to the rule that one creates.
+**And the number moved with it**: this said rule 8 while `spec/README.md` already had a rule 8.
 
 ## Why this is one sentence and not a path
 
@@ -104,12 +185,19 @@ the words.
 > What the game **is**, stated normatively, **and the shape of the thing that runs it**. If a rule
 > is not written here, it is not decided, no matter how thoroughly it was discussed.
 
-**And a new rule 8**, after *record what was rejected*:
+**And a new rule 9**, appended after rule 8:
 
-> 8. **A document says what the game is, or how the thing that runs it is shaped.** Rule 4's two
+> 9. **A document says what the game is, or how the thing that runs it is shaped.** Rule 4's two
 >    kinds are about the game; an architecture document says what is true of the artifact. **A
 >    boundary stated here is one the build keeps**, and the check that fails when it stops being
 >    kept is part of stating it.
+
+## It is rule 9 because rule 8 is taken, which this lane first got wrong
+
+**This proposal said *a new rule 8, after record what was rejected*.** Rule 8 exists - *relationships
+in prose, data in data files* - and *record what was rejected* is rule 7. **So the placement would
+have renumbered an approved rule without saying so**, which is the kind of quiet change promotion
+exists to prevent. Appending as rule 9 renumbers nothing.
 
 ## Why the second block is a new rule and not a wider rule 4
 

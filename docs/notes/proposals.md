@@ -69,6 +69,33 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-161 - Nothing maps a crate's kind onto a layer, and `P-547` makes that gap visible
+
+**to** spec · **status** open · **raised** 2026-09-24 · **source** `P-547`, and the promotion sweep Sean asked for
+
+**This lane's own work, filed because a promotion files what it leaves open.**
+
+`docs/architecture.md` has two tables. **The layer table has four layers** - supporting crates,
+rendering, engine adapter, composition root. **The crate table has seven kinds** - algorithm,
+model, entities, view model, view, binding, binary. **No sentence connects them.**
+
+## Why it matters now rather than before
+
+**`P-547` widens the adapter layer to admit `game-globe`**, whose kind is *binding*, and
+`planet-ecs`, whose kind is *entities*. So after it lands, two kinds belong to a layer the document
+never places them in - and a reader can only reach that by reading rule 6 and inferring, **which is
+how this lane reported four rule-4 violations where the table allowed two.**
+
+## What the fix probably is, not proposed here
+
+**A column on the crate table naming the layer**, so the mapping is a cell rather than an
+inference, and every crate is placed by construction. **`tools/outbox/tests/architecture.rs`
+already reads that table** and asserts the workspace set against it, so the check has somewhere to
+go.
+
+**Not urgent.** No gate fails on it, and nothing is built wrongly because of it - the cost is that
+the document can be read two ways, which has now happened once and been paid for.
+
 ### S-160 - `planet-bevy`'s README says it is the only crate that knows an engine exists, and four others name `bevy::`
 
 **to** code · **status** open · **raised** 2026-09-24 · **source** measuring rule 4 for `P-545`, after Sean asked that it be fixed if it is broken
