@@ -51,7 +51,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 ### To spec (39)
 
 - **S-161** - Nothing maps a crate's kind onto a layer, and `P-547` makes that gap visible · `docs/notes/proposals.md`
-- **S-159** - Seventeen architecture rules, eight of them checkable and none of the boundaries checked · `docs/notes/proposals.md`
+- **S-159** - Seventeen architecture rules, six of them checkable and unchecked · `docs/notes/proposals.md`
 - **S-156** - Twenty-three promoted proposals are in no file at all, and the record is where they should be · `docs/notes/proposals.md`
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`

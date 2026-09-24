@@ -156,7 +156,7 @@ two systems move; the root goes back to assembling.
 **Nothing is red.** No gate fails on this today, which is the finding: the rule has been written
 down and unheld for as long as it has existed.
 
-### S-159 - Seventeen architecture rules, eight of them checkable and none of the boundaries checked
+### S-159 - Seventeen architecture rules, six of them checkable and unchecked
 
 **to** spec · **status** open · **raised** 2026-09-23 · **source** `P-545`, and Sean deciding that `spec/` covers the shape of the artifact
 
@@ -206,8 +206,17 @@ green**. Three of the habits this repository has paid for, in one test.
 ## What the work is
 
 **Promote the normative rules into `spec/architecture.md`**, smallest first, and write the check
-that fails when each stops being true. **`P-546` decides where the check lives** and is open to
-Sean.
+that fails when each stops being true.
+
+## What landed on 2026-09-24, which narrows this item rather than closing it
+
+**`P-545` and `P-546` settled the two questions this item waited on.** `spec/` covers the
+artifact's shape, and a check on it lives outside the column it constrains - `tools/spec/`.
+**`P-547` settled rule 4**, so the first check is writable.
+
+**What is left is the work, not the decisions.** Group the rules, promote them, write the checks.
+**`S-161` goes first**: nothing maps a crate's kind onto a layer, and a check on the adapter layer
+has to know which crates are in it.
 
 **Eight checkable rules is not eight proposals.** Rules 1 and 7 are about the dependency graph and
 read as one statement; 3 and 4 are both confinements of a type to a crate. **This lane has not yet
