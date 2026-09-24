@@ -1685,6 +1685,14 @@ other sixty. Only the hexagon-hexagon borders move under the repair, and those a
 sixty that sink. **So the old sample point was right on half the board by symmetry and wrong on
 the other half**, which is why the counts never disagreed while the magnitude did.
 
+**And that is the shape that makes a wrong instrument look consistent rather than noisy** - the
+code lane's sentence, and worth more than either repair. An instrument wrong at random scatters,
+and scatter invites a question. **This one agreed with the truth exactly wherever the truth was
+symmetric**, so the disagreement was confined to the half nobody had reason to look at, and
+every check of it came back clean. Two cases now, two days apart, in both lanes and in opposite
+directions - which is what `CLAUDE.md`'s *the instrument answers a narrower question than the one
+asked* looks like when it has caught something it did not come from.
+
 **And the word now says which job it is doing in both places.** The arc check still samples
 segment midpoints, at `:312`, and says why that one is correct: *a chord between two points at
 one radius is lowest at its own midpoint.* That was the whole of this item - not the number.
