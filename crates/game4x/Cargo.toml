@@ -18,5 +18,6 @@ bevy = { version = "0.19", default-features = false, features = ["2d", "3d", "ui
 game-console.workspace = true
 game-front.workspace = true
 game-globe.workspace = true
+game-inspect.workspace = true
 planet-bevy.workspace = true
 planet-render.workspace = true

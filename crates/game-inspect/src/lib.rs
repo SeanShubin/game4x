@@ -1,5 +1,21 @@
 //! Operating the application by remote control: drive it, photograph it, dump it.
 //!
+//! # Why this is a crate rather than a module of the root
+//!
+//! **`docs/architecture.md` rule 4**: the composition root *may assemble plugins, but it may
+//! not compute with engine types*, and rule 6 says it twice - an algorithm *never names
+//! `Entity`, `Query`, `Commands` or `Res`*. This file takes `Res<Errand>` and writes through
+//! `ResMut<Orbit>`, which is computing with them.
+//!
+//! **It was `crates/game4x/src/inspect.rs` until `S-160`**, where nothing was red and the rule
+//! had been written down and unheld for as long as it had existed. Moving it makes it an
+//! engine adapter, which is the layer allowed to name those types, and leaves the root
+//! assembling.
+//!
+//! **Nothing about what it does changed**, which is the property its own header rests on:
+//! *nothing here is compiled differently from what ships - the same binary plays and poses*.
+//! A crate boundary keeps that true where a rewrite would not.
+//!
 //! Everything below the engine can be tested with no window open, which is what the
 //! layering is for. The picture cannot, and half of `spec/planet.md` describes it: *the
 //! terrain of the realistic drawing is continuous*, *nothing in the terrain reveals how the
@@ -20,7 +36,9 @@
 use bevy::prelude::*;
 use bevy::render::view::screenshot::{Screenshot, save_to_disk};
 
-use crate::options::Options;
+pub mod options;
+
+pub use options::{Misuse, Options, USAGE, read};
 
 /// Drives the application from the command line and writes what it finds.
 pub struct InspectPlugin {

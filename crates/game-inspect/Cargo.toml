@@ -1,0 +1,13 @@
+[package]
+name = "game-inspect"
+version.workspace = true
+edition.workspace = true
+description = "The remote control: drive the application, photograph it, dump it. An engine adapter, because it takes `Res` and writes through `ResMut`."
+
+[dependencies]
+# `png` for the screenshot path: `save_to_disk` encodes by extension, and without it a
+# `--shot` would fail at run time rather than at build time.
+bevy = { version = "0.19", default-features = false, features = ["2d", "3d", "ui", "png"] }
+game-console.workspace = true
+game-front.workspace = true
+planet-bevy.workspace = true

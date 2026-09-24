@@ -55,9 +55,6 @@
 //! | The console  | stdin and stdout   | a text field and a transcript, on the page |
 //! | The browser  | `/browser`         | a panel, reached by its own button      |
 
-mod inspect;
-mod options;
-
 use bevy::prelude::*;
 use bevy::window::PresentMode;
 use planet_render::{Params, WorldSpec};
@@ -71,10 +68,10 @@ use planet_render::{Params, WorldSpec};
 const UNDESIGNED: usize = 92;
 
 fn main() {
-    let asked = match options::read(std::env::args().skip(1)) {
+    let asked = match game_inspect::read(std::env::args().skip(1)) {
         Ok(Some(options)) => options,
         Ok(None) => {
-            println!("{}", options::USAGE);
+            println!("{}", game_inspect::USAGE);
             return;
         }
         Err(misuse) => {
@@ -133,13 +130,13 @@ fn main() {
         // picture and a dump and quits. Added always, because it does nothing at all
         // unless it was asked for something, and a harness compiled only sometimes is a
         // harness that tests a different program.
-        .add_plugins(inspect::InspectPlugin { options: asked })
+        .add_plugins(game_inspect::InspectPlugin { options: asked })
         .run();
 }
 
 /// The window, described here rather than in the engine adapter so that assembling the
 /// application stays visible in one place.
-fn window(asked: &options::Options) -> WindowPlugin {
+fn window(asked: &game_inspect::Options) -> WindowPlugin {
     WindowPlugin {
         primary_window: Some(Window {
             title: "game4x".to_string(),

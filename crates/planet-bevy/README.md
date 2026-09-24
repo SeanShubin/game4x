@@ -2,8 +2,18 @@
 
 [Architecture](../../docs/architecture.md) · [Root README](../../README.md)
 
-The Bevy adapter: a window, input, and presentation. **The only crate in the project that
-knows a graphics engine exists.**
+The Bevy adapter: a window, input, and presentation.
+
+**It is not the only crate that names one**, and that sentence stood here until `S-160`
+measured it: five of the seventeen crates mention `bevy::` in `src/` - this one, `planet-flat`,
+`game4x`, `game-globe` and `planet-ecs` - and `docs/architecture.md`'s own dependency table
+already listed `bevy` against all five. The document contradicted its own rule 4 rather than
+describing a drift nobody had noticed.
+
+**What is true is narrower and is the thing rule 4 actually asks**: no crate below the adapter
+layer names an engine type, and what an algorithm is written against is a plain value rather
+than an `Entity`, a `Query`, a `Commands` or a `Res`. This crate is where the engine is
+adapted; the other four are the composition root and two adapters beside it.
 
 ## What it does
 

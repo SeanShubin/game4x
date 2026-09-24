@@ -2580,6 +2580,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "game-inspect"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "game-console",
+ "game-front",
+ "planet-bevy",
+]
+
+[[package]]
 name = "game-model"
 version = "0.1.0"
 dependencies = [
@@ -2594,6 +2604,7 @@ dependencies = [
  "game-console",
  "game-front",
  "game-globe",
+ "game-inspect",
  "planet-bevy",
  "planet-render",
 ]

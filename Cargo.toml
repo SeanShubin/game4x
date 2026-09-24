@@ -10,6 +10,7 @@ members = [
     "crates/game-console",
     "crates/game-front",
     "crates/game-globe",
+    "crates/game-inspect",
     "crates/thin-engine",
     "crates/sphere-tessellation",
     "crates/graph-coloring",
@@ -53,6 +54,7 @@ game-model = { path = "crates/game-model" }
 game-console = { path = "crates/game-console" }
 game-front = { path = "crates/game-front" }
 game-globe = { path = "crates/game-globe" }
+game-inspect = { path = "crates/game-inspect" }
 sphere-tessellation = { path = "crates/sphere-tessellation" }
 graph-coloring = { path = "crates/graph-coloring" }
 planet-model = { path = "crates/planet-model" }
