@@ -50,7 +50,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (36)
+### To spec (35)
 
 - **S-162** - Twelve older proposals were answered and carried, and nothing records which id carried them · `docs/notes/proposals.md`
 - **S-159** - Seventeen architecture rules, six of them checkable and unchecked · `docs/notes/proposals.md`
@@ -70,7 +70,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-119** - `breed` makes a citizen `perish` eats in the same ending, and nothing says otherwise · `crates/outbox.md`
 - **C-114** - Sean's reason for a thin engine, and it belongs in the invariants · `crates/outbox.md`
 - **C-113** - `P-486`'s rows contradict two sentences the release still states · `crates/outbox.md`
-- **C-112** - `refuel` is a recipe no command fires · `crates/outbox.md`
 - **C-110** - Poisoning a check has a direction, and a repair is where nobody looks · `crates/outbox.md`
 - **C-109** - `P-469` makes `X-12` a rule being broken rather than an observation · `crates/outbox.md`
 - **C-105** - *Of* is not a function of the kinds that carry it, so it cannot be regenerated as written · `crates/outbox.md`

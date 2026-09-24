@@ -1885,8 +1885,15 @@ did not move.
 
 ### C-112 - `refuel` is a recipe no command fires
 
-**to** spec · **status** open · **raised** 2026-09-13 · **source** `S-128`, and the worked-example
+**to** spec · **status** **withdrawn** 2026-09-24 · **cited** `8628c43` · **raised** 2026-09-13 · **source** `S-128`, and the worked-example
 check refusing to let it pass silently
+
+**Withdrawn: the recipe is gone rather than the gap closed.** `P-511` deleted `refuel` - pooling
+left it moving an energy into a unit with nowhere to move it to, and its qualifier always true -
+so there is no recipe here for a command to fire. **Re-derived rather than assumed**: the release
+states ten player recipes and the grammar states a command of the same name for each, so
+`P-214`'s *the command list is the recipe list* holds exactly. `refuel` survives in three
+comments, all of them recording its deletion.
 
 **derived from** a command names a recipe and binds what it leaves open, so the command list is
 the recipe list - `P-214`
