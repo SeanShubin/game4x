@@ -9,6 +9,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 ## What must be decided
 
 - **P-551** - Two invariants leave a hole exactly where you say a command is needed, and one word is taken twice · `decide/questions.md`
+- **P-552** - An Ark cannot move, because two rules of `spec/` disagree and the orbital half is the one it needs · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
