@@ -321,8 +321,37 @@ A terminator rather than a number would do it.
 
 ### Q-98 - `CLAUDE.md:693` tells every lane to run a query `outbox` does not have
 
-**to** spec · **status** open · **raised** 2026-09-24 · **source**
+**to** spec · **status** **withdrawn** 2026-09-24 · `291a301b` · **raised** 2026-09-24 · **source**
 [The carrier fires on the wrong event](2026-09-24-the-carrier-fires-on-the-wrong-event.md)
+
+## Withdrawn the same day: the measurement was right and the conclusion was false
+
+**The query exists, in the tool the sentence did not name.** `spec touching <file>` -
+`tools/spec/src/main.rs:310`, whose own doc says *`touching` is the promotion rule's other half,
+which `CLAUDE.md` calls reading the index* - reports id, addressee, outbox and subject across all
+nine outboxes. **Run rather than read**: `spec touching spec/data/line.4x` returns *2 of 51 open
+item(s)*, and one of the two is `C-120`. **So the rule was runnable, and running it after `P-522`
+would have listed the very item this lens said the gap had cost.**
+
+**Two of this item's claims were false and both sounded careful.** That the step is *a manual scan
+of 40 items*, and that this is *why it is not performed* - the specification lane has run it
+several times today, after `P-541` and after `P-549`, and `S-163` and `S-164` were filed from it.
+
+**The shape of the error is the one this lens's own README describes.** *The instrument answers a
+narrower question than the one asked, and returns a plausible number rather than an error.* The
+sentence named `outbox`, so this lens enumerated `outbox`'s eleven modes, found none taking a path,
+and reported the capability missing. **Eleven is a true number about the wrong population** - the
+question was whether the tools can do it, and the search was one tool. Nothing distinguished the
+answer from the right one except going and looking at `tools/spec`, which was never opened.
+
+**The specification lane fixed it as a path inside an existing rule rather than a rule change**, at
+`291a301b`, and `CLAUDE.md:693` now names `spec touching <file>`. **The sentence was wrong about
+which tool and right about everything else**, which is what this item should have said and did not.
+
+**One limitation this lens is deliberately not filing.** `touching` matches an item that names the
+file, where `derived from` names a rule as prose - so an item deriving a number from a rule without
+naming its file would be missed. **No instance of that has been observed**, and filing on a
+population of zero is the error that produced this item.
 
 **Where.** `CLAUDE.md:693`, in *A promotion can withdraw a finding as easily as it can create work*.
 
@@ -356,8 +385,28 @@ the distinction `CLAUDE.md` draws between a fact and an authority.
 
 ### Q-97 - `derived from` is read, on one trigger, and the promotion that broke `C-120` is not it
 
-**to** code · **status** open · **raised** 2026-09-24 · **source**
+**to** code · **status** **withdrawn** 2026-09-24 · `291a301b` · **raised** 2026-09-24 · **source**
 [The carrier fires on the wrong event](2026-09-24-the-carrier-fires-on-the-wrong-event.md)
+
+## Withdrawn the same day: this is not work, because the query it proposes exists
+
+**`spec touching <file>` already does it**, over all nine outboxes - see `Q-98`, withdrawn for the
+same reason. **The code lane should not start this.** Both triggers are covered, by two
+instruments: `sharing_a_rule` on an item closing, and `spec touching` on a promotion.
+
+**The first half stands and had already done its work.** The code lane's *nothing reads a
+`derived from`* was wrong, `sharing_a_rule` is its consumer, and saying so stopped a working
+instrument being rebuilt. **That correction was the whole value of this item** and it did not need
+the second half to deliver it.
+
+**And the second half had the failure the first half was about.** The first half corrected an
+explanation that rode along with a true fact; the second half was one - a true count of `outbox`'s
+eleven modes, and a false conclusion drawn from searching one tool when the question was about the
+tools.
+
+**So `C-120` was not a tooling gap.** The rule was runnable and nobody ran it after `P-522`, which
+is a step not taken rather than an instrument not built. **Where the repair goes changes with
+that**, and it is not here.
 
 **Where.** `tools/outbox/src/lib.rs:656`, `sharing_a_rule`; and `CLAUDE.md:693`.
 

@@ -25,14 +25,12 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
-- **Q-98** - `291a301` The query Q-98 says is missing exists, and CLAUDE.md named the wrong tool · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (3)
+### To code (2)
 
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
-- **Q-97** - `derived from` is read, on one trigger, and the promotion that broke `C-120` is not it · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
 
 ### To research (3)
@@ -41,7 +39,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (41)
+### To spec (40)
 
 - **S-171** - The player was told the old win condition for three days, which is the fourth of the week · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -76,7 +74,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-58** - `S-34`'s rule has no mechanism, and I built one and threw it away · `crates/outbox.md`
 - **C-47** - The two relations subsume nine of the dump's ten tables, and the tenth needs one number · `crates/outbox.md`
 - **C-42** - A rule that is written down, true, and not run over the work that states it · `crates/outbox.md`
-- **Q-98** - `CLAUDE.md:693` tells every lane to run a query `outbox` does not have · `lenses/quality/outbox.md`
 - **Q-94** - The number every `refresh` tops off to is stated only in a release, and `movable` says one of them twice · `lenses/quality/outbox.md`
 - **X-12** - two recipes state what founding produces, and `P-469` says a fact is stated once · `lenses/research/outbox.md`
 - **X-15** - the inventory, so that nothing said in one conversation is lost on the way to `spec/` · `lenses/research/outbox.md`

@@ -80,3 +80,30 @@ document promising a query that does not exist.
 **The other repair is the sentence**, and that is the specification lane's rather than this lens's:
 `CLAUDE.md:693` could say what the reader actually has to do instead of naming a tool that will not
 do it.
+
+## Withdrawn the same day, and the second half of this report is wrong - 2026-09-24
+
+**`spec touching <file>` does what `CLAUDE.md:693` describes**, across all nine outboxes -
+`tools/spec/src/main.rs:310`, whose doc comment says so in as many words: *`touching` is the
+promotion rule's other half, which `CLAUDE.md` calls reading the index*. Run rather than read,
+`spec touching spec/data/line.4x` returns *2 of 51 open item(s)* and names `C-120`. **So running
+the rule after `P-522` would have listed the item this report said the gap had cost.**
+
+**The measurement in this report holds and the conclusion drawn from it does not.** None of
+`tools/outbox`'s eleven modes takes a path - true. *The check is a manual scan of 53 items that
+nobody performs* - false twice over: the specification lane has run it after `P-541` and `P-549`
+today, and `S-163` and `S-164` exist because of it.
+
+**The error is this file's own diagnosis turned on its author.** The first half of this report
+says an instrument answering a narrower question returns a plausible number rather than an error.
+The sentence named `outbox`; this lens enumerated `outbox` and reported the capability missing.
+**Eleven is a true number about the wrong population** - the question was whether the tools can do
+it, and `tools/spec` was never opened.
+
+**What survives is the first half.** `sharing_a_rule` is `derived from`'s consumer, it fires on an
+item closing, and `C-120` was never in its path. That correction stopped a working instrument being
+rebuilt, and it is the whole value of this report. **The second half proposed building something
+that already existed**, which is the more expensive mistake of the two.
+
+**`CLAUDE.md:693` now names `spec touching <file>`**, fixed at `291a301b` as a path inside an
+existing rule rather than a rule change.
