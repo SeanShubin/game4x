@@ -101,6 +101,30 @@ written for a queue.
 choices only he can make, `proposals.md` holds words for him to approve* - which was true when
 those were the Sean-facing files and is now true of their successors.
 
+## The five that pass are the stronger half of the argument
+
+**Measured over `docs/notes/proposals.md`: eight items carry an `asks` field and all eight are
+withdrawn.** Three ask a decision and are reported; **five ask approval and pass** - because the
+record's filename is `proposals.md`, which the `home` map reads as *the file that holds what asks
+approval*.
+
+```
+pass  P-502 P-508 P-501 P-514 P-513   asks approval, in a file whose name says approval
+fail  P-536 P-517 P-516               asks a decision, in the same file
+```
+
+**So the check is green on five items for a reason that has nothing to do with the rule.** No open
+item in the record carries the field at all, which means **restricting the population to `open`
+removes all eight** and leaves the check measuring the two `decide/` files, which is what it is
+for.
+
+**This is the failure this repository keeps naming**: the instrument answers a narrower question
+than the one asked and returns a plausible number. *A wrong number invites a question; a right
+number about the wrong thing invites none* - and five greens invited none for nine days.
+
+**And the count grows.** Each withdrawn decision-asking item moved out of `decide/` adds a line,
+so the report gets longer as the queue gets tidier.
+
 ## Why this lane is not fixing it
 
 **`tools/outbox` is production support and yours** - `CLAUDE.md`, Perspectives. **And the content
