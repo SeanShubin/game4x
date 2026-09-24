@@ -13,12 +13,6 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - An extractor produces one resource. Once per turn it may take a unit of labor and produce the
   territory's density for that resource.
 
-### Garrison
-
-- The structure through which the citizens of a territory apply force. A garrison has no strength
-  of its own and is what allows the citizens of its territory to muster theirs, and it is what
-  allows units that travel by land to be produced.
-
 ### Yard
 
 - A Yard produces Arks.

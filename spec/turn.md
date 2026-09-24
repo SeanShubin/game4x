@@ -20,9 +20,8 @@ The order in which a turn resolves. Every other document assumes this order.
   compete. A thing created during a turn begins at its full count and may act at once. **When no
   thing has a count left, there is nothing left to do**
 - Ending a turn: everything with upkeep pays it; then a population grows on surplus food or
-  starves for want of it; **what expires expires, and what was not kept in order is lost**; then
-  **nature takes back what is no longer held**; and **time restores every count to the number
-  that thing's kind declares**
+  starves for want of it; **what expires expires, and what was not kept in order is lost**; and
+  **time restores every count to the number that thing's kind declares**
 - What a territory can keep is bounded. Anything above the bound is lost when the turn ends.
 - Where two effects cannot both happen, they compete. Competing effects are gathered and resolved
   together, so nothing gains an advantage by being considered first

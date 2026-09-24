@@ -69,6 +69,47 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-157 - `P-541` changed `spec/data/` three ways, and one of them withdraws half of `S-144`
+
+**to** code · **status** open · **raised** 2026-09-23 · **source** `P-541`, promoted
+
+**Filed the moment it landed**, because `spec/data/` is what the engine loads.
+
+```
+spec/data/traits.4x   + {trait name:biome admits:value kept:thing}
+spec/data/biomes.4x   six values kept, nature:N dropped from five of them
+spec/data/limit.4x    the garrison row gone, four of five rows left
+```
+
+**The biome trait is back and declared.** `biomes.4x` had six values of a trait no file declared -
+this lane's own doing on the 21st, regenerating the directory from a release that had cut biomes -
+and Sean's ruling is that biome stays because the realistic drawing needs it.
+
+## What it does to `S-144`
+
+**`S-144` said `biomes_can_be_held.rs` reads a table `P-522` deleted.** The table is still deleted
+and the release still has biomes out of scope, **so the failure stands** - but the reason *no rule
+reads a biome* no longer implies *nothing declares one*. **Worth re-reading before acting on it**
+rather than taken from here.
+
+## What this lane has not measured
+
+**Whether the gate is red.** Three data files changed and this lane has not run the suite; the
+figure that matters is yours and takes about fourteen minutes. **Expect red rather than assume
+it** - `CLAUDE.md` says a promotion into data the code generates from makes the gate red until the
+code follows, and saying so is this item.
+
+## And force, garrison and nature left `spec/` proper
+
+**`spec/future/force.md` is new** and holds what moved: `spec/control.md`'s Force, Producing force
+and Gaining and holding ground; `spec/structures.md`'s Garrison; `spec/console.md`'s `set force`
+command; and `spec/turn.md`'s *nature takes back what is no longer held*, so that bullet has four
+clauses rather than five. **None of it is a change to the rules** - it is where they sit, and
+`spec/README.md` now says the file is a future plan.
+
+**The release cited two of those sections by their old path** and now cites the new one. Nothing
+in `releases/first-release.md` changed its meaning.
+
 ### S-156 - Twenty-three promoted proposals are in no file at all, and the record is where they should be
 
 **to** spec · **status** open · **raised** 2026-09-23 · **source** `spec land P-540 P-511` refusing, and the measurement that followed
@@ -7249,6 +7290,7 @@ work the release exists to order.
 | P-542, `generate-planet`, and a size named for its count                                                                     | `spec/planet.md` -> Shape, and `spec/console.md` -> Commands                                                                                                                                             | 2026-09-24 |
 | P-543, What the player reads and what the game reads are disjoint                                                            | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-24 |
 | P-544, The rule editor is for automation, and the game needs neither it nor typing                                           | `spec/interface.md` -> Surfaces, and `spec/invariants.md` -> Everything is expressible                                                                                                                   | 2026-09-24 |
+| P-541, Force, garrison and nature leave the specification; biome comes back to the data                                      | `spec/future/`, `spec/control.md`, `spec/planet.md`                                                                                                                                                      | 2026-09-24 |
 | P-497, `spec/data/` normalized: seven relations, every count re-derived                                                      | `spec/data/`                                                                                                                                                                                             | 2026-09-14 |
 | P-455, three data files, and `kinds.4x` finished                                                                             | `spec/data/`                                                                                                                                                                                             | 2026-09-12 |
 | P-444, the first data file, and the directory it goes in                                                                     | a new file, `spec/data/kinds.4x`                                                                                                                                                                         | 2026-09-12 |

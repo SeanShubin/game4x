@@ -1,4 +1,3 @@
-{limit container:territory contained:garrison n:1}
 {limit container:territory contained:yard n:1}
 {limit container:territory contained:ark n:2}
 {limit container:territory contained:pioneer n:2}

@@ -529,9 +529,9 @@ Whole areas of the specification this release does not touch, so the omission re
 Sean, 2026-09-20: *I am cutting nature and force from this prototype because I don't think they are
 necessary to vet the core game loop: start with an ark -> develop a planet -> launch an ark.*
 
-- **Nature** - `spec/control.md` -> Force, *every territory has a force of nature, inherent to it*.
+- **Nature** - `spec/future/force.md` -> Force, *every territory has a force of nature, inherent to it*.
   Nothing resists a claim in this release, so `reclaim`, `renew` and `take` are not built
-- **Force** - `spec/control.md` -> Producing force, and *gaining and holding ground*. No garrison,
+- **Force** - `spec/future/force.md` -> Producing force, and *gaining and holding ground*. No garrison,
   no muster, and `deploy ark` and `found by land` neither require force nor produce a garrison.
   **`spec/turn.md`'s *nature takes back what is no longer held* goes with it**, so a turn in this
   release has four steps rather than five

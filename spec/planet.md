@@ -43,6 +43,10 @@ ones it crosses is a fact about that unit.
 - A territory's biome does not determine its numbers. The two are chosen to agree thematically, and
   a territory is free to differ where that shows something the others do not.
 - Each territory has a biome.
+- **A biome earns its place by being shown rather than by being obeyed.** It is what the realistic
+  drawing reads to make a territory look like the place it is - which is a reason to keep a fact
+  that nothing else in this specification has, and the reason a sweep for data no rule reads must
+  not remove it.
 - A territory's biome is what the terrain gives it. It is not chosen independently of the
   surface the territory covers.
 - The biomes are ocean, ice, desert, grassland, jungle and mountain.

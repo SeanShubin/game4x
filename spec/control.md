@@ -6,40 +6,8 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 [Specification](README.md) · [Root README](../README.md)
 
-How a territory is claimed and held. Weapons and their ranges are in [combat](combat.md).
-
-## Force
-
-- Force is the capacity for violence.
-- Every territory has a force of nature, inherent to it. Nature has no quantity and no
-  population that grows.
-- Nature consumes nothing. An extractor is intentional exploitation, and nature does not
-  exploit.
-
-## Producing force
-
-- **Force is mustered each turn and does not outlast it.** What a territory presents is what it
-  mustered this turn, and nothing accumulates
-- A citizen can fight but cannot organise. **It musters no force unless something coordinates it**
-- A garrison coordinates the citizens of its territory, so that **each of them musters its
-  strength each turn**. It has no strength of its own, and **it does this by existing** - nothing
-  has to work it
-- **What a citizen spends to muster is its own**, and is not what it spends to labor or to bear
-- **A unit is organised force in itself**, and musters its own force needing nothing to coordinate
-  it
-- A territory has at most one garrison, because it represents the organisation of the whole
-  territory rather than a presence in one part of it
-
-## Gaining and holding ground
-
-- Taking a territory takes force greater than the existing force, be that nature, a player, or
-  anything else not already controlled by you
-- Holding a territory takes force equal to its force of nature
-- Should the force in a territory fall below its force of nature, nature takes it back. Its entire
-  population perishes, and every unit on it is destroyed
-- Several units brought to one place sum their force. Taking a territory uses the organised force
-  brought to it, and several units may take together
-
+How a game is won and lost. Force, and how territory is claimed and held, are a future plan
+in [force](future/force.md); weapons and their ranges are in [combat](combat.md).
 
 ## Winning
 

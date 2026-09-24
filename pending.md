@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-541** - Force, garrison and nature leave the specification; biome comes back to the data · `decide/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -31,8 +30,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (16)
+### To code (17)
 
+- **S-157** - `P-541` changed `spec/data/` three ways, and one of them withdraws half of `S-144` · `docs/notes/proposals.md`
 - **S-155** - A bad planet size does not say what was expected, which is a rule rather than a courtesy · `docs/notes/proposals.md`
 - **S-154** - `spec/README.md`'s rules renumbered, and three of your comments cite the old numbers · `docs/notes/proposals.md`
 - **S-153** - The mainline keeps the rendering and loses the rules, and thin-engine stops being a prototype · `docs/notes/proposals.md`

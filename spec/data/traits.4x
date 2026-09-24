@@ -21,3 +21,4 @@
 {trait name:paid admits:number kept:thing}
 {trait name:phase admits:value kept:thing}
 {trait name:movable admits:number kept:kind}
+{trait name:biome admits:value kept:thing}

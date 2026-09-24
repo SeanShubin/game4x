@@ -24,7 +24,8 @@ no matter how thoroughly it was discussed.
 | [Logistics](logistics.md)   | Where materials are, and moving them to where they are needed    |
 | [Population](population.md) | Citizens, how they grow, and the labor they provide              |
 | [The turn](turn.md)         | The order in which a turn resolves                               |
-| [Control](control.md)       | Force, coordination, and how territory is claimed and held       |
+| [Control](control.md)       | How a game is won and lost                                       |
+| [Force](future/force.md)    | **A future plan.** Force, garrisons, and holding ground          |
 | [Interface](interface.md)   | What the player sees and can reach                               |
 | [Console](console.md)       | The command language                                             |
 | [Combat](combat.md)         | Ranges, weapons, resolution                                      |
