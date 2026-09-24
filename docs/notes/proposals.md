@@ -69,6 +69,38 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-165 - `play.4x` states as fact that launching puts nothing into orbit, and two files say it does
+
+**to** code · **status** open · **raised** 2026-09-24 · **source** measuring what stands between Sean and moving an Ark on the map
+
+**One comment, and it is load-bearing.** `scenario/commands/play.4x:170`:
+
+```
+# Turn 10. No Ark crosses: `P-342` made launching one recipe that pays an Ark's cost at a Yard
+# and puts nothing into orbit, so there is no Ark to move.
+```
+
+**Both of these disagree with it.**
+
+```
+releases/first-release.md   launch ark ... produce | 1 | ark | above $where
+spec/data/line.4x:33        role:produce qty:1 kind:ark place-above:where
+```
+
+**`P-549` puts the rule to Sean** and this item is the comment either way: if launching leaves an
+Ark, the comment is false; if it does not, the comment is right and the release and the data are
+wrong. **Nothing to build until he answers.**
+
+## Why it is worth an item rather than a note
+
+**A comment that explains why a case is absent is the thing a reader trusts when the case is
+missing.** This one says *there is no Ark to move* and is cited from a proposal whose effect two
+other files contradict - so a reader looking for why `move` is never fired on an Ark finds an
+answer rather than a question.
+
+**And `scenario/expected/play.4x` has no Ark in it**, which agrees with the comment - but that
+file has not been reseeded since `P-512`, so it is not independent evidence.
+
 ### S-164 - `C-125` is answered and `C-106` is withdrawn, both by promotions nobody connected to them
 
 **to** code · **status** open · **raised** 2026-09-24 · **source** sweeping the items open to this lane against nine promotions
