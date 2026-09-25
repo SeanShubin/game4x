@@ -201,6 +201,64 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
         player_one_less, 4,
         "`put ... one less` rows a player owns: move, create labor, mine energy and work"
     );
+    // **The release states its own table's numbers back in prose, and nothing reached that
+    // until now.** `R-8` diagnosed it in place - *the check that covers what `docs/` says
+    // about the release does not reach what the release says about itself* - and on
+    // 2026-09-25 the code lane found the same shape three times in its own columns, one of
+    // them four lines above the comment explaining the change that made it stale.
+    //
+    // **The cost of a founding unit is the case, because it is stated twice by design**: the
+    // Recipes table charges it and the prose under *What the release leaves open* explains
+    // what it means. `P-489` moved the pioneer's energy from six to two.
+    let release = read("releases/first-release.md");
+    for (recipe, says, want) in [
+        (
+            "produce pioneer",
+            "**3 metal, 2 energy and 2 citizens**",
+            [("metal", 3u32), ("energy", 2), ("citizen", 2)],
+        ),
+        (
+            "launch ark",
+            "3 metal, 12 energy and 2 citizens",
+            [("metal", 3), ("energy", 12), ("citizen", 2)],
+        ),
+    ] {
+        assert!(
+            release.contains(says),
+            "releases/first-release.md no longer says {says:?} of `{recipe}` - if the wording \
+             changed, change it here too"
+        );
+        let charged: Vec<(String, u32)> = rows
+            .iter()
+            .filter(|cells| cells[0].trim_matches('*') == recipe && cells[2] == "consume")
+            .map(|cells| {
+                (
+                    cells[4].clone(),
+                    cells[3].parse().expect("a consume carries a number"),
+                )
+            })
+            .collect();
+        // **Poisoned from the other side too**: a recipe that stopped consuming anything would
+        // make every comparison below vacuous.
+        assert_eq!(
+            charged.len(),
+            want.len(),
+            "`{recipe}` has {} consume rows and the prose names {}",
+            charged.len(),
+            want.len()
+        );
+        for (kind, quantity) in want {
+            let found = charged.iter().find(|(k, _)| k == kind).unwrap_or_else(|| {
+                panic!("`{recipe}` consumes no {kind}, and the prose says it does")
+            });
+            assert_eq!(
+                found.1, quantity,
+                "the prose says {says:?} and the Recipes table charges `{recipe}` {} {kind}",
+                found.1
+            );
+        }
+    }
+
     // **Each wording asserted where the number is**, because a standalone count cannot tell
     // that the document still says it - which is how the message above went on naming `hold`.
     let rules = read("docs/designing-rules.md");
