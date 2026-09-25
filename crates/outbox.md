@@ -61,6 +61,72 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-139 - `mine energy` produces energy into an orbit, and the same section says an orbit holds nothing else
+
+**to** spec · **status** open · **raised** 2026-09-24 · **source** building `mine energy` after
+`931ee901` and reading the section it lands in
+
+**derived from** *an orbit holds units and nothing else* - `releases/first-release.md` -> Where
+things are
+
+**`P-552` is what this lane was waiting for and it lands against a sentence in the same section
+as the table that licenses it.** One paragraph of *Where things are* disagrees with its own
+table, and this lane has to pick one to build.
+
+## The four statements, three of which agree
+
+**`releases/first-release.md` -> Recipes**, the `mine energy` rows `P-552` promoted:
+
+```
+require 1 ark      working at least 1   above `$where`
+put       ark      working one less     above `$where`
+produce 1 energy                        above `$where`
+```
+
+**`releases/first-release.md` -> Where things are**, the table in the same section: **a unit's
+tank gives room for energy, up to the unit's fuel.** An Ark's `Fuel` is 1 since `P-552`, and an
+Ark is in an orbit - so the table already says an orbit has room for one energy.
+
+**`spec/logistics.md`**: *an orbit has room for the fuel its units carry and for nothing else,
+because that is what is in it* - and, of every place, *what a place holds of a kind is one
+number; the things in it that can hold that kind contribute capacity and hold nothing.*
+
+**And the prose of *Where things are*, which is the one that disagrees**: *there are twelve
+territories and twelve orbits. An orbit holds units and nothing else.*
+
+## Why the prose cannot be read as still true
+
+**Under pooling the energy is the orbit's and not the unit's.** That is the whole of `P-509`
+through `P-512` and it is what `S-150` built: a tank contributes capacity and holds nothing. So
+*an orbit holds units and nothing else* and *an orbit has room for the fuel its units carry*
+cannot both be carried out - the second puts a number of energy in the orbit, and the first says
+nothing but units is there.
+
+**It is not a reading of intent, it is a `produce` row.** `mine energy` produces 1 energy above
+`$where`, and `$where` is a territory, so the energy goes to the orbit above it. There is nowhere
+else the row could put it.
+
+## What this lane built, and the assumption it proceeded under
+
+**The three newer statements win and the prose is stale.** The table, the recipe and
+`spec/logistics.md` agree; the sentence is the oldest of the four and predates pooling. **So an
+orbit holds one number of energy, bounded by the tanks of the units in it**, which is what every
+other place in this release does.
+
+**`C-138` was the same shape and this is its mirror.** That one had `spec/units.md` lagging
+`spec/logistics.md`; Sean settled it as `P-552`, and `P-552`'s own destination section now lags
+the rule it promoted. **A promotion that makes something else stale** - and the something else
+is four lines above the table it landed beside.
+
+## What it does not ask
+
+**No urgency and no wording.** Nothing is built wrongly: the code follows the three that agree,
+and if Sean wants the prose instead then an Ark cannot mine and `mine energy` has nowhere to put
+what it makes, which is a bigger change than a sentence. **Which of the two he wants is his** -
+this lane can only report that the section disagrees with itself.
+
+---
+
 ### C-138 - `spec/units.md` still gives a unit a bin that holds fuel, and pooling took it away
 
 **to** spec · **status** open · **raised** 2026-09-24 · **source** building `S-150`, reading the two

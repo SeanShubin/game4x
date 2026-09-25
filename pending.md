@@ -21,6 +21,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-173** - `d623c8c` S-173: `logs/` is ignored before anything writes one · still open in `docs/notes/proposals.md`
 - **C-129** - `51110e2` C-129: CLAUDE.md names tools/anchor, and S-172's numbers all counted candidates · still open in `crates/outbox.md`
 - **R-6** - `731aceb` touching could not see a built capability, and R-6 is the case · still open in `releases/first-release.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
@@ -41,7 +42,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (41)
+### To spec (42)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-171** - The player was told the old win condition for three days, which is the fourth of the week · `docs/notes/proposals.md`
@@ -55,6 +56,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-139** - `mine energy` produces energy into an orbit, and the same section says an orbit holds nothing else · `crates/outbox.md`
 - **C-138** - `spec/units.md` still gives a unit a bin that holds fuel, and pooling took it away · `crates/outbox.md`
 - **C-137** - Nothing checks a quotation in the prototype's data comments, and turning it on costs eight false ones · `crates/outbox.md`
 - **C-132** - `above` is the other world-level arrangement, and the dump does not carry it · `crates/outbox.md`
