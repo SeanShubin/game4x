@@ -241,8 +241,8 @@ this lane can only report that the section disagrees with itself.
 **to** spec · **status** acted · **raised** 2026-09-24 · **source** building `S-150`, reading the two
 
 **Closed 2026-09-25: the two sentences this item had to choose between are one sentence now.**
-`spec/units.md:17` states pooling directly - *a mobile unit contributes room for fuel to the place
-it is in* - and **no word for a container appears in the file at all.** Measured by grepping it for
+`spec/units.md` states pooling directly, at line 17 - *a mobile unit contributes room for fuel to
+the place it is in* - and **no word for a container appears in the file at all.** Measured by grepping it for
 `bin`, which returns nothing. **So the choice this lane made while building `S-150` is what the
 specification says**, and it stopped being a choice. **cited** `931ee901`
 files against each other before changing the model
@@ -2082,11 +2082,29 @@ offered that rather than started it.
 
 **to** spec · **status** acted · **raised** 2026-09-13 · **source** building `S-128`, and the gate
 
-**Closed 2026-09-25: neither sentence it quotes is in the release.** **Verified both ways rather
-than one** - the words *a put has no quantity* and *a put names a thing that is already there*
-return nothing, **and every `put` row now carries a blank `Qty`**, thirteen of them, which is the
-same fact from the other side. The contradiction needed a rule and a row disagreeing, and the rule
-is gone while the rows agree with what it used to say.
+**Closed 2026-09-25, and the sentence first written here was false.** It said *neither sentence
+it quotes is in the release*. **Both are.** *A put names a thing that is already there* is at
+`releases/first-release.md:181`, **wrapped across two lines**; *A put has no quantity, because
+nothing is made or taken* is at `:183`, **capitalised**. The search that missed them was
+line-based and case-sensitive - **one grep, both of the failure modes `CLAUDE.md` documents, at
+once** - and the same grep had been run by the specification lane an hour earlier with the same
+result, so two lanes reached one wrong answer by the same route and neither caught it.
+
+**The closure stands, on the other half only.** Thirteen `put` rows and thirteen blank `Qty`,
+re-derived by parsing the table. **The contradiction needed a rule and a row disagreeing; the rule
+is still stated and the rows now obey it**, which is the opposite of how this was first written up
+and the same conclusion.
+
+**And the second half is resolved too, which the first note did not check at all.** This item's
+part two was that the prose stated a cost the rows had stopped stating - *3 metal, 6 energy and 2
+citizens* against a row consuming 3 and 2. The release now says **3 metal, 2 energy and 2
+citizens**, matching `produce pioneer`'s rows. Measured with whitespace collapsed, after the first
+attempt taught what a line-based search costs.
+
+**Chasing this found three stale copies of that cost in this lane's own columns** - one of them
+four lines above the comment explaining that the number had changed. They are fixed, and
+`every_cost_stated_in_prose_is_the_cost_the_model_charges` is the check that would have caught
+them. **cited** `ac9a7d34`
 refusing the rows before this lane had read them
 
 **derived from** a put names a thing that is already there and says what is true of it afterwards

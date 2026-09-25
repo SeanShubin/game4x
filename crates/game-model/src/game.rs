@@ -30,7 +30,14 @@ pub mod cost {
     pub const ARK_METAL: u32 = 3;
     pub const ARK_ENERGY: u32 = 12;
     pub const ARK_CITIZENS: u32 = 2;
-    /// A Pioneer costs 3 metal, 6 energy and 2 citizens.
+    /// A Pioneer costs 3 metal, 2 energy and 2 citizens.
+    ///
+    /// **It said six until 2026-09-25, four lines above the comment explaining that it is
+    /// two.** `P-486` made the energy a `put` and `P-489` made it a cost again at two;
+    /// `PIONEER_ENERGY`'s own doc records both moves, and this sentence - a second statement
+    /// of the same three numbers - was not edited by either. **A number an item derives goes
+    /// stale without anyone editing it**, and here the stale copy and the account of why it
+    /// moved were in one screen of each other.
     ///
     /// **Three is conservation rather than balance.** A landing deploys a garrison and two
     /// extractors at one metal each, so a unit that deploys one has to bind with three. At

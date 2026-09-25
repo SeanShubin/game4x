@@ -84,7 +84,10 @@
 {build-extractor territory:1 resource:energy}
 {end-turn}
 
-# Turn 6. Twelve of each a turn, and a pioneer costs three metal and six energy.
+# Turn 6. Twelve of each a turn, and a pioneer costs three metal and two energy.
+#
+# **Six until 2026-09-25**, which is the release's figure from before `P-489` made a pioneer's
+# energy a cost again at two. Found by chasing `C-113`, not by reading this line.
 {create-labor territory:1}
 {work territory:1 resource:food}
 {create-labor territory:1}

@@ -31,8 +31,13 @@
 {create-labor territory:2}
 {work territory:2 resource:food}
 
-# The landing site can afford another pioneer every turn: two metal and six energy against
+# The landing site can afford another pioneer every turn: three metal and two energy against
 # twelve of each.
+#
+# **Both numbers were stale and each from a different change** - two metal predates the bind
+# going to three, and six energy predates `P-489` putting the cost at two. **Neither was edited
+# when its figure moved**, which is why this comment was wrong in two ways at once while reading
+# perfectly well.
 {produce-pioneer territory:1}
 {end-turn}
 
