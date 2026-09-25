@@ -25,4 +25,5 @@
 {block id:refresh-citizen-laboring recipe:refresh owner:world}
 {block id:refresh-citizen-bearing recipe:refresh owner:world}
 {block id:refresh-extractor-working recipe:refresh owner:world}
+{block id:refresh-ark-working recipe:refresh owner:world}
 {block id:renew recipe:renew owner:world}

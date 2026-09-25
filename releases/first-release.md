@@ -274,6 +274,7 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 | **refresh**         | world  | put     |                                      | citizen   | laboring at its maximum                       |                |
 | **refresh**         | world  | put     |                                      | citizen   | bearing at its maximum                        |                |
 | **refresh**         | world  | put     |                                      | extractor | working at its maximum                        |                |
+| **refresh**         | world  | put     |                                      | ark       | working at its maximum                        |                |
 | **renew**           | world  | require | 1                                    | citizen   |                                               |                |
 |                     |        | put     |                                      | citizen   | paid 0                                        |                |
 

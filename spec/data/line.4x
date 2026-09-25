@@ -68,5 +68,6 @@
 {line block:refresh-citizen-laboring seq:1 role:put kind:citizen}
 {line block:refresh-citizen-bearing seq:1 role:put kind:citizen}
 {line block:refresh-extractor-working seq:1 role:put kind:extractor}
+{line block:refresh-ark-working seq:1 role:put kind:ark}
 {line block:renew seq:1 role:require qty:1 kind:citizen}
 {line block:renew seq:2 role:put kind:citizen}

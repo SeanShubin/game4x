@@ -100,7 +100,7 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
     let stated = [
         Stated {
             document: "docs/designing-rules.md",
-            says: "72 role cells",
+            says: "73 role cells",
             derived: rows.len(),
         },
         Stated {

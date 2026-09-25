@@ -17,4 +17,5 @@
 {constraint block:refresh-citizen-laboring seq:1 trait:laboring compare:at-maximum}
 {constraint block:refresh-citizen-bearing seq:1 trait:bearing compare:at-maximum}
 {constraint block:refresh-extractor-working seq:1 trait:working compare:at-maximum}
+{constraint block:refresh-ark-working seq:1 trait:working compare:at-maximum}
 {constraint block:renew seq:2 trait:paid compare:exactly n:0}
