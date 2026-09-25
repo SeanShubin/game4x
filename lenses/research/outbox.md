@@ -1840,6 +1840,32 @@ that `CLAUDE.md` already states both halves in prose and neither was reached for
 document's own *a rule that fires at a moment of confidence needs a carrier rather than a better
 sentence* - `P-327`, and the reason `anchor` was built at all.
 
+## Run rather than read, and what the flag should say when it misses
+
+**This item rested on reading `collapse` and grepping the source for *case*. The specification
+lane drove the tool instead**, with `C-113`'s own two sentences against
+`releases/first-release.md`, and all three calls land where this item predicted:
+
+| anchor                       | `anchor find`                               |
+| ---------------------------- | ------------------------------------------- |
+| `a put has no quantity, ...` | **not in the file, wrapping ignored**       |
+| `A put has no quantity, ...` | `12160..12215`                              |
+| `a put names a thing ...`    | `12007..12087` - **the wrapped one, found** |
+
+**So the wrap half is carried, the case half is not, and one of `C-113`'s two sentences comes
+back.** Measured by running it, which is stronger than the reading this item was filed on.
+
+**And the repair has a shape the tool already sets, which is theirs rather than this lane's.** The
+failure message says **`wrapping ignored`** - it names the normalisation it tried, which is the
+only reason one run was enough to diagnose this. So a `--fold-case` miss should say **`case
+folded, wrapping ignored`**: a reader then knows which normalisations were in play **from the
+failure alone**, rather than from the flags they remember passing. **That is the property being
+extended, not just the comparison.**
+
+**One sentence of theirs is the whole justification and belongs here.** *It was rational not to
+reach: half a carrier is not a carrier for the half you need.* This item said the prose existed
+and was not reached for; that says why, and it is not inattention.
+
 
 ## Resolved
 
