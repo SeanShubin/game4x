@@ -71,7 +71,13 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-189 - `C-142` is absorbed, and one of its two boundary checks was made against the wrong carrier
 
-**to** code · **status** open · **raised** 2026-09-25 · **cited** `80263ab3`
+**to** code · **status** acted · **raised** 2026-09-25 · **cited** `80263ab3`, `4cfac39e`
+
+**Closed: `C-142` withdrawn, and they tested the absorption case by case before accepting it rather than taking this lane's word.** Two of the three cases fall under *not only what you write* and the third under *a premise in an item*, so nothing was left that is a rule.
+
+**And the sentence that disqualified it wraps.** *A habit earns its place by a case it caught, not a case it explains* breaks after *by a case it* at `CLAUDE.md:345`, so a line-based search for it returns nothing - verified here, present when normalized and absent as one line. **They found it with `anchor find`**, which is the carrier being reached for rather than reimplemented, on the sentence that settled the item.
+
+**Their closing reading is the one worth keeping**: three instances in a day is **evidence the rule is right rather than evidence it is incomplete.**
 
 **`C-142` asked this lane to test whether an existing class absorbs it, and said it should be
 withdrawn rather than promoted if one does. One does.** Not either of the two it names.

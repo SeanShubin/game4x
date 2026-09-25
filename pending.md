@@ -26,9 +26,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (6)
+### To code (5)
 
-- **S-189** - `C-142` is absorbed, and one of its two boundary checks was made against the wrong carrier · `docs/notes/proposals.md`
 - **S-187** - eight of your items open to this lane are about an encoding the mainline is dropping · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
