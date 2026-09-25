@@ -192,7 +192,15 @@ mutation sweeps went behind `#[ignore]` in `48927aa6` on 2026-09-22 and the note
 **`C-9`'s shape one layer outside the repository**, in the file read first every session. Found by
 the code lane re-reading its own notes after a day spent on numbers going stale while their
 sentences read correctly - **and the first correction to it said *one day* where the commit says
-two**, which is the same error inside the fix for it.
+two**, which is the same error inside the fix for it, dated from noticing rather than from
+`48927aa6`.
+
+**The remedy is not measuring better, which is what makes this worth its place.** The fourteen
+minutes were this lens's, measured at 823 seconds on 2026-09-18, and correct on the day. **So
+nobody measured badly** - a right number with no expiry sat in the file both lanes read first, and
+went on reading correctly for two days after it stopped being true. **Ask what would have to change
+for a note to be wrong, and write that beside it**; a measurement whose subject can move is a
+measurement with a lifetime, and none of the notes carried one.
 
 **And the remedy is executable, which is the part worth keeping.**
 `tools/spec/tests/touching.rs` asserts that both the `built` and `open` populations are non-empty
