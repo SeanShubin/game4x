@@ -572,7 +572,15 @@ generated view does.
 
 ### R-12 - I can read the foundation form of a test without leaving the reports
 
-**to** code · **status** open · **raised** 2026-09-25 · **from** `P-558`
+**to** sean · **status** **built** 2026-09-25 · **from** `P-558` · **cited** `211652e`, `694424c`, `f947d15` · **evidence reported by the code lane and recorded here rather than by the lane that built it**, and **every clause re-derived by this lane rather than taken from the report.**
+
+**`reports/foundation/` holds 54 files and 985 rows**, and its names are identical to `reviewed/`'s 54 - diffed, not counted, so a file present under one name and absent under another could not pass. **Generated from `reviewed/` and never from `spec/tests/`**: `examples/foundation.rs` reads `reviewed/` at line 55 and says at line 60 of the other directory *nothing is generated from here*.
+
+**The unread are named and counted and are never an error**, which is the clause `C-141` corrected: line 278 reports them by name with a count, under a floor asserted **before anything is written** - *a run over almost nothing would write almost nothing and look finished*.
+
+**The reversal is `what_the_engine_runs_is_what_the_record_generates`** in `crates/thin-engine/tests/generated.rs`. The check it replaces converts `spec/tests/` and asserts the committed foundation equals it - **the working copy is the expectation there, and a test Sean has not read is in it.** This one asserts the other way.
+
+**And `render.rs`'s header had named the wrong source since 2026-09-21** - *`spec/tests/*.4x` read, and `data/foundation/tests/*.4x` written from it* - which is the plan written in the code being stale in exactly the way rule 3 exists to prevent. Corrected while building rather than filed.
 
 - **In** - `spec/README.md`, rule 3: *a test is stated in the friendly form, and the foundation
   form is a rendering of it. The rendering is generated from `reviewed/` and never from

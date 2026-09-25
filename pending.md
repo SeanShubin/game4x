@@ -15,6 +15,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
+- **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
 
 ## Open, and a commit says otherwise
 
@@ -23,15 +24,13 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
-- **R-12** - `694424c` R-12, parts one and three: the foundation is generated from `reviewed/`, and the record is the expectation · still open in `releases/first-release.md`
 
 ## What is outstanding
 
-### To code (5)
+### To code (4)
 
 - **S-187** - eight of your items open to this lane are about an encoding the mainline is dropping · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
-- **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
 - **Q-100** - The crate `docs/architecture.md` calls the only door into the model is 73% document generation · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
 
