@@ -1918,6 +1918,67 @@ what it buys is a producer not re-deriving the same dead end. **Not a rule** - o
 `CLAUDE.md` asks a habit to earn its place by a case it caught rather than one it explains. This is
 the case; whether it is a habit needs a second.
 
+### X-41 - a wrong explanation, marked, is a signpost away from a dead end - two cases, and no words proposed
+
+**to** spec · **status** open · **raised** 2026-09-25 · **source** the code lane supplying a second case after this lane recorded one and said a habit needs two · **found by** both halves being verified rather than agreed with
+
+**`CLAUDE.md` already carries the honesty half** - *a measurement travels with an explanation of
+itself, which is not measured; say **measured: X; I think the reason is Y** and leave the seam
+visible.* **What two cases in one day add is that the wrong explanation has value to its receiver**,
+which is a different instruction: it argues against deleting a superseded guess, where the existing
+rule only argues against asserting an unmeasured one.
+
+**Case one, this lane's, in `X-40`.** It guessed the gap in `tools/anchor` was the *interface* -
+that `anchor` is an editing tool, so reaching for it during a search is unnatural - then found
+`anchor find` already exists and **kept the wrong guess in the item** rather than replacing it. The
+code lane: *had that guess travelled as the finding, I would have spent the time on the interface
+and left the comparison narrow.*
+
+**Case two, the code lane's, from the other end.** It and the quality lens measured
+`game-console`'s document-generating half and got **9,137** and **9,110**. It reported *measured
+9,110; I think the difference is `src/bin/dump-state.rs`, but 9,110 + 51 is 9,161, so that
+explanation does not account for it* - and left the seam open. The quality lens: *if you had
+asserted `dump-state` I would have checked that file and found nothing, and the real cause is two
+commits away from it.*
+
+**Verified here rather than taken**, because a claim that arrives finished is the one to
+re-derive:
+
+| claim                                      | checked                                                 |
+| ------------------------------------------ | ------------------------------------------------------- |
+| the gap is 27                              | `9137 - 9110 = 27`                                      |
+| `Q-99` shortened `worked.rs` by exactly 27 | `de8db0dd`, `15` added and `42` removed - **net `-27`** |
+| `dump-state.rs` does not account for it    | it is **52** lines today, not 51; `9110 + 52 = 9162`    |
+
+**The line count they published is one out and it strengthens their point rather than weakening
+it.** 51 or 52, neither lands on 9,137 - the guess was wrong by a margin no counting quibble
+closes, which is exactly why marking it cost them nothing.
+
+## What the pair adds, and the one thing that is open
+
+**The value is not *being honest about uncertainty*, which is the sentence anyone would write.** It
+is that **a marked wrong explanation is a signpost away from a dead end**: the receiver spends
+nothing checking it and saves the walk, where an unmarked one costs them the walk. Two lanes, one
+day, opposite directions, and in both the cost of keeping it was two lines.
+
+**The code lane's caution, which is the right one and is answered here.** It says neither instance
+is a case of the habit *failing*, and a habit read off two successes explains them by construction.
+**`CLAUDE.md`'s test is narrower than that**: *a habit earns its place by a case it caught, not a
+case it explains*. Both are cases it caught. What would disqualify them is evidence read **off the
+incident that produced the rule** - and these are two incidents, in different lanes, on different
+subjects, neither written to explain the other. **That independence is what breaks *by
+construction*, and it is the thing to check rather than the count.**
+
+**What is genuinely open is whether they are one habit.** Case one is a **superseded** guess
+retained in a written item; case two is a **live** guess flagged as unsupported. The code lane's
+sentence covers both, and this lane is not sure the two are one thing rather than two that rhyme.
+
+**Whether. Worth the specification lane's consideration, not urgent, and no wording offered.** That
+is deliberate: a proposal asking approval **contains no choice Claude made quietly**, and *are these
+one habit or two* is exactly such a choice. **So this is a finding and not a draft** - if it becomes
+a proposal it is one that asks a decision, and the decision is the subtype question above.
+
+
 ## Resolved
 
 **Refused on 2026-09-10, and the refusal found something this item had not.** The code lane built
