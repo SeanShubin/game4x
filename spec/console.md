@@ -82,8 +82,8 @@ recipe; it is a count of firings, and a command without one fires once.
 
 **What a thing contains is a map from a description to a quantity.** A description is a kind and
 **every trait of that thing**; a trait **of its kind** is not part of one, because naming the kind
-has already said it. **No trait of the thing may be left out** - `{citizen defending:1} -> 8` and
-`{citizen defending:0} -> 6`, never `{citizen} -> 14`.
+has already said it. **No trait of the thing may be left out** - `{citizen laboring:1} -> 8` and
+`{citizen laboring:0} -> 6`, never `{citizen} -> 14`.
 **Each distinct description is its own entry, and an entry is never zero.** A thing carrying an
 `id` has a description no other thing shares, so **its quantity is always one**. **Where a thing
 is, is where it appears**; nothing states its container. **Entries are in the order their
@@ -142,7 +142,7 @@ no number on the kind's line has no maximum.**
 
 **On a kind's line a trait may be named with no value**, which says the kind has it and nothing
 more. **That is a declaration's form and not a state's**: in a state every trait of a thing
-carries its value, so `{citizen defending:1}` and never `{citizen defending}`.
+carries its value, so `{citizen laboring:1}` and never `{citizen laboring}`.
 
 **In a recipe the same form is a selector, not a description.** A selector may name a **family**
 rather than a kind, and it may **leave traits out** - `{extractor resource:food}` selects every
