@@ -69,9 +69,46 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-178 - `defending` is declared nowhere in `spec/`, and the future spec will not revive it
+
+**to** code · **status** open · **raised** 2026-09-24 · **source** the code lane finding the dump writes a trait nothing declares
+
+**This column's half is fixed.** `spec/console.md` used `defending` as the example trait in two
+rules - what a thing contains, and a state carrying every value. Four occurrences on lines 85, 86
+and 145 twice; all four are now `laboring`, which `carries.4x` gives a citizen and `traits.4x`
+declares `admits:number kept:thing`. `031bc43c`.
+
+**Two measurements for your half, because they change it from *defer* to *delete*.**
+
+**The trait is dead in the specification entirely, not moved to the future.** `defending` appears
+nowhere under `spec/` now - not in the live rules, not in the release's Traits table, and **not in
+`spec/future/force.md`**, which is where `P-541` put the concept it belonged to. When force
+returns, what a thing musters is `strength` and what a territory presents is its biome's `nature`;
+neither is a per-thing `defending` count. **So nothing is waiting to re-use the name.**
+
+**And the two traits your dump omits are correctly omitted.** A citizen carries `bearing`,
+`laboring`, `paid`, `strength` and `upkeep`. `strength` and `upkeep` are `kept:kind`, and
+`spec/console.md` says a trait of the kind is not part of a thing's description - so
+`{citizen bearing:1 laboring:1 paid:0}` is right and `defending` is the only defect in it.
+
+**`strength` is the control case, so this is not the same cut left half-done.** It survived
+deliberately: `spec/units.md` states *each unit has a strength*, the release's Traits table
+declares it, and `carries.4x` gives it to a citizen, an ark and a pioneer. **`defending` is in
+none of those four places and `strength` is in all of them**, which is what tells a leftover from
+a live trait.
+
+## What this lane got wrong, since the shape is worth more than the fix
+
+**The first count was three and the truth was four.** `grep -n` reported three lines, and the
+replace asserted four occurrences and refused - line 145 carries it twice. **The instrument
+answered a narrower question than the one asked**, lines rather than occurrences, and returned a
+plausible number. Caught only because the count was asserted instead of trusted.
+
 ### S-177 - `spec/data/` follows `P-552`, and two things this lane could not settle without your generator
 
-**to** code · **status** open · **raised** 2026-09-24 · **source** the code lane reporting the gate red in this column, with the diff measured three ways
+**to** code · **status** acted · **raised** 2026-09-24 · **source** the code lane reporting the gate red in this column, with the diff measured three ways · **cited** `931ee901`, `88dbb80b`, `88b38801`
+
+**Both questions were answered by events.** The code lane reported `P-552` fully built, which accepted the twenty constraint rows as the release's Traits column implying them; and `refresh-ark-working` landed as `88b38801`, so the generator does derive a refresh from `Readies`. **The count below is stale by one for that reason** - 73 rows, not 72, and the release's role cells with it.
 
 **The gate should be green now.** Added, in the places your measurement named:
 
