@@ -84,7 +84,7 @@ give a place room.
 | a store       | the resource it was built for | 10              |
 | a unit's tank | energy                        | the unit's fuel |
 
-There are twelve territories and twelve orbits. An orbit holds units and nothing else.
+There are twelve territories and twelve orbits. **An orbit holds units and the energy an Ark's tank gives it room for**, and nothing else - no extractor, no citizen, no store.
 
 **The dump is a data file, so `spec/console.md` governs what it may say** - a map from a
 description to a quantity, where a thing appears inside what holds it and nothing states its
