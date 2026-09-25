@@ -23,7 +23,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
-- **R-12** - `211652e` R-12, part two: the translator is a crate, and the direction is Cargo's rather than a convention · still open in `releases/first-release.md`
+- **R-12** - `694424c` R-12, parts one and three: the foundation is generated from `reviewed/`, and the record is the expectation · still open in `releases/first-release.md`
 
 ## What is outstanding
 
