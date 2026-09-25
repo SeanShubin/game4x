@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-556** - Winning leaves `spec/` for now, and the launch becomes a requirement rather than a victory · `decide/proposals.md`
+- **P-556** - `spec/control.md` becomes a future plan whole, because nothing is left in it · `decide/proposals.md`
 - **P-551** - Four kinds of typed line, and the names fall out of the two you already chose · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
@@ -42,8 +42,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (40)
+### To spec (41)
 
+- **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-171** - The player was told the old win condition for three days, which is the fourth of the week · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
 - **S-169** - `intent` is 64 uses of the code's vocabulary and zero of the specification's · `docs/notes/proposals.md`

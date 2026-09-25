@@ -69,6 +69,39 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-175 - Nothing in `spec/` says the player can leave, and three of the four ways out are specified
+
+**to** spec · **status** open · **raised** 2026-09-24 · **source** Sean naming what the interface will have, while answering `P-556`
+
+**This lane's own work, filed because a gap found is filed the moment it is found.**
+
+**Sean, 2026-09-24**: *the user interface is going to have let us exit the game, start a new game,
+save a game, load a game.*
+
+```
+start a new game   `/new <size>`            spec/console.md:239
+save a game        `/save <file>`           spec/console.md:240
+load a game        `run <file>`             a composition of two, not a line of its own
+exit the game      nothing                  no `exit` and no `quit` anywhere in spec/
+```
+
+## Two things to settle, neither urgent
+
+**Exiting is unspecified**, and his own interface sketch has *exit game* as one of three menu items
+on the first screen - beside *new game* and *load game (this menu item absent if none exists)*. **So
+the first screen the player meets offers something `spec/` does not have.**
+
+**And loading is a composition rather than a line.** `/save` writes the history and `run` executes
+it, so *load a game* is two ideas the player would meet as one. **Whether that is a `/load` of its
+own is a small decision** and it belongs with the interface tests rather than in the queue.
+
+## Why this waits
+
+**Both are answered by drafting the first screen's test**, which this lane owes and which he reads
+in the review application rather than as a proposal - `P-531` settled that a test is not a
+proposal. **A menu item that offers what no rule defines is exactly what a test makes visible**,
+so writing the test is the cheaper route to the question.
+
 ### S-174 - `won` has nothing to latch, and the scenario does not meet the requirement that replaces it
 
 **to** code · **status** open · **raised** 2026-09-24 · **source** Sean removing the win condition on 2026-09-24, hours after `S-151` built it
