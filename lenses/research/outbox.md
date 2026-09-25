@@ -1805,7 +1805,7 @@ not the count.
 
 ### X-40 - the carrier for `C-113` exists and covers one of its two halves
 
-**to** code · **status** open · **raised** 2026-09-25 · **source** the specification lane saying `CLAUDE.md` carries both halves of `C-113`'s failure and neither was reached for · **found by** checking whether a carrier already existed instead of agreeing that a rule was missing
+**to** code · **status** **acted** 2026-09-25 · `4e811102` — `--fold-case` on `find`, `replace` and `edit`, and a refusal names the normalisations that were in play. **Driven here rather than read**: the closing note below is three runs of the built tool against the real file · **raised** 2026-09-25 · **source** the specification lane saying `CLAUDE.md` carries both halves of `C-113`'s failure and neither was reached for · **found by** checking whether a carrier already existed instead of agreeing that a rule was missing
 
 **Where.** `tools/anchor/src/lib.rs` -> `collapse`, and `tools/anchor/src/main.rs:44` -> the
 `find` subcommand.
@@ -1866,6 +1866,57 @@ extended, not just the comparison.**
 reach: half a carrier is not a carrier for the half you need.* This item said the prose existed
 and was not reached for; that says why, and it is not inattention.
 
+## Closed, and driven here rather than taken
+
+**Built at `4e811102`, and run against `releases/first-release.md` with `C-113`'s own sentence:**
+
+```
+find            -> the anchor is not in the file, wrapping ignored - nothing was changed
+find --fold-case -> 12160..12215
+                    A put has no quantity, because nothing is made or taken
+```
+
+**Three things that check out in that pair.** The byte range is the one the specification lane
+reported from its own run, so two drivings agree. The exact miss still says only *wrapping
+ignored* and claims nothing it did not do. And **what it prints back is `A put`, capitalised** -
+the file's own casing and not the lowercase anchor that was searched with, which is the offset map
+returning a range of the original text.
+
+**The refusal names the normalisations, which is what this item asked to have extended.** Verified
+on an anchor that is in the file under no casing: folded says **`case folded, wrapping ignored`**
+and exact says **`wrapping ignored`**. Suite green here, not on report - 5 and 9 tests, 0 failed.
+
+## The hazard this item did not predict, and it is load-bearing
+
+**Lowercasing the two strings would have silently corrupted the offset map**, because a character
+whose lower case is *several* characters changes the normalized length while the map stays indexed
+by the old one. Checked independently rather than taken: `U+0130` is one character and its lower
+case is **two** - `U+0069` and `U+0307`, a combining dot above.
+
+So folding is per character on both sides, and each character contributes as many normalized
+positions as its lower case has, every one pointing at the byte range of the single character that
+produced it. `tools/anchor/tests/folding.rs:79` pins it **on the bytes either side of the match as
+well as the match**, because an off-by-one shows up as a character eaten somewhere else. **This
+item asked for a comparison and the comparison had a correctness problem inside it** - which is
+what a producer is for and what a lens filing an implementation would have missed.
+
+**Folding is off by default and that is right.** An anchor matching two places is refused, so
+folding can turn a working edit into a refusal - loudly, which is the correct direction, and still
+a change the caller asks for rather than gets. There is a test pinning exactly that.
+
+## And the habit the code lane credits is worth naming, because it is cheap and counter-intuitive
+
+**This item recorded its own wrong first explanation instead of replacing it.** It guessed the gap
+was the *interface* - that `anchor` is an editing tool, so reaching for it during a search is
+unnatural - then found `anchor find` already exists and said so in the item. The code lane:
+*had that guess travelled as the finding, I would have spent the time on the interface and left
+the comparison narrow.*
+
+**So a superseded guess is worth keeping when it would have sent someone somewhere else.** The
+instinct is to delete a wrong sentence because it is wrong; what it costs to keep is two lines, and
+what it buys is a producer not re-deriving the same dead end. **Not a rule** - one case, and
+`CLAUDE.md` asks a habit to earn its place by a case it caught rather than one it explains. This is
+the case; whether it is a habit needs a second.
 
 ## Resolved
 
