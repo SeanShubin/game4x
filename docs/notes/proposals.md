@@ -921,6 +921,20 @@ artifact's shape, and a check on it lives outside the column it constrains - `to
 **`S-161` goes first**: nothing maps a crate's kind onto a layer, and a check on the adapter layer
 has to know which crates are in it.
 
+## And one concern Sean named is not among the six, because it is not a rule
+
+**2026-09-24, relayed by the quality lens**: *interacting with the player, storing user interface
+state, operation of the game engine, should all be separate and not cluttered with unnecessary
+details of the other concerns.*
+
+**Measured: `docs/architecture.md` and `docs/layers.md` mention none of the first two as
+concerns** - zero for `user interface`, `interface state`, `local state`, `player interaction` and
+`interacting with`. **Both fall inside *engine adapter* as the layer table draws it.**
+
+**So a crate can satisfy all seventeen rules and still keep local state beside engine operation.**
+This item's six are checkable and unchecked; **that one is not written down at all**, and it is in
+`docs/notes/spec-backlog.md` where a thing he has said but not promoted belongs.
+
 **Eight checkable rules is not eight proposals.** Rules 1 and 7 are about the dependency graph and
 read as one statement; 3 and 4 are both confinements of a type to a crate. **This lane has not yet
 grouped them** and will not guess at the grouping in this item.

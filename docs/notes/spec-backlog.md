@@ -10,6 +10,42 @@ When an item lands in the spec, delete the row. Nothing here is decided.
 
 
 
+
+## 2026-09-24 - three concerns, and the architecture names one of them
+
+**Sean**, to the quality lens, having told the code lane to work through its tasks and then ask for
+a review: *focus on separation of concerns and making sure no part of the code has access to
+another part of the code that it shouldn't. Interacting with the player, storing user interface
+state, operation of the game engine, should all be separate and not cluttered with unnecessary
+details of the other concerns.*
+
+**Relayed by the quality lens rather than said here**, with a measurement this lane re-derived
+rather than accepted: **zero mentions** of `user interface`, `interface state`, `local state`,
+`player interaction` or `interacting with` in `docs/architecture.md` or `docs/layers.md`. The layer
+table has four rows - supporting, rendering, engine adapter, composition root - and declares the
+single most important line to be the model against the graphics engine. **Both of his first two
+concerns fall inside *engine adapter* as it is drawn.**
+
+## The part the relay could not have known
+
+**Two of his three concerns were named hours earlier the same day.** `P-551` landed `local state`
+for what is selected and where the view is, and `spec/invariants.md` has had `game state` all
+along. **So the vocabulary for two of the three exists and the architecture predates it by two
+hours** - `local state` appears in `spec/console.md` and nowhere else.
+
+**His third, interacting with the player, has `spec/interface.md`'s five surfaces** and no layer.
+
+## What it is not
+
+**Not a finding and not a proposal.** It is step one of the cycle: he said something and the
+writing is what counts. **The quality lens is measuring the code against his sentence rather than
+only against the seventeen rules when the review comes**, because a crate can satisfy all seventeen
+and still keep local state beside engine operation - nothing forbids it.
+
+**And it is not one of `S-159`'s six.** That item counts architecture rules that are checkable and
+unchecked; **a rule that does not exist cannot be among them**, so this is a rule missing rather
+than a rule unheld.
+
 ## 2026-09-24 - logging, and `../boardgame`'s screen dump
 
 **Sean**: *we will need a log directory with files that log everything that happened. One log will
