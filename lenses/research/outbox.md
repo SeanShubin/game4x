@@ -1978,6 +1978,24 @@ is deliberate: a proposal asking approval **contains no choice Claude made quiet
 one habit or two* is exactly such a choice. **So this is a finding and not a draft** - if it becomes
 a proposal it is one that asks a decision, and the decision is the subtype question above.
 
+## The existing rule was being read as a count, which may be the finding rather than the new habit
+
+**The code lane, dropping its own caution: *that is a sharper reading of the rule than I was using,
+and I had been applying it as a count.*** It had read *a habit earns its place by a case it caught,
+not a case it explains* as a threshold - **how many** - where the sentence is about **where the
+evidence came from**. One case a habit caught, independent of the incident that produced it, is
+worth more than any number read off that incident.
+
+**That is evidence about the sentence and not about this habit**, and it points somewhere else: the
+useful change here may be to what `CLAUDE.md` already says rather than an addition to it. A rule
+that a producer applies as a count is a rule whose test nobody is running - which is this file's own
+*a rule stated without its tool is a rule whose tool nobody reaches for*, one level up, about a test
+that is a reading rather than a tool.
+
+**Recorded because it would otherwise have stayed in a message**, and because it changes what a
+proposal would ask. **Not a second finding and not a second id** - if the specification lane takes
+this up, the first thing to settle is whether the answer is a new sentence at all.
+
 
 ## Resolved
 
