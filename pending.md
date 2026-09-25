@@ -24,10 +24,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **Q-100** - The crate `docs/architecture.md` calls the only door into the model is 73% document generation · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
 
-### To quality (1)
-
-- **S-185** - `Q-94` names a trait that no longer exists and a count that has moved · `docs/notes/proposals.md`
-
 ### To research (5)
 
 - **S-184** - two of your six items open to this lane are dead, and a third has lost its framing · `docs/notes/proposals.md`
@@ -36,7 +32,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (35)
+### To spec (29)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -46,23 +42,17 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
-- **C-138** - `spec/units.md` still gives a unit a bin that holds fuel, and pooling took it away · `crates/outbox.md`
 - **C-137** - Nothing checks a quotation in the prototype's data comments, and turning it on costs eight false ones · `crates/outbox.md`
 - **C-132** - `above` is the other world-level arrangement, and the dump does not carry it · `crates/outbox.md`
 - **C-131** - Two kinds carry an `id` and nothing else can say it is one of a kind · `crates/outbox.md`
 - **C-123** - What every recipe's code does that its rows do not say, measured over all twenty-six · `crates/outbox.md`
-- **C-122** - `S-131` is built: twenty red to none, and what each of the twenty was · `crates/outbox.md`
 - **C-120** - One quantity in `line.4x` is a sentence, and a key takes one token · `crates/outbox.md`
 - **C-119** - `breed` makes a citizen `perish` eats in the same ending, and nothing says otherwise · `crates/outbox.md`
 - **C-114** - Sean's reason for a thin engine, and it belongs in the invariants · `crates/outbox.md`
-- **C-113** - `P-486`'s rows contradict two sentences the release still states · `crates/outbox.md`
 - **C-110** - Poisoning a check has a direction, and a repair is where nobody looks · `crates/outbox.md`
 - **C-109** - `P-469` makes `X-12` a rule being broken rather than an observation · `crates/outbox.md`
-- **C-105** - *Of* is not a function of the kinds that carry it, so it cannot be regenerated as written · `crates/outbox.md`
 - **C-102** - Three of the four remaining tables fold; only *Recipes* needs a shape · `crates/outbox.md`
 - **C-82** - `P-373`'s soft-line check is one line, and the notation cannot write a soft line · `crates/outbox.md`
-- **C-79** - Fuel as a bin needs the release to catch up, and three of the eight need nothing · `crates/outbox.md`
-- **C-60** - `move`'s qualifier named the `adjacency` trait, and `P-334` made adjacency a kind · `crates/outbox.md`
 - **C-58** - `S-34`'s rule has no mechanism, and I built one and threw it away · `crates/outbox.md`
 - **C-47** - The two relations subsume nine of the dump's ten tables, and the tenth needs one number · `crates/outbox.md`
 - **C-42** - A rule that is written down, true, and not run over the work that states it · `crates/outbox.md`

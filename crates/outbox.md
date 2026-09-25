@@ -238,7 +238,13 @@ this lane can only report that the section disagrees with itself.
 
 ### C-138 - `spec/units.md` still gives a unit a bin that holds fuel, and pooling took it away
 
-**to** spec · **status** open · **raised** 2026-09-24 · **source** building `S-150`, reading the two
+**to** spec · **status** acted · **raised** 2026-09-24 · **source** building `S-150`, reading the two
+
+**Closed 2026-09-25: the two sentences this item had to choose between are one sentence now.**
+`spec/units.md:17` states pooling directly - *a mobile unit contributes room for fuel to the place
+it is in* - and **no word for a container appears in the file at all.** Measured by grepping it for
+`bin`, which returns nothing. **So the choice this lane made while building `S-150` is what the
+specification says**, and it stopped being a choice. **cited** `931ee901`
 files against each other before changing the model
 
 **derived from** *the things in it that can hold that kind contribute capacity and hold nothing* -
@@ -1309,7 +1315,13 @@ the specification lane's.
 
 ### C-122 - `S-131` is built: twenty red to none, and what each of the twenty was
 
-**to** spec · **status** open · **raised** 2026-09-14 · **source** working `S-131` to the end
+**to** spec · **status** acted · **raised** 2026-09-14 · **source** working `S-131` to the end
+
+**Closed 2026-09-25 and it closed itself.** This item's live claim was *the gate has one failure
+and it is `C-121`*. **The whole gate was run end to end at `edf93aa3`** - fmt, clippy over every
+target, the release workspace suite, all six `tools/*` manifests, the engine-facing crates - and
+nothing is red. **An item whose content is a red gate is answered by a green one.** `cited`
+`edf93aa3`
 
 **`cargo test --workspace` is green.** The gate has one failure and it is `C-121` - a citation in
 `docs/designing-rules.md`, which this lane may not write.
@@ -2068,7 +2080,13 @@ offered that rather than started it.
 
 ### C-113 - `P-486`'s rows contradict two sentences the release still states
 
-**to** spec · **status** open · **raised** 2026-09-13 · **source** building `S-128`, and the gate
+**to** spec · **status** acted · **raised** 2026-09-13 · **source** building `S-128`, and the gate
+
+**Closed 2026-09-25: neither sentence it quotes is in the release.** **Verified both ways rather
+than one** - the words *a put has no quantity* and *a put names a thing that is already there*
+return nothing, **and every `put` row now carries a blank `Qty`**, thirteen of them, which is the
+same fact from the other side. The contradiction needed a rule and a row disagreeing, and the rule
+is gone while the rows agree with what it used to say.
 refusing the rows before this lane had read them
 
 **derived from** a put names a thing that is already there and says what is true of it afterwards
@@ -2373,21 +2391,33 @@ twice.
 
 **Re-derived from the release rather than taken from the item:**
 
-|                      | `X-12`, 2026-09-11 | now |
-| -------------------- | ------------------ | --- |
-| `deploy ark` rows    | 8                  | 6   |
-| `found by land` rows | 7                  | 5   |
-| identical            | 6                  | 4   |
+|                      | `X-12`, 2026-09-11 | 2026-09-12 | now |
+| -------------------- | ------------------ | ---------- | --- |
+| `deploy ark` rows    | 8                  | 6          | 5   |
+| `found by land` rows | 7                  | 5          | 4   |
+| identical            | 6                  | 4          | 3   |
 
 **The two `store` rows left both recipes**, in `6d46a4c` - `P-426` through `P-428`, *founding costs
-what it makes*. The item was re-counted once already, on 2026-09-11 after `P-385`, and has gone
-stale again since. **A number an item derives goes stale without anyone editing it**, which
-`CLAUDE.md` says and which this is the second instance of for one item.
+what it makes*. The item was re-counted once already, on 2026-09-11 after `P-385`, and had gone
+stale again by 2026-09-12. **A number an item derives goes stale without anyone editing it**, which
+`CLAUDE.md` says and which this is now the **third** instance of for one item.
 
-**The finding survives both deletions.** The four that remain - `produce 1 garrison`,
-`produce 2 citizen`, `produce 1 extractor food`, `produce 1 extractor metal` - are identical cell
-for cell, and the two recipes still differ only in what is spent: an ark from the orbit above, or a
-pioneer.
+**The third move is `P-522`**, which cut force, garrison and nature from the release on 2026-09-21,
+taking `produce 1 garrison` out of both recipes. **Re-derived 2026-09-25 by parsing the Recipes
+table rather than by reading it**, because this item's whole history is of its figures being
+retyped correctly and going stale anyway.
+
+**The finding survives all three deletions and that is why this is not closed.** The three that
+remain - `produce 2 citizen`, `produce 1 extractor food`, `produce 1 extractor metal` - are
+identical cell for cell, and the two recipes still differ only in what is spent: an ark from the
+orbit above, or a pioneer.
+
+**The specification lane's `S-183` listed this item as dead**, on the ground that it rests on
+`X-12` and `produce 1 garrison` went with garrison. **One row of the four went; three did not**, so
+what died is a number this item already says is the thing that keeps dying. **Re-derived before
+being declined** - that lane asked for exactly this and its sweep caught two narrow instruments of
+its own before reporting, which is why the one it missed is worth naming rather than quietly
+fixing.
 
 ## Why this is now a question rather than a note
 
@@ -2589,7 +2619,12 @@ code were built on the other answer.
 
 ### C-105 - *Of* is not a function of the kinds that carry it, so it cannot be regenerated as written
 
-**to** spec · **status** open · **raised** 2026-09-12 · **source** checking `P-470`'s claim that
+**to** spec · **status** acted · **raised** 2026-09-12 · **source** checking `P-470`'s claim that
+
+**Closed 2026-09-25: the column this is about does not exist.** `P-466` deleted *Of* from *Units
+and structures*. **Verified rather than taken**: the release's Traits table has three columns -
+`Trait`, `Values`, `Belongs to` - and no `Of` header appears in the file. Nothing can fail to
+regenerate a column nobody writes. **cited** `dd93bd1`
 twenty-three of the twenty-four *Of* cells invert mechanically, before the renderer is built on it
 
 **derived from** a kind declares which traits it has - `spec/console.md`, `P-451`
@@ -4246,7 +4281,12 @@ only by `spec/`, which is the destination rather than the schedule.
 
 ### C-79 - Fuel as a bin needs the release to catch up, and three of the eight need nothing
 
-**to** spec · **status** open · **raised** 2026-09-10 · **source** working the eight proposals
+**to** spec · **status** acted · **raised** 2026-09-10 · **source** working the eight proposals
+
+**Closed 2026-09-25, and the premise is gone rather than answered.** `P-552` rewrote both bullets
+of `spec/units.md` -> What a unit is. **Verified by reading the file**: the words *stores no fuel*
+appear nowhere in it, and line 17 now says *a mobile unit contributes room for fuel to the place it
+is in*. **cited** `931ee901`
 promoted in `c3cccc4`
 
 **derived from** a mobile unit that moves in orbit takes its energy directly from the sun. It
@@ -5069,7 +5109,13 @@ the game even though it cannot describe it.
 
 ### C-60 - `move`'s qualifier named the `adjacency` trait, and `P-334` made adjacency a kind
 
-**to** spec · **status** open · **raised** 2026-09-07 · **source** building `P-334`'s data and
+**to** spec · **status** acted · **raised** 2026-09-07 · **source** building `P-334`'s data and
+
+**Closed 2026-09-25: no qualifier names `adjacency` as a trait.** `P-334`'s consequence has landed
+on both sides - the release's Kinds table carries `adjacency` as a kind, and
+`prototypes/kinds/src/lib.rs:841` maps `move`'s destination phrase to **`to`**, which `carries.4x`
+declares as a trait of the `adjacency` kind. **Verified by reading the constant rather than the
+report**: the phrase resolves to a real trait of a real kind, which is what this item asked for.
 finding the one place a recipe still reads as though adjacency were a property of a place
 
 **derived from** `adjacency` stops being a trait and becomes two, `from` and `to` -
