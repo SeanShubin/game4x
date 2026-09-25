@@ -1046,6 +1046,11 @@ question\nit exists to ask.\n\n",
 /// One commit, as much of it as reconciliation needs.
 #[derive(Clone, Debug)]
 pub struct Commit {
+    /// **The whole hash, and it was seven characters until `S-180`.**
+    ///
+    /// A citation is matched against this as a prefix, so truncating it here made the
+    /// comparison **fail for a citation that was more precise than seven characters** -
+    /// `731acebf` is not a prefix of `731aceb`. See [`unclosed`] for what that cost.
     pub hash: String,
     pub subject: String,
     /// Every path the commit touched, relative to the repository root.
@@ -1097,13 +1102,36 @@ pub fn unclosed(items: &[Item], commits: &[Commit]) -> Vec<Unclosed> {
             if !cites(&commit.subject, &item.id) {
                 continue;
             }
+            // **A citation is a prefix of the hash, and the hash is now whole.**
+            // `S-180`: this compared against a hash already cut to seven characters, so
+            // `731acebf` - a real abbreviation of a real commit, one character more precise
+            // than the tool prints - matched nothing, and `R-6` and `R-8` were named on every
+            // run for as long as they recorded it. **Being more precise failed, silently**:
+            // nothing said *that hash was not recognised*, only that the item was still open.
+            //
+            // **`git log --format=%h` abbreviates to eight in this repository and this tool
+            // prints seven**, so a lane that copied a hash out of `git log` wrote a citation
+            // that could not work. Every `cited` field in `docs/notes/proposals.md` carries
+            // eight, which is the whole specification lane's outbox latent on one `take(7)`.
+            // Found by that lane, running `--settled` either side of a change that altered
+            // nothing but the width.
+            //
+            // **This line did not change and did not need to.** A second arm accepting a
+            // citation *longer* than the hash was written here and deleted: with the whole
+            // hash to compare against, it can never fire, and a branch nothing reaches is
+            // the one kind of defect no check can catch. **The whole of the repair is that
+            // `history` stops truncating** - one decision in one place, rather than a
+            // comparison taught to tolerate a mutilated input.
             if item.cited.iter().any(|seen| commit.hash.starts_with(seen)) {
                 continue;
             }
             found.push(Unclosed {
                 id: item.id.clone(),
                 outbox: item.outbox.clone(),
-                hash: commit.hash.clone(),
+                // **Abbreviated here rather than at the source**, so that what is matched
+                // and what is shown are two decisions. `S-180` was the one decision doing
+                // both jobs, and the matching half was wrong.
+                hash: commit.hash.chars().take(7).collect(),
                 subject: commit.subject.clone(),
                 citations: commits
                     .iter()
@@ -1175,7 +1203,11 @@ pub fn history(root: &Path, depth: usize) -> Vec<Commit> {
             .map(str::to_string)
             .collect();
         commits.push(Commit {
-            hash: head.chars().take(7).collect(),
+            // **The whole hash, since `S-180`.** This took seven characters, and a citation
+            // is compared against it with `starts_with` - so a `cited` field of eight
+            // characters could never match, however real the commit was. Abbreviating is
+            // now [`Unclosed`]'s business, which is where the hash is printed.
+            hash: head.to_string(),
             subject,
             touched,
         });
@@ -1831,6 +1863,142 @@ end - `spec/turn.md`, `P-100`
         )];
         assert_eq!(unclosed(&[item("C-5", &[])], &commits).len(), 1);
         assert!(unclosed(&[item("C-5", &["1d8c46f"])], &commits).is_empty());
+    }
+
+    /// A citation matches however precisely it was written, at every width from seven up.
+    ///
+    /// # The check that would have failed before this
+    ///
+    /// **`S-180`, and it cost the specification lane an hour.** `history` cut every hash to
+    /// seven characters and `unclosed` compared a citation against the cut, so
+    /// `` **cited** `731acebf` `` - a real abbreviation of a real commit, one character more
+    /// precise than this tool prints - **matched nothing**. `R-6` and `R-8` were named on
+    /// every run of the pre-commit hook for as long as they recorded it, and recording it
+    /// harder made it worse.
+    ///
+    /// **Being more precise failed, silently.** Nothing said *that hash was not recognised*;
+    /// the only output was that the item was still open, which is exactly what the output
+    /// says when nobody has recorded anything. A wrong number invites a question and a right
+    /// number about the wrong thing invites none.
+    ///
+    /// **And it was latent across a whole outbox.** `git log --format=%h` abbreviates to
+    /// eight in this repository while this tool prints seven, so every `cited` field in
+    /// `docs/notes/proposals.md` - copied from `git log` - could never have matched. One
+    /// `take(7)` held that.
+    ///
+    /// **Every width is checked rather than the eight that failed**, because fixing the case
+    /// an item happened to name would leave the next one open: forty characters is as legal
+    /// an abbreviation as seven, and the count below says how many widths were tried.
+    ///
+    /// # What this one would not have caught, said rather than implied
+    ///
+    /// **This test passes against the code that had the defect**, and measuring that is how
+    /// it came to say so. It builds its own [`Commit`] with a whole hash, so the matcher it
+    /// exercises was always correct - the fault was in [`history`], which handed the matcher
+    /// a hash already cut to seven characters. **A rule can be right on its examples and
+    /// wrong about every real input**, which is exactly what happened.
+    ///
+    /// So this pins the contract and
+    /// `every_hash_the_real_outboxes_cite_is_one_the_matcher_can_recognise` is the check that
+    /// would have failed: restoring the `take(7)` leaves this green and turns that one red.
+    #[test]
+    fn a_citation_matches_however_precisely_it_was_written() {
+        let whole = "731acebf33094b3482adc72298ebdd00af80f59a";
+        let commits = vec![commit(
+            whole,
+            "R-6: the loop plays through",
+            &["crates/game-console/src/lib.rs"],
+        )];
+
+        // Uncited, so it is reported - the control, without which every assertion below
+        // could pass because the matcher never runs.
+        assert_eq!(
+            unclosed(&[item("R-6", &[])], &commits).len(),
+            1,
+            "an uncited item is reported, or this test proves nothing about citing one"
+        );
+
+        let mut widths = 0;
+        for width in 7..=whole.len() {
+            let cited = &whole[..width];
+            assert!(
+                unclosed(&[item("R-6", &[cited])], &commits).is_empty(),
+                "`{cited}` is {width} characters of the commit`s own hash and was not                  recognised as a citation of it"
+            );
+            widths += 1;
+        }
+        assert_eq!(
+            widths, 34,
+            "seven characters up to forty is thirty-four widths; {widths} were tried"
+        );
+
+        // **And a hash that is not this commit's still reports**, so the relaxation above is
+        // a prefix match rather than a match on anything hash-shaped.
+        assert_eq!(
+            unclosed(&[item("R-6", &["aaaaaaa"])], &commits).len(),
+            1,
+            "a citation of some other commit is not a citation of this one"
+        );
+    }
+
+    /// Every hash this repository`s outboxes actually cite is one the matcher can recognise.
+    ///
+    /// **The unit test above is the rule and this is the population.** `S-180` was found in
+    /// the real outboxes rather than in a fixture, and a rule that holds on constructed
+    /// hashes can still miss every real one - which is what happened: the widths in this
+    /// repository are seven and eight, and only one of the two worked.
+    ///
+    /// **A citation older than the window is not a failure**, so what is asserted is that
+    /// every citation which does resolve to a commit in the window is matched by it, and
+    /// **how many did** - a run where nothing resolved would satisfy the first half for the
+    /// wrong reason.
+    #[test]
+    fn every_hash_the_real_outboxes_cite_is_one_the_matcher_can_recognise() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+        let all = read(&root);
+        let commits = history(&root, 400);
+        assert!(
+            commits.len() > 100,
+            "only {} commits read, so this would agree with almost any citation",
+            commits.len()
+        );
+        assert!(
+            commits.iter().all(|commit| commit.hash.len() == 40),
+            "a hash is carried whole now, and a citation is matched against the whole of it"
+        );
+
+        let mut resolved = 0;
+        let mut widths = std::collections::BTreeSet::new();
+        for item in &all.items {
+            for cited in &item.cited {
+                let Some(found) = commits.iter().find(|commit| commit.hash.starts_with(cited))
+                else {
+                    // Older than the window, or a hash that has stopped existing. Neither is
+                    // this test`s subject: `tools/spec` fails the gate on a `cited` field that
+                    // names no commit, and it resolves rather than comparing strings.
+                    continue;
+                };
+                assert!(
+                    found.hash.starts_with(cited),
+                    "{}`s citation `{cited}` resolves to {} and is not a prefix of it",
+                    item.id,
+                    found.hash
+                );
+                widths.insert(cited.len());
+                resolved += 1;
+            }
+        }
+        assert!(
+            resolved > 20,
+            "only {resolved} citations resolved to a commit in the window, which is too few              for the assertion above to have been asked of anything"
+        );
+        // **Both widths are present, which is the whole of `S-180`.** Seven is what this tool
+        // prints and eight is what `git log --format=%h` gives; a repository carrying only one
+        // of them would pass this without the defect having been fixed.
+        assert!(
+            widths.contains(&7) && widths.contains(&8),
+            "the citations in this repository are {widths:?}, and `S-180` was about seven and              eight disagreeing - if only one width is left, this check has stopped covering it"
+        );
     }
 
     /// `C-1` must not be settled by a commit about `C-12`.
