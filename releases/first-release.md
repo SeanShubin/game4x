@@ -371,21 +371,30 @@ that used to be kept is lost at a turn's end. `scenario/expected/play.4x` was re
 `P-225`'s protocol and is **unreviewed, and says so**.
 
 
-**The first clause is observed whole for the first time, 2026-09-25** - `c3b9e39`, reported by the
-code lane and **re-derived here from the state rather than from the commands**, because a line is
-not a launch. `scenario/expected/play.4x` holds **two Arks aloft, over orbits 1 and 2, and none on
-any surface** - which is what makes the orbit an Ark is above the territory it launched from, since
-`P-549` admits no ark on a surface. The scenario runs **fifteen `{end-turn}`s over 211 command
-lines**, and carries both `{launch-ark territory:1}` and `{launch-ark territory:2}`. **The Ark the
-game began with was consumed by `deploy-ark` on turn 1**, so two Arks in two orbits is two
-launches, and the second is from ground taken by land.
+**The first clause is observed whole, 2026-09-25** - `c3b9e39`. **What witnesses it is the steps
+rather than the final state, and this line said otherwise for a day.** It read *two Arks aloft over
+orbits 1 and 2, and none on any surface* - on the premise that `P-549` admits no ark on a surface,
+so the orbit an Ark sits in is the territory it launched from. **`cd5b8b2c` added a sixteenth turn
+that crosses an Ark from orbit 1 to orbit 2**: both Arks are in orbit 2 now, the position witnesses
+one launch where there were two, and **nothing about the game changed.**
 
-**The check behind this clause had been reading the input.** It counted `{launch-ark` lines in the
-scenario file - which a scenario launching twice from the same ground satisfies just as well, and
-is *a check whose subject is behaviour reads the outcome, not the input* exactly. It now reads
-where the Arks are, asserts `[1, 2]`, and names territory 2 in a second assertion, because a count
-of two would not have caught two launches from territory 1. **Poisoned before being believed**:
-deleting turn 15's launch gives `[1]` against `[1, 2]`.
+**The commands are `{deploy-ark territory:1}` on turn 1, `{launch-ark territory:1}` on turn 9,
+`{launch-ark territory:2}` on turn 15, and `{move unit:ark from:1 to:2}` on turn 16** - sixteen
+`{end-turn}`s over 219 command lines. **The second launch is from ground taken by land**, which is
+what the clause asks, and the Ark the game began with was consumed by `deploy-ark` on turn 1.
+
+**The check behind this clause has read a proxy twice, and reads the step now.** It counted
+`{launch-ark` lines in the scenario file, which a scenario launching twice from the same ground
+satisfies just as well - *a check whose subject is behaviour reads the outcome, not the input*. Its
+replacement read the final position and asserted `[1, 2]`, which held only while no Ark had moved;
+turn 16 made it `[2, 2]`, one launch appeared to vanish, and the game was correct throughout. **It
+asserts the step now**: a launch above a territory is a step after which that orbit holds one more
+Ark **and the game holds one more unit**, so a crossing adds none and a landing consumes one.
+
+**Both corrections came out of re-deriving a claim that had arrived finished, and the second one
+arrived saying this line was unaffected.** It was not. **`a line is not a launch` and `where a
+thing is now is not where it came from` are the same failure one level apart**, found a day apart,
+in the same clause of the same capability.
 
 **What territory 2 had to build, because `P-427` leaves a founding with no stores at all**: a metal
 store, a second mine and the first well on turn 11; the second metal store that mine licenses, the
