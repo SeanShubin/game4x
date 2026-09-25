@@ -10,7 +10,7 @@
 
 **`P-426` and `P-427` have since decided that question elsewhere**, which is what the gap looks like when somebody closes it by hand: the Kinds row now says metal is *drawn from the planet, and conserved once above ground*, reconciling it with the planet being an endless source, and the four `produce 1 store` rows are gone from both founding recipes - which were creating five metal of binding while consuming three. **Both were found by re-deriving from the Binding column, not here.**
 
-**44 rules**, ground from **27** blocks of recipe rows: a family becomes its members, a density becomes its cases. **22 of them draw on a source** - the planet, the star or time - and a source is a place they take from rather than an exemption from the arithmetic. That is what keeps them in the check instead of out of it.
+**46 rules**, ground from **29** blocks of recipe rows: a family becomes its members, a density becomes its cases. **23 of them draw on a source** - the planet, the star or time - and a source is a place they take from rather than an exemption from the arithmetic. That is what keeps them in the check instead of out of it.
 
 ## A weighting exists, so nothing comes back round with more
 
@@ -24,6 +24,7 @@ Every rule is non-increasing under the weighting below, so any sequence of them 
 | pioneer            | 12     | a thing                  |
 | food               | 4      | a thing                  |
 | ark, moving        | 3      | a count, spent by acting |
+| ark, working       | 3      | a count, spent by acting |
 | citizen            | 3      | a thing                  |
 | citizen, bearing   | 3      | a count, spent by acting |
 | citizen, laboring  | 3      | a count, spent by acting |
@@ -57,6 +58,7 @@ Made minus taken, per place. A `require` row moves nothing and is absent rather 
 | produce pioneer                 | +1 pioneer · -2 citizen · -2 energy · -3 metal              | -9    |
 | launch ark                      | +1 ark · -12 energy · -2 citizen · -3 metal                 | -39   |
 | create labor (citizen laboring) | +1 labor · -1 citizen, laboring                             | 0     |
+| mine energy (ark working)       | +1 energy · -1 ark, working                                 | 0     |
 | work (energy x2)                | +2 energy · -1 extractor, working · -1 labor · -1 the star  | -18   |
 | work (energy x4)                | +4 energy · -1 extractor, working · -1 labor · -1 the star  | -12   |
 | work (energy x5)                | +5 energy · -1 extractor, working · -1 labor · -1 the star  | -9    |
@@ -90,6 +92,7 @@ Made minus taken, per place. A `require` row moves nothing and is absent rather 
 | refresh (citizen laboring)      | +1 citizen, laboring · -1 time                              | 0     |
 | refresh (citizen bearing)       | +1 citizen, bearing · -1 time                               | 0     |
 | refresh (extractor working)     | +1 extractor, working · -1 time                             | 0     |
+| refresh (ark working)           | +1 ark, working · -1 time                                   | 0     |
 | renew (citizen paid)            | -1 citizen, paid                                            | -3    |
 
 **A rule that nets nothing is kept rather than dropped.** `stow` moves a resource into a store, and a store is a container rather than a state - so at this granularity it does nothing, and a reader looking for it should find it saying so rather than find it missing.

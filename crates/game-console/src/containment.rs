@@ -664,13 +664,49 @@ pub fn tree(game: &Game) -> Entry {
         // have to be named individually, which is what `releases/first-release.md` says an
         // `id` is for.
         let mut above = Entry::leaf(Description::of(Kind::Orbit).with("id", place.id));
-        above.contents = group(
-            game.units
-                .iter()
-                .filter(|unit| unit.location == game_model::Location::Orbit(place.id))
-                .map(entry_for_unit)
-                .collect(),
-        );
+        let orbit = game_model::Location::Orbit(place.id);
+        let mut inside: Vec<Entry> = game
+            .units
+            .iter()
+            .filter(|unit| unit.location == orbit)
+            .map(entry_for_unit)
+            .collect();
+        // **What the orbit holds, since `P-552` gave it something to hold.** `mine energy`
+        // produces energy *above `$where`*, and under pooling that energy is the orbit's rather
+        // than the Ark's - so it is an entry beside the units and not inside one, which is the
+        // same shape a territory's resources have.
+        //
+        // **An entry is never zero** - `spec/console.md` - so an orbit with nothing mined reads
+        // as units alone, exactly as it did before there was anything to mine.
+        for (resource, amount) in game
+            .orbits
+            .get(&place.id)
+            .map(|it| it.holding())
+            .unwrap_or_default()
+        {
+            inside.push(Entry {
+                description: Description::of(Kind::from_resource(resource)),
+                quantity: amount,
+                contents: Vec::new(),
+                capacity: Vec::new(),
+            });
+        }
+        above.contents = group(inside);
+        // **And its room, which is the tanks in it and nothing else.** `spec/logistics.md`: *an
+        // orbit has room for the fuel its units carry and for nothing else, because that is what
+        // is in it.* So an empty orbit declares room for nothing, and a reader can see why what
+        // was mined there goes at the turn's end.
+        above.capacity = Resource::ALL
+            .iter()
+            .filter(|resource| {
+                game.room_in(orbit, **resource) > 0 || game.held_in(orbit, **resource) > 0
+            })
+            .map(|resource| Capacity {
+                of: Description::of(Kind::from_resource(*resource)),
+                room: game.room_in(orbit, *resource) as i64 - game.held_in(orbit, *resource) as i64,
+                used: game.held_in(orbit, *resource),
+            })
+            .collect();
         children.push(above);
     }
 

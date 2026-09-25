@@ -190,4 +190,18 @@
 {work territory:1 resource:food}
 {create-labor territory:2}
 {work territory:2 resource:food}
+
+# **And the Ark that turn 9 launched mines from the sun** - `P-552`, which is what gives an orbit
+# anything in it. `spec/units.md`: *a mobile unit that moves in orbit gathers its own energy from
+# the sun. It mines one unit.*
+#
+# **One unit is exactly one crossing**, which is the Ark's `Fuel` of 1 - so this is the state a
+# reader needs to see the loop at all: an orbit with something in it, and a unit that could spend
+# it. **Nothing crosses yet**, because a second orbit to cross to is the scenario's next gap and
+# not this recipe's.
+#
+# **It survives the turn's end**, and that is the tank doing the one thing a tank does: an orbit
+# declares no room of its own, so what is mined is kept only while the Ark that mined it is still
+# there to hold it.
+{mine-energy territory:1}
 {end-turn}

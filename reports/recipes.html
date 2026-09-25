@@ -14,7 +14,7 @@
 <p><strong>Generated. Do not edit.</strong> <code>cargo run -p game-console --bin dump-state</code>, or <code>scripts/dump-state.sh</code>.</p>
 <p>Every recipe the release declares, with its own lines gathered under it. The release states these across seven columns, one row per line and the name written only on the first - which is the right shape for a table and the wrong one for answering <em>what does this recipe do</em>.</p>
 <p><strong>Beside each rule is a worked example</strong> - a state, the command that fires the recipe, and the state after - in the notation <code>scenario/expected/play.4x</code> uses, holding only what that recipe touched. Every one is a real command run against a real state: <code>R-7</code>.</p>
-<p>27 recipes, 68 lines between them, 12 worked examples.</p>
+<p>29 recipes, 73 lines between them, 13 worked examples.</p>
 <h2 id="deploy-ark">deploy ark</h2>
 <p>Run by the <strong>player</strong>.</p>
 <ul class="bullets">
@@ -278,6 +278,29 @@
     {citizen bearing:1 defending:1 laboring:0 paid:0} -&gt; 1
     {garrison} -&gt; 1
     {labor} -&gt; 1
+</pre>
+<h2 id="mine-energy">mine energy</h2>
+<p>Run by the <strong>player</strong>.</p>
+<ul class="bullets">
+<li><strong>require</strong> 1 territory, in <code>$where</code></li>
+<li><strong>require</strong> 1 ark, working at least 1, in above <code>$where</code></li>
+<li><strong>put</strong> ark — , working one less, in above <code>$where</code></li>
+<li><strong>produce</strong> 1 energy, in above <code>$where</code></li>
+</ul>
+<h3 id="an-example">An example</h3>
+<p>Before:</p>
+<pre>
+{game phase:play}
+  {orbit id:1} -&gt; 1
+    {ark id:1 defending:1 moving:1} -&gt; 1
+</pre>
+<p><code>{mine-energy territory:1}</code></p>
+<p>After:</p>
+<pre>
+{game phase:play}
+  {orbit id:1} -&gt; 1
+    {ark id:1 defending:1 moving:1} -&gt; 1
+    {energy} -&gt; 1
 </pre>
 <h2 id="work">work</h2>
 <p>Run by the <strong>player</strong>.</p>
@@ -903,6 +926,43 @@
 <p>Run by the <strong>world</strong>.</p>
 <ul class="bullets">
 <li><strong>put</strong> extractor — , working at its maximum</li>
+</ul>
+<h3 id="an-example">An example</h3>
+<p><strong>One ending, 10 recipes.</strong> This same firing is the example for upkeep, bear, breed, perish, age, spoil, stow, discard, renew as well - no command fires one of the world's alone.</p>
+<p>the world's ten in one ending, in the release's order, and the way the population settles when <strong>the food is the lesser</strong>. Territory 1 has three food for two citizens: <code>upkeep</code> feeds both, <code>bear</code> turns each of them spent and leaves two fertility, and <code>breed</code> fires <strong>once</strong> rather than twice - there is one food left and each new citizen costs one. <code>renew</code> makes both parents fertile again. Territory 2 has no food, so its citizen goes unpaid, <code>breed</code> cannot fire there at all, and <code>perish</code> takes it. What food is left expires, the fertility nobody bred with is discarded, and the worked extractor is ready again. <strong>The pioneer in territory 2 is untouched</strong>, because nothing but a citizen eats - <code>P-339</code>. This note used to say it starved and that the file could not show it, which was true of an older rule and of a <code>usable</code> trait the release never declared; <code>P-367</code> removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. <code>C-62</code>.</p>
+<p>Before:</p>
+<pre>
+{game phase:play}
+  {territory id:1 biome:grassland} -&gt; 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 2
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -&gt; 1
+    {extractor resource:food working:0} -&gt; 1
+    {food} -&gt; 3
+    {garrison} -&gt; 1
+    {store resource:food} -&gt; 1
+  {territory id:2 biome:grassland} -&gt; 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 1
+    {garrison} -&gt; 1
+    {pioneer id:1 defending:1 moving:1} -&gt; 1
+</pre>
+<p><code>{end-turn}</code></p>
+<p>After:</p>
+<pre>
+{game phase:play}
+  {territory id:1 biome:grassland} -&gt; 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -&gt; 3
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -&gt; 1
+    {extractor resource:food working:1} -&gt; 1
+    {garrison} -&gt; 1
+    {store resource:food} -&gt; 1
+  {territory id:2 biome:grassland} -&gt; 1
+    {garrison} -&gt; 1
+    {pioneer id:1 defending:1 moving:1} -&gt; 1
+</pre>
+<h2 id="refresh">refresh</h2>
+<p>Run by the <strong>world</strong>.</p>
+<ul class="bullets">
+<li><strong>put</strong> ark — , working at its maximum</li>
 </ul>
 <h3 id="an-example">An example</h3>
 <p><strong>One ending, 10 recipes.</strong> This same firing is the example for upkeep, bear, breed, perish, age, spoil, stow, discard, renew as well - no command fires one of the world's alone.</p>

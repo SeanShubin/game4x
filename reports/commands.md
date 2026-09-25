@@ -6,7 +6,7 @@ Every command that ran, in order, with the recipe it fired. `S-24`: the third of
 
 The hierarchy is flattened. `run setup` opens `setup.4x`, which opens others, and a `run` line is not listed - it is where the next commands are kept rather than a move in the game.
 
-196 commands over 10 turn(s), and 63 of them before the game began.
+197 commands over 10 turn(s), and 63 of them before the game began.
 
 | #   | turn   | command                                                              | fires                                                                                      |
 | --- | ------ | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
@@ -205,6 +205,7 @@ The hierarchy is flattened. `run setup` opens `setup.4x`, which opens others, an
 | 193 | 10     | `{work territory:1 resource:food}`                                   | `work`                                                                                     |
 | 194 | 10     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
 | 195 | 10     | `{work territory:2 resource:food}`                                   | `work`                                                                                     |
-| 196 | 10     | `{end-turn}`                                                         | `upkeep`, `bear`, `breed`, `perish`, `age`, `spoil`, `stow`, `discard`, `refresh`, `renew` |
+| 196 | 10     | `{mine-energy territory:1}`                                          | `mine energy`                                                                              |
+| 197 | 10     | `{end-turn}`                                                         | `upkeep`, `bear`, `breed`, `perish`, `age`, `spoil`, `stow`, `discard`, `refresh`, `renew` |
 
-196 row(s)
+197 row(s)

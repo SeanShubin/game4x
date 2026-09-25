@@ -86,15 +86,18 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
     // citizen as well as the one on a nature, which is one rule applied to two kinds.
     assert_eq!(
         // **Twenty-seven under twenty names since `P-522`**, which cut nine blocks.
+        //
+        // **Twenty-nine under twenty-one names since `P-552`**: `mine energy` is a block and a
+        // name, and the Ark's `refresh` is a block under a name that was already there.
         blocks.len(),
-        27,
-        "the release states twenty-seven blocks of recipe rows; it has {} ({blocks:?})",
+        29,
+        "the release states twenty-nine blocks of recipe rows; it has {} ({blocks:?})",
         blocks.len()
     );
     assert_eq!(
         declared.len(),
-        20,
-        "those blocks are stated under twenty names; there are {} ({declared:?})",
+        21,
+        "those blocks are stated under twenty-one names; there are {} ({declared:?})",
         declared.len()
     );
     assert!(

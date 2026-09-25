@@ -307,6 +307,55 @@ fn bound_of(kind: &str) -> u32 {
     numbers[0]
 }
 
+/// What a recipe's `produce` row of a kind states.
+///
+/// **A produce is not a cost and `cost_of` reads consumes**, so `MINED_ENERGY` needed a reader
+/// rather than an arm: `mine energy` takes nothing and makes one energy, which is the only
+/// figure in `game::cost` that is a gain rather than a price.
+///
+/// **Refused rather than summed when a recipe produces a kind twice.** `deploy ark` produces two
+/// extractors on two rows, and a reader that added them would hand back a figure the release
+/// states nowhere - so this asks for the one row and says so when there is not exactly one.
+fn recipe_produces(named: &str, what: &str) -> u32 {
+    let text = std::fs::read_to_string(
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../releases/first-release.md"),
+    )
+    .expect("the release document");
+    let rows = game_console::recipes::body_under(&text, "## Recipes");
+    let role_at = game_console::recipes::column_of(&text, "## Recipes", "Role");
+    let qty_at = game_console::recipes::column_of(&text, "## Recipes", "Qty");
+    let kind_at = game_console::recipes::column_of(&text, "## Recipes", "Kind");
+
+    let mut name = String::new();
+    let mut found: Vec<u32> = Vec::new();
+    for row in &rows {
+        if let Some(next) = row
+            .first()
+            .map(|cell| game_console::recipes::plain(cell))
+            .filter(|cell| !cell.is_empty())
+        {
+            name = next;
+        }
+        if name != named || row.get(role_at).map(String::as_str) != Some("produce") {
+            continue;
+        }
+        if row.get(kind_at).map(|cell| cell.trim()) != Some(what) {
+            continue;
+        }
+        if let Some(qty) = row.get(qty_at).and_then(|cell| cell.trim().parse().ok()) {
+            found.push(qty);
+        }
+    }
+    assert_eq!(
+        found.len(),
+        1,
+        "`{named}` has {} `produce {what}` row(s) carrying a number, and this reader is \
+         entitled to one",
+        found.len()
+    );
+    found[0]
+}
+
 fn run(session: &mut Session, line: &str) -> Outcome {
     session
         .run(line, &Files::commands())
@@ -503,7 +552,7 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
     // that happen to be 2 - `cost::PIONEER_ENERGY` is what `produce pioneer` spends and
     // `UnitKind::fuel()` is the room the tank gives. **A second constant can disagree with the
     // Units table again**, and this row is what would say so.
-    let checked: [(&str, u32, &str, &str); 14] = [
+    let checked: [(&str, u32, &str, &str); 15] = [
         ("STORE_LABOR", cost::STORE_LABOR, "store", "labor"),
         ("STORE_METAL", cost::STORE_METAL, "store", "metal"),
         ("YARD_LABOR", cost::YARD_LABOR, "yard", "labor"),
@@ -543,6 +592,9 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
         // time; a figure in `game::cost` that nothing compares with the release is exactly what
         // the set assertion below exists to name.
         ("ARKS_IN_AN_ORBIT", cost::ARKS_IN_AN_ORBIT, "bound", "ark"),
+        // **A produce rather than a consume** - `mine energy` takes nothing and makes one
+        // energy, which is the only figure here that is a gain.
+        ("MINED_ENERGY", cost::MINED_ENERGY, "produces", "energy"),
     ];
 
     for (name, held, thing, what) in checked {
@@ -555,6 +607,7 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
                     .0
             }
             "bound" => bound_of(what),
+            "produces" => recipe_produces("mine energy", what),
             _ => cost_of(thing, what),
         };
         assert_eq!(
@@ -1276,6 +1329,9 @@ fn every_way_the_state_can_change_is_a_command() {
         Transition::ProducePioneer {
             territory: TerritoryId(1),
         },
+        Transition::MineEnergy {
+            territory: TerritoryId(1),
+        },
         Transition::Work {
             count: 1,
             structure: StructureKind::Extractor,
@@ -1291,7 +1347,10 @@ fn every_way_the_state_can_change_is_a_command() {
     // Sixteen ways to change the state. `P-260` added `build store`, which is what a
     // territory needs before it keeps anything at all; `P-232` added `create labor`, which
     // `P-214` found was the one player recipe with no command.
-    assert_eq!(changing.len(), 16);
+    //
+    // **Seventeen since `P-552`** added `mine energy`, which is the first way to change the
+    // state of an orbit rather than of a territory.
+    assert_eq!(changing.len(), 17);
 
     let commands_that_change: Vec<&str> = grammar
         .forms()
@@ -1315,8 +1374,8 @@ fn every_way_the_state_can_change_is_a_command() {
     // the grammar in its own test, so a form with no arm fails there.
     assert_eq!(
         commands_that_change.len(),
-        18,
-        "eighteen commands change the state; the grammar has {} ({commands_that_change:?})",
+        19,
+        "nineteen commands change the state; the grammar has {} ({commands_that_change:?})",
         commands_that_change.len()
     );
     // **Four pairs, named rather than counted.** `move`, `build`, `produce` and
@@ -1395,13 +1454,13 @@ fn every_player_recipe_has_one_command_named_for_it() {
     // **Eleven since `39a42c6` added `refuel`**, and the tripwire firing is what told this
     // lane the release had moved. A count over a document is worth keeping hand-maintained
     // for exactly that: it is the number changing that carries the news.
-    // **Ten since `P-511`**, which deleted `refuel`: pooling left it moving an energy
+    // **Eleven since `P-552`**, which added `mine energy`; ten from `P-511`, which deleted `refuel`: pooling left it moving an energy
     // into a unit with nowhere to move it to, and its qualifier always true. The tripwire
     // firing is again what told this lane the release had moved.
     assert_eq!(
         distinct.len(),
-        10,
-        "ten recipes the player may fire when this was written; the release has {} \
+        11,
+        "eleven recipes the player may fire since `P-552`; the release has {} \
          ({distinct:?})",
         distinct.len()
     );
@@ -1497,13 +1556,13 @@ fn every_place_a_recipe_leaves_open_is_a_field_of_its_command() {
             places.insert(name.to_string());
         }
     }
-    // **Ten since `P-511`**, which deleted `refuel`: pooling left it moving an energy
+    // **Eleven since `P-552`**, which added `mine energy`; ten from `P-511`, which deleted `refuel`: pooling left it moving an energy
     // into a unit with nowhere to move it to, and its qualifier always true. The tripwire
     // firing is again what told this lane the release had moved.
     assert_eq!(
         order.len(),
-        10,
-        "ten recipes the player may fire when this was written; the release has {} \
+        11,
+        "eleven recipes the player may fire since `P-552`; the release has {} \
          ({order:?})",
         order.len()
     );
@@ -1545,10 +1604,14 @@ fn every_place_a_recipe_leaves_open_is_a_field_of_its_command() {
         );
         checked += 1;
     }
+    // **Eleven of eleven since `P-552`, and the sentence that stood here has expired twice.**
+    // It read *ten of the eleven: `refuel` has no command yet* - `P-511` deleted `refuel`, which
+    // made it ten of ten, and `mine energy` makes it eleven of eleven. **No player recipe is
+    // without a command**, which is what `P-214` asked for.
     assert_eq!(
-        checked, 10,
+        checked, 11,
         "every player recipe that a command fires, and the count so that an empty table cannot \
-         pass. Ten of the eleven: `refuel` has no command yet - `C-112`"
+         pass"
     );
 }
 
@@ -1626,9 +1689,13 @@ fn the_readies_column_declares_the_maximum_this_reads() {
     );
     // **Five since `P-522` took `defending` out of all three Readies cells**: a citizen
     // readies `bearing` and `laboring`, an extractor `working`, and each unit `moving`.
+    //
+    // **Six since `P-552`**, which gave the Ark a `working` of its own - so the Ark is the one
+    // thing in this release that readies two counts for two different recipes: `moving` for a
+    // crossing and `working` for `mine energy`.
     assert_eq!(
-        pairs, 5,
-        "five kind-and-action pairs declare a maximum - a citizen's two, an extractor's \
-         one, and one each for the two units - and {pairs} do"
+        pairs, 6,
+        "six kind-and-action pairs declare a maximum - a citizen's two, an extractor's one, \
+         each unit's `moving`, and the Ark's `working` - and {pairs} do"
     );
 }

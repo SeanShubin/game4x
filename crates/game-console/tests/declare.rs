@@ -285,9 +285,13 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
     // derived files caught none of it, and what said so was a kind's line naming a trait that
     // is not declared. Re-derived here before being written down: thirty-seven rows in the
     // file, thirty-seven `trait:` references, one per row.
+    //
+    // **Thirty-eight since `P-552`**, which gave the ark a `working` count and wrote
+    // `{carries kind:ark trait:working}` - the promotion asserted the move from 37 to 38 in its
+    // own commit, and this is the reader that would have failed if it had not.
     assert_eq!(
-        mentions, 37,
-        "thirty-seven trait names across `carries.4x`; this read {mentions}"
+        mentions, 38,
+        "thirty-eight trait names across `carries.4x`; this read {mentions}"
     );
     // **Seven memberships, in `member.4x` rather than on a kind's line** - `P-497` again, and
     // the count is the one that was here when `family:` was a key.
@@ -1086,10 +1090,13 @@ fn the_blocks_the_release_implies_are_the_blocks_in_the_file() {
     .expect("spec/data/block.4x");
 
     // **Both sides non-empty before comparing**, or two failures to read agree with each other.
+    // **Twenty-nine since `P-552`**, which arrived in two commits: `mine energy` is one
+    // recipe and one block, and the Ark's `working` needed a `refresh` block the promotion had
+    // entailed and not written.
     assert_eq!(
         generated.lines().count(),
-        27,
-        "twenty-seven blocks since `P-522`; the generator wrote {}",
+        29,
+        "twenty-nine blocks since `P-552`; the generator wrote {}",
         generated.lines().count()
     );
     assert_eq!(
@@ -1104,7 +1111,15 @@ fn the_blocks_the_release_implies_are_the_blocks_in_the_file() {
         .into_iter()
         .map(|block| block.id)
         .collect();
-    assert_eq!(ids.len(), 27, "two blocks share an id");
+    // **Twenty-eight since `P-552`.** The count is asserted rather than only the uniqueness,
+    // and the message used to say *two blocks share an id* alone - which is one of the two ways
+    // this fires and was the wrong one when `mine energy` arrived. A legitimate new block and a
+    // duplicated id are the same failure to a count, so the message names both.
+    assert_eq!(
+        ids.len(),
+        29,
+        "twenty-nine blocks with distinct ids: either two share one, or the release has gained          or lost a recipe and this number has not followed"
+    );
     // `refresh` is the name that needs all three parts, and `discard` the one that needs two.
     assert!(
         ids.contains("refresh-extractor-working"),
@@ -1147,9 +1162,15 @@ fn every_release_derived_relation_round_trips() {
     // **The shape `P-522` left.** Each is the population its relation is derived over, and
     // each is written down rather than counted from the generator it checks.
     for (name, generated, expected) in [
-        ("block.4x", declare::blocks(&document), 27),
-        ("line.4x", declare::lines(&document), 68),
-        ("constraint.4x", declare::constraints(&document), 18),
+        // **Twenty-nine since `P-552`** - `mine energy`'s block and the Ark's refresh.
+        ("block.4x", declare::blocks(&document), 29),
+        // **Seventy-three since `P-552`** - `mine energy`'s four rows and the Ark's refresh
+        // row, and the release states 73 role cells counted from its own cells.
+        ("line.4x", declare::lines(&document), 73),
+        // **Twenty since `P-552`.** `mine energy` states two conditions in its `Traits`
+        // column - *working at least 1* on the require and *working one less* on the put - and
+        // this generator reads that column, so both become constraint rows.
+        ("constraint.4x", declare::constraints(&document), 21),
         ("for.4x", declare::fors(&document), 6),
     ] {
         assert_eq!(

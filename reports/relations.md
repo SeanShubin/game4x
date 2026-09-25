@@ -8,7 +8,7 @@ leaves; this is the same view over the rules it played by.
 `biomes.4x` holds `value`, `families.4x` holds `family`, `kinds.4x` holds `kind` and
 `traits.4x` holds `trait`.
 
-12 relations, 233 rows.
+12 relations, 244 rows.
 
 ## Values that are sentences
 
@@ -18,7 +18,7 @@ shown rather than corrected here** - the data is not this report's to edit.
 
 | Where                       | Field | Value                                |
 | --------------------------- | ----- | ------------------------------------ |
-| `spec/data/line.4x` line 41 | `qty` | `$where`'s density for that resource |
+| `spec/data/line.4x` line 45 | `qty` | `$where`'s density for that resource |
 
 ## above
 
@@ -54,7 +54,7 @@ From `spec/data/biomes.4x`. 6 row(s), 2 column(s).
 
 ## block
 
-From `spec/data/block.4x`. 27 row(s), 3 column(s).
+From `spec/data/block.4x`. 29 row(s), 3 column(s).
 
 | id                        | owner  | recipe          |
 | ------------------------- | ------ | --------------- |
@@ -67,6 +67,7 @@ From `spec/data/block.4x`. 27 row(s), 3 column(s).
 | produce-pioneer           | player | produce-pioneer |
 | launch-ark                | player | launch-ark      |
 | create-labor              | player | create-labor    |
+| mine-energy               | player | mine-energy     |
 | work                      | player | work            |
 | upkeep                    | world  | upkeep          |
 | bear                      | world  | bear            |
@@ -84,11 +85,12 @@ From `spec/data/block.4x`. 27 row(s), 3 column(s).
 | refresh-citizen-laboring  | world  | refresh         |
 | refresh-citizen-bearing   | world  | refresh         |
 | refresh-extractor-working | world  | refresh         |
+| refresh-ark-working       | world  | refresh         |
 | renew                     | world  | renew           |
 
 ## carries
 
-From `spec/data/carries.4x`. 37 row(s), 2 column(s).
+From `spec/data/carries.4x`. 38 row(s), 2 column(s).
 
 | kind      | trait       |
 | --------- | ----------- |
@@ -129,10 +131,11 @@ From `spec/data/carries.4x`. 37 row(s), 2 column(s).
 | adjacency | from        |
 | adjacency | to          |
 | game      | phase       |
+| ark       | working     |
 
 ## constraint
 
-From `spec/data/constraint.4x`. 18 row(s), 5 column(s).
+From `spec/data/constraint.4x`. 21 row(s), 5 column(s).
 
 | block                     | compare    | n   | seq | trait    |
 | ------------------------- | ---------- | --- | --- | -------- |
@@ -140,6 +143,8 @@ From `spec/data/constraint.4x`. 18 row(s), 5 column(s).
 | move                      | one-less   |     | 4   | moving   |
 | create-labor              | at-least   | 1   | 1   | laboring |
 | create-labor              | one-less   |     | 2   | laboring |
+| mine-energy               | at-least   | 1   | 2   | working  |
+| mine-energy               | one-less   |     | 3   | working  |
 | work                      | at-least   | 1   | 2   | working  |
 | work                      | one-less   |     | 3   | working  |
 | upkeep                    | at-maximum |     | 3   | paid     |
@@ -153,6 +158,7 @@ From `spec/data/constraint.4x`. 18 row(s), 5 column(s).
 | refresh-citizen-laboring  | at-maximum |     | 1   | laboring |
 | refresh-citizen-bearing   | at-maximum |     | 1   | bearing  |
 | refresh-extractor-working | at-maximum |     | 1   | working  |
+| refresh-ark-working       | at-maximum |     | 1   | working  |
 | renew                     | exactly    | 0   | 2   | paid     |
 
 ## family
@@ -219,7 +225,7 @@ From `spec/data/limit.4x`. 4 row(s), 3 column(s).
 
 ## line
 
-From `spec/data/line.4x`. 68 row(s), 7 column(s).
+From `spec/data/line.4x`. 73 row(s), 7 column(s).
 
 | block                     | kind      | place-bound | qty                                  | role    | seq | place-above |
 | ------------------------- | --------- | ----------- | ------------------------------------ | ------- | --- | ----------- |
@@ -259,6 +265,10 @@ From `spec/data/line.4x`. 68 row(s), 7 column(s).
 | create-labor              | citizen   |             | 1                                    | require | 1   |             |
 | create-labor              | citizen   |             |                                      | put     | 2   |             |
 | create-labor              | labor     |             | 1                                    | produce | 3   |             |
+| mine-energy               | territory | where       | 1                                    | require | 1   |             |
+| mine-energy               | ark       |             | 1                                    | require | 2   | where       |
+| mine-energy               | ark       |             |                                      | put     | 3   | where       |
+| mine-energy               | energy    |             | 1                                    | produce | 4   | where       |
 | work                      | territory | where       | 1                                    | require | 1   |             |
 | work                      | extractor |             | 1                                    | require | 2   |             |
 | work                      | extractor |             |                                      | put     | 3   |             |
@@ -289,6 +299,7 @@ From `spec/data/line.4x`. 68 row(s), 7 column(s).
 | refresh-citizen-laboring  | citizen   |             |                                      | put     | 1   |             |
 | refresh-citizen-bearing   | citizen   |             |                                      | put     | 1   |             |
 | refresh-extractor-working | extractor |             |                                      | put     | 1   |             |
+| refresh-ark-working       | ark       |             |                                      | put     | 1   |             |
 | renew                     | citizen   |             | 1                                    | require | 1   |             |
 | renew                     | citizen   |             |                                      | put     | 2   |             |
 

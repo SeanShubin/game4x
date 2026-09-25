@@ -45,13 +45,17 @@ fn every_recipe_is_either_drawn_or_named_as_not_drawn() {
         // **Twenty-seven under twenty names since `P-522`**, which cut nine blocks under
         // five names of their own.
         net.recipes,
-        27,
-        "the release states twenty-seven blocks of recipe rows and the parse found {}",
+        // **Twenty-nine since `P-552`**: `mine energy`'s block and the Ark's `refresh`.
+        29,
+        "the release states twenty-nine blocks of recipe rows and the parse found {}",
         net.recipes
     );
     assert_eq!(
-        net.names, 20,
-        "those blocks are stated under twenty distinct names and the parse found {}",
+        // **Twenty-one since `P-552`** - `mine energy` is a name of its own, where the Ark's
+        // `refresh` joined a name that was already there.
+        net.names,
+        21,
+        "those blocks are stated under twenty-one distinct names and the parse found {}",
         net.names
     );
     // **The deduplication has to remove something**, or a version that stopped deduplicating
@@ -219,8 +223,11 @@ fn the_density_rule_is_spelled_out_against_the_planet_it_describes() {
     // over a nature cleared the mark, and the two `refresh` rows over `defending` and
     // `muster` and `stand`'s puts went with them.
     assert_eq!(
-        puts, 11,
-        "{puts} `put` rows were skipped; the release states eleven"
+        // **Thirteen since `P-552`**: `mine energy` puts the ark back with one less `working`,
+        // and the Ark's `refresh` row puts it back at its maximum.
+        puts,
+        13,
+        "{puts} `put` rows were skipped; the release states thirteen"
     );
 
     let expected: Vec<&String> = names
@@ -919,8 +926,11 @@ fn a_block_that_names_a_count_carries_it_in_its_label() {
     // that restored `defending`, and `renew` is one rather than two, having lost the one that
     // cleared the mark on a nature.
     assert_eq!(
-        checked, 4,
-        "four blocks carry a count in their label - the four `refresh` rows - and {checked} did"
+        // **Five since `P-552`**: `refresh` is five blocks now, the Ark's `working` being the
+        // fifth - and `mine energy` names a count in its own label too.
+        checked,
+        5,
+        "five blocks carry a count in their label - the `refresh` rows and `mine energy` - and          {checked} did"
     );
 
     // **Eight since `P-494` and `P-498`**, which is `renew` clearing two marks - `met` on a

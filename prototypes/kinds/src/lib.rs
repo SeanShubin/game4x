@@ -789,6 +789,21 @@ const fn put(noun: Noun, traits: &'static [Qualifier]) -> Line {
     }
 }
 
+/// A `put` row that names where the thing stays.
+///
+/// **`P-552` is the first row that needed one.** Every other `put` acts where the recipe acts
+/// and says nothing; `mine energy` puts the Ark back *above `$where`*, because the recipe is
+/// named for a territory and acts in the orbit over it.
+const fn placed_put(noun: Noun, traits: &'static [Qualifier], place: &'static str) -> Line {
+    Line {
+        role: Role::Put,
+        quantity: Quantity::None,
+        noun,
+        traits,
+        place: Some(place),
+    }
+}
+
 const fn measured(role: Role, quantity: Quantity, noun: Noun) -> Line {
     Line {
         role,
@@ -994,6 +1009,22 @@ pub const RECIPES: &[Recipe] = &[
         ],
     },
     Recipe {
+        // **`P-552`, and it is the first recipe in this release that acts in an orbit.** Sean:
+        // *a mobile unit that moves in orbit gathers its own energy from the sun. It mines one
+        // unit.* So an Ark fuels the orbit it is in, and a crossing spends what it mined.
+        //
+        // **`working` rather than `moving`**, which is what lets an Ark mine and cross in one
+        // turn - `P-411`: two recipes naming different actions never compete.
+        name: "mine energy",
+        owner: Player,
+        lines: &[
+            placed(Require, 1, TERRITORY, &[], "`$where`"),
+            placed(Require, 1, Noun::Of(Ark), &WORKING_SOME, "above `$where`"),
+            placed_put(Noun::Of(Ark), &WORKING_LESS, "above `$where`"),
+            placed(Produce, 1, Noun::Of(Energy), &[], "above `$where`"),
+        ],
+    },
+    Recipe {
         name: "work",
         owner: Player,
         lines: &[
@@ -1154,6 +1185,17 @@ pub const RECIPES: &[Recipe] = &[
         name: "refresh",
         owner: World,
         lines: &[put(EXTRACTOR, &WORKING_FULL)],
+    },
+    Recipe {
+        // **The Ark's `working`, and `P-552` entailed it rather than stating it.** That
+        // promotion gave the Ark `working 1` in `Readies`, and `spec/turn.md` restores every
+        // count to the number its kind declares - so the row followed as a second commit once
+        // the omission was found. **The Ark is the only thing here with two counts refreshed**,
+        // which is why this is a fifth `refresh` block rather than part of the unit one above:
+        // `UNIT` is a family and `moving` reaches the pioneer too, where `working` must not.
+        name: "refresh",
+        owner: World,
+        lines: &[put(Noun::Of(Ark), &WORKING_FULL)],
     },
     // **Nine blocks stood here and `P-522` cut all nine** - `muster` and `stand`, the two
     // `refresh` rows that restored `defending`, and the force rule's four: `hold`, `reclaim`,
@@ -1373,11 +1415,21 @@ pub const PRODUCIBLE: &[Producible] = &[
         // on the release's half of the original, and this is it.
         //
         // **Paraphrased rather than quoted**, because the words are gone.
-        fuel: None,
+        //
+        // **And `P-552` filled it: the Ark's `Fuel` is 1.** Sean's words are in
+        // `spec/units.md` now - *a mobile unit that moves in orbit gathers its own energy from
+        // the sun. It mines one unit* - so the bin is the room one mined unit sits in, and the
+        // blank that was the stale half is a number again. **The paraphrase above is kept**
+        // because it records what this cell said and why, which a reader of the number cannot
+        // otherwise recover.
+        fuel: Some(1),
         upkeep: None,
         movable: true,
         crosses: Some("orbit border"),
-        readies: &[("moving", 1)],
+        // **Two counts since `P-552`**, and the Ark is the only thing in this release with
+        // two: `moving` for a crossing and `working` for `mine energy`. `P-411` says two
+        // recipes naming different actions never compete, which is why they are separate.
+        readies: &[("moving", 1), ("working", 1)],
     },
     Producible {
         kind: Pioneer,

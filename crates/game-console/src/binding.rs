@@ -198,6 +198,11 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
         form::LAUNCH_ARK => Meaning::Change(Transition::Launch {
             territory: territory("territory")?,
         }),
+        // **The orbit is worked out and not bound** - `spec/console.md`, and `P-552`'s rows say
+        // `above $where` for the same reason.
+        form::MINE_ENERGY => Meaning::Change(Transition::MineEnergy {
+            territory: territory("territory")?,
+        }),
         // **The one lookup that came back.** `P-328` makes a command's name one word, and
         // `move` is the recipe's whole name - so the kind cannot ride in it the way it does in
         // `deploy-ark`, and a word has to be read and turned into a kind again. `C-56` is the
@@ -284,6 +289,7 @@ pub fn handled() -> Vec<&'static str> {
         form::START,
         form::DEPLOY_ARK,
         form::LAUNCH_ARK,
+        form::MINE_ENERGY,
         form::MOVE,
         form::FOUND_BY_LAND,
         form::BUILD_STORE,

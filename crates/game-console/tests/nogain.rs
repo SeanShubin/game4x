@@ -377,6 +377,10 @@ fn every_block_becomes_at_least_one_rule() {
             "refresh (citizen laboring)",
             "refresh (citizen bearing)",
             "refresh (extractor working)",
+            // **The sixth, since `P-552`.** An Ark readies `working` as well as `moving`, so
+            // `refresh` grounds once more - and it is the one kind in this release that has two
+            // counts put back for two different recipes.
+            "refresh (ark working)",
         ],
         "`refresh` ground to {refreshed:?}"
     );
@@ -587,10 +591,14 @@ fn every_recipe_row_names_a_count_rather_than_readiness() {
     // Derived twice and the two agreed: the release's own table has sixty-eight rows carrying
     // a role, and `spec/data/line.4x` - generated from it by another lane - has sixty-eight
     // lines.
+    //
+    // **Seventy-three since `P-552`**, which arrived in two commits: `mine energy`'s four rows
+    // and the Ark's `refresh` row. Derived twice again and the two agree - the release's table
+    // has 73 rows carrying a role and `spec/data/line.4x` has 73 lines.
     assert_eq!(
         rows.len(),
-        68,
-        "sixty-eight recipe rows is the population this counted against"
+        73,
+        "seventy-three recipe rows is the population this counted against"
     );
     assert!(
         saying.is_empty(),

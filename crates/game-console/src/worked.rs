@@ -460,6 +460,30 @@ pub fn examples() -> Vec<Example> {
                 )
             },
         },
+        // **`P-552`, and it is the first example in this report that acts in an orbit.** The
+        // ground below is held only so the territory exists to be named; nothing about the
+        // recipe requires it, because the sun does not care who owns what is underneath.
+        //
+        // **The Ark is put in orbit rather than launched into it**, which keeps the example one
+        // firing of one recipe: launching would put two rules in the *before* and this report
+        // shows a recipe against the state it acts on.
+        Example {
+            also: &[],
+            recipe: "mine energy",
+            command: "{mine-energy territory:1}",
+            case: None,
+            before: || {
+                let mut game = founded(&[], &[]);
+                let mut ark = game_model::Unit::new(
+                    game_model::UnitId(1),
+                    game_model::UnitKind::Ark,
+                    TerritoryId(1),
+                );
+                ark.location = game_model::Location::Orbit(TerritoryId(1));
+                game.units.push(ark);
+                game
+            },
+        },
     ]
 }
 

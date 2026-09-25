@@ -13,7 +13,9 @@
 // 133 since `S-76`: turn 8 crosses instead of founding and turn 9 founds, so the two lines
 // that worked territory 2 before it existed moved into the turn that claims it - one command
 // fewer, and a `move` where there was none.
-const LINES: usize = 133;
+// 134 since `P-552`: turn 10 fires `mine-energy` on the Ark that turn 9 launched, which is the
+// one command that makes `mine energy` a recipe the scenario covers rather than declares.
+const LINES: usize = 134;
 const TURNS: usize = 10;
 
 use game_console::{Library, fired};
@@ -112,6 +114,9 @@ fn ending_a_turn_runs_exactly_the_recipes_the_release_calls_the_worlds() {
     // brought outlives it, which is why this counts names rather than subtracting five.
     assert_eq!(
         worlds.len(),
+        // **Ten, and it stayed ten through `P-552`.** `mine energy` is the player's, so this
+        // number does not move with the eleven below it - which a blanket edit of every `10` in
+        // this file got wrong once, and this assertion caught.
         10,
         "ten world recipes; the release has {}",
         worlds.len()
@@ -175,9 +180,9 @@ fn every_player_recipe_the_release_declares_is_actually_fired() {
         .collect();
     assert_eq!(
         players.len(),
-        // **Ten since `P-511`.** P-511 deleted `refuel`: pooling left it moving an energy into a unit with nowhere to move it to, and its qualifier always true.
-        10,
-        "ten player recipes when this was written; the release has {} ({players:?})",
+        // **Eleven since `P-552`**, which added `mine energy` - the first player recipe that acts in an orbit. Ten from `P-511` until then, when it deleted `refuel`.
+        11,
+        "eleven player recipes since `P-552`; the release has {} ({players:?})",
         players.len()
     );
 
@@ -402,10 +407,12 @@ fn every_recipe_the_release_declares_fires_while_the_scenario_runs() {
     //
     // **Twenty-five since `P-511`.** P-511 deleted `refuel`: pooling left it moving an energy into a unit with nowhere to move it to, and its qualifier always true.
     // **Twenty since `P-522`**, which cut `muster`, `stand`, `hold`, `reclaim` and `take`.
+    // **Twenty-one since `P-552`**, which added `mine energy`: eleven the player fires and ten
+    // the world does.
     assert_eq!(
         distinct.len(),
-        20,
-        "twenty recipes by name when this was written; the release declares {} \
+        21,
+        "twenty-one recipes by name since `P-552`; the release declares {} \
          ({distinct:?})",
         distinct.len()
     );

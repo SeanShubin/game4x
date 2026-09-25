@@ -458,7 +458,7 @@ fn the_scenario_fires_every_player_recipe_the_release_declares() {
     // **The command is the recipe's name with the spaces joined** - `P-328`. So this table
     // is a dashing rather than a mapping, and a recipe the release adds fails here by having
     // no row rather than by being unreachable.
-    let fired_by: [(&str, &str); 10] = [
+    let fired_by: [(&str, &str); 11] = [
         ("deploy ark", "{deploy-ark"),
         ("build store", "{build-store"),
         ("move", "{move "),
@@ -467,6 +467,7 @@ fn the_scenario_fires_every_player_recipe_the_release_declares() {
         ("build yard", "{build-yard"),
         ("produce pioneer", "{produce-pioneer"),
         ("launch ark", "{launch-ark"),
+        ("mine energy", "{mine-energy"),
         ("create labor", "{create-labor"),
         ("work", "{work "),
     ];
@@ -523,9 +524,9 @@ fn the_scenario_fires_every_player_recipe_the_release_declares() {
 
     assert_eq!(
         declared.len(),
-        // **Ten since `P-511`.** P-511 deleted `refuel`: pooling left it moving an energy into a unit with nowhere to move it to, and its qualifier always true.
-        10,
-        "ten player recipes were declared when this was written; the release now has {} \
+        // **Eleven since `P-552`**, which added `mine energy` - the first player recipe that acts in an orbit. Ten from `P-511` until then, when it deleted `refuel`.
+        11,
+        "eleven player recipes were declared since `P-552`; the release now has {} \
          ({declared:?}). If one was added, name what fires it above and make the scenario \
          fire it.",
         declared.len()

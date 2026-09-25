@@ -151,23 +151,20 @@ impl UnitKind {
     /// **And `spec/units.md` still says the bin is built full and moving burns a unit of
     /// it**, which is `C-138`. The release is the work order and this follows the release.
     ///
-    /// **An Ark carries none, since `S-86` blanked its Fuel cell** - the release half `C-79`
-    /// was waiting on, and this is the other half changed in the same breath. `spec/units.md`:
-    /// *a mobile unit that moves in orbit gathers its energy from the sun*, a fixed amount each
-    /// turn, *and holds it in a bin of its own*.
+    /// **An Ark's is 1 since `P-552`, and it was blank from `S-86` until then.** `S-86`
+    /// blanked the cell because an Ark stored no fuel and nothing it did spent any: it reaches
+    /// the ground by landing, `deploy ark` consumes it, and `move` was the only thing that
+    /// spent a cell. **A bin of zero took away a capacity nothing used.**
     ///
-    /// **The sentence moved under this comment and the consequence held.** It read *it stores
-    /// no fuel*; it now gives such a unit a bin of its own, filled from the sun rather than
-    /// from a territory - so what an Ark is *built* carrying is still none, which is the fact
-    /// this cell is about.
-    ///
-    /// **It costs an Ark nothing, which is why this is safe rather than merely correct.** An
-    /// Ark reaches the ground by landing and is consumed by `deploy ark`; `Game::land` asks
-    /// where it is and not what it has left, and `move` is the only thing that spends a cell.
-    /// So a bin of zero takes away a capacity nothing used.
+    /// **What changed is that an Ark moves.** `spec/units.md`, as Sean approved it: *a mobile
+    /// unit contributes room for fuel to the place it is in, and moving spends a unit of it*,
+    /// and *a mobile unit that moves in orbit gathers its own energy from the sun. It mines
+    /// one unit.* So an Ark's tank is the whole of an orbit's room for energy, `mine energy`
+    /// is what fills it, and a crossing is what spends it - **one of each, which is why the
+    /// figure is 1 and not two.**
     pub fn fuel(self) -> u32 {
         match self {
-            UnitKind::Ark => 0,
+            UnitKind::Ark => 1,
             UnitKind::Pioneer => 2,
         }
     }
@@ -303,8 +300,8 @@ mod tests {
         assert_eq!(UnitKind::Ark.force(), 2);
         assert_eq!(
             UnitKind::Ark.fuel(),
-            0,
-            "`S-86` blanked the Ark's Fuel cell: it takes its energy from the sun and stores              none"
+            1,
+            "`P-552` gave the Ark's Fuel cell a 1: it mines one unit from the sun and a crossing              spends one"
         );
         assert_eq!(UnitKind::Ark.upkeep(), 0);
         assert_eq!(UnitKind::Pioneer.force(), 2);

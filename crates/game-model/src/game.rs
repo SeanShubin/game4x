@@ -12,7 +12,7 @@
 use crate::identity::{Resource, TerritoryId};
 use crate::rejection::Rejection;
 use crate::territory::Territory;
-use crate::unit::Unit;
+use crate::unit::{Location, Unit};
 
 /// Costs, from `releases/first-release.md`.
 ///
@@ -65,6 +65,12 @@ pub mod cost {
     /// territory until 2026-09-24 and nothing read it either way, because nothing produced an
     /// Ark - which is `S-165`.
     pub const ARKS_IN_AN_ORBIT: u32 = 2;
+    /// What one firing of `mine energy` produces.
+    ///
+    /// **`P-552`, and `spec/units.md` says the number in words**: *it mines one unit.* The
+    /// release's row says `produce 1 energy`, and `the_costs_in_the_model_are_the_costs_in_the_release`
+    /// holds this against it.
+    pub const MINED_ENERGY: u32 = 1;
     /// A move costs one energy, **taken from the place the unit leaves**.
     ///
     /// **`$from` is the whole of `S-150`.** `releases/first-release.md` -> Recipes gives
@@ -82,33 +88,55 @@ pub enum Phase {
     Play,
 }
 
-/// A recipe whose firing a later rule asks about.
+/// What an orbit holds.
 ///
-/// **Two of the release's twenty-six are here**, and a recipe joins them when a rule needs to
-/// know that it happened rather than what it left behind. `spec/control.md`'s win condition is
-/// the only such rule today: *a player wins by deploying an Ark to one territory and launching
-/// an Ark from a different one.*
+/// **An orbit is a place, and a place holds one number per kind** - `spec/logistics.md`. It was
+/// nothing at all until `P-552`, because the only thing in an orbit was a unit and a unit held
+/// its own fuel; under pooling the fuel is the place's, and `mine energy` produces *above
+/// `$where`*, which is this.
 ///
-/// **Neither act can be read off the state afterwards, which is why anything is recorded at
-/// all.** `deploy ark` and `found by land` leave the same two citizens and two extractors, so a
-/// founded territory does not say which took it - that is `S-165`'s finding from the other
-/// side. And an Ark in an orbit may have been launched there, placed there while the world was
-/// designed, or have moved there, so the Ark does not say where it came from either.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum Recorded {
-    DeployArk,
-    LaunchArk,
+/// **An orbit declares no capacity of its own.** `spec/logistics.md`: *an orbit has room for the
+/// fuel its units carry and for nothing else, because that is what is in it.* So the room comes
+/// entirely from [`Game::room_in`] summing the tanks, and an empty orbit has room for nothing -
+/// which is why anything mined into one with no Ark left in it is lost at the turn's end.
+///
+/// **Written over every resource rather than for energy.** Nothing in this release gives an
+/// orbit room for anything else, and `UnitKind::holds` answers for all three - so a kind that
+/// gained a bin for metal would need no change here. The map is what keeps that true; a single
+/// `energy: u32` would be the shape `CLAUDE.md` forbids.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct Orbit {
+    held: std::collections::BTreeMap<Resource, u32>,
 }
 
-/// One firing of a recorded recipe, and the place it fired in.
-///
-/// **The place is the `$where` the command named**, which for both of these is a territory: an
-/// Ark is deployed *to* a territory and launched *from* one, and the orbit each act touches is
-/// worked out from it.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct Firing {
-    pub recipe: Recorded,
-    pub at: TerritoryId,
+impl Orbit {
+    /// How much of a resource is in it.
+    pub fn store(&self, resource: Resource) -> u32 {
+        self.held.get(&resource).copied().unwrap_or(0)
+    }
+
+    pub fn add(&mut self, resource: Resource, amount: u32) {
+        *self.held.entry(resource).or_insert(0) += amount;
+    }
+
+    /// Takes what is there, up to `amount`, and says nothing about the shortfall.
+    ///
+    /// **The caller asks first.** Every spender in this model checks before it takes, so a
+    /// saturating take here cannot hide a shortfall from a player - and `Territory::take` has
+    /// the same shape for the same reason.
+    pub fn take(&mut self, resource: Resource, amount: u32) {
+        let entry = self.held.entry(resource).or_insert(0);
+        *entry = entry.saturating_sub(amount);
+    }
+
+    /// Every resource it holds any of, in a fixed order.
+    pub fn holding(&self) -> Vec<(Resource, u32)> {
+        self.held
+            .iter()
+            .filter(|(_, amount)| **amount > 0)
+            .map(|(resource, amount)| (*resource, *amount))
+            .collect()
+    }
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -120,27 +148,21 @@ pub struct Game {
     /// Which territories touch, by id. Symmetric.
     pub adjacency: Vec<Vec<TerritoryId>>,
     pub units: Vec<Unit>,
-    /// Whether this game has been won.
+    /// What each orbit holds, keyed by the territory it is above.
     ///
-    /// State rather than a question asked later, because winning happens at a *moment*: the
-    /// win is a launch, and once the Ark is in orbit the launch is over. Recomputing it
-    /// afterwards would ask whether the condition holds *now*, which is a different question
-    /// and would keep answering yes long after nobody launched anything. **That reason holds
-    /// whichever condition is being tested**, which is why this field survives the change
-    /// below.
+    /// **A map and not a vector beside `territories`, and the reason is a silent no-op.** It was
+    /// a `Vec<Orbit>` indexed by territory for an hour, filled only by `create planet` - so a
+    /// fixture that pushed territories directly left it empty, and writing energy into an orbit
+    /// did nothing at all. **Nothing failed**: the write was dropped, the read said zero, and
+    /// the worked example for `mine energy` rendered a recipe that changed nothing.
     ///
-    /// **`P-527` cut the definition of *fully exploited* out of `spec/control.md`, `P-520`
-    /// replaced the win condition with it, and `S-151` is this code catching up.** It latched
-    /// on a fully exploited planet until 2026-09-24; it latches on
-    /// [`Game::the_win_condition_holds`] now, which is the sentence the specification has.
-    pub won: bool,
-    /// Every firing of a recipe that a rule asks about afterwards.
+    /// **Two collections that have to be the same length are two things that can disagree.**
+    /// With a map there is nothing to keep in step: an absent key is an empty orbit, which is
+    /// what an orbit nobody has mined into is.
     ///
-    /// **State the state cannot otherwise answer for**, which is the whole reason it is here -
-    /// see [`Recorded`]. It is not a history: nothing records a turn, an order, or the
-    /// twenty-four recipes no rule asks about, and `Session::history` is the thing that keeps
-    /// what was typed.
-    pub firings: Vec<Firing>,
+    /// **`P-552` is what gave an orbit anything to hold.** Before it, an Ark's `Fuel` was blank
+    /// and nothing produced into an orbit, so an orbit was a place in the dump and nowhere else.
+    pub orbits: std::collections::BTreeMap<TerritoryId, Orbit>,
 }
 
 impl Default for Game {
@@ -158,8 +180,7 @@ impl Game {
             territories: Vec::new(),
             adjacency: Vec::new(),
             units: Vec::new(),
-            firings: Vec::new(),
-            won: false,
+            orbits: Default::default(),
         }
     }
 
@@ -219,6 +240,95 @@ impl Game {
             .iter()
             .map(|resource| (*resource, self.brought_room(id, *resource)))
             .collect()
+    }
+
+    /// How much of a resource a place holds, whichever layer it is on.
+    ///
+    /// **`S-168`'s other half, and `P-552` is what made it needed.** `move` spends at the place
+    /// the unit leaves, and for an Ark that place is an orbit - so every question a mover asks
+    /// has to be askable of either layer. **One function rather than a surface one and an
+    /// orbital one**, because two would be able to disagree and this model has already paid for
+    /// that once.
+    pub fn held_in(&self, place: Location, resource: Resource) -> u32 {
+        match place {
+            Location::On(id) => self.territory(id).map(|it| it.store(resource)).unwrap_or(0),
+            Location::Orbit(id) => self
+                .orbits
+                .get(&id)
+                .map(|it| it.store(resource))
+                .unwrap_or(0),
+        }
+    }
+
+    /// A place's room for a resource: what it declares, plus what stands in it.
+    ///
+    /// **A territory declares stores and an orbit declares nothing.** `spec/logistics.md`: *an
+    /// orbit has room for the fuel its units carry and for nothing else, because that is what
+    /// is in it.* So an orbit with no Ark in it has room for nothing, and what was mined into
+    /// one goes at the turn's end.
+    pub fn room_in(&self, place: Location, resource: Resource) -> u32 {
+        let declared = match place {
+            Location::On(id) => self
+                .territory(id)
+                .map(|it| it.capacity(resource))
+                .unwrap_or(0),
+            Location::Orbit(_) => 0,
+        };
+        declared + self.tanks_in(place, resource)
+    }
+
+    /// The room the units in a place give it, for one resource.
+    ///
+    /// **Counted per layer rather than per territory**, which is the whole difference from
+    /// [`Game::brought_room`]: a pioneer on the ground and an Ark above it are in two places,
+    /// and each gives room to its own.
+    pub fn tanks_in(&self, place: Location, resource: Resource) -> u32 {
+        self.units
+            .iter()
+            .filter(|unit| unit.location == place)
+            .map(|unit| unit.kind.holds(resource))
+            .sum()
+    }
+
+    /// Put a resource into a place.
+    pub(crate) fn add_in(&mut self, place: Location, resource: Resource, amount: u32) {
+        match place {
+            Location::On(id) => {
+                if let Ok(it) = self.territory_mut(id) {
+                    it.add(resource, amount);
+                }
+            }
+            // **Inserted rather than found**, which is the whole point of the map: an orbit
+            // nobody has mined into has no entry, and mining into it makes one.
+            Location::Orbit(id) => self.orbits.entry(id).or_default().add(resource, amount),
+        }
+    }
+
+    /// Take a resource out of a place, refusing rather than going short.
+    pub(crate) fn spend_in(
+        &mut self,
+        place: Location,
+        resource: Resource,
+        amount: u32,
+    ) -> Result<(), Rejection> {
+        let held = self.held_in(place, resource);
+        if held < amount {
+            return Err(Rejection::NotEnoughResource {
+                place,
+                resource,
+                held,
+                needed: amount,
+            });
+        }
+        match place {
+            Location::On(id) => self.territory_mut(id)?.take(resource, amount),
+            Location::Orbit(id) => {
+                if let Some(it) = self.orbits.get_mut(&id) {
+                    it.take(resource, amount)
+                }
+            }
+        }
+        Ok(())
     }
 
     pub fn units_in_orbit(&self) -> Vec<&Unit> {
@@ -294,46 +404,6 @@ impl Game {
 
     /// `spec/control.md`: a player has lost when they have no citizens and nothing that
     /// converts into a citizen.
-    /// Whether this game has been won. `spec/control.md` gives exactly one way.
-    pub fn has_won(&self) -> bool {
-        self.won
-    }
-
-    /// Whether the win condition holds of what has been done so far.
-    ///
-    /// **`spec/control.md`, the whole of it**: *a player wins by deploying an Ark to one
-    /// territory and launching an Ark from a different one.*
-    ///
-    /// **Two acts and one inequality, and the order between them is deliberately not asked.**
-    /// The sentence names two things a player does and says nothing about which comes first, so
-    /// this asks whether both are among what was done - which is why [`Game::won`] is latched
-    /// after either of them rather than only after the launch.
-    ///
-    /// **It is a question and the field is the answer at a moment.** Asking it later would ask
-    /// whether the condition holds *now*, and it would keep answering yes forever, which is the
-    /// reason `won` is stored and was the reason before the condition changed.
-    pub fn the_win_condition_holds(&self) -> bool {
-        let at = |recipe: Recorded| {
-            self.firings
-                .iter()
-                .filter(move |firing| firing.recipe == recipe)
-                .map(|firing| firing.at)
-        };
-        at(Recorded::DeployArk)
-            .any(|deployed| at(Recorded::LaunchArk).any(|launched| launched != deployed))
-    }
-
-    /// Record a firing, and latch the win if it has just become true.
-    ///
-    /// **Latched here rather than at each call site**, so that a recipe added to [`Recorded`]
-    /// cannot be recorded by one and forgotten by the other.
-    pub(crate) fn record(&mut self, recipe: Recorded, at: TerritoryId) {
-        self.firings.push(Firing { recipe, at });
-        if self.the_win_condition_holds() {
-            self.won = true;
-        }
-    }
-
     /// **No citizens anywhere and no units left** - and it used to be *no usable unit*.
     ///
     /// `P-367` made nature destroy what stands on a territory it takes back, which was the
@@ -420,196 +490,196 @@ mod tests {
             .collect()
     }
 
-    /// Winning takes a deploy and a launch, in two different territories.
+    // **Two tests of winning were here and `S-174` removed the concept they tested.**
+    // `winning_takes_a_deploy_and_a_launch_in_two_different_territories` and
+    // `winning_is_a_moment_rather_than_the_state_afterwards` were built on 2026-09-24 against
+    // `spec/control.md`, and Sean removed the win condition hours later: *lets simply remove the
+    // concept for now. The user interface is going to just let you keep playing. Launching the
+    // ark from a separate territory is the test we are using to make sure the first release
+    // works, not a win condition, a requirement.*
+    //
+    // **`P-556` moved the file whole to `spec/future/control.md`**, so the sentence they
+    // asserted is a plan rather than a rule, and `Game::won`, `has_won` and `Game::firings` went
+    // with them. **Deleted rather than ignored**: a test of a rule the specification does not
+    // have is a claim about the game that nothing backs.
+    //
+    // **What replaced them is not a test here.** The requirement is that *the scenario* launches
+    // from its second territory - `releases/first-release.md` -> `R-6` - which is a fact about a
+    // command log and not about any game state, so it is checked where the scenario is checked.
+
+    /// An Ark mines from the sun and crosses on what it mined.
     ///
-    /// # The check that would have failed before this
+    /// # What this replaces, and why the old assertion had to go
     ///
-    /// **`S-151`, and the first case is the one that used to win.** The code latched the win on
-    /// `is_fully_exploited` - what `spec/control.md` said until `P-520` replaced it - so **a
-    /// launch from a finished planet was a win whatever had been deployed anywhere**. It is
-    /// not: *a player wins by deploying an Ark to one territory and launching an Ark from a
-    /// different one.*
+    /// **`S-168` left an Ark selectable and unmovable**, and this test asserted that: the Ark was
+    /// found in its orbit and refused with `NothingFuelsAnOrbit`, because an orbit held nothing
+    /// and nothing put anything there. **That was a gap reported in code**, and `P-552` closed
+    /// it - so the assertion is gone rather than adjusted, and the refusal it named is deleted.
     ///
-    /// **The old condition was read before the cost was paid**, so the state it judged is the
-    /// one before the launch, and that is where this asserts it.
+    /// **Sean, `P-552`**: *a mobile unit that moves in orbit gathers its own energy from the
+    /// sun. It mines one unit.* The release gives `mine energy` four rows and the Ark a `Fuel`
+    /// of 1 and `Readies: moving 1, working 1`.
     ///
-    /// # Why the finished planet and the deploy cannot be in one fixture
+    /// # The whole loop, because each half alone passes for the wrong reason
     ///
-    /// **A fully exploited planet has no ground left to deploy to.** Every claimable territory
-    /// is taken, so `deploy ark` is refused with `AlreadyControlled` - which is why the cases
-    /// below are built separately rather than as one sequence. **That is a fact about the two
-    /// conditions rather than about this test**: the rule that was replaced and the rule that
-    /// replaced it cannot both be satisfied by the same planet at the same instant.
+    /// **Mining with nothing to spend it on** would pass if a crossing were free. **Crossing
+    /// without mining first** is the case that must still be refused, and it is asserted here
+    /// against an orbit that has an Ark in it - so *no Ark* cannot be the reason. **And the
+    /// energy is the orbit's rather than the Ark's**, which is what makes the tank room and not
+    /// a charge: it is read back out of the place.
+    ///
+    /// **One mined unit pays for exactly one crossing**, which is the Ark's `Fuel` of 1 doing
+    /// the only thing a tank does - so a second crossing in the same turn is refused for want of
+    /// energy rather than for want of a move.
     #[test]
-    fn winning_takes_a_deploy_and_a_launch_in_two_different_territories() {
-        let launch = |at: u32| Transition::Launch {
-            territory: TerritoryId(at),
-        };
-        let deploy = |at: u32| Transition::Land {
-            kind: UnitKind::Ark,
-            territory: TerritoryId(at),
-        };
-        // What a launch costs, put on a territory by hand.
-        let afford = |place: &mut Territory| {
-            place.set_count(Kind::Yard, 1);
-            let enough = place.citizens().max(cost::ARK_CITIZENS);
-            place.set_count(Kind::Citizen, enough);
-            place.add(Resource::Metal, cost::ARK_METAL);
-            place.add(Resource::Energy, cost::ARK_ENERGY);
-        };
-
-        // -- the case that changed: a finished planet, launched from, nothing deployed.
-        let finished = {
-            let mut game = designed().after(&Transition::Start).unwrap();
-            game.units.clear();
-            for place in &mut game.territories {
-                finish(place);
-                afford(place);
-            }
-            game
-        };
-        assert!(
-            finished.is_fully_exploited(),
-            "the old condition read this state, so it has to hold or the case is not the case"
-        );
-        let launched = finished.after(&launch(1)).expect("a yard and the cost");
-        assert!(
-            !launched.has_won(),
-            "a launch from a finished planet with nothing deployed used to be the whole win"
-        );
-        assert!(
-            launched
-                .firings
-                .iter()
-                .any(|firing| firing.recipe == Recorded::LaunchArk),
-            "the launch happened, so the refusal above is the rule and not a failed command"
-        );
-
-        // -- two acts, one place: territory 2 is left unclaimed with an Ark above it.
-        let open = || {
+    fn an_ark_mines_from_the_sun_and_crosses_on_what_it_mined() {
+        let start = || {
             let mut game = designed().after(&Transition::Start).unwrap();
             game.units.clear();
             game.units
-                .push(Unit::new(UnitId(1), UnitKind::Ark, TerritoryId(2)));
-            for at in [0, 2] {
-                finish(&mut game.territories[at]);
-                afford(&mut game.territories[at]);
-            }
+                .push(Unit::new(UnitId(1), UnitKind::Ark, TerritoryId(1)));
             game
         };
-        let mut same = open().after(&deploy(2)).expect("territory 2 is unclaimed");
-        afford(&mut same.territories[1]);
-        let same = same.after(&launch(2)).expect("territory 2 can pay now");
-        assert!(
-            !same.has_won(),
-            "deployed to territory 2 and launched from territory 2 is one place, not two"
+        let above = Location::Orbit(TerritoryId(1));
+        let mine = Transition::MineEnergy {
+            territory: TerritoryId(1),
+        };
+        let cross = Transition::Move {
+            kind: UnitKind::Ark,
+            from: TerritoryId(1),
+            to: TerritoryId(2),
+        };
+
+        // -- an orbit starts empty, and a crossing out of it is refused for the energy.
+        let bare = start();
+        assert_eq!(
+            bare.held_in(above, Resource::Energy),
+            0,
+            "an orbit holds nothing until something mines"
+        );
+        let why = bare
+            .after(&cross)
+            .expect_err("an empty orbit cannot pay for a crossing");
+        assert_eq!(
+            why,
+            Rejection::NotEnoughResource {
+                place: above,
+                resource: Resource::Energy,
+                held: 0,
+                needed: cost::MOVE_ENERGY,
+            },
+            "refused for the orbit's energy, and the Ark is right there"
         );
 
-        // -- two acts, two places.
-        let apart = open()
-            .after(&deploy(2))
-            .expect("territory 2 is unclaimed")
-            .after(&launch(1))
-            .expect("territory 1 has a yard and the cost");
-        assert!(
-            apart.has_won(),
-            "deployed to territory 2 and launched from territory 1 is the win condition"
+        // -- mining puts the energy in the orbit, not in the Ark.
+        let mined = start().after(&mine).expect("an Ark in orbit can mine");
+        assert_eq!(
+            mined.held_in(above, Resource::Energy),
+            cost::MINED_ENERGY,
+            "what it mined is the orbit's"
+        );
+        assert_eq!(
+            mined.room_in(above, Resource::Energy),
+            UnitKind::Ark.fuel(),
+            "and the room it fits in is the Ark's tank, which is all an orbit declares"
         );
 
-        // **And the order between them is not asked**, because the sentence names none: the
-        // same two acts the other way round are the same win.
-        let reversed = open()
-            .after(&launch(1))
-            .expect("territory 1 can pay")
-            .after(&deploy(2))
-            .expect("territory 2 is unclaimed");
+        // -- and one mined unit carries it across.
+        let crossed = mined.after(&cross).expect("it can pay now");
         assert!(
-            reversed.has_won(),
-            "launching first and deploying second is the same two acts in two places"
+            crossed
+                .units
+                .iter()
+                .any(|unit| unit.location == Location::Orbit(TerritoryId(2))),
+            "the Ark crossed into the next orbit"
+        );
+        assert_eq!(
+            crossed.held_in(above, Resource::Energy),
+            0,
+            "the crossing spent what was mined"
+        );
+        assert_eq!(
+            crossed.held_in(Location::Orbit(TerritoryId(2)), Resource::Energy),
+            0,
+            "and nothing was hauled - `move` has no haul row"
         );
     }
 
-    /// An Ark is found by `move`, and what refuses it is the orbit's energy.
+    /// An Ark mines once a turn, and mining is a different count from moving.
     ///
-    /// # The check that would have failed before this
+    /// **`P-411`, and the release states it as `Readies: moving 1, working 1`.** Two recipes
+    /// naming different actions never compete, so an Ark that has crossed can still mine and one
+    /// that has mined can still cross. **Both orders are fired here**, because a single count
+    /// would let exactly one of the two through and the other would look like a rule.
     ///
-    /// **`S-168`: `move` asked for `Location::On(from)` whatever the kind**, and an Ark is
-    /// never on the surface - `P-549`. So a move of an Ark was refused with *there is no ark
-    /// anywhere*, which is the shape of a wrong answer that invites no question: a true
-    /// sentence about the place it looked, and the wrong place.
+    /// **And a second mining in one turn is refused**, which is what makes `working` a count
+    /// rather than a flag nothing reads. **Once a turn and not once a place**: an Ark that mined
+    /// in one orbit and crossed into another has still mined this turn, which the second half
+    /// below asserts rather than assumes.
     ///
-    /// **Both halves, because either alone passes for the wrong reason.** The Ark is selected,
-    /// which is what `S-168` asked for; and it is refused for the orbit rather than for being
-    /// missing, which is what makes the selection worth anything. **A test asserting only that
-    /// the move is refused would have passed before this and after it.**
+    /// # Why the second order stocks the orbit instead of mining into it
     ///
-    /// **And a Pioneer in the same fixture still moves on the surface**, so the layer is read
-    /// from the kind rather than applied to everything.
-    ///
-    /// # What it does not assert
-    ///
-    /// **Not that an Ark moves**, because no Ark can: `move` burns one energy at the place it
-    /// leaves, an orbit holds none, and nothing in this release puts any there. That is
-    /// `P-552` and it is Sean's. **The refusal here is the gap said out loud**, and it will
-    /// have to change when he answers - which is the point of naming it rather than leaving
-    /// *there is no ark anywhere*.
+    /// **An Ark cannot cross before it has mined, because mining is the only thing that fuels an
+    /// orbit.** So *cross, then mine* is unreachable by playing - the crossing would need the
+    /// energy the mining has not made yet. The orbit is stocked by hand for that half, which is
+    /// the only way to separate *crossing spends `moving`* from *crossing spends `working`*.
     #[test]
-    fn an_ark_is_found_in_its_orbit_and_refused_for_the_energy_that_is_not_there() {
-        let mut game = designed().after(&Transition::Start).unwrap();
-        game.units.clear();
-        let mut ark = Unit::new(UnitId(1), UnitKind::Ark, TerritoryId(1));
-        ark.location = Location::Orbit(TerritoryId(1));
-        game.units.push(ark);
-        assert!(
-            game.are_adjacent(TerritoryId(1), TerritoryId(2)),
-            "the fixture needs the two territories next door, or adjacency is the refusal"
-        );
+    fn an_ark_mines_once_a_turn_and_mining_is_not_moving() {
+        let start = || {
+            let mut game = designed().after(&Transition::Start).unwrap();
+            game.units.clear();
+            game.units
+                .push(Unit::new(UnitId(1), UnitKind::Ark, TerritoryId(1)));
+            game
+        };
+        let mine = Transition::MineEnergy {
+            territory: TerritoryId(1),
+        };
+        let cross = Transition::Move {
+            kind: UnitKind::Ark,
+            from: TerritoryId(1),
+            to: TerritoryId(2),
+        };
 
-        let why = game
-            .after(&Transition::Move {
-                kind: UnitKind::Ark,
-                from: TerritoryId(1),
-                to: TerritoryId(2),
-            })
-            .expect_err("an orbit has no energy, so no Ark can pay for a crossing");
+        let once = start().after(&mine).expect("the first mining of the turn");
+        let why = once
+            .after(&mine)
+            .expect_err("an Ark mines once a turn - `working` is 1");
         assert_eq!(
             why,
-            Rejection::NothingFuelsAnOrbit {
-                above: TerritoryId(1)
-            },
-            "the Ark was found and refused for the orbit - it used to be refused as missing"
-        );
-        assert!(
-            !matches!(
-                why,
-                Rejection::NoUnitAvailable { .. } | Rejection::NoUnitThere { .. }
-            ),
-            "refused as though there were no Ark, which is what `S-168` reported"
+            Rejection::AlreadyUsed(UnitKind::Ark),
+            "refused as used rather than as missing, and the Ark is still up there"
         );
 
-        // **The same fixture moves a Pioneer**, so the layer comes from the kind rather than
-        // from a change that put every unit in orbit.
-        let mut ground = game.clone();
-        let mut pioneer = Unit::new(UnitId(2), UnitKind::Pioneer, TerritoryId(1));
-        pioneer.location = Location::On(TerritoryId(1));
-        ground.units.push(pioneer);
-        ground.territories[0].add(Resource::Energy, cost::MOVE_ENERGY);
-        let moved = ground
-            .after(&Transition::Move {
-                kind: UnitKind::Pioneer,
-                from: TerritoryId(1),
-                to: TerritoryId(2),
-            })
-            .expect("a pioneer crosses on the surface, where its energy is");
-        assert!(
-            moved.units.iter().any(|unit| unit.kind == UnitKind::Pioneer
-                && unit.location == Location::On(TerritoryId(2))),
-            "the pioneer arrived on the ground rather than in an orbit"
+        // **Mine then cross**, which is the order the loop uses: mining leaves the move alone.
+        let crossed = once.after(&cross).expect("mining does not spend the move");
+        assert_eq!(
+            crossed
+                .after(&Transition::MineEnergy {
+                    territory: TerritoryId(2),
+                })
+                .expect_err("it already mined this turn, in the orbit it came from"),
+            Rejection::AlreadyUsed(UnitKind::Ark),
+            "`working` is once a turn and not once a place"
         );
-        assert!(
-            moved.units.iter().any(|unit| unit.kind == UnitKind::Ark
-                && unit.location == Location::Orbit(TerritoryId(1))),
-            "and the Ark stayed where it was"
+
+        // **Cross then mine**, with the orbit stocked rather than mined - see above.
+        let mut stocked = start();
+        stocked.add_in(
+            Location::Orbit(TerritoryId(1)),
+            Resource::Energy,
+            cost::MOVE_ENERGY,
+        );
+        let arrived = stocked.after(&cross).expect("it can pay out of the stock");
+        let again = arrived
+            .after(&Transition::MineEnergy {
+                territory: TerritoryId(2),
+            })
+            .expect("crossing does not spend the working");
+        assert_eq!(
+            again.held_in(Location::Orbit(TerritoryId(2)), Resource::Energy),
+            cost::MINED_ENERGY,
+            "it mined in the orbit it arrived in, having crossed first"
         );
     }
 
@@ -705,94 +775,12 @@ mod tests {
         );
     }
 
-    /// Launching off an unfinished planet is just leaving.
-    #[test]
-    fn launching_from_an_unfinished_planet_wins_nothing() {
-        let mut game = designed().after(&Transition::Start).unwrap();
-        // **What a launch costs, where an Ark used to be pushed.** `P-342` made launching one
-        // recipe: the cost is paid at a Yard and nothing comes back, so what has to be there
-        // is the cost rather than a unit.
-        {
-            let place = &mut game.territories[0];
-            place.set_count(Kind::Yard, 1);
-            // **Never fewer than it already has** - `P-361`. This was `set_count(.., 2)`, and
-            // now that a finished territory is one with the population its food supports,
-            // setting two on a territory that had twelve un-finished the planet a line before
-            // it was asked whether the planet was finished. Paying a cost is what `Launch`
-            // does; this only has to make it affordable.
-            let enough = place.citizens().max(cost::ARK_CITIZENS);
-            place.set_count(Kind::Citizen, enough);
-            place.add(Resource::Metal, cost::ARK_METAL);
-            place.add(Resource::Energy, cost::ARK_ENERGY);
-        }
-        let after = game
-            .after(&Transition::Launch {
-                territory: TerritoryId(1),
-            })
-            .unwrap();
-        assert!(!after.has_won());
-    }
-
-    /// Winning is a moment, not a standing condition. Once it has happened it stays
-    /// happened, and nothing that changes afterwards takes it back.
-    ///
-    /// **The reason survives the condition changing, which is why this test did.** It used to
-    /// take the planet apart under a winner and check the win held; the condition is now two
-    /// acts rather than a state, so what is taken apart is the ground the Ark was deployed to -
-    /// **nature reclaiming territory 2 does not un-deploy the Ark that took it.**
-    ///
-    /// **This used to check another half that `P-342` took away** rather than answering: that a
-    /// *Pioneer* leaving wins nothing. There is one launch recipe and it is `launch ark`, so a
-    /// pioneer launching is a state the language cannot express.
-    #[test]
-    fn winning_is_a_moment_rather_than_the_state_afterwards() {
-        let mut game = designed().after(&Transition::Start).unwrap();
-        game.units.clear();
-        let id = UnitId(1);
-        game.units
-            .push(Unit::new(id, UnitKind::Ark, TerritoryId(2)));
-        // **Territory 2 is left unclaimed**, because that is the only kind of ground an Ark
-        // can be deployed to.
-        for at in [0, 2] {
-            let place = &mut game.territories[at];
-            // A citizen is what holds it, since `S-19` made control derived. Setting a flag
-            // beside an empty territory used to do this, which is the disagreement that
-            // rule removes.
-            finish(place);
-            // **Never fewer than it already has** - `P-361`. Paying a cost is what `Launch`
-            // does; this only has to make it affordable.
-            let enough = place.citizens().max(cost::ARK_CITIZENS);
-            place.set_count(Kind::Citizen, enough);
-            place.add(Resource::Metal, cost::ARK_METAL);
-            place.add(Resource::Energy, cost::ARK_ENERGY);
-        }
-        // Deployed and launched but nothing done yet is not a win.
-        assert!(!game.has_won());
-
-        let after = game
-            .after(&Transition::Land {
-                kind: UnitKind::Ark,
-                territory: TerritoryId(2),
-            })
-            .expect("the Ark is above territory 2")
-            .after(&Transition::Launch {
-                territory: TerritoryId(1),
-            })
-            .expect("territory 1 has a yard and the cost");
-        assert!(after.has_won(), "two places, which is the condition");
-
-        // Take the deployed-to territory apart underneath it: the win has already happened.
-        let mut later = after.clone();
-        later.territories[1].held.clear();
-        assert!(
-            !later.territory(TerritoryId(2)).unwrap().founded(),
-            "territory 2 is not held any more, or nothing was taken apart"
-        );
-        assert!(
-            later.has_won(),
-            "and it was won when the two acts met, which is a moment"
-        );
-    }
+    // **`launching_from_an_unfinished_planet_wins_nothing` was here and went with the
+    // concept** - `S-174`. It asserted that a launch off an unfinished planet was not a win,
+    // which was the old condition's second half; there is no win to be nothing now.
+    //
+    // **What launching does is checked where launching does it**:
+    // `launching_leaves_an_ark_in_the_orbit_above_it` below, which is the row `P-549` gave it.
 
     /// An ocean cannot be taken, so it cannot be what stops a planet being finished.
     #[test]
@@ -1594,7 +1582,7 @@ mod tests {
         assert_eq!(
             rejected,
             Rejection::NotEnoughResource {
-                territory: TerritoryId(1),
+                place: Location::On(TerritoryId(1)),
                 resource: Resource::Metal,
                 held: 0,
                 needed: cost::YARD_METAL,
@@ -1931,7 +1919,7 @@ mod tests {
         assert_eq!(
             why,
             Rejection::NotEnoughResource {
-                territory: TerritoryId(1),
+                place: Location::On(TerritoryId(1)),
                 resource: Resource::Energy,
                 held: 0,
                 needed: cost::MOVE_ENERGY,

@@ -14,7 +14,7 @@ release's four are a second hand-written form, and `P-465` is about what that co
 the release because that is where all six tables are today, and says so rather than implying the
 release is the source.
 
-16 kinds, 4 families, 23 traits, 27 recipes.
+16 kinds, 4 families, 23 traits, 29 recipes.
 
 ## Signatures
 
@@ -27,7 +27,7 @@ family counts**, because a family is how the release addresses several kinds at 
 **No two of the 16 kinds behave alike**, over all 120 pairs of them.
 
 **Every group below holds one kind**, which is what that sentence means when
-you reach them. **The traits alone do collide** - 6 of the kinds carry exactly
+you reach them. **The traits alone do collide** - 4 of the kinds carry exactly
 the traits another one carries - and every such pair is then separated by the recipes
 that name it. So the release has no two kinds it says *the same things* about, and Sean
 has accepted that as the answer: he expects a small number of distinct things.
@@ -58,9 +58,9 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 ### `s-5` - ark
 
-**Traits** `binding`, `fuel`, `keeps`, `metal in it`, `movable`, `moving`, `strength`
+**Traits** `binding`, `fuel`, `keeps`, `metal in it`, `movable`, `moving`, `strength`, `working`
 
-**Named by** `age put`, `age require`, `deploy ark consume`, `launch ark produce`, `move put`, `move require`, `refresh put`, `spoil consume`
+**Named by** `age put`, `age require`, `deploy ark consume`, `launch ark produce`, `mine energy put`, `mine energy require`, `move put`, `move require`, `refresh put`, `spoil consume`
 
 ### `s-6` - pioneer
 
@@ -84,7 +84,7 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 **Traits** `keeps`
 
-**Named by** `age put`, `age require`, `discard consume`, `launch ark consume`, `move consume`, `produce pioneer consume`, `spoil consume`, `stow consume`, `stow produce`, `work produce`
+**Named by** `age put`, `age require`, `discard consume`, `launch ark consume`, `mine energy produce`, `move consume`, `produce pioneer consume`, `spoil consume`, `stow consume`, `stow produce`, `work produce`
 
 ### `s-10` - labor
 
@@ -96,7 +96,7 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 **Traits** `control`, `id`, `keeps`
 
-**Named by** `age put`, `age require`, `deploy ark require`, `launch ark require`, `move require`, `spoil consume`, `work require`
+**Named by** `age put`, `age require`, `deploy ark require`, `launch ark require`, `mine energy require`, `move require`, `spoil consume`, `work require`
 
 ### `s-12` - orbit
 
@@ -263,13 +263,13 @@ carries a landing, and can invade from orbit.
 
 **In families** thing, unit
 
-**Traits of it** `moving` (a number), `strength` (a number), `fuel` (how much energy its tank gives room for), `binding` (a number: the metal the recipe that makes it consumes), `metal in it` (a number: its binding plus the metal in its parts), `keeps` (the number of turns it will last), `movable` (a number)
+**Traits of it** `moving` (a number), `working` (a number), `strength` (a number), `fuel` (how much energy its tank gives room for), `binding` (a number: the metal the recipe that makes it consumes), `metal in it` (a number: its binding plus the metal in its parts), `keeps` (the number of turns it will last), `movable` (a number)
 
 **Signature** `s-5`
 
 **Bounded by** a capacity of 2 in the orbit, which is the only place that admits one
 
-**As a thing** Strength: 2 · Crosses: orbit border · Readies: moving 1 · Movable: 1
+**As a thing** Strength: 2 · Fuel: 1 · Crosses: orbit border · Readies: moving 1, working 1 · Movable: 1
 
 **Holds** energy, up to the unit's fuel - *a fact about each one rather than about the kind*
 
@@ -279,10 +279,13 @@ carries a landing, and can invade from orbit.
 - `move` requires 1 (as a unit), moving at least 1, in `$from`
 - `move` puts  (as a unit), moving one less, in `$to`
 - `launch ark` produces 1, in above `$where`
+- `mine energy` requires 1, working at least 1, in above `$where`
+- `mine energy` puts , working one less, in above `$where`
 - `age` requires 1 (as a thing), keeps at least 1
 - `age` puts  (as a thing), keeps one less
 - `spoil` consumes 1 (as a thing), keeps 0
 - `refresh` puts  (as a unit), moving at its maximum
+- `refresh` puts , working at its maximum
 
 ## pioneer
 
@@ -376,6 +379,7 @@ what moves things; neither conserved nor expiring.
 - `move` consumes 1, in `$from`
 - `produce pioneer` consumes 2
 - `launch ark` consumes 12
+- `mine energy` produces 1, in above `$where`
 - `work` produces `$where`'s density for that resource (as a resource)
 - `age` requires 1 (as a thing), keeps at least 1
 - `age` puts  (as a thing), keeps one less
@@ -424,6 +428,7 @@ a place things are in, which has a density and a capacity per resource.
 - `move` requires 1 (as a place), in `$from`
 - `move` requires 1 (as a place), joined to `$from` by an edge the unit crosses, in `$to`
 - `launch ark` requires 1, in `$where`
+- `mine energy` requires 1, in `$where`
 - `work` requires 1, in `$where`
 - `age` requires 1 (as a thing), keeps at least 1
 - `age` puts  (as a thing), keeps one less

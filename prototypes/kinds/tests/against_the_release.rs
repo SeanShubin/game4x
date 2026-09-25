@@ -117,7 +117,9 @@ fn there_are_thirty_two_recipe_blocks_under_twenty_two_names() {
     // **Twenty-seven since `P-522`**, which cut nine blocks with force: `muster`, `stand`,
     // the two `refresh` rows over `defending`, and the force rule's `hold`, `reclaim`,
     // `renew` over a nature and `take`.
-    assert_eq!(kinds::RECIPES.len(), 27);
+    // **Twenty-nine since `P-552`**, in two commits: `mine energy` is a block under a new
+    // name, and the Ark's `working` is a fifth `refresh` block under a name already there.
+    assert_eq!(kinds::RECIPES.len(), 29);
 
     let mut names: Vec<&str> = kinds::RECIPES.iter().map(|recipe| recipe.name).collect();
     names.sort_unstable();
@@ -128,10 +130,12 @@ fn there_are_thirty_two_recipe_blocks_under_twenty_two_names() {
     // **Twenty-six since `P-494` and `P-495`.**
     // **Twenty since `P-522`**: `muster`, `stand`, `hold`, `reclaim` and `take` were five
     // names of their own, and `refresh` and `renew` lost blocks without losing their names.
+    // **Twenty-one since `P-552`**: `mine energy` is a name of its own, and the Ark's
+    // `refresh` is a block under a name already there.
     assert_eq!(
         names.len(),
-        20,
-        "twenty distinct names, and these are {names:?}"
+        21,
+        "twenty-one distinct names, and these are {names:?}"
     );
 
     assert!(
@@ -434,6 +438,11 @@ fn a_role_says_what_becomes_of_what_a_recipe_names() {
             // which is the same list answering the same question each time one moves.
             "launch ark",
             "create labor",
+            // **`mine energy` joined with `P-552`**, and it keeps two things rather than one:
+            // the territory its orbit is above, and the Ark itself - which it puts back with
+            // one less `working` instead of eating. The sun is what it consumes, and the sun
+            // is not a thing this release models.
+            "mine energy",
             "work",
             "upkeep",
             "bear",
@@ -445,6 +454,9 @@ fn a_role_says_what_becomes_of_what_a_recipe_names() {
             "refresh",
             "refresh",
             "refresh",
+            "refresh",
+            // **The fifth since `P-552`**: the Ark's `working`, put back the way the other
+            // four counts are.
             "refresh",
             // **`muster`, `stand`, two more `refresh` rows and the force rule's four stood
             // here, and `P-522` cut all nine.** Every one of them kept what it named -
@@ -552,6 +564,10 @@ fn a_named_ingredient_is_bound_before_it_is_referred_to() {
             // **Four again since `P-511` deleted `refuel`.** It was five while that recipe
             // had the `require 1 territory` row `P-491` gave it to bind `$where`.
             ("launch ark", vec!["`$where`"]),
+            // **Five since `P-552`.** `mine energy` names the territory its orbit is above, for
+            // the same reason `launch ark` does - `spec/console.md`: a place worked out from
+            // another is not open.
+            ("mine energy", vec!["`$where`"]),
             ("work", vec!["`$where`"]),
         ]
     );

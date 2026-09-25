@@ -209,7 +209,7 @@ is in it, because the names are what this is for.
 
 | id  | kind | in-kind | in-id | fuel | ready |
 | --- | ---- | ------- | ----- | ---- | ----- |
-| 1   | ark  | orbit   | 1     | 0    | yes   |
+| 1   | ark  | orbit   | 1     | 1    | yes   |
 
 1 row(s)
 
@@ -258,7 +258,7 @@ is in it, because the names are what this is for.
 | labor     | 0       |
 | food      | 0       |
 | metal     | 0       |
-| energy    | 12      |
+| energy    | 13      |
 | extractor | 11      |
 | garrison  | 2       |
 | yard      | 1       |

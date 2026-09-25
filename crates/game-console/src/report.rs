@@ -1,7 +1,6 @@
 //! Answering questions about the game. Nothing here changes anything.
 
 use command_language::Grammar;
-use game_model::game::Recorded;
 use game_model::{Game, Phase, Resource, TerritoryId, unit::Location};
 
 use crate::binding::Subject;
@@ -26,18 +25,19 @@ pub fn show(game: &Game, subject: &Subject) -> String {
     match subject {
         Subject::Turn => match game.phase {
             Phase::Design => "designing the world; the game has not started".to_string(),
-            // Winning and losing are said here because this is where a player asks how the
-            // game is going, and neither is visible in any other report: an Ark in orbit
-            // looks the same whether it was launched off a finished planet or a bare one.
-            Phase::Play if game.has_won() => format!(
-                "turn {} - won: an Ark was deployed to one territory and launched from another",
-                game.turn
-            ),
+            // **Losing is said here and winning is not, since `S-174`.** This is where a
+            // player asks how the game is going, and losing is visible in no other report - a
+            // planet with nobody on it looks like one nobody has reached yet.
+            //
+            // **Winning was said here until 2026-09-24**, when Sean removed the concept: *the
+            // user interface is going to just let you keep playing.* So there is nothing to
+            // announce, and a report that announced one would be telling a player a rule the
+            // specification has moved to `spec/future/`.
             Phase::Play if game.has_lost() => format!(
                 "turn {} - lost: no citizens, and nothing left that becomes one",
                 game.turn
             ),
-            Phase::Play => format!("turn {}{}", game.turn, how_to_win(game)),
+            Phase::Play => format!("turn {}", game.turn),
         },
         Subject::Territory(id) => match game.territory(*id) {
             Ok(_) => territory(game, *id),
@@ -106,37 +106,11 @@ pub fn show(game: &Game, subject: &Subject) -> String {
     }
 }
 
-/// What would win from here, said as what is left to do rather than as the rule.
-///
-/// **`spec/control.md`**: *a player wins by deploying an Ark to one territory and launching an
-/// Ark from a different one.* **Three states follow from it and the hint names which one this
-/// is**, because *launch an Ark to win* was true under the condition `P-520` replaced and is
-/// not true under this one - `S-151`.
-///
-/// **Derived from what has been deployed rather than restated.** Deploy to one place and the
-/// launch has to be from any other; deploy to two or more and **any** launch wins, because
-/// whichever place it goes from, one of the deploys was somewhere else.
-fn how_to_win(game: &Game) -> String {
-    let mut deployed: Vec<TerritoryId> = game
-        .firings
-        .iter()
-        .filter(|firing| firing.recipe == Recorded::DeployArk)
-        .map(|firing| firing.at)
-        .collect();
-    deployed.sort();
-    deployed.dedup();
-    match deployed.as_slice() {
-        [] => " - deploy an Ark to a territory, then launch one from a different territory, to \
-                win"
-        .to_string(),
-        [one] => format!(
-            " - an Ark is deployed to territory {one}; launch one from any other territory to \
-             win"
-        ),
-        _ => " - Arks are deployed to more than one territory; launching one anywhere wins"
-            .to_string(),
-    }
-}
+// **`how_to_win` was here and `S-174` took the question away.** It said what was left to do -
+// both acts when nothing was deployed, naming the territory when one was, *anywhere wins* when
+// two or more were - and it was built on 2026-09-24, hours before Sean removed winning. **A hint
+// towards a rule the specification does not have is worse than no hint**, which is the same
+// reason the announcement above went.
 
 fn territory(game: &Game, id: TerritoryId) -> String {
     let Ok(place) = game.territory(id) else {
@@ -351,10 +325,6 @@ pub fn entities(game: &Game) -> Vec<Entry> {
 
 #[cfg(test)]
 mod tests {
-    use game_model::TerritoryId;
-    use game_model::game::Recorded;
-
-    use crate::binding::Subject;
     use crate::{Library, NoLibrary, Outcome, Session};
 
     fn played(lines: &[&str]) -> Session {
@@ -378,70 +348,13 @@ mod tests {
         ])
     }
 
-    /// The turn report says what would win from here, in each of the three states.
-    ///
-    /// # The check that would have failed before this
-    ///
-    /// **Nothing read this sentence at all, and it stated a rule the specification had
-    /// dropped.** It said *the planet is fully exploited; launch an Ark to win* - `P-520`
-    /// replaced that condition and the hint went on offering it, because no test named the
-    /// string and `is_fully_exploited` is false in every fixture that would have shown it.
-    ///
-    /// **Over the three states rather than on one**, with the count, because the hint is a
-    /// function of what has been deployed and one branch passing says nothing about the
-    /// others. `spec/control.md`: *a player wins by deploying an Ark to one territory and
-    /// launching an Ark from a different one.*
-    ///
-    /// **The middle case names the territory**, which is the half a pinned string would have
-    /// got for free and a rule check has to ask for: a hint that said *some territory* would
-    /// be true and useless.
-    #[test]
-    fn the_turn_says_what_would_win_from_here() {
-        let mut session = tiny();
-        let turn = |session: &Session| super::show(&session.game, &Subject::Turn);
-
-        let nothing = turn(&session);
-        assert!(
-            nothing.contains("deploy an Ark to a territory, then launch one from a different"),
-            "with nothing deployed the hint is both acts: {nothing}"
-        );
-
-        session
-            .run("{deploy-ark territory:1}", &NoLibrary)
-            .expect("an Ark is in the orbit above territory 1");
-        let one = turn(&session);
-        assert!(
-            one.contains("an Ark is deployed to territory 1"),
-            "the hint names where, or a player cannot act on it: {one}"
-        );
-        assert!(
-            one.contains("any other territory"),
-            "and says the launch has to be somewhere else: {one}"
-        );
-
-        // A second Ark, deployed to a second territory, is the state where anywhere wins.
-        // **Put in by hand rather than played**, because the fixture's planet has one
-        // territory set up and a second deploy is a scenario rather than a case of this rule.
-        session.game.firings.push(game_model::game::Firing {
-            recipe: Recorded::DeployArk,
-            at: TerritoryId(2),
-        });
-        let many = turn(&session);
-        assert!(
-            many.contains("launching one anywhere wins"),
-            "deployed to two places, so no launch can be in the same place as both: {many}"
-        );
-
-        let said = [nothing, one, many];
-        let mut distinct: Vec<&String> = said.iter().collect();
-        distinct.sort();
-        distinct.dedup();
-        assert_eq!(
-            distinct.len(),
-            3,
-            "three states and three sentences, or two of the branches are the same branch"
-        );
-    }
+    // **`the_turn_says_what_would_win_from_here` was here and went with the hint** - `S-174`.
+    // It checked three branches with the count and asserted them distinct, which was the right
+    // shape for a sentence that existed; the sentence does not exist now.
+    //
+    // **What it caught is worth keeping in words**: the hint had told the player the old rule
+    // for three days after `P-520` replaced it, because no test named the string and
+    // `is_fully_exploited` was false in every fixture that would have shown it.
 
     #[test]
     fn help_lists_every_command_with_its_syntax() {

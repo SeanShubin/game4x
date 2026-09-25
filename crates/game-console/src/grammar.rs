@@ -24,6 +24,7 @@ pub mod form {
     // player had put in a positional hole; the word is part of the name now.
     pub const DEPLOY_ARK: &str = "deploy-ark";
     pub const LAUNCH_ARK: &str = "launch-ark";
+    pub const MINE_ENERGY: &str = "mine-energy";
     pub const MOVE: &str = "move";
     pub const FOUND_BY_LAND: &str = "found-by-land";
     pub const BUILD_STORE: &str = "build-store";
@@ -158,6 +159,19 @@ pub fn grammar() -> Grammar {
                 Term::optional("repeat", Kind::Number),
             ],
             "pay an ark's cost at a yard and send it up; nothing comes back",
+        ),
+        // **`P-552`, and it names the territory rather than the orbit.** `spec/console.md`: *a
+        // place worked out from another is not open - the orbit above a territory is named by
+        // naming the territory.* So one number, as `launch-ark` takes one, and which layer it
+        // means is the recipe's.
+        Form::new(
+            form::MINE_ENERGY,
+            vec![
+                Term::Keyword("mine-energy"),
+                Term::required("territory", Kind::Number),
+                Term::optional("repeat", Kind::Number),
+            ],
+            "an ark in the orbit above a territory mines a unit of energy from the sun",
         ),
         Form::new(
             form::MOVE,
@@ -414,15 +428,16 @@ mod tests {
             })
             .map(|form| form.name)
             .collect();
-        // **Ten, and each drop was a promotion rather than a deletion.** Twelve until
-        // `P-328` made a name one word and `move ark`/`move pioneer` became one `move`;
-        // eleven until `P-342` made `produce ark` into `launch ark` and there was one command
-        // where there had been two. **Ten player recipes, ten commands** - which is what
-        // `P-214` asked for and is true for the first time.
+        // **Eleven, and every change to this number was a promotion rather than a deletion.**
+        // Twelve until `P-328` made a name one word and `move ark`/`move pioneer` became one
+        // `move`; eleven until `P-342` made `produce ark` into `launch ark` and there was one
+        // command where there had been two; ten from then until `P-552` added `mine energy`.
+        // **Eleven player recipes, eleven commands**, which is what `P-214` asked for and has
+        // held through the two changes since.
         assert_eq!(
             takes_repeat.len(),
-            10,
-            "ten commands take a repeat: {takes_repeat:?}"
+            11,
+            "eleven commands take a repeat: {takes_repeat:?}"
         );
         for named in [
             form::END_TURN,

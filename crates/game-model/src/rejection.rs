@@ -12,6 +12,7 @@
 use std::fmt;
 
 use crate::identity::{Resource, StructureKind, TerritoryId, UnitKind};
+use crate::unit::Location;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Rejection {
@@ -70,19 +71,14 @@ pub enum Rejection {
     },
     NotControlled(TerritoryId),
     AlreadyControlled(TerritoryId),
-    /// A unit in an orbit cannot pay for a crossing, because an orbit holds no energy.
-    ///
-    /// **`S-168`, and it is a gap reported rather than a rule.** `move` consumes one energy at
-    /// the place the unit leaves; an Ark leaves an orbit; `spec/data/carries.4x` gives an orbit
-    /// an `id` and nothing else, and the word *sun* appears in no data file. **`P-552` is the
-    /// decision** - `spec/units.md` says a unit moving in orbit gathers its energy from the
-    /// sun, and that sentence has no mechanism.
-    ///
-    /// **It names the orbit rather than the territory below it**, because the territory is not
-    /// what is short: nothing is wrong with the ground under a stranded Ark.
-    NothingFuelsAnOrbit {
-        above: TerritoryId,
-    },
+    // **`NothingFuelsAnOrbit` was here and `P-552` answered it.** It said an orbit holds no
+    // energy and nothing puts any there, which was true for one day: `spec/units.md` gave a
+    // unit moving in orbit its energy from the sun and no recipe fired it. **Sean answered with
+    // `mine energy`**, so an orbit has a number of energy like any other place, and a shortfall
+    // in one is `NotEnoughResource` naming that place.
+    //
+    // **Deleted rather than left unconstructed**, which is `S-155`'s lesson: a variant nothing
+    // builds draws the next reader to the wrong half of the code.
     // **`NoCells` was here and `S-150` deleted it.** It said *that pioneer has no energy cells
     // left*, and under pooling a unit has no cells to be out of: the energy a move spends is
     // the place's, so what refuses is `NotEnoughResource`, which names the territory, the
@@ -97,8 +93,14 @@ pub enum Rejection {
         force: u32,
         needed: u32,
     },
+    /// A place has less of a resource than something needs.
+    ///
+    /// **It carries a place rather than a territory since `P-552`**, because an Ark spends the
+    /// energy of the orbit it leaves and an orbit is not a territory. **One variant for both
+    /// layers**: two would be the shape `CLAUDE.md` forbids, and they would be able to disagree
+    /// about the same shortfall.
     NotEnoughResource {
-        territory: TerritoryId,
+        place: Location,
         resource: Resource,
         held: u32,
         needed: u32,
@@ -197,11 +199,7 @@ impl fmt::Display for Rejection {
                 "territory {territory} has as many {} things as it can hold",
                 kind.name()
             ),
-            Rejection::NothingFuelsAnOrbit { above } => write!(
-                out,
-                "the orbit above territory {above} has no energy, and nothing in this release \
-                 puts any there - moving in orbit waits on where that energy comes from"
-            ),
+
             Rejection::NotControlled(id) => write!(out, "you do not control territory {id}"),
             Rejection::AlreadyControlled(id) => write!(out, "you already control territory {id}"),
             Rejection::NotEnoughForce {
@@ -213,14 +211,11 @@ impl fmt::Display for Rejection {
                 "taking territory {territory} needs more than {needed} force, and you bring {force}"
             ),
             Rejection::NotEnoughResource {
-                territory,
+                place,
                 resource,
                 held,
                 needed,
-            } => write!(
-                out,
-                "territory {territory} has {held} {resource} and that needs {needed}"
-            ),
+            } => write!(out, "{place} has {held} {resource} and that needs {needed}"),
             Rejection::NotEnoughLabor {
                 territory,
                 available,
@@ -301,7 +296,7 @@ mod tests {
                 to: TerritoryId(7),
             },
             Rejection::NotEnoughResource {
-                territory: TerritoryId(3),
+                place: Location::On(TerritoryId(3)),
                 resource: Resource::Metal,
                 held: 4,
                 needed: 30,
@@ -335,13 +330,26 @@ mod tests {
         );
         assert_eq!(
             Rejection::NotEnoughResource {
-                territory: TerritoryId(3),
+                place: Location::On(TerritoryId(3)),
                 resource: Resource::Metal,
                 held: 4,
                 needed: 30
             }
             .to_string(),
             "territory 3 has 4 metal and that needs 30"
+        );
+        // **The same shortfall in the other layer reads as the other layer** - `P-552`. One
+        // variant covers both, and a player told `territory 3` when the orbit is what is short
+        // would look at the wrong place.
+        assert_eq!(
+            Rejection::NotEnoughResource {
+                place: Location::Orbit(TerritoryId(3)),
+                resource: Resource::Energy,
+                held: 0,
+                needed: 1
+            }
+            .to_string(),
+            "the orbit above territory 3 has 0 energy and that needs 1"
         );
     }
 }

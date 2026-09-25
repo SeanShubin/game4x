@@ -10,7 +10,7 @@ is the right shape for a table and the wrong one for answering *what does this r
 the state after - in the notation `scenario/expected/play.4x` uses, holding only what that
 recipe touched. Every one is a real command run against a real state: `R-7`.
 
-27 recipes, 68 lines between them, 12 worked examples.
+29 recipes, 73 lines between them, 13 worked examples.
 
 ## deploy ark
 
@@ -339,6 +339,36 @@ After:
     {citizen bearing:1 defending:1 laboring:0 paid:0} -> 1
     {garrison} -> 1
     {labor} -> 1
+```
+
+## mine energy
+
+Run by the **player**.
+
+- **require** 1 territory, in `$where`
+- **require** 1 ark, working at least 1, in above `$where`
+- **put** ark — , working one less, in above `$where`
+- **produce** 1 energy, in above `$where`
+
+### An example
+
+Before:
+
+```
+{game phase:play}
+  {orbit id:1} -> 1
+    {ark id:1 defending:1 moving:1} -> 1
+```
+
+`{mine-energy territory:1}`
+
+After:
+
+```
+{game phase:play}
+  {orbit id:1} -> 1
+    {ark id:1 defending:1 moving:1} -> 1
+    {energy} -> 1
 ```
 
 ## work
@@ -1116,6 +1146,52 @@ After:
 Run by the **world**.
 
 - **put** extractor — , working at its maximum
+
+### An example
+
+**One ending, 10 recipes.** This same firing is the example for upkeep, bear, breed, perish, age, spoil, stow, discard, renew as well - no command fires one of the world's alone.
+
+the world's ten in one ending, in the release's order, and the way the population settles when **the food is the lesser**. Territory 1 has three food for two citizens: `upkeep` feeds both, `bear` turns each of them spent and leaves two fertility, and `breed` fires **once** rather than twice - there is one food left and each new citizen costs one. `renew` makes both parents fertile again. Territory 2 has no food, so its citizen goes unpaid, `breed` cannot fire there at all, and `perish` takes it. What food is left expires, the fertility nobody bred with is discarded, and the worked extractor is ready again. **The pioneer in territory 2 is untouched**, because nothing but a citizen eats - `P-339`. This note used to say it starved and that the file could not show it, which was true of an older rule and of a `usable` trait the release never declared; `P-367` removed the last thing that set that trait, so there is no state a unit can be in now that an artifact cannot show. `C-62`.
+
+Before:
+
+```
+{game phase:play}
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 2
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
+    {extractor resource:food working:0} -> 1
+    {food} -> 3
+    {garrison} -> 1
+    {store resource:food} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 1
+    {garrison} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
+```
+
+`{end-turn}`
+
+After:
+
+```
+{game phase:play}
+  {territory id:1 biome:grassland} -> 1
+    {citizen bearing:1 defending:1 laboring:1 paid:0} -> 3
+    {deposit density:4 resource:food occupied:1 free:2 capacity:3} -> 1
+    {extractor resource:food working:1} -> 1
+    {garrison} -> 1
+    {store resource:food} -> 1
+  {territory id:2 biome:grassland} -> 1
+    {garrison} -> 1
+    {pioneer id:1 defending:1 moving:1} -> 1
+```
+
+## refresh
+
+Run by the **world**.
+
+- **put** ark — , working at its maximum
 
 ### An example
 

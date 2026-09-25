@@ -105,6 +105,11 @@ pub fn fired(transition: &Transition) -> (Vec<&'static str>, &'static str) {
             _ => (Vec::new(), "no recipe lands one of these"),
         },
         Transition::Move { .. } => (vec!["move"], ""),
+        // **`P-552`, and it is the first recipe in this release that acts in an orbit.** The
+        // sentence above - *no recipe in it names an orbit* - was true of `launch` and is no
+        // longer true of the release: `mine energy` requires an ark above `$where` and produces
+        // energy there.
+        Transition::MineEnergy { .. } => (vec!["mine energy"], ""),
         Transition::FoundByLand { .. } => (vec!["found by land"], ""),
         Transition::BuildStore { .. } => (vec!["build store"], ""),
         Transition::Build { structure, .. } => match structure {

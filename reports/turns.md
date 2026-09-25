@@ -3275,7 +3275,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 | id  | kind | in-kind | in-id | fuel | ready |
 | --- | ---- | ------- | ----- | ---- | ----- |
-| 1   | ark  | orbit   | 1     | 0    | yes   |
+| 1   | ark  | orbit   | 1     | 1    | yes   |
 
 1 row(s)
 
@@ -3351,6 +3351,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 {work territory:1 resource:food}
 {create-labor territory:2}
 {work territory:2 resource:food}
+{mine-energy territory:1}
 {end-turn}
 ```
 
@@ -3360,8 +3361,9 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 - {territory id:2 biome:grassland} {extractor resource:food working:1} -> 1
 
-**new** (6)
+**new** (7)
 
+- {orbit id:1} {energy} -> 1
 - {territory id:1 biome:grassland} {citizen bearing:1 defending:1 laboring:0 paid:0} -> 2
 - {territory id:1 biome:grassland} {extractor resource:food working:0} -> 2
 - {territory id:1 biome:grassland} {food} -> 8
@@ -3658,7 +3660,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 | id  | kind | in-kind | in-id | fuel | ready |
 | --- | ---- | ------- | ----- | ---- | ----- |
-| 1   | ark  | orbit   | 1     | 0    | yes   |
+| 1   | ark  | orbit   | 1     | 1    | yes   |
 
 1 row(s)
 
@@ -3707,7 +3709,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | labor     | 0       |
 | food      | 0       |
 | metal     | 0       |
-| energy    | 12      |
+| energy    | 13      |
 | extractor | 11      |
 | garrison  | 2       |
 | yard      | 1       |

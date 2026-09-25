@@ -82,6 +82,19 @@ pub enum Transition {
     Launch {
         territory: TerritoryId,
     },
+    /// `mine energy`: an Ark in orbit takes a unit of energy from the sun.
+    ///
+    /// **`P-552`, and it is what makes an Ark able to move.** `spec/units.md`: *a mobile unit
+    /// that moves in orbit gathers its own energy from the sun. It mines one unit.* Before it,
+    /// an orbit held nothing, so a crossing had nothing to spend and `S-168` could select an
+    /// Ark and never move one.
+    ///
+    /// **It carries the territory rather than the orbit**, because `spec/console.md` says a
+    /// place worked out from another is not open: the orbit above a territory is named by
+    /// naming the territory. The recipe's rows say `above $where` for the same reason.
+    MineEnergy {
+        territory: TerritoryId,
+    },
     /// Move a unit to an adjacent territory, taking and founding it if it is not already
     /// controlled.
     /// Move a unit onto adjacent ground that is already held.

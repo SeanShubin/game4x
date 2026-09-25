@@ -63,6 +63,7 @@
 <tr><td>produce-pioneer</td><td>player</td><td>produce-pioneer</td></tr>
 <tr><td>launch-ark</td><td>player</td><td>launch-ark</td></tr>
 <tr><td>create-labor</td><td>player</td><td>create-labor</td></tr>
+<tr><td>mine-energy</td><td>player</td><td>mine-energy</td></tr>
 <tr><td>work</td><td>player</td><td>work</td></tr>
 <tr><td>upkeep</td><td>world</td><td>upkeep</td></tr>
 <tr><td>bear</td><td>world</td><td>bear</td></tr>
@@ -80,10 +81,11 @@
 <tr><td>refresh-citizen-laboring</td><td>world</td><td>refresh</td></tr>
 <tr><td>refresh-citizen-bearing</td><td>world</td><td>refresh</td></tr>
 <tr><td>refresh-extractor-working</td><td>world</td><td>refresh</td></tr>
+<tr><td>refresh-ark-working</td><td>world</td><td>refresh</td></tr>
 <tr><td>renew</td><td>world</td><td>renew</td></tr>
 </tbody>
 </table>
-<p class="count">27 row(s)</p>
+<p class="count">29 row(s)</p>
 <h2 id="carries-spec-data-carries-4x">carries - spec/data/carries.4x</h2>
 <table>
 <thead>
@@ -127,9 +129,10 @@
 <tr><td><a href="catalog.html#adjacency">adjacency</a></td><td>from</td></tr>
 <tr><td><a href="catalog.html#adjacency">adjacency</a></td><td>to</td></tr>
 <tr><td><a href="catalog.html#game">game</a></td><td>phase</td></tr>
+<tr><td><a href="catalog.html#ark">ark</a></td><td>working</td></tr>
 </tbody>
 </table>
-<p class="count">37 row(s)</p>
+<p class="count">38 row(s)</p>
 <h2 id="constraint-spec-data-constraint-4x">constraint - spec/data/constraint.4x</h2>
 <table>
 <thead>
@@ -140,6 +143,8 @@
 <tr><td>move</td><td>one-less</td><td></td><td>4</td><td>moving</td></tr>
 <tr><td>create-labor</td><td>at-least</td><td>1</td><td>1</td><td>laboring</td></tr>
 <tr><td>create-labor</td><td>one-less</td><td></td><td>2</td><td>laboring</td></tr>
+<tr><td>mine-energy</td><td>at-least</td><td>1</td><td>2</td><td>working</td></tr>
+<tr><td>mine-energy</td><td>one-less</td><td></td><td>3</td><td>working</td></tr>
 <tr><td>work</td><td>at-least</td><td>1</td><td>2</td><td>working</td></tr>
 <tr><td>work</td><td>one-less</td><td></td><td>3</td><td>working</td></tr>
 <tr><td>upkeep</td><td>at-maximum</td><td></td><td>3</td><td>paid</td></tr>
@@ -153,10 +158,11 @@
 <tr><td>refresh-citizen-laboring</td><td>at-maximum</td><td></td><td>1</td><td>laboring</td></tr>
 <tr><td>refresh-citizen-bearing</td><td>at-maximum</td><td></td><td>1</td><td>bearing</td></tr>
 <tr><td>refresh-extractor-working</td><td>at-maximum</td><td></td><td>1</td><td>working</td></tr>
+<tr><td>refresh-ark-working</td><td>at-maximum</td><td></td><td>1</td><td>working</td></tr>
 <tr><td>renew</td><td>exactly</td><td>0</td><td>2</td><td>paid</td></tr>
 </tbody>
 </table>
-<p class="count">18 row(s)</p>
+<p class="count">21 row(s)</p>
 <h2 id="family-spec-data-families-4x">family - spec/data/families.4x</h2>
 <table>
 <thead>
@@ -269,6 +275,10 @@
 <tr><td>create-labor</td><td><a href="catalog.html#citizen">citizen</a></td><td></td><td>1</td><td>require</td><td>1</td><td></td></tr>
 <tr><td>create-labor</td><td><a href="catalog.html#citizen">citizen</a></td><td></td><td></td><td>put</td><td>2</td><td></td></tr>
 <tr><td>create-labor</td><td><a href="catalog.html#labor">labor</a></td><td></td><td>1</td><td>produce</td><td>3</td><td></td></tr>
+<tr><td>mine-energy</td><td><a href="catalog.html#territory">territory</a></td><td>where</td><td>1</td><td>require</td><td>1</td><td></td></tr>
+<tr><td>mine-energy</td><td><a href="catalog.html#ark">ark</a></td><td></td><td>1</td><td>require</td><td>2</td><td>where</td></tr>
+<tr><td>mine-energy</td><td><a href="catalog.html#ark">ark</a></td><td></td><td></td><td>put</td><td>3</td><td>where</td></tr>
+<tr><td>mine-energy</td><td><a href="catalog.html#energy">energy</a></td><td></td><td>1</td><td>produce</td><td>4</td><td>where</td></tr>
 <tr><td>work</td><td><a href="catalog.html#territory">territory</a></td><td>where</td><td>1</td><td>require</td><td>1</td><td></td></tr>
 <tr><td>work</td><td><a href="catalog.html#extractor">extractor</a></td><td></td><td>1</td><td>require</td><td>2</td><td></td></tr>
 <tr><td>work</td><td><a href="catalog.html#extractor">extractor</a></td><td></td><td></td><td>put</td><td>3</td><td></td></tr>
@@ -299,11 +309,12 @@
 <tr><td>refresh-citizen-laboring</td><td><a href="catalog.html#citizen">citizen</a></td><td></td><td></td><td>put</td><td>1</td><td></td></tr>
 <tr><td>refresh-citizen-bearing</td><td><a href="catalog.html#citizen">citizen</a></td><td></td><td></td><td>put</td><td>1</td><td></td></tr>
 <tr><td>refresh-extractor-working</td><td><a href="catalog.html#extractor">extractor</a></td><td></td><td></td><td>put</td><td>1</td><td></td></tr>
+<tr><td>refresh-ark-working</td><td><a href="catalog.html#ark">ark</a></td><td></td><td></td><td>put</td><td>1</td><td></td></tr>
 <tr><td>renew</td><td><a href="catalog.html#citizen">citizen</a></td><td></td><td>1</td><td>require</td><td>1</td><td></td></tr>
 <tr><td>renew</td><td><a href="catalog.html#citizen">citizen</a></td><td></td><td></td><td>put</td><td>2</td><td></td></tr>
 </tbody>
 </table>
-<p class="count">68 row(s)</p>
+<p class="count">73 row(s)</p>
 <h2 id="member-spec-data-member-4x">member - spec/data/member.4x</h2>
 <table>
 <thead>

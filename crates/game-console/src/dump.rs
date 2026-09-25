@@ -296,14 +296,22 @@ pub fn tables(game: &Game) -> Vec<Table> {
         // about - a dump and an entity view disagreeing about a thing that holds something -
         // reappearing in a different pair of views, introduced by the fix for the first.
         //
-        // **The addend is gone with `S-150` and the paragraph above is kept.** A unit holds
-        // nothing now, so summing the territories is summing everywhere a resource can be -
-        // which is what this row always meant and could not say for three days. **The two
-        // views agree again by there being one place to look** rather than by two sums being
-        // kept level, and the test named above is still what would say otherwise.
+        // **The addend went with `S-150` and came back with `P-552`, and the sentence in
+        // between was wrong.** `S-150` removed it saying *a unit holds nothing now, so summing
+        // the territories is summing everywhere a resource can be* - true for one day. `P-552`
+        // gave an orbit a number of energy, and this row went on summing territories alone.
+        //
+        // **The same test caught it the same way**, which is the third time that check has been
+        // the only thing to notice: turn 10 printed `energy` unchanged at 12 while the delta
+        // accounted for the one unit an Ark had mined into an orbit.
+        //
+        // **So the row sums every place rather than every territory**, which is what *is there
+        // one anywhere* has always meant - and the lesson is that a claim about where a kind can
+        // be is a premise, not a simplification.
+        let aloft: u32 = game.orbits.values().map(|it| it.store(resource)).sum();
         kinds.push(vec![
             resource.name().to_string(),
-            total(&|t| t.store(resource)).to_string(),
+            (total(&|t| t.store(resource)) + aloft).to_string(),
         ]);
     }
     for kind in StructureKind::ALL {

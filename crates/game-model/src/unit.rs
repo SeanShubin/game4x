@@ -19,6 +19,22 @@ pub enum Location {
     On(TerritoryId),
 }
 
+impl std::fmt::Display for Location {
+    /// How a place is named to a player.
+    ///
+    /// **A refusal has to say which layer it is about** - `P-552` gave an orbit a number of
+    /// energy, so *territory 3 has 0 energy* and *the orbit above territory 3 has 0 energy* are
+    /// two different complaints and a player who is given the wrong one looks in the wrong
+    /// place. `Rejection::NotEnoughResource` carries a place for that reason and writes it
+    /// through here.
+    fn fmt(&self, out: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Location::On(id) => write!(out, "territory {id}"),
+            Location::Orbit(id) => write!(out, "the orbit above territory {id}"),
+        }
+    }
+}
+
 impl Location {
     /// The territory this place is, or is above. Every place in this release has one.
     pub fn territory(self) -> TerritoryId {
@@ -81,6 +97,16 @@ pub struct Unit {
     /// naming the same action draw on the same count, and two naming different actions never
     /// compete. A unit that has moved can still stand.
     pub stood: bool,
+    /// Whether this unit has already worked this turn - `P-552`'s `working`, `0 or 1`.
+    ///
+    /// **A third count and not a reuse of `moving`**, because `P-411` makes two recipes naming
+    /// different actions never compete: an Ark that has mined can still cross, and one that has
+    /// crossed can still mine. `releases/first-release.md` gives the Ark **Readies: moving 1,
+    /// working 1** for that reason, and the citizen beside it has had two counts all along.
+    ///
+    /// **`mine energy` is the only thing that spends it**, and `refresh` puts it back with the
+    /// others at the turn's end.
+    pub worked: bool,
 }
 
 impl Unit {
@@ -91,6 +117,7 @@ impl Unit {
             kind,
             location: Location::Orbit(above),
             exhausted: false,
+            worked: false,
             stood: false,
         }
     }
@@ -132,10 +159,11 @@ mod tests {
         assert!(unit.in_orbit());
         assert!(unit.ready());
         assert_eq!(unit.force(), 2);
-        // **An Ark's tank is none** - `S-86` blanked its Fuel cell, because a unit that moves
-        // in orbit takes its energy from the sun. It reaches the ground by landing, which asks
-        // where it is and not what it has left.
-        assert_eq!(unit.kind.fuel(), 0);
+        // **An Ark's tank is 1 since `P-552`, and was none from `S-86` until then.** `S-86`
+        // blanked the cell because nothing an Ark did spent a cell; `P-552` gave it `mine
+        // energy` and a crossing to spend it on, so the tank is the room one mined unit sits
+        // in - which is the whole of an orbit's capacity for energy.
+        assert_eq!(unit.kind.fuel(), 1);
 
         // A pioneer travels by land and its tank is the room it brings, so the two are
         // asserted apart.

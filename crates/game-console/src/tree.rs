@@ -502,21 +502,29 @@ mod tests {
             .collect();
         assert_eq!(
             energy.len(),
-            6,
+            7,
             "two territories, each declaring extractors of energy, stores of energy and the \
-             energy itself - and a count over nothing is the failure with the sign flipped"
+             energy itself, and one orbit that declares room for the Ark in it - and a count \
+             over nothing is the failure with the sign flipped"
         );
         let empty = energy.iter().filter(|bound| bound.total() == 0).count();
         assert_eq!(
             empty, 5,
-            "five of the six offer nothing, and the sixth is the pioneer's tank on territory 2"
+            "five of the seven offer nothing; the other two are the tanks - a pioneer's on the \
+             ground of territory 2 and an Ark's in the orbit above territory 1"
         );
-        assert!(
-            energy
-                .iter()
-                .any(|bound| bound.total() == game_model::UnitKind::Pioneer.fuel() as i64),
-            "the sixth is the tank, so this test's subject is the other five"
-        );
+        // **The seventh arrived with `P-552`**, which gave an orbit something to have room for.
+        // Before it an orbit declared nothing and this count was six.
+        for tank in [
+            game_model::UnitKind::Pioneer.fuel() as i64,
+            game_model::UnitKind::Ark.fuel() as i64,
+        ] {
+            assert!(
+                energy.iter().any(|bound| bound.total() == tank),
+                "a tank of {tank} is one of the two that are not zero, and this test's subject \
+                 is the five that are"
+            );
+        }
         let text = page(&game, "containment");
         assert!(
             !text.contains("0/0"),
