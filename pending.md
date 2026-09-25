@@ -8,9 +8,10 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-553** - The deploy comes first, and the launch is the winning act · `decide/proposals.md`
 - **P-551** - Two invariants leave a hole exactly where you say a command is needed, and one word is taken twice · `decide/questions.md`
 - **P-552** - An Ark cannot move, because two rules of `spec/` disagree and the orbital half is the one it needs · `decide/questions.md`
-- **P-553** - Does winning need the deploy before the launch? Your sentence does not say, and a release line assumes it does · `decide/questions.md`
+- **P-554** - Nothing in the first release shows you a win, and the loop you described is the winning one · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -24,6 +25,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-553** - `2177dbd` S-151 closed, P-553 for the order the win condition does not state · still open in `decide/proposals.md`
 - **C-129** - `51110e2` C-129: CLAUDE.md names tools/anchor, and S-172's numbers all counted candidates · still open in `crates/outbox.md`
 - **R-6** - `731aceb` touching could not see a built capability, and R-6 is the case · still open in `releases/first-release.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`

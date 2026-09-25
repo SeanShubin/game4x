@@ -209,46 +209,61 @@ build the general rule. **Whether hauling fires in this release is a separate qu
 proposal does not ask it; under `F1` an Ark is unaffected, because the orbit it arrives in has its
 own income.
 
-### P-553 - Does winning need the deploy before the launch? Your sentence does not say, and a release line assumes it does
+### P-554 - Nothing in the first release shows you a win, and the loop you described is the winning one
 
-**to** sean · **status** open · **raised** 2026-09-24 · **kind** entailed · **shape** a decision · **asks** a decision · **into** `spec/control.md` -> Winning, or `releases/first-release.md` -> `R-6`
+**to** sean · **status** open · **raised** 2026-09-24 · **kind** measured · **shape** a decision · **asks** a decision · **into** `releases/first-release.md` -> `R-6`, or a twelfth capability
 
-**One question, and it exists because the code lane declined to assume an answer.**
-
-## The three statements
+**Your two descriptions of the loop are different loops**, and only one of them wins.
 
 ```
-spec/control.md      A player wins by deploying an Ark to one territory and launching an
-                     Ark from a different one.
-releases/... R-6     victory takes a launch from a territory other than the one the Ark
-                     deployed to
-the model            won latches after either act, and a test fires them both ways round
+2026-09-20   start with an ark -> develop a planet -> launch an ark
+2026-09-24   start with an ark, deploy to the surface, develop that territory,
+             expand to an adjacent one, develop it, launch an ark from there
 ```
 
-**Your sentence names two acts and says nothing about which comes first.** `R-6`'s *vetted when* -
-this lane's wording, not yours - says *the one the Ark deployed to*, **which presupposes the deploy
-already happened.** The model permits either order.
+**The second wins and the first does not**, because winning takes a launch from a territory other
+than the one the Ark deployed to.
+
+## What the release vets today, measured
+
+**Eleven capabilities and none of them is a win.** `R-6` is *the loop can be played through*, and
+its *vetted when* says plainly: **it does not win, and that is the win condition working** - *this
+scenario deploys to territory 1 and launches from territory 1.*
+
+**And the scenario stops one step short of your six.** In `scenario/commands/play.4x`:
+
+```
+:19    {deploy-ark territory:1}          your step 2
+:149   {build-yard territory:1}          your step 3, in the first territory
+:154   {found-by-land territory:2}       your step 4
+:164   {launch-ark territory:1}          from the FIRST territory, so no win
+       territory 2 gets one {create-labor} and one {work resource:food}
+```
+
+**Five of your six steps.** The missing one is developing the second territory far enough to build
+a Yard there.
 
 ## The two answers
 
-**`W1` - either order wins.** Launching from territory 1 and later deploying to territory 2 is a
-win. **`R-6`'s line is this lane's to reword**, since it assumed more than your rule says.
+**`V1` - the release shows you a win.** `R-6`'s *vetted when* changes, or a twelfth capability is
+added, and the scenario develops territory 2 to a Yard and launches from it. **What it costs**: the
+scenario grows by the turns that takes, and `scenario/expected/play.4x` is reseeded - which the
+code lane can predict and has done twice before.
 
-**`W2` - the deploy comes first.** *A player wins by launching an Ark from a territory other than
-one an Ark has been deployed to* - one sentence, and `R-6` is already right.
+**`V2` - it does not, and `R-6` keeps saying why.** The release vets the mechanics and the win is
+vetted when you play it yourself. **What it costs**: the win condition is promoted, the model
+latches it as of today, and **nothing you can look at demonstrates it** - which is the state
+`CLAUDE.md` says a feature is not in until a person observes it.
 
-## What this lane would say, and it is weak
+## What this lane would say
 
-**`W2` reads like the game you described** - *start with an ark, develop a planet, launch an ark* -
-where leaving comes last. **But `W1` is what your sentence says**, and a rule that means less than
-it says is the safer of the two mistakes to leave standing.
+**`V1`, and the reason is your own words rather than this lane's taste.** You said the tests are
+how you keep executive control and that a feature is done when you have observed it. **A win
+condition nobody has watched happen is the one rule in `spec/control.md` with no observation behind
+it.**
 
-**So this is genuinely yours.** The narrative points one way and the promoted words point the
-other, and this lane will not pick between your fiction and your sentence.
+**And it is cheap now in a way it was not.** `S-151` built the latch today and the code lane
+already reseeded `play.4x` once for the Ark in orbit, so the machinery and the habit both exist.
 
-## Why it is worth asking at all
-
-**It changes what the game does**, not only what a document says: under `W1` a player can win
-without ever developing the second territory they launch from. **And the code is already built
-either way** - `won` latches after either act today, so `W2` is a condition added and `W1` is
-nothing to do.
+**`V2` is defensible** if you would rather see the win by playing than by reading a scenario - and
+if you pick it, that is worth one sentence in `R-6` so the absence reads as chosen.
