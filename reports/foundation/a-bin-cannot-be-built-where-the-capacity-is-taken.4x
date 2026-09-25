@@ -1,0 +1,17 @@
+# Generated from `reviewed/a-bin-cannot-be-built-where-the-capacity-is-taken.4x` by `cargo run --example foundation`. Do not edit.
+#
+# `spec/README.md` rule 3: a test is stated in the friendly form, and the foundation
+# form is a rendering of it - generated from `reviewed/` and never from `spec/tests/`.
+
+{test name:a-bin-cannot-be-built-where-the-capacity-is-taken}
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{capacity of:48 for:42 what:27 per:48 quantity:2}
+{bin where:1 what:30 quantity:2}
+{labor where:1 quantity:1}
+{metal where:1 quantity:1}
+{when}
+{build-bin what:30 where:1}
+{refused}
+{capacity of:48 for:42 what:30 per:48 quantity:3}

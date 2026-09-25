@@ -100,6 +100,22 @@ pub fn find(
         return Err(Problem::EmptyAnchor);
     }
 
+    // **A marker that is in no line stripped nothing, and that is never what was meant.**
+    // On this machine it is not even a typo: Git Bash rewrites an argument that looks like a
+    // path, so `--strip "//!"` arrives as something else entirely and the strip silently does
+    // not happen. **The anchor then fails to match and the failure says the anchor is not in the
+    // file** - which is true, and is the wrong thing to be told.
+    //
+    // **Doing nothing is never a success here**, and a flag that did nothing is the same defect
+    // one level up from an edit that did nothing.
+    if let Some(marker) = strip
+        && !text
+            .lines()
+            .any(|line| line.trim_start().starts_with(marker))
+    {
+        return Err(Problem::MarkerNotFound(marker.to_string()));
+    }
+
     // `at[i]` is the byte offset in `text` of the character that begins normalized position
     // `i`, and `ends[i]` is one past the byte that ends it.
     let mut normalized = String::new();
@@ -302,6 +318,12 @@ pub enum Problem {
     Ambiguous(usize, How),
     /// An anchor of no words matches everywhere and means nothing.
     EmptyAnchor,
+    /// A `--strip` marker that no line of the file begins with.
+    ///
+    /// **It stripped nothing, so the comparison was made against text nobody asked for.** The
+    /// anchor then fails to match, and *the anchor is not in the file* is a true sentence about
+    /// the wrong question.
+    MarkerNotFound(String),
 }
 
 impl std::fmt::Display for Problem {
@@ -318,6 +340,10 @@ impl std::fmt::Display for Problem {
                 how.named()
             ),
             Problem::EmptyAnchor => write!(out, "the anchor has no words in it"),
+            Problem::MarkerNotFound(marker) => write!(
+                out,
+                "no line begins with `{marker}`, so --strip stripped nothing - and a shell that                  rewrites an argument looking like a path is the usual reason"
+            ),
         }
     }
 }

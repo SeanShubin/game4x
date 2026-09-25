@@ -1,0 +1,23 @@
+# Generated from `reviewed/the-same-territory-has-room-for-a-bin-of-another-resource.4x` by `cargo run --example foundation`. Do not edit.
+#
+# `spec/README.md` rule 3: a test is stated in the friendly form, and the foundation
+# form is a rendering of it - generated from `reviewed/` and never from `spec/tests/`.
+
+{test name:the-same-territory-has-room-for-a-bin-of-another-resource}
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{capacity of:48 for:42 what:30 per:48 quantity:2}
+{capacity of:48 for:42 what:31 per:48 quantity:3}
+{bin where:1 what:30 quantity:2}
+{labor where:1 quantity:1}
+{metal where:1 quantity:1}
+{when}
+{build-bin what:31 where:1}
+{then}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{capacity of:48 for:42 what:30 per:48 quantity:2}
+{capacity of:48 for:42 what:31 per:48 quantity:3}
+{bin where:1 what:30 quantity:2}
+{bin where:1 what:31 quantity:1}

@@ -1,0 +1,23 @@
+# Generated from `reviewed/a-scout-arriving-where-one-stands-makes-two.4x` by `cargo run --example foundation`. Do not edit.
+#
+# `spec/README.md` rule 3: a test is stated in the friendly form, and the foundation
+# form is a rendering of it - generated from `reviewed/` and never from `spec/tests/`.
+
+{test name:a-scout-arriving-where-one-stands-makes-two}
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{territory id:2}
+{place id:2 of:2 layer:surface}
+{adjacency id:1 from:1 to:2}
+{scout where:1 moving:1 quantity:1}
+{scout where:2 moving:0 quantity:1}
+{when}
+{move from:1 to:2 what:28}
+{then}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{territory id:2}
+{place id:2 of:2 layer:surface}
+{adjacency id:1 from:1 to:2}
+{scout where:2 moving:0 quantity:2}

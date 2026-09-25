@@ -1,0 +1,16 @@
+# Generated from `reviewed/a-territory-with-no-orbit-cannot-launch.4x` by `cargo run --example foundation`. Do not edit.
+#
+# `spec/README.md` rule 3: a test is stated in the friendly form, and the foundation
+# form is a rendering of it - generated from `reviewed/` and never from `spec/tests/`.
+
+{test name:a-territory-with-no-orbit-cannot-launch}
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{labor where:1 quantity:1}
+{metal where:1 quantity:1}
+{energy where:1 quantity:1}
+{when}
+{launch where:1}
+{refused}
+{place of:1 layer:orbit}

@@ -1,0 +1,22 @@
+# Generated from `reviewed/the-same-free-space-admits-one-kind-and-refuses-another.4x` by `cargo run --example foundation`. Do not edit.
+#
+# `spec/README.md` rule 3: a test is stated in the friendly form, and the foundation
+# form is a rendering of it - generated from `reviewed/` and never from `spec/tests/`.
+
+{test name:the-same-free-space-admits-one-kind-and-refuses-another}
+{given}
+{provides kind:48 what:1 quantity:6}
+{consumes kind:28 what:1 quantity:1}
+{consumes kind:35 what:1 quantity:2}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{territory id:2}
+{place id:2 of:2 layer:surface}
+{adjacency id:1 from:1 to:2}
+{transport where:1 moving:1 quantity:1}
+{transport where:2 moving:1 quantity:2}
+{scout where:2 moving:1 quantity:1}
+{when}
+{move from:1 to:2 what:35}
+{refused}
+{provides kind:48 what:1 quantity:7}

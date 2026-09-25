@@ -1,0 +1,20 @@
+# Generated from `reviewed/a-deployment-with-nowhere-to-mine-still-costs-the-ark.4x` by `cargo run --example foundation`. Do not edit.
+#
+# `spec/README.md` rule 3: a test is stated in the friendly form, and the foundation
+# form is a rendering of it - generated from `reviewed/` and never from `spec/tests/`.
+
+{test name:a-deployment-with-nowhere-to-mine-still-costs-the-ark}
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{place id:2 of:1 layer:orbit}
+{capacity of:18 for:19 what:27 per:48 quantity:1}
+{ark where:2 moving:1 gathering:1 quantity:1}
+{when}
+{deploy what:51 where:2}
+{then}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{place id:2 of:1 layer:orbit}
+{capacity of:18 for:19 what:27 per:48 quantity:1}
+{citizen where:1 hungry:0 bearing:1 laboring:1 quantity:2}

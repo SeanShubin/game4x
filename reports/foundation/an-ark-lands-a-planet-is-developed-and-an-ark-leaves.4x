@@ -1,0 +1,40 @@
+# Generated from `reviewed/an-ark-lands-a-planet-is-developed-and-an-ark-leaves.4x` by `cargo run --example foundation`. Do not edit.
+#
+# `spec/README.md` rule 3: a test is stated in the friendly form, and the foundation
+# form is a rendering of it - generated from `reviewed/` and never from `spec/tests/`.
+
+{test name:an-ark-lands-a-planet-is-developed-and-an-ark-leaves}
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{place id:2 of:1 layer:orbit}
+{capacity of:18 for:19 what:27 per:48 quantity:1}
+{deposit where:1 what:30 density:6 quantity:1}
+{deposit where:1 what:31 density:6 quantity:1}
+{deposit where:1 what:50 density:6 quantity:1}
+{ark where:2 moving:1 gathering:1 quantity:1}
+{when}
+{deploy what:51 where:2}
+{toil where:1}
+{work what:31 where:1}
+{end-turn}
+{toil where:1}
+{work what:30 where:1}
+{build-extractor what:50 where:1}
+{work what:50 where:1}
+{launch where:1}
+{then}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{place id:2 of:1 layer:orbit}
+{capacity of:18 for:19 what:27 per:48 quantity:1}
+{deposit where:1 what:30 density:6 quantity:1}
+{deposit where:1 what:31 density:6 quantity:1}
+{deposit where:1 what:50 density:6 quantity:1}
+{extractor where:1 what:30 working:0 quantity:1}
+{extractor where:1 what:31 working:1 quantity:1}
+{extractor where:1 what:50 working:0 quantity:1}
+{citizen where:1 hungry:1 bearing:1 laboring:0 quantity:4}
+{metal where:1 quantity:4}
+{energy where:1 quantity:5}
+{ark where:2 moving:1 gathering:1 quantity:1}

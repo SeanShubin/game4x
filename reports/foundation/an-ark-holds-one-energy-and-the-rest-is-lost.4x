@@ -1,0 +1,20 @@
+# Generated from `reviewed/an-ark-holds-one-energy-and-the-rest-is-lost.4x` by `cargo run --example foundation`. Do not edit.
+#
+# `spec/README.md` rule 3: a test is stated in the friendly form, and the foundation
+# form is a rendering of it - generated from `reviewed/` and never from `spec/tests/`.
+
+{test name:an-ark-holds-one-energy-and-the-rest-is-lost}
+{given}
+{territory id:1}
+{place id:1 of:1 layer:orbit}
+{ark where:1 moving:1 gathering:1 quantity:1}
+{capacity of:51 for:50 what:50 per:48 quantity:1}
+{energy where:1 quantity:3}
+{when}
+{end-turn}
+{then}
+{territory id:1}
+{place id:1 of:1 layer:orbit}
+{ark where:1 moving:1 gathering:1 quantity:1}
+{capacity of:51 for:50 what:50 per:48 quantity:1}
+{energy where:1 quantity:1}

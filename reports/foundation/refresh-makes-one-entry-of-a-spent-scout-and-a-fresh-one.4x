@@ -1,0 +1,17 @@
+# Generated from `reviewed/refresh-makes-one-entry-of-a-spent-scout-and-a-fresh-one.4x` by `cargo run --example foundation`. Do not edit.
+#
+# `spec/README.md` rule 3: a test is stated in the friendly form, and the foundation
+# form is a rendering of it - generated from `reviewed/` and never from `spec/tests/`.
+
+{test name:refresh-makes-one-entry-of-a-spent-scout-and-a-fresh-one}
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{scout where:1 moving:1 quantity:2}
+{scout where:1 moving:0 quantity:3}
+{when}
+{refresh trait:1 what:28}
+{then}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{scout where:1 moving:1 quantity:5}

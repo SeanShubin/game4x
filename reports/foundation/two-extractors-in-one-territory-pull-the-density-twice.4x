@@ -1,0 +1,23 @@
+# Generated from `reviewed/two-extractors-in-one-territory-pull-the-density-twice.4x` by `cargo run --example foundation`. Do not edit.
+#
+# `spec/README.md` rule 3: a test is stated in the friendly form, and the foundation
+# form is a rendering of it - generated from `reviewed/` and never from `spec/tests/`.
+
+{test name:two-extractors-in-one-territory-pull-the-density-twice}
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{capacity of:18 for:19 what:27 per:48 quantity:1}
+{deposit where:1 what:31 density:6 quantity:2}
+{extractor where:1 what:31 working:1 quantity:2}
+{labor where:1 quantity:2}
+{when}
+{work what:31 where:1}
+{work what:31 where:1}
+{then}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{capacity of:18 for:19 what:27 per:48 quantity:1}
+{deposit where:1 what:31 density:6 quantity:2}
+{extractor where:1 what:31 working:0 quantity:2}
+{food where:1 quantity:12}

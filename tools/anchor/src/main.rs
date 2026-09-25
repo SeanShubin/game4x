@@ -11,6 +11,20 @@
 //!
 //! `anchor find` does the same lookup and prints the byte range without changing anything,
 //! which is what to reach for when checking an anchor before trusting it.
+//!
+//! # Two things `--strip` does not do, both met on 2026-09-25
+//!
+//! **It is for matching and never for writing.** A replacement is written verbatim, so one that
+//! drops the marker leaves a file whose lines are no longer comments. `--strip "//!"` with a
+//! replacement of bare prose produced four lines of Rust that were not a doc comment and not
+//! code, and it did it without complaint because the replacement is exactly what was asked for.
+//!
+//! **And a shell may eat the marker.** Git Bash rewrites an argument that looks like a path, so
+//! `--strip "//!"` can arrive as something else entirely and strip nothing - after which the
+//! anchor does not match and the refusal truthfully says the anchor is not in the file.
+//! `MSYS_NO_PATHCONV=1` is the fix on that shell. **The tool now refuses a marker no line begins
+//! with**, so the silent version of this is gone, and that refusal says a shell is the usual
+//! reason.
 
 use std::process::ExitCode;
 

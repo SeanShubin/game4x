@@ -1,0 +1,73 @@
+# Generated from `reviewed/a-second-settlement-launches-the-ark-the-first-could-not.4x` by `cargo run --example foundation`. Do not edit.
+#
+# `spec/README.md` rule 3: a test is stated in the friendly form, and the foundation
+# form is a rendering of it - generated from `reviewed/` and never from `spec/tests/`.
+
+{test name:a-second-settlement-launches-the-ark-the-first-could-not}
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{place id:2 of:1 layer:orbit}
+{territory id:2}
+{place id:3 of:2 layer:surface}
+{place id:4 of:2 layer:orbit}
+{adjacency id:1 from:1 to:2}
+{capacity of:18 for:19 what:27 per:48 quantity:1}
+{provides kind:48 what:1 quantity:6}
+{consumes kind:54 what:1 quantity:1}
+{deposit where:1 what:30 density:6 quantity:1}
+{deposit where:1 what:31 density:6 quantity:1}
+{deposit where:3 what:30 density:6 quantity:1}
+{deposit where:3 what:31 density:6 quantity:1}
+{deposit where:3 what:50 density:6 quantity:1}
+{ark where:2 moving:1 gathering:1 quantity:1}
+{when}
+{deploy what:51 where:2}
+{toil where:1}
+{work what:31 where:1}
+{end-turn}
+{toil where:1}
+{work what:31 where:1}
+{work what:30 where:1}
+{build-pioneer where:1}
+{move from:1 to:3 what:54}
+{end-turn}
+{deploy what:54 where:3}
+{toil where:1}
+{work what:31 where:1}
+{toil where:3}
+{work what:31 where:3}
+{end-turn}
+{toil where:3}
+{work what:30 where:3}
+{build-extractor what:50 where:3}
+{work what:50 where:3}
+{launch where:3}
+{then}
+{adjacency id:1 from:1 to:2}
+{ark where:4 moving:1 gathering:1 quantity:1}
+{capacity of:18 for:19 what:30 per:48 quantity:1}
+{capacity of:18 for:19 what:31 per:48 quantity:1}
+{capacity of:18 for:19 what:50 per:48 quantity:1}
+{citizen where:1 hungry:1 bearing:1 laboring:1 quantity:6}
+{citizen where:3 hungry:1 bearing:1 laboring:0 quantity:4}
+{consumes kind:54 what:1 quantity:1}
+{deposit where:1 what:30 density:6 quantity:1}
+{deposit where:1 what:31 density:6 quantity:1}
+{deposit where:3 what:30 density:6 quantity:1}
+{deposit where:3 what:31 density:6 quantity:1}
+{deposit where:3 what:50 density:6 quantity:1}
+{energy where:3 quantity:5}
+{extractor where:1 what:30 working:1 quantity:1}
+{extractor where:1 what:31 working:1 quantity:1}
+{extractor where:3 what:30 working:0 quantity:1}
+{extractor where:3 what:31 working:1 quantity:1}
+{extractor where:3 what:50 working:0 quantity:1}
+{metal where:3 quantity:4}
+{place id:1 of:1 layer:surface}
+{place id:2 of:1 layer:orbit}
+{place id:3 of:2 layer:surface}
+{place id:4 of:2 layer:orbit}
+{provides kind:48 what:1 quantity:6}
+{territory id:1}
+{territory id:2}

@@ -1,0 +1,16 @@
+# Generated from `reviewed/the-sun-reaches-an-ark-once-a-turn.4x` by `cargo run --example foundation`. Do not edit.
+#
+# `spec/README.md` rule 3: a test is stated in the friendly form, and the foundation
+# form is a rendering of it - generated from `reviewed/` and never from `spec/tests/`.
+
+{test name:the-sun-reaches-an-ark-once-a-turn}
+{given}
+{territory id:1}
+{place id:1 of:1 layer:orbit}
+{deposit where:1 what:50 density:3 quantity:1}
+{ark where:1 moving:1 gathering:1 quantity:1}
+{when}
+{gather where:1}
+{gather where:1}
+{refused}
+{ark where:1 gathering:1}

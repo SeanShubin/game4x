@@ -155,11 +155,16 @@ fn every_way_this_refuses_is_reachable() {
         find("abc", "xyz", None, How::exact()).unwrap_err(),
         find("a a", "a", None, How::exact()).unwrap_err(),
         find("abc", " ", None, How::exact()).unwrap_err(),
+        // **A marker no line begins with**, which is a strip that stripped nothing.
+        find("abc", "abc", Some(">"), How::exact()).unwrap_err(),
     ];
     for why in &refusals {
         // No wildcard, deliberately: this arm is the tie to the variant count.
         match why {
-            Problem::NotFound(_) | Problem::Ambiguous(_, _) | Problem::EmptyAnchor => {}
+            Problem::NotFound(_)
+            | Problem::Ambiguous(_, _)
+            | Problem::EmptyAnchor
+            | Problem::MarkerNotFound(_) => {}
         }
     }
     assert!(
@@ -179,6 +184,12 @@ fn every_way_this_refuses_is_reachable() {
             .iter()
             .any(|why| matches!(why, Problem::EmptyAnchor)),
         "an anchor of no words must be reachable"
+    );
+    assert!(
+        refusals
+            .iter()
+            .any(|why| matches!(why, Problem::MarkerNotFound(_))),
+        "a strip that strips nothing must be reachable"
     );
 
     for why in &refusals {

@@ -1,0 +1,24 @@
+# Generated from `reviewed/toil-works-the-unworked-citizens-of-one-place.4x` by `cargo run --example foundation`. Do not edit.
+#
+# `spec/README.md` rule 3: a test is stated in the friendly form, and the foundation
+# form is a rendering of it - generated from `reviewed/` and never from `spec/tests/`.
+
+{test name:toil-works-the-unworked-citizens-of-one-place}
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{territory id:2}
+{place id:2 of:2 layer:surface}
+{citizen where:1 hungry:1 bearing:0 laboring:1 quantity:2}
+{citizen where:1 hungry:1 bearing:0 laboring:0 quantity:1}
+{citizen where:2 hungry:1 bearing:1 laboring:1 quantity:1}
+{when}
+{toil where:1}
+{then}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{territory id:2}
+{place id:2 of:2 layer:surface}
+{citizen where:1 hungry:1 bearing:0 laboring:0 quantity:3}
+{citizen where:2 hungry:1 bearing:1 laboring:1 quantity:1}
+{labor where:1 quantity:2}

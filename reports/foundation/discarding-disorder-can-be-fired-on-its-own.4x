@@ -1,0 +1,22 @@
+# Generated from `reviewed/discarding-disorder-can-be-fired-on-its-own.4x` by `cargo run --example foundation`. Do not edit.
+#
+# `spec/README.md` rule 3: a test is stated in the friendly form, and the foundation
+# form is a rendering of it - generated from `reviewed/` and never from `spec/tests/`.
+
+{test name:discarding-disorder-can-be-fired-on-its-own}
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{capacity of:48 for:42 what:27 per:48 quantity:4}
+{capacity of:42 for:27 what:27 per:48 quantity:10}
+{bin where:1 what:30 quantity:2}
+{metal where:1 quantity:22}
+{when}
+{discard-disorder}
+{then}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{capacity of:48 for:42 what:27 per:48 quantity:4}
+{capacity of:42 for:27 what:27 per:48 quantity:10}
+{bin where:1 what:30 quantity:2}
+{metal where:1 quantity:20}
