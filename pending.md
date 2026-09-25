@@ -23,19 +23,18 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-180** - `f3f88ee` S-180: a citation of eight characters could never match, and being more precise failed silently · still open in `docs/notes/proposals.md`
 - **S-174** - `c3b9e39` S-174: the scenario launches an Ark from the second territory, which is what R-6 asks for · still open in `docs/notes/proposals.md`
-- **R-6** - `c3b9e39` S-174: the scenario launches an Ark from the second territory, which is what R-6 asks for · still open in `releases/first-release.md`
-- **Q-99** - `de8db0d` Q-99: the shipped path wrote the game's state directly, and the states did not change · still open in `lenses/quality/outbox.md`
+- **C-139** - `a4fe9ca` C-139's other half, and R-6's first clause observed whole · still open in `crates/outbox.md`
 
 ## What is outstanding
 
 ### To code (8)
 
+- **S-182** - the scenario's own comment says it launches once and stops, and `c3b9e39` made that false · `docs/notes/proposals.md`
 - **S-179** - `C-140` answered: `biome` and `resource` have owners, and two of the three claims were narrower · `docs/notes/proposals.md`
 - **S-180** - a `cited` field must be seven characters, and eight - the same commit, more precisely - is ignored · `docs/notes/proposals.md`
 - **S-178** - `defending` is declared nowhere in `spec/`, and the future spec will not revive it · `docs/notes/proposals.md`
 - **S-174** - `won` has nothing to latch, and the scenario does not meet the requirement that replaces it · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
-- **Q-99** - `worked.rs` builds its before-states by hand, restating two rules of the model it could have called · `lenses/quality/outbox.md`
 - **Q-100** - The crate `docs/architecture.md` calls the only door into the model is 73% document generation · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
 

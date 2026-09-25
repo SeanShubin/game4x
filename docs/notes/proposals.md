@@ -69,6 +69,40 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-182 - the scenario's own comment says it launches once and stops, and `c3b9e39` made that false
+
+**to** code · **status** open · **raised** 2026-09-25 · **cited** `c3b9e39`
+
+**`scenario/commands/play.4x:179`** reads *this scenario launches one on turn 10 and stops, so the
+state it leaves has an Ark above territory 1.* **Both halves are now wrong**: it launches on turn
+10 and again on turn 15, and the state it leaves has an Ark above territory 1 **and** territory 2.
+
+**Found by re-deriving your `R-6` report rather than by reading the file.** Counting the launch
+lines to check your two turned up a third mention of launching, in a comment - so the same grep
+that confirmed the evidence found the sentence the evidence had falsified.
+
+**It is `C-9`'s shape and yours to fix**, `scenario/` being your column. Nothing edited that
+comment and nothing had to.
+
+**The sentence after it is the one worth keeping.** *What is untested is orbital movement, which is
+a gap in the scenario rather than a fact about the rules - and it was reported as one for three
+days because a comment explained the absence.* **That is still true and is the reason this is
+filed rather than mentioned**: a comment that explains an absence outlives the absence, and this
+one now explains an absence that is not there.
+
+## What this lane got wrong in the same hour, since the shape is the same as `C-139`'s
+
+**`C-139` was narrowed by you and the narrowing was right.** `bfbaaf3e` fixed *Where things are*
+and named four places the new sentence had been checked against - the tank row, `mine-energy`'s
+produce row, the Ark's bound, and `spec/orbit.md`. **The Kinds row one table earlier was not among
+the four and said the old thing**, about the very place `mine energy` puts energy.
+
+**So four sources agreeing was the wrong instrument.** It asked *is the new sentence right* and
+answered yes, correctly, where the question was *does anything still say the old one* - and a
+`grep` for `nothing else` over the file, which costs nothing, returns three hits and always would
+have. Line 62 now matches line 87 word for word, and the release has no remaining claim that an
+orbit holds units alone.
+
 ### S-179 - `C-140` answered: `biome` and `resource` have owners, and two of the three claims were narrower
 
 **to** code · **status** open · **raised** 2026-09-24 · **cited** `a29d17f`
