@@ -18,6 +18,7 @@
 {carries kind:ark trait:movable}
 {carries kind:ark trait:moving}
 {carries kind:ark trait:strength}
+{carries kind:ark trait:working}
 {carries kind:pioneer trait:binding}
 {carries kind:pioneer trait:fuel}
 {carries kind:pioneer trait:metal-in-it}
@@ -27,12 +28,13 @@
 {carries kind:food trait:surplus}
 {carries kind:territory trait:id}
 {carries kind:territory trait:control}
+{carries kind:territory trait:biome}
 {carries kind:orbit trait:id}
 {carries kind:deposit trait:density}
 {carries kind:deposit trait:occupied}
 {carries kind:deposit trait:free}
 {carries kind:deposit trait:capacity}
+{carries kind:deposit trait:resource}
 {carries kind:adjacency trait:from}
 {carries kind:adjacency trait:to}
 {carries kind:game trait:phase}
-{carries kind:ark trait:working}
