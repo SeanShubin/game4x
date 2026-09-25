@@ -749,8 +749,13 @@ cut by `ee767358` on 2026-09-21.
 item was right on 2026-09-18 and is wrong now**, and nothing edited it.
 
 **Re-stated, with the commit this time.** At `71332b0f` the Readies column reads: `citizen` bearing
-1 and laboring 1; `extractor` working 1; `ark` moving 1 and working 1; `pioneer` moving 1. **Five
-allowances over four kinds, matching the five blocks.** `grep -rn "readies" spec/` is empty - no
+1 and laboring 1; `extractor` working 1; `ark` moving 1 and working 1; `pioneer` moving 1. **That is
+six `(kind, trait)` pairs against five blocks, and the two counts are of different things** -
+`refresh-unit-moving` is one block covering ark and pioneer through the `unit` family,
+`{family name:unit}` with both as `{member ...}`. **The first version of this line said *five
+allowances, matching the five blocks*** and asserted a match between counts of different things,
+which is this class a third time in one chain and inside the correction of a stale number. Caught by
+the specification lane. `grep -rn "readies" spec/` is empty - no
 trait in `traits.4x`, no row in `carries.4x`, no sentence anywhere - so `compare:at-maximum` still
 has no maximum in `spec/` to point at, and the only statement of it is in the file `CLAUDE.md` says
 is deleted once vetted.

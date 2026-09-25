@@ -22,6 +22,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-183** - `80f96b9` S-183: six of the seven were dead and the seventh was the item about dying numbers · still open in `docs/notes/proposals.md`
+- **S-184** - `3177279` S-184: X-19 and X-26 close, X-12 does not, and the four does not reproduce · still open in `docs/notes/proposals.md`
 
 ## What is outstanding
 
