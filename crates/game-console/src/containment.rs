@@ -56,7 +56,7 @@ use game_model::{Game, Phase};
 /// twice; `{garrison force:0}` was the entry that lost a word.
 ///
 /// **The key of the map, so two things sharing one are indistinguishable.** That is the
-/// point rather than a limitation: `{citizen defending:1} -> 8` says there are eight of them
+/// point rather than a limitation: `{citizen laboring:1} -> 8` says there are eight of them
 /// and that nothing in the state tells them apart. Where two things *are* distinguishable
 /// they carry a trait that says so, and `id` is the trait that always does.
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -458,7 +458,7 @@ pub fn trait_name(name: Trait) -> &'static str {
 /// standing in for it.** `P-459` was the gap: `refresh` read *at its maximum* six times and
 /// the *Readies* column said `yes`, one cell for a citizen's three actions, where
 /// `spec/turn.md` asks for a number. The column is the count per action now - *bearing 1,
-/// defending 1, laboring 1* - so there is a declared maximum to read.
+/// laboring 1* - so there is a declared maximum to read.
 ///
 /// **It is one for all eight pairs**, and `the_readies_column_declares_the_maximum_this_reads`
 /// in `game-console` holds this constant against the column. **That check is why this stays a
@@ -473,7 +473,7 @@ pub const MAXIMUM_PER_ACTION: u32 = 1;
 
 /// **One trait per action, and the name depends on the kind.** `spec/console.md`: a
 /// description is a kind and **every trait of that thing**, and **no trait of the thing may be
-/// left out** - `{citizen defending:1} -> 8` and `{citizen defending:0} -> 6`. So a count is
+/// left out** - `{citizen laboring:1} -> 8` and `{citizen laboring:0} -> 6`. So a count is
 /// always written, with its value, rather than omitted when it is full.
 ///
 /// **Absent means one**, which is how the model has always stored readiness and is why a thing
@@ -496,9 +496,13 @@ pub const MAXIMUM_PER_ACTION: u32 = 1;
 fn counts(kind: Kind, thing: &Thing) -> Vec<(&'static str, u32)> {
     let held = |name: Trait| thing.trait_of(name).unwrap_or(MAXIMUM_PER_ACTION);
     match kind {
+        // **`defending` was the second of these until 2026-09-24 and `carries.4x` never said
+        // a citizen carried it.** `P-522` cut force from the release and `292a2018` took the
+        // word out of the last `Readies` cell; this list kept writing it. **A citizen carries
+        // `bearing`, `laboring`, `paid`, `strength` and `upkeep`**, and the first three of those
+        // are counts a recipe spends.
         Kind::Citizen => vec![
             ("bearing", held(Trait::Spent)),
-            ("defending", held(Trait::Defending)),
             ("laboring", held(Trait::Ready)),
             // **`paid` defaults to zero and the three above it default to one**, which is the
             // same split [`Trait::Met`] records: a readiness is absent when it is full and a
@@ -822,16 +826,29 @@ impl Entry {
 /// release: *Where things are* gives a unit's tank as one of the three sorts of capacity
 /// rather than as something with a description of its own.
 fn describe_unit(unit: &game_model::Unit) -> Description {
-    Description::of(match unit.kind {
+    let mut described = Description::of(match unit.kind {
         game_model::UnitKind::Ark => Kind::Ark,
         game_model::UnitKind::Pioneer => Kind::Pioneer,
     })
-    .with("id", unit.id)
-    // **A unit's counts, under `P-411`'s names.** `moving` is what the model has stored as
-    // `exhausted` all along - absent means one - and `defending` is `P-414`'s, which a unit
-    // spends to stand. `fuel` left the description with `P-407`: it is a trait of the kind.
-    .with("moving", u32::from(!unit.exhausted))
-    .with("defending", u32::from(!unit.stood))
+    .with("id", unit.id);
+    // **A unit's counts, and the kind says which it has.** `releases/first-release.md`'s
+    // `Readies` cell and `spec/data/carries.4x` agree: an ark readies `moving` and `working`, a
+    // pioneer only `moving`. **Written from `UnitKind::readies` rather than listed here**, so a
+    // count a kind does not carry cannot be written by this function at all.
+    //
+    // **`defending` was written on every unit until 2026-09-24 and declared nowhere.** `P-522`
+    // cut it from all three `Readies` cells and `292a2018` finished the cut; this went on saying
+    // it for two days, because nothing compared what the dump says a thing carries against what
+    // the data says it carries. `every_count_the_dump_writes_is_one_its_kind_carries` is that
+    // comparison, and it is why this reads the kind.
+    for readiness in unit.kind.readies() {
+        let spent = match readiness {
+            game_model::identity::Readiness::Moving => unit.exhausted,
+            game_model::identity::Readiness::Working => unit.worked,
+        };
+        described = described.with(readiness.name(), u32::from(!spent));
+    }
+    described
 }
 
 /// A unit, which holds nothing.
@@ -946,7 +963,7 @@ mod tests {
     /// Two things with one description are one entry, and the quantity is the count.
     ///
     /// **The counts are back in the description since `P-411`, one per action.** A citizen
-    /// carries `bearing`, `defending` and `laboring`, each `0 or 1`, and `spec/console.md`
+    /// carries `bearing` and `laboring`, each `0 or 1`, and `spec/console.md`
     /// says no trait of the thing may be left out - so a count is written with its value
     /// rather than omitted when it is full.
     #[test]
@@ -958,7 +975,7 @@ mod tests {
         assert_eq!(territory.contents[0].quantity, 8);
         assert_eq!(
             territory.contents[0].description.written(),
-            "{citizen bearing:1 defending:1 laboring:1 paid:0}"
+            "{citizen bearing:1 laboring:1 paid:0}"
         );
         assert!(
             territory.contents[0].contents.is_empty(),
@@ -975,8 +992,8 @@ mod tests {
     /// citizens are two descriptions again.
     ///
     /// **So the state that had no written form has one**, and it is the form
-    /// `spec/console.md`'s own example uses: `{citizen defending:1} -> 8` and
-    /// `{citizen defending:0} -> 6`, never `{citizen} -> 14`.
+    /// `spec/console.md`'s own example uses: `{citizen laboring:1} -> 8` and
+    /// `{citizen laboring:0} -> 6`, never `{citizen} -> 14`.
     #[test]
     fn a_trait_that_tells_two_things_apart_makes_two_entries() {
         let mut game = a_world();
@@ -998,14 +1015,8 @@ mod tests {
         assert_eq!(
             written,
             vec![
-                (
-                    "{citizen bearing:1 defending:1 laboring:0 paid:0}".to_string(),
-                    6
-                ),
-                (
-                    "{citizen bearing:1 defending:1 laboring:1 paid:0}".to_string(),
-                    8
-                ),
+                ("{citizen bearing:1 laboring:0 paid:0}".to_string(), 6),
+                ("{citizen bearing:1 laboring:1 paid:0}".to_string(), 8),
             ],
             "eight that can labor and six that cannot, in the order their descriptions sort in"
         );

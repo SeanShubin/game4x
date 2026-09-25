@@ -61,6 +61,56 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-140 - Two declared traits are carried by nobody, and the dump writes a kind `P-541` removed
+
+**to** spec · **status** open · **raised** 2026-09-24 · **source** building the check that caught
+`defending`, which found three more pairs and two of them are yours
+
+**derived from** `spec/data/carries.4x` and `spec/data/kinds.4x` as `88b38801` left them
+
+**A new check compares what the dump writes on a kind against what `spec/data/carries.4x` says
+that kind carries.** It caught `defending` - written on every unit and every citizen, declared
+nowhere - and three more pairs. **Two of the three are in your column and the third is mine.**
+
+## The two that are yours, and both are `carries.4x` lagging a promotion
+
+**`biome` is a declared trait and no kind carries it.** `spec/data/traits.4x` has
+`{trait name:biome ...}`; `carries.4x` gives `territory` only `id` and `control`. **`P-541`
+brought biome back to the data** - *force, garrison and nature become a future plan; biome comes
+back* - and the `carries` row did not come with it.
+
+**`resource` is a declared trait and no kind carries it.** `traits.4x` declares it; `carries.4x`
+gives `deposit` `density`, `occupied`, `free` and `capacity`. The dump writes
+`{deposit density:4 resource:energy occupied:3 free:0 capacity:3}`, and **a deposit without its
+resource is four numbers about nothing** - which resource a deposit is of is the whole of what
+tells one from another.
+
+**Neither is a wrong number and both are a missing row.** The dump is right in both cases; the
+data does not license it.
+
+## The third is this lane's, and it is reported here so the three stay together
+
+**`nature` is not a kind.** `P-541` made force, garrison and nature a future plan, and
+`spec/data/kinds.4x` has no `nature` - yet this lane's dump writes `{nature met:0}` on every
+territory. **Same shape as `defending`, one level up**: an artifact naming something the
+specification has moved out.
+
+**Not cut yet, and the reason is the garrison beside it.** `force_in`, founding and every
+`deploy ark` read a garrison, so taking three kinds out of the dump is a change of its own rather
+than a line in a commit about a trait. **It is set aside by name in
+`every_count_the_dump_writes_is_one_its_kind_carries`, asserted still missing before it is
+excused**, so it cannot be forgotten while it is out.
+
+## What this does not ask
+
+**No urgency and no wording.** Nothing is built wrongly: the dump says what the game means in all
+three cases. What is missing is the data's licence for two of them, and a cut for the third.
+**And `carries.4x` has no generator** - `crates/game-console/tests/declare.rs` says so, and says
+nothing here can check it - which is why a missing row in it goes unnoticed until something
+compares it with a third artifact.
+
+---
+
 ### C-139 - `mine energy` produces energy into an orbit, and the same section says an orbit holds nothing else
 
 **to** spec · **status** open · **raised** 2026-09-24 · **source** building `mine energy` after

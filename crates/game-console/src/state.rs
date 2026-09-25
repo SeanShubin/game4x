@@ -3,8 +3,8 @@
 //! > **What a thing contains is a map from a description to a quantity.** A description is a
 //! > kind and **every trait of that thing**; a trait **of its kind** is not part of one,
 //! > because naming the kind has already said it.
-//! > **No trait of the thing may be left out** - `{citizen defending:1} -> 8` and `{citizen
-//! > defending:0} -> 6`, never `{citizen} -> 14`. **Each distinct description is its own
+//! > **No trait of the thing may be left out** - `{citizen laboring:1} -> 8` and `{citizen
+//! > laboring:0} -> 6`, never `{citizen} -> 14`. **Each distinct description is its own
 //! > entry, and an entry is never zero.** A thing carrying an `id` has a description no
 //! > other thing shares, so **its quantity is always one**. **Where a thing is, is where it
 //! > appears**; nothing states its container. **Entries are in the order their descriptions
@@ -30,9 +30,9 @@
 //! ```text
 //! {game phase:play}
 //!   {orbit id:1} -> 1
-//!     {ark defending:1 id:1 moving:1} -> 1
+//!     {ark id:1 moving:1 working:1} -> 1
 //!   {territory biome:grassland id:1 nature:1} -> 1
-//!     {citizen bearing:1 defending:1 laboring:1} -> 8
+//!     {citizen bearing:1 laboring:1} -> 8
 //! ```
 //!
 //! **Written the way the file writes it, and both entries moved twice this week.** `ready:yes`
@@ -553,10 +553,10 @@ mod tests {
     /// place a reader looks to see what a tree looks like showed a shape the game cannot emit.
     fn a_tree_is_written_and_read_back_as_itself() {
         // **`id` leads and the alphabet does not** - Sean's order of relevance, 2026-09-13.
-        // This fixture read `{ark defending:1 id:1 moving:1}` until today, which was the
+        // This fixture read `{ark id:1 moving:1 working:1}` until today, which was the
         // alphabet rather than a decision anybody had made.
-        let text = "{game phase:play}\n  {orbit id:1} -> 1\n    {ark id:1 defending:1 moving:1} -> 1\n  \
-                    {territory id:1 biome:ice nature:1} -> 1\n    {citizen bearing:1 defending:1 laboring:1} -> 8\n";
+        let text = "{game phase:play}\n  {orbit id:1} -> 1\n    {ark id:1 moving:1 working:1} -> 1\n  \
+                    {territory id:1 biome:ice nature:1} -> 1\n    {citizen bearing:1 laboring:1} -> 8\n";
         let tree = root(text);
         assert_eq!(written(&tree), text, "the same bytes, both ways");
         // **Reading is order-blind and writing is not**, which is what makes the order a

@@ -968,6 +968,163 @@ fn the_traits_file_declares_what_a_data_file_needs() {
 /// four that are left are all one row's.
 ///
 /// `C-120` carries it. The rows are the specification lane's; the sweep is this lane's.
+/// The scenario's command files, so a test can replay them.
+struct Files(std::path::PathBuf);
+
+impl game_console::Library for Files {
+    fn fetch(&self, name: &str) -> Option<String> {
+        std::fs::read_to_string(self.0.join(format!("{name}.4x"))).ok()
+    }
+
+    fn names(&self) -> Vec<String> {
+        Vec::new()
+    }
+}
+
+/// Every trait the containment tree writes on a thing is one `spec/data/carries.4x` says that
+/// kind carries.
+///
+/// # The check that would have failed before this
+///
+/// **The dump wrote `defending` on every unit and every citizen, and nothing declared it.**
+/// `P-522` cut force from the release and `292a2018` took the word out of the last `Readies`
+/// cell, so for two days `scenario/expected/play.4x` read `{ark id:1 defending:1 moving:1}` and
+/// `{citizen bearing:1 defending:1 laboring:1 paid:0}` against a Traits table and a
+/// `carries.4x` that name no such trait.
+///
+/// **And the mirror was true at the same time**: `P-552` gave the ark `working`, `carries.4x`
+/// says so, and the dump did not write it. **One check catches both**, because both are the same
+/// disagreement between what the dump says a thing carries and what the data says it carries.
+///
+/// # Why nothing caught it
+///
+/// **`every_bare_word_in_every_data_file_is_a_declared_trait` reads the data against the data**,
+/// and both sides were consistent: nothing in `spec/data/` mentioned `defending`. The dump is a
+/// third artifact and no check joined it to the first two. **A trait a dump invents is invisible
+/// to every reader that only compares declarations with each other.**
+///
+/// # What it does not check
+///
+/// **Only the traits a kind's own description carries**, not what is nested inside a thing. And
+/// `id` is excluded by name: it is a kind's identity rather than a trait, and `carries.4x`
+/// records the traits. **The count of kinds looked at is asserted**, so a walk that found no
+/// description cannot pass.
+#[test]
+fn every_count_the_dump_writes_is_one_its_kind_carries() {
+    let data = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data");
+    let declared: BTreeSet<(String, String)> = state::declarations(
+        &std::fs::read_to_string(data.join("carries.4x")).expect("spec/data/carries.4x"),
+    )
+    .expect("the file of carryings parses")
+    .iter()
+    .filter_map(|row| {
+        Some((
+            row.traits.get("kind")?.clone(),
+            row.traits.get("trait")?.clone(),
+        ))
+    })
+    .collect();
+    assert!(
+        declared.len() > 30,
+        "only {} carryings declared, which is too few to compare against",
+        declared.len()
+    );
+
+    // A state with one of everything the scenario reaches, so the walk meets real descriptions.
+    let files = Files(Path::new(env!("CARGO_MANIFEST_DIR")).join("../../scenario/commands"));
+    let mut session = game_console::Session::new();
+    for line in ["{run file:setup}", "{start}", "{run file:play}"] {
+        session
+            .run(line, &files)
+            .unwrap_or_else(|why| panic!("`{line}` failed: {why}"));
+    }
+
+    // **Three pairs are set aside by name, and none of them is `defending`'s shape.** Each is
+    // asserted to be still missing before it is excused, so an exception cannot outlive its gap.
+    //
+    // - `territory` / `biome` and `deposit` / `resource`: **both are declared traits** in
+    //   `spec/data/traits.4x`, and `carries.4x` does not say those kinds carry them. `P-541`
+    //   brought `biome` back to the data and the `carries` row did not follow. **That file is
+    //   the specification lane's**, so this is reported rather than repaired - `C-140`.
+    // - `nature` / `met`: **`nature` is not a kind at all** since `P-541` made force, garrison
+    //   and nature a future plan, and this dump still writes it. **That one is this lane's**,
+    //   and it is `defending`'s shape at the level of the kind rather than the trait - too large
+    //   to cut here, because the garrison beside it is load-bearing in the model.
+    const EXCUSED: [(&str, &str); 3] = [
+        ("territory", "biome"),
+        ("deposit", "resource"),
+        ("nature", "met"),
+    ];
+
+    let mut kinds = BTreeSet::new();
+    let mut wrong: Vec<String> = Vec::new();
+    for entry in game_console::containment::tree(&session.game).walk() {
+        let kind = entry.description.kind.to_string();
+        kinds.insert(kind.clone());
+        for name in entry.description.traits.keys() {
+            // **`id` is identity and not a trait** - `spec/logistics.md` gives a thing an `id`
+            // and `carries.4x` records what it carries.
+            if name == "id" {
+                continue;
+            }
+            if EXCUSED
+                .iter()
+                .any(|(of, named)| *of == kind && named == name)
+            {
+                continue;
+            }
+            if !declared.contains(&(kind.clone(), name.clone())) {
+                wrong.push(format!(
+                    "`{kind}` is written with `{name}` and carries no such trait"
+                ));
+            }
+        }
+    }
+
+    // **Asserted still missing before being set aside.** A pair that gains its `carries` row
+    // fails here rather than being excused for ever, which is what `C-61`'s pattern is for.
+    for (of, named) in EXCUSED {
+        assert!(
+            !declared.contains(&(of.to_string(), named.to_string())),
+            "`{of}` carries `{named}` now, so drop it from `EXCUSED` rather than excusing what \
+             no longer needs excusing"
+        );
+    }
+    assert!(
+        kinds.len() > 5,
+        "only {} kinds appeared in the tree, which is too few to be a played game: {kinds:?}",
+        kinds.len()
+    );
+    wrong.sort();
+    wrong.dedup();
+    assert!(
+        wrong.is_empty(),
+        "{} kind-and-trait pair(s) the dump writes are declared by nothing:\n  {}",
+        wrong.len(),
+        wrong.join("\n  ")
+    );
+
+    // **And the other direction, over the counts a unit readies**, which is where the missing
+    // `working` lived: a kind that carries a count the dump never writes is the same defect
+    // pointing the other way.
+    let mut checked = 0;
+    for unit in &session.game.units {
+        let kind = unit.kind.name().to_string();
+        for readiness in unit.kind.readies() {
+            assert!(
+                declared.contains(&(kind.clone(), readiness.name().to_string())),
+                "`{kind}` readies `{}` and `carries.4x` does not say so",
+                readiness.name()
+            );
+            checked += 1;
+        }
+    }
+    assert!(
+        checked > 0,
+        "the played scenario left no unit, so the readiness half counted over nothing"
+    );
+}
+
 #[test]
 fn every_bare_word_in_every_data_file_is_a_declared_trait() {
     let data = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data");

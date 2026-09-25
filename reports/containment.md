@@ -38,7 +38,7 @@ this is the same tree with nothing collapsed, so that a change to it is one line
   - {orbit id:11}
   - {orbit id:12}
   - {orbit id:1} - energy&nbsp;1/1
-    - {ark id:1 defending:1 moving:1}
+    - {ark id:1 moving:1 working:1}
     - {energy}
   - {orbit id:2}
   - {orbit id:3}
@@ -49,7 +49,7 @@ this is the same tree with nothing collapsed, so that a change to it is one line
   - {orbit id:8}
   - {orbit id:9}
   - {territory id:1 biome:grassland} - garrison&nbsp;1/1 yard&nbsp;1/1 extractor&nbsp;resource:food&nbsp;3/3 store&nbsp;resource:food&nbsp;1/3 food&nbsp;0/10 extractor&nbsp;resource:metal&nbsp;3/3 store&nbsp;resource:metal&nbsp;2/3 metal&nbsp;0/20 extractor&nbsp;resource:energy&nbsp;3/3 store&nbsp;resource:energy&nbsp;2/3 energy&nbsp;12/20
-    - {citizen bearing:1 defending:1 laboring:1 paid:0} x 8
+    - {citizen bearing:1 laboring:1 paid:0} x 8
     - {deposit density:4 resource:energy occupied:3 free:0 capacity:3}
     - {deposit density:4 resource:food occupied:3 free:0 capacity:3}
     - {deposit density:4 resource:metal occupied:3 free:0 capacity:3}
@@ -79,7 +79,7 @@ this is the same tree with nothing collapsed, so that a change to it is one line
     - {deposit density:8 resource:metal occupied:0 free:8 capacity:8}
     - {nature met:0}
   - {territory id:2 biome:grassland} - garrison&nbsp;1/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;1/2 store&nbsp;resource:food&nbsp;0/2 extractor&nbsp;resource:metal&nbsp;1/2 store&nbsp;resource:metal&nbsp;0/2 extractor&nbsp;resource:energy&nbsp;0/2 store&nbsp;resource:energy&nbsp;0/2
-    - {citizen bearing:1 defending:1 laboring:1 paid:0} x 6
+    - {citizen bearing:1 laboring:1 paid:0} x 6
     - {deposit density:4 resource:energy occupied:0 free:2 capacity:2}
     - {deposit density:4 resource:metal occupied:1 free:1 capacity:2}
     - {deposit density:6 resource:food occupied:1 free:1 capacity:2}

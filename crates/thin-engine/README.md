@@ -655,8 +655,8 @@ it.** `spec/console.md`:
 
 > **What a thing contains is a map from a description to a quantity.** A description is a kind and
 > **every trait of that thing**; a trait **of its kind** is not part of one, because naming the kind
-> has already said it. **No trait of the thing may be left out** - `{citizen defending:1} -> 8` and
-> `{citizen defending:0} -> 6`, never `{citizen} -> 14`.
+> has already said it. **No trait of the thing may be left out** - `{citizen laboring:1} -> 8` and
+> `{citizen laboring:0} -> 6`, never `{citizen} -> 14`.
 
 **So the key is not a subset anybody chooses. It is every column but the quantity, by rule.**
 

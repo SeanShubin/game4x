@@ -74,6 +74,31 @@ impl fmt::Display for Resource {
     }
 }
 
+/// A count a kind readies each turn, which a recipe spends and `refresh` puts back.
+///
+/// **`releases/first-release.md` -> Units and structures, the `Readies` column**, and
+/// `spec/data/carries.4x` says the same thing per kind: an ark carries `moving` and `working`,
+/// a pioneer only `moving`.
+///
+/// **`P-411` is why they are separate.** Two recipes naming different actions never compete, so
+/// an Ark can cross and mine in one turn - and one count for both would make each look like a
+/// rule about the other.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Readiness {
+    Moving,
+    Working,
+}
+
+impl Readiness {
+    /// What the release's `Readies` cell calls it, which is what the dump writes.
+    pub fn name(self) -> &'static str {
+        match self {
+            Readiness::Moving => "moving",
+            Readiness::Working => "working",
+        }
+    }
+}
+
 /// A border a unit crosses when it moves, which is the layer it moves on.
 ///
 /// **`releases/first-release.md` -> Units and structures, the `Crosses` column**, which was
@@ -184,6 +209,22 @@ impl UnitKind {
         match self {
             UnitKind::Ark => Border::Orbit,
             UnitKind::Pioneer => Border::Surface,
+        }
+    }
+
+    /// Which counts this kind readies, in the order the release's `Readies` cell lists them.
+    ///
+    /// **`spec/data/carries.4x` is the other half and they agree**: an ark carries `moving` and
+    /// `working`, a pioneer only `moving`. A test holds this against the release.
+    ///
+    /// **It exists because the dump was writing a count nothing declared.** `defending` was
+    /// written on every unit until 2026-09-24 - `P-522` cut it from the release's `Readies`
+    /// cells and `292a2018` finished the cut, and nothing noticed for two days because no check
+    /// compared what the dump says a thing carries with what the data says it carries.
+    pub fn readies(self) -> &'static [Readiness] {
+        match self {
+            UnitKind::Ark => &[Readiness::Moving, Readiness::Working],
+            UnitKind::Pioneer => &[Readiness::Moving],
         }
     }
 

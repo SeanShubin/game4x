@@ -255,7 +255,12 @@ fn declared_traits(document: &str) -> BTreeMap<String, Admits> {
 /// enough to be the thing checked written twice is the hazard, and these five are one
 /// promotion rather than five findings. **They come out together or not at all**, which is
 /// what makes them one entry with five spellings rather than five exceptions.
-const UNDECLARED: [(&str, &str); 5] = [
+// **`defending` was the fifth and is gone, which is this list doing its job.** `P-522` deferred
+// force and the word stayed in the dump for two days; the dump stopped writing it on 2026-09-24,
+// so the exception had nothing left to excuse and the assertion below said so. **An exception
+// that outlives its gap is a lie in the other direction**, and that is the half of this list
+// that caught something.
+const UNDECLARED: [(&str, &str); 4] = [
     (
         "garrison",
         "`P-522` deferred it; `spec/control.md` keeps it",
@@ -266,10 +271,6 @@ const UNDECLARED: [(&str, &str); 5] = [
         "`P-522` cut the Biomes table; `spec/planet.md` keeps every biome",
     ),
     ("met", "the mark `hold` put on a nature, deferred with it"),
-    (
-        "defending",
-        "what a thing spends to muster a force, deferred with force",
-    ),
 ];
 
 /// Every word of every description in the played state is one the release declares.
@@ -411,10 +412,10 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
             "`{word}` is declared now, so delete its exception: {why}"
         );
     }
-    // **Five, and the number is asserted so that the list cannot grow quietly.** It was zero
+    // **Four, and the number is asserted so that the list cannot grow quietly.** It was zero
     // and the claim it carried was that every word in the data file is declared; `P-522`
-    // deferred five and the claim is now that these five and no others are deferred. **A
-    // sixth is a finding** - either the model has got ahead of the specification, which is
+    // deferred five, and `defending` left when the dump stopped writing it. The claim is now
+    // that these four and no others are deferred. **A fifth is a finding** - either the model has got ahead of the specification, which is
     // what this check has always been for, or another promotion deferred something and the
     // reason belongs beside it.
     //
@@ -423,8 +424,8 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
     // again the entry has to come out.
     assert_eq!(
         UNDECLARED.len(),
-        5,
-        "five words are deferred by `P-522`; a sixth is a finding rather than an allowance"
+        4,
+        "four words are deferred; a fifth is a finding rather than an allowance"
     );
 }
 
