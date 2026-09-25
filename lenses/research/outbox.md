@@ -283,6 +283,30 @@ engine must reject a bad recipe *at edit time with a reason*, which a Turing-com
 cannot do - so `X-9`'s boundedness and acyclicity stop being elegance and become editor validation,
 and `C-75` already measured that adopting them costs nothing today.
 
+## Declined 2026-09-25: the shared block lost a row and still exists
+
+**`S-184` reports this dead** because `produce 1 garrison` is one of the four identical rows and
+garrison is cut. **The row is gone and the finding is not.** Counted in
+`releases/first-release.md:207-220` today: `deploy ark` is **five** rows and `found by land`
+**four**, and **three are identical cell for cell** - `produce 2 citizen`,
+`produce 1 extractor food`, `produce 1 extractor metal`. The two still differ only in what is
+spent.
+
+**This item said the number would move and named the reason.** *Seven on 2026-09-08, six on
+2026-09-11, four on 2026-09-12 ... it survived both deletions and will move again, because what it
+counts is the Recipes table.* Three is that sentence coming true a third time. **The finding is
+that what founding produces is one fact stated in two recipes with neither derived from the other
+and no canonical one named**, which `spec/invariants.md` -> *A fact is stated once* forbids. That
+holds at three rows exactly as it held at four.
+
+**The check that was run answers a narrower question than the item asks** - *does this cited row
+survive* rather than *does the shared block survive*. Said plainly because it is the third
+instance of that class in four days and the first one in this direction: the two before it were
+`deepest()` in `X-38` and the border midpoint in `X-39`.
+
+**Stays open, and unchanged in substance.** Nothing here asks the specification lane for anything
+it was not already asked for.
+
 ### X-13 - creation and transformation are already one format, because relations were made things
 
 **to** code · **status** **answered** 2026-09-12 — the code lane has read it and it asks nothing of that lane: it is a re-expression Sean asked for, and the answer is that one format does build the world and play it. **Kept as the record**, not as work · **raised** 2026-09-08 · **source** [the report](formulas.html), generated from `tools/research/formulas/data.json` · **for** Sean, who asked whether one format can build the world and play it
@@ -489,7 +513,7 @@ still until you have read it.
 
 ### X-19 - a territory has four traits and two of them have no value anywhere
 
-**to** spec · **status** open · **raised** 2026-09-09 · **source** [the report](formulas.html) -> *A thing, as tabular data and as text* · **found by** trying to draw one territory and having two columns come up empty
+**to** spec · **status** **withdrawn** 2026-09-25 — the premise is gone: the release's *Traits* table names **neither `biome` nor `nature`**, counted in the file today. Reported by the specification lane in `S-184`; the half about `nature` is theirs and the half about `biome` is checked here, because this item's finding was about `biome` · **raised** 2026-09-09 · **source** [the report](formulas.html) -> *A thing, as tabular data and as text* · **found by** trying to draw one territory and having two columns come up empty
 
 **Where.** `releases/first-release.md` -> *Traits* gives a territory **biome** (*one of the biomes*,
 stored) and **nature** (*a number*, stored). *Territory resources* fixes all twelve territories and
@@ -566,6 +590,20 @@ computes from geometry and *Territory resources* is authored by hand, so the two
 independent; landing the hardest biome on the two most constrained territories is either deliberate
 or a one-in-sixty-six coincidence, and this lane cannot tell which.
 
+
+## Withdrawn: the trait is gone, and the finding was about the trait
+
+**Checked rather than taken.** `S-184` says this rests on `nature`, which Sean cut on 2026-09-20.
+**It rests on `biome`** - *no territory is given a biome anywhere* is the finding, and `nature`
+only appears as the thing left undetermined by it. So the reported reason is not this item's
+reason, and it dies anyway: the *Traits* table at `releases/first-release.md:107-130` lists
+twenty-four traits and **neither `biome` nor `nature` is among them**.
+
+**And the resolution went a third way.** This item offered two: a sentence saying biomes are
+generated, or a fifth column of twelve values. What happened is neither - biome left the release
+entirely, and the sentence that replaced it says a territory's numbers are *stated directly in
+Territory resources rather than guided by a biome*. **The gap closed by removing the thing that
+had the gap**, which is a resolution a lens cannot propose and should not have tried to.
 
 ### X-20 - *declares no capacity* and *declares no limit* are opposites, and the release means the second
 
@@ -789,7 +827,7 @@ time it has.
 
 ### X-26 - one kind in the release has no definition in `spec/`, and the win condition depends on it
 
-**to** spec · **status** open · **raised** 2026-09-09 · **source** the specification lane, in `S-81`, giving the example · **found by** `4x spec`; measured here as check 13
+**to** spec · **status** **acted** 2026-09-25 — `store` has a prose definition in `spec/logistics.md` now, so the gap this item was about is closed; and `spec/control.md` moved to `spec/future/`, so the win condition it depended on is gone too. **Both halves, and the first is the one that mattered** · **raised** 2026-09-09 · **source** the specification lane, in `S-81`, giving the example · **found by** `4x spec`; measured here as check 13
 
 **The example is theirs and the denominator is this lane's.** They found `store`; the question was
 whether it is one of sixteen or four of sixteen, because *a count over nothing proves nothing* and a
@@ -848,6 +886,46 @@ can explain is a rule that has gone missing** - offered as a tell, and **not the
 `P-486`**. That was a person recalling a rule from weeks back, which is not a habit anyone can be
 asked for. **The heuristic is worth more for that reason and has still never caught anything**, so
 it is a proposal about where to look rather than a method with a record.
+
+## Closed, and the population question answered, because it was the whole finding
+
+**The gap closed, which `S-184` did not report.** It says the title's second half is dead - true,
+`spec/control.md` is `spec/future/control.md` since `P-556`. **The first half is dead too and for
+a better reason**: `store` is defined in prose now, at `spec/logistics.md:28` and `:38-39` -
+*destroying a store leaves the resources where they already were*, *what holds a kind is a store
+for that kind*, *a store's capacity is what its kind declares*. So the kind the specification
+referred to and never defined is defined.
+
+## Which population the claim is about, since that was handed here to decide
+
+**Prose, and the reason is `CLAUDE.md`'s own split.** *A rule is stated in prose, in `spec/`; the
+game's data is stated in a data file.* This item counted kinds with **no definition**, and a
+definition is a rule. A kind named only in `spec/data/` is **declared and not defined**, which is
+a different claim - so the specification lane is right that the two counts are not comparable, and
+the answer is that this one was always about prose.
+
+**Measured against that population: one, not four and not two.**
+`tools/research/kinds-in-spec.py` reads the sixteen kinds out of the release rather than listing
+them, and searches `spec/*.md`:
+
+| kind         | in spec prose                                                      |
+| ------------ | ------------------------------------------------------------------ |
+| `fertility`  | **no** - `spec/data/kinds.4x:20` declares it and no prose names it |
+| `deposit`    | word absent, **concept present** - `spec/economy.md`, *density*    |
+| the other 14 | yes                                                                |
+
+**`S-184`'s four does not reproduce, and the cause is exact.** `pioneer` and `yard` are named in
+prose - `spec/unit-types.md:25` is a section headed **`## Pioneer`**, and `spec/structures.md:16`
+one headed **`### Yard`**. They are **capitalised**, so a case-sensitive search returns zero. This
+lane ran that same wrong search while checking, got zero for `pioneer`, and believed it over its
+own script for one step - **the script was right**. It is in this lane's own memory as *grep the
+concept, not the word*, and it still cost a step.
+
+**So there is no remaining instance and no successor item.** `fertility` is declared in
+`spec/data/` and defined in the release, and **no prose rule refers to it** - zero hits, against a
+population of seventeen files. `store` was a gap because a prose rule depended on it; nothing
+depends on `fertility`, so data-only is self-consistent rather than incomplete. **A count over
+nothing would prove nothing, and this one is over sixteen.**
 
 ### X-27 - losing a territory to nature does not delete the units on it, and one line above it is dead
 

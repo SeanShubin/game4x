@@ -15,6 +15,14 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 
+## Open, and a commit says otherwise
+
+An item is closed by whoever filed it and answered by somebody else, so the filer gets
+no signal. These are still marked `open`, and a commit that touched no part of their own
+outbox cites them - which usually means they were settled and nobody went back.
+
+- **S-183** - `80f96b9` S-183: six of the seven were dead and the seventh was the item about dying numbers · still open in `docs/notes/proposals.md`
+
 ## What is outstanding
 
 ### To code (4)
@@ -32,7 +40,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (29)
+### To spec (27)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -59,8 +67,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **Q-94** - The number every `refresh` tops off to is stated only in a release, and `movable` says one of them twice · `lenses/quality/outbox.md`
 - **X-12** - two recipes state what founding produces, and `P-469` says a fact is stated once · `lenses/research/outbox.md`
 - **X-15** - the inventory, so that nothing said in one conversation is lost on the way to `spec/` · `lenses/research/outbox.md`
-- **X-19** - a territory has four traits and two of them have no value anywhere · `lenses/research/outbox.md`
-- **X-26** - one kind in the release has no definition in `spec/`, and the win condition depends on it · `lenses/research/outbox.md`
 - **X-31** - two conditions the release writes as prose, and it has the vocabulary for both · `lenses/research/outbox.md`
 - **X-33** - a flat torus has no seamless drawing, and this lane's first reason for saying so was wrong · `lenses/research/outbox.md`
 
