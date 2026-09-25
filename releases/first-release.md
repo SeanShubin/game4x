@@ -366,8 +366,8 @@ that used to be kept is lost at a turn's end. `scenario/expected/play.4x` was re
 `P-225`'s protocol and is **unreviewed, and says so**.
 
 
-- **In** - `spec/control.md`, *a player wins by deploying an Ark to one territory and launching
-  an Ark from a different one*
+- **In** - `spec/control.md`, *a player wins by launching an Ark from a territory other than one
+  an Ark has been deployed to*
 - **Vetted when** - the scenario takes a first territory from orbit, takes a second by land, and
   launches an Ark; and **every recipe in the release fires at least once while it runs**, measured
   by what fired rather than by what the file says. **It does not win, and that is the win condition

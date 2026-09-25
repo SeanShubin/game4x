@@ -11,7 +11,7 @@ in [force](future/force.md); weapons and their ranges are in [combat](combat.md)
 
 ## Winning
 
-- A player wins by deploying an Ark to one territory and launching an Ark from a different one.
+- A player wins by launching an Ark from a territory other than one an Ark has been deployed to.
 
 ## Losing
 

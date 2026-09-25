@@ -9,7 +9,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 ## What must be decided
 
 - **P-552** - An Ark holds one energy, mines one a turn, and spends one to move · `decide/proposals.md`
-- **P-553** - The deploy comes first, and the launch is the winning act · `decide/proposals.md`
 - **P-551** - `game state` and `local state` are chosen, and a log is a thing `spec/` does not have · `decide/questions.md`
 - **P-554** - Nothing in the first release shows you a win, and the loop you described is the winning one · `decide/questions.md`
 - **P-555** - Two halves answered, and the command log is the one left · `decide/questions.md`
@@ -27,7 +26,6 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **P-552** - `1175b01` P-552: an Ark cannot move, and the reason is a contradiction in spec/ · still open in `decide/proposals.md`
-- **P-553** - `2177dbd` S-151 closed, P-553 for the order the win condition does not state · still open in `decide/proposals.md`
 - **C-129** - `51110e2` C-129: CLAUDE.md names tools/anchor, and S-172's numbers all counted candidates · still open in `crates/outbox.md`
 - **R-6** - `731aceb` touching could not see a built capability, and R-6 is the case · still open in `releases/first-release.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
@@ -107,8 +105,8 @@ it exists to ask.
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217, P-364, P-518
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119, P-172, P-392
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147, P-193, P-199, P-213, P-218, P-222, P-493
+- `spec/control.md` -> Winning - P-77, P-81, P-125, P-361, P-468, P-521, P-527, P-553
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185, P-390, P-408, P-480
-- `spec/control.md` -> Winning - P-77, P-81, P-125, P-361, P-468, P-521, P-527
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
 - `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306, P-313, P-410
 - `releases/first-release.md` -> Where things are - P-265, P-311, P-320, P-358, P-512

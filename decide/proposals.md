@@ -35,10 +35,15 @@ energy.
 
 **The Ark's `Fuel` cell**, which is blank today, becomes `1`.
 
-**And a world recipe**, beside the other automatic ones:
+**And a player recipe**, which is the shape `work` already has:
 
-> | **mine energy**     | world  | require | 1 | ark    |  |  |
-> |                     |        | produce | 1 | energy |  |  |
+> | **mine energy**     | player | require | 1 | territory |                    | `$where`       |
+> |                     |        | require | 1 | ark       | working at least 1 | above `$where` |
+> |                     |        | put     |   | ark       | working one less   | above `$where` |
+> |                     |        | produce | 1 | energy    |                    | above `$where` |
+
+**The Ark's `Readies` cell gains `working 1`**, beside the `moving 1` it has, and
+`spec/data/carries.4x` gains `{carries kind:ark trait:working}`.
 
 ## Why the numbers agree with a rule written weeks earlier
 
@@ -46,64 +51,40 @@ energy.
 `moving 1`** - so the fuel economy and the move limit meet on a number neither mentions, and
 neither is derived from the other.
 
-## The one thing your words leave open, and this lane's reading of it
+## A recipe, and the sentence that makes it one is already promoted
 
-**You said *can mine* and also *automated*.** This takes it as a **world** recipe - the world fires
-it at every turn's end, like `upkeep` - because *self-contained and automated* is the stronger
-clause and because a player recipe would appear in the command list as something to remember.
-**Say so if you meant a player recipe**, and the row changes one word.
+**This lane read *automated* as a world recipe and you corrected it**: *the automated part was
+thematic. The user interface layer may automate a lot to remove busywork from the player, but as
+far as the engine is concerned every transformation takes a recipe.*
+
+**`spec/interface.md` already says the first half of that**, which is why the correction costs
+nothing: *what is offered, and what is done unasked, is a layer above the rules that writes the
+commands a player would have written.* **So the interface firing `mine energy` every turn is the
+rule working rather than an exception to it** - the same layer that already works every extractor
+with somewhere to put what it makes.
+
+**And `work` is the shape to copy rather than invent.** It is a player recipe, it readies on
+`working`, and the interface fires it unasked. **Mining differs in three cells and no structure**:
+no labor, no density, and the place is the orbit above `$where` rather than `$where` itself.
+
+## Why the Ark needs `working 1` rather than nothing
+
+**A player recipe with no readying fires as often as it is asked.** `work` is bounded by
+`working at least 1` and `working one less`, which is what makes it once per extractor per turn.
+**Your *every turn* needs the same bound**, or an Ark can mine repeatedly within one turn.
+
+**`working` is already declared** - `{trait name:working admits:number kept:thing}` - and carried
+by the extractor alone. **Giving it to the Ark adds no vocabulary**, which is why this proposal
+does not invent a `mining` trait.
 
 ## What it costs and what it does not
 
-**The gate goes red until the code lane follows**: a new recipe, a trait cell, and
-`scenario/expected/play.4x` gains an energy line in orbit 1 after the launch. **Said in the same
-breath as the rule.**
+**The gate goes red until the code lane follows**: a new recipe, two trait cells, a row in
+`spec/data/carries.4x`, and `scenario/expected/play.4x` gains an energy line in orbit 1 after the
+launch. **Said in the same breath as the rule.**
 
 **And nothing here changes the surface.** `move` already consumes one energy at `$from`, and the
 release already says a tank gives room rather than holds - `P-512`. **The ground bullet above only
 makes `spec/units.md` say what the release has said since then**, which is `S-170`'s other half
 left where it is.
-
-### P-553 - The deploy comes first, and the launch is the winning act
-
-**to** sean · **status** open · **raised** 2026-09-24 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Winning
-
-**You answered by describing the loop**: *deploy the ark to the surface, develop the territory we
-deployed to, expand to an adjacent territory, develop the adjacent territory, launch an ark from
-there.* **Six steps in order, the launch last** - which is `W2`.
-
-## What lands
-
-**Replacing the Winning bullet:**
-
-> - A player wins by launching an Ark from a territory other than one an Ark has been deployed to.
-
-## What it does and does not add
-
-**It makes the order explicit** where the old sentence named two acts and left it open. `R-6`'s
-*vetted when* already reads this way - *victory takes a launch from a territory other than the one
-the Ark deployed to* - so the release stops assuming more than the rule says.
-
-**Two words of yours are deliberately not in it.** *Adjacent* is how expansion works and not a
-condition on winning; *develop* is what a Yard costs and not a rule. **Putting either in the win
-condition would make it say more than you meant.**
-
-**And nothing changes in the code.** `S-151` built `won` to latch after either act; `W2` is a
-condition added, which the code lane said is one `match` arm away.
-
-## What this leaves open, and it is the larger half
-
-**Nothing in the release vets a win.** Eleven capabilities, and `R-6` - *the loop can be played
-through* - **deliberately does not win and says so**: *this scenario deploys to territory 1 and
-launches from territory 1.*
-
-**So the loop you just described and the loop `R-6` vets are different loops.** Measured in
-`scenario/commands/play.4x`: it deploys to 1, builds its Yard in 1, founds 2 by land, launches from
-1, and territory 2 gets one turn of `create-labor` and `work food` and nothing else. **Five of your
-six steps, and the missing one is developing the second territory far enough to launch from it.**
-
-**Filed as `P-554`** rather than folded in here, because whether the first release should show you
-a win is a scope question and this one is a wording question.
-
-*Nothing is open. Everything filed has been decided.*
 
