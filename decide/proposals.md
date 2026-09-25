@@ -11,6 +11,57 @@ of it needs you.
 
 ## Open
 
+### P-555 - A log directory, one command log, and a screen the assistant can read
+
+**to** sean · **status** open · **raised** 2026-09-24 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/interface.md` -> a new section, Logs
+
+**All three answered**: the directory is gitignored, the screen log carries the pixels while the
+interface test carries the structure, and **one file for the command log**. The working, and what
+`../boardgame` taught, is in [`docs/notes/decisions.md`](../docs/notes/decisions.md).
+
+## What lands
+
+**A new section in `spec/interface.md`**, after *What is offered*:
+
+> ## Logs
+>
+> **Everything that happens is logged, in files under `logs/`.** A log is not a record of the game
+> - `history` is that - and it is not a debugging convenience either. **It is a surface to review**:
+> what the application did is read from it rather than described by whoever was watching.
+>
+> - **`logs/input.txt`** - what the player's device did: where the pointer was, where the window
+>   was, what was clicked and pressed
+> - **`logs/commands.txt`** - every command, each line saying whether it changed the game or the
+>   interface. **The history is the game lines**, so `history` and this cannot disagree about what
+>   happened
+> - **`logs/screen.txt`** - what is on the screen: the viewport, which screen and which view, each
+>   region, and each thing in it with its position. **Every heading states how many it holds**, so
+>   a section that holds nothing says so rather than being blank
+>
+> **The logs are emptied when the application starts**, so that what is in them is what the
+> version now running did.
+>
+> **A log carries positions and an interface test carries structure.** The test says what regions
+> exist and what is in them; the log says where they were drawn. **So a test survives a change of
+> layout and a log is enough to see what was on the screen**, and neither is asked to do the
+> other's work.
+
+## Why it is one section in `spec/interface.md` and not somewhere new
+
+**A log is a surface**, and that file already says what the surfaces are and that *how a thing is
+presented may follow the platform while what the user can do stays the same*. **The logs are the
+same claim pointed the other way**: what the application did is the same whoever was watching.
+
+## What this leaves for the code lane, already filed
+
+**`S-173`** is the `.gitignore` line, which is their column since `P-548` and is filed
+independently. **The rest of the section is a rule and waits for this to land.**
+
+## What it does not settle
+
+**What a local command is called**, which is `P-551`'s `L1` - this section says *whether it
+changed the game or the interface* rather than naming the second kind, so it holds either way.
+
 ### P-552 - An Ark holds one energy, mines one a turn, and spends one to move
 
 **to** sean · **status** open · **raised** 2026-09-24 · **kind** recovered · **shape** an instruction · **asks** approval · **into** `spec/units.md`, and `releases/first-release.md` -> Units and structures, Recipes

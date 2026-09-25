@@ -8,10 +8,10 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-555** - A log directory, one command log, and a screen the assistant can read · `decide/proposals.md`
 - **P-552** - An Ark holds one energy, mines one a turn, and spends one to move · `decide/proposals.md`
 - **P-551** - `game state` and `local state` are chosen, and a log is a thing `spec/` does not have · `decide/questions.md`
 - **P-554** - Nothing in the first release shows you a win, and the loop you described is the winning one · `decide/questions.md`
-- **P-555** - Two halves answered, and the command log is the one left · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -25,6 +25,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-555** - `2a222db` P-555: two halves answered, and S-173 for the gitignore line · still open in `decide/proposals.md`
 - **P-552** - `1175b01` P-552: an Ark cannot move, and the reason is a contradiction in spec/ · still open in `decide/proposals.md`
 - **C-129** - `51110e2` C-129: CLAUDE.md names tools/anchor, and S-172's numbers all counted candidates · still open in `crates/outbox.md`
 - **R-6** - `731aceb` touching could not see a built capability, and R-6 is the case · still open in `releases/first-release.md`
