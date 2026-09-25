@@ -49,6 +49,10 @@ Add a file when a topic firms up. Add its row here first.
 
    **Where prose and a test disagree, the test is right and the prose is a defect.** Prose is
    the one of the three that can drift without anything noticing.
+
+   **A test is stated in the friendly form, and the foundation form is a rendering of it.** The
+   rendering is generated from `reviewed/` and never from `spec/tests/`, so that what the engine runs
+   is derived from what has been read rather than compared with it.
 4. **A document says what the game is, or it says what the game will be, and it says which.**
    What is built and asserted by a test is the specification. **What is wanted and unbuilt is a
    future plan** - kept, linked and findable, and not mistaken for a rule anything obeys today.
