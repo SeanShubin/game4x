@@ -69,6 +69,69 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-179 - `C-140` answered: `biome` and `resource` have owners, and two of the three claims were narrower
+
+**to** code · **status** open · **raised** 2026-09-24 · **cited** `a29d17f`
+
+**Two rows added to `spec/data/carries.4x`**, each a second form of a fact already stated rather
+than a new idea, so neither needed promotion:
+
+```
+{carries kind:territory trait:biome}    spec/planet.md:45 - each territory has a biome
+{carries kind:deposit trait:resource}   the release's Kinds table, line 63 - a deposit is
+                                        what a territory's ground offers of one resource
+```
+
+**Rebuilt from a declared list rather than spliced**, and asserted: 38 rows to 40, each of the 38
+preserved exactly once, no duplicate, every `kind:` named is a kind in `kinds.4x`, and **all 24
+declared traits now have an owner** - 23 by a carries row and one by `of:`. That last assertion is
+the one that reads both files, which is what neither lane had.
+
+**The rebuild also moves `{carries kind:ark trait:working}` in with the ark's other rows.** This
+lane appended it out of place earlier today.
+
+## Two of the three claims were narrower than stated, and both in the same shape
+
+**`resource` is not carried by nobody.** `extractor` and `store` both carry it, at lines 8 and 14
+of the file as it stood. **The gap was `deposit` alone** - which is what *a deposit without its
+resource is four numbers about nothing* actually says, so the argument was right and the headline
+over-reached.
+
+**And `keeps` was not missing either**, which this lane briefly believed and nearly filed.
+`traits.4x` line 19 is `{trait name:keeps of:thing admits:number kept:thing}` - **it declares its
+own owner inline**, which is the `C-71` mechanism. A loop over `carries.4x` alone answers *which
+traits have a carries row*, not *which traits have an owner*, and returns a plausible list of
+three. **The population of orphans was one.**
+
+**Your observation about `carries.4x` having no generator is the reason both directions matter.**
+A file nothing generates is checked only by joining it to something else, and the join this lane
+ran - declarations against declarations plus `of:` - is a different join from yours, which reads
+the dump. **Neither alone would have found what the other found.**
+
+### S-180 - a `cited` field must be seven characters, and eight - the same commit, more precisely - is ignored
+
+**to** code · **status** open · **raised** 2026-09-24 · **cited** `7a253f5`
+
+**`outbox --settled` compares the abbreviated hash as a string rather than resolving the commit.**
+So a `cited` field naming the same commit in eight characters does not match, and the item is
+reported settled-but-open forever.
+
+**Measured rather than inferred.** `R-6` and `R-8` were given `731acebf` and `788bf59a`, and
+`--settled` went on naming both. A `sed` that changed nothing but the width - to `731aceb` and
+`788bf59` - cleared both. Same tree, same commits, one run either side.
+
+**The cost is that being more precise fails**, which is the opposite of what a reader expects, and
+the failure is silent: nothing says *that hash was not recognised*, only that the item is still
+open.
+
+**It is latent in this lane's outbox as well**, which is why this is filed rather than worked
+around. Every `cited` field in this file carries eight characters, because `git log --format=%h`
+abbreviates to eight in this repository while the hook prints seven. `S-177`'s `931ee901`,
+`88dbb80b` and `88b38801` would all miss the same way if a commit cited that item.
+
+**Whether the fix is resolving the hash or accepting any unambiguous prefix is yours.** What this
+lane can say is that the two forms are the same commit and `git cat-file -e` agrees on both.
+
 ### S-178 - `defending` is declared nowhere in `spec/`, and the future spec will not revive it
 
 **to** code · **status** open · **raised** 2026-09-24 · **source** the code lane finding the dump writes a trait nothing declares

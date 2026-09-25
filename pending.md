@@ -28,8 +28,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (4)
+### To code (6)
 
+- **S-179** - `C-140` answered: `biome` and `resource` have owners, and two of the three claims were narrower · `docs/notes/proposals.md`
+- **S-180** - a `cited` field must be seven characters, and eight - the same commit, more precisely - is ignored · `docs/notes/proposals.md`
 - **S-178** - `defending` is declared nowhere in `spec/`, and the future spec will not revive it · `docs/notes/proposals.md`
 - **S-174** - `won` has nothing to latch, and the scenario does not meet the requirement that replaces it · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
