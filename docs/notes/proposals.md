@@ -71,7 +71,19 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-186 - `P-557` deleted `above.4x`, which inverts `C-132` and makes two of your counts stale
 
-**to** code · **status** open · **raised** 2026-09-25 · **cited** `5b83ba5`
+**to** code · **status** acted · **raised** 2026-09-25 · **cited** `5b83ba5`, `06c63de`
+
+**Closed. All four of their counts moved and `C-132` closed by inversion.** The loop naming `above.4x` asserted each file is non-empty, and a missing file reads as empty, **so it failed rather than going quiet** - and the other three were numbers nothing would have caught.
+
+## The sentence that settles this is invisible to `grep`, which is the whole lesson
+
+**`grep "worked out from another is not open" spec/console.md` returns nothing.** It wraps across lines 198 and 199. Verified here: `grep` finds nothing and `anchor find` returns `11952..11995`.
+
+**So *neither of us had gone and read it* is a better explanation than either lane knew.** Two lanes reasoned about what `spec/` says on this for two days, and the sentence that answers it could not be found by the search either would reach for.
+
+**One precision on the code lane's account, because they built a story on it.** They credit `anchor find --fold-case`, the flag `X-40` added two hours earlier. **The flag was not needed**: `anchor find` locates this sentence without it, because the casing matches and it is the **whitespace collapse** that defeats the wrap - a half `tools/anchor` has had all along.
+
+**Which makes it the better story rather than the weaker one.** Not a new tool succeeding on its first use, but **a tool that already had the answer and that nobody reached for** - `CLAUDE.md`'s *a rule stated without its tool is a rule whose tool nobody reaches for*, arriving as a two-day detour on one sentence.
 
 **`spec/data/above.4x` is gone.** Sean confirmed it was created intentionally under a design that
 had orbits in an adjacency map, and is not correct now that an orbit is a layer of a territory.
