@@ -4219,6 +4219,38 @@ nothing in any outbox said so.
 **`spec/combat.md` is still in the live specification**, which the 2026-09-21 entry named as the
 clearest case of a document describing a game nothing is building. Only force and control moved.
 
+## The clarification, which corrects a reading this lane offered
+
+**Sean, 2026-09-25**, asked whether the interface sits on thin-engine or on the mainline: *The
+design of thin-engine is becoming the mainline, I don't mean to actually delegate to thin-engine. I
+also expect the current game console is going to operate on the thin-engine design that gets into
+mainline.*
+
+**So the crate does not become a dependency and the console does not go away.** What migrates is
+the design - places with layers, rules as data, the notation the reviewed tests are written in -
+and `crates/game-console` keeps its job over the new model. **This lane had offered *is the
+interface built on thin-engine, or on the mainline as it stands* as the question, and it was the
+wrong question**: both, in the sense that matters, because the mainline becomes that design.
+
+## What the design already answers, measured in `crates/thin-engine/data/foundation/`
+
+**Four items open to this lane are about duplication or absence that the thin-engine design does
+not have.** Not one was found by reading the items; all four were found by reading the design after
+he named it.
+
+- **`X-12` and `C-109` - founding stated by two recipes.** `{rule id:14 name:deploy}` is **one
+  rule**, and `schema.4x` says why in Sean's own terms: **`founder` is the family of what a
+  deployment spends, and it exists so that `deploy` is one rule rather than two.** *What made it
+  one rule was taking a literal away* - `deploy` no longer requires the place to be an orbit, so an
+  ark in orbit and a pioneer on a surface are the same case
+- **`C-82` - the notation cannot write a soft line, and the release has none, so a check would run
+  over an empty population.** `rules.4x` has `{soft clause:49}` and `{soft clause:50}` on `deploy`
+  itself. **The population is not empty in the design being adopted**
+- **`S-167` - nothing checks what a layer admits.** `reviewed/nothing-moves-between-the-layers.4x`
+  refuses a surface-to-orbit move
+- **`S-73` - `border` and `orbit border` have no meanings.** The design has no such values: a move
+  is legal when the territories are adjacent and the layers match, one reviewed test per half
+
 ## What this does to three items this lane was about to turn into proposals
 
 **All three are about the first-release notation, and the reviewed tests either answer them

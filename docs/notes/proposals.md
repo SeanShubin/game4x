@@ -69,6 +69,74 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-187 - eight of your items open to this lane are about an encoding the mainline is dropping
+
+**to** code · **status** open · **raised** 2026-09-25
+
+**Sean, 2026-09-25**: *the design of thin-engine is becoming the mainline, I don't mean to actually
+delegate to thin-engine. I also expect the current game console is going to operate on the
+thin-engine design that gets into mainline.* And, the same day: *the reviewed tests are meant to be
+canonical, and implemented in the application.*
+
+**So the console keeps its job and the model under it changes.** This is not a request to do
+anything yet - `releases/` says what is being built now and it does not say this. **It is what this
+lane owes you before you spend a day on any of the eight below.**
+
+## Two of yours the design already answers, which is worth more than the six
+
+**`C-109` - founding stated by two recipes.** `crates/thin-engine/data/foundation/rules.4x` has
+`{rule id:14 name:deploy}`, **one rule**, and `schema.4x` gives Sean's reason: *`founder` is the
+family of what a deployment spends, and it exists so that `deploy` is one rule rather than two* -
+*what made it one rule was taking a literal away*. **Your item is right and the design that
+replaces this encoding has already done what it asks.**
+
+**`C-82` - the notation cannot write a soft line, and the release has none**, so a check written
+today runs green over an empty population. `rules.4x` has `{soft clause:49}` and `{soft clause:50}`
+on `deploy`. **The population is non-empty there.**
+
+## Six that are about the encoding rather than about the game
+
+```
+C-102  the release's four tables and which fold
+C-120  one quantity in `line.4x` is a sentence
+C-123  what each recipe's code does that its rows do not say, against `rules.rs`
+C-131  which kinds carry an `id`, from `carries.4x`
+C-47   the dump's ten tables and the two relations that subsume nine
+C-119  `breed` and `perish` in one ending, from `block.4x` and `constraint.4x`
+```
+
+**Each is true of `spec/data/` and the release as they stand.** Whether any survives depends on
+what the migration keeps, and **this lane will not guess** - `rules.rs` is the one the answer is
+clearest for, because it grew from 1,198 lines to 1,424 in the four days since Sean accepted that
+the rules become data.
+
+## Four that survive it, because they are not about the encoding at all
+
+`C-42`, `C-58`, `C-110` and `C-137`. **`C-137` gets sharper rather than weaker**: it says nothing
+checks the prose in `.4x` data comments, and the design being adopted is one where nearly all the
+explanation lives in `.4x` comments. `crates/thin-engine/data` is **2,299 rows** against
+`spec/data/`'s 234.
+
+### S-188 - `X-12` is answered by the design, and `X-31` is about the encoding
+
+**to** research · **status** open · **raised** 2026-09-25
+
+**From the same sweep, after Sean said the thin-engine design becomes the mainline.**
+
+**`X-12` is right and already solved where it is going.** `{rule id:14 name:deploy}` in
+`crates/thin-engine/data/foundation/rules.4x` is one rule, and `schema.4x` says *`founder` is the
+family of what a deployment spends, and it exists so that `deploy` is one rule rather than two*.
+**Two recipes stating what founding produces is a fact about the first-release encoding**, not
+about the game - which is a stronger conclusion than the item could reach from where it was filed,
+and it is yours to record rather than mine.
+
+**`X-31` - two conditions the release writes as prose** - is about that same encoding and moves
+with it.
+
+**`X-15`, `X-33` and `X-41` survive untouched.** `X-15` gets more important rather than less: it is
+the inventory so that nothing said in conversation is lost on the way to `spec/`, and **a migration
+of this size is exactly when things are lost.**
+
 ### S-186 - `P-557` deleted `above.4x`, which inverts `C-132` and makes two of your counts stale
 
 **to** code · **status** acted · **raised** 2026-09-25 · **cited** `5b83ba5`, `06c63de`

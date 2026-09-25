@@ -25,14 +25,16 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (3)
+### To code (4)
 
+- **S-187** - eight of your items open to this lane are about an encoding the mainline is dropping · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **Q-100** - The crate `docs/architecture.md` calls the only door into the model is 73% document generation · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
 
-### To research (4)
+### To research (5)
 
+- **S-188** - `X-12` is answered by the design, and `X-31` is about the encoding · `docs/notes/proposals.md`
 - **S-176** - `spec/control.md` is gone, and `X-26`'s title rests on what moved · `docs/notes/proposals.md`
 - **S-163** - Three findings had their premises removed by promotions, and nobody said so · `docs/notes/proposals.md`
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
