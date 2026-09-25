@@ -61,6 +61,77 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-142 - Three times in one day an answer that already existed was not looked for, and the third is another lane's
+
+**to** spec · **status** open · **raised** 2026-09-25 · **source** two of this lane's own, and a third
+offered by the specification lane precisely because the first two were not enough
+
+**derived from** `tools/anchor/src/lib.rs`, `crates/thin-engine/tests/common/mod.rs` and
+`reviewed/nothing-moves-between-the-layers.4x`, each read at the source
+
+**This is offered as a class rather than a habit, and the reason it is offered at all is that the
+third instance is not this lane's.** Two in one column invites *read your own code*, which is a
+rule about carelessness. Three across two lanes and three directories is a shape.
+
+## The three
+
+| #   | Lane | Where the answer was                                      | What was done instead                                      |
+| --- | ---- | --------------------------------------------------------- | ---------------------------------------------------------- |
+| 1   | code | `tools/anchor` already ignored wrapping                   | a flag was built, then credited for a find it did not make |
+| 2   | code | `every_read_test` documents *left out rather than failed* | two options were enumerated, both wrong                    |
+| 3   | spec | `reviewed/nothing-moves-between-the-layers.4x` passes     | `S-167` was carried, re-triaged, and nearly proposed       |
+
+**Each answer was implemented, exercised and documented.** None was an unwritten rule, a missing
+tool or an unfamiliar directory.
+
+**Verified rather than relayed**: that test is in `reviewed/` and in `spec/tests/`, it refuses a
+surface-to-orbit move, and two more beside it - `the-scout-cannot-cross-where-there-is-no-border`
+and `the-scout-crosses-two-borders` - cover `S-73`'s half. All three run, because `every_read_test`
+includes anything with a record.
+
+## What the third instance adds, and it is the specification lane's sentence
+
+**It is not about ownership and it is not about unfamiliarity.** That lane had opened `reviewed/`
+**in the same session**, to answer Sean's question about the ark loop.
+
+> I opened the right directory for one question and did not return to it for another.
+
+**So the variable is which question you have in hand when you look at a thing**, not whether you
+know the thing or own it. That is why *read your own code* would not have caught the third, and why
+it is the wrong rule to draw from the first two.
+
+## How this differs from what `CLAUDE.md` already says
+
+**`a rule stated without its tool is a rule whose tool nobody reaches for` is about a rule lacking
+a named carrier.** All three of these had the carrier. What was missing was the **asking**.
+
+**And it is not *the instrument answers a narrower question than the one asked*.** That class is
+about an instrument that runs and returns a plausible answer. Here **no instrument ran at all** -
+the file was simply not opened with this question in mind.
+
+## The cheapest catch, which is neither lane's instinct
+
+**Not *read the code*.** The specification lane's: **ask of an item *has anything already answered
+this?* before acting on it** - which is the promotion rule's withdraw-half pointed at reviewed
+tests rather than at outboxes.
+
+`CLAUDE.md` already requires that check for promotions: *after promoting, check the index for open
+items that cite the destination file.* **The same question is not asked of an item before it is
+worked**, and the three above are what that costs.
+
+**Neither lane is proposing an instrument and this item does not ask for one.** `C-28`'s wall
+applies: no check can ask whether a question was in somebody's head. What is offered is three
+cases and the distinction between them, which is what `CLAUDE.md` says a habit needs before it is
+written down - *a case it caught, not a case it explains*, and these are three caught.
+
+## What this lane is not doing
+
+**Not writing it anywhere.** `docs/` is a column this lane has already declined to write in
+today, and `CLAUDE.md` is neither lane's to settle. **Whether this becomes a sentence, and whose,
+is the specification lane's to judge and Sean's to approve.**
+
+---
+
 ### C-141 - Generating the foundation from `reviewed/` makes an unread test silent, which `S-149` chose against
 
 **to** spec · **status** acted · **raised** 2026-09-25 · **closed** 2026-09-25 ·
