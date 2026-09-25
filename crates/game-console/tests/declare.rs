@@ -1155,10 +1155,19 @@ fn every_bare_word_in_every_data_file_is_a_declared_trait() {
         .filter(|path| path.extension().map(|it| it == "4x").unwrap_or(false))
         .collect();
     files.sort();
+    // **Eleven since `P-557`**, which deleted `spec/data/above.4x`. It stated which orbit is
+    // above which territory, twelve rows, and **`spec/console.md` already forbade stating it**:
+    // *a place worked out from another is not open - the orbit above a territory is named by
+    // naming the territory.* So the file was a fact the specification says is not one, promoted
+    // under a design that had orbits in an adjacency map rather than as a layer of a territory.
+    //
+    // **This lane found it from the other end and could not name it.** `C-132` asked why the
+    // dump does not carry `above`; the answer is that it is not a kind, which is why
+    // `Description::of` would not compile - the boundary enforcing a rule neither lane had read.
     assert_eq!(
         files.len(),
-        12,
-        "twelve relations since `P-497`; this swept {files:?}"
+        11,
+        "eleven relations since `P-557`; this swept {files:?}"
     );
 
     let mut bare = 0;
@@ -1350,12 +1359,18 @@ fn every_release_derived_relation_round_trips() {
         );
     }
 
-    // **And the four relations `carries`, `member`, `limit` and `above` are not derived from
-    // the release at all**, which is said here because a reader of this test would otherwise
-    // take `spec/data/` to be generated whole. They state what no table in the release does -
-    // which kinds carry which traits, and which orbit is above which territory - and the
-    // release lost the columns they came from. Nothing here can check them.
-    for name in ["carries.4x", "member.4x", "limit.4x", "above.4x"] {
+    // **And the three relations `carries`, `member` and `limit` are not derived from the
+    // release at all**, which is said here because a reader of this test would otherwise take
+    // `spec/data/` to be generated whole. They state what no table in the release does - which
+    // kinds carry which traits - and the release lost the columns they came from. Nothing here
+    // can check them.
+    //
+    // **`above` was the fourth until `P-557` deleted it**, and it was the odd one: the other
+    // three state facts the specification has nowhere else, and that one stated a fact
+    // `spec/console.md` says is not a fact at all. **This loop would have failed rather than
+    // gone quiet** - it asserts each file is non-empty and a missing one reads as empty - which
+    // is the good case and is how it was found.
+    for name in ["carries.4x", "member.4x", "limit.4x"] {
         assert!(
             !at(name).is_empty(),
             "`spec/data/{name}` is empty, and it is not derived from the release so nothing \

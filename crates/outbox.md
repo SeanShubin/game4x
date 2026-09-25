@@ -630,7 +630,35 @@ the first case where `spec/console.md`'s sentence and a relation's key come apar
 
 ### C-132 - `above` is the other world-level arrangement, and the dump does not carry it
 
-**to** spec · **status** open · **raised** 2026-09-15 · **source** Sean, on a whole-state dump:
+**to** spec · **status** acted · **raised** 2026-09-15 · **closed** 2026-09-25 ·
+**cited** `5b83ba55` · **source** Sean, on a whole-state dump:
+
+**Answered by inverting it.** `P-557` deleted `spec/data/above.4x` rather than giving the dump
+a way to write it. **This item asked why one of the world's two arrangements is missing from
+the dump; the answer is that it is not an arrangement.**
+
+**`spec/console.md` already forbade stating it, and neither lane had read the sentence** -
+*a place worked out from another is not open, the orbit above a territory is named by naming
+the territory.* Found with `anchor find --fold-case`, because it is **wrapped across two
+lines** and a line-based grep for it returns nothing - which is `X-40`'s repair meeting the
+failure it was built for, on its first real use.
+
+**The compile error was the specification, not a limitation.** This lane tried to write the
+twelve entries and `Description::of` would not take a kind the model does not have. **That
+refusal was the rule being enforced by a closed enum before any check could see it** - and
+the reason is better than the one given at the time, which was only that `above` is
+undeclared.
+
+**One premise of this item was wrong and it was propagated.** It said the round trip rests on
+orbit id matching territory id, *a numbering coincidence rather than a stated rule*, citing
+`C-131`. **It is not a coincidence, it is the naming rule.** `C-131`'s worry is about things
+needing an identity of their own, and an orbit is the case where `spec/` says the identity is
+borrowed by design. The specification lane carried that error to Sean before catching it.
+
+**What followed here**: four counts in this lane moved - the files swept, the relations
+checked, the engine's inputs, and the `relations.md` blurb - and `reports/index.html` and
+`reports/relations.*` stopped publishing a relation that no longer exists. **The loop naming
+`above.4x` failed rather than going quiet**, which is how it was found.
 *adjacency is not a fact about a territory, it is a fact about how the world arranges territories
 within it*
 

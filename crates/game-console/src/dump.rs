@@ -1177,7 +1177,7 @@ pub fn index(generated: &[(String, String)]) -> String {
             }
             "state.md" => "the state after the scenario, one table per relation",
             "relations.md" => {
-                "the rules as relations, one table for each of the twelve in spec/data"
+                "the rules as relations, one table for each of the eleven in spec/data"
             }
             "entities.md" => "the same state as entities and their components",
             "turns.md" => "every turn: the commands that ran, what changed, and what was there",

@@ -530,8 +530,12 @@ fn every_file_the_engine_reads_as_input_is_reachable_from_the_index() {
         .collect();
     assert_eq!(
         on_disk.len(),
-        20,
-        "twenty files the engine reads - twelve in `spec/data` and eight in `scenario`; this \
+        // **Nineteen since `P-557` deleted `spec/data/above.4x`**, which stated which orbit is
+        // above which territory. `spec/console.md` already forbade stating it - *a place worked
+        // out from another is not open* - so the file was a fact the specification says is not
+        // one, and the engine reads one input fewer rather than one input differently.
+        19,
+        "nineteen files the engine reads - eleven in `spec/data` and eight in `scenario`; this \
          found {on_disk:?}"
     );
 

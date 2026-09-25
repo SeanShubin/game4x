@@ -8,7 +8,7 @@ leaves; this is the same view over the rules it played by.
 `biomes.4x` holds `value`, `families.4x` holds `family`, `kinds.4x` holds `kind` and
 `traits.4x` holds `trait`.
 
-12 relations, 246 rows.
+11 relations, 234 rows.
 
 ## Values that are sentences
 
@@ -19,25 +19,6 @@ shown rather than corrected here** - the data is not this report's to edit.
 | Where                       | Field | Value                                |
 | --------------------------- | ----- | ------------------------------------ |
 | `spec/data/line.4x` line 45 | `qty` | `$where`'s density for that resource |
-
-## above
-
-From `spec/data/above.4x`. 12 row(s), 2 column(s).
-
-| orbit | territory |
-| ----- | --------- |
-| 1     | 1         |
-| 2     | 2         |
-| 3     | 3         |
-| 4     | 4         |
-| 5     | 5         |
-| 6     | 6         |
-| 7     | 7         |
-| 8     | 8         |
-| 9     | 9         |
-| 10    | 10        |
-| 11    | 11        |
-| 12    | 12        |
 
 ## value
 

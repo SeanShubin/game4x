@@ -39,7 +39,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (28)
+### To spec (27)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -50,7 +50,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
 - **C-137** - Nothing checks a quotation in the prototype's data comments, and turning it on costs eight false ones · `crates/outbox.md`
-- **C-132** - `above` is the other world-level arrangement, and the dump does not carry it · `crates/outbox.md`
 - **C-131** - Two kinds carry an `id` and nothing else can say it is one of a kind · `crates/outbox.md`
 - **C-123** - What every recipe's code does that its rows do not say, measured over all twenty-six · `crates/outbox.md`
 - **C-120** - One quantity in `line.4x` is a sentence, and a key takes one token · `crates/outbox.md`
