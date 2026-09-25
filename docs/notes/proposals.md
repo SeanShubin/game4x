@@ -171,7 +171,7 @@ design**: whether `firings` survives is yours, since you built it and said what 
 
 ### S-173 - `logs/` needs a `.gitignore` line before anything writes one
 
-**to** code · **status** open · **raised** 2026-09-24 · **source** Sean answering `P-555`: *the log directory should be ignored by git*
+**to** code · **status** acted · **acted** 2026-09-24 · **cited** `d623c8c` · **raised** 2026-09-24 · **source** Sean answering `P-555`: *the log directory should be ignored by git*
 
 **One line, and it is worth having before the directory exists rather than after.**
 

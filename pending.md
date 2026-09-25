@@ -21,17 +21,15 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-173** - `d623c8c` S-173: `logs/` is ignored before anything writes one · still open in `docs/notes/proposals.md`
 - **C-129** - `51110e2` C-129: CLAUDE.md names tools/anchor, and S-172's numbers all counted candidates · still open in `crates/outbox.md`
 - **R-6** - `731aceb` touching could not see a built capability, and R-6 is the case · still open in `releases/first-release.md`
 - **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 
 ## What is outstanding
 
-### To code (4)
+### To code (3)
 
 - **S-174** - `won` has nothing to latch, and the scenario does not meet the requirement that replaces it · `docs/notes/proposals.md`
-- **S-173** - `logs/` needs a `.gitignore` line before anything writes one · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
 
