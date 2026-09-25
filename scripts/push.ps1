@@ -9,6 +9,15 @@
 #   scripts\push.ps1 -DeployOnly     return as soon as the page is live
 #   scripts\push.ps1 -NoGate         skip the local gate (it has already been run)
 #
+# It says how long it took, and which part took it:
+#
+#   Took 7m 12s  (gate 5m 02s, push 3s, runs 1m 51s, page 16s)
+#
+# The breakdown is there because the total answers "was that slow" and not "why". Two of the
+# four phases are this machine and two are waiting on GitHub, and there is nothing to be done
+# about the second pair - so a slow push is worth looking at only when the gate is the one
+# that grew.
+#
 # Exit codes are three because this pipeline has three outcomes, not two:
 #
 #   0  deployed, and everything that ran afterwards passed
@@ -41,6 +50,33 @@ $env:GH_PAGER = "cat"
 
 $site = "https://seanshubin.github.io/game4x"
 $deployJob = "Deploy to GitHub Pages"
+
+# --- How long it took, on every way out ---------------------------------------------------
+#
+# **The `finally` already here is the carrier**, and it is why this is a stopwatch at the top
+# rather than a line before each `exit`. There are eleven of them, over half are failures, and
+# the failure paths are the ones worth timing - a gate that has started taking twelve minutes
+# is the thing this is for, and it leaves without reaching the end.
+#
+# **`exit` inside `try` runs the `finally`**, which is what makes one line cover all eleven.
+$clock = [Diagnostics.Stopwatch]::StartNew()
+$timing = $false
+$phases = [ordered]@{}
+
+# Seconds as a person reads them. Under a minute is seconds, over is minutes and seconds,
+# because a push is minutes and `431s` makes a reader do arithmetic.
+#
+# **Truncated rather than rounded, so this agrees with `push.sh`.** PowerShell's `[int]` rounds
+# to nearest and bash's `SECONDS` counts whole seconds, so `[int]432.7` is 433 here and 432
+# there - **the same push reported as `7m 13s` by one script and `7m 12s` by the other.** A
+# second later is not worth anything and two scripts disagreeing about one number is worth
+# something, so this floors and takes a `double`.
+function Format-Took {
+    param([double] $Seconds)
+    $whole = [int][Math]::Floor($Seconds)
+    if ($whole -lt 60) { return "${whole}s" }
+    return "{0}m {1:d2}s" -f [Math]::Floor($whole / 60), ($whole % 60)
+}
 
 # `gh --jq` is not usable from PowerShell when the filter contains a quoted string. The
 # quotes do not survive the hand-off to a native command, so
@@ -104,6 +140,10 @@ try {
         Write-Host ""
     }
 
+    # **Timing starts here rather than at the top.** Everything above leaves without doing
+    # any work, and a total over that is a number about nothing.
+    $timing = $true
+
     # Run the gate here rather than leaving it to the hook, so a failure costs nothing and
     # so this works in a clone where core.hooksPath was never set. The hook is executed
     # rather than copied: one list of what the gate is, in the file that owns it.
@@ -138,7 +178,9 @@ try {
         }
 
         Write-Host "==> Gate (hooks/pre-push)"
+        $began = $clock.Elapsed.TotalSeconds
         & $sh hooks/pre-push
+        $phases["gate"] = $clock.Elapsed.TotalSeconds - $began
         if ($LASTEXITCODE -ne 0) {
             Write-Host ""
             Write-Host "gate failed; nothing pushed"
@@ -148,7 +190,9 @@ try {
     }
 
     # Already gated above, so the hook is not run a second time. It takes minutes.
+    $began = $clock.Elapsed.TotalSeconds
     git push --no-verify
+    $phases["push"] = $clock.Elapsed.TotalSeconds - $began
     if ($LASTEXITCODE -ne 0) { Write-Host "push failed"; exit 1 }
     $sha = (git rev-parse HEAD).Trim()
     $short = $sha.Substring(0, 7)
@@ -158,6 +202,7 @@ try {
     # Wait until it stops growing.
     $runs = @()
     $previous = @()
+    $began = $clock.Elapsed.TotalSeconds
     for ($i = 0; $i -lt 40; $i++) {
         $listed = Get-GhJson @("run", "list", "--limit", "25", "--json", "databaseId,headSha")
         $found = @($listed | Where-Object { (Get-Field $_ "headSha") -eq $sha } |
@@ -237,6 +282,8 @@ try {
         }
     }
 
+    $phases["runs"] = $clock.Elapsed.TotalSeconds - $began
+
     if (-not $deployed) {
         Write-Host ""
         Write-Host "NOT DEPLOYED  $short"
@@ -250,6 +297,7 @@ try {
     Write-Host ""
     Write-Host "Deploy job succeeded. Waiting for $site to serve $short"
     $live = ""
+    $began = $clock.Elapsed.TotalSeconds
     for ($i = 0; $i -lt 60; $i++) {
         try {
             $info = Invoke-RestMethod -Uri "$site/build-info.json?cachebust=$(Get-Random)" -TimeoutSec 15
@@ -259,6 +307,8 @@ try {
         if ($live -eq $sha) { break }
         Start-Sleep -Seconds 10
     }
+
+    $phases["page"] = $clock.Elapsed.TotalSeconds - $began
 
     Write-Host ""
     if ($live -eq $sha) {
@@ -285,4 +335,20 @@ try {
 }
 finally {
     Pop-Location
+    # **Nothing is said when nothing ran.** `-?` and *nothing to push* both leave before the
+    # work starts, and telling somebody their help text took no time is noise.
+    if ($timing) {
+        $total = Format-Took ($clock.Elapsed.TotalSeconds)
+        # **A phase that did not run is left out rather than printed as zero.** `-NoGate` and
+        # `-DeployOnly` each skip one, and `gate 0s` would read as a gate that was instant
+        # rather than one that never happened.
+        $parts = @($phases.Keys | ForEach-Object { "$_ $(Format-Took ($phases[$_]))" })
+        Write-Host ""
+        if ($parts.Count -gt 0) {
+            Write-Host "Took $total  ($($parts -join ', '))"
+        }
+        else {
+            Write-Host "Took $total"
+        }
+    }
 }

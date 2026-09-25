@@ -41,6 +41,20 @@ for a while. `.github/workflows/pipeline.yml` stamps the commit into `dist/build
 so the live site can be asked which build it is, and that is the only answer to *do I have a
 deployment*.
 
+**And it says how long it took, and which part took it**, on every way out - including the
+failures, which are the ones worth timing.
+
+```
+Took 7m 12s  (gate 5m 02s, push 3s, runs 1m 51s, page 16s)
+```
+
+**The breakdown is there because the total answers *was that slow* and not *why*.** `gate` and
+`push` are this machine; `runs` and `page` are waiting on GitHub and there is nothing to be
+done about them - so a push that has grown is worth looking at only when `gate` is the part
+that grew. **A phase that did not run is left out rather than shown as zero**, since
+`--no-gate` and `--deploy-only` each skip one and `gate 0s` would read as a gate that was
+instant rather than one that never happened.
+
 Three exit codes, because this pipeline has three outcomes:
 
 | Code | Means                                                           |

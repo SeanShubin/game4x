@@ -21,15 +21,37 @@ use hooks::{root, tracked};
 use std::process::Command;
 
 /// What git will write for these paths at checkout, one line per path.
+///
+/// **The paths go in on stdin rather than as arguments**, and the reason is a real failure
+/// rather than a preference. Passing every tracked file on one command line worked until the
+/// tree grew past Windows' limit, and then `CreateProcess` refused it with *the filename or
+/// extension is too long* - an error about a filename, raised because the **command line** was
+/// too long, on a test about line endings.
+///
+/// **It was 54 generated files that did it** - `reports/foundation/`, which `R-12` added - so
+/// the check broke for a reason having nothing to do with what it checks, and would have broken
+/// again at the next growth.
+///
+/// **`--stdin` has no such limit**, so this removes the ceiling rather than raising it.
+/// Chunking the arguments would have been the version that works until the next time.
 fn eol_attributes(paths: &[String]) -> Vec<(String, String)> {
-    let mut command = Command::new("git");
-    command
-        .args(["check-attr", "eol", "--"])
-        .current_dir(root());
-    for path in paths {
-        command.arg(path);
+    use std::io::Write;
+
+    let mut child = Command::new("git")
+        .args(["check-attr", "eol", "--stdin"])
+        .current_dir(root())
+        .stdin(std::process::Stdio::piped())
+        .stdout(std::process::Stdio::piped())
+        .stderr(std::process::Stdio::piped())
+        .spawn()
+        .expect("git check-attr");
+    {
+        let mut writing = child.stdin.take().expect("a pipe to write the paths into");
+        for path in paths {
+            writeln!(writing, "{path}").expect("writing a path to git check-attr");
+        }
     }
-    let out = command.output().expect("git check-attr");
+    let out = child.wait_with_output().expect("git check-attr");
     assert!(
         out.status.success(),
         "git check-attr failed: {}",

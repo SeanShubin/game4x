@@ -10,6 +10,15 @@
 #   scripts/push.sh --deploy-only   return as soon as the page is live
 #   scripts/push.sh --no-gate       skip the local gate (it has already been run)
 #
+# It says how long it took, and which part took it:
+#
+#   Took 7m 12s  (gate 5m 02s, push 3s, runs 1m 51s, page 16s)
+#
+# The breakdown is there because the total answers "was that slow" and not "why". Two of the
+# four phases are this machine and two are waiting on GitHub, and there is nothing to be done
+# about the second pair - so a slow push is worth looking at only when the gate is the one
+# that grew.
+#
 # Exit codes are three because this pipeline has three outcomes, not two:
 #
 #   0  deployed, and everything that ran afterwards passed
@@ -40,6 +49,55 @@ cd "$(dirname "$0")/.."
 # the shape that pages.
 export GIT_PAGER=cat
 export GH_PAGER=cat
+
+# --- How long it took, on every way out ---------------------------------------------------
+#
+# **A trap rather than a line before each `exit`.** There are ten of them, half are failures,
+# and the failure paths are the ones worth timing - a gate that has started taking twelve
+# minutes is the thing this is for, and it exits without reaching the end.
+#
+# **This is the same carrier argument as the pager two comments up**, which is the reason it
+# is written the same way: set once at the top, and an `exit` added to this file later is
+# covered without anybody remembering.
+#
+# `SECONDS` is bash's own counter and needs no subprocess, so the timing costs nothing on a
+# script that is mostly sleeping.
+TIMING=0
+GATE_AT=""
+PUSH_AT=""
+RUNS_AT=""
+PAGE_AT=""
+
+# Seconds as a person reads them. Under a minute is seconds, over is minutes and seconds,
+# because a push is minutes and `431s` makes a reader do arithmetic.
+spell() {
+    if [ "$1" -lt 60 ]; then
+        printf '%ds' "$1"
+    else
+        printf '%dm %02ds' $(($1 / 60)) $(($1 % 60))
+    fi
+}
+
+took() {
+    [ "$TIMING" -eq 1 ] || return 0
+    parts=""
+    for phase in "gate:$GATE_AT" "push:$PUSH_AT" "runs:$RUNS_AT" "page:$PAGE_AT"; do
+        name="${phase%%:*}"
+        value="${phase#*:}"
+        # **A phase that did not run is left out rather than printed as zero.** `--no-gate`
+        # and `--deploy-only` each skip one, and `gate 0s` would read as a gate that was
+        # instant rather than one that never happened.
+        [ -n "$value" ] || continue
+        parts="$parts, $name $(spell "$value")"
+    done
+    echo
+    if [ -n "$parts" ]; then
+        echo "Took $(spell "$SECONDS")  (${parts#, })"
+    else
+        echo "Took $(spell "$SECONDS")"
+    fi
+}
+trap took EXIT
 
 SITE="https://seanshubin.github.io/game4x"
 DEPLOY_JOB="Deploy to GitHub Pages"
@@ -95,6 +153,10 @@ if [ -n "$dirty" ]; then
     echo
 fi
 
+# **Timing starts here rather than at the top.** `--help` and *nothing to push* both leave
+# before this, and telling somebody their help text took no time is noise.
+TIMING=1
+
 # --- The gate ---------------------------------------------------------------------------
 #
 # Run here rather than left to the hook, so a failure costs nothing and so this works in a
@@ -102,16 +164,21 @@ fi
 # copied: one list of what the gate is, in the file that already owns it.
 if [ "$GATE" -eq 1 ]; then
     echo "==> Gate (hooks/pre-push)"
+    gate_began=$SECONDS
     if ! sh hooks/pre-push; then
+        GATE_AT=$((SECONDS - gate_began))
         echo
         echo "gate failed; nothing pushed" >&2
         exit 1
     fi
+    GATE_AT=$((SECONDS - gate_began))
     echo
 fi
 
 # Already gated above, so the hook is not run a second time. It takes minutes.
-git push --no-verify || { echo "push failed" >&2; exit 1; }
+push_began=$SECONDS
+git push --no-verify || { PUSH_AT=$((SECONDS - push_began)); echo "push failed" >&2; exit 1; }
+PUSH_AT=$((SECONDS - push_began))
 sha="$(git rev-parse HEAD)"
 short="${sha:0:7}"
 echo
@@ -122,6 +189,7 @@ echo
 # until it stops growing, which is boardgame's trick and a good one.
 runs=""
 previous=""
+runs_began=$SECONDS
 for _ in $(seq 1 40); do
     found="$(gh run list --limit 25 --json databaseId,headSha \
         --jq ".[] | select(.headSha == \"$sha\") | .databaseId" 2>/dev/null)"
@@ -203,6 +271,8 @@ for id in $runs; do
     fi
 done
 
+RUNS_AT=$((SECONDS - runs_began))
+
 if [ "$deployed" -eq 0 ]; then
     echo
     echo "NOT DEPLOYED  $short"
@@ -218,12 +288,15 @@ fi
 echo
 echo "Deploy job succeeded. Waiting for $SITE to serve $short"
 live=""
+page_began=$SECONDS
 for _ in $(seq 1 60); do
     live="$(curl -fsS --max-time 15 "$SITE/build-info.json?cachebust=$RANDOM" 2>/dev/null \
         | tr -d ' \n\r' | sed -n 's/.*"commit":"\([0-9a-f]*\)".*/\1/p')"
     [ "$live" = "$sha" ] && break
     sleep 10
 done
+
+PAGE_AT=$((SECONDS - page_began))
 
 echo
 if [ "$live" = "$sha" ]; then
