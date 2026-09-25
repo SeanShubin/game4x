@@ -569,6 +569,39 @@ generated view does.
   published site and not the repository view** - *I don't necessarily need it to be rendered when I
   browse it as source*.
 
+
+### R-12 - I can read the foundation form of a test without leaving the reports
+
+**to** code · **status** open · **raised** 2026-09-25 · **from** `P-558`
+
+- **In** - `spec/README.md`, rule 3: *a test is stated in the friendly form, and the foundation
+  form is a rendering of it. The rendering is generated from `reviewed/` and never from
+  `spec/tests/`, so that what the engine runs is derived from what has been read rather than
+  compared with it*
+- **Vetted when** - `reports/` holds the foundation form of **every test in `reviewed/`**,
+  generated rather than written, so I can open one and read the numeric rows of a test I am
+  debugging; **and no test I have not reviewed is among them**, which is what makes the generated
+  form a rendering of what I approved rather than of what was typed
+
+## Three things, and the third is the one that reverses the direction
+
+**Generate the foundation form into `reports/` from `reviewed/`.** Sean, 2026-09-25: *foundation
+lives in reports*. It is a generated file, so nobody edits it and padding it changes nothing.
+
+**Move `crates/thin-engine/tests/common/friendly.rs` into production support.** Sean, 2026-09-25:
+*go with your recommendation, move it.* **`examples/report.rs` already reaches it with
+`#[path = "../tests/common/friendly.rs"]`**, and `examples/review-web.rs` - the review application
+- depends on it, so it is production support in fact already. **844 lines, 561 of them code, three
+imports and none of them test infrastructure**, so nothing travels with it.
+
+**Reverse the comparison in `friendly.rs`.** It renders friendly from foundation and compares;
+under rule 3 it asserts the generated foundation against the read friendly instead.
+**`every_file_survives_the_round_trip` already asserts the identity in both directions**, so the
+reversal is which side is the expectation rather than new machinery.
+
+**What must not change**: Sean, 2026-09-15, *the engine should only know about the foundational
+format*. The translator sits outside the engine before and after this.
+
 ## Out of scope
 
 Whole areas of the specification this release does not touch, so the omission reads as deliberate.
