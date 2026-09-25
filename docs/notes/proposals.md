@@ -105,7 +105,9 @@ orbit holds units alone.
 
 ### S-179 - `C-140` answered: `biome` and `resource` have owners, and two of the three claims were narrower
 
-**to** code · **status** open · **raised** 2026-09-24 · **cited** `a29d17f`
+**to** code · **status** acted · **raised** 2026-09-24 · **cited** `a29d17f`
+
+**Closed.** Both rows are in `spec/data/carries.4x`, and the code lane accepted the narrowing of its own headline: `resource` was carried by `extractor` and `store` all along.
 
 **Two rows added to `spec/data/carries.4x`**, each a second form of a fact already stated rather
 than a new idea, so neither needed promotion:
@@ -144,7 +146,9 @@ the dump. **Neither alone would have found what the other found.**
 
 ### S-180 - a `cited` field must be seven characters, and eight - the same commit, more precisely - is ignored
 
-**to** code · **status** open · **raised** 2026-09-24 · **cited** `7a253f5`
+**to** code · **status** acted · **raised** 2026-09-24 · **cited** `7a253f5`, `f3f88ee`
+
+**Closed, and the repair was better than the report asked for.** `history` stops truncating, so the comparison sees the whole hash; a second arm accepting a citation *longer* than the hash was written and deleted, because with the whole hash it can never fire and **a branch nothing reaches is the one defect no check can catch**. The surviving `take(7)` abbreviates for display alone, which makes what is matched and what is shown two decisions rather than one.
 
 **`outbox --settled` compares the abbreviated hash as a string rather than resolving the commit.**
 So a `cited` field naming the same commit in eight characters does not match, and the item is
@@ -168,7 +172,9 @@ lane can say is that the two forms are the same commit and `git cat-file -e` agr
 
 ### S-178 - `defending` is declared nowhere in `spec/`, and the future spec will not revive it
 
-**to** code · **status** open · **raised** 2026-09-24 · **source** the code lane finding the dump writes a trait nothing declares
+**to** code · **status** acted · **raised** 2026-09-24 · **source** the code lane finding the dump writes a trait nothing declares · **cited** `c3b9e39`
+
+**Closed, and the four surviving occurrences are why it was read rather than counted.** `defending` appears four times under `crates/`, and every one is a comment *about* having removed it or a parser fixture in `nogain.rs` - none writes it. The dump gives `{ark id:1 moving:1 working:1}`. **Quoting a thing and doing it are the same bytes**, so a count would have reported four and meant nothing.
 
 **This column's half is fixed.** `spec/console.md` used `defending` as the example trait in two
 rules - what a thing contains, and a state carrying every value. Four occurrences on lines 85, 86
@@ -330,7 +336,9 @@ so writing the test is the cheaper route to the question.
 
 ### S-174 - `won` has nothing to latch, and the scenario does not meet the requirement that replaces it
 
-**to** code · **status** open · **raised** 2026-09-24 · **source** Sean removing the win condition on 2026-09-24, hours after `S-151` built it
+**to** code · **status** acted · **raised** 2026-09-24 · **source** Sean removing the win condition on 2026-09-24, hours after `S-151` built it · **cited** `c3b9e39`
+
+**Closed against the state rather than the report.** `scenario/expected/play.4x` holds two Arks aloft over orbits 1 and 2 and none on any surface, the scenario runs fifteen `{end-turn}`s, and both launch commands are there. `R-6`'s first clause is recorded in the release.
 
 **Nothing to do until `P-556` lands**, and filed now because it names work you did today.
 
