@@ -11,6 +11,59 @@ of it needs you.
 
 ## Open
 
+### P-552 - An Ark holds one energy, mines one a turn, and spends one to move
+
+**to** sean · **status** open · **raised** 2026-09-24 · **kind** recovered · **shape** an instruction · **asks** approval · **into** `spec/units.md`, and `releases/first-release.md` -> Units and structures, Recipes
+
+**Your words**: *ark has a storage container for 1 energy, ark can mine energy every turn.
+Thematically energy comes from the sun via solar panels... it is self contained and automated, no
+need to feed civilians or for civilians to generate labor. One move costs 1 energy.*
+
+**That is `F1` with the numbers filled in**, and it resolves the contradiction rather than choosing
+between its halves: pooling holds, and the Ark contributes the room while the orbit holds the
+energy.
+
+## What lands
+
+**Replacing `spec/units.md`'s two fuel bullets**, which are the half that said a unit holds its own:
+
+> - A mobile unit contributes room for fuel to the place it is in, and moving spends a unit of
+>   energy from the place it leaves. **One with no energy where it stands cannot move.**
+> - **A mobile unit that moves in orbit gathers its own energy from the sun.** It mines one unit
+>   each turn into the orbit it is in, needing no citizen and no labor - **it is self-contained and
+>   automated**, which is what being above the surface buys it.
+
+**The Ark's `Fuel` cell**, which is blank today, becomes `1`.
+
+**And a world recipe**, beside the other automatic ones:
+
+> | **mine energy**     | world  | require | 1 | ark    |  |  |
+> |                     |        | produce | 1 | energy |  |  |
+
+## Why the numbers agree with a rule written weeks earlier
+
+**Room for 1, one a turn, one a move**: an Ark moves once per turn. **The Units table already says
+`moving 1`** - so the fuel economy and the move limit meet on a number neither mentions, and
+neither is derived from the other.
+
+## The one thing your words leave open, and this lane's reading of it
+
+**You said *can mine* and also *automated*.** This takes it as a **world** recipe - the world fires
+it at every turn's end, like `upkeep` - because *self-contained and automated* is the stronger
+clause and because a player recipe would appear in the command list as something to remember.
+**Say so if you meant a player recipe**, and the row changes one word.
+
+## What it costs and what it does not
+
+**The gate goes red until the code lane follows**: a new recipe, a trait cell, and
+`scenario/expected/play.4x` gains an energy line in orbit 1 after the launch. **Said in the same
+breath as the rule.**
+
+**And nothing here changes the surface.** `move` already consumes one energy at `$from`, and the
+release already says a tank gives room rather than holds - `P-512`. **The ground bullet above only
+makes `spec/units.md` say what the release has said since then**, which is `S-170`'s other half
+left where it is.
+
 ### P-553 - The deploy comes first, and the launch is the winning act
 
 **to** sean · **status** open · **raised** 2026-09-24 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Winning

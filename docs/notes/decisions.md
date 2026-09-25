@@ -26,6 +26,94 @@ ones, for their reasoning.
 
 ## Answered, kept for the reasoning
 
+## The working behind `P-552`, answered on 2026-09-24 with a fourth option
+
+**Not an item** - `P-552` is a proposal and lives in
+[`decide/proposals.md`](../../decide/proposals.md).
+
+**This lane offered three answers and Sean gave a fourth, which is `F1` with the numbers
+filled in**: an Ark holds room for one energy, mines one each turn, and a move costs one.
+**The three options argued about where fuel lives; his answer says that and also how much
+and how often**, which is the part no option had.
+
+**And it makes the fuel economy and the move limit agree without either deriving the
+other.** Room for 1, income 1 a turn, 1 a move - so an Ark moves once per turn, which is
+what `moving 1` already said in the Units table. Two rules written at different times
+meeting on a number neither mentions.
+
+
+**to** sean · **status** open · **raised** 2026-09-24 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `spec/units.md`, and `spec/logistics.md` if you choose otherwise
+
+**You asked whether the code has everything it needs from the spec to move an Ark. It does not, and
+this is the whole of what is missing.** One decision, and it is yours because both sentences are
+yours.
+
+## Why an Ark cannot move today, measured
+
+```
+spec/data/line.4x:10   {line block:move seq:5 role:consume qty:1 kind:energy place-bound:from}
+spec/data/carries.4x   an orbit carries `id` and nothing else
+spec/data/*.4x         the word `sun` appears nowhere
+```
+
+**A move burns one energy at the place it leaves. An Ark leaves an orbit. Nothing puts energy in
+an orbit.** So the command is refused for want of fuel, always.
+
+## The two rules, and they cannot both be carried out
+
+**`spec/units.md:20`**, the older:
+
+```
+A mobile unit that moves in orbit gathers its energy from the sun, a fixed amount each turn,
+and holds it in a bin of its own. Moving in orbit burns a unit of it.
+```
+
+**`spec/logistics.md:29`**, which the code lane built:
+
+```
+A resource in a place is in that place, not in a container inside it. The things in it that
+can hold that kind contribute capacity and hold nothing.
+```
+
+**One says the unit holds the fuel; the other says the place does.** `releases/first-release.md`
+agrees with logistics three times - *fuel* is *how much energy its tank gives room for*, the tank
+is a capacity row in *Where things are*, and `move`'s energy is at `$from`. **`spec/units.md` is
+the only file that does not**, and its ground half says the same thing about a pioneer.
+
+## The three answers
+
+**`F1` - pooling wins, and the sun fills the orbit.** The unit's bin becomes room the orbit has,
+and **an orbit gains a fixed amount of energy each turn from the sun**, up to the capacity the
+things in it contribute. `spec/units.md`'s two bullets are rewritten to say where the energy is
+rather than who holds it.
+
+**`F2` - `spec/units.md` wins for units.** A unit holds its own fuel and pooling governs places
+only. **This reverses what is built** and what the release says three times, and the tank stops
+being a capacity.
+
+**`F3` - pooling on the ground, the sun in orbit.** Two mechanisms with a boundary between them.
+**Cheapest to write and the most to remember**: a reader has to know which layer they are on before
+they know where fuel lives.
+
+## What this lane would say
+
+**`F1`.** It keeps your fiction - the sun is where orbital energy comes from - and changes only
+*who holds it*, which is the half `spec/logistics.md` already settled for everything else. **It is
+also the only one of the three that needs no new mechanism**: an orbit gaining energy each turn is
+a place gaining a resource, which the turn already does.
+
+**And it is the smallest change to what exists.** `F2` undoes pooling; `F3` adds a second rule for
+fuel. `F1` rewrites two bullets and gives an orbit an income.
+
+## What it does not settle, and what the code lane reported
+
+**A unit that moves into an empty place cannot move again.** `spec/logistics.md` has *a thing that
+leaves takes what it hauls*, defaulting to fill, **and `move`'s five rows in the release have no
+haul** - so a unit arrives with nothing. The code lane built the table and says plainly it did not
+build the general rule. **Whether hauling fires in this release is a separate question** and this
+proposal does not ask it; under `F1` an Ark is unaffected, because the orbit it arrives in has its
+own income.
+
 ## The working behind `P-553`, answered `W2` on 2026-09-24
 
 **Not an item** - `P-553` is a proposal and lives in
