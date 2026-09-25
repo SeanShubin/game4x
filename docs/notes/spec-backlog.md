@@ -4287,3 +4287,34 @@ form is the source and the friendly form is derived, while **the friendly form i
 and approves**. If the mainline takes the design, the thing he maintains and the thing that is
 canonical should be the same artifact, and today they are held together by a test rather than being
 one file. **Not a defect - a place where one could appear.**
+
+## Said 2026-09-25: a discoverable reason is what makes a recommendation good
+
+**Sean**, asked to update the justification for the engine reading the foundation form: *Lets
+update the reason, I am finding that reasons being discoverable by an AI Assistant has made the AI
+Assistant much more capable of giving me good recommendations.*
+
+**Recorded with the day's evidence rather than as a compliment**, because it is a claim about the
+process and it was load-bearing three times in one session:
+
+- **`P-557` turned entirely on one sentence.** *A place worked out from another is not open - the
+  orbit above a territory is named by naming the territory*, in `spec/console.md`. Without it the
+  recommendation would have been *make `above` a kind*, which is what two lanes had been assuming
+  and what the specification forbids
+- **`C-132` inverted because of it.** The item asked the code lane to write `above` into the dump;
+  the reason in `spec/` said there was nothing to write. **The code lane could not build it and the
+  compile error was the specification being enforced by the type system**
+- **This evaluation turned on a comment in `schema.rs`.** *This is identity, not uniqueness, and
+  the two parted company when a quantity arrived.* It is what makes the surviving reason for his
+  own rule better than the reason he first gave
+
+**And the counter-case is as sharp.** The rule *the engine should only know about the foundational
+format* is stated in exactly two places, both doc comments in `crates/thin-engine/`, and **nowhere
+in `spec/`**. It is the rule the whole two-format design rests on, and a reader of `spec/` cannot
+find it - which is `C-42`'s shape, *a rule that is written down, true, and not run over the work
+that states it*.
+
+**What this implies for how this lane works**: a reason belongs where a reader of the rule will
+reach it, not where the person who had the reason was working at the time. `spec/` links down to a
+note for reasoning - but a reason that *decides* what the rule is, rather than explaining why it was
+chosen, is part of the rule.

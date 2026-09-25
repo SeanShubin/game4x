@@ -580,8 +580,28 @@ generated view does.
   compared with it*
 - **Vetted when** - `reports/` holds the foundation form of **every test in `reviewed/`**,
   generated rather than written, so I can open one and read the numeric rows of a test I am
-  debugging; **and no test I have not reviewed is among them**, which is what makes the generated
-  form a rendering of what I approved rather than of what was typed
+  debugging; **no test I have not reviewed is among them**; and **the generator says how many are
+  unread and names them**, so that a test waiting on me is reported rather than merely absent
+
+## The third part is a correction, filed by the code lane as `C-141`
+
+**`R-12`'s observable said *absent* and absence is not loud.** The code lane read `S-149`'s
+reasoning and asked whether an unreviewed test should stop the gate or be quietly not-yet-running,
+and said it would build the refusing version unless told otherwise.
+
+**Neither, and the answer was already built.** `crates/thin-engine/tests/common/mod.rs`,
+`every_read_test`: **A test with no record is left out rather than failed**, which is the half of
+the rule that is easy to get backwards. **Drafting a test is not an error**; it is a thing that
+constrains nothing until he has read it - so this returns fewer files and **the runner says how
+many and which.** And `first_test.rs` prints *N of M tests have not been read and did not run*
+with their names, under a floor - `reading.len() > 40`, because **a count over nothing is the same
+failure with the sign flipped.**
+
+**So the generator mirrors that contract rather than inventing one.** Generate for the read tests,
+name and count the unread, and keep a floor so a missing `reviewed/` cannot make the whole thing
+vacuous. **Refusing would make drafting a test an error**, which is the one thing that doc says not
+to do - and drafting is what an assistant does on Sean's direction, so it would put the gate red
+every time a test is written and before he has had a chance to read it.
 
 ## Three things, and the third is the one that reverses the direction
 
