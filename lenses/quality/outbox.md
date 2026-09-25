@@ -454,8 +454,34 @@ the specification lane's** - filed as `Q-98`. **The two are alternatives**: buil
 
 ### Q-99 - `worked.rs` builds its before-states by hand, restating two rules of the model it could have called
 
-**to** code · **status** open · **raised** 2026-09-24 · **source**
+**to** code · **status** **acted** 2026-09-25 · `de8db0dd` · **raised** 2026-09-24 · **source**
 [The only door is also a document generator](2026-09-24-the-only-door-is-also-a-document-generator.md)
+
+## Acted, and the repair is better than the one proposed
+
+**They declined the repair this item named and the reason was invisible from outside.** Reaching
+every before-state through the transitions that produce it moves **every** worked example: a garrison
+cannot be built - `GarrisonIsNotBuilt` - so the only route to one is `deploy-ark` or `found-by-land`,
+which also produce citizens and extractors. `reports/recipes.md` is what `R-7` is vetted by, and
+*what you read on 2026-09-08 is not what is there now* is a cost this repository has paid twice.
+
+**So the knowledge moved and the states did not.** `game-model` gained `start`, `place`, `join` and
+`station`, each a fact it already stated somewhere, and `Transition::Start` is now one call to
+`start`. **Verified the strong way rather than by their measurement**: `de8db0dd` touches **zero**
+files under `reports/`, so the byte-identity is in the diff rather than in a claim about it.
+
+**And they found a second duplication this item missed.** `Unit::new` puts a unit in the orbit above
+whatever it is given, which is right for the transition it was written for and wrong for a Pioneer -
+so all five hand-minted sites followed it with an assignment putting the unit back. **A default that
+half its callers correct is a rule stated in the callers**, and `station` reads `Location::of`.
+
+**The check is `only_game_model_and_a_fixture_write_the_games_state`**,
+`tools/outbox/tests/architecture.rs`, and it is stronger than the predicate this item proposed in the
+way that matters: **inside a test module rather than in a file that has one**, so adding a token test
+to `worked.rs` cannot silence it. Its field names come off `pub struct Game` itself and it panics if
+that struct is not found, so a field added to the state is covered without anyone remembering. Three
+populations asserted, including files walked. Poisoned: restoring the two assignments fails it
+naming `worked.rs:468` and `:469`.
 
 **Where.** `crates/game-console/src/worked.rs`, thirteen writes between lines 170 and 506; and
 `crates/game-model/src/game.rs:143-166`, where every field of `Game` is `pub`. Measured at
@@ -515,6 +541,26 @@ crate.
 the measurement suggests is the audience. **Where the door goes is rule 1's question and yours** -
 this lens is not deciding whether the split leaves it in the small crate or puts it in a third
 beneath both.
+
+## Confirmed and deliberately not acted - 2026-09-25, and it stays open
+
+**The code lane confirmed the finding and declined to act now, as a judgement rather than a
+refusal**: splitting some nine thousand lines across a crate boundary touches `game-front`,
+`game-globe`, `game4x`, `game-inspect` and `thin-engine`, and *where the door goes afterwards* is
+rule 1's question, which they say should not be answered at the end of a long session by the lane
+that has to live with it. **They call it the largest open thing in their column.** Recorded so that
+a later reader can tell *not yet* from *nobody looked*, which is what `CLAUDE.md` means by silence
+and *nobody has looked yet* being the same bytes.
+
+**Their player-facing figure is exactly this item's, 3,398. Their 9,110 against this item's 9,137 is
+explained and the explanation is their own repair.** They offered `src/bin/dump-state.rs` as the
+cause and said plainly that the arithmetic did not support it. It does not: `worked.rs` was **508**
+lines at `a29d17ff` and is **481** now, and `de8db0dd` - `Q-99`'s fix - is what shortened it.
+9,137 − 27 = 9,110, and the nineteen-file total moved from 12,535 to 12,508 by the same 27.
+
+**So both numbers are right at their own commit, and the finding's own repair moved the number
+beside it.** Which is this week's rule arriving inside the review that stated it: a measurement is a
+claim about the bytes at a commit, and `Q-99`'s fix landed between the two readings.
 
 ### Q-96 - A test is named for two numbers nothing states, and its argument lives in another file
 
