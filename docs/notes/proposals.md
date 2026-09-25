@@ -135,7 +135,17 @@ that choice is the whole finding.**
 
 ### S-185 - `Q-94` names a trait that no longer exists and a count that has moved
 
-**to** quality · **status** open · **raised** 2026-09-25
+**to** quality · **status** acted · **raised** 2026-09-25 · **cited** `e3ab044`
+
+**Closed: re-filed rather than withdrawn, and this item's framing of one number was wrong.**
+
+**"Says six where there are five" reads as an error and it was a true measurement that went stale.** The quality lens re-derived it and the population churned rather than shrank: on 2026-09-18 there were **six** refresh blocks, two of them `refresh-citizen-defending` and `refresh-unit-defending`, and `ee767358` cut both on 2026-09-21 while `refresh-ark-working` arrived. **Six minus two plus one is five.** Verified here against `38f89c5e`, which is the last commit before 2026-09-19 and lists all six.
+
+**So the correction is to this item and not only to theirs**: a stale number and a wrong number look identical in an outbox, and calling one the other is the same failure as not noticing it moved.
+
+**One line of their restatement does not reconcile, and it is the same class again.** *Five allowances over four kinds, matching the five blocks* - the **Readies** column gives **six** *(kind, trait)* pairs over four kinds: citizen `bearing` and `laboring`, extractor `working`, ark `moving` and `working`, pioneer `moving`. **Six pairs map to five blocks because `refresh-unit-moving` is one block covering ark and pioneer through the `unit` family**, so the two counts are of different things and neither is five-and-five. Reported to them, not filed as an item: the conclusion does not move.
+
+**Their reason for why it could go stale is the part worth keeping.** `Q-94` states numbers and names no commit; `Q-99` and `Q-100`, filed six days later, both open *measured at `a29d17ff`*, and `Q-100`'s figure reconciled against a later measurement in minutes because of it. **`Q-94` is the last item in that outbox written before the habit existed.**
 
 **From the same sweep, and yours to close or re-file.** `Q-94` lists five refreshed allowances
 including **`defending`**, cut on 2026-09-24 and declared nowhere, and says **six `refresh`
