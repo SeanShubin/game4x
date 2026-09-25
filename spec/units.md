@@ -14,13 +14,11 @@ What is true of every unit. Particular units are in [unit types](unit-types.md).
 - Each type of unit has a unique name
 - Each unit has a strength
 - A unit may require upkeep each turn, and is lost if it is not paid
-- A mobile unit that moves over the ground has a bin for fuel. **It is built with that bin full,
-  and the energy is paid where it is built.** Moving burns a unit of it, and one with an empty
-  bin cannot move
-- **A mobile unit that moves in orbit gathers its energy from the sun**, a fixed amount each
-  turn, and holds it in a bin of its own. **Moving in orbit burns a unit of it**, and one with
-  an empty bin cannot move. **The sun is where that energy comes from**, so orbital movement is
-  never paid for out of a territory.
+- A mobile unit contributes room for fuel to the place it is in, and moving spends a unit of
+  energy from the place it leaves. **One with no energy where it stands cannot move.**
+- **A mobile unit that moves in orbit gathers its own energy from the sun.** It mines one unit
+  each turn into the orbit it is in, needing no citizen and no labor - **it is self-contained and
+  automated**, which is what being above the surface buys it.
 - Fuel moves freely between a controlled territory that has it and anything there that can hold it
 
 ## Open questions

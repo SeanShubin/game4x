@@ -165,7 +165,7 @@ a raw material returns to its source.
 | **extractor** |          |      |                 |              | working 1             |         |
 | **yard**      |          |      |                 |              |                       |         |
 | **store**     |          |      |                 |              |                       |         |
-| **ark**       | 2        |      |                 | orbit border | moving 1              | 1       |
+| **ark**       | 2        | 1    |                 | orbit border | moving 1, working 1   | 1       |
 | **pioneer**   | 2        | 2    |                 | border       | moving 1              | 1       |
 
 An Ark can invade land from orbit. Nothing outside this table
@@ -240,6 +240,10 @@ that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `
 | **create labor**    | player | require | 1                                    | citizen   | laboring at least 1                           |                |
 |                     |        | put     |                                      | citizen   | laboring one less                             |                |
 |                     |        | produce | 1                                    | labor     |                                               |                |
+| **mine energy**     | player | require | 1                                    | territory |                                               | `$where`       |
+|                     |        | require | 1                                    | ark       | working at least 1                            | above `$where` |
+|                     |        | put     |                                      | ark       | working one less                              | above `$where` |
+|                     |        | produce | 1                                    | energy    |                                               | above `$where` |
 | **work**            | player | require | 1                                    | territory |                                               | `$where`       |
 |                     |        | require | 1                                    | extractor | working at least 1                            |                |
 |                     |        | put     |                                      | extractor | working one less                              |                |

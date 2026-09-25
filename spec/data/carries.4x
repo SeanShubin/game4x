@@ -35,3 +35,4 @@
 {carries kind:adjacency trait:from}
 {carries kind:adjacency trait:to}
 {carries kind:game trait:phase}
+{carries kind:ark trait:working}

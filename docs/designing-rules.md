@@ -96,7 +96,7 @@ one of three sources - *anything that exhausts draws on time for a turn: it spen
 carries, and only the turn's end restores that count.* **`refresh` is that sentence written as
 rows**, and it is the only rule in the game that writes a count upward from nothing.
 
-**Counted from the Qty and Traits columns of the *Recipes* table, over its 68 role cells**, so it
+**Counted from the Qty and Traits columns of the *Recipes* table, over its 72 role cells**, so it
 can be re-run: **57 cells carry a quantity and 11 are blank, and the eleven blanks are exactly
 the eleven `put` rows.** Of the 57, one reads a trait - *`$where`'s density for that resource* - which is a colour
 rather than a marking read. **It was three until `P-522`**, which cut `muster` and `stand` and

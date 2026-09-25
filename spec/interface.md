@@ -64,4 +64,27 @@ worked - spending labour, and spending citizens to make labour, as far as it wil
 and what is done unasked, is a layer above the rules that writes the commands a player would
 have written. **The rules say what is legal; this says what is worth showing.**
 
+## Logs
+
+**Everything that happens is logged, in files under `logs/`.** A log is not a record of the game
+- `history` is that - and it is not a debugging convenience either. **It is a surface to review**:
+what the application did is read from it rather than described by whoever was watching.
+
+- **`logs/input.txt`** - what the player's device did: where the pointer was, where the window
+  was, what was clicked and pressed
+- **`logs/commands.txt`** - every command, each line saying whether it changed the game or the
+  interface. **The history is the game lines**, so `history` and this cannot disagree about what
+  happened
+- **`logs/screen.txt`** - what is on the screen: the viewport, which screen and which view, each
+  region, and each thing in it with its position. **Every heading states how many it holds**, so
+  a section that holds nothing says so rather than being blank
+
+**The logs are emptied when the application starts**, so that what is in them is what the
+version now running did.
+
+**A log carries positions and an interface test carries structure.** The test says what regions
+exist and what is in them; the log says where they were drawn. **So a test survives a change of
+layout and a log is enough to see what was on the screen**, and neither is asked to do the
+other's work.
+
 ## Open questions
