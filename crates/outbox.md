@@ -61,6 +61,72 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-141 - Generating the foundation from `reviewed/` makes an unread test silent, which `S-149` chose against
+
+**to** spec · **status** open · **raised** 2026-09-25 · **source** reading `R-12` against the code
+that already implements the arrangement it changes
+
+**derived from** `spec/README.md` rule 3 as `63b904fd` left it, and
+`crates/thin-engine/examples/report.rs` as `86e84c86` left it
+
+**`R-12` is buildable and this is not a refusal.** Both directions of the translator exist -
+`Names::row` renders friendly from foundation and `Names::foundation` does the inverse, with
+`fold` handling the friendly `-> n` arrow - so the reversal really is which side is the
+expectation. **What follows is one consequence that this lane has already reasoned about and
+decided against, in writing, and that rule 3 reverses without mentioning.**
+
+## The argument that is already in the code
+
+`report.rs`, on why the suite runs `spec/tests/` and compares against `reviewed/`:
+
+> **The alternative was to run `reviewed/` instead of `spec/tests/`, and comparing is stronger.**
+> A runner pointed at the records does not run a test that has no record, and the orphan check
+> walks records to tests rather than the other way - so an unread test would simply not run, and
+> the suite would be green while proving less. **This one is red and says which.**
+
+**That is `S-149`'s finding**: the suite ran the working copies and nothing compared a test to its
+record, so Sean's reading changed what the gate did by nothing at all.
+
+## What rule 3 does to it
+
+Rule 3 says the foundation rendering is generated **from `reviewed/` and never from
+`spec/tests/`**, so that what the engine runs is derived from what has been read. **Taken to the
+engine, that is the runner pointed at the records** - and an unread test then reaches no
+foundation file, runs nowhere, and **the suite is green while proving less**, which is the state
+the sentence above was written to avoid.
+
+**`R-12`'s second half is aware of the shape and does not close it.** *No test I have not reviewed
+is among them* is a property of what `reports/` contains. It says an unread test is **absent**; it
+does not say anything is **loud** about its absence. Absence and *nobody wrote one* are the same
+bytes.
+
+## What this lane needs decided, and it is one question
+
+**Is an unreviewed test meant to stop the gate, or meant to be quietly not-yet-running?**
+
+Both are defensible and they build differently:
+
+- **Loud** - the generator refuses, or a check fails, when `spec/tests/` holds a test `reviewed/`
+  does not. The gate stays red until Sean reads it, which is what happens today.
+- **Quiet** - an unreviewed test is work in progress and simply does not run. Then `S-149`'s
+  concern is answered by something else naming the gap, and this lane needs to know what.
+
+**This lane will build the loud version under the assumption if nothing says otherwise**, because
+it is what the code does today and because a check going quiet is the harder failure to notice
+later. **Stated here rather than chosen silently** - `CLAUDE.md` asks a blocked question to be
+filed with the assumption it proceeded under, and this is that.
+
+## What is not in question
+
+**The direction is right and this lane is not arguing with it.** Generating what the engine runs
+from what was read is strictly better than generating it from what was typed, and it closes the
+gap `render.rs` has carried in its own header since 2026-09-21: *a test he approves does not reach
+the engine*. **That header also names `spec/tests/` as the source to read**, which rule 3 now
+forbids - so the plan written in the code is stale in exactly the way rule 3 exists to prevent,
+and this lane will correct it while building rather than filing it separately.
+
+---
+
 ### C-140 - Two declared traits are carried by nobody, and the dump writes a kind `P-541` removed
 
 **to** spec · **status** acted · **raised** 2026-09-24 · **closed** 2026-09-24 ·

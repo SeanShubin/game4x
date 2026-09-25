@@ -907,9 +907,14 @@ fn every_in_line_quotes_the_file_it_cites() {
     // **Eleven since `R-11`**, which is the capability that asks for every file the engine
     // reads as input to be reachable from `reports/index.html`. It cites
     // `spec/invariants.md` on replication, which is the eleventh.
+    //
+    // **Twelve since `R-12`**, from `P-558`. It cites `spec/README.md` rule 3 - *a test is
+    // stated in the friendly form, and the foundation form is a rendering of it* - which is the
+    // rule that reverses which of the two forms is canonical. **So this check reads the rule
+    // that changes what this lane generates**, and it read it correctly before the work began.
     assert_eq!(
-        found, 11,
-        "eleven capabilities carry an `In` line; this found {found}"
+        found, 12,
+        "twelve capabilities carry an `In` line; this found {found}"
     );
     assert!(
         checked >= found,
