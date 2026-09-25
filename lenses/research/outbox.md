@@ -904,9 +904,9 @@ definition is a rule. A kind named only in `spec/data/` is **declared and not de
 a different claim - so the specification lane is right that the two counts are not comparable, and
 the answer is that this one was always about prose.
 
-**Measured against that population: one, not four and not two.**
-`tools/research/kinds-in-spec.py` reads the sixteen kinds out of the release rather than listing
-them, and searches `spec/*.md`:
+**Measured against that population: two - `deposit` and `fertility`.** Corrected 2026-09-25; this
+sentence first said **one**, and the table under it said two. `tools/research/kinds-in-spec.py`
+reads the sixteen kinds out of the release rather than listing them, and searches `spec/*.md`:
 
 | kind         | in spec prose                                                      |
 | ------------ | ------------------------------------------------------------------ |
@@ -920,6 +920,25 @@ one headed **`### Yard`**. They are **capitalised**, so a case-sensitive search 
 lane ran that same wrong search while checking, got zero for `pioneer`, and believed it over its
 own script for one step - **the script was right**. It is in this lane's own memory as *grep the
 concept, not the word*, and it still cost a step.
+
+## And this lane got its own count wrong in the same breath, the same way
+
+**The script folded the concept terms into the presence test.** `X-26` asks two questions - *is
+the word there*, which is the count, and where it is not, *is the concept there*, which decides
+gap or reification. Searching for `density` under the heading `deposit` answers the second and
+was reported as the first, so `deposit` came back named and the count came back **one**. **The
+table three lines above said two the whole time.**
+
+**That is the third instance in this exchange and the second by this lane** - `deepest()` in
+`X-38`, the border midpoint in `X-39`, and now a changed metric reported as a measurement. The
+instrument is split into two columns now and neither can stand in for the other. **The
+specification lane caught it, having just been caught itself**, which is the two-producer
+arrangement working in the direction it is usually not needed.
+
+**The membership moved even though the number did not.** `X-26` counted `store` and `deposit`;
+today it is `deposit` and `fertility`. **Two both times, and only one of the two is the same
+kind** - so agreeing with the item's number is not agreeing with the item, and saying only *the
+count is two* would have hidden that `store` left and `fertility` arrived.
 
 **So there is no remaining instance and no successor item.** `fertility` is declared in
 `spec/data/` and defined in the release, and **no prose rule refers to it** - zero hits, against a

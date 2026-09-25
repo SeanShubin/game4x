@@ -19,9 +19,18 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 # The kinds, read from the release rather than written here, so the list cannot drift from it.
 RELEASE = ROOT / "releases" / "first-release.md"
 
-# `store` is searched by concept as well as by word, for the reason `X-26` gives: a
-# case-sensitive search for one word returned a plausible zero once already.
-ALSO = {
+# **Two questions, and the first version of this script asked one.**
+#
+# `X-26` counts kinds *named in `spec/` by their own word*. Where the word is absent it then asks
+# a second question - is the **concept** there? - and that one decides whether the absence is a
+# gap or a reification. `deposit` is the case: no prose says the word, and
+# `spec/economy.md:14` says the thing.
+#
+# The first version folded the concept terms into the presence test, which counted `deposit` as
+# named and returned **one** where the answer is **two**. That is a changed metric reported as a
+# measurement - the same class this lane has been tracking all week, committed by it twice in one
+# exchange. The two are separate columns now and neither can silently stand in for the other.
+CONCEPT = {
     "store": ["storage", "silo", "warehouse", "granary", "stockpile"],
     "deposit": ["density", "what its ground offers"],
     "adjacency": ["adjacent", "neighbour", "next to"],
@@ -39,15 +48,26 @@ def kinds_from_release():
     return kinds
 
 
-def named_in(paths, word):
-    """Whether the word appears, by itself or by one of its concept terms."""
-    terms = [word] + ALSO.get(word, [])
+def found_in(paths, terms):
+    """Whether any of the terms appears as a word. Case-insensitive, deliberately.
+
+    `## Pioneer` and `### Yard` are section headings, so a case-sensitive search returns zero for
+    two kinds that are defined at length. Both lanes ran that search and both got four.
+    """
     for path in paths:
         text = path.read_text(encoding="utf-8", errors="replace").lower()
         for term in terms:
-            if re.search(rf"\b{re.escape(term)}\b", text):
+            if re.search(rf"\b{re.escape(term)}\b", text.lower()):
                 return True
     return False
+
+
+def by_word(paths, kind):
+    return found_in(paths, [kind])
+
+
+def by_concept(paths, kind):
+    return found_in(paths, CONCEPT.get(kind, []))
 
 
 def main():
@@ -66,22 +86,27 @@ def main():
     assert kinds and prose, "a count over nothing proves nothing"
     print()
 
-    missing_prose, missing_anywhere = [], []
+    unnamed, gaps, reifications = [], [], []
+    print(f"  {'kind':<12} {'word in prose':<14} {'concept':<10} {'elsewhere under spec/'}")
     for kind in kinds:
-        in_prose = named_in(prose, kind)
-        in_other = named_in(data + tests, kind)
-        if not in_prose:
-            missing_prose.append(kind)
-        if not in_prose and not in_other:
-            missing_anywhere.append(kind)
-        mark = "prose" if in_prose else ("data/tests only" if in_other else "NOWHERE")
-        print(f"  {kind:<12} {mark}")
+        word = by_word(prose, kind)
+        concept = by_concept(prose, kind)
+        elsewhere = by_word(data + tests, kind)
+        if not word:
+            unnamed.append(kind)
+            (reifications if concept else gaps).append(kind)
+        print(
+            f"  {kind:<12} {'yes' if word else 'NO':<14} "
+            f"{('yes' if concept else '-'):<10} {'yes' if elsewhere else '-'}"
+        )
 
     print()
-    print(f"not named in spec PROSE          {len(missing_prose)}: {', '.join(missing_prose) or 'none'}")
-    print(f"not named ANYWHERE under spec/   {len(missing_anywhere)}: {', '.join(missing_anywhere) or 'none'}")
+    print(f"not named by their own word   {len(unnamed)}: {', '.join(unnamed) or 'none'}")
+    print(f"  of those, concept absent    {len(gaps)}: {', '.join(gaps) or 'none'}")
+    print(f"  of those, concept present   {len(reifications)}: {', '.join(reifications) or 'none'}")
     print()
-    print("These are two different questions. A kind in `spec/data/` is declared and not defined.")
+    print("The count is the first line. Whether an absence is a gap or a reification is the")
+    print("second question, and folding it into the first is what made this script say one.")
 
 
 if __name__ == "__main__":
