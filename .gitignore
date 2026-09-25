@@ -47,3 +47,17 @@ desktop.ini
 # Renamed from notes/ on 2026-09-01 and untracked at the same time: these are transient,
 # and a transient file in the history is one a later reader has to work out the status of.
 temporary-notes/
+
+# --- What a run writes about itself ---
+# **`S-173`, and Sean answering `P-555`**: *the log directory should be ignored by git.* Here
+# before anything writes one, because the first run that logs would otherwise leave an untracked
+# directory in three lanes' `git status` at once.
+#
+# **Which matters here more than it would elsewhere**, for the reason written beside `target*/`
+# above: the hazard this repository guards hardest is staging something you did not mean to, the
+# defence is reading `git status` before every `git add`, and a list with generated output in it
+# is one nobody reads. A log rewritten on every startup is that hazard exactly.
+#
+# **`P-555` has not settled what the logs are called or whether the command log is one file or
+# two.** This line covers either, and nothing else about logging is decided by it.
+logs/
