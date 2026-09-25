@@ -9,6 +9,20 @@ Design intent stated in conversation that has not reached [the specification](..
 When an item lands in the spec, delete the row. Nothing here is decided.
 
 
+
+## 2026-09-24 - logging, and `../boardgame`'s screen dump
+
+**Sean**: *we will need a log directory with files that log everything that happened. One log will
+be the mouse position, window position, click, right click, etc. Another log or two will be the
+user commands and the game commands, not sure if these should be split or merged. We may need
+other logs. Either way, all logs need to be cleared on each app startup, so I can be sure that the
+logs represent the last version of the app that runned. Have a look at how logging was done in
+`../boardgame`. I actually had a representation of the state of the screen so my ai assistant did
+not need to ask what I saw in order to debug what was going on.*
+
+**Filed as `P-555`**, which carries what that repository teaches: that a log is a review surface
+rather than a debugging aid, and that a screen dump is an exhibit a machine can read.
+
 ## 2026-09-24 - interface state, and what a command refers to
 
 **Sean**: *I think we are going to have to invent commands for controlling the user interface, but

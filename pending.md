@@ -12,6 +12,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **P-553** - The deploy comes first, and the launch is the winning act · `decide/proposals.md`
 - **P-551** - `game state` and `local state` are chosen, and a log is a thing `spec/` does not have · `decide/questions.md`
 - **P-554** - Nothing in the first release shows you a win, and the loop you described is the winning one · `decide/questions.md`
+- **P-555** - A log directory, and the thing `../boardgame` has that this repository does not · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
