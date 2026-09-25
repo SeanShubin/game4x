@@ -23,9 +23,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **C-140** - `a29d17f` C-140: carries.4x gives biome and resource an owner, and two of its three claims were narrower · still open in `crates/outbox.md`
 - **C-139** - `bfbaaf3` C-139: an orbit holds energy, which the table four lines below already said · still open in `crates/outbox.md`
+- **C-130** - `d2668ea` R-8 stops stating a count that has now drifted three times, and C-130 is withdrawn · still open in `crates/outbox.md`
 - **C-129** - `51110e2` C-129: CLAUDE.md names tools/anchor, and S-172's numbers all counted candidates · still open in `crates/outbox.md`
-- **R-6** - `731aceb` touching could not see a built capability, and R-6 is the case · still open in `releases/first-release.md`
-- **R-8** - `788bf59` C-130: R-8 says eighteen kinds and 153 pairs, the report says 19 and 171 · still open in `releases/first-release.md`
 
 ## What is outstanding
 
