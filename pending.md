@@ -10,7 +10,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 - **P-552** - An Ark holds one energy, mines one a turn, and spends one to move · `decide/proposals.md`
 - **P-553** - The deploy comes first, and the launch is the winning act · `decide/proposals.md`
-- **P-551** - Two invariants leave a hole exactly where you say a command is needed, and one word is taken twice · `decide/questions.md`
+- **P-551** - `game state` and `local state` are chosen, and a log is a thing `spec/` does not have · `decide/questions.md`
 - **P-554** - Nothing in the first release shows you a win, and the loop you described is the winning one · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
