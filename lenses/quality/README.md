@@ -551,6 +551,12 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [The only door is also a document generator](2026-09-24-the-only-door-is-also-a-document-generator.md)
+  - 2026-09-24. The separation-of-concerns review Sean set the brief for. `Game`'s state is
+    public and `worked.rs` writes it in the shipped path, restating `Transition::Start`'s body
+    and the model's id rule; and the crate `docs/architecture.md` calls the only door into the
+    model is 73% document generation, so the generators hold the door's key. One of their three
+    suspicions refuted. What it did not do: UI state, which no crate names yet.
 - [The carrier fires on the wrong event](2026-09-24-the-carrier-fires-on-the-wrong-event.md)
   - 2026-09-24. The code lane reported that `derived from` did not save `C-120` because
     nothing reads it. Something does - `sharing_a_rule`, on one trigger, an outbox item

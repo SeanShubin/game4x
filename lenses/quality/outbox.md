@@ -452,6 +452,70 @@ one the prose was about, which is `P-245`'s wall. **The other repair is the sent
 the specification lane's** - filed as `Q-98`. **The two are alternatives**: build this query and
 `CLAUDE.md:693` becomes true, so whichever lands first closes the other.
 
+### Q-99 - `worked.rs` builds its before-states by hand, restating two rules of the model it could have called
+
+**to** code · **status** open · **raised** 2026-09-24 · **source**
+[The only door is also a document generator](2026-09-24-the-only-door-is-also-a-document-generator.md)
+
+**Where.** `crates/game-console/src/worked.rs`, thirteen writes between lines 170 and 506; and
+`crates/game-model/src/game.rs:143-166`, where every field of `Game` is `pub`. Measured at
+`a29d17ff`, not the `5437d219` you named - `C-140` landed in between.
+
+**What.** Twenty-eight sites outside `game-model` write `Game`'s state, and **the population
+splits**: `containment.rs` and `tree.rs` are entirely inside `#[cfg(test)]`, which begins at 932 and
+214, and `fired.rs`'s two are `one.turn == 0`, reads. **`worked.rs` has no test module in 508 lines**,
+so its thirteen are the shipped path. **Your suspicion 3 was right about the mechanism and nobody had
+separated the fixtures from it.**
+
+**Why, and it is not that an impossible state exists today.** `ground()` at `worked.rs:491-507`
+writes `phase = Play; turn = 1`, which is exactly and only `Transition::Start` at
+`rules.rs:122-124`. **It matches now.** It is a transition's body restated in another crate with
+nothing keeping it in step, and `spec/invariants.md` -> *A fact is stated once* is what it breaks.
+Same for identity: `UnitId(1)` by hand at five sites, where the model mints
+`UnitId(units.len() + 1)` - a rule `game-model` states **ten times** itself.
+
+**The cost is specific to what the file is for.** `R-7` has Sean **deriving the after from the rule
+and the before by hand**, so the after is trustworthy - a real command really run - and **the before
+is the hand-built half**. The file's header argues against precisely that: *a written example can
+show behaviour the code does not have... All three sat in artifacts whose purpose was
+hand-derivation.*
+
+**Whether. Worth fixing now, and privacy is the wrong repair** - crate-private fields would red the
+fixtures, which are not the problem. **Reach the before-states through the transitions that produce
+them.** The check that says it worked: no `game.` field assignment or `push` outside `game-model/`
+in a file with no `#[cfg(test)]`. Red today on one file, and red the day `worked.rs` was written.
+
+### Q-100 - The crate `docs/architecture.md` calls the only door into the model is 73% document generation
+
+**to** code · **status** open · **raised** 2026-09-24 · **source**
+[The only door is also a document generator](2026-09-24-the-only-door-is-also-a-document-generator.md)
+
+**Where.** `crates/game-console/`, twenty files and 12,587 lines; and `docs/architecture.md:149`.
+
+**What.** The architecture document's own words for the crate are **The command language bound to
+the game. The only door into the model.** Classified over **all twenty files by each module's own
+`//!` first line** rather than by its name: **3,398 lines answer a player** - `lib`, `state`,
+`binding`, `grammar`, `report`, `fired` - and **9,137 generate documents for a reader** - `dump`
+1803, `nogain` 1276, `containment` 1261, `petri` 980, `declare` 803, `tree` 534, `worked` 508,
+`relations` 417, `petri_page` 408, `browse` 315, `style` 290, `petri_draw` 282, `recipes` 260.
+
+**Why this is Sean's question rather than a tidiness one.** *The only door into the model* and *a
+document generator* in one crate means **the document generators hold the door's key**, which is how
+`Q-99` is possible at all - `worked.rs` reaches past no boundary, it is inside the crate that owns
+one. **Two concerns in one crate is not the defect; the defect is that one of them is the access
+control for the other.**
+
+**Two details inside it, neither worth its own item.** `style.rs` is *two stylesheets* and
+`petri_draw.rs` is *the net as a picture*, so rendering sits in a crate the layer table files under
+supporting while giving Rendering its own row. And `declare.rs` is **803 lines, no `#[cfg(test)]`,
+`assert!` in its body** - verification that would panic a player's session, in the player-facing
+crate.
+
+**Whether. Worth doing, and it is your suspicion 1 with a ratio rather than a new claim.** The seam
+the measurement suggests is the audience. **Where the door goes is rule 1's question and yours** -
+this lens is not deciding whether the split leaves it in the small crate or puts it in a third
+beneath both.
+
 ### Q-96 - A test is named for two numbers nothing states, and its argument lives in another file
 
 **to** code · **status** **acted** 2026-09-24 · `4f89b719` · **raised** 2026-09-18 · **source**
