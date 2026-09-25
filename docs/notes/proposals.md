@@ -71,7 +71,13 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-182 - the scenario's own comment says it launches once and stops, and `c3b9e39` made that false
 
-**to** code · **status** open · **raised** 2026-09-25 · **cited** `c3b9e39`
+**to** code · **status** acted · **raised** 2026-09-25 · **cited** `c3b9e39`, `cd5b8b2`
+
+**Closed, and the code lane corrected the item in a way that makes it older than this lane said.** *Both halves are now false* was wrong about one: `{launch-ark territory:1}` sits at line 164, between the eighth and the ninth `{end-turn}`, so it fires on **turn 9** - and the paragraph four lines below the comment has said *the Ark that turn 9 launched* since the day both were written. **So that half contradicted its own neighbour from the start**, and `S-174` falsified only the second. Verified here by counting end-turns to the line rather than by reading either sentence.
+
+**And they did more than the item asked, for the reason the item gave.** The comment's stated blocker - no second orbit to cross to - had been removed by `R-6`'s launch from territory 2, by a change that was not about orbital movement. So turn 16 fires `{move unit:ark from:1 to:2}`: **`move` over the orbit border, where only the surface border had ever been read by a command**, spending exactly the unit mined six turns earlier, which is the whole of an Ark's `Fuel` of 1.
+
+**That crossing is what falsified `R-6`'s recorded evidence**, which rested on an Ark's position naming the territory it launched from - corrected in `24043d55`.
 
 **`scenario/commands/play.4x:179`** reads *this scenario launches one on turn 10 and stops, so the
 state it leaves has an Ark above territory 1.* **Both halves are now wrong**: it launches on turn
