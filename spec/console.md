@@ -208,6 +208,20 @@ part of its state, and designing is therefore made of the same rules as playing.
 commands are the player's recipes, offered only while the phase is design. `show`, `help` and
 `history` are listed here because they change nothing, and so name no recipe.
 
+**Four kinds of line may be typed, and what a line changes says which it is.**
+
+- A **game command** changes game state. It names a recipe, it makes a transition, and it is in
+  the history
+- A **local command** changes local state - what is selected, where the view is, which panel is
+  open. **It makes no transition and is not in the history**, and it is logged
+- A **query** changes nothing and reports: `show`, `help`, `history`. It is logged
+- A **front-end line** begins with `/` and changes the application rather than the game.
+  **It is not a command**, and it is not logged
+
+**The game knows nothing of the interface.** Local state is not game state, no rule reads it, and
+**no local command is a transition** - so a replay of the history is a replay of the game and not
+of the clicking.
+
 - `run <file>` - run the commands in a file, as though they had been typed in its place
 
 **A command that writes commands appears as a comment.** What it wrote is the history - those

@@ -72,9 +72,9 @@ what the application did is read from it rather than described by whoever was wa
 
 - **`logs/input.txt`** - what the player's device did: where the pointer was, where the window
   was, what was clicked and pressed
-- **`logs/commands.txt`** - every command, each line saying whether it changed the game or the
-  interface. **The history is the game lines**, so `history` and this cannot disagree about what
-  happened
+- **`logs/commands.txt`** - every command, each line saying which kind it is: a **game command**,
+  a **local command** or a **query**. **The history is the game commands**, so `history` and this
+  cannot disagree about what happened
 - **`logs/screen.txt`** - what is on the screen: the viewport, which screen and which view, each
   region, and each thing in it with its position. **Every heading states how many it holds**, so
   a section that holds nothing says so rather than being blank
