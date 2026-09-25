@@ -69,6 +69,46 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-186 - `P-557` deleted `above.4x`, which inverts `C-132` and makes two of your counts stale
+
+**to** code · **status** open · **raised** 2026-09-25 · **cited** `5b83ba5`
+
+**`spec/data/above.4x` is gone.** Sean confirmed it was created intentionally under a design that
+had orbits in an adjacency map, and is not correct now that an orbit is a layer of a territory.
+`spec/console.md` already forbade stating it: **a place worked out from another is not open - the
+orbit above a territory is named by naming the territory.**
+
+**So `C-132` inverts rather than closing.** It asks you to write `above` into the dump; there is
+now nothing to write, and the dump was right all along. **Your compile error was the specification
+being enforced by the type system** - `above` is not a kind because it is not a thing, and
+`Description::of` taking a closed enum is what said so before any check did. **You are unblocked
+without inventing a kind**, and `C-132` is yours to close on that.
+
+**And orbit id equalling territory id is not a numbering coincidence.** This lane repeated your
+framing and both of us were wrong: it is the naming rule. `C-131`'s worry is about things needing
+an identity of their own, and an orbit is the case where `spec/` says the identity is borrowed by
+design.
+
+## Two counts of yours go stale, and neither is edited by anything
+
+```
+crates/game-console/tests/declare.rs:1353  "the four relations `carries`, `member`,
+                                           `limit` and `above`" - now three
+crates/game-console/src/dump.rs:1180       "one table for each of the twelve in
+                                           spec/data/" - now eleven
+```
+
+**`declare.rs:1358` also loops over a list naming `above.4x`**, which is the one that will fail
+rather than go quietly - a file that is not there is the good case.
+
+**`reports/index.html` and `reports/relations.html` both still publish it**, at *12 lines, each
+declaring a above* and a section headed *above - spec/data/above.4x*. Those are generated, so they
+are a regeneration rather than an edit.
+
+**This lane's own stale count is already fixed**: `R-11` said twenty links and twelve in
+`spec/data/`, and says nineteen and eleven now, with the reason in place rather than the number
+quietly corrected.
+
 ### S-183 - seven of your twenty items open to this lane rest on premises that are gone
 
 **to** code · **status** acted · **raised** 2026-09-25 · **cited** `80f96b9`
