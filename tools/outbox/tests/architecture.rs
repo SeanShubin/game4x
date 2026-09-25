@@ -270,3 +270,186 @@ fn every_row_links_to_a_readme_that_exists() {
         broken.join("\n  ")
     );
 }
+
+/// Every `.rs` file under a directory, so a walk covers what is there rather than a list.
+///
+/// **Coverage by default**, which is this file's own argument: a crate that lands and is not
+/// written down fails `every_crate_has_a_row_and_every_row_has_a_crate` because that test
+/// iterates the workspace. Same instinct, same reason.
+fn every_rust_file(under: &Path) -> Vec<PathBuf> {
+    let mut found = Vec::new();
+    let mut stack = vec![under.to_path_buf()];
+    while let Some(at) = stack.pop() {
+        let Ok(entries) = std::fs::read_dir(&at) else {
+            continue;
+        };
+        for entry in entries.flatten() {
+            let path = entry.path();
+            let name = entry.file_name().to_string_lossy().to_string();
+            if path.is_dir() {
+                if !matches!(name.as_str(), "target" | ".git" | "node_modules") {
+                    stack.push(path);
+                }
+                continue;
+            }
+            if path.extension().and_then(|e| e.to_str()) == Some("rs") {
+                found.push(path);
+            }
+        }
+    }
+    found.sort();
+    found
+}
+
+/// Every field of `Game` that is written from outside `game-model`, and each name is derived.
+///
+/// **The names come from `pub struct Game` itself**, so a field added to the state is covered
+/// without anybody remembering to add it here - which is the same reason
+/// `every_crate_has_a_row_and_every_row_has_a_crate` iterates the workspace rather than a list.
+fn fields_of_the_game(source: &str) -> BTreeSet<String> {
+    let Some(from) = source.find("pub struct Game {") else {
+        panic!("crates/game-model/src/game.rs has no `pub struct Game`");
+    };
+    let rest = &source[from..];
+    let Some(to) = rest.find("\n}") else {
+        panic!("`pub struct Game` is not closed");
+    };
+    let mut found = BTreeSet::new();
+    for line in rest[..to].lines() {
+        let line = line.trim();
+        if let Some(rest) = line.strip_prefix("pub ")
+            && let Some((name, _)) = rest.split_once(':')
+            && !name.contains('(')
+        {
+            found.insert(name.trim().to_string());
+        }
+    }
+    found
+}
+
+/// Nothing outside `game-model` writes the game's state except a fixture.
+///
+/// # What this is, and the finding it comes from
+///
+/// **`Q-99`, from the quality lens on 2026-09-24.** `Game`'s fields are `pub`, so any crate
+/// that can read the state can also build one no transition could produce - and
+/// `Game::after` exists to be the only thing that moves it. Twenty-eight sites outside
+/// `game-model` were writing those fields.
+///
+/// **Twelve were fixtures and thirteen were the shipped path.** The fixtures are in
+/// `#[cfg(test)]` modules of `containment.rs` and `tree.rs` and are not the defect: a test
+/// building a state directly is a test, and making the fields private would redden exactly
+/// the population that is fine. **The thirteen were `crates/game-console/src/worked.rs`**,
+/// 508 lines with no test module at all, which generates the worked examples `R-7` is vetted
+/// by.
+///
+/// # What it actually cost, which is not an impossible state
+///
+/// **Nothing wrong was on disk.** `ground()` wrote `phase = Play` and `turn = 1`, which is
+/// exactly and only what `Transition::Start` does - so it *matched*. The cost is that it was
+/// a transition's body restated in another crate with nothing keeping the two in step, and
+/// five sites minted `UnitId(1)` by hand where the model mints `units.len() + 1`.
+///
+/// **The file doing it is the one whose own header argues against it**: *a written example can
+/// show behaviour the code does not have, and this repository has produced three of those in
+/// one week ... all three sat in artifacts whose purpose was hand-derivation.*
+///
+/// # Why a check here rather than private fields
+///
+/// **Privacy reddens the fixtures, which are not the problem.** The rule that is actually
+/// wanted is *the shipped path goes through the model*, and a `#[cfg(test)]` module is exactly
+/// where the exception belongs - so the predicate is the boundary rather than the visibility.
+///
+/// **Inside a test module, not merely in a file that has one.** The weaker form - *a file with
+/// no `#[cfg(test)]`* - is satisfied by adding one token test to `worked.rs`, which would
+/// change nothing and silence this.
+///
+/// # What it does not check
+///
+/// **Only `Game`'s own fields.** `Territory::deposits` is public too and is written by these
+/// same fixtures; that is a second boundary and this does not claim it. The population of
+/// files walked is asserted, so a walk that found nothing cannot pass.
+#[test]
+fn only_game_model_and_a_fixture_write_the_games_state() {
+    let model = std::fs::read_to_string(root().join("crates/game-model/src/game.rs"))
+        .expect("crates/game-model/src/game.rs");
+    let fields = fields_of_the_game(&model);
+    assert!(
+        fields.len() >= 6,
+        "only {} fields read off `pub struct Game`, so this would look for almost nothing:          {fields:?}",
+        fields.len()
+    );
+
+    let mut walked = 0;
+    let mut offences = Vec::new();
+    let mut fixtures = 0;
+    for file in every_rust_file(&root().join("crates")) {
+        let relative = file
+            .strip_prefix(root())
+            .unwrap_or(&file)
+            .to_string_lossy()
+            .replace('\\', "/");
+        // `game-model` is where the state lives and is allowed to write it.
+        if relative.starts_with("crates/game-model/") {
+            continue;
+        }
+        let source = std::fs::read_to_string(&file).expect("a rust file this walk found");
+        walked += 1;
+        // Where the test module begins, if there is one. Everything from there down is a
+        // fixture, which is the exception this rule has.
+        let tests_begin = source
+            .lines()
+            .position(|line| line.trim().starts_with("#[cfg(test)]"))
+            .unwrap_or(usize::MAX);
+
+        for (at, line) in source.lines().enumerate() {
+            let line = line.trim();
+            // A comment naming a write is not a write - which is the *quoting a thing and
+            // doing it are the same bytes* failure this repository tracks by name.
+            if line.starts_with("//") {
+                continue;
+            }
+            for name in &fields {
+                let Some(after) = line.split_once(&format!(".{name}")) else {
+                    continue;
+                };
+                let after = after.1;
+                let writes = after.starts_with(".push(")
+                    || after.starts_with(".insert(")
+                    || after.starts_with(".remove(")
+                    || after.starts_with(".clear(")
+                    || after.starts_with(".pop(")
+                    || (after.trim_start().starts_with('=')
+                        && !after.trim_start().starts_with("=="));
+                if !writes {
+                    continue;
+                }
+                if at > tests_begin {
+                    fixtures += 1;
+                } else {
+                    offences.push(format!("{relative}:{}: {line}", at + 1));
+                }
+            }
+        }
+    }
+
+    assert!(
+        walked > 40,
+        "only {walked} rust files outside `game-model` were read, so the assertions below          would be about almost nothing"
+    );
+    // **The fixtures are the population this rule deliberately allows**, and a count of zero
+    // offences means nothing beside a count of zero exceptions - there would be nothing for
+    // the predicate to have distinguished.
+    assert!(
+        fixtures > 8,
+        "only {fixtures} writes were found inside test modules, and this rule's whole content          is that those are allowed and others are not - with none of them, a clean result          would not show the predicate had run"
+    );
+    assert!(
+        offences.is_empty(),
+        "{} site(s) outside `game-model` write the game's state from the shipped path, where          `Game::after` is meant to be the only thing that moves it:
+  {}",
+        offences.len(),
+        offences.join("
+  ")
+    );
+}

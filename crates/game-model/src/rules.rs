@@ -118,10 +118,11 @@ impl Game {
                 let id = UnitId(next.units.len() as u32 + 1);
                 next.units.push(Unit::new(id, *kind, *above));
             }
-            Transition::Start => {
-                next.phase = Phase::Play;
-                next.turn = 1;
-            }
+            // **One line, and `Q-99` is why.** What this does was also written in
+            // `crates/game-console/src/worked.rs` - a transition's body restated in another
+            // crate, with nothing keeping the two in step. It is [`Game::start`] now, and
+            // both callers say it the same way because there is only one place it is said.
+            Transition::Start => next.start(),
 
             Transition::Land { kind, territory } => next.land(*kind, *territory)?,
             Transition::Launch { territory } => next.launch(*territory)?,

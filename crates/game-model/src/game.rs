@@ -9,7 +9,7 @@
 //! types, because the rules needed every one of them; the state needs four. A file that has
 //! stopped reaching for `Transition` is a file that has stopped deciding anything.
 
-use crate::identity::{Resource, TerritoryId};
+use crate::identity::{Resource, TerritoryId, UnitId, UnitKind};
 use crate::rejection::Rejection;
 use crate::territory::Territory;
 use crate::unit::{Location, Unit};
@@ -182,6 +182,76 @@ impl Game {
             units: Vec::new(),
             orbits: Default::default(),
         }
+    }
+
+    // -- constructing -------------------------------------------------------
+    //
+    // **`Q-99`: a state is built through the model, not by writing its fields from another
+    // crate.** Twenty-eight sites outside `game-model` wrote `Game`'s public fields; twelve
+    // were fixtures inside `#[cfg(test)]` and **thirteen were the shipped path** - the worked
+    // examples in `crates/game-console/src/worked.rs`, a file with no test module at all.
+    //
+    // **The cost was not an impossible state.** It was a fact stated twice with nothing
+    // keeping the two in step: `ground()` wrote `phase = Play` and `turn = 1`, which is
+    // exactly and only what [`Transition::Start`] does, and five sites minted `UnitId(1)` by
+    // hand where the model mints `units.len() + 1`. **The file that did it is the one whose
+    // own header says a hand-derived artifact can show behaviour the code does not have.**
+    //
+    // **These three keep the states byte-identical**, which is why the repair was available
+    // at all: `reports/recipes.md` is what Sean vets for `R-7`, and reaching every
+    // before-state through the transitions that produce it would have moved every example
+    // under him. What moves instead is where the knowledge lives.
+
+    /// Begin play: turn one.
+    ///
+    /// **[`Transition::Start`] is this and nothing else**, so the two cannot drift - which is
+    /// what `Q-99` found them doing across a crate boundary.
+    pub fn start(&mut self) {
+        self.phase = Phase::Play;
+        self.turn = 1;
+    }
+
+    /// Add a territory, with the empty adjacency row that has to come with it.
+    ///
+    /// **Two collections that must be the same length are two things that can disagree**, which
+    /// is what [`Game::orbits`] stopped being a `Vec` over. A caller pushing one and forgetting
+    /// the other leaves a territory nothing is adjacent to, and nothing says so.
+    pub fn place(&mut self, territory: Territory) {
+        self.territories.push(territory);
+        self.adjacency.push(Vec::new());
+    }
+
+    /// Record that two territories touch, both ways.
+    ///
+    /// **Adjacency is symmetric** - [`Game::adjacency`] says so - and a caller writing one
+    /// direction gets a border a unit can cross once.
+    pub fn join(&mut self, one: TerritoryId, other: TerritoryId) {
+        for (from, to) in [(one, other), (other, one)] {
+            if let Some(row) = self.adjacency.get_mut(from.index())
+                && !row.contains(&to)
+            {
+                row.push(to);
+            }
+        }
+    }
+
+    /// Put a unit at a territory, in the layer its kind belongs to.
+    ///
+    /// **The id is `units.len() + 1`, which is what [`Transition::AddUnitToOrbit`] computes**,
+    /// and `Q-99` found `UnitId(1)` written by hand at five sites outside the crate.
+    ///
+    /// **Which layer comes from [`Location::of`], not from the caller.** `Unit::new` puts a
+    /// unit *in the orbit above* whatever it is given - which is right for the transition it
+    /// was written for and wrong for a Pioneer - so all five of those sites followed it with
+    /// an assignment putting the unit back where it belonged. **A default that half its
+    /// callers correct is a rule stated in the callers**, and `P-549` already says which layer
+    /// an Ark is in.
+    pub fn station(&mut self, kind: UnitKind, at: TerritoryId) -> UnitId {
+        let id = UnitId(self.units.len() as u32 + 1);
+        let mut unit = Unit::new(id, kind, at);
+        unit.location = Location::of(kind, at);
+        self.units.push(unit);
+        id
     }
 
     // -- reading ------------------------------------------------------------

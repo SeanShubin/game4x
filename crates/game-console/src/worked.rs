@@ -167,8 +167,8 @@ fn beside(second_is_held: bool) -> Game {
         other.set_garrison(Some(game_model::territory::Garrison { force: 0 }));
         other.put(game_model::thing::Kind::Citizen, 1);
     }
-    game.territories.push(other);
-    game.adjacency = vec![vec![TerritoryId(2)], vec![TerritoryId(1)]];
+    game.place(other);
+    game.join(TerritoryId(1), TerritoryId(2));
     game
 }
 
@@ -187,11 +187,7 @@ pub fn examples() -> Vec<Example> {
             case: None,
             before: || {
                 let mut game = ground(&[(Resource::Food, 3, 4), (Resource::Metal, 3, 4)]);
-                game.units.push(game_model::Unit::new(
-                    game_model::UnitId(1),
-                    game_model::UnitKind::Ark,
-                    TerritoryId(1),
-                ));
+                game.station(game_model::UnitKind::Ark, TerritoryId(1));
                 game
             },
         },
@@ -266,13 +262,7 @@ pub fn examples() -> Vec<Example> {
             case: Some("moving spends one energy where it stood and leaves the unit not ready"),
             before: || {
                 let mut game = beside(true);
-                let mut unit = game_model::Unit::new(
-                    game_model::UnitId(1),
-                    game_model::UnitKind::Pioneer,
-                    TerritoryId(1),
-                );
-                unit.location = game_model::Location::On(TerritoryId(1));
-                game.units.push(unit);
+                game.station(game_model::UnitKind::Pioneer, TerritoryId(1));
                 // **The place pays, so the place has to have it** - `S-150`. `move`'s
                 // `consume 1 energy` row names `$from`, and this example used to run on the
                 // pioneer's own tank.
@@ -305,13 +295,7 @@ pub fn examples() -> Vec<Example> {
                         density: 4,
                     },
                 );
-                let mut unit = game_model::Unit::new(
-                    game_model::UnitId(1),
-                    game_model::UnitKind::Pioneer,
-                    TerritoryId(2),
-                );
-                unit.location = game_model::Location::On(TerritoryId(2));
-                game.units.push(unit);
+                game.station(game_model::UnitKind::Pioneer, TerritoryId(2));
                 game
             },
         },
@@ -383,16 +367,9 @@ pub fn examples() -> Vec<Example> {
                     game_model::Territory::empty(TerritoryId(2), game_model::Biome::Grassland);
                 hungry.set_garrison(Some(game_model::territory::Garrison { force: 0 }));
                 hungry.put(Kind::Citizen, 1);
-                game.territories.push(hungry);
-                game.adjacency = vec![vec![TerritoryId(2)], vec![TerritoryId(1)]];
-
-                let mut starving = game_model::Unit::new(
-                    game_model::UnitId(1),
-                    game_model::UnitKind::Pioneer,
-                    TerritoryId(2),
-                );
-                starving.location = game_model::Location::On(TerritoryId(2));
-                game.units.push(starving);
+                game.place(hungry);
+                game.join(TerritoryId(1), TerritoryId(2));
+                game.station(game_model::UnitKind::Pioneer, TerritoryId(2));
                 game
             },
         },
@@ -474,13 +451,7 @@ pub fn examples() -> Vec<Example> {
             case: None,
             before: || {
                 let mut game = founded(&[], &[]);
-                let mut ark = game_model::Unit::new(
-                    game_model::UnitId(1),
-                    game_model::UnitKind::Ark,
-                    TerritoryId(1),
-                );
-                ark.location = game_model::Location::Orbit(TerritoryId(1));
-                game.units.push(ark);
+                game.station(game_model::UnitKind::Ark, TerritoryId(1));
                 game
             },
         },
@@ -490,8 +461,11 @@ pub fn examples() -> Vec<Example> {
 /// Ground with one resource, and nothing on it.
 fn ground(offers: &[(Resource, u32, u32)]) -> Game {
     let mut game = Game::new();
-    game.phase = game_model::Phase::Play;
-    game.turn = 1;
+    // **`Q-99`: this wrote `phase` and `turn` directly, which is `Transition::Start`'s body
+    // restated in another crate.** Nothing kept the two in step, and this file's own header
+    // is the argument against exactly that - *a written example can show behaviour the code
+    // does not have*. `Game::start` is now the one place it is said.
+    game.start();
     let mut place = game_model::Territory::empty(TerritoryId(1), game_model::Biome::Grassland);
     for (resource, capacity, density) in offers {
         place.deposits.insert(
@@ -502,7 +476,6 @@ fn ground(offers: &[(Resource, u32, u32)]) -> Game {
             },
         );
     }
-    game.territories.push(place);
-    game.adjacency.push(Vec::new());
+    game.place(place);
     game
 }
