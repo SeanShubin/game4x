@@ -21,9 +21,7 @@
 use std::collections::BTreeMap;
 use std::path::PathBuf;
 
-#[path = "../tests/common/friendly.rs"]
-#[allow(dead_code)]
-mod friendly;
+use friendly_notation as friendly;
 
 use friendly::Names;
 use thin_engine::notation::{Row, read};

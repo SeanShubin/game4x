@@ -31,9 +31,7 @@ use std::path::PathBuf;
 
 // **Only two of the translator's entry points are used here**, and the rest are the test
 // suite's - so this compilation unit sees them as dead where the tests do not.
-#[path = "../tests/common/friendly.rs"]
-#[allow(dead_code)]
-mod friendly;
+use friendly_notation as friendly;
 
 use friendly::Names;
 use thin_engine::notation::{Row, read};

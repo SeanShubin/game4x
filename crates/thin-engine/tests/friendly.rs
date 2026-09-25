@@ -4,8 +4,8 @@
 //! why it may name anything it likes and why `data/engine.4x` does not grow a word for it.
 
 mod common;
-use common::friendly::{Change, Names, compared};
 use common::{game_rows, rows};
+use friendly_notation::{Change, Names, compared};
 use thin_engine::notation::Row;
 use thin_engine::schema::Schema;
 
@@ -117,7 +117,7 @@ fn every_file_survives_the_round_trip() {
     script.extend(
         rows("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x")
             .into_iter()
-            .zip(common::friendly::in_a_section(&rows(
+            .zip(friendly_notation::in_a_section(&rows(
                 "data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x",
             )))
             .filter(|(_, section)| !section)
@@ -139,7 +139,7 @@ fn every_file_survives_the_round_trip() {
     {
         let file = file.as_str();
         let these = rows(file);
-        let mine = common::friendly::in_a_section(&these);
+        let mine = friendly_notation::in_a_section(&these);
         for (at, row) in these.iter().enumerate() {
             let row = row.clone();
             let names = if file.ends_with("script.4x")

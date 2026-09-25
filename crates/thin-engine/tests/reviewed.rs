@@ -26,9 +26,12 @@ use std::path::Path;
 /// **The comparison lives in the example and the gate borrows it**, so the page and the suite
 /// cannot disagree about what drift is. `review-web.rs` includes the same file the same way.
 ///
-/// **And `mod common` is not here, which is not a style choice.** `report.rs` reaches
-/// `tests/common/friendly.rs` by path, so a file that loads both sees it twice and clippy's
-/// `duplicate_mod` fails the gate, which runs `-D warnings`. **Nothing here needs `common`** -
+/// **And `mod common` is not here, which is not a style choice.** It used to be that
+/// `report.rs` reached `tests/common/friendly.rs` by path, so a file that loads both saw it
+/// twice and clippy's `duplicate_mod` failed the gate, which runs `-D warnings`. **`R-12`
+/// removed that hazard rather than this line working around it**: the translator is
+/// `friendly-notation` now, a crate, and a crate cannot be included twice. **Nothing here needs
+/// `common`** -
 /// the two directories come from `report` itself, which is where they should have come from
 /// anyway: `tests_at` and `records_at` exist so the move is spelled once.
 #[path = "../examples/report.rs"]

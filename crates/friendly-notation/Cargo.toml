@@ -1,0 +1,28 @@
+# The translator between the engine's notation and the one a person writes.
+#
+# **A crate rather than a module of `thin-engine`, and the engine's own checks are why.**
+# `tests/isolation.rs` asserts that `src/` holds eight modules, that none of them reads a file or
+# depends on another crate, and that none names a noun the game has. **This names game nouns by
+# design** - a scout, a territory, a place - so it could never have lived there.
+#
+# **And a crate rather than a file included with `#[path]`, which is what it was.**
+# `examples/report.rs` and `examples/review-web.rs` reached it that way, so the direction was
+# right by coincidence of syntax rather than by structure. `review-web.rs` is the review
+# application, and `CLAUDE.md` puts that beyond every lane it judges: **a record's meaning must
+# not be able to change because a rendering changed.** A dependency cannot point backwards; a
+# file include has no direction at all.
+#
+# **It depends on `thin-engine` and `thin-engine` does not depend on it.** That crate's manifest
+# says its empty `[dependencies]` is deliberate - Sean: *I don't want any dependencies or
+# assumptions creeping in from existing code, even the notation* - and this does not change it.
+# What that crate gains is a **dev-dependency**, which is what its tests and examples already had
+# in substance when the translator was a `mod` under `tests/`.
+
+[package]
+name = "friendly-notation"
+version.workspace = true
+edition.workspace = true
+publish = false
+
+[dependencies]
+thin-engine = { path = "../thin-engine" }

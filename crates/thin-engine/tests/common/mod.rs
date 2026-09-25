@@ -8,8 +8,6 @@
 // **Each test binary compiles this whole module**, so a helper only one file uses is dead code in
 // the others. That is how `mod common` works in Rust and not a sign of an unused helper.
 
-pub mod friendly;
-
 use std::path::PathBuf;
 
 use thin_engine::engine::Game;

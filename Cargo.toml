@@ -12,6 +12,7 @@ members = [
     "crates/game-globe",
     "crates/game-inspect",
     "crates/thin-engine",
+    "crates/friendly-notation",
     "crates/sphere-tessellation",
     "crates/graph-coloring",
     "crates/planet-model",

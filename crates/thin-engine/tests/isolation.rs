@@ -67,15 +67,53 @@ fn nothing_in_src_reads_a_file_or_depends_on_another_crate() {
     );
 
     // **A path dependency would not show up above**, so the manifest is checked too.
+    //
+    // **This read everything after `[dependencies]` and asserted it was empty**, which was the
+    // same answer as *the engine depends on nothing* only for as long as that table happened to
+    // be last in the file. `R-12` added a `[dev-dependencies]` table after it - the translator,
+    // which the tests and examples already used as a `mod` - and the check went red on a
+    // manifest whose `[dependencies]` was still empty.
+    //
+    // **The instrument answered *is there any text after this header* and the sentence claimed
+    // *does the engine depend on anything*.** It now reads the table rather than the rest of the
+    // file: from that header to the next one, and every line in between.
+    //
+    // **A dev-dependency is deliberately allowed and this says so rather than ignoring it.**
+    // Nothing it names is compiled into the engine, and `src/` is still checked above for
+    // depending on no crate at all - which is the property, and is the one a `use` would break.
     let manifest = std::fs::read_to_string(mine().join("Cargo.toml")).expect("the manifest");
-    let after = manifest
-        .split_once("[dependencies]")
+    let table = manifest
+        .split_once(
+            "
+[dependencies]",
+        )
         .expect("a dependencies table, even an empty one")
         .1;
-    assert_eq!(
-        after.trim(),
-        "",
-        "the prototype depends on nothing, and this says `{after}`"
+    let table = match table.split_once(
+        "
+[",
+    ) {
+        Some((inside, _)) => inside,
+        None => table,
+    };
+    let depends: Vec<&str> = table
+        .lines()
+        .map(str::trim)
+        .filter(|line| !line.is_empty() && !line.starts_with('#'))
+        .collect();
+    assert!(
+        depends.is_empty(),
+        "the engine depends on nothing, and its `[dependencies]` says {depends:?}"
+    );
+
+    // **And the table is found rather than assumed**, so a manifest that stopped having one
+    // would fail here rather than pass by finding nothing to complain about.
+    assert!(
+        manifest.contains(
+            "
+[dependencies]"
+        ),
+        "the manifest has no `[dependencies]` table, so the check above ran over nothing"
     );
 }
 

@@ -10,7 +10,7 @@
 //! friendly one back.
 
 mod common;
-use common::friendly::{self, Names};
+use friendly_notation::{self as friendly, Names};
 
 use common::{mine, rows};
 

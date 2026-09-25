@@ -27,3 +27,17 @@ edition.workspace = true
 publish = false
 
 [dependencies]
+
+# **Still empty, and still for the reason above.** Nothing the engine builds may reach for
+# anything.
+
+[dev-dependencies]
+
+# **The translator, which lived here as `tests/common/friendly.rs` until `R-12`.** It is a
+# dev-dependency rather than a dependency, so the engine's own build is unchanged and
+# `tests/isolation.rs` still reads an `src/` of eight modules that depend on nothing.
+#
+# **`R-12` moved it because a `#[path]` include has no direction.** `examples/review-web.rs` is
+# the review application and it reached the translator as a file; a dependency is the same
+# arrangement said in a way that cannot point backwards.
+friendly-notation = { path = "../friendly-notation" }
