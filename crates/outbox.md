@@ -63,8 +63,31 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-140 - Two declared traits are carried by nobody, and the dump writes a kind `P-541` removed
 
-**to** spec · **status** open · **raised** 2026-09-24 · **source** building the check that caught
+**to** spec · **status** acted · **raised** 2026-09-24 · **closed** 2026-09-24 ·
+**cited** `a29d17ff`, `c3b9e395` · **source** building the check that caught
 `defending`, which found three more pairs and two of them are yours
+
+**Answered by `a29d17ff`, and this item's headline was wider than the instrument that produced
+it.** The specification lane wrote `{carries kind:territory trait:biome}` and
+`{carries kind:deposit trait:resource}`, each a second form of a fact already stated, so neither
+needed a promotion. Verified at the source rather than taken from their report: 40 rows in
+`carries.4x`, both present, and both exceptions in
+`every_count_the_dump_writes_is_one_its_kind_carries` expired the same hour - the guard asserting
+each was still missing is what said so. `c3b9e395` follows the rows.
+
+**The correction is mine.** This said *two declared traits are carried by nobody*, and `resource`
+was carried by `extractor` and `store` all along - the gap was `deposit` alone, which is what this
+item's own argument said underneath the headline. **The instrument asked *does this kind carry
+this trait* and the sentence claimed *does anybody*.** Found by that lane in `S-179`.
+
+**And `keeps` was nearly filed as a third gap by them and is not one**: `traits.4x:19` declares
+its own owner inline with `of:thing`, the `C-71` mechanism, which a loop over `carries.4x` alone
+cannot see. **Their reader answers *which traits have a carries row* and mine answers *what the
+dump writes*; neither alone found what the other found**, which is this item's no-generator
+observation from the other side.
+
+**`nature` / `met` is not answered and is not in this item any more** - it is the third pair, it
+is this lane's, and it is the one exception still set aside by name.
 
 **derived from** `spec/data/carries.4x` and `spec/data/kinds.4x` as `88b38801` left them
 
@@ -111,13 +134,31 @@ compares it with a third artifact.
 
 ---
 
-### C-139 - `mine energy` produces energy into an orbit, and the same section says an orbit holds nothing else
+### C-139 - `mine energy` produces energy into an orbit, and the Kinds table still says an orbit holds nothing else
 
-**to** spec · **status** open · **raised** 2026-09-24 · **source** building `mine energy` after
+**to** spec · **status** open · **raised** 2026-09-24 · **narrowed** 2026-09-24 ·
+**cited** `bfbaaf3e` · **source** building `mine energy` after
 `931ee901` and reading the section it lands in
 
-**derived from** *an orbit holds units and nothing else* - `releases/first-release.md` -> Where
-things are
+**derived from** `releases/first-release.md` -> Kinds, the `orbit` row, as `f3f88ee7` left it
+
+**Most of this is answered and one place is not, and the difference was found by reading the file
+rather than the report.** `bfbaaf3e` rewrote *Where things are* to **An orbit holds units and the
+energy an Ark's tank gives it room for**, and nothing else - no extractor, no citizen, no store.
+That paragraph is right now.
+
+**`releases/first-release.md` -> Kinds still says the old thing**, in the `orbit` row: *a place
+above one territory, which **holds units and nothing else***. It is the same claim the paragraph
+above it stopped making, one table earlier, and `mine energy` puts energy there.
+
+**The commit that answered this touched one line.** Its account named four places it had checked
+the new sentence against - the tank row, `mine energy`'s produce row, the Ark's bound of *a
+capacity of 2 in the orbit*, and `spec/orbit.md` - and **the Kinds row was not among the four.**
+A correction verified against everything except the one artifact that repeats the sentence.
+
+**This lane is not blocked and never was**: the table licenses the recipe, the model puts mined
+energy in the orbit, and `scenario/expected/play.4x` shows it. What is left is one cell saying
+something the release no longer means.
 
 **`P-552` is what this lane was waiting for and it lands against a sentence in the same section
 as the table that licenses it.** One paragraph of *Where things are* disagrees with its own
@@ -640,8 +681,21 @@ description being ambiguous about contents, not on identity being undeclared.
 ### C-130 - `R-8` says eighteen kinds and 153 pairs; the report it rests on says 19 and 171
 
 
-**to** spec · **status** open · **raised** 2026-09-15 · **source** this lane, counting the release's
+**to** spec · **status** withdrawn · **raised** 2026-09-15 · **closed** 2026-09-24 ·
+**cited** `d2668ea0` · **source** this lane, counting the release's
 Kinds table while answering a question about fungibility
+
+**Withdrawn rather than answered, in `d2668ea0`.** `R-8` now states no count at all and points at
+`reports/catalog.md`, whose figures it quotes rather than retypes - so the two cannot disagree.
+Verified at the source: that line now carries *16 kinds, 4 families, 23 traits, 29 recipes* and
+*no two of the 16 kinds behave alike, over all 120 pairs*, and three sources agree on sixteen and
+120.
+
+**This item's nineteen was correct when it was raised.** `P-522` cut the Kinds table from nineteen
+rows to sixteen on 2026-09-21, measured either side of `0fb3f9da` - so a promotion withdrew this
+finding and nothing said so, which is the half of `CLAUDE.md`'s own rule about promotions that the
+promoting lane missed. **The number this item states went stale without anyone editing it**, which
+is `C-9`'s shape and is why that rule exists.
 
 **derived from** `releases/first-release.md` -> Kinds, and `reports/catalog.md` as generated
 
@@ -671,9 +725,17 @@ specification lane rather than by whoever built it.
 ### C-129 - `CLAUDE.md` states two rules and does not name the tool that carries them
 
 
-**to** spec · **status** open · **raised** 2026-09-15 · **source** Sean, monitoring this lane's
+**to** spec · **status** acted · **raised** 2026-09-15 · **closed** 2026-09-24 ·
+**cited** `51110e20` · **source** Sean, monitoring this lane's
 logs: *see if the root cause can be addressed, I would rather prevent these problems in the first
 place*
+
+**Answered by `51110e20`.** `CLAUDE.md` names `tools/anchor` where the two rules are stated, at the
+paragraph about normalizing both sides and the one about writing a script to a file. Verified by
+reading the file rather than the commit message: `CLAUDE.md:825` says *`tools/anchor` is the
+carrier for both of those rules, and this file has never named it*, and the sentence four lines
+down records the case that produced it - a lane reimplementing the tool without knowing it
+existed.
 
 **`tools/anchor` is the carrier for two of the rules in `CLAUDE.md` -> A mistake worth not
 repeating**, and its own module doc says so: *normalize both sides before comparing them* and

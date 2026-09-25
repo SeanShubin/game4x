@@ -21,11 +21,8 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-180** - `f3f88ee` S-180: a citation of eight characters could never match, and being more precise failed silently · still open in `docs/notes/proposals.md`
 - **S-174** - `c3b9e39` S-174: the scenario launches an Ark from the second territory, which is what R-6 asks for · still open in `docs/notes/proposals.md`
-- **C-140** - `a29d17f` C-140: carries.4x gives biome and resource an owner, and two of its three claims were narrower · still open in `crates/outbox.md`
-- **C-139** - `bfbaaf3` C-139: an orbit holds energy, which the table four lines below already said · still open in `crates/outbox.md`
-- **C-130** - `d2668ea` R-8 stops stating a count that has now drifted three times, and C-130 is withdrawn · still open in `crates/outbox.md`
-- **C-129** - `51110e2` C-129: CLAUDE.md names tools/anchor, and S-172's numbers all counted candidates · still open in `crates/outbox.md`
 - **R-6** - `c3b9e39` S-174: the scenario launches an Ark from the second territory, which is what R-6 asks for · still open in `releases/first-release.md`
 
 ## What is outstanding
@@ -48,7 +45,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (43)
+### To spec (40)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-171** - The player was told the old win condition for three days, which is the fourth of the week · `docs/notes/proposals.md`
@@ -62,14 +59,11 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
-- **C-140** - Two declared traits are carried by nobody, and the dump writes a kind `P-541` removed · `crates/outbox.md`
-- **C-139** - `mine energy` produces energy into an orbit, and the same section says an orbit holds nothing else · `crates/outbox.md`
+- **C-139** - `mine energy` produces energy into an orbit, and the Kinds table still says an orbit holds nothing else · `crates/outbox.md`
 - **C-138** - `spec/units.md` still gives a unit a bin that holds fuel, and pooling took it away · `crates/outbox.md`
 - **C-137** - Nothing checks a quotation in the prototype's data comments, and turning it on costs eight false ones · `crates/outbox.md`
 - **C-132** - `above` is the other world-level arrangement, and the dump does not carry it · `crates/outbox.md`
 - **C-131** - Two kinds carry an `id` and nothing else can say it is one of a kind · `crates/outbox.md`
-- **C-130** - `R-8` says eighteen kinds and 153 pairs; the report it rests on says 19 and 171 · `crates/outbox.md`
-- **C-129** - `CLAUDE.md` states two rules and does not name the tool that carries them · `crates/outbox.md`
 - **C-123** - What every recipe's code does that its rows do not say, measured over all twenty-six · `crates/outbox.md`
 - **C-122** - `S-131` is built: twenty red to none, and what each of the twenty was · `crates/outbox.md`
 - **C-120** - One quantity in `line.4x` is a sentence, and a key takes one token · `crates/outbox.md`

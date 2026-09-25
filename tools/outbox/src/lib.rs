@@ -265,13 +265,37 @@ pub fn parse(text: &str, outbox: &str) -> Vec<Item> {
         // index rather than report it empty - silently, because a file that parses to
         // nothing and a file with nothing in it look identical from here. The next person
         // to change an outbox's format needs to know that before they do it.
-        let Some(fields) = lines[at + 1..]
+        //
+        // **The address is a block of lines, not one line, and reading one line lost data.**
+        // `S-181`: an addressing block wraps as soon as it carries four or five fields, and
+        // 237 of this repository's 466 items wrap - so a `**cited**` field that began on the
+        // second line was **invisible**, and 23 items were carrying one. The failure is
+        // `S-180`'s twin: a hash recorded correctly had no effect, and no effect is what the
+        // tool also shows for a hash nobody recorded.
+        //
+        // **The block is the run of non-blank lines**, joined with a space, because that is
+        // what a wrap is - every outbox here puts a blank line between the address and the
+        // prose under it, and `an_addressing_block_is_read_whole_however_it_wraps` asserts
+        // both that the blocks which wrap are found and how many of them there are.
+        let Some(first) = lines[at + 1..]
             .iter()
-            .find(|line| !line.trim().is_empty())
-            .filter(|line| line.trim_start().starts_with("**to**"))
+            .position(|line| !line.trim().is_empty())
+            .map(|found| at + 1 + found)
+            .filter(|found| lines[*found].trim_start().starts_with("**to**"))
         else {
             continue;
         };
+        let last = lines[first..]
+            .iter()
+            .position(|line| line.trim().is_empty())
+            .map(|found| first + found)
+            .unwrap_or(lines.len());
+        let block = lines[first..last]
+            .iter()
+            .map(|line| line.trim())
+            .collect::<Vec<&str>>()
+            .join(" ");
+        let fields = block.as_str();
         let Some(to) = field(fields, "to") else {
             continue;
         };
@@ -291,7 +315,7 @@ pub fn parse(text: &str, outbox: &str) -> Vec<Item> {
                 "
 ",
             ),
-            fields: (*fields).to_string(),
+            fields: block.clone(),
             derived_from: derived_from(&lines[at..ends]),
             cited: considered(fields),
         });
@@ -1999,6 +2023,96 @@ end - `spec/turn.md`, `P-100`
             widths.contains(&7) && widths.contains(&8),
             "the citations in this repository are {widths:?}, and `S-180` was about seven and              eight disagreeing - if only one width is left, this check has stopped covering it"
         );
+    }
+
+    /// An addressing block is read whole, however many lines it wraps across.
+    ///
+    /// # The check that would have failed before this
+    ///
+    /// **`S-181`, and it is `S-180`'s twin found by fixing `S-180`.** The address was read as
+    /// **one line** - the first non-blank line after the heading - so a `**cited**` field that
+    /// began on the second line was invisible. An addressing block wraps as soon as it carries
+    /// four or five fields, which most of them do.
+    ///
+    /// **The same failure signature**: a hash recorded correctly had no effect, and no effect
+    /// is what the tool also shows for a hash nobody recorded. Recording it in the right place
+    /// and in the right form still did nothing, and nothing said so.
+    ///
+    /// **It was found on the first use.** `S-180`'s repair made an eight-character citation
+    /// match, so this lane wrote four of them while closing `C-129`, `C-130` and `C-140` - and
+    /// three of the four items went quiet while `C-139`'s did not. **The one that did not was
+    /// the one whose `cited` had wrapped onto a second line.**
+    ///
+    /// # What is asserted, and why a count of wrapping blocks rather than a property
+    ///
+    /// **Over the real outboxes**, because the defect is about how these files are actually
+    /// written and a fixture would have been written to suit the parser. Three numbers:
+    ///
+    /// - how many items parse at all, so a parser that had stopped finding any would fail
+    ///   rather than satisfy everything below
+    /// - **how many addressing blocks wrap**, which is the population the one-line reader was
+    ///   losing. If this falls to zero the check has stopped covering anything, and the
+    ///   assertion says so rather than passing
+    /// - **how many items yield a citation the first line alone does not**, which is the data
+    ///   the old reader lost. This is asserted non-zero rather than asserted absent: the fix
+    ///   is that such an item is read correctly, **not that nobody may write one** - a check
+    ///   demanding the workaround would forbid a legal layout and call it a repair
+    #[test]
+    fn an_addressing_block_is_read_whole_however_it_wraps() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+        let all = read(&root);
+        assert!(
+            all.items.len() > 300,
+            "only {} items parsed, so the counts below would be about almost nothing",
+            all.items.len()
+        );
+
+        let mut wrapped = 0;
+        let mut recovered = Vec::new();
+        for item in &all.items {
+            let text = std::fs::read_to_string(root.join(&item.outbox)).expect("its outbox");
+            // The single line the block began on, found by being a prefix of the joined block.
+            let Some(first) = text
+                .lines()
+                .map(str::trim)
+                .filter(|line| line.starts_with("**to**"))
+                .find(|line| item.fields.starts_with(*line))
+            else {
+                continue;
+            };
+            if first.len() == item.fields.len() {
+                continue;
+            }
+            wrapped += 1;
+            // **What the one-line reader would have had, against what this one has.**
+            let alone = considered(first);
+            if item.cited.len() > alone.len() {
+                recovered.push((
+                    item.id.clone(),
+                    item.cited.len() - alone.len(),
+                    item.cited.clone(),
+                ));
+            }
+        }
+
+        assert!(
+            wrapped > 100,
+            "only {wrapped} addressing blocks wrap, and the one-line reader lost exactly those              - if this has fallen to nothing, this check no longer covers anything"
+        );
+        assert!(
+            !recovered.is_empty(),
+            "no item yields a citation its first line does not, so this repository can no              longer demonstrate what `S-181` repaired - the check has stopped covering it"
+        );
+        // **Every recovered hash is hash-shaped**, so widening the read has not started
+        // taking prose for a citation. The count of items is in the message either way.
+        for (id, gained, cited) in &recovered {
+            assert!(
+                cited
+                    .iter()
+                    .all(|hash| hash.len() >= 7 && hash.chars().all(|c| c.is_ascii_hexdigit())),
+                "{id} gained {gained} citation(s) from its continuation lines and one of                  {cited:?} is not a hash"
+            );
+        }
     }
 
     /// `C-1` must not be settled by a commit about `C-12`.
