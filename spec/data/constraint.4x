@@ -2,6 +2,8 @@
 {constraint block:move seq:4 trait:moving compare:one-less}
 {constraint block:create-labor seq:1 trait:laboring compare:at-least n:1}
 {constraint block:create-labor seq:2 trait:laboring compare:one-less}
+{constraint block:mine-energy seq:2 trait:working compare:at-least n:1}
+{constraint block:mine-energy seq:3 trait:working compare:one-less}
 {constraint block:work seq:2 trait:working compare:at-least n:1}
 {constraint block:work seq:3 trait:working compare:one-less}
 {constraint block:upkeep seq:3 trait:paid compare:at-maximum}

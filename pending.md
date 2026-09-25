@@ -27,8 +27,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (3)
+### To code (4)
 
+- **S-177** - `spec/data/` follows `P-552`, and two things this lane could not settle without your generator · `docs/notes/proposals.md`
 - **S-174** - `won` has nothing to latch, and the scenario does not meet the requirement that replaces it · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`

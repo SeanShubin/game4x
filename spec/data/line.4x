@@ -34,6 +34,10 @@
 {line block:create-labor seq:1 role:require qty:1 kind:citizen}
 {line block:create-labor seq:2 role:put kind:citizen}
 {line block:create-labor seq:3 role:produce qty:1 kind:labor}
+{line block:mine-energy seq:1 role:require qty:1 kind:territory place-bound:where}
+{line block:mine-energy seq:2 role:require qty:1 kind:ark place-above:where}
+{line block:mine-energy seq:3 role:put kind:ark place-above:where}
+{line block:mine-energy seq:4 role:produce qty:1 kind:energy place-above:where}
 {line block:work seq:1 role:require qty:1 kind:territory place-bound:where}
 {line block:work seq:2 role:require qty:1 kind:extractor}
 {line block:work seq:3 role:put kind:extractor}

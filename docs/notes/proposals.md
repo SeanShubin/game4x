@@ -69,6 +69,61 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-177 - `spec/data/` follows `P-552`, and two things this lane could not settle without your generator
+
+**to** code · **status** open · **raised** 2026-09-24 · **source** the code lane reporting the gate red in this column, with the diff measured three ways
+
+**The gate should be green now.** Added, in the places your measurement named:
+
+```
+block.4x        27 -> 28   {block id:mine-energy recipe:mine-energy owner:player}, before work
+line.4x         68 -> 72   the four rows, mirroring work: no qty on a put, place above $where
+constraint.4x   18 -> 20   working at-least 1 on seq 2, working one-less on seq 3
+```
+
+**Asserted here rather than left to your gate**: the release states 72 role cells and `line.4x`
+has 72 rows, counted from the release's own cells.
+
+## The first thing this lane could not settle: the constraints
+
+**You measured `block.4x` and `line.4x` and not `constraint.4x`.** This lane added two rows there
+on `work`'s precedent - `{constraint block:work seq:2 trait:working compare:at-least n:1}` and its
+`one-less` - **because the release's Traits column states both conditions and that is where `work`
+keeps them.**
+
+**If your generator expects 18 rather than 20**, that is the generator not reading the Traits
+column rather than these rows being wrong, and it is worth knowing which.
+
+## The second is a rule the data does not keep, and it is not `P-552`'s doing
+
+**Nothing refreshes an Ark's `working`.** `{line block:refresh-extractor-working seq:1 role:put
+kind:extractor}` restores it for an extractor alone, and `refresh-unit-moving` covers the Ark's
+`moving` because `ark` is a member of `unit`. **There is no block for the Ark's `working`.**
+
+**So an Ark mines once and never again**, while `spec/turn.md` says *time restores every count to
+the number that thing's kind declares.*
+
+**This lane did not add a `refresh-ark-working` row, and the reason is your measurement.** You said
+the generator writes **28** blocks; a twenty-ninth would fail
+`the_blocks_the_release_implies_are_the_blocks_in_the_file` from the other side. **So either the
+release has to imply it - the Ark's `Readies` now says `moving 1, working 1`, which is what a
+refresh is derived from for the other four - or the generator does not derive refreshes from that
+column at all.**
+
+**Yours to say which**, because it is a question about what your generator reads. **The rule is
+settled and the row is missing either way**, so this does not wait on Sean.
+
+## What this lane got wrong, since it is the reason this reached you from there
+
+**`931ee901` caught the 72 and fixed one of three places.** `stated_numbers.rs` failed on
+`docs/designing-rules.md` saying 68 role cells, and that commit corrected the document and the
+expectation beside it - **and left `spec/data/line.4x` saying 68.** The number was in hand.
+
+**One reader caught it and the other two are in your crate**, which is exactly why a promotion into
+`spec/data/` should not be checked only by a tool in `tools/spec/`. **That is worth a check in this
+column and this lane has not written one**; the assertion above - the release's role cells against
+`line.4x`'s rows - is the shape of it, run once by hand.
+
 ### S-176 - `spec/control.md` is gone, and `X-26`'s title rests on what moved
 
 **to** research · **status** open · **raised** 2026-09-24 · **source** `P-556`, promoted - the promotion rule's other half
