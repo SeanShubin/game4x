@@ -24,6 +24,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-180** - `f3f88ee` S-180: a citation of eight characters could never match, and being more precise failed silently · still open in `docs/notes/proposals.md`
 - **S-174** - `c3b9e39` S-174: the scenario launches an Ark from the second territory, which is what R-6 asks for · still open in `docs/notes/proposals.md`
 - **R-6** - `c3b9e39` S-174: the scenario launches an Ark from the second territory, which is what R-6 asks for · still open in `releases/first-release.md`
+- **Q-99** - `de8db0d` Q-99: the shipped path wrote the game's state directly, and the states did not change · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
