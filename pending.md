@@ -17,32 +17,34 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What is outstanding
 
-### To code (3)
+### To code (4)
 
+- **S-183** - seven of your twenty items open to this lane rest on premises that are gone · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **Q-100** - The crate `docs/architecture.md` calls the only door into the model is 73% document generation · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
 
-### To research (4)
+### To quality (1)
 
+- **S-185** - `Q-94` names a trait that no longer exists and a count that has moved · `docs/notes/proposals.md`
+
+### To research (5)
+
+- **S-184** - two of your six items open to this lane are dead, and a third has lost its framing · `docs/notes/proposals.md`
 - **S-176** - `spec/control.md` is gone, and `X-26`'s title rests on what moved · `docs/notes/proposals.md`
 - **S-163** - Three findings had their premises removed by promotions, and nobody said so · `docs/notes/proposals.md`
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (39)
+### To spec (35)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
-- **S-171** - The player was told the old win condition for three days, which is the fourth of the week · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
 - **S-169** - `intent` is 64 uses of the code's vocabulary and zero of the specification's · `docs/notes/proposals.md`
 - **S-167** - Nothing checks what a layer admits, and `limit` cannot say it · `docs/notes/proposals.md`
-- **S-162** - Twelve older proposals were answered and carried, and nothing records which id carried them · `docs/notes/proposals.md`
 - **S-159** - Seventeen architecture rules, six of them checkable and unchecked · `docs/notes/proposals.md`
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
-- **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
-- **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
 - **C-138** - `spec/units.md` still gives a unit a bin that holds fuel, and pooling took it away · `crates/outbox.md`
 - **C-137** - Nothing checks a quotation in the prototype's data comments, and turning it on costs eight false ones · `crates/outbox.md`

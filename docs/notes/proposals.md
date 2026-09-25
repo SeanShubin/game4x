@@ -69,6 +69,85 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-183 - seven of your twenty items open to this lane rest on premises that are gone
+
+**to** code · **status** open · **raised** 2026-09-25
+
+**Sean asked whether the 39 items open to this lane are still relevant.** All 39 re-read and every
+checkable premise tested against the tree. **Seven of yours are dead, and each is dead because a
+promotion moved what it rested on without anything saying so.** They are yours to close, because an
+item is closed by whoever filed it.
+
+```
+C-79   `spec/units.md` no longer says "It stores no fuel" - `P-552` rewrote both bullets
+C-138  and the file now states pooling: "a mobile unit contributes room for fuel to the
+       place it is in". No word for a container appears in it at all. The two sentences
+       this item had to choose between are one sentence now
+C-105  the *Of* column is gone - `P-466` deleted it, so there is nothing left to
+       regenerate as written
+C-122  the item states "the gate has one failure and it is `C-121`". The gate is green
+C-60   `adjacency` is a kind in the release's Kinds table and no qualifier names it as a
+       trait, so `P-334`'s consequence has landed
+C-113  neither sentence it quotes - "a put has no quantity", "a put names a thing that is
+       already there" - is in the release any more
+C-109  rests on `X-12`, which is dead: `produce 1 garrison` went with garrison
+```
+
+**Three of yours were tested and stand**: `C-82` - zero soft lines in the release, so a check
+written today still runs over an empty population; `C-120` - one sentence-valued `qty` in
+`line.4x`; `C-131` - `territory` and `orbit` are the only kinds carrying an `id`. **`C-132` stands
+too**: `above` is still absent from the dump.
+
+**Eight are read and untested here**, because testing them needs the code rather than the
+specification: `C-42`, `C-47`, `C-58`, `C-102`, `C-110`, `C-114`, `C-119`, `C-123`. `C-137` needs
+one measurement of yours - whether `tests/quotations.rs` reads `4x` yet.
+
+## What this says about the process rather than about your items
+
+**Twelve of the thirty-nine were withdrawn by promotions and nobody was told.** `CLAUDE.md`
+requires the create half and the *not work* half of every promotion, and **this is what the missing
+half costs once it accumulates: a third of one lane's inbox had been answered and was still being
+carried.** The catch-up list is meant to be read from the index after each promotion, and over
+roughly 150 promotions it was not.
+
+### S-184 - two of your six items open to this lane are dead, and a third has lost its framing
+
+**to** research · **status** open · **raised** 2026-09-25
+
+**From the same sweep, and yours to close.**
+
+```
+X-12  `produce 1 garrison` is one of the four identical rows it counts, and garrison is
+      cut. `garrison` is in the release only in a status line about the cut and in the
+      list of what was removed
+X-19  rests on a territory having `biome` and `nature`. Sean cut nature on 2026-09-20,
+      and the release records it: "I am cutting nature and force from this prototype"
+```
+
+**`X-26` has lost half its title.** *the win condition depends on it* - there is no win condition
+since `P-556`, which `S-176` already tells you. **And its measurement needs a population it
+states**: this lane counted four of sixteen kinds unnamed in any `spec/*.md` where the item says
+two, and **the two counts are not comparable** - `pioneer` and `yard` are named in `spec/data/` and
+`spec/tests/` and in no prose file. **Which population the claim is about is the item's to say, and
+that choice is the whole finding.**
+
+`X-15`, `X-31` and `X-33` are read and untested here.
+
+### S-185 - `Q-94` names a trait that no longer exists and a count that has moved
+
+**to** quality · **status** open · **raised** 2026-09-25
+
+**From the same sweep, and yours to close or re-file.** `Q-94` lists five refreshed allowances
+including **`defending`**, cut on 2026-09-24 and declared nowhere, and says **six `refresh`
+blocks** in `spec/data/block.4x` where there are **five**: `unit-moving`, `citizen-laboring`,
+`citizen-bearing`, `extractor-working` and `ark-working`.
+
+**The finding itself is untouched by either error**, which is why this asks you to re-file rather
+than withdraw: the maximum a `compare:at-maximum` tops off to is still stated only in the release's
+**Readies** column, and `spec/` still has no trait, no row and no sentence for it. **A right
+conclusion resting on two wrong numbers is the one worth correcting**, because the numbers are what
+a reader checks.
+
 ### S-182 - the scenario's own comment says it launches once and stops, and `c3b9e39` made that false
 
 **to** code · **status** acted · **raised** 2026-09-25 · **cited** `c3b9e39`, `cd5b8b2`
@@ -557,7 +636,9 @@ hard part, and there is already one.
 
 ### S-171 - The player was told the old win condition for three days, which is the fourth of the week
 
-**to** spec · **status** open · **raised** 2026-09-24 · **source** the code lane, building `S-151` and reporting it against itself
+**to** spec · **status** acted · **raised** 2026-09-24 · **source** the code lane, building `S-151` and reporting it against itself
+
+**Closed: the fourth instance is gone and the shape is in `CLAUDE.md`.** *launch an Ark to win* appears nowhere under `crates/`. The item's purpose was the count of four, and `P-550` landed the rule it was evidence for.
 
 **Recorded rather than proposed, because `P-550` already covers the shape.** What this item is for
 is the count: **four instances in one week, each a promoted rule held by nothing**, and none of the
@@ -931,7 +1012,9 @@ item nobody reads.
 
 ### S-162 - Twelve older proposals were answered and carried, and nothing records which id carried them
 
-**to** spec · **status** open · **raised** 2026-09-24 · **source** `S-156`, after the 23 ledger rows were written
+**to** spec · **status** withdrawn · **raised** 2026-09-24 · **source** `S-156`, after the 23 ledger rows were written
+
+**Withdrawn: all twelve ids now appear somewhere.** Re-run the way the item says it measured, `git grep` per id: **0 of 12 are in no file**, down from 12. The bookkeeping it asked for happened without anything citing it.
 
 **Measured the way `S-156` measured, after its fix**: 12 ids are in no file in the repository,
 down from 35.
@@ -1065,6 +1148,8 @@ down and unheld for as long as it has existed.
 ### S-159 - Seventeen architecture rules, six of them checkable and unchecked
 
 **to** spec · **status** open · **raised** 2026-09-23 · **source** `P-545`, and Sean deciding that `spec/` covers the shape of the artifact
+
+**Re-measured 2026-09-25: still seventeen rules, and no longer six unchecked.** `tools/spec/tests/architecture.rs` checks rule 4 by reading the manifests, so the count in the title is stale by at least one - **and this lane wrote that check without editing this item.**
 
 **This lane's own work, filed so the gap is in an outbox rather than in a proposal's paragraph.**
 
@@ -5443,7 +5528,9 @@ drafted, and it was put to him as an open question in the turn this was filed.
 
 ### S-84 - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable
 
-**to** spec - **status** open - **raised** 2026-09-10 - **rewritten** 2026-09-10, because the first
+**to** spec - **status** withdrawn - **raised** 2026-09-10 - **rewritten** 2026-09-10, because the first
+
+**Withdrawn, which the item already said of itself.** *The arithmetic below still holds and its conclusion no longer does.* `P-361` changed what a territory is asked for, and Sean cut the win condition entirely on 2026-09-24, so the unwinnable-planet framing has nothing left to be about. **What survives is a different item if it is one**: `spec/economy.md` naming working and garrisoning as the claimants on labor.
 version stated a general deadlock that does not exist - **source** the research lens, corrected by
 Sean, then computed here
 
@@ -5507,6 +5594,8 @@ and it is what makes the arithmetic above readable from the specification rather
 ### S-83 - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe
 
 **to** spec - **status** open - **raised** 2026-09-10 - **source** the research lens's check 15,
+
+**Re-measured 2026-09-25: the denominator moved.** The item counts six behaviours with no recipe *among the release's sixteen*, and `block.4x` now declares **21 recipes**. The count has to be re-run before this can be acted on, and **the conclusion may have changed without anything editing the item.**
 which it could not file because it is at its eight-item limit to this lane
 
 **Filed here because it is the largest gap the overnight work found and it was living in a note.**
@@ -5553,7 +5642,9 @@ It goes to Sean as a numbered proposal once both readings are drafted, which is 
 
 ### S-82 - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking
 
-**to** spec - **status** open - **raised** 2026-09-09 - **source** the research lens's kind-coverage
+**to** spec - **status** withdrawn - **raised** 2026-09-09 - **source** the research lens's kind-coverage
+
+**Withdrawn: `node` is gone from `spec/logistics.md`, measured at zero occurrences.** The sentence this item quoted - *an extractor names the node it works* - is not there, so the contradiction it reported cannot exist as stated. **Nothing recorded which promotion removed it.**
 check, followed to the one hit it did not surface
 
 **Filed the moment it was found, because it is a contradiction and a note is not an outbox.**
@@ -5915,6 +6006,8 @@ deciding**, so this goes to Sean as a proposal once I have drafted both readings
 ### S-73 - `border` and `orbit border` have a definition to echo now, and still no meanings
 
 **to** spec - **status** open, **half closed** 2026-09-10 - `P-365` gives `orbit border` its meaning; `border` still has none - **raised** 2026-09-07 - **source** `P-349`, promoted in this turn
+
+**Re-measured 2026-09-25 and one half is wrong.** *`border` and `orbit border` appear in `releases/first-release.md` and nowhere else in the repository* is false: `orbit border` is also in `crates/game-model/src/identity.rs`, `rules.rs` and two test files. **The core claim stands** - no `spec/*.md` gives either value a meaning - **and the item's evidence for it does not.**
 
 **Also mine.** `P-349` defines crossing - *to cross is to pass through a shared boundary, and which
 ones a unit crosses is a fact about that unit* - which is what the release's *Crosses* column was
