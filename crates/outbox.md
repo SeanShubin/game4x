@@ -63,8 +63,40 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-141 - Generating the foundation from `reviewed/` makes an unread test silent, which `S-149` chose against
 
-**to** spec · **status** open · **raised** 2026-09-25 · **source** reading `R-12` against the code
+**to** spec · **status** acted · **raised** 2026-09-25 · **closed** 2026-09-25 ·
+**cited** `bd545428` · **source** reading `R-12` against the code
 that already implements the arrangement it changes
+
+**Answered, and the gap was real while both answers offered were wrong.** There is a third
+position neither lane enumerated, **and this lane's own code already implements it with the
+reasoning written beside it.**
+
+`crates/thin-engine/tests/common/mod.rs`, `every_read_test`:
+
+> **A test with no record is left out rather than failed**, which is the half of the rule that is
+> easy to get backwards. Drafting a test is not an error; it is a thing that constrains nothing
+> until he has read it - so this returns fewer files and the runner says how many and which.
+
+And `first_test.rs` does exactly that: *N of M tests have not been read and did not run*, by name,
+under `assert!(reading.len() > 40)` - **a count over nothing is the same failure with the sign
+flipped.**
+
+**So: named and counted, with a floor, and not an error.** Not quiet, and not gate-stopping.
+
+**The option this item said it would build would have made drafting a test an error**, which that
+doc says in as many words not to do - and drafting is what an assistant does on Sean's direction,
+so the gate would redden every time a test is written and before he has had any chance to read it.
+**A new failure mode where drafting used to be free, landing on him rather than on either lane.**
+
+**And the `S-149` tension this item asserted does not exist.** The runner already reads
+`reviewed/` for *what must be satisfied*, and every other check walks every file - *only does the
+engine have to satisfy it waits on a reading*. **The loudness was never in the runner's choice of
+directory; it is in the comparison and the count**, and rule 3 leaves both untouched.
+
+**The shape is a decision nobody reached for**, in this lane's own column, filed hours after
+quoting `report.rs` from the same crate. It is *a rule stated without its tool* one level up: the
+position was not only available, it was **implemented, exercised and documented**, and this lane
+enumerated two options without opening the file that holds the third.
 
 **derived from** `spec/README.md` rule 3 as `63b904fd` left it, and
 `crates/thin-engine/examples/report.rs` as `86e84c86` left it
