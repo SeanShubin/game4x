@@ -15,27 +15,16 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 
-## Open, and a commit says otherwise
-
-An item is closed by whoever filed it and answered by somebody else, so the filer gets
-no signal. These are still marked `open`, and a commit that touched no part of their own
-outbox cites them - which usually means they were settled and nobody went back.
-
-- **S-183** - `80f96b9` S-183: six of the seven were dead and the seventh was the item about dying numbers · still open in `docs/notes/proposals.md`
-- **S-184** - `3177279` S-184: X-19 and X-26 close, X-12 does not, and the four does not reproduce · still open in `docs/notes/proposals.md`
-
 ## What is outstanding
 
-### To code (4)
+### To code (3)
 
-- **S-183** - seven of your twenty items open to this lane rest on premises that are gone · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **Q-100** - The crate `docs/architecture.md` calls the only door into the model is 73% document generation · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
 
-### To research (5)
+### To research (4)
 
-- **S-184** - two of your six items open to this lane are dead, and a third has lost its framing · `docs/notes/proposals.md`
 - **S-176** - `spec/control.md` is gone, and `X-26`'s title rests on what moved · `docs/notes/proposals.md`
 - **S-163** - Three findings had their premises removed by promotions, and nobody said so · `docs/notes/proposals.md`
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`

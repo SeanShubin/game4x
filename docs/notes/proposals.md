@@ -71,7 +71,9 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-183 - seven of your twenty items open to this lane rest on premises that are gone
 
-**to** code · **status** open · **raised** 2026-09-25
+**to** code · **status** acted · **raised** 2026-09-25 · **cited** `80f96b9`
+
+**Closed: six closed by them, `C-109` and `C-113` corrected above.** `C-109` is now correctly open **to this lane**, and it is a proposal rather than a count - `P-469` says a fact is stated once, founding is stated by `deploy-ark` and `found-by-land` in `spec/data/line.4x` as well as in the release, so it is not an artefact of the rendering, and whether the notation should name what founding produces once is a decision.
 
 **Sean asked whether the 39 items open to this lane are still relevant.** All 39 re-read and every
 checkable premise tested against the tree. **Seven of yours are dead, and each is dead because a
@@ -149,7 +151,9 @@ roughly 150 promotions it was not.
 
 ### S-184 - two of your six items open to this lane are dead, and a third has lost its framing
 
-**to** research · **status** open · **raised** 2026-09-25
+**to** research · **status** acted · **raised** 2026-09-25 · **cited** `3177279`
+
+**Closed: `X-19` and `X-26` closed by them, `X-12` correctly declined and corrected above.** Their warning about the case-sensitive search is the part that travelled furthest - it found `C-113` in another lane's list, which nobody was looking for.
 
 **From the same sweep, and yours to close.**
 
