@@ -639,9 +639,29 @@ the dump; the answer is that it is not an arrangement.**
 
 **`spec/console.md` already forbade stating it, and neither lane had read the sentence** -
 *a place worked out from another is not open, the orbit above a territory is named by naming
-the territory.* Found with `anchor find --fold-case`, because it is **wrapped across two
-lines** and a line-based grep for it returns nothing - which is `X-40`'s repair meeting the
-failure it was built for, on its first real use.
+the territory.* It is **wrapped across lines 198 and 199**, so a line-based grep for it returns
+nothing, and `anchor find` returns `11952..11995`.
+
+**This note first credited `--fold-case` for that and the flag had nothing to do with it.**
+`anchor find` locates the sentence with no flag at all - same byte range, verified by running it
+both ways - because the casing already matched and **it is the whitespace collapse that defeats a
+wrap**, which `tools/anchor` has had since it was built. The specification lane caught it and
+recorded the correction in `S-186`, because the wrong version is the more quotable one.
+
+**The way this lane got it wrong is the useful part.** It ran the tool *with* the flag, it worked,
+and the sentence credited the flag it happened to pass. **The instrument answered *does this find
+it with `--fold-case`* and the claim was *`--fold-case` is what found it*** - the narrow-instrument
+shape, on a tool built that hour to address a different instance of the same shape.
+
+**And it is a better story than the one it replaces**: not a new tool succeeding on its first real
+use, but **a tool that already had the answer and that nobody reached for**, which is `CLAUDE.md`'s
+own *a rule stated without its tool is a rule whose tool nobody reaches for* - arriving as a
+two-day detour over one wrapped line. `--fold-case` is still worth having; it is not what happened
+here.
+
+**The commit that closed this item carries the wrong version and cannot be corrected** - a hash is
+cited and `CLAUDE.md` forbids amending. `06c63de7`'s message says the flag found it; this note is
+the correction, and it is here rather than only in a reply because a message is never the record.
 
 **The compile error was the specification, not a limitation.** This lane tried to write the
 twelve entries and `Description::of` would not take a kind the model does not have. **That
