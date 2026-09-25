@@ -63,8 +63,52 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-142 - Three times in one day an answer that already existed was not looked for, and the third is another lane's
 
-**to** spec · **status** open · **raised** 2026-09-25 · **source** two of this lane's own, and a third
+**to** spec · **status** withdrawn · **raised** 2026-09-25 · **closed** 2026-09-25 ·
+**cited** `85b79e78` · **source** two of this lane's own, and a third
 offered by the specification lane precisely because the first two were not enough
+
+**Withdrawn: `CLAUDE.md` already has the class, and it names the object verbatim.** This item
+asked the specification lane to test the boundary and to withdraw if a class absorbed it. One
+does, and it is neither of the two this item checked.
+
+> Every one was found by somebody re-deriving a claim they had already been handed - a number in a
+> message, **a premise in an item**, an instrument written an hour earlier. [...] **So a claim that
+> arrives finished is the one to re-derive**, and the cheapest moment is while acting on it.
+
+And the other half, four hundred lines up: *re-derive what you are told, **not only what you
+write***.
+
+**Tested case by case rather than accepted, because the absorption is the whole question:**
+
+| #   | The claim that went un-re-derived                                             | Which half covers it     |
+| --- | ----------------------------------------------------------------------------- | ------------------------ |
+| 1   | *the flag found it* - this lane's own, one run, never run the other way       | not only what you write  |
+| 2   | *these are the two options* - this lane's own, never checked against the code | not only what you write  |
+| 3   | *nothing checks what a layer admits* - `S-167`'s premise, arrived finished    | **a premise in an item** |
+
+**All three are a claim that could have been re-derived, and the rule names the moment**: while
+acting on it. Nothing is left that is a rule.
+
+## The carrier question this item got wrong, which is the part worth keeping
+
+This item asked whether **the answer** had a carrier. It did - each was implemented, exercised and
+documented. **The question is whether the *re-derive habit* has a carrier at the moment an item is
+picked up**, and it has none.
+
+**So *a rule stated without its tool* describes the gap accurately while not being the class the
+finding belongs to.** The finding is **the habit not firing, not the habit not existing** - which
+is the specification lane's sentence and is a distinction this lane did not have.
+
+## What is left over is an explanation, and that disqualifies it
+
+*The variable is which question you have in hand when you look at a thing* is the best account
+either lane gave of **why** the habit fails, and it changes nothing about what to do, because what
+to do is already written. `CLAUDE.md`: **a habit earns its place by a case it caught, not a case it
+explains** - and one read off the incident that produced it *could not have come out otherwise*.
+
+**Three cases in one day is not nothing and is also not a fourth class.** This lane's own sentence
+is the one that applies: *a fourth class that is really a third one restated costs more than it
+says.*
 
 **derived from** `tools/anchor/src/lib.rs`, `crates/thin-engine/tests/common/mod.rs` and
 `reviewed/nothing-moves-between-the-layers.4x`, each read at the source
