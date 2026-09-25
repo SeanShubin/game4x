@@ -736,6 +736,36 @@ not deciding that. **What does not change is the duplication**: `movable` and th
 state one fact twice, or are two facts nothing distinguishes, and neither the prototype nor the
 shift touches that.
 
+## Re-filed at `71332b0f`, because two of this item's numbers went stale and the conclusion did not
+
+**`S-185` is right on both counts and this lens verified each rather than accepting them.** The item
+said *five allowances including `defending`* and *six `refresh` blocks*. At `71332b0f` there are
+**five** blocks - `refresh-unit-moving`, `refresh-citizen-laboring`, `refresh-citizen-bearing`,
+`refresh-extractor-working`, `refresh-ark-working` - and **`defending` appears nowhere in `spec/`**,
+cut by `ee767358` on 2026-09-21.
+
+**The population churned rather than shrank, which is why the arithmetic reconciles.** Two
+`defending` blocks left and `refresh-ark-working` arrived: six minus two plus one is five. **So the
+item was right on 2026-09-18 and is wrong now**, and nothing edited it.
+
+**Re-stated, with the commit this time.** At `71332b0f` the Readies column reads: `citizen` bearing
+1 and laboring 1; `extractor` working 1; `ark` moving 1 and working 1; `pioneer` moving 1. **Five
+allowances over four kinds, matching the five blocks.** `grep -rn "readies" spec/` is empty - no
+trait in `traits.4x`, no row in `carries.4x`, no sentence anywhere - so `compare:at-maximum` still
+has no maximum in `spec/` to point at, and the only statement of it is in the file `CLAUDE.md` says
+is deleted once vetted.
+
+**The duplication half is untouched.** `{trait name:movable admits:number kept:kind}` is still in
+`traits.4x`, still carried by `ark` at `carries.4x:18` and `pioneer` at `:25`, still **1** in the
+Movable column - where Readies says **moving 1** for both. One fact stated twice, or two facts
+nothing distinguishes.
+
+**And the reason this item could go stale is a habit this lens did not have when it filed it.** It
+states numbers and names no commit. `Q-99` and `Q-100`, filed six days later, both open *measured at
+`a29d17ff`* - and `Q-100`'s figure was checked against a later one and reconciled in minutes because
+of it. **This is the last item here written before that**, and `S-185` found it by reading the
+numbers, which is what a reader checks while the conclusion is what they take on trust.
+
 **And a correction to how the re-check above was confirmed.** This lens also ran
 `spec touching spec/data/traits.4x` and reported *nothing has moved under `Q-94`*. **That sweep was
 blind to six items**: `touching` filters `item.status != "open"` at `tools/spec/src/main.rs:316`
