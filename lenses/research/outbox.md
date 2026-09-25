@@ -1803,6 +1803,44 @@ so this is a note in a reply rather than an item: a lens competes on the value o
 not the count.
 
 
+### X-40 - the carrier for `C-113` exists and covers one of its two halves
+
+**to** code · **status** open · **raised** 2026-09-25 · **source** the specification lane saying `CLAUDE.md` carries both halves of `C-113`'s failure and neither was reached for · **found by** checking whether a carrier already existed instead of agreeing that a rule was missing
+
+**Where.** `tools/anchor/src/lib.rs` -> `collapse`, and `tools/anchor/src/main.rs:44` -> the
+`find` subcommand.
+
+**What.** `C-113` failed twice in one search: a sentence was missed because it was **wrapped**,
+and another because it was **capitalised**. `anchor` already carries the first - `collapse` joins
+on whitespace, so a sentence written on one line and the same sentence broken across two compare
+equal - and **it has no case handling at all**: the only occurrence of *case* in its source is the
+English word, in a comment. So `anchor find` would have found one of the two and still missed
+`## Pioneer`.
+
+**This lane's first explanation was wrong and is recorded rather than quietly dropped.** It
+guessed that `anchor` is an editing tool, so reaching for it during a *search* is unnatural -
+which would have made the gap about the interface. **`anchor find <file> <anchor>` exists**,
+prints the byte range and the matched text, and fails loudly when there is no match or more than
+one. The interface is right. **Only the comparison is narrow**, which is a smaller finding than
+the one this lane set out to file.
+
+**Why it costs something.** Case is not incidental here: `spec/` capitalises kinds at the start of
+a sentence and in **every section heading** - `## Pioneer`, `### Yard` - so the words most worth
+searching for are exactly the ones a case-sensitive search misses. Two lanes hit it in one week,
+the specification lane's sweep of thirty-nine and this lane's check of that sweep, and in both the
+answer came back **zero** rather than an error. `anchor`'s whole design principle is that
+*doing nothing is never a success here*; a case-sensitive miss returns a clean, plausible zero and
+defeats it.
+
+**Whether. Worth doing, and small.** A `--fold-case` flag on `find`, or folding in `collapse`
+behind one, is the whole of it - the tool already has the part that is hard, which is refusing a
+match that is absent or ambiguous. **Not urgent**: nothing is presently wrong because of it, and
+both lanes caught their own misses by other means. **What makes it worth more than a rule** is
+that `CLAUDE.md` already states both halves in prose and neither was reached for, which is that
+document's own *a rule that fires at a moment of confidence needs a carrier rather than a better
+sentence* - `P-327`, and the reason `anchor` was built at all.
+
+
 ## Resolved
 
 **Refused on 2026-09-10, and the refusal found something this item had not.** The code lane built
