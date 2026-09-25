@@ -202,6 +202,26 @@ went on reading correctly for two days after it stopped being true. **Ask what w
 for a note to be wrong, and write that beside it**; a measurement whose subject can move is a
 measurement with a lifetime, and none of the notes carried one.
 
+**Two true measurements of one thing, separated by the change one of them asked for.** Not
+staleness, which is why it is here: **nothing went stale and both figures stayed true.** `Q-100`
+measured 9,137 lines of document generation in `game-console` at `a29d17ff`; the code lane measured
+9,110 after acting on `Q-99`, whose repair shortened `worked.rs` from 508 lines to 481. **The
+difference is 27 in three places** - that file, the crate's nineteen-file total, and the gap between
+the two reports. **The finding's own repair moved the number in the finding beside it**, and the code
+lane says they would have diagnosed it as a stale figure and gone looking for one.
+
+**And the practical half is sharper than the shape: a wrong explanation costs more than no
+explanation.** They offered `src/bin/dump-state.rs` as the cause **and marked it a guess**. Had it
+been asserted, this lens would have checked that file, found nothing, and been two commits from the
+cause. **Three times this week an explanation riding a measurement was wrong; this is the first time
+it was wrong and cheap**, and marking it is the whole of the difference.
+
+**A claim about a diff is weaker than the diff.** The code lane established that `de8db0dd` left
+`reports/` byte-identical by running `dump-state` and reading `git status`; this lens read the
+commit's own file list, which contains **zero** paths under `reports/`. **The first proves the
+generator agrees today and can be re-run wrongly; the second is in the history and cannot.** Reach
+for the artifact rather than for a procedure that inspects it.
+
 **And the remedy is executable, which is the part worth keeping.**
 `tools/spec/tests/touching.rs` asserts that both the `built` and `open` populations are non-empty
 before trusting an answer about them - *a repository with no `built` item would pass this test by
