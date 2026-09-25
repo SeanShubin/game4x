@@ -4180,3 +4180,57 @@ restoring the row.
 **And `spec/future/` is a record rather than a graveyard**, which his last clause settles: he
 intends to get to them. **That belongs in the file's opening line**, so the next reader knows the
 rules are waiting rather than discarded.
+
+## Said 2026-09-25: the reviewed tests are canonical, and the prototype's question is answered
+
+**Sean**, asked whether a scenario test exists that goes from an ark in orbit to launching a new
+ark: *The reviewed tests are meant to be canonical, and implemented in the application. My
+prototyping on thin engine was to decide if I can simplify the mainline app, and the answer turned
+out to be yes, so I expect the mainline application to be very similar to thin engine, and to drop
+much of its initial implementation details.*
+
+**This is the decision landing on what he said on 2026-09-21**, which is recorded above and which
+he accepted in full. **Two things in it are new.**
+
+**`reviewed/` is canonical and is what the application implements.** The 2026-09-21 entry says the
+rules become data and thin-engine becomes the engine; it does not say what the application is
+measured against. **This does**: 54 tests he has read, and the application implements them.
+
+**And the prototype's question has an answer.** *Can I simplify the mainline app* - **yes**. That
+is research's deliverable in the shape `CLAUDE.md` asks for, a recorded answer to a stated
+question, and it arrived four days before it was written down anywhere.
+
+## What has moved in the four days since he accepted it, measured rather than recalled
+
+| What he accepted 2026-09-21        | Where it stands 2026-09-25                                    |
+| ---------------------------------- | ------------------------------------------------------------- |
+| the main game's rules become data  | **`rules.rs` grew from 1,198 lines to 1,424**                 |
+| `spec/` splits into now and future | **two files moved** - `spec/future/control.md` and `force.md` |
+| `spec/data/` resolves              | **unchanged**: 11 files, 234 rows                             |
+
+**The first row is the one to read twice.** `1198` is the figure this lane wrote on 2026-09-21 and
+it was right; `git show 14069b89:crates/game-model/src/rules.rs` gives exactly that. **So the file
+he decided should stop being the rules gained 226 lines in the four days after he decided it**, and
+nothing in any outbox said so.
+
+**Against thin-engine, unchanged in shape**: 4,513 lines of engine that name no game noun, and
+**2,299 rows of data**. `spec/data/` holds 234.
+
+**`spec/combat.md` is still in the live specification**, which the 2026-09-21 entry named as the
+clearest case of a document describing a game nothing is building. Only force and control moved.
+
+## What this does to three items this lane was about to turn into proposals
+
+**All three are about the first-release notation, and the reviewed tests either answer them
+differently or do not have the concept.** None had been drafted, so nothing is wasted - but the
+relevance sweep of 2026-09-25 asked the right question one level too low.
+
+- **`S-167` - *nothing checks what a layer admits*.** `reviewed/nothing-moves-between-the-layers.4x`
+  refuses a move from a surface place to an orbit place. **The layer rule is checked**, in the suite
+  he has read; the gap is in the track being replaced
+- **`S-73` - *`border` and `orbit border` have no meanings*.** Thin-engine has no such values. A
+  move is legal when the territories are adjacent and the layers match - two reviewed tests, one
+  per half. **The column has no counterpart in the model that replaces it**
+- **`S-170` - *a unit that crosses into an empty place is stranded*.** Thin-engine's `move` spends
+  `moving` and nothing else. **There is no fuel in it at all**, so the item is about a mechanism the
+  mainline may not keep
