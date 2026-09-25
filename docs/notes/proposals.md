@@ -929,7 +929,7 @@ details of the other concerns.*
 
 **Measured: `docs/architecture.md` and `docs/layers.md` mention none of the first two as
 concerns** - zero for `user interface`, `interface state`, `local state`, `player interaction` and
-`interacting with`. **Both fall inside *engine adapter* as the layer table draws it.**
+`interacting with`.**Both fall inside *engine adapter* as the layer table draws it** - and that table's file has not changed since `cdc4fdff` at 10:12:53, ten hours before `local state` existed.
 
 **So a crate can satisfy all seventeen rules and still keep local state beside engine operation.**
 This item's six are checkable and unchecked; **that one is not written down at all**, and it is in

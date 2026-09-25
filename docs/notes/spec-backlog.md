@@ -26,14 +26,43 @@ table has four rows - supporting, rendering, engine adapter, composition root - 
 single most important line to be the model against the graphics engine. **Both of his first two
 concerns fall inside *engine adapter* as it is drawn.**
 
-## The part the relay could not have known
+## The part the relay could not have known, and both of this lane's numbers were wrong
 
-**Two of his three concerns were named hours earlier the same day.** `P-551` landed `local state`
-for what is selected and where the view is, and `spec/invariants.md` has had `game state` all
-along. **So the vocabulary for two of the three exists and the architecture predates it by two
-hours** - `local state` appears in `spec/console.md` and nowhere else.
+**He said this nine minutes after `local state` landed.** Corrected by the quality lens and
+re-derived here from the commits rather than from their message:
 
-**His third, interacting with the player, has `spec/interface.md`'s five surfaces** and no layer.
+```
+20:56:27   3f3b02c8   P-551 promoted - `local state` enters spec/console.md
+21:06:56   c90db748   this entry first written, relaying what he had said in between
+10:12:53   cdc4fdff   the LAST change to docs/architecture.md, ten hours earlier
+```
+
+**Ten hours and forty-three minutes, not two** - and since that is the last change to the file,
+*the architecture has not caught up at all* rather than lagging by a margin. **And *hours earlier*
+was true of `game state` alone**; `local state` was minutes, so this entry had attributed to both
+what was true of one.
+
+**His third concern, interacting with the player, has `spec/interface.md`'s five surfaces** and no
+layer.
+
+## What the nine minutes probably mean, and the seam is visible on purpose
+
+**Measured**: his statement and the relay both fall inside the ten and a half minutes after
+`P-551` landed. **Inferred**: he was generalising a sentence he had just read.
+
+**The evidence this lane has and the relay did not**: he said *promote p-551* in this conversation,
+so he had read its text, which is
+
+> **The game knows nothing of the interface.** Local state is not game state, no rule reads it,
+> and **no local command is a transition**
+
+**and his statement is that sentence widened from two concerns to three.** *Interacting with the
+player, storing user interface state, operation of the game engine, should all be separate.*
+
+**So this entry records a generalisation rather than a gap.** He approved a rule separating game
+state from local state, and immediately asked for the same separation in the code - **naming a
+third concern that neither the rule nor the architecture has.** That is what a proposal from here
+should answer, and it is a different question from *why is the architecture behind*.
 
 ## What it is not
 
