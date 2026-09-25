@@ -142,9 +142,15 @@ already reseeded `play.4x` once for the Ark in orbit, so the machinery and the h
 **`V2` is defensible** if you would rather see the win by playing than by reading a scenario - and
 if you pick it, that is worth one sentence in `R-6` so the absence reads as chosen.
 
-### P-555 - A log directory, and the thing `../boardgame` has that this repository does not
+### P-555 - Two halves answered, and the command log is the one left
 
 **to** sean · **status** open · **raised** 2026-09-24 · **kind** recovered · **shape** an instruction · **asks** a decision · **into** `spec/interface.md`, `CLAUDE.md` -> Perspectives, and `.gitignore`
+
+**Answered on 2026-09-24**: *the log directory should be ignored by git*, and *your recommend on
+screen log is fine* - so the interface test reads the structure and the log carries the pixels.
+
+**One half is left: whether the command log is split or merged.** Everything below is the working,
+and the recommendation is unchanged.
 
 **You asked me to look at `../boardgame` and the important thing there is not the format.**
 
@@ -208,12 +214,21 @@ logs/screen.txt    the current screen: the viewport, which screen and view, each
 adding the directory reddens that check until `CLAUDE.md` names it. **It is generated output, so it
 has no owner** - the rule `pending.md` already sits under.
 
-**And nothing in `.gitignore` mentions a log today**, measured at zero matches, so `logs/` needs a
-line or every run leaves the tree dirty for three lanes.
+**And nothing in `.gitignore` mentions a log today**, measured at zero matches. **You answered
+this one**, and `.gitignore` is the code lane's column since `P-548`, so it is filed to them as
+`S-173` rather than edited here - independent of the half still open, because the first run of
+anything would otherwise dirty three trees.
 
 **The screen log is what an interface test is made of, or it is not, and that is the open half.**
 `P-540` settled that a screen is a tree and that the layout structure is specified without the
 visual arrangement. **`screen.txt` carries absolute pixel positions**, which is the visual
 arrangement - so either the test reads a projection of the log that drops positions, or they are
-two artifacts with two formats. **This lane would make the test read the structure and the log
+two artifacts with two formats.**This lane would make the test read the structure and the log
 carry the pixels**, so that what you review is stable and what you debug from is complete.
+**Answered: that is what you chose.**
+
+## So the one thing left
+
+**Split or merge the command log.** The recommendation above is merge with each line marked, on
+`spec/invariants.md`'s *a fact is stated once* and because two files lose the interleaving. **Say
+which and this becomes words to approve.**

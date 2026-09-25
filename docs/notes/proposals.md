@@ -69,6 +69,36 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-173 - `logs/` needs a `.gitignore` line before anything writes one
+
+**to** code · **status** open · **raised** 2026-09-24 · **source** Sean answering `P-555`: *the log directory should be ignored by git*
+
+**One line, and it is worth having before the directory exists rather than after.**
+
+```
+logs/
+```
+
+**Measured: nothing in `.gitignore` mentions a log today**, zero matches across its forty-nine
+lines. **So the first run of anything that logs leaves an untracked directory in `git status` for
+three lanes at once.**
+
+## Why that matters more here than it would elsewhere
+
+**Your own comment in that file argues it.** Beside `target*/`: *an untracked build directory in
+`git status` is not merely noise - the hazard this repository guards hardest is staging something
+you did not mean to, and the defence is reading `git status` before every `git add`. A list with a
+build tree in it is one nobody reads.*
+
+**A log directory rewritten on every startup is that hazard exactly**, and the staging race has
+already cost this repository three commit messages.
+
+## What is not settled and does not block this
+
+**`P-555` still asks whether the command log is one file or two**, and `logs/` covers either.
+**The rest of it - what the logs are called, what they contain, that they are cleared at startup -
+is Sean's and not yet promoted**, so this item is the ignore line alone.
+
 ### S-172 - Nothing checks a quotation in `tools/spec/`, and the claim that something reports them is false
 
 **to** code · **status** withdrawn · **withdrawn** 2026-09-24 · **cited** `632b0327` · **raised** 2026-09-24 · **source** the code lane, clearing the red gate `731acebf` caused and saying what it did not fix

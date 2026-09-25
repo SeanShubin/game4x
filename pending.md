@@ -12,7 +12,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **P-553** - The deploy comes first, and the launch is the winning act · `decide/proposals.md`
 - **P-551** - `game state` and `local state` are chosen, and a log is a thing `spec/` does not have · `decide/questions.md`
 - **P-554** - Nothing in the first release shows you a win, and the loop you described is the winning one · `decide/questions.md`
-- **P-555** - A log directory, and the thing `../boardgame` has that this repository does not · `decide/questions.md`
+- **P-555** - Two halves answered, and the command log is the one left · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -34,8 +34,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (2)
+### To code (3)
 
+- **S-173** - `logs/` needs a `.gitignore` line before anything writes one · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
 
