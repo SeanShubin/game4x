@@ -2,12 +2,12 @@
 
 **Authored.** Sean owns every idea here. Claude may rephrase and reorganize what is already
 present, reporting every change; a new idea is entered by Sean himself, whether he types it
-or pastes it from a [proposal](../docs/notes/proposals.md).
+or pastes it from a [proposal](../../docs/notes/proposals.md).
 
-[Specification](README.md) · [Root README](../README.md)
+[Specification](../README.md) · [Root README](../../README.md)
 
-How a game is won and lost. Force, and how territory is claimed and held, are a future plan
-in [force](future/force.md); weapons and their ranges are in [combat](combat.md).
+**These rules are not built and are not abandoned.** They are here because the game wants them
+once it can be played, and the first release cannot be played while it is building them.
 
 ## Winning
 

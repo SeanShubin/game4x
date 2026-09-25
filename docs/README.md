@@ -21,7 +21,7 @@ spec/
   structures.md ................... the list of structures and what each one does
   units.md ........................ what is true of every unit
   unit-types.md ................... each particular unit, one section apiece
-  control.md ...................... threat, security, claiming and holding
+  future/control.md ............... a future plan: winning and losing
   console.md ...................... the command language
   combat.md ....................... ranges, weapons, resolution
   orbit.md ........................ the orbital layer

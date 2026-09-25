@@ -365,7 +365,7 @@ an id. **`P-424` asks it.**
 
 **The worked example and the counter-example were both rewritten on 2026-09-12**, and the reason is
 worth keeping. The example borrowed `stand` and `garrison` from the release and had a garrison
-producing 2 force, which `spec/control.md` flatly denies - *it has no strength of its own*. The
+producing 2 force, which `spec/future/control.md` flatly denies - *it has no strength of its own*. The
 counter-example held the garrison up as *the shape that cannot be had*, which stopped being true
 when `P-416` removed the *highest* case. **Both now invent their kinds**, and the counter-example
 says what the game does instead. **A document about what cannot be expressed must not use a live

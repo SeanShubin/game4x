@@ -11,26 +11,26 @@ is not written here, it is not decided, no matter how thoroughly it was discusse
 
 ## The documents
 
-| Document                    | What it specifies                                                |
-| --------------------------- | ---------------------------------------------------------------- |
-| [Invariants](invariants.md) | Statements that are always true; every other document obeys them |
-| [Narrative](narrative.md)   | The fiction the rules implement                                  |
-| [The planet](planet.md)     | The sphere, its territories, and what a territory carries        |
-| [Resources](resources.md)   | The list of resources                                            |
-| [Structures](structures.md) | The list of structures and what each one does                    |
-| [Units](units.md)           | What is true of every unit                                       |
-| [Unit types](unit-types.md) | Each particular unit, one section apiece                         |
-| [Economy](economy.md)       | Extraction, structures and labor                                 |
-| [Logistics](logistics.md)   | Where materials are, and moving them to where they are needed    |
-| [Population](population.md) | Citizens, how they grow, and the labor they provide              |
-| [The turn](turn.md)         | The order in which a turn resolves                               |
-| [Control](control.md)       | How a game is won and lost                                       |
-| [Force](future/force.md)    | **A future plan.** Force, garrisons, and holding ground          |
-| [Interface](interface.md)   | What the player sees and can reach                               |
-| [Console](console.md)       | The command language                                             |
-| [Combat](combat.md)         | Ranges, weapons, resolution                                      |
-| [Orbit](orbit.md)           | The orbital layer and what sits in it                            |
-| [Scenarios](scenarios.md)   | The scenarios that demonstrate the game, and what each is for    |
+| Document                     | What it specifies                                                |
+| ---------------------------- | ---------------------------------------------------------------- |
+| [Invariants](invariants.md)  | Statements that are always true; every other document obeys them |
+| [Narrative](narrative.md)    | The fiction the rules implement                                  |
+| [The planet](planet.md)      | The sphere, its territories, and what a territory carries        |
+| [Resources](resources.md)    | The list of resources                                            |
+| [Structures](structures.md)  | The list of structures and what each one does                    |
+| [Units](units.md)            | What is true of every unit                                       |
+| [Unit types](unit-types.md)  | Each particular unit, one section apiece                         |
+| [Economy](economy.md)        | Extraction, structures and labor                                 |
+| [Logistics](logistics.md)    | Where materials are, and moving them to where they are needed    |
+| [Population](population.md)  | Citizens, how they grow, and the labor they provide              |
+| [The turn](turn.md)          | The order in which a turn resolves                               |
+| [Control](future/control.md) | **A future plan.** How a game is won and lost                    |
+| [Force](future/force.md)     | **A future plan.** Force, garrisons, and holding ground          |
+| [Interface](interface.md)    | What the player sees and can reach                               |
+| [Console](console.md)        | The command language                                             |
+| [Combat](combat.md)          | Ranges, weapons, resolution                                      |
+| [Orbit](orbit.md)            | The orbital layer and what sits in it                            |
+| [Scenarios](scenarios.md)    | The scenarios that demonstrate the game, and what each is for    |
 
 Add a file when a topic firms up. Add its row here first.
 

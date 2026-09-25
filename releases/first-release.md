@@ -370,13 +370,14 @@ that used to be kept is lost at a turn's end. `scenario/expected/play.4x` was re
 `P-225`'s protocol and is **unreviewed, and says so**.
 
 
-- **In** - `spec/control.md`, *a player wins by launching an Ark from a territory other than one
-  an Ark has been deployed to*
+- **In** - `spec/future/control.md`, *a player wins by launching an Ark from a territory other
+  than one an Ark has been deployed to* - **a future plan since `P-556`**, and the requirement
+  below is what this release is checked against instead
 - **Vetted when** - the scenario takes a first territory from orbit, takes a second by land, and
-  launches an Ark; and **every recipe in the release fires at least once while it runs**, measured
-  by what fired rather than by what the file says. **It does not win, and that is the win condition
-  working**: victory takes a launch from a territory other than the one the Ark deployed to, and
-  this scenario deploys to territory 1 and launches from territory 1
+  **launches an Ark from the second**; and every recipe in the release fires at least once while
+  it runs, measured by what fired rather than by what the file says. **This is the requirement
+  the first release is checked against and not a victory** - nothing ends, and the interface lets
+  the player keep going.
 
 - **Nothing in the code blocks it, as of 2026-09-05.** Earlier doubts were settled: a
   territory's stores carry, and the output a territory can reach is decidable from the

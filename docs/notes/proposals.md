@@ -69,6 +69,43 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-176 - `spec/control.md` is gone, and `X-26`'s title rests on what moved
+
+**to** research · **status** open · **raised** 2026-09-24 · **source** `P-556`, promoted - the promotion rule's other half
+
+**`P-556` moved `spec/control.md` to `spec/future/control.md` whole**, because Sean removed the win
+condition and then the loss condition and nothing was left in it.
+
+## Why this is addressed to you rather than filed as a path change
+
+**`X-26`'s title is *one kind in the release has no definition in `spec/`, and the win condition
+depends on it*.** There is no win condition in `spec/` now - it is a future plan - **so the second
+half of your title is about a rule that has left the directory the first half measures.**
+
+**Your measurement is untouched**: 14 of 16 kinds named in `spec/` by their own word, and `store`
+one of the two that are not. **What moved is what rests on it.** A kind the win condition depended
+on now has nothing in `spec/` depending on it at all, which either strengthens the finding or
+empties it, and that is yours to say rather than this lane's.
+
+## And two other items cite the old path, both incidentally
+
+```
+C-114   the code lane - Sean's reason for a thin engine, and it belongs in the invariants
+Q-94    the quality lens - the number every `refresh` tops off to
+```
+
+**Neither's conclusion rests on winning** as far as this lane can see from outside their columns -
+the citation is a path in prose. **Both owners are told**, and each should check rather than inherit
+that reading.
+
+## One thing this lane did and undid, because the shape is worth having
+
+**It first repointed every mention in its own record - forty-nine of them - and reverted.** A
+closed item's citation is not a broken link; it is what that item recorded as true at the time, and
+`CLAUDE.md` says so of a number in the same position: *left as written rather than edited, because
+what the item recorded is what was true then.* **Only open items were repointed**, and the count
+was what caught it: two were expected and forty-nine came back.
+
 ### S-175 - Nothing in `spec/` says the player can leave, and three of the four ways out are specified
 
 **to** spec · **status** open · **raised** 2026-09-24 · **source** Sean naming what the interface will have, while answering `P-556`
@@ -114,7 +151,7 @@ first release works, not a win condition, a requirement.*
 
 ## Two things follow, and one of them is a scenario change
 
-**`won` has nothing to latch.** `S-151` built it this afternoon against `spec/control.md`'s
+**`won` has nothing to latch.** `S-151` built it this afternoon against `spec/future/control.md`'s
 condition, and that condition is moving to `spec/future/winning.md`. **The latch and
 `Game::firings`'s reason for existing both come out**, unless `firings` earns its place elsewhere -
 you wrote that it keeps the firings a rule asks about, and after this no rule asks.
@@ -5193,7 +5230,7 @@ drafted, and it was put to him as an open question in the turn this was filed.
 version stated a general deadlock that does not exist - **source** the research lens, corrected by
 Sean, then computed here
 
-**Overtaken by `P-361`, promoted 2026-09-10.** This item's smallest reading was *retune territory 5's food to density 2*. **That is now the wrong fix**: `spec/control.md` no longer
+**Overtaken by `P-361`, promoted 2026-09-10.** This item's smallest reading was *retune territory 5's food to density 2*. **That is now the wrong fix**: `spec/future/control.md` no longer
 asks a territory for every structure its ground has room for, but for **the greatest output it
 can reach** - and territory 5 reaches its own the turn it is founded. **The arithmetic below
 still holds and its conclusion no longer does.** What survives is its last paragraph:
@@ -5230,7 +5267,7 @@ before `is_fully_exploited` will call it done. It can never build the third.
 **Why it costs something, and it is the whole game.** `Game::is_fully_exploited` requires every
 claimable territory to hold every extractor it has capacity for. Territory 5 never will. **So the
 planet can never be fully exploited, so an Ark can never be launched from one, so the game as
-specified cannot be won** - `spec/control.md`, *a player wins by launching an Ark from a fully
+specified cannot be won** - `spec/future/control.md`, *a player wins by launching an Ark from a fully
 exploited planet*. **This is a fourth blocker on `R-6`** and the only one that is arithmetic rather
 than a missing rule.
 
