@@ -1,4 +1,4 @@
-//! `anchor replace <file> <anchor-file> <replacement-file> [--strip <prefix>]`
+//! `anchor replace <file> <anchor-file> <replacement-file> [--strip <prefix>] [--fold-case]`
 //!
 //! **The anchor and the replacement are files, and that is the point.** `CLAUDE.md`: *write a
 //! script to a file before running it; never assemble one inside a shell string* - a file has
@@ -20,6 +20,14 @@ fn main() -> ExitCode {
         .iter()
         .position(|a| a == "--strip")
         .and_then(|at| args.get(at + 1).cloned());
+    // **A flag with no value, so it is dropped from the positionals rather than skipping
+    // the argument after it.** `X-40`: `spec/` capitalises kinds at the start of a sentence
+    // and in every section heading, so the words most worth searching for are exactly the ones
+    // a case-sensitive search misses - and it misses them by returning a clean, plausible
+    // zero, which is what this tool exists to refuse.
+    let how = anchor::How {
+        fold_case: args.iter().any(|a| a == "--fold-case"),
+    };
     let positional: Vec<&String> = {
         let mut out = Vec::new();
         let mut skip = false;
@@ -30,6 +38,9 @@ fn main() -> ExitCode {
             }
             if arg == "--strip" {
                 skip = true;
+                continue;
+            }
+            if arg == "--fold-case" {
                 continue;
             }
             out.push(arg);
@@ -44,7 +55,7 @@ fn main() -> ExitCode {
     match positional.as_slice() {
         [command, file, anchor_at] if *command == "find" => {
             let text = read(file);
-            match anchor::find(&text, &read(anchor_at), strip.as_deref()) {
+            match anchor::find(&text, &read(anchor_at), strip.as_deref(), how) {
                 Ok((from, to)) => {
                     println!("{from}..{to}");
                     println!("{}", &text[from..to]);
@@ -58,7 +69,13 @@ fn main() -> ExitCode {
         }
         [command, file, anchor_at, with_at] if *command == "replace" => {
             let text = read(file);
-            match anchor::replace(&text, &read(anchor_at), &read(with_at), strip.as_deref()) {
+            match anchor::replace(
+                &text,
+                &read(anchor_at),
+                &read(with_at),
+                strip.as_deref(),
+                how,
+            ) {
                 Ok(after) => {
                     std::fs::write(file, &after)
                         .unwrap_or_else(|why| panic!("cannot write {file}: {why}"));
@@ -73,7 +90,7 @@ fn main() -> ExitCode {
         }
         [command, file, edits_at] if *command == "edit" => {
             let text = read(file);
-            match anchor::edits(&text, &read(edits_at), strip.as_deref()) {
+            match anchor::edits(&text, &read(edits_at), strip.as_deref(), how) {
                 Ok(after) => {
                     std::fs::write(file, &after)
                         .unwrap_or_else(|why| panic!("cannot write {file}: {why}"));
@@ -88,9 +105,9 @@ fn main() -> ExitCode {
         }
         _ => {
             eprintln!(
-                "anchor find <file> <anchor-file> [--strip <prefix>]\n\
-                 anchor replace <file> <anchor-file> <replacement-file> [--strip <prefix>]\n\
-                 anchor edit <file> <edits-file> [--strip <prefix>]"
+                "anchor find <file> <anchor-file> [--strip <prefix>] [--fold-case]\n\
+                 anchor replace <file> <anchor-file> <replacement-file> [--strip <prefix>] [--fold-case]\n\
+                 anchor edit <file> <edits-file> [--strip <prefix>] [--fold-case]"
             );
             ExitCode::FAILURE
         }

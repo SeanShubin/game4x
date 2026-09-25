@@ -3,7 +3,7 @@
 //! **These are not hypotheticals.** Every case below is a shape `CLAUDE.md` records losing an
 //! edit to, and three of them happened again while this session was building other things.
 
-use anchor::{Problem, find, replace};
+use anchor::{How, Problem, find, replace};
 
 /// An anchor written on one line finds text the file wrapped across two.
 ///
@@ -14,10 +14,10 @@ use anchor::{Problem, find, replace};
 fn wrapping_is_not_a_difference() {
     let file = "before\nthe quick brown\nfox jumps over\nafter\n";
     let anchor = "the quick brown fox jumps over";
-    let (from, to) = find(file, anchor, None).expect("the words are there, wrapped");
+    let (from, to) = find(file, anchor, None, How::exact()).expect("the words are there, wrapped");
     assert_eq!(&file[from..to], "the quick brown\nfox jumps over");
 
-    let after = replace(file, anchor, "one line now", None).unwrap();
+    let after = replace(file, anchor, "one line now", None, How::exact()).unwrap();
     assert_eq!(after, "before\none line now\nafter\n");
 }
 
@@ -25,7 +25,7 @@ fn wrapping_is_not_a_difference() {
 #[test]
 fn indentation_is_not_a_difference() {
     let file = "fn main() {\n    let x = 1;\n    let y = 2;\n}\n";
-    let (from, to) = find(file, "let x = 1; let y = 2;", None).unwrap();
+    let (from, to) = find(file, "let x = 1; let y = 2;", None, How::exact()).unwrap();
     assert_eq!(&file[from..to], "let x = 1;\n    let y = 2;");
 }
 
@@ -36,10 +36,13 @@ fn indentation_is_not_a_difference() {
 #[test]
 fn an_anchor_that_is_not_there_is_refused() {
     let file = "the quick brown fox\n";
-    assert_eq!(find(file, "a slow green fox", None), Err(Problem::NotFound));
     assert_eq!(
-        replace(file, "a slow green fox", "x", None),
-        Err(Problem::NotFound)
+        find(file, "a slow green fox", None, How::exact()),
+        Err(Problem::NotFound(How::exact()))
+    );
+    assert_eq!(
+        replace(file, "a slow green fox", "x", None, How::exact()),
+        Err(Problem::NotFound(How::exact()))
     );
 }
 
@@ -50,17 +53,23 @@ fn an_anchor_that_is_not_there_is_refused() {
 #[test]
 fn an_anchor_that_matches_twice_is_refused() {
     let file = "let x = 1;\nlet y = 2;\nlet x = 1;\n";
-    assert_eq!(find(file, "let x = 1;", None), Err(Problem::Ambiguous(2)));
     assert_eq!(
-        replace(file, "let x = 1;", "let x = 9;", None),
-        Err(Problem::Ambiguous(2))
+        find(file, "let x = 1;", None, How::exact()),
+        Err(Problem::Ambiguous(2, How::exact()))
+    );
+    assert_eq!(
+        replace(file, "let x = 1;", "let x = 9;", None, How::exact()),
+        Err(Problem::Ambiguous(2, How::exact()))
     );
 }
 
 /// An anchor of no words matches everywhere and is refused.
 #[test]
 fn an_empty_anchor_is_refused() {
-    assert_eq!(find("anything", "   \n  ", None), Err(Problem::EmptyAnchor));
+    assert_eq!(
+        find("anything", "   \n  ", None, How::exact()),
+        Err(Problem::EmptyAnchor)
+    );
 }
 
 /// The replacement goes in exactly as written, including its whitespace.
@@ -71,7 +80,14 @@ fn an_empty_anchor_is_refused() {
 #[test]
 fn the_replacement_is_verbatim() {
     let file = "a\nthe quick brown\nfox\nz\n";
-    let after = replace(file, "the quick brown fox", "one\n  two\n    three", None).unwrap();
+    let after = replace(
+        file,
+        "the quick brown fox",
+        "one\n  two\n    three",
+        None,
+        How::exact(),
+    )
+    .unwrap();
     assert_eq!(after, "a\none\n  two\n    three\nz\n");
 }
 
@@ -82,7 +98,7 @@ fn the_replacement_is_verbatim() {
 #[test]
 fn nothing_outside_the_match_moves() {
     let file = "\u{e9}\u{e9}\u{e9} start\nthe quick\nbrown fox\nend \u{e9}\u{e9}\u{e9}\n";
-    let after = replace(file, "the quick brown fox", "X", None).unwrap();
+    let after = replace(file, "the quick brown fox", "X", None, How::exact()).unwrap();
     assert_eq!(
         after,
         "\u{e9}\u{e9}\u{e9} start\nX\nend \u{e9}\u{e9}\u{e9}\n"
@@ -102,18 +118,24 @@ fn nothing_outside_the_match_moves() {
 #[test]
 fn a_line_marker_is_not_a_difference() {
     let file = "before\n> the quick brown\n> fox jumps over\nafter\n";
-    let (from, to) = find(file, "the quick brown fox jumps over", Some(">")).unwrap();
+    let (from, to) = find(
+        file,
+        "the quick brown fox jumps over",
+        Some(">"),
+        How::exact(),
+    )
+    .unwrap();
     assert_eq!(&file[from..to], "the quick brown\n> fox jumps over");
 
     // Without the strip the same anchor is simply not there, which is the failure it carries.
     assert_eq!(
-        find(file, "the quick brown fox jumps over", None),
-        Err(Problem::NotFound)
+        find(file, "the quick brown fox jumps over", None, How::exact()),
+        Err(Problem::NotFound(How::exact()))
     );
 
     // A Rust doc comment is the same shape one directory over.
     let doc = "/// one two\n/// three four\n";
-    assert!(find(doc, "one two three four", Some("///")).is_ok());
+    assert!(find(doc, "one two three four", Some("///"), How::exact()).is_ok());
 }
 
 /// Every way this refuses is reachable from `find`, and adding a fifth breaks the build.
@@ -130,24 +152,26 @@ fn a_line_marker_is_not_a_difference() {
 #[test]
 fn every_way_this_refuses_is_reachable() {
     let refusals = [
-        find("abc", "xyz", None).unwrap_err(),
-        find("a a", "a", None).unwrap_err(),
-        find("abc", " ", None).unwrap_err(),
+        find("abc", "xyz", None, How::exact()).unwrap_err(),
+        find("a a", "a", None, How::exact()).unwrap_err(),
+        find("abc", " ", None, How::exact()).unwrap_err(),
     ];
     for why in &refusals {
         // No wildcard, deliberately: this arm is the tie to the variant count.
         match why {
-            Problem::NotFound | Problem::Ambiguous(_) | Problem::EmptyAnchor => {}
+            Problem::NotFound(_) | Problem::Ambiguous(_, _) | Problem::EmptyAnchor => {}
         }
     }
     assert!(
-        refusals.iter().any(|why| matches!(why, Problem::NotFound)),
+        refusals
+            .iter()
+            .any(|why| matches!(why, Problem::NotFound(_))),
         "an anchor that is not there must be reachable"
     );
     assert!(
         refusals
             .iter()
-            .any(|why| matches!(why, Problem::Ambiguous(_))),
+            .any(|why| matches!(why, Problem::Ambiguous(_, _))),
         "an anchor that matches twice must be reachable"
     );
     assert!(

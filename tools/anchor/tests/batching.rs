@@ -5,7 +5,7 @@
 //! file and one command, so the script won every time and took every failure with it. These are
 //! about the shape that makes the right thing the smaller thing.
 
-use anchor::{Problem, edits};
+use anchor::{How, Problem, edits};
 
 const SPEC: &str = "\
 @@
@@ -22,7 +22,7 @@ others
 #[test]
 fn several_edits_are_applied_in_order() {
     let text = "before\nthe first words\nbetween\nthe second words\nafter\n";
-    let after = edits(text, SPEC, None).expect("both edits");
+    let after = edits(text, SPEC, None, How::exact()).expect("both edits");
     assert_eq!(after, "before\nwords instead\nbetween\nothers\nafter\n");
 }
 
@@ -41,7 +41,10 @@ two
 @@ replace
 three
 ";
-    assert_eq!(edits("one\n", spec, None).expect("both"), "three\n");
+    assert_eq!(
+        edits("one\n", spec, None, How::exact()).expect("both"),
+        "three\n"
+    );
 }
 
 /// **Wrapping is not a difference here either**, which is the whole reason the anchor is
@@ -57,7 +60,7 @@ let name = row .value(\"name\") .map(str::to_string);
 let name = taken(row);
 ";
     assert_eq!(
-        edits(text, spec, None).expect("wrapped"),
+        edits(text, spec, None, How::exact()).expect("wrapped"),
         "let name = taken(row);\n"
     );
 }
@@ -67,9 +70,9 @@ let name = taken(row);
 #[test]
 fn a_refusal_names_the_edit_that_was_refused() {
     let text = "the first words\n";
-    let why = edits(text, SPEC, None).expect_err("the second anchor is not there");
+    let why = edits(text, SPEC, None, How::exact()).expect_err("the second anchor is not there");
     assert_eq!(why.at, 2, "the second edit");
-    assert_eq!(why.why, Problem::NotFound);
+    assert_eq!(why.why, Problem::NotFound(How::exact()));
     assert!(
         format!("{why}").contains("the second words"),
         "and it says which anchor: {why}"
@@ -81,7 +84,7 @@ fn a_refusal_names_the_edit_that_was_refused() {
 #[test]
 fn a_refused_batch_changes_nothing() {
     let text = "the first words\n";
-    assert!(edits(text, SPEC, None).is_err());
+    assert!(edits(text, SPEC, None, How::exact()).is_err());
     // `edits` returns the text rather than writing it, so a refusal cannot have written
     // anything - the caller still holds what it started with.
     assert_eq!(text, "the first words\n");
@@ -98,7 +101,7 @@ fn the_marker_is_whatever_the_first_line_says() {
 !!! replace
 a line that says the usual marker
 ";
-    let after = edits("@@ anchor\n", spec, None).expect("a chosen marker");
+    let after = edits("@@ anchor\n", spec, None, How::exact()).expect("a chosen marker");
     assert_eq!(after, "a line that says the usual marker\n");
 }
 
@@ -115,10 +118,16 @@ fn every_way_a_batch_is_refused_is_covered() {
         ),
     ];
     for (spec, why) in &refused {
-        edits("whatever\n", spec, None).expect_err(why);
+        edits("whatever\n", spec, None, How::exact()).expect_err(why);
     }
     assert_eq!(refused.len(), 4, "four ways, and each is checked");
 
     // The control: a well formed batch is accepted, so the four above fail for their own reasons.
-    edits("x\n", "@@\n@@ anchor\nx\n@@ replace\ny\n", None).expect("a well formed batch");
+    edits(
+        "x\n",
+        "@@\n@@ anchor\nx\n@@ replace\ny\n",
+        None,
+        How::exact(),
+    )
+    .expect("a well formed batch");
 }

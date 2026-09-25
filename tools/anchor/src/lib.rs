@@ -29,6 +29,43 @@ pub fn collapse(text: &str) -> String {
     text.split_whitespace().collect::<Vec<_>>().join(" ")
 }
 
+/// How an anchor is compared with the text.
+///
+/// **Two normalisations, and a failure names the ones that were in play** - which is the
+/// property `X-40` asked to have extended rather than the comparison. `wrapping ignored` in a
+/// refusal is the only reason one run was enough to diagnose `C-113`; a reader learns what was
+/// tried from the failure rather than from the flags they remember passing.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub struct How {
+    /// Whether upper and lower case are the same letter.
+    ///
+    /// **Off by default, because a search that folds finds more than it was asked for.** An
+    /// anchor matching two places is refused, so folding can turn a working edit into a
+    /// refusal - loudly, which is the right direction, and still a change the caller asks for
+    /// rather than gets.
+    pub fold_case: bool,
+}
+
+impl How {
+    /// Compare exactly, apart from wrapping.
+    pub fn exact() -> Self {
+        Self { fold_case: false }
+    }
+
+    /// The normalisations in play, in the words a failure uses.
+    ///
+    /// **Wrapping is always ignored and is always named**, because an anchor that is not found
+    /// is most often one drafted against a file a formatter has since reflowed - so saying so
+    /// is what stops the next reader re-drafting it by hand.
+    pub fn named(self) -> &'static str {
+        if self.fold_case {
+            "case folded, wrapping ignored"
+        } else {
+            "wrapping ignored"
+        }
+    }
+}
+
 /// Where the anchor sits in the text, as a byte range, ignoring how either was wrapped.
 ///
 /// **The offset is mapped back to the original.** Comparing normalized text and then editing
@@ -39,8 +76,26 @@ pub fn collapse(text: &str) -> String {
 /// the text and then searching it would give offsets into a string that is not the file, and
 /// mapping those back is a second map to get wrong. Here a marker is simply not emitted, so
 /// every position still points into the original bytes.
-pub fn find(text: &str, anchor: &str, strip: Option<&str>) -> Result<(usize, usize), Problem> {
-    let wanted = collapse(anchor);
+///
+/// **Case is folded per character on both sides**, rather than by lowercasing the two
+/// strings. That is what keeps the map below usable: a character whose lower case is several
+/// characters contributes several normalized positions, and every one of them points at the
+/// byte range of the single character that produced it. Lowercasing the whole string would
+/// change its length and leave the map indexed by nothing.
+pub fn find(
+    text: &str,
+    anchor: &str,
+    strip: Option<&str>,
+    how: How,
+) -> Result<(usize, usize), Problem> {
+    let wanted: String = if how.fold_case {
+        collapse(anchor)
+            .chars()
+            .flat_map(char::to_lowercase)
+            .collect()
+    } else {
+        collapse(anchor)
+    };
     if wanted.is_empty() {
         return Err(Problem::EmptyAnchor);
     }
@@ -74,9 +129,20 @@ pub fn find(text: &str, anchor: &str, strip: Option<&str>) -> Result<(usize, usi
                 }
                 continue;
             }
-            normalized.push(character);
-            at.push(here);
-            ends.push(here + character.len_utf8());
+            if how.fold_case {
+                // **Every position a folded character produces points at that character's own
+                // bytes**, so the range handed back is of the original text in its original
+                // case. `anchor find` prints what it matched, and what it prints is the file.
+                for lowered in character.to_lowercase() {
+                    normalized.push(lowered);
+                    at.push(here);
+                    ends.push(here + character.len_utf8());
+                }
+            } else {
+                normalized.push(character);
+                at.push(here);
+                ends.push(here + character.len_utf8());
+            }
         }
     }
     while normalized.ends_with(' ') {
@@ -87,7 +153,7 @@ pub fn find(text: &str, anchor: &str, strip: Option<&str>) -> Result<(usize, usi
 
     let found: Vec<usize> = normalized.match_indices(&wanted).map(|(i, _)| i).collect();
     match found.len() {
-        0 => Err(Problem::NotFound),
+        0 => Err(Problem::NotFound(how)),
         1 => {
             let start = found[0];
             // Byte positions in the normalized string are character positions only if every
@@ -97,7 +163,7 @@ pub fn find(text: &str, anchor: &str, strip: Option<&str>) -> Result<(usize, usi
             let to_char = from_char + wanted.chars().count();
             Ok((at[from_char], ends[to_char - 1]))
         }
-        n => Err(Problem::Ambiguous(n)),
+        n => Err(Problem::Ambiguous(n, how)),
     }
 }
 
@@ -107,8 +173,9 @@ pub fn replace(
     anchor: &str,
     with: &str,
     strip: Option<&str>,
+    how: How,
 ) -> Result<String, Problem> {
-    let (from, to) = find(text, anchor, strip)?;
+    let (from, to) = find(text, anchor, strip, how)?;
     let mut out = String::with_capacity(text.len());
     out.push_str(&text[..from]);
     out.push_str(with);
@@ -144,7 +211,7 @@ pub fn replace(
 ///
 /// **Each edit is applied to the result of the one before**, so an anchor may name text an earlier
 /// edit wrote. Every refusal [`find`] makes applies to each in turn, and the index says which.
-pub fn edits(text: &str, spec: &str, strip: Option<&str>) -> Result<String, Refused> {
+pub fn edits(text: &str, spec: &str, strip: Option<&str>, how: How) -> Result<String, Refused> {
     let mut lines = spec.lines();
     let marker = lines.next().unwrap_or_default().trim();
     if marker.is_empty() {
@@ -172,7 +239,7 @@ pub fn edits(text: &str, spec: &str, strip: Option<&str>) -> Result<String, Refu
     if sections.is_empty() || !sections.len().is_multiple_of(2) {
         return Err(Refused {
             at: 0,
-            why: Problem::NotFound,
+            why: Problem::NotFound(how),
             what: format!(
                 "{} sections, and an edit is an `{anchor_at}` followed by a `{replace_at}`",
                 sections.len()
@@ -187,13 +254,13 @@ pub fn edits(text: &str, spec: &str, strip: Option<&str>) -> Result<String, Refu
         if !is_anchor || *is_replace {
             return Err(Refused {
                 at: at + 1,
-                why: Problem::NotFound,
+                why: Problem::NotFound(how),
                 what: format!("edit {} is not an anchor followed by a replacement", at + 1),
             });
         }
         let anchor = anchor.join("\n");
         let with = with.join("\n");
-        out = replace(&out, &anchor, &with, strip).map_err(|why| Refused {
+        out = replace(&out, &anchor, &with, strip, how).map_err(|why| Refused {
             at: at + 1,
             what: format!("edit {}: {}", at + 1, collapse(&anchor)),
             why,
@@ -224,10 +291,15 @@ impl std::fmt::Display for Refused {
 #[derive(Debug, PartialEq, Eq)]
 pub enum Problem {
     /// The anchor is not in the file. The edit this would have made is the silent no-op.
-    NotFound,
+    ///
+    /// **It carries how it looked**, so the refusal names the normalisations that were in play.
+    NotFound(How),
     /// The anchor is in the file more than once. Taking the first is how the wrong line is
     /// edited, so this refuses instead of choosing.
-    Ambiguous(usize),
+    ///
+    /// **It carries how it looked too**, because folding case is a way of matching twice where
+    /// an exact search matched once - and a count of two is baffling until you know that.
+    Ambiguous(usize, How),
     /// An anchor of no words matches everywhere and means nothing.
     EmptyAnchor,
 }
@@ -235,13 +307,15 @@ pub enum Problem {
 impl std::fmt::Display for Problem {
     fn fmt(&self, out: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Problem::NotFound => write!(
+            Problem::NotFound(how) => write!(
                 out,
-                "the anchor is not in the file, wrapping ignored - nothing was changed"
+                "the anchor is not in the file, {} - nothing was changed",
+                how.named()
             ),
-            Problem::Ambiguous(n) => write!(
+            Problem::Ambiguous(n, how) => write!(
                 out,
-                "the anchor matches {n} places, so this refuses rather than taking the first"
+                "the anchor matches {n} places, {}, so this refuses rather than taking the first",
+                how.named()
             ),
             Problem::EmptyAnchor => write!(out, "the anchor has no words in it"),
         }
