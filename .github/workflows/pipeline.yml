@@ -261,11 +261,24 @@ jobs:
           test -f crates/game4x/dist/scenario/expected/play.4x
           test -f crates/game4x/dist/spec/data/kinds.4x
           # **Every twin, counted against every input**, so a copy that silently made none
-          # fails here rather than on the site. Twenty today: twelve in `spec/data` and eight
+          # fails here rather than on the site. Nineteen today: eleven in `spec/data` and eight
           # in `scenario`.
+          #
+          # **A floor rather than that number, and the reason is that the number broke the
+          # build.** It said twenty, `P-557` deleted `spec/data/above.4x`, and this step failed
+          # fifty-six minutes into a run - **the only hard-coded count in the step, and the only
+          # thing in it that broke.** Its two neighbours derive what they compare against and
+          # neither noticed.
+          #
+          # **The exact count is asserted where the local gate can see it.**
+          # `crates/game-console/tests/browsable.rs` says nineteen files the engine reads, and it
+          # runs on every push - so a number here is a second statement of that fact, in the one
+          # place that takes an hour to tell you it disagrees. `test "$twins" -eq "$inputs"` is
+          # the property this step alone can check, and the floor is only there so that it cannot
+          # pass over an empty copy.
           inputs=$(find crates/game4x/dist/spec/data crates/game4x/dist/scenario -name '*.4x' | wc -l)
           twins=$(find crates/game4x/dist/spec/data crates/game4x/dist/scenario -name '*.4x.txt' | wc -l)
-          test "$inputs" -eq 20
+          test "$inputs" -ge 15
           test "$twins" -eq "$inputs"
           test -f crates/game4x/dist/lenses/research/formulas.html
           test -f crates/game4x/dist/tools/research/formulas/data.json
@@ -311,7 +324,23 @@ jobs:
           test "$published" -eq "$(find spec/tests -name '*.4x' | wc -l)"
           test "$published" -gt 40
           test -f crates/game4x/dist/reports/thin-engine/index.html
+          # **And a twin for every `.4x` anywhere under the artifact, because naming the roots
+          # is what went wrong.** The two passes above each name a pair of directories, and
+          # `R-12` added `reports/foundation/` - 54 generated files - which neither covers. They
+          # would have published as downloads with nothing saying so.
+          #
+          # **Coverage by default**, which is the argument this file already makes twice: the
+          # crate list is *selected by exclusion* and the tools are *found rather than listed*,
+          # both after a name list went stale. A root that is forgotten is now twinned anyway,
+          # and the assertion below is over the whole tree rather than over a directory somebody
+          # remembered.
+          find crates/game4x/dist -name '*.4x' -exec sh -c 'test -f "$1.txt" || cp "$1" "$1.txt"' _ {} \;
+          all_inputs=$(find crates/game4x/dist -name '*.4x' | wc -l)
+          all_twins=$(find crates/game4x/dist -name '*.4x.txt' | wc -l)
+          test "$all_inputs" -gt 150
+          test "$all_twins" -eq "$all_inputs"
           echo "Published $thin thin-engine inputs with $thin_twins twins, $published of them tests"
+          echo "Published $all_inputs .4x files with $all_twins twins, over the whole artifact"
           echo "Published $(find crates/game4x/dist/reports -type f | wc -l) report files"
 
       - name: Upload Pages artifact
