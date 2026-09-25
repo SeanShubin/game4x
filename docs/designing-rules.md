@@ -72,13 +72,12 @@ token carries a colour, and an arc that preserves the colour is an ordinary arc.
 an extension of the formalism - it is the coloured version of what `consume`/`produce` was
 approximating badly, and it buys identity **at no cost to any guarantee in this document**.
 
-**The eleven rows split five, five and one, and only the second half is interesting.**
+**The thirteen rows split six, six and one, and only the second half is interesting.**
 
-- **Five write *one less*** - `move`, `create labor`, `work`, `bear` and `age`. Each is
+- **Six write *one less*** - `move`, `create labor`, `mine energy`, `work`, `bear` and `age`. Each is
   preceded by a `require ... at least 1`, so the value is known before it is written. **An ordinary
-  decrement arc**, and three of the five are player recipes
-- **Five write *at its maximum*** - four `refresh`'s and `upkeep`'s `paid`, both **world**
-  recipes. **The test is what the amount is, not what the row looks like**: *at its maximum* is
+  decrement arc**, and four of the six are player recipes
+- **Six write *at its maximum*** - five `refresh`'s and `upkeep`'s `paid`, both **world** recipes. **The test is what the amount is, not what the row looks like**: *at its maximum* is
   **how much is missing**, so the amount depends on the current marking. *One less* is a fixed
   decrement and reads nothing. **This is the reset arc, and it is confined to the rules that
   restore what time gives back**
@@ -97,8 +96,7 @@ carries, and only the turn's end restores that count.* **`refresh` is that sente
 rows**, and it is the only rule in the game that writes a count upward from nothing.
 
 **Counted from the Qty and Traits columns of the *Recipes* table, over its 73 role cells**, so it
-can be re-run: **57 cells carry a quantity and 11 are blank, and the eleven blanks are exactly
-the eleven `put` rows.** Of the 57, one reads a trait - *`$where`'s density for that resource* - which is a colour
+can be re-run: **60 cells carry a quantity and 13 are blank, and the thirteen blanks are exactly the thirteen `put` rows.** Of the 60, one reads a trait - *`$where`'s density for that resource* - which is a colour
 rather than a marking read. **It was three until `P-522`**, which cut `muster` and `stand` and
 took the two strength reads with them.
 
@@ -107,6 +105,17 @@ cells and twelve `put` rows. **`P-427` took four `store` rows out of founding**,
 **`P-431` made `age`'s second row a `put`**, so twelve became thirteen. **Nothing edited this
 paragraph and nothing had to** - which is `C-9`'s shape, and it was found by re-deriving the figures
 rather than by reading them.
+
+**Corrected again 2026-09-24, and this time the gate said so instead of a person re-counting.**
+`P-552` gave the Ark a `mine energy` recipe whose *put ark working one less* is a `put`, and
+`88b38801` added the fifth `refresh` row, *put ark working at its maximum*. **Each is a `put`, so
+each is a blank Qty, so each moved both numbers at once** - eleven to thirteen and 57 to 60.
+**Nothing edited this paragraph and nothing had to**, a second time, in the same eleven lines.
+**What is different is that there was a catcher**:
+`every_number_the_documents_state_is_the_number_that_is_there` was written on 2026-09-12 out of the
+correction above, and this is the first stale figure it found rather than explained. **The argument
+survives untouched** - the blanks are exactly the `put` rows at thirteen the way they were at
+eleven, and the one cell that reads a trait is still the same cell.
 
 
 

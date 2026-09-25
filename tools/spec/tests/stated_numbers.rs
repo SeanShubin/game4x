@@ -59,6 +59,22 @@ fn recipe_rows() -> Vec<Vec<String>> {
                 .collect::<Vec<String>>()
         })
         .filter(|cells| cells.len() > 5)
+        .collect::<Vec<Vec<String>>>()
+        .into_iter()
+        .scan((String::new(), String::new()), |carried, mut cells| {
+            // **The Recipe and Owner cells are written once and left blank down the rest of
+            // that recipe's rows**, so a row on its own does not say which recipe it belongs
+            // to or who owns it. Carried forward because *four of the six are player
+            // recipes* is a count over the owner of a `put` row, and a row that has lost its
+            // owner would count as neither.
+            if cells[0].is_empty() {
+                cells[0] = carried.0.clone();
+                cells[1] = carried.1.clone();
+            } else {
+                *carried = (cells[0].clone(), cells[1].clone());
+            }
+            Some(cells)
+        })
         .filter(|cells| {
             let role = &cells[2];
             !role.is_empty() && role != "Role" && !role.starts_with("---")
@@ -87,11 +103,11 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
         .iter()
         .filter(|cells| cells[5].contains("at its maximum"))
         .count();
-    let _names: std::collections::BTreeSet<&str> = rows
+    let one_less: Vec<&&Vec<String>> = puts
         .iter()
-        .filter(|cells| cells[0].starts_with("**"))
-        .map(|cells| cells[0].trim_matches('*'))
+        .filter(|cells| cells[5].contains("one less"))
         .collect();
+    let player_one_less = one_less.iter().filter(|cells| cells[1] == "player").count();
     let reads_a_trait = rows
         .iter()
         .filter(|cells| !cells[3].is_empty() && cells[3].parse::<u32>().is_err())
@@ -105,18 +121,23 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
         },
         Stated {
             document: "docs/designing-rules.md",
-            says: "11 are blank",
+            says: "13 are blank",
             derived: blank.len(),
         },
         Stated {
             document: "docs/designing-rules.md",
-            says: "eleven `put` rows",
+            says: "thirteen `put` rows",
             derived: puts.len(),
         },
         Stated {
             document: "docs/designing-rules.md",
-            says: "57 cells carry a quantity",
+            says: "60 cells carry a quantity",
             derived: rows.len() - blank.len(),
+        },
+        Stated {
+            document: "docs/designing-rules.md",
+            says: "The thirteen rows split six, six and one",
+            derived: puts.len(),
         },
         // **`25 recipes` was here and is gone.** It matched a sentence recording what
         // `P-494`, `P-495` and `C-115` took the table to - history, compared against the
@@ -159,13 +180,40 @@ fn every_number_the_documents_state_is_the_number_that_is_there() {
 
     // Counted here rather than only in prose, so the two that are not a bare count still move
     // the test when they move.
-    // **Four `refresh`'s and `upkeep`'s `paid`** - `P-522` cut two `refresh`'s with
-    // `defending` and `hold` entire, taking eight to five. The old message named `hold`, which
-    // stopped existing, and the count is what said so - twice now, in the same assertion.
+    // **Five `refresh`'s and `upkeep`'s `paid`** - `P-522` cut two `refresh`'s with
+    // `defending` and `hold` entire, taking eight to five, and `88b38801` added the Ark's
+    // `working` to take five to six. The old message named `hold`, which stopped existing,
+    // and the count is what said so - three times now, in the same assertion.
     assert_eq!(
-        maxima, 5,
-        "`put ... at its maximum` rows: four `refresh`'s and `upkeep`'s `paid`"
+        maxima, 6,
+        "`put ... at its maximum` rows: five `refresh`'s and `upkeep`'s `paid`"
     );
+    // **The other two thirds of the same sentence, which nothing re-derived until now.**
+    // `P-552` moved all three at once and the loop above covered only the first, so *five,
+    // five and one* stayed on the page while the count beside it was corrected. A number
+    // stated in prose and not in this file is a number that goes stale in silence.
+    assert_eq!(
+        one_less.len(),
+        6,
+        "`put ... one less` rows: move, create labor, mine energy, work, bear and age"
+    );
+    assert_eq!(
+        player_one_less, 4,
+        "`put ... one less` rows a player owns: move, create labor, mine energy and work"
+    );
+    // **Each wording asserted where the number is**, because a standalone count cannot tell
+    // that the document still says it - which is how the message above went on naming `hold`.
+    let rules = read("docs/designing-rules.md");
+    for says in [
+        "**Six write *one less***",
+        "**Six write *at its maximum*** - five `refresh`'s",
+        "four of the six are player recipes",
+    ] {
+        assert!(
+            rules.contains(says),
+            "docs/designing-rules.md no longer says {says:?} - if the wording changed, change it here too"
+        );
+    }
     // **One since `P-522`**, which cut `muster` and `stand` and took the two strength reads
     // with them. What is left is `work`'s density.
     assert_eq!(
