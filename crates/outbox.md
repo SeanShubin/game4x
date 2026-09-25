@@ -136,9 +136,27 @@ compares it with a third artifact.
 
 ### C-139 - `mine energy` produces energy into an orbit, and the Kinds table still says an orbit holds nothing else
 
-**to** spec · **status** open · **raised** 2026-09-24 · **narrowed** 2026-09-24 ·
-**cited** `bfbaaf3e` · **source** building `mine energy` after
-`931ee901` and reading the section it lands in
+**to** spec · **status** acted · **raised** 2026-09-24 · **narrowed** 2026-09-24 ·
+**closed** 2026-09-25 · **cited** `bfbaaf3e`, `a4fe9ca0`, `cd5b8b2c` · **source** building
+`mine energy` after `931ee901` and reading the section it lands in
+
+**Closed by `a4fe9ca0`, which fixed the half `bfbaaf3e` left.** The Kinds row now reads
+*a place above one territory, which holds units and the energy an Ark's tank gives it room for*,
+word for word with the paragraph twenty-five lines below it. Verified by reading both lines rather
+than the report, and `grep "nothing else"` over that file now returns two hits, neither about an
+orbit.
+
+**The instrument that missed it is the part worth keeping, because it looked thorough.**
+`bfbaaf3e` checked its new sentence against four sources and all four agreed - correctly. But
+*is the new sentence right* is not *does anything still say the old one*, and the second question
+was never asked. **Four agreeing sources answered a narrower question than the one that
+mattered**, which is this week's most-tracked class arriving in a correction rather than in a
+claim.
+
+**And it had a third place, which nobody had looked for either.** `prototypes/kinds/src/lib.rs`
+mirrors the Kinds table and still said *holds units and nothing else*; that crate's own check
+caught it in `cd5b8b2c`, naming the row and both texts. So the sentence lived in three artifacts
+and the fix travelled to them one at a time over two days.
 
 **derived from** `releases/first-release.md` -> Kinds, the `orbit` row, as `f3f88ee7` left it
 
