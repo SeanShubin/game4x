@@ -9,7 +9,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 ## What must be decided
 
 - **P-556** - Winning leaves `spec/` for now, and the launch becomes a requirement rather than a victory · `decide/proposals.md`
-- **P-551** - `game state` and `local state` are chosen, and a log is a thing `spec/` does not have · `decide/questions.md`
+- **P-551** - Four kinds of typed line, and the names fall out of the two you already chose · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`

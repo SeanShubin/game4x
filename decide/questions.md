@@ -11,74 +11,65 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
-### P-551 - `game state` and `local state` are chosen, and a log is a thing `spec/` does not have
+### P-551 - Four kinds of typed line, and the names fall out of the two you already chose
 
-**to** sean · **status** open · **raised** 2026-09-24 · **kind** recovered · **shape** an instruction · **asks** a decision · **into** `spec/invariants.md`, `spec/console.md` -> Commands
+**to** sean · **status** open · **raised** 2026-09-24 · **kind** recovered · **shape** a decision · **asks** a decision · **into** `spec/console.md` -> Commands
 
-**Two answers taken.** *`game state` and `local state` is fine* - so the mechanics side keeps the
-name your invariants already give it, and the other side takes the term
-deterministic-lockstep RTS uses for exactly this. **And**: *no need to record interface commands in
-the history but they do need to be logged.*
+**You said you cannot name one in isolation and you are right** - `spec/console.md` already
+distinguishes four kinds of typed line and **two of the four have no name**, which is why naming
+the fifth had nothing to sit beside.
 
-**Three decisions are left, and the second is the one your answer created.**
-
-## `L1` - what a typed interface command is called
-
-**There is no settled term**, because most games never reify one - they handle input and move on.
-**`command` and `local command` is the closest to standard**, and it falls out of the split you just
-chose: a command changes game state, a local command changes local state.
-
-**This lane recommends `local command`**, and the cost is that *local* then does two jobs - the
-state and the command - which is an argument for it rather than against: one word, one boundary.
-
-## `L2` - what a log is, since `spec/` has none
-
-**Measured: the word does not appear in `spec/*.md`.** There is exactly one record today -
-**history** - and `spec/console.md` says what it is: `history` lists every command executed so far,
-`/save` writes it to a file, and `run` executes that file. **A `/` line is in none of it.**
-
-**So *logged but not in history* asks for a second artifact**, and it needs three things your
-sentence does not say:
+## What the file already distinguishes, and what it calls each
 
 ```
-what reads it      a command like `history`, or a file only, or the review application
-what replays it    nothing, presumably - that is what makes it not history
-what it is for     the answer that decides the other two
+{move unit:ark from:1 to:2}   named: "a command that changes the game names a recipe"
+{show territory:1}            UNNAMED: "and three that change nothing"
+/console                      UNNAMED: "a line beginning with `/`... none of these is a command"
+{select unit:ark}             does not exist yet
 ```
 
-**This lane's reading of *what it is for*, offered as the thing to confirm or correct**: an
-interface test is a file of commands, and a test that begins *select the ark* has to say so
-somewhere. **The log is what an interface test is made of**, which is why it earns its place and
-why nothing needs to replay it - the test is the replay.
+**So the set is four and the vocabulary is one word plus two descriptions.**
 
-## `L3` - do interface commands differ from `/` lines, and how
-
-**This is the sharpest one, and your answer is what sharpens it.** `spec/console.md:241`: a `/`
-line *directs the front end rather than the game... none of these is a command and none is a
-transition: history does not record them.*
-
-**An interface command is also not a transition and also not in history.** So until your answer
-they were indistinguishable. **Now they differ in one way: an interface command is logged and a
-`/` line is not** - and that is either the whole of the distinction or a consequence of a deeper
-one.
-
-**Two readings:**
+## `N1` - named for what each changes, which costs no new words
 
 ```
-one kind    `/game`, `/save` and `{select ...}` are all front-end lines, and the log is
-            simply where the ones about the game's own objects go
-two kinds   a `/` line directs the application and a local command acts on the game's
-            objects without changing them - different things that share a history rule
+{move unit:ark from:1 to:2}   a game command     changes game state    makes a transition, in the history
+{select unit:ark}             a local command    changes local state    logged, not in the history
+{show territory:1}            a query            changes nothing        logged, not in the history
+/console                      a front-end line   changes the application   not logged
 ```
 
-**This lane recommends *two kinds*, on your own sentence**: *the game mechanics are abstract rules
-while the user interface is how the user interacts with those rules.* **`/console` is not an
-interaction with a rule and `{select ark}` is.** And `/` lines are already excluded from `help`,
-where a local command a player can type ought to be findable.
+**Nothing here is invented.** *Game state* and *local state* are the two you chose this afternoon,
+and the command names are those two adjectives; `query` is already in `spec/console.md` -
+*commands to query the game state are available*; and *a line beginning with `/` directs the front
+end* is already the phrase. **Four names, four kinds, and no word this repository has not already
+spent.**
 
-## What lands once these are answered, so you can see the size
+**And it answers `L3` without a separate rule**: a `/` line is not a command at all, which the file
+already says. **That is the difference** - a local command acts on the game's own objects and a
+front-end line acts on the application.
 
-**One sentence in `spec/invariants.md`** naming the two kinds of state and saying the mechanics know
-nothing of the interface. **One paragraph in `spec/console.md` -> Commands** saying what a local
-command is, that it is logged and not in history, and that `help` lists it. **Nothing in
-`spec/units.md` or the release.**
+## `N2` - one noun, qualified where it matters
+
+**No new names**: *a command names the game, the interface, or nothing*, and `/` lines stay
+not-commands. **Cheapest to read and there is nothing to check** - a tool cannot ask which kind a
+command is, so the log's mark and `help`'s contents rest on whoever writes them.
+
+## `N3` - name the act after the effect
+
+**A game command becomes *a transition***, since `spec/invariants.md` already says a game state
+changes only by a transition. **Costs**: it conflates the act with its effect - a command *makes* a
+transition - and `transition` is used nine times in `spec/` for the change rather than the typing.
+
+## What this lane would say
+
+**`N1`.** It is the only one of the three that adds no vocabulary, and the reason is that you
+already did the work: the state split you chose names the commands for free. **`N2` leaves nothing
+to enforce and `N3` spends a word that is already doing another job.**
+
+## One thing `N1` forces, and it is small
+
+**The command log's mark becomes three-valued rather than two.** `P-555` says each line says
+*whether it changed the game or the interface*; with a query in the set it is **game, local or
+query**, and a `/` line is not in the log at all. **One word in a sentence not yet promoted**, so
+nothing landed has to change.
