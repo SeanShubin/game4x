@@ -4266,3 +4266,24 @@ relevance sweep of 2026-09-25 asked the right question one level too low.
 - **`S-170` - *a unit that crosses into an empty place is stranded*.** Thin-engine's `move` spends
   `moving` and nothing else. **There is no fuel in it at all**, so the item is about a mechanism the
   mainline may not keep
+
+## Said 2026-09-25: thin-engine's tests are not maintained, and mainline is
+
+**Sean**: *I don't expect to be maintaining any tests for thin-engine anymore, those tests have
+been migrated to mainline and mainline is what I maintain. Thin engine is a prototype.*
+
+**What that settles.** `spec/tests/` and `reviewed/` at the repository root are the fifty-four he
+maintains and has read. `crates/thin-engine/data/foundation/tests/` holds fifty-four of the same
+names in the **foundation** form - numeric, `{place id:1 of:1 layer:surface}` - where the root
+copies are the **friendly** form he wrote, `{place id:1 of:territory-1 layer:surface name:place-1}`.
+
+**They are not a second copy that can disagree, and a check is why.** `crates/thin-engine/tests/
+friendly.rs` renders the friendly form from the foundation form and compares it line for line -
+*the translator is not part of the engine*, Sean, 2026-09-15. So one is a rendering of the other,
+which is `CLAUDE.md`'s own split between stating and presenting.
+
+**What is worth watching as the design migrates**: the rendering direction. Today the foundation
+form is the source and the friendly form is derived, while **the friendly form is the one he reads
+and approves**. If the mainline takes the design, the thing he maintains and the thing that is
+canonical should be the same artifact, and today they are held together by a test rather than being
+one file. **Not a defect - a place where one could appear.**
