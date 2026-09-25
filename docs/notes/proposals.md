@@ -185,6 +185,22 @@ case-sensitively, so `## Pioneer` and `### Yard` were invisible; **the research 
 declared and not defined, a definition is a rule, and `CLAUDE.md` puts rules in prose. So prose is
 the population, and the item was measuring the right thing all along.
 
+**And *the count is two* understates it, which the research lens corrected at `148e4b7a`.** The
+count is two both times and **only one of the two members is the same kind**. `X-26` counted
+`store` and `deposit`; today it is `deposit` and `fertility`. Verified here: `X-26`'s own opening
+names `store` as the example the code lane found; `spec/logistics.md:28` now says *destroying a
+store leaves the resources where they already were*, so `store` closed; and neither `deposit` nor
+`fertility` appears in any `spec/` prose file.
+
+**So agreeing with a number is not agreeing with an item.** *Two* on its own hides that one member
+left because the gap it named was filled and another arrived that was never examined - **a matching
+count over a changed population**, which is the twin of a count that moves. The first announces
+itself and the second does not.
+
+**It is why the closure does not rest on the count**: nothing in prose refers to `fertility` at all,
+by word or by concept, so data-only is self-consistent there, where `store` was a gap only because
+a prose rule depended on it.
+
 **And their warning was worth more than the count.** *If the sweep of all 39 used a case-sensitive
 search, it is worth re-running.* It did, it was re-run, and it found one more wrong verdict in the
 code lane's list - `C-113`, whose sentence begins *A put has no quantity* with a capital. **An item
