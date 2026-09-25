@@ -46,24 +46,24 @@ Every territory has capacity for at least one food extractor.
 
 ## Kinds
 
-| Kind          | What it is                                                                         |
-| ------------- | ---------------------------------------------------------------------------------- |
-| **citizen**   | a person: provides labor, eats, and grows on surplus                               |
-| **extractor** | built for one resource, and worked to produce it                                   |
-| **yard**      | where an Ark is produced                                                           |
-| **store**     | built to hold one resource, and holds nothing else                                 |
-| **ark**       | carries a landing, and can invade from orbit                                       |
-| **pioneer**   | founds a territory                                                                 |
-| **food**      | eaten by citizens; expires                                                         |
-| **metal**     | what things are built from; drawn from the planet, and conserved once above ground |
-| **energy**    | what moves things; neither conserved nor expiring                                  |
-| **labor**     | what working a machine takes; a citizen provides it each turn                      |
-| **territory** | a place things are in, which has a density and a capacity per resource             |
-| **orbit**     | a place above one territory, which holds units and nothing else                    |
-| **deposit**   | what a territory's ground offers of one resource, and how richly                   |
-| **adjacency** | two places that share an edge, held by the thing that holds them                   |
-| **game**      | every thing is in it, and it is the one thing that is in nothing                   |
-| **fertility** | a citizen's capacity to raise one more, spent by raising one and renewed each turn |
+| Kind          | What it is                                                                                    |
+| ------------- | --------------------------------------------------------------------------------------------- |
+| **citizen**   | a person: provides labor, eats, and grows on surplus                                          |
+| **extractor** | built for one resource, and worked to produce it                                              |
+| **yard**      | where an Ark is produced                                                                      |
+| **store**     | built to hold one resource, and holds nothing else                                            |
+| **ark**       | carries a landing, and can invade from orbit                                                  |
+| **pioneer**   | founds a territory                                                                            |
+| **food**      | eaten by citizens; expires                                                                    |
+| **metal**     | what things are built from; drawn from the planet, and conserved once above ground            |
+| **energy**    | what moves things; neither conserved nor expiring                                             |
+| **labor**     | what working a machine takes; a citizen provides it each turn                                 |
+| **territory** | a place things are in, which has a density and a capacity per resource                        |
+| **orbit**     | a place above one territory, which holds units and the energy an Ark's tank gives it room for |
+| **deposit**   | what a territory's ground offers of one resource, and how richly                              |
+| **adjacency** | two places that share an edge, held by the thing that holds them                              |
+| **game**      | every thing is in it, and it is the one thing that is in nothing                              |
+| **fertility** | a citizen's capacity to raise one more, spent by raising one and renewed each turn            |
 
 ## Families
 
@@ -352,7 +352,7 @@ only one who can move them.
 
 ### R-6 - The loop can be played through
 
-**to** sean - **status** **built** 2026-09-11 - **cited** `faafb5f`, `2f38241`, `53bd58d`, `58c8b4a`, `92786a9`, `d7ed1e8`, `d7e6469`, `3292266`, `5e97b79`, `731aceb` - **the last of those is tooling and not evidence**: `spec touching` could not see a built capability and `R-6` was the case - **evidence reported by the code lane and recorded here rather than by the lane that built it**, and **every clause re-run by this lane rather than taken from the report.** `{deploy-ark territory:1}` at `play.4x:19`, `{found-by-land territory:2}` at `:154`, `{launch-ark territory:1}` at `:164`. **The scenario's commands changed by one line on 2026-09-12, and `S-26` says not to do that under you without saying so.** `P-460` gave `move` its second place, so turn 8 reads `{move unit:pioneer from:1 to:2}` in `scenario/commands/play.4x` and the same in `spread.4x`. **`scenario/expected/play.4x` does not change at all**, so what this capability rests on - the loop playing through, and every recipe firing - is untouched and was re-measured rather than assumed. **And its expected state moved again when `P-474` was built, by thirty-four lines and no others.** Every deposit entry carried `room` where it had carried `total-capacity`: `{deposit density:4 resource:food room:0}` in territory 1, where three food extractors stand on ground with capacity for three. **And it moved a third time when `P-475`, `P-476`, `P-477` and `P-478` were built**, again by thirty-four lines and no others. Territory 1's food deposit reads `{deposit capacity:3 density:4 free:0 occupied:3 resource:food}`. **Every clause re-run by this lane rather than taken from the code lane's report**: 34 deposit entries, `capacity - occupied = free` on all 34, `occupied` equal to the extractors standing in that territory on all 34, five deposits with anything on them, and no `room:` anywhere. `cargo test --workspace` is green, where two tests in `crates/game-console/tests/declare.rs` were red on a literal 24 against a count of 26. **Nothing about what the game does moved** - the same 34 deposits by territory, resource and density, and `free` equal to the old `room` everywhere. **Nothing about what the game does moved** - the pioneer that went is the pioneer that went, and the check counted thirty-four deposit lines changed and zero of anything else. **The code lane predicted the shape of that diff before making it** - twenty-nine deposits untouched by any extractor, five not - and the diff agreed, which is why it was willing to reseed the file at all.
+**to** sean - **status** **built** 2026-09-11 - **cited** `faafb5f`, `2f38241`, `53bd58d`, `58c8b4a`, `92786a9`, `d7ed1e8`, `d7e6469`, `3292266`, `5e97b79`, `731aceb`, `c3b9e39` - **the last of those is tooling and not evidence**: `spec touching` could not see a built capability and `R-6` was the case - **evidence reported by the code lane and recorded here rather than by the lane that built it**, and **every clause re-run by this lane rather than taken from the report.** `{deploy-ark territory:1}` at `play.4x:19`, `{found-by-land territory:2}` at `:154`, `{launch-ark territory:1}` at `:164`. **The scenario's commands changed by one line on 2026-09-12, and `S-26` says not to do that under you without saying so.** `P-460` gave `move` its second place, so turn 8 reads `{move unit:pioneer from:1 to:2}` in `scenario/commands/play.4x` and the same in `spread.4x`. **`scenario/expected/play.4x` does not change at all**, so what this capability rests on - the loop playing through, and every recipe firing - is untouched and was re-measured rather than assumed. **And its expected state moved again when `P-474` was built, by thirty-four lines and no others.** Every deposit entry carried `room` where it had carried `total-capacity`: `{deposit density:4 resource:food room:0}` in territory 1, where three food extractors stand on ground with capacity for three. **And it moved a third time when `P-475`, `P-476`, `P-477` and `P-478` were built**, again by thirty-four lines and no others. Territory 1's food deposit reads `{deposit capacity:3 density:4 free:0 occupied:3 resource:food}`. **Every clause re-run by this lane rather than taken from the code lane's report**: 34 deposit entries, `capacity - occupied = free` on all 34, `occupied` equal to the extractors standing in that territory on all 34, five deposits with anything on them, and no `room:` anywhere. `cargo test --workspace` is green, where two tests in `crates/game-console/tests/declare.rs` were red on a literal 24 against a count of 26. **Nothing about what the game does moved** - the same 34 deposits by territory, resource and density, and `free` equal to the old `room` everywhere. **Nothing about what the game does moved** - the pioneer that went is the pioneer that went, and the check counted thirty-four deposit lines changed and zero of anything else. **The code lane predicted the shape of that diff before making it** - twenty-nine deposits untouched by any extractor, five not - and the diff agreed, which is why it was willing to reseed the file at all.
 `every_recipe_the_release_declares_fires_while_the_scenario_runs` passes, and
 `the_committed_scenario_launches_an_ark_and_does_not_finish_the_planet` passes with it. **It does
 not win, which is the last clause rather than a shortfall.**
@@ -370,6 +370,28 @@ of founding, so territory 2 has no stores at all, territory 1 has one fewer of e
 that used to be kept is lost at a turn's end. `scenario/expected/play.4x` was reseeded under
 `P-225`'s protocol and is **unreviewed, and says so**.
 
+
+**The first clause is observed whole for the first time, 2026-09-25** - `c3b9e39`, reported by the
+code lane and **re-derived here from the state rather than from the commands**, because a line is
+not a launch. `scenario/expected/play.4x` holds **two Arks aloft, over orbits 1 and 2, and none on
+any surface** - which is what makes the orbit an Ark is above the territory it launched from, since
+`P-549` admits no ark on a surface. The scenario runs **fifteen `{end-turn}`s over 211 command
+lines**, and carries both `{launch-ark territory:1}` and `{launch-ark territory:2}`. **The Ark the
+game began with was consumed by `deploy-ark` on turn 1**, so two Arks in two orbits is two
+launches, and the second is from ground taken by land.
+
+**The check behind this clause had been reading the input.** It counted `{launch-ark` lines in the
+scenario file - which a scenario launching twice from the same ground satisfies just as well, and
+is *a check whose subject is behaviour reads the outcome, not the input* exactly. It now reads
+where the Arks are, asserts `[1, 2]`, and names territory 2 in a second assertion, because a count
+of two would not have caught two launches from territory 1. **Poisoned before being believed**:
+deleting turn 15's launch gives `[1]` against `[1, 2]`.
+
+**What territory 2 had to build, because `P-427` leaves a founding with no stores at all**: a metal
+store, a second mine and the first well on turn 11; the second metal store that mine licenses, the
+second well and the first energy store on 12; the second energy store on 13; the Yard on 14, for
+fifteen of the seventeen metal saved; the launch on 15. **Recorded here and not certified** - the
+code lane may build a thing and may not vet it, and neither may this lane.
 
 - **In** - `spec/future/control.md`, *a player wins by launching an Ark from a territory other
   than one an Ark has been deployed to* - **a future plan since `P-556`**, and the requirement
