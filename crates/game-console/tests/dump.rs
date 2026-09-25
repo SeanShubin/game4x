@@ -422,9 +422,14 @@ fn every_labor_consumer_is_preceded_by_a_create_labor() {
     // wells and a Yard, and works them - thirty-five more commands that spend labor, each with
     // its own `create labor` in front of it. **`spread.4x` is untouched at thirteen**, which is
     // why the two are named separately rather than summed.
+    //
+    // **Ninety-six since turn 16**, which adds three: both territories are fed while the Ark
+    // crosses in orbit. **The crossing itself is not one of the three** - `move` spends energy
+    // rather than labor, so the command this turn exists for is invisible to this count, which
+    // is what it means for a check to be about labor and not about turns.
     assert_eq!(
-        checked, 106,
-        "ninety-three labor consumers in play.4x and thirteen in spread.4x; found {checked}"
+        checked, 109,
+        "ninety-six labor consumers in play.4x and thirteen in spread.4x; found {checked}"
     );
 }
 
@@ -759,10 +764,15 @@ fn every_turn_splits_the_player_from_the_end_of_the_turn() {
     // *what expires expires*, on the one turn nothing was over a bound. **Five more turns
     // added exactly five more of the first kind**, which is a scenario running longer rather
     // than a phase falling silent.
+    //
+    // **Sixteen since turn 16**, and it is the same one kind again: fifteen of the sixteen are
+    // now *nature takes back what is no longer held*, one per turn but turn 8. **The turn that
+    // moved an Ark in orbit reclaimed nothing**, which is the phase saying so rather than the
+    // count saying nothing.
     let empty = turns.matches("*Nothing changed.*").count();
     assert_eq!(
-        empty, 15,
-        "{empty} sections say nothing changed and this was written when 15 did. If a rule or \
+        empty, 16,
+        "{empty} sections say nothing changed and this was written when 16 did. If a rule or \
          the scenario moved, that is fine - say so here rather than widening this to `> 0`"
     );
     assert!(

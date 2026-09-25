@@ -102,7 +102,15 @@ impl Kind {
             Kind::Territory => {
                 "a place things are in, which has a density and a capacity per resource"
             }
-            Kind::Orbit => "a place above one territory, which holds units and nothing else",
+            // **`C-139`, and the row lagged the paragraph four lines below it by a day.**
+            // `bfbaaf3e` made *Where things are* say an orbit holds the energy an Ark's tank
+            // gives it room for; this cell went on saying *nothing else* until `a4fe9ca0`
+            // moved it, because the commit that fixed the paragraph checked the new sentence
+            // against four sources and none of them was the other place saying the old one.
+            Kind::Orbit => {
+                "a place above one territory, which holds units and the energy an Ark's tank \
+                 gives it room for"
+            }
             Kind::Deposit => "what a territory's ground offers of one resource, and how richly",
             Kind::Adjacency => "two places that share an edge, held by the thing that holds them",
             Kind::Game => "every thing is in it, and it is the one thing that is in nothing",

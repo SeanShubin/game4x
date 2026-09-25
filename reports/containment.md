@@ -37,10 +37,9 @@ this is the same tree with nothing collapsed, so that a change to it is one line
   - {orbit id:10}
   - {orbit id:11}
   - {orbit id:12}
-  - {orbit id:1} - energy&nbsp;1/1
+  - {orbit id:1}
+  - {orbit id:2} - energy&nbsp;0/2
     - {ark id:1 moving:1 working:1}
-    - {energy}
-  - {orbit id:2} - energy&nbsp;0/1
     - {ark id:2 moving:1 working:1}
   - {orbit id:3}
   - {orbit id:4}
@@ -127,4 +126,4 @@ this is the same tree with nothing collapsed, so that a change to it is one line
     - {deposit density:8 resource:metal occupied:0 free:6 capacity:6}
     - {nature met:0}
 
-123 things, counting every container and everything in one.
+122 things, counting every container and everything in one.

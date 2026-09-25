@@ -175,13 +175,30 @@
 # `P-549`: *yes launching leaves the ark in orbit, we spend materials from the surface and end
 # up with an ark in orbit, and an ark is never on the surface.*
 #
-# **So there is an Ark, and it does not cross because nothing here tells it to.** An Ark moves
-# in orbit and lands by `deploy-ark`; this scenario launches one on turn 10 and stops, so the
-# state it leaves has an Ark above territory 1. **What is untested is orbital movement**, which
-# is a gap in the scenario rather than a fact about the rules - and it was reported as one for
-# three days because a comment explained the absence. The pioneer's crossing on turn 8 is
-# the move this file fires, and it fires because founding needs it rather than because a case
-# was written to exercise it - `C-63` answered by `S-76`.
+# **So there is an Ark, and it does not cross on this turn because nothing here tells it to.**
+# An Ark moves in orbit and lands by `deploy-ark`. **It crosses on turn 16**, spending exactly
+# the unit of energy the next command mines - which is what an Ark's `Fuel` of 1 means, and the
+# whole of why that command is worth firing here.
+#
+# **Three things this paragraph claimed were false and one of them always was** - `S-182`, filed
+# by the specification lane while checking this lane's own report. It said the scenario *launches
+# one on turn 10 and stops*: the launch is on **turn 9**, four lines above, and the paragraph
+# below this one has said *the Ark that turn 9 launched* the whole time - **so the comment
+# contradicted itself before anything changed under it.** It then said the state left has an Ark
+# above territory 1; `S-174` made that two Arks over two orbits, and turn 16 moves one of them.
+#
+# **And it said orbital movement was untested, which was true and is the part worth keeping**,
+# because of how it stopped being true. The reason given for the gap was that *a second orbit to
+# cross to is the scenario's next gap* - and `R-6`'s launch from territory 2 put an Ark in orbit
+# 2, so the stated blocker was removed by a change that was not about it. **Nothing noticed; the
+# comment went on explaining an absence that had become an omission.**
+#
+# **Which is this file's own warning landing on this file.** The sentence that was here read: *it
+# was reported as one for three days because a comment explained the absence.* Writing a third
+# comment to explain the same absence is that failure a third time, so turn 16 fires the command
+# instead. The pioneer's crossing on turn 8 is the other move this file fires, and it fires
+# because founding needs it rather than because a case was written to exercise it - `C-63`
+# answered by `S-76`.
 # The farms are worked first, as always: a population that gathers nothing this turn starves
 # at the end of it, whatever else is going on.
 {create-labor territory:1}
@@ -197,8 +214,10 @@
 #
 # **One unit is exactly one crossing**, which is the Ark's `Fuel` of 1 - so this is the state a
 # reader needs to see the loop at all: an orbit with something in it, and a unit that could spend
-# it. **Nothing crosses yet**, because a second orbit to cross to is the scenario's next gap and
-# not this recipe's.
+# it. **Nothing crosses yet**, and what it is waiting for is somewhere to cross to: orbit 2 is
+# empty until turn 15 launches into it. **The unit mined here is the unit spent on turn 16**, and
+# it sits in this orbit untouched for five turns in between - which is the tank doing the one
+# thing a tank does, shown over a span rather than asserted.
 #
 # **It survives the turn's end**, and that is the tank doing the one thing a tank does: an orbit
 # declares no room of its own, so what is mined is kept only while the Ark that mined it is still
@@ -316,4 +335,29 @@
 {work territory:2 resource:food}
 {create-labor territory:2}
 {launch-ark territory:2}
+{end-turn}
+
+# Turn 16. The Ark crosses in orbit, which is the one rule path nothing in this file exercised.
+#
+# **`move` fires here for the second time and over the other border.** Turn 8 crosses a Pioneer
+# on the surface; this crosses an Ark on the orbit border - `spec/units.md` gives an Ark
+# `Crosses: orbit border` and a Pioneer `Crosses: border`, and until now only one of the two had
+# ever been read by a command.
+#
+# **It spends the unit mined on turn 10, and that is the whole of an Ark's `Fuel` of 1.** `move`
+# consumes one energy at `$from`, which is the orbit it leaves - `S-150`, the place pays - and
+# that orbit holds exactly one, put there by `mine-energy` six turns ago and held ever since by
+# the tank of the Ark now leaving. **So the orbit it leaves ends empty of both**, and a reader
+# can follow one unit of energy from the sun to a crossing without reading any other line.
+#
+# **Orbit 2 ends with two Arks, which is its capacity** - `releases/first-release.md` bounds an
+# ark by *a capacity of 2 in the orbit*. That is the bound reached rather than tested: nothing
+# here asks for a third, so this shows the legal case and says nothing about the refusal.
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:2}
+{work territory:2 resource:food}
+{move unit:ark from:1 to:2}
 {end-turn}

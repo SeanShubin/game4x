@@ -44,9 +44,8 @@
   {orbit id:11} -> 1
   {orbit id:12} -> 1
   {orbit id:1} -> 1
-    {ark id:1 moving:1 working:1} -> 1
-    {energy} -> 1
   {orbit id:2} -> 1
+    {ark id:1 moving:1 working:1} -> 1
     {ark id:2 moving:1 working:1} -> 1
   {orbit id:3} -> 1
   {orbit id:4} -> 1

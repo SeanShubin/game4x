@@ -14,7 +14,7 @@
 <p><strong>Generated. Do not edit.</strong> <code>cargo run -p game-console --bin dump-state</code>.</p>
 <p>Every command that ran, in order, with the recipe it fired. <code>S-24</code>: the third of the four artifacts a person needs to derive the data dump by hand, the others being <code>catalog.md</code>, <code>recipes.md</code> and <code>state.md</code>.</p>
 <p>The hierarchy is flattened. <code>run setup</code> opens <code>setup.4x</code>, which opens others, and a <code>run</code> line is not listed - it is where the next commands are kept rather than a move in the game.</p>
-<p>274 commands over 15 turn(s), and 63 of them before the game began.</p>
+<p>282 commands over 16 turn(s), and 63 of them before the game began.</p>
 <table>
 <thead>
 <tr><th>#</th><th>turn</th><th>command</th><th>fires</th></tr>
@@ -294,8 +294,16 @@
 <tr><td>272</td><td>15</td><td><code>{create-labor territory:2}</code></td><td><code>create labor</code></td></tr>
 <tr><td>273</td><td>15</td><td><code>{launch-ark territory:2}</code></td><td><code>launch ark</code></td></tr>
 <tr><td>274</td><td>15</td><td><code>{end-turn}</code></td><td><code>upkeep</code>, <code>bear</code>, <code>breed</code>, <code>perish</code>, <code>age</code>, <code>spoil</code>, <code>stow</code>, <code>discard</code>, <code>refresh</code>, <code>renew</code></td></tr>
+<tr><td>275</td><td>16</td><td><code>{create-labor territory:1}</code></td><td><code>create labor</code></td></tr>
+<tr><td>276</td><td>16</td><td><code>{work territory:1 resource:food}</code></td><td><code>work</code></td></tr>
+<tr><td>277</td><td>16</td><td><code>{create-labor territory:1}</code></td><td><code>create labor</code></td></tr>
+<tr><td>278</td><td>16</td><td><code>{work territory:1 resource:food}</code></td><td><code>work</code></td></tr>
+<tr><td>279</td><td>16</td><td><code>{create-labor territory:2}</code></td><td><code>create labor</code></td></tr>
+<tr><td>280</td><td>16</td><td><code>{work territory:2 resource:food}</code></td><td><code>work</code></td></tr>
+<tr><td>281</td><td>16</td><td><code>{move unit:ark from:1 to:2}</code></td><td><code>move</code></td></tr>
+<tr><td>282</td><td>16</td><td><code>{end-turn}</code></td><td><code>upkeep</code>, <code>bear</code>, <code>breed</code>, <code>perish</code>, <code>age</code>, <code>spoil</code>, <code>stow</code>, <code>discard</code>, <code>refresh</code>, <code>renew</code></td></tr>
 </tbody>
 </table>
-<p>274 row(s)</p>
+<p>282 row(s)</p>
 </body>
 </html>

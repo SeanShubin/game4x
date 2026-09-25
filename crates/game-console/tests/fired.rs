@@ -21,8 +21,13 @@
 // and the launch. **Seventy-seven commands, and they divide three ways**: fifty-two are
 // territory 2's, twenty keep territory 1 fed - four a turn, because a population that gathers
 // nothing starves at the end of that turn whatever else is going on - and five end a turn.
-const LINES: usize = 211;
-const TURNS: usize = 15;
+// 219 and 16 since `S-182`: turn 16 crosses the Ark in orbit, spending the unit `mine-energy`
+// put there on turn 10. **Eight commands, and only one of them is the turn's reason** - the other
+// seven feed both territories, because a population that gathers nothing starves whatever else is
+// going on. It closes the one rule path this file never read: `move` over the orbit border, where
+// turn 8 reads it over the surface border.
+const LINES: usize = 219;
+const TURNS: usize = 16;
 
 use game_console::{Library, fired};
 use std::path::{Path, PathBuf};

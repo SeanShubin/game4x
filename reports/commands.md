@@ -6,7 +6,7 @@ Every command that ran, in order, with the recipe it fired. `S-24`: the third of
 
 The hierarchy is flattened. `run setup` opens `setup.4x`, which opens others, and a `run` line is not listed - it is where the next commands are kept rather than a move in the game.
 
-274 commands over 15 turn(s), and 63 of them before the game began.
+282 commands over 16 turn(s), and 63 of them before the game began.
 
 | #   | turn   | command                                                              | fires                                                                                      |
 | --- | ------ | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
@@ -284,5 +284,13 @@ The hierarchy is flattened. `run setup` opens `setup.4x`, which opens others, an
 | 272 | 15     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
 | 273 | 15     | `{launch-ark territory:2}`                                           | `launch ark`                                                                               |
 | 274 | 15     | `{end-turn}`                                                         | `upkeep`, `bear`, `breed`, `perish`, `age`, `spoil`, `stow`, `discard`, `refresh`, `renew` |
+| 275 | 16     | `{create-labor territory:1}`                                         | `create labor`                                                                             |
+| 276 | 16     | `{work territory:1 resource:food}`                                   | `work`                                                                                     |
+| 277 | 16     | `{create-labor territory:1}`                                         | `create labor`                                                                             |
+| 278 | 16     | `{work territory:1 resource:food}`                                   | `work`                                                                                     |
+| 279 | 16     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 280 | 16     | `{work territory:2 resource:food}`                                   | `work`                                                                                     |
+| 281 | 16     | `{move unit:ark from:1 to:2}`                                        | `move`                                                                                     |
+| 282 | 16     | `{end-turn}`                                                         | `upkeep`, `bear`, `breed`, `perish`, `age`, `spoil`, `stow`, `discard`, `refresh`, `renew` |
 
-274 row(s)
+282 row(s)

@@ -436,7 +436,7 @@ a place things are in, which has a density and a capacity per resource.
 
 ## orbit
 
-a place above one territory, which holds units and nothing else.
+a place above one territory, which holds units and the energy an Ark's tank gives it room for.
 
 **In families** thing, place
 
