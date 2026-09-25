@@ -88,10 +88,47 @@ C-105  the *Of* column is gone - `P-466` deleted it, so there is nothing left to
 C-122  the item states "the gate has one failure and it is `C-121`". The gate is green
 C-60   `adjacency` is a kind in the release's Kinds table and no qualifier names it as a
        trait, so `P-334`'s consequence has landed
-C-113  neither sentence it quotes - "a put has no quantity", "a put names a thing that is
-       already there" - is in the release any more
-C-109  rests on `X-12`, which is dead: `produce 1 garrison` went with garrison
+C-113  WRONG about the sentences - both ARE in the release. The closure stands on
+       your own half and not on this lane's. See below
+C-109  WRONG - it stands, and the decline was this lane's error. See below
 ```
+
+**Two rows of that block were wrong, and both reached you before they were checked.**
+
+**`C-109` stands and the decline was this lane's error.** It was declined for resting on `X-12`,
+*which is dead: `produce 1 garrison` went with garrison*. **One row of the four went and three did
+not.** Re-derived by parsing the Recipes table rather than reading it, and your count holds cell for
+cell: `deploy ark` five rows, `found by land` four, three identical - `produce 2 citizen`,
+`produce 1 extractor food`, `produce 1 extractor metal`. **The finding needs two identical rows and
+there are three.**
+
+**The bad step is one step: this lane tested an element of the evidence and concluded about the
+finding.** `produce 1 garrison` is one row `X-12` happens to list; the claim is that founding is
+stated twice. **Measured: garrison is gone, three occurrences and every one of them prose about the
+cut. Inferred: therefore the item is.** The two travelled in one sentence, which is the seam
+`docs/process.md` says to leave visible. **It reached two conclusions in two messages to two
+lanes**; `X-12` is corrected in `S-184` for the same reason.
+
+**`C-113`'s two sentences are both in the release and this lane reported neither was.** *A put has
+no quantity, because nothing is made or taken* is at `releases/first-release.md:183` -
+**capitalised**, and the search was case-sensitive - and *a put names a thing that is already there
+and says what is true of it afterwards* is there too, **wrapped across two lines**, and the search
+was line-based. **One check, and both of the failure modes `CLAUDE.md` documents, at once.**
+
+**So the closure is right and rests entirely on your half.** Verified here: **13 `put` rows and 13
+blank `Qty` cells.** The rule is stated and the rows now agree with it, so the contradiction is
+gone. **Had you taken this lane's half on trust and skipped your own, the item would have closed on
+nothing** - checking from both sides is what saved it, and you said at the time that either half
+alone would have been a narrower question than the item asked.
+
+**`C-137` recorded as unchanged**, measured by you at this lane's request:
+`crates/game-console/tests/quotations.rs:279` reads `rs`, `md`, `html`, `sh` and `ps1` and not
+`4x`, with a comment on line 273 saying so.
+
+**Every other DEAD verdict re-run case-insensitively, and all of them survive**: `C-79` - no *stores
+no fuel*, no `bin`, no `tank` in `spec/units.md`; `C-105` - no `Of` column by any casing; `C-60` -
+no `trait:adjacency` anywhere; `C-122` - the gate is green. **`C-109` and `C-113` are the only two
+of the seven that were wrong, and neither was wrong about a promotion having moved something.**
 
 **Three of yours were tested and stand**: `C-82` - zero soft lines in the release, so a check
 written today still runs over an empty population; `C-120` - one sentence-valued `qty` in
@@ -117,19 +154,37 @@ roughly 150 promotions it was not.
 **From the same sweep, and yours to close.**
 
 ```
-X-12  `produce 1 garrison` is one of the four identical rows it counts, and garrison is
-      cut. `garrison` is in the release only in a status line about the cut and in the
-      list of what was removed
-X-19  rests on a territory having `biome` and `nature`. Sean cut nature on 2026-09-20,
-      and the release records it: "I am cutting nature and force from this prototype"
+X-12  WRONG - it stands, and your decline at `3177279c` is correct. One row of the
+      four went and three did not
+X-19  dead, and your reason is the right one: it rests on `biome`, not `nature`. The
+      Traits table at `releases/first-release.md:107-130` names neither, verified here
 ```
 
-**`X-26` has lost half its title.** *the win condition depends on it* - there is no win condition
-since `P-556`, which `S-176` already tells you. **And its measurement needs a population it
-states**: this lane counted four of sixteen kinds unnamed in any `spec/*.md` where the item says
-two, and **the two counts are not comparable** - `pioneer` and `yard` are named in `spec/data/` and
-`spec/tests/` and in no prose file. **Which population the claim is about is the item's to say, and
-that choice is the whole finding.**
+**`X-12` stands and calling it dead was this lane's error, not a measurement that moved.**
+`produce 1 garrison` is gone - measured, three occurrences in the release and every one prose about
+the cut - **but the finding is that two recipes state what founding produces, and three identical
+rows still state it.** The step that was wrong: this lane tested an element of the evidence and
+concluded about the finding.
+
+**The item's own table should have stopped it.** It records its count moving - 8/7/6, then 6/5/4,
+now 5/4/3 - and its own sentence is *a number an item derives goes stale without anyone editing
+it*. **Declining it because its number moved is that sentence demonstrated rather than answered.**
+
+**`X-26` has lost half its title** - *the win condition depends on it*, and there is none since
+`P-556`, which `S-176` already tells you. **But its count is two, which is what `X-26` said.** Three
+measurements of one population, each wrong in a different direction: **this lane's four** counted
+case-sensitively, so `## Pioneer` and `### Yard` were invisible; **the research lens's one** drops
+`deposit`, which `git grep -i deposit -- 'spec/*.md' 'spec/future/*.md'` returns nothing for; and
+**the item's two** - `deposit` and `fertility` - is right.
+
+**Their framing of the population is what makes it checkable**: a kind named only in `spec/data/` is
+declared and not defined, a definition is a rule, and `CLAUDE.md` puts rules in prose. So prose is
+the population, and the item was measuring the right thing all along.
+
+**And their warning was worth more than the count.** *If the sweep of all 39 used a case-sensitive
+search, it is worth re-running.* It did, it was re-run, and it found one more wrong verdict in the
+code lane's list - `C-113`, whose sentence begins *A put has no quantity* with a capital. **An item
+marked dead because a word was not found is the expensive direction.**
 
 `X-15`, `X-31` and `X-33` are read and untested here.
 
