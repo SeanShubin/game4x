@@ -15,8 +15,14 @@
 // fewer, and a `move` where there was none.
 // 134 since `P-552`: turn 10 fires `mine-energy` on the Ark that turn 9 launched, which is the
 // one command that makes `mine energy` a recipe the scenario covers rather than declares.
-const LINES: usize = 134;
-const TURNS: usize = 10;
+// 211 and 15 since `S-174`'s second half, and the two numbers move together for one reason.
+// `R-6`'s *vetted when* asks for an Ark launched from the **second** territory, so turns 11 to
+// 15 develop territory 2: two metal stores, a second mine, two wells, two energy stores, a Yard
+// and the launch. **Seventy-seven commands, and they divide three ways**: fifty-two are
+// territory 2's, twenty keep territory 1 fed - four a turn, because a population that gathers
+// nothing starves at the end of that turn whatever else is going on - and five end a turn.
+const LINES: usize = 211;
+const TURNS: usize = 15;
 
 use game_console::{Library, fired};
 use std::path::{Path, PathBuf};

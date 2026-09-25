@@ -7,7 +7,7 @@ These are the rows the F3 browser shows, from the same function.
 
 | id       | phase | territories | units |
 | -------- | ----- | ----------- | ----- |
-| the game | play  | 12          | 1     |
+| the game | play  | 12          | 2     |
 
 1 row(s)
 
@@ -16,7 +16,7 @@ These are the rows the F3 browser shows, from the same function.
 | id  | citizens | labor-spent | nature | force | food | food capacity | food density | food extractors | metal | metal capacity | metal density | metal extractors | energy | energy capacity | energy density | energy extractors | garrison | yards |
 | --- | -------- | ----------- | ------ | ----- | ---- | ------------- | ------------ | --------------- | ----- | -------------- | ------------- | ---------------- | ------ | --------------- | -------------- | ----------------- | -------- | ----- |
 | 1   | 8        | 0           | 1      | 8     | 0    | 3             | 4            | 3               | 0     | 3              | 4             | 3                | 12     | 3               | 4              | 3                 | force 0  | 1     |
-| 2   | 6        | 0           | 0      | 6     | 0    | 2             | 6            | 1               | 0     | 2              | 4             | 1                | 0      | 2               | 4              | 0                 | force 0  | 0     |
+| 2   | 6        | 0           | 0      | 6     | 0    | 2             | 6            | 1               | 7     | 2              | 4             | 2                | 4      | 2               | 4              | 2                 | force 0  | 1     |
 | 3   | 0        | 0           | 1      | 0     | 0    | 6             | 2            | 0               | 0     | 2              | 4             | 0                | 0      | 2               | 4              | 0                 | none     | 0     |
 | 4   | 0        | 0           | 1      | 0     | 0    | 1             | 2            | 0               | 0     | 4              | 5             | 0                | 0      | 4               | 5              | 0                 | none     | 0     |
 | 5   | 0        | 0           | 1      | 0     | 0    | 3             | 1            | 0               | 0     | 8              | 8             | 0                | 0      | 8               | 8              | 0                 | none     | 0     |
@@ -35,6 +35,7 @@ These are the rows the F3 browser shows, from the same function.
 | id  | kind | location | fuel | force | exhausted |
 | --- | ---- | -------- | ---- | ----- | --------- |
 | 1   | ark  | orbit-1  | 1    | 2     | false     |
+| 2   | ark  | orbit-2  | 1    | 2     | false     |
 
-1 row(s)
+2 row(s)
 

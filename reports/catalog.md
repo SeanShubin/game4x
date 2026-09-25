@@ -106,7 +106,7 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 ### `s-13` - deposit
 
-**Traits** `capacity`, `density`, `free`, `keeps`, `occupied`
+**Traits** `capacity`, `density`, `free`, `keeps`, `occupied`, `resource`
 
 **Named by** `age put`, `age require`, `spoil consume`
 
@@ -458,7 +458,7 @@ what a territory's ground offers of one resource, and how richly.
 
 **In families** thing
 
-**Traits of it** `density` (a number), `capacity` (a number), `occupied` (a number), `free` (a number: its capacity less what it holds), `keeps` (the number of turns it will last)
+**Traits of it** `resource` (one of the resources), `density` (a number), `capacity` (a number), `occupied` (a number), `free` (a number: its capacity less what it holds), `keeps` (the number of turns it will last)
 
 **Signature** `s-13`
 

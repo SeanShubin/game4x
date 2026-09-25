@@ -9,23 +9,23 @@ the links, so that a change to the state is a change to one line here.
 
 | id  | biome     | nature | citizens | labor-spent | yards |
 | --- | --------- | ------ | -------- | ----------- | ----- |
-| 2   | grassland | 0      | 6        | 0           | 0     |
+| 2   | grassland | 0      | 6        | 0           | 1     |
 
 ## deposit
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
 | 2         | food     | 2        | 6       | 1     |
-| 2         | metal    | 2        | 4       | 1     |
-| 2         | energy   | 2        | 4       | 0     |
+| 2         | metal    | 2        | 4       | 2     |
+| 2         | energy   | 2        | 4       | 2     |
 
 ## store
 
 | territory | resource | amount |
 | --------- | -------- | ------ |
 | 2         | food     | 0      |
-| 2         | metal    | 0      |
-| 2         | energy   | 0      |
+| 2         | metal    | 7      |
+| 2         | energy   | 4      |
 
 ## garrison
 
@@ -39,14 +39,17 @@ the links, so that a change to the state is a change to one line here.
 | --------- | -------- | ----- |
 | 2         | food     | yes   |
 | 2         | metal    | yes   |
+| 2         | metal    | yes   |
+| 2         | energy   | yes   |
+| 2         | energy   | yes   |
 
 ## structure
 
 | territory | structure | count |
 | --------- | --------- | ----- |
-| 2         | extractor | 2     |
+| 2         | extractor | 5     |
 | 2         | garrison  | 1     |
-| 2         | yard      | 0     |
+| 2         | yard      | 1     |
 
 ## labor
 

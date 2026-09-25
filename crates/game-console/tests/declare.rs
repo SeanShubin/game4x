@@ -289,9 +289,17 @@ fn the_file_of_kinds_and_the_release_declare_the_same_words() {
     // **Thirty-eight since `P-552`**, which gave the ark a `working` count and wrote
     // `{carries kind:ark trait:working}` - the promotion asserted the move from 37 to 38 in its
     // own commit, and this is the reader that would have failed if it had not.
+    //
+    // **Forty since `a29d17f8`, and the two rows are the answer to `C-140`.** A territory
+    // carries `biome` and a deposit carries `resource`; `P-541` brought biomes back to the
+    // release and neither row followed, so the dump wrote both for three days against a file
+    // that licensed neither. **Neither needed a promotion** - `spec/planet.md` says *each
+    // territory has a biome* and the release's Kinds table says a deposit is *what a
+    // territory's ground offers of one resource* - so a second form of a fact already stated
+    // is a row the specification lane may write.
     assert_eq!(
-        mentions, 38,
-        "thirty-eight trait names across `carries.4x`; this read {mentions}"
+        mentions, 40,
+        "forty trait names across `carries.4x`; this read {mentions}"
     );
     // **Seven memberships, in `member.4x` rather than on a kind's line** - `P-497` again, and
     // the count is the one that was here when `family:` was a key.
@@ -1039,22 +1047,21 @@ fn every_count_the_dump_writes_is_one_its_kind_carries() {
             .unwrap_or_else(|why| panic!("`{line}` failed: {why}"));
     }
 
-    // **Three pairs are set aside by name, and none of them is `defending`'s shape.** Each is
-    // asserted to be still missing before it is excused, so an exception cannot outlive its gap.
+    // **One pair is set aside by name, and it was three for a day.** Each is asserted to be
+    // still missing before it is excused, so an exception cannot outlive its gap.
     //
-    // - `territory` / `biome` and `deposit` / `resource`: **both are declared traits** in
-    //   `spec/data/traits.4x`, and `carries.4x` does not say those kinds carry them. `P-541`
-    //   brought `biome` back to the data and the `carries` row did not follow. **That file is
-    //   the specification lane's**, so this is reported rather than repaired - `C-140`.
+    // **Two of the three expired within a day of being written, and this assertion is what
+    // said so.** `territory` / `biome` and `deposit` / `resource` were excused because both
+    // traits were declared and no `carries` row gave those kinds either; `C-140` reported
+    // them, `a29d17f8` wrote both rows, and **the guard below went red rather than the
+    // exception going quietly stale.** That is the whole of what it is for - *an exception
+    // that has been repaired is a lie in the other direction, and nothing else would notice.*
+    //
     // - `nature` / `met`: **`nature` is not a kind at all** since `P-541` made force, garrison
     //   and nature a future plan, and this dump still writes it. **That one is this lane's**,
     //   and it is `defending`'s shape at the level of the kind rather than the trait - too large
-    //   to cut here, because the garrison beside it is load-bearing in the model.
-    const EXCUSED: [(&str, &str); 3] = [
-        ("territory", "biome"),
-        ("deposit", "resource"),
-        ("nature", "met"),
-    ];
+    //   to cut here, because the garrison beside it is load-bearing in the model. `C-140`.
+    const EXCUSED: [(&str, &str); 1] = [("nature", "met")];
 
     let mut kinds = BTreeSet::new();
     let mut wrong: Vec<String> = Vec::new();

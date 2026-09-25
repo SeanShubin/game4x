@@ -385,9 +385,16 @@ fn every_trait_of_a_territory_is_shown_in_the_dump() {
     // map, `nature` went by becoming a kind, and `biome` went because the release stopped
     // having biomes at all. **Which is why they are named as well as counted** - two is two
     // whichever two they are.
+    //
+    // **Three again since `a29d17f8`, and `biome` came back the way it left.** `P-541`
+    // brought biomes back to the release and the `carries` row did not follow, so for three
+    // days the dump wrote a trait the data did not license - `C-140`, filed by this lane and
+    // answered by the specification lane's `S-179` rather than by a promotion, because
+    // `spec/planet.md` already says *each territory has a biome*. **The fifth distinct
+    // reason this list has moved, and the first in which it grew.**
     assert_eq!(
         of_a_territory,
-        ["control", "id"],
+        ["biome", "control", "id"],
         "`spec/data/carries.4x` names the traits a territory carries"
     );
 

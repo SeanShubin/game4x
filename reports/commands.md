@@ -6,7 +6,7 @@ Every command that ran, in order, with the recipe it fired. `S-24`: the third of
 
 The hierarchy is flattened. `run setup` opens `setup.4x`, which opens others, and a `run` line is not listed - it is where the next commands are kept rather than a move in the game.
 
-197 commands over 10 turn(s), and 63 of them before the game began.
+274 commands over 15 turn(s), and 63 of them before the game began.
 
 | #   | turn   | command                                                              | fires                                                                                      |
 | --- | ------ | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
@@ -207,5 +207,82 @@ The hierarchy is flattened. `run setup` opens `setup.4x`, which opens others, an
 | 195 | 10     | `{work territory:2 resource:food}`                                   | `work`                                                                                     |
 | 196 | 10     | `{mine-energy territory:1}`                                          | `mine energy`                                                                              |
 | 197 | 10     | `{end-turn}`                                                         | `upkeep`, `bear`, `breed`, `perish`, `age`, `spoil`, `stow`, `discard`, `refresh`, `renew` |
+| 198 | 11     | `{create-labor territory:1}`                                         | `create labor`                                                                             |
+| 199 | 11     | `{work territory:1 resource:food}`                                   | `work`                                                                                     |
+| 200 | 11     | `{create-labor territory:1}`                                         | `create labor`                                                                             |
+| 201 | 11     | `{work territory:1 resource:food}`                                   | `work`                                                                                     |
+| 202 | 11     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 203 | 11     | `{work territory:2 resource:food}`                                   | `work`                                                                                     |
+| 204 | 11     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 205 | 11     | `{work territory:2 resource:metal}`                                  | `work`                                                                                     |
+| 206 | 11     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 207 | 11     | `{build-store territory:2 resource:metal}`                           | `build store`                                                                              |
+| 208 | 11     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 209 | 11     | `{build-extractor territory:2 resource:metal}`                       | `build extractor`                                                                          |
+| 210 | 11     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 211 | 11     | `{work territory:2 resource:metal}`                                  | `work`                                                                                     |
+| 212 | 11     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 213 | 11     | `{build-extractor territory:2 resource:energy}`                      | `build extractor`                                                                          |
+| 214 | 11     | `{end-turn}`                                                         | `upkeep`, `bear`, `breed`, `perish`, `age`, `spoil`, `stow`, `discard`, `refresh`, `renew` |
+| 215 | 12     | `{create-labor territory:1}`                                         | `create labor`                                                                             |
+| 216 | 12     | `{work territory:1 resource:food}`                                   | `work`                                                                                     |
+| 217 | 12     | `{create-labor territory:1}`                                         | `create labor`                                                                             |
+| 218 | 12     | `{work territory:1 resource:food}`                                   | `work`                                                                                     |
+| 219 | 12     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 220 | 12     | `{work territory:2 resource:food}`                                   | `work`                                                                                     |
+| 221 | 12     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 222 | 12     | `{build-store territory:2 resource:metal}`                           | `build store`                                                                              |
+| 223 | 12     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 224 | 12     | `{work territory:2 resource:metal}`                                  | `work`                                                                                     |
+| 225 | 12     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 226 | 12     | `{work territory:2 resource:metal}`                                  | `work`                                                                                     |
+| 227 | 12     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 228 | 12     | `{build-extractor territory:2 resource:energy}`                      | `build extractor`                                                                          |
+| 229 | 12     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 230 | 12     | `{build-store territory:2 resource:energy}`                          | `build store`                                                                              |
+| 231 | 12     | `{end-turn}`                                                         | `upkeep`, `bear`, `breed`, `perish`, `age`, `spoil`, `stow`, `discard`, `refresh`, `renew` |
+| 232 | 13     | `{create-labor territory:1}`                                         | `create labor`                                                                             |
+| 233 | 13     | `{work territory:1 resource:food}`                                   | `work`                                                                                     |
+| 234 | 13     | `{create-labor territory:1}`                                         | `create labor`                                                                             |
+| 235 | 13     | `{work territory:1 resource:food}`                                   | `work`                                                                                     |
+| 236 | 13     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 237 | 13     | `{work territory:2 resource:food}`                                   | `work`                                                                                     |
+| 238 | 13     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 239 | 13     | `{work territory:2 resource:metal}`                                  | `work`                                                                                     |
+| 240 | 13     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 241 | 13     | `{work territory:2 resource:metal}`                                  | `work`                                                                                     |
+| 242 | 13     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 243 | 13     | `{build-store territory:2 resource:energy}`                          | `build store`                                                                              |
+| 244 | 13     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 245 | 13     | `{work territory:2 resource:energy}`                                 | `work`                                                                                     |
+| 246 | 13     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 247 | 13     | `{work territory:2 resource:energy}`                                 | `work`                                                                                     |
+| 248 | 13     | `{end-turn}`                                                         | `upkeep`, `bear`, `breed`, `perish`, `age`, `spoil`, `stow`, `discard`, `refresh`, `renew` |
+| 249 | 14     | `{create-labor territory:1}`                                         | `create labor`                                                                             |
+| 250 | 14     | `{work territory:1 resource:food}`                                   | `work`                                                                                     |
+| 251 | 14     | `{create-labor territory:1}`                                         | `create labor`                                                                             |
+| 252 | 14     | `{work territory:1 resource:food}`                                   | `work`                                                                                     |
+| 253 | 14     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 254 | 14     | `{work territory:2 resource:food}`                                   | `work`                                                                                     |
+| 255 | 14     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 256 | 14     | `{build-yard territory:2}`                                           | `build yard`                                                                               |
+| 257 | 14     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 258 | 14     | `{work territory:2 resource:metal}`                                  | `work`                                                                                     |
+| 259 | 14     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 260 | 14     | `{work territory:2 resource:metal}`                                  | `work`                                                                                     |
+| 261 | 14     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 262 | 14     | `{work territory:2 resource:energy}`                                 | `work`                                                                                     |
+| 263 | 14     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 264 | 14     | `{work territory:2 resource:energy}`                                 | `work`                                                                                     |
+| 265 | 14     | `{end-turn}`                                                         | `upkeep`, `bear`, `breed`, `perish`, `age`, `spoil`, `stow`, `discard`, `refresh`, `renew` |
+| 266 | 15     | `{create-labor territory:1}`                                         | `create labor`                                                                             |
+| 267 | 15     | `{work territory:1 resource:food}`                                   | `work`                                                                                     |
+| 268 | 15     | `{create-labor territory:1}`                                         | `create labor`                                                                             |
+| 269 | 15     | `{work territory:1 resource:food}`                                   | `work`                                                                                     |
+| 270 | 15     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 271 | 15     | `{work territory:2 resource:food}`                                   | `work`                                                                                     |
+| 272 | 15     | `{create-labor territory:2}`                                         | `create labor`                                                                             |
+| 273 | 15     | `{launch-ark territory:2}`                                           | `launch ark`                                                                               |
+| 274 | 15     | `{end-turn}`                                                         | `upkeep`, `bear`, `breed`, `perish`, `age`, `spoil`, `stow`, `discard`, `refresh`, `renew` |
 
-197 row(s)
+274 row(s)

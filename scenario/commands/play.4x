@@ -205,3 +205,115 @@
 # there to hold it.
 {mine-energy territory:1}
 {end-turn}
+
+# Turn 11. The second territory starts building, and `R-6` is why. **Its *vetted when* asks for
+# an Ark launched from the second territory**, so everything from here is territory 2 paying for
+# a Yard out of ground that is poorer than the landing site's: two metal at density four, two
+# energy at density four, and **no stores at all, because `P-427` took them out of founding.**
+#
+# **So the first metal it digs buys somewhere to put the next.** A store is what makes a turn's
+# production survive the turn, and a Yard costs fifteen metal - which is four turns of this
+# ground even with both mines running, and impossible in any number of turns without a store.
+#
+# Territory 1 does exactly what it did on turn 10: eight citizens, two farms worked, eight food
+# against eight upkeep. **It is stable rather than idle** - a population that gathers nothing
+# starves, and this one gathers precisely what it eats.
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:2}
+{work territory:2 resource:food}
+{create-labor territory:2}
+{work territory:2 resource:metal}
+{create-labor territory:2}
+{build-store territory:2 resource:metal}
+{create-labor territory:2}
+{build-extractor territory:2 resource:metal}
+{create-labor territory:2}
+{work territory:2 resource:metal}
+{create-labor territory:2}
+{build-extractor territory:2 resource:energy}
+{end-turn}
+
+# Turn 12. The second metal store, which the second mine has just licensed - a store is bounded
+# by the extractors of its resource, so two mines is what makes two stores legal, and twenty
+# metal is what makes fifteen reachable at all.
+#
+# **And the first energy store.** Energy is the resource this ground has to build for twice over:
+# a Yard needs metal and the Ark it produces needs twelve energy, which is more than one store
+# holds.
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:2}
+{work territory:2 resource:food}
+{create-labor territory:2}
+{build-store territory:2 resource:metal}
+{create-labor territory:2}
+{work territory:2 resource:metal}
+{create-labor territory:2}
+{work territory:2 resource:metal}
+{create-labor territory:2}
+{build-extractor territory:2 resource:energy}
+{create-labor territory:2}
+{build-store territory:2 resource:energy}
+{end-turn}
+
+# Turn 13. Everything territory 2 will ever build is built after this turn, and the two wells
+# start running. Twelve energy needs two stores and two turns of both wells.
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:2}
+{work territory:2 resource:food}
+{create-labor territory:2}
+{work territory:2 resource:metal}
+{create-labor territory:2}
+{work territory:2 resource:metal}
+{create-labor territory:2}
+{build-store territory:2 resource:energy}
+{create-labor territory:2}
+{work territory:2 resource:energy}
+{create-labor territory:2}
+{work territory:2 resource:energy}
+{end-turn}
+
+# Turn 14. The Yard, for fifteen of the seventeen metal this ground has saved - and the mines
+# and wells keep running behind it, because the Ark still wants three metal and twelve energy.
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:2}
+{work territory:2 resource:food}
+{create-labor territory:2}
+{build-yard territory:2}
+{create-labor territory:2}
+{work territory:2 resource:metal}
+{create-labor territory:2}
+{work territory:2 resource:metal}
+{create-labor territory:2}
+{work territory:2 resource:energy}
+{create-labor territory:2}
+{work territory:2 resource:energy}
+{end-turn}
+
+# Turn 15. **The Ark leaves the second territory, which is what `R-6` is checked against**: the
+# scenario took its first territory from orbit, its second by land, and launches from the second.
+#
+# **Two citizens go with it**, which is the cost the recipe states and the reason this territory
+# ends the game at six rather than eight - the food it grows pays for two more before the turn is
+# over. **There is now an Ark above each of the two territories the player holds**, one launched
+# from the landing site on turn 9 and one from the ground that had to build for it.
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:2}
+{work territory:2 resource:food}
+{create-labor territory:2}
+{launch-ark territory:2}
+{end-turn}

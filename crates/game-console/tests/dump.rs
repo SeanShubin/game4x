@@ -168,11 +168,17 @@ fn the_entity_view_names_every_kind_and_admits_what_it_cannot_name() {
     //
     // `an_empty_table_is_named_rather_than_omitted` shows the renderer against a fresh game,
     // where emptiness is not an accident of coverage, and that is where the empty case lives.
+    //
+    // **Two since `S-174`'s second half, and the second one is what `R-6` asks for.** Its
+    // *vetted when* wants an Ark launched from the *second* territory, so the scenario runs
+    // five turns further and territory 2 builds its own Yard: one Ark above territory 1 from
+    // turn 9 and one above territory 2 from turn 15. **The pioneer is not among them** - it
+    // was consumed by founding on turn 9 - so two units is two Arks.
     let unit = tables.iter().find(|t| t.kind == "unit").expect("listed");
     assert_eq!(
         unit.rows.len(),
-        1,
-        "the scenario deploys one Ark and launches one, and the launched one is in orbit"
+        2,
+        "the scenario launches an Ark from each of the two territories it holds, and both are          in orbit"
     );
     let text = dump::entities_markdown(&session.game, "after");
     assert!(text.contains("## unit"), "and it has a table regardless");
@@ -411,9 +417,14 @@ fn every_labor_consumer_is_preceded_by_a_create_labor() {
 
     // Over every case, and how many there were: a scenario that stopped spending labor
     // would satisfy every assertion above by having nothing to check.
+    // **Ninety-three since `S-174`'s second half**, where it was fifty-eight: five more turns
+    // of `play.4x`, in which territory 2 builds two stores of each resource, a second mine, two
+    // wells and a Yard, and works them - thirty-five more commands that spend labor, each with
+    // its own `create labor` in front of it. **`spread.4x` is untouched at thirteen**, which is
+    // why the two are named separately rather than summed.
     assert_eq!(
-        checked, 71,
-        "fifty-eight labor consumers in play.4x and thirteen in spread.4x; found {checked}"
+        checked, 106,
+        "ninety-three labor consumers in play.4x and thirteen in spread.4x; found {checked}"
     );
 }
 
@@ -739,10 +750,19 @@ fn every_turn_splits_the_player_from_the_end_of_the_turn() {
     // when nobody lost a territory; it marks and clears a `met` on every nature every
     // turn now, and `take` consumes one on the turn a pioneer stands on ground nobody
     // has founded - so one of the eleven empty sections stopped being empty.
+    //
+    // **Fifteen since `S-174`'s second half, and the scenario moved rather than a rule.**
+    // `R-6` wants an Ark launched from the second territory, so `play.4x` runs fifteen turns
+    // where it ran ten. **Which phase is empty is what says the number is the scenario's**:
+    // fourteen of the fifteen are *nature takes back what is no longer held*, one per turn
+    // but turn 8, where a pioneer stood on ground nobody had founded - and the fifteenth is
+    // *what expires expires*, on the one turn nothing was over a bound. **Five more turns
+    // added exactly five more of the first kind**, which is a scenario running longer rather
+    // than a phase falling silent.
     let empty = turns.matches("*Nothing changed.*").count();
     assert_eq!(
-        empty, 10,
-        "{empty} sections say nothing changed and this was written when 10 did. If a rule or \
+        empty, 15,
+        "{empty} sections say nothing changed and this was written when 15 did. If a rule or \
          the scenario moved, that is fine - say so here rather than widening this to `> 0`"
     );
     assert!(

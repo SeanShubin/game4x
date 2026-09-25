@@ -47,6 +47,7 @@
     {ark id:1 moving:1 working:1} -> 1
     {energy} -> 1
   {orbit id:2} -> 1
+    {ark id:2 moving:1 working:1} -> 1
   {orbit id:3} -> 1
   {orbit id:4} -> 1
   {orbit id:5} -> 1
@@ -86,12 +87,18 @@
     {nature met:0} -> 1
   {territory id:2 biome:grassland} -> 1
     {citizen bearing:1 laboring:1 paid:0} -> 6
-    {deposit density:4 resource:energy occupied:0 free:2 capacity:2} -> 1
-    {deposit density:4 resource:metal occupied:1 free:1 capacity:2} -> 1
+    {deposit density:4 resource:energy occupied:2 free:0 capacity:2} -> 1
+    {deposit density:4 resource:metal occupied:2 free:0 capacity:2} -> 1
     {deposit density:6 resource:food occupied:1 free:1 capacity:2} -> 1
+    {energy} -> 4
+    {extractor resource:energy working:1} -> 2
     {extractor resource:food working:1} -> 1
-    {extractor resource:metal working:1} -> 1
+    {extractor resource:metal working:1} -> 2
     {garrison} -> 1
+    {metal} -> 7
+    {store resource:energy} -> 2
+    {store resource:metal} -> 2
+    {yard} -> 1
   {territory id:3 biome:grassland} -> 1
     {deposit density:2 resource:food occupied:0 free:6 capacity:6} -> 1
     {deposit density:4 resource:energy occupied:0 free:2 capacity:2} -> 1

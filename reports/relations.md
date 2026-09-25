@@ -8,7 +8,7 @@ leaves; this is the same view over the rules it played by.
 `biomes.4x` holds `value`, `families.4x` holds `family`, `kinds.4x` holds `kind` and
 `traits.4x` holds `trait`.
 
-12 relations, 244 rows.
+12 relations, 246 rows.
 
 ## Values that are sentences
 
@@ -90,7 +90,7 @@ From `spec/data/block.4x`. 29 row(s), 3 column(s).
 
 ## carries
 
-From `spec/data/carries.4x`. 38 row(s), 2 column(s).
+From `spec/data/carries.4x`. 40 row(s), 2 column(s).
 
 | kind      | trait       |
 | --------- | ----------- |
@@ -114,6 +114,7 @@ From `spec/data/carries.4x`. 38 row(s), 2 column(s).
 | ark       | movable     |
 | ark       | moving      |
 | ark       | strength    |
+| ark       | working     |
 | pioneer   | binding     |
 | pioneer   | fuel        |
 | pioneer   | metal-in-it |
@@ -123,15 +124,16 @@ From `spec/data/carries.4x`. 38 row(s), 2 column(s).
 | food      | surplus     |
 | territory | id          |
 | territory | control     |
+| territory | biome       |
 | orbit     | id          |
 | deposit   | density     |
 | deposit   | occupied    |
 | deposit   | free        |
 | deposit   | capacity    |
+| deposit   | resource    |
 | adjacency | from        |
 | adjacency | to          |
 | game      | phase       |
-| ark       | working     |
 
 ## constraint
 

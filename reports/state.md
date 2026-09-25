@@ -7,7 +7,7 @@ is in it, because the names are what this is for.
 
 | phase | territories | units |
 | ----- | ----------- | ----- |
-| play  | 12          | 1     |
+| play  | 12          | 2     |
 
 1 row(s)
 
@@ -16,7 +16,7 @@ is in it, because the names are what this is for.
 | id  | biome     | nature | citizens | labor-spent | yards |
 | --- | --------- | ------ | -------- | ----------- | ----- |
 | 1   | grassland | 1      | 8        | 0           | 1     |
-| 2   | grassland | 0      | 6        | 0           | 0     |
+| 2   | grassland | 0      | 6        | 0           | 1     |
 | 3   | grassland | 1      | 0        | 0           | 0     |
 | 4   | mountain  | 1      | 0        | 0           | 0     |
 | 5   | mountain  | 1      | 0        | 0           | 0     |
@@ -38,8 +38,8 @@ is in it, because the names are what this is for.
 | 1         | metal    | 3        | 4       | 3     |
 | 1         | energy   | 3        | 4       | 3     |
 | 2         | food     | 2        | 6       | 1     |
-| 2         | metal    | 2        | 4       | 1     |
-| 2         | energy   | 2        | 4       | 0     |
+| 2         | metal    | 2        | 4       | 2     |
+| 2         | energy   | 2        | 4       | 2     |
 | 3         | food     | 6        | 2       | 0     |
 | 3         | metal    | 2        | 4       | 0     |
 | 3         | energy   | 2        | 4       | 0     |
@@ -81,8 +81,8 @@ is in it, because the names are what this is for.
 | 1         | metal    | 0      |
 | 1         | energy   | 12     |
 | 2         | food     | 0      |
-| 2         | metal    | 0      |
-| 2         | energy   | 0      |
+| 2         | metal    | 7      |
+| 2         | energy   | 4      |
 | 3         | food     | 0      |
 | 3         | metal    | 0      |
 | 3         | energy   | 0      |
@@ -140,8 +140,11 @@ is in it, because the names are what this is for.
 | 1         | energy   | yes   |
 | 2         | food     | yes   |
 | 2         | metal    | yes   |
+| 2         | metal    | yes   |
+| 2         | energy   | yes   |
+| 2         | energy   | yes   |
 
-11 row(s)
+14 row(s)
 
 ## structure
 
@@ -150,9 +153,9 @@ is in it, because the names are what this is for.
 | 1         | extractor | 9     |
 | 1         | garrison  | 1     |
 | 1         | yard      | 1     |
-| 2         | extractor | 2     |
+| 2         | extractor | 5     |
 | 2         | garrison  | 1     |
-| 2         | yard      | 0     |
+| 2         | yard      | 1     |
 | 3         | extractor | 0     |
 | 3         | garrison  | 0     |
 | 3         | yard      | 0     |
@@ -210,8 +213,9 @@ is in it, because the names are what this is for.
 | id  | kind | in-kind | in-id | fuel | ready |
 | --- | ---- | ------- | ----- | ---- | ----- |
 | 1   | ark  | orbit   | 1     | 1    | yes   |
+| 2   | ark  | orbit   | 2     | 1    | yes   |
 
-1 row(s)
+2 row(s)
 
 ## adjacency
 
@@ -257,12 +261,12 @@ is in it, because the names are what this is for.
 | citizen   | 14      |
 | labor     | 0       |
 | food      | 0       |
-| metal     | 0       |
-| energy    | 13      |
-| extractor | 11      |
+| metal     | 7       |
+| energy    | 17      |
+| extractor | 14      |
 | garrison  | 2       |
-| yard      | 1       |
-| ark       | 1       |
+| yard      | 2       |
+| ark       | 2       |
 | pioneer   | 0       |
 | territory | 12      |
 | adjacency | 30      |
