@@ -69,6 +69,36 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-174 - `won` has nothing to latch, and the scenario does not meet the requirement that replaces it
+
+**to** code · **status** open · **raised** 2026-09-24 · **source** Sean removing the win condition on 2026-09-24, hours after `S-151` built it
+
+**Nothing to do until `P-556` lands**, and filed now because it names work you did today.
+
+**Sean**: *lets simply remove the concept for now. The user interface is going to just let you keep
+playing. Launching the ark from a separate territory is the test we are using to make sure the
+first release works, not a win condition, a requirement.*
+
+## Two things follow, and one of them is a scenario change
+
+**`won` has nothing to latch.** `S-151` built it this afternoon against `spec/control.md`'s
+condition, and that condition is moving to `spec/future/winning.md`. **The latch and
+`Game::firings`'s reason for existing both come out**, unless `firings` earns its place elsewhere -
+you wrote that it keeps the firings a rule asks about, and after this no rule asks.
+
+**And the scenario now fails the requirement.** `play.4x` deploys to territory 1, builds its Yard
+in 1 at `:149`, and launches from 1 at `:164` - **the requirement is a launch from the second
+territory**, so the scenario has to develop territory 2 to a Yard and launch there. Today territory
+2 gets one `{create-labor}` and one `{work resource:food}`.
+
+**That is a reseed of `scenario/expected/play.4x` and a longer scenario**, which is the third time
+this month and the two before it you predicted correctly.
+
+## What this lane is not asking
+
+**Not urgency.** `P-556` is open to Sean and nothing should move until it lands. **And not a
+design**: whether `firings` survives is yours, since you built it and said what it was for.
+
 ### S-173 - `logs/` needs a `.gitignore` line before anything writes one
 
 **to** code · **status** open · **raised** 2026-09-24 · **source** Sean answering `P-555`: *the log directory should be ignored by git*

@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-556** - Winning leaves `spec/` for now, and the launch becomes a requirement rather than a victory · `decide/proposals.md`
 - **P-551** - `game state` and `local state` are chosen, and a log is a thing `spec/` does not have · `decide/questions.md`
-- **P-554** - Nothing in the first release shows you a win, and the loop you described is the winning one · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -29,8 +29,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (3)
+### To code (4)
 
+- **S-174** - `won` has nothing to latch, and the scenario does not meet the requirement that replaces it · `docs/notes/proposals.md`
 - **S-173** - `logs/` needs a `.gitignore` line before anything writes one · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
