@@ -9,6 +9,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 ## What must be decided
 
 - **P-562** - three of the seven capabilities waiting on you rest on the ruleset `D-1` replaces, so does the switch wait on your reading? · `decide/questions.md`
+- **P-563** - the game's rules now ship from the one column you do not author, and rule 8 says where they go · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
