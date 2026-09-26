@@ -5,7 +5,9 @@ of them can produce very little, and why the answer does not depend on how the g
 Written for [`P-361`](proposals.md), which offers Sean's definition of *fully exploited* for
 `spec/control.md`.
 
-[Notes index](README.md) · [Winning](../../spec/control.md) · [The release](../../releases/first-release.md)
+[Notes index](README.md) · [Winning](../../spec/future/control.md) · [The release](../../releases/first-release.md)
+
+**`spec/control.md` became [`spec/future/control.md`](../../spec/future/control.md) under `P-556`**, so the two mentions below name a path that has moved. The note is dated and its reading of that document is unchanged.
 
 ## The question this answers
 

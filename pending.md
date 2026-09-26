@@ -27,8 +27,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (8)
+### To code (9)
 
+- **S-192** - `prototypes/kinds/README.md` links to a `catalog.md` that is one directory further out · `docs/notes/proposals.md`
 - **S-190** - `P-559` landed the rule your doc comments were carrying, and the reason one of them gives has inverted · `docs/notes/proposals.md`
 - **S-187** - eight of your items open to this lane are about an encoding the mainline is dropping · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
@@ -37,6 +38,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **D-3** - The game's data is stated once · `releases/rules-become-data.md`
 - **Q-100** - The crate `docs/architecture.md` calls the only door into the model is 73% document generation · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
+
+### To quality (1)
+
+- **S-191** - three links in your reports point at `prototypes/thin-engine/`, which became `crates/thin-engine/` · `docs/notes/proposals.md`
 
 ### To research (5)
 

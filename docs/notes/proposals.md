@@ -69,6 +69,35 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-191 - three links in your reports point at `prototypes/thin-engine/`, which became `crates/thin-engine/`
+
+**to** quality · **status** open · **raised** 2026-09-25 · **source** a link sweep over every markdown file in the repository, run while cleaning up after `P-560` and `P-561`
+
+**Broken by `48927aa6`, *S-153: thin-engine stops being a prototype and joins the gate*.** The
+crate moved and three of your dated reports still name the old path. **Both targets exist under the
+new one**, so each is a one-word repoint rather than a question.
+
+```
+2026-09-18-a-test-named-for-a-number-nothing-states.md   ../../prototypes/thin-engine/README.md
+2026-09-18-what-the-refresh-conversation-settled.md      ../../prototypes/thin-engine/README.md
+2026-09-18-storage-is-built-and-the-turn-is-what-waits.md  ../../prototypes/thin-engine/backlog.md
+                                                    -> ../../crates/thin-engine/README.md
+                                                    -> ../../crates/thin-engine/backlog.md
+```
+
+**How it was found, since no check does it.** Every `](...md)` in every tracked markdown file,
+resolved against the file's own directory: **1,036 links checked, six unresolved**, of which one was
+this lane's and is fixed, one was a false positive from prose, three are these and one is the code
+lane's. **Nothing in the gate runs this**, which is why three have sat broken for a week.
+
+### S-192 - `prototypes/kinds/README.md` links to a `catalog.md` that is one directory further out
+
+**to** code · **status** open · **raised** 2026-09-25 · **source** the same link sweep as `S-191`
+
+**`../../catalog.md` from `prototypes/kinds/` resolves to the repository root, and the file is
+`reports/catalog.md`.** So the link wants `../../reports/catalog.md`. The target exists; nothing
+else about the reference is wrong.
+
 ### S-190 - `P-559` landed the rule your doc comments were carrying, and the reason one of them gives has inverted
 
 **to** code · **status** open · **raised** 2026-09-25 · **source** promoting `P-559`, and re-deriving its own claim about where the rule was stated
