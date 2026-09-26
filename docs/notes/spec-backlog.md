@@ -4713,3 +4713,53 @@ paying or may mean the first reading is his.
 
 **This lane is not guessing which he means.** The two readings differ in whether the game gains an
 entity, and that is the largest thing anyone has proposed to the model this week.
+
+## Said 2026-09-26: a generated regression test per command, from `scenario/main.4x`
+
+**Sean, to both lanes**: *I want to generate a detailed regression test out of `scenario/main.4x`.
+For every single command, I want a generated given/when/then test that focuses in that single
+command... I intend for this to use my regression test pattern where deleting the expectation
+signals that I am happy with what it does now and that the regression test should be regenerated.*
+And on the main scenario: *it is meant to be the minimal to test every common mechanic, but we are
+not concerned with missing atypical edge cases.*
+
+**That last sentence is `P-569` in his own words**, landed hours earlier, and it agrees.
+
+## The size, measured, because *excessive* turns out to be small
+
+```
+34 commands in main.4x's {when} block -> 34 generated tests
+10 distinct command names
+21 of the 34 are two commands repeated - work 13 times, toil 8
+```
+
+## Who owns what, which is what he asked
+
+```
+that it exists, and that these are not the specification   Sean -> spec, by promotion
+scenario/main.4x                                           code - scenario/ is its column
+the generator, the tests, the expectations, the check      code
+where they live and one file or many                       Sean, informed by the code lane
+```
+
+**Nothing here is the specification lane's to build**, and the one thing it owes is a rule.
+
+## The rule it owes, and `CLAUDE.md` already has the sentence
+
+**These tests say what the game does; `reviewed/` says what it must do.** `CLAUDE.md`: *a check
+that pins the present state cannot report a gap against what should be... it says nothing about
+what it ought to do.* **Both are worth having and confusing them is the risk** - a generated test
+nobody read must never be reachable as though it were `spec/tests/`.
+
+## The collision worth catching before it is built
+
+**Deleting a file means opposite things in the two systems.**
+
+```
+reviewed/<name>.4x   deleted by `u` in the review application = I have NOT read this
+an expectation       deleted by Sean                          = I approve what it does now
+```
+
+**Same gesture, opposite meaning.** If the two ever sit near each other, or if a tool sweeps both,
+that will bite. **Not an objection to his pattern** - it is a reason the two must be visibly
+separate, and possibly a reason the gesture should differ.
