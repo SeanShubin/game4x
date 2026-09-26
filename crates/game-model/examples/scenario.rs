@@ -151,7 +151,10 @@ pub fn watched() -> (Game, Vec<(usize, Effect)>, Option<String>) {
                 }
                 game = next;
             }
-            Err(why) => return (game, history, Some(format!("{why:?}"))),
+            // **`Display` and not `Debug`.** `Refused` says what happened in words - *`move`.`4`
+            // wants a value for `gathering`* - and the derived form says
+            // `Unbound { rule: "move", ... }`, which is the struct rather than the refusal.
+            Err(why) => return (game, history, Some(format!("{why}"))),
         }
     }
     (game, history, None)
@@ -489,10 +492,39 @@ pub fn regression_at() -> PathBuf {
 pub fn regression_cases() -> Vec<(String, String)> {
     let mut game = opening().0;
     let (_, history, refused) = watched();
-    assert_eq!(
-        refused, None,
-        "the scenario is refused, so there is nothing to record"
-    );
+
+    // **A refused scenario is the most useful failure there is and it read as the least.** Sean,
+    // 2026-09-27: *I should clearly see why the regression test failed.* What he got was
+    // `Unbound { rule: "move", clause: "4", column: "gathering" }` out of a `Debug`, with nothing
+    // saying which command was refused or where in the run it was.
+    //
+    // **`Refused` has a `Display` and nothing was using it.** The commands are said in the friendly
+    // form, because the ids in them mean nothing to a reader of `scenario/main.4x`.
+    if let Some(why) = &refused {
+        let stood = history.len();
+        let mut replay = opening().0;
+        let mut last = String::from("(none - the first command was refused)");
+        for (_, effect) in &history {
+            last = friendly_command(&replay, &effect.command);
+            replay = fire(&replay, &effect.command, 1)
+                .map(|(next, _)| next)
+                .unwrap_or(replay);
+        }
+        let refused_at = opening()
+            .1
+            .get(stood)
+            .map(|it| friendly_command(&replay, it))
+            .unwrap_or_else(|| "(past the end of the command list)".to_string());
+        panic!(
+            "scenario/main.4x does not play.\n\n  \
+             {stood} command(s) stood, the last being\n      {last}\n\n  \
+             and command {} was refused:\n      {refused_at}\n      {why}\n\n\
+             Nothing is recorded, because a scenario that does not play has no behaviour to \
+             record. Either the command is wrong or the rule is - read the refusal and decide \
+             which.",
+            stood + 1
+        );
+    }
 
     let mut out = Vec::new();
     for (at, (turn, effect)) in history.iter().enumerate() {

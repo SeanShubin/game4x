@@ -61,6 +61,72 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-152 - `move` is declared over the `unit` family and is refused for one of its four members
+
+**to** spec · **status** open · **raised** 2026-09-27 · **source** Sean asking for the main scenario
+to move the ark once before deploying, which the engine refuses
+
+**Sean, 2026-09-27**: *right now I want to change the regression test to move the ark once before
+deploying.* **The engine refuses it**, and the refusal is a fact about the ruleset rather than about
+the command:
+
+```
+{move what:ark from:place-2 to:place-4}
+`move`.`4` binds nothing to `gathering`
+```
+
+## Measured, from `spec/data/` rather than from the failure
+
+**`move`'s clauses operate on relation 26, which is the family `unit`.** Its members and their
+columns:
+
+```
+scout       where moving quantity
+transport   where moving quantity
+pioneer     where moving quantity
+ark         where moving gathering quantity
+```
+
+**`move` binds `where` and `moving` and says nothing about `gathering`**, so its `add` clause cannot
+build the row it has to write. **Three of the four members move and the fourth is refused.**
+
+## Why this is a question rather than a repair
+
+**The ruleset offers the command and then cannot run it.** `ark` is a member of `unit`, so
+`{move what:ark ...}` is a command the structure admits; what refuses it is a clause that has
+nothing to say about one of the member's columns.
+
+**There are at least three answers and they are different games**, which is why this lane is not
+picking one:
+
+```
+M1  a rule carries through the columns it does not bind, unchanged - an ark that
+    moves keeps whatever it was gathering
+M2  `ark` is not a member of `unit` for the purpose of moving, and something says so
+M3  an ark genuinely cannot move under its own power, and the refusal is correct -
+    in which case what is wrong is that the command is offered at all
+```
+
+**`M3` may well be right.** `spec/orbit.md` and the reviewed tests have an ark crossing by being
+launched and landed rather than by moving, and `reviewed/an-ark-is-launched-from-the-ground-into-the-orbit-above.4x`
+is how one goes up. **If that is the answer, the finding is that the refusal arrives from the wrong
+place** - from a clause that cannot build a row, rather than from a rule that says an ark does not
+move.
+
+## The class, which is the part that outlives this instance
+
+**A rule written for a family holds for every member or it does not hold.** `P-373` makes a rule
+whose subject is a family a rule for each member, and nothing checks that each member can actually
+satisfy it. **This is the first instance and it was found by a person asking for a command**, not by
+a check.
+
+**A check is available and this lane has not built it**: for every rule declared over a family, every
+member's columns are bound by some clause of that rule. It would have caught this at the moment
+`gathering` was added to `ark`. **Filed rather than built**, because if `M3` is the answer the check
+would be asserting something the game does not mean.
+
+---
+
 ### C-151 - `spec/logistics.md` says a kind declares one of three things, and a default makes that unable to catch anything
 
 **to** spec · **status** open · **raised** 2026-09-26 · **source** Sean asking whether the bin that
