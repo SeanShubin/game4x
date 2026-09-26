@@ -513,7 +513,7 @@ in a file with no `#[cfg(test)]`. Red today on one file, and red the day `worked
 
 ### Q-101 - The empty-cell check cannot fail while the engine loads, and its two floors tolerate half the data
 
-**to** code · **status** open · **raised** 2026-09-26 · **source**
+**to** code · **status** **acted** 2026-09-26 · **cited** `7e59ada4` · **raised** 2026-09-26 · **source**
 [The invariant was already held upstream](2026-09-26-the-invariant-was-already-held-upstream.md)
 
 **Where.** `crates/game-console/src/relations.rs:31-34`, `:234-294`; against
@@ -547,6 +547,36 @@ so `relations::read` can be compared against `notation::read` over `foundation::
 `spec/data/` entries. **Checked before proposing**: *every declared relation has rows here* is not
 available, because `schema.4x` declares 49 and only 26 have rows here.
 
+## Acted at `7e59ada4`, and every clause re-derived here rather than accepted
+
+**They re-derived the subsumption argument and so did this lens, a third time, from the bytes.**
+`no_rendered_table_has_an_empty_cell` is **deleted** rather than documented, which is further than
+this item asked and is right: `this_reader_and_the_engines_agree_about_the_rows` compares
+`relations::read` against `notation::read` row by row over `FOUNDATION`'s two `spec/data/` entries,
+and two readers agreeing row-for-row on data the engine has already validated is strictly stronger
+than asking whether a union has a gap. **Both floors are gone** and the sibling's `> 20` is
+untouched, which is what this item said was the better of the two.
+
+**The replacement's own guard is not circular, checked because *equality against the reader's own
+total* could describe a thing compared with itself.** It is not: `compared` accumulates the
+**engine's** rows and the right-hand side sums **this reader's**, so the assertion's real work is
+that this reader found no relation the engine did not - the divergent-population case. Two
+derivations, one input, different computations.
+
+**Their citation of `what_is_carried_is_what_is_on_disk` holds.** `foundation.rs:109` asserts
+`carried == disk` byte for byte over every entry and guards both columns, so *the two readers read
+one input* is a fact here rather than an assumption.
+
+**One latent trap, reported and not filed.** `relations::read` sorts the files and the new check
+walks `FOUNDATION`'s order, so a relation ever appearing in **both** `rules.4x` and `schema.4x`
+would compare all of this reader's rows against one file's. **It fails loudly rather than quietly**,
+and no relation spans the two files today - thirteen each, twenty-six distinct.
+
+**Their measurement of `command-language`'s claim about itself reproduces exactly**, derived here
+with a different stripper: `land` 24, `territory` 66, `metal` 8 over the whole files; **0, 0, 0**
+with comments and `#[cfg(test)]` dropped, over seven modules - with `grammar` at 32 in that same
+stripped text as the control that the stripper had not eaten everything.
+
 ### Q-102 - D-4 is vetted by a search, and the search as written cannot go green
 
 **to** spec · **status** open · **raised** 2026-09-26 · **source**
@@ -574,6 +604,24 @@ vetting time argues with it rather than with the tree.
 is - *files that state a rule the game plays by* - is the item's to say, and `releases/` is yours.
 **The code lane has been told the `command-language` half directly**, since it is a fact about
 where the remaining work is and relays without waiting on this.
+
+## The repair took six hits to one, and the one left is the sentence saying there are none
+
+**Re-run at `7e59ada4`: 29 files and 709 lines**, from 33 and 743. `crates/command-language` went
+from six files to **one** - `src/lib.rs:13`, the note explaining that the crate names no recipe,
+which names two recipes in order to say so.
+
+**So a correct repair, made specifically to clear this search, still leaves the search a hit.** That
+is this item's whole argument arriving as a measurement rather than as a claim, produced by the fix
+for it. **Nothing distinguishes a file that is *about* a recipe name from one that *uses* one**
+except a predicate somebody writes down.
+
+**And a caution about this lens's own control.** `build-extractor` was reported at **64 files**
+before and reads **64** now, which looks like stability and is two different sets: 65 at `65d566db`,
+less the two `command-language` modules that were renamed, plus one that gained the word in the note
+explaining the rename. **The first 64 was measured at `17a9332d`, before this lens's own report
+added a mention.** Two true counts of different populations, equal by coincidence - and an equal
+number invites no question at all.
 
 ### Q-100 - The crate `docs/architecture.md` calls the only door into the model is 73% document generation
 
@@ -625,6 +673,21 @@ lines at `a29d17ff` and is **481** now, and `de8db0dd` - `Q-99`'s fix - is what 
 **So both numbers are right at their own commit, and the finding's own repair moved the number
 beside it.** Which is this week's rule arriving inside the review that stated it: a measurement is a
 claim about the bytes at a commit, and `Q-99`'s fix landed between the two readings.
+
+## The assertion half of this item, measured and declined - 2026-09-26
+
+**Recorded here rather than given an id**, because it is this item's `declare.rs` observation in a
+second file and a ninth open item would cost them more than it is worth.
+
+**Measured at `17a9332d`:** `dump.rs` carries **ten** assertions and no `#[cfg(test)]` anywhere in
+the file; `browse.rs` one and `fired.rs` one, both also with none. `assert_eq!(listed, 9, "nine
+reports are linked")` sits in the body of `pub fn index`. It is exercised, since `dumps_are_current`
+reaches it through `generated()`, so the count is checked - what is not checked is that it stays a
+count rather than becoming a panic in somebody's session.
+
+**The code lane declined it on 2026-09-26, with a reason this lens accepts**: the switch rewrites
+that module's relationship to the model, so repairing the assertions now is work `D-1` deletes.
+**Recorded so a later reader can tell *not yet* from *nobody looked*.**
 
 ### Q-96 - A test is named for two numbers nothing states, and its argument lives in another file
 

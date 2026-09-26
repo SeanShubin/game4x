@@ -25,7 +25,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (12)
+### To code (11)
 
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`
 - **S-192** - `prototypes/kinds/README.md` links to a `catalog.md` that is one directory further out · `docs/notes/proposals.md`
@@ -36,7 +36,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **D-3** - The game's data is stated once · `releases/rules-become-data.md`
 - **D-4** - The old ruleset is gone, not archived · `releases/rules-become-data.md`
 - **D-5** - I have watched the new game play through · `releases/rules-become-data.md`
-- **Q-101** - The empty-cell check cannot fail while the engine loads, and its two floors tolerate half the data · `lenses/quality/outbox.md`
 - **Q-100** - The crate `docs/architecture.md` calls the only door into the model is 73% document generation · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
 
