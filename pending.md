@@ -51,7 +51,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (31)
+### To spec (32)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -61,6 +61,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-147** - The engine moved into `game-model` and `docs/architecture.md` still has a row for the crate it left · `crates/outbox.md`
 - **C-146** - If the rules are data, the data is the game's rules, and it is sitting in this lane's column · `crates/outbox.md`
 - **C-145** - Two numbers in items open right now cannot be reproduced at the bytes they were measured on · `crates/outbox.md`
 - **C-144** - `D-3` says no transcription survives in Rust, and the direction it describes runs the other way · `crates/outbox.md`

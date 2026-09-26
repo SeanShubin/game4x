@@ -26,7 +26,7 @@
 //!
 //! **The rule is `spec/invariants.md` -> The data is a normalized relational model**: *the engine
 //! reads the form whose references are ids*. Until `P-559` landed it on 2026-09-25 it was stated
-//! only in this lane's column, here and in `crates/thin-engine/README.md` - `S-190`.
+//! only in this lane's column, here and in `crates/game-model/ENGINE.md` - `S-190`.
 //!
 //! **Sean, 2026-09-15**, who said it first: *I don't consider the translation between user
 //! friendly format and foundational format part of the engine. The engine should only know about
@@ -49,8 +49,8 @@
 
 use std::collections::BTreeMap;
 
-use thin_engine::notation::{Row, read};
-use thin_engine::schema::Schema;
+use game_model::notation::{Row, read};
+use game_model::schema::Schema;
 
 /// Read friendly text, folding `-> n` back into the relation's quantity column.
 ///
@@ -740,7 +740,7 @@ impl Names {
 
 /// A row as the notation writes it, for a message about it.
 pub fn shown(row: &Row) -> String {
-    thin_engine::notation::write(row)
+    game_model::notation::write(row)
 }
 
 /// What a row *is*, as a value that can be compared and ordered: its relation, and the columns

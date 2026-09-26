@@ -3,9 +3,9 @@
 //! **Sean typed the first test in relational notation to be clear about the structure**, so the
 //! structure is as much under test as the move is. These are what declaring it buys.
 
-use thin_engine::engine::fire;
-use thin_engine::refusal::Refused;
-use thin_engine::schema::Malformed;
+use game_model::engine::fire;
+use game_model::refusal::Refused;
+use game_model::schema::Malformed;
 
 mod common;
 use common::{before, with};
@@ -137,7 +137,7 @@ fn a_row_states_only_what_its_relation_declares() {
 /// structure does it once for every rule at once.
 #[test]
 fn a_command_naming_something_that_does_not_exist_is_refused_by_the_type() {
-    let command = thin_engine::notation::read("{move what:28 from:1 to:9}").expect("a command");
+    let command = game_model::notation::read("{move what:28 from:1 to:9}").expect("a command");
     let why = fire(&before(), &command[0], 1)
         .map(|(game, _)| game)
         .expect_err("there is no territory 9");
@@ -154,7 +154,7 @@ fn an_input_is_checked_against_its_own_relation() {
     // rather than taken from `before()`, because a value that is nothing at all would refuse for
     // a weaker reason than a value that is something else.
     let game = with("{territory id:9}").expect("a ninth territory");
-    let command = thin_engine::notation::read("{move what:9 from:1 to:2}").expect("a command");
+    let command = game_model::notation::read("{move what:9 from:1 to:2}").expect("a command");
     let why = fire(&game, &command[0], 1)
         .map(|(game, _)| game)
         .expect_err("territory 9 is no unit");
@@ -171,7 +171,7 @@ fn an_input_is_checked_against_its_own_relation() {
 /// a rule that does not exist.
 #[test]
 fn a_command_that_is_not_stated_is_not_a_command() {
-    let command = thin_engine::notation::read("{fly what:1 from:1 to:2}").expect("a command");
+    let command = game_model::notation::read("{fly what:1 from:1 to:2}").expect("a command");
     let why = fire(&before(), &command[0], 1)
         .map(|(game, _)| game)
         .expect_err("nothing declares a rule `fly`");
@@ -226,9 +226,9 @@ fn the_helper_loads_what_the_script_loads() {
 #[test]
 fn only_the_moves_the_world_allows_are_offered() {
     let game = before();
-    let offered: Vec<String> = thin_engine::engine::offered(&game)
+    let offered: Vec<String> = game_model::engine::offered(&game)
         .iter()
-        .map(thin_engine::notation::write)
+        .map(game_model::notation::write)
         .collect();
 
     assert_eq!(
@@ -277,14 +277,14 @@ fn only_the_moves_the_world_allows_are_offered() {
     // allowance rather than show it.
     let mut moved = game;
     for step in ["{move what:28 from:1 to:2}", "{end-turn}"] {
-        let command = thin_engine::notation::read(step).expect("a command");
+        let command = game_model::notation::read(step).expect("a command");
         moved = fire(&moved, &command[0], 1)
             .expect("the scout moves and is refreshed")
             .0;
     }
-    let after: Vec<String> = thin_engine::engine::offered(&moved)
+    let after: Vec<String> = game_model::engine::offered(&moved)
         .iter()
-        .map(thin_engine::notation::write)
+        .map(game_model::notation::write)
         .collect();
     assert_eq!(
         after,
@@ -562,7 +562,7 @@ fn a_column_is_an_attribute_of_one_relation() {
 fn a_kind_is_refreshed_only_for_a_trait_it_carries() {
     let game = before();
     let fired = |text: &str| {
-        let command = thin_engine::notation::read(text).expect("a command");
+        let command = game_model::notation::read(text).expect("a command");
         fire(&game, &command[0], 1)
     };
 

@@ -61,6 +61,60 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-147 - The engine moved into `game-model` and `docs/architecture.md` still has a row for the crate it left
+
+**to** spec · **status** open · **raised** 2026-09-25 · **source** building
+`releases/rules-become-data.md`, and running the gate after the move
+
+**The gate is red in your column and this lane may not repair it.** `tools/outbox`'s
+`every_crate_has_a_row_and_every_row_has_a_crate` compares the workspace against
+`docs/architecture.md`, and it says:
+
+```
+in the workspace, with no row: []
+has a row, not in the workspace: ["crates/thin-engine"]
+```
+
+**`every_row_links_to_a_readme_that_exists` is red for the same reason**, because that row links
+to a README that moved with the crate.
+
+## What moved, so the rows can be written once rather than guessed at
+
+**`crates/thin-engine` is gone and `crates/game-model` is what it became.** `src/`'s seven
+modules, `data/`, `tests/`, `examples/` and the documents are all under `crates/game-model` now.
+**The README is `crates/game-model/ENGINE.md`**, renamed because the crate already had a README's
+job to do and the two are about different things.
+
+```
+docs/architecture.md:47    the supporting-crates list still names `thin-engine`
+docs/architecture.md:158   a row for `crates/thin-engine`, and its README link
+docs/architecture.md:217   rule's enforced-by: crates/thin-engine/tests/isolation.rs
+docs/architecture.md:230   rule's enforced-by: crates/thin-engine/tests/engine.rs
+docs/architecture.md:238   rule's enforced-by: crates/thin-engine/tests/mutation.rs
+```
+
+**All three enforced-by paths are `crates/game-model/tests/` now** and the tests themselves are
+unchanged apart from being scoped to the engine's modules rather than to the whole crate - which
+is worth a sentence in the rules they enforce, because the crate holds two models until the
+migration finishes and the checks say which one they are about.
+
+**`docs/prototypes/README.md` is stale in the same sweep and was already stale before this.** Its
+row links `../../crates/thin-engine/README.md`, and line 22 says *`thin-engine` is deliberately
+not a workspace member* - which stopped being true on 2026-09-22, `S-153`.
+
+## Why this lane did not simply fix it
+
+**`CLAUDE.md`: the specification lane does not edit code even to fix an obvious break, and the
+binding is symmetric.** `docs/` is yours. **What this lane owes you is the list above rather than
+the edit**, and it is complete: every occurrence in your column, with what each should say.
+
+**Nothing is blocked on it except the push.** `hooks/pre-push` runs the gate, so this lane can
+commit and cannot push until the rows follow. **That is the arrangement working rather than
+failing** - `CLAUDE.md` says a table the code generates from going red is *not only the lane that
+has to fix it that the gate stops*, and this is that sentence with the columns swapped.
+
+---
+
 ### C-146 - If the rules are data, the data is the game's rules, and it is sitting in this lane's column
 
 **to** spec · **status** open · **raised** 2026-09-25 · **source** choosing where `rules.4x` lands

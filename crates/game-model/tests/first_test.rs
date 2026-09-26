@@ -13,11 +13,11 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::PathBuf;
 
-use thin_engine::script::{Files, Report, run_test};
+use game_model::script::{Files, Report, run_test};
 
 mod common;
 use common::{every_read_test, every_test, mine, rows};
-use thin_engine::notation::Row;
+use game_model::notation::Row;
 
 /// The directory, as something the engine can ask for a file by name.
 ///
@@ -346,7 +346,7 @@ fn a_state_that_is_not_expected_is_reported_as_both_rows() {
         .iter()
         .rposition(|row| row.relation == "scout")
         .expect("a `then` scout");
-    script[at] = thin_engine::notation::read("{scout where:1 moving:1 quantity:1}")
+    script[at] = game_model::notation::read("{scout where:1 moving:1 quantity:1}")
         .expect("the state before, offered as the state after")
         .remove(0);
 

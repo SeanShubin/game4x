@@ -10,9 +10,81 @@
 
 use std::path::PathBuf;
 
-use thin_engine::engine::Game;
-use thin_engine::notation::{Row, read};
-use thin_engine::schema::Malformed;
+use game_model::engine::Game;
+use game_model::notation::{Row, read};
+use game_model::schema::Malformed;
+
+/// The modules of the model the engine replaces, named so the engine's own checks can skip them.
+///
+/// **This is a countdown and not a catalogue.** `releases/rules-become-data.md` measures `D-1` by
+/// this crate **stopping** holding rules rather than holding fewer, and every check that excepts
+/// these asserts the length - so a module deleted from `src/` is deleted here, the number falls,
+/// and when it reaches zero the exceptions have nothing left to except and go with it.
+///
+/// **Excepting them by name is what keeps the engine's properties true rather than weakened.**
+/// *The engine reads no file and names no noun the game has* was a statement about a whole crate
+/// while the crate was only the engine. It is the same statement about the same code now; what
+/// changed is that the crate holds something else too, and naming that something else is more
+/// precise than widening the rule to admit it.
+pub const BEING_REPLACED: [&str; 8] = [
+    "game",
+    "identity",
+    "rejection",
+    "rules",
+    "territory",
+    "thing",
+    "transition",
+    "unit",
+];
+
+/// **`lib.rs` is excepted for a different reason and it is temporary too.** It declares both
+/// module sets, so it says `pub mod territory;` and `pub mod unit;` - two words that are
+/// relations the data names. **It is a declaration of the modules above rather than the engine
+/// naming a noun**, and it comes back into scope the moment there is nothing left to declare.
+pub const SHARED: [&str; 1] = ["lib"];
+
+/// Every module of the engine, read from `src/` rather than listed.
+///
+/// **Read and then excepted, so a module appearing in `src/` that is in neither list is a
+/// failure rather than a silent omission.** A hand list of what to check answers *what did
+/// somebody remember*; this answers *what is there*, which is the question the checks are asked.
+pub fn engine_modules() -> Vec<PathBuf> {
+    let mut found = Vec::new();
+    let mut skipped = 0;
+    for entry in std::fs::read_dir(mine().join("src")).expect("src") {
+        let path = entry.expect("a module").path();
+        if path.extension().map(|it| it != "rs").unwrap_or(true) {
+            continue;
+        }
+        let stem = path
+            .file_stem()
+            .and_then(|it| it.to_str())
+            .expect("a module name")
+            .to_string();
+        if BEING_REPLACED.contains(&stem.as_str()) || SHARED.contains(&stem.as_str()) {
+            skipped += 1;
+            continue;
+        }
+        found.push(path);
+    }
+    assert_eq!(
+        skipped,
+        BEING_REPLACED.len() + SHARED.len(),
+        "every module excepted by name is a module that is there - one that is not means the \
+         migration moved and a list did not"
+    );
+    assert_eq!(
+        found.len(),
+        ENGINE_MODULES,
+        "the engine is {ENGINE_MODULES} modules, and this found {}: {found:?}",
+        found.len()
+    );
+    found
+}
+
+/// **Asserted rather than derived**, so that a module vanishing is a failure and not a smaller
+/// population every check downstream then passes over.
+pub const ENGINE_MODULES: usize = 7;
 
 /// **The only directory anything here reads**, which is what `S-136` means by isolated.
 pub fn mine() -> PathBuf {

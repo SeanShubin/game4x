@@ -38,8 +38,8 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::path::PathBuf;
 
 use friendly_notation::{Names, fold, in_a_section, states_a_world};
-use thin_engine::notation::{Row, write};
-use thin_engine::schema::Schema;
+use game_model::notation::{Row, write};
+use game_model::schema::Schema;
 
 use common::{mine, rows};
 

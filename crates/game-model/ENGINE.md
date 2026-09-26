@@ -1,4 +1,9 @@
-# thin-engine
+# The engine
+
+**This was `crates/thin-engine/README.md` and the crate is gone.** The engine moved into
+`crates/game-model` on 2026-09-25 to build `releases/rules-become-data.md`, and this is the
+document it was written under, kept whole. **It reads as a research log because that is what it
+was**, and the answer it records is the reason the code is now the mainline's.
 
 **The question**: can a thin engine run the game from data?
 
@@ -7,8 +12,10 @@ preference: *a thin engine running a data driven game forces inadequacies in the
 structure to come to light sooner*. **A thin engine is an instrument, and the three explosions -
 of the code, of the data structure, of the data - are its three readings.**
 
-Built to `S-136`. **Nothing here is a decision** - it is research, and if its answer implies one,
-that reaches Sean as a proposal through the specification lane, not from this directory.
+Built to `S-136`. **It was not a decision while it was research** - and Sean made one from it on
+2026-09-25: *the design of thin-engine is becoming the mainline*. What follows below is the log
+that answer came out of, and it is still not the place a decision is made.
+
 
 **[`layers.md`](layers.md) says what may say what**, and which check holds each boundary - the code,
 the words it branches on, the structure, this game's rules, a scenario, and the harness that runs
@@ -1568,7 +1575,7 @@ The isolation is checked rather than promised, by `tests/isolation.rs`:
 ## Running it
 
 ```
-cd crates/thin-engine
+cd crates/game-model
 cargo test --no-fail-fast      # every binary, not just up to the first that fails
 cargo run --example report     # report.html: every test, whole, failures marked
 cargo run --example render     # data/friendly/ from data/foundation/
@@ -1701,7 +1708,7 @@ Sean, 2026-09-16: *Lets explore the idea of marking things as reviewed from the 
 goal is to be able to look through everything quickly and express my decisions quickly.*
 
 ```
-cd crates/thin-engine
+cd crates/game-model
 cargo run --example review-web
   http://127.0.0.1:7878  -  6 tests
 ```

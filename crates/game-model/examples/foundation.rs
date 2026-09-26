@@ -37,8 +37,8 @@ use std::collections::BTreeSet;
 use std::path::PathBuf;
 
 use friendly_notation::{Names, fold, in_a_section, states_a_world};
-use thin_engine::notation::{Row, read, write};
-use thin_engine::schema::Schema;
+use game_model::notation::{Row, read, write};
+use game_model::schema::Schema;
 
 /// The fewest records that can be there before a run proves nothing.
 ///

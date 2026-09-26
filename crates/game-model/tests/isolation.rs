@@ -21,18 +21,11 @@ use common::{mine, rows};
 /// doing it are the same bytes*, which `CLAUDE.md` names after four instances in one evening.
 #[test]
 fn nothing_in_src_reads_a_file_or_depends_on_another_crate() {
-    let src = mine().join("src");
-    let files: Vec<PathBuf> = std::fs::read_dir(&src)
-        .expect("src")
-        .filter_map(|entry| entry.ok())
-        .map(|entry| entry.path())
-        .filter(|path| path.extension().map(|it| it == "rs").unwrap_or(false))
-        .collect();
-    assert_eq!(
-        files.len(),
-        8,
-        "eight modules, and each is checked: {files:?}"
-    );
+    // **The engine's modules, not the crate's.** `common::engine_modules` reads `src/` and
+    // excepts the model being replaced by name, asserting that every name it excepts is there
+    // and that what is left is the engine. **The property below is unchanged**; what changed is
+    // that this crate holds a second thing while the migration runs.
+    let files: Vec<PathBuf> = common::engine_modules();
     let mut read = 0;
 
     for file in &files {
@@ -101,9 +94,20 @@ fn nothing_in_src_reads_a_file_or_depends_on_another_crate() {
         .map(str::trim)
         .filter(|line| !line.is_empty() && !line.starts_with('#'))
         .collect();
-    assert!(
-        depends.is_empty(),
-        "the engine depends on nothing, and its `[dependencies]` says {depends:?}"
+    // **The engine depends on nothing and this crate does not, yet.** `planet-model` is here
+    // because `territory.rs` holds a biome as a Rust field, and `territory.rs` is one of the
+    // eight modules the migration removes. **In the new model a biome is a column**, so this
+    // entry goes when that module does.
+    //
+    // **The property the engine rests on is checked above and is not this line**: no module of
+    // the engine says `use` of another crate, which is what a dependency would have to do to
+    // reach it. This is the weaker, cruder statement, kept because it is the one that goes to
+    // zero - and asserting the exact contents rather than a count means a second entry
+    // appearing is a failure rather than a number nobody looks at.
+    assert_eq!(
+        depends,
+        ["planet-model.workspace = true"],
+        "the only dependency left is the one `territory.rs` needs, and this crate's `[dependencies]` says {depends:?}"
     );
 
     // **And the table is found rather than assumed**, so a manifest that stopped having one
@@ -210,8 +214,7 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
     );
 
     let mut looked = 0;
-    for file in std::fs::read_dir(mine().join("src")).expect("src") {
-        let file = file.expect("a module").path();
+    for file in common::engine_modules() {
         let name = file
             .file_name()
             .and_then(|it| it.to_str())
@@ -236,5 +239,10 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
             looked += 1;
         }
     }
-    assert_eq!(looked, 272, "thirty-four nouns over eight modules");
+    assert_eq!(
+        looked,
+        nouns.len() * common::ENGINE_MODULES,
+        "thirty-four nouns over {} engine modules",
+        common::ENGINE_MODULES
+    );
 }

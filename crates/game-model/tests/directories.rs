@@ -14,8 +14,8 @@ use friendly_notation::{self as friendly, Names};
 
 use common::{mine, rows};
 
-use thin_engine::notation::{Row, write};
-use thin_engine::schema::Schema;
+use game_model::notation::{Row, write};
+use game_model::schema::Schema;
 
 /// Every file in a directory: the shared ones, then one per test.
 ///
@@ -225,7 +225,7 @@ fn neither_directory_omits_anything() {
 #[test]
 fn a_name_the_foundation_cannot_keep_is_refused() {
     let names = Names::of(&store(true, "friendly"));
-    let row = thin_engine::notation::read("{territory id:1 name:home}").expect("a row");
+    let row = game_model::notation::read("{territory id:1 name:home}").expect("a row");
 
     let why = names
         .foundation(&row[0])
@@ -238,7 +238,7 @@ fn a_name_the_foundation_cannot_keep_is_refused() {
 
     // The control: the generated name converts, so the refusal is about the name and not about
     // territories having a name at all.
-    let row = thin_engine::notation::read("{territory id:1 name:territory-1}").expect("a row");
+    let row = game_model::notation::read("{territory id:1 name:territory-1}").expect("a row");
     assert_eq!(
         write(&names.foundation(&row[0]).expect("the generated name")),
         "{territory id:1}"

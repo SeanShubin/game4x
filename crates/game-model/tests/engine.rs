@@ -12,7 +12,7 @@
 use std::collections::BTreeSet;
 
 mod common;
-use common::{mine, rows};
+use common::rows;
 
 /// Every string constant the engine compares a data value against.
 ///
@@ -24,13 +24,14 @@ use common::{mine, rows};
 fn constants() -> BTreeSet<String> {
     let mut found = BTreeSet::new();
     let mut files = 0;
-    for file in std::fs::read_dir(mine().join("src")).expect("src") {
-        let file = file.expect("a module").path();
-        if file.extension().map(|it| it != "rs").unwrap_or(true) {
-            continue;
-        }
+    // **The engine's modules and not the crate's**, which `common::engine_modules` gets by
+    // reading `src/` and excepting the model being replaced by name. **The boundary is the
+    // engine's**, so a constant in a module that is on its way out is not a word the data has
+    // to delegate.
+    for file in common::engine_modules() {
         files += 1;
         let text = std::fs::read_to_string(&file).expect("a module");
+
         for line in text.split("#[cfg(test)]").next().unwrap_or("").lines() {
             let line = line.trim();
             let Some(rest) = line.strip_prefix("const ") else {
@@ -47,7 +48,11 @@ fn constants() -> BTreeSet<String> {
             }
         }
     }
-    assert_eq!(files, 8, "eight modules were read");
+    assert_eq!(
+        files,
+        common::ENGINE_MODULES,
+        "every engine module was read"
+    );
     found
 }
 

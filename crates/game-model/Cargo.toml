@@ -1,8 +1,30 @@
+# The game, during the one migration this crate has ever had.
+#
+# **Two models live here** - see `src/lib.rs`. The thin engine moved in on 2026-09-25 from
+# `crates/thin-engine`, which is gone, and the model it replaces is removed a piece at a time.
+# `ENGINE.md` is the README that crate was written under.
+#
+# **`planet-model` is the old model's dependency and not the engine's.** The engine names no noun
+# the game has and reaches for nothing; `Biome` is a Rust type only because the model being
+# replaced holds a biome as a field. **In the new model a biome is a column**, so this line goes
+# when `territory.rs` does - which is the shortest statement of what the migration is for.
+
 [package]
 name = "game-model"
 version.workspace = true
 edition.workspace = true
-description = "The game: a state, a transition, and the one function between them. Integers only, engine-free."
+description = "The game: the thin engine that runs it from data, and the model it is replacing."
 
 [dependencies]
 planet-model.workspace = true
+
+[dev-dependencies]
+
+# **The translator, which lived in `thin-engine/tests/common/friendly.rs` until `R-12`.** It is a
+# dev-dependency rather than a dependency, so the engine's own build is unchanged and
+# `tests/isolation.rs` still reads an engine that depends on nothing.
+#
+# **This is a dependency cycle and Cargo permits exactly this one**: `friendly-notation` depends
+# on this crate, and this crate depends on it only to test and to run its examples. A dev
+# dependency is not part of the built library, so there is no cycle in anything that ships.
+friendly-notation = { path = "../friendly-notation" }

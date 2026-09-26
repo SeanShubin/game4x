@@ -34,7 +34,7 @@ use std::path::PathBuf;
 use friendly_notation as friendly;
 
 use friendly::Names;
-use thin_engine::notation::{Row, read};
+use game_model::notation::{Row, read};
 
 /// Every file in a directory: the shared ones, then one per test.
 ///

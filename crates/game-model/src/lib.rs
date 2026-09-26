@@ -1,4 +1,23 @@
-//! The game.
+//! The game, during the one migration this crate has ever had.
+//!
+//! **Two models live here and one of them is leaving.** `releases/rules-become-data.md` says a
+//! rule changes when Sean edits data and not before, and its measure is that this crate **stops**
+//! holding rules rather than holding fewer. So the thin engine moved in beside the model it
+//! replaces, and the model it replaces is removed a piece at a time.
+//!
+//! - **The engine** - [`notation`], [`store`], [`schema`], [`engine`], [`script`], [`refusal`],
+//!   [`view`]. It knows no noun the game has; everything it does is read out of `data/`.
+//! - **The model being replaced** - [`game`], [`rules`], [`territory`], [`thing`], [`unit`],
+//!   [`transition`], [`identity`], [`rejection`]. A struct per noun and a method per rule.
+//!
+//! **`tests/isolation.rs` names the second list and asserts its length**, so the migration has a
+//! number: eight modules to go, and the exception disappears when the list is empty rather than
+//! when somebody remembers to delete it.
+//!
+//! **It arrived as `crates/thin-engine` and that crate is gone.** Sean, 2026-09-25: *I don't mean
+//! to actually delegate to thin-engine* - so it was moved rather than depended on, and there is
+//! nothing left to delegate to. `ENGINE.md` is the README it was written under and holds the
+//! question it was built to answer.
 //!
 //! # One function
 //!
@@ -23,6 +42,19 @@
 //! territory sits on a sphere: adjacency arrives as a graph of integer ids, computed
 //! above and handed in with the transition that creates the planet.
 
+// **The engine.** Seven modules that name no noun the game has - `tests/isolation.rs` is what
+// says so, and `data/engine.4x` lists every word any of them branches on.
+pub mod engine;
+pub mod notation;
+pub mod refusal;
+pub mod schema;
+pub mod script;
+pub mod store;
+pub mod view;
+
+// **The model being replaced.** Eight modules, a struct per noun and a method per rule, and the
+// list `tests/isolation.rs` excepts by name. **It is a countdown rather than a catalogue**: a
+// module deleted here is deleted there, and when both are empty the exception goes with them.
 pub mod game;
 pub mod identity;
 pub mod rejection;

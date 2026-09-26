@@ -29,10 +29,10 @@
 
 use std::collections::{BTreeMap, BTreeSet};
 
-use thin_engine::engine::Game;
-use thin_engine::notation::{Row, read, write};
-use thin_engine::schema::Malformed;
-use thin_engine::script::{Files, run_test};
+use game_model::engine::Game;
+use game_model::notation::{Row, read, write};
+use game_model::schema::Malformed;
+use game_model::script::{Files, run_test};
 
 mod common;
 use common::mine;

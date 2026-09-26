@@ -170,7 +170,7 @@ jobs:
       #
       # Release, because twenty minutes is the debug figure and this is the same work.
       - name: Test (the mutation sweep, which the push gate skips)
-        run: cargo test --release -p thin-engine -- --ignored
+        run: cargo test --release -p game-model -- --ignored
 
       # Run from the crate directory: Trunk resolves the cargo manifest from its working
       # directory, and the workspace root is a virtual manifest with no root package.
@@ -283,7 +283,7 @@ jobs:
           test -f crates/game4x/dist/lenses/research/formulas.html
           test -f crates/game4x/dist/tools/research/formulas/data.json
           test -f crates/game4x/dist/tools/research/formulas/results.json
-          # **The thin-engine's tests, served where they are asked for.** Sean, 2026-09-21:
+          # **The engine's tests, served where they are asked for.** Sean, 2026-09-21:
           # *can I render the tests from somewhere under
           # https://seanshubin.github.io/game4x/reports/*. They land at
           # `/game4x/reports/thin-engine/`, and the data beside the page so that every link in
@@ -304,9 +304,16 @@ jobs:
           # for the form the engine runs, and both are relative to this directory - so both roots
           # are copied under it. **Copying only `data/` published a page whose every *on disk*
           # link was dead**, which is what this step looked like between the move and now.
+          #
+          # **The published path keeps the name `thin-engine` and the crate no longer has
+          # it.** The engine moved into `crates/game-model` on 2026-09-25 and that crate is
+          # gone; this is a URL Sean asked for and has, so renaming it would break a link
+          # he holds in exchange for tidiness. **The source paths below follow the move and
+          # the destination does not**, which is the difference between a file and an
+          # address.
           mkdir -p crates/game4x/dist/reports/thin-engine/spec
-          cp crates/thin-engine/report.html crates/game4x/dist/reports/thin-engine/index.html
-          cp -r crates/thin-engine/data crates/game4x/dist/reports/thin-engine/data
+          cp crates/game-model/report.html crates/game4x/dist/reports/thin-engine/index.html
+          cp -r crates/game-model/data crates/game4x/dist/reports/thin-engine/data
           cp -r spec/tests crates/game4x/dist/reports/thin-engine/spec/tests
           find crates/game4x/dist/reports/thin-engine -name '*.4x' \
             -exec sh -c 'cp "$1" "$1.txt"' _ {} \;

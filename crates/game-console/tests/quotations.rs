@@ -262,7 +262,7 @@ fn collect(directory: &Path, into: &mut Vec<PathBuf>) {
                 collect(&path, into);
             }
         } else if path.file_name().unwrap_or_default() == "report.html" {
-            // **A generated copy, by the rule two branches up.** `crates/thin-engine`
+            // **A generated copy, by the rule two branches up.** `crates/game-model`
             // renders every test into one page, comments and all - and reading it reports
             // findings that are not there, because the renderer puts each line in its own
             // element and this reads straight through the markup. One it reported was

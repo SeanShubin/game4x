@@ -6,8 +6,8 @@
 mod common;
 use common::{game_rows, rows};
 use friendly_notation::{Change, Names, compared};
-use thin_engine::notation::Row;
-use thin_engine::schema::Schema;
+use game_model::notation::Row;
+use game_model::schema::Schema;
 
 /// **`given.4x` renders as Sean wrote it**, line for line.
 #[test]
@@ -161,8 +161,8 @@ fn every_file_survives_the_round_trip() {
                 back,
                 row,
                 "{file}: `{}` rendered as `{friendly}` and came back as `{}`",
-                thin_engine::notation::write(&row),
-                thin_engine::notation::write(&back)
+                game_model::notation::write(&row),
+                game_model::notation::write(&back)
             );
             checked += 1;
         }

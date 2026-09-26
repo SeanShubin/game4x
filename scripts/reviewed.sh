@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Commit the thin-engine tests you have marked reviewed.
+# Commit the engine tests you have marked reviewed.
 #
 # The review application writes a copy of each test into reviewed/ as you approve it, and that
 # copy is the marker: a later edit makes the two differ and the test shows as drifted until you
@@ -17,7 +17,7 @@
 
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
-prototype="$root/crates/thin-engine"
+prototype="$root/crates/game-model"
 
 # **Staging is publishing, and `git commit` commits the index rather than your changes.** So a
 # file somebody else staged would be committed under this message. Refuse rather than carry it.

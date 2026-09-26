@@ -24,8 +24,8 @@ use std::path::PathBuf;
 use friendly_notation as friendly;
 
 use friendly::Names;
-use thin_engine::notation::{Row, read};
-use thin_engine::script::{Files, run_test};
+use game_model::notation::{Row, read};
+use game_model::script::{Files, run_test};
 
 fn mine() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -391,7 +391,7 @@ the world it leaves. (old state, commands) -> (new state, effects).
                 world.push(row);
             }
         }
-        let before = thin_engine::engine::Game::of(world).ok();
+        let before = game_model::engine::Game::of(world).ok();
 
         // **The commands the `when` states**, which is the middle of the fold.
         let mut commands = Vec::new();
@@ -460,7 +460,7 @@ old state
 "
                     ));
                 }
-                match thin_engine::engine::play(before, &commands) {
+                match game_model::engine::play(before, &commands) {
                     Err(why) => log.push_str(&format!(
                         "
 refused
@@ -587,7 +587,7 @@ not as expected
         //
         // **Only where there are two worlds.** A `{refused}` test states one, and a line of it is
         // neither the same as nor different from anything.
-        let schema = thin_engine::schema::Schema::of(&whole).ok();
+        let schema = game_model::schema::Schema::of(&whole).ok();
         let mut marks: BTreeMap<(String, String), (friendly::Change, Option<String>)> =
             BTreeMap::new();
         if let Some(schema) = &schema {

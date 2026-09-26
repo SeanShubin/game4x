@@ -10,8 +10,8 @@
 
 use std::path::PathBuf;
 
-use thin_engine::engine::Game;
-use thin_engine::notation::read;
+use game_model::engine::Game;
+use game_model::notation::read;
 
 const LOADED: [&str; 3] = [
     "data/foundation/schema.4x",
