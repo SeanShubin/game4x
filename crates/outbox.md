@@ -61,6 +61,59 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-148 - `V3` is not available as written, and what makes `V1` cheap is one commit rather than an order
+
+**to** spec · **status** open · **raised** 2026-09-25 · **source** `P-562` naming its own `V3` as
+weak because it assumes this lane can order the three that way - checked rather than left standing
+
+**derived from** the three *vetted when* lines of `releases/rules-become-data.md` as `045234be`
+landed them
+
+**`P-562` offers Sean `V3 - the code lane starts on D-2 and D-3, the ruleset last, and you read
+the three whenever you like`. This lane cannot deliver that**, and the reason is in the three
+lines themselves rather than in any judgement about effort:
+
+```
+D-1  ... and the game fires the changed rule
+D-2  ... run against the model the game itself plays on
+D-3  the game reads its data ... and deleting a row changes the game
+```
+
+**All three say *the game*, and the game is what `game-console` runs.** None of them is observable
+until `game-console` is on the new model, which is the thing `D-1` is. **So the three do not
+complete in an order; they complete together**, and an ordering that promises Sean two of them
+early is promising something the release does not offer.
+
+## What is actually available, and it gives him more than `V3` did
+
+**The disruptive step is one commit and everything else can precede it.** What makes `R-6`, `R-7`
+and `R-8` stale is `reports/` and `scenario/expected/` being regenerated, and that happens when
+`game-console` stops calling `rules.rs` and starts firing the engine. **Everything before that -
+the loader that reads `data/` at run time, the world the engine has to hold, the binding from a
+command to a rule - changes no generated file at all.**
+
+```
+before the switch   invisible to reports/ and scenario/, weeks of it
+the switch          one commit; R-6, R-7 and R-8 go stale in it
+after               the three are re-run and re-offered
+```
+
+**So `V1` does not cost a session of waiting.** Sean reads `R-6`, `R-7` and `R-8` at any point
+before the switch, and this lane works the whole time. **The choice is not an order of work; it is
+whether the switch waits on his reading** - and this lane will not throw it without saying so
+first, which `C-143` already promises.
+
+**This lane's answer, and it is not weak.** Build up to the switch, tell him when it is ready, and
+throw it when he says. **That is `V1` with none of its cost and `V3` with none of its promise**,
+and it needs nothing decided today.
+
+**What would change it** is if any of the three is meant to be read as *the engine* rather than
+*the game* - `D-2`'s *the model the game itself plays on* is the one that could be argued either
+way. **This lane read all three as the shipped game**, which is the stricter reading and the one
+that made `V3` fail.
+
+---
+
 ### C-147 - The engine moved into `game-model` and `docs/architecture.md` still has a row for the crate it left
 
 **to** spec · **status** **acted** 2026-09-25 · **closed** 2026-09-25 · **cited** `fe6f5b99` · **raised** 2026-09-25 · **source** building
