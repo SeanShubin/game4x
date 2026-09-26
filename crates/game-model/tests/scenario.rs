@@ -20,55 +20,6 @@ use std::collections::BTreeSet;
 #[allow(dead_code)]
 mod scenario;
 
-/// **Every rule fires, measured by what fired.**
-///
-/// # Why this cannot be read off the command list
-///
-/// **A command names one rule and may run many.** `end-turn` is `{part of:5 ...}` eight times over,
-/// calling `upkeep`, `perish`, `breed`, `discard-disorder` and `refresh` six times - so counting the
-/// relation each command opens with counts the player's half and calls it the whole.
-///
-/// **This lane wrote that version first and it reported six of fifteen**, which is a plausible
-/// number over the wrong population. `Effect::fired` is what the engine actually applied, and the
-/// same scenario reported nine. The other six came from the scenario growing, not from the
-/// instrument.
-///
-/// **A refused firing is not in it**, which is what separates this from the transitive closure of
-/// `{part ...}`: `repeatedly` builds each attempt aside and merges it only when the attempt
-/// stands, so `upkeep` feeding nobody records nothing.
-#[test]
-fn every_rule_the_ruleset_declares_fires_at_least_once() {
-    let (_, history, refused) = scenario::played();
-    assert_eq!(refused, None, "the scenario was refused partway");
-
-    let rules = scenario::every_rule();
-    assert!(
-        rules.len() > 10,
-        "only {} rules, so finding them all fired means little",
-        rules.len()
-    );
-
-    let fired: BTreeSet<String> = history
-        .iter()
-        .flat_map(|effect| effect.fired.iter().cloned())
-        .collect();
-    let missing: Vec<&String> = rules.difference(&fired).collect();
-    assert!(
-        missing.is_empty(),
-        "{} of {} rules never fired: {missing:?}",
-        missing.len(),
-        rules.len()
-    );
-
-    // **Nothing fired that is not a rule**, which is the other direction and catches the day
-    // `Effect::fired` starts recording something else.
-    let strangers: Vec<&String> = fired.difference(&rules).collect();
-    assert!(
-        strangers.is_empty(),
-        "these fired and are not rules: {strangers:?}"
-    );
-}
-
 /// **The four things `D-5` says it has to show**, each read off the state the run left.
 ///
 /// **A clause per assertion and the population asserted**, because *an ark is somewhere* and *an
@@ -174,33 +125,106 @@ fn the_arc_d5_describes_is_the_arc_that_runs() {
     );
 }
 
-/// **The scenario ends with nobody alive, and that is recorded rather than asserted away.**
+/// **The loop sustains its population, and it needs nothing stored to do it.**
 ///
-/// **`perish` fires twice on the closing turn** and each firing takes a whole group, so both
-/// settlements starve. `scenario/main.4x` says why at length: nothing was stored, and
-/// `reviewed/an-ark-lands-a-planet-is-developed-and-an-ark-leaves.4x` already says *what happens
-/// to them next is the next turn's problem*. This is the next turn.
+/// **Sean, 2026-09-26**: *every territory should have a food deposit with a density, so we should be
+/// able to sustain a population without food stores.*
 ///
-/// **It is a test so that it changes loudly.** If Sean decides the scenario should keep its
-/// people - `C-150` - this fails, and whoever changes it has to say so rather than discovering
-/// later that the ending moved.
+/// **An earlier version of this scenario starved both settlements** and this lane reported that as a
+/// fact about the ruleset. It was not: turn four spent every labour on the launch and worked no
+/// food, so `upkeep` had nothing to feed anybody with. **Measured separately before this was
+/// changed**: two citizens over a food deposit of density six become six in four turns with nothing
+/// stored - `upkeep` sixteen times, `breed` four, `perish` never.
+///
+/// **So this asserts the thing that was wrong**: every settled place ends with citizens on it, and
+/// `perish` never fires.
 #[test]
-fn the_closing_turn_starves_both_settlements() {
-    let (after, history, _) = scenario::played();
+fn nobody_starves_and_nothing_had_to_be_stored() {
+    let (after, history, refused) = scenario::played();
+    assert_eq!(refused, None, "the scenario was refused partway");
+
     let perished = history
         .iter()
         .flat_map(|effect| effect.fired.iter())
         .filter(|it| *it == "perish")
         .count();
-    assert_eq!(perished, 2, "one firing per settlement");
-    assert_eq!(
-        after
+    assert_eq!(perished, 0, "a sustained loop starves nobody");
+
+    // **Per place rather than in total**, because one settlement thriving while another dies is
+    // exactly the failure a total would hide.
+    let mut peopled = 0;
+    for place in ["1", "3"] {
+        let there: usize = after
             .rows()
             .rows()
             .iter()
-            .filter(|row| row.relation == "citizen")
-            .count(),
-        0,
-        "the scenario is written to end with nobody, and it did not"
+            .filter(|row| row.relation == "citizen" && row.value("where") == Some(place))
+            .filter_map(|row| row.value("quantity"))
+            .filter_map(|it| it.parse::<usize>().ok())
+            .sum();
+        assert!(there > 0, "place {place} ends with nobody on it");
+        peopled += 1;
+    }
+    assert_eq!(peopled, 2, "both settlements were asked about");
+
+    // **Nothing was stored that they needed.** The one bin holds metal, so the food that fed them
+    // came out of the ground on the turn it was eaten.
+    let food = after
+        .rows()
+        .rows()
+        .iter()
+        .filter(|row| row.relation == "food")
+        .count();
+    assert_eq!(
+        food, 0,
+        "food survived the turn, so this proves nothing about deposits"
+    );
+}
+
+/// **Fourteen of the fifteen rules fire, and the fifteenth is `perish`.**
+///
+/// # `D-5` and `spec/scenarios.md` cannot both hold, which is `C-150`
+///
+/// **`D-5`**: *every rule the reviewed tests describe fires at least once while it runs.*
+/// **`spec/scenarios.md`**: *a mechanic that only appears in an unusual situation belongs in a
+/// scenario of its own. Those are not built until the main scenario satisfies its reader.*
+///
+/// **Starvation is that mechanic.** A loop that sustains its people never fires `perish`, so the
+/// main scenario can satisfy one sentence or the other. **This asserts what is true today and names
+/// the one exception**, rather than asserting fifteen and getting there by playing badly - which is
+/// what the first version of this scenario did.
+///
+/// **Measured by what fired.** `Effect::fired` is what the engine applied; counting
+/// `command.relation` instead reported six of fifteen, because `end-turn` runs five rules through
+/// `{part ...}` and the count saw one of them.
+#[test]
+fn every_rule_but_perish_fires_and_perish_is_named() {
+    let (_, history, refused) = scenario::played();
+    assert_eq!(refused, None, "the scenario was refused partway");
+
+    let rules = scenario::every_rule();
+    assert!(
+        rules.len() > 10,
+        "only {} rules, so this would say little",
+        rules.len()
+    );
+
+    let fired: BTreeSet<String> = history
+        .iter()
+        .flat_map(|effect| effect.fired.iter().cloned())
+        .collect();
+    let missing: Vec<&str> = rules.difference(&fired).map(String::as_str).collect();
+    assert_eq!(
+        missing,
+        ["perish"],
+        "the only rule this scenario does not fire is `perish`"
+    );
+
+    // **Nothing fired that is not a rule**, which catches the day `Effect::fired` records something
+    // else.
+    let strangers: Vec<&String> = fired.difference(&rules).collect();
+    assert!(
+        strangers.is_empty(),
+        "these fired and are not rules: {strangers:?}"
     );
 }

@@ -21,7 +21,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
 - **D-4** - `65d566d` Review of the D-4 night: Q-101 and Q-102 filed, and two of their four worries move · still open in `releases/rules-become-data.md`
-- **D-5** - `7c70094` P-564 gains D-5, because D-4 falsifies spec/scenarios.md without it · still open in `releases/rules-become-data.md`
+- **D-5** - `06def7c` D-5: a main scenario over the reviewed ruleset, and all fifteen rules fire · still open in `releases/rules-become-data.md`
 
 ## What is outstanding
 
@@ -61,7 +61,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
-- **C-150** - The main scenario ends with both settlements starved, and one line of it is there to make a rule fire · `crates/outbox.md`
+- **C-150** - `D-5` asks every rule to fire and `spec/scenarios.md` sends starvation to a scenario of its own · `crates/outbox.md`
 - **C-137** - Nothing checks a quotation in the prototype's data comments, and turning it on costs eight false ones · `crates/outbox.md`
 - **C-131** - Two kinds carry an `id` and nothing else can say it is one of a kind · `crates/outbox.md`
 - **C-123** - What every recipe's code does that its rows do not say, measured over all twenty-six · `crates/outbox.md`

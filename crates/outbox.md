@@ -61,53 +61,56 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
-### C-150 - The main scenario ends with both settlements starved, and one line of it is there to make a rule fire
+### C-150 - `D-5` asks every rule to fire and `spec/scenarios.md` sends starvation to a scenario of its own
 
-**to** spec · **status** open · **raised** 2026-09-26 · **source** building `D-5`, and noticing which
-line of the scenario was written for the measurement rather than for the game
+**to** spec · **status** open · **raised** 2026-09-26 · **rewritten** 2026-09-26 after Sean
+corrected the first version, which blamed the ruleset for something the scenario was doing
 
-**`D-5` asks two things of the main scenario and they pull against each other.** It has to show the
-arc - an Ark down, a territory developed, a second taken by land and developed, an Ark up - and
-**every rule the reviewed tests describe has to fire at least once**. Fourteen of the fifteen fire
-in the arc. `perish` does not.
+**derived from** a mechanic that only appears in an unusual situation belongs in a scenario of its
+own - `spec/scenarios.md`
 
-**So there is a fifth `{end-turn}` after the launch, and it is the only line in the file put there
-for the measurement.** What it costs, measured rather than reasoned: `perish` fires twice, each
-firing takes a whole citizen group, and the scenario ends with two developed territories, an ark in
-orbit and nobody alive.
-
-## It is the ruleset and not a defect in the scenario
-
-**Sean's own reviewing says it.** `reviewed/an-ark-lands-a-planet-is-developed-and-an-ark-leaves.4x`:
-*the settlement that built the ark is still there and hungry - a launch is not a departure, it is a
-thing built. What happens to them next is the next turn's problem.* **This is the next turn.**
-Nothing was stored, so there was nothing to eat.
-
-## The choice, and it is a scenario's to make rather than a rule's
+**Two sentences, and the main scenario can satisfy one of them.**
 
 ```
-E1  leave it            every rule fires; the scenario Sean watches ends with nobody alive
-E2  store the food      they live; `perish` fires nowhere and the measurement clause fails
-E3  starve one place    a bin at one settlement and not the other, so `perish` fires once
-                        and the other survives to the end
+D-5                  every rule the reviewed tests describe fires at least once while it runs
+spec/scenarios.md    a mechanic that only appears in an unusual situation belongs in a
+                     scenario of its own. Those are not built until the main scenario
+                     satisfies its reader
 ```
 
-**This lane has built `E1` and is not defending it.** `spec/scenarios.md` says the main scenario is
-*vetted by hand*, and what a person watching it should see at the end is exactly the sort of thing a
-hand vets. **`E3` is what this lane would choose** - it fires `perish` on something real rather than
-on the whole population, and it ends with a living settlement - and it is a guess about what Sean
-wants to watch.
+**Starvation is that mechanic**, so `perish` fires in the main scenario only when the loop is played
+badly. **Fourteen of fifteen rules fire** in the scenario as it stands, and the fifteenth is
+`perish`.
 
-**Nothing is blocked.** `crates/game-model/tests/scenario.rs` asserts the ending as it stands, so a
-change to it is loud rather than quiet, and `scenario/main.4x` says at length which line is there for
-the measurement and what it costs.
+## What this item said first, and why it was wrong
 
-## And one thing this lane will not do without being told
+**It said the ruleset starves a settlement one turn after a launch, and offered Sean three endings.**
+Sean, 2026-09-26: *every territory should have a food deposit with a density, so we should be able to
+sustain a population without food stores.*
 
-**Adding a bin to keep them alive is a change to what the scenario shows, not to the ruleset.** But
-`E2` and `E3` both mean the file no longer fires every rule or fires it somewhere chosen for the
-purpose, and **`D-5`'s measurement clause is Sean's sentence**. Whether *every rule fires* is worth
-an ending he would not choose is the question, and it is his.
+**He is right, measured.** Two citizens over a food deposit of density six become **six citizens in
+four turns** with nothing stored and nobody starving - `upkeep` sixteen times, `breed` four, `perish`
+never. The old scenario starved both settlements because **turn four spent every labour on the launch
+and worked no food**, which is the scenario played badly and not a rule.
+
+**So the fix was the scenario and it is made**: every settled place works its food on every one of
+its turns, and it ends with two settlements of six alive. **`nobody_starves_and_nothing_had_to_be_stored`
+asserts it**, per place rather than in total, and asserts no food survived the turn - so what fed
+them came out of the ground on the turn it was eaten.
+
+**This lane reported a scenario defect as a property of the game.** The measurement that would have
+caught it is the one Sean's sentence implies and it took two minutes to run.
+
+## What is actually open
+
+**Which sentence gives way.** This lane has built to `spec/scenarios.md` - the main scenario
+sustains its people and does not fire `perish` - and `every_rule_but_perish_fires_and_perish_is_named`
+names the exception rather than hiding it, so the day a starvation scenario exists this fails and
+says so.
+
+**`D-5`'s clause is Sean's and this lane will not reinterpret it.** If *every rule fires* is meant
+literally of the main scenario, then the main scenario has to be played badly somewhere, and that is
+worth his saying rather than this lane's choosing.
 
 ---
 
