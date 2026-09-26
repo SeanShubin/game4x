@@ -9144,6 +9144,7 @@ work the release exists to order.
 | P-560, the release that makes the rules data, and the specification needed nothing                                           | `releases/rules-become-data.md` - a new file                                                                                                                                                             | 2026-09-25 |
 | P-561, `spec/combat.md` becomes a future plan, being four scaffolding prompts and no rule                                    | `spec/combat.md` -> `spec/future/combat.md`, and `spec/README.md`                                                                                                                                        | 2026-09-25 |
 | P-562, retire `R-6`, `R-7` and `R-8` unread, and a release finishes when every capability is vetted or retired               | `releases/first-release.md` -> Capabilities, and `releases/README.md` -> Vetting, and deletion                                                                                                           | 2026-09-26 |
+| P-564, `D-4` the old ruleset is gone not archived, and `D-5` I have watched the new game play through                        | `releases/rules-become-data.md` -> Capabilities                                                                                                                                                          | 2026-09-26 |
 
 ## Forecast cleanups that were checked and not filed
 

@@ -11,123 +11,50 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
-### P-563 - the game's rules now ship from the one column you do not author, and rule 8 says where they go
+### P-565 - `L2` answered, `D-5` already carries it, and what `spec/tests/` is remains open
 
-**to** sean · **status** open · **raised** 2026-09-26 · **rewritten** 2026-09-26, with the size arguments taken out · **asks** a decision · **kind** entailed · **into** where `rules.4x`, `schema.4x` and `engine.4x` live, and `spec/data/`
+**to** sean · **status** open · **raised** 2026-09-26 · **half answered** 2026-09-26, `L2` · **asks** a decision · **kind** entailed · **into** `spec/README.md` rule 3, and whether `spec/tests/` exists
 
-**Three answers, separated by which files name a game noun.**
+**You answered the lock and not the directory.** *The old scenario test where we conquer the whole
+planet is gone, we will need a new scenario test to handle the smaller expand then launch* - that
+is `L2`, a new scenario rather than the reviewed tests as the lock.
 
-```
-H1  all three move to spec/data/                 engine.4x goes too, and it is the one
-                                                 file with nothing of yours in it
-H2  all three stay in crates/game-model/data/    the game's rules stay in the column the
-                                                 code lane writes and you do not author
-H3  rules.4x and schema.4x move, engine.4x stays the split follows the measurement below
-```
+## You were right, and this lane was wrong about it twice
 
-## The measurement, and it is about ownership rather than size
+**It existed and it was a requirement rather than a file.** `R-6`'s *vetted when* asked for **a
+fully exploited planet** until `P-422` changed the target on 2026-09-12 - `crates/outbox.md`:
+*the vetted when no longer asks for a fully exploited planet*. `R-6`'s own text still carries the
+scar: *these numbers were taken against an older vetted when that asked for a fully exploited
+planet, which the release no longer requires.*
 
-```
-rules.4x     {rule id:1 name:move}       the game's rules           yours
-schema.4x    82 lines name a game noun   the game's kinds, traits   yours
-engine.4x     0 lines name a game noun   the engine's primitives    the code lane's
-```
+**This lane first answered that no scenario conquers the planet**, having counted territories in
+the seven files of `scenario/commands/`. **That was true and it was not the question** - you said
+*scenario test*, and the thing you remembered was what the scenario test was checked against.
+Same shape as the three errors already recorded today.
 
-**`engine.4x` naming no game noun is checked rather than intended** - `docs/architecture.md` rule
-12, and `tests/isolation.rs` fails if it stops being true. **That is what makes `H3` a boundary
-that already exists rather than a line drawn for this.**
+**So nothing is lost and nothing needs hunting.** What you described as the replacement is what
+the release should say, and the only question is whether `D-5` says it.
 
-## Why it is live now
+## And `D-5` already is that new scenario test
 
-**As of `c438986a` the game ships these files.** `crates/game-model/src/foundation.rs` carries them
-with `include_str!` and builds a `Game` from them, so they stopped being a prototype's fixture and
-became what a player's build runs.
+**You promoted it in `P-564` an hour ago.** *A main scenario exists over the reviewed ruleset and I
+have watched it run: a first territory taken, a second taken by land, and an Ark launched from the
+second.* **So `L2` needs no new capability** - it needs rule 3 to point at that instead of at the
+scenario being deleted, which is a rewrite for you to read and this lane will bring it once you
+settle the other half.
 
-## What `spec/data/` holds today, which is the part that makes room
-
-**Its eleven files are a rendering and not a source**, generated from `releases/first-release.md`.
-`C-144` measured that nothing reads them at run time: deleting a row changes no game, reddens a
-test, and the next generator run puts it back. **When the release's tables stop being the ruleset
-that rendering has no subject**, so the directory is free exactly when the new ruleset needs it.
-
-**Nothing currently orders it to go.** `releases/rules-become-data.md` never mentions `spec/data/`;
-`D-3` forbids a transcription *in Rust* and says nothing about a rendering in your own directory.
-**Whichever answer you pick, that deletion needs ordering**, and this lane will file it rather than
-leave it to be noticed.
-
-## What changes for you afterwards, which is the one thing worth weighing
-
-**Under `H1` or `H3`, a rule changes by promotion** - today the code lane edits `rules.4x` and
-afterwards a rule change is something you read. **Rule 8 already draws that line and it may be the
-line you want**: *tuning happens in the editor and does not touch the specification, and a tuned
-value becomes the default only when I say it does.* So trying a number costs nothing and changing
-a rule costs a reading.
-
-**Under `H2` the reverse**: the code lane can change what the game does without you, and `D-1`'s
-observable - *I change a recipe by editing a data file* - is satisfied by a file you do not own.
-
-## What this lane would say
-
-**`H3`**, because rule 8 already says it and the file it leaves behind is the one the architecture
-already forbids from naming anything of yours. **Not because it moves less than `H1`.**
-
-**Neither answer gates the switch.** The engine reads these files through `include_str!` from
-wherever they sit, so where they live does not hold up getting your ruleset running, and the code
-lane should not wait on this.
-
-### P-565 - `spec/tests/` is a byte-identical copy of `reviewed/` with no stated status, and rule 3's lock is being deleted
-
-**to** sean · **status** open · **raised** 2026-09-26 · **asks** a decision · **kind** entailed · **into** `spec/README.md` rule 3, and whether `spec/tests/` exists
-
-**You said the approved tests are canonical, and rule 3 already says so** - *a test is the primary
-statement*, *where prose and a test disagree, the test is right*. **Two things it does not say, and
-your sentence is what makes them matter.**
-
-## One - what is `spec/tests/`?
+## What is still open, and it is one question
 
 ```
-spec/tests/   54 files
-reviewed/     54 files, the same 54 names, 0 differing in content
+T1  delete spec/tests/       reviewed/ is canonical; a byte-identical copy of it is
+                             clutter. CLAUDE.md names spec/tests/, so this needs your
+                             approval there too
+T2  keep it, and say what    spec/tests/ is where a test is written, reviewed/ is where
+    it is                    one you have read lands. Rule 3 gains a sentence
 ```
 
-**Rule 3 names `spec/tests/` once and only to say the rendering does not come from it.** So the
-normative directory holds an exact copy of the canonical one, nothing says which is which, and
-nothing would notice them drifting.
+**`T3` is withdrawn** - it proposed deleting `reviewed/`, and you have since said the approved
+tests are canonical, which settles it.
 
-```
-T1  delete spec/tests/         reviewed/ is canonical and a copy of it is the clutter
-                               you just said to keep out. CLAUDE.md names spec/tests/,
-                               so this needs your approval there too
-T2  keep it, and say what      spec/tests/ is where a test is written and reviewed/ is
-    it is                      where one that has been read lands. Rule 3 gains a sentence
-T3  delete reviewed/ instead   the review application writes it and no lane may touch it;
-                               this is listed so the option is visibly considered, not
-                               because this lane recommends it
-```
-
-**This lane would say `T2`.** The two directories are not a duplicate but a before and an after -
-a test you have not read yet has to live somewhere, and `reviewed/` is exactly the set you have
-read. **They are identical today because you have read all 54.**
-
-## Two - the data's lock is being deleted
-
-**Rule 3**: *The game's data is decided in its data file, reviewed by hand and locked by the
-scenario test.* **`P-564`'s `D-4` deletes the scenario**, so that clause becomes false when it
-lands.
-
-```
-L1  the reviewed tests are the lock      they exercise the data the engine reads, and
-                                         they are the thing you have read
-L2  name a new scenario                  a scenario over the new ruleset, written later
-L3  drop the clause                      the data is reviewed by hand and locked by nothing
-```
-
-**This lane would say `L1`**, and it is nearly a restatement rather than a new rule: rule 3's own
-first sentence already makes a test the primary statement, and the reviewed tests run against the
-data the engine reads.
-
-## What this is not
-
-**It does not ask whether the approved tests are canonical.** You have said they are and rule 3
-agrees. **It asks what the other directory is for, and what locks the data once the scenario is
-gone** - neither of which rule 3 answers today.
+**This lane would say `T2`**: the two are a before and an after rather than a duplicate, and they
+are identical today only because you have read all 54.

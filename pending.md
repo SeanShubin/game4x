@@ -8,9 +8,9 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-564** - *out of my way* is observable and nothing asserts it, so the release gets `D-4` and `D-5` · `decide/proposals.md`
-- **P-563** - the game's rules now ship from the one column you do not author, and rule 8 says where they go · `decide/questions.md`
-- **P-565** - `spec/tests/` is a byte-identical copy of `reviewed/` with no stated status, and rule 3's lock is being deleted · `decide/questions.md`
+- **P-563** - `H3`: the game's rules and kinds move to `spec/data/`, and the engine's primitives stay · `decide/proposals.md`
+- **P-566** - `D-5` says two territories are taken and you said both are developed · `decide/proposals.md`
+- **P-565** - `L2` answered, `D-5` already carries it, and what `spec/tests/` is remains open · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -22,11 +22,14 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-563** - `cfc0edc` P-563 filed, and P-562 defines the switch it turns on · still open in `decide/proposals.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
+- **D-4** - `7c70094` P-564 gains D-5, because D-4 falsifies spec/scenarios.md without it · still open in `releases/rules-become-data.md`
+- **D-5** - `7c70094` P-564 gains D-5, because D-4 falsifies spec/scenarios.md without it · still open in `releases/rules-become-data.md`
 
 ## What is outstanding
 
-### To code (9)
+### To code (11)
 
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`
 - **S-192** - `prototypes/kinds/README.md` links to a `catalog.md` that is one directory further out · `docs/notes/proposals.md`
@@ -35,6 +38,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **D-1** - A rule changes when I edit data, and not before · `releases/rules-become-data.md`
 - **D-2** - The game plays by the tests I have read · `releases/rules-become-data.md`
 - **D-3** - The game's data is stated once · `releases/rules-become-data.md`
+- **D-4** - The old ruleset is gone, not archived · `releases/rules-become-data.md`
+- **D-5** - I have watched the new game play through · `releases/rules-become-data.md`
 - **Q-100** - The crate `docs/architecture.md` calls the only door into the model is 73% document generation · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
 

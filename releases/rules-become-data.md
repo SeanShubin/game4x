@@ -47,6 +47,29 @@ across or is written again is the code lane's to choose, and no capability here 
 - **Vetted when** - the game reads its data from the data files at run time, and deleting a row
   changes the game. No transcription of those rows survives in Rust
 
+### D-4 - The old ruleset is gone, not archived
+
+**to** code · **status** open · **raised** 2026-09-26 · **from** `P-564`
+
+- **In** - `spec/README.md` rule 4, *what is built and asserted by a test is the specification*,
+  and Sean, 2026-09-26: *I am confident i can re-create any old rules*
+- **Vetted when** - nothing in the repository states a rule of the game except the files the
+  engine reads. The hand-written ruleset, the rendering of it in `spec/data/`, the scenario that
+  exercised it and the tables it was generated from are **deleted rather than moved**, and no
+  test, report or document is left describing a rule the game does not play by. **A search for
+  any recipe name the reviewed tests do not use finds nothing outside the history**
+
+### D-5 - I have watched the new game play through
+
+**to** code · **status** open · **raised** 2026-09-26 · **from** `P-564`
+
+- **In** - `spec/scenarios.md`, *there is one main scenario, and it touches everything a typical
+  game uses. It is the foundation, and it is vetted by hand*
+- **Vetted when** - a main scenario exists over the reviewed ruleset and I have watched it run:
+  a first territory taken, a second taken by land, and an Ark launched from the second. **Every
+  rule the reviewed tests describe fires at least once while it runs, measured by what fired
+  rather than by what the file says.** This is the observation `R-6` was retired without making
+
 ## Out of scope
 
 - **The drawing.** `crates/` keeps the planet, the reports and the console. Sean, 2026-09-21:
