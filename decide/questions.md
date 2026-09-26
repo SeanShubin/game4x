@@ -11,81 +11,73 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
-### P-562 - three of the seven capabilities waiting on you rest on the ruleset `D-1` replaces, so does the switch wait on your reading?
+### P-562 - you want the old mechanics out of your way, and three of the capabilities queued for you are evidence about them
 
-**to** sean · **status** open · **raised** 2026-09-25 · **rewritten** 2026-09-25, one of the three answers was not available · **asks** a decision · **kind** entailed · **into** `releases/first-release.md`, and how the code lane sequences `D-1`
+**to** sean · **status** open · **raised** 2026-09-25 · **rewritten** 2026-09-26, around what you said rather than around the switch · **asks** a decision · **kind** entailed · **into** `releases/first-release.md`
 
-## What "the switch" is, since this question turns on the word
-
-**One step, not the migration.** `game-console` reaches the rules through `Transition` and
-`end_turn`, which today resolve to `crates/game-model/src/rules.rs` - **1,424 lines of Rust that
-are the rules.** The switch is the step where that path stops resolving to `rules.rs` and starts
-firing the data ruleset through the engine.
-
-**Three things people mean by "moving to thin-engine" have already happened and none of them was
-the switch.** The engine's code moved into `crates/game-model` on 2026-09-25, `f633864a`. The
-ruleset began shipping with the binary the same day, `c438986a`. The reviewed tests already run,
-in `crates/game-model/tests/`.
-
-**What none of that changed is which rules the game plays by.** Measured just now: nothing outside
-`game-model` fires the data ruleset, and `rules.rs` is still 1,424 lines and still what a command
-reaches. **The switch is the moment the game a player runs starts obeying the data**, and `D-2`
-is the same moment seen from the tests - they stop being about the engine alone and start being
-about the game.
-
-**Two answers, and neither needs anything from you today.**
+**Sean, 2026-09-26**: *the old mechanics are put somewhere out of this release so that I can focus
+on the tests i reviewed.* **Three of the seven capabilities waiting on you are evidence about
+those mechanics.**
 
 ```
-W1  the switch waits for your word   the code lane builds up to it, says when it is ready,
-                                     and throws it when you say. You read R-6, R-7 and R-8
-                                     whenever you like before then
-W2  the switch does not wait         the three go stale, and are re-run and re-offered
-                                     once the new model plays. You read them once, later
+W1  retire R-6, R-7, R-8       you never read them. They assert that mechanics being
+                               deleted worked, which stops being worth your attention
+                               the moment the deletion is decided - and it is
+W2  read them, then retire     the work is done and reported; reading it is an hour
+                               and closes the first release properly
+W3  leave them open            they go stale when the switch happens and are re-run
+                               against the new model, which is `W2` at a later date
 ```
 
-## What changed since this was filed, and it is the whole of the rewrite
-
-**A third answer offered you `D-2` and `D-3` early, and the release cannot deliver it.** The code
-lane checked it against the words rather than against the intent, and it fails:
+## The four that are not about the old mechanics, and are unaffected either way
 
 ```
-D-1  "the game fires the changed rule"
-D-2  "the model the game itself plays on"
-D-3  "the game reads its data from the data files at run time"
+R-9   reports browsable, no script      a property of the report's form
+R-10  a drawing in either theme         a property of the drawing's form
+R-11  the engine's inputs are reachable the set of inputs moves; the claim does not
+R-12  the foundation form of a test     generated from reviewed/ - the tests you read
 ```
 
-**All three say *the game*, and the game is what `game-console` runs.** So none of the three is
-observable until the console is on the new model, which is `D-1` itself - **they do not complete in
-an order, they complete together.** This lane confirms the strict reading is the one intended:
-`D-2` contrasts it with *today they run against `crates/thin-engine` and against nothing else*, and
-under a loose reading `D-2` would already be met and would be saying nothing.
+**`R-12` is the one that is already about what you want**, and `R-9` and `R-10` are about the
+reports rather than about any ruleset. **So this question is about three capabilities, not seven**,
+and the other four are worth your eye whatever you answer.
 
-## And checking it made `W1` cost nothing, which is the part worth your eye
+## Why `R-6`, `R-7` and `R-8` are the three
 
-**What makes `R-6`, `R-7` and `R-8` stale is one step, not the whole migration.** Their evidence is
-`reports/recipes.md` and `scenario/expected/play.4x`, and **both are produced by running
-`crates/game-model`** - re-derived here: `worked.rs`, which the recipes report is built from, and
-`tests/expected_state.rs`, which writes the scenario's expected state, each construct a
-`game_model::Game`.
+**Their evidence is produced by running the mechanics being replaced.** Re-derived:
+`tests/expected_state.rs` writes `scenario/expected/play.4x` by constructing a `game_model::Game`,
+and `worked.rs`, which `reports/recipes.md` is built from, does the same. `R-8`'s signatures come
+from the same release tables.
 
-**So nothing regenerates until `game-console` stops calling `rules.rs` and starts firing the
-engine.** Everything before that - a loader that reads the data at run time, the world the engine
-has to hold, binding a command to a rule - **touches no generated file at all.** That is the bulk of
-the work, and it is invisible to the three.
+**And the scenario is older than the thing replacing it**, which is the question you asked:
 
-**`W1` therefore costs no waiting.** It was filed as though it did.
+```
+2026-09-05  scenario/expected/play.4x     366 lines of commands, 133 of expected state
+2026-09-14  thin-engine begins
+2026-09-21  spec/tests/ and reviewed/ arrive
+2026-09-22  the review application
+```
+
+**Nine days before thin-engine and sixteen before the review process.** No file in `reviewed/`
+mentions the scenario, so the two suites do not overlap at all.
 
 ## What this lane would say
 
-**`W1`**, and the code lane independently proposed the same thing. It is `W1` with none of the cost
-this item first attributed to it. `C-143` already commits that lane to filing before it throws the
-switch, so the difference between the two answers is only whether your reading is a gate on it or a
-thing you do afterwards.
+**`W1`.** `docs/process.md` makes vetting the thing that gates *finishing* rather than shipping, and
+a capability whose subject is being deleted has nothing left to finish. **Reading the three would
+tell you that mechanics you are removing worked**, which is true and is not worth an hour of the
+one attention this process is built to conserve.
+
+**What `W1` costs, and it is the honest objection**: `R-6` is *the loop can be played through*,
+which is the closest thing to a statement that the game works at all. Retiring it unread means
+nothing has ever confirmed that by a person's eye - and the new model owes the same observation
+before it can claim it. **This lane would file that as a capability of the new release rather than
+keep the old one open**, but it is your call whether that is a deferral you accept.
 
 ## What is not in question
 
-**Nothing here asks you to re-approve `D-1`, `D-2` or `D-3`.** The capabilities are right and this
-is about when one step inside them happens.
+**Nothing here retires a test you reviewed.** The 54 in `reviewed/` are untouched, and `D-2` is
+what makes them the game's.
 
 ### P-563 - the game's rules now ship from the one column you do not author, and rule 8 says where they go
 

@@ -4355,3 +4355,40 @@ that states it*.
 reach it, not where the person who had the reason was working at the time. `spec/` links down to a
 note for reasoning - but a reason that *decides* what the rule is, rather than explaining why it was
 chosen, is part of the rule.
+
+## Said 2026-09-26: the reviewed tests are what the game runs, and the old mechanics go somewhere else
+
+**Sean**, asking whether `scenario/expected/play.4x` predates the review process, and then stating
+the end state: *The end state I want to get to is that the tests I reviewed through the web page
+are the ones the game actually runs, and the old mechanics are put somewhere out of this release
+so that I can focus on the tests i reviewed.*
+
+**The first half is `D-1` and `D-2` and needs nothing new.** `releases/rules-become-data.md`
+already says the game plays by the tests in `reviewed/`.
+
+**The second half is new and is not in any release.** *The old mechanics are put somewhere out of
+this release* is a scope statement, and nothing today says it. What is in the release's *Out of
+scope* is the drawing, the console's shape, and `releases/first-release.md`'s capabilities - and
+that last line says *nothing here changes what they assert*, which is the opposite of setting them
+aside.
+
+## The dates he asked about, and the answer is yes
+
+```
+2026-09-05  scenario/expected/play.4x created          ddbaed66
+2026-09-14  thin-engine begins                         3729c88d
+2026-09-21  spec/tests/ and reviewed/ arrive           b629b5e7, 7747a0cf
+2026-09-22  the review application joins the gate      48927aa6
+```
+
+**Nine days before thin-engine and sixteen before the review process.** The scenario is the old
+mechanics' own artifact: 366 lines of commands and 133 of expected state, written by
+`tests/expected_state.rs` running `game_model::Game`, which is `rules.rs`. **No file in
+`reviewed/` mentions the scenario**, so the two suites do not overlap.
+
+## What this lane thinks it changes, and it is filing rather than deciding
+
+**`R-6`, `R-7` and `R-8` are evidence about the mechanics he has just said he wants out of his
+way.** `P-562` asks whether the switch waits on his reading of those three. **If they are going
+out of scope, the question is not when he reads them but whether he reads them at all**, and this
+lane has put that to him rather than assuming it.
