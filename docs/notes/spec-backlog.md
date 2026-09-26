@@ -4477,3 +4477,21 @@ duplicate of the canonical one, with nothing saying which is which or what happe
 `D-4` in `P-564` takes `scenario/commands/` and `scenario/expected/` out. **So promoting `P-564`
 makes a clause of rule 3 false**, which is the staleness rule firing before the promotion rather
 than after it.
+
+## Said 2026-09-26: the relational model buys coherence, which accuracy needs and is not
+
+**Sean**: *The relational model is important because it is what guarantees our model is coherent,
+even though it could still be inaccurate. An incoherent model can not be accurate.*
+
+**`spec/` does not say this.** `spec/invariants.md` -> The data is a normalized relational model
+gives the reason as *one consistent model with no duplication*, which is the property. **His
+sentence is the argument for caring about it**, and it has two halves the file does not carry:
+coherence is **necessary** for accuracy, and it is **not sufficient**.
+
+**Measured: zero occurrences of *coherent*, *accurate* or *accuracy* anywhere in `spec/`.**
+
+**Why it is worth promoting rather than noting.** He said on 2026-09-25 that *reasons being
+discoverable by an AI Assistant has made the AI Assistant much more capable of giving me good
+recommendations*, and this is the reason under a rule three other rules lean on. It also bounds
+the claim: structure cannot make the rules right, so nothing should argue that a normalized model
+is evidence the game is correct. **Filed as `P-567`.**
