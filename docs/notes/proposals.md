@@ -95,8 +95,31 @@ tools/outbox/tests/promotions.rs           4
 tools/outbox/tests/architecture.rs         1
 ```
 
-**Compilation is not affected.** Every reference in any `src/` is a comment - no `include_str!` or
-`read_to_string` of `spec/data/` exists outside tests - so the build stands and the suite does not.
+**Compilation is not affected** - `cargo build --workspace` is clean - **but the sentence this
+lane first wrote here was wrong.** It said every `src/` reference is a comment. **Four
+`#[cfg(test)]` tests inside `crates/game-console/src/` read the directory too**, and they fail
+first: `relations::tests` three times and `style::tests` once, all at `src/relations.rs:127`. The
+instrument was a grep for `include_str!|read_to_string|File::open` on the same line as
+`spec/data`, which a path built in two steps escapes.
+
+## And those four are not a path problem, which is the part worth your attention
+
+**`spec/data/` held one relation per file and the foundation form does not.**
+
+```
+old  spec/data/block.4x    1 relation
+new  spec/data/rules.4x   13 - rule, input, clause, binding, soft, scope, ...
+     spec/data/schema.4x  13 - relation, column, trait, family, member, ...
+```
+
+`relations.rs:127` asserts one relation per file and says why: *a file holding two relations
+renders as one with a lot of blanks, which is what a normalized view exists to stop.*
+
+**So `H3` moved files into a directory whose convention they do not keep**, and neither `P-563`
+nor `spec/README.md` rule 8 caught it - rule 8 says *several files in a directory of their own*
+and never says one relation each. **This lane is not deciding which gives way** - the reader, the
+convention, or the layout. It is reported because it is a design question about the normalized
+view, and if it needs Sean it comes back through this lane as a proposal.
 
 **`hooks/pre-push` runs the suite, so pushing will fail until this is done.** Committing will not.
 
