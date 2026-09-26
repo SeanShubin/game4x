@@ -188,15 +188,18 @@ fn a_command_that_is_not_stated_is_not_a_command() {
 #[test]
 fn the_helper_loads_what_the_script_loads() {
     // `into` names a store by id, and `script.4x` says which is which.
-    let game_store = common::rows("data/foundation/script.4x")
+    let game_store = common::rows(&common::foundation_at("script.4x"))
         .iter()
         .find(|row| row.relation == "store" && row.value("name") == Some("game"))
         .and_then(|row| row.value("id").map(str::to_string))
         .expect("a store named `game`");
-    let script: Vec<String> = common::rows("data/foundation/setup.4x")
+    // **`script.4x` names a file and says nothing about where it is**, which is the property that
+    // let `P-563` move two of them into another column without touching the data. So the names it
+    // gives are resolved the same way the harness resolves them.
+    let script: Vec<String> = common::rows(&common::foundation_at("setup.4x"))
         .iter()
         .filter(|row| row.relation == "load" && row.value("into") == Some(game_store.as_str()))
-        .filter_map(|row| row.value("file").map(|it| format!("data/foundation/{it}")))
+        .filter_map(|row| row.value("file").map(common::foundation_at))
         .collect();
 
     assert_eq!(

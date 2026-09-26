@@ -63,7 +63,7 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-148 - `V3` is not available as written, and what makes `V1` cheap is one commit rather than an order
 
-**to** spec · **status** open · **raised** 2026-09-25 · **source** `P-562` naming its own `V3` as
+**to** spec · **status** **answered** 2026-09-26 · **closed** 2026-09-26 · **cited** `6d0e279c` - P-562 rewrote V3 out; W1 is what this item proposed and Sean chose it · **raised** 2026-09-25 · **source** `P-562` naming its own `V3` as
 weak because it assumes this lane can order the three that way - checked rather than left standing
 
 **derived from** the three *vetted when* lines of `releases/rules-become-data.md` as `045234be`
@@ -214,7 +214,7 @@ cheap one unnamed.
 
 ### C-146 - If the rules are data, the data is the game's rules, and it is sitting in this lane's column
 
-**to** spec · **status** open · **raised** 2026-09-25 · **source** choosing where `rules.4x` lands
+**to** spec · **status** **answered** 2026-09-26 · **closed** 2026-09-26 · **cited** `86cfaabd` - Sean chose H3: the rules and kinds go to `spec/data/`, the primitives stay here · **raised** 2026-09-25 · **source** choosing where `rules.4x` lands
 before moving any code for `releases/rules-become-data.md`
 
 **derived from** state the game's data in several files in a directory of their own -
@@ -263,7 +263,7 @@ question**, and the answer is a place rather than an argument.
 
 ### C-145 - Two numbers in items open right now cannot be reproduced at the bytes they were measured on
 
-**to** spec · **status** open · **raised** 2026-09-25 · **source** re-deriving what arrived
+**to** spec · **status** **answered** 2026-09-25 · **closed** 2026-09-26 · **cited** `475127a8` - both numbers corrected in `S-193`; `R-7` pinned to a commit · **raised** 2026-09-25 · **source** re-deriving what arrived
 finished, before acting on it - `S-190`'s ratio and `R-7`'s evidence line
 
 **derived from** a number an item derives names the rule it came from - `CLAUDE.md`, What done
@@ -338,7 +338,7 @@ it, which is the cheapest moment.
 
 ### C-144 - `D-3` says no transcription survives in Rust, and the direction it describes runs the other way
 
-**to** spec · **status** open · **raised** 2026-09-25 · **source** reading `declare.rs` before
+**to** spec · **status** **answered** 2026-09-25 · **closed** 2026-09-26 · **cited** `475127a8` - `S-193` confirms the example was wrong and `D-3`'s words untouched · **raised** 2026-09-25 · **source** reading `declare.rs` before
 starting `releases/rules-become-data.md`
 
 **`D-3`'s own words are right and its example is not.** The capability says *the game reads its
@@ -367,7 +367,7 @@ what a later reader will use to judge whether the capability is met.
 
 ### C-143 - `reviewed/` and the release state different rulesets, and seven capabilities Sean is queued to vet rest on the one being replaced
 
-**to** spec · **status** open · **raised** 2026-09-25 · **source** `S-187`'s last paragraph,
+**to** spec · **status** **answered** 2026-09-26 · **closed** 2026-09-26 · **cited** `f7e5ae5c` - became `P-562`; Sean retired `R-6`, `R-7` and `R-8` unread · **raised** 2026-09-25 · **source** `S-187`'s last paragraph,
 measured rather than accepted, before choosing how to build `releases/rules-become-data.md`
 
 **derived from** a test is stated in the friendly form and the foundation form is a rendering of

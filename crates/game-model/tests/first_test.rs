@@ -11,7 +11,6 @@
 //! read a file, and asserting that the report says what it should.
 
 use std::collections::{BTreeMap, BTreeSet};
-use std::path::PathBuf;
 
 use game_model::script::{Files, Report, run_test};
 
@@ -23,21 +22,31 @@ use game_model::notation::Row;
 ///
 /// **This is where `std::fs` lives and the only place it may.** `src/` reads nothing - it is
 /// handed this and asks it, which is what lets `load` exist without the engine opening anything.
-struct Directory(PathBuf);
+/// The foundation, wherever each of its files lives.
+///
+/// **This was one directory and `P-563` made it two.** `setup.4x` asks for `schema.4x`,
+/// `engine.4x` and `rules.4x` by bare name, and two of those three are `spec/data/`'s now - so
+/// the answer to *where is this file* moved out of a `join` and into `common::foundation_at`,
+/// which is the one place that knows the split.
+///
+/// **The engine is untouched by that.** `Files::read` is the only thing it needs from outside
+/// itself, and it still asks by name and gets text - which is the whole reason the split cost one
+/// adapter rather than a change to the engine.
+struct Foundation;
 
-impl Files for Directory {
+impl Files for Foundation {
     fn read(&self, name: &str) -> Option<String> {
-        std::fs::read_to_string(self.0.join(name)).ok()
+        std::fs::read_to_string(mine().join(common::foundation_at(name))).ok()
     }
 }
 
-fn data() -> Directory {
-    Directory(mine().join("data").join("foundation"))
+fn data() -> Foundation {
+    Foundation
 }
 
 /// One test's rows: what every test loads, then the test itself.
 fn script_of(file: &str) -> Vec<Row> {
-    let mut all = rows("data/foundation/setup.4x");
+    let mut all = rows(&common::foundation_at("setup.4x"));
     all.extend(rows(file));
     all
 }
@@ -48,7 +57,7 @@ fn report_of(file: &str) -> Report {
 
 /// Every relation the schema marks as state, by name.
 fn state_relations() -> BTreeSet<String> {
-    let schema = rows("data/foundation/schema.4x");
+    let schema = rows(&common::foundation_at("schema.4x"));
     let named: BTreeMap<String, String> = schema
         .iter()
         .filter(|row| row.relation == "relation")
@@ -64,7 +73,7 @@ fn state_relations() -> BTreeSet<String> {
 
 /// Every relation the structure declares, by name.
 fn declared_relations() -> BTreeSet<String> {
-    rows("data/foundation/schema.4x")
+    rows(&common::foundation_at("schema.4x"))
         .iter()
         .filter(|row| row.relation == "relation")
         .filter_map(|row| row.value("name").map(str::to_string))
@@ -73,7 +82,7 @@ fn declared_relations() -> BTreeSet<String> {
 
 /// Every rule the ruleset declares, by name.
 fn rule_names() -> BTreeSet<String> {
-    rows("data/foundation/rules.4x")
+    rows(&common::foundation_at("rules.4x"))
         .iter()
         .filter(|row| row.relation == "rule")
         .filter_map(|row| row.value("name").map(str::to_string))
@@ -154,7 +163,7 @@ fn the_ruleset_states_no_world() {
     let state = state_relations();
     let mut checked = 0;
     for file in ["schema.4x", "engine.4x", "rules.4x"] {
-        for row in rows(&format!("data/foundation/{file}")) {
+        for row in rows(&common::foundation_at(&file)) {
             assert!(
                 !state.contains(&row.relation),
                 "{file}: `{}` is state, and a world belongs to the scenario that states it",

@@ -14,9 +14,9 @@ use game_model::engine::Game;
 use game_model::notation::read;
 
 const LOADED: [&str; 3] = [
-    "data/foundation/schema.4x",
+    "../../spec/data/schema.4x",
     "data/foundation/engine.4x",
-    "data/foundation/rules.4x",
+    "../../spec/data/rules.4x",
 ];
 
 fn main() {

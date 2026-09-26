@@ -116,18 +116,36 @@ pub fn rows(at: &str) -> Vec<Row> {
     read(&text).unwrap_or_else(|why| panic!("{at}: {why}"))
 }
 
-/// The four files `data/test.4x` loads into the game, in the order it loads them.
+/// The files loaded into the game, in the order they are loaded.
 ///
-/// **Named here as well as in `test.4x`, and the two are checked against each other** by
-/// `the_helper_loads_what_the_script_loads` - which caught them disagreeing about the order the
+/// **Read from `foundation::PATHS` rather than written here**, which is `P-563`: two of the three
+/// are `spec/data/`'s now and one is this crate's, and a path written in seven places is a path
+/// that will be edited in six. **What that list is checked against is still `script.4x`**, by
+/// `the_helper_loads_what_the_script_loads` - which caught the two disagreeing about the order the
 /// first time it ran. **The order does not matter to the engine**, since everything goes into one
 /// store and is validated together; the lists agreeing is what matters, and asserting the order is
 /// the cheapest way to notice that they do not.
-pub const LOADED: [&str; 3] = [
-    "data/foundation/schema.4x",
-    "data/foundation/engine.4x",
-    "data/foundation/rules.4x",
-];
+pub const LOADED: [&str; 3] = game_model::foundation::PATHS;
+
+/// Where a foundation file lives, given its bare name.
+///
+/// **`P-563` split `data/foundation/` across two columns and this is the only place that knows
+/// it.** `schema.4x` and `rules.4x` are `spec/data/`'s now; `engine.4x`, `script.4x`, `setup.4x`
+/// and every test are still this crate's. A reader that spelled `data/foundation/{file}` was
+/// right for as long as they were all in one directory, and there were seven of them.
+///
+/// **Resolved from `foundation::PATHS` rather than from a second list**, so the answer here and
+/// the answer the shipped binary uses cannot differ. A name that is not one of the three keeps
+/// the old spelling, which is what makes this a lookup rather than a table.
+pub fn foundation_at(file: &str) -> String {
+    for at in LOADED {
+        let named = at.rsplit('/').next().unwrap_or(at);
+        if named == file {
+            return at.to_string();
+        }
+    }
+    format!("data/foundation/{file}")
+}
 
 /// Every test file, read rather than listed - one test per file, and nothing else in `tests/`.
 pub fn every_test() -> Vec<String> {

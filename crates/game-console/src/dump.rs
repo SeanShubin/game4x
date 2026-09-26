@@ -1686,9 +1686,9 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(String, String)> {
     // `spec/data/` the way two readers of one subject have here before - `P-485`.
     let relational = {
         let at = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data");
-        let (found, spilled) = crate::relations::read(&at);
+        let found = crate::relations::read(&at);
         (
-            crate::relations::markdown(&found, &spilled),
+            crate::relations::markdown(&found),
             html(&crate::relations::sections(&found), RELATIONS),
         )
     };

@@ -12,9 +12,9 @@
 //! builds get the same bytes, so what the acceptance test reads off disk is what a player runs.
 //!
 //! **It is not a transcription, which is what `D-3` forbids.** `include_str!` carries the file;
-//! it does not restate it. Delete a row from `data/foundation/rules.4x`, build, and the game
-//! fires a different rule - which is the capability's own sentence, and the tests below are where
-//! it is asserted rather than claimed.
+//! it does not restate it. Delete a row from `spec/data/rules.4x`, build, and the game fires a
+//! different rule - which is the capability's own sentence, and the tests below are where it is
+//! asserted rather than claimed.
 //!
 //! # Why it is here and not in the engine
 //!
@@ -32,21 +32,45 @@ use crate::engine::Game;
 use crate::notation::{Row, read};
 use crate::schema::Malformed;
 
-/// The foundation's files, in the order `data/foundation/script.4x` loads them.
+/// The foundation's files: a name, where it lives relative to this crate, and its bytes.
 ///
-/// **One list, read by everything here.** `library.rs` writes its names three times - once to
-/// embed and once in each of two tests - which is the shape `Q-46` is about: a list that has to
-/// be edited in more than one place is a list that will be edited in one. **Here the names and
-/// the bytes travel together**, so a file added to the foundation is added once.
+/// **One list, and it is the only place any of the three paths is written.** `library.rs` writes
+/// its names three times - once to embed and once in each of two tests - which is the shape
+/// `Q-46` is about: a list that has to be edited in more than one place is a list that will be
+/// edited in one. **The tests and `tests/common`'s `LOADED` read this rather than repeating it**,
+/// which is what made `P-563` a three-line change here instead of a sweep.
+///
+/// **Two of the three are not in this crate, and `P-563` is why.** Sean answered `H3` on
+/// 2026-09-26: the game's rules and kinds live in `spec/data/` and the engine's primitives stay
+/// in `crates/`. So `schema.4x` and `rules.4x` are the specification's and `engine.4x` is this
+/// lane's - **which is the column boundary drawn through the foundation**, and the reason this
+/// list has a path column at all.
 ///
 /// **The order does not matter to the engine** and is kept anyway. Everything goes into one store
 /// and is validated together, so this is the order a reader should meet them in rather than a
 /// constraint: the structure, then the words the engine implements, then this game's rules.
-pub const FOUNDATION: [(&str, &str); 3] = [
-    ("schema", include_str!("../data/foundation/schema.4x")),
-    ("engine", include_str!("../data/foundation/engine.4x")),
-    ("rules", include_str!("../data/foundation/rules.4x")),
+pub const FOUNDATION: [(&str, &str, &str); 3] = [
+    (
+        "schema",
+        "../../spec/data/schema.4x",
+        include_str!("../../../spec/data/schema.4x"),
+    ),
+    (
+        "engine",
+        "data/foundation/engine.4x",
+        include_str!("../data/foundation/engine.4x"),
+    ),
+    (
+        "rules",
+        "../../spec/data/rules.4x",
+        include_str!("../../../spec/data/rules.4x"),
+    ),
 ];
+
+/// Where each foundation file lives, relative to this crate - the paths of [`FOUNDATION`].
+///
+/// **`tests/common`'s `LOADED` is this**, so a file moving between columns is one edit.
+pub const PATHS: [&str; 3] = [FOUNDATION[0].1, FOUNDATION[1].1, FOUNDATION[2].1];
 
 /// Every row of the foundation, read out of the bytes carried above.
 ///
@@ -55,8 +79,8 @@ pub const FOUNDATION: [(&str, &str); 3] = [
 /// caller who could do nothing with it.
 pub fn rows() -> Vec<Row> {
     let mut all = Vec::new();
-    for (name, text) in FOUNDATION {
-        let rows = read(text).unwrap_or_else(|why| panic!("data/foundation/{name}.4x: {why}"));
+    for (_, at, text) in FOUNDATION {
+        let rows = read(text).unwrap_or_else(|why| panic!("{at}: {why}"));
         all.extend(rows);
     }
     all
@@ -84,16 +108,26 @@ mod tests {
     #[test]
     fn what_is_carried_is_what_is_on_disk() {
         let mut compared = 0;
-        for (name, carried) in FOUNDATION {
-            let path = format!(
-                "{}/data/foundation/{name}.4x",
-                env!("CARGO_MANIFEST_DIR").replace('\\', "/")
-            );
+        for (name, at, carried) in FOUNDATION {
+            let path = format!("{}/{at}", env!("CARGO_MANIFEST_DIR").replace('\\', "/"));
             let disk = std::fs::read_to_string(&path)
                 .unwrap_or_else(|why| panic!("cannot read {path}: {why}"));
-            assert_eq!(carried, disk, "`{name}.4x` has drifted");
+            assert_eq!(carried, disk, "`{name}` has drifted from {at}");
             compared += 1;
         }
+        // **Both columns are covered, asserted rather than assumed.** `P-563` split the
+        // foundation across two lanes' directories, and a list that had quietly lost one of them
+        // would still compare three files and still pass.
+        assert!(
+            FOUNDATION.iter().any(|(_, at, _)| at.contains("spec/data")),
+            "no foundation file is the specification's, so `H3` is not what this is reading"
+        );
+        assert!(
+            FOUNDATION
+                .iter()
+                .any(|(_, at, _)| at.starts_with("data/foundation")),
+            "no foundation file is this crate's, so the engine's primitives have gone missing"
+        );
         // **A count over nothing is the same failure with the sign flipped** - `CLAUDE.md`. An
         // empty `FOUNDATION` would compare nothing and pass in exactly these words.
         assert_eq!(compared, FOUNDATION.len());

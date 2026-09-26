@@ -179,12 +179,8 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
     ];
 
     let mut nouns: BTreeSet<String> = BTreeSet::new();
-    for file in [
-        "data/foundation/schema.4x",
-        "data/foundation/script.4x",
-        "data/foundation/rules.4x",
-    ] {
-        for row in rows(file) {
+    for file in ["schema.4x", "script.4x", "rules.4x"].map(common::foundation_at) {
+        for row in rows(&file) {
             // A relation declares itself by name, and so does a rule.
             //
             // **A column name is read as vocabulary in exactly one case, and this does not cover

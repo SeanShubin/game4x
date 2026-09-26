@@ -52,7 +52,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (32)
+### To spec (27)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -62,11 +62,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
-- **C-148** - `V3` is not available as written, and what makes `V1` cheap is one commit rather than an order · `crates/outbox.md`
-- **C-146** - If the rules are data, the data is the game's rules, and it is sitting in this lane's column · `crates/outbox.md`
-- **C-145** - Two numbers in items open right now cannot be reproduced at the bytes they were measured on · `crates/outbox.md`
-- **C-144** - `D-3` says no transcription survives in Rust, and the direction it describes runs the other way · `crates/outbox.md`
-- **C-143** - `reviewed/` and the release state different rulesets, and seven capabilities Sean is queued to vet rest on the one being replaced · `crates/outbox.md`
 - **C-137** - Nothing checks a quotation in the prototype's data comments, and turning it on costs eight false ones · `crates/outbox.md`
 - **C-131** - Two kinds carry an `id` and nothing else can say it is one of a kind · `crates/outbox.md`
 - **C-123** - What every recipe's code does that its rows do not say, measured over all twenty-six · `crates/outbox.md`
@@ -151,6 +146,7 @@ it exists to ask.
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/invariants.md` -> Everything is expressible - P-12, P-128
 - `spec/invariants.md` -> Nothing comes back round with more - P-388, P-419
+- `spec/invariants.md` -> The data is a normalized relational model - P-559, P-567
 - `spec/planet.md` - P-272, P-280
 - `spec/planet.md` -> Distance - P-24, P-349
 - `spec/planet.md` -> Shape - P-1, P-6

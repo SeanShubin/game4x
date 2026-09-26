@@ -49,8 +49,11 @@ fn every_row_keeps_its_id() {
     let names = Names::of(&game);
 
     let mut checked = 0;
-    for file in ["data/foundation/rules.4x", "data/foundation/schema.4x"] {
-        for row in rows(file).into_iter().chain(common::section("given")) {
+    for file in [
+        common::foundation_at("rules.4x"),
+        common::foundation_at("schema.4x"),
+    ] {
+        for row in rows(&file).into_iter().chain(common::section("given")) {
             let Some(id) = row.value("id") else { continue };
             let rendered = names.row(&row);
             assert!(
@@ -126,15 +129,17 @@ fn every_file_survives_the_round_trip() {
     let of_script = Names::of(&script);
 
     let mut checked = 0;
+    // **Resolved through `common::foundation_at` rather than spelled**, because `P-563` put
+    // `schema.4x` and `rules.4x` in `spec/data/` and left the other three here.
     for file in [
-        "data/foundation/schema.4x",
-        "data/foundation/engine.4x",
-        "data/foundation/rules.4x",
-        "data/foundation/script.4x",
-        "data/foundation/setup.4x",
+        "schema.4x",
+        "engine.4x",
+        "rules.4x",
+        "script.4x",
+        "setup.4x",
     ]
     .iter()
-    .map(|it| it.to_string())
+    .map(|it| common::foundation_at(it))
     .chain(common::every_test())
     {
         let file = file.as_str();

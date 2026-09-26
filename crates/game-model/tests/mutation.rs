@@ -42,6 +42,10 @@ fn originals() -> BTreeMap<String, String> {
     let mut all = BTreeMap::new();
     // **The shared files, then the tests.** A test is one file in `tests/` and nothing else is,
     // so both are read rather than listed - a list here would be a second place to remember.
+    // **`P-563` put two of the shared files in `spec/data/`**, so the directory is no longer the
+    // whole population. They are added from `common::LOADED`, which is the shipped list, rather
+    // than named again here - and anything already found under the directory is skipped, so this
+    // keeps working whichever column a file ends up in.
     let root = mine().join("data").join("foundation");
     for at in [root.clone(), root.join("tests")] {
         let under = at == root.join("tests");
@@ -59,11 +63,30 @@ fn originals() -> BTreeMap<String, String> {
             all.insert(name, std::fs::read_to_string(&file).expect("a file"));
         }
     }
-    // **Six shared files and at least one test**, rather than a number every new test would move.
+    let mut elsewhere = 0;
+    for at in common::LOADED {
+        let name = at.rsplit('/').next().unwrap_or(at).to_string();
+        if all.contains_key(&name) {
+            continue;
+        }
+        all.insert(
+            name,
+            std::fs::read_to_string(mine().join(at)).unwrap_or_else(|why| panic!("{at}: {why}")),
+        );
+        elsewhere += 1;
+    }
+
+    // **Five shared files and at least one test**, rather than a number every new test would move.
     // Sean, 2026-09-15: *I intend to have one test per file.*
     let tests = all.keys().filter(|it| it.starts_with("tests/")).count();
     assert_eq!(all.len() - tests, 5, "five shared files: {:?}", all.keys());
     assert!(tests > 0, "no tests, so mutating proves nothing");
+    // **Both sides of the split are non-empty**, so a sweep that quietly stopped reaching one
+    // column fails here rather than mutating fewer files and reporting a clean result.
+    assert_eq!(
+        elsewhere, 2,
+        "two shared files are outside this crate since `P-563`, and this found {elsewhere}"
+    );
 
     all
 }
