@@ -50,11 +50,14 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - Nothing contains itself, directly or through anything else
 - Every thing is in the game, directly or through what contains it. **The game is the one thing that
   is in nothing**, so containment is a tree rather than a scattering
-- **A kind declares one of three things about what it may hold.** It may declare **no capacity**,
-  and then it holds nothing of that sort and never can. It may declare a **limit**, and then it
-  holds up to that many and may happen to be empty - so a thing holding nothing today is not
-  thereby a thing that never could. Or it may declare **no limit**, and then it holds any number,
-  and there is no free capacity to record because nothing can be short of it
+- **A store declares a limit, or declares no limit.** With a limit it contributes that much
+  capacity, and a place may happen to be holding less - so a store standing in an empty place
+  is not thereby a store that never fills. With no limit it contributes without bound, and there
+  is no free capacity to record because nothing can be short of it.
+- **A kind that declares neither contributes nothing, and is therefore not a store.** That is
+  the right answer for an extractor, which stands in a deposit and holds nothing. **It is a
+  defect for a kind built to be a store**, which is a store that forgot to say - and the two are
+  not told apart by this sentence, but by the data saying which kinds are stores.
 - **The game declares no limit, for every kind.** It contains everything, there is no free
   capacity to record because nothing can be short of it, and it is the one thing that is in
   nothing - so the tree has a root that no rule has to except.
