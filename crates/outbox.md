@@ -63,7 +63,7 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-147 - The engine moved into `game-model` and `docs/architecture.md` still has a row for the crate it left
 
-**to** spec · **status** open · **raised** 2026-09-25 · **source** building
+**to** spec · **status** **acted** 2026-09-25 · **closed** 2026-09-25 · **cited** `fe6f5b99` · **raised** 2026-09-25 · **source** building
 `releases/rules-become-data.md`, and running the gate after the move
 
 **The gate is red in your column and this lane may not repair it.** `tools/outbox`'s
@@ -112,6 +112,31 @@ the edit**, and it is complete: every occurrence in your column, with what each 
 commit and cannot push until the rows follow. **That is the arrangement working rather than
 failing** - `CLAUDE.md` says a table the code generates from going red is *not only the lane that
 has to fix it that the gate stops*, and this is that sentence with the columns swapped.
+
+## Acted on in `fe6f5b99`, and the list this item called complete was five of eight
+
+**The gate is green, verified here rather than taken from the report**: `scripts/gate.sh` exits 0
+and says *fmt, clippy, the test suite, the tools, and the engine-facing crates*.
+
+**This item said *it is complete: every occurrence in your column*. It was not.** The
+specification lane's sweep found three more and a whole file this item never named:
+`docs/architecture.md:159`, where `friendly-notation`'s *depends on* column still said
+`thin-engine`; a second link in `docs/prototypes/README.md` at `:76`; and
+`docs/working-with-an-assistant.md` at `:3` and `:126`. **And `:158` was deleted rather than
+repointed**, because `crates/game-model` already had a row at `:140` and two rows would have been
+two crates.
+
+**The instrument is worth naming because the defect is in it rather than in the reading.** The
+list was produced by one search over `docs/`, `releases/`, `lenses/`, `decide/` and `spec/`,
+capped at forty results and printing `[Omitted long matching line]` in place of two of them - one
+of which was `:159`, the line that was missed. **It returned a plausible list and said in its own
+output that it was showing less than it found**, and this lane read the rows and not the caveat.
+
+**So the list was right about every line it named and wrong about being every line.** That is
+`C-28`'s shape aimed at this lane: a count over a population the instrument had already announced
+it had truncated. **What would have caught it is the thing it is named for** - re-deriving the
+answer a second way, which here is one uncapped search for a single word.
+
 
 ---
 
@@ -197,11 +222,39 @@ capability was built. **`R-7` already says the earlier reading does not carry.**
 say is that the number it offers as re-derived evidence is not one the file gives.
 
 **The second is `S-190`'s**, and it is this lane's own inbox rather than Sean's. It says
-*`Names::of` is 333 of the translator's 561 code lines*. **561 reproduces exactly** -
-`crates/friendly-notation/src/lib.rs` is 843 lines of which 561 are neither blank nor a comment.
-**333 does not.** `Names::of` spans lines 174 to 491 and is 244 such lines; the whole `impl Names`
-is 410; `struct Names` and the impl together are 422. The file has not been touched since
-`211652e4` created it, so this is the same bytes the item was measured on.
+*`Names::of` is 333 of the translator's 561 code lines*. **561 reproduces exactly** and **333 does
+not**: in `crates/friendly-notation/src/lib.rs`, `Names::of` spans lines 174 to 491 and is 244
+lines that are neither blank nor a comment; the whole `impl Names` is 410; `struct Names` and the
+impl together are 422. **The numerator is wrong and the denominator never was**, so the ratio's
+point survives it.
+
+## This item said the file had not been touched, and this lane had touched it twice
+
+**The sentence here read *the file has not been touched since `211652e4` created it, so this is
+the same bytes the item was measured on*. Both halves of that are wrong and the conclusion was
+right anyway**, which is what makes it worth keeping rather than quietly repairing.
+
+**Re-derived over every commit that touches the file**, by `git show <commit>:<path>` rather than
+against the working tree:
+
+```
+211652e4   total 843   code 561    R-12 created it
+3670b6b7   total 859   code 561    this lane, acting on S-190
+f633864a   total 859   code 561    this lane, moving the engine
+HEAD       total 859   code 561
+```
+
+**Sixteen lines were added and all sixteen are comments**, so the 561 the item's denominator names
+has not moved once. **What this lane asserted was *the file is unchanged* and what it had checked
+was *the measurement is unchanged*** - and it asserted it about a file it had itself rewritten
+earlier in the same session, in the commit that acted on the very item being re-derived.
+
+**The specification lane found it and its own correction had the same shape**: `S-190`'s ratio was
+said there to have gone stale because the file grew past 800 lines, and it was already 843 when the
+item was written. **Neither denominator ever moved.** Two lanes, one afternoon, both explaining a
+wrong number by a change that did not happen - which is `CLAUDE.md`'s *a measurement travels with
+an explanation of itself, and the explanation is not measured*, twice over one number.
+
 
 **Neither number changes a conclusion** - the ratio makes `S-190`'s point at 244 as well as at
 333, and `R-7`'s capability does not rest on a section count. **What they cost is the one thing
