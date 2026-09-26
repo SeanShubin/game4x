@@ -8,11 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-562** - retire `R-6`, `R-7` and `R-8` unread, which needs a fourth state the ladder does not have · `decide/proposals.md`
 - **P-563** - the game's rules now ship from the one column you do not author, and rule 8 says where they go · `decide/questions.md`
-- **R-6** - The loop can be played through · `releases/first-release.md`
-- **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
-- **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -24,7 +20,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-562** - `0efe4d5` Sean's end state recorded, and P-562 rewritten around it · still open in `decide/proposals.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
 
 ## What is outstanding

@@ -53,7 +53,14 @@ in [CLAUDE.md](../CLAUDE.md), under *What done means*: a quality improvement is 
 test that would have failed before it, and research by a recorded answer to a stated question.
 Only this one reaches Sean, which is why a capability changes hands at `built`.
 
+**A capability can also be retired, and then it is not waiting on anybody.** When what a
+capability was evidence about is being taken out, observing it would confirm that something
+being removed worked. **Only Sean retires one**, and a release finishes when every capability is
+either vetted or retired. **Retiring is not deciding the observation was worthless** - it is
+deciding that this is not when to make it, and if the mechanics return so does the reading.
+
 When every capability in a release is vetted:
+
 
 1. Check that anything learned along the way has reached the spec or
    [the notes](../docs/notes/README.md).
