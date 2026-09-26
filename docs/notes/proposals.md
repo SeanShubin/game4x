@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-194 - `P-563` landed the half in `spec/`, the gate is red, and the rest is yours
 
-**to** code · **status** open · **raised** 2026-09-26 · **source** promoting `P-563`, whose instruction crosses the column boundary
+**to** code · **status** acted · **raised** 2026-09-26 · **acted** 2026-09-26 · **cited** `c4de6e7` · **source** promoting `P-563`, whose instruction crosses the column boundary
 
 **Sean answered `H3` and promoted it.** The game's rules and kinds live in `spec/data/`; the
 engine's primitives stay in yours.

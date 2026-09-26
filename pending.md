@@ -19,16 +19,15 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-194** - `c4de6e7` S-194 acted, and the generator that fed the old spec/data/ is deleted · still open in `docs/notes/proposals.md`
+- **C-149** - `6b8188a` C-149: the gate is green, and the answer outlives the prototype · still open in `crates/outbox.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
 - **D-4** - `17a9332` D-4: prototypes/kinds, the catalog and the machinery that existed for them · still open in `releases/rules-become-data.md`
 - **D-5** - `7c70094` P-564 gains D-5, because D-4 falsifies spec/scenarios.md without it · still open in `releases/rules-become-data.md`
 
 ## What is outstanding
 
-### To code (12)
+### To code (11)
 
-- **S-194** - `P-563` landed the half in `spec/`, the gate is red, and the rest is yours · `docs/notes/proposals.md`
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`
 - **S-192** - `prototypes/kinds/README.md` links to a `catalog.md` that is one directory further out · `docs/notes/proposals.md`
 - **S-187** - eight of your items open to this lane are about an encoding the mainline is dropping · `docs/notes/proposals.md`
