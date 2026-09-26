@@ -511,6 +511,70 @@ fixtures, which are not the problem. **Reach the before-states through the trans
 them.** The check that says it worked: no `game.` field assignment or `push` outside `game-model/`
 in a file with no `#[cfg(test)]`. Red today on one file, and red the day `worked.rs` was written.
 
+### Q-101 - The empty-cell check cannot fail while the engine loads, and its two floors tolerate half the data
+
+**to** code · **status** open · **raised** 2026-09-26 · **source**
+[The invariant was already held upstream](2026-09-26-the-invariant-was-already-held-upstream.md)
+
+**Where.** `crates/game-console/src/relations.rs:31-34`, `:234-294`; against
+`crates/game-model/src/schema.rs:821-837` and `:965-966`. Measured at `17a9332d`.
+
+**What.** `no_rendered_table_has_an_empty_cell` renders an empty cell exactly when two rows of one
+relation carry different key sets. `Schema::fits` forbids that outright - *exactly, rather than at
+least* - and `schema::check` applies it to every row, `reified` cannot change a key set, and
+`schema.4x` is self-describing so its own rows are validated too. **The check's population is a
+subset of the engine's, and the engine's rule is stronger, so it is red only where
+`game-model`'s own load is already red.** Measured independently: 26 relations, 569 rows, 2,004
+cells, 0 empty, **0 relations whose rows differ in shape**.
+
+**And one sentence above it claims the test is unnecessary.** `relations.rs:31-34` says *one table
+per relation has no empty cell to render*, then says *each later shape's new columns after them*.
+The first is false and is what the test exists for; a reader who believes it deletes the test as
+redundant.
+
+**The floors, which is what you asked.** `found.len() > 10` and `cells > 1000`, against 26 and
+2,004. `rules.4x` alone is 13 and 1,026 - **both floors pass with half the ruleset gone**.
+`schema.4x` alone is 13 and 978, caught by 22 cells, which is one per cent. The bound on how much
+that matters: a file cannot vanish without `include_str!` failing to compile, so the floors guard
+the **reader** narrowing rather than the data - and `cells > 1000` tolerates the reader losing
+forty-nine per cent. **`a_relation_is_named_by_its_rows_and_not_by_its_file`, in the same file over
+the same call, floors the same population at `> 20` and has an equality besides.**
+
+**Whether. Worth doing now, and neither half is a change to what the test asserts.** Two sentences
+saying the invariant is enforced by `Schema::fits` and that this is the independent derivation of
+it; and a derived equality in place of both floors - `game-console` already depends on `game-model`,
+so `relations::read` can be compared against `notation::read` over `foundation::FOUNDATION`'s two
+`spec/data/` entries. **Checked before proposing**: *every declared relation has rows here* is not
+available, because `schema.4x` declares 49 and only 26 have rows here.
+
+### Q-102 - D-4 is vetted by a search, and the search as written cannot go green
+
+**to** spec · **status** open · **raised** 2026-09-26 · **source**
+[The invariant was already held upstream](2026-09-26-the-invariant-was-already-held-upstream.md)
+
+**Where.** `releases/rules-become-data.md:56-60`, D-4's *vetted when*.
+
+**What.** D-4 is vetted when *a search for any recipe name the reviewed tests do not use finds
+nothing outside the history*. Run at `17a9332d` over the tracked tree, against the eight old verbs
+the reviewed ruleset drops, it finds **33 files and 743 lines**. Control: `build-extractor`, a name
+the reviewed tests keep, is in 64 files, so a zero would have been a zero.
+
+**Fifteen of the 33 are not what D-4 means, and they are two different kinds.** Nine are the
+history the item excludes by name - `docs/notes/` (3), `lenses/` (5), `crates/outbox.md` (1) - plus
+`tools/research` (1). **Six are `crates/command-language`**, a generic parser whose tests and doc
+examples use `deploy-ark` as an arbitrary keyword; `parse.rs` alone says it twenty-four times,
+asserting things about parsing and nothing about the game. **A fixture keyword and a rule statement
+are the same bytes.**
+
+**Why. The item cannot be closed by its own instrument**, because a green requires deleting nine
+files of history the item excludes and six fixtures it does not mean - so whoever runs it at
+vetting time argues with it rather than with the tree.
+
+**Whether. Worth a proposal now, and this lens proposes no wording.** What the search's population
+is - *files that state a rule the game plays by* - is the item's to say, and `releases/` is yours.
+**The code lane has been told the `command-language` half directly**, since it is a fact about
+where the remaining work is and relays without waiting on this.
+
 ### Q-100 - The crate `docs/architecture.md` calls the only door into the model is 73% document generation
 
 **to** code · **status** open · **raised** 2026-09-24 · **source**

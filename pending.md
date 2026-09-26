@@ -20,12 +20,12 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
-- **D-4** - `17a9332` D-4: prototypes/kinds, the catalog and the machinery that existed for them · still open in `releases/rules-become-data.md`
+- **D-4** - `a838645` D-4: the four reports read out of the release's tables, and the tests that held them · still open in `releases/rules-become-data.md`
 - **D-5** - `7c70094` P-564 gains D-5, because D-4 falsifies spec/scenarios.md without it · still open in `releases/rules-become-data.md`
 
 ## What is outstanding
 
-### To code (11)
+### To code (12)
 
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`
 - **S-192** - `prototypes/kinds/README.md` links to a `catalog.md` that is one directory further out · `docs/notes/proposals.md`
@@ -36,6 +36,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **D-3** - The game's data is stated once · `releases/rules-become-data.md`
 - **D-4** - The old ruleset is gone, not archived · `releases/rules-become-data.md`
 - **D-5** - I have watched the new game play through · `releases/rules-become-data.md`
+- **Q-101** - The empty-cell check cannot fail while the engine loads, and its two floors tolerate half the data · `lenses/quality/outbox.md`
 - **Q-100** - The crate `docs/architecture.md` calls the only door into the model is 73% document generation · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
 
@@ -51,7 +52,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (27)
+### To spec (28)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -74,6 +75,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-58** - `S-34`'s rule has no mechanism, and I built one and threw it away · `crates/outbox.md`
 - **C-47** - The two relations subsume nine of the dump's ten tables, and the tenth needs one number · `crates/outbox.md`
 - **C-42** - A rule that is written down, true, and not run over the work that states it · `crates/outbox.md`
+- **Q-102** - D-4 is vetted by a search, and the search as written cannot go green · `lenses/quality/outbox.md`
 - **Q-94** - The number every `refresh` tops off to is stated only in a release, and `movable` says one of them twice · `lenses/quality/outbox.md`
 - **X-12** - two recipes state what founding produces, and `P-469` says a fact is stated once · `lenses/research/outbox.md`
 - **X-15** - the inventory, so that nothing said in one conversation is lost on the way to `spec/` · `lenses/research/outbox.md`

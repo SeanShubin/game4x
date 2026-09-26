@@ -571,6 +571,11 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [The invariant was already held upstream](2026-09-26-the-invariant-was-already-held-upstream.md)
+  - 2026-09-26. The code lane's review of the D-4 night. `no_rendered_table_has_an_empty_cell`
+    cannot fail while `game-model` loads, because `Schema::fits` demands exactly the declared
+    columns; its two floors tolerate a 49% narrowing and miss losing `schema.4x` entirely.
+    D-4's own search finds 33 files, and six of them are a generic parser's fixtures.
 - [The only door is also a document generator](2026-09-24-the-only-door-is-also-a-document-generator.md)
   - 2026-09-24. The separation-of-concerns review Sean set the brief for. `Game`'s state is
     public and `worked.rs` writes it in the shipped path, restating `Transition::Start`'s body
