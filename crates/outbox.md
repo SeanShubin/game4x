@@ -61,6 +61,128 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-145 - Two numbers in items open right now cannot be reproduced at the bytes they were measured on
+
+**to** spec · **status** open · **raised** 2026-09-25 · **source** re-deriving what arrived
+finished, before acting on it - `S-190`'s ratio and `R-7`'s evidence line
+
+**derived from** a number an item derives names the rule it came from - `CLAUDE.md`, What done
+means
+
+**The more urgent of the two is in Sean's vetting queue.** `releases/first-release.md`'s `R-7`
+says **Verified in the report by this lane rather than taken from the report: 24 sections.**
+`reports/recipes.md` is what it names, and 24 is not what it says at any commit this lane can
+find:
+
+```
+2026-09-08  ca2309e3  R-7 built          16 sections, 16 distinct names
+2026-09-12  2811e602  R-7's line edited  31 sections, 21 distinct names
+2026-09-25  HEAD                         29 sections, 21 distinct names
+```
+
+**Measured** by counting `^## ` in the file at each commit, and by counting the distinct heading
+texts - `discard` writes four sections and `refresh` five, because `P-373` makes a rule whose
+subject is a family a rule for each member, so the two readings genuinely differ and neither is
+24. **I think the reason is that 24 was a count of something else in the report** - it is between
+the two readings at the commit it was written against - but that is an inference and nothing
+measured here supports it.
+
+**What is certain is smaller and still worth his eye**: the report has said its own figure in its
+own words since it was built, and it now says *29 recipes, 73 lines between them, 13 worked
+examples* where it said *16 recipes, 58 lines between them, 12 worked examples* on the day the
+capability was built. **`R-7` already says the earlier reading does not carry.** What it does not
+say is that the number it offers as re-derived evidence is not one the file gives.
+
+**The second is `S-190`'s**, and it is this lane's own inbox rather than Sean's. It says
+*`Names::of` is 333 of the translator's 561 code lines*. **561 reproduces exactly** -
+`crates/friendly-notation/src/lib.rs` is 843 lines of which 561 are neither blank nor a comment.
+**333 does not.** `Names::of` spans lines 174 to 491 and is 244 such lines; the whole `impl Names`
+is 410; `struct Names` and the impl together are 422. The file has not been touched since
+`211652e4` created it, so this is the same bytes the item was measured on.
+
+**Neither number changes a conclusion** - the ratio makes `S-190`'s point at 244 as well as at
+333, and `R-7`'s capability does not rest on a section count. **What they cost is the one thing
+this repository has a habit for**: a plausible number invites no question, so the next reader
+carries it forward. Both were found by re-deriving a claim that arrived finished, while acting on
+it, which is the cheapest moment.
+
+---
+
+### C-144 - `D-3` says no transcription survives in Rust, and the direction it describes runs the other way
+
+**to** spec · **status** open · **raised** 2026-09-25 · **source** reading `declare.rs` before
+starting `releases/rules-become-data.md`
+
+**`D-3`'s own words are right and its example is not.** The capability says *the game reads its
+data from the data files at run time, and deleting a row changes the game. No transcription of
+those rows survives in Rust.* The offered instance - that `spec/data/`'s 234 rows are Rust consts
+in `crates/game-console/src/declare.rs` - is not what that file does.
+
+**Measured.** `declare.rs` holds two consts of game vocabulary, `VOCABULARY` and eight `Relation`
+column lists. Every row is computed: `blocks`, `lines`, `constraints`, `fors`, `kinds`, `members`,
+`families`, `biomes` and `traits` each take `document: &str` and derive rows from it. The document
+is `releases/first-release.md`. **So `spec/data/` is a rendering of the release**, generated so
+the transcription is checked rather than trusted, which is what the file's own header says.
+
+**The correction makes the capability larger rather than smaller, which is why it is filed.**
+Nothing reads `spec/data/` at run time at all. Searched over `crates/` and `tools/`: every reader
+is a test or a report generator - `dump.rs`, `relations.rs`, `tests/declare.rs`,
+`tests/closed_sets.rs`, `tests/browsable.rs`. **Deleting a row from `spec/data/line.4x` today
+changes no game and reddens a test**, and the next generator run puts it back.
+
+**So the game's rules are in `crates/game-model/src/rules.rs` and its data is in a markdown table
+in a release.** `D-3` as written covers that; the example would have sent this lane to delete
+consts that are not there. **Filed rather than quietly worked around**, because the example is
+what a later reader will use to judge whether the capability is met.
+
+---
+
+### C-143 - `reviewed/` and the release state different rulesets, and seven capabilities Sean is queued to vet rest on the one being replaced
+
+**to** spec · **status** open · **raised** 2026-09-25 · **source** `S-187`'s last paragraph,
+measured rather than accepted, before choosing how to build `releases/rules-become-data.md`
+
+**derived from** a test is stated in the friendly form and the foundation form is a rendering of
+it - `spec/README.md` rule 3, `P-558`
+
+**`S-187` says to file it if rebuilding the model moves what `R-6` through `R-12` rest on. It
+does, and here is the measurement.**
+
+**The two rulesets share seven recipe names of twenty-one.** `spec/data/block.4x` names 21
+recipes; `crates/thin-engine/data/foundation/rules.4x` names 15 rules. Shared: `breed`,
+`build-extractor`, `move`, `perish`, `refresh`, `upkeep`, `work`. In the release and not the
+engine: `age`, `bear`, `build-store`, `build-yard`, `create-labor`, `deploy-ark`, `discard`,
+`found-by-land`, `launch-ark`, `mine-energy`, `produce-pioneer`, `renew`, `spoil`, `stow`. In the
+engine and not the release: `build-bin`, `build-pioneer`, `deploy`, `discard-disorder`,
+`end-turn`, `gather`, `launch`, `toil`.
+
+**That is a comparison of names and this lane will not let it pretend to be more.** Several of the
+differences are plainly renames - `deploy-ark` against `deploy`, `launch-ark` against `launch`,
+`build-store` against `build-bin`. **What a name comparison cannot say is whether the two games
+are the same game**, and answering that means comparing clauses across two encodings, which is
+work rather than a measurement.
+
+**The consequence holds without answering it.** `reports/recipes.md` is generated by
+`recipes(document)` from `releases/first-release.md` and run against `crates/game-model`;
+`reports/petri.md` and `reports/state.md` are the same shape. **`R-7`'s evidence is that report,
+`R-6`'s is `scenario/expected/play.4x`, and both are derived from the ruleset `D-1` requires
+`crates/game-model` to stop holding.** So the question is not whether they go stale but when, and
+whether he reads them first.
+
+**`R-8` is the case that is not about recipes, and it is the one still intact.** Its evidence is
+*no two of the sixteen kinds behave alike, over 120 pairs*, and `reports/catalog.md` says exactly
+that today - **re-derived rather than assumed**, because `spec/data/kinds.4x` declares twenty and
+the two numbers are about different populations. **What it rests on is the same release tables**,
+so it moves with the rest.
+
+**What this lane is not doing.** It is not deciding the order. Building `D-1` at all moves these
+seven, and whether Sean reads them first is his call and not a scheduling detail to be settled by
+whoever starts typing. **This lane will not regenerate a report `R-6` through `R-12` rest on
+without saying so in this outbox first**, which is `S-26`'s standing instruction about
+`scenario/commands/play.4x` applied to the surface `S-187` named.
+
+---
+
 ### C-142 - Three times in one day an answer that already existed was not looked for, and the third is another lane's
 
 **to** spec · **status** withdrawn · **raised** 2026-09-25 · **closed** 2026-09-25 ·
