@@ -1025,6 +1025,14 @@ built, which they also did not predict. **Both land inside the clamp.**
 **Reported by them against themselves**, with `reports/turns.md` carrying both, which is the shape
 a prediction is for: it is worth asking precisely because a wrong one is informative.
 
+## What `P-560` does to this, 2026-09-25
+
+**The mechanism may not survive.** `fuel` and `haul` appear in exactly two files of the reviewed
+suite and **in a comment both times**, never in a `{...}` row - the design's `move` spends `moving`
+and nothing else. So a unit crossing into an empty place is not stranded there because there is
+nothing for it to carry. **This stays open against `spec/logistics.md`**, which still says a thing
+that leaves takes what it hauls.
+
 ### S-169 - `intent` is 64 uses of the code's vocabulary and zero of the specification's
 
 **to** spec · **status** open · **raised** 2026-09-24 · **source** measuring common game-development terms for `P-551`
@@ -1157,6 +1165,15 @@ ban the same word, and a reader cannot tell a forbidden kind from one nobody has
 citizens on the surface, so no rule currently tries to put an ark on a surface. **What is missing
 is the thing that would say so if one did** - and `P-549` exists because a container was wrong for
 three weeks and the only way it was found was Sean stating the rule in a sentence.
+
+## Re-derived 2026-09-25, and it survives `P-560`
+
+**A note of this lane's said the thin-engine design answered this. It does not.**
+`reviewed/nothing-moves-between-the-layers.4x` refuses a **move** whose two places differ in layer;
+**this item asks whether anything refuses a kind because of the layer it would stand on**, which is
+a different sentence. Enumerated rather than sampled: **54 reviewed tests, 14 carrying a `{refused}`
+block, none refusing a kind by its layer.** So neither track has a data form for *an orbit admits no
+extractor* or *a surface admits no ark*, and this stays open with its premise intact.
 
 ### S-166 - `post-commit` guards one file against a hazard its own header describes in general
 
@@ -6332,6 +6349,14 @@ now sayable in words `spec/` owns.
 so it is a proposal rather than an edit - and the naming is a real choice, since *orbit border* may
 be better said as the boundary a place shares with the space above it. **Drafted next, as words for
 him to approve.**
+
+## What `P-560` does to this, 2026-09-25
+
+**The migration removes the subject rather than defining it.** The reviewed tests join territories
+with `{adjacency from:… to:…}` and refuse a cross-layer move on the layers themselves, so there is
+no `border` and no `orbit border` to give a meaning to. **The word survives in two test names, as
+English, and never in the notation.** Until `D-1` lands, `releases/first-release.md`'s *Crosses*
+column still carries both values and this item still stands against it.
 
 ### S-72 - `manned` is deleted, by Sean's decision on `C-46`
 

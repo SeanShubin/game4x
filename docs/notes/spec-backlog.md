@@ -4246,8 +4246,8 @@ he named it.
 - **`C-82` - the notation cannot write a soft line, and the release has none, so a check would run
   over an empty population.** `rules.4x` has `{soft clause:49}` and `{soft clause:50}` on `deploy`
   itself. **The population is not empty in the design being adopted**
-- **`S-167` - nothing checks what a layer admits.** `reviewed/nothing-moves-between-the-layers.4x`
-  refuses a surface-to-orbit move
+- **`S-167` - nothing checks what a layer admits. WRONG, corrected 2026-09-25** - see the note
+  below this list
 - **`S-73` - `border` and `orbit border` have no meanings.** The design has no such values: a move
   is legal when the territories are adjacent and the layers match, one reviewed test per half
 
@@ -4257,15 +4257,52 @@ he named it.
 differently or do not have the concept.** None had been drafted, so nothing is wasted - but the
 relevance sweep of 2026-09-25 asked the right question one level too low.
 
-- **`S-167` - *nothing checks what a layer admits*.** `reviewed/nothing-moves-between-the-layers.4x`
-  refuses a move from a surface place to an orbit place. **The layer rule is checked**, in the suite
-  he has read; the gap is in the track being replaced
+- **`S-167` - *nothing checks what a layer admits*. This was wrong and is corrected below.**
+  `reviewed/nothing-moves-between-the-layers.4x` refuses a *move* whose two places differ in layer.
+  **That is a different question from what a layer admits**, which is about a kind standing
+  somewhere, not about a journey
 - **`S-73` - *`border` and `orbit border` have no meanings*.** Thin-engine has no such values. A
   move is legal when the territories are adjacent and the layers match - two reviewed tests, one
   per half. **The column has no counterpart in the model that replaces it**
 - **`S-170` - *a unit that crosses into an empty place is stranded*.** Thin-engine's `move` spends
   `moving` and nothing else. **There is no fuel in it at all**, so the item is about a mechanism the
   mainline may not keep
+
+## Corrected 2026-09-25: `S-167` is not answered, and the instrument is the reason
+
+**Re-derived while cleaning up after `P-560`, not found by any check.** The list above says
+`reviewed/nothing-moves-between-the-layers.4x` answers `S-167`. **It does not, and the two
+sentences are not the same sentence.**
+
+```
+what that test asserts   a MOVE whose two places differ in layer is refused
+what S-167 asks          does anything refuse a KIND because of the layer it would stand on
+                         - an orbit admits no extractor, a surface admits no ark
+```
+
+**Enumerated rather than sampled: 54 reviewed tests, 14 of them carrying a `{refused}` block, and
+not one refuses a kind by its layer.** The nearest two are that move, and
+`a-territory-with-no-orbit-cannot-launch.4x`, which refuses because the orbit place is absent
+rather than because a layer would not admit what was put there.
+
+**So `S-167` survives the migration and stays open.** `spec/orbit.md`'s *an orbit admits no
+extractor and no citizen* and `P-549`'s *a surface admits no ark* have no data form in either
+track.
+
+**The shape of the error, which is the part worth keeping.** The instrument asked *does a reviewed
+test mention layers* and the question was *does a reviewed test check what a layer admits*. It
+returned a plausible answer rather than an error, and the answer was about a narrower population
+than the one asked for - `CLAUDE.md` -> What done means, the tell being *a right number about the
+wrong thing invites none*. **Both halves were this lane's**: it wrote the claim on 2026-09-25 and
+caught it the same day only by enumerating the refusals instead of re-reading the sentence.
+
+**Two neighbours in the same list were re-derived at the same time and both hold.**
+
+- **`S-73`** - `border` and `orbit border` have no counterpart. The reviewed tests join territories
+  with `{adjacency from:… to:…}` and refuse a cross-layer move on the layers, so the two values go.
+  **The word survives only in two test names**, as English, never in the notation
+- **`S-170`** - there is no fuel in the design. `fuel` and `haul` appear in exactly two reviewed
+  files and **in comments both times**, never in a `{...}` row
 
 ## Said 2026-09-25: thin-engine's tests are not maintained, and mainline is
 

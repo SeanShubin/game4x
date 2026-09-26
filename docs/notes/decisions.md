@@ -41,7 +41,7 @@ and two of the four had no name, so the fifth had nothing to sit beside.
 `query` was already in the file; *a line beginning with `/`* was already the phrase.
 
 
-**to** sean · **status** open · **raised** 2026-09-24 · **kind** recovered · **shape** a decision · **asks** a decision · **into** `spec/console.md` -> Commands
+**to** sean · **status** answered 2026-09-24, `N1` · **raised** 2026-09-24 · **kind** recovered · **shape** a decision · **asks** a decision · **into** `spec/console.md` -> Commands
 
 **You said you cannot name one in isolation and you are right** - `spec/console.md` already
 distinguishes four kinds of typed line and **two of the four have no name**, which is why naming
@@ -118,7 +118,7 @@ heading, *26 strings attempted* for what the renderer tried rather than what app
 *overlaps: none* as a derived check stated rather than left to a reader.
 
 
-**to** sean · **status** open · **raised** 2026-09-24 · **kind** recovered · **shape** an instruction · **asks** a decision · **into** `spec/interface.md`, `CLAUDE.md` -> Perspectives, and `.gitignore`
+**to** sean · **status** answered 2026-09-24 · **raised** 2026-09-24 · **kind** recovered · **shape** an instruction · **asks** a decision · **into** `spec/interface.md`, `CLAUDE.md` -> Perspectives, and `.gitignore`
 
 **Answered on 2026-09-24**: *the log directory should be ignored by git*, and *your recommend on
 screen log is fine* - so the interface test reads the structure and the log carries the pixels.
@@ -223,7 +223,7 @@ what `moving 1` already said in the Units table. Two rules written at different 
 meeting on a number neither mentions.
 
 
-**to** sean · **status** open · **raised** 2026-09-24 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `spec/units.md`, and `spec/logistics.md` if you choose otherwise
+**to** sean · **status** answered 2026-09-24 · **raised** 2026-09-24 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `spec/units.md`, and `spec/logistics.md` if you choose otherwise
 
 **You asked whether the code has everything it needs from the spec to move an Ark. It does not, and
 this is the whole of what is missing.** One decision, and it is yours because both sentences are
@@ -310,7 +310,7 @@ rather than a condition on winning, and *develop* is what a Yard costs rather th
 rule. **Neither belongs in the sentence**, and the proposal does not put them there.
 
 
-**to** sean · **status** open · **raised** 2026-09-24 · **kind** entailed · **shape** a decision · **asks** a decision · **into** `spec/control.md` -> Winning, or `releases/first-release.md` -> `R-6`
+**to** sean · **status** answered 2026-09-24, `W2` · **raised** 2026-09-24 · **kind** entailed · **shape** a decision · **asks** a decision · **into** `spec/control.md` -> Winning, or `releases/first-release.md` -> `R-6`
 
 **One question, and it exists because the code lane declined to assume an answer.**
 
@@ -363,7 +363,7 @@ states**: *an ark is never on the surface.* That sentence made `spec/data/limit.
 row wrong, which the question had not looked at.
 
 
-**to** sean · **status** open · **raised** 2026-09-24 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `releases/first-release.md` -> Recipes, and `spec/data/line.4x`
+**to** sean · **status** answered 2026-09-24, `K1` · **raised** 2026-09-24 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `releases/first-release.md` -> Recipes, and `spec/data/line.4x`
 
 **This decides whether there is an Ark to move**, which is what you asked about. Nothing else
 between you and that test is a rule question.
@@ -431,7 +431,7 @@ table is the model; this lane cited the summary and reported four defects, two o
 the model had already allowed.
 
 
-**to** sean · **status** open · **raised** 2026-09-24 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `docs/architecture.md` -> The layers and Rules
+**to** sean · **status** answered 2026-09-24, `A1` · **raised** 2026-09-24 · **kind** measured · **shape** an instruction · **asks** a decision · **into** `docs/architecture.md` -> The layers and Rules
 
 **This item offered three answers and two of them were answers to the wrong question.** Reading
 `docs/architecture.md` -> The layers rather than only its Rules changed what is broken. **The
@@ -505,7 +505,7 @@ goes stale the next time one is added. **What lands instead is the two missing s
 and a check.**
 
 
-**to** sean · **status** open · **raised** 2026-09-24 · **kind** measured · **shape** rows · **asks** a decision · **into** `CLAUDE.md` -> Perspectives
+**to** sean · **status** answered 2026-09-24 · **raised** 2026-09-24 · **kind** measured · **shape** rows · **asks** a decision · **into** `CLAUDE.md` -> Perspectives
 
 **You asked for the full list.** Here it is, built against the filesystem and asserted: every
 top-level directory and every tracked root file appears exactly once.
@@ -602,7 +602,7 @@ know is in `S-159`: the sweep read `crates/*/tests/` and the checks live in
 carried it - *nothing outside `crates/` does this today* - was the opposite of true.
 
 
-**to** sean · **status** open · **raised** 2026-09-23 · **kind** measured · **shape** an instruction · **asks** a decision · **into** the check's location, and `docs/architecture.md` -> Rules
+**to** sean · **status** answered 2026-09-24, `C1` · **raised** 2026-09-23 · **kind** measured · **shape** an instruction · **asks** a decision · **into** the check's location, and `docs/architecture.md` -> Rules
 
 **`P-545` makes the boundary yours. This asks where the thing that enforces it sits.** It carries
 no quotation, because what you are choosing is a location and the words follow from it.
@@ -729,7 +729,7 @@ choice and two fields**, and it looked like a whole command's worth of design un
 measured.
 
 
-**to** sean · **status** open · **raised** 2026-09-23 · **kind** invented · **shape** an instruction · **asks** a decision · **into** `spec/console.md` -> Commands
+**to** sean · **status** answered 2026-09-23, `L3` and `S3` · **raised** 2026-09-23 · **kind** invented · **shape** an instruction · **asks** a decision · **into** `spec/console.md` -> Commands
 
 **Two of your three points are already settled and the third is the real question.**
 
@@ -837,7 +837,7 @@ which is the thing this repository keeps finding: a count is only as good as the
 it names, and this one never named it until the third try.
 
 
-**to** sean · **status** open · **raised** 2026-09-23 · **kind** recovered · **shape** text · **asks** a decision · **into** `spec/console.md` -> The language
+**to** sean · **status** answered 2026-09-23, `C1` and then a third kind · **raised** 2026-09-23 · **kind** recovered · **shape** text · **asks** a decision · **into** `spec/console.md` -> The language
 
 **Your words, 2026-09-23:** *making it a requirement that the user ONLY ever sees prose. So a
 quoted string is only displayed to the user and never has a mechanical effect, and anything with a
@@ -954,7 +954,7 @@ sketch tripped, the two facts his draft left blank, and what `U2` costs. **What 
 `U1` and `U3`, three recommendations, and the whole one-notation-or-two measurement.
 
 
-**to** sean · **status** open · **raised** 2026-09-22 · **kind** invented · **shape** an instruction · **asks** a decision · **into** a new notation, and `spec/tests/`
+**to** sean · **status** answered 2026-09-22, `U2` and `N1` · **raised** 2026-09-22 · **kind** invented · **shape** an instruction · **asks** a decision · **into** a new notation, and `spec/tests/`
 
 **You said to use a precise notation like the game rules use, and the game notation does not
 reach this yet.** A test today is `{given}` rows, a `{when}` command and `{then}` rows, where
@@ -1207,7 +1207,7 @@ across rows is a column; a value that would not may be a node in a cell.*
 [`decide/proposals.md`](../../decide/proposals.md); a second heading carrying the same id
 would make a cited id resolve to two things. **The question it asked was:** *Fully exploited* is defined in four bullets and now read by nothing in `spec/`
 
-**to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** a decision · **into** `spec/control.md` -> Winning
+**to** sean · **status** answered 2026-09-21, `W2` · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** a decision · **into** `spec/control.md` -> Winning
 
 **Filed the moment `P-521` landed**, which is what that proposal said would happen.
 
@@ -1258,7 +1258,7 @@ is honest. **You are the one who knows whether that test is coming.**
 [`decide/proposals.md`](../../decide/proposals.md); a second heading carrying the same id
 would make a cited id resolve to two things. **The question it asked was:** Three lines of the release still name what `P-522` cut, and one of them is a vetted capability
 
-**to** sean · **status** open · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** a decision · **into** `releases/first-release.md`
+**to** sean · **status** answered 2026-09-21, `B1` · **raised** 2026-09-21 · **kind** entailed · **shape** an instruction · **asks** a decision · **into** `releases/first-release.md`
 
 **Filed the moment `P-522` landed.** Its instruction named six tables and a section and carried
 them out exactly; **it did not name these three, and they survive saying things the release no
