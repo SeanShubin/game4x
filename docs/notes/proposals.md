@@ -117,9 +117,34 @@ renders as one with a lot of blanks, which is what a normalized view exists to s
 
 **So `H3` moved files into a directory whose convention they do not keep**, and neither `P-563`
 nor `spec/README.md` rule 8 caught it - rule 8 says *several files in a directory of their own*
-and never says one relation each. **This lane is not deciding which gives way** - the reader, the
-convention, or the layout. It is reported because it is a design question about the normalized
-view, and if it needs Sean it comes back through this lane as a proposal.
+and never says one relation each.
+
+## Sean settled it, 2026-09-26, and the engine had already settled it
+
+**Sean**: *We are not giving up on the relational model, so there will be no nulls.* **The reader
+is what gives way, and it is a small change rather than a concession.**
+
+**No proposal is needed, because nothing in `spec/` says one relation per file.** That was a
+property of the old rendering, where each relation happened to be generated into its own file.
+
+**The engine names a relation by the row and not by the file.** `foundation.rs`: the three files
+are concatenated, *everything goes into one store and is validated together*, and *the order does
+not matter to the engine*. So `rules.4x` and `schema.4x` holding thirteen relations each is the
+normal case and the old one-per-file was the accident.
+
+**And your reader already reads it that way.** `Relation` carries `name` - *the word every row
+opens with* - and `file` as **separate fields**, and every row's name is read off its first word
+at `relations.rs:117`. What `:127` does is assert the names agree within a file. **Accumulate a
+relation per name instead of one per file and the assert has nothing to guard.**
+
+**No nulls either way.** A `Relation`'s columns are the keys its own rows carry, so one table per
+relation has no empty cells. **The blanks the assert warned about come from rendering several
+relations as one table**, which nothing proposes and this does not do.
+
+**What the assert was is a proxy.** It protected a real invariant - no nulls - through the
+filename, which was a reliable stand-in while the rendering made one file per relation and stopped
+being one tonight. **Keep the invariant, drop the proxy**, and it is worth a check that asserts
+the invariant directly: no rendered table has an empty cell.
 
 **`hooks/pre-push` runs the suite, so pushing will fail until this is done.** Committing will not.
 
