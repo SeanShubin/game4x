@@ -24,12 +24,28 @@
 //!
 //! # It is not part of the engine
 //!
-//! **Sean**: *I don't consider the translation between user friendly format and foundational
-//! format part of the engine. The engine should only know about the foundational format. The user
-//! friendly format is for the test harness and debugging.*
+//! **The rule is `spec/invariants.md` -> The data is a normalized relational model**: *the engine
+//! reads the form whose references are ids*. Until `P-559` landed it on 2026-09-25 it was stated
+//! only in this lane's column, here and in `crates/thin-engine/README.md` - `S-190`.
 //!
-//! So this lives in `tests/`, where naming a game noun is allowed and no constant of it reaches
-//! `data/engine.4x`. **The translator can be as thick as it likes and the engine does not grow.**
+//! **Sean, 2026-09-15**, who said it first: *I don't consider the translation between user
+//! friendly format and foundational format part of the engine. The engine should only know about
+//! the foundational format.*
+//!
+//! **He went on to say the friendly format is for the test harness and debugging, and that half
+//! has inverted.** `spec/README.md` rule 3: *a test is stated in the friendly form, and the
+//! foundation form is a rendering of it.* So friendly is the authored artifact and foundation is
+//! what is generated from it, which is the opposite way round from the sentence above - kept
+//! here rather than quietly dropped, because a reader who has met it elsewhere needs to know
+//! which way it went.
+//!
+//! **The reason that survives is the invariant's own**: a name is unique by constraint and an id
+//! is unique by construction, so resolving one to the other is a job the engine does not do.
+//!
+//! **This is a crate and not a test module, which `R-12` changed** - `examples/review-web.rs`
+//! reached it by `#[path]`, and an include has no direction. Naming a game noun is still allowed
+//! here and no constant of it reaches `data/engine.4x`. **The translator can be as thick as it
+//! likes and the engine does not grow.**
 
 use std::collections::BTreeMap;
 

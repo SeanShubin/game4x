@@ -86,7 +86,7 @@ be deleted, named below.
 ## What the invariants settle, which the prototype had left open
 
 **Minting is permitted.** This README has called the minting question *closed rather than solved*,
-and `tests/common/friendly.rs` rests on *nothing is minted*. **That was a consequence of the
+and `crates/friendly-notation` rests on *nothing is minted*. **That was a consequence of the
 friendly format carrying every id**, which 1 removes: a minimal command states no `command` id and
 no `argument` ids, so the converter must make them. **3 is what says that cost is acceptable.**
 
@@ -118,7 +118,7 @@ six things named `scout`, measured rather than reasoned:
 {residency id:1 what:1 where:territory-1}
 ```
 
-**`what:1` is an id.** `tests/common/friendly.rs` makes nameability all-or-nothing per relation, so
+**`what:1` is an id.** `crates/friendly-notation` makes nameability all-or-nothing per relation, so
 six things sharing a name means `thing` is not nameable and every reference to one falls back to
 its id. `where:territory-1` survives because territories are distinct. **That is invariant 2
 failing, in the world invariant 1 was being argued about.**
@@ -826,8 +826,8 @@ notation he already derives by hand rather than anything invented for this proto
 
 **What it costs is translator work and no engine work.** `src/notation.rs` reads one `{…}` per line
 and knows no arrow; it does not learn one. **The arrow is read and written in
-`tests/common/friendly.rs`**, which is where Sean put the translator and said it *can be as thick as
-it likes and the engine does not grow*.
+`crates/friendly-notation`**, which is where Sean put the translator and said it *can be as thick
+as it likes and the engine does not grow*.
 
 ## Built, 2026-09-15, and one thing it needed that was not in the plan
 
@@ -1358,14 +1358,28 @@ row that never said it was called that.
 
 ## The user-facing style, which is not part of the engine
 
-**Sean, 2026-09-15**: *I don't consider the translation between user friendly format and
-foundational format part of the engine. The engine should only know about the foundational format.
-The user friendly format is for the test harness and debugging.*
+**The rule is `spec/invariants.md` -> The data is a normalized relational model**: *the engine
+reads the form whose references are ids*. Until `P-559` landed it on 2026-09-25 this section and
+`crates/friendly-notation/src/lib.rs` were the only places it was stated - `S-190`.
 
-**So it lives in `tests/common/friendly.rs`, and that is what keeps it free.** `src/` may name no
-noun the game has, and every constant in it is a word `data/engine.4x` lists as delegated. Neither
-applies in `tests/`. **The translator can be as thick as it likes and the engine does not grow a
-line** - it is still 1013.
+**Sean, 2026-09-15**, who said it first: *I don't consider the translation between user friendly
+format and foundational format part of the engine. The engine should only know about the
+foundational format.*
+
+**He went on to say the friendly format is for the test harness and debugging, and that half has
+inverted.** `spec/README.md` rule 3: *a test is stated in the friendly form, and the foundation
+form is a rendering of it.* So friendly is now the authored artifact and foundation is what is
+generated from it. **Kept rather than quietly dropped**, because a reader who has met the whole
+quotation elsewhere needs to know which half moved.
+
+**It lives in `crates/friendly-notation` and not in `tests/common/friendly.rs`, which `R-12`
+changed.** `src/` may name no noun the game has, and every constant in it is a word
+`data/engine.4x` lists as delegated; neither binds a dev-dependency. **The translator can be as
+thick as it likes and the engine does not grow a line** - and what says so is `tests/isolation.rs`
+rather than a figure written down here. **The figure that was here said 1013 and `src/` is 4,513
+lines now**, which is this repository's own rule arriving in its own README: a number an item
+derives goes stale without anyone editing it.
+
 
 **All eight files render**, which `every_file_in_data_renders` asserts rather than claims:
 
