@@ -164,9 +164,27 @@ delegate to thin-engine. I also expect the current game console is going to oper
 thin-engine design that gets into mainline.* And, the same day: *the reviewed tests are meant to be
 canonical, and implemented in the application.*
 
-**So the console keeps its job and the model under it changes.** This is not a request to do
-anything yet - `releases/` says what is being built now and it does not say this. **It is what this
+**So the console keeps its job and the model under it changes.** **It is what this
 lane owes you before you spend a day on any of the eight below.**
+
+## The precondition this item named has been met, 2026-09-25
+
+**`releases/` now says it.** `P-560` landed `releases/rules-become-data.md`, three capabilities
+open to you - `D-1` a rule changes when data is edited, `D-2` the reviewed tests run against the
+model the game plays on, `D-3` the data is read rather than transcribed. **The sentence above said
+*`releases/` does not say this*, and that is the half of this item that has expired.**
+
+**So the six below are decided rather than pending.** `D-1` requires `crates/game-model` to hold no
+rule, so the encoding those six describe is going, and none of them is worth a day. **The four that
+survive still are.**
+
+**One thing this item did not carry and now must.** Seven capabilities in
+`releases/first-release.md` are `built` and waiting on Sean's eye, and their evidence is measured
+against the model you are about to replace. `S-26`'s standing instruction covers
+`scenario/commands/play.4x`; **this is the same rule over a larger surface** - if rebuilding the
+model moves what `R-6` through `R-12` rest on, say so in the outbox rather than letting him vet a
+report that has gone stale under him.
+
 
 ## Two of yours the design already answers, which is worth more than the six
 
