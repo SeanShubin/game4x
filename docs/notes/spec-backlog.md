@@ -4613,3 +4613,52 @@ cannot stop** - `spec/invariants.md` says the game is one function.
 **And *worse than a refused one* was this lane's phrasing rather than a finding**: whether a
 partial replay is bad at all is a question nobody has asked him, and it only arises once rules
 change under saves people have.
+
+## Said 2026-09-26: the console saves a name too, and saves are tracked in the history
+
+**Sean**, on `/save <file>`: *the debug console will save a name as well, what that name means is
+different on pc/web.* **So the console's argument is a name, not a file**, and the platform
+difference is below the player and below the console alike. One sentence of `spec/console.md`
+changes.
+
+**And on tracking**: *we are going to have to track saves in the history, will also be useful for
+quicksave/quickload features.*
+
+## That collides with one sentence, and the mechanism to resolve it is already in the same file
+
+**The collision, stated exactly.** `spec/console.md` on the `/` lines: *none of these is a command
+and none is a transition: **history does not record them***. A save that is tracked in the history
+is recorded, so that clause cannot stand as written.
+
+**The device is four paragraphs above it.** *A command that writes commands appears as a comment...
+the command that wrote them is a `#` line above them, so a reader sees where they came from and **a
+replay steps over it**.*
+
+**A save mark is that, and it keeps all three things true at once.**
+
+```
+saving is still not a transition   the code's reason holds: a command names a recipe and
+                                   saving names none - console.rs, from spec/invariants.md
+the history records the save       a `#` line, which is Sean's requirement
+a replay is unaffected             it steps over a comment, as it already does
+```
+
+**What changes is narrow**: the `/` lines are still not transitions, and *history does not record
+them* becomes false of `/save` alone.
+
+**It is an extension of the device rather than a use of it.** Today a `#` line records *a command
+that wrote commands*; this would record a front-end line that wrote no commands at all. **Same
+mechanism, wider subject** - worth saying so rather than presenting it as already covered.
+
+## Two things it gives, and one subtlety
+
+**Unsaved commands are the ones after the last mark**, which is what `/new`'s prompt needs and
+what `console.rs`'s `saved_as` cannot answer today.
+
+**Quicksave and quickload are a mark with a reserved name**, which is why he raised them together.
+
+**The subtlety, because it looks like a contradiction and is not.** If the history were game state,
+adding a mark to it would be a state change and saving would be a transition after all.
+**`spec/invariants.md` says the history is *a complete account of* the state rather than part of
+it** - *a game's history is a complete account of it, including what its rules were*. So a mark in
+the account changes no state, and the argument that saving names no recipe survives.
