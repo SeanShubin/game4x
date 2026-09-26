@@ -11,87 +11,74 @@ of it needs you.
 
 ## Open
 
-### P-568 - holding is done by containers, and a container that declares nothing is a defect
+### P-568 - the unification is already promoted, and one bullet of it cannot be broken
 
-**to** sean · **status** open · **raised** 2026-09-26 · **rewritten** 2026-09-26, around the unification you approved · **asks** approval · **kind** recovered · **shape** text · **into** `spec/logistics.md`, replacing the *one of three things* bullet
+**to** sean · **status** open · **raised** 2026-09-26 · **rewritten** 2026-09-26, twice - the second time because the section already said it · **asks** approval · **kind** recovered · **shape** text · **into** `spec/logistics.md` -> Containment, replacing the *one of three things* bullet
 
-**Your words, 2026-09-26**: *a territory has a bin that can hold a certain number of extractors; a
-vehicle has a bin that can hold a certain amount of energy; a transport vehicle will have 2 bins,
-one for energy it uses for fuel, and one for the thing it transports; things that don't have bins
-are in disorder and clear at end of turn.* And: *I think it makes sense to unify
-bins/capacity/storage.*
+**You asked whether to unify bins, capacity and storage. `spec/logistics.md` -> Containment
+already does, and you promoted it.** This lane drafted the unification without re-reading the
+section it would land in; the re-read before you approve is what caught it.
 
-**The bug this began with**: a bin was built for metal with no row saying how much a bin holds, so
-`discard-disorder` took all five metal with the bin standing there.
+```
+A bin is a thing. What holds a kind is a store for that kind, and a thing with two bins
+holds two stores. A store's capacity is what its kind declares, and it holds nothing
+```
 
-## Why the rule in the file could not catch it
+**That is your transport with two bins, in the file, already normative.** And the model is more
+unified than the draft was: **resources are not in containers at all.**
 
-**`spec/logistics.md` says a kind declares one of three things - no capacity, a limit, or no
-limit - and your 2026-09-18 default says omitting a capacity means carrying none of that thing.**
-Together, a kind that declares nothing is declaring the first of the three. **Every kind that
-could exist satisfies the sentence**, so the bin was not breaking a rule; it was using a default.
+```
+A resource in a place is in that place, not in a container inside it. What a place holds of
+a kind is one number. The things in it that can hold that kind contribute capacity and hold
+nothing
+```
 
-## What the unification changes, and it is the second sentence that does the work
+**The earlier draft said *nothing holds anything except by having a container for it*, which
+contradicts that.** Stores do not hold; they contribute capacity, and the place holds one number.
+**Withdrawn before you read it rather than after.**
 
-**Holding stops being something any kind may declare and becomes something a container does.**
-Then a kind with no declaration is not *a thing that holds nothing* - it is **not a container**,
-and a container with no declaration is a **defect**, which is the sentence that was missing.
+## So the bug was the spec working, and one sentence short of catching itself
+
+**A bin whose kind declares no capacity contributes nothing**, so the place's metal capacity
+stayed zero and the metal was lost at the turn's end - *at the turn's end what the place holds
+beyond that capacity is lost*. **Every step of that is a promoted rule.**
+
+**What no rule says is that this is wrong.** *A store's capacity is what its kind declares* is
+silent on a kind that declares nothing, and the *one of three things* bullet makes declaring
+nothing a legal third option.
 
 ## The words
 
 **Replacing the *one of three things* bullet:**
 
-> - **A thing that holds is a container, and a container is a thing.** A place has its deposits and
->   its bins; a vehicle has containers of its own, and a transport has two - one for the fuel it
->   burns and one for what it carries. **Nothing holds anything except by having a container for
->   it**, so a kind that is not a container holds nothing and never can.
-> - **A container declares a limit, or declares no limit.** With a limit it holds up to that many
->   and may happen to be empty - so a thing holding nothing today is not thereby a thing that never
->   could. With no limit it holds any number, and there is no free capacity to record because
->   nothing can be short of it.
-> - **A container that declares neither is a defect.** What holds nothing is a kind that is not a
->   container, and that is a different thing from a container that forgot to say.
+> - **A store declares a limit, or declares no limit.** With a limit it contributes that much
+>   capacity, and a place may happen to be holding less - so a store standing in an empty place
+>   is not thereby a store that never fills. With no limit it contributes without bound, and there
+>   is no free capacity to record because nothing can be short of it.
+> - **A kind that declares neither contributes nothing, and is therefore not a store.** That is
+>   the right answer for an extractor, which stands in a deposit and holds nothing. **It is a
+>   defect for a kind built to be a store**, which is a store that forgot to say - and the two are
+>   not told apart by this sentence, but by the data saying which kinds are stores.
 
-## What this rests on that is already true
+## What it does and does not buy
 
-```
-containers are already things        deposit holds 1 extractor, bin holds 10 resources
-capacity is already per kind         spec/logistics.md, and a territory varies by how many
-                                     deposits it has rather than by its own capacity row
-disorder is already this rule        spec/resources.md: order is being in a container
-the tree already isolates a vehicle  a transport's fuel container is in the transport, so it
-                                     takes capacity there and never in the place
-```
+**It removes the third option**, which is what made the rule unbreakable: a kind declaring nothing
+was declaring *no capacity*, so every kind satisfied the sentence.
 
-**That last line is a correction this lane owes you.** It told you a vehicle's container would
-compete with the metal bins for slots in the place. **It would not** - containment is a tree and
-what holds a thing is what says where it is. That was the only argument against unifying and it
-was wrong.
+**It does not make the check writable on its own**, and says so in its own last clause. **The data
+must say which kinds are stores** - `{family}` and `{member kind:N family:M}` already exist and are
+where that goes. **That is a data change and follows the words rather than preceding them.**
 
-## What it costs, stated so you can refuse it
+## What is no longer in this
 
-**Vehicles gain container kinds they do not have today.** An ark holds its energy directly now;
-afterwards it holds a container that holds the energy. **A fuel container cannot be a `bin`**,
-because every bin holds ten and a fuel container holds one, and capacity is a fact about the kind.
+**`P-570` is withdrawn unasked.** Whether a territory may omit a resource was decided by you on
+2026-09-15 and is in a test you reviewed: *a row at quantity zero is never written - the model is
+a minimal expression of intent.* **Omitting a resource means no deposit of it**, and building an
+extractor for it is refused by that test.
 
-**And the data must say which kinds are containers**, or *every container declares a capacity* is
-unfalsifiable again. `{family}` and `{member kind:N family:M}` already exist and are where that
-goes. **This proposal does not decide that** - it is a data change, not a rule, and it follows the
-words rather than preceding them.
-
-## What is not in this, and it is still open
-
-**Whether *some number of extractors* may be zero** was split out as `P-570` and is **withdrawn
-unasked**: you decided it on 2026-09-15 and it is in a test you reviewed.
-`an-extractor-cannot-be-built-where-there-is-no-deposit.4x` says *a row at quantity zero is never
-written - the model is a minimal expression of intent*. **Omitting a resource means no deposit of
-it**, and building an extractor for it is refused by that test.
-
-**That does not weaken this proposal and is worth saying, because the two looked alike.** A
-territory with no deposit is a coherent fact - there is no energy in that ground. **A container
-that declares no capacity is not a coherent fact** - it is a thing whose whole purpose is to hold,
-holding nothing. *Minimal expression of intent* covers the first and says nothing about the
-second, which is why one needed a rule and the other did not.
+**The two only looked alike.** A territory with no deposit is a coherent fact. **A store that
+declares no capacity is a thing whose whole purpose is to hold, contributing nothing** - which
+*minimal expression of intent* does not cover.
 
 ### P-569 - `D-5` asks the main scenario for a rule `spec/scenarios.md` says belongs elsewhere
 

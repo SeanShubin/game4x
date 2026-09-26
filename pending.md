@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-568** - holding is done by containers, and a container that declares nothing is a defect · `decide/proposals.md`
+- **P-568** - the unification is already promoted, and one bullet of it cannot be broken · `decide/proposals.md`
 - **P-569** - `D-5` asks the main scenario for a rule `spec/scenarios.md` says belongs elsewhere · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
