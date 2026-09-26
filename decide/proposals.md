@@ -80,3 +80,48 @@ once* forces building to happen **somewhere**, not in both places. Your sentence
 **Not the fully exploited planet.** You recalled `R-6`'s old target and it did exist - it asked
 for a fully exploited planet until `P-422` changed it on 2026-09-12. **This is the smaller thing
 you described**, two territories developed, and it does not restore the old requirement.
+
+### P-565 - rule 3 leans on the difference between `spec/tests/` and `reviewed/` without ever stating it
+
+**to** sean · **status** open · **raised** 2026-09-26 · **answered** 2026-09-26, the code settles it · **asks** approval · **kind** recovered · **shape** text · **into** `spec/README.md` rule 3, after *the rendering is generated from `reviewed/` and never from `spec/tests/`*
+
+**The choice this item offered is withdrawn, because the code answers it.** `review-web.rs` reads
+`report::tests_at()`, which is `spec/tests/`, and writes `report::records_at()`, which is
+`reviewed/`. **Deleting `spec/tests/` would leave the review application nothing to press `r` on**,
+so `T1` was never available and this lane should not have offered it.
+
+```
+spec/tests/<name>.4x    the test, written by this lane
+       |  you press `r`
+reviewed/<name>.4x      a verbatim copy - "I have read this"
+```
+
+**`u` deletes the copy and `x` files a note in `reviewed/asked.md`. Three writes and nothing
+else.**
+
+## Why it belongs in rule 3 rather than being left to the code
+
+**Rule 3 already leans on the distinction in its own last sentence** - *the rendering is generated
+from `reviewed/` and never from `spec/tests/`* - and never says what the two are. **A reader of
+`spec/` learns it only by reading `review-web.rs`.**
+
+## The words
+
+**One paragraph, into rule 3, after *so that what the engine runs is derived from what has been
+read rather than compared with it*:**
+
+> **A test is written in `spec/tests/`, and a copy of it in `reviewed/` is the record that I have
+> read it.** The review application makes that copy and removes it, acting as me; nothing else
+> puts a file there. **So the two directories hold the same tests only while I have read every
+> one**, and a test nobody has read is in the first and not the second - which is what makes
+> generating from `reviewed/` mean something.
+
+## One thing this does not fix, and it is not stale yet
+
+**Rule 3 also says the data is *locked by the scenario test*, and `D-4` deletes that scenario.**
+This lane told you promoting `P-564` makes that clause false. **That was overstated**: `spec/`
+describes the end state, `D-5` puts a main scenario back, and the clause is true again when it
+does. **What is genuinely unsettled is narrower** - `D-5` says you watch the scenario run, and says
+nothing about an automated test asserting its expected state, which is what *locked* means today.
+**Filed rather than folded in**, because it is about what `D-5` should require and not about these
+two directories.

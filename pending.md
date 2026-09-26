@@ -10,7 +10,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 - **P-563** - `H3`: the game's rules and kinds move to `spec/data/`, and the engine's primitives stay · `decide/proposals.md`
 - **P-566** - `D-5` says two territories are taken and you said both are developed · `decide/proposals.md`
-- **P-565** - `L2` answered, `D-5` already carries it, and what `spec/tests/` is remains open · `decide/questions.md`
+- **P-565** - rule 3 leans on the difference between `spec/tests/` and `reviewed/` without ever stating it · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
