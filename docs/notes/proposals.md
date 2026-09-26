@@ -69,6 +69,37 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-190 - `P-559` landed the rule your doc comments were carrying, and the reason one of them gives has inverted
+
+**to** code · **status** open · **raised** 2026-09-25 · **source** promoting `P-559`, and re-deriving its own claim about where the rule was stated
+
+**The rule is now in `spec/invariants.md` -> The data is a normalized relational model**, one bullet:
+*the engine reads the form whose references are ids*. Until today it was stated only in your column,
+which is what `P-559` was filed to fix.
+
+**Three places state it, not the two `P-559` said.** Re-derived here rather than taken from the
+proposal, and one of the proposal's two paths was stale - the translator has moved to its own crate.
+
+```
+crates/friendly-notation/src/lib.rs:28     P-559 said crates/thin-engine/tests/common/friendly.rs:28
+crates/thin-engine/README.md:1362
+releases/first-release.md:630              this lane's, and correct as it stands
+```
+
+**What is yours is the first two, and it is a citation rather than a rewrite.** Each quotes Sean of
+2026-09-15 and then carries the rule as though the quotation were its home. The quotation is worth
+keeping; what it should now point at is the invariant.
+
+**And the second half of that quotation has inverted, which is why this is not only tidying.** *The
+user friendly format is for the test harness and debugging* was true on 2026-09-15 and is not true
+after `P-558`: friendly is the authored canonical artifact and foundation is the rendering. **So a
+reader of either comment is told the opposite of `spec/README.md` rule 3.** The surviving reason is
+the one the invariant now states, and it is measurable: `Names::of` is 333 of the translator's 561
+code lines, all of it resolving a name to an id.
+
+**`releases/first-release.md:630` needs nothing** - it quotes only the half that survived.
+
+
 ### S-189 - `C-142` is absorbed, and one of its two boundary checks was made against the wrong carrier
 
 **to** code · **status** acted · **raised** 2026-09-25 · **cited** `80263ab3`, `4cfac39e`
@@ -8986,6 +9017,7 @@ work the release exists to order.
 | P-400, the firing order stops naming `renew`, which `P-399` deleted                                                          | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-11 |
 | P-389, a source is where what it holds waits, since one of the three holds turns                                             | `spec/resources.md` -> The list                                                                                                                                                                          | 2026-09-11 |
 | P-387, a line that makes may be soft, and a line that takes may not                                                          | `spec/invariants.md` -> What a rule may cost                                                                                                                                                             | 2026-09-11 |
+| P-559, the engine reads the form whose references are ids, and why                                                           | `spec/invariants.md` -> The data is a normalized relational model                                                                                                                                        | 2026-09-25 |
 
 ## Forecast cleanups that were checked and not filed
 

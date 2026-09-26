@@ -192,6 +192,10 @@ specific rule.
 - **The notation is a text form of that model, written for convenience.** It is how a person reads
   and writes the relations; **it is not a second model**, and anything said in it is said about a
   relation.
+- **The engine reads the form whose references are ids.** An id is unique by construction and a
+  name is unique by constraint, so a form written with names carries a naming rule that something
+  has to enforce. **Identity is the engine's concern and uniqueness of names is not**, so a name
+  is resolved to an id before the engine sees a row.
 - **How the data is actually held is an implementation detail**, chosen for production.
 - **One thing knows how it is held, and everything else asks it.** It can answer any question about
   the data, so **nothing else has a reason to know a layout and nothing else may**. A rule, a
