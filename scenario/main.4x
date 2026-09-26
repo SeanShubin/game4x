@@ -1,0 +1,109 @@
+# The main scenario: the loop Sean watches, over the ruleset he has read.
+#
+# **`spec/scenarios.md`**: *there is one main scenario, and it touches everything a typical game
+# uses. It is the foundation, and it is vetted by hand.*
+#
+# **`D-5` says what it has to show**: an Ark deploys, that first territory is developed, a second is
+# taken by land and developed too, and an Ark launches from the second - and every rule the reviewed
+# tests describe fires at least once while it runs.
+#
+# **It is written in the friendly form**, which is the form Sean reads. `spec/README.md` rule 3:
+# *a test is stated in the friendly form, and the foundation form is a rendering of it.* A scenario
+# is not a test and the reason is the same - what he has to be able to read is what he vets.
+#
+# **`{given}` is the world and `{when}` is the act. There is no `{then}`**, and that is the
+# difference between this and a test: a test says what should be true afterwards, and this one is
+# watched. `cargo run -p game-model --example scenario` plays it and prints what each command took
+# and made, which rules fired, and the state it left.
+#
+# ## Where the arc comes from
+#
+# **The spine is `reviewed/a-second-settlement-launches-the-ark-the-first-could-not.4x`**, which is
+# already `D-5`'s four clauses: an ark lands, the first place is developed, a pioneer takes the
+# second by land, and the ark leaves from there. **A test says one thing and a scenario has to touch
+# everything**, so what is added here is whatever the ruleset still had no firing for.
+#
+# ## What each turn is for
+#
+# **Turn one is the landing and the food.** The ark becomes two extractors and two citizens; two
+# labours mine food, and nothing eats yet - a citizen off an ark owes no meal - so the food is there
+# for `breed` to spend at the turn's end.
+#
+# **Turn two builds the pioneer and sends it.** Food and metal out of the ground, a pioneer built
+# from them, and it walks to the second territory - which is `move`, and the only rule here that
+# needs two places joined by a border.
+#
+# **Turn three settles the second place and works both.** Two settlements from here on, and the
+# turn's end feeds citizens in both.
+#
+# **Turn four is the second planet and the launch.** Metal, an energy extractor built from it,
+# the energy, and an ark built from the three - from the territory that was taken rather than the
+# one that was landed on, which is the half `D-5` adds to the old `R-6`.
+#
+# ## The last turn kills everybody, and that is what the ruleset does
+#
+# **There is a fifth `{end-turn}` after the launch and it is the only line here added to make a
+# rule fire.** `perish` had no firing without it, and `D-5` asks that every rule fire at least
+# once. **Say plainly what it costs**: both settlements starve. `perish` fires twice and each
+# firing takes a whole group - one citizen group at `place-1` and one at `place-3` - so the
+# scenario ends with two developed territories, an ark in orbit, and nobody alive.
+#
+# **This is the ruleset and not a mistake in the scenario.**
+# `reviewed/an-ark-lands-a-planet-is-developed-and-an-ark-leaves.4x` says it in Sean's own
+# reviewing: *the settlement that built the ark is still there and hungry - a launch is not a
+# departure, it is a thing built. What happens to them next is the next turn's problem.* **This
+# is the next turn.** Nothing was stored, so nothing was there to eat.
+#
+# **It is flagged rather than fixed, because a scenario is vetted by hand.** Storing food would
+# keep them alive and leave `perish` unfired, and which of those Sean wants to watch is his to
+# say - `C-150`.
+
+{test name:main}
+
+{given}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{place id:2 of:territory-1 layer:orbit name:place-2}
+{territory id:2 name:territory-2}
+{place id:3 of:territory-2 layer:surface name:place-3}
+{place id:4 of:territory-2 layer:orbit name:place-4}
+{adjacency id:1 from:territory-1 to:territory-2}
+{capacity of:deposit for:extractor what:resource per:place} -> 1
+{capacity of:place for:bin what:resource per:place} -> 2
+{provides kind:place what:berth} -> 6
+{consumes kind:pioneer what:berth} -> 1
+{deposit where:place-1 what:metal density:6} -> 1
+{deposit where:place-1 what:food density:6} -> 1
+{deposit where:place-2 what:energy density:3} -> 1
+{deposit where:place-3 what:metal density:6} -> 1
+{deposit where:place-3 what:food density:6} -> 1
+{deposit where:place-3 what:energy density:6} -> 1
+{ark where:place-2 moving:1 gathering:1} -> 1
+
+{when}
+{gather where:place-2}
+{deploy where:place-2 what:ark}
+{toil where:place-1}
+{work where:place-1 what:food}
+{end-turn}
+{toil where:place-1}
+{work where:place-1 what:food}
+{work where:place-1 what:metal}
+{build-pioneer where:place-1}
+{move what:pioneer from:place-1 to:place-3}
+{end-turn}
+{deploy where:place-3 what:pioneer}
+{toil where:place-1}
+{work where:place-1 what:food}
+{toil where:place-3}
+{work where:place-3 what:food}
+{end-turn}
+{toil where:place-1}
+{work where:place-1 what:metal}
+{build-bin where:place-1 what:metal}
+{toil where:place-3}
+{work where:place-3 what:metal}
+{build-extractor where:place-3 what:energy}
+{work where:place-3 what:energy}
+{launch where:place-3}
+{end-turn}

@@ -467,9 +467,12 @@ fn apply(
         why: Box::new(why),
     })?;
     crate::schema::check(&schema, &after).map_err(|why| Refused::Broke {
-        rule,
+        rule: rule.clone(),
         why: Box::new(why),
     })?;
+    // **Recorded here and nowhere else**, because this is the one place a rule changes the world.
+    // A rule made of parts never reaches it; each of its parts does.
+    effect.fired.push(rule);
     Ok(Game {
         schema,
         rows: after,
@@ -697,6 +700,18 @@ pub struct Effect {
     pub command: Row,
     pub took: Vec<Row>,
     pub made: Vec<Row>,
+    /// Every rule that applied, in the order it applied, with repeats repeated.
+    ///
+    /// **A command names one rule and may run many.** `{part of:R is:X}` makes one rule a sequence
+    /// of others, so `end-turn` runs eight and a caller reading `command.relation` sees one of
+    /// them. **`D-5` asks for what fired rather than for what the file says**, and this is the
+    /// only thing that can answer it: the parts a rule calls are in the data, but whether a
+    /// repeating part fired at all depends on the world it met.
+    ///
+    /// **A firing that was refused is not here.** `repeatedly` builds each attempt's effect aside
+    /// and merges it only when the attempt stands, so `upkeep` feeding nobody records nothing -
+    /// which is the difference between this and the transitive closure of `part`.
+    pub fired: Vec<String>,
 }
 
 /// Play a list of commands against a world: **(old state, commands) -> (new state, effects)**.
@@ -781,6 +796,7 @@ pub fn fire(game: &Game, command: &Row, repeat: usize) -> Result<(Game, Effect),
         command: command.clone(),
         took: Vec::new(),
         made: Vec::new(),
+        fired: Vec::new(),
     };
     for _ in 0..repeat {
         after = run(&after, &of_rule, named.clone(), &bound, &mut effect)?;
@@ -885,6 +901,10 @@ fn once(
 ) -> Result<Game, Refused> {
     let parts = parts_of(game, of_rule);
     if !parts.is_empty() {
+        // **A rule made of parts never reaches `apply`**, so it would be absent from
+        // `effect.fired` while every part of it was there. Recorded here instead: `end-turn` ran,
+        // and what it ran follows it in the list.
+        effect.fired.push(rule.clone());
         let mut after = game.clone();
         for part in parts {
             let id = part.value(ID).unwrap_or_default();
@@ -932,6 +952,7 @@ fn repeatedly(
             command: effect.command.clone(),
             took: Vec::new(),
             made: Vec::new(),
+            fired: Vec::new(),
         };
         let next = match apply(&pool, of_rule, rule.clone(), bound, &mut aside) {
             Ok(next) => next,
@@ -953,6 +974,7 @@ fn repeatedly(
         held.extend(aside.made.clone());
         effect.took.extend(aside.took);
         effect.made.extend(aside.made);
+        effect.fired.extend(aside.fired);
     }
 
     // **And everything held aside goes back**, joined with whatever is there, which is the one
@@ -1133,6 +1155,7 @@ pub fn offered(game: &Game) -> Vec<Row> {
                 },
                 took: Vec::new(),
                 made: Vec::new(),
+                fired: Vec::new(),
             };
             if apply(game, of_rule, named.clone(), &by_id, &mut aside).is_ok() {
                 out.push(Row {
