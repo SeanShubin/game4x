@@ -52,6 +52,12 @@ pub mod script;
 pub mod store;
 pub mod view;
 
+// **Beside the engine rather than part of it.** The foundation the engine runs on, carried in
+// the binary so that a browser build reads the same bytes a desktop build does. It does what the
+// engine may not - `include_str!` - which is why `common::BESIDE` names it and the engine's own
+// walk skips it.
+pub mod foundation;
+
 // **The model being replaced.** Eight modules, a struct per noun and a method per rule, and the
 // list `tests/isolation.rs` excepts by name. **It is a countdown rather than a catalogue**: a
 // module deleted here is deleted there, and when both are empty the exception goes with them.

@@ -43,6 +43,22 @@ pub const BEING_REPLACED: [&str; 8] = [
 /// naming a noun**, and it comes back into scope the moment there is nothing left to declare.
 pub const SHARED: [&str; 1] = ["lib"];
 
+/// Modules that are **beside** the engine rather than part of it, and are not going anywhere.
+///
+/// **This is the one exception list that is permanent, and it says so.** `BEING_REPLACED` and
+/// `SHARED` both empty out when the migration finishes; this one does not, because what it names
+/// is a layer rather than a leftover.
+///
+/// **`foundation` carries `data/foundation/` in the binary**, which means it says `include_str!`,
+/// one of the four words the engine may not say. That is not a weakening of the engine's rule:
+/// the rule is what makes `Game::of(rows)` the only way in, and a module that hands the engine
+/// rows is the rule being obeyed rather than bent. `layers.md` already places it: *the harness is
+/// beside the others rather than under them.*
+///
+/// **What keeps it honest is that it is short and each entry carries its reason.** An exception
+/// list that grows without one is how a rule stops binding the code it names.
+pub const BESIDE: [&str; 1] = ["foundation"];
+
 /// Every module of the engine, read from `src/` rather than listed.
 ///
 /// **Read and then excepted, so a module appearing in `src/` that is in neither list is a
@@ -61,7 +77,10 @@ pub fn engine_modules() -> Vec<PathBuf> {
             .and_then(|it| it.to_str())
             .expect("a module name")
             .to_string();
-        if BEING_REPLACED.contains(&stem.as_str()) || SHARED.contains(&stem.as_str()) {
+        if BEING_REPLACED.contains(&stem.as_str())
+            || SHARED.contains(&stem.as_str())
+            || BESIDE.contains(&stem.as_str())
+        {
             skipped += 1;
             continue;
         }
@@ -69,7 +88,7 @@ pub fn engine_modules() -> Vec<PathBuf> {
     }
     assert_eq!(
         skipped,
-        BEING_REPLACED.len() + SHARED.len(),
+        BEING_REPLACED.len() + SHARED.len() + BESIDE.len(),
         "every module excepted by name is a module that is there - one that is not means the \
          migration moved and a list did not"
     );
