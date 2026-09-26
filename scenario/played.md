@@ -102,9 +102,13 @@ the orbit above that.
 
 14 of 15 rules fired; 1 did not: ["perish"]
 
-`perish` fires when somebody starves, and nobody does. `spec/scenarios.md` sends a
-mechanic that only appears in an unusual situation to a scenario of its own, and
-`D-5` asks that every rule fire here - `C-150`, with Sean as `P-569`.
+### What a typical game does not use
+
+**`perish`** needs a starvation - a settlement whose citizens are hungry when its food runs out. The main scenario works its food every turn and sustains its people, so nobody starves in it.
+
+`spec/scenarios.md`: *a mechanic that only appears in an unusual situation belongs to
+a scenario of its own. Those are not built until the main scenario satisfies its
+reader.*
 
 ## The world it left
 

@@ -282,11 +282,28 @@ pub fn played_as_markdown() -> String {
         rules.len(),
         missing.len()
     ));
+    // **The second half of `D-5`'s clause**: a rule that did not fire is named here with what it
+    // needs, so an omission is read rather than noticed. **Asserted and not merely printed** - an
+    // unfired rule with no entry is a rule that stopped firing and said nothing.
     if !missing.is_empty() {
+        out.push_str("### What a typical game does not use\n\n");
+        for rule in &missing {
+            let needs = UNUSUAL
+                .iter()
+                .find(|(named, _)| named == rule)
+                .map(|(_, needs)| *needs)
+                .unwrap_or_else(|| {
+                    panic!(
+                        "`{rule}` fired nowhere and is not named in `UNUSUAL` - `D-5` asks that a \
+                         rule that does not fire be named with the unusual situation it needs"
+                    )
+                });
+            out.push_str(&format!("**`{rule}`** needs {needs}\n\n"));
+        }
         out.push_str(
-            "`perish` fires when somebody starves, and nobody does. `spec/scenarios.md` sends a\n\
-             mechanic that only appears in an unusual situation to a scenario of its own, and\n\
-             `D-5` asks that every rule fire here - `C-150`, with Sean as `P-569`.\n\n",
+            "`spec/scenarios.md`: *a mechanic that only appears in an unusual situation belongs to\n\
+             a scenario of its own. Those are not built until the main scenario satisfies its\n\
+             reader.*\n\n",
         );
     }
 
@@ -390,6 +407,33 @@ fn main() {
 fn friendly_command(game: &Game, command: &Row) -> String {
     Names::of(game.rows().rows()).row(command)
 }
+
+/// Rules a typical game does not use, each with the unusual situation it needs.
+///
+/// # `D-5` asks for two things and this is the second
+///
+/// **`D-5`, promoted 2026-09-26**: *every rule a typical game uses fires at least once while it
+/// runs, measured by what fired rather than by what the file says, and **a rule that does not fire
+/// is named with the unusual situation it needs** - so an omission is something I can read rather
+/// than something I have to notice.*
+///
+/// **`spec/scenarios.md` is where the naming points**: *a mechanic that only appears in an unusual
+/// situation belongs in a scenario of its own. Those are not built until the main scenario satisfies
+/// its reader.* So an entry here names a scenario that does not exist yet, and the list empties as
+/// those are built.
+///
+/// **One list, rendered into `scenario/played.md` and held by
+/// `every_rule_fires_or_is_named_with_what_it_needs`.** The naming has to be something Sean reads,
+/// which is why it reaches the file rather than living only in a test.
+///
+/// **The clause this serves replaced one that gave no signal for it.** The old one asked only that
+/// every rule fire, so a rule that silently stopped firing read as fourteen-of-fifteen and nothing
+/// said which or why.
+pub const UNUSUAL: [(&str, &str); 1] = [(
+    "perish",
+    "a starvation - a settlement whose citizens are hungry when its food runs out. The main \
+     scenario works its food every turn and sustains its people, so nobody starves in it.",
+)];
 
 /// Every relation the schema marks as state, by name.
 ///

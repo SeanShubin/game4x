@@ -181,54 +181,6 @@ fn nobody_starves_and_nothing_had_to_be_stored() {
     );
 }
 
-/// **Fourteen of the fifteen rules fire, and the fifteenth is `perish`.**
-///
-/// # `D-5` and `spec/scenarios.md` cannot both hold, which is `C-150`
-///
-/// **`D-5`**: *every rule the reviewed tests describe fires at least once while it runs.*
-/// **`spec/scenarios.md`**: *a mechanic that only appears in an unusual situation belongs in a
-/// scenario of its own. Those are not built until the main scenario satisfies its reader.*
-///
-/// **Starvation is that mechanic.** A loop that sustains its people never fires `perish`, so the
-/// main scenario can satisfy one sentence or the other. **This asserts what is true today and names
-/// the one exception**, rather than asserting fifteen and getting there by playing badly - which is
-/// what the first version of this scenario did.
-///
-/// **Measured by what fired.** `Effect::fired` is what the engine applied; counting
-/// `command.relation` instead reported six of fifteen, because `end-turn` runs five rules through
-/// `{part ...}` and the count saw one of them.
-#[test]
-fn every_rule_but_perish_fires_and_perish_is_named() {
-    let (_, history, refused) = scenario::played();
-    assert_eq!(refused, None, "the scenario was refused partway");
-
-    let rules = scenario::every_rule();
-    assert!(
-        rules.len() > 10,
-        "only {} rules, so this would say little",
-        rules.len()
-    );
-
-    let fired: BTreeSet<String> = history
-        .iter()
-        .flat_map(|effect| effect.fired.iter().cloned())
-        .collect();
-    let missing: Vec<&str> = rules.difference(&fired).map(String::as_str).collect();
-    assert_eq!(
-        missing,
-        ["perish"],
-        "the only rule this scenario does not fire is `perish`"
-    );
-
-    // **Nothing fired that is not a rule**, which catches the day `Effect::fired` records something
-    // else.
-    let strangers: Vec<&String> = fired.difference(&rules).collect();
-    assert!(
-        strangers.is_empty(),
-        "these fired and are not rules: {strangers:?}"
-    );
-}
-
 /// **The committed playthrough is what the scenario produces now.**
 ///
 /// **`scenario/played.md` is the thing Sean reads**, so a rule change that moves it has to move the
@@ -273,4 +225,95 @@ fn the_committed_playthrough_is_current() {
             ),
         }
     }
+}
+
+/// **`D-5`'s two halves: every rule a typical game uses fires, and one that does not is named.**
+///
+/// **`D-5`, promoted 2026-09-26**: *every rule a typical game uses fires at least once while it
+/// runs, measured by what fired rather than by what the file says, and a rule that does not fire is
+/// named with the unusual situation it needs - so an omission is something I can read rather than
+/// something I have to notice.*
+///
+/// # The second half is the one that carries the signal
+///
+/// **The clause this replaces asked only that every rule fire.** Under it, a rule that silently
+/// stopped firing read as fourteen-of-fifteen and nothing said which or why. **Under this one it is
+/// a failure unless somebody wrote down the unusual situation it needs**, which is what
+/// `scenario::UNUSUAL` is - and `scenario/played.md` renders it, so the omission reaches the file
+/// Sean reads.
+///
+/// # Both directions, and both counts
+///
+/// **A named list that silently empties is the same hole one level up**, which the specification
+/// lane asked to be closed here. So: every rule either fired or is named; nothing is named that
+/// fired; and the two counts are asserted against today's figures rather than only against each
+/// other.
+///
+/// **The figures move when a starvation scenario is built**, which is the point - `perish` will fire
+/// then, `UNUSUAL` empties, and this fails until somebody says so.
+///
+/// **Measured by what fired.** `Effect::fired` is what the engine applied; counting
+/// `command.relation` instead reported six of fifteen, because `end-turn` runs five rules through
+/// `{part ...}` and the count saw one of them.
+#[test]
+fn every_rule_fires_or_is_named_with_what_it_needs() {
+    let (_, history, refused) = scenario::played();
+    assert_eq!(refused, None, "the scenario was refused partway");
+
+    let rules = scenario::every_rule();
+    let fired: BTreeSet<String> = history
+        .iter()
+        .flat_map(|effect| effect.fired.iter().cloned())
+        .collect();
+    let named: BTreeSet<String> = scenario::UNUSUAL
+        .iter()
+        .map(|(rule, _)| rule.to_string())
+        .collect();
+
+    // **Every rule is accounted for one way or the other**, which is the whole clause in one line.
+    let unaccounted: Vec<&String> = rules
+        .difference(&fired)
+        .filter(|it| !named.contains(*it))
+        .collect();
+    assert!(
+        unaccounted.is_empty(),
+        "{} rule(s) fired nowhere and are named nowhere: {unaccounted:?} - `D-5` asks that an \
+         omission be readable rather than noticed",
+        unaccounted.len()
+    );
+
+    // **Nothing is named that fired**, so an entry cannot outlive the situation it describes. A
+    // starvation scenario makes `perish` fire, and this is what says to delete its entry.
+    let stale: Vec<&String> = named.intersection(&fired).collect();
+    assert!(
+        stale.is_empty(),
+        "these are named as unusual and fired anyway: {stale:?} - delete their entries in \
+         `scenario::UNUSUAL`"
+    );
+
+    // **Nothing is named that is not a rule**, which catches a typo in an entry rather than letting
+    // it excuse nothing.
+    let strangers: Vec<&String> = named.difference(&rules).collect();
+    assert!(
+        strangers.is_empty(),
+        "these are named in `UNUSUAL` and are not rules: {strangers:?}"
+    );
+
+    // **And nothing fired that is not a rule**, which catches the day `Effect::fired` records
+    // something else.
+    let odd: Vec<&String> = fired.difference(&rules).collect();
+    assert!(odd.is_empty(), "these fired and are not rules: {odd:?}");
+
+    // **Both counts, because either set being empty would make this a different check.** With
+    // nothing fired every rule would be unaccounted and the first assertion would catch it; with
+    // nothing named it would catch that too - but a run where `rules` itself was empty passes every
+    // assertion above in silence.
+    assert_eq!(rules.len(), 15, "the ruleset is fifteen rules: {rules:?}");
+    assert_eq!(fired.len(), 14, "fourteen of them fire: {fired:?}");
+    assert_eq!(named.len(), 1, "one is named as unusual: {named:?}");
+    assert_eq!(
+        fired.len() + named.len(),
+        rules.len(),
+        "the two halves partition the ruleset, with nothing counted twice"
+    );
 }
