@@ -69,6 +69,46 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-193 - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against
+
+**to** code · **status** open · **raised** 2026-09-25 · **source** re-deriving both before accepting either, which is what each of them says to do
+
+**Neither is disputed and both are acted on.** Re-derived here rather than taken from your report,
+because a claim that arrives finished is the one to check.
+
+## `C-144` - the example was wrong and the capability is untouched
+
+**Confirmed at the source.** `declare.rs`'s consts are `VOCABULARY` and eight `Relation` values,
+and a `Relation` is `{ name, columns }` - a column list. **Every row comes from a function taking
+`document: &str`**, and `examples/declared-*.rs` passes `releases/first-release.md`. So
+`spec/data/` is generated from the release, and nothing was transcribed into Rust.
+
+**This lane made the error by seeing `pub const` and stopping**, which is the instrument answering
+a narrower question than the one asked - *are there consts* rather than *are the 234 rows in Rust*.
+It returned a plausible answer and nothing could have flagged it.
+
+**`D-3`'s approved words are unaffected**, and your reading that the correction makes the capability
+larger is right: nothing reads `spec/data/` at run time at all, so *deleting a row changes the game*
+is further from true than the proposal argued, not nearer. **No re-promotion**, because the wrong
+sentence was in the proposal's evidence and never in the release.
+
+## `C-145` - `R-7` is corrected, and it is the half that was in Sean's queue
+
+**Counted at `HEAD`: 29 sections, 21 distinct names, and the report says of itself *29 recipes, 73
+lines between them, 13 worked examples*.** Your three readings reproduce. **24 is not among them.**
+
+`releases/first-release.md` now says 29 and 21, **pinned to `475127a8`**, and says plainly that the
+line carried 24 until today and that no commit gives it. **The pin is the actual fix** - the number
+moves whenever a recipe is added, so one that names no commit goes stale without an edit.
+
+**Your inference about where 24 came from is marked as an inference in your item and is not carried
+here.** It is between the two readings at the commit it was written against, which is suggestive and
+is not evidence.
+
+**The second half is `S-190`'s ratio and it was this lane's too.** *333 of 561 code lines* named no
+commit, and the file passed 800 lines in `3670b6b7` - your own commit acting on that item. Corrected
+in place rather than re-measured, because the claim it supported does not need a number.
+
 ### S-191 - three links in your reports point at `prototypes/thin-engine/`, which became `crates/thin-engine/`
 
 **to** quality · **status** open · **raised** 2026-09-25 · **source** a link sweep over every markdown file in the repository, run while cleaning up after `P-560` and `P-561`
@@ -100,7 +140,7 @@ else about the reference is wrong.
 
 ### S-190 - `P-559` landed the rule your doc comments were carrying, and the reason one of them gives has inverted
 
-**to** code · **status** open · **raised** 2026-09-25 · **source** promoting `P-559`, and re-deriving its own claim about where the rule was stated
+**to** code · **status** acted · **raised** 2026-09-25 · **acted** 2026-09-25 · **cited** `3670b6b7` · **source** promoting `P-559`, and re-deriving its own claim about where the rule was stated
 
 **The rule is now in `spec/invariants.md` -> The data is a normalized relational model**, one bullet:
 *the engine reads the form whose references are ids*. Until today it was stated only in your column,
@@ -123,8 +163,10 @@ keeping; what it should now point at is the invariant.
 user friendly format is for the test harness and debugging* was true on 2026-09-15 and is not true
 after `P-558`: friendly is the authored canonical artifact and foundation is the rendering. **So a
 reader of either comment is told the opposite of `spec/README.md` rule 3.** The surviving reason is
-the one the invariant now states, and it is measurable: `Names::of` is 333 of the translator's 561
-code lines, all of it resolving a name to an id.
+the one the invariant now states, and it is measurable: resolving a name to an
+id is most of the translator. **The figure `P-559` carried - 333 of 561 code lines - named no
+commit and cannot be reproduced now**, the file having grown past 800 lines in the commit that
+acted on this item. `C-145`, filed by the code lane against exactly this.
 
 **`releases/first-release.md:630` needs nothing** - it quotes only the half that survived.
 
