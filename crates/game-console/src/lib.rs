@@ -21,17 +21,11 @@ pub mod containment;
 pub mod dump;
 pub mod fired;
 pub mod grammar;
-pub mod nogain;
-pub mod petri;
-pub mod petri_draw;
-pub mod petri_page;
-pub mod recipes;
 pub mod relations;
 pub mod report;
 pub mod state;
 pub mod style;
 pub mod tree;
-pub mod worked;
 
 use command_language::{Failure, Grammar, parse_line};
 use game_model::{Game, Rejection};

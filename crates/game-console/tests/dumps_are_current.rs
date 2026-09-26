@@ -136,22 +136,25 @@ fn every_committed_dump_is_what_the_scenario_produces() {
     // **Stated as a sum rather than as a number**, because thirty-nine on its own says
     // nothing about which of the three moved when it next changes.
     // **Nineteen since `S-135`**, which added `relations.md` and `relations.html` - the
-    // rules as relations, beside `state.md`'s same view over the state.
+    // rules as relations, beside `state.md`'s same view over the state. **Thirteen since
+    // `D-4`**, which took `catalog.md` and its page with `prototypes/kinds`, and
+    // `recipes.md`, `petri.md` and `nogain.md` and their pages with the release tables all
+    // three were read out of.
     assert_eq!(
         generated.len(),
-        19 + 2 + 12 * 2,
+        13 + 2 + 12 * 2,
         "eighteen report files and the index, two stylesheets, and a page and a sibling for \
          each of the twelve territories; `dump::generated` returned {}",
         generated.len()
     );
 
-    // **The two `prototypes/kinds` writes get their page held here**, because that crate
-    // cannot use this renderer and nothing should depend on it. `catalog.md` is held to the
-    // release by `prototypes/kinds/tests/catalog_is_current.rs`; this holds `catalog.html`
-    // to `catalog.md`. Neither half alone says the page shows what the release says.
+    // **The same sum as above, and nothing is held here that is written elsewhere.** It used
+    // to be one more: `prototypes/kinds` wrote `catalog.md` and could not use this renderer,
+    // so its own test held the markdown to the release and this one held the page to the
+    // markdown. `D-4` deleted both halves with the tables they were about.
     assert_eq!(
         generated.len(),
-        19 + 2 + 12 * 2,
+        13 + 2 + 12 * 2,
         "every report this crate generates, and since `D-4` there is no other crate writing one"
     );
 
@@ -208,7 +211,7 @@ fn every_committed_dump_is_what_the_scenario_produces() {
     // The set was discovered, so it can be empty for the wrong reason. This says it was not.
     assert_eq!(
         on_disk.len(),
-        19 + 2 + 12 * 2,
+        13 + 2 + 12 * 2,
         "the same population again, counted from the directory rather than from the \
          program, and nothing is excluded since `D-4` took `catalog.md`. \
          Found {} ({on_disk:?})",
@@ -227,7 +230,7 @@ fn the_scenario_produces_tables_rather_than_empty_files() {
     let generated = dump::generated(&Files(root.join("scenario/commands")));
     assert_eq!(
         generated.len(),
-        19 + 2 + 12 * 2,
+        13 + 2 + 12 * 2,
         "the same population as the currency check above, and it is worth restating rather \
          than sharing: a helper that both read would make one number, and two checks over \
          one number is one check"
@@ -329,8 +332,8 @@ fn every_page_is_well_formed_enough_to_be_read_as_one() {
     // likeliest to drift from the rest.
     assert_eq!(
         pages,
-        10 + 12,
-        "ten pages and one per territory, and every one of them checked - eleven until \
+        7 + 12,
+        "seven pages and one per territory, and every one of them checked - eleven until \
          `D-4` deleted `catalog.html` with the tables it was rendered from"
     );
 }

@@ -1378,10 +1378,11 @@ pub fn index(generated: &[(String, String)]) -> String {
     // **Seven, and it read eight while one was listed twice.** The duplicate came in when
     // `R-7` moved `recipes.md` into `generated` while it was still named by hand below, and
     // this count accommodated it instead of catching it - which is the thing a count is for.
-    // Eight since `S-87` added the Petri net, nine since `S-93` added the no-gain check, ten
-    // since `S-135` added the rules as relations, and **nine again since `D-4` deleted
-    // `catalog.md` with the tables `prototypes/kinds` rendered it from**.
-    assert_eq!(listed, 9, "nine reports are linked");
+    // Eight since `S-87` added the Petri net, nine since `S-93` added the no-gain check and ten
+    // since `S-135` added the rules as relations. **Six since `D-4`**, which took `catalog.md`
+    // with `prototypes/kinds`, and then `recipes.md`, `petri.md` and `nogain.md` with the
+    // release tables all three were read out of.
+    assert_eq!(listed, 6, "six reports are linked");
     assert_eq!(
         paired, listed,
         "every report has its markdown beside it. `containment` was the one that did not, \
@@ -1738,25 +1739,20 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(String, String)> {
     .into_iter()
     .map(|(name, text): (&str, String)| (name.to_string(), text))
     .collect();
-    // **`R-7`: the recipes, with a worked example beside each rule.** Generated here rather
-    // than in `prototypes/kinds` because an example is a real command run against a real
-    // state, and that crate depends on nothing.
-    let release = std::fs::read_to_string(
-        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../releases/first-release.md"),
-    )
-    .expect("the release document");
-    written.push((
-        String::from("recipes.md"),
-        crate::recipes::recipes(&release),
-    ));
-
+    // **Nothing here reads `releases/first-release.md` any more, and four reports went with
+    // it.** `recipes.md` showed every recipe of that release with a worked example beside it,
+    // `petri.md` and `petri.html` drew the same table as a net, and `nogain.md` solved for a
+    // weighting over it. **`D-4`: no report may be left describing a rule the game does not play
+    // by**, and the reviewed ruleset is not that table - so the four are deleted rather than
+    // repointed at data they were never about.
+    //
     // **Every markdown report gets a page** - `S-40`. Three of the index's links opened raw
     // markdown in a browser, `turns.md` worst of all, being the longest and the one read
     // most while checking the state function. Rendered from the markdown rather than from
     // the model, so the two cannot say different things.
     let pages: Vec<(String, String)> = written
         .iter()
-        .filter(|(name, _)| name == "turns.md" || name == "commands.md" || name == "recipes.md")
+        .filter(|(name, _)| name == "turns.md" || name == "commands.md")
         .map(|(name, text)| (html_name(name).to_string(), page(text, name)))
         .collect();
     written.extend(pages);
@@ -1765,28 +1761,6 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(String, String)> {
     // feature - twenty-five lines shut and several hundred open - and a markdown file is
     // always open, so a twin would be the same information in the form that made it
     // unreadable. `crate::tree` says so at more length.
-    // **`S-87`: the rules as a Petri net.** Read out of the same release the recipes view is
-    // read out of, so the two cannot describe different games. The page carries drawings and
-    // the markdown carries the incidence matrix, which is the form a diff can show and the
-    // form the research lens's checks operate on.
-    written.push((
-        String::from("petri.md"),
-        crate::petri_page::markdown(&release),
-    ));
-    written.push((
-        String::from("petri.html"),
-        crate::petri_page::page(&release),
-    ));
-    // **`S-93`: the no-gain invariant, decided rather than believed.** A third reading of the
-    // same Recipes table, at a finer granularity than the drawing - readiness is a state
-    // there, where the drawing has only kinds - and the weighting it solves for is published
-    // because Sean chose a derived weighting over a declared one and asked to see what it
-    // arrives at.
-    written.push((String::from("nogain.md"), crate::nogain::markdown(&release)));
-    written.push((
-        String::from("nogain.html"),
-        crate::dump::page(&crate::nogain::markdown(&release), "nogain.md"),
-    ));
 
     written.push((
         String::from("containment.html"),

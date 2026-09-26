@@ -7,6 +7,33 @@ with excessive tests, keep it below 5 at a time. Make a backlog if you need to.*
 and deferred, so that describing it does not mean building it. An item leaves by being built or by
 being struck out with a reason.
 
+## Determinism has no check on the new model, and it had two on the old one
+
+**Added 2026-09-26, by the lane that deleted them.** `D-4` took
+`crates/game-console/tests/first_release.rs`, whose every assertion was about a rule the game will
+not play by. **Two of its twenty tests were not**:
+
+```
+replaying_the_same_commands_produces_the_same_game
+the_history_of_a_game_is_enough_to_rebuild_it
+```
+
+**Those are `docs/architecture.md` rule 3** - *applying the same list to the same start yields the
+same game, always* - and they were properties of the model rather than of the ruleset. **Nothing
+asserts them of the engine.**
+
+**It is not a gap the deletion created, which is worth being exact about.** The engine has been
+deterministic by construction since it was written: no clock, no environment, no floating point,
+and `tests/isolation.rs` holds the last of those by reading `src/`. What went is the check that
+would notice if that stopped being true. **`docs/process.md`: a quality improvement's evidence is a
+test that would have failed before it** - so a rule with no check is *unverified* rather than
+broken, and this says which.
+
+**What it needs**: two tests over the reviewed ruleset, once `D-5`'s main scenario exists to replay.
+One applying a command list twice and comparing the stores; one rebuilding a game from its history
+and comparing it to the game that was played. **Neither can be written before there is a scenario
+to run**, which is why this is here rather than open.
+
 ## Storage
 
 Sean, 2026-09-17: *We will have structures that can store food/metal/energy. We will also have
