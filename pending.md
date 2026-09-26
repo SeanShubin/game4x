@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-571** - the generated regression tests need a home and a rule saying they are not the specification · `decide/questions.md`
+- **P-571** - the main scenario has generated detail under it, and nothing says it is not the specification · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -20,6 +20,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-571** - `2568e9a` P-571 revised: the code lane built G2 while the question was being filed · still open in `decide/proposals.md`
 - **C-151** - `26dd253` C-151 and C-150 turned into P-568 and P-569 · still open in `crates/outbox.md`
 - **C-150** - `26dd253` C-151 and C-150 turned into P-568 and P-569 · still open in `crates/outbox.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
