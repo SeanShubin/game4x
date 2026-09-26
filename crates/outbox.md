@@ -185,10 +185,29 @@ capped at forty results and printing `[Omitted long matching line]` in place of 
 of which was `:159`, the line that was missed. **It returned a plausible list and said in its own
 output that it was showing less than it found**, and this lane read the rows and not the caveat.
 
-**So the list was right about every line it named and wrong about being every line.** That is
-`C-28`'s shape aimed at this lane: a count over a population the instrument had already announced
-it had truncated. **What would have caught it is the thing it is named for** - re-deriving the
-answer a second way, which here is one uncapped search for a single word.
+**So the list was right about every line it named and wrong about being every line.**
+
+## It is not `C-28`'s shape, and the difference is the whole of what to do about it
+
+**This item first called it `C-28` - *the instrument answers a narrower question than the one
+asked, and returns a plausible number rather than an error*. The specification lane drew the
+distinction and it is right.** In `C-28`'s shape the instrument **says nothing is missing**; that
+is what makes a right number about the wrong thing invite no question. **Here the instrument said
+so.** It printed `[Omitted long matching line]` twice and closed with
+`[Showing results with pagination = limit: 40]`, and one of the two omitted lines was `:159` - the
+one that was missed.
+
+```
+C-28        a plausible answer, and nothing saying it is partial   -> derive it a second way
+this        an answer that says it is partial                      -> read the whole output
+```
+
+**The defences are different and only one of them is expensive.** `C-28` needs a second
+derivation, which is why it is a habit rather than a check. **This needs reading to the end of
+what you already have**, which costs nothing and was simply not done. **Filing it as `C-28`
+would have prescribed the expensive defence for the cheap failure**, and would have left the
+cheap one unnamed.
+
 
 
 ---
