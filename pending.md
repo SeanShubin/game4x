@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-562** - three of the seven capabilities waiting on you rest on the ruleset `D-1` replaces, so do you look before it starts? · `decide/questions.md`
+- **P-562** - three of the seven capabilities waiting on you rest on the ruleset `D-1` replaces, so does the switch wait on your reading? · `decide/questions.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
