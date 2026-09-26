@@ -4553,3 +4553,63 @@ costs attention for nothing. **They are what a proposal will have to answer** wh
 
 **Nothing in `crates/` serializes anything today** - no `serde`, no `ron` in any manifest - and
 under the history design nothing needs to.
+
+## Said 2026-09-26: the four save/load questions answered, and a question back
+
+**Sean answered all four** left open by the `../boardgame` reading. Recorded verbatim, because
+three of them change `spec/` and one corrects this lane.
+
+## Persisting across launches
+
+*It will always start at the main menu, if there is a previous game there will be a continue
+button, so we are one click away from the previous game.*
+
+**This is a sixth surface.** `spec/interface.md` says *the game presents five surfaces, all
+reachable from the front end, in every build* and lists them: the game, the console, the data
+browser, the rule editor, the debug view. **A main menu is none of them**, and *menu* appears
+nowhere in that file.
+
+**It is also not boardgame's answer**, which resumes the session with no click at all. His is a
+click, and the difference is deliberate: the previous game is offered rather than assumed.
+
+## What `/save <file>` means on the web
+
+*The user only saves/loads a name, whether that name corresponds to a file or a web construct is
+hidden from the user.*
+
+**`spec/console.md` says *file* and has to stop saying it.** Today: *`/save <file>` writes the
+history of the current game to a file, which `run` can then execute.* Under his answer the
+argument is a **name**, and where it lands is the shell's business - which is what
+`crates/game-front/src/console.rs` already says of the text: *a desktop writes a file, and a page
+has no filesystem to write one to.*
+
+**`run <file>` is the other half and he did not name it.** It takes a file today; loading by name
+needs something that takes a name.
+
+## Abandoning a game
+
+*If there are any unsaved commands, the user will be prompted if they want to save before creating
+a new game, if they don't the unsaved portion is discarded.*
+
+**This needs a thing the game does not track: which commands are saved.** `/save` records a name
+today - `console.rs`'s `saved_as` - and nothing records how much of the history that save covered.
+**A prompt is also new**: nothing in `spec/interface.md` asks the player a question.
+
+## And he asked back: why would a replay stop partway?
+
+**One mechanism, and this lane checked the obvious other one first and found it does not exist.**
+
+**The planet is in the history, so replay rebuilds it.** `{generate-planet size: policy: seed:}`
+is a command rather than a front-end line, and `spec/console.md` says *the same seed and the same
+policy give the same planet*. **So a replay does not depend on anything outside the history**, and
+the worry that it might was this lane's and was wrong.
+
+**What is left is the rules changing under a save.** The history is commands that were legal under
+the rules at the time; under `D-1` the rules are data shipped with the binary, so a build with an
+edited rule can refuse a command an older save recorded. **Same build, same rules, and the replay
+cannot stop** - `spec/invariants.md` says the game is one function.
+
+**So it is a rule change and nothing else** - constant during development, a patch after release.
+**And *worse than a refused one* was this lane's phrasing rather than a finding**: whether a
+partial replay is bad at all is a question nobody has asked him, and it only arises once rules
+change under saves people have.
