@@ -401,6 +401,17 @@ count summed over the hand list it was meant to check; a comment satisfying a te
 constant it explained; a reader that took a sentence *about* a citation for a citation; and a
 carrier that saw one of two legal forms an hour after it was written.
 
+**A claim about a commit is checked against that commit, and this lane got it wrong on 2026-09-26.**
+It read a commit subject - *all fifteen rules fire* - against the scenario at `HEAD`, which says
+fourteen, and reported the subject as disagreeing with the file it landed. **It did not.** At
+`06def7c` the scenario carried a fifth `{end-turn}` that starved everybody, `perish` fired, and the
+subject was true; `dc34b4c2` changed the scenario three commits later and its own subject records
+that. **The instrument answered *do these disagree now* when the question was *did it disagree when
+it was made*** - which is this class with the clock moved rather than the population. Found by the
+code lane, which filed the correction rather than conceding it in a message. **A subject cannot be
+amended here, so it is only ever a finding when it was false at its own commit, and checking that
+is one `git show`.**
+
 **A dead branch is not one of them, and keeping it out is what keeps the class a class.** One of the
 nine was invisible because its only caller never ran - *a reader nobody calls cannot fail* - but a
 branch that never runs returns no answer at all, where this class returns a **plausible** one.
