@@ -10,7 +10,7 @@ question is answered — not when it is polished.
 | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
 | [Planet view](planet-view.md)                               | Can we divide a sphere into hex-like regions and show them so the world reads as a world?                                                                             | Built ([code](../../prototypes/planet-view/README.md))          |
 | [Goldberg view](../../prototypes/goldberg-view/README.md)   | Which territory counts read as a planet rather than a die or a fog of small cells?                                                                                    | **Answered** 2026-08-30, below                                  |
-| [Kinds](../../prototypes/kinds/README.md)                   | What do the inputs to the gameplay logic actually look like?                                                                                                          | **Answered** 2026-08-31, below                                  |
+| Kinds                                                       | What do the inputs to the gameplay logic actually look like?                                                                                                          | **Answered** 2026-08-31, below                                  |
 | [Gap view](../../prototypes/gap-view/README.md)             | Can a player set a destination anywhere on the world with one mouse gesture, without rotating anything?                                                               | Built ([code](../../prototypes/gap-view/README.md))             |
 | [Hex torus view](../../prototypes/hex-torus-view/README.md) | At the sizes the game would use, does a flat isotropic hex torus read as a world, and how visible is the wrapping? **Not whether a torus should be the game's shape** | Being built ([code](../../prototypes/hex-torus-view/README.md)) |
 | [Thin engine](../../crates/game-model/ENGINE.md)            | Can a rule run from rows of data, against an engine that names no game noun? **`C-114`'s open half, answered by existing rather than decided**                        | **Answered** 2026-09-14, below                                  |
@@ -106,9 +106,14 @@ ten build, all ten draw, and stepping between them costs nothing.
 ## Kinds: answered 2026-08-31
 
 **The question was whether the two tables hold together**, which markdown cannot tell you.
-`prototypes/kinds` is the same content as Rust data - enums for the kinds, a struct per
-recipe, figures hardcoded - with a test that renders it back into the release's tables and
-compares them cell by cell. It does not play: no turn, no board, no state.
+`prototypes/kinds` **was** the same content as Rust data - enums for the kinds, a struct per
+recipe, figures hardcoded - with a test that rendered it back into the release's tables and
+compared them cell by cell. It did not play: no turn, no board, no state.
+
+**The prototype is deleted, 2026-09-26, and the answer below is not.** `D-4` took it with the
+rest of the old ruleset: it held the release's tables, and the release's tables stopped being
+what the game plays by. **Its question was answered on 2026-08-31 and research is done when the
+answer is recorded**, which this section is.
 
 **`S-4` predicted four things it would force open. All four were real.** The prototype's own README
 carries them in full; the shape of each:

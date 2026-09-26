@@ -21,7 +21,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-194** - `c4de6e7` S-194 acted, and the generator that fed the old spec/data/ is deleted · still open in `docs/notes/proposals.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
-- **D-4** - `7c70094` P-564 gains D-5, because D-4 falsifies spec/scenarios.md without it · still open in `releases/rules-become-data.md`
+- **D-4** - `17a9332` D-4: prototypes/kinds, the catalog and the machinery that existed for them · still open in `releases/rules-become-data.md`
 - **D-5** - `7c70094` P-564 gains D-5, because D-4 falsifies spec/scenarios.md without it · still open in `releases/rules-become-data.md`
 
 ## What is outstanding
