@@ -81,9 +81,17 @@ words rather than preceding them.
 
 ## What is not in this, and it is still open
 
-**Whether *some number of extractors* may be zero** - `spec/planet.md`, the scenario's territory 1
-having no energy density and nothing objecting. **It is a separate question and is filed as
-`P-570`**, because this one asks approval and that one asks a decision.
+**Whether *some number of extractors* may be zero** was split out as `P-570` and is **withdrawn
+unasked**: you decided it on 2026-09-15 and it is in a test you reviewed.
+`an-extractor-cannot-be-built-where-there-is-no-deposit.4x` says *a row at quantity zero is never
+written - the model is a minimal expression of intent*. **Omitting a resource means no deposit of
+it**, and building an extractor for it is refused by that test.
+
+**That does not weaken this proposal and is worth saying, because the two looked alike.** A
+territory with no deposit is a coherent fact - there is no energy in that ground. **A container
+that declares no capacity is not a coherent fact** - it is a thing whose whole purpose is to hold,
+holding nothing. *Minimal expression of intent* covers the first and says nothing about the
+second, which is why one needed a rule and the other did not.
 
 ### P-569 - `D-5` asks the main scenario for a rule `spec/scenarios.md` says belongs elsewhere
 
