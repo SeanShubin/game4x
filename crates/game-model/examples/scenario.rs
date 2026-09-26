@@ -123,12 +123,32 @@ pub fn every_rule() -> BTreeSet<String> {
 /// than only at the end.
 #[allow(clippy::type_complexity)]
 pub fn played() -> (Game, Vec<Effect>, Option<String>) {
+    let (game, history, refused) = watched();
+    (
+        game,
+        history.into_iter().map(|(_, it)| it).collect(),
+        refused,
+    )
+}
+
+/// The same run, with each command's turn number beside it.
+///
+/// **A turn is what a person reads a game in.** `{end-turn}` closes one, so the turn a command
+/// belongs to is how many `end-turn`s came before it - which is the only thing this adds, and it is
+/// the thing that makes 545 lines of trace into something that can be vetted by hand.
+#[allow(clippy::type_complexity)]
+pub fn watched() -> (Game, Vec<(usize, Effect)>, Option<String>) {
     let (mut game, commands) = opening();
     let mut history = Vec::new();
+    let mut turn = 1;
     for command in &commands {
         match fire(&game, command, 1) {
             Ok((next, effect)) => {
-                history.push(effect);
+                let closes = effect.command.relation == "end-turn";
+                history.push((turn, effect));
+                if closes {
+                    turn += 1;
+                }
                 game = next;
             }
             Err(why) => return (game, history, Some(format!("{why:?}"))),
@@ -137,64 +157,156 @@ pub fn played() -> (Game, Vec<Effect>, Option<String>) {
     (game, history, None)
 }
 
+/// What a place holds, as a person would say it.
+///
+/// **Grouped by place and summed**, because a store keeps two rows of four citizens apart and a
+/// reader counting his population does not.
+pub fn holdings(game: &Game) -> BTreeMap<String, BTreeMap<String, i64>> {
+    let state = state_relations(game);
+    let mut out: BTreeMap<String, BTreeMap<String, i64>> = BTreeMap::new();
+    for row in game.rows().rows() {
+        if !state.contains(&row.relation) {
+            continue;
+        }
+        let Some(place) = row.value("where") else {
+            continue;
+        };
+        let count = row
+            .value("quantity")
+            .and_then(|it| it.parse::<i64>().ok())
+            .unwrap_or(1);
+        *out.entry(place.to_string())
+            .or_default()
+            .entry(row.relation.clone())
+            .or_default() += count;
+    }
+    out
+}
+
 fn main() {
-    let (after, history, refused) = played();
+    let detail = std::env::args().any(|it| it == "--detail");
+    let (mut game, _) = opening();
+    let (after, history, refused) = watched();
     let rules = every_rule();
 
-    println!("# The main scenario\n");
     println!(
-        "{} rules in the ruleset, {} commands.\n",
-        rules.len(),
-        history.len()
+        "# The main scenario
+"
     );
+    println!(
+        "{} rules in the ruleset, {} commands, {} turns.",
+        rules.len(),
+        history.len(),
+        history.last().map(|(turn, _)| *turn).unwrap_or(0)
+    );
+    println!(
+        "
+Every place is written as the friendly form writes it: `place-1` is the surface"
+    );
+    println!("landed on, `place-2` the orbit above it, `place-3` the surface taken by land,");
+    println!(
+        "`place-4` the orbit above that.
+"
+    );
+    if !detail {
+        println!(
+            "`--detail` prints what every command took and made.
+"
+        );
+    }
 
+    // **Replayed alongside, one command at a time**, so the world can be shown as each turn closes.
+    // `watched` already has every effect; what it does not have is the world in between, and a
+    // reader confirming a game played needs the state at the end of each turn rather than only at
+    // the end of the last one.
     let mut fired: BTreeMap<String, usize> = BTreeMap::new();
-    for effect in &history {
-        // **`effect.fired` and not `command.relation`**, which is `D-5`'s *measured by what fired*.
-        // A command names one rule and `end-turn` runs eight of them through `{part ...}`, so
-        // counting the command counts a narrower population and reports a plausible six of
-        // fifteen. **This lane wrote that version first** and the number looked reasonable.
+    let mut shown = 0;
+    for (at, (turn, effect)) in history.iter().enumerate() {
+        if at == 0 || history[at - 1].0 != *turn {
+            println!(
+                "## Turn {turn}
+"
+            );
+        }
         for rule in &effect.fired {
             *fired.entry(rule.clone()).or_default() += 1;
         }
-        println!("## {}", write(&effect.command));
-        println!("  fired {}", effect.fired.join(", "));
-        for row in &effect.took {
-            println!("  took  {}", write(row));
+        println!("  {}", friendly_command(&game, &effect.command));
+        if detail {
+            for row in &effect.took {
+                println!("      took  {}", write(row));
+            }
+            for row in &effect.made {
+                println!("      made  {}", write(row));
+            }
         }
-        for row in &effect.made {
-            println!("  made  {}", write(row));
+        game = fire(&game, &effect.command, 1)
+            .map(|(next, _)| next)
+            .unwrap_or(game);
+
+        if effect.command.relation == "end-turn" {
+            println!();
+            for (place, held) in holdings(&game) {
+                let what: Vec<String> = held
+                    .iter()
+                    .filter(|(_, count)| **count > 0)
+                    .map(|(kind, count)| format!("{count} {kind}"))
+                    .collect();
+                if !what.is_empty() {
+                    println!("    place-{place}: {}", what.join(", "));
+                }
+            }
+            println!();
+            shown += 1;
         }
-        println!();
     }
+    assert!(shown > 0, "no turn closed, so nothing was shown to confirm");
 
     if let Some(why) = refused {
-        println!("REFUSED after {} command(s): {why}\n", history.len());
+        println!(
+            "REFUSED after {} command(s): {why}
+",
+            history.len()
+        );
     }
 
-    // **What fired rather than what the file says** - `D-5`'s own words. A command's relation is
-    // the rule it fires, so this counts rules and not lines.
-    println!("## What fired\n");
+    // **What fired rather than what the file says** - `D-5`'s own words. A command names one rule
+    // and `end-turn` runs five more through `{part ...}`, so counting the command counts a narrower
+    // population: it reported six of fifteen where the engine had applied nine.
+    println!(
+        "## What fired
+"
+    );
     for rule in &rules {
         match fired.get(rule) {
             Some(times) => println!("  {rule:18} {times}"),
-            None => println!("  {rule:18} -"),
+            None => println!("  {rule:18} -   never"),
         }
     }
     let missing: Vec<&String> = rules.iter().filter(|it| !fired.contains_key(*it)).collect();
     println!(
-        "\n{} of {} rules fired; {} did not: {missing:?}",
+        "
+{} of {} rules fired; {} did not: {missing:?}",
         rules.len() - missing.len(),
         rules.len(),
         missing.len()
     );
+    if !missing.is_empty() {
+        println!(
+            "
+`perish` fires when somebody starves, and nobody does - `spec/scenarios.md` sends a"
+        );
+        println!(
+            "mechanic that only appears in an unusual situation to a scenario of its own, and"
+        );
+        println!("`D-5` asks that every rule fire here. Those two cannot both hold - `C-150`.");
+    }
 
-    println!("\n## The state it left\n");
-    // **The world and not the ruleset.** Every row is in one store, so the rules the game plays by
-    // sit in `after` beside the places and the citizens - and somebody watching a game played does
-    // not want eighty `{binding ...}` rows. **`{state relation:N}` already says which relations a
-    // world is made of**, which is the same question `tests/first_test.rs` asks to hold the
-    // scenario layer apart from the ruleset.
+    println!(
+        "
+## The world it left
+"
+    );
     let state = state_relations(&after);
     assert!(
         state.len() > 10,
@@ -202,22 +314,32 @@ fn main() {
         state.len()
     );
     let names = Names::of(after.rows().rows());
-    let mut shown: Vec<String> = after
+    let mut rows: Vec<String> = after
         .rows()
         .rows()
         .iter()
         .filter(|row| state.contains(&row.relation))
         .map(|it| names.row(it))
         .collect();
-    shown.sort();
-    for line in &shown {
+    rows.sort();
+    for line in &rows {
         println!("  {line}");
     }
     println!(
-        "\n{} row(s) of world, out of {} in the store.",
-        shown.len(),
+        "
+{} row(s) of world, out of {} in the store.",
+        rows.len(),
         after.rows().rows().len()
     );
+}
+
+/// A command as the scenario file writes it, with ids put back to names.
+///
+/// **The trace showed `{deploy what:51 where:2}`** and the file says
+/// `{deploy where:place-2 what:ark}`. A reader confirming that the scenario did what it says cannot
+/// do it against relation ids, so this renders the command back the way he wrote it.
+fn friendly_command(game: &Game, command: &Row) -> String {
+    Names::of(game.rows().rows()).row(command)
 }
 
 /// Every relation the schema marks as state, by name.
