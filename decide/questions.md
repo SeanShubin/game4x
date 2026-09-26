@@ -52,6 +52,19 @@ self-contained cases rather than a chain, and any of the three layouts holds tha
 `docs/process.md`'s own words: *Absent expected data means I accept what it does now, so the test
 writes it, and what I review is the diff in version control.*
 
+## Your one-directory constraint, 2026-09-26, and it is already met
+
+*If i am deleting multiple files instead of one the files I delete should be in a single
+directory.* **`scenario/regression/` is one directory with no subdirectories**, so `G2` satisfies
+it as built and `G1` would too. `G3` satisfies it trivially by being one file.
+
+**One consequence to know before you delete anything.** Each file holds `{given}`, `{when}` and
+`{then}` together, so **deleting one deletes the whole case and not only its expectation**. That
+is harmless - all three are generated from `scenario/main.4x` - but the gesture means *regenerate
+this case* rather than *re-accept this expectation*. **If the command itself has moved in the
+scenario since, what comes back is a different test rather than a refreshed answer**, and the
+diff you review will say so.
+
 ## The second - a rule, because these are not `spec/tests/`
 
 **`CLAUDE.md` already has the sentence**: *a check that pins the present state cannot report a
