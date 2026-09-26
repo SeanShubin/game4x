@@ -31,8 +31,11 @@ fn root() -> PathBuf {
 /// find them by a marker, and a file that lost its marker would leave the list silently -
 /// which is the failure this repository keeps producing. A name added here is a decision;
 /// a name missing from here fails the count below.
-const GENERATED: [&str; 5] = [
-    "reports/catalog.md",
+const GENERATED: [&str; 4] = [
+    // **`reports/catalog.md` was here until `D-4`**, which deleted `prototypes/kinds` and the
+    // release tables it rendered. **Removed rather than left**: this check reports a listed file
+    // that is not there, which is the list doing its job - and a name kept for a file nobody
+    // writes would be the same silence the comment above is about, with the sign flipped.
     "pending.md",
     "reports/state.md",
     "reports/entities.md",

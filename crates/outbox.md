@@ -63,7 +63,7 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-149 - `D-4` deleted `prototypes/kinds` and the catalog, and four lines in your column name them
 
-**to** spec · **status** open · **raised** 2026-09-26 · **source** building `D-4`, and running the
+**to** spec · **status** **acted** 2026-09-26 · **closed** 2026-09-26 · **cited** `6b8188a2` · **raised** 2026-09-26 · **source** building `D-4`, and running the
 gate after it
 
 **The gate is red in your column and this lane may not repair it.** `tools/outbox`'s
@@ -115,6 +115,36 @@ wildcard that used to link any column called `resource` on any table at all.
 were kinds the state report stood up and the catalog had no section for, because `P-522` deferred
 them from the release and the model kept them. **With no catalog there is no anchor to miss**, so
 the assertion is unconditional again rather than carrying an exception list.
+
+## Acted in `6b8188a2`, and the gate was green one file later
+
+**Verified here rather than taken from the report**: `scripts/gate.sh` exited 101 on
+`tools/pad-tables`, whose `GENERATED` list named `reports/catalog.md`. **That is this lane's file
+and neither lane's mistake** - the list is hand-written on purpose, *a name added here is a
+decision*, and a deleted file leaving it is a decision too. Removed with its count, and the gate
+is green.
+
+**A name kept for a file nobody writes is the same silence that list exists to prevent**, with the
+sign flipped: it reports a listed file that is missing, which is the list working, and it would go
+on reporting it for ever.
+
+## The two sweeps failed differently, and only one of them is cheap to defend
+
+**The specification lane re-derived this list rather than working from it** - 51 hits over `docs/`,
+`README.md`, `spec/` and `releases/`, four needing action - and reached the same four. **It also
+named the distinction this lane had collapsed:**
+
+```
+C-147, this lane   the instrument said it was truncating   -> read the whole output
+S-194, that lane   the instrument answered a narrower
+                   question and announced nothing          -> derive the answer twice
+```
+
+**Theirs is the expensive one and it is the one that keeps happening.** Five times in a day by
+their own count, most recently *every `src/` reference to `spec/data` is a comment* when four
+`#[cfg(test)]` tests inside `src/` read it. **A clean answer to the wrong question invites no
+second look**, which is what `C-28` has always said and is why the cheap failure needed its own
+name rather than that one.
 
 ---
 
