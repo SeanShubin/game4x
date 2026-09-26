@@ -126,6 +126,30 @@ fn every_command_has_an_expectation_and_it_is_current() {
     // **In this test rather than beside it.** It was its own test for an hour and raced with this
     // one over the same directory - two tests, one of which writes, and `cargo test` runs them at
     // once. **The writing and the sweep are one operation and had to be one test.**
+    // **One directory and no subdirectories, which is Sean's own constraint.** Sean, 2026-09-27:
+    // *if I am deleting multiple files rather than one, they need to be in a single directory.*
+    // **Accepting a turn's worth of behaviour is several deletions**, and a file two levels down is
+    // one he would have to go and find.
+    //
+    // **Checked both ways**, because a name and a directory entry are different populations: no
+    // case is named with a path in it, and nothing in the directory is a directory.
+    for (name, _) in &cases {
+        assert!(
+            !name.contains('/') && !name.contains('\\'),
+            "`{name}` is a path rather than a name, so the cases would not be in one directory"
+        );
+    }
+    let nested: Vec<String> = std::fs::read_dir(&at)
+        .unwrap_or_else(|why| panic!("{}: {why}", at.display()))
+        .filter_map(|it| it.ok())
+        .filter(|it| it.path().is_dir())
+        .filter_map(|it| it.file_name().to_str().map(str::to_string))
+        .collect();
+    assert!(
+        nested.is_empty(),
+        "`scenario/regression/` holds {nested:?}, and deleting several expectations has to be          several deletions in one directory"
+    );
+
     let wanted: BTreeSet<String> = cases.iter().map(|(name, _)| name.clone()).collect();
     let found: BTreeSet<String> = std::fs::read_dir(&at)
         .unwrap_or_else(|why| panic!("{}: {why}", at.display()))
