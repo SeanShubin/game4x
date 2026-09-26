@@ -9247,6 +9247,7 @@ work the release exists to order.
 | P-563, `H3` the game's rules and kinds move to `spec/data/`, and the engine's primitives stay                                | `spec/data/`, and `crates/game-model/data/foundation/` - the rest filed as `S-194`                                                                                                                       | 2026-09-26 |
 | P-565, a test is written in `spec/tests/` and a copy in `reviewed/` is the record it was read                                | `spec/README.md` rule 3                                                                                                                                                                                  | 2026-09-26 |
 | P-566, `D-5` asks for both territories developed rather than taken                                                           | `releases/rules-become-data.md` -> `D-5`                                                                                                                                                                 | 2026-09-26 |
+| P-567, the relational model guarantees coherence, which accuracy needs and is not                                            | `spec/invariants.md` -> The data is a normalized relational model                                                                                                                                        | 2026-09-26 |
 
 ## Forecast cleanups that were checked and not filed
 

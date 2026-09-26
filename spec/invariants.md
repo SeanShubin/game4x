@@ -189,6 +189,9 @@ specific rule.
 - **The game's data is a set of fully normalized relations.** That is what makes it one consistent
   model with no duplication, and it is how *a fact is stated once* is kept rather than merely
   required.
+- **The relational model is what guarantees the model is coherent.** It could still be
+  inaccurate - coherence is not correctness - but **an incoherent model cannot be accurate**, so
+  this is the part that has to hold before accuracy is worth asking about.
 - **The notation is a text form of that model, written for convenience.** It is how a person reads
   and writes the relations; **it is not a second model**, and anything said in it is said about a
   relation.
