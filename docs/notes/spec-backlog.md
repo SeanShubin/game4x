@@ -4495,3 +4495,61 @@ discoverable by an AI Assistant has made the AI Assistant much more capable of g
 recommendations*, and this is the reason under a rule three other rules lean on. It also bounds
 the claim: structure cannot make the rules right, so nothing should argue that a normalized model
 is evidence the game is correct. **Filed as `P-567`.**
+
+## Said 2026-09-26: take `../boardgame`'s persistence for save/load, web and PC
+
+**Sean**: *see how ../boardgame handled persistence in both web and PC, we are going to want to
+use that for our save/load capability.*
+
+**Read: `crates/boardgame/src/persistence.rs`, 124 lines.** What it does, so the next session need
+not re-read it:
+
+```
+one serialization, two backends   RON both sides, chosen by #[cfg(target_arch = "wasm32")]
+  native   directories::ProjectDirs -> <data_dir>/boardgame/boardgame.tableau.ron
+  web      web_sys -> localStorage, same string as the key and the file stem
+persists across launches          automatically, on both; the player resets with a button
+encode and write are split        so the caller writes only when the RON changed - autosave
+an unparseable save               falls back to a fresh table rather than crashing
+an unknown field                  serde skips it, so an older save still loads - with a test
+loading reconciles                the save gives the player's arrangement, all content comes
+                                  from the running build, so a session survives an update
+```
+
+## What transfers, and it is the backend rather than the shape
+
+**This lane's save is already specified and it saves something else.** `spec/console.md`: *`/save
+<file>` writes the history of the current game to a file, which `run` can then execute.* **A
+replay, not a snapshot** - and `crates/game-front/src/console.rs` says why in its own words: *a
+file cannot record a state the rules would not have produced.*
+
+**So three of boardgame's seven lines do not apply.** There is nothing to serialize - the history
+is already text - so no RON, no `encode`/`decode`, and **no `reconcile`**: replaying against the
+current rules is what reconciling is for.
+
+**And the seam is already cut where boardgame fills it.** `console.rs`'s `saved()`: *what is done
+with the text is the shell's business: a desktop writes a file, and a page has no filesystem to
+write one to.* **That sentence is the hole `persistence.rs` plugs**, and it is the reason the fit
+is good.
+
+**What transfers is the rest**: the cfg'd two-backend module behind one call, `ProjectDirs`
+natively and `localStorage` on the web, one key serving as both, the write-only-if-changed split
+for an autosave loop, and failing to a fresh game rather than crashing.
+
+## Four things nothing decides yet, and none is urgent
+
+**Not filed as a question**, because save/load is in no release and a question with no reader
+costs attention for nothing. **They are what a proposal will have to answer** when it is.
+
+- **Does the game persist across launches by itself?** boardgame's does. Ours saves only when
+  `/save` is typed, and nothing reloads on start
+- **What does `/save <file>` mean on the web?** There is no file. A key, a download, or a
+  different verb - and `spec/console.md` names a file explicitly
+- **A replay can stop partway.** boardgame's analogous failure is a save the new code cannot
+  parse, answered by falling back to fresh. **Ours is a history whose fifth command the current
+  rules now refuse** - and a half-replayed game is a worse outcome than a refused one
+- **`/new` already abandons a game.** That may be the *Start Over* button, or may not, since it
+  chooses a planet size rather than resetting
+
+**Nothing in `crates/` serializes anything today** - no `serde`, no `ron` in any manifest - and
+under the history design nothing needs to.
