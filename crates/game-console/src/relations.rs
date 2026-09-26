@@ -310,6 +310,14 @@ mod tests {
                     .unwrap_or_else(|| panic!("{at} declares `{name}` and this reader lost it"));
                 // **Compared per relation rather than in total**, so one relation gaining rows
                 // while another loses them cannot cancel out.
+                //
+                // **`found` spans both files and `rows` is one file's**, which is exact only
+                // because no relation appears in both - thirteen in `rules.4x`, thirteen in
+                // `schema.4x`, twenty-six distinct. **A relation that ever spanned them would
+                // compare all of this reader's rows against one file's** and fail on the count
+                // below, loudly and with both numbers, rather than passing over the difference.
+                // Reported by the quality lens; left as a sentence because the failure is the
+                // right one.
                 assert_eq!(
                     mine.rows.len(),
                     rows.len(),
