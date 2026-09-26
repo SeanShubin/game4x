@@ -4662,3 +4662,54 @@ adding a mark to it would be a state change and saving would be a transition aft
 **`spec/invariants.md` says the history is *a complete account of* the state rather than part of
 it** - *a game's history is a complete account of it, including what its rules were*. So a mark in
 the account changes no state, and the argument that saving names no recipe survives.
+
+## Said 2026-09-26: everything that holds is a bin - and `spec/` says container
+
+**Sean, stating his understanding to narrow `P-568`:**
+
+```
+a territory has a bin that can hold a certain number of extractors
+a vehicle has a bin that can hold a certain amount of energy
+a transport has 2 bins - one for the energy it uses as fuel, one for what it transports
+things that don't have bins are in disorder and clear at end of turn
+```
+
+**Three of the four are already in `spec/` and the fourth is nearly his words.**
+`spec/resources.md`: ***Order is being in a container**; disorder is lying loose where it was
+made*, and *what is still in disorder when a turn ends returns to its source. What a container
+holds stays.* `spec/logistics.md` carries the containment tree and the three-way capacity
+declaration.
+
+## The word is overloaded and that is the whole confusion
+
+**`bin` is a kind in the data - a thing `build-bin` makes - and *container* is the general
+concept.** His four sentences are true of containers; the data's containers are not all bins:
+
+```
+{capacity of:place    for:bin       what:metal    per:place} -> 2   a place holds bins
+{capacity of:deposit  for:extractor what:food     per:place} -> 1   a DEPOSIT holds extractors
+{capacity of:bin      for:resource  what:resource per:place} -> 10  a bin holds resources
+{capacity of:ark      for:energy    what:energy   per:place} -> 1   an ARK holds energy
+```
+
+**So *a territory has a bin that holds extractors* is a deposit in the data, and *a vehicle has a
+bin for energy* is the ark declaring directly.** No intermediate thing exists.
+
+## The one question that actually narrows `P-568`
+
+**Is a bin a thing, or a way of speaking?**
+
+- **A way of speaking** - *bin* means *whatever declares a capacity*, and the ark's fuel bin is
+  the ark's own row. **Nothing in the data changes**, and `B1`'s marker problem stands as filed
+- **A thing** - an ark contains a bin which contains energy, and a transport contains two.
+  **Then containers are things and a kind that is a container is knowable**, which dissolves the
+  marker problem - `B1` needs nothing new
+
+**And *a thing* collides with a rule already written.** `spec/logistics.md`: *a thing that
+contains things takes up capacity in whatever contains it.* An ark's fuel bin would then take a
+bin slot in the place it stands in, competing with the metal bins - which is almost certainly not
+meant. **Not filed as an objection**: it is what the second reading costs, and it may be worth
+paying or may mean the first reading is his.
+
+**This lane is not guessing which he means.** The two readings differ in whether the game gains an
+entity, and that is the largest thing anyone has proposed to the model this week.
