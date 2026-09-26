@@ -69,6 +69,54 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-195 - position-based names make Sean's next edit report 33 false orphans
+
+**to** code · **status** open · **raised** 2026-09-26 · **source** Sean naming the edit he wants next, and this lane simulating it against the naming scheme
+
+**Sean, 2026-09-26**: *right now I want to change the regression test to move the ark once before
+deploying... I should clearly see why the regression test failed to check whether the new behavior
+indeed is what i wanted.*
+
+**Simulated against `scenario/regression/` as it stands: inserting one `{move}` at position 2
+renames 33 of the 34 files.** `02-deploy.4x` becomes `03-deploy.4x`, and so on to
+`34-end-turn.4x` becoming `35-end-turn.4x`.
+
+## The check does not merely go noisy, it reports the wrong thing
+
+**`tests/regression.rs` computes orphans as `found.difference(&wanted)`.** After the insertion,
+33 files are in `found` and not in `wanted`, so it fails with *33 file(s) in
+`scenario/regression/` are of commands the scenario no longer plays - delete them*.
+
+**That sentence is false.** Every one of those commands is still played; it has moved by one
+position. **And the message tells him to delete them**, which under `P-572` - promoted an hour
+ago - is the gesture that means *I accept what it does now*. **So the failure message instructs
+the reader to perform an approval.**
+
+**Your own comment predicted the rename and not this consequence**: *a renumbering does this too:
+the cases are named by position, so inserting a command at turn one renames every file after it.*
+**It is one step further than that** - the renames are read as removals.
+
+## What Sean asked for, which decides it
+
+**He wants to read the failure and see the behaviour that changed.** Two or three cases genuinely
+behave differently after an ark moves first; **thirty-three renames and a false orphan message is
+not that**, and the purpose he stated for the whole artifact is *when something changes I will
+know exactly what changed*.
+
+## A naming that survives insertion, offered rather than prescribed
+
+**Name by command and occurrence rather than by position** - `deploy-1`, `work-7`, `move-1`.
+Inserting a move before the deploy then renames **one** file: today's single `move` becomes
+`move-2`. **Measured over what is there**: work 13, toil 8, end-turn 5, deploy 2, and six commands
+appearing once.
+
+**What that costs is the reading order**, which position gave for free. If order matters for
+browsing, it can come from a generated index rather than from every filename - but that is your
+call and this lane is not designing it.
+
+**Not filed as a defect in what you built.** The scheme is correct for a scenario that only grows
+at the end, and nothing said otherwise until Sean named an insertion.
+
 ### S-194 - `P-563` landed the half in `spec/`, the gate is red, and the rest is yours
 
 **to** code · **status** acted · **raised** 2026-09-26 · **acted** 2026-09-26 · **cited** `c4de6e7` · **source** promoting `P-563`, whose instruction crosses the column boundary
