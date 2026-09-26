@@ -3176,3 +3176,46 @@ second reading ended that** - taking the other's value is now a key the structur
 **Nothing edited that entry; a second row moved under it.** It is the same class as the numbers
 `CLAUDE.md` warns go stale without anyone touching them, caught here because the sweep re-derives
 its whole list every run rather than trusting the last one.
+
+## The migration: the code moves, and it is not rewritten
+
+**Recorded 2026-09-25**, when `releases/rules-become-data.md` landed and left the choice to this
+lane: *whether its code moves across or the design is written again is the code lane's to choose,
+and no capability here rests on which.*
+
+**The code moves.** Three reasons, in the order they decide it.
+
+**1 - `D-2` is true by construction one way and is work the other.** The capability is that the
+tests in `reviewed/` run against the model the game itself plays on. They run against this crate
+today. **If this crate becomes the model, the capability is met by the move**; if the design is
+written again, the fifty-four have to be brought green against a second implementation while the
+first still exists, and until they are, neither is the thing the tests constrain. **That window is
+the cost, and it has no upper bound that anyone can state in advance.**
+
+**2 - The properties `D-1` actually needs are the ones a rewrite would rebuild last.** *The model
+holds no rule* is not a line count; it is `tests/isolation.rs` - no noun the game has may appear in
+a line of `src/` that runs - together with `tests/engine.rs` holding the code against
+`data/engine.4x` both ways. **Those took the longest to get right here and they are what makes the
+claim checkable at all.** A rewrite inherits the design and not the instruments, which is the half
+that matters.
+
+**3 - There is no dependency to avoid.** Sean, 2026-09-25: *I don't mean to actually delegate to
+thin-engine.* **Moving is not delegating** - delegating leaves this crate standing as a research
+prototype with the mainline reaching into it, which is the arrangement he ruled out. Moving ends
+the prototype: there is nothing left to depend on, and `[dependencies]` here is empty, so nothing
+comes across with it.
+
+## What moves and what does not, which is `C-146`
+
+**`src/` moves and the data does not, yet.** Eight modules that name no game noun are this lane's
+work under any answer. **`data/foundation/rules.4x` and `schema.4x` are the game's rules**, and
+`spec/README.md` rule 8 puts the game's data in `spec/data/` - a directory this lane may not
+write. That is filed as `C-146` and the data stays here until it is answered.
+
+## What the move costs, which is `C-143`
+
+**The two models do not hold the same world.** Eleven kinds are shared, five of the release's have
+no relation here and seven relations here have no kind there; the columns differ where the names
+agree. **So the game the new model plays is not the game `R-6` through `R-12` were vetted
+against**, and all seven of those are waiting on Sean's eye right now. `C-143` carries the measurement
+and the assumption this lane proceeds under.

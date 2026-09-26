@@ -61,6 +61,55 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-146 - If the rules are data, the data is the game's rules, and it is sitting in this lane's column
+
+**to** spec · **status** open · **raised** 2026-09-25 · **source** choosing where `rules.4x` lands
+before moving any code for `releases/rules-become-data.md`
+
+**derived from** state the game's data in several files in a directory of their own -
+`spec/README.md` rule 8
+
+**`D-1` is *a rule changes when I edit data, and not before*, and it does not say which data.**
+The ruleset the reviewed tests run against is
+`crates/thin-engine/data/foundation/rules.4x`, 703 lines, beside `schema.4x` at 911. **`crates/`
+is this lane's column**, and `CLAUDE.md` says the code lane writes it.
+
+**So carrying the design across as it stands would put the game's rules in the one column Sean
+does not author.** That is the opposite of what `D-1` is for: its vetted-when is *I change a
+recipe by editing a data file*, and a file in `crates/` is a file this lane may rewrite under
+him. **`spec/README.md` rule 8 already says where game data goes** - *state the game's data in
+several files in a directory of their own* - and that directory is `spec/data/`.
+
+**This was a research crate and the column was right for it.** Nothing depended on it and its
+data was a prototype's. It stops being right the moment the same rows are what the game plays on,
+which is what this release asks for.
+
+## The concrete case, so this is a decision about something rather than about tidiness
+
+**`territory` is `[id]` in `schema.4x` and the mainline's scenario writes `{territory id:1
+biome:grassland}`.** Giving the new model a biome is one column row and one reference row. **It
+is also a change to what the game's structure says**, which is `C-143`'s question arriving as a
+single line of data - and this lane cannot tell from `D-1` whether adding it is building the
+release or writing the specification.
+
+**The same question decides five more**: `yard` and `fertility` are release kinds the engine has
+no relation for, and `scout`, `transport` and `capacity` are engine relations the release has no
+kind for.
+
+## What this lane will do until it is answered, which is not nothing
+
+**It will move code and not rules.** The engine's `src/` is eight modules that name no game noun -
+`tests/isolation.rs` is what says so - and moving those is this lane's work under any answer.
+**The data is the part that changes hands**, so it stays where it is and is moved in one step
+once somebody has said where to.
+
+**And the assumption, stated rather than discovered**: `spec/data/` is where the ruleset ends up
+and the specification lane owns it, with `schema.4x` and `rules.4x` landing beside the eleven
+relations already there. **If that is right this item is a work order for that lane rather than a
+question**, and the answer is a place rather than an argument.
+
+---
+
 ### C-145 - Two numbers in items open right now cannot be reproduced at the bytes they were measured on
 
 **to** spec · **status** open · **raised** 2026-09-25 · **source** re-deriving what arrived
@@ -172,8 +221,54 @@ whether he reads them first.
 **`R-8` is the case that is not about recipes, and it is the one still intact.** Its evidence is
 *no two of the sixteen kinds behave alike, over 120 pairs*, and `reports/catalog.md` says exactly
 that today - **re-derived rather than assumed**, because `spec/data/kinds.4x` declares twenty and
-the two numbers are about different populations. **What it rests on is the same release tables**,
-so it moves with the rest.
+the two numbers are about different populations: four of the twenty are the vocabulary a file of
+kinds needs before it can use any of them, and sixteen are the game's. **What it rests on is the
+same release tables**, so it moves with the rest.
+
+## The sharper measurement, and it is about the world rather than the recipes
+
+**The recipe names were where this lane looked first and they are the weaker half.** The two
+models do not hold the same world, which a comparison of `spec/data/kinds.4x` against the state
+relations `schema.4x` declares says exactly:
+
+```
+shared, 11   adjacency ark citizen deposit energy extractor food labor metal
+             pioneer territory
+release, 5   fertility game orbit store yard
+engine, 7    bin capacity consumes place provides scout transport
+```
+
+**Two of the five are renames and one of them generalises.** `store` is the engine's `bin`, and
+`orbit` is the engine's `place`, which carries a `layer` and so says surface and orbit with one
+relation instead of two. **Two are cuts already made**: `scenario/expected/play.4x` still writes
+`{garrison} -> 1` and `{nature met:0} -> 1` thirteen times, and `P-541` made force, garrison and
+nature a future plan - so there the mainline is what is stale and the engine is already right.
+**`yard`, `fertility` and `game` have no counterpart at all**, and `scout` and `transport` are
+kinds the engine has that the release does not.
+
+**And the columns differ where the names agree.** `territory` is `[id]` in the engine and
+`[id, biome]` in the scenario; `deposit` is `[where, what, density, quantity]` against
+`[density, resource, capacity, occupied, free]`, because the engine states capacity as its own
+relation; `citizen` carries `hungry` where the scenario writes `paid`; `ark` carries `gathering`
+where the scenario writes `working`.
+
+## What this lane cannot do about it, which is the part that decides the order
+
+**The code lane may not write a test into `spec/tests/`.** That directory is the specification's
+and `reviewed/` is Sean's, and `spec/README.md` rule 3 makes a test the thing that decides what
+the game does. **So the ruleset cannot be grown from here.** A kind the engine lacks and the
+release has - `yard`, `fertility` - reaches the new model only by a test being written and read,
+which is two lanes' work and neither of them is this one.
+
+**The assumption this lane will proceed under, stated so it is on the record rather than
+discovered later**: the reviewed tests are the game's ruleset, and what the release states
+without a test behind it is unbuilt in the new model rather than deleted from the game.
+**Under that assumption the migration makes the game smaller before it makes it bigger**, and
+`yard` and `fertility` are the two kinds that go quiet.
+
+**If that is wrong, the order is different and this lane should be told**, because the work it
+implies is to grow the ruleset first and move second, which is the opposite way round.
+
 
 **What this lane is not doing.** It is not deciding the order. Building `D-1` at all moves these
 seven, and whether Sean reads them first is his call and not a scheduling detail to be settled by
