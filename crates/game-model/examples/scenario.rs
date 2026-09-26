@@ -455,3 +455,105 @@ pub fn state_relations(game: &Game) -> BTreeSet<String> {
         .filter_map(|it| named.get(it).cloned())
         .collect()
 }
+
+/// Where the per-command regression expectations live.
+///
+/// **A directory of their own**, because Sean, 2026-09-27: *organized in a way that allows me to
+/// browse them without clutter of other files.*
+pub fn regression_at() -> PathBuf {
+    root().join("scenario").join("regression")
+}
+
+/// One generated test per command of the main scenario: the world before, the command, the world
+/// after.
+///
+/// # Why one per command rather than one file
+///
+/// **Sean, 2026-09-27**: *for every single command, I want a generated given/when/then test that
+/// focuses in that single command... This is an excessive amount of detail, but I won't be looking
+/// at all of them, when something changes I will know exactly what changed.*
+///
+/// **So the unit is the command and the diff is the point.** A rule that changes what `work` does
+/// moves every `work` case and nothing else; a rule that changes the first turn moves everything
+/// after it, which is the truth about the change rather than noise.
+///
+/// # The shape is the one the reviewed tests use
+///
+/// **`{given}`, `{when}`, `{then}`**, in the friendly form, so a case reads like the tests Sean has
+/// already approved - and `{given}` is the whole world rather than only what the command touches,
+/// which is what makes each case a world that could be run on its own.
+///
+/// **State rows only.** The ruleset is in the same store as the world, and a case carrying eighty
+/// `{binding ...}` rows is one nobody can read. `{state relation:N}` says which relations a world is
+/// made of.
+pub fn regression_cases() -> Vec<(String, String)> {
+    let mut game = opening().0;
+    let (_, history, refused) = watched();
+    assert_eq!(
+        refused, None,
+        "the scenario is refused, so there is nothing to record"
+    );
+
+    let mut out = Vec::new();
+    for (at, (turn, effect)) in history.iter().enumerate() {
+        let command = friendly_command(&game, &effect.command);
+        let after_game = fire(&game, &effect.command, 1)
+            .map(|(next, _)| next)
+            .unwrap_or_else(|why| panic!("command {}: {why:?}", at + 1));
+
+        // **What this command took and what it made, and nothing else.** The whole world was the
+        // first shape and it cascaded: one density changed from six to seven and **all thirty-four
+        // files moved**, because every later case carried a `{given}` it had merely inherited.
+        // Sean, 2026-09-27: *when something changes I will know exactly what changed* - and
+        // thirty-four files is not knowing.
+        let names = Names::of(after_game.rows().rows());
+        let render = |rows: &[Row]| -> Vec<String> {
+            let mut out: Vec<String> = rows.iter().map(|it| names.row(it)).collect();
+            out.sort();
+            out
+        };
+        let before = render(&effect.took);
+        let after = render(&effect.made);
+
+        let name = format!("{:02}-{}", at + 1, effect.command.relation);
+        let mut text = String::new();
+        text.push_str(&format!(
+            "# Turn {turn}, command {} of {}: {command}\n",
+            at + 1,
+            history.len()
+        ));
+        text.push_str(
+            "#\n\
+             # **Generated. Do not edit.** `scripts/regression.sh`, from `scenario/main.4x`.\n\
+             # **Delete this file to accept what the scenario does now** - `docs/process.md`:\n\
+             # *absent expected data means I accept what it does now, so the test writes it, and\n\
+             # what I review is the diff in version control.*\n\
+             #\n\
+             # `{given}` is what the command took and `{then}` is what it made, which is the\n\
+             # engine's own account of it. **The whole world was the first shape and cascaded**:\n\
+             # one density changed from six to seven and all thirty-four files moved, because\n\
+             # every later case carried a world it had merely inherited.\n\
+             #\n\
+             # `scenario/played.md` is where the whole world at each turn's end is.\n\n",
+        );
+        text.push_str(&format!("{{test name:{name}}}\n\n"));
+        text.push_str("{given}\n");
+        for line in &before {
+            text.push_str(&format!("{line}\n"));
+        }
+        text.push_str(&format!("\n{{when}}\n{command}\n\n"));
+        text.push_str("{then}\n");
+        for line in &after {
+            text.push_str(&format!("{line}\n"));
+        }
+
+        out.push((format!("{name}.4x"), text));
+        game = after_game;
+    }
+    assert!(
+        out.len() > 10,
+        "only {} case(s), which is not the main scenario",
+        out.len()
+    );
+    out
+}

@@ -1,0 +1,26 @@
+# Turn 4, command 23 of 34: {work where:place-3 what:food}
+#
+# **Generated. Do not edit.** `scripts/regression.sh`, from `scenario/main.4x`.
+# **Delete this file to accept what the scenario does now** - `docs/process.md`:
+# *absent expected data means I accept what it does now, so the test writes it, and
+# what I review is the diff in version control.*
+#
+# `{given}` is what the command took and `{then}` is what it made, which is the
+# engine's own account of it. **The whole world was the first shape and cascaded**:
+# one density changed from six to seven and all thirty-four files moved, because
+# every later case carried a world it had merely inherited.
+#
+# `scenario/played.md` is where the whole world at each turn's end is.
+
+{test name:23-work}
+
+{given}
+{extractor where:place-3 what:food working:1} -> 1
+{labor where:place-3} -> 1
+
+{when}
+{work where:place-3 what:food}
+
+{then}
+{extractor where:place-3 what:food working:0} -> 1
+{food where:place-3} -> 6
