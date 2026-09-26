@@ -53,6 +53,12 @@ Add a file when a topic firms up. Add its row here first.
    **A test is stated in the friendly form, and the foundation form is a rendering of it.** The
    rendering is generated from `reviewed/` and never from `spec/tests/`, so that what the engine runs
    is derived from what has been read rather than compared with it.
+
+   **A test is written in `spec/tests/`, and a copy of it in `reviewed/` is the record that I have
+   read it.** The review application makes that copy and removes it, acting as me; nothing else
+   puts a file there. **So the two directories hold the same tests only while I have read every
+   one**, and a test nobody has read is in the first and not the second - which is what makes
+   generating from `reviewed/` mean something.
 4. **A document says what the game is, or it says what the game will be, and it says which.**
    What is built and asserted by a test is the specification. **What is wanted and unbuilt is a
    future plan** - kept, linked and findable, and not mistaken for a rule anything obeys today.

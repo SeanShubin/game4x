@@ -1,0 +1,703 @@
+# The rule: `move`, as inputs, clauses and bindings.
+#
+# **A clause says which relation and what to do with it; a binding says which column takes which
+# input.** They are two relations because a clause cannot carry `residency`'s columns - those
+# change with the relation it points at, and a relation's columns do not change.
+#
+# **`build-extractor` says nothing about capacity.** It removes a labor, removes a metal and adds
+# an extractor; that there must be a deposit with room for it is a fact about the world, stated
+# once in `schema.4x` and enforced wherever a world is checked. **A rule that cannot break it is
+# better than a rule that remembers not to** - and the next rule that makes an extractor is bound
+# by it without saying anything either.
+#
+# **`work` requires the deposit it reads from.** The density is a column of that row, so the
+# require clause and the reading clause are the same one seen twice - and a territory holding two
+# grades of one resource cannot arise, because the structure refuses it.
+#
+# **A command names what is moved, not which row.** Scouts are fungible, so `what` is the category
+# and `from` is what picks the row out of the three a category may have. **There is no `it`**: a
+# residency has no id to name, because it is keyed by its description.
+#
+# **`require` and `remove` are patterns; `add` is a whole row.** The adjacency clause names no id
+# because it asks whether *any* road runs that way. **The add clause names every column, and the
+# quantity is the one no caller supplies** - an input is typed as a relation and carries one of its
+# keys, so a plain number cannot be one. `{literal ...}` is where it comes from, which is what
+# `releases/first-release.md` does with a **Qty** written in the recipe.
+
+# **`move` binds places and adjacency joins territories, so the rule makes the join.** Two
+# `require place` clauses match the places named, and the adjacency clause takes its `from` and its
+# `to` by reading each one's `of` - which is `{reading ...}`, the same machinery `work` uses for a
+# deposit's density and `upkeep` for a parent's bearing. **Two sources feeding one pattern is what
+# `row_of` already does**, because it walks every reading on a clause rather than one.
+#
+# **The places are required before the adjacency, and the order is why.** A reading takes from the
+# row an earlier clause matched, and `matched` is filled in clause order during the `require` pass -
+# so a place named after the adjacency would be read before it had matched anything.
+#
+# **This is the join Sean chose.** 2026-09-20: *I don't want to be "stating adjacency between
+# places".* The alternative was an adjacency row per pair of places, which is three times the rows
+# and a `kind` column to keep the three kinds of move apart. **Rows in the world against readings in
+# the rule**, and the readings keep the graph one thing.
+
+# **The two places must share a layer, and that is what stops anything crossing.** Sean, 2026-09-20:
+# *for now I am thinking nothing will move between layers.* The `to` place takes its `layer` from
+# the `from` place's, so a surface and an orbit never match and a move between them is refused -
+# **by construction rather than by a rule saying no.**
+#
+# **It is the same move as the territory join one line up.** What would be an equality test is a
+# pattern: the value is read from the row the first clause matched and written into the second
+# clause's pattern, and a place that does not carry it is simply not found.
+#
+# **Crossing happens, but never as a move.** Deploying an ark takes it out of an orbit and puts what
+# it becomes on the surface; building one takes resources off the surface and puts an ark in orbit.
+# **Both are transformations rather than journeys**, and neither is this rule.
+
+{rule id:1 name:move}
+
+{input id:1 rule:1 seq:1 name:what of:26}
+{input id:2 rule:1 seq:2 name:from of:48}
+{input id:3 rule:1 seq:3 name:to of:48}
+
+{clause id:29 rule:1 seq:1 role:1 relation:48}
+{clause id:30 rule:1 seq:2 role:1 relation:48}
+{clause id:2 rule:1 seq:3 role:1 relation:15}
+{clause id:3 rule:1 seq:4 role:2 relation:26}
+{clause id:4 rule:1 seq:5 role:3 relation:26}
+
+{relation-of clause:3 input:1}
+{relation-of clause:4 input:1}
+
+{binding id:42 clause:29 column:134 input:2}
+{binding id:43 clause:30 column:134 input:3}
+
+{reading id:3 clause:2 column:42 of:29 takes:135}
+{reading id:4 clause:2 column:43 of:30 takes:135}
+{reading id:10 clause:30 column:136 of:29 takes:136}
+
+{binding id:5 clause:3 column:72 input:2}
+
+{binding id:7 clause:4 column:72 input:3}
+
+{literal id:13 clause:3 column:98 value:1}
+{literal id:2 clause:3 column:73 value:1}
+
+{literal id:14 clause:4 column:98 value:0}
+{literal id:1 clause:4 column:73 value:1}
+
+{rule id:2 name:build-extractor}
+
+{input id:4 rule:2 seq:1 name:where of:48}
+{input id:7 rule:2 seq:2 name:what of:27}
+
+{clause id:5 rule:2 seq:1 role:2 relation:29}
+{clause id:6 rule:2 seq:2 role:2 relation:30}
+{clause id:7 rule:2 seq:3 role:3 relation:19}
+
+{binding id:9 clause:5 column:78 input:4}
+{binding id:10 clause:6 column:80 input:4}
+
+{binding id:11 clause:7 column:55 input:4}
+{binding id:12 clause:7 column:56 input:7}
+
+{literal id:4 clause:5 column:79 value:1}
+{literal id:6 clause:6 column:81 value:1}
+{literal id:15 clause:7 column:101 value:1}
+{literal id:8 clause:7 column:57 value:1}
+
+{rule id:3 name:work}
+
+{input id:8 rule:3 seq:1 name:where of:48}
+{input id:9 rule:3 seq:2 name:what of:27}
+
+{clause id:10 rule:3 seq:1 role:1 relation:18}
+{clause id:13 rule:3 seq:2 role:2 relation:19}
+{clause id:11 rule:3 seq:3 role:2 relation:29}
+{clause id:14 rule:3 seq:4 role:3 relation:19}
+{clause id:12 rule:3 seq:5 role:3 relation:27}
+
+{relation-of clause:12 input:9}
+
+{binding id:17 clause:10 column:51 input:8}
+{binding id:18 clause:10 column:52 input:9}
+
+{binding id:26 clause:13 column:55 input:8}
+{binding id:27 clause:13 column:56 input:9}
+
+{binding id:19 clause:11 column:78 input:8}
+
+{binding id:28 clause:14 column:55 input:8}
+{binding id:29 clause:14 column:56 input:9}
+
+{binding id:21 clause:12 column:74 input:8}
+
+{literal id:16 clause:13 column:101 value:1}
+{literal id:17 clause:13 column:57 value:1}
+{literal id:11 clause:11 column:79 value:1}
+{literal id:18 clause:14 column:101 value:0}
+{literal id:19 clause:14 column:57 value:1}
+
+{reading id:1 clause:12 column:75 of:10 takes:53}
+
+# **One `refresh`, because the trait it restores is an argument rather than part of its name.**
+# Sean, 2026-09-18: *I don't like that I have a separate refresh command for each resource, I feel
+# like this should be parameterized somehow.* There were two rules, identical but for which column
+# they assigned, and the column was the only thing telling them apart.
+#
+# **`what` is typed as a relation and not as a family**, which is what lets one rule reach a kind
+# and a family alike: `{refresh what:scout trait:moving}` denotes one relation, and
+# `{refresh what:unit trait:moving}` denotes every member of that family. **The type cannot narrow
+# this to the kinds that carry the trait**, because an input's type is fixed and which kinds carry
+# a trait depends on the other argument - so the pairing is refused when fired rather than when
+# declared, and `offered` shows only the pairs that would work.
+#
+# **`{assigns ... input:trait ...}` names an input where it named a column.** The trait's name is
+# the column's name, so nothing else has to say which column: `moving` restores `scout.moving`
+# and `extractor.moving` does not exist, which is the refusal rather than a lookup that fails
+# quietly.
+
+# **`refresh` has no `where`, because time does not visit one place.** It had one while it was a
+# player's command; as a step of ending a turn it restores every count there is, and the pattern
+# its `put` matches names no place at all. **Checked against the tests rather than assumed** - the
+# four that refresh have one territory or one scout between them, so none of them could tell a
+# per-place refresh from this one, and none ever needed to.
+
+# **Ending a turn is the composite, and refresh is its whole body so far.** `spec/turn.md` has five
+# steps - upkeep, then growth or starvation, then what expires, then what nature reclaims, and
+# *time restores every count to the number that thing's kind declares* last. **Only the last is
+# built**, and the other four are rules this order has room for rather than something this rule
+# will grow clauses to do.
+#
+# **It takes no arguments**, so its parts supply constants and nothing is passed down from a parent
+# to a child. That is the smallest thing that works; a part that needed its parent's argument would
+# be a second kind of `{argument ...}`, and nothing needs one yet.
+
+{rule id:4 name:refresh}
+
+{input id:11 rule:4 seq:1 name:what of:1}
+{input id:12 rule:4 seq:2 name:trait of:38}
+
+{clause id:15 rule:4 seq:1 role:4 relation:26}
+
+{relation-of clause:15 input:11}
+
+{assigns id:1 clause:15 input:12 value:1}
+
+{rule id:5 name:end-turn}
+
+# **Every part is one of `spec/turn.md`'s steps, in its order** - upkeep is paid, then a population
+# grows on surplus food or starves for want of it, then what expires and what was not kept is lost,
+# then what nature reclaims, and time restoring the counts last. **Only what nature reclaims is
+# missing**, and `tree.txt` is where the order can be read.
+#
+# **`upkeep` and `perish` sat under a composite called `adjust-population` for a day**, and it was
+# the wrong pair to group. Of its two parts one did not adjust the population - `upkeep` removes a
+# citizen and adds a citizen - and the other only ever shrank it, so the name promised a symmetry
+# that had no second half. Sean, 2026-09-20: *adjust-population is too vague, how is it adjusting
+# population?*
+#
+# **And the grouping cut across the document it was meant to follow.** Eating is step one and
+# starving is step two, *with* breeding - so `perish` belongs beside `breed` and not beside
+# `upkeep`. **The grouping comes back as `grow-or-starve` when `breed` gives it a second part**;
+# until then it would be a composite of one, which is two rows nothing distinguishes.
+#
+# **Hunger is restored like every other count**, by the same `refresh` the scouts and the
+# extractors use. It is one rule over a trait, so a third pairing costs two argument rows and no
+# vocabulary at all - which is what parameterising it bought.
+
+{part id:4 of:5 is:8 seq:1}
+{part id:6 of:5 is:9 seq:2}
+{part id:7 of:5 is:10 seq:3}
+{part id:3 of:5 is:7 seq:4}
+{part id:1 of:5 is:4 seq:5}
+{part id:2 of:5 is:4 seq:6}
+{part id:5 of:5 is:4 seq:7}
+{part id:8 of:5 is:4 seq:8}
+{part id:9 of:5 is:4 seq:9}
+{part id:10 of:5 is:4 seq:10}
+
+{argument id:1 part:1 input:11 value:26}
+{argument id:2 part:1 input:12 value:1}
+{argument id:3 part:2 input:11 value:19}
+{argument id:4 part:2 input:12 value:2}
+{argument id:5 part:5 input:11 value:47}
+{argument id:6 part:5 input:12 value:3}
+{argument id:7 part:8 input:11 value:47}
+{argument id:8 part:8 input:12 value:4}
+{argument id:9 part:9 input:11 value:47}
+{argument id:10 part:9 input:12 value:5}
+{argument id:11 part:10 input:11 value:51}
+{argument id:12 part:10 input:12 value:6}
+
+# **`build-bin` says nothing about how many will fit**, the same way `build-extractor` says
+# nothing about deposits. That a territory has room for only so many is a fact about the world,
+# stated once in `schema.4x` and enforced wherever a world is checked - so a rule that cannot
+# break it is better than a rule that remembers not to.
+
+{rule id:6 name:build-bin}
+
+{input id:13 rule:6 seq:1 name:where of:48}
+{input id:14 rule:6 seq:2 name:what of:27}
+
+{clause id:17 rule:6 seq:1 role:2 relation:29}
+{clause id:18 rule:6 seq:2 role:2 relation:30}
+{clause id:19 rule:6 seq:3 role:3 relation:42}
+
+{binding id:30 clause:17 column:78 input:13}
+{binding id:31 clause:18 column:80 input:13}
+
+{binding id:32 clause:19 column:118 input:13}
+{binding id:33 clause:19 column:119 input:14}
+
+{literal id:20 clause:17 column:79 value:1}
+{literal id:21 clause:18 column:81 value:1}
+{literal id:22 clause:19 column:120 value:1}
+
+# **`discard-disorder` is `spec/turn.md`'s third step**: *what expires expires, and what was not
+# kept in order is lost*. **It comes after the population is adjusted and before the refreshes**,
+# which is the order that document states - upkeep, then growth, then this, then what nature
+# reclaims, and time restoring the counts last.
+#
+# **It was called `discard-disorder`, which was that sentence**, and a rule's name being its
+# own citation is worth something. **It cost more than it bought**: the turn's other steps are
+# verbs - `upkeep`, `perish`, `refresh` - and this was the one clause, and by
+# some way the longest thing a player reads in `tree.txt`. Sean, 2026-09-19, naming the concept it
+# takes its name from instead: *everything over capacity is in disorder. There will be an end turn
+# mechanic that discards everything in disorder.* **The sentence it was named for is right here**,
+# one line up, which is where the citation lives now.
+# **It takes no argument, and the sweep is what said so.** It had a `what`, and
+# `{relation-of clause:clause-20 input:what}` to read it - but the clause already declares
+# `relation:resource`, and `resource` is the only loose family, so the argument could only ever be
+# what the clause already said. **Deleting the `relation-of` row broke nothing**, which is the
+# sweep reporting decoration rather than a rule.
+#
+# **So the input, the `relation-of` and the argument are all gone**, and the rule says what it does.
+# If a second family is ever loose, the argument comes back - and then it will be doing something.
+
+# **It takes no argument, and names the family of everything that may lie loose.** Sean, 2026-09-20:
+# *always discard whatever is in disorder, so no need to specify `what:resource`.* The clause names
+# `stock`, `relations_of` expands it to its members, and the turn fires this once.
+#
+# **The argument came back for a day and is gone again**, and the day was worth it: it showed that
+# the set had two statements - this rule's parts, and `{loose ...}` - with nothing making them
+# agree. **One family is the fix, and the clause naming it is what makes it one.**
+#
+# **Its one clause has the role `keep`**, which bounds a quantity to the room there is for it. That
+# is the fifth role and the first that reads a capacity: `require` and `remove` match, `add` makes,
+# `put` assigns, and this one takes away what will not fit.
+
+{rule id:7 name:discard-disorder}
+
+{clause id:20 rule:7 seq:1 role:5 relation:49}
+
+# **`upkeep` is `spec/turn.md`'s first step**: *upkeep is paid*. One citizen eats one food and is
+# no longer hungry, and it repeats - so as many eat as there is food for, and nothing anywhere
+# computes a minimum. Sean, 2026-09-19, on the loop he intends: *each citizen cosumes 1 food or
+# perishes*.
+#
+# **It is scoped per territory**, which is what joins the citizen to the food. Without it the
+# clause would name no place, match a citizen in every territory at once, and be refused for not
+# having said which - `Refused::NotOneToTake`.
+#
+# **Both clauses name every trait they mean.** `hungry:1` is what makes one of the two citizen rows
+# in a place the one meant, and it is why nothing here has to choose.
+
+# **Its `add` reads the parent's `bearing` rather than stating one.** A citizen carries two traits
+# now, and an `add` must name every column - so eating has to say what the fed citizen's `bearing`
+# is. **Writing `1` would be right only because the turn restores it last**, and would quietly hand
+# a free breeding to any citizen that ate with its bearing already spent.
+#
+# **So a `require` goes first, to be read from.** It is the shape `work` already uses to produce
+# *the density here* rather than a number somebody typed, and it puts the coupling where it can
+# fail loudly: two citizen rows differing in `bearing` make the reading ambiguous, and `NotOne`
+# says so instead of the engine picking one.
+
+{rule id:8 name:upkeep}
+
+{input id:15 rule:8 seq:1 name:where of:48}
+
+{scope rule:8 input:15}
+{repeats rule:8}
+
+{clause id:28 rule:8 seq:1 role:1 relation:47}
+{clause id:21 rule:8 seq:2 role:2 relation:47}
+{clause id:22 rule:8 seq:3 role:2 relation:31}
+{clause id:23 rule:8 seq:4 role:3 relation:47}
+
+{binding id:41 clause:28 column:130 input:15}
+{binding id:34 clause:21 column:130 input:15}
+{binding id:35 clause:22 column:82 input:15}
+{binding id:36 clause:23 column:130 input:15}
+
+{literal id:36 clause:28 column:131 value:1}
+{literal id:23 clause:21 column:131 value:1}
+{literal id:24 clause:21 column:132 value:1}
+{literal id:25 clause:22 column:83 value:1}
+{literal id:26 clause:23 column:131 value:0}
+{literal id:27 clause:23 column:132 value:1}
+
+{reading id:2 clause:23 column:133 of:28 takes:133}
+{reading id:7 clause:23 column:137 of:28 takes:137}
+
+# **`perish` is the consequence `hungry` does not carry.** A trait says what a thing may do; what
+# happens to a thing that did not is a step of the turn, with a name a player can read.
+#
+# **It takes the row rather than one of them**, which is what a `remove` clause naming no quantity
+# means: everyone still hungry after upkeep goes at once. **So its repetition fires once and then
+# runs out**, and that is not what the repetition is for.
+#
+# **It repeats because *as many times as it can* is zero**, and a turn has to end in a world with
+# no citizens in it. A bare `remove` refuses when nothing matches, which is right for a player's
+# command and wrong for a step the turn fires whatever the world holds.
+#
+# **So every step of the turn is a no-op when there is nothing to do**, by one of three routes -
+# `put` assigns nothing, `keep` finds nothing over, and a repetition fires zero times.
+#
+# **The quantity it used to name was decoration and the sweep said so.** With `repeats` the rule
+# reaches the same world one at a time or all at once, so `{literal ... column:132 value:1}` could
+# be deleted and nothing failed.
+
+{rule id:9 name:perish}
+
+{input id:16 rule:9 seq:1 name:where of:48}
+
+{scope rule:9 input:16}
+{repeats rule:9}
+
+{clause id:24 rule:9 seq:1 role:2 relation:47}
+
+{binding id:37 clause:24 column:130 input:16}
+
+{literal id:28 clause:24 column:131 value:1}
+
+# **`upkeep` before `perish` is where the order lives**, and it is the first time `part.seq` has
+# carried an answer rather than a tidy arrangement. **Swap the two and everyone dies** - perish
+# fired first finds every citizen hungry and the food goes untouched - which is what
+# `the-hungry-perish-after-upkeep-and-not-before` asserts.
+#
+# **`breed` goes beside `perish` and is not built.** `backlog.md` carries it: a citizen that is not
+# hungry and has a `bearing` makes another. It is the half of `spec/turn.md`'s second step that
+# grows where `perish` shrinks, and keeping it out is what keeps this increment's tests about
+# hunger.
+
+# **`breed` is `spec/turn.md`'s second step, the half that grows**: *a population grows on surplus
+# food or starves for want of it.* `perish` is the other half, and the two are neighbours in the
+# turn because the document puts them in one step.
+#
+# **Excess is a position in the order and not a comparison.** Whatever food is standing when this
+# runs is by construction the surplus - `upkeep` has already taken what the citizens owed - so
+# nothing anywhere subtracts, and nothing asks whether there is more food than citizens.
+#
+# **The parent is consumed and returns as one of two.** That is what spends its `bearing` without a
+# `put` beside a `remove`, and it is why no citizen breeds twice in a turn. Sean, 2026-09-19, on
+# the loop: *each remaining (citizen, food) produces an additional citizen.*
+#
+# **So the increase is the smaller of the food to spare and the citizens that can bear**, and
+# nothing computes a minimum: it repeats until one of the two clauses stops matching. Three
+# citizens and ten food give six; three and five give five; three and two give two, because one
+# starved and none bred.
+
+# **A newborn arrives able to work and to bear**, which is the rule everything made follows -
+# Sean, 2026-09-20: *Generally i want things created with full capability.* **Breeding does not run
+# away on it**, because `repeats` holds what a firing made aside and the next firing never sees it;
+# `breeding-does-not-reach-the-citizens-it-just-made` is what says so, and it says it by the food it
+# did not eat rather than by a `bearing` of nought.
+#
+# **`toil` is the turn's second part
+# and breeding is its fifth, so a citizen born here contributes no labour this turn whatever its
+# `laboring` says - and `refresh` sets it at the turn's end regardless. **So the value is only ever
+# read when `breed` is fired on its own**, and `laboring:1` is the honest one: it has not worked,
+# rather than having already done so.
+
+{rule id:10 name:breed}
+
+{input id:17 rule:10 seq:1 name:where of:48}
+
+{scope rule:10 input:17}
+{repeats rule:10}
+
+{clause id:25 rule:10 seq:1 role:2 relation:47}
+{clause id:26 rule:10 seq:2 role:2 relation:31}
+{clause id:27 rule:10 seq:3 role:3 relation:47}
+
+{binding id:38 clause:25 column:130 input:17}
+{binding id:39 clause:26 column:82 input:17}
+{binding id:40 clause:27 column:130 input:17}
+
+{literal id:29 clause:25 column:131 value:0}
+{literal id:30 clause:25 column:133 value:1}
+{literal id:31 clause:25 column:132 value:1}
+{literal id:32 clause:26 column:83 value:1}
+{literal id:33 clause:27 column:131 value:0}
+{literal id:34 clause:27 column:133 value:1}
+{literal id:48 clause:27 column:137 value:1}
+{literal id:35 clause:27 column:132 value:2}
+
+# **`toil` is a citizen spending its `laboring` to make a labour**, and it is `upkeep`'s mirror:
+# one takes a food and gives back a citizen that has eaten, this takes nothing and gives back a
+# citizen that has worked, plus the labour it made.
+#
+# **It is the player's and not the turn's.** Sean, 2026-09-20: *I was expecting citizens to generate
+# labor during a regular turn.* So it takes its place as an argument like every other command, and
+# it is a root of the tree rather than a step of `end-turn` - which is what makes working a choice
+# rather than something that happens to you.
+#
+# **One command works a whole place**, because it repeats: it fires once per citizen that still has
+# its `laboring`, and stops when none has. **A citizen produces one labour per turn**, which is the
+# `quantity:1` on the clause that makes it. Sean, 2026-09-20: *in the future I will want to be able
+# to change how much labor a single citizen can produce per turn* - and when that day comes the
+# number stops being a literal and becomes a rate, the way `{consumes kind:scout what:berth} -> 1`
+# already is. `backlog.md` carries it.
+#
+# **It reads the citizen it gives back, rather than stating one.** A citizen carries three traits,
+# and an `add` must name every column - so writing `hungry:1 bearing:1` would be right only because
+# the turn restores them last. The `require` is there to be read from, which is what `work` does
+# with a deposit's density and `upkeep` with a parent's bearing.
+
+{rule id:11 name:toil}
+
+{input id:18 rule:11 seq:1 name:where of:48}
+
+{repeats rule:11}
+
+{clause id:31 rule:11 seq:1 role:1 relation:47}
+{clause id:32 rule:11 seq:2 role:2 relation:47}
+{clause id:33 rule:11 seq:3 role:3 relation:47}
+{clause id:34 rule:11 seq:4 role:3 relation:29}
+
+{binding id:44 clause:31 column:130 input:18}
+{binding id:45 clause:32 column:130 input:18}
+{binding id:46 clause:33 column:130 input:18}
+{binding id:47 clause:34 column:78 input:18}
+
+{literal id:42 clause:31 column:137 value:1}
+{literal id:43 clause:32 column:137 value:1}
+{literal id:44 clause:32 column:132 value:1}
+{literal id:45 clause:33 column:137 value:0}
+{literal id:46 clause:33 column:132 value:1}
+{literal id:47 clause:34 column:79 value:1}
+
+{reading id:5 clause:33 column:131 of:31 takes:131}
+{reading id:6 clause:33 column:133 of:31 takes:133}
+
+# **It is `gather` and not `collect`, and `tests/isolation.rs` is why.** `collect` is a bare word
+# in `src/engine.rs` a dozen times over - it is how Rust ends an iterator - so *no game noun appears
+# in a line that runs* cannot hold for it. **This is `store` becoming `bin` again**, and the game
+# gives way for the same reason: the engine's use is structural and unavoidable, and the game has
+# another word. `gather` pairs with `gathering` as `work` pairs with `working`.
+#
+# **`gather` is an ark spending its `gathering` on the sun.** Sean, 2026-09-20: *ark can gather 1
+# energy from the sun each turn.* It is `toil` with the nouns changed - a thing spending a per-turn
+# allowance to make a resource - and the two may yet be one rule over a kind, a trait and a
+# resource, the way `refresh` is one rule over a kind and a trait.
+#
+# **The sun is not in the world and does not need to be.** `spec/invariants.md`: *a source is named,
+# and a named source is not a gain. A star's energy and a planet's material [are endless].* So
+# nothing is taken from anything: the ark spends what the turn gave it, and the energy arrives.
+#
+# **It is the player's, not the turn's**, which is the correction Sean made for labour and which
+# holds here for the same reason: *I was expecting citizens to generate labor during a regular
+# turn.* An ark nobody touches does not fuel itself.
+#
+# **One command gathers for every ark in the place**, because it repeats - once per ark that still
+# has its `gathering`, and stopping when none has.
+#
+# **It reads back the `moving` it was given.** An `add` must name every column, and writing
+# `moving:1` would hand a spent move back for free to an ark that had already crossed.
+
+# **It is shaped like `work`, and Sean said why.** 2026-09-20: *think of the sun as providing
+# unlimited capacity for extractors, and the ark as an extractor for solar energy; the ark can only
+# store 1 energy so excess is wasted, the sun may have a density higher than 1, also wasted because
+# the ark can't store it. An ark isn't an extractor, but it can do some things an extractor does.*
+#
+# **So the sun is a deposit of energy and the rule reads its density**, exactly as `work` reads a
+# deposit's. What an ark gathers is what the sun gives, and what it keeps is what it can hold -
+# those are two different numbers and the difference is wasted at the turn's end.
+#
+# **It does not repeat, and that is the other half of matching `work`.** A second command on a
+# spent ark is refused rather than quietly doing nothing, which is what makes *once a turn*
+# something a test can see: a no-op leaves no trace, and a refusal is a trace.
+#
+# **An ark is not an extractor.** `{capacity of:deposit for:extractor ...}` counts extractors
+# against deposits, and an ark counts against nothing - which is the *unlimited capacity for
+# extractors* the sun has, arriving by the ark not being one.
+
+{rule id:12 name:gather}
+
+{input id:19 rule:12 seq:1 name:where of:48}
+
+{clause id:39 rule:12 seq:1 role:1 relation:18}
+{clause id:35 rule:12 seq:2 role:1 relation:51}
+{clause id:36 rule:12 seq:3 role:2 relation:51}
+{clause id:37 rule:12 seq:4 role:3 relation:51}
+{clause id:38 rule:12 seq:5 role:3 relation:50}
+
+{binding id:52 clause:39 column:51 input:19}
+{binding id:48 clause:35 column:142 input:19}
+{binding id:49 clause:36 column:142 input:19}
+{binding id:50 clause:37 column:142 input:19}
+{binding id:51 clause:38 column:140 input:19}
+
+{literal id:49 clause:35 column:144 value:1}
+{literal id:50 clause:36 column:144 value:1}
+{literal id:51 clause:36 column:145 value:1}
+{literal id:52 clause:37 column:144 value:0}
+{literal id:53 clause:37 column:145 value:1}
+{literal id:55 clause:39 column:52 value:50}
+
+{reading id:8 clause:37 column:143 of:35 takes:143}
+{reading id:9 clause:38 column:141 of:39 takes:53}
+
+# **`launch` builds an ark and puts it in orbit, and that is one action.** Sean, 2026-09-20:
+# *building/launching an ark will be one action, removing the resources required to build an ark
+# from the surface and adding an ark to orbit.* **Nothing crosses between layers**, so this is not a
+# journey with two halves - it is a transformation whose inputs are on the ground and whose output
+# is above it.
+#
+# **The orbit is worked out and not named.** The player says which surface place is building, the
+# rule reads that place's territory, and the orbit above is the one place with that territory and
+# that layer - found by matching rather than chosen. `spec/console.md` has the phrase: **a place
+# worked out from another is not open.**
+#
+# **A labour to assemble it, a metal to build it, an energy to launch it.** Sean: *tuning is going
+# to be separate, for now I am making everything cheap.* Each is one, and each is taken from the
+# ground rather than from the sky.
+#
+# **Everything made arrives at full capability**, which is Sean's rule rather than this rule's.
+# Sean, 2026-09-20: *Generally i want things created with full capability.* So a built extractor may
+# be worked the turn it is built, a launched ark may move and gather, and a citizen off an ark or
+# out of a breeding may labour and bear.
+#
+# **`hungry` is the one that cannot say it that way**, and that is the whole of why a rename to
+# `fed` keeps coming up: a capacity at full is `1` and an obligation at full is `0`, so *everything
+# starts at one* is true of five columns and false of the sixth. **The polarity does not go away
+# under the other name**; it moves to the turn, which restores a capacity and imposes an obligation
+# with the one word `refresh`.
+#
+# **It names no kind, and one day it will.** Only an ark launches today; a second launchable kind
+# turns the rule's output into an argument, the way `discard-disorder` grew one the day a second
+# family lay loose.
+
+{rule id:13 name:launch}
+
+{input id:20 rule:13 seq:1 name:where of:48}
+
+{clause id:40 rule:13 seq:1 role:1 relation:48}
+{clause id:41 rule:13 seq:2 role:1 relation:48}
+{clause id:42 rule:13 seq:3 role:2 relation:29}
+{clause id:43 rule:13 seq:4 role:2 relation:30}
+{clause id:44 rule:13 seq:5 role:2 relation:50}
+{clause id:45 rule:13 seq:6 role:3 relation:51}
+
+{binding id:53 clause:40 column:134 input:20}
+{binding id:54 clause:42 column:78 input:20}
+{binding id:55 clause:43 column:80 input:20}
+{binding id:56 clause:44 column:140 input:20}
+
+{literal id:56 clause:40 column:136 value:surface}
+{literal id:57 clause:41 column:136 value:orbit}
+{literal id:58 clause:42 column:79 value:1}
+{literal id:59 clause:43 column:81 value:1}
+{literal id:60 clause:44 column:141 value:1}
+{literal id:61 clause:45 column:143 value:1}
+{literal id:62 clause:45 column:144 value:1}
+{literal id:63 clause:45 column:145 value:1}
+
+{reading id:11 clause:41 column:135 of:40 takes:135}
+{reading id:12 clause:45 column:142 of:41 takes:134}
+
+
+## What an ark becomes when it comes down
+
+# **Sean, 2026-09-20**, whole: *ark can deploy to the surface, which entails destruction of the ark,
+# along with creation of 1 metal extractor, 1 food extractor, and 2 citizens.*
+#
+# **The ark is spent before anything is made**, which is the clause order and is deliberate. Sean:
+# *it is legal to deploy an ark anywhere, individual rules may fail but the deployment succeeds.*
+# So a deployment onto barren ground still costs the ark, and
+# `a-deployment-with-nowhere-to-mine-still-costs-the-ark` is what says so.
+#
+# **The two extractors are soft and the two citizens are not.** An extractor stands in a deposit and
+# there may be none; nothing gives room for a citizen, so a citizen can never be short - **and it is
+# the absence of a capacity row that says that**, rather than anything written here.
+#
+# **The ground is found by matching, the same way `launch` finds the orbit.** An orbit names the
+# territory it belongs to, and the surface of that territory is the place whose `of` is the same -
+# so the equality is a pattern and never a comparison.
+#
+# **Nothing crosses a layer.** An ark in orbit is removed and what it becomes is added to the
+# ground; `nothing-moves-between-the-layers` is the rule that makes this a transformation rather
+# than a journey.
+
+{rule id:14 name:deploy}
+
+{input id:21 rule:14 seq:1 name:where of:48}
+{input id:22 rule:14 seq:2 name:what of:55}
+
+{relation-of clause:48 input:22}
+
+{clause id:46 rule:14 seq:1 role:1 relation:48}
+{clause id:47 rule:14 seq:2 role:1 relation:48}
+{clause id:48 rule:14 seq:3 role:2 relation:55}
+{clause id:49 rule:14 seq:4 role:3 relation:19}
+{clause id:50 rule:14 seq:5 role:3 relation:19}
+{clause id:51 rule:14 seq:6 role:3 relation:47}
+
+{soft clause:49}
+{soft clause:50}
+
+{binding id:57 clause:46 column:134 input:21}
+{binding id:58 clause:48 column:153 input:21}
+
+{literal id:65 clause:47 column:136 value:surface}
+{literal id:66 clause:48 column:154 value:1}
+{literal id:67 clause:49 column:56 value:30}
+{literal id:68 clause:49 column:101 value:1}
+{literal id:69 clause:49 column:57 value:1}
+{literal id:70 clause:50 column:56 value:31}
+{literal id:71 clause:50 column:101 value:1}
+{literal id:72 clause:50 column:57 value:1}
+{literal id:73 clause:51 column:131 value:0}
+{literal id:74 clause:51 column:133 value:1}
+{literal id:75 clause:51 column:137 value:1}
+{literal id:76 clause:51 column:132 value:2}
+
+{reading id:13 clause:47 column:135 of:46 takes:135}
+{reading id:14 clause:49 column:55 of:47 takes:134}
+{reading id:15 clause:50 column:55 of:47 takes:134}
+{reading id:16 clause:51 column:130 of:47 takes:134}
+
+
+## Building the thing that settles a second place
+
+# **The win condition needs two settlements and only one thing can make the second.** Sean,
+# 2026-09-20: *win condition is to deploy my ark to one space and launch an ark from a different
+# space.* An ark comes down once; a citizen is not a `unit`, so `move` cannot carry one. **A pioneer
+# is built, walks, and settles**, and that is the whole route to a second place.
+#
+# **It costs what everything costs here.** Sean: *Tuning is going to be separate, for now i am
+# making everything cheap.* A labour and a metal, the same as an extractor and the same as a bin.
+#
+# **And that makes it the strongest move in the game, which is worth saying rather than fixing.** A
+# pioneer yields two extractors and two citizens for what one extractor costs, so nothing would ever
+# build an extractor by hand. **This is the first place where *everything is cheap* produces a
+# dominant move rather than a fast one** - a fact about the numbers and not about the rules, and his
+# to price when tuning stops being separate.
+#
+# **It arrives able to move**, which is what everything made here does.
+
+{rule id:15 name:build-pioneer}
+
+{input id:23 rule:15 seq:1 name:where of:48}
+
+{clause id:52 rule:15 seq:1 role:2 relation:29}
+{clause id:53 rule:15 seq:2 role:2 relation:30}
+{clause id:54 rule:15 seq:3 role:3 relation:54}
+
+{binding id:59 clause:52 column:78 input:23}
+{binding id:60 clause:53 column:80 input:23}
+{binding id:61 clause:54 column:150 input:23}
+
+{literal id:77 clause:52 column:79 value:1}
+{literal id:78 clause:53 column:81 value:1}
+{literal id:79 clause:54 column:151 value:1}
+{literal id:80 clause:54 column:152 value:1}

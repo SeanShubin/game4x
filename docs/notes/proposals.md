@@ -69,6 +69,57 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-194 - `P-563` landed the half in `spec/`, the gate is red, and the rest is yours
+
+**to** code · **status** open · **raised** 2026-09-26 · **source** promoting `P-563`, whose instruction crosses the column boundary
+
+**Sean answered `H3` and promoted it.** The game's rules and kinds live in `spec/data/`; the
+engine's primitives stay in yours.
+
+**This lane did the part in its own column and stopped.** `spec/data/` now holds `rules.4x` and
+`schema.4x`, byte-identical to the copies in `crates/game-model/data/foundation/`, and the eleven
+files that were there - the rendering generated from `releases/first-release.md` - are deleted.
+
+## The gate is red and that is this promotion, not a defect
+
+**Eight test files read `spec/data/` and those files are gone.**
+
+```
+crates/game-console/tests/declare.rs      54 references
+crates/game-console/tests/vocabulary.rs   11
+crates/game-console/tests/browsable.rs     8
+crates/game-console/tests/closed_sets.rs   5
+crates/game-console/tests/petri.rs         4
+crates/game-console/tests/nogain.rs        2
+tools/outbox/tests/promotions.rs           4
+tools/outbox/tests/architecture.rs         1
+```
+
+**Compilation is not affected.** Every reference in any `src/` is a comment - no `include_str!` or
+`read_to_string` of `spec/data/` exists outside tests - so the build stands and the suite does not.
+
+**`hooks/pre-push` runs the suite, so pushing will fail until this is done.** Committing will not.
+
+## What is left, and all of it is in your column
+
+```
+crates/game-model/data/foundation/rules.4x    delete - it is in spec/data/ now
+crates/game-model/data/foundation/schema.4x   delete
+crates/game-model/src/foundation.rs           repoint two include_str! at spec/data/
+the eight test files above                    they test a generator D-4 deletes
+```
+
+**Most of those tests go rather than move.** They assert that `spec/data/` matches the tables in
+`releases/first-release.md`, and `D-4` deletes both sides of that comparison. **`declare.rs` is the
+generator's own test and the generator is what `D-4` removes.**
+
+## Why this lane did not simply do all of it
+
+**`crates/` is yours and `spec/` is this lane's, and the instruction crossed the line.** Doing the
+half in `spec/` and filing the half in `crates/` is the same shape as `C-147` in the other
+direction. **Sean knows the gate is red** - it was reported to him in the same breath as the
+promotion.
+
 ### S-193 - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against
 
 **to** code · **status** open · **raised** 2026-09-25 · **source** re-deriving both before accepting either, which is what each of them says to do
@@ -9145,6 +9196,9 @@ work the release exists to order.
 | P-561, `spec/combat.md` becomes a future plan, being four scaffolding prompts and no rule                                    | `spec/combat.md` -> `spec/future/combat.md`, and `spec/README.md`                                                                                                                                        | 2026-09-25 |
 | P-562, retire `R-6`, `R-7` and `R-8` unread, and a release finishes when every capability is vetted or retired               | `releases/first-release.md` -> Capabilities, and `releases/README.md` -> Vetting, and deletion                                                                                                           | 2026-09-26 |
 | P-564, `D-4` the old ruleset is gone not archived, and `D-5` I have watched the new game play through                        | `releases/rules-become-data.md` -> Capabilities                                                                                                                                                          | 2026-09-26 |
+| P-563, `H3` the game's rules and kinds move to `spec/data/`, and the engine's primitives stay                                | `spec/data/`, and `crates/game-model/data/foundation/` - the rest filed as `S-194`                                                                                                                       | 2026-09-26 |
+| P-565, a test is written in `spec/tests/` and a copy in `reviewed/` is the record it was read                                | `spec/README.md` rule 3                                                                                                                                                                                  | 2026-09-26 |
+| P-566, `D-5` asks for both territories developed rather than taken                                                           | `releases/rules-become-data.md` -> `D-5`                                                                                                                                                                 | 2026-09-26 |
 
 ## Forecast cleanups that were checked and not filed
 

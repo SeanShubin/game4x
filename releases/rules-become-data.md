@@ -66,9 +66,10 @@ across or is written again is the code lane's to choose, and no capability here 
 - **In** - `spec/scenarios.md`, *there is one main scenario, and it touches everything a typical
   game uses. It is the foundation, and it is vetted by hand*
 - **Vetted when** - a main scenario exists over the reviewed ruleset and I have watched it run:
-  a first territory taken, a second taken by land, and an Ark launched from the second. **Every
-  rule the reviewed tests describe fires at least once while it runs, measured by what fired
-  rather than by what the file says.** This is the observation `R-6` was retired without making
+  an Ark deploys, **that first territory is developed**, a second is taken by land and
+  **developed too**, and an Ark launches from the second. **Every rule the reviewed tests
+  describe fires at least once while it runs**, measured by what fired rather than by what the
+  file says. This is the observation `R-6` was retired without making
 
 ## Out of scope
 

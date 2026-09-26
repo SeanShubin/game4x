@@ -1,4 +1,0 @@
-{limit container:territory contained:yard n:1}
-{limit container:orbit contained:ark n:2}
-{limit container:territory contained:pioneer n:2}
-{limit container:store contained:resource n:10}

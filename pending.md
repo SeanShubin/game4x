@@ -8,9 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-563** - `H3`: the game's rules and kinds move to `spec/data/`, and the engine's primitives stay · `decide/proposals.md`
-- **P-566** - `D-5` says two territories are taken and you said both are developed · `decide/proposals.md`
-- **P-565** - rule 3 leans on the difference between `spec/tests/` and `reviewed/` without ever stating it · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -22,15 +19,15 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-563** - `cfc0edc` P-563 filed, and P-562 defines the switch it turns on · still open in `decide/proposals.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
 - **D-4** - `7c70094` P-564 gains D-5, because D-4 falsifies spec/scenarios.md without it · still open in `releases/rules-become-data.md`
 - **D-5** - `7c70094` P-564 gains D-5, because D-4 falsifies spec/scenarios.md without it · still open in `releases/rules-become-data.md`
 
 ## What is outstanding
 
-### To code (11)
+### To code (12)
 
+- **S-194** - `P-563` landed the half in `spec/`, the gate is red, and the rest is yours · `docs/notes/proposals.md`
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`
 - **S-192** - `prototypes/kinds/README.md` links to a `catalog.md` that is one directory further out · `docs/notes/proposals.md`
 - **S-187** - eight of your items open to this lane are about an encoding the mainline is dropping · `docs/notes/proposals.md`

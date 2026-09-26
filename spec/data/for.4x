@@ -1,6 +1,0 @@
-{for block:deploy-ark seq:4 kind:food}
-{for block:deploy-ark seq:5 kind:metal}
-{for block:found-by-land seq:3 kind:food}
-{for block:found-by-land seq:4 kind:metal}
-{for block:build-extractor seq:3 kind:$resource}
-{for block:build-store seq:3 kind:$resource}

@@ -1,0 +1,911 @@
+# The shared schema: every relation, its columns in order, and what points at what.
+#
+# **Every reference is to a single opaque integer id** - Sean, 2026-09-15: *I want the truth of the
+# data model to be fully normalized, which I believe means always referencing by ids, and a single
+# id at that.*
+#
+# **Sixteen relations are keyed by such an id and one is not.** `residency` carries a `quantity`
+# and is keyed by its description, `(what, where)` - Sean, 2026-09-15: *it would make no sense to
+# have both an id and a quantity in the same logical model.* **Nothing references a residency**,
+# which is what lets it do without one.
+#
+# **The ids mean nothing and are not meant to be read.** Making them legible is the user-facing
+# style's job, not this one's. What is legible here is the `name` column, which is decoration -
+# with two exceptions worth knowing: a row names its relation by `relation.name`, and a row's
+# values are keyed by `column.name`, so those two decorations are what the notation is written in.
+
+
+## Every relation, and its columns in order
+
+{relation id:1 name:relation}
+{relation id:2 name:column}
+{relation id:3 name:reference}
+{relation id:4 name:state}
+{relation id:5 name:role}
+{relation id:6 name:rule}
+{relation id:7 name:input}
+{relation id:8 name:clause}
+{relation id:9 name:binding}
+{relation id:12 name:primitive}
+{relation id:13 name:territory}
+{relation id:15 name:adjacency}
+{relation id:17 name:literal}
+{relation id:18 name:deposit}
+{relation id:19 name:extractor}
+{relation id:21 name:reading}
+{relation id:22 name:attribute}
+{relation id:23 name:relation-of}
+{relation id:24 name:family}
+{relation id:25 name:member}
+{relation id:26 name:unit}
+{relation id:27 name:resource}
+{relation id:28 name:scout}
+{relation id:29 name:labor}
+{relation id:30 name:metal}
+{relation id:31 name:food}
+{relation id:33 name:supply}
+{relation id:34 name:provides}
+{relation id:35 name:transport}
+{relation id:36 name:consumes}
+{relation id:37 name:assigns}
+{relation id:38 name:trait}
+{relation id:39 name:carries}
+{relation id:40 name:part}
+{relation id:41 name:argument}
+{relation id:42 name:bin}
+{relation id:43 name:capacity}
+{relation id:44 name:loose}
+
+
+## The columns
+
+{column id:1 relation:1 seq:1 name:id}
+{column id:2 relation:1 seq:2 name:name}
+{column id:3 relation:2 seq:1 name:id}
+{column id:4 relation:2 seq:2 name:relation}
+{column id:5 relation:2 seq:3 name:seq}
+{column id:6 relation:2 seq:4 name:name}
+{column id:7 relation:3 seq:1 name:id}
+{column id:8 relation:3 seq:2 name:column}
+{column id:9 relation:3 seq:3 name:to}
+{column id:10 relation:4 seq:1 name:id}
+{column id:11 relation:4 seq:2 name:relation}
+{column id:12 relation:5 seq:1 name:id}
+{column id:13 relation:5 seq:2 name:name}
+{column id:14 relation:6 seq:1 name:id}
+{column id:15 relation:6 seq:2 name:name}
+{column id:16 relation:7 seq:1 name:id}
+{column id:17 relation:7 seq:2 name:rule}
+{column id:18 relation:7 seq:3 name:seq}
+{column id:19 relation:7 seq:4 name:name}
+{column id:20 relation:7 seq:5 name:of}
+{column id:21 relation:8 seq:1 name:id}
+{column id:22 relation:8 seq:2 name:rule}
+{column id:23 relation:8 seq:3 name:seq}
+{column id:24 relation:8 seq:4 name:role}
+{column id:25 relation:8 seq:5 name:relation}
+{column id:26 relation:9 seq:1 name:id}
+{column id:27 relation:9 seq:2 name:clause}
+{column id:28 relation:9 seq:3 name:column}
+{column id:29 relation:9 seq:4 name:input}
+{column id:36 relation:12 seq:1 name:id}
+{column id:37 relation:12 seq:2 name:word}
+{column id:38 relation:13 seq:1 name:id}
+{column id:41 relation:15 seq:1 name:id}
+{column id:42 relation:15 seq:2 name:from}
+{column id:43 relation:15 seq:3 name:to}
+
+
+{column id:47 relation:17 seq:1 name:id}
+{column id:48 relation:17 seq:2 name:clause}
+{column id:49 relation:17 seq:3 name:column}
+{column id:50 relation:17 seq:4 name:value}
+
+{column id:51 relation:18 seq:1 name:where}
+{column id:52 relation:18 seq:2 name:what}
+{column id:53 relation:18 seq:3 name:density}
+{column id:54 relation:18 seq:4 name:quantity}
+{column id:55 relation:19 seq:1 name:where}
+{column id:56 relation:19 seq:2 name:what}
+{column id:101 relation:19 seq:3 name:working}
+{column id:57 relation:19 seq:4 name:quantity}
+
+{column id:60 relation:21 seq:1 name:id}
+{column id:61 relation:21 seq:2 name:clause}
+{column id:62 relation:21 seq:3 name:column}
+{column id:63 relation:21 seq:4 name:of}
+{column id:64 relation:21 seq:5 name:takes}
+
+{column id:65 relation:22 seq:1 name:column}
+{column id:66 relation:22 seq:2 name:relation}
+
+{column id:67 relation:23 seq:1 name:clause}
+{column id:68 relation:23 seq:2 name:input}
+{column id:69 relation:24 seq:1 name:relation}
+{column id:70 relation:25 seq:1 name:kind}
+{column id:71 relation:25 seq:2 name:family}
+
+
+## The families, and the kinds that belong to them
+#
+# **A family is an abstract relation: columns and no rows.** The columns are the shape its members
+# share, and `{member ...}` is the set - Sean, 2026-09-17, having considered an exists/not-exists
+# trait and a set of kinds and asking whether both were relevant: they are the same mechanism.
+# `spec/data/families.4x` writes it this way already, and `spec/data/for.4x` uses it for exactly
+# what it is for here: `{for block:build-extractor seq:3 kind:$resource}`.
+
+{column id:72 relation:26 seq:1 name:where}
+{column id:98 relation:26 seq:2 name:moving}
+{column id:73 relation:26 seq:3 name:quantity}
+{column id:74 relation:27 seq:1 name:where}
+{column id:75 relation:27 seq:2 name:quantity}
+
+
+## Every kind of thing, as a relation of its own
+#
+# **Sean, 2026-09-17**, looking at a deposit, an extractor and a labor in one territory: *I notice
+# that in territory-1, we have a deposit, an extractor, and a food. Yet the way we specify this is
+# different.* **It was: two of them had their kind in the schema and one had it in a column.** A
+# kind is a relation now, and `residency` and `thing` are both gone.
+#
+# **This is `spec/data/carries.4x` said in the notation** - a kind and the traits it carries is a
+# relation and its columns.
+
+{column id:76 relation:28 seq:1 name:where}
+{column id:99 relation:28 seq:2 name:moving}
+{column id:77 relation:28 seq:3 name:quantity}
+{column id:78 relation:29 seq:1 name:where}
+{column id:79 relation:29 seq:2 name:quantity}
+{column id:80 relation:30 seq:1 name:where}
+{column id:81 relation:30 seq:2 name:quantity}
+{column id:82 relation:31 seq:1 name:where}
+{column id:83 relation:31 seq:2 name:quantity}
+
+
+## How many times a thing may still act
+#
+# **Sean, 2026-09-17**, on an extractor that can be worked as often as there is labor for it:
+# *rediness is going to end up being a number of times we can do something rather than whether we
+# have done something.* **So it is a quantity, and a quantity is a relation's.**
+#
+# **An allowance is its own counted relation rather than a column on the thing.** A column would
+# have meant going from `working:3` to `working:2`, which is arithmetic on a named column and
+# something the engine cannot do; a quantity is arithmetic it already does, and running out is the
+# refusal it already gives. **What that gives up is which extractor was worked** - and two
+# extractors with one work each cannot be told from two extractors sharing two works by anything
+# the game can ask, because extractors are fungible.
+#
+# **One relation per kind of readiness**, named for the activity, which is what `spec/data/traits.4x`
+# does with `working`, `moving`, `laboring` and `bearing`. Each is a column of the thing that has
+# it, so a readiness cannot outnumber the things holding it without anything saying so.
+
+{column id:102 relation:37 seq:1 name:id}
+{column id:103 relation:37 seq:2 name:clause}
+{column id:104 relation:37 seq:3 name:input}
+{column id:105 relation:37 seq:4 name:value}
+{column id:106 relation:38 seq:1 name:id}
+{column id:107 relation:38 seq:2 name:name}
+{column id:108 relation:39 seq:1 name:kind}
+{column id:109 relation:39 seq:2 name:trait}
+{column id:110 relation:40 seq:1 name:id}
+{column id:111 relation:40 seq:2 name:of}
+{column id:112 relation:40 seq:3 name:is}
+{column id:113 relation:40 seq:4 name:seq}
+{column id:114 relation:41 seq:1 name:id}
+{column id:115 relation:41 seq:2 name:part}
+{column id:116 relation:41 seq:3 name:input}
+{column id:117 relation:41 seq:4 name:value}
+{column id:118 relation:42 seq:1 name:where}
+{column id:119 relation:42 seq:2 name:what}
+{column id:120 relation:42 seq:3 name:quantity}
+{column id:121 relation:43 seq:1 name:of}
+{column id:122 relation:43 seq:2 name:for}
+{column id:123 relation:43 seq:3 name:what}
+{column id:124 relation:43 seq:4 name:per}
+{column id:125 relation:43 seq:5 name:quantity}
+{column id:126 relation:44 seq:1 name:kind}
+
+
+## What a place has room for, and what each kind takes up
+#
+# **Sean, 2026-09-17**: *I am thinking of inventing a resource that vehicles take up and having a
+# certain limit per territory that is the same across all territories. A lot of real time strategy
+# games do this, and I know the board game twilight imperium does this as well.*
+#
+# **The allowance is a constant and the rate is per kind**, which is the half `spec/data/limit.4x`
+# cannot write: `{limit container:territory contained:ark n:2}` counts arks, and a transport worth
+# two scouts has nowhere to be said.
+#
+# **A pool names the kind of place it is an allowance of**, and a drawing kind's place is whichever
+# of its columns points at that - so the engine finds it rather than knowing the game calls it
+# `where`.
+
+{column id:87 relation:33 seq:1 name:id}
+{column id:88 relation:33 seq:2 name:name}
+{column id:89 relation:33 seq:3 name:per}
+
+{column id:90 relation:34 seq:1 name:kind}
+{column id:91 relation:34 seq:2 name:what}
+{column id:92 relation:34 seq:3 name:quantity}
+
+{column id:93 relation:36 seq:1 name:kind}
+{column id:94 relation:36 seq:2 name:what}
+{column id:95 relation:36 seq:3 name:quantity}
+
+{column id:96 relation:35 seq:1 name:where}
+{column id:100 relation:35 seq:2 name:moving}
+{column id:97 relation:35 seq:3 name:quantity}
+
+
+## What points at what
+#
+# **A reference is always to a relation's `id`.** The engine checks that such a row is there, so a
+# value pointing at nothing is refused when the data is read rather than when it is used.
+
+{reference id:1 column:4 to:1}
+{reference id:2 column:8 to:2}
+{reference id:3 column:9 to:1}
+{reference id:4 column:11 to:1}
+{reference id:5 column:17 to:6}
+{reference id:6 column:20 to:1}
+{reference id:7 column:22 to:6}
+{reference id:8 column:24 to:5}
+{reference id:9 column:25 to:1}
+{reference id:10 column:27 to:8}
+{reference id:11 column:28 to:2}
+{reference id:12 column:29 to:7}
+{reference id:16 column:42 to:13}
+{reference id:17 column:43 to:13}
+
+
+{reference id:20 column:48 to:8}
+{reference id:21 column:49 to:2}
+
+{reference id:22 column:51 to:48}
+{reference id:23 column:52 to:27}
+{reference id:24 column:55 to:48}
+{reference id:25 column:56 to:27}
+
+{reference id:28 column:61 to:8}
+{reference id:29 column:62 to:2}
+{reference id:30 column:63 to:8}
+{reference id:31 column:64 to:2}
+
+{reference id:32 column:65 to:2}
+{reference id:33 column:66 to:1}
+
+{reference id:34 column:67 to:8}
+{reference id:35 column:68 to:7}
+{reference id:36 column:69 to:1}
+{reference id:37 column:70 to:1}
+{reference id:38 column:71 to:1}
+
+{reference id:41 column:76 to:48}
+{reference id:42 column:78 to:48}
+{reference id:43 column:80 to:48}
+{reference id:44 column:82 to:48}
+
+{reference id:45 column:103 to:8}
+{reference id:46 column:104 to:7}
+
+{reference id:47 column:89 to:1}
+{reference id:48 column:90 to:1}
+{reference id:49 column:91 to:33}
+{reference id:50 column:93 to:1}
+{reference id:51 column:94 to:33}
+{reference id:52 column:96 to:48}
+{reference id:53 column:108 to:1}
+{reference id:54 column:109 to:38}
+{reference id:55 column:111 to:6}
+{reference id:56 column:112 to:6}
+{reference id:57 column:115 to:40}
+{reference id:58 column:116 to:7}
+{reference id:59 column:118 to:48}
+{reference id:60 column:119 to:27}
+{reference id:61 column:121 to:1}
+{reference id:62 column:122 to:1}
+{reference id:63 column:123 to:27}
+{reference id:64 column:124 to:1}
+{reference id:65 column:126 to:1}
+
+
+## Which relations are the game's state
+#
+# **This is what bounds the comparison.** `expected.4x` states the state after, and a diff has to
+# know which relations to look at - without this it would compare the rule and the command too.
+
+{state id:1 relation:13}
+{state id:3 relation:15}
+{state id:5 relation:18}
+{state id:6 relation:19}
+{state id:7 relation:28}
+{state id:8 relation:29}
+{state id:9 relation:30}
+{state id:10 relation:31}
+{state id:12 relation:35}
+{state id:13 relation:34}
+{state id:14 relation:36}
+
+
+## Which relations are families, and who belongs
+#
+# **A `unit` may be moved and a `resource` may be extracted**, and those are the two sets any rule
+# here ranges over. **`move` is typed `of:unit`**, so a deposit is not offered to it because the
+# game says a deposit is not a unit - rather than because `move`'s add clause happens to leave a
+# column unbound, which is how it would have been excluded without this.
+
+{family relation:26}
+{family relation:27}
+{family relation:49}
+
+{member kind:28 family:26}
+{member kind:51 family:26}
+{member kind:35 family:26}
+{member kind:30 family:27}
+{member kind:31 family:27}
+{member kind:50 family:27}
+{member kind:30 family:49}
+{member kind:31 family:49}
+{member kind:29 family:49}
+{member kind:50 family:49}
+
+
+## What a deposit's density is, and what a deposit holds
+#
+# **A density is a fact about a deposit and not part of what a deposit is.** Sean, 2026-09-17,
+# ruling out the alternative: a territory may have deposits of two grades, or the notation may be
+# uniform and minimal, and it cannot have both - *we are dropping (2)*. `spec/planet.md` asks for
+# one: *For each resource, a territory has capacity for some number of extractors, and a density
+# that each of them yields.*
+#
+# **So a second grade is two rows with one key and the structure refuses it**, which is the whole
+# reason the column is marked: with density in the key it would be a legal state nothing could
+# name.
+
+{attribute column:53 relation:18}
+{attribute column:66 relation:22}
+{attribute column:68 relation:23}
+
+
+# **An extractor stands in a deposit, so there cannot be more of them than there are deposits.**
+# Sean: *We can't place an extractor if there are no available deposits.* **That is a capacity and
+# nothing else**, and every world that states an extractor says so:
+#
+# ```text
+# {capacity of:deposit for:extractor what:resource per:place} -> 1
+# ```
+#
+# **It was a second mechanism until 2026-09-20.** `{limit held:extractor by:deposit}` compared the
+# two relations key for key and refused the world outright - the same arithmetic reached by a
+# different road, and a road `{soft ...}` cannot walk down, because softness caps a line at the
+# room there is and a limit is not a room.
+#
+# **What it cost is that the row is stated in a world rather than here, and that is not a choice.**
+# `{state relation:capacity}` makes a capacity part of what a world is, and a world is what a test
+# states and what its `then` compares - so a capacity row sitting beside this paragraph would have
+# to appear in every `then` section in the suite. **A structural row is one no world states**, which
+# `{loose ...}`, `{stands-in ...}` and `{supply ...}` are and this is not.
+#
+# **It was tried the other way first and the suite said so at once**: every test compared a world
+# three capacity rows short. **The rule that came out of it is worth more than the row** - a stated
+# relation belongs to a world, and only what is never stated belongs in this file.
+#
+# **So every world holding a deposit and an extractor says what a deposit holds.** That is more
+# places than the structural fact took, and it is also what Sean asked for everywhere else: *I need
+# see what the actual numbers are, not some hidden default.*
+
+
+
+## What a supply is, and what it is measured in
+#
+# **How much is provided and how much is consumed are rows of the world**, stated in each test's
+# `given` - Sean, 2026-09-17: *there are certain things I always want to see in tests because I
+# need to compute the tests in my head.* **A layer that kept them out of a scenario would be a
+# layer hiding what the test is about**, and he ruled that comprehension wins where the two
+# conflict.
+#
+# **This declares the supply and nothing else.** `per` says what it is measured in, so the check
+# does not have to work out which relation every provider and consumer has in common.
+
+{supply id:1 name:berth per:48}
+
+
+## The three roles a clause can have
+#
+# **The engine branches on the `name`, not on the id.** An id is arbitrary, so a rule that says
+# `role:2` means nothing until the row is looked up - which makes `role.name` load-bearing where
+# every other `name` is decoration.
+
+{role id:1 name:require}
+{role id:2 name:remove}
+{role id:3 name:add}
+{role id:4 name:put}
+{role id:5 name:keep}
+
+
+## What a trait is, and which kinds carry one
+
+# **A trait is an allowance a kind carries**, and it is the column that holds how many are left.
+# `moving` is one and `working` is another; a scout has a `moving` and an extractor has a
+# `working`, and `refresh` is one rule over both because the trait is an argument rather than
+# part of the rule's name.
+#
+# **Sean, 2026-09-18**: *I don't like that I have a separate refresh command for each resource, I
+# feel like this should be parameterized somehow.* And on what the parameterisation has to reach:
+# *I should be able to declare separate things with separate commands, as well as explicitly
+# declare group commands. So i can refresh a scout, refresh a transport, refresh all movable,
+# refresh all workable, and their intersections.*
+#
+# **`carries` is checked both ways**, which is what stops it drifting from the columns it
+# describes: a kind that carries a trait declares a column of that name, and a column named for a
+# trait is carried by the relation that declares it. Neither half is derivable from the other -
+# the first would let a column go undeclared, the second would let a `carries` row name nothing -
+# so the check is a pair and `src/schema.rs` states it as one.
+#
+# **A family carries what its members carry.** `unit` declares `moving` because `scout` and
+# `transport` do, so `{refresh what:unit trait:moving}` is the group command and
+# `{refresh what:scout trait:moving}` is the separate one. That is Sean's *their intersections*
+# with no third mechanism: the pair of arguments is the intersection.
+
+{trait id:1 name:moving}
+{trait id:2 name:working}
+
+{carries kind:26 trait:1}
+{carries kind:28 trait:1}
+{carries kind:35 trait:1}
+{carries kind:19 trait:2}
+
+
+## What a composite is, and why the tree is the point
+
+# **A rule is a leaf or a composite, and a composite names rules in order.** `{part id:1
+# of:end-turn is:refresh seq:1}` says ending a turn does a refresh first; `{argument id:1 part:1
+# input:what value:unit}` says which refresh.
+#
+# **It is the clause layer one level up, and deliberately the same shape.** A clause has an id and
+# `{binding ...}` rows name it; a part has an id and `{argument ...}` rows name it. Nothing here
+# is a new idea about how a rule is described - it is the existing idea applied to rules rather
+# than to rows.
+#
+# **Sean, 2026-09-18**, on what the structure has to be: *Whatever it turns out to mean, it must be
+# able to organize the entirety of game rules is some type of acyclic graph or tree. Otherwise it
+# will be impossible for a human player to understand how to play the game.* So `src/schema.rs`
+# refuses a cycle and refuses a rule with two parents, and `examples/tree.rs` prints the whole of
+# it on one screen.
+#
+# **A rule with one parent may still be named twice by it.** `end-turn` refreshes twice, once per
+# trait, and those are two steps of one order rather than two parents - which is what a person
+# reading the tree sees and what the check counts.
+#
+# **The roots are the player's menu.** A rule that is somebody's part is fired by that somebody; a
+# rule that is nobody's part is offered. So nothing declares an owner: `spec/data/block.4x` says
+# `owner:world` and here the tree says it, which is one fact in one place rather than two that can
+# disagree.
+#
+# **Sean, 2026-09-18**, on why a part is still a command in its own right: *Why can't refresh be
+# both a player command and part of the turn. It seems it will make it easier to read tests across
+# multiple turns if i see an end turn command, and it will be easier to test the end turn command
+# itself if i can test its parts.* **Fired by name and offered to a player are two questions**, and
+# this lane had collapsed them into one.
+
+
+## A bin, and how many of each a place has room for
+
+# **A bin is a kind like any other** - `{bin where:territory-1 what:metal} -> 4` is four metal bins
+# standing in territory-1, keyed by the pair the way an extractor is.
+#
+# **It is called a bin and not a store, because `store` is the engine's word.** `src/store.rs` is
+# where rows are kept and five of the eight modules say `store` in a line that runs, so a game
+# noun of that name cannot satisfy `tests/isolation.rs` - *no relation or rule the data names
+# appears in code that runs*. **The check found it; the name was not chosen for taste.**
+#
+# **`spec/logistics.md` draws the same line and drew it first**: *A bin is a thing. What holds a
+# kind is a store for that kind, and a thing with two bins holds two stores.* The thing is the
+# bin; what it is for a resource is the store. Sean asked for storage and this is the thing half
+# of it.
+#
+# **How many a thing has room for is `{capacity ...}`, which is a table and not a number.**
+#
+# **Sean, 2026-09-18**: *a territory has many types of capacities: one for bins, one for berth, one
+# for extractors. A bin can have many types of capacities: one for metal, one for food, one for
+# energy. A metal transport has 2 types of capacities: one for metal, one energy (which it uses as
+# fuel). If we omit a capacity, we can default that to mean it may carry none of that thing.*
+#
+# ```text
+# {capacity of:territory for:bin      what:resource per:territory} -> 4
+# {capacity of:bin       for:resource what:resource per:territory} -> 10
+# ```
+#
+# **One trait column, and it restricts whichever side declares one.** A territory has no `what`,
+# so the first row is about every territory; a bin has one, so it is about bins carrying that
+# resource. **Two columns - one per side - was the first draft and it does not work**: `of:territory`
+# has nothing to qualify, every column of a row must be present, and there is no way to write *not
+# applicable*.
+#
+# **A family named where a member is expected means each member**, which is the rule
+# `{refresh what:unit trait:moving}` already runs on. **Named twice in one row it means the same
+# member**, so `for:resource what:resource` is a bin holding what it carries and not what it does
+# not. That sentence is the whole of the templating, and it needs no notation: `src/notation.rs`
+# still has no types and every value is still a word.
+#
+# **Sean, 2026-09-18**, on why this is the shape to take: *so it is macro substitution, not
+# computation, yes, that indicates to me we are on the right track.* Expansion is bounded by the
+# family's size and cannot recurse, so what every check sees is the plain rows it always saw.
+#
+# **`per` is declared and not guessed**, for the reason already written on `{supply ... per:...}`:
+# a container may be the place or be in it, and working out which relation every side has in
+# common is a guess where this is a fact.
+#
+# **Omitting a capacity already meant none.** `nothing_crowds_a_place` says so in a comment - *a
+# kind named by neither is not in the arithmetic at all* - so the default is being written down
+# rather than added.
+#
+# **Sean, 2026-09-17**: *Each territory will have a limit of how many storage structures of each
+# type it can hold.* **This needed no new mechanism, and `backlog.md` said it would** - it said the
+# cap had to be *per description, not per relation*, and that the weighted pool could not say it
+# *because a pool is named per kind*. Both true, and both about the pool. **The limit was already
+# the right instrument and nobody had looked at it.**
+#
+# **`spec/logistics.md` had the shape too**: *What a thing may contain is a maximum per kind, per
+# family of kinds, or **per kind carrying a particular value of a trait***. A bin carrying
+# `what:metal` is the third case.
+#
+# **A deviation worth seeing rather than settling.** The same document says a place *declares none
+# of its own* capacity - it is the sum of what stands there. Here a territory does declare it, as
+# it already does for berths with `{provides kind:territory what:berth} -> 6`. **The number has to
+# be visible in the test**, which is Sean's rule and decides it for now: *I need see what the
+# actual numbers are, not some hidden default.*
+
+{state id:15 relation:42}
+{state id:16 relation:43}
+
+
+## What may lie loose, and what may not
+
+# **A resource over its capacity is in disorder; a structure over its capacity cannot exist.**
+# Sean, 2026-09-19, on why one word has two behaviours: *structures behave differently from
+# resources in this regard. This is because structures are intentionally built for the purpose of
+# having that structure there, while resources are mined to be spent or stored.*
+#
+# **So a capacity is a maximum unless the thing it holds is loose.** `{loose kind:resource}` names
+# the kinds that may exceed one, and there is nothing else it does: the check stops refusing, and
+# `discard-disorder` takes the excess at the turn's end.
+#
+# **Over capacity is still usable, which is the point.** Sean: *i am going to have mechanics that
+# allow for stuff over capacity to be used in other recipies to avoid the waste.*
+# `spec/resources.md` had already said it: *Matter that is out of its source may be spent, whether
+# it is in disorder or in order.*
+#
+# **A family names its members**, so one row covers every resource. It is not `{state ...}` and so
+# is not reified - a structural fact belongs beside `{supply ...}` and `{stands-in ...}` rather than
+# in every test's `given`.
+#
+# **What is lost is lost, and does not go anywhere.** `spec/resources.md` says disorder *returns to
+# its source*; Sean, 2026-09-19: *This was a thematic statement rather than a mechanical one, I am
+# not sure our thin-engine needs that theme yet.* **There are no sources here**, so nothing has
+# anywhere to return to, and the theme is noted rather than built.
+
+{loose kind:49}
+
+# **Labour is loose and nothing holds it, which together are the whole of *unspent labour is lost*.**
+# Sean, 2026-09-20: *unspent labor does not survive the turn* and *excess labor to be removed the
+# same as discard-disorder.* **No capacity row says nothing holds it**; the absence of one does,
+# because a loose kind nothing gives room for has no room.
+
+
+
+## A rule that fires as many times as it can, and the place it fires in
+
+# **`{repeats rule:R}`** is how a varying amount is said without arithmetic. `spec/invariants.md`:
+# *where a rule would need a quantity that varies, it is written as a smaller rule that fires as
+# many times as it can*, and the quantity is then how often it fired. Feeding a population is that
+# shape - as many citizens eat as there is food for, and nothing computes a minimum.
+#
+# **It draws from the world as it was when it began.** What a firing makes cannot be spent by its
+# own later firings, so a rule that produces what it consumes cannot run away. Sean, 2026-09-19, on
+# the framing that gives it: *I am thinking that repeat should always have consume-once rather than
+# consume semantics.*
+#
+# **That is the termination proof**: the pool it draws from is finite and only ever shrinks, so the
+# repetition stops without anything counting the turns. A rule that removes nothing has no such
+# pool and is refused - `Malformed::NeverStops`.
+#
+# **`{scope rule:R input:I}`** says an input is filled by the engine, once per row of whatever it
+# is typed as - not by a command and not by an argument. **A world-owned rule has no caller to
+# supply a place**, and `upkeep` has to take a citizen and a food *from the same territory*, which
+# is a join every other rule makes through an argument.
+#
+# **On the rule and not on the part**, so firing it by hand and firing it from the turn do the same
+# thing. Sean, 2026-09-19: *there are some things that happen in sequence, and others that can be
+# declared once and applied separately.* A scope is the second kind: it is true of the rule always.
+#
+# **So it is scoped per rule rather than per composite**, which Sean's sketch put it on. The two
+# give the same answer here because these rules are place-local - all of `upkeep` everywhere then
+# all of `perish` everywhere is the same world as both in one territory then both in the next - and
+# the per-rule form needs no way for a part to be handed its parent's argument.
+#
+# **A scoped rule is therefore a part and never a root.** The engine fills the input, so there is
+# nothing for a player to choose, and `offered` skips anything a part names.
+
+{relation id:45 name:repeats}
+{relation id:46 name:scope}
+{relation id:53 name:soft}
+
+{column id:127 relation:45 seq:1 name:rule}
+{column id:128 relation:46 seq:1 name:rule}
+{column id:129 relation:46 seq:2 name:input}
+{column id:149 relation:53 seq:1 name:clause}
+
+{reference id:66 column:127 to:6}
+{reference id:67 column:128 to:6}
+{reference id:68 column:129 to:7}
+{reference id:75 column:149 to:8}
+
+
+## A line that takes what room there is
+
+# **Sean, 2026-09-20**, on an ark that lands where there is nothing to mine: *it is legal to deploy
+# an ark anywhere, individual rules may fail but the deployment succeeds. Consequences of legal
+# moves may be disastrous, but that is player choice.*
+#
+# **Every other role refuses the world it would leave**, which is the right default and the wrong
+# answer here: a deployment that cannot place a food extractor would place nothing at all, and the
+# ark would be spent on nothing or not spent at all. **`{soft clause:C}` says that one line takes
+# the room there is** - all of it, some of it, or none - and the rest of the rule goes on.
+#
+# **It reads the same arithmetic the world check reads**, so what a soft line fits and what the
+# world would refuse cannot disagree.
+#
+# **A kind nothing gives room for is unbounded, and a soft line about it is a plain one.** *Nothing
+# says how much room there is* and *there is no room* are different worlds - which is why two
+# citizens always land and two extractors may not.
+
+
+## A citizen, and the hunger a turn gives it
+
+# **A citizen is not one person.** `spec/population.md`: *It is the smallest group that can sustain
+# reproduction.* A count of them is a density across a territory, the same way a deposit is.
+#
+# **`hungry` is an obligation where `moving` and `working` are capacities.** The machinery is the
+# same - one per turn, restored by the turn, spent by acting - and the difference is what unspent
+# means: a scout that did not move is fine, and a citizen that did not eat is dead.
+#
+# **That consequence lives in `perish`**, a named step of the turn, rather than in the trait. Sean,
+# 2026-09-19: *Hungry seems like not so much a capacity as it does a need, it seems the difference
+# is relevant and why it doesn't read as well as bearing.*
+#
+# **It was `hunger` for a day, and a noun was the wrong part of speech.** The rule that chose it
+# was sound - a capacity is a gerund, `moving` and `working` and `bearing`, and an obligation is
+# not one - but **a noun takes an amount**. `hunger:1` reads as *how much a citizen eats*, which is
+# the one thing it does not mean: every citizen eats exactly one food and the trait is one bit.
+#
+# **An adjective cannot be misread that way.** You can have two hunger; you cannot be two hungry.
+# **The evidence is as good as naming evidence gets** - Sean read it back as *so hunger is how much
+# a citizen eats?* on 2026-09-20, having been handed the model the day before. A name that misleads
+# the person it was explained to is a name that misleads.
+#
+# **The distinction the noun was for survives**, because an adjective among gerunds is still a
+# visibly different part of speech. **What it costs is the turn**: `refresh what:citizen
+# trait:hungry` reads less well than *restore hunger* - one use against the two clauses that match
+# on it, which is why it was the trade to take.
+#
+# **`{state ...}` says a citizen is something a world holds**, which two things read: templating,
+# so that a row naming a family becomes one per member, and the test harness, which refuses a
+# `given` stating anything that is not a world. **The second is what caught its absence** - this
+# lane left the row out on the strength of the first reader alone.
+
+# **`bearing` is a capacity where `hungry` is an obligation**, and the grammar says which: a gerund
+# for something a thing may do, a noun or an adjective for something it owes. Sean, 2026-09-19:
+# *Bearing is their capacity to reproduce, that makes sense to me.*
+#
+# **It is what stops one citizen breeding with the whole surplus**, exactly as `hungry` stops one
+# eating all the food. `breed` consumes the parent and returns it as one of two, with its bearing
+# spent - so no citizen breeds twice in a turn, and *at most doubling* falls out of the rule rather
+# than being stated anywhere.
+#
+# **That is what replaces `borrow` and the mainline's `fertility` token.** Sean, 2026-09-19,
+# choosing: *clarity is more important than conciseness, so yes, lets not have borrow, and lean on
+# traits.* A borrowed citizen could be borrowed again; a consumed one that comes back spent cannot.
+#
+# **A citizen now has two traits, so a place can hold two citizen rows**, and a clause that matches
+# citizens without naming both is ambiguous. **`upkeep` and `perish` name only `hungry` and are
+# safe because `bearing` is uniform when they run** - the turn restores it last, so every citizen
+# enters a turn fertile and the split exists only between `breed` and the refreshes. **If that ever
+# stops being true the engine refuses rather than guessing**, which is `Refused::NotOneToTake` doing
+# the job it was built for.
+
+# **`laboring` is a citizen's capacity to work, and it is a gerund like the rest.** Sean,
+# 2026-09-20: *citizen produces a labor that work then spends.* `spec/data/traits.4x` already names
+# it beside `working`, `moving` and `bearing`, and `schema.4x` has quoted that list since the
+# allowances were built - so this is the fourth use of a mechanism rather than a new one.
+#
+# **It closes the loop.** `labor` was consumed by three rules and produced by none: every test that
+# spent one stated it in a `given`, so a population could grow and starve but nothing it did made
+# the food it lived on. A citizen makes one labour a turn, and `work` spends it on an extractor.
+
+{relation id:47 name:citizen}
+
+{column id:130 relation:47 seq:1 name:where}
+{column id:131 relation:47 seq:2 name:hungry}
+{column id:133 relation:47 seq:3 name:bearing}
+{column id:137 relation:47 seq:4 name:laboring}
+{column id:132 relation:47 seq:5 name:quantity}
+
+{reference id:69 column:130 to:48}
+
+{state id:17 relation:47}
+
+{trait id:3 name:hungry}
+{trait id:4 name:bearing}
+{trait id:5 name:laboring}
+
+{carries kind:47 trait:3}
+{carries kind:47 trait:4}
+{carries kind:47 trait:5}
+
+# **A place is a layer of a territory, and a thing stands in a place rather than in a territory.**
+# Sean, 2026-09-20: *I no longer think orbits should be separate territories with adjacencies like
+# they are in the mainline spec. I think orbits should be part of the territory.* `spec/orbit.md`
+# says the same from the other side - *an orbit is not a territory* - and `spec/console.md` says
+# *the orbit above a territory is named by naming the territory*, which is what `of` does here.
+#
+# **Adjacency stays between territories and does not learn about places.** Sean, 2026-09-20: *I
+# don't want to be "stating adjacency between places".* So the graph is one thing and `move` pays
+# for the join, reading each place's territory before it asks whether the two are neighbours.
+#
+# **Only the surface exists yet.** `layer` carries one value, which is honest rather than useful -
+# what it buys is that orbit is a row and not a change. The rules that tell the layers apart, and
+# the capacity that gives them different room, are the two increments after this one.
+
+# **`stock` is what a place holds a number of, and it is the set that may lie loose.** Metal, food
+# and labour: each is somewhere, each is a count, and each piles up beyond what there is room for.
+# `resource` is the two a recipe may name - `work what:food` is a sentence and `work what:labor` is
+# not - so the two families overlap and are not the same set.
+#
+# **It exists so that what may lie loose is stated once.** Sean, 2026-09-20, on the rule that
+# discards it: *always discard whatever is in disorder, so no need to specify `what:resource`.*
+# **There had been two statements of the set** - `{loose ...}` saying what may exceed a capacity,
+# and a `{part ...}` per kind saying what gets trimmed - and nothing made them agree. Add a loose
+# kind and forget the part, and it may exceed its capacity forever while every check passes.
+#
+# **The sweep could not have caught that**, and not by oversight: it deletes rows and changes
+# values, and never adds one. **A mistake with no instrument pointed at it** is the kind this
+# prototype exists to find, so the answer is a shape where it cannot be made.
+#
+# **A kind may belong to two families**, because `{member ...}` is keyed by both its columns - so
+# metal is a resource and a stock, and neither statement is a copy of the other.
+
+{relation id:50 name:energy}
+
+{column id:140 relation:50 seq:1 name:where}
+{column id:141 relation:50 seq:2 name:quantity}
+
+{reference id:71 column:140 to:48}
+
+{state id:19 relation:50}
+
+# **An ark is a unit that can only be in orbit.** Sean, 2026-09-20: *ark can only be in orbit; can
+# spend one energy and one move to move from orbit to orbit; contains a storage container for 1
+# energy; can collect 1 energy from the sun each turn.*
+#
+# **It joins `unit`, so `move`, the refresh of `moving` and the berth pool all reach it** without a
+# word being added anywhere. `gathering` is the second allowance it carries - the one it spends on
+# the sun - and it is a gerund because it is a capacity rather than an obligation.
+#
+# **It consumes no berths, and nothing says otherwise yet.** A kind with no `{consumes ...}` row
+# contributes nothing to a pool, so an orbit holds as many arks as anyone states. That is a row
+# waiting for a test rather than an oversight.
+
+{relation id:51 name:ark}
+
+{column id:142 relation:51 seq:1 name:where}
+{column id:143 relation:51 seq:2 name:moving}
+{column id:144 relation:51 seq:3 name:gathering}
+{column id:145 relation:51 seq:4 name:quantity}
+
+{reference id:72 column:142 to:48}
+
+{state id:20 relation:51}
+
+{trait id:6 name:gathering}
+
+{carries kind:51 trait:1}
+{carries kind:51 trait:6}
+
+# **`{stands-in ...}` says which layer a kind may stand in, and it is how an orbit has capacity for
+# no extractors.** `spec/orbit.md`: *an orbit is not a territory: it has capacity for no extractors,
+# and nothing is extracted there.*
+#
+# **`per` says which of the kind's columns is the place**, because following a reference is not
+# enough: an extractor points at a place and at a resource, and choosing between them is the
+# guessing this engine refuses. It is the same word `{capacity ... per:place}` and
+# `{supply ... per:place}` already use, read by the same `place_of`.
+#
+# **Everything after `kind` and `per` is a constraint on the place's row, matched by column name.**
+# So `layer` is never a word the engine knows - it is read off this relation's own columns, the way
+# a trait's name is the column's name - and a second constraint would need no code at all.
+#
+# **A kind with no row may stand anywhere.** With two layers that is the same as *either*, and it
+# stops being the same at three - which is worth knowing before a third arrives.
+
+{relation id:52 name:stands-in}
+
+{column id:146 relation:52 seq:1 name:kind}
+{column id:147 relation:52 seq:2 name:per}
+{column id:148 relation:52 seq:3 name:layer}
+
+{reference id:73 column:146 to:1}
+{reference id:74 column:147 to:1}
+
+{stands-in kind:51 per:48 layer:orbit}
+{stands-in kind:19 per:48 layer:surface}
+
+# **`energy` is what a star gives and a recipe spends, and *fuel* is what it is called in a tank.**
+# Sean, 2026-09-20: *fuel is the same thing as energy, when I say fuel I tend to mean energy that
+# happens to be used for movement in this context.* So there is one relation and one capacity to
+# reason about, which is what makes a transport's two containers sum.
+#
+# **It is a resource and a stock**: a recipe may name it, and it lies loose, so what a place holds
+# beyond its room is lost at the turn's end. `spec/invariants.md` calls the source endless - *a
+# star's energy and a planet's material* - and an endless source is not a gain.
+
+{relation id:49 name:stock}
+
+{column id:138 relation:49 seq:1 name:where}
+{column id:139 relation:49 seq:2 name:quantity}
+
+{relation id:48 name:place}
+
+{column id:134 relation:48 seq:1 name:id}
+{column id:135 relation:48 seq:2 name:of}
+{column id:136 relation:48 seq:3 name:layer}
+
+{reference id:70 column:135 to:13}
+
+{state id:18 relation:48}
+
+
+## A pioneer, and what it shares with an ark
+
+# **Sean, 2026-09-20**: *Pioneer [...] can deploy with the same result as an ark*, and *pioneer
+# deploys from same territory, surface deploys to surface.*
+#
+# **`founder` is the family of what a deployment spends**, and it exists so that `deploy` is one
+# rule rather than two. An ark stands in an orbit and the ground it settles is the surface below; a
+# pioneer stands on that surface and the ground it settles is the one it is standing on. **Both are
+# *the surface of the place's territory***, so the rule that finds one finds the other, and neither
+# case is written down.
+#
+# **What made it one rule was taking a literal away.** `deploy` required the place it is given to be
+# an orbit; it no longer says, and the two sentences of Sean's above fall out of `{stands-in ...}`
+# instead - an ark may only be in orbit and a pioneer may only be on a surface, so what each of them
+# can be asked to do is already decided.
+#
+# **A pioneer is a unit and a founder both**, which a kind may be: `{member ...}` is keyed by both
+# its columns. It moves, so `move` carries it with no change; it does not gather, because turning to
+# the sun is what an ark is for.
+#
+# **Its store of two fuel is not here.** Sean asked for one, and a capacity is a row of a world
+# rather than a structural fact - so it belongs in the test that needs it, and no test does yet.
+
+{relation id:54 name:pioneer}
+{relation id:55 name:founder}
+
+{column id:150 relation:54 seq:1 name:where}
+{column id:151 relation:54 seq:2 name:moving}
+{column id:152 relation:54 seq:3 name:quantity}
+{column id:153 relation:55 seq:1 name:where}
+{column id:154 relation:55 seq:2 name:quantity}
+
+{reference id:76 column:150 to:48}
+
+{state id:21 relation:54}
+
+{family relation:55}
+{member kind:54 family:26}
+{member kind:54 family:55}
+{member kind:51 family:55}
+
+{carries kind:54 trait:1}
+
+{stands-in kind:54 per:48 layer:surface}
