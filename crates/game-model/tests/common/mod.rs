@@ -43,20 +43,35 @@ pub const BEING_REPLACED: [&str; 8] = [
 /// naming a noun**, and it comes back into scope the moment there is nothing left to declare.
 pub const SHARED: [&str; 1] = ["lib"];
 
-/// Modules that are **beside** the engine rather than part of it, and are not going anywhere.
+/// Modules that are **beside** the engine rather than part of it.
 ///
-/// **This is the one exception list that is permanent, and it says so.** `BEING_REPLACED` and
-/// `SHARED` both empty out when the migration finishes; this one does not, because what it names
-/// is a layer rather than a leftover.
+/// # This list exists because the checks ask where a file is, not what it does
 ///
-/// **`foundation` carries `data/foundation/` in the binary**, which means it says `include_str!`,
-/// one of the four words the engine may not say. That is not a weakening of the engine's rule:
-/// the rule is what makes `Game::of(rows)` the only way in, and a module that hands the engine
-/// rows is the rule being obeyed rather than bent. `layers.md` already places it: *the harness is
-/// beside the others rather than under them.*
+/// **That is the thing to know about it, and this comment used to answer a different question.**
+/// `engine_modules` takes every `.rs` in `src/` - a population defined by location - and the rules
+/// it feeds are about behaviour: *reads no file*, *names no noun the game has*. **So a module that
+/// sits in `src/` and is not the engine has to be excepted by name**, and would however many such
+/// modules there were. `Q-83` is this shape, found by the quality lens in its own column first.
 ///
-/// **What keeps it honest is that it is short and each entry carries its reason.** An exception
-/// list that grows without one is how a rule stops binding the code it names.
+/// **It is permanent for that reason and not because `foundation` is special.** `BEING_REPLACED`
+/// and `SHARED` empty out when the migration finishes; this one empties only if the engine stops
+/// being defined by a directory.
+///
+/// **The behavioural statement is available and true today, which is what makes the proxy safe**:
+/// no engine module reaches for `foundation`. Measured over the seven - six say the word zero
+/// times and `schema.rs` says it once, in a comment at `:1042`. **So nothing the engine builds
+/// depends on the module that reads files**, which is the property the location proxy is standing
+/// in for.
+///
+/// **`foundation` carries the foundation's files in the binary**, which means it says
+/// `include_str!` - one of the four words the engine may not. That is the engine's rule being
+/// obeyed rather than bent: the rule is what makes `Game::of(rows)` the only way in, and this
+/// hands the engine rows. `layers.md` places it - *the harness is beside the others rather than
+/// under them*.
+///
+/// **A separate crate would buy nothing here.** It would make the location and the behaviour agree
+/// by construction, and it would spend a row in `docs/architecture.md`, which is another lane's -
+/// for a property one grep already establishes.
 pub const BESIDE: [&str; 1] = ["foundation"];
 
 /// Every module of the engine, read from `src/` rather than listed.

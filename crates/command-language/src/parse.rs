@@ -65,7 +65,7 @@ pub fn parse_script(grammar: &Grammar, text: &str) -> Result<Vec<Utterance>, Fai
 /// order meant nothing.
 ///
 /// **The name is one token and the fields carry their own names**, so
-/// `{build-extractor territory:1 resource:metal}` and the same two fields swapped are one
+/// `{attach-conveyor territory:1 resource:metal}` and the same two fields swapped are one
 /// command. A form is still a list of keywords followed by holes, and every form in the
 /// console's grammar now has exactly one keyword.
 ///
@@ -291,6 +291,7 @@ fn read(token: &Token, kind: Kind) -> Option<Argument> {
 
 #[cfg(test)]
 mod tests {
+
     use super::*;
     use crate::grammar::Form;
 
@@ -299,19 +300,19 @@ mod tests {
             Form::new(
                 "land",
                 vec![
-                    Term::Keyword("deploy-ark"),
+                    Term::Keyword("fetch-item"),
                     Term::required("territory", Kind::Number),
                 ],
-                "bring an ark down from orbit",
+                "fetch an item from the store",
             ),
             Form::new(
                 "build",
                 vec![
-                    Term::Keyword("build-extractor"),
+                    Term::Keyword("attach-conveyor"),
                     Term::required("territory", Kind::Number),
                     Term::optional("resource", Kind::Name),
                 ],
-                "build an extractor",
+                "attach a conveyor",
             ),
             Form::new("end-turn", vec![Term::Keyword("end-turn")], "end the turn"),
         ])
@@ -323,7 +324,7 @@ mod tests {
 
     #[test]
     fn a_command_parses_into_named_arguments() {
-        let utterance = parse("{deploy-ark territory:1}").unwrap().unwrap();
+        let utterance = parse("{fetch-item territory:1}").unwrap().unwrap();
         assert_eq!(utterance.form, "land");
         assert_eq!(utterance.number("territory").unwrap(), 1);
         // **`ark` is a word of the name and not an argument**, so asking for it as one says
@@ -333,9 +334,9 @@ mod tests {
 
     #[test]
     fn an_optional_argument_may_be_left_out_or_supplied() {
-        let without = parse("{build-extractor territory:3}").unwrap().unwrap();
+        let without = parse("{attach-conveyor territory:3}").unwrap().unwrap();
         assert_eq!(without.optional_name("resource"), None);
-        let with = parse("{build-extractor territory:3 resource:metal}")
+        let with = parse("{attach-conveyor territory:3 resource:metal}")
             .unwrap()
             .unwrap();
         assert_eq!(with.optional_name("resource"), Some("metal"));
@@ -356,7 +357,7 @@ mod tests {
     /// The whole point of carrying positions: a failure says where and what was wanted.
     #[test]
     fn a_wrong_argument_says_where_it_is_and_what_was_expected() {
-        let failure = parse("{deploy-ark territory:orbit}").unwrap_err();
+        let failure = parse("{fetch-item territory:orbit}").unwrap_err();
         // **At the value and not at the field that carried it.** `territory:` opens at
         // column 13 and `orbit` at column 23, and the one a reader has to change is the
         // value - so the position points past the name rather than at the start of the pair.
@@ -370,7 +371,7 @@ mod tests {
 
     #[test]
     fn a_missing_argument_is_reported_at_the_end_of_the_line() {
-        let failure = parse("{deploy-ark}").unwrap_err();
+        let failure = parse("{fetch-item}").unwrap_err();
         // **The field is named, which a positional grammar could not do.** It could say a
         // number was wanted and never which of the numbers, because the thing missing had no
         // name until `P-321` gave every argument one.
@@ -401,7 +402,7 @@ mod tests {
         // Column 2, which is the first word of the name: column 1 is the brace, and every
         // form got that far.
         assert_eq!(failure.position, Position::new(1, 2));
-        for expected in ["deploy-ark", "build-extractor", "end-turn"] {
+        for expected in ["fetch-item", "attach-conveyor", "end-turn"] {
             assert!(
                 failure.expected.contains(&expected.to_string()),
                 "{failure} should offer {expected}"
@@ -413,7 +414,7 @@ mod tests {
     /// an argument is reported there rather than at the start of the line.
     #[test]
     fn the_report_comes_from_whichever_form_read_furthest() {
-        let failure = parse("{build-extractor territory:three}").unwrap_err();
+        let failure = parse("{attach-conveyor territory:three}").unwrap_err();
         assert_eq!(failure.position, Position::new(1, 28));
         assert!(
             failure.expected.contains(&"a number".to_string()),
@@ -423,7 +424,7 @@ mod tests {
 
     #[test]
     fn a_script_parses_every_line_in_order() {
-        let script = "{deploy-ark territory:1}\n\n# a note\n{end-turn}\n";
+        let script = "{fetch-item territory:1}\n\n# a note\n{end-turn}\n";
         let commands = parse_script(&grammar(), script).unwrap();
         assert_eq!(commands.len(), 2);
         assert_eq!(commands[0].form, "land");
@@ -432,15 +433,15 @@ mod tests {
 
     #[test]
     fn a_script_stops_at_the_first_line_that_fails_and_says_which() {
-        let script = "{deploy-ark territory:1}\n{deploy-ark territory:orbit}\n{end-turn}\n";
+        let script = "{fetch-item territory:1}\n{fetch-item territory:orbit}\n{end-turn}\n";
         let failure = parse_script(&grammar(), script).unwrap_err();
         assert_eq!(failure.position.line, 2);
     }
 
     #[test]
     fn a_command_remembers_how_it_was_written() {
-        let utterance = parse("  {deploy-ark territory:1}  ").unwrap().unwrap();
-        assert_eq!(utterance.source, "{deploy-ark territory:1}");
+        let utterance = parse("  {fetch-item territory:1}  ").unwrap().unwrap();
+        assert_eq!(utterance.source, "{fetch-item territory:1}");
     }
 
     /// A grammar with a hole that takes a command, so nesting has something to nest into.
@@ -454,10 +455,10 @@ mod tests {
             Form::new(
                 "land",
                 vec![
-                    Term::Keyword("deploy-ark"),
+                    Term::Keyword("fetch-item"),
                     Term::required("territory", Kind::Number),
                 ],
-                "bring an ark down from orbit",
+                "fetch an item from the store",
             ),
             Form::new(
                 "repeat",
@@ -479,7 +480,7 @@ mod tests {
     /// A command carries another command, and the inner one is read exactly like any command.
     #[test]
     fn a_value_may_be_another_command() {
-        let outer = nested("{repeat times:3 what:{deploy-ark territory:7}}")
+        let outer = nested("{repeat times:3 what:{fetch-item territory:7}}")
             .unwrap()
             .expect("a command");
         assert_eq!(outer.form, "repeat");
@@ -496,7 +497,7 @@ mod tests {
     /// one nested command; three can only be satisfied by recursion, which is the claim.
     #[test]
     fn the_tree_is_as_deep_as_it_is_written() {
-        let outer = nested("{repeat times:2 what:{repeat times:3 what:{deploy-ark territory:1}}}")
+        let outer = nested("{repeat times:2 what:{repeat times:3 what:{fetch-item territory:1}}}")
             .unwrap()
             .expect("a command");
         let middle = outer.command("what").unwrap();
@@ -518,15 +519,15 @@ mod tests {
     /// would repeat its parent. The span it is sliced by is the inner braces.
     #[test]
     fn a_nested_command_remembers_only_itself() {
-        let outer = nested("{repeat times:3 what:{deploy-ark territory:7}}")
+        let outer = nested("{repeat times:3 what:{fetch-item territory:7}}")
             .unwrap()
             .expect("a command");
         assert_eq!(
             outer.source,
-            "{repeat times:3 what:{deploy-ark territory:7}}"
+            "{repeat times:3 what:{fetch-item territory:7}}"
         );
         let inner = outer.command("what").unwrap();
-        assert_eq!(inner.source, "{deploy-ark territory:7}");
+        assert_eq!(inner.source, "{fetch-item territory:7}");
         assert_eq!(inner.span.from.column, 22);
     }
 
@@ -537,7 +538,7 @@ mod tests {
     /// nested command debuggable. There was nothing to point at until now.
     #[test]
     fn a_failure_inside_a_nested_command_points_inside_it() {
-        let failure = nested("{repeat times:3 what:{deploy-ark territory:x}}").unwrap_err();
+        let failure = nested("{repeat times:3 what:{fetch-item territory:x}}").unwrap_err();
         // `territory:x` begins at column 34, so its value sits at 44.
         assert_eq!(failure.position.column, 44, "{failure}");
         assert!(
@@ -554,7 +555,7 @@ mod tests {
     /// the kind of thing that goes stale without anything noticing.
     #[test]
     fn a_failure_names_the_command_it_was_found_inside() {
-        let failure = nested("{repeat times:3 what:{deploy-ark territory:x}}").unwrap_err();
+        let failure = nested("{repeat times:3 what:{fetch-item territory:x}}").unwrap_err();
         assert_eq!(failure.inside, ["repeat"], "{failure}");
         assert!(
             failure.to_string().ends_with("inside `repeat`"),
@@ -570,17 +571,17 @@ mod tests {
     #[test]
     fn the_enclosing_chain_is_as_deep_as_the_nesting() {
         let cases: [(&str, &[&str]); 4] = [
-            ("{deploy-ark territory:x}", &[]),
+            ("{fetch-item territory:x}", &[]),
             (
-                "{repeat times:1 what:{deploy-ark territory:x}}",
+                "{repeat times:1 what:{fetch-item territory:x}}",
                 &["repeat"],
             ),
             (
-                "{repeat times:1 what:{repeat times:2 what:{deploy-ark territory:x}}}",
+                "{repeat times:1 what:{repeat times:2 what:{fetch-item territory:x}}}",
                 &["repeat", "repeat"],
             ),
             (
-                "{repeat times:1 what:{repeat times:2 what:{repeat times:3 what:{deploy-ark territory:x}}}}",
+                "{repeat times:1 what:{repeat times:2 what:{repeat times:3 what:{fetch-item territory:x}}}}",
                 &["repeat", "repeat", "repeat"],
             ),
         ];
@@ -596,7 +597,7 @@ mod tests {
         // today is one, so a version that named an enclosing command where there is none
         // would be wrong about the only case that is currently reachable.
         assert!(
-            nested("{deploy-ark territory:x}")
+            nested("{fetch-item territory:x}")
                 .unwrap_err()
                 .inside
                 .is_empty(),
@@ -612,7 +613,7 @@ mod tests {
     #[test]
     fn a_nested_command_may_be_any_form() {
         let cases = [
-            ("{deploy-ark territory:4}", "land"),
+            ("{fetch-item territory:4}", "land"),
             ("{repeat times:1 what:{end-turn}}", "repeat"),
             ("{end-turn}", "end-turn"),
         ];
@@ -635,7 +636,7 @@ mod tests {
     /// opens, so the empty value has a meaning and cannot also be a silent empty name.
     #[test]
     fn a_field_with_no_value_is_refused() {
-        let failure = parse("{build-extractor territory:1 resource:}").unwrap_err();
+        let failure = parse("{attach-conveyor territory:1 resource:}").unwrap_err();
         assert_eq!(failure.position.column, 39, "{failure}");
         assert!(
             failure.expected.iter().any(|what| what == "a name"),
@@ -653,7 +654,7 @@ mod tests {
     /// A nested command that is never closed is reported rather than accepted.
     #[test]
     fn an_unclosed_nested_command_is_refused() {
-        let failure = nested("{repeat times:3 what:{deploy-ark territory:7}").unwrap_err();
+        let failure = nested("{repeat times:3 what:{fetch-item territory:7}").unwrap_err();
         assert!(failure.expected.iter().any(|what| what == "}"), "{failure}");
     }
 }

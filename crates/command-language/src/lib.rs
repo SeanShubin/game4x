@@ -1,8 +1,34 @@
 //! A command language: a grammar, a parser, and a typed syntax tree.
 //!
-//! **This crate contains no game nouns.** `land`, `territory` and `metal` never appear in
-//! it. A grammar is data handed in from outside, and what the words mean is decided a
-//! layer up. That seam is the one idea worth keeping from the predecessor reviewed in
+//! **No game noun appears in the code that ships**, which is narrower than what this said and is
+//! the part that is true. It said *this crate contains no game nouns - `land`, `territory` and
+//! `metal` never appear in it*, and those three appear 24, 66 and 8 times: in the fixture grammars,
+//! the doc examples and the prose. **A grammar is data handed in from outside** and what the words
+//! mean is decided a layer up; a test has to hand in *some* grammar, and the one here used this
+//! game's words.
+//!
+//! **Measured over every module, comments and `#[cfg(test)]` dropped: none.** So the seam is intact
+//! and the sentence about it was not.
+//!
+//! **Two recipe names are renamed and the rest are left**, which is `Q-101`. `deploy-ark` and
+//! `build-extractor` were recipes of the first release, and `D-4` asks that a search for a recipe
+//! name find nothing - so a fixture keyword and a rule statement being the same bytes made 31
+//! hits in a crate that asserts nothing about the game. They are `fetch-item` and
+//! `attach-conveyor` now, at matching lengths, because a dozen assertions here are about a column
+//! number.
+//!
+//! # Why this is prose and not a check, which took a measurement to find out
+//!
+//! **The obvious instrument is wrong and would have looked right.** Sweeping this crate for every
+//! word `spec/data/` declares finds 26 of them over 234 occurrences - and `column` (36),
+//! `argument` (14), `rule` (11) and `move` (4) are the parser's own vocabulary and Rust's,
+//! colliding with relation names by coincidence. **A check over that population would fail on
+//! correct code**, and a hand list of the ones that are really game nouns is the thing
+//! `CLAUDE.md` says goes stale.
+//!
+//! **What is checkable is the narrow claim above** - no game noun in code that runs - and that is
+//! `crates/game-model/tests/isolation.rs`'s shape one crate over. It is stated here and held by
+//! nothing, which is the honest description rather than a claim to have solved it. That seam is the one idea worth keeping from the predecessor reviewed in
 //! `docs/notes/parser-architecture.md`; everything listed there under *what is weak* is a
 //! requirement met here rather than a defect reproduced:
 //!
@@ -36,23 +62,23 @@
 //! use command_language::{Form, Grammar, Kind, Term, parse_line};
 //!
 //! let grammar = Grammar::new(vec![Form::new(
-//!     "deploy-ark",
+//!     "fetch-item",
 //!     vec![
-//!         Term::Keyword("deploy-ark"),
+//!         Term::Keyword("fetch-item"),
 //!         Term::required("territory", Kind::Number),
 //!     ],
-//!     "bring an ark down from orbit",
+//!     "fetch an item from the store",
 //! )]);
 //!
-//! let command = parse_line(&grammar, "{deploy-ark territory:1}", 1).unwrap().unwrap();
-//! assert_eq!(command.form, "deploy-ark");
+//! let command = parse_line(&grammar, "{fetch-item territory:1}", 1).unwrap().unwrap();
+//! assert_eq!(command.form, "fetch-item");
 //! assert_eq!(command.number("territory").unwrap(), 1);
 //!
 //! // The fields carry their own names, so their order is not part of the command.
-//! let same = parse_line(&grammar, "{deploy-ark territory:1}", 1).unwrap().unwrap();
+//! let same = parse_line(&grammar, "{fetch-item territory:1}", 1).unwrap().unwrap();
 //! assert_eq!(same.number("territory").unwrap(), 1);
 //!
-//! let failure = parse_line(&grammar, "{deploy-ark territory:orbit}", 1).unwrap_err();
+//! let failure = parse_line(&grammar, "{fetch-item territory:orbit}", 1).unwrap_err();
 //! assert_eq!(failure.to_string(), "line 1 column 23: expected a number, found `orbit`");
 //! ```
 

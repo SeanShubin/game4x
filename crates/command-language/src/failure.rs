@@ -76,7 +76,7 @@ pub struct Failure {
     /// **`P-215`'s other half**: *a rejection names the line and column it was found at, **and
     /// the command it was found inside***, and its argument is that this is what makes a
     /// nested command debuggable. A column alone says where in the line, which stops being
-    /// enough the moment a line holds a tree - `{repeat times:3 what:{deploy-ark
+    /// enough the moment a line holds a tree - `{repeat times:3 what:{fetch-item
     /// territory:x}}` fails at column 44, and the useful half of the answer is *inside
     /// `repeat`*.
     ///

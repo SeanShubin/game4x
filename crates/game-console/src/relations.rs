@@ -21,17 +21,31 @@
 //! broke is the lesson.** `spec/data/` used to hold eleven files generated one per relation from
 //! `releases/first-release.md`, and this asserted one relation per file. **The assertion was a
 //! proxy for *no nulls*** - two relations in one table give a table with blank cells - and it
-//! held right up until `P-563` put the foundation form there. `S-194`. **Keep the invariant, drop
-//! the proxy**: `no_rendered_table_has_an_empty_cell` asks the rule itself, over every cell.
+//! held right up until `P-563` put the foundation form there. `S-194`.
 //!
 //! Sean, 2026-09-26: *we are not giving up on the relational model, so there will be no nulls.*
 //! `spec/invariants.md` carries the reason - the relational model guarantees coherence, and an
 //! incoherent model cannot be accurate.
 //!
-//! **A relation's columns are the keys its own rows carry**, in the order first seen, so one
-//! table per relation has no empty cell to render. **A row is a map, so within one row the order
-//! is the map's** - every column the first row carries, alphabetically, then each later shape's
-//! new columns after them. Stable, and deliberately not the order the file writes them in.
+//! # Where *no nulls* is actually held, which is not here
+//!
+//! **A relation's columns are the keys its own rows carry**, in the order first seen - so a table
+//! has a blank cell exactly when two rows of one relation carry different key sets.
+//!
+//! **`game_model::schema::Schema::fits` forbids that outright**, requiring a row's key set to
+//! equal its relation's declared columns *exactly rather than at least*, and `schema::check`
+//! applies it to every row of everything `game_model::foundation` loads - which is these same two
+//! files. **So the rule is held upstream and this module cannot break it.** `Q-101`, and this lane
+//! re-derived it rather than accepting it.
+//!
+//! **This lane first replaced the proxy with a check that could not fail**, and said in its own
+//! doc that it *asks the rule itself*. What is here now compares this reader's rows against the
+//! engine's over the same bytes: two readers, one input, an equality rather than a floor somebody
+//! chose.
+//!
+//! **A row is a map, so within one row the order is the map's** - alphabetical. **Stable, and
+//! deliberately not the order the file writes them in**, which is not recoverable from a relation
+//! once its rows have been gathered.
 
 use std::collections::BTreeMap;
 use std::path::Path;
@@ -67,9 +81,9 @@ impl Relation {
 ///
 /// **It used to be one relation per file and that was a proxy**, standing in for *no nulls*
 /// through the filename: rows of two relations rendered as one table have blank cells, and one
-/// file per relation made that impossible. `S-194` is where it failed. The invariant is kept and
-/// asserted directly now - `no_rendered_table_has_an_empty_cell` - and a relation's columns are
-/// the keys its own rows carry, so gathering by name has nothing left to guard.
+/// file per relation made that impossible. `S-194` is where it failed. **What holds the invariant
+/// is `Schema::fits`**, upstream of this and over the same bytes - see the module header - so
+/// gathering by name has nothing left to guard.
 pub fn read(directory: &Path) -> Vec<Relation> {
     let mut found: Vec<Relation> = Vec::new();
 
@@ -144,16 +158,16 @@ pub fn read(directory: &Path) -> Vec<Relation> {
 ///
 /// **`P-563` deleted that file with the rest of the old rendering, and the population went to
 /// zero.** What replaced it is stricter than any tolerance here: `spec/data/` now holds the
-/// foundation form, `game_model::foundation` reads those same bytes with `game_model::notation::read`,
-/// and that refuses a bare word outright - *every value is named*. **So a sentence-valued
+/// foundation form, `game_model::foundation` reads those same bytes with
+/// `game_model::notation::read`, and that refuses a bare word outright - *every value is named*. **So a sentence-valued
 /// quantity fails the build before this reader is ever called**, which is where a notation rule
 /// belongs.
 ///
 /// **It refuses rather than dropping, which the old version could not afford to.** A bare word
-/// here would otherwise become a column with an empty cell - the null
-/// `no_rendered_table_has_an_empty_cell` forbids - and a silent drop would lose a field. The
-/// message names the file and the line, because this reads a directory and a file spec adds
-/// without the engine loading it would arrive here unvalidated.
+/// here would otherwise become a column with an empty cell, and a silent drop would lose a field.
+/// The message names the file and the line, because this reads a directory: a file the
+/// specification adds without the engine loading it would arrive here unvalidated, and that is the
+/// one case `Schema::fits` upstream does not cover.
 fn fields<'a>(
     words: impl Iterator<Item = &'a str>,
     file: &str,
@@ -231,66 +245,99 @@ mod tests {
         Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/data")
     }
 
-    /// **No rendered table has an empty cell**, which is the invariant the old check guarded
-    /// through a proxy.
+    /// **This reader and the engine's read the same files the same way**, which is what the
+    /// one-relation-per-file assertion was replaced by.
     ///
-    /// # What the proxy was, and why it stopped working
+    /// # The first replacement claimed more than it did, and `Q-101` measured it
     ///
-    /// **This asserted one relation per file.** That was true of the old `spec/data/` - eleven
-    /// files, each generated from one table of `releases/first-release.md` - and it protected the
-    /// real rule by standing in for it: rows of two relations in one table render as one table
-    /// with a lot of blanks, and the file name was a reliable way to stop that happening.
+    /// **The assertion this replaces was a proxy for *no nulls* through the filename.** That held
+    /// while `spec/data/` was eleven files generated one per relation from
+    /// `releases/first-release.md`; `P-563` put the foundation form there, where `rules.4x` opens
+    /// thirteen relations, and it failed on the first read. Sean, 2026-09-26: *we are not giving up
+    /// on the relational model, so there will be no nulls.*
     ///
-    /// **`P-563` put the foundation form there and the proxy failed on the first read.**
-    /// `rules.4x` opens thirteen relations and `schema.4x` thirteen more, and Sean, 2026-09-26:
-    /// *we are not giving up on the relational model, so there will be no nulls.* **The invariant
-    /// is kept and the proxy is gone** - `read` gathers by relation name now, so a table's columns
-    /// are the keys its own rows carry and there is nothing left for a filename to guard.
+    /// **This lane then wrote `no_rendered_table_has_an_empty_cell` and said it *asks the rule
+    /// itself*. It could not fail.** A cell is empty exactly when two rows of one relation carry
+    /// different key sets, and `game_model::schema::Schema::fits` forbids that outright - the key
+    /// set must equal the declared columns, *exactly rather than at least* - with `schema::check`
+    /// applying it to every row of everything `foundation.rs` loads.
     ///
-    /// # So the invariant is asserted directly, over every cell there is
+    /// **The quality lens found it and this lane re-derived it rather than accepting it**: `fits`
+    /// at `schema.rs:821` compares sorted key sets for equality, `check` at `:965` runs it over
+    /// `rows.rows()`, and the one population that could have differed is empty -
+    /// `relations::read` globs `spec/data/*.4x` and `foundation::FOUNDATION` names two, and the
+    /// glob today returns those same two. **So the extra coverage was zero files**, which is
+    /// `CLAUDE.md`'s count over nothing wearing the other sign.
     ///
-    /// **A proxy answers a narrower question than the one asked** - `C-28` - and the cost here was
-    /// a check that went red on data that was correct. This asks the rule itself: every cell of
-    /// every rendered row is non-empty. **Both populations are asserted**, because a read that
-    /// found no relations, or relations with no rows, would report no empty cells for the same
-    /// reason an empty directory reports no failures.
+    /// # What is worth checking is that the two readers agree
+    ///
+    /// **Two readers over one input, and an equality rather than a floor.** The engine's
+    /// `notation::read` and this module's `read` parse the same bytes for different purposes, and
+    /// nothing said they got the same rows. **A floor is a number this lane chose**; this is a
+    /// comparison, and it fails if either reader drifts.
+    ///
+    /// **`Q-101` measured what the floors were worth and they were worse than feared**:
+    /// `cells > 1000` against 2,004 tolerated the reader losing forty-nine per cent, and
+    /// `schema.4x` alone would have passed both by one per cent. Neither guarded the data, because
+    /// a file cannot vanish without `include_str!` failing to compile.
     #[test]
-    fn no_rendered_table_has_an_empty_cell() {
+    fn this_reader_and_the_engines_agree_about_the_rows() {
         let found = read(&data());
-        assert!(
-            found.len() > 10,
-            "only {} relations, so finding no empty cell means nothing",
-            found.len()
-        );
+        let mut compared = 0;
 
-        let mut cells = 0;
-        let mut empty: Vec<String> = Vec::new();
-        for relation in &found {
-            assert!(
-                !relation.rows.is_empty(),
-                "`{}` has no rows, so its columns are guarded by nothing",
-                relation.name
-            );
-            for row in &relation.rows {
-                for (column, cell) in relation.columns.iter().zip(relation.cells(row)) {
-                    if cell.is_empty() {
-                        empty.push(format!("{}.{column}", relation.name));
-                    }
-                    cells += 1;
+        for (_, at, text) in game_model::foundation::FOUNDATION {
+            if !at.contains("spec/data") {
+                continue;
+            }
+            // **The engine's reader, over the bytes it carries** - which
+            // `foundation::what_is_carried_is_what_is_on_disk` holds equal to the file this module
+            // read off disk, so the two are reading one input and not two copies of one.
+            let theirs = game_model::notation::read(text).expect("the engine reads it");
+            assert!(!theirs.is_empty(), "{at} parsed to nothing");
+
+            let mut by_relation: BTreeMap<String, Vec<BTreeMap<String, String>>> = BTreeMap::new();
+            for row in &theirs {
+                by_relation
+                    .entry(row.relation.clone())
+                    .or_default()
+                    .push(row.values.clone());
+            }
+
+            for (name, rows) in by_relation {
+                let mine = found
+                    .iter()
+                    .find(|it| it.name == name)
+                    .unwrap_or_else(|| panic!("{at} declares `{name}` and this reader lost it"));
+                // **Compared per relation rather than in total**, so one relation gaining rows
+                // while another loses them cannot cancel out.
+                assert_eq!(
+                    mine.rows.len(),
+                    rows.len(),
+                    "`{name}`: the engine read {} row(s) of it and this reader read {}",
+                    rows.len(),
+                    mine.rows.len()
+                );
+                for (at_row, theirs) in rows.iter().enumerate() {
+                    assert_eq!(
+                        &mine.rows[at_row], theirs,
+                        "`{name}` row {at_row}: the two readers disagree about what it says"
+                    );
                 }
+                compared += rows.len();
             }
         }
 
-        assert!(
-            empty.is_empty(),
-            "{} cells are empty, so the relational model has nulls in it: {:?}",
-            empty.len(),
-            empty.iter().take(8).collect::<Vec<&String>>()
+        // **A count over nothing is the same failure with the sign flipped** - `CLAUDE.md`. With
+        // no `spec/data/` entry in `FOUNDATION` this loop would compare nothing and pass in
+        // exactly these words. **Equality against the reader's own total**, so the number is
+        // derived on both sides rather than chosen here: every relation this reader found was
+        // matched, and every row of it.
+        assert_eq!(
+            compared,
+            found.iter().map(|it| it.rows.len()).sum::<usize>(),
+            "every row this reader found was compared against the engine's"
         );
-        assert!(
-            cells > 1000,
-            "only {cells} cells were read, which is not this data"
-        );
+        assert!(compared > 0, "no rows were compared");
     }
 
     /// **A relation's name is the word its rows open with and not its file name**, and the cases
