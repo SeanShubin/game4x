@@ -111,6 +111,19 @@ the approval instead of the code. **The record is the one artifact whose whole v
 nobody judged by it can touch it** - which is why the review application is the code lane's, the
 same reason a lens never edits what it reviews.
 
+**A generated regression case is deleted by Sean, and that deletion is an approval.** The cases
+under `scenario/regression/` have no owner and nobody edits them - they are generated in full,
+and a hand edit is overwritten. **Deleting one is different**: it is not overwritten, it is
+honoured, and it says *I accept what it does now*. **So no instance deletes one while the
+command it covers is still played**, and a lane that thinks a case is wrong says so in an
+outbox rather than removing it.
+
+**A case the scenario no longer plays is housekeeping and any lane may remove it.** The two are
+told apart by `scenario/main.4x`: a case whose command is still there is waiting on Sean, and a
+case whose command is gone is waiting on nobody. **That is the same line `reviewed/` draws** -
+a record is the person's and an orphan is a mess - and it is drawn here because the gesture
+means the opposite in the two places.
+
 **Everyone reads everything; nobody writes outside their own column.** That asymmetry is what makes
 them composable rather than merely separated - a perspective that cannot read the others has to
 guess, and one that can write to another has to be trusted. **It binds each producer against the

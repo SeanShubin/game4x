@@ -2,6 +2,10 @@
 
 - There is one **main scenario**, and it touches everything a typical game uses. It is the
   foundation, and it is vetted by hand
+- **The main scenario has generated detail beneath it, and none of it is vetted by hand.** One
+  case per command, recording what that command took and what it made. **It says what the game
+  does; the tests I have read say what it must** - so a generated case is never a statement of
+  intent, however exactly it describes the behaviour.
 - A mechanic that only appears in an unusual situation belongs in a scenario of its own. Those are
   not built until the main scenario satisfies its reader
 - Other scenarios check that particular end states are reachable, including the win condition.
