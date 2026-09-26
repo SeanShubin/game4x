@@ -79,8 +79,21 @@ declare **no capacity**, and then it holds nothing of that sort and never can. I
 to mean it may carry none of that thing.*
 
 **Together, every kind declares *no capacity* by default.** So *declares one of three* is satisfied
-by every kind that has ever existed, including one that says nothing at all - and a rule that cannot
-be false catches nothing. **That is why writing a bin with no capacity row passed.**
+by every kind that has ever existed, including one that says nothing at all. **That is why writing a
+bin with no capacity row passed.**
+
+## The diagnosis this item first gave was wrong, and the correction changes the fix
+
+**This lane called it a rule stated and held by nothing.** The specification lane reframed it and is
+right: *a kind declares one of three things about what it may hold* is a **definition**, and a
+definition is not violated but used. It tells a reader that *empty* and *cannot hold* are different
+states, which is load-bearing and is doing work in that same bullet. **What makes it unfalsifiable is
+the default, and that is not a defect in the sentence.**
+
+**So the gap is not a weak rule. It is that no rule forbids what happened**: a bin with no capacity
+row is not breaking anything, it is using a default. **That is why the question below asks what the
+game means rather than asking for the sentence to be strengthened** - strengthening a definition
+would be repairing the wrong thing.
 
 ## What it cost, measured
 

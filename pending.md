@@ -21,6 +21,8 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **C-151** - `26dd253` C-151 and C-150 turned into P-568 and P-569 · still open in `crates/outbox.md`
+- **C-150** - `26dd253` C-151 and C-150 turned into P-568 and P-569 · still open in `crates/outbox.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
 - **D-4** - `65d566d` Review of the D-4 night: Q-101 and Q-102 filed, and two of their four worries move · still open in `releases/rules-become-data.md`
 - **D-5** - `06def7c` D-5: a main scenario over the reviewed ruleset, and all fifteen rules fire · still open in `releases/rules-become-data.md`
