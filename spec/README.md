@@ -28,7 +28,7 @@ is not written here, it is not decided, no matter how thoroughly it was discusse
 | [Force](future/force.md)     | **A future plan.** Force, garrisons, and holding ground          |
 | [Interface](interface.md)    | What the player sees and can reach                               |
 | [Console](console.md)        | The command language                                             |
-| [Combat](combat.md)          | Ranges, weapons, resolution                                      |
+| [Combat](future/combat.md)   | **A future plan.** Ranges, weapons, resolution                   |
 | [Orbit](orbit.md)            | The orbital layer and what sits in it                            |
 | [Scenarios](scenarios.md)    | The scenarios that demonstrate the game, and what each is for    |
 

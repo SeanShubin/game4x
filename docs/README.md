@@ -23,7 +23,7 @@ spec/
   unit-types.md ................... each particular unit, one section apiece
   future/control.md ............... a future plan: winning and losing
   console.md ...................... the command language
-  combat.md ....................... ranges, weapons, resolution
+  future/combat.md ................ ranges, weapons, resolution
   orbit.md ........................ the orbital layer
 releases/
   README.md ....................... what each delivery includes; files are deleted once vetted
