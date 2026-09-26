@@ -183,69 +183,65 @@ pub fn holdings(game: &Game) -> BTreeMap<String, BTreeMap<String, i64>> {
     out
 }
 
-fn main() {
-    let detail = std::env::args().any(|it| it == "--detail");
-    let (mut game, _) = opening();
+/// The whole playthrough as markdown, which is the thing to read.
+///
+/// # Why a file rather than a terminal
+///
+/// **Sean, 2026-09-26**: *I see a terminal pop up and a bunch of commands fly by too fast for me to
+/// grok.* **He is right and the first version of this was the wrong shape.** `R-9` already says how
+/// this repository is read - *I can browse the reports without a script running* - and
+/// `scenario/expected/play.4x` was the precedent: a committed artifact of a playthrough, which
+/// diffs when the game changes.
+///
+/// **So the whole thing goes in one file and the terminal gets nine lines.** The file is read at
+/// leisure, in an editor, and its diff is what says a rule moved. **Nothing is behind a flag**,
+/// because a committed file whose contents depend on how it was invoked is a file nobody can trust.
+///
+/// **Four parts, in the order they answer questions**: the turns, what fired, the world it left, and
+/// then every command's takings for when a number looks wrong.
+pub fn played_as_markdown() -> String {
+    let mut game = opening().0;
     let (after, history, refused) = watched();
     let rules = every_rule();
+    let turns = history.last().map(|(turn, _)| *turn).unwrap_or(0);
 
-    println!(
-        "# The main scenario
-"
+    let mut out = String::from("# The main scenario, played\n\n");
+    out.push_str(
+        "**Generated. Do not edit.** `scripts/scenario.sh`. The rules are `spec/data/`, the world\n\
+         and the act are `scenario/main.4x`, and this file is what happened when they met.\n\n\
+         **`spec/scenarios.md`: it is vetted by hand.** So this is written to be read rather than\n\
+         to pass; `crates/game-model/tests/scenario.rs` is the part a gate holds.\n\n",
     );
-    println!(
-        "{} rules in the ruleset, {} commands, {} turns.",
+    out.push_str(&format!(
+        "{} rules in the ruleset, {} commands, {turns} turns.\n\n",
         rules.len(),
-        history.len(),
-        history.last().map(|(turn, _)| *turn).unwrap_or(0)
+        history.len()
+    ));
+    out.push_str(
+        "Every place is written the way `scenario/main.4x` writes it: `place-1` is the surface\n\
+         landed on, `place-2` the orbit above it, `place-3` the surface taken by land, `place-4`\n\
+         the orbit above that.\n\n",
     );
-    println!(
-        "
-Every place is written as the friendly form writes it: `place-1` is the surface"
-    );
-    println!("landed on, `place-2` the orbit above it, `place-3` the surface taken by land,");
-    println!(
-        "`place-4` the orbit above that.
-"
-    );
-    if !detail {
-        println!(
-            "`--detail` prints what every command took and made.
-"
-        );
-    }
 
-    // **Replayed alongside, one command at a time**, so the world can be shown as each turn closes.
-    // `watched` already has every effect; what it does not have is the world in between, and a
-    // reader confirming a game played needs the state at the end of each turn rather than only at
-    // the end of the last one.
     let mut fired: BTreeMap<String, usize> = BTreeMap::new();
-    let mut shown = 0;
+    let mut closed = 0;
     for (at, (turn, effect)) in history.iter().enumerate() {
         if at == 0 || history[at - 1].0 != *turn {
-            println!(
-                "## Turn {turn}
-"
-            );
+            out.push_str(&format!("## Turn {turn}\n\n"));
         }
         for rule in &effect.fired {
             *fired.entry(rule.clone()).or_default() += 1;
         }
-        println!("  {}", friendly_command(&game, &effect.command));
-        if detail {
-            for row in &effect.took {
-                println!("      took  {}", write(row));
-            }
-            for row in &effect.made {
-                println!("      made  {}", write(row));
-            }
-        }
+        out.push_str(&format!(
+            "    {}\n",
+            friendly_command(&game, &effect.command)
+        ));
         game = fire(&game, &effect.command, 1)
             .map(|(next, _)| next)
             .unwrap_or(game);
 
         if effect.command.relation == "end-turn" {
-            println!();
+            out.push('\n');
             for (place, held) in holdings(&game) {
                 let what: Vec<String> = held
                     .iter()
@@ -253,64 +249,52 @@ Every place is written as the friendly form writes it: `place-1` is the surface"
                     .map(|(kind, count)| format!("{count} {kind}"))
                     .collect();
                 if !what.is_empty() {
-                    println!("    place-{place}: {}", what.join(", "));
+                    out.push_str(&format!("  place-{place}: {}\n", what.join(", ")));
                 }
             }
-            println!();
-            shown += 1;
+            out.push('\n');
+            closed += 1;
         }
     }
-    assert!(shown > 0, "no turn closed, so nothing was shown to confirm");
+    assert!(closed > 0, "no turn closed, so there is nothing to read");
 
-    if let Some(why) = refused {
-        println!(
-            "REFUSED after {} command(s): {why}
-",
+    if let Some(why) = &refused {
+        out.push_str(&format!(
+            "**REFUSED** after {} command(s): {why}\n\n",
             history.len()
-        );
+        ));
     }
 
-    // **What fired rather than what the file says** - `D-5`'s own words. A command names one rule
-    // and `end-turn` runs five more through `{part ...}`, so counting the command counts a narrower
-    // population: it reported six of fifteen where the engine had applied nine.
-    println!(
-        "## What fired
-"
-    );
+    // **What fired rather than what the file says.** A command names one rule and `end-turn` runs
+    // five more through `{part ...}`, so counting the command counts a narrower population: it
+    // reported six of fifteen where the engine had applied nine.
+    out.push_str("## What fired\n\n");
     for rule in &rules {
         match fired.get(rule) {
-            Some(times) => println!("  {rule:18} {times}"),
-            None => println!("  {rule:18} -   never"),
+            Some(times) => out.push_str(&format!("    {rule:18} {times}\n")),
+            None => out.push_str(&format!("    {rule:18} -   never\n")),
         }
     }
     let missing: Vec<&String> = rules.iter().filter(|it| !fired.contains_key(*it)).collect();
-    println!(
-        "
-{} of {} rules fired; {} did not: {missing:?}",
+    out.push_str(&format!(
+        "\n{} of {} rules fired; {} did not: {missing:?}\n\n",
         rules.len() - missing.len(),
         rules.len(),
         missing.len()
-    );
+    ));
     if !missing.is_empty() {
-        println!(
-            "
-`perish` fires when somebody starves, and nobody does - `spec/scenarios.md` sends a"
+        out.push_str(
+            "`perish` fires when somebody starves, and nobody does. `spec/scenarios.md` sends a\n\
+             mechanic that only appears in an unusual situation to a scenario of its own, and\n\
+             `D-5` asks that every rule fire here - `C-150`, with Sean as `P-569`.\n\n",
         );
-        println!(
-            "mechanic that only appears in an unusual situation to a scenario of its own, and"
-        );
-        println!("`D-5` asks that every rule fire here. Those two cannot both hold - `C-150`.");
     }
 
-    println!(
-        "
-## The world it left
-"
-    );
+    out.push_str("## The world it left\n\n");
     let state = state_relations(&after);
     assert!(
         state.len() > 10,
-        "only {} state relations, so this would print almost nothing",
+        "only {} state relations, so this would show almost nothing",
         state.len()
     );
     let names = Names::of(after.rows().rows());
@@ -323,13 +307,78 @@ Every place is written as the friendly form writes it: `place-1` is the surface"
         .collect();
     rows.sort();
     for line in &rows {
-        println!("  {line}");
+        out.push_str(&format!("    {line}\n"));
     }
-    println!(
-        "
-{} row(s) of world, out of {} in the store.",
+    out.push_str(&format!(
+        "\n{} row(s) of world, out of {} in the store.\n\n",
         rows.len(),
         after.rows().rows().len()
+    ));
+
+    // **Last, because it is the part to reach for rather than to read.** When a number above looks
+    // wrong, this is what produced it.
+    out.push_str("## What every command took and made\n\n");
+    let mut game = opening().0;
+    for (turn, effect) in &history {
+        out.push_str(&format!(
+            "### Turn {turn}: {}\n\n",
+            friendly_command(&game, &effect.command)
+        ));
+        out.push_str(&format!("    fired {}\n", effect.fired.join(", ")));
+        for row in &effect.took {
+            out.push_str(&format!("    took  {}\n", write(row)));
+        }
+        for row in &effect.made {
+            out.push_str(&format!("    made  {}\n", write(row)));
+        }
+        out.push('\n');
+        game = fire(&game, &effect.command, 1)
+            .map(|(next, _)| next)
+            .unwrap_or(game);
+    }
+    out
+}
+
+/// Where the playthrough is written.
+pub fn played_at() -> PathBuf {
+    root().join("scenario").join("played.md")
+}
+
+fn main() {
+    let text = played_as_markdown();
+    let at = played_at();
+    std::fs::write(&at, &text).unwrap_or_else(|why| panic!("{}: {why}", at.display()));
+
+    let (_, history, refused) = watched();
+    let rules = every_rule();
+    let fired: std::collections::BTreeSet<String> = history
+        .iter()
+        .flat_map(|(_, effect)| effect.fired.iter().cloned())
+        .collect();
+    let missing: Vec<&String> = rules.difference(&fired).collect();
+
+    // **Nine lines, because the file is the thing to read.** Anything longer here is the problem
+    // this arrangement exists to fix.
+    println!("Played scenario/main.4x against spec/data/.");
+    println!();
+    println!(
+        "  {} turns, {} commands, {} of {} rules fired",
+        history.last().map(|(turn, _)| *turn).unwrap_or(0),
+        history.len(),
+        rules.len() - missing.len(),
+        rules.len()
+    );
+    if !missing.is_empty() {
+        println!("  never fired: {missing:?}");
+    }
+    match refused {
+        Some(why) => println!("  REFUSED: {why}"),
+        None => println!("  nothing was refused"),
+    }
+    println!();
+    println!(
+        "Read it in scenario/played.md - {} lines.",
+        text.lines().count()
     );
 }
 
@@ -337,7 +386,7 @@ Every place is written as the friendly form writes it: `place-1` is the surface"
 ///
 /// **The trace showed `{deploy what:51 where:2}`** and the file says
 /// `{deploy where:place-2 what:ark}`. A reader confirming that the scenario did what it says cannot
-/// do it against relation ids, so this renders the command back the way he wrote it.
+/// do it against relation ids, so the command is rendered back the way he wrote it.
 fn friendly_command(game: &Game, command: &Row) -> String {
     Names::of(game.rows().rows()).row(command)
 }

@@ -228,3 +228,49 @@ fn every_rule_but_perish_fires_and_perish_is_named() {
         "these fired and are not rules: {strangers:?}"
     );
 }
+
+/// **The committed playthrough is what the scenario produces now.**
+///
+/// **`scenario/played.md` is the thing Sean reads**, so a rule change that moves it has to move the
+/// file too. `crates/game-console/tests/dumps_are_current.rs` holds the reports this way and the
+/// argument is the same: a generated file that is committed and stale is worse than one that is
+/// absent, because it reads exactly like one that is current.
+///
+/// **It fails with the first line that differs** rather than with a byte count, because the point of
+/// a committed playthrough is that its diff says what changed.
+#[test]
+fn the_committed_playthrough_is_current() {
+    let at = scenario::played_at();
+    let committed = std::fs::read_to_string(&at)
+        .unwrap_or_else(|why| panic!("{}: {why} - run `scripts/scenario.sh`", at.display()));
+    let produced = scenario::played_as_markdown();
+
+    // **A count over nothing is the same failure with the sign flipped** - `CLAUDE.md`. Two empty
+    // strings are equal.
+    assert!(
+        produced.lines().count() > 100,
+        "the runner produced {} line(s), which is not a playthrough",
+        produced.lines().count()
+    );
+
+    if committed != produced {
+        let differs = committed
+            .lines()
+            .zip(produced.lines())
+            .enumerate()
+            .find(|(_, (was, now))| was != now);
+        match differs {
+            Some((at_line, (was, now))) => panic!(
+                "scenario/played.md is stale at line {}: it says\n  {was}\nand the scenario now \
+                 produces\n  {now}\nRun `scripts/scenario.sh`.",
+                at_line + 1
+            ),
+            None => panic!(
+                "scenario/played.md has {} line(s) and the scenario produces {} - run \
+                 `scripts/scenario.sh`",
+                committed.lines().count(),
+                produced.lines().count()
+            ),
+        }
+    }
+}
