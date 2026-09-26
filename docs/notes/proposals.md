@@ -121,9 +121,14 @@ new one**, so each is a one-word repoint rather than a question.
 2026-09-18-a-test-named-for-a-number-nothing-states.md   ../../prototypes/thin-engine/README.md
 2026-09-18-what-the-refresh-conversation-settled.md      ../../prototypes/thin-engine/README.md
 2026-09-18-storage-is-built-and-the-turn-is-what-waits.md  ../../prototypes/thin-engine/backlog.md
-                                                    -> ../../crates/thin-engine/README.md
-                                                    -> ../../crates/thin-engine/backlog.md
+                                                    -> ../../crates/game-model/ENGINE.md
+                                                    -> ../../crates/game-model/backlog.md
 ```
+
+**Corrected the same day this was filed.** The first version sent you to
+`crates/thin-engine/`, which was right for about an hour: `f633864a` moved the engine into
+`crates/game-model` and the crate stopped existing. **The README is `ENGINE.md` there**, because
+that crate already had a `README.md` doing a different job.
 
 **How it was found, since no check does it.** Every `](...md)` in every tracked markdown file,
 resolved against the file's own directory: **1,036 links checked, six unresolved**, of which one was
@@ -164,9 +169,13 @@ user friendly format is for the test harness and debugging* was true on 2026-09-
 after `P-558`: friendly is the authored canonical artifact and foundation is the rendering. **So a
 reader of either comment is told the opposite of `spec/README.md` rule 3.** The surviving reason is
 the one the invariant now states, and it is measurable: resolving a name to an
-id is most of the translator. **The figure `P-559` carried - 333 of 561 code lines - named no
-commit and cannot be reproduced now**, the file having grown past 800 lines in the commit that
-acted on this item. `C-145`, filed by the code lane against exactly this.
+id is most of the translator. **The figure `P-559` carried - 333 of 561 code lines - is
+wrong in its numerator and not in its denominator.** Re-derived at `HEAD` and at `211652e4`:
+**561 code lines both times, unchanged**, while the file's total went 844 to 860 on comments
+alone. The code lane measures `Names::of` at 244, `impl Names` at 410 and the two with the struct
+at 422 - **none of them 333.** `C-145`. **An earlier version of this line blamed the file for
+growing, which was this lane's third narrower-question error of the day**: the denominator was
+never the problem.
 
 **`releases/first-release.md:630` needs nothing** - it quotes only the half that survived.
 

@@ -13,15 +13,16 @@ question is answered — not when it is polished.
 | [Kinds](../../prototypes/kinds/README.md)                   | What do the inputs to the gameplay logic actually look like?                                                                                                          | **Answered** 2026-08-31, below                                  |
 | [Gap view](../../prototypes/gap-view/README.md)             | Can a player set a destination anywhere on the world with one mouse gesture, without rotating anything?                                                               | Built ([code](../../prototypes/gap-view/README.md))             |
 | [Hex torus view](../../prototypes/hex-torus-view/README.md) | At the sizes the game would use, does a flat isotropic hex torus read as a world, and how visible is the wrapping? **Not whether a torus should be the game's shape** | Being built ([code](../../prototypes/hex-torus-view/README.md)) |
-| [Thin engine](../../crates/thin-engine/README.md)           | Can a rule run from rows of data, against an engine that names no game noun? **`C-114`'s open half, answered by existing rather than decided**                        | **Answered** 2026-09-14, below                                  |
+| [Thin engine](../../crates/game-model/ENGINE.md)            | Can a rule run from rows of data, against an engine that names no game noun? **`C-114`'s open half, answered by existing rather than decided**                        | **Answered** 2026-09-14, below                                  |
 | [Goldberg move](../../prototypes/goldberg-move/README.md)   | Can a player lay out a move of any length across a sphere by clicking, without the interface ever having to guess which way round he meant to go?                     | Being built ([code](../../prototypes/goldberg-move/README.md))  |
 
 ## Conventions
 
-- One prototype per crate, each with a `README.md` linked from this index. **Most are workspace
-  members and `thin-engine` is deliberately not** - `S-136` keeps it outside so the gate does not
-  fire on a thing being grown one concept at a time, and so nothing it depends on can arrive
-  without being asked for.
+- One prototype per crate, each with a `README.md` linked from this index. **Every prototype
+  listed here is a workspace member.** `S-136` once kept `thin-engine` outside, so the gate would
+  not fire on a thing being grown one concept at a time; it joined the gate on 2026-09-22 under
+  `S-153`, and on 2026-09-25 the engine moved into `crates/game-model` and the crate stopped
+  existing. **The exception this bullet recorded has no subject left.**
 - Each prototype gets a run script in [`scripts/`](../../scripts/README.md), so running
   one never requires remembering a cargo incantation.
 - A prototype depends on real modules where that is the point, and fakes everything else.
@@ -73,7 +74,7 @@ read added to `src/`, and `{adjacent from:1 to:3}` added to the world - each fai
 should have. **The isolation is asserted rather than promised.**
 
 Recorded from the code lane's `C-126`; the argument is in
-[`crates/thin-engine/README.md`](../../crates/thin-engine/README.md).
+[`crates/game-model/ENGINE.md`](../../crates/game-model/ENGINE.md).
 
 ## Goldberg view: answered 2026-08-30
 
