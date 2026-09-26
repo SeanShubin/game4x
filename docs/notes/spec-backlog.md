@@ -4763,3 +4763,40 @@ an expectation       deleted by Sean                          = I approve what i
 **Same gesture, opposite meaning.** If the two ever sit near each other, or if a tool sweeps both,
 that will bite. **Not an objection to his pattern** - it is a reason the two must be visibly
 separate, and possibly a reason the gesture should differ.
+
+## Said 2026-09-26: the regression data needs no approval record, and why
+
+**This lane asked whether the main scenario should gain an approval record the way `spec/tests/`
+has `reviewed/`, since *vetted by hand* currently has no bytes behind it. Sean declined, with the
+reason:**
+
+*That is fine, because the regression test is drawing my attention to differences, that may or not
+be failures. If they turn out to be failures, I will add a unit test to lock it down, if they turn
+out to just be a scenario change, I will not add a unit test. Either way I will regenerate the
+regression test data.*
+
+**So the record is the reviewed test he adds, and its absence is also a record.** The regression
+suite is a **detector**; the specification is where a difference lands if it mattered.
+
+```
+a difference that is a failure        -> a new test, read and approved, in reviewed/
+a difference that is a scenario change -> nothing, and the data is regenerated
+either way                             -> the regression data is regenerated
+```
+
+**This lane's suggestion is dropped rather than parked.** An approval record on the regression
+data would record that he looked at something he had already decided not to keep - **the reading
+is real and the artifact it belongs to is the test, not the case that prompted it.**
+
+## It makes `S-195` worse rather than milder
+
+**If the whole job is drawing his attention to differences, then a failure message naming
+thirty-three false orphans is a failure of the only job it has.** `S-195` is filed to the code
+lane and this is the sentence that sharpens it.
+
+## And it answers what `P-571` left implicit
+
+**The bullet promoted an hour ago says a generated case *says what the game does; the tests I have
+read say what it must*.** What it does not say is the path between them, and his answer is that
+path: **a difference becomes a reviewed test, or it becomes nothing.** Not proposed - the bullet
+stands as written and this is the reasoning behind it, which is where reasoning goes.
