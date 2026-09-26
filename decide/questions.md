@@ -30,19 +30,27 @@ not**, and both are yours.
 **So the clutter you want to avoid is 34 items, not hundreds**, and half of it is two commands
 seen in different states.
 
-## The first decision - where they live, and one file or many
+## The code lane has already built `G2`, so this is now a choice against an artifact
+
+**`scenario/regression/` holds 34 files**, numbered and named for their command -
+`01-gather.4x` through `34-end-turn.4x`. **Go and look before choosing**; the options below are
+what you would be choosing between, and one of them is on disk.
 
 ```
-G1  one file per command name       10 files, work.4x holding its 13 in order.
-                                    Browsing by mechanic; a change to work touches one file
-G2  one file per command            34 files, named for the command and its turn.
-                                    A change shows as one file in a diff and nothing else moves
-G3  one file                        everything in order, read top to bottom like the scenario
+G2  one file per command   34 files, as built. A change shows as one file in a diff
+                           and nothing else moves
+G1  one per command name   10 files, work.4x holding its 13 in order. Browsing by
+                           mechanic rather than by turn
+G3  one file               1,129 lines, measured by concatenating what is there.
+                           Read top to bottom like the scenario itself
 ```
 
-**`G2` makes a diff say the most** - one changed file names the one command that moved - and it
-is the most files. **`G1` groups the way you would browse.** `G3` is the scenario again with
-expectations attached.
+**Each test states the world whole** - most are 25 lines, the last is 78 - so they are
+self-contained cases rather than a chain, and any of the three layouts holds that.
+
+**Your deletion convention is honoured and cited correctly.** Every header carries
+`docs/process.md`'s own words: *Absent expected data means I accept what it does now, so the test
+writes it, and what I review is the diff in version control.*
 
 ## The second - a rule, because these are not `spec/tests/`
 
