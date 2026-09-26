@@ -61,6 +61,82 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-151 - `spec/logistics.md` says a kind declares one of three things, and a default makes that unable to catch anything
+
+**to** spec · **status** open · **raised** 2026-09-26 · **source** Sean asking whether the bin that
+held nothing could have been prevented by the specification, after this lane said it could not
+
+**This lane said *nothing is missing from the spec* and that was wrong.** The rule is there. What is
+wrong is that it cannot be violated.
+
+## The two sentences
+
+**`spec/logistics.md`**: *A kind **declares** one of three things about what it may hold. It may
+declare **no capacity**, and then it holds nothing of that sort and never can. It may declare a
+**limit**... Or it may declare **no limit**.*
+
+**Sean, 2026-09-18, quoted in `spec/data/schema.4x`**: *If we omit a capacity, we can default that
+to mean it may carry none of that thing.*
+
+**Together, every kind declares *no capacity* by default.** So *declares one of three* is satisfied
+by every kind that has ever existed, including one that says nothing at all - and a rule that cannot
+be false catches nothing. **That is why writing a bin with no capacity row passed.**
+
+## What it cost, measured
+
+**`scenario/main.4x` built a bin for metal and lost all five metal at the turn's end.** `build-bin`
+succeeded; `discard-disorder` took `{metal quantity:5 where:1}` with the bin standing there. The
+missing row was `{capacity of:bin for:resource what:resource per:place} -> 10`, and
+`spec/data/schema.4x` shows it beside the other one in Sean's own example - so the data file states
+the pair and the world this lane wrote had one of them.
+
+**The two rows answer different questions** and `spec/logistics.md` distinguishes them correctly:
+*a place's capacity for a kind is the sum of what is in it that can hold that kind, and for a kind a
+place can hold, a place declares none of its own. What a place has room to stand is a different
+question.* **Nothing is missing there.** What is missing is anything that would have refused the
+world.
+
+## The question, and this lane is not guessing at it
+
+**Should building a thing that can hold nothing be refused?** A bin whose kind declares no capacity
+for anything is a thing the player spends labour and metal on that provably cannot do its job, and
+nothing says so - not the build, not the turn's end, not a check.
+
+**Or should a kind that is a store be required to declare a capacity explicitly?** That is the other
+reading of *declares one of three*, and it would make the rule checkable: a kind named as `for:` in
+some capacity row and giving room for nothing is either deliberate - an extractor stands in a deposit
+and holds nothing, which is fine - or a gap. **This lane cannot tell those apart from the data**,
+which is why it is a question rather than a check.
+
+**Whichever it is, the rule as written is inert**, and that is the part worth a proposal even if the
+answer is *leave the default alone*.
+
+## A second rule in the same class, found looking for the first
+
+**`spec/planet.md`**: *For each resource, a territory has capacity for some number of extractors, and
+a density that each of them yields.*
+
+**`scenario/main.4x`'s territory-1 had no energy density at all** - metal and food on the surface,
+energy in the orbit - and nothing objected. **Is *some number* allowed to be zero**, so a territory
+may omit a resource entirely? Measured: adding the energy density changes nothing observable, because
+`deploy` makes two extractors either way. **So the question is what the sentence means rather than
+what it costs.**
+
+## And the starvation, which is the other half of what Sean asked
+
+**The spec could not have prevented that one, and its own answer to the class is the one that
+worked.** Both settlements starved because the scenario spent every labour on building and worked no
+food. That is a legal sequence: `spec/population.md` states *if less food than citizens, each unfed
+citizen starves*, and the scenario obeyed it.
+
+**What catches a legal sequence that is not a game anybody would play is a person.**
+`spec/scenarios.md`: *there is one main scenario, and it touches everything a typical game uses. It
+is the foundation, and it is vetted by hand.* **It was vetted by hand and the hand caught it** - this
+lane had reported it as a property of the ruleset. **So that half is the process working**, and it is
+recorded here rather than filed as a gap.
+
+---
+
 ### C-150 - `D-5` asks every rule to fire and `spec/scenarios.md` sends starvation to a scenario of its own
 
 **to** spec · **status** open · **raised** 2026-09-26 · **rewritten** 2026-09-26 after Sean
