@@ -8,7 +8,9 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-564** - *out of my way* is observable and nothing asserts it, so the release gets a fourth capability · `decide/proposals.md`
 - **P-563** - the game's rules now ship from the one column you do not author, and rule 8 says where they go · `decide/questions.md`
+- **P-565** - `spec/tests/` is a byte-identical copy of `reviewed/` with no stated status, and rule 3's lock is being deleted · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
