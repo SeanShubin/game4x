@@ -22,16 +22,6 @@
 use crate::dump::{Section, escaped, head, normalized_sections};
 use game_model::Game;
 
-/// The page a kind's name links to: the catalog's section for it.
-///
-/// **An anchor rather than a page**, and it is the one exception to a page per thing. A kind
-/// is not a thing in the game - it is what a thing *is* - and the catalog is already one
-/// section per kind, generated from the release. A second page per kind would be that section
-/// rendered twice from two crates, and `prototypes/kinds` may not use this renderer.
-fn kind_at(name: &str) -> String {
-    format!("catalog.html#{}", slug(name))
-}
-
 /// A territory's own page.
 fn territory_at(id: &str) -> String {
     format!("territory-{id}.html")
@@ -39,9 +29,8 @@ fn territory_at(id: &str) -> String {
 
 /// A heading's anchor, from its text.
 ///
-/// **The same slug on both sides or the link goes nowhere.** The catalog writes `## citizen`
-/// and this writes `catalog.html#citizen`, and the only thing keeping those equal is that
-/// both are this function. A test follows every link it generates to the anchor it names.
+/// **The same slug on both sides or the link goes nowhere.** Both sides of every anchor this
+/// generates come from this function, and a test follows each one to the heading it names.
 pub fn slug(text: &str) -> String {
     let mut out = String::new();
     let mut dashed = false;
@@ -70,11 +59,11 @@ pub fn reference(table: &str, column: &str, cell: &str) -> Option<String> {
         // A territory, by id, wherever one is named.
         (_, "territory") | (_, "from") | (_, "to") => Some(territory_at(cell)),
         ("territory", "id") => Some(territory_at(cell)),
-        // A kind, by name. `resource` and `structure` hold kind names too - food and yard
-        // are kinds in the release's Kinds table, which is what the catalog is generated
-        // from.
-        (_, "resource") | (_, "structure") | (_, "kind") | (_, "in-kind") => Some(kind_at(cell)),
-        ("kind", "id") => Some(kind_at(cell)),
+        // **A kind's name linked to `catalog.html#<name>` until 2026-09-26**, and the catalog
+        // was `prototypes/kinds` rendering the release's Kinds table. `D-4` deleted both, so a
+        // kind has nowhere to point and says so here rather than pointing at a page that is
+        // not there. **`unlinked` below is where it is now named**, which is the difference
+        // between *not a reference* and *nobody has looked*.
         // A unit stands in a place, and which place is what `in-kind` says. So `in-id` is a
         // territory's id when it is a territory's, and this cannot tell from here.
         (_, "in-id") => None,
@@ -88,7 +77,7 @@ pub fn reference(table: &str, column: &str, cell: &str) -> Option<String> {
 /// text, and a column added tomorrow would fall through the same way - reading as *not a
 /// reference* when it means *nobody has looked*. `tests/browse.rs` holds every column of
 /// every table against this list, so a new one fails until it is either linked or named here.
-pub const UNLINKED: [(&str, &str); 23] = [
+pub const UNLINKED: [(&str, &str); 30] = [
     ("game", "phase"),
     ("game", "territories"),
     ("game", "units"),
@@ -121,6 +110,23 @@ pub const UNLINKED: [(&str, &str); 23] = [
     // worse than no link: it is confidently wrong, and nothing about following it says so.
     ("unit", "in-id"),
     ("kind", "in-play"),
+    // **Six columns held a kind's name and linked to `catalog.html#<name>` until 2026-09-26.**
+    // `D-4` deleted `prototypes/kinds` and `reports/catalog.md` with the tables they rendered,
+    // so a kind has no page to point at. **Named here rather than left to fall through**, which
+    // is this list's whole job: a column reading as plain text because nobody looked, and one
+    // reading as plain text because somebody decided, are the same bytes.
+    //
+    // **They are named per table rather than by a wildcard**, the way every other entry is. The
+    // rule that linked them matched `(_, "resource")` on any table at all, so a new table with a
+    // `resource` column would have been linked without anyone deciding - which is the thing this
+    // list exists to make impossible.
+    ("deposit", "resource"),
+    ("store", "resource"),
+    ("extractor", "resource"),
+    ("structure", "structure"),
+    ("unit", "kind"),
+    ("unit", "in-kind"),
+    ("kind", "id"),
 ];
 
 /// A cell, as a link where it is a reference and as text where it is not.

@@ -201,7 +201,7 @@ fn the_entity_view_names_every_kind_and_admits_what_it_cannot_name() {
 fn the_html_carries_the_same_rows_and_names_nothing_itself() {
     let session = played();
     let sections = dump::normalized_sections(&session.game);
-    let page = dump::html(&sections, "after");
+    let page = dump::html(&sections, "after", dump::Linking::Things);
 
     for section in &sections {
         let (name, columns, rows) = (&section.name, &section.columns, &section.rows);
@@ -223,7 +223,11 @@ fn the_html_carries_the_same_rows_and_names_nothing_itself() {
     // there - the `unit kind` table names every kind from the model's enumeration whether
     // any exist or not, which is the whole point of that table. Asserting a name is absent
     // tests the scenario; asserting the page changes with the state tests the renderer.
-    let empty = dump::html(&dump::normalized_sections(&Session::new().game), "before");
+    let empty = dump::html(
+        &dump::normalized_sections(&Session::new().game),
+        "before",
+        dump::Linking::Things,
+    );
     assert_ne!(empty, page, "two states must not render the same page");
     assert!(
         page.contains("grassland"),

@@ -86,14 +86,11 @@ fn marked_on_disk(root: &Path) -> Vec<String> {
             .unwrap_or_default()
             .to_string_lossy()
             .to_string();
-        // `prototypes/kinds` produces `catalog.md` and holds it to being current itself. It
-        // is excluded here rather than added, because this test is about the dumps and a file
-        // belongs to whatever generates it. **`recipes.md` left this list with `R-7`**: it
-        // carries a worked example under each rule now, which is a real command run against a
-        // real state, so it is generated here and held here.
-        if name == "catalog.md" {
-            continue;
-        }
+        // **Nothing is excluded, and two files were.** `recipes.md` left with `R-7`, which
+        // gave it a worked example run against a real state; `catalog.md` left with `D-4`,
+        // which deleted `prototypes/kinds` and the tables it rendered. **Every report in
+        // the directory is generated here now**, so a name this loop skipped would be a
+        // file held to nothing.
         let Ok(text) = std::fs::read_to_string(&path) else {
             continue;
         };
@@ -128,7 +125,7 @@ fn marked_on_disk(root: &Path) -> Vec<String> {
 #[test]
 fn every_committed_dump_is_what_the_scenario_produces() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let mut generated = dump::generated(&Files(root.join("scenario/commands")));
+    let generated = dump::generated(&Files(root.join("scenario/commands")));
 
     // **Thirty-nine, and the number moved for three reasons at once** - all of them `R-9`.
     // `containment.md` arrived, because every view has a diffable sibling now and that was
@@ -152,19 +149,10 @@ fn every_committed_dump_is_what_the_scenario_produces() {
     // cannot use this renderer and nothing should depend on it. `catalog.md` is held to the
     // release by `prototypes/kinds/tests/catalog_is_current.rs`; this holds `catalog.html`
     // to `catalog.md`. Neither half alone says the page shows what the release says.
-    for name in dump::RENDERED_ELSEWHERE {
-        let at = root.join("reports").join(name);
-        let markdown = std::fs::read_to_string(&at)
-            .unwrap_or_else(|why| panic!("cannot read {}: {why}", at.display()));
-        generated.push((
-            dump::html_name(name).to_string(),
-            dump::page(&markdown, name),
-        ));
-    }
     assert_eq!(
         generated.len(),
-        19 + 2 + 12 * 2 + 1,
-        "one more with `catalog.html`, which `prototypes/kinds` writes the markdown for"
+        19 + 2 + 12 * 2,
+        "every report this crate generates, and since `D-4` there is no other crate writing one"
     );
 
     let produced: std::collections::BTreeSet<String> =
@@ -220,9 +208,9 @@ fn every_committed_dump_is_what_the_scenario_produces() {
     // The set was discovered, so it can be empty for the wrong reason. This says it was not.
     assert_eq!(
         on_disk.len(),
-        19 + 2 + 12 * 2 + 1,
+        19 + 2 + 12 * 2,
         "the same population again, counted from the directory rather than from the \
-         program - `catalog.md` is the one file excluded, and it is `prototypes/kinds`'. \
+         program, and nothing is excluded since `D-4` took `catalog.md`. \
          Found {} ({on_disk:?})",
         on_disk.len()
     );
@@ -236,17 +224,10 @@ fn every_committed_dump_is_what_the_scenario_produces() {
 #[test]
 fn the_scenario_produces_tables_rather_than_empty_files() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let mut generated = dump::generated(&Files(root.join("scenario/commands")));
-    for name in dump::RENDERED_ELSEWHERE {
-        let markdown = std::fs::read_to_string(root.join("reports").join(name)).unwrap();
-        generated.push((
-            dump::html_name(name).to_string(),
-            dump::page(&markdown, name),
-        ));
-    }
+    let generated = dump::generated(&Files(root.join("scenario/commands")));
     assert_eq!(
         generated.len(),
-        19 + 2 + 12 * 2 + 1,
+        19 + 2 + 12 * 2,
         "the same population as the currency check above, and it is worth restating rather \
          than sharing: a helper that both read would make one number, and two checks over \
          one number is one check"
@@ -314,14 +295,7 @@ fn the_scenario_produces_tables_rather_than_empty_files() {
 #[test]
 fn every_page_is_well_formed_enough_to_be_read_as_one() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let mut generated = dump::generated(&Files(root.join("scenario/commands")));
-    for name in dump::RENDERED_ELSEWHERE {
-        let markdown = std::fs::read_to_string(root.join("reports").join(name)).unwrap();
-        generated.push((
-            dump::html_name(name).to_string(),
-            dump::page(&markdown, name),
-        ));
-    }
+    let generated = dump::generated(&Files(root.join("scenario/commands")));
 
     let mut pages = 0;
     for (name, text) in &generated {
@@ -355,7 +329,8 @@ fn every_page_is_well_formed_enough_to_be_read_as_one() {
     // likeliest to drift from the rest.
     assert_eq!(
         pages,
-        11 + 12,
-        "eleven pages and one per territory, and every one of them checked"
+        10 + 12,
+        "ten pages and one per territory, and every one of them checked - eleven until \
+         `D-4` deleted `catalog.html` with the tables it was rendered from"
     );
 }

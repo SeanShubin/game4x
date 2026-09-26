@@ -225,16 +225,19 @@ fn only_a_generator_or_a_check_reads_a_report() {
     }
 
     readers.sort();
-    // **Thirteen since `S-153`**, where the floor was seven: the engine's own report reader
-    // arrived with the move into `crates/`. Raised rather than left, because a floor set for
-    // one population is a literal about a different one the moment the population moves.
+    // **Eleven since `D-4`**, thirteen since `S-153`, and seven before that. The engine's own
+    // report reader arrived with the move into `crates/`; two left when `D-4` deleted
+    // `prototypes/kinds` and the `reports/catalog.md` it wrote. **Moved with the population
+    // rather than left**, because a floor set for one population is a literal about a different
+    // one the moment the population moves - and lowered deliberately, which is what this
+    // assertion's own message asks for.
     assert!(
-        readers.len() >= 13,
+        readers.len() >= 11,
         "only {} file(s) name the reports directory, and there were seven - {readers:?}. \
          A predicate that finds nothing passes while checking nothing, and one that finds \
          most of them passes while missing the rest, which is `Q-56` exactly. If a reader \
-         was deliberately removed, lower this with it and say so. It was seven until the \
-         engine moved into `crates/`.",
+         was deliberately removed, lower this with it and say so. It was thirteen until \
+         `D-4` deleted `prototypes/kinds` and the catalog it wrote.",
         readers.len()
     );
     assert!(

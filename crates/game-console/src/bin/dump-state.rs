@@ -30,20 +30,11 @@ fn main() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
     let files = Files(root.join("scenario/commands"));
 
-    // The two reports `prototypes/kinds` writes get a page here, because it cannot use this
-    // renderer and nothing should depend on it. Rendered from its markdown on disk.
-    let mut elsewhere = Vec::new();
-    for name in dump::RENDERED_ELSEWHERE {
-        let at = root.join("reports").join(name);
-        let markdown = std::fs::read_to_string(&at)
-            .unwrap_or_else(|why| panic!("cannot read {}: {why}", at.display()));
-        elsewhere.push((
-            dump::html_name(name).to_string(),
-            dump::page(&markdown, name),
-        ));
-    }
-
-    for (name, text) in dump::generated(&files).into_iter().chain(elsewhere) {
+    // **Every report is generated here.** Two used to be another crate's markdown rendered to
+    // a page by this one - `recipes.md` until `R-7` moved its generator here, `catalog.md`
+    // until `D-4` deleted `prototypes/kinds` with the tables it rendered - and the chain that
+    // carried them went with the second.
+    for (name, text) in dump::generated(&files) {
         let at = root.join("reports").join(&name);
         std::fs::write(&at, text)
             .unwrap_or_else(|why| panic!("cannot write {}: {why}", at.display()));

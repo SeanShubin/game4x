@@ -4,330 +4,759 @@
 rules are stated. `reports/state.md` is the same view over the state the scenario
 leaves; this is the same view over the rules it played by.
 
-**The relation is the word each row opens with, and it is not always the file name** -
-`biomes.4x` holds `value`, `families.4x` holds `family`, `kinds.4x` holds `kind` and
-`traits.4x` holds `trait`.
+**The relation is the word each row opens with, and a file holds as many as it likes** -
+`rules.4x` opens thirteen of these and `schema.4x` the rest.
 
-11 relations, 234 rows.
+26 relations, 569 rows.
 
-## Values that are sentences
+## rule
 
-`spec/console.md` gives a field one token and these carry several, so a reader has
-to take the words up to the next `key:` as one value. **This is `C-120` and it is
-shown rather than corrected here** - the data is not this report's to edit.
+From `spec/data/rules.4x`. 15 row(s), 2 column(s).
 
-| Where                       | Field | Value                                |
-| --------------------------- | ----- | ------------------------------------ |
-| `spec/data/line.4x` line 45 | `qty` | `$where`'s density for that resource |
+| id  | name             |
+| --- | ---------------- |
+| 1   | move             |
+| 2   | build-extractor  |
+| 3   | work             |
+| 4   | refresh          |
+| 5   | end-turn         |
+| 6   | build-bin        |
+| 7   | discard-disorder |
+| 8   | upkeep           |
+| 9   | perish           |
+| 10  | breed            |
+| 11  | toil             |
+| 12  | gather           |
+| 13  | launch           |
+| 14  | deploy           |
+| 15  | build-pioneer    |
 
-## value
+## input
 
-From `spec/data/biomes.4x`. 6 row(s), 2 column(s).
+From `spec/data/rules.4x`. 20 row(s), 5 column(s).
 
-| name      | of    |
-| --------- | ----- |
-| ocean     | biome |
-| ice       | biome |
-| desert    | biome |
-| grassland | biome |
-| jungle    | biome |
-| mountain  | biome |
+| id  | name  | of  | rule | seq |
+| --- | ----- | --- | ---- | --- |
+| 1   | what  | 26  | 1    | 1   |
+| 2   | from  | 48  | 1    | 2   |
+| 3   | to    | 48  | 1    | 3   |
+| 4   | where | 48  | 2    | 1   |
+| 7   | what  | 27  | 2    | 2   |
+| 8   | where | 48  | 3    | 1   |
+| 9   | what  | 27  | 3    | 2   |
+| 11  | what  | 1   | 4    | 1   |
+| 12  | trait | 38  | 4    | 2   |
+| 13  | where | 48  | 6    | 1   |
+| 14  | what  | 27  | 6    | 2   |
+| 15  | where | 48  | 8    | 1   |
+| 16  | where | 48  | 9    | 1   |
+| 17  | where | 48  | 10   | 1   |
+| 18  | where | 48  | 11   | 1   |
+| 19  | where | 48  | 12   | 1   |
+| 20  | where | 48  | 13   | 1   |
+| 21  | where | 48  | 14   | 1   |
+| 22  | what  | 55  | 14   | 2   |
+| 23  | where | 48  | 15   | 1   |
 
-## block
+## clause
 
-From `spec/data/block.4x`. 29 row(s), 3 column(s).
+From `spec/data/rules.4x`. 50 row(s), 5 column(s).
 
-| id                        | owner  | recipe          |
-| ------------------------- | ------ | --------------- |
-| deploy-ark                | player | deploy-ark      |
-| move                      | player | move            |
-| found-by-land             | player | found-by-land   |
-| build-extractor           | player | build-extractor |
-| build-store               | player | build-store     |
-| build-yard                | player | build-yard      |
-| produce-pioneer           | player | produce-pioneer |
-| launch-ark                | player | launch-ark      |
-| create-labor              | player | create-labor    |
-| mine-energy               | player | mine-energy     |
-| work                      | player | work            |
-| upkeep                    | world  | upkeep          |
-| bear                      | world  | bear            |
-| breed                     | world  | breed           |
-| perish                    | world  | perish          |
-| age                       | world  | age             |
-| spoil                     | world  | spoil           |
-| stow-metal                | world  | stow            |
-| stow-energy               | world  | stow            |
-| discard-metal             | world  | discard         |
-| discard-energy            | world  | discard         |
-| discard-labor             | world  | discard         |
-| discard-fertility         | world  | discard         |
-| refresh-unit-moving       | world  | refresh         |
-| refresh-citizen-laboring  | world  | refresh         |
-| refresh-citizen-bearing   | world  | refresh         |
-| refresh-extractor-working | world  | refresh         |
-| refresh-ark-working       | world  | refresh         |
-| renew                     | world  | renew           |
+| id  | relation | role | rule | seq |
+| --- | -------- | ---- | ---- | --- |
+| 29  | 48       | 1    | 1    | 1   |
+| 30  | 48       | 1    | 1    | 2   |
+| 2   | 15       | 1    | 1    | 3   |
+| 3   | 26       | 2    | 1    | 4   |
+| 4   | 26       | 3    | 1    | 5   |
+| 5   | 29       | 2    | 2    | 1   |
+| 6   | 30       | 2    | 2    | 2   |
+| 7   | 19       | 3    | 2    | 3   |
+| 10  | 18       | 1    | 3    | 1   |
+| 13  | 19       | 2    | 3    | 2   |
+| 11  | 29       | 2    | 3    | 3   |
+| 14  | 19       | 3    | 3    | 4   |
+| 12  | 27       | 3    | 3    | 5   |
+| 15  | 26       | 4    | 4    | 1   |
+| 17  | 29       | 2    | 6    | 1   |
+| 18  | 30       | 2    | 6    | 2   |
+| 19  | 42       | 3    | 6    | 3   |
+| 20  | 49       | 5    | 7    | 1   |
+| 28  | 47       | 1    | 8    | 1   |
+| 21  | 47       | 2    | 8    | 2   |
+| 22  | 31       | 2    | 8    | 3   |
+| 23  | 47       | 3    | 8    | 4   |
+| 24  | 47       | 2    | 9    | 1   |
+| 25  | 47       | 2    | 10   | 1   |
+| 26  | 31       | 2    | 10   | 2   |
+| 27  | 47       | 3    | 10   | 3   |
+| 31  | 47       | 1    | 11   | 1   |
+| 32  | 47       | 2    | 11   | 2   |
+| 33  | 47       | 3    | 11   | 3   |
+| 34  | 29       | 3    | 11   | 4   |
+| 39  | 18       | 1    | 12   | 1   |
+| 35  | 51       | 1    | 12   | 2   |
+| 36  | 51       | 2    | 12   | 3   |
+| 37  | 51       | 3    | 12   | 4   |
+| 38  | 50       | 3    | 12   | 5   |
+| 40  | 48       | 1    | 13   | 1   |
+| 41  | 48       | 1    | 13   | 2   |
+| 42  | 29       | 2    | 13   | 3   |
+| 43  | 30       | 2    | 13   | 4   |
+| 44  | 50       | 2    | 13   | 5   |
+| 45  | 51       | 3    | 13   | 6   |
+| 46  | 48       | 1    | 14   | 1   |
+| 47  | 48       | 1    | 14   | 2   |
+| 48  | 55       | 2    | 14   | 3   |
+| 49  | 19       | 3    | 14   | 4   |
+| 50  | 19       | 3    | 14   | 5   |
+| 51  | 47       | 3    | 14   | 6   |
+| 52  | 29       | 2    | 15   | 1   |
+| 53  | 30       | 2    | 15   | 2   |
+| 54  | 54       | 3    | 15   | 3   |
 
-## carries
+## relation-of
 
-From `spec/data/carries.4x`. 40 row(s), 2 column(s).
+From `spec/data/rules.4x`. 5 row(s), 2 column(s).
 
-| kind      | trait       |
-| --------- | ----------- |
-| citizen   | bearing     |
-| citizen   | laboring    |
-| citizen   | paid        |
-| citizen   | strength    |
-| citizen   | upkeep      |
-| extractor | binding     |
-| extractor | metal-in-it |
-| extractor | resource    |
-| extractor | working     |
-| yard      | binding     |
-| yard      | metal-in-it |
-| store     | binding     |
-| store     | metal-in-it |
-| store     | resource    |
-| ark       | binding     |
-| ark       | fuel        |
-| ark       | metal-in-it |
-| ark       | movable     |
-| ark       | moving      |
-| ark       | strength    |
-| ark       | working     |
-| pioneer   | binding     |
-| pioneer   | fuel        |
-| pioneer   | metal-in-it |
-| pioneer   | movable     |
-| pioneer   | moving      |
-| pioneer   | strength    |
-| food      | surplus     |
-| territory | id          |
-| territory | control     |
-| territory | biome       |
-| orbit     | id          |
-| deposit   | density     |
-| deposit   | occupied    |
-| deposit   | free        |
-| deposit   | capacity    |
-| deposit   | resource    |
-| adjacency | from        |
-| adjacency | to          |
-| game      | phase       |
+| clause | input |
+| ------ | ----- |
+| 3      | 1     |
+| 4      | 1     |
+| 12     | 9     |
+| 15     | 11    |
+| 48     | 22    |
 
-## constraint
+## binding
 
-From `spec/data/constraint.4x`. 21 row(s), 5 column(s).
+From `spec/data/rules.4x`. 46 row(s), 4 column(s).
 
-| block                     | compare    | n   | seq | trait    |
-| ------------------------- | ---------- | --- | --- | -------- |
-| move                      | at-least   | 1   | 3   | moving   |
-| move                      | one-less   |     | 4   | moving   |
-| create-labor              | at-least   | 1   | 1   | laboring |
-| create-labor              | one-less   |     | 2   | laboring |
-| mine-energy               | at-least   | 1   | 2   | working  |
-| mine-energy               | one-less   |     | 3   | working  |
-| work                      | at-least   | 1   | 2   | working  |
-| work                      | one-less   |     | 3   | working  |
-| upkeep                    | at-maximum |     | 3   | paid     |
-| bear                      | at-least   | 1   | 1   | bearing  |
-| bear                      | one-less   |     | 2   | bearing  |
-| perish                    | exactly    | 0   | 1   | paid     |
-| age                       | at-least   | 1   | 1   | keeps    |
-| age                       | one-less   |     | 2   | keeps    |
-| spoil                     | exactly    | 0   | 1   | keeps    |
-| refresh-unit-moving       | at-maximum |     | 1   | moving   |
-| refresh-citizen-laboring  | at-maximum |     | 1   | laboring |
-| refresh-citizen-bearing   | at-maximum |     | 1   | bearing  |
-| refresh-extractor-working | at-maximum |     | 1   | working  |
-| refresh-ark-working       | at-maximum |     | 1   | working  |
-| renew                     | exactly    | 0   | 2   | paid     |
+| clause | column | id  | input |
+| ------ | ------ | --- | ----- |
+| 29     | 134    | 42  | 2     |
+| 30     | 134    | 43  | 3     |
+| 3      | 72     | 5   | 2     |
+| 4      | 72     | 7   | 3     |
+| 5      | 78     | 9   | 4     |
+| 6      | 80     | 10  | 4     |
+| 7      | 55     | 11  | 4     |
+| 7      | 56     | 12  | 7     |
+| 10     | 51     | 17  | 8     |
+| 10     | 52     | 18  | 9     |
+| 13     | 55     | 26  | 8     |
+| 13     | 56     | 27  | 9     |
+| 11     | 78     | 19  | 8     |
+| 14     | 55     | 28  | 8     |
+| 14     | 56     | 29  | 9     |
+| 12     | 74     | 21  | 8     |
+| 17     | 78     | 30  | 13    |
+| 18     | 80     | 31  | 13    |
+| 19     | 118    | 32  | 13    |
+| 19     | 119    | 33  | 14    |
+| 28     | 130    | 41  | 15    |
+| 21     | 130    | 34  | 15    |
+| 22     | 82     | 35  | 15    |
+| 23     | 130    | 36  | 15    |
+| 24     | 130    | 37  | 16    |
+| 25     | 130    | 38  | 17    |
+| 26     | 82     | 39  | 17    |
+| 27     | 130    | 40  | 17    |
+| 31     | 130    | 44  | 18    |
+| 32     | 130    | 45  | 18    |
+| 33     | 130    | 46  | 18    |
+| 34     | 78     | 47  | 18    |
+| 39     | 51     | 52  | 19    |
+| 35     | 142    | 48  | 19    |
+| 36     | 142    | 49  | 19    |
+| 37     | 142    | 50  | 19    |
+| 38     | 140    | 51  | 19    |
+| 40     | 134    | 53  | 20    |
+| 42     | 78     | 54  | 20    |
+| 43     | 80     | 55  | 20    |
+| 44     | 140    | 56  | 20    |
+| 46     | 134    | 57  | 21    |
+| 48     | 153    | 58  | 21    |
+| 52     | 78     | 59  | 23    |
+| 53     | 80     | 60  | 23    |
+| 54     | 150    | 61  | 23    |
+
+## reading
+
+From `spec/data/rules.4x`. 16 row(s), 5 column(s).
+
+| clause | column | id  | of  | takes |
+| ------ | ------ | --- | --- | ----- |
+| 2      | 42     | 3   | 29  | 135   |
+| 2      | 43     | 4   | 30  | 135   |
+| 30     | 136    | 10  | 29  | 136   |
+| 12     | 75     | 1   | 10  | 53    |
+| 23     | 133    | 2   | 28  | 133   |
+| 23     | 137    | 7   | 28  | 137   |
+| 33     | 131    | 5   | 31  | 131   |
+| 33     | 133    | 6   | 31  | 133   |
+| 37     | 143    | 8   | 35  | 143   |
+| 38     | 141    | 9   | 39  | 53    |
+| 41     | 135    | 11  | 40  | 135   |
+| 45     | 142    | 12  | 41  | 134   |
+| 47     | 135    | 13  | 46  | 135   |
+| 49     | 55     | 14  | 47  | 134   |
+| 50     | 55     | 15  | 47  | 134   |
+| 51     | 130    | 16  | 47  | 134   |
+
+## literal
+
+From `spec/data/rules.4x`. 67 row(s), 4 column(s).
+
+| clause | column | id  | value   |
+| ------ | ------ | --- | ------- |
+| 3      | 98     | 13  | 1       |
+| 3      | 73     | 2   | 1       |
+| 4      | 98     | 14  | 0       |
+| 4      | 73     | 1   | 1       |
+| 5      | 79     | 4   | 1       |
+| 6      | 81     | 6   | 1       |
+| 7      | 101    | 15  | 1       |
+| 7      | 57     | 8   | 1       |
+| 13     | 101    | 16  | 1       |
+| 13     | 57     | 17  | 1       |
+| 11     | 79     | 11  | 1       |
+| 14     | 101    | 18  | 0       |
+| 14     | 57     | 19  | 1       |
+| 17     | 79     | 20  | 1       |
+| 18     | 81     | 21  | 1       |
+| 19     | 120    | 22  | 1       |
+| 28     | 131    | 36  | 1       |
+| 21     | 131    | 23  | 1       |
+| 21     | 132    | 24  | 1       |
+| 22     | 83     | 25  | 1       |
+| 23     | 131    | 26  | 0       |
+| 23     | 132    | 27  | 1       |
+| 24     | 131    | 28  | 1       |
+| 25     | 131    | 29  | 0       |
+| 25     | 133    | 30  | 1       |
+| 25     | 132    | 31  | 1       |
+| 26     | 83     | 32  | 1       |
+| 27     | 131    | 33  | 0       |
+| 27     | 133    | 34  | 1       |
+| 27     | 137    | 48  | 1       |
+| 27     | 132    | 35  | 2       |
+| 31     | 137    | 42  | 1       |
+| 32     | 137    | 43  | 1       |
+| 32     | 132    | 44  | 1       |
+| 33     | 137    | 45  | 0       |
+| 33     | 132    | 46  | 1       |
+| 34     | 79     | 47  | 1       |
+| 35     | 144    | 49  | 1       |
+| 36     | 144    | 50  | 1       |
+| 36     | 145    | 51  | 1       |
+| 37     | 144    | 52  | 0       |
+| 37     | 145    | 53  | 1       |
+| 39     | 52     | 55  | 50      |
+| 40     | 136    | 56  | surface |
+| 41     | 136    | 57  | orbit   |
+| 42     | 79     | 58  | 1       |
+| 43     | 81     | 59  | 1       |
+| 44     | 141    | 60  | 1       |
+| 45     | 143    | 61  | 1       |
+| 45     | 144    | 62  | 1       |
+| 45     | 145    | 63  | 1       |
+| 47     | 136    | 65  | surface |
+| 48     | 154    | 66  | 1       |
+| 49     | 56     | 67  | 30      |
+| 49     | 101    | 68  | 1       |
+| 49     | 57     | 69  | 1       |
+| 50     | 56     | 70  | 31      |
+| 50     | 101    | 71  | 1       |
+| 50     | 57     | 72  | 1       |
+| 51     | 131    | 73  | 0       |
+| 51     | 133    | 74  | 1       |
+| 51     | 137    | 75  | 1       |
+| 51     | 132    | 76  | 2       |
+| 52     | 79     | 77  | 1       |
+| 53     | 81     | 78  | 1       |
+| 54     | 151    | 79  | 1       |
+| 54     | 152    | 80  | 1       |
+
+## assigns
+
+From `spec/data/rules.4x`. 1 row(s), 4 column(s).
+
+| clause | id  | input | value |
+| ------ | --- | ----- | ----- |
+| 15     | 1   | 12    | 1     |
+
+## part
+
+From `spec/data/rules.4x`. 10 row(s), 4 column(s).
+
+| id  | is  | of  | seq |
+| --- | --- | --- | --- |
+| 4   | 8   | 5   | 1   |
+| 6   | 9   | 5   | 2   |
+| 7   | 10  | 5   | 3   |
+| 3   | 7   | 5   | 4   |
+| 1   | 4   | 5   | 5   |
+| 2   | 4   | 5   | 6   |
+| 5   | 4   | 5   | 7   |
+| 8   | 4   | 5   | 8   |
+| 9   | 4   | 5   | 9   |
+| 10  | 4   | 5   | 10  |
+
+## argument
+
+From `spec/data/rules.4x`. 12 row(s), 4 column(s).
+
+| id  | input | part | value |
+| --- | ----- | ---- | ----- |
+| 1   | 11    | 1    | 26    |
+| 2   | 12    | 1    | 1     |
+| 3   | 11    | 2    | 19    |
+| 4   | 12    | 2    | 2     |
+| 5   | 11    | 5    | 47    |
+| 6   | 12    | 5    | 3     |
+| 7   | 11    | 8    | 47    |
+| 8   | 12    | 8    | 4     |
+| 9   | 11    | 9    | 47    |
+| 10  | 12    | 9    | 5     |
+| 11  | 11    | 10   | 51    |
+| 12  | 12    | 10   | 6     |
+
+## scope
+
+From `spec/data/rules.4x`. 3 row(s), 2 column(s).
+
+| input | rule |
+| ----- | ---- |
+| 15    | 8    |
+| 16    | 9    |
+| 17    | 10   |
+
+## repeats
+
+From `spec/data/rules.4x`. 4 row(s), 1 column(s).
+
+| rule |
+| ---- |
+| 8    |
+| 9    |
+| 10   |
+| 11   |
+
+## soft
+
+From `spec/data/rules.4x`. 2 row(s), 1 column(s).
+
+| clause |
+| ------ |
+| 49     |
+| 50     |
+
+## relation
+
+From `spec/data/schema.4x`. 49 row(s), 2 column(s).
+
+| id  | name        |
+| --- | ----------- |
+| 1   | relation    |
+| 2   | column      |
+| 3   | reference   |
+| 4   | state       |
+| 5   | role        |
+| 6   | rule        |
+| 7   | input       |
+| 8   | clause      |
+| 9   | binding     |
+| 12  | primitive   |
+| 13  | territory   |
+| 15  | adjacency   |
+| 17  | literal     |
+| 18  | deposit     |
+| 19  | extractor   |
+| 21  | reading     |
+| 22  | attribute   |
+| 23  | relation-of |
+| 24  | family      |
+| 25  | member      |
+| 26  | unit        |
+| 27  | resource    |
+| 28  | scout       |
+| 29  | labor       |
+| 30  | metal       |
+| 31  | food        |
+| 33  | supply      |
+| 34  | provides    |
+| 35  | transport   |
+| 36  | consumes    |
+| 37  | assigns     |
+| 38  | trait       |
+| 39  | carries     |
+| 40  | part        |
+| 41  | argument    |
+| 42  | bin         |
+| 43  | capacity    |
+| 44  | loose       |
+| 45  | repeats     |
+| 46  | scope       |
+| 53  | soft        |
+| 47  | citizen     |
+| 50  | energy      |
+| 51  | ark         |
+| 52  | stands-in   |
+| 49  | stock       |
+| 48  | place       |
+| 54  | pioneer     |
+| 55  | founder     |
+
+## column
+
+From `spec/data/schema.4x`. 138 row(s), 4 column(s).
+
+| id  | name      | relation | seq |
+| --- | --------- | -------- | --- |
+| 1   | id        | 1        | 1   |
+| 2   | name      | 1        | 2   |
+| 3   | id        | 2        | 1   |
+| 4   | relation  | 2        | 2   |
+| 5   | seq       | 2        | 3   |
+| 6   | name      | 2        | 4   |
+| 7   | id        | 3        | 1   |
+| 8   | column    | 3        | 2   |
+| 9   | to        | 3        | 3   |
+| 10  | id        | 4        | 1   |
+| 11  | relation  | 4        | 2   |
+| 12  | id        | 5        | 1   |
+| 13  | name      | 5        | 2   |
+| 14  | id        | 6        | 1   |
+| 15  | name      | 6        | 2   |
+| 16  | id        | 7        | 1   |
+| 17  | rule      | 7        | 2   |
+| 18  | seq       | 7        | 3   |
+| 19  | name      | 7        | 4   |
+| 20  | of        | 7        | 5   |
+| 21  | id        | 8        | 1   |
+| 22  | rule      | 8        | 2   |
+| 23  | seq       | 8        | 3   |
+| 24  | role      | 8        | 4   |
+| 25  | relation  | 8        | 5   |
+| 26  | id        | 9        | 1   |
+| 27  | clause    | 9        | 2   |
+| 28  | column    | 9        | 3   |
+| 29  | input     | 9        | 4   |
+| 36  | id        | 12       | 1   |
+| 37  | word      | 12       | 2   |
+| 38  | id        | 13       | 1   |
+| 41  | id        | 15       | 1   |
+| 42  | from      | 15       | 2   |
+| 43  | to        | 15       | 3   |
+| 47  | id        | 17       | 1   |
+| 48  | clause    | 17       | 2   |
+| 49  | column    | 17       | 3   |
+| 50  | value     | 17       | 4   |
+| 51  | where     | 18       | 1   |
+| 52  | what      | 18       | 2   |
+| 53  | density   | 18       | 3   |
+| 54  | quantity  | 18       | 4   |
+| 55  | where     | 19       | 1   |
+| 56  | what      | 19       | 2   |
+| 101 | working   | 19       | 3   |
+| 57  | quantity  | 19       | 4   |
+| 60  | id        | 21       | 1   |
+| 61  | clause    | 21       | 2   |
+| 62  | column    | 21       | 3   |
+| 63  | of        | 21       | 4   |
+| 64  | takes     | 21       | 5   |
+| 65  | column    | 22       | 1   |
+| 66  | relation  | 22       | 2   |
+| 67  | clause    | 23       | 1   |
+| 68  | input     | 23       | 2   |
+| 69  | relation  | 24       | 1   |
+| 70  | kind      | 25       | 1   |
+| 71  | family    | 25       | 2   |
+| 72  | where     | 26       | 1   |
+| 98  | moving    | 26       | 2   |
+| 73  | quantity  | 26       | 3   |
+| 74  | where     | 27       | 1   |
+| 75  | quantity  | 27       | 2   |
+| 76  | where     | 28       | 1   |
+| 99  | moving    | 28       | 2   |
+| 77  | quantity  | 28       | 3   |
+| 78  | where     | 29       | 1   |
+| 79  | quantity  | 29       | 2   |
+| 80  | where     | 30       | 1   |
+| 81  | quantity  | 30       | 2   |
+| 82  | where     | 31       | 1   |
+| 83  | quantity  | 31       | 2   |
+| 102 | id        | 37       | 1   |
+| 103 | clause    | 37       | 2   |
+| 104 | input     | 37       | 3   |
+| 105 | value     | 37       | 4   |
+| 106 | id        | 38       | 1   |
+| 107 | name      | 38       | 2   |
+| 108 | kind      | 39       | 1   |
+| 109 | trait     | 39       | 2   |
+| 110 | id        | 40       | 1   |
+| 111 | of        | 40       | 2   |
+| 112 | is        | 40       | 3   |
+| 113 | seq       | 40       | 4   |
+| 114 | id        | 41       | 1   |
+| 115 | part      | 41       | 2   |
+| 116 | input     | 41       | 3   |
+| 117 | value     | 41       | 4   |
+| 118 | where     | 42       | 1   |
+| 119 | what      | 42       | 2   |
+| 120 | quantity  | 42       | 3   |
+| 121 | of        | 43       | 1   |
+| 122 | for       | 43       | 2   |
+| 123 | what      | 43       | 3   |
+| 124 | per       | 43       | 4   |
+| 125 | quantity  | 43       | 5   |
+| 126 | kind      | 44       | 1   |
+| 87  | id        | 33       | 1   |
+| 88  | name      | 33       | 2   |
+| 89  | per       | 33       | 3   |
+| 90  | kind      | 34       | 1   |
+| 91  | what      | 34       | 2   |
+| 92  | quantity  | 34       | 3   |
+| 93  | kind      | 36       | 1   |
+| 94  | what      | 36       | 2   |
+| 95  | quantity  | 36       | 3   |
+| 96  | where     | 35       | 1   |
+| 100 | moving    | 35       | 2   |
+| 97  | quantity  | 35       | 3   |
+| 127 | rule      | 45       | 1   |
+| 128 | rule      | 46       | 1   |
+| 129 | input     | 46       | 2   |
+| 149 | clause    | 53       | 1   |
+| 130 | where     | 47       | 1   |
+| 131 | hungry    | 47       | 2   |
+| 133 | bearing   | 47       | 3   |
+| 137 | laboring  | 47       | 4   |
+| 132 | quantity  | 47       | 5   |
+| 140 | where     | 50       | 1   |
+| 141 | quantity  | 50       | 2   |
+| 142 | where     | 51       | 1   |
+| 143 | moving    | 51       | 2   |
+| 144 | gathering | 51       | 3   |
+| 145 | quantity  | 51       | 4   |
+| 146 | kind      | 52       | 1   |
+| 147 | per       | 52       | 2   |
+| 148 | layer     | 52       | 3   |
+| 138 | where     | 49       | 1   |
+| 139 | quantity  | 49       | 2   |
+| 134 | id        | 48       | 1   |
+| 135 | of        | 48       | 2   |
+| 136 | layer     | 48       | 3   |
+| 150 | where     | 54       | 1   |
+| 151 | moving    | 54       | 2   |
+| 152 | quantity  | 54       | 3   |
+| 153 | where     | 55       | 1   |
+| 154 | quantity  | 55       | 2   |
+
+## reference
+
+From `spec/data/schema.4x`. 67 row(s), 3 column(s).
+
+| column | id  | to  |
+| ------ | --- | --- |
+| 4      | 1   | 1   |
+| 8      | 2   | 2   |
+| 9      | 3   | 1   |
+| 11     | 4   | 1   |
+| 17     | 5   | 6   |
+| 20     | 6   | 1   |
+| 22     | 7   | 6   |
+| 24     | 8   | 5   |
+| 25     | 9   | 1   |
+| 27     | 10  | 8   |
+| 28     | 11  | 2   |
+| 29     | 12  | 7   |
+| 42     | 16  | 13  |
+| 43     | 17  | 13  |
+| 48     | 20  | 8   |
+| 49     | 21  | 2   |
+| 51     | 22  | 48  |
+| 52     | 23  | 27  |
+| 55     | 24  | 48  |
+| 56     | 25  | 27  |
+| 61     | 28  | 8   |
+| 62     | 29  | 2   |
+| 63     | 30  | 8   |
+| 64     | 31  | 2   |
+| 65     | 32  | 2   |
+| 66     | 33  | 1   |
+| 67     | 34  | 8   |
+| 68     | 35  | 7   |
+| 69     | 36  | 1   |
+| 70     | 37  | 1   |
+| 71     | 38  | 1   |
+| 76     | 41  | 48  |
+| 78     | 42  | 48  |
+| 80     | 43  | 48  |
+| 82     | 44  | 48  |
+| 103    | 45  | 8   |
+| 104    | 46  | 7   |
+| 89     | 47  | 1   |
+| 90     | 48  | 1   |
+| 91     | 49  | 33  |
+| 93     | 50  | 1   |
+| 94     | 51  | 33  |
+| 96     | 52  | 48  |
+| 108    | 53  | 1   |
+| 109    | 54  | 38  |
+| 111    | 55  | 6   |
+| 112    | 56  | 6   |
+| 115    | 57  | 40  |
+| 116    | 58  | 7   |
+| 118    | 59  | 48  |
+| 119    | 60  | 27  |
+| 121    | 61  | 1   |
+| 122    | 62  | 1   |
+| 123    | 63  | 27  |
+| 124    | 64  | 1   |
+| 126    | 65  | 1   |
+| 127    | 66  | 6   |
+| 128    | 67  | 6   |
+| 129    | 68  | 7   |
+| 149    | 75  | 8   |
+| 130    | 69  | 48  |
+| 140    | 71  | 48  |
+| 142    | 72  | 48  |
+| 146    | 73  | 1   |
+| 147    | 74  | 1   |
+| 135    | 70  | 13  |
+| 150    | 76  | 48  |
+
+## state
+
+From `spec/data/schema.4x`. 18 row(s), 2 column(s).
+
+| id  | relation |
+| --- | -------- |
+| 1   | 13       |
+| 3   | 15       |
+| 5   | 18       |
+| 6   | 19       |
+| 7   | 28       |
+| 8   | 29       |
+| 9   | 30       |
+| 10  | 31       |
+| 12  | 35       |
+| 13  | 34       |
+| 14  | 36       |
+| 15  | 42       |
+| 16  | 43       |
+| 17  | 47       |
+| 19  | 50       |
+| 20  | 51       |
+| 18  | 48       |
+| 21  | 54       |
 
 ## family
 
-From `spec/data/families.4x`. 4 row(s), 1 column(s).
+From `spec/data/schema.4x`. 4 row(s), 1 column(s).
 
-| name     |
+| relation |
 | -------- |
-| thing    |
-| unit     |
-| resource |
-| place    |
-
-## for
-
-From `spec/data/for.4x`. 6 row(s), 3 column(s).
-
-| block           | kind      | seq |
-| --------------- | --------- | --- |
-| deploy-ark      | food      | 4   |
-| deploy-ark      | metal     | 5   |
-| found-by-land   | food      | 3   |
-| found-by-land   | metal     | 4   |
-| build-extractor | $resource | 3   |
-| build-store     | $resource | 3   |
-
-## kind
-
-From `spec/data/kinds.4x`. 20 row(s), 1 column(s).
-
-| name      |
-| --------- |
-| kind      |
-| trait     |
-| family    |
-| value     |
-| citizen   |
-| extractor |
-| yard      |
-| store     |
-| ark       |
-| pioneer   |
-| food      |
-| metal     |
-| energy    |
-| labor     |
-| territory |
-| orbit     |
-| deposit   |
-| adjacency |
-| game      |
-| fertility |
-
-## limit
-
-From `spec/data/limit.4x`. 4 row(s), 3 column(s).
-
-| contained | container | n   |
-| --------- | --------- | --- |
-| yard      | territory | 1   |
-| ark       | orbit     | 2   |
-| pioneer   | territory | 2   |
-| resource  | store     | 10  |
-
-## line
-
-From `spec/data/line.4x`. 73 row(s), 7 column(s).
-
-| block                     | kind      | place-bound | qty                                  | role    | seq | place-above |
-| ------------------------- | --------- | ----------- | ------------------------------------ | ------- | --- | ----------- |
-| deploy-ark                | territory | where       | 1                                    | require | 1   |             |
-| deploy-ark                | ark       |             | 1                                    | consume | 2   | where       |
-| deploy-ark                | citizen   |             | 2                                    | produce | 3   |             |
-| deploy-ark                | extractor |             | 1                                    | produce | 4   |             |
-| deploy-ark                | extractor |             | 1                                    | produce | 5   |             |
-| move                      | place     | from        | 1                                    | require | 1   |             |
-| move                      | place     | to          | 1                                    | require | 2   |             |
-| move                      | unit      | from        | 1                                    | require | 3   |             |
-| move                      | unit      | to          |                                      | put     | 4   |             |
-| move                      | energy    | from        | 1                                    | consume | 5   |             |
-| found-by-land             | pioneer   |             | 1                                    | consume | 1   |             |
-| found-by-land             | citizen   |             | 2                                    | produce | 2   |             |
-| found-by-land             | extractor |             | 1                                    | produce | 3   |             |
-| found-by-land             | extractor |             | 1                                    | produce | 4   |             |
-| build-extractor           | labor     |             | 1                                    | consume | 1   |             |
-| build-extractor           | metal     |             | 1                                    | consume | 2   |             |
-| build-extractor           | extractor |             | 1                                    | produce | 3   |             |
-| build-store               | labor     |             | 1                                    | consume | 1   |             |
-| build-store               | metal     |             | 1                                    | consume | 2   |             |
-| build-store               | store     |             | 1                                    | produce | 3   |             |
-| build-yard                | labor     |             | 1                                    | consume | 1   |             |
-| build-yard                | metal     |             | 15                                   | consume | 2   |             |
-| build-yard                | yard      |             | 1                                    | produce | 3   |             |
-| produce-pioneer           | metal     |             | 3                                    | consume | 1   |             |
-| produce-pioneer           | energy    |             | 2                                    | consume | 2   |             |
-| produce-pioneer           | citizen   |             | 2                                    | consume | 3   |             |
-| produce-pioneer           | pioneer   |             | 1                                    | produce | 4   |             |
-| launch-ark                | territory | where       | 1                                    | require | 1   |             |
-| launch-ark                | metal     |             | 3                                    | consume | 2   |             |
-| launch-ark                | energy    |             | 12                                   | consume | 3   |             |
-| launch-ark                | citizen   |             | 2                                    | consume | 4   |             |
-| launch-ark                | yard      |             | 1                                    | require | 5   |             |
-| launch-ark                | ark       |             | 1                                    | produce | 6   | where       |
-| create-labor              | citizen   |             | 1                                    | require | 1   |             |
-| create-labor              | citizen   |             |                                      | put     | 2   |             |
-| create-labor              | labor     |             | 1                                    | produce | 3   |             |
-| mine-energy               | territory | where       | 1                                    | require | 1   |             |
-| mine-energy               | ark       |             | 1                                    | require | 2   | where       |
-| mine-energy               | ark       |             |                                      | put     | 3   | where       |
-| mine-energy               | energy    |             | 1                                    | produce | 4   | where       |
-| work                      | territory | where       | 1                                    | require | 1   |             |
-| work                      | extractor |             | 1                                    | require | 2   |             |
-| work                      | extractor |             |                                      | put     | 3   |             |
-| work                      | labor     |             | 1                                    | consume | 4   |             |
-| work                      | resource  |             | `$where`'s density for that resource | produce | 5   |             |
-| upkeep                    | citizen   |             | 1                                    | require | 1   |             |
-| upkeep                    | food      |             | 1                                    | consume | 2   |             |
-| upkeep                    | citizen   |             |                                      | put     | 3   |             |
-| bear                      | citizen   |             | 1                                    | require | 1   |             |
-| bear                      | citizen   |             |                                      | put     | 2   |             |
-| bear                      | fertility |             | 1                                    | produce | 3   |             |
-| breed                     | fertility |             | 1                                    | consume | 1   |             |
-| breed                     | food      |             | 1                                    | consume | 2   |             |
-| breed                     | citizen   |             | 1                                    | produce | 3   |             |
-| perish                    | citizen   |             | 1                                    | consume | 1   |             |
-| age                       | thing     |             | 1                                    | require | 1   |             |
-| age                       | thing     |             |                                      | put     | 2   |             |
-| spoil                     | thing     |             | 1                                    | consume | 1   |             |
-| stow-metal                | metal     |             | 1                                    | consume | 1   |             |
-| stow-metal                | metal     |             | 1                                    | produce | 2   |             |
-| stow-energy               | energy    |             | 1                                    | consume | 1   |             |
-| stow-energy               | energy    |             | 1                                    | produce | 2   |             |
-| discard-metal             | metal     |             | 1                                    | consume | 1   |             |
-| discard-energy            | energy    |             | 1                                    | consume | 1   |             |
-| discard-labor             | labor     |             | 1                                    | consume | 1   |             |
-| discard-fertility         | fertility |             | 1                                    | consume | 1   |             |
-| refresh-unit-moving       | unit      |             |                                      | put     | 1   |             |
-| refresh-citizen-laboring  | citizen   |             |                                      | put     | 1   |             |
-| refresh-citizen-bearing   | citizen   |             |                                      | put     | 1   |             |
-| refresh-extractor-working | extractor |             |                                      | put     | 1   |             |
-| refresh-ark-working       | ark       |             |                                      | put     | 1   |             |
-| renew                     | citizen   |             | 1                                    | require | 1   |             |
-| renew                     | citizen   |             |                                      | put     | 2   |             |
+| 26       |
+| 27       |
+| 49       |
+| 55       |
 
 ## member
 
-From `spec/data/member.4x`. 7 row(s), 2 column(s).
+From `spec/data/schema.4x`. 13 row(s), 2 column(s).
 
-| family   | kind      |
-| -------- | --------- |
-| unit     | ark       |
-| unit     | pioneer   |
-| resource | food      |
-| resource | metal     |
-| resource | energy    |
-| place    | territory |
-| place    | orbit     |
+| family | kind |
+| ------ | ---- |
+| 26     | 28   |
+| 26     | 51   |
+| 26     | 35   |
+| 27     | 30   |
+| 27     | 31   |
+| 27     | 50   |
+| 49     | 30   |
+| 49     | 31   |
+| 49     | 29   |
+| 49     | 50   |
+| 26     | 54   |
+| 55     | 54   |
+| 55     | 51   |
+
+## attribute
+
+From `spec/data/schema.4x`. 3 row(s), 2 column(s).
+
+| column | relation |
+| ------ | -------- |
+| 53     | 18       |
+| 66     | 22       |
+| 68     | 23       |
+
+## supply
+
+From `spec/data/schema.4x`. 1 row(s), 3 column(s).
+
+| id  | name  | per |
+| --- | ----- | --- |
+| 1   | berth | 48  |
+
+## role
+
+From `spec/data/schema.4x`. 5 row(s), 2 column(s).
+
+| id  | name    |
+| --- | ------- |
+| 1   | require |
+| 2   | remove  |
+| 3   | add     |
+| 4   | put     |
+| 5   | keep    |
 
 ## trait
 
-From `spec/data/traits.4x`. 24 row(s), 4 column(s).
+From `spec/data/schema.4x`. 6 row(s), 2 column(s).
 
-| admits   | kept  | name        | of    |
-| -------- | ----- | ----------- | ----- |
-| identity | thing | id          |       |
-| number   | thing | moving      |       |
-| number   | thing | laboring    |       |
-| number   | thing | working     |       |
-| number   | thing | bearing     |       |
-| resource | thing | resource    |       |
-| number   | kind  | strength    |       |
-| number   | kind  | fuel        |       |
-| number   | kind  | upkeep      |       |
-| number   | kind  | binding     |       |
-| number   | kind  | metal-in-it |       |
-| number   | thing | density     |       |
-| number   | thing | capacity    |       |
-| number   | thing | occupied    |       |
-| number   | thing | free        |       |
-| number   | thing | control     |       |
-| place    | thing | from        |       |
-| place    | thing | to          |       |
-| number   | thing | keeps       | thing |
-| number   | kind  | surplus     |       |
-| number   | thing | paid        |       |
-| value    | thing | phase       |       |
-| number   | kind  | movable     |       |
-| value    | thing | biome       |       |
+| id  | name      |
+| --- | --------- |
+| 1   | moving    |
+| 2   | working   |
+| 3   | hungry    |
+| 4   | bearing   |
+| 5   | laboring  |
+| 6   | gathering |
+
+## carries
+
+From `spec/data/schema.4x`. 10 row(s), 2 column(s).
+
+| kind | trait |
+| ---- | ----- |
+| 26   | 1     |
+| 28   | 1     |
+| 35   | 1     |
+| 19   | 2     |
+| 47   | 3     |
+| 47   | 4     |
+| 47   | 5     |
+| 51   | 1     |
+| 51   | 6     |
+| 54   | 1     |
+
+## loose
+
+From `spec/data/schema.4x`. 1 row(s), 1 column(s).
+
+| kind |
+| ---- |
+| 49   |
+
+## stands-in
+
+From `spec/data/schema.4x`. 3 row(s), 3 column(s).
+
+| kind | layer   | per |
+| ---- | ------- | --- |
+| 51   | orbit   | 48  |
+| 19   | surface | 48  |
+| 54   | surface | 48  |
 

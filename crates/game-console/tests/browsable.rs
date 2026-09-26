@@ -25,26 +25,14 @@ impl Library for Files {
     }
 }
 
+/// Every generated file, which is every file these three conditions are about.
+///
+/// **It used to add another crate's markdown and the page rendered from it.** `catalog.md` was
+/// `prototypes/kinds`' file, so this crate rendered it and did not produce it - and `D-4` deleted
+/// both with the tables they came from, which left this a pass-through.
 fn everything() -> Vec<(String, String)> {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let mut out = dump::generated(&Files(root.join("scenario/commands")));
-    for name in dump::RENDERED_ELSEWHERE {
-        let markdown = std::fs::read_to_string(root.join("reports").join(name))
-            .unwrap_or_else(|why| panic!("cannot read {name}: {why}"));
-        out.push((
-            dump::html_name(name).to_string(),
-            dump::page(&markdown, name),
-        ));
-        // **And its markdown, which `dump::generated` does not return.** It is
-        // `prototypes/kinds`' file, so this crate renders it and does not produce it - and
-        // the first version of this test therefore reported `catalog.html` as a view with
-        // no sibling and `index.html` as linking to a file nothing generates. Both were
-        // true of the list and false of the directory. **A check whose population is
-        // narrower than its claim** is the shape this repository has recorded five times,
-        // and it caught itself here.
-        out.push((name.to_string(), markdown));
-    }
-    out
+    dump::generated(&Files(root.join("scenario/commands")))
 }
 
 /// No page needs a script, and none has one.
@@ -79,11 +67,12 @@ fn no_page_carries_a_script_or_a_handler() {
     // **Twenty-one since `S-87`**, and this check is the one that matters most for that
     // page: a Petri net is exactly the sort of thing every other project draws with a
     // client-side renderer, and `R-9` forbids it. The SVG arrives drawn.
-    // **Twenty-two since `S-93`** added the no-gain check's own page.
-    // **Twenty-three since `S-135`** added the rules as relations.
+    // **Twenty-two since `S-93`** added the no-gain check's own page, **twenty-three since
+    // `S-135`** added the rules as relations, and **twenty-two again since `D-4`** deleted
+    // `catalog.html` with the tables `prototypes/kinds` rendered it from.
     assert_eq!(
-        pages, 23,
-        "twenty-three pages were asked, and a claim about no pages is not a claim"
+        pages, 22,
+        "twenty-two pages were asked, and a claim about no pages is not a claim"
     );
 }
 
@@ -111,8 +100,8 @@ fn every_view_has_a_diffable_sibling() {
         paired += 1;
     }
     assert_eq!(
-        paired, 22,
-        "twenty-two views were asked - ten reports and twelve territories"
+        paired, 21,
+        "twenty-one views were asked - nine reports and twelve territories"
     );
 
     for name in &names {
@@ -127,38 +116,6 @@ fn every_view_has_a_diffable_sibling() {
     }
 }
 
-/// A kind the played state shows and the catalog has no section for, and why.
-///
-/// # This is a dead link on a page and it is tolerated rather than unnoticed
-///
-/// **The catalog is generated from the release's Kinds table and the state from the model**,
-/// and Sean chose on 2026-09-21 to leave the model with what `spec/` keeps rather than cut
-/// `garrison`, `biome` and `force` out of it to match a release that defers them. So the state
-/// report stands up a garrison, `browse::kind_at` links it to `catalog.html#garrison` the way
-/// it links every kind, and the catalog has no such section.
-///
-/// **The cost is real and small**: clicking a garrison in the state report does nothing, which
-/// is exactly the silent failure this test exists to catch. It is written down here rather
-/// than excused by a weakened assertion, so a reader of the report knows why, and a second one
-/// arriving is a finding.
-///
-/// **Both directions bite.** A link to a deferred anchor that the catalog *does* have fails,
-/// so the entry cannot outlive the gap; and any other missing anchor fails as before.
-const DEFERRED: [(&str, &str); 3] = [
-    (
-        "garrison",
-        "`P-522` deferred the kind; the model keeps it because `spec/control.md` does",
-    ),
-    (
-        "force",
-        "`P-522` deferred the force rule; `spec/control.md` keeps force",
-    ),
-    (
-        "nature",
-        "`P-522` deferred it with the force rule; `spec/planet.md` keeps it",
-    ),
-];
-
 /// Every link a page makes lands on a file that exists, and on an anchor that is in it.
 ///
 /// **The half that matters is the anchor.** A link to a file is checked by the file being
@@ -169,7 +126,7 @@ const DEFERRED: [(&str, &str); 3] = [
 #[test]
 fn every_link_lands_on_something_that_is_there() {
     let files = everything();
-    let (mut checked, mut dead) = (0, 0);
+    let mut checked = 0;
     for (name, text) in &files {
         if !name.ends_with(".html") {
             continue;
@@ -192,22 +149,10 @@ fn every_link_lands_on_something_that_is_there() {
                 .find(|(named, _)| named == file)
                 .unwrap_or_else(|| panic!("{name} links to {file}, which nothing generates"));
             if let Some(anchor) = anchor {
-                let deferred = DEFERRED.iter().any(|(word, _)| *word == anchor);
-                match deferred {
-                    false => assert!(
-                        found.1.contains(&format!("id=\"{anchor}\"")),
-                        "{name} links to {target}, and {file} has no id {anchor:?}"
-                    ),
-                    // **Asserted the other way round**, so an exception that has been repaired
-                    // fails here rather than passing quietly for ever.
-                    true => {
-                        assert!(
-                            !found.1.contains(&format!("id=\"{anchor}\"")),
-                            "{file} has id {anchor:?} now, so delete its entry in `DEFERRED`"
-                        );
-                        dead += 1;
-                    }
-                }
+                assert!(
+                    found.1.contains(&format!("id=\"{anchor}\"")),
+                    "{name} links to {target}, and {file} has no id {anchor:?}"
+                );
             }
             checked += 1;
         }
@@ -218,19 +163,11 @@ fn every_link_lands_on_something_that_is_there() {
          reports rather than about one of them"
     );
 
-    // **The dead links are counted, not merely allowed.** Three entries in `DEFERRED` can
-    // excuse any number of links, and *some link somewhere is dead* is not what that list
-    // claims.
-    //
-    // **Twenty-seven, over three anchors**, which is what a state report of twelve
-    // territories costs: a garrison, a nature and a force cell each, wherever the played
-    // scenario stood one up. **The number is the thing to watch** - the three anchors stay
-    // three while a promotion defers nothing new, and this moves the moment the scenario
-    // changes what it builds, which is the reseed `S-150` is about.
-    assert_eq!(
-        dead, 27,
-        "twenty-seven links land on one of the three deferred anchors and {dead} did"
-    );
+    // **Every link lands, and three anchors used to be allowed not to.** `DEFERRED` named
+    // `garrison`, `force` and `nature` - kinds the state report stood up and the catalog, being
+    // generated from a release that deferred them, had no section for. **`D-4` deleted the
+    // catalog**, so there is no anchor to miss and no exception to keep: the assertion above is
+    // unconditional again.
 }
 
 /// Every column of every table is either linked or named as deliberately not.
@@ -530,12 +467,15 @@ fn every_file_the_engine_reads_as_input_is_reachable_from_the_index() {
         .collect();
     assert_eq!(
         on_disk.len(),
-        // **Nineteen since `P-557` deleted `spec/data/above.4x`**, which stated which orbit is
-        // above which territory. `spec/console.md` already forbade stating it - *a place worked
-        // out from another is not open* - so the file was a fact the specification says is not
-        // one, and the engine reads one input fewer rather than one input differently.
-        19,
-        "nineteen files the engine reads - eleven in `spec/data` and eight in `scenario`; this \
+        // **Ten since `P-563`**, which replaced `spec/data/`'s eleven generated files with the
+        // two of the foundation form. `D-4` is why there is no rendering to generate from, and
+        // `D-5` moves this again when the scenario is rewritten over the reviewed ruleset.
+        //
+        // **It was nineteen since `P-557` deleted `spec/data/above.4x`**, which stated which
+        // orbit is above which territory - `spec/console.md` already forbade stating it, *a place
+        // worked out from another is not open*.
+        10,
+        "ten files the engine reads - two in `spec/data` and eight in `scenario`; this \
          found {on_disk:?}"
     );
 
@@ -604,18 +544,18 @@ fn every_file_the_engine_reads_as_input_is_reachable_from_the_index() {
     );
 
     // **And the page says what each one declares**, read from the file rather than written
-    // beside it: `kinds.4x` says `kind`, `traits.4x` says `trait`, and a file declaring
-    // something new describes itself. Checked on one, because the mechanism is one.
+    // beside it. **Checked on `rules.4x`, because the mechanism is one** - it was `kinds.4x`
+    // until `P-563` replaced the eleven generated files with the two of the foundation form.
     //
     // **Found by the twin's href since `S-134`**, because that is what the entry is keyed by
     // now - the label carries the file's own path and the description after it.
-    let kinds = dump::engine_inputs()
+    let rules = dump::engine_inputs()
         .into_iter()
-        .find(|(href, _)| href.ends_with("kinds.4x.txt"))
-        .expect("kinds.4x among the inputs");
+        .find(|(href, _)| href.ends_with("rules.4x.txt"))
+        .expect("rules.4x among the inputs");
     assert!(
-        kinds.1.contains("kind"),
-        "`kinds.4x` is described as `{}`, which does not say what it declares",
-        kinds.1
+        rules.1.contains("rule"),
+        "`rules.4x` is described as `{}`, which does not say what it declares",
+        rules.1
     );
 }

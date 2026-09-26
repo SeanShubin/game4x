@@ -18,16 +18,15 @@ mod common;
 use common::{every_read_test, every_test, mine, rows};
 use game_model::notation::Row;
 
-/// The directory, as something the engine can ask for a file by name.
+/// The foundation, as something the engine can ask for a file by name.
 ///
 /// **This is where `std::fs` lives and the only place it may.** `src/` reads nothing - it is
 /// handed this and asks it, which is what lets `load` exist without the engine opening anything.
-/// The foundation, wherever each of its files lives.
 ///
 /// **This was one directory and `P-563` made it two.** `setup.4x` asks for `schema.4x`,
-/// `engine.4x` and `rules.4x` by bare name, and two of those three are `spec/data/`'s now - so
-/// the answer to *where is this file* moved out of a `join` and into `common::foundation_at`,
-/// which is the one place that knows the split.
+/// `engine.4x` and `rules.4x` by bare name, and two of those three are the specification's now -
+/// `spec/data/schema.4x` and `spec/data/rules.4x`. So the answer to *where is this file* moved out
+/// of a `join` and into `common::foundation_at`, which is the one place that knows the split.
 ///
 /// **The engine is untouched by that.** `Files::read` is the only thing it needs from outside
 /// itself, and it still asks by name and gets text - which is the whole reason the split cost one
@@ -163,7 +162,7 @@ fn the_ruleset_states_no_world() {
     let state = state_relations();
     let mut checked = 0;
     for file in ["schema.4x", "engine.4x", "rules.4x"] {
-        for row in rows(&common::foundation_at(&file)) {
+        for row in rows(&common::foundation_at(file)) {
             assert!(
                 !state.contains(&row.relation),
                 "{file}: `{}` is state, and a world belongs to the scenario that states it",

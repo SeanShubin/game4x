@@ -26,7 +26,6 @@ members = [
     "prototypes/planet-view",
     "prototypes/goldberg-view",
     "prototypes/goldberg-move",
-    "prototypes/kinds",
     "prototypes/gap-view",
     "prototypes/hex-torus-view",
 ]

@@ -61,6 +61,63 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-149 - `D-4` deleted `prototypes/kinds` and the catalog, and four lines in your column name them
+
+**to** spec · **status** open · **raised** 2026-09-26 · **source** building `D-4`, and running the
+gate after it
+
+**The gate is red in your column and this lane may not repair it.** `tools/outbox`'s
+`every_crate_has_a_row_and_every_row_has_a_crate` says:
+
+```
+in the workspace, with no row: []
+has a row, not in the workspace: ["prototypes/kinds"]
+```
+
+**`every_row_links_to_a_readme_that_exists` is red for the same reason.** That row links to a
+README that went with the crate.
+
+## What was deleted, and why it was `D-4` rather than tidying
+
+**`prototypes/kinds` was the release's seven tables as Rust data**, with a test holding every cell
+against the document - 4,812 lines. `D-4` deletes *the tables it was generated from*, so a second
+hand-written copy of them describes a rule the game does not play by, which is the thing the
+capability forbids being left anywhere.
+
+**It wrote `reports/catalog.md`**, which went with it, along with `catalog.html` and the
+`RENDERED_ELSEWHERE` machinery that existed because one report was another crate's.
+
+## The four lines, swept uncapped this time
+
+```
+docs/architecture.md:155        the row for `prototypes/kinds`, and its README link
+docs/prototypes/README.md:13    its row in the prototype index
+docs/prototypes/README.md:109   `prototypes/kinds` is the same content as Rust data ...
+README.md:49                    links to reports/catalog.md, which is gone
+```
+
+**`releases/first-release.md` needs nothing.** Its four mentions of `reports/catalog.md` are
+`R-8`'s evidence, and `R-8` is retired unread - a record of what was true, which is what that
+line is for.
+
+**The sweep is uncapped and that is deliberate.** `C-147` claimed *every occurrence in your
+column* off one search capped at forty results that printed `[Omitted long matching line]` twice,
+and one of the two omitted lines was the one it missed. **This is four words grepped over `docs/`,
+`releases/`, `spec/` and `README.md` with no limit**, counted before being listed.
+
+## Two things in this lane that went with it, so a reader of the diff is not surprised
+
+**`browse::kind_at` is gone.** Every kind's name linked to `catalog.html#<name>`; there is no page
+per kind now, so six columns moved into `browse::UNLINKED` - named per table rather than under the
+wildcard that used to link any column called `resource` on any table at all.
+
+**`DEFERRED` is gone**, and it was three tolerated dead links. `garrison`, `force` and `nature`
+were kinds the state report stood up and the catalog had no section for, because `P-522` deferred
+them from the release and the model kept them. **With no catalog there is no anchor to miss**, so
+the assertion is unconditional again rather than carrying an exception list.
+
+---
+
 ### C-148 - `V3` is not available as written, and what makes `V1` cheap is one commit rather than an order
 
 **to** spec · **status** **answered** 2026-09-26 · **closed** 2026-09-26 · **cited** `6d0e279c` - P-562 rewrote V3 out; W1 is what this item proposed and Sean chose it · **raised** 2026-09-25 · **source** `P-562` naming its own `V3` as
