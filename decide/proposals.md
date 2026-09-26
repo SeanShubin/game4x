@@ -11,6 +11,65 @@ of it needs you.
 
 ## Open
 
+### P-572 - who owns the regression cases, and the answer is nobody except for one gesture that is yours
+
+**to** sean · **status** open · **raised** 2026-09-26 · **asks** approval · **kind** entailed · **shape** text · **into** `CLAUDE.md` -> Perspectives, after the `reviewed/` paragraphs
+
+**You asked who should own the regression scenario. Three things are being asked about and they
+answer differently.**
+
+```
+scenario/main.4x           the code lane's - it is the source, and scenario/ is its column
+the generator and check    the code lane's
+scenario/regression/*.4x   no owner. CLAUDE.md: a generated file has no owner, nobody edits
+                           it, and a hand edit is overwritten at the next commit
+```
+
+**So two of the three need nothing said. The third does, and not about editing.**
+
+## The gap, which is deletion rather than editing
+
+**Deleting one of those files is your approval**, and the generated-file rule does not cover it - it
+says a hand **edit** is overwritten, and a deletion is not overwritten. **It is honoured**: the
+generator writes a fresh case, which is the whole point.
+
+**So a lane deleting a case is indistinguishable from you accepting a change you never saw.**
+Nothing forbids it today.
+
+**`reviewed/` has exactly this rule and the regression cases have none.** `CLAUDE.md`: *`reviewed/`
+is the record of what Sean has read, and no instance creates or deletes one.* **Same gesture,
+opposite meaning, and only one of the two is guarded.**
+
+## One deletion that is not yours, so the rule has to say which
+
+**`crates/game-model/tests/regression.rs` already tells the code lane to delete files** - *file(s)
+in `scenario/regression/` are of commands the scenario no longer plays... delete them*. **That is
+housekeeping and not acceptance**, and the two are told apart by whether the command is still in
+`scenario/main.4x`, which that test already computes.
+
+## The words
+
+**Two paragraphs, into `CLAUDE.md` -> Perspectives, after the `reviewed/` paragraphs:**
+
+> **A generated regression case is deleted by Sean, and that deletion is an approval.** The cases
+> under `scenario/regression/` have no owner and nobody edits them - they are generated in full,
+> and a hand edit is overwritten. **Deleting one is different**: it is not overwritten, it is
+> honoured, and it says *I accept what it does now*. **So no instance deletes one while the
+> command it covers is still played**, and a lane that thinks a case is wrong says so in an
+> outbox rather than removing it.
+>
+> **A case the scenario no longer plays is housekeeping and any lane may remove it.** The two are
+> told apart by `scenario/main.4x`: a case whose command is still there is waiting on Sean, and a
+> case whose command is gone is waiting on nobody. **That is the same line `reviewed/` draws** -
+> a record is the person's and an orphan is a mess - and it is drawn here because the gesture
+> means the opposite in the two places.
+
+## Why this one cannot be relayed
+
+**`CLAUDE.md` says an approval for itself comes from you directly**, and this is what it says
+about who may write what. **You asked the question in your own words, which is why it is being
+put to you now** rather than filed and left.
+
 ### P-571 - the main scenario has generated detail under it, and nothing says it is not the specification
 
 **to** sean · **status** open · **raised** 2026-09-26 · **answered** 2026-09-26, the layout · **asks** approval · **kind** entailed · **shape** text · **into** `spec/scenarios.md`

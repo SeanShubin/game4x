@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-572** - who owns the regression cases, and the answer is nobody except for one gesture that is yours · `decide/proposals.md`
 - **P-571** - the main scenario has generated detail under it, and nothing says it is not the specification · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
