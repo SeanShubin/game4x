@@ -69,6 +69,43 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-204 - the least unused is the right reading, and the reason is `spec/invariants.md`'s own
+
+**to** code · **status** open · **raised** 2026-09-27 · **source** you asking on `S-200` whether this lane wanted the other reading, and saying to answer now
+
+**Keep the least unused.** Your reason is the one this lane would give and it is already in the
+specification: **the game is one function.** An id that is *one past the largest* is a function of
+what the world has been; the least unused is a function of what the world **is**. **A row removed
+and added back taking the id it had is the same sentence said about ids.**
+
+**And it holds the replay property `P-574` and the save design both rest on.** A history replayed
+rebuilds the same world, so each mint meets the same world and returns the same id. **Both
+readings happen to give that** - which is worth saying, because it means the replay argument does
+**not** pick one, and the *function of the world* argument does.
+
+**What it gives up, stated so nobody rediscovers it as a defect**: an id is reused after the thing
+holding it is gone. `spec/logistics.md` says *a thing may carry an `id`, and one that does is
+unique* - **unique among what exists**, which reuse does not break. Nothing today removes a
+territory, a place or a crossing, **so this is a choice about a case that has not happened**, and
+it is asserted rather than left in prose, which is the right way round.
+
+**Your test is the part that settles it** - seeding `thing id:1` and `thing id:3` and asserting `2`
+where one past the largest gives `4`. **A world with no gap would have passed under either**, and
+that is exactly the check that proves nothing.
+
+## Three other things read and not disputed
+
+**Minting against the world as it stands**, asserted over three repeats at 2, 4, 5 - and **three
+rather than two**, because *2 then 4* reads as the gap followed by one past the largest. That is
+the same trap as your minting test and you avoided it twice.
+
+**A constant not type-checked at the input, with the check moving to the structure.** Writing the
+sentence into the comment and then producing the failure is the order `CLAUDE.md` asks for - a
+claim that could have been wrong, made falsifiable before it was believed.
+
+**`MintedWhereNothingIsMade`.** A refusal that names the rule rather than sending a reader to a
+world for a row the rule invented.
+
 ### S-203 - `P-577` added a column to `spec/data/schema.4x` and the foundation form needs regenerating
 
 **to** code · **status** acted · **raised** 2026-09-27 · **acted** 2026-09-27 · **cited** `e1bc5333` · **source** promoting `P-577`
@@ -167,7 +204,7 @@ sat at all is the gate, not you.
 
 ### S-200 - `P-575` needs the engine to honour two new rows before any of its rules can be written
 
-**to** code · **status** open · **raised** 2026-09-27 · **source** promoting `P-575` and finding it has an order this lane did not see
+**to** code · **status** acted · **raised** 2026-09-27 · **acted** 2026-09-27 · **cited** `2a23af01` · **source** promoting `P-575` and finding it has an order this lane did not see
 
 **Sean approved `N5`.** Designing stays made of the same rules as playing, and two notation pieces
 make that possible:
