@@ -12,9 +12,14 @@
 //! builds get the same bytes, so what the acceptance test reads off disk is what a player runs.
 //!
 //! **It is not a transcription, which is what `D-3` forbids.** `include_str!` carries the file;
-//! it does not restate it. Delete a row from `spec/data/rules.4x`, build, and the game fires a
-//! different rule - which is the capability's own sentence, and the tests below are where it is
+//! it does not restate it. Delete a row from `data/foundation/rules.4x`, build, and the game fires
+//! a different rule - which is the capability's own sentence, and the tests below are where it is
 //! asserted rather than claimed.
+//!
+//! **The file it carries is generated from `spec/data/`, so a row deleted there takes one more
+//! step.** `cargo run --example render` converts the friendly source Sean authors into the form the
+//! engine reads, and `tests/directories.rs` fails whenever the two have come apart - so the extra
+//! step cannot be forgotten silently. **Why there is a step at all is under [`FOUNDATION`].**
 //!
 //! # Why it is here and not in the engine
 //!
@@ -40,11 +45,17 @@ use crate::schema::Malformed;
 /// edited in one. **The tests and `tests/common`'s `LOADED` read this rather than repeating it**,
 /// which is what made `P-563` a three-line change here instead of a sweep.
 ///
-/// **Two of the three are not in this crate, and `P-563` is why.** Sean answered `H3` on
-/// 2026-09-26: the game's rules and kinds live in `spec/data/` and the engine's primitives stay
-/// in `crates/`. So `schema.4x` and `rules.4x` are the specification's and `engine.4x` is this
-/// lane's - **which is the column boundary drawn through the foundation**, and the reason this
-/// list has a path column at all.
+/// **All three are in this crate, and `P-576` is why they came back.** `P-563` moved `schema.4x`
+/// and `rules.4x` to `spec/data/` and named the **converted** form, which is the wrong half:
+/// `tests/directories.rs` line 1 says *`data/friendly/` is the source and `data/foundation/` is
+/// what it converts to*, so Sean's column got a rendering and the rules he authors stayed here.
+/// `P-576` corrects it, and `spec/data/` now holds the **friendly source**.
+///
+/// **So what this carries is generated**, and `CLAUDE.md` gives a generated file no owner. The
+/// engine cannot convert: `Names` lives in `friendly-notation`, which depends on this crate and is
+/// a dev-dependency here precisely so `tests/isolation.rs` can go on reading an engine that
+/// depends on nothing. **Converting at run time would make that cycle real**, so the conversion
+/// happens once, in `examples/render.rs`, and its output is what ships.
 ///
 /// **The order does not matter to the engine** and is kept anyway. Everything goes into one store
 /// and is validated together, so this is the order a reader should meet them in rather than a
@@ -52,8 +63,8 @@ use crate::schema::Malformed;
 pub const FOUNDATION: [(&str, &str, &str); 3] = [
     (
         "schema",
-        "../../spec/data/schema.4x",
-        include_str!("../../../spec/data/schema.4x"),
+        "data/foundation/schema.4x",
+        include_str!("../data/foundation/schema.4x"),
     ),
     (
         "engine",
@@ -62,8 +73,8 @@ pub const FOUNDATION: [(&str, &str, &str); 3] = [
     ),
     (
         "rules",
-        "../../spec/data/rules.4x",
-        include_str!("../../../spec/data/rules.4x"),
+        "data/foundation/rules.4x",
+        include_str!("../data/foundation/rules.4x"),
     ),
 ];
 
@@ -115,18 +126,24 @@ mod tests {
             assert_eq!(carried, disk, "`{name}` has drifted from {at}");
             compared += 1;
         }
-        // **Both columns are covered, asserted rather than assumed.** `P-563` split the
-        // foundation across two lanes' directories, and a list that had quietly lost one of them
-        // would still compare three files and still pass.
+        // **Nothing carried is the friendly source, and that is the assertion that was missing.**
+        //
+        // `P-563` pointed two of these three at `spec/data/`, and `P-576` made that directory the
+        // **friendly** form - so the binary embedded names where the engine resolves ids, and the
+        // whole suite went red at once. Compilation was unaffected, because `include_str!` only
+        // embeds text.
+        //
+        // **This fails on that state rather than describing it**: an `include_str!` reaching
+        // outside `data/foundation/` is reaching for something nobody generated.
+        let source: Vec<&str> = FOUNDATION
+            .iter()
+            .map(|(_, at, _)| *at)
+            .filter(|at| !at.starts_with("data/foundation/"))
+            .collect();
         assert!(
-            FOUNDATION.iter().any(|(_, at, _)| at.contains("spec/data")),
-            "no foundation file is the specification's, so `H3` is not what this is reading"
-        );
-        assert!(
-            FOUNDATION
-                .iter()
-                .any(|(_, at, _)| at.starts_with("data/foundation")),
-            "no foundation file is this crate's, so the engine's primitives have gone missing"
+            source.is_empty(),
+            "{source:?} is carried and is not generated - the engine reads the foundation form, \
+             and `spec/data/` is the friendly source it is converted from"
         );
         // **A count over nothing is the same failure with the sign flipped** - `CLAUDE.md`. An
         // empty `FOUNDATION` would compare nothing and pass in exactly these words.

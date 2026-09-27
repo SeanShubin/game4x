@@ -43,6 +43,12 @@ use game_model::schema::Schema;
 
 use common::{mine, rows};
 
+/// **The converter, borrowed rather than copied** - it is the one place that knows where the
+/// friendly source of each file lives, and `P-576` moved two of the five into `spec/data/`.
+#[path = "../examples/render.rs"]
+#[allow(dead_code)]
+mod render;
+
 /// The fewest records that can be there before a run proves nothing.
 ///
 /// **The same forty `first_test.rs` and `examples/foundation.rs` use.** Three places with three
@@ -89,7 +95,7 @@ fn shape(row: &Row) -> (String, Vec<(String, String)>) {
 /// Every test the engine runs is the one `reviewed/` generates.
 #[test]
 fn what_the_engine_runs_is_what_the_record_generates() {
-    let schema = Schema::of(&rows("data/friendly/schema.4x")).expect("a schema");
+    let schema = Schema::of(&rows(&render::friendly_at("schema.4x"))).expect("a schema");
 
     let records: BTreeSet<String> = names_in(&records_at()).into_iter().collect();
     let drafts = names_in(&tests_at());
@@ -138,14 +144,13 @@ fn what_the_engine_runs_is_what_the_record_generates() {
             }
         }
     };
-    for (file, game) in [
-        ("schema.4x", true),
-        ("engine.4x", true),
-        ("rules.4x", true),
-        ("script.4x", false),
-        ("setup.4x", false),
-    ] {
-        let at = format!("data/friendly/{file}");
+    // **The five shared files come from `render::files()`**, which is what the conversion walks,
+    // so a sixth cannot exist here and not there.
+    for (file, game) in render::files()
+        .into_iter()
+        .filter(|(f, _)| !f.starts_with("tests/"))
+    {
+        let at = render::friendly_at(&file);
         let text =
             std::fs::read_to_string(mine().join(&at)).unwrap_or_else(|why| panic!("{at}: {why}"));
         add(
@@ -235,8 +240,8 @@ fn what_the_engine_runs_is_what_the_record_generates() {
 /// that the comparison above could be strengthened.
 #[test]
 fn the_relations_written_in_no_declared_order_are_the_rule_names() {
-    let schema = Schema::of(&rows("data/friendly/schema.4x")).expect("a schema");
-    let rules = rows("data/friendly/rules.4x");
+    let schema = Schema::of(&rows(&render::friendly_at("schema.4x"))).expect("a schema");
+    let rules = rows(&render::friendly_at("rules.4x"));
 
     let named: BTreeSet<String> = rules
         .iter()

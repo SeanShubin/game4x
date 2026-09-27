@@ -40,6 +40,12 @@ use friendly_notation::{Names, fold, in_a_section, states_a_world};
 use game_model::notation::{Row, read, write};
 use game_model::schema::Schema;
 
+/// **The converter, borrowed rather than copied** - it is the one place that knows where the
+/// friendly source of each file lives.
+#[path = "render.rs"]
+#[allow(dead_code)]
+mod render;
+
 /// The fewest records that can be there before a run proves nothing.
 ///
 /// **The same forty `first_test.rs` uses**, and for the same reason: the two would otherwise be
@@ -97,30 +103,39 @@ fn rows_of(text: &str, at: &str) -> Vec<Row> {
 
 /// The five shared files, which are the world every test is read against.
 ///
-/// **They are still `data/friendly/`'s**, because `P-532` moved only the tests to `spec/tests/`.
-/// A test's rows mean nothing without the schema and the rules they name.
-/// **The flag is which store a whole file's rows belong to**, and it is `tests/directories.rs`'s
-/// list rather than a second opinion: `schema`, `engine` and `rules` describe the game the engine
-/// runs, and `script` and `setup` are the script's. A test file is neither, so its rows are routed
-/// one at a time by whether they state a world.
+/// **Borrowed from the converter rather than listed here.** A test's rows mean nothing without the
+/// schema and the rules they name, and where each of those lives is `render::friendly_at`'s answer -
+/// `P-576` put two of the five in `spec/data/`.
+///
+/// **The flag is which store a whole file's rows belong to**: `schema`, `engine` and `rules`
+/// describe the game the engine runs, and `script` and `setup` are the script's. A test file is
+/// neither, so its rows are routed one at a time by whether they state a world.
+///
+/// # It filtered by whether the file was there, and that was a silent narrowing
+///
+/// **This read `.filter(|(file, _)| mine().join("data/friendly").join(file).exists())`**, which was
+/// written while the files were moving. `P-576` moved `schema.4x` and `rules.4x` out of that
+/// directory, and the filter would have dropped both **without a word** - generating every test
+/// against a world with no schema and no rules. A missing file is loud now.
 fn shared() -> Vec<(String, bool)> {
-    [
-        ("schema.4x", true),
-        ("engine.4x", true),
-        ("rules.4x", true),
-        ("script.4x", false),
-        ("setup.4x", false),
-    ]
-    .iter()
-    .filter(|(file, _)| mine().join("data/friendly").join(file).exists())
-    .map(|(file, game)| ((*file).to_string(), *game))
-    .collect()
+    let all: Vec<(String, bool)> = render::files()
+        .into_iter()
+        .filter(|(file, _)| !file.starts_with("tests/"))
+        .collect();
+    assert_eq!(
+        all.len(),
+        5,
+        "five shared files, and this found {}: {all:?}",
+        all.len()
+    );
+    all
 }
 
 fn main() {
-    let schema_text = std::fs::read_to_string(mine().join("data/friendly/schema.4x"))
-        .expect("data/friendly/schema.4x");
-    let schema = Schema::of(&rows_of(&schema_text, "data/friendly/schema.4x")).expect("a schema");
+    let at = render::friendly_at("schema.4x");
+    let schema_text =
+        std::fs::read_to_string(mine().join(&at)).unwrap_or_else(|why| panic!("{at}: {why}"));
+    let schema = Schema::of(&rows_of(&schema_text, &at)).expect("a schema");
 
     // **Which tests have a record, and which are waiting on him.**
     let records: BTreeSet<String> = names_in(&records_at()).into_iter().collect();
@@ -160,7 +175,7 @@ fn main() {
         }
     };
     for (file, game) in shared() {
-        let at = format!("data/friendly/{file}");
+        let at = render::friendly_at(&file);
         let text =
             std::fs::read_to_string(mine().join(&at)).unwrap_or_else(|why| panic!("{at}: {why}"));
         let these = fold(&text, &schema).unwrap_or_else(|why| panic!("{at}: {why}"));

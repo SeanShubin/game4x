@@ -23,14 +23,13 @@ use game_model::notation::Row;
 /// **This is where `std::fs` lives and the only place it may.** `src/` reads nothing - it is
 /// handed this and asks it, which is what lets `load` exist without the engine opening anything.
 ///
-/// **This was one directory and `P-563` made it two.** `setup.4x` asks for `schema.4x`,
-/// `engine.4x` and `rules.4x` by bare name, and two of those three are the specification's now -
-/// `spec/data/schema.4x` and `spec/data/rules.4x`. So the answer to *where is this file* moved out
-/// of a `join` and into `common::foundation_at`, which is the one place that knows the split.
+/// **`setup.4x` asks for `schema.4x`, `engine.4x` and `rules.4x` by bare name**, and says nothing
+/// about where any of them is. So the answer to *where is this file* lives in
+/// `common::foundation_at` rather than in a `join` here.
 ///
-/// **The engine is untouched by that.** `Files::read` is the only thing it needs from outside
-/// itself, and it still asks by name and gets text - which is the whole reason the split cost one
-/// adapter rather than a change to the engine.
+/// **That is what let `P-563` move two of them into another column and `P-576` move them back**,
+/// each without touching the data - and the engine was untouched by either. `Files::read` is the
+/// only thing it needs from outside itself, and it still asks by name and gets text.
 struct Foundation;
 
 impl Files for Foundation {

@@ -129,8 +129,9 @@ fn every_file_survives_the_round_trip() {
     let of_script = Names::of(&script);
 
     let mut checked = 0;
-    // **Resolved through `common::foundation_at` rather than spelled**, because `P-563` put
-    // `schema.4x` and `rules.4x` in `spec/data/` and left the other three here.
+    // **Resolved through `common::foundation_at` rather than spelled**, so this and the shipped
+    // binary cannot disagree about where a foundation file is. `P-563` moved two of the five into
+    // another column and `P-576` moved them back, and neither edited this line.
     for file in [
         "schema.4x",
         "engine.4x",

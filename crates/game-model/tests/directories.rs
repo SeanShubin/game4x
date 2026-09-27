@@ -1,27 +1,39 @@
-//! `data/friendly/` is the source and `data/foundation/` is what it converts to.
+//! The friendly source is what a person writes and `data/foundation/` is what it converts to.
 //!
 //! **Sean, 2026-09-15**: *Lets make friendly the source and not omit anything. This presumes we
 //! can reliably convert between friendly and foundation. Also it is ok that sometimes they happen
 //! to be the same thing.*
 //!
-//! So both directories hold the same eight files, nothing is left out of either, and **this is
-//! what says they say the same thing**. Converting the friendly directory has to produce the
-//! foundation directory row for row, and rendering the foundation directory has to produce the
-//! friendly one back.
+//! So both forms hold the same rows, nothing is left out of either, and **this is what says they
+//! say the same thing**: converting the friendly source has to produce the committed foundation
+//! byte for byte, and rendering the foundation has to produce the friendly source back row for row.
+//!
+//! # Where each form lives, and why this file no longer says
+//!
+//! **`P-576` put `schema.4x` and `rules.4x` in `spec/data/` as the friendly source**, and left
+//! `engine.4x`, `script.4x` and `setup.4x` here because they name no game noun. **The program that
+//! converts is the one place that knows that** - this borrows `examples/render.rs` the way
+//! `tests/scenario.rs` borrows `examples/scenario.rs`, so the thing that converts and the thing
+//! that checks the conversion cannot disagree about what converts to what.
+//!
+//! **`P-563` got the direction backwards and nothing failed**, which is the reason the borrowing
+//! matters. It moved the *converted* form into Sean's column, so he owned a rendering and the rules
+//! he authors stayed in this one - and these tests stayed green throughout, because holding two
+//! things equal row for row is not the same as holding the right one to be the source.
 
 mod common;
 use friendly_notation::{self as friendly, Names};
 
-use common::{foundation_at, mine, rows};
-
 use game_model::notation::{Row, write};
-use game_model::schema::Schema;
 
-/// Every file in a directory: the shared ones, then one per test.
-///
-/// **Read rather than listed.** Sean, 2026-09-15: *I intend to have one test per file*, so a list
-/// here would be a second place to remember - and `data/{d}/tests/` holding only tests is what
-/// makes reading it safe.
+/// **The converter, borrowed rather than copied.** `files`, `friendly_at`, `foundation_at` and the
+/// conversion itself all come from the program that writes the generated files.
+#[path = "../examples/render.rs"]
+#[allow(dead_code)]
+mod render;
+
+use render::{files, foundation_at, friendly_at, friendly_rows, mine, rows};
+
 /// Every row in `data/foundation`, so a count below is derived rather than written down.
 ///
 /// **Adding a test must not mean editing a number.** Sean, 2026-09-15: *I intend to have one test
@@ -37,28 +49,12 @@ fn every_row() -> usize {
     total
 }
 
-fn files() -> Vec<(String, bool)> {
-    let mut all: Vec<(String, bool)> = vec![
-        ("schema.4x".to_string(), true),
-        ("engine.4x".to_string(), true),
-        ("rules.4x".to_string(), true),
-        ("script.4x".to_string(), false),
-        ("setup.4x".to_string(), false),
-    ];
-    let mut tests: Vec<String> =
-        std::fs::read_dir(mine().join("data").join("foundation").join("tests"))
-            .expect("data/foundation/tests")
-            .filter_map(|it| it.ok())
-            .filter_map(|it| it.file_name().to_str().map(str::to_string))
-            .filter(|name| name.ends_with(".4x"))
-            .collect();
-    tests.sort();
-    all.extend(
-        tests
-            .into_iter()
-            .map(|name| (format!("tests/{name}"), false)),
-    );
-    all
+/// One file's rows from whichever form, both already folded where folding applies.
+fn of(from: &str, file: &str) -> Vec<Row> {
+    match from {
+        "foundation" => rows(&foundation_at(file)),
+        _ => friendly_rows(file),
+    }
 }
 
 fn store(of_game: bool, from: &str) -> Vec<Row> {
@@ -68,7 +64,7 @@ fn store(of_game: bool, from: &str) -> Vec<Row> {
     // every thing's name.
     let mut all: Vec<Row> = Vec::new();
     for (file, game) in files() {
-        let these = of(from, &file, game);
+        let these = of(from, &file);
         let mine = friendly::states_a_world(&these);
         for (row, is_game) in these.into_iter().zip(mine) {
             if (game || is_game) == of_game && !all.contains(&row) {
@@ -79,92 +75,70 @@ fn store(of_game: bool, from: &str) -> Vec<Row> {
     all
 }
 
-/// One file's rows, from whichever directory.
+/// **What is committed under `data/foundation/` is what the friendly source converts to, byte for
+/// byte.**
 ///
-/// **The friendly side may carry `-> n` and the foundation never does**, so friendly files go
-/// through the fold that puts a quantity back into its column. **The schema is read first and
-/// from the same directory**, because the fold has to know which column that is - and a schema
-/// file carries no arrow itself, so reading it needs nothing that is not already there.
-fn of(from: &str, file: &str, _of_game: bool) -> Vec<Row> {
-    if from == "foundation" {
-        // **`P-563` split this directory across two columns**, so where a foundation file lives is
-        // `common::foundation_at`'s answer rather than a path spelled here. `schema.4x` and
-        // `rules.4x` are `spec/data/`'s; the other three and every test are still this crate's.
-        return rows(&foundation_at(file));
-    }
-    let at = format!("data/{from}/{file}");
-    // **A test's friendly side left this prototype on 2026-09-21** - `P-532` put it in
-    // `spec/tests/`, where it is the specification rather than a rendering of one. **The shared
-    // files did not**, so `data/friendly/` still holds five of them and the path a test is found
-    // at is now the one thing this function has to know about the split.
-    let at = match at.strip_prefix("data/friendly/tests/") {
-        Some(name) => format!("../../spec/tests/{name}"),
-        None => at,
-    };
-    // **Always the game's schema.** Only a game row carries `-> n`, so a script row passes through
-    // untouched and a section row inside a script file is still folded correctly.
-    let schema = Schema::of(&rows("data/friendly/schema.4x")).expect("a schema");
-    let text =
-        std::fs::read_to_string(mine().join(&at)).unwrap_or_else(|why| panic!("{at}: {why}"));
-    friendly::fold(&text, &schema).unwrap_or_else(|why| panic!("{at}: {why}"))
-}
-
-/// **Converting the friendly directory gives the foundation directory, row for row.**
+/// # It compared rows, and that is one order short
 ///
-/// This is the direction that matters now that friendly is the source: what is committed under
-/// `foundation/` is what `friendly/` converts to, and nothing else.
+/// **This asserted row for row, and a row is a set of named values.** `Schema::write` puts them in
+/// the order the relation declares and `notation::write` sorts them, so `{column id:47 relation:17
+/// seq:1 name:id}` and `{column id:47 name:id relation:17 seq:1}` are one row and two files - and
+/// a row comparison passes over the difference. **18 rows of `script.4x` are how this lane found
+/// that**, and `examples/foundation.rs` had already found it once, in all 54 test files.
+///
+/// **A generated file that is committed and stale reads exactly like one that is current**, which
+/// is the argument `crates/game-console/tests/dumps_are_current.rs` makes for the reports. So this
+/// compares the text, and fails with the first line that differs.
 #[test]
 fn the_foundation_is_what_the_friendly_source_converts_to() {
-    let mut checked = 0;
-    let of_game = Names::of(&store(true, "friendly"));
-    let of_script = Names::of(&store(false, "friendly"));
-    for (file, game) in files() {
-        let friendly = of("friendly", &file, game);
-        let mine = friendly::in_a_section(&friendly);
-        let foundation = rows(&foundation_at(&file));
-        assert_eq!(
-            friendly.len(),
-            foundation.len(),
-            "{file}: {} friendly rows against {} foundation rows",
-            friendly.len(),
-            foundation.len()
-        );
-        for (at, row) in friendly.iter().enumerate() {
-            let names = if game || mine[at] {
-                &of_game
-            } else {
-                &of_script
-            };
-            let converted = names
-                .foundation(row)
-                .unwrap_or_else(|why| panic!("data/friendly/{file}: {why}"));
-            assert_eq!(
-                converted,
-                foundation[at],
-                "data/friendly/{file}: `{}` converts to `{}` and `foundation/{file}` says `{}`",
-                write(row),
-                write(&converted),
-                write(&foundation[at])
-            );
-            checked += 1;
+    let produced = render::converted();
+    let mut compared = 0;
+    for (at, text) in &produced {
+        let committed = std::fs::read_to_string(mine().join(at))
+            .unwrap_or_else(|why| panic!("{at}: {why} - run `cargo run --example render`"));
+        if committed != *text {
+            let differs = committed
+                .lines()
+                .zip(text.lines())
+                .enumerate()
+                .find(|(_, (was, now))| was != now);
+            match differs {
+                Some((line, (was, now))) => panic!(
+                    "{at} is stale at line {}: it says\n  {was}\nand the friendly source converts \
+                     to\n  {now}\nRun `cargo run --example render`.",
+                    line + 1
+                ),
+                None => panic!(
+                    "{at} has {} line(s) and the conversion produces {} - run `cargo run --example \
+                     render`",
+                    committed.lines().count(),
+                    text.lines().count()
+                ),
+            }
         }
+        compared += 1;
     }
+    // **A count over nothing is the same failure with the sign flipped** - `CLAUDE.md`. Converting
+    // no files would compare no files and pass.
     assert_eq!(
-        checked,
-        every_row(),
-        "every row of the friendly source was converted"
+        compared, 5,
+        "five shared files, and this compared {compared}"
     );
 }
 
-/// **And rendering the foundation gives the friendly source back**, so neither directory can drift
-/// from the other without this failing.
+/// **And rendering the foundation gives the friendly source back**, so neither form can drift from
+/// the other without this failing.
+///
+/// **This is the direction nothing generates**, and that is what it is for: Sean's premise was that
+/// the two forms convert *reliably*, which is a claim about both ways round. A conversion that lost
+/// something would still round-trip its own output and fail here.
 #[test]
 fn the_friendly_source_is_what_the_foundation_renders_to() {
     let mut checked = 0;
     let of_game = Names::of(&store(true, "foundation"));
     let of_script = Names::of(&store(false, "foundation"));
     for (file, game) in files() {
-        let friendly = of("friendly", &file, game);
+        let friendly = of("friendly", &file);
         let foundation = rows(&foundation_at(&file));
         let mine = friendly::in_a_section(&foundation);
         for (at, row) in foundation.iter().enumerate() {
@@ -177,13 +151,15 @@ fn the_friendly_source_is_what_the_foundation_renders_to() {
             // the relation declares; `write` sorts them. Two spellings of the same row.
             let rendered = names
                 .parse(&names.row(row))
-                .unwrap_or_else(|why| panic!("data/foundation/{file}: {why}"));
+                .unwrap_or_else(|why| panic!("{}: {why}", foundation_at(&file)));
             assert_eq!(
                 rendered,
                 friendly[at],
-                "data/foundation/{file}: `{}` renders to `{}` and `friendly/{file}` says `{}`",
+                "{}: `{}` renders to `{}` and `{}` says `{}`",
+                foundation_at(&file),
                 write(row),
                 names.row(row),
+                friendly_at(&file),
                 write(&friendly[at])
             );
             checked += 1;
@@ -196,20 +172,20 @@ fn the_friendly_source_is_what_the_foundation_renders_to() {
     );
 }
 
-/// **Every shared file exists in both notations**, because nothing is omitted from either.
+/// **Every shared file exists in both forms**, because nothing is omitted from either.
 ///
-/// # It asks about files rather than about directories, and `P-563` is why
+/// # It asks about files rather than about directories
 ///
-/// **This compared two directory listings and that stopped being the same question.** The
-/// foundation's `schema.4x` and `rules.4x` are `spec/data/`'s now, so `data/foundation/` holds
-/// three files and `data/friendly/` holds five, and a listing comparison says they disagree when
-/// what it means to ask is whether either notation is missing anything.
+/// **This compared two directory listings and that stopped being the same question.** The friendly
+/// source is spread across two columns - `spec/data/` holds two files and `data/friendly/` holds
+/// three - so a listing comparison says they disagree when what it means to ask is whether either
+/// form is missing anything.
 ///
 /// **So it asks of each file in turn where that file lives.** The population is `files()`, which
 /// reads the tests rather than listing them, and the count is asserted - a check that resolved
 /// every name to nothing would otherwise pass over an empty loop.
 #[test]
-fn neither_notation_omits_anything() {
+fn neither_form_omits_anything() {
     let shared: Vec<String> = files()
         .iter()
         .map(|(f, _)| f.to_string())
@@ -217,7 +193,7 @@ fn neither_notation_omits_anything() {
         .collect();
     let mut looked = 0;
     for file in &shared {
-        for at in [foundation_at(file), format!("data/friendly/{file}")] {
+        for at in [foundation_at(file), friendly_at(file)] {
             let path = mine().join(&at);
             assert!(
                 path.is_file(),
@@ -226,12 +202,36 @@ fn neither_notation_omits_anything() {
             looked += 1;
         }
     }
-    assert_eq!(
-        looked,
-        shared.len() * 2,
-        "both notations, every shared file"
-    );
-    assert_eq!(looked, 10, "five shared files in two notations");
+    assert_eq!(looked, shared.len() * 2, "both forms, every shared file");
+    assert_eq!(looked, 10, "five shared files in two forms");
+}
+
+/// **What the shipped binary carries is the generated form, and it is this one.**
+///
+/// **`game_model::foundation::PATHS` and `render::foundation_at` are two statements of where a
+/// foundation file lives**, and nothing made them agree. `P-563` pointed the first at `spec/data/`
+/// and `P-576` made that directory the friendly source, so the binary embedded names the engine
+/// cannot resolve - and it compiled, because `include_str!` only embeds text.
+#[test]
+fn the_binary_carries_what_the_conversion_writes() {
+    let carried: Vec<&str> = game_model::foundation::PATHS.to_vec();
+    let mut matched = 0;
+    for at in &carried {
+        let name = at.rsplit('/').next().unwrap_or(at);
+        assert_eq!(
+            *at,
+            foundation_at(name),
+            "the binary carries `{at}` and the conversion writes `{}`",
+            foundation_at(name)
+        );
+        assert!(
+            render::converted().iter().any(|(to, _)| to == at),
+            "`{at}` is carried and `examples/render.rs` does not write it"
+        );
+        matched += 1;
+    }
+    assert_eq!(matched, carried.len());
+    assert_eq!(matched, 3, "three files are the foundation");
 }
 
 /// **A name the foundation has nowhere to keep is refused, not dropped.**

@@ -133,9 +133,9 @@ pub fn rows(at: &str) -> Vec<Row> {
 
 /// The files loaded into the game, in the order they are loaded.
 ///
-/// **Read from `foundation::PATHS` rather than written here**, which is `P-563`: two of the three
-/// are `spec/data/`'s now and one is this crate's, and a path written in seven places is a path
-/// that will be edited in six. **What that list is checked against is still `script.4x`**, by
+/// **Read from `foundation::PATHS` rather than written here**, because a path written in seven
+/// places is a path that will be edited in six. **What that list is checked against is still
+/// `script.4x`**, by
 /// `the_helper_loads_what_the_script_loads` - which caught the two disagreeing about the order the
 /// first time it ran. **The order does not matter to the engine**, since everything goes into one
 /// store and is validated together; the lists agreeing is what matters, and asserting the order is
@@ -144,14 +144,15 @@ pub const LOADED: [&str; 3] = game_model::foundation::PATHS;
 
 /// Where a foundation file lives, given its bare name.
 ///
-/// **`P-563` split `data/foundation/` across two columns and this is the only place that knows
-/// it.** `schema.4x` and `rules.4x` are `spec/data/`'s now; `engine.4x`, `script.4x`, `setup.4x`
-/// and every test are still this crate's. A reader that spelled `data/foundation/{file}` was
-/// right for as long as they were all in one directory, and there were seven of them.
+/// **One directory again, and `P-576` is why.** `P-563` moved `schema.4x` and `rules.4x` into
+/// `spec/data/` and named the *converted* form, so Sean owned a rendering and the rules he authors
+/// stayed here. `P-576` corrects it: `spec/data/` holds the friendly source, every foundation file
+/// is generated from it, and `CLAUDE.md` gives a generated file no owner.
 ///
-/// **Resolved from `foundation::PATHS` rather than from a second list**, so the answer here and
-/// the answer the shipped binary uses cannot differ. A name that is not one of the three keeps
-/// the old spelling, which is what makes this a lookup rather than a table.
+/// **Resolved from `foundation::PATHS` rather than from a list of its own**, so the answer here and
+/// the answer the shipped binary uses cannot differ - which is what this was for before the split
+/// and still is. `tests/directories.rs`'s `the_binary_carries_what_the_conversion_writes` is what
+/// says those paths are also what the conversion writes.
 pub fn foundation_at(file: &str) -> String {
     for at in LOADED {
         let named = at.rsplit('/').next().unwrap_or(at);

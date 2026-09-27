@@ -285,14 +285,28 @@ mod tests {
         let found = read(&data());
         let mut compared = 0;
 
-        for (_, at, text) in game_model::foundation::FOUNDATION {
-            if !at.contains("spec/data") {
-                continue;
-            }
-            // **The engine's reader, over the bytes it carries** - which
-            // `foundation::what_is_carried_is_what_is_on_disk` holds equal to the file this module
-            // read off disk, so the two are reading one input and not two copies of one.
-            let theirs = game_model::notation::read(text).expect("the engine reads it");
+        // **The files this module walked, not a list from somewhere else.** This read
+        // `foundation::FOUNDATION` and skipped anything outside `spec/data/`, which was the same two
+        // files while `P-563` pointed the shipped binary there. **`P-576` pointed it back at
+        // `data/foundation/`, the filter matched nothing, and the loop compared zero rows** - caught
+        // by this test's own total below rather than by anybody reading it.
+        //
+        // **So the population is the directory `read` was given**, and the two readers cannot be
+        // over different inputs however the binary is loaded.
+        let mut files: Vec<std::path::PathBuf> = std::fs::read_dir(data())
+            .expect("spec/data")
+            .filter_map(|it| it.ok())
+            .map(|it| it.path())
+            .filter(|it| it.extension().and_then(|it| it.to_str()) == Some("4x"))
+            .collect();
+        files.sort();
+        assert!(!files.is_empty(), "`spec/data/` holds no `.4x` file");
+        for path in files {
+            let at = path.display().to_string();
+            let text = std::fs::read_to_string(&path).unwrap_or_else(|why| panic!("{at}: {why}"));
+            // **The engine's reader, over the same bytes off the same disk** - one input read twice
+            // rather than two copies of one.
+            let theirs = game_model::notation::read(&text).expect("the engine reads it");
             assert!(!theirs.is_empty(), "{at} parsed to nothing");
 
             let mut by_relation: BTreeMap<String, Vec<BTreeMap<String, String>>> = BTreeMap::new();
@@ -335,11 +349,10 @@ mod tests {
             }
         }
 
-        // **A count over nothing is the same failure with the sign flipped** - `CLAUDE.md`. With
-        // no `spec/data/` entry in `FOUNDATION` this loop would compare nothing and pass in
-        // exactly these words. **Equality against the reader's own total**, so the number is
-        // derived on both sides rather than chosen here: every relation this reader found was
-        // matched, and every row of it.
+        // **A count over nothing is the same failure with the sign flipped** - `CLAUDE.md`, and
+        // this is the assertion that caught the empty loop above. **Equality against the reader's
+        // own total**, so the number is derived on both sides rather than chosen here: every
+        // relation this reader found was matched, and every row of it.
         assert_eq!(
             compared,
             found.iter().map(|it| it.rows.len()).sum::<usize>(),
