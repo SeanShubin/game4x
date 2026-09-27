@@ -67,3 +67,5 @@
 {primitive id:59 word:scope}
 {primitive id:60 word:stands-in}
 {primitive id:61 word:soft}
+{primitive id:62 word:minted}
+{primitive id:63 word:constant}

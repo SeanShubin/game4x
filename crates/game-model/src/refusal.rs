@@ -67,6 +67,17 @@ pub enum Refused {
     },
     /// The rule removes something no row matches, so the rule contradicts itself.
     NothingToRemove { rule: String, wanted: String },
+    /// A `{minted}` names a clause that matches rather than makes.
+    ///
+    /// **Minting an id to look for asks the world for a row nobody has made.** `require` and
+    /// `remove` match a pattern and `add` builds a whole row, and only the second has an id to
+    /// choose - so this is the data saying something that cannot mean anything, refused rather than
+    /// answered with a number.
+    MintedWhereNothingIsMade {
+        rule: String,
+        clause: String,
+        column: String,
+    },
     /// A `put` would assign a trait to a kind that does not carry one.
     ///
     /// **`refresh` is one rule over every trait, so the pairing is checked when it fires.** An
@@ -144,6 +155,14 @@ impl std::fmt::Display for Refused {
                 "`{rule}` refreshes `{carried}`, and no `{relation}` carries one"
             ),
             Refused::Broke { rule, why } => write!(out, "`{rule}` would leave a world where {why}"),
+            Refused::MintedWhereNothingIsMade {
+                rule,
+                clause,
+                column,
+            } => write!(
+                out,
+                "`{rule}` mints `{column}` in clause `{clause}`, which matches rather than makes"
+            ),
         }
     }
 }

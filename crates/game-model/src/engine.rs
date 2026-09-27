@@ -67,6 +67,8 @@ const REPEATS: &str = "repeats";
 const SOFT: &str = "soft";
 const WHAT: &str = "what";
 const SCOPE: &str = "scope";
+const MINTED: &str = "minted";
+const CONSTANT: &str = "constant";
 
 /// Every row there is, and the structure read out of them.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -211,7 +213,18 @@ fn apply(
             let relations = relations_of(game, clause, bound);
             let alone = relations.len() == 1;
             for relation in &relations {
-                let wanted = row_of(game, clause, bound, &rule, PATTERN, &matched, relation)?;
+                let wanted = row_of(
+                    &Applying {
+                        game,
+                        bound,
+                        rule: &rule,
+                        matched: &matched,
+                        so_far: &after,
+                    },
+                    clause,
+                    PATTERN,
+                    relation,
+                )?;
                 match role {
                     REQUIRE => {
                         let found = game.rows.matching(&wanted);
@@ -343,7 +356,18 @@ fn apply(
                 }
                 assignments.push((carried, value.to_string()));
             }
-            let wanted = row_of(game, clause, bound, &rule, PATTERN, &matched, &relation)?;
+            let wanted = row_of(
+                &Applying {
+                    game,
+                    bound,
+                    rule: &rule,
+                    matched: &matched,
+                    so_far: &after,
+                },
+                clause,
+                PATTERN,
+                &relation,
+            )?;
             let found: Vec<Row> = after.matching(&wanted).into_iter().cloned().collect();
             for row in found {
                 let mut made = row.clone();
@@ -381,7 +405,18 @@ fn apply(
                     .into_iter()
                     .any(|row| row.value(CLAUSE) == clause.value(ID));
                 for relation in relations_of(game, clause, bound) {
-                    let mut made = row_of(game, clause, bound, &rule, WHOLE, &matched, &relation)?;
+                    let mut made = row_of(
+                        &Applying {
+                            game,
+                            bound,
+                            rule: &rule,
+                            matched: &matched,
+                            so_far: &after,
+                        },
+                        clause,
+                        WHOLE,
+                        &relation,
+                    )?;
                     if soft {
                         let schema = Schema::of(after.rows()).map_err(|why| Refused::Broke {
                             rule: rule.clone(),
@@ -601,15 +636,64 @@ fn carries(game: &Game, relation: &str, carried: &str) -> bool {
     })
 }
 
-fn row_of(
-    game: &Game,
-    clause: &Row,
-    bound: &BTreeMap<String, String>,
-    rule: &str,
-    whole: bool,
-    matched: &BTreeMap<String, Row>,
-    relation: &str,
-) -> Result<Row, Refused> {
+/// The least id a relation is not using, as a decimal string.
+///
+/// **Over the store handed in and one column of one relation.** Nothing else in the world is
+/// consulted, which is what makes the answer a fact about that store - see the `{minted}` paragraph
+/// in [`row_of`] for why the least rather than one past the largest.
+///
+/// **A value that is not a number is not in the way.** An id column holds decimals throughout, and
+/// a row holding something else cannot be the thing a decimal would collide with - so it is skipped
+/// rather than treated as zero, which would reserve `1` on its behalf.
+fn unused(so_far: &Store, relation: &str, column: &str) -> String {
+    let mut taken: Vec<u64> = so_far
+        .rows()
+        .iter()
+        .filter(|row| row.relation == relation)
+        .filter_map(|row| row.value(column))
+        .filter_map(|it| it.parse::<u64>().ok())
+        .collect();
+    taken.sort_unstable();
+    taken.dedup();
+    let mut next = 1;
+    for one in taken {
+        if one != next {
+            break;
+        }
+        next += 1;
+    }
+    next.to_string()
+}
+
+/// What is true of the whole command, gathered so that a clause can be asked about on its own.
+///
+/// **Five of these travelled as five arguments and `S-200` made them six**, which is one past the
+/// point clippy stops reading. **They are one thing rather than six**: the command being applied -
+/// the world it started in, what the caller bound, the rule's name, what earlier clauses matched,
+/// and the world as it stands.
+///
+/// **Built fresh at each call site rather than once.** `matched` and `so_far` are both written to
+/// between calls, so a value holding a reference to either could not outlive the loop that fills
+/// them - which is the borrow checker saying the same thing this comment does.
+struct Applying<'a> {
+    game: &'a Game,
+    bound: &'a BTreeMap<String, String>,
+    rule: &'a str,
+    matched: &'a BTreeMap<String, Row>,
+    /// **The world as it stands, which is not `game.rows`.** A minted id is the next one unused,
+    /// and two `add` clauses of one rule - or one clause under `{repeats}` - would otherwise both
+    /// read the store as it was before the command and mint the same number.
+    so_far: &'a Store,
+}
+
+fn row_of(applying: &Applying, clause: &Row, whole: bool, relation: &str) -> Result<Row, Refused> {
+    let Applying {
+        game,
+        bound,
+        rule,
+        matched,
+        so_far,
+    } = applying;
     let id = clause.value(ID).unwrap_or_default();
     let bindings: Vec<&Row> = game
         .of_relation(BINDING)
@@ -685,6 +769,54 @@ fn row_of(
             continue;
         };
         values.insert(name.to_string(), value.to_string());
+    }
+
+    // **A minted column is the fourth way one gets a value, and the only one the rule does not
+    // state.** `S-200`, from `P-575`: `{minted clause:C column:N}` - *an `add` clause's column takes
+    // the next id unused by that relation.*
+    //
+    // **`engine.rs` already said why this was needed**: an `add` must name every column, *including
+    // the `id` it will be known by*. So until now no rule could add a territory, a place or a
+    // crossing, because no rule could name an id that does not exist yet.
+    //
+    // # Next unused, per store, and both halves are answers to questions that were asked
+    //
+    // **Per store.** `S-201`, re-derived by the specification lane rather than agreed with:
+    // `script.4x` uses relation ids 1 to 6 and fourteen column ids, and **all twenty collide with a
+    // different thing in `schema.4x`** - so the two stores have been separate id spaces since
+    // `script.4x` existed, and `minted` inherits that rather than introducing it. `so_far` is one
+    // store, which is what makes this per store without saying so anywhere.
+    //
+    // **The least unused rather than one past the largest.** *Next unused* over a set is the least
+    // element not in it, and it makes the id a function of the world rather than of its history: a
+    // row removed and added back takes the id it had. One past the largest would give it a new one,
+    // which is a fact about what has happened rather than about what is there - and `S-200` asks for
+    // *a fact about the world rather than state anybody keeps*.
+    //
+    // **Nothing uses this yet, so nothing depends on which.** The four design rules are the
+    // specification lane's next step, and this choice is asserted in `tests/minting.rs` so that
+    // reading it is how anybody finds out.
+    //
+    // **Only where a whole row is built.** A `require` or a `remove` matches a pattern, and minting
+    // an id to look for is asking the world for a row nobody has made - so a `{minted}` on such a
+    // clause is refused rather than quietly producing a number.
+    for minted in game
+        .of_relation(MINTED)
+        .into_iter()
+        .filter(|row| row.value(CLAUSE) == Some(id))
+    {
+        let column = minted.value(COLUMN).unwrap_or_default();
+        let Some((_, name)) = game.schema.column(column) else {
+            continue;
+        };
+        if !whole {
+            return Err(Refused::MintedWhereNothingIsMade {
+                rule: rule.to_string(),
+                clause: id.to_string(),
+                column: name.to_string(),
+            });
+        }
+        values.insert(name.to_string(), unused(so_far, relation, name));
     }
 
     // **Every column of the relation has to be bound**, said here rather than left to the
@@ -1109,29 +1241,62 @@ fn arguments_of(
         if filled.iter().any(|(it, _)| it == id) {
             continue;
         }
-        let Some(given) = game
+        let given = game
             .of_relation(ARGUMENT)
             .into_iter()
             .filter(|row| row.value(PART) == Some(part))
             .find(|row| row.value(INPUT) == Some(id))
             .and_then(|row| row.value(VALUE))
-        else {
-            return Err(Refused::Missing {
-                rule: named.to_string(),
-                input: name.to_string(),
-            });
+            .map(str::to_string);
+
+        // **A constant is the other way a part fills an input, and it denotes nothing.** `S-200`,
+        // from `P-575`: `{constant part:P input:i value:6}` - *a value supplied to a part or a
+        // command's input, where `{argument}` supplies a reference. It is the part-layer twin of
+        // `{literal clause:C column:N value:1}`.*
+        //
+        // **So the type check below is skipped for one, and that is the difference rather than an
+        // omission.** An input is typed as a relation and carries one of its keys; a constant is a
+        // plain value, so asking whether it is a key of anything is asking the wrong question -
+        // exactly as `{literal}` gives a quantity no reference check could pass.
+        //
+        // **The value is still checked, one layer down.** It reaches a column through a
+        // `{binding}`, and the row that column belongs to is checked against the structure before
+        // it enters the world - so what moves is where the check happens, not whether there is one.
+        //
+        // **Read after the argument and never both**, which is the rule `{literal}` follows after
+        // `{binding}`: one input, one source. An argument wins, because it is the caller speaking
+        // and a constant is the part.
+        let constant = game
+            .of_relation(CONSTANT)
+            .into_iter()
+            .filter(|row| row.value(PART) == Some(part))
+            .find(|row| row.value(INPUT) == Some(id))
+            .and_then(|row| row.value(VALUE))
+            .map(str::to_string);
+
+        let value = match (given, constant) {
+            (Some(given), _) => {
+                let of = input.value(OF).unwrap_or_default();
+                let of = game.named(RELATION, of).unwrap_or(of).to_string();
+                if !game.has_key(&of, &given) {
+                    return Err(Refused::WrongType {
+                        rule: named.to_string(),
+                        input: name.to_string(),
+                        value: given,
+                        of,
+                    });
+                }
+                given
+            }
+            (None, Some(constant)) => constant,
+            (None, None) => {
+                return Err(Refused::Missing {
+                    rule: named.to_string(),
+                    input: name.to_string(),
+                });
+            }
         };
-        let of = input.value(OF).unwrap_or_default();
-        let of = game.named(RELATION, of).unwrap_or(of).to_string();
-        if !game.has_key(&of, given) {
-            return Err(Refused::WrongType {
-                rule: named.to_string(),
-                input: name.to_string(),
-                value: given.to_string(),
-                of,
-            });
-        }
-        bound.insert(id.to_string(), given.to_string());
+        bound.insert(id.to_string(), value);
     }
     Ok(bound)
 }

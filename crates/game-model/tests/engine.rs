@@ -94,10 +94,12 @@ fn the_words_the_data_delegates_are_the_words_the_engine_implements() {
         "`data/engine.4x` lists these and `src/` does not branch on them: {unimplemented:?}"
     );
 
+    // **60 since `S-200`**, which added `minted` and `constant` - the two notation pieces `P-575`
+    // needs before a rule can make a world. 58 before that.
     assert_eq!(
         implemented.len(),
-        58,
-        "58 words, and the count is written down so that adding one is a decision somebody makes rather than a line somebody adds"
+        60,
+        "60 words, and the count is written down so that adding one is a decision somebody makes rather than a line somebody adds"
     );
 }
 
