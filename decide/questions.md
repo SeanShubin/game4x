@@ -11,63 +11,53 @@ proposal and moves to [`proposals.md`](proposals.md); the reasoning stays behind
 
 ## Open
 
-### P-574 - adjacency is stated twice or travel goes one way, and `spec/` already forbids the first
+### P-574 - adjacency stays directed, and the check that keeps worlds two-way needs a scope
 
-**to** sean · **status** open · **raised** 2026-09-27 · **asks** a decision · **kind** entailed · **into** the schema, and `spec/planet.md` if you choose otherwise
+**to** sean · **status** open · **raised** 2026-09-27 · **answered** 2026-09-27, directed · **asks** a decision · **kind** entailed · **into** `spec/planet.md`, and a check in `releases/rules-become-data.md`
 
-**Your ark-move edit cannot be made without contradicting something.** The code lane filed `C-153`
-and restored the scenario unedited.
+**You said**: *I am thinking i want to leave one-way adjacency open, but for the current release
+have check in place so that we never generated a world without two way adjacency.*
 
-**What made it visible**: the ark moves from the orbit above territory 1 to the orbit above
-territory 2, and the pioneer then settles the territory the ark came from - **two things travelling
-opposite ways along one border.** Nothing had ever done that.
+**That dissolves the contradiction rather than choosing a side.** If adjacency is directed then two
+rows are **two facts** - passable one way, passable the other - so `a fact is stated once` is not
+broken and nothing is duplicated. **Both of the answers this item offered are withdrawn**; neither
+was needed.
 
-## Three sentences, all promoted, and no two of them hold together
+## One sentence of `spec/` now says the wrong thing
 
-```
-spec/planet.md:26    two territories are adjacent when they SHARE an edge
-spec/planet.md:32    adjacency is a SHARED boundary. Two places are adjacent when they share one
-spec/invariants.md   a fact is stated once and every other form of it is derived
-```
+**`spec/planet.md`**: *Adjacency is a shared boundary. Two places are adjacent when they share one.*
+**Under your answer that is no longer what adjacency means** - it is how the worlds you generate
+happen to be built. **A cliff you descend and cannot climb would satisfy the model and contradict
+that sentence.**
 
-**Sharing is symmetric.** The data states it directed - `{adjacency id:1 from:territory-1
-to:territory-2}` - and `move` matches that direction and no other. **So one row means travel one
-way, and two rows state one fact twice.**
+**This lane is not proposing the replacement yet**, because the scope below changes what it should
+say.
 
-## This lane told you the wrong thing an hour ago and is correcting it here
-
-**It offered you *one row derived, or two rows with a check that they agree*. The second is not
-available**: two rows is one fact stated twice, which `spec/invariants.md` forbids, and it
-contradicts *shared* twice in `spec/planet.md`. **A check that the two rows agree would be a check
-that a rule is not being broken, which is not the same as not breaking it.**
-
-## Never exercised, which is why it surfaced now and not months ago
-
-**The code lane measured over everything you have read**: 12 reviewed tests declare an adjacency,
-15 moves across them, **15 with the declared direction and 0 against**. The reviewed worlds are
-chains and everything walks forward along them. **It corrected its own instrument first** - a
-version that could not map a place to its territory reported 13 and 13 - and the count above has
-0 unmapped and its three outcomes sum to the total.
-
-## So the decision is where symmetry lives, and both keep one stated fact
+## The scope decision, and the measurement makes it concrete
 
 ```
-S1  the schema says the relation is symmetric, and the engine matches either
-    direction for any relation so declared. `{symmetric relation:adjacency}`,
-    the same shape as `{family relation:unit}` which already exists
-S2  a world states one row and something derives the other before the engine
-    sees it, the way capacity, occupied and free are three names and two facts
+directed adjacency rows in everything you have read, plus the scenario:  19
+rows with no reverse:                                                    17
+files declaring an adjacency:                                            13
 ```
 
-**`S1` is a notation feature and `S2` is a derivation step.** `S1` is smaller and general - any
-future *shares a* relation gets it free - and it needs the engine to honour a declared property
-rather than to know anything about adjacency, **which matters because `docs/architecture.md` rule
-11 says the engine names no noun the game has.**
+```
+W1  the check is on generated worlds only - what `generate-planet` produces.
+    Costs nothing today: 0 files change, and a hand-written test world stays
+    free to be one-way, which is correct if one-way is legal
+W2  the check is on every world, tests included. 13 files gain rows - and 12
+    of them are tests you have approved, so the copies in `reviewed/` stop
+    matching and you re-read all twelve
+```
 
-## The third answer the code lane found and deliberately did not take
+**Your words say *generated*, which is `W1`.** This lane reads it that way and is asking because
+`W2` costs twelve re-readings and nothing said which you meant.
 
-**A third territory in a chain lets the ark move forward and the pioneer move forward again.** It
-contradicts nothing, works today, and **settles the question by avoiding it** - which is why it
-was filed rather than quietly done. **It is still available** if you would rather have the
-scenario now and the decision later, and this lane would say the decision is worth taking first
-because the next world you draw will meet it again.
+## What is true either way
+
+**The scenario gains the reverse row.** Your ark-move edit needs it - the ark crosses one way and
+the pioneer comes back the other - and `scenario/main.4x` is one world whichever scope you pick.
+
+**And the reviewed tests are right as they stand under `W1`.** A test about moving forward along a
+chain declares the boundary it uses and no more, which is *the model is a minimal expression of
+intent* applied to a world.
