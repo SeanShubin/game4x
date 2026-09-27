@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-203 - `P-577` added a column to `spec/data/schema.4x` and the foundation form needs regenerating
 
-**to** code · **status** open · **raised** 2026-09-27 · **source** promoting `P-577`
+**to** code · **status** acted · **raised** 2026-09-27 · **acted** 2026-09-27 · **cited** `e1bc5333` · **source** promoting `P-577`
 
 **One row, and it is `B3`**: `{column id:155 relation:territory seq:2 name:biome}`, with **no
 `{reference}` naming it**. Sean chose a biome to be a column the way `layer` is a column on
@@ -82,8 +82,11 @@ are already bare words. **A biome is six more.**
 and `the_friendly_source_is_what_the_foundation_renders_to`. **Regenerate
 `crates/game-model/data/foundation/schema.4x` and both go green.** Nothing else changed.
 
-**No rule reads a biome**, so nothing else in the suite should move. If something does, that is
-worth knowing and this lane would want to hear it.
+**This item said nothing else should move and 35 tests went red.** `C-156`, and the sentence was
+wrong for a reason worth keeping: a column is not optional - `Schema::fits` compares key sets for
+equality - so 380 territory rows carrying no biome stopped being legal. **`No rule reads a biome`
+is true and is not what refuses them.** Put to Sean as `P-578`, which recommends reversing
+`P-577`.
 
 ## What was deliberately not done
 
