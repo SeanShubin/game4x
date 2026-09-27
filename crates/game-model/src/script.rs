@@ -105,6 +105,20 @@ pub enum Failed {
     OutOfOrder { step: String, needs: String },
 }
 
+impl Failed {
+    /// The same words, with every row a refusal names written by `say`.
+    ///
+    /// **The one variant that carries rows is the one that carries a `Refused`**, so this hands
+    /// the writer on and answers every other variant with its own words. It exists because a
+    /// caller holding a `Failed` should not have to take the refusal apart to say it with names.
+    pub fn told(&self, say: &dyn Fn(&Row) -> String) -> String {
+        match self {
+            Failed::Refused { why } => why.told(say),
+            other => format!("{other}"),
+        }
+    }
+}
+
 impl std::fmt::Display for Failed {
     fn fmt(&self, out: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
@@ -371,8 +385,11 @@ pub fn run_test(script: &[Row], files: &dyn Files) -> Result<Report, Failed> {
                 // **Both refusals that carry a row hand it over in the same form**, so a test
                 // can name what a rule could not take as readily as what it could not find.
                 let wanted = match &why {
+                    // **Written in the schema's column order**, because it is compared below
+                    // against `{refused}` rows written the same way. The refusal carries the row
+                    // itself now, so the writing happens where the comparison does.
                     Refused::NotSo { wanted, .. } | Refused::NothingToRemove { wanted, .. } => {
-                        wanted.clone()
+                        before.schema().write(wanted)
                     }
                     // **A limit refuses by naming the row that would have had to be there**, so
                     // it is the same kind of answer as the other two: not *this is too many* but

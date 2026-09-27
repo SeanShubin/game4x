@@ -154,7 +154,17 @@ pub fn watched() -> (Game, Vec<(usize, Effect)>, Option<String>) {
             // **`Display` and not `Debug`.** `Refused` says what happened in words - *`move`.`4`
             // wants a value for `gathering`* - and the derived form says
             // `Unbound { rule: "move", ... }`, which is the struct rather than the refusal.
-            Err(why) => return (game, history, Some(format!("{why}"))),
+            //
+            // **And `told` and not `Display`, so the rows in it carry names.** The engine holds
+            // one as `{deposit where:4 what:50}`, which is true and of no use to a reader of
+            // `scenario/main.4x`, where the same row is `{deposit where:place-4 what:energy}`.
+            // **`game` is the world as the refused command met it**, which is where the names
+            // are, so this is the one place the rendering can happen at all.
+            Err(why) => {
+                let names = Names::of(game.rows().rows());
+                let said = why.told(&|row| names.row(row));
+                return (game, history, Some(said));
+            }
         }
     }
     (game, history, None)

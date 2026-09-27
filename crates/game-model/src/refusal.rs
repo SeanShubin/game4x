@@ -6,6 +6,7 @@
 //! is one of the two output types - the other is `Effect` - and thirty-odd lines of it are the
 //! words a refusal is written in, which is not the loop.
 
+use crate::notation::Row;
 use crate::schema::Malformed;
 
 /// Why a command did not happen, said in terms of the data rather than of the engine.
@@ -37,7 +38,7 @@ pub enum Refused {
         column: String,
     },
     /// Everything was bound and the world does not agree.
-    NotSo { rule: String, wanted: String },
+    NotSo { rule: String, wanted: Row },
     /// A clause reads a value out of the row an earlier clause matched, and that clause did not
     /// match exactly one.
     ///
@@ -62,11 +63,11 @@ pub enum Refused {
     /// not the engine choosing.
     NotOneToTake {
         rule: String,
-        wanted: String,
+        wanted: Row,
         found: usize,
     },
     /// The rule removes something no row matches, so the rule contradicts itself.
-    NothingToRemove { rule: String, wanted: String },
+    NothingToRemove { rule: String, wanted: Row },
     /// A `{minted}` names a clause that matches rather than makes.
     ///
     /// **Minting an id to look for asks the world for a row nobody has made.** `require` and
@@ -95,6 +96,40 @@ pub enum Refused {
     /// variant naming a row and a number, and a `Result` whose error is that large is paid for on
     /// every call that succeeds.
     Broke { rule: String, why: Box<Malformed> },
+}
+
+impl Refused {
+    /// The same words, with every row it names written by `say`.
+    ///
+    /// **A refusal is read by a person and the engine cannot name anything.** Three of these
+    /// carry a row, and a row in the form the engine holds says `{deposit where:4 what:50}` -
+    /// true, and of no use to somebody reading `scenario/main.4x`, where the same row is
+    /// `{deposit where:place-4 what:energy}`. **The names live in `friendly-notation`**, which
+    /// is a dev-dependency here and must stay one: `tests/isolation.rs` holds that the engine
+    /// depends on no crate.
+    ///
+    /// **So the caller brings the writer.** `Display` passes the plain one and a boundary that
+    /// has a `Names` passes that, which is one set of words rendered two ways rather than two
+    /// sets that can drift.
+    pub fn told(&self, say: &dyn Fn(&Row) -> String) -> String {
+        match self {
+            Refused::NotSo { rule, wanted } => {
+                format!("`{rule}` needs {} and it is not", say(wanted))
+            }
+            Refused::NotOneToTake {
+                rule,
+                wanted,
+                found,
+            } => format!(
+                "`{rule}` removes {} and {found} rows match, so it has not said which",
+                say(wanted)
+            ),
+            Refused::NothingToRemove { rule, wanted } => {
+                format!("`{rule}` removes {} and nothing matched", say(wanted))
+            }
+            other => format!("{other}"),
+        }
+    }
 }
 
 impl std::fmt::Display for Refused {
@@ -126,7 +161,11 @@ impl std::fmt::Display for Refused {
             } => {
                 write!(out, "`{rule}`.`{clause}` binds nothing to `{column}`")
             }
-            Refused::NotSo { rule, wanted } => write!(out, "`{rule}` needs {wanted} and it is not"),
+            Refused::NotSo { rule, wanted } => write!(
+                out,
+                "`{rule}` needs {} and it is not",
+                crate::notation::write(wanted)
+            ),
             Refused::NotOne {
                 rule,
                 clause,
@@ -141,10 +180,15 @@ impl std::fmt::Display for Refused {
                 found,
             } => write!(
                 out,
-                "`{rule}` removes {wanted} and {found} rows match, so it has not said which"
+                "`{rule}` removes {} and {found} rows match, so it has not said which",
+                crate::notation::write(wanted)
             ),
             Refused::NothingToRemove { rule, wanted } => {
-                write!(out, "`{rule}` removes {wanted} and nothing matched")
+                write!(
+                    out,
+                    "`{rule}` removes {} and nothing matched",
+                    crate::notation::write(wanted)
+                )
             }
             Refused::DoesNotCarry {
                 rule,

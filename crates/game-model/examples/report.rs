@@ -407,7 +407,9 @@ the world it leaves. (old state, commands) -> (new state, effects).
         }
 
         let outcome = match run_test(&script, &data) {
-            Err(why) => Outcome::Refused(format!("{why}")),
+            // **Said with names**, the same as every other row on this page. `Refused::told`
+            // takes the writer because the engine has none - `tests/isolation.rs`.
+            Err(why) => Outcome::Refused(why.told(&|row| names.row(row))),
             Ok(report) if report.same() => Outcome::Passed,
             Ok(report) => Outcome::Differed {
                 missing: report.missing.iter().map(|it| friendly(it)).collect(),

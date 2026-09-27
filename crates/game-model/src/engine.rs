@@ -229,10 +229,7 @@ fn apply(
                     REQUIRE => {
                         let found = game.rows.matching(&wanted);
                         if found.is_empty() {
-                            return Err(Refused::NotSo {
-                                rule,
-                                wanted: game.schema.write(&wanted),
-                            });
+                            return Err(Refused::NotSo { rule, wanted });
                         }
                         // **One match is remembered and several are not.** A clause nothing reads
                         // from does not care either way; one that is read from refuses below
@@ -259,7 +256,7 @@ fn apply(
                         if how_many > 1 {
                             return Err(Refused::NotOneToTake {
                                 rule,
-                                wanted: game.schema.write(&wanted),
+                                wanted,
                                 found: how_many,
                             });
                         }
@@ -280,10 +277,7 @@ fn apply(
                         }
                         let Some(took) = after.take(&wanted, counted(game, &wanted).as_deref())
                         else {
-                            return Err(Refused::NothingToRemove {
-                                rule,
-                                wanted: game.schema.write(&wanted),
-                            });
+                            return Err(Refused::NothingToRemove { rule, wanted });
                         };
                         // **What a remove took is remembered, which is what lets an add carry
                         // through.** `spec/invariants.md`: *a rule carries through the columns it
