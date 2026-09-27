@@ -146,6 +146,21 @@ data means I accept what it does now**, so the test writes it, and what I review
 version control. Nothing else may write it: an expectation that can be edited in place is one that
 can be edited by accident, which is the thing it exists to prevent.
 
+**Every type of thing that is data has a generated suite of its own**, and there are four: the
+commands a scenario ran, the transformations over the things, the definitions of the things, and
+the words the engine implements. **The first three are the artifacts above**; the data dump is
+not a fourth suite, because it is what every case already ends with. **The fourth is below all of
+them** - a word a rule delegates to, where what moved is the code rather than the game.
+
+**A suite is one directory and deleting it is the same gesture at a coarser grain.** Deleting asks
+to be shown; **committing the diff is the acceptance.** So deleting the wrong one costs a question
+rather than an approval - the suite is written back unchanged, and nothing is accepted that I have
+not read a diff of.
+
+**The pattern reaches exactly as far as a transition.** A local command makes none, so there is
+nothing for a case to state about one - and the day a local command has a case is the day the game
+reads the interface.
+
 A test is there for what I cannot reliably repeat. **I can remember to do a thing the first time;
 what I cannot do is remember a mundane check every time after that**, and that is what a failing
 test is for. So a check earns its place by guarding the repetition, not the one-off.

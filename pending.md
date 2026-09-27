@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-580** - A generated suite per type of thing that is data, and the line is the transition · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -131,6 +130,7 @@ it exists to ask.
 - `spec/planet.md` -> Distance - P-24, P-349, P-574
 - `spec/units.md` -> What a unit is - P-66, P-486, P-524
 - `docs/process.md` - P-289, P-291
+- `docs/process.md` -> How I know the application is right - P-317, P-580
 - `docs/process.md` -> Quality instance - P-244, P-294
 - `docs/process.md` -> Specification Instance - P-292, P-329
 - `docs/process.md` -> Starting the instances - P-268, P-273
