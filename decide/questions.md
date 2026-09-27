@@ -70,14 +70,38 @@ for.
 **Phase near the interface.** **Wall 3 dissolves and it fits what the spec already says** - *the
 game knows nothing of the interface*. Nothing in the engine has to know a phase.
 
-## One wall is left and it is the smallest
+## Why a numeric argument was never possible, which you asked and is not what this lane assumed
 
-**An argument carries a word and never a number.** Measured over every `{argument}` in
-`spec/data/rules.4x`: `ark bearing citizen extractor gathering hungry laboring moving unit
-working` - ten values, all names of relations or traits. **`set-resource` needs a density.**
+**It was not forbidden. It was never a value.** An argument **denotes something in the schema** and
+the engine dereferences it - `crates/game-model/src/engine.rs`: *a clause is done once for each
+relation its argument denotes. One where the argument is a kind, and one per member where it is a
+family.*
 
-**So the extension is one mechanism widened rather than a new one invented**, which is a much
-smaller thing than this item claimed an hour ago.
+**That is load-bearing and it is yours.** 2026-09-18: *I don't like that I have a separate refresh
+command for each resource, I feel like this should be parameterized somehow.* `refresh` is one rule
+over `moving` and `working` **because the trait is an argument rather than part of the rule's
+name**. A number has nothing to dereference to, so it was never a thing an argument could be.
+
+## And that exposes an asymmetry the schema already half-notices
+
+**The clause layer has two ways to fill a column and the part layer has one.**
+
+```
+clause   {binding clause:C column:N input:i}     a reference - take it from an input
+         {literal clause:C column:N value:1}     a constant - this number, here
+part     {argument part:P input:i value:unit}    a reference - and nothing else
+```
+
+**`literal` is keyed by `clause` and there is no counterpart keyed by `part`.** The schema says the
+two layers are *deliberately the same shape* - *a clause has an id and `{binding ...}` rows name
+it; a part has an id and `{argument ...}` rows name it* - **and they are not the same shape, because
+one of the two is missing.**
+
+## So the extension is a symmetry rather than a new idea
+
+**Give the part and command layer the constant the clause layer already has.** Then `set-resource`
+supplies a density the way `build-extractor` supplies a `1`, and **nothing about what an argument
+means changes** - it goes on denoting, and the new thing goes on being a value.
 
 ## The decision
 
