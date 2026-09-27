@@ -459,6 +459,19 @@ pub fn state_relations(game: &Game) -> BTreeSet<String> {
         .collect()
 }
 
+/// One generated case: what it is called, the command it covers, and its whole text.
+///
+/// **The command is carried beside the name because the orphan check needs it.** `P-572`:
+/// *the two are told apart by `scenario/main.4x` - a case whose command is still there is waiting
+/// on Sean, and a case whose command is gone is waiting on nobody.* **So the question is what the
+/// commands are, and a check that compared filenames answered a different one** - `S-195`.
+pub struct Case {
+    pub name: String,
+    /// The command in the friendly form, exactly as `{when}` states it.
+    pub command: String,
+    pub text: String,
+}
+
 /// Where the per-command regression expectations live.
 ///
 /// **A directory of their own**, because Sean, 2026-09-27: *organized in a way that allows me to
@@ -489,7 +502,7 @@ pub fn regression_at() -> PathBuf {
 /// **State rows only.** The ruleset is in the same store as the world, and a case carrying eighty
 /// `{binding ...}` rows is one nobody can read. `{state relation:N}` says which relations a world is
 /// made of.
-pub fn regression_cases() -> Vec<(String, String)> {
+pub fn regression_cases() -> Vec<Case> {
     let mut game = opening().0;
     let (_, history, refused) = watched();
 
@@ -527,6 +540,7 @@ pub fn regression_cases() -> Vec<(String, String)> {
     }
 
     let mut out = Vec::new();
+    let mut seen: BTreeMap<(usize, String), usize> = BTreeMap::new();
     for (at, (turn, effect)) in history.iter().enumerate() {
         let command = friendly_command(&game, &effect.command);
         let after_game = fire(&game, &effect.command, 1)
@@ -547,13 +561,41 @@ pub fn regression_cases() -> Vec<(String, String)> {
         let before = render(&effect.took);
         let after = render(&effect.made);
 
-        let name = format!("{:02}-{}", at + 1, effect.command.relation);
+        // **Named by turn, rule and occurrence within that turn**, never by position in the run.
+        // `S-195`: position made Sean's next edit rename 33 of 34 files, because inserting one
+        // command renumbers everything after it.
+        //
+        // **Measured over the three schemes rather than argued.** His edit inserts a `{move}` into
+        // turn one:
+        //
+        // ```text
+        // by position            renames 33   what was here
+        // by command+occurrence  renames  1   worst case 13, the count of `work`
+        // by turn+command+k      renames  0   worst case  4, the largest (turn, rule) group
+        // ```
+        //
+        // **Zero because `t01-move-1` is a name nothing else held.** The cap is four because no
+        // turn runs one rule more than four times - `t04-work` and `t05-work` are the largest.
+        //
+        // **What it costs is play order in the filename**, which sorts alphabetically within a
+        // turn. `scenario/played.md` is where the order is, and it is the file he reads in order.
+        *seen
+            .entry((*turn, effect.command.relation.clone()))
+            .or_insert(0) += 1;
+        let name = format!(
+            "t{turn:02}-{}-{}",
+            effect.command.relation,
+            seen[&(*turn, effect.command.relation.clone())]
+        );
         let mut text = String::new();
-        text.push_str(&format!(
-            "# Turn {turn}, command {} of {}: {command}\n",
-            at + 1,
-            history.len()
-        ));
+        // **The turn and the command, and no position.** This read `command 4 of 34`, which put the
+        // very thing `S-195` took out of the filename back into the body: inserting one command in
+        // turn one left the names alone and then reported **34 of 35 cases stale**, because every
+        // header carried a position and a total that had both moved.
+        //
+        // **Measured, and it is why the naming alone was not the fix.** A case says which turn it is
+        // in and what it does; where it sits in the run is `scenario/played.md`'s business.
+        text.push_str(&format!("# Turn {turn}: {command}\n"));
         text.push_str(
             "#\n\
              # **Generated. Do not edit.** `scripts/regression.sh`, from `scenario/main.4x`.\n\
@@ -579,7 +621,11 @@ pub fn regression_cases() -> Vec<(String, String)> {
             text.push_str(&format!("{line}\n"));
         }
 
-        out.push((format!("{name}.4x"), text));
+        out.push(Case {
+            name: format!("{name}.4x"),
+            command,
+            text,
+        });
         game = after_game;
     }
     assert!(

@@ -45,6 +45,8 @@ use std::collections::BTreeSet;
 #[allow(dead_code)]
 mod scenario;
 
+use scenario::Case;
+
 /// **Every command's case is on disk and says what the scenario does now.**
 ///
 /// **It writes what is missing and compares what is there**, which is `docs/process.md`'s pattern
@@ -58,7 +60,12 @@ fn every_command_has_an_expectation_and_it_is_current() {
 
     let (mut written, mut compared) = (Vec::new(), 0);
     let mut stale: Vec<String> = Vec::new();
-    for (name, produced) in &cases {
+    for Case {
+        name,
+        text: produced,
+        ..
+    } in &cases
+    {
         let path = at.join(name);
         match std::fs::read_to_string(&path) {
             // **Present: compared and never rewritten.** A difference is reported with the line, so
@@ -117,15 +124,6 @@ fn every_command_has_an_expectation_and_it_is_current() {
         "every case was either compared or written"
     );
 
-    // **And nothing is left behind that the scenario no longer plays**, which is the direction that
-    // rots: a command deleted from `scenario/main.4x` leaves its file, where it reads exactly like
-    // a case still played - and everything above walks what the scenario produces, so it would
-    // never be looked at. **A renumbering does this too**: the cases are named by position, so
-    // inserting a command at turn one renames every file after it.
-    //
-    // **In this test rather than beside it.** It was its own test for an hour and raced with this
-    // one over the same directory - two tests, one of which writes, and `cargo test` runs them at
-    // once. **The writing and the sweep are one operation and had to be one test.**
     // **One directory and no subdirectories, which is Sean's own constraint.** Sean, 2026-09-27:
     // *if I am deleting multiple files rather than one, they need to be in a single directory.*
     // **Accepting a turn's worth of behaviour is several deletions**, and a file two levels down is
@@ -133,7 +131,7 @@ fn every_command_has_an_expectation_and_it_is_current() {
     //
     // **Checked both ways**, because a name and a directory entry are different populations: no
     // case is named with a path in it, and nothing in the directory is a directory.
-    for (name, _) in &cases {
+    for Case { name, .. } in &cases {
         assert!(
             !name.contains('/') && !name.contains('\\'),
             "`{name}` is a path rather than a name, so the cases would not be in one directory"
@@ -150,22 +148,73 @@ fn every_command_has_an_expectation_and_it_is_current() {
         "`scenario/regression/` holds {nested:?}, and deleting several expectations has to be          several deletions in one directory"
     );
 
-    let wanted: BTreeSet<String> = cases.iter().map(|(name, _)| name.clone()).collect();
-    let found: BTreeSet<String> = std::fs::read_dir(&at)
-        .unwrap_or_else(|why| panic!("{}: {why}", at.display()))
-        .filter_map(|it| it.ok())
-        .filter_map(|it| it.file_name().to_str().map(str::to_string))
-        .filter(|name| name.ends_with(".4x"))
-        .collect();
-    let orphaned: Vec<&String> = found.difference(&wanted).collect();
+    // **A file is left behind when its command is gone, and that is asked of the command rather
+    // than of the name.**
+    //
+    // **`P-572`**: *the two are told apart by `scenario/main.4x` - a case whose command is still
+    // there is waiting on Sean, and a case whose command is gone is waiting on nobody.*
+    //
+    // # This compared filenames and said something false
+    //
+    // **It was `found.difference(&wanted)` over names.** `S-195` simulated Sean's next edit against
+    // it: inserting one `{move}` renamed 33 of 34 files, so 33 names were on disk and not in the
+    // produced set, and it failed with *33 file(s) are of commands the scenario no longer plays -
+    // delete them.*
+    //
+    // **Every one of those commands was still played.** And under `P-572` deleting a case whose
+    // command is still played is Sean's approval gesture - so **the message instructed the reader to
+    // approve thirty-three behaviours it had not shown them.** That is worse than noise.
+    //
+    // **The naming now makes his edit rename nothing**, and this is fixed anyway: a scheme that
+    // renames less is not a scheme that renames never, and the check has to be right when one does.
+    let played: BTreeSet<String> = cases.iter().map(|it| it.command.clone()).collect();
+    let mut gone: Vec<String> = Vec::new();
+    let mut looked = 0;
+    for entry in std::fs::read_dir(&at).unwrap_or_else(|why| panic!("{}: {why}", at.display())) {
+        let path = entry.expect("a readable entry").path();
+        if path.extension().and_then(|it| it.to_str()) != Some("4x") {
+            continue;
+        }
+        let name = path
+            .file_name()
+            .and_then(|it| it.to_str())
+            .unwrap_or_default()
+            .to_string();
+        let text = std::fs::read_to_string(&path).unwrap_or_else(|why| panic!("{name}: {why}"));
+
+        // **The command a case covers is the line under its `{when}`**, which is where every case
+        // states it and is the only thing that identifies what it is about.
+        let covers = text
+            .lines()
+            .skip_while(|line| line.trim() != "{when}")
+            .nth(1)
+            .map(str::trim)
+            .unwrap_or_default()
+            .to_string();
+        assert!(
+            !covers.is_empty(),
+            "`{name}` has no command under its `{{when}}`, so nothing says what it is about"
+        );
+        looked += 1;
+        if !played.contains(&covers) {
+            gone.push(format!("{name} covers {covers}"));
+        }
+    }
+
     assert!(
-        orphaned.is_empty(),
-        "{} file(s) in `scenario/regression/` are of commands the scenario no longer plays:          {orphaned:?} - delete them",
-        orphaned.len()
+        gone.is_empty(),
+        "{} case(s) cover a command `scenario/main.4x` no longer plays, so they are waiting on \
+         nobody and any lane may remove them - `P-572`:\n    {}",
+        gone.len(),
+        gone.join("\n    ")
     );
+
+    // **Both populations, because either being empty would make this vacuous.** No files on disk and
+    // every command would be unplayed and none reported; no commands and every file would be.
     assert_eq!(
-        found.len(),
-        wanted.len(),
-        "every command the scenario plays has a file, and nothing else does"
+        looked,
+        cases.len(),
+        "every file on disk was asked about and every case has one"
     );
+    assert!(!played.is_empty(), "the scenario plays no commands");
 }
