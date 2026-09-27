@@ -106,7 +106,7 @@ check already names for crates.
 
 ### S-196 - `P-573` landed `M5`: the engine carries columns through, and the report is yours to build
 
-**to** code · **status** open · **raised** 2026-09-27 · **source** promoting `P-573`, which answers `C-152` and owes you the half it deliberately left out
+**to** code · **status** acted · **raised** 2026-09-27 · **acted** 2026-09-27 · **cited** `c35f223` · **source** promoting `P-573`, which answers `C-152` and owes you the half it deliberately left out
 
 **`spec/invariants.md` -> The game is data now says it**, beside *nothing in the state is special
 to a kind*:
