@@ -520,23 +520,29 @@ fn counts(kind: Kind, thing: &Thing) -> Vec<(&'static str, u32)> {
 ///
 /// `spec/logistics.md` draws the line and says why it matters:
 ///
-/// > **A kind declares one of three things about what it may hold.** It may declare **no
-/// > capacity**, and then it holds nothing of that sort and never can. It may declare a
-/// > **limit**, and then it holds up to that many and may happen to be empty - so a thing
-/// > holding nothing today is not thereby a thing that never could. Or it may declare **no
-/// > limit**, and then it holds any number, and there is no free capacity to record because
-/// > nothing can be short of it
+/// > **A store declares a limit, or declares no limit.** With a limit it contributes that much
+/// > capacity, and a place may happen to be holding less - so a store standing in an empty place
+/// > is not thereby a store that never fills. With no limit it contributes without bound, and there
+/// > is no free capacity to record because nothing can be short of it.
+///
+/// > **A kind that declares neither contributes nothing, and is therefore not a store.** That is
+/// > the right answer for an extractor, which stands in a deposit and holds nothing. **It is a
+/// > defect for a kind built to be a store**, which is a store that forgot to say - and the two are
+/// > not told apart by this sentence, but by the data saying which kinds are stores.
 ///
 /// **So this is a fact about the kind and not a count of what is there.** A reader who
 /// cannot tell *empty* from *never* is being shown the opposite of the rule, and the only
 /// place the difference can come from is here.
 ///
-/// **`P-391` made it three cases where it was two, and this function still answers two.** It
-/// says whether a kind may hold anything at all, which separates *no capacity* from the other
-/// two and is all any caller here asks. **The third case is the one to watch**: a kind
-/// declaring *no limit* holds any number and has no room to record, so anything printing a
-/// `used/total` for one would be printing a total the specification says does not exist.
-/// `crates/game-console/src/tree.rs` is where that would show.
+/// **Three cases, and this function still answers two.** It says whether a kind may hold anything
+/// at all, which separates *declares neither* from the other two and is all any caller here asks.
+/// **The third case is the one to watch**: a kind declaring *no limit* holds any number and has no
+/// room to record, so anything printing a `used/total` for one would be printing a total the
+/// specification says does not exist. `crates/game-console/src/tree.rs` is where that would show.
+///
+/// **`P-568` reworded this rule into the two bullets above**, where `P-391` had written it as one
+/// paragraph of three cases. The cases did not change; the wording did, and the *declares neither*
+/// case gained a stated consequence - which is `C-151` answered.
 ///
 /// Three kinds, from `releases/first-release.md` -> *Where things are*, which gives this
 /// release exactly three sorts of capacity: **a territory**, for the kinds it has total

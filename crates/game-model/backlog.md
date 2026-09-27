@@ -506,9 +506,9 @@ a comparison. `spec/data/line.4x` writes it `place-above:where`.
 ## The mainline already answers the fourth, and better than a marker on a part
 
 `spec/console.md`: *A line may carry an attachment, written in brackets after its amount -
-`-1 [soft]`. It says what to do when the line cannot do all of what it says.* **A line with no
-attachment does all of what it says, or the rule does nothing** - so the default is what this engine
-already does, and softness is opt-in per line.
+`-1 [soft]`. It says what to do when the line cannot do all of what it says.* And
+`spec/console.md`: *a line with no attachment does all of what it says, or the rule does nothing* -
+so the default is what this engine already does, and softness is opt-in per line.
 
 **`spec/invariants.md` fences it twice.** *A line that makes may be soft, and a line that takes may
 not.* And the one that matters most: **soft means what holds it will not take another, never there

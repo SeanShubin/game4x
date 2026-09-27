@@ -512,7 +512,7 @@ fn attributed(tail: &str) -> Option<&str> {
 /// lead begins inside a span, and a parser that guesses at nesting in prose has more ways to
 /// be wrong than this has. The cost is a sentence shaped one way instead of another; the
 /// warning is here so the next reader spends a minute rather than twenty.
-fn emphasised(lead: &str) -> Option<(String, usize)> {
+fn emphasised(lead: &str) -> Option<(String, usize, &'static str)> {
     let mut offset = None;
     for (index, character) in lead.char_indices() {
         if index > 60 || matches!(character, '.' | ';') {
@@ -536,7 +536,7 @@ fn emphasised(lead: &str) -> Option<(String, usize)> {
     // Past the closing marker, not up to it. Reading it as an opener made the next
     // asterisk anywhere in the file look like the end of a second quotation, and a whole
     // README came back attributed to `spec/planet.md`.
-    Some((quoted, offset? + closer.len() * 2 + shut))
+    Some((quoted, offset? + closer.len() * 2 + shut, closer))
 }
 
 /// The next quotation in a list, attributed to the same document as the one before it.
@@ -545,16 +545,67 @@ fn emphasised(lead: &str) -> Option<(String, usize)> {
 /// three of its lines in a row. Without this only the first is checked, and it was the
 /// second and third that a reader would be trusting just as much.
 ///
-/// Only a comma, a space and the word `and` may separate them. Anything else is a sentence
-/// that has moved on to its own words.
-fn continued(rest: &str) -> Option<(String, usize)> {
+/// A comma or the word `and` separates them. A bare space does too, **but only into the same
+/// emphasis**. Anything else is a sentence that has moved on to its own words.
+///
+/// # A bare space into the other emphasis produced two false alarms
+///
+/// **A quotation in italics followed by this lane's own words in bold read as a second quotation**,
+/// and the test reported that the specification does not say them - which it does not, and which
+/// nobody claimed. Two cases, each a sentence carrying on after a quotation it had finished:
+/// `crates/game-model/src/engine.rs` writing **Found here**, and `crates/outbox.md` writing **It
+/// was vetted by hand and the hand caught it**.
+///
+/// **A false alarm is the expensive kind** - the author re-reads a correct sentence looking for a
+/// difference that is not there - and this one is next door to the limitation `emphasised` records
+/// below.
+///
+/// # Two wrong fixes came first, and the counts are what told them apart
+///
+/// **Dropping the bare space altogether took the count from 159 to 150.** Two of those nine were
+/// the false alarms and **seven were genuine quotations that had been checked and were passing**.
+/// This lane had written *157* into this comment before running it.
+///
+/// **Then the marker rule was written and did nothing**, because it asked `rest.contains(',')` -
+/// whether a comma appears anywhere later in the run, which is true almost always. **159 before and
+/// 159 after**, and both false alarms survived it unchanged.
+///
+/// **What works is the marker over the separator's own bytes: 159 to 157.** The one true quotation
+/// it would also have dropped was written in bold in `crates/game-model/backlog.md`, where the
+/// convention is italics for quoted words; giving it its own attribution brought it back. **So the
+/// cost is the two false alarms and nothing else.**
+fn continued(rest: &str, marker: &str) -> Option<(String, usize, &'static str)> {
     let trimmed = rest.trim_start_matches([',', ' ']);
-    let trimmed = trimmed.strip_prefix("and ").unwrap_or(trimmed).trim_start();
-    if !trimmed.starts_with('*') {
+    let connected = trimmed.strip_prefix("and ").unwrap_or(trimmed).trim_start();
+    if !connected.starts_with('*') {
         return None;
     }
-    let skipped = rest.len() - trimmed.len();
-    emphasised(trimmed).map(|(quoted, used)| (quoted, skipped + used))
+    let skipped = rest.len() - connected.len();
+
+    // **The separator is these bytes and not the whole tail.** The first version of the rule below
+    // asked `rest.contains(',')`, which asks whether a comma appears anywhere later in the run -
+    // true almost always - so the rule never fired and both false alarms survived it unchanged.
+    // **The count said so: 159 before and 159 after**, which is what re-running rather than reading
+    // is for.
+    let separator = &rest[..skipped];
+    let listed = separator.contains(',') || separator.contains("and");
+
+    // **After a bare space the next span has to open the same way.** A list is written in one
+    // emphasis throughout - `*one*, *two* and *three*` - so italics followed by bold is this lane's
+    // sentence carrying on, not a further quotation.
+    //
+    // **Compared as the whole opener rather than as a prefix**, because `**bold**` starts with `*`
+    // and a prefix test would let every one of them through under a marker of `*`.
+    let opener = if connected.starts_with("**") {
+        "**"
+    } else {
+        "*"
+    };
+    if !listed && opener != marker {
+        return None;
+    }
+
+    emphasised(connected).map(|(quoted, used, next)| (quoted, skipped + used, next))
 }
 
 /// The quotations in one file: the spec file named, and the words attributed to it.
@@ -571,14 +622,15 @@ fn quotations(path: &Path, text: &str) -> Vec<(String, String)> {
             let Some(lead) = attributed(tail) else {
                 continue;
             };
-            let Some((quoted, consumed)) = emphasised(lead) else {
+            let Some((quoted, consumed, mut marker)) = emphasised(lead) else {
                 continue;
             };
             found.push((document.clone(), quoted));
             rest = &lead[consumed..];
-            while let Some((quoted, used)) = continued(rest) {
+            while let Some((quoted, used, next)) = continued(rest, marker) {
                 found.push((document.clone(), quoted));
                 rest = &rest[used..];
+                marker = next;
             }
         }
     }
@@ -818,10 +870,16 @@ fn every_quotation_of_the_specification_says_what_it_says_now() {
 
     // The test has to be able to fail. If the convention were ever renamed, this would
     // quietly check nothing and pass forever, which is the failure mode of every scanner.
+    //
+    // **157 today, and the floor is 120.** `Q-101` measured what a loose floor is worth and it was
+    // worse than feared - one at `1000` against `2004` tolerated a reader losing half its input,
+    // and this one at `40` against 157 tolerated three quarters. **There is no second derivation of
+    // how many quotations ought to exist**, so a floor is what is available; what it can do is
+    // catch a collapse rather than a trim, and 120 leaves room for ordinary deletion.
     assert!(
-        checked >= 40,
-        "only {checked} quotations found; the convention has probably changed \
-         and this test has stopped watching anything"
+        checked >= 120,
+        "only {checked} quotations found, and there were 157; the convention has probably changed \
+         and this test has stopped watching most of what it watched"
     );
     assert!(
         documents.len() >= 2,

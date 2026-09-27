@@ -173,16 +173,20 @@ fn node(out: &mut String, entry: &Entry, depth: usize) {
 
 /// The `used/total` line for a container, and only where a total is declared.
 ///
-/// **A capacity of zero is left off rather than printed as `0/0`.** `spec/logistics.md`: a kind
-/// that declares **no capacity** *holds nothing of that sort and never can* - so a territory
-/// with no metal is not a container of metal that happens to be empty, and printing it as one
-/// would say the opposite of what the rule says.
+/// **A capacity of zero is left off rather than printed as `0/0`.** `spec/logistics.md`: *a kind
+/// that declares neither contributes nothing, and is therefore not a store* - so a territory with
+/// no metal is not a container of metal that happens to be empty, and printing it as one would say
+/// the opposite of what the rule says.
 ///
-/// **`P-391` split that rule into three cases and the claim above survives the first.** A kind
-/// now declares no capacity, a limit, or **no limit** - and the third is the one this has to
-/// keep out of: something holding any number has *no room to record because nothing can be
-/// short of it*, so a `used/total` line for it would print a total the specification says does
-/// not exist. That is the same mistake as `0/0` from the other end.
+/// **Three cases, and the third is the other one to keep out of.** `spec/logistics.md`: *a store
+/// declares a limit, or declares no limit* - and with no limit *it contributes without bound, and
+/// there is no free capacity to record because nothing can be short of it*, so a `used/total` line
+/// for it would print a total the specification says does not exist. That is the same mistake as
+/// `0/0` from the other end.
+///
+/// **`P-568` reworded the rule this quotes and nothing said so.** It read *a kind that declares
+/// **no capacity** holds nothing of that sort and never can* - `P-391`'s wording - and
+/// `tests/quotations.rs` is what caught it, five days after the gate stopped running that test.
 ///
 /// **What is full is marked.** The reason a summary carries these at all is that a collapsed
 /// container which cannot say whether it is full defeats collapsing it.
@@ -476,8 +480,8 @@ mod tests {
 
     /// A capacity of zero is left off rather than drawn as `0/0`.
     ///
-    /// `spec/logistics.md`: a kind declaring **no capacity** *holds nothing of that sort and
-    /// never can* - so drawing it as an empty container says the opposite of the rule.
+    /// `spec/logistics.md`: *a kind that declares neither contributes nothing, and is therefore
+    /// not a store* - so drawing it as an empty container says the opposite of the rule.
     ///
     /// # Why this counts the zeroes instead of requiring them all
     ///
