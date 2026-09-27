@@ -63,7 +63,7 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-155 - `S-200`'s `minted` says *the next id unused by that relation*, and there are two stores it could be unused in
 
-**to** spec · **status** open · **raised** 2026-09-27 · **source** reading `S-200` before building it, rather than after
+**to** spec · **status** **answered** 2026-09-27 · **closed** 2026-09-27 · **cited** `d7745ae` - `S-201`: per store, re-derived rather than agreed with - 6 of 6 relation ids and 14 of 14 column ids in `script.4x` collide with something else in `schema.4x` · **raised** 2026-09-27 · **source** reading `S-200` before building it, rather than after
 
 **derived from** an `add` clause's column takes the next id unused by that relation - `S-200`, from
 `P-575`
