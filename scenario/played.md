@@ -6,7 +6,7 @@ and the act are `scenario/main.4x`, and this file is what happened when they met
 **`spec/scenarios.md`: it is vetted by hand.** So this is written to be read rather than
 to pass; `crates/game-model/tests/scenario.rs` is the part a gate holds.
 
-15 rules in the ruleset, 34 commands, 5 turns.
+15 rules in the ruleset, 35 commands, 5 turns.
 
 Every place is written the way `scenario/main.4x` writes it: `place-1` is the surface
 landed on, `place-2` the orbit above it, `place-3` the surface taken by land, `place-4`
@@ -14,6 +14,7 @@ the orbit above that.
 
 ## Turn 1
 
+    {move what:ark from:place-4 to:place-2}
     {gather where:place-2}
     {deploy where:place-2 what:ark}
     {toil where:place-1}
@@ -93,7 +94,7 @@ the orbit above that.
     end-turn           5
     gather             1
     launch             1
-    move               1
+    move               2
     perish             -   never
     refresh            30
     toil               36
@@ -121,6 +122,7 @@ notation say so.
 ## The world it left
 
     {adjacency id:1 from:territory-1 to:territory-2}
+    {adjacency id:2 from:territory-2 to:territory-1}
     {ark where:place-4 moving:1 gathering:1} -> 1
     {bin where:place-1 what:metal} -> 1
     {capacity of:bin for:energy what:energy per:place} -> 10
@@ -155,15 +157,21 @@ notation say so.
     {territory id:1 name:territory-1}
     {territory id:2 name:territory-2}
 
-34 row(s) of world, out of 661 in the store.
+35 row(s) of world, out of 662 in the store.
 
 ## What every command took and made
+
+### Turn 1: {move what:ark from:place-4 to:place-2}
+
+    fired move
+    took  {ark moving:1 quantity:1 where:4}
+    made  {ark gathering:1 moving:0 quantity:1 where:2}
 
 ### Turn 1: {gather where:place-2}
 
     fired gather
     took  {ark gathering:1 quantity:1 where:2}
-    made  {ark gathering:0 moving:1 quantity:1 where:2}
+    made  {ark gathering:0 moving:0 quantity:1 where:2}
     made  {energy quantity:3 where:2}
 
 ### Turn 1: {deploy where:place-2 what:ark}

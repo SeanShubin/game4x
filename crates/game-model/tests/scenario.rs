@@ -42,31 +42,42 @@ fn the_arc_d5_describes_is_the_arc_that_runs() {
             .count()
     };
 
-    // **The places are derived from the move and not named**, because the foundation form has no
-    // names - `place-1` is the friendly rendering of `{place id:1 ...}`. **Naming them would be
-    // hard-coding ids**, and a scenario that renumbered its world would pass this while showing
-    // something else.
+    // **The places are derived and never named**, because the foundation form has no names -
+    // `place-1` is the friendly rendering of `{place id:1 ...}`. **Naming them would be hard-coding
+    // ids**, and a scenario that renumbered its world would pass this while showing something else.
     //
-    // **The move is what says which territory was taken**: its `from` is the surface landed on and
-    // its `to` is the surface reached by land. Everything else follows from those two.
-    let moved = history
+    // # Derived from the settlements and not from the move, which is a correction
+    //
+    // **This read the first move's `from` as the landing and its `to` as the ground taken.** That
+    // held while the scenario moved exactly one thing. Sean then asked for the ark to move once
+    // before the rest, and the first move became the ark's between two orbits - so the test took an
+    // orbit for the landing and reported *the landing has 0 working extractors*, which was true of
+    // an orbit and nothing to do with the arc.
+    //
+    // **A `deploy` is what makes a settlement**, and `D-5` names two of them: the ark's and the
+    // pioneer's, in that order. **Where each settled is the `where` of what it made** - the
+    // extractors and citizens it put on the ground - which is the place itself rather than the
+    // `where` the command names, because an ark deploys from the orbit above and a pioneer from the
+    // ground it stands on.
+    let settled: Vec<String> = history
         .iter()
-        .find(|effect| effect.fired.iter().any(|it| it == "move"))
-        .expect("the scenario moves something");
-    let landed = moved
-        .command
-        .value("from")
-        .expect("a move says where from")
-        .to_string();
-    let taken = moved
-        .command
-        .value("to")
-        .expect("a move says where to")
-        .to_string();
-    assert_ne!(
-        landed, taken,
-        "a move that goes nowhere is not taking ground"
+        .filter(|effect| effect.fired.iter().any(|it| it == "deploy"))
+        .map(|effect| {
+            effect
+                .made
+                .iter()
+                .find_map(|row| row.value("where"))
+                .unwrap_or_else(|| panic!("a deploy made nothing anywhere"))
+                .to_string()
+        })
+        .collect();
+    assert_eq!(
+        settled.len(),
+        2,
+        "two settlements: an ark deploys and a pioneer deploys - found {settled:?}"
     );
+    let (landed, taken) = (settled[0].clone(), settled[1].clone());
+    assert_ne!(landed, taken, "both settlements are in one place");
 
     let territory_of = |place: &str| -> String {
         rows.iter()
@@ -78,7 +89,23 @@ fn the_arc_d5_describes_is_the_arc_that_runs() {
     assert_ne!(
         territory_of(&landed),
         territory_of(&taken),
-        "both places are in one territory, so nothing was taken by land"
+        "both settlements are in one territory, so nothing was taken by land"
+    );
+
+    // **And some move joins those two territories**, which is what *by land* means. The scenario may
+    // move other things - an ark between orbits does not take ground - so this asks whether any move
+    // crossed between the settled territories rather than assuming which move did.
+    let by_land = history.iter().any(|effect| {
+        effect.fired.iter().any(|it| it == "move")
+            && [effect.command.value("from"), effect.command.value("to")]
+                .iter()
+                .filter_map(|it| it.map(territory_of))
+                .collect::<BTreeSet<String>>()
+                == BTreeSet::from([territory_of(&landed), territory_of(&taken)])
+    });
+    assert!(
+        by_land,
+        "no move joins the two settled territories, so the second was not taken by land"
     );
 
     // **An Ark deploys**, and it is the first thing that happens.
@@ -101,12 +128,11 @@ fn the_arc_d5_describes_is_the_arc_that_runs() {
         );
     }
 
-    // **A second is taken by land**, which is `move` and not a second landing.
-    assert_eq!(
-        deployed.iter().filter(|it| **it == "move").count(),
-        1,
-        "the second territory is reached by land exactly once"
-    );
+    // **Nothing here counts moves.** It asserted exactly one, which was true while the pioneer was
+    // the only thing that moved and stopped being true the moment Sean asked for the ark to move
+    // too. **What `D-5` asks is that the second territory be reached by land**, and the `by_land`
+    // check above asks that directly - whether some move crossed between the two settled
+    // territories - so a scenario may move as many things as it likes.
 
     // **An Ark launches from the second**, so the one ark left is in the territory that was taken
     // and is not on its surface - which is what *launched* means without naming a layer.
