@@ -5,20 +5,32 @@
 One script per thing you might want to run, so that running it never requires
 remembering a cargo incantation.
 
-| `goldberg-view.ps1` / `.sh` | [the goldberg view prototype](../prototypes/goldberg-view/README.md) | The ten smallest Goldberg solids in the abstract drawing. `[` and `]` step through them |
-| `outbox.ps1` / `.sh` | `tools/outbox` | What is open and addressed to whom, across every outbox. Not a prototype; see below |
-| Script                    | Runs                                                           | Notes                                                                                                                                                        |
-| ------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `game4x.ps1` / `.sh`      | [the application](../crates/game4x/)                           | Drag, a finger or the arrows to turn; wheel or pinch to zoom; `R` resets; `1`-`5` start a new game at that size. The console is the terminal you ran it from |
-| `web.ps1` / `.sh`         | the same application as WASM, on `localhost:8080`              | What GitHub Pages publishes, running locally. There the console is part of the page                                                                          |
-| `planet-view.ps1` / `.sh` | [the planet view prototype](../docs/prototypes/planet-view.md) | Drag to turn the world, `P` to fold it into a globe, `Esc` to quit                                                                                           |
-| `pad-tables.ps1` / `.sh`  | `tools/pad-tables`                                             | Aligns every markdown table in the repo. Not a prototype; see below                                                                                          |
+| Script                       | Runs                                                                                | Notes                                                                                                                                                        |
+| ---------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `game4x.ps1` / `.sh`         | [the application](../crates/game4x/)                                                | Drag, a finger or the arrows to turn; wheel or pinch to zoom; `R` resets; `1`-`5` start a new game at that size. The console is the terminal you ran it from |
+| `web.ps1` / `.sh`            | the same application as WASM, on `localhost:8080`                                   | What GitHub Pages publishes, running locally. There the console is part of the page                                                                          |
+| `shot.ps1` / `.sh`           | [the application](../crates/game4x/), by remote control                             | One frame to a PNG, plus a text dump of what is behind it. `--help` lists the options                                                                        |
+| `scenario.ps1` / `.sh`       | the main scenario, over the reviewed ruleset                                        | Writes `scenario/played.md` and prints nine lines. **Read the file** - the playthrough is 670 lines and a terminal is the wrong place for it                 |
+| `regression.ps1` / `.sh`     | the per-command regression cases                                                    | Writes any of `scenario/regression/` that are missing and fails on any that moved. **Delete a case to accept what it does now**                              |
+| `review.ps1` / `.sh`         | the review application, on `127.0.0.1:7878`                                         | Read `spec/tests/` and say what you think of each. `r` marks one reviewed, `u` takes it back, `x` files a note                                               |
+| `reviewed.ps1` / `.sh`       | `git`, over `reviewed/`                                                             | Commits the tests you have marked reviewed. Regenerates the report first so its tally matches, and refuses if anything else is staged                        |
+| `dump-state.ps1` / `.sh`     | `game-console`, over the scenario                                                   | Writes every report in `reports/` - the state, the entities, the turns, and a page per territory                                                             |
+| `gate.ps1` / `.sh`           | `hooks/pre-push` - fmt, clippy, the test suite, the tools, the engine-facing crates | The gate on its own, without pushing. Names what is dirty first, because the tree is shared. `Q-91`                                                          |
+| `push.ps1` / `.sh`           | the gate, then `git push`, then the pipeline                                        | Returns when the published page is serving this commit. See below                                                                                            |
+| `outbox.ps1` / `.sh`         | `tools/outbox`                                                                      | What is open and addressed to whom, across every outbox. Not a prototype; see below                                                                          |
+| `pad-tables.ps1` / `.sh`     | `tools/pad-tables`                                                                  | Aligns every markdown table in the repo. Not a prototype; see below                                                                                          |
+| `planet-view.ps1` / `.sh`    | [the planet view prototype](../docs/prototypes/planet-view.md)                      | Drag to turn the world, `P` to fold it into a globe, `Esc` to quit                                                                                           |
+| `goldberg-view.ps1` / `.sh`  | [the goldberg view prototype](../prototypes/goldberg-view/README.md)                | The ten smallest Goldberg solids in the abstract drawing. `[` and `]` step through them                                                                      |
+| `goldberg-move.ps1` / `.sh`  | [the goldberg move prototype](../prototypes/goldberg-move/README.md)                | Moving on a Goldberg solid, and what a move costs                                                                                                            |
+| `gap-view.ps1` / `.sh`       | [the gap view prototype](../prototypes/gap-view/README.md)                          | Where a tessellation leaves a gap, drawn                                                                                                                     |
+| `hex-torus-view.ps1` / `.sh` | [the hex torus prototype](../prototypes/hex-torus-view/README.md)                   | A hex grid on a flat torus, and why a seamless drawing of one is not available - `X-33`                                                                      |
 
-| `shot.ps1` / `.sh` | [the application](../crates/game4x/), by remote control | One frame to a PNG, plus a text dump of what is behind it. `--help` lists the options |
-| `push.ps1` / `.sh` | the gate, then `git push`, then the pipeline | Returns when the published page is serving this commit. See below |
-| `gate.ps1` / `.sh` | `hooks/pre-push` - fmt, clippy, the test suite, the tools, the engine-facing crates | The gate on its own, without pushing. Names what is dirty first, because the tree is shared. `Q-91` |
-| `kinds.ps1` / `.sh` | [the kinds prototype](../prototypes/kinds/README.md) | Prints the release's kinds and transformations from the Rust data that holds them |
-| `reviewed.ps1` / `.sh` | `git`, over `crates/thin-engine/reviewed/` | Commits the tests you have marked reviewed in the review server. Regenerates the report first so its tally matches, and refuses if anything else is staged |
+**Every script has a row and every row has a script**, held by
+`every_script_has_a_row_and_every_row_has_a_script` in `tools/outbox/tests/architecture.rs`.
+`S-197`: Sean had to ask how to run the regression test, and this index did not say. It was missing
+seven, listed one that `D-4` had deleted, described `reviewed` as being over a directory that moved
+two days earlier, and had two rows sitting **above** the header so they rendered as part of nothing.
+
 ```
 scripts/planet-view.ps1                       # PowerShell
 bash scripts/planet-view.sh                   # POSIX shell

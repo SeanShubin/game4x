@@ -61,6 +61,82 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-154 - `P-574`'s check has no world to run over: `generate-planet` is not built, and the one generator there is states one crossing per boundary
+
+**to** spec · **status** open · **raised** 2026-09-27 · **source** `S-198` asking for the check and
+saying *it passes today over the generator*, which is a premise rather than a measurement
+
+**derived from** every generated world states both crossings of every boundary - `spec/planet.md` ->
+Distance, promoted today
+
+**`S-198`**: *build the check over what `generate-planet` produces: every crossing has its reverse.
+It passes today over the generator and this lane has not run it - that is your measurement to make.*
+
+**It was the measurement to make and it does not pass, because there is nothing to run it over.**
+
+## `generate-planet` is specified and not built
+
+**Searched over `crates/` and `tools/` for any form of it**: `generate-planet` appears once in the
+repository, at `spec/console.md:243`, as a command the console is specified to have. **No code
+implements it.**
+
+**What does exist is `create planet`**, in `crates/game-console/src/binding.rs` - and that builds the
+**old model's** world, the one `D-1` replaces and `D-4` deletes. **Nothing generates a world the
+engine reads.** Every world the engine has ever seen is hand-written: the fifty-four tests in
+`spec/tests/` and `scenario/main.4x`.
+
+## And the generator that does exist would fail the check
+
+**Measured over `scenario/expected/play.4x`**, which is what `create planet size:tiny-12` produced:
+
+```
+30 adjacency rows, 30 distinct
+ 0 boundaries stated both ways
+30 edges on a 12-territory Goldberg
+```
+
+**One row per edge, exactly.** So the only generated world in the repository states one crossing per
+boundary - the thing the promoted sentence forbids of a generated world - and it is a world for a
+model that is being deleted.
+
+## So the rule is inert, and that is the second time this week
+
+**`P-574` says every generated world states both crossings.** There are no generated worlds for the
+engine, so the sentence is true of nothing and can catch nothing. **`C-151` was the same shape**:
+*a kind declares one of three things* could not be violated because a default satisfied it. Here a
+rule cannot be violated because its population is empty.
+
+**A check written now would be green over zero worlds**, which `CLAUDE.md` names directly - *a count
+over nothing is the same failure with the sign flipped* - so writing one would be worse than not,
+because it would read as the rule being kept.
+
+## What this lane proposes instead, and it is not a check yet
+
+**The rule wants a subject before it wants a check.** Two ways it could get one, and both are
+Sean's:
+
+```
+G1  the check lands with the generator - `spec/README.md` rule 9 is satisfied when
+    `generate-planet` is built, by the same commit, and nothing is written now
+G2  the rule is about worlds rather than generators - a world of more than N
+    territories states both crossings, which would reach `scenario/main.4x`
+    and give the rule a subject today
+```
+
+**`G1` is what this lane will do absent an answer**, because `spec/README.md` rule 9 asks that the
+check exist when the thing it checks does, and the thing does not. **It is recorded here rather than
+left as silence**, since a promoted rule with no check and no note is indistinguishable from one
+nobody got to.
+
+## What is not blocked
+
+**Sean's ark-move edit needs the reverse crossing in `scenario/main.4x`**, which `S-198` names and
+which no check covers either way, because that world is hand-written and the promoted words allow a
+hand-written world to state one crossing. **That is a one-row edit to the scenario and is waiting on
+nothing but his word**, since it changes what a world of his says.
+
+---
+
 ### C-153 - `spec/planet.md` says adjacency is a shared boundary, the engine matches it in one direction, and `spec/invariants.md` forbids stating it twice
 
 **to** spec · **status** open · **raised** 2026-09-27 · **source** Sean asking for the main scenario

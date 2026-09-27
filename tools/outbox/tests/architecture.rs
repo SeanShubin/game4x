@@ -456,3 +456,81 @@ fn only_game_model_and_a_fixture_write_the_games_state() {
   ")
     );
 }
+
+/// **Every script has a row in `scripts/README.md` and every row has a script.**
+///
+/// # Why this exists, and it is the same shape one file over
+///
+/// **`S-197`**: Sean had to ask how to run the regression test. `scripts/README.md` opens with *one
+/// script per thing you might want to run, so that running it never requires remembering a cargo
+/// incantation* - and the running worked while the index did not.
+///
+/// **Measured when it was written**: seventeen scripts, eleven rows. Seven missing including the two
+/// he needed, one listed that `D-4` had deleted, and `reviewed` described as being over a directory
+/// that had moved two days earlier.
+///
+/// **This is `every_crate_has_a_row_and_every_row_has_a_crate` applied to a second index.** That one
+/// has kept `docs/architecture.md` honest through two crate moves this week, and the case it names -
+/// a row for something that no longer exists - is exactly the third line above.
+///
+/// # Both directions, because they rot differently
+///
+/// **A script with no row** is a thing nobody can find, which is what happened. **A row with no
+/// script** is an instruction that fails when followed, which is worse: it reads as current.
+#[test]
+fn every_script_has_a_row_and_every_row_has_a_script() {
+    let scripts = root().join("scripts");
+    let on_disk: BTreeSet<String> = std::fs::read_dir(&scripts)
+        .expect("scripts/")
+        .filter_map(|it| it.ok())
+        .filter_map(|it| it.file_name().to_str().map(str::to_string))
+        .filter_map(|name| name.strip_suffix(".sh").map(str::to_string))
+        .collect();
+
+    // **`.ps1` and `.sh` are one entry, and both have to be there.** `scripts/README.md`:
+    // *two of each, PowerShell and POSIX shell, doing the same thing... a script that only runs on
+    // one machine is a trap for the next person.* So the pairing is checked here rather than being
+    // a convention somebody remembers.
+    let unpaired: Vec<&String> = on_disk
+        .iter()
+        .filter(|name| !scripts.join(format!("{name}.ps1")).is_file())
+        .collect();
+    assert!(
+        unpaired.is_empty(),
+        "these have a `.sh` and no `.ps1`: {unpaired:?} - a script that runs on one machine is a \
+         trap for the next person"
+    );
+
+    let text = std::fs::read_to_string(root().join("scripts").join("README.md"))
+        .expect("scripts/README.md");
+    let listed: BTreeSet<String> = text
+        .lines()
+        .filter_map(|line| line.strip_prefix("| `"))
+        .filter_map(|rest| rest.split('`').next())
+        .filter_map(|name| name.strip_suffix(".ps1").map(str::to_string))
+        .collect();
+
+    // **A count over nothing is the same failure with the sign flipped.** An index that parsed to
+    // nothing would report every script as missing; a directory that read as empty would report
+    // every row as stale. Both would be true of the sets and false of the repository.
+    assert!(
+        on_disk.len() > 10,
+        "only {} script(s) found, so the directory did not read",
+        on_disk.len()
+    );
+    assert!(
+        listed.len() > 10,
+        "only {} row(s) parsed out of scripts/README.md, so its table has changed shape",
+        listed.len()
+    );
+
+    let missing: Vec<&String> = on_disk.difference(&listed).collect();
+    let stale: Vec<&String> = listed.difference(&on_disk).collect();
+    assert!(
+        missing.is_empty() && stale.is_empty(),
+        "scripts/README.md and scripts/ disagree\n\
+         \n  on disk, with no row: {missing:?}\
+         \n  has a row, not on disk: {stale:?}\n\
+         \nThe Notes column is a judgement and is not checked. Only the set is a fact. See S-197."
+    );
+}
