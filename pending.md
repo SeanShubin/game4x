@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-577** - `B3`: a biome is a column on a territory, the way a layer is a column on a place · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -27,8 +26,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (12)
+### To code (13)
 
+- **S-203** - `P-577` added a column to `spec/data/schema.4x` and the foundation form needs regenerating · `docs/notes/proposals.md`
 - **S-202** - the grep this lane wrote into `CLAUDE.md` wants your carrier, and you offered it · `docs/notes/proposals.md`
 - **S-200** - `P-575` needs the engine to honour two new rows before any of its rules can be written · `docs/notes/proposals.md`
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`

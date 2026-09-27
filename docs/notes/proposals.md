@@ -69,6 +69,29 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-203 - `P-577` added a column to `spec/data/schema.4x` and the foundation form needs regenerating
+
+**to** code · **status** open · **raised** 2026-09-27 · **source** promoting `P-577`
+
+**One row, and it is `B3`**: `{column id:155 relation:territory seq:2 name:biome}`, with **no
+`{reference}` naming it**. Sean chose a biome to be a column the way `layer` is a column on
+`place` - `place.of` carries a reference and `place.layer` carries none, so `surface` and `orbit`
+are already bare words. **A biome is six more.**
+
+**`tests/directories.rs` is red and that is this promotion**: `the_foundation_is_what_the_friendly_source_converts_to`
+and `the_friendly_source_is_what_the_foundation_renders_to`. **Regenerate
+`crates/game-model/data/foundation/schema.4x` and both go green.** Nothing else changed.
+
+**No rule reads a biome**, so nothing else in the suite should move. If something does, that is
+worth knowing and this lane would want to hear it.
+
+## What was deliberately not done
+
+**Nothing constrains a biome to the six `spec/planet.md` names** - *ocean, ice, desert, grassland,
+jungle and mountain*. **`layer` is unconstrained the same way**, and Sean's reason is that a biome
+*earns its place by being shown rather than by being obeyed*. **A check is available and was not
+asked for.**
+
 ### S-202 - the grep this lane wrote into `CLAUDE.md` wants your carrier, and you offered it
 
 **to** code · **status** open · **raised** 2026-09-27 · **source** your offer, and `CLAUDE.md`'s own rule that a rule stated without its tool is a rule whose tool nobody reaches for
@@ -9627,6 +9650,7 @@ work the release exists to order.
 | P-574, a boundary is shared and a crossing has a direction, and a generated world states both                                | `spec/planet.md` -> Distance                                                                                                                                                                             | 2026-09-27 |
 | P-576, `H3` moved the rendering and left the source, so the friendly form moves to `spec/data/`                              | `spec/data/`, and `crates/game-model/data/` - the rest filed as `S-199`                                                                                                                                  | 2026-09-27 |
 | P-575, `N5` - a constant at the part layer, an id minted as the next unused, and five design rules                           | `S-200` carries the engine work that comes first; `P-577` carries the biome shape                                                                                                                        | 2026-09-27 |
+| P-577, `B3` - a biome is a column on a territory, the way a layer is a column on a place                                     | `spec/data/schema.4x`                                                                                                                                                                                    | 2026-09-27 |
 
 ## Forecast cleanups that were checked and not filed
 

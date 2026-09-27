@@ -91,6 +91,7 @@
 {column id:36 relation:primitive seq:1 name:id}
 {column id:37 relation:primitive seq:2 name:word}
 {column id:38 relation:territory seq:1 name:id}
+{column id:155 relation:territory seq:2 name:biome}
 {column id:41 relation:adjacency seq:1 name:id}
 {column id:42 relation:adjacency seq:2 name:from}
 {column id:43 relation:adjacency seq:3 name:to}
