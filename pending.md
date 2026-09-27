@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-574** - a boundary is shared and a crossing has a direction, and a generated world states both · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -20,15 +19,15 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-574** - `39fa5bf` P-574 rewritten: adjacency stays directed, and the check needs a scope · still open in `decide/proposals.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
 - **D-4** - `65d566d` Review of the D-4 night: Q-101 and Q-102 filed, and two of their four worries move · still open in `releases/rules-become-data.md`
 - **D-5** - `1819dcf` D-5's clause has two halves now, and the second one reaches the file Sean reads · still open in `releases/rules-become-data.md`
 
 ## What is outstanding
 
-### To code (12)
+### To code (13)
 
+- **S-198** - `P-574` landed: adjacency is directed, the check is yours, and the scenario is not covered by it · `docs/notes/proposals.md`
 - **S-197** - `scripts/README.md` misses two scripts, lists one that is gone, and its table is broken · `docs/notes/proposals.md`
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`
 - **S-192** - `prototypes/kinds/README.md` links to a `catalog.md` that is one directory further out · `docs/notes/proposals.md`
@@ -127,6 +126,7 @@ it exists to ask.
 - `releases/first-release.md` -> Kinds, Traits - P-192, P-322, P-334
 - `spec/invariants.md` -> The game is one function - P-75, P-115, P-363
 - `spec/narrative.md` -> Violence and order - P-39, P-278, P-394
+- `spec/planet.md` -> Distance - P-24, P-349, P-574
 - `spec/units.md` -> What a unit is - P-66, P-486, P-524
 - `docs/process.md` - P-289, P-291
 - `docs/process.md` -> Quality instance - P-244, P-294
@@ -153,7 +153,6 @@ it exists to ask.
 - `spec/invariants.md` -> Nothing comes back round with more - P-388, P-419
 - `spec/invariants.md` -> The data is a normalized relational model - P-559, P-567
 - `spec/planet.md` - P-272, P-280
-- `spec/planet.md` -> Distance - P-24, P-349
 - `spec/planet.md` -> Shape - P-1, P-6
 - `spec/population.md` -> Citizens - P-37, P-28
 - `spec/resources.md` -> The list, `spec/turn.md` -> Order of operations - P-126, P-138

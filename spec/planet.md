@@ -29,8 +29,14 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - There can be roads, portals and such that affect traversal, but they do so without
   changing distance
 
-**Adjacency is a shared boundary.** Two places are adjacent when they share one. **Edge, border
-and boundary name that shared thing**, and none of them means anything the others do not.
+**A boundary is shared and a crossing has a direction.** Two places that share a boundary are
+adjacent, and that is symmetric. **Edge, border and boundary name that shared thing**, and none
+of them means anything the others do not. **What the data states is a crossing of it** - that a
+unit may pass from one place to the other - so a boundary may in principle be crossable one way
+and not the other.
+
+**Every generated world states both crossings of every boundary**, and a check says so. **A world
+written by hand may state one**, which is how a test declares the crossing it uses and no more.
 
 **To cross is to pass through a shared boundary.** A unit crosses some and not others, and which
 ones it crosses is a fact about that unit.

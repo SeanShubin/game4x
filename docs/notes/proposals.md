@@ -69,6 +69,58 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-198 - `P-574` landed: adjacency is directed, the check is yours, and the scenario is not covered by it
+
+**to** code · **status** open · **raised** 2026-09-27 · **source** promoting `P-574`, which answers `C-153` and owes you the check that is part of stating it
+
+**`C-153` is answered and nothing in the engine changes.** `spec/planet.md` -> Distance now says:
+
+> **A boundary is shared and a crossing has a direction.** ... **What the data states is a crossing
+> of it** - that a unit may pass from one place to the other - so a boundary may in principle be
+> crossable one way and not the other.
+>
+> **Every generated world states both crossings of every boundary**, and a check says so. **A world
+> written by hand may state one**, which is how a test declares the crossing it uses and no more.
+
+**So none of your three answers was taken and none was wrong.** Adding the reverse row is right for
+the scenario, matching symmetrically is not wanted, and the third territory is unnecessary. **Sean
+kept one-way adjacency legal in the model and constrained only what is generated.**
+
+## What is yours, and rule 9 is why it is not optional
+
+**`spec/README.md` rule 9**: *a boundary stated here is one the build keeps, and the check that
+fails when it stops being kept is part of stating it.* **Build the check over what
+`generate-planet` produces**: every crossing has its reverse.
+
+**It passes today over the generator and this lane has not run it** - that is your measurement to
+make, not one to take from here.
+
+## The scenario is not covered and still needs the row
+
+**`scenario/main.4x` is hand-written**, so the check will not reach it. **It still needs the reverse
+crossing** for Sean's ark-move edit - the ark crosses one way and the pioneer comes back the other,
+which is what `C-153` found.
+
+**That is a judgement rather than a gate**, and it is named here so it is not discovered when the
+edit is tried again.
+
+## What the reviewed tests do, measured, so nothing sweeps them
+
+```
+19 directed crossings across everything Sean has read, plus the scenario
+17 with no reverse
+13 files, of which 12 are tests he has approved
+```
+
+**Those twelve are correct as they stand** and the promoted words say so. **Do not add reverse rows
+to them**: their `reviewed/` copies would stop matching and he would re-read all twelve for nothing.
+
+## One thing left alone deliberately
+
+**The relation is called `adjacency` and states a crossing.** Two words for two things now.
+**Renaming reaches every world and every rule**, nothing breaks while it waits, and Sean has not
+been asked. **Not yours to do quietly** - file it if you want it.
+
 ### S-197 - `scripts/README.md` misses two scripts, lists one that is gone, and its table is broken
 
 **to** code · **status** open · **raised** 2026-09-27 · **source** Sean asking how to run the regression test, and the index not saying
@@ -9384,6 +9436,7 @@ work the release exists to order.
 | P-571, the main scenario has generated detail beneath it, and none of it is vetted by hand                                   | `spec/scenarios.md`                                                                                                                                                                                      | 2026-09-26 |
 | P-572, a regression case is deleted by Sean and that deletion is an approval                                                 | `CLAUDE.md` -> Perspectives                                                                                                                                                                              | 2026-09-26 |
 | P-573, a rule carries through the columns it does not name                                                                   | `spec/invariants.md` -> The game is data                                                                                                                                                                 | 2026-09-27 |
+| P-574, a boundary is shared and a crossing has a direction, and a generated world states both                                | `spec/planet.md` -> Distance                                                                                                                                                                             | 2026-09-27 |
 
 ## Forecast cleanups that were checked and not filed
 
