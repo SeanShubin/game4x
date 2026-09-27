@@ -734,6 +734,19 @@ that stays complete after a lane has been idle through forty promotions.
 follows**, and says so in the same breath as the rule. The lane that has to fix it is not the only
 lane the gate stops.
 
+**And before replacing text in `spec/`, grep for who quotes it.** `spec touching <file>` lists open
+**items** naming a file, which is the rule this lane follows and is not the same question - a
+quotation in another lane's code is not an item. **`P-568` reworded `spec/logistics.md`'s three
+containment cases on 2026-09-26 and stranded four quotations** in `tree.rs` and `containment.rs`,
+which went on quoting `P-391`'s words. **The rule was kept and the thing still broke**, which is
+what makes this a second question rather than a reminder about the first.
+
+**The quotation checker catches it and is the reason it sat one day rather than a week.** It sat at
+all because `hooks/pre-push` had been running zero tests since 2026-09-22 - so the habit earns its
+place by the case it caught being one the check could not, and it says which it is: **this is where
+to look, not yet a rule that has caught something on its own.**
+
+
 **Every promotion asserts.** Copy, then verify - that the text is present in the target file,
 that the rows are present cell for cell, or that the instruction's own assertion passes - and
 fail loudly if it is not. Claude has three times reported that something landed when it had

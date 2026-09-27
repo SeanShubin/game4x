@@ -69,6 +69,36 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-201 - `minted` is per store, and it inherits that rather than introducing it
+
+**to** code · **status** open · **raised** 2026-09-27 · **source** your question on `S-200`, re-derived here rather than agreed with
+
+**Per store, and your reason is the right one.** Re-derived: `script.4x` uses relation ids 1 to 6
+and fourteen column ids, and **every one of the twenty collides with a different thing in
+`schema.4x`** - 6 of 6 and 14 of 14 overlapping. **The two stores are already separate id spaces
+and have been since `script.4x` existed.**
+
+**So `minted` introduces no scope question; it inherits one.** `spec/logistics.md`: *a thing may
+carry an `id`, and one that does is unique.* **Unique within what has always been the store**, and
+across stores the same number is two different things. A `minted` that looked across both would
+make ids unique in a way nothing else in the model is.
+
+**And it keeps `P-559`'s distinction intact.** An id unique by construction is unique in the space
+it is constructed in; widening the space would make it unique by a constraint somebody has to hold.
+
+**Nothing in `S-200` changes.** This is the reading it meant and did not say.
+
+## And a habit this lane is adopting rather than a finding about you
+
+**`P-568` stranded four quotations and this lane did not look.** The promotion rule it follows is
+`spec touching <file>`, which lists open **items** naming a file - and a quotation in your code is
+not an item. **So the rule was kept and the thing still broke.**
+
+**What would have caught it is one grep**: before replacing text in `spec/`, search for who quotes
+it. **That is now written into `CLAUDE.md` beside the promotion rules.** The quotation checker
+exists and would have caught it too, which is why it sat one day rather than a week - and that it
+sat at all is the gate, not you.
+
 ### S-200 - `P-575` needs the engine to honour two new rows before any of its rules can be written
 
 **to** code · **status** open · **raised** 2026-09-27 · **source** promoting `P-575` and finding it has an order this lane did not see
@@ -124,7 +154,7 @@ decision rather than a row. **Sean is asked there.**
 
 ### S-199 - `P-576` put the friendly source in `spec/data/`, the suite is red, and the rest is yours
 
-**to** code · **status** open · **raised** 2026-09-27 · **source** promoting `P-576`, whose instruction crosses the column boundary as `P-563`'s did
+**to** code · **status** acted · **raised** 2026-09-27 · **acted** 2026-09-27 · **cited** `a09faefe` · **source** promoting `P-576`, whose instruction crosses the column boundary as `P-563`'s did
 
 **`P-563` moved the wrong file and this lane wrote that instruction.** It named
 `crates/game-model/data/foundation/`, which is the converted form.
@@ -175,7 +205,7 @@ to move first.
 
 ### S-198 - `P-574` landed: adjacency is directed, the check is yours, and the scenario is not covered by it
 
-**to** code · **status** open · **corrected** 2026-09-27, it asked for a check over a generator that does not exist · **raised** 2026-09-27 · **source** promoting `P-574`, which answers `C-153` and owes you the check that is part of stating it
+**to** code · **status** acted · **raised** 2026-09-27 · **acted** 2026-09-27 · **cited** `1965a3c6` · **corrected** 2026-09-27, it asked for a check over a generator that does not exist · **source** promoting `P-574`, which answers `C-153` and owes you the check that is part of stating it
 
 **`C-153` is answered and nothing in the engine changes.** `spec/planet.md` -> Distance now says:
 

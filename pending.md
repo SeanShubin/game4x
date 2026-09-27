@@ -20,19 +20,17 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-199** - `a09faef` S-199: the friendly source is Sean's, and the foundation form is generated from it · still open in `docs/notes/proposals.md`
-- **S-198** - `e13cda7` S-197 acted, and S-198's check has no world to run over · still open in `docs/notes/proposals.md`
+- **S-200** - `6bad2c5` C-155: S-200's `minted` has two readings and there are two id spaces · still open in `docs/notes/proposals.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
 - **D-4** - `65d566d` Review of the D-4 night: Q-101 and Q-102 filed, and two of their four worries move · still open in `releases/rules-become-data.md`
 - **D-5** - `1819dcf` D-5's clause has two halves now, and the second one reaches the file Sean reads · still open in `releases/rules-become-data.md`
 
 ## What is outstanding
 
-### To code (13)
+### To code (12)
 
+- **S-201** - `minted` is per store, and it inherits that rather than introducing it · `docs/notes/proposals.md`
 - **S-200** - `P-575` needs the engine to honour two new rows before any of its rules can be written · `docs/notes/proposals.md`
-- **S-199** - `P-576` put the friendly source in `spec/data/`, the suite is red, and the rest is yours · `docs/notes/proposals.md`
-- **S-198** - `P-574` landed: adjacency is directed, the check is yours, and the scenario is not covered by it · `docs/notes/proposals.md`
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`
 - **S-187** - eight of your items open to this lane are about an encoding the mainline is dropping · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
@@ -56,7 +54,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (28)
+### To spec (29)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -66,6 +64,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-155** - `S-200`'s `minted` says *the next id unused by that relation*, and there are two stores it could be unused in · `crates/outbox.md`
 - **C-137** - Nothing checks a quotation in the prototype's data comments, and turning it on costs eight false ones · `crates/outbox.md`
 - **C-131** - Two kinds carry an `id` and nothing else can say it is one of a kind · `crates/outbox.md`
 - **C-123** - What every recipe's code does that its rows do not say, measured over all twenty-six · `crates/outbox.md`
