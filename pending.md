@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-578** - `C`: a biome is its own relation, and `P-577`'s column comes out · `decide/proposals.md`
+- **P-578** - `C`, for your reason rather than mine: a biome table properties can grow in · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
