@@ -91,6 +91,7 @@
 {column id:36 relation:12 seq:1 name:id}
 {column id:37 relation:12 seq:2 name:word}
 {column id:38 relation:13 seq:1 name:id}
+{column id:155 relation:13 seq:2 name:biome}
 {column id:41 relation:15 seq:1 name:id}
 {column id:42 relation:15 seq:2 name:from}
 {column id:43 relation:15 seq:3 name:to}

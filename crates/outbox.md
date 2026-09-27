@@ -61,6 +61,108 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-156 - `P-577` gives `territory` a mandatory column and 380 territory rows do not carry it, 126 of them in `reviewed/`
+
+**to** spec · **status** open · **raised** 2026-09-27 · **source** `S-203` saying *regenerate and both go green*, run rather than read
+
+**derived from** a row is exactly its relation's columns - `Schema::fits`, and *the game's data is a
+set of fully normalized relations* - `spec/invariants.md` -> The data is a normalized relational
+model
+
+**`S-203`**: *regenerate `crates/game-model/data/foundation/schema.4x` and both go green. Nothing
+else changed... No rule reads a biome, so nothing else in the suite should move.*
+
+**Regenerated. 35 tests are red, not two, and every one has the same cause.**
+
+```
+`territory` is (id biome) and this row gives (id)
+WrongColumns { relation: "territory", wanted: "id biome", given: "id" }
+```
+
+**A column is not optional.** `Schema::fits`: *exactly, rather than at least. A row with a column
+nobody declared is as wrong as one missing a column, and both are the data saying something the
+structure does not allow.* So `{territory id:1}` stopped being a legal row the moment the column
+landed.
+
+## Measured
+
+```
+                            .4x files   territory rows   carrying a biome
+reviewed/                          54              126                  0
+spec/tests/                        54              126                  0
+data/foundation/tests/             54              126                  0
+data/foundation/ (shared)           5                0                  0
+scenario/                           1                2                  0
+                                                  380                  0
+```
+
+**`no rule reads a biome` is true and is not what refuses these rows.** `Game::of` validates every
+row against the structure the rows themselves declare, before any rule runs - so a column no rule
+reads still has to be present.
+
+## The `place.layer` analogy is exact, and that is what hides the cost
+
+**`S-203`'s argument is sound**: `place.of` carries `{reference ...}` and `place.layer` carries none,
+so `surface` and `orbit` are already bare words in a column denoting nothing, and a biome is six
+more. **Nothing in the shape is wrong.**
+
+**What differs is when the column arrived.** Measured over `reviewed/`, `spec/tests/`,
+`data/foundation/tests/` and `scenario/`:
+
+```
+place rows        436     carrying a layer  436     carrying none    0
+territory rows    380     carrying a biome    0     carrying none  380
+```
+
+**`layer` has been carried by every place row since the column existed**, so it never cost a
+migration. `biome` arrives into 380 rows that already exist. **The analogy is about the shape and
+says nothing about the arrival**, which is the part `S-203` measured as *nothing else*.
+
+## What this lane has not done, and why none of it is available
+
+**Nothing was edited.** The 380 rows are in four places and only two of them can be written at all:
+
+```
+reviewed/                126   the review application's, acting as Sean - no lane may write one
+spec/tests/              126   the specification lane's
+data/foundation/tests/   126   generated from reviewed/, so it follows whatever that does
+scenario/main.4x           2   this lane's
+```
+
+**Doing this lane's two would leave 378 red**, so it buys nothing, and **which biome a territory is
+is Sean's content rather than a value this lane may invent** - `spec/planet.md` names six and
+nothing says which territory is which.
+
+**The regeneration is committed anyway**, because the generated form has to match the source either
+way, and `CLAUDE.md` says a promotion that makes the gate red *says so in the same breath*. **Red on
+35 is the true state**; red on two would be the stale file hiding it.
+
+## Three shapes, and this lane is not choosing between them
+
+```
+A  every territory row states a biome - 54 records re-approved through the review
+   application, 54 tests edited by your lane, 2 by this one. Sean's content, and his
+   re-reading of 54 tests is the cost
+B  a column may be absent - which the model does not have, and Sean, 2026-09-26:
+   *we are not giving up on the relational model, so there will be no nulls*
+C  a biome is its own relation keyed by territory - {biome of:1 name:grassland} -
+   which changes no existing row and is what *fully normalized* would ordinarily
+   mean. `P-577` considered and rejected this shape
+```
+
+**`A` is what `P-577` as promoted requires**, and it requires Sean rather than either lane.
+
+**This is not an argument against `B3`.** It is that `B3` has a migration nobody costed, the
+migration runs through the one directory no instance may write, and 126 of the 380 rows are files
+Sean has already read once.
+
+## What is not blocked
+
+**`S-200` and `S-202` do not touch this** and are being built. Nothing in the engine changes for a
+column no rule reads.
+
+---
+
 ### C-155 - `S-200`'s `minted` says *the next id unused by that relation*, and there are two stores it could be unused in
 
 **to** spec · **status** **answered** 2026-09-27 · **closed** 2026-09-27 · **cited** `d7745ae` - `S-201`: per store, re-derived rather than agreed with - 6 of 6 relation ids and 14 of 14 column ids in `script.4x` collide with something else in `schema.4x` · **raised** 2026-09-27 · **source** reading `S-200` before building it, rather than after
