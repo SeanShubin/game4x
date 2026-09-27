@@ -61,6 +61,101 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-153 - `spec/planet.md` says adjacency is a shared boundary, the engine matches it in one direction, and `spec/invariants.md` forbids stating it twice
+
+**to** spec · **status** open · **raised** 2026-09-27 · **source** Sean asking for the main scenario
+to move the ark once before deploying, which is the first thing in the repository that needs a border
+crossed both ways
+
+**derived from** adjacency is a shared boundary - `spec/planet.md` -> Distance; and a fact is stated
+once - `spec/invariants.md`
+
+## Three sentences and no two of them can hold together
+
+```
+spec/planet.md:26        two territories are adjacent when they share an edge
+spec/planet.md:32        adjacency is a shared boundary. Two places are adjacent
+                         when they share one
+spec/invariants.md:178   a fact is stated once and every other form of it is derived
+```
+
+**Sharing is symmetric**: if territory 1 shares an edge with territory 2, then 2 shares it with 1.
+**The data states it directed** - `{adjacency id:1 from:territory-1 to:territory-2}` - and **the
+engine matches that direction and no other.**
+
+**Verified from the ruleset rather than from the failure.** `move`'s adjacency clause carries two
+readings and no bindings:
+
+```
+adjacency.from  <-  the place you leave
+adjacency.to    <-  the place you arrive at
+```
+
+**So a move from territory 2 to territory 1 needs `{adjacency from:territory-2 to:territory-1}`**,
+which is a second row for one boundary.
+
+**Either way one sentence breaks.** One row per boundary means travel in one direction only; two
+rows means a fact stated twice.
+
+## It has never been exercised, measured over everything Sean has read
+
+```
+reviewed tests declaring an adjacency   12
+moves across all of them                15
+  with the declared direction           15
+  against it                             0
+```
+
+**Every move he has ever approved travels the way the adjacency points.** The reviewed worlds are
+chains - `1 -> 2`, `2 -> 3` - and everything walks forward along them, so nothing has met this.
+
+**Measured twice, because the first instrument was wrong.** It reported 13 moves and 13 with no
+adjacency either way, having failed to map a place to its territory; the count above has `0`
+unmapped and the three outcomes summing to the total, which is what says the map worked.
+
+## What made it visible
+
+**Sean, 2026-09-27**: *make the edit so that the ark moves once before the rest happens.* The ark
+starts in the orbit above territory 1 and moves to the orbit above territory 2, which uses the
+boundary in the declared direction. **The pioneer then has to come back the other way**, because the
+place it settles is the one the ark came from.
+
+**So the ark and the pioneer travel opposite ways along one border**, and the data can say only one
+of them:
+
+```
+{move what:ark     from:place-2 to:place-4}   t1 -> t2   stands
+{move what:pioneer from:place-3 to:place-1}   t2 -> t1   `move` needs
+                                                         {adjacency from:2 to:1} and it is not
+```
+
+**And this lane stated it badly first**, which is worth recording because the wrong version points
+at the wrong thing. It said *move needs the reverse adjacency*, which reads as a fault in the
+pioneer's move. **The pioneer was never moving backwards** - before this edit it went
+`place-1 -> place-3`, which is `t1 -> t2` and with the direction. Sean caught it: *how was the
+pioneer ever moving?* **What is new is two things travelling opposite ways, not anything about
+either one of them.**
+
+## What this lane is not doing
+
+**It is not adding the reverse row.** That is a change to what the world states, it states one fact
+twice, and `spec/invariants.md` is the thing it would contradict - so it is a promotion rather than
+a scenario edit.
+
+**It is not changing the engine to match symmetrically.** That would be the other answer and it is
+a rule, not an implementation detail: whether one row means one crossing or two is what a border
+*is*.
+
+**A third territory would dodge it and this lane has not done that either.** A chain `t1 -> t2 ->
+t3` lets the ark move forward and the pioneer move forward again, so every move follows a declared
+direction and nothing is contradicted. **It works today** - but it is a larger change to the world
+than Sean asked for, and picking it would settle the question by avoiding it.
+
+**`scenario/main.4x` is restored and the edit is not in it.** Sean said he will deal with this in
+`spec/`.
+
+---
+
 ### C-152 - `move` is declared over the `unit` family and is refused for one of its four members
 
 **to** spec · **status** **answered** 2026-09-27 · **closed** 2026-09-27 · **cited** `P-573` - Sean chose `M5`: the engine carries through columns a rule does not name, and the check is a report · **raised** 2026-09-27 · **source** Sean asking for the main scenario
