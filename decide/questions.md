@@ -53,20 +53,47 @@ thing `N1` asks for has no precedent in the model because the model does not wor
 **That sentence is what `N1` was faithful to.** Against it stands everything above, and the fact
 that no phase exists to be part of any state.
 
+## Your three answers, 2026-09-27, and two of them already exist
+
+**Id minting.** *Create-territory just gives the next number not used by any other territory.* **New,
+small, and it strengthens your own `P-559`**: an id becomes unique by construction where a
+caller-supplied one would be unique by constraint. **Wall 1 falls.**
+
+**A core for regular and meta commands.** **It is built.** `{part of:end-turn is:upkeep seq:1}`
+composes a rule from rules; `{argument part:P input:i value:v}` supplies a value to a part's input;
+`src/schema.rs` refuses a cycle and a second parent, and `examples/tree.rs` prints the whole tree.
+**`end-turn` is exactly this, with five parts.** So the mechanism you asked for is there and
+`create planet` does not even need it - **code writing commands is your other framing and it needs
+no composition at all**, because the code emits as many `add-territory` commands as the size calls
+for.
+
+**Phase near the interface.** **Wall 3 dissolves and it fits what the spec already says** - *the
+game knows nothing of the interface*. Nothing in the engine has to know a phase.
+
+## One wall is left and it is the smallest
+
+**An argument carries a word and never a number.** Measured over every `{argument}` in
+`spec/data/rules.4x`: `ark bearing citizen extractor gathering hungry laboring moving unit
+working` - ten values, all names of relations or traits. **`set-resource` needs a density.**
+
+**So the extension is one mechanism widened rather than a new one invented**, which is a much
+smaller thing than this item claimed an hour ago.
+
 ## The decision
 
 ```
-N2   a world is produced, not played into being. `generate-planet` emits a stated
-     world - rows - and design commands stop existing. The sentence above changes.
-     Nothing in the notation grows
-N5   the notation grows: numeric inputs, ids that come from the command, a phase
-     relation and a biome relation. Then designing really is made of the same rules
-     as playing, and `create planet` is a macro writing them, which is your framing
+N5   the notation grows two things and loses one worry: an id minted as the next
+     unused, an argument that may be a number, and a `biome` relation. Phase goes
+     to the interface. Then `create planet` is code writing commands, which is
+     your macro framing, and the commands it writes exist
+N2   a world is produced rather than played into being - `generate-planet` emits
+     stated rows, design commands stop existing, and `spec/console.md`'s
+     "designing is made of the same rules as playing" changes
 ```
 
-**This lane would say `N2`**, because four extensions to buy a thing you only do once per game is
-a large price, and because the model already behaves that way everywhere. **`N5` is what your macro
-framing needs to be true**, and it is the honest version of it - the macro was right about the
-mechanism and it has nothing to expand into yet.
+**This lane now says `N5`, having argued `N2` an hour ago on a count of four that is a count of
+two.** It keeps the sentence you already wrote, it keeps designing and playing the same thing, and
+**every world a player makes is then a history that replays** - which is the property `N2` would
+have had to give up.
 
 **What is not in question**: the ten mechanical renames, and that the old model goes.
