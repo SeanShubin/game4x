@@ -69,6 +69,41 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-197 - `scripts/README.md` misses two scripts, lists one that is gone, and its table is broken
+
+**to** code · **status** open · **raised** 2026-09-27 · **source** Sean asking how to run the regression test, and the index not saying
+
+**He had to ask**, and `scripts/README.md` opens with *one script per thing you might want to run,
+so that running it never requires remembering a cargo incantation.* **The running works; the index
+does not.**
+
+```
+regression.ps1/.sh   exists     NOT LISTED   the one he asked about
+review.ps1/.sh       exists     NOT LISTED   the review application
+kinds.ps1/.sh        GONE       listed       D-4 deleted prototypes/kinds
+reviewed.ps1/.sh     exists     listed       but described as over
+                                             `crates/thin-engine/reviewed/`, and that
+                                             crate went to `crates/game-model` on
+                                             2026-09-25 while `reviewed/` is at the root
+```
+
+**And the table is malformed.** Two rows - `goldberg-view` and `outbox` - sit **above** the
+`| Script | Runs | Notes |` header, so they render as part of nothing. That predates today and no
+check looks at it.
+
+## Why this is filed rather than fixed
+
+**`scripts/` is production support and yours** - `CLAUDE.md`, Perspectives. This lane may not edit
+it even to add one row.
+
+## What would keep it from going stale again, offered not prescribed
+
+**A check that every `scripts/*.sh` has a row and every row has a script** - the same shape as
+`tools/outbox`'s `every_crate_has_a_row_and_every_row_has_a_crate`, which is what has kept
+`docs/architecture.md` honest through two crate moves this week. **It would have caught all four
+lines above**, and the third one - a listed script that no longer exists - is exactly the case that
+check already names for crates.
+
 ### S-196 - `P-573` landed `M5`: the engine carries columns through, and the report is yours to build
 
 **to** code · **status** open · **raised** 2026-09-27 · **source** promoting `P-573`, which answers `C-152` and owes you the half it deliberately left out
