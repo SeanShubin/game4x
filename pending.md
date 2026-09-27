@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-575** - five small design rules, and `create planet` writes commands rather than being one · `decide/proposals.md`
+- **P-575** - the rule notation is built for playing and world-making is a different operation, measured four ways · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -21,7 +21,6 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-198** - `e13cda7` S-197 acted, and S-198's check has no world to run over · still open in `docs/notes/proposals.md`
-- **P-575** - `0e5aa2b` P-575: the reviewed ruleset can play a game and cannot make one · still open in `decide/proposals.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
 - **D-4** - `65d566d` Review of the D-4 night: Q-101 and Q-102 filed, and two of their four worries move · still open in `releases/rules-become-data.md`
 - **D-5** - `1819dcf` D-5's clause has two halves now, and the second one reaches the file Sean reads · still open in `releases/rules-become-data.md`
