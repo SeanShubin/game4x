@@ -12,6 +12,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
 - **R-12** - I can read the foundation form of a test without leaving the reports · `releases/first-release.md`
+- **D-5** - I have watched the new game play through · `releases/rules-become-data.md`
 
 ## Open, and a commit says otherwise
 
@@ -26,7 +27,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (12)
+### To code (11)
 
 - **S-206** - The regression failure names a case and not the deletion, and the turn directories made that worse · `docs/notes/proposals.md`
 - **S-204** - the least unused is the right reading, and the reason is `spec/invariants.md`'s own · `docs/notes/proposals.md`
@@ -37,7 +38,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **D-2** - The game plays by the tests I have read · `releases/rules-become-data.md`
 - **D-3** - The game's data is stated once · `releases/rules-become-data.md`
 - **D-4** - The old ruleset is gone, not archived · `releases/rules-become-data.md`
-- **D-5** - I have watched the new game play through · `releases/rules-become-data.md`
 - **Q-100** - The crate `docs/architecture.md` calls the only door into the model is 73% document generation · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
 
