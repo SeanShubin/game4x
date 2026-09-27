@@ -35,8 +35,46 @@ cargo clippy --workspace --all-targets -- -D warnings
 #
 # Excluding makes coverage the default. This list is wrong only when somebody deliberately
 # removes a name, and the thing it names is one fact: does the crate link an engine.
-ENGINE="--exclude planet-ecs --exclude planet-bevy --exclude planet-flat \
-  --exclude game-globe --exclude game4x --exclude planet-view --exclude goldberg-view \n  --exclude goldberg-move"
+# **On one line, and that is not a style choice.** This was wrapped with `\` continuations and
+# one of them arrived as a literal `\n` - two characters, inside double quotes, where a line
+# break was meant. `$ENGINE` is expanded unquoted, so that word reached `cargo test` as a
+# positional argument, and a positional argument to `cargo test` is the **test-name filter**.
+# Nothing is named `\n`, so the release suite compiled fifty test binaries, ran **0 of 638
+# tests**, and printed `test result: ok` fifty times. Introduced at `2a5a030b` on 2026-09-22.
+#
+# `.github/workflows/pipeline.yml` carries the same list on one line and has been running those
+# tests the whole time, so nothing shipped unchecked. What was blind is the gate a lane runs
+# before it commits - the one it quotes when it says *green*.
+ENGINE="--exclude planet-ecs --exclude planet-bevy --exclude planet-flat --exclude game-globe --exclude game4x --exclude planet-view --exclude goldberg-view --exclude goldberg-move"
+
+# **`ok` over nothing is `ok`, so a suite says how many tests it ran and zero is red.**
+#
+# `CLAUDE.md`: *a count over nothing is the same failure with the sign flipped*, and *a check
+# whose subject is behaviour reads the outcome, not the input.* Checking that the exclude list
+# is well formed would read what was written; this reads what ran, which is what was false.
+#
+# **It is not about backslashes.** Anything reaching `cargo test` as a positional argument
+# becomes the filter, whatever put it there, and cargo calls a fully filtered run a pass
+# because from its own side it is one.
+#
+# The verdict travels in a file because the group runs in a subshell to the left of `tee`, and
+# `$?` after a pipeline is `tee`'s. Output still streams, so a long suite stays watchable.
+suite() {
+    label=$1
+    shift
+    work=$(mktemp -d)
+    { "$@" 2>&1 && echo green > "$work/verdict"; } | tee "$work/log"
+    [ -f "$work/verdict" ] || { echo "pre-push: $label failed, above." >&2; exit 1; }
+    ran=$(sed -n 's/^test result:.* \([0-9][0-9]*\) passed.*/\1/p' "$work/log" |
+        awk '{ n += $1 } END { print n + 0 }')
+    if [ "$ran" -eq 0 ]; then
+        echo "pre-push: $label compiled and ran 0 tests, which is not a pass." >&2
+        echo "          A stray word in the argument list is cargo's test-name filter." >&2
+        exit 1
+    fi
+    echo "pre-push: $label - $ran test(s) ran"
+    rm -rf "$work"
+}
 
 # Release for the rest, because the tessellation tests relax hundreds of seeds and are
 # unusably slow unoptimized.
@@ -54,7 +92,7 @@ ENGINE="--exclude planet-ecs --exclude planet-bevy --exclude planet-flat \
 # `cargo fmt` still hides the tests entirely. That ordering is cheap to remember and is the
 # point of running fmt first; masking *within* one run is neither.
 echo "pre-push: cargo test --release (everything that does not link an engine)"
-cargo test --release --no-fail-fast --workspace $ENGINE
+suite "the release suite" cargo test --release --no-fail-fast --workspace $ENGINE
 
 # Debug for the engine-facing ones: clippy above has just compiled them unoptimized, so
 # this reuses that build rather than paying for a release build of Bevy. They used to run
@@ -79,7 +117,7 @@ echo "pre-push: the documentation tools"
 for manifest in tools/*/Cargo.toml; do
     echo "  $manifest"
     cargo fmt --manifest-path "$manifest" -- --check
-    cargo test --no-fail-fast --manifest-path "$manifest"
+    suite "$manifest" cargo test --no-fail-fast --manifest-path "$manifest"
     # **The `tools/spec` exception is gone, and it expired the way one should.** It said
     # clippy was skipped there because the file carried a live `collapsible_if` this lane
     # may not edit - Q-46, reported to the lane that owns it. `11cf365` fixed it, and the
@@ -93,5 +131,5 @@ for manifest in tools/*/Cargo.toml; do
 done
 
 echo "pre-push: cargo test (the engine-facing crates)"
-cargo test --no-fail-fast -p planet-ecs -p planet-bevy -p planet-flat -p game-globe -p game4x \
-  -p planet-view -p goldberg-view -p goldberg-move
+suite "the engine-facing crates" cargo test --no-fail-fast -p planet-ecs -p planet-bevy \
+  -p planet-flat -p game-globe -p game4x -p planet-view -p goldberg-view -p goldberg-move
