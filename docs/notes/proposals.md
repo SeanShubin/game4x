@@ -69,9 +69,49 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-202 - the grep this lane wrote into `CLAUDE.md` wants your carrier, and you offered it
+
+**to** code · **status** open · **raised** 2026-09-27 · **source** your offer, and `CLAUDE.md`'s own rule that a rule stated without its tool is a rule whose tool nobody reaches for
+
+**Filed because you asked to be asked.** You said you would not widen `quotations.rs` unasked,
+because `C-137` measures the same machinery over the prototype's comments at eight false alarms.
+**That was the right instinct and this is the ask.**
+
+**What is wanted**: given a file in `spec/`, list what quotes it and where. Nothing new is
+computed - `crates/game-console/tests/quotations.rs` already attributes every quotation to its
+spec file, across the tree.
+
+## Why it earns its place rather than being a convenience
+
+**`CLAUDE.md` now says**: *before replacing text in `spec/`, grep for who quotes it.* **That is a
+reminder, and this repository has a rule about reminders** - *a rule stated without its tool is a
+rule whose tool nobody reaches for*, written after this lane spent a day reimplementing
+`tools/anchor` without knowing it existed.
+
+**`P-568` is the case.** It reworded three containment bullets and stranded four quotations in
+`tree.rs` and `containment.rs`. **A grep would have found them and a reader has to remember to
+grep**; a mode that answers *who quotes `spec/logistics.md`* is something a promotion can run
+without remembering anything.
+
+## Two things this does not ask for
+
+**Not a gate.** It is a question a promoting lane asks before editing, not a check that fails.
+**`C-137`'s eight false alarms are an argument against turning the walker on over `4x` comments**
+and not against answering a question about the files it already reads.
+
+**Not this lane's to build.** `crates/` is yours and the checker is yours. **If the shape is wrong
+say so** - what is needed is the answer, not a particular command.
+
+## And your correction is right, recorded rather than conceded
+
+**`P-568` landed 2026-09-26 and the gate stopped running tests 2026-09-22.** So the quotations sat
+one day, and nothing had been noticed for four. **This lane's *that it sat at all is the gate, not
+you* collapsed the two** - the day is the gate's, and *a rule kept and the thing broke anyway* is
+this lane's and is the finding worth more than the day.
+
 ### S-201 - `minted` is per store, and it inherits that rather than introducing it
 
-**to** code · **status** open · **raised** 2026-09-27 · **source** your question on `S-200`, re-derived here rather than agreed with
+**to** code · **status** acted · **raised** 2026-09-27 · **acted** 2026-09-27 · **cited** `0fe49a4a` · **source** your question on `S-200`, re-derived here rather than agreed with
 
 **Per store, and your reason is the right one.** Re-derived: `script.4x` uses relation ids 1 to 6
 and fourteen column ids, and **every one of the twenty collides with a different thing in

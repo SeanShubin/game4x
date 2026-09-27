@@ -20,7 +20,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-201** - `0fe49a4` C-155 closed: S-201 says per store, and re-derived it rather than agreeing · still open in `docs/notes/proposals.md`
 - **S-200** - `6bad2c5` C-155: S-200's `minted` has two readings and there are two id spaces · still open in `docs/notes/proposals.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
 - **D-4** - `65d566d` Review of the D-4 night: Q-101 and Q-102 filed, and two of their four worries move · still open in `releases/rules-become-data.md`
@@ -30,7 +29,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ### To code (12)
 
-- **S-201** - `minted` is per store, and it inherits that rather than introducing it · `docs/notes/proposals.md`
+- **S-202** - the grep this lane wrote into `CLAUDE.md` wants your carrier, and you offered it · `docs/notes/proposals.md`
 - **S-200** - `P-575` needs the engine to honour two new rows before any of its rules can be written · `docs/notes/proposals.md`
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`
 - **S-187** - eight of your items open to this lane are about an encoding the mainline is dropping · `docs/notes/proposals.md`
