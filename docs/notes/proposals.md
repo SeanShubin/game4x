@@ -69,6 +69,75 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-205 - `P-578` takes the column back out, and the promotion alone fixes none of the 34 reds
+
+**to** code · **status** open · **raised** 2026-09-27 · **source** promoting `P-578`, and measuring
+its own check line rather than reading it
+
+**`P-578` landed**: `{column id:155 relation:territory seq:2 name:biome}` is gone from
+`spec/data/schema.4x`, and a `biome` relation with six rows and a `terrain` join from territory to
+biome are in, in a section of their own. **`S-203` is the same notice for the promotion this one
+reverses**, and `C-156` is answered by it: a biome is no longer a mandatory column, so the 380
+territory rows that carry only an `id` are legal again and **126 of them in `reviewed/` did not
+have to change.** `C-156` is yours to close.
+
+**What this item exists to say is that the proposal's check line does not pass yet.** `P-578` said
+*the 34 reds are gone, and no test file was edited to make that so*. **Measured at `fbf465f0` with
+the change applied, the same 34 still fail and three more join them.**
+
+## The measurement, and what it was compared against
+
+`CARGO_TARGET_DIR=target-spec cargo test --workspace --no-fail-fast`, run twice over the same tree -
+once with `spec/data/schema.4x` at `fbf465f0` and once with `P-578` applied - taking the failing
+names from the `test <name> ... FAILED` lines and comparing the two lists with `comm`. **Both
+populations are non-empty**: 34 names before and 37 after, and the comparison ranged over both.
+
+```
+fixed by the promotion                 0 of 34
+still red                             34 of 34
+new                                    3
+  every_committed_dump_is_what_the_scenario_produces
+  the_foundation_is_what_the_friendly_source_converts_to
+  the_friendly_source_is_what_the_foundation_renders_to
+```
+
+**All 34 say the same thing and it is not about `spec/data/`**: `WrongColumns { relation:
+"territory", wanted: "id biome", given: "id" }`. **The engine reads
+`crates/game-model/data/foundation/schema.4x`** - `include_str!`, in `src/foundation.rs:66` - and
+line 94 of that file is still `{column id:155 relation:13 seq:2 name:biome}`. So the friendly form
+and the foundation form now disagree, which is what the two `directories.rs` tests have started
+saying, and the reds go when the foundation form is regenerated. **Measured: the count and the
+message. Inferred: that regenerating is all the 34 need** - `S-203` made the mirror of that
+inference and it was wrong, so it is worth one run rather than one reading.
+
+**The third new red is the committed dumps and it names its own three differences**:
+`relations.md` line 10 - *26 relations, 570 rows* against *27 relations, 584 rows*;
+`relations.html` line 438 - a `biome` row; `index.html` line 26 - `spec/data/schema.4x` at *319
+lines, of 13 sorts* against *333 lines, of 14 sorts*. `cargo run -p game-console --bin dump-state`
+and commit the result, which its own failure message says.
+
+## Two things about the data worth knowing before you run it
+
+**`terrain` has no rows.** The relation and its two references are declared and not one territory
+has been given a biome, so nothing in `spec/data/` says which territory is grassland. **That is not
+a red and not an omission in the promotion** - `P-578` states the join's form, `{terrain
+of:territory-1 is:grassland}`, and no rule reads a biome. The world-making that would write those
+rows is `S-200`'s ground, not this.
+
+**`biome` carries no `{state}` row and `terrain` carries one.** The six do not change while a game
+runs; which territory has which is the world. `trait` and `carries` are the precedent the proposal
+was built from.
+
+## And twelve lines in that file are this lane's prose rather than Sean's
+
+The new section opens with a comment block explaining why a biome is a table and `terrain` a join,
+quoting his own sentence about expanding a biome's properties in one place. **Every idea in it is
+from `P-578`, which he read; the wording is this lane's** and is reported to him in the turn that
+landed it. Every other section of `spec/data/schema.4x` carries such a block, which is why it is
+there.
+
+
+
 ### S-204 - the least unused is the right reading, and the reason is `spec/invariants.md`'s own
 
 **to** code · **status** open · **raised** 2026-09-27 · **source** you asking on `S-200` whether this lane wanted the other reading, and saying to answer now
@@ -9691,6 +9760,7 @@ work the release exists to order.
 | P-576, `H3` moved the rendering and left the source, so the friendly form moves to `spec/data/`                              | `spec/data/`, and `crates/game-model/data/` - the rest filed as `S-199`                                                                                                                                  | 2026-09-27 |
 | P-575, `N5` - a constant at the part layer, an id minted as the next unused, and five design rules                           | `S-200` carries the engine work that comes first; `P-577` carries the biome shape                                                                                                                        | 2026-09-27 |
 | P-577, `B3` - a biome is a column on a territory, the way a layer is a column on a place                                     | `spec/data/schema.4x`                                                                                                                                                                                    | 2026-09-27 |
+| P-578, `C`, for your reason rather than mine: a biome table properties can grow in                                           | `spec/data/schema.4x`                                                                                                                                                                                    | 2026-09-27 |
 
 ## Forecast cleanups that were checked and not filed
 

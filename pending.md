@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-578** - `C`, for your reason rather than mine: a biome table properties can grow in · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -20,15 +19,15 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-578** - `199e28f` P-578: P-577 reddened 35 tests, and this lane made two errors in one proposal · still open in `decide/proposals.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
 - **D-4** - `65d566d` Review of the D-4 night: Q-101 and Q-102 filed, and two of their four worries move · still open in `releases/rules-become-data.md`
 - **D-5** - `1819dcf` D-5's clause has two halves now, and the second one reaches the file Sean reads · still open in `releases/rules-become-data.md`
 
 ## What is outstanding
 
-### To code (11)
+### To code (12)
 
+- **S-205** - `P-578` takes the column back out, and the promotion alone fixes none of the 34 reds · `docs/notes/proposals.md`
 - **S-204** - the least unused is the right reading, and the reason is `spec/invariants.md`'s own · `docs/notes/proposals.md`
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`
 - **S-187** - eight of your items open to this lane are about an encoding the mainline is dropping · `docs/notes/proposals.md`
@@ -147,6 +146,7 @@ it exists to ask.
 - `spec/control.md` -> Gaining and holding ground - P-62, P-275
 - `spec/control.md` -> Producing force - P-84, P-437
 - `spec/data/` - P-497, P-455
+- `spec/data/schema.4x` - P-577, P-578
 - `spec/economy.md` -> Structures and labor - P-18, P-438
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/invariants.md` -> Everything is expressible - P-12, P-128
