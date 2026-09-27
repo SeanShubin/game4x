@@ -7,7 +7,7 @@ leaves; this is the same view over the rules it played by.
 **The relation is the word each row opens with, and a file holds as many as it likes** -
 `rules.4x` opens thirteen of these and `schema.4x` the rest.
 
-26 relations, 569 rows.
+26 relations, 570 rows.
 
 ## rule
 
@@ -409,7 +409,7 @@ From `spec/data/schema.4x`. 49 row(s), 2 column(s).
 
 ## column
 
-From `spec/data/schema.4x`. 138 row(s), 4 column(s).
+From `spec/data/schema.4x`. 139 row(s), 4 column(s).
 
 | id  | name      | relation    | seq |
 | --- | --------- | ----------- | --- |
@@ -445,6 +445,7 @@ From `spec/data/schema.4x`. 138 row(s), 4 column(s).
 | 36  | id        | primitive   | 1   |
 | 37  | word      | primitive   | 2   |
 | 38  | id        | territory   | 1   |
+| 155 | biome     | territory   | 2   |
 | 41  | id        | adjacency   | 1   |
 | 42  | from      | adjacency   | 2   |
 | 43  | to        | adjacency   | 3   |

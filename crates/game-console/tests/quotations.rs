@@ -43,7 +43,7 @@
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
-fn root() -> PathBuf {
+pub fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..")
 }
 
@@ -78,7 +78,7 @@ fn root() -> PathBuf {
 /// discovering: the first draft reproduced the offending line to explain it and added three
 /// findings to the very list it was describing. **Naming a specification file and then
 /// emphasising anything is the shape** - so the shape is described here and not performed.
-const OURS: [&str; 5] = ["crates", "prototypes", "scripts", "tools", "hooks"];
+pub const OURS: [&str; 5] = ["crates", "prototypes", "scripts", "tools", "hooks"];
 
 /// The directories under `tools/` that belong to another lane.
 ///
@@ -150,7 +150,7 @@ const OURS: [&str; 5] = ["crates", "prototypes", "scripts", "tools", "hooks"];
 /// count asked for a bold marker - so the measure written to find the trigger did not match
 /// the trigger. The figures are kept with what each asked rather than reconciled, because
 /// what they disagree about is the question.
-fn other_lanes() -> Vec<String> {
+pub fn other_lanes() -> Vec<String> {
     let mut out = vec!["spec".to_string()];
     if let Ok(entries) = std::fs::read_dir(root().join("lenses")) {
         for entry in entries.flatten() {
@@ -164,7 +164,7 @@ fn other_lanes() -> Vec<String> {
     out
 }
 
-fn sources() -> Vec<PathBuf> {
+pub fn sources() -> Vec<PathBuf> {
     let theirs: Vec<PathBuf> = other_lanes()
         .iter()
         .map(|lane| root().join("tools").join(lane))
@@ -244,7 +244,7 @@ fn the_sweep_reaches_this_lanes_files_and_no_other_lanes() {
     );
 }
 
-fn collect(directory: &Path, into: &mut Vec<PathBuf>) {
+pub fn collect(directory: &Path, into: &mut Vec<PathBuf>) {
     let Ok(entries) = std::fs::read_dir(directory) else {
         return;
     };
@@ -288,7 +288,7 @@ fn collect(directory: &Path, into: &mut Vec<PathBuf>) {
 /// A quotation is wrapped across lines to fit a comment, and the specification wraps at a
 /// different width, so neither can be compared as written. Collapsing both makes the
 /// comparison about the words.
-fn flattened(text: &str) -> String {
+pub fn flattened(text: &str) -> String {
     let mut out = String::new();
     for line in text.lines() {
         let line = line.trim();
@@ -326,7 +326,7 @@ fn flattened(text: &str) -> String {
 ///
 /// Backticks and asterisks survive [`flattened`] because that is what the quotations are
 /// *found* by, and are dropped here because that is not what they are *judged* by.
-fn bare(text: &str) -> String {
+pub fn bare(text: &str) -> String {
     flattened(&text.replace(['`', '*'], ""))
 }
 
@@ -379,7 +379,7 @@ fn a_marker_beside_punctuation_is_removed_rather_than_spaced() {
 ///
 /// Runs rather than one string, so a mention at the end of one comment cannot attribute
 /// words that appear at the start of the next.
-fn prose(path: &Path, text: &str) -> Vec<String> {
+pub fn prose(path: &Path, text: &str) -> Vec<String> {
     if path.extension().and_then(|e| e.to_str()) != Some("rs") {
         // The same paragraph rule, for a document whose every line is prose.
         let kept: Vec<String> = text
@@ -421,7 +421,7 @@ fn prose(path: &Path, text: &str) -> Vec<String> {
 /// A full stop is the marker because both readers already refuse to cross one - the
 /// emphasis scan stops there, and a list continuation allows only a comma, a space and the
 /// word `and`.
-fn marked(line: &str) -> String {
+pub fn marked(line: &str) -> String {
     let bare = line
         .trim_start()
         .trim_start_matches('/')
@@ -456,7 +456,7 @@ fn marked(line: &str) -> String {
 /// repository. The loose version reported seven such spans - `**required, not a
 /// convenience.**` among them - and every one was correct prose being called a
 /// misquotation.
-const ATTRIBUTING: [&str; 13] = [
+pub const ATTRIBUTING: [&str; 13] = [
     "says",
     "asks",
     "requires",
@@ -475,7 +475,7 @@ const ATTRIBUTING: [&str; 13] = [
 /// What follows the lead, if this mention attributes words rather than discussing the file.
 ///
 /// Three leads count: a colon, a possessive, and an attributing verb.
-fn attributed(tail: &str) -> Option<&str> {
+pub fn attributed(tail: &str) -> Option<&str> {
     if let Some(rest) = tail.strip_prefix(':') {
         return Some(rest);
     }
@@ -512,7 +512,7 @@ fn attributed(tail: &str) -> Option<&str> {
 /// lead begins inside a span, and a parser that guesses at nesting in prose has more ways to
 /// be wrong than this has. The cost is a sentence shaped one way instead of another; the
 /// warning is here so the next reader spends a minute rather than twenty.
-fn emphasised(lead: &str) -> Option<(String, usize, &'static str)> {
+pub fn emphasised(lead: &str) -> Option<(String, usize, &'static str)> {
     let mut offset = None;
     for (index, character) in lead.char_indices() {
         if index > 60 || matches!(character, '.' | ';') {
@@ -574,7 +574,7 @@ fn emphasised(lead: &str) -> Option<(String, usize, &'static str)> {
 /// it would also have dropped was written in bold in `crates/game-model/backlog.md`, where the
 /// convention is italics for quoted words; giving it its own attribution brought it back. **So the
 /// cost is the two false alarms and nothing else.**
-fn continued(rest: &str, marker: &str) -> Option<(String, usize, &'static str)> {
+pub fn continued(rest: &str, marker: &str) -> Option<(String, usize, &'static str)> {
     let trimmed = rest.trim_start_matches([',', ' ']);
     let connected = trimmed.strip_prefix("and ").unwrap_or(trimmed).trim_start();
     if !connected.starts_with('*') {
@@ -609,7 +609,7 @@ fn continued(rest: &str, marker: &str) -> Option<(String, usize, &'static str)> 
 }
 
 /// The quotations in one file: the spec file named, and the words attributed to it.
-fn quotations(path: &Path, text: &str) -> Vec<(String, String)> {
+pub fn quotations(path: &Path, text: &str) -> Vec<(String, String)> {
     let mut found = Vec::new();
     for run in prose(path, text) {
         let mut rest = run.as_str();
@@ -638,7 +638,7 @@ fn quotations(path: &Path, text: &str) -> Vec<(String, String)> {
 }
 
 /// Punctuation a quotation may reasonably trim, and the ellipsis that marks a cut.
-fn comparable(quoted: &str) -> Vec<String> {
+pub fn comparable(quoted: &str) -> Vec<String> {
     // A quotation may elide a middle with an ellipsis, in which case each part has to
     // appear rather than the whole.
     quoted
@@ -696,7 +696,7 @@ fn past_tense_is_a_record_and_present_tense_is_a_claim() {
 /// nothing.** `prose` joins a comment into runs so that a sentence wrapped across three
 /// lines can be matched as one - which is right for its purpose and destroys the only thing
 /// a blockquote is: a `>` at the start of a line.
-fn comment_lines(path: &Path, text: &str) -> Vec<String> {
+pub fn comment_lines(path: &Path, text: &str) -> Vec<String> {
     let rust = path.extension().and_then(|e| e.to_str()) == Some("rs");
     text.lines()
         .map(|line| {
@@ -726,7 +726,7 @@ fn comment_lines(path: &Path, text: &str) -> Vec<String> {
 /// A block counts as quoting a file when a backticked path to one appears within three
 /// prose lines above it. That bound is what keeps an unrelated block further down the
 /// comment from being attributed to a file mentioned at the top.
-fn blocks(path: &Path, text: &str) -> Vec<(String, String)> {
+pub fn blocks(path: &Path, text: &str) -> Vec<(String, String)> {
     let lines = comment_lines(path, text);
     let mut found = Vec::new();
     let mut named: Option<(String, usize)> = None;
@@ -984,7 +984,7 @@ fn every_in_line_quotes_the_file_it_cites() {
 ///
 /// **`**In**` is not a quotation**, and a scanner that treated every `*` alike would read the
 /// bold label as an italic span and compare the word `In` against the specification.
-fn italics(text: &str) -> Vec<String> {
+pub fn italics(text: &str) -> Vec<String> {
     let bytes: Vec<char> = text.chars().collect();
     let mut out = Vec::new();
     let mut at = 0;
@@ -1013,7 +1013,7 @@ fn italics(text: &str) -> Vec<String> {
 /// **Lifted out so both arms can be driven against a document written here** - `closed_sets.rs`
 /// says why: the release is Sean's file and this lane does not edit it, so a check that it
 /// catches a wrong quotation is demonstrated on a document written to carry one.
-fn quotes_missing_from(whole: &str, document: &str) -> (usize, Vec<String>) {
+pub fn quotes_missing_from(whole: &str, document: &str) -> (usize, Vec<String>) {
     let flat = bare(document);
     let mut counted = 0;
     let mut missing = Vec::new();
