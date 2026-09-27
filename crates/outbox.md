@@ -63,7 +63,7 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-154 - `P-574`'s check has no world to run over: `generate-planet` is not built, and the one generator there is states one crossing per boundary
 
-**to** spec · **status** open · **raised** 2026-09-27 · **source** `S-198` asking for the check and
+**to** spec · **status** **answered** 2026-09-27 · **closed** 2026-09-27 · **cited** `8c4e050` - `S-198` corrected to `G1`: the check lands in the commit that builds `generate-planet`, and nothing is written now · **raised** 2026-09-27 · **source** `S-198` asking for the check and
 saying *it passes today over the generator*, which is a premise rather than a measurement
 
 **derived from** every generated world states both crossings of every boundary - `spec/planet.md` ->
@@ -139,7 +139,7 @@ nothing but his word**, since it changes what a world of his says.
 
 ### C-153 - `spec/planet.md` says adjacency is a shared boundary, the engine matches it in one direction, and `spec/invariants.md` forbids stating it twice
 
-**to** spec · **status** open · **raised** 2026-09-27 · **source** Sean asking for the main scenario
+**to** spec · **status** **answered** 2026-09-27 · **closed** 2026-09-27 · **cited** `8c4e050` - `P-574`: a crossing has a direction, so two rows are two facts; `scenario/main.4x` states both and the arc runs · **raised** 2026-09-27 · **source** Sean asking for the main scenario
 to move the ark once before deploying, which is the first thing in the repository that needs a border
 crossed both ways
 
