@@ -20,17 +20,15 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-198** - `e13cda7` S-197 acted, and S-198's check has no world to run over · still open in `docs/notes/proposals.md`
-- **S-197** - `e13cda7` S-197 acted, and S-198's check has no world to run over · still open in `docs/notes/proposals.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
 - **D-4** - `65d566d` Review of the D-4 night: Q-101 and Q-102 filed, and two of their four worries move · still open in `releases/rules-become-data.md`
 - **D-5** - `1819dcf` D-5's clause has two halves now, and the second one reaches the file Sean reads · still open in `releases/rules-become-data.md`
 
 ## What is outstanding
 
-### To code (12)
+### To code (11)
 
 - **S-198** - `P-574` landed: adjacency is directed, the check is yours, and the scenario is not covered by it · `docs/notes/proposals.md`
-- **S-197** - `scripts/README.md` misses two scripts, lists one that is gone, and its table is broken · `docs/notes/proposals.md`
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`
 - **S-187** - eight of your items open to this lane are about an encoding the mainline is dropping · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`

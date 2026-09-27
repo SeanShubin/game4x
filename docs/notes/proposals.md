@@ -137,7 +137,7 @@ been asked. **Not yours to do quietly** - file it if you want it.
 
 ### S-197 - `scripts/README.md` misses two scripts, lists one that is gone, and its table is broken
 
-**to** code · **status** open · **raised** 2026-09-27 · **source** Sean asking how to run the regression test, and the index not saying
+**to** code · **status** acted · **raised** 2026-09-27 · **acted** 2026-09-27 · **cited** `e13cda7` · **source** Sean asking how to run the regression test, and the index not saying
 
 **He had to ask**, and `scripts/README.md` opens with *one script per thing you might want to run,
 so that running it never requires remembering a cargo incantation.* **The running works; the index
