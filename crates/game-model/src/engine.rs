@@ -250,6 +250,21 @@ fn apply(
                                 found: how_many,
                             });
                         }
+                        // **The row as the world holds it, before it is taken**, which is what
+                        // carrying a column through needs. `Store::take` gives back the pattern
+                        // with its quantity - *what was taken, not what is left* - and a pattern
+                        // does not carry the columns it never named, which is the whole class of
+                        // column a rule is silent about.
+                        //
+                        // **Measured rather than assumed**: recording what `take` returned put
+                        // `{moving, quantity, where}` into `matched` for an ark, and the
+                        // `gathering` the carry-through was written to find had already been
+                        // dropped one line earlier.
+                        if alone && let [one] = after.matching(&wanted)[..] {
+                            let id = clause.value(ID).unwrap_or_default().to_string();
+                            let one = one.clone();
+                            matched.insert(id, one);
+                        }
                         let Some(took) = after.take(&wanted, counted(game, &wanted).as_deref())
                         else {
                             return Err(Refused::NothingToRemove {
@@ -257,6 +272,15 @@ fn apply(
                                 wanted: game.schema.write(&wanted),
                             });
                         };
+                        // **What a remove took is remembered, which is what lets an add carry
+                        // through.** `spec/invariants.md`: *a rule carries through the columns it
+                        // does not name... what it does not name it leaves as it found it.* **Found
+                        // here** - this is the row the rule met, and the only place a value it never
+                        // mentions can come from.
+                        //
+                        // **Only when the clause named one relation and took one row**, for the
+                        // reason the `require` arm above gives: which member a value came from would
+                        // otherwise be whichever was walked last.
                         effect.took.push(took);
                     }
                 }
@@ -670,12 +694,51 @@ fn row_of(
         && whole
     {
         for column in &declared.columns {
-            if !values.contains_key(&column.name) {
-                return Err(Refused::Unbound {
-                    rule: rule.to_string(),
-                    clause: id.to_string(),
-                    column: column.name.clone(),
-                });
+            if values.contains_key(&column.name) {
+                continue;
+            }
+            // **A column the rule does not name is carried through** - `spec/invariants.md`, added
+            // by `P-573`: *a rule acting on a family acts on members that may carry columns it
+            // never mentions, and what it does not name it leaves as it found it.*
+            //
+            // **`C-152` is what it answers.** `move` acts on `unit`; three of its four members are
+            // `(where, moving, quantity)` and an ark also carries `gathering`, which no clause of
+            // `move` names. Before this, moving an ark was refused - and `spec/units.md` says *a
+            // mobile unit that moves in orbit gathers its own energy from the sun*, which is an ark
+            // and nothing else, so `gathering` exists **because** an ark moves.
+            //
+            // **Found in the rows this rule matched, of this same relation.** A `require` and a
+            // `remove` both record what they met, so *as it found it* has somewhere to read from.
+            //
+            // **Several different values is refused rather than resolved.** Sean, 2026-09-19: *it
+            // should be possible to structure the code to make nondeterminism impossible by raising
+            // an error instead* - so two matched rows disagreeing about a column nobody named is a
+            // refusal and not a choice.
+            let mut carried: Vec<&str> = matched
+                .values()
+                .filter(|row| row.relation == relation)
+                .filter_map(|row| row.value(&column.name))
+                .collect();
+            carried.sort_unstable();
+            carried.dedup();
+            match carried[..] {
+                [one] => {
+                    values.insert(column.name.clone(), one.to_string());
+                }
+                [] => {
+                    return Err(Refused::Unbound {
+                        rule: rule.to_string(),
+                        clause: id.to_string(),
+                        column: column.name.clone(),
+                    });
+                }
+                _ => {
+                    return Err(Refused::NotOne {
+                        rule: rule.to_string(),
+                        clause: id.to_string(),
+                        found: carried.len(),
+                    });
+                }
             }
         }
     }

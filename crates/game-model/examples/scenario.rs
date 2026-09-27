@@ -310,6 +310,34 @@ pub fn played_as_markdown() -> String {
         );
     }
 
+    // **`P-573`'s report, and it is short on purpose.** Sean took a report over a refusal knowing
+    // a report can be ignored, on the reasoning he gave for the regression suite - so its whole
+    // value is that he reads it, which is why it is here rather than in a file he would have to
+    // remember to open. **Its diff is what says a rule stopped naming a column.**
+    out.push_str("## Columns a rule leaves as it found them\n\n");
+    let carried = carried_through();
+    if carried.is_empty() {
+        out.push_str(
+            "None - every `add` clause names every column of every member it acts on.\n\n",
+        );
+    } else {
+        for (rule, family, member, columns) in &carried {
+            out.push_str(&format!(
+                "**`{rule}`** acts on `{family}`; `{member}` carries {} that no clause names.\n\n",
+                columns
+                    .iter()
+                    .map(|it| format!("`{it}`"))
+                    .collect::<Vec<String>>()
+                    .join(", ")
+            ));
+        }
+        out.push_str(
+            "`spec/invariants.md`: *what it does not name it leaves as it found it.* These are\n\
+             carried through rather than refused - `P-573`, which chose a report over making the\n\
+             notation say so.\n\n",
+        );
+    }
+
     out.push_str("## The world it left\n\n");
     let state = state_relations(&after);
     assert!(
@@ -633,5 +661,147 @@ pub fn regression_cases() -> Vec<Case> {
         "only {} case(s), which is not the main scenario",
         out.len()
     );
+    out
+}
+
+/// Every column a rule leaves as it found it, because no clause of it names one.
+///
+/// # `P-573` chose a report over a refusal, and that shapes this
+///
+/// **`spec/invariants.md`**: *a rule carries through the columns it does not name. A rule acting on
+/// a family acts on members that may carry columns it never mentions, and what it does not name it
+/// leaves as it found it.*
+///
+/// **Sean rejected making the notation say so**, and his reason is the whole design here: a line
+/// that always says *carry through* is a line that gets pasted, and it reads the same whether it
+/// was considered or not. **So this reports and refuses nothing**, and its value is entirely that
+/// he reads it - which is why it goes into `scenario/played.md`, the file he already opens, rather
+/// than into one he would have to remember.
+///
+/// # Only a clause that builds a row
+///
+/// **This lane's first instrument counted seven and the answer is one.** It walked every clause,
+/// and `require` and `remove` match on a **pattern** - they name what they care about and nothing
+/// else, so every column they do not name reads as carried through and none of it is.
+///
+/// **A row is built by `add`**, which is the one role that must produce every column, and the only
+/// place `Refused::Unbound` could ever have come from. Restricting to it gives `move` acting on
+/// `unit`, an ark carrying `gathering`, and nothing else.
+pub fn carried_through() -> Vec<(String, String, String, Vec<String>)> {
+    let rows = foundation::rows();
+    let of = |relation: &str| -> Vec<&Row> {
+        rows.iter().filter(|it| it.relation == relation).collect()
+    };
+    let named = |relation: &str| -> BTreeMap<String, String> {
+        of(relation)
+            .iter()
+            .filter_map(|row| Some((row.value("id")?.to_string(), row.value("name")?.to_string())))
+            .collect()
+    };
+    let (relations, roles, rules) = (named("relation"), named("role"), named("rule"));
+
+    let mut column_of: BTreeMap<String, (String, String)> = BTreeMap::new();
+    let mut columns_of: BTreeMap<String, Vec<String>> = BTreeMap::new();
+    for row in of("column") {
+        let (Some(id), Some(relation), Some(name)) =
+            (row.value("id"), row.value("relation"), row.value("name"))
+        else {
+            continue;
+        };
+        column_of.insert(id.to_string(), (relation.to_string(), name.to_string()));
+        columns_of
+            .entry(relation.to_string())
+            .or_default()
+            .push(name.to_string());
+    }
+
+    let input_of: BTreeMap<String, String> = of("input")
+        .iter()
+        .filter_map(|row| Some((row.value("id")?.to_string(), row.value("of")?.to_string())))
+        .collect();
+    let acts_on: BTreeMap<String, String> = of("relation-of")
+        .iter()
+        .filter_map(|row| {
+            Some((
+                row.value("clause")?.to_string(),
+                row.value("input")?.to_string(),
+            ))
+        })
+        .collect();
+    let mut members: BTreeMap<String, Vec<String>> = BTreeMap::new();
+    for row in of("member") {
+        let (Some(kind), Some(family)) = (row.value("kind"), row.value("family")) else {
+            continue;
+        };
+        members
+            .entry(family.to_string())
+            .or_default()
+            .push(kind.to_string());
+    }
+
+    // **Three ways a column gets a value and all three count as naming it** - a binding from what
+    // the caller wrote, a literal from what the rule says, a reading from a row an earlier clause
+    // matched. `engine::row_of` reads them in that order and carries through only what none of
+    // them gave.
+    let mut says: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
+    for relation in ["binding", "literal", "reading"] {
+        for row in of(relation) {
+            let (Some(clause), Some(column)) = (row.value("clause"), row.value("column")) else {
+                continue;
+            };
+            if let Some((_, name)) = column_of.get(column) {
+                says.entry(clause.to_string())
+                    .or_default()
+                    .insert(name.clone());
+            }
+        }
+    }
+
+    let mut out = Vec::new();
+    for clause in of("clause") {
+        let (Some(id), Some(rule), Some(role), Some(relation)) = (
+            clause.value("id"),
+            clause.value("rule"),
+            clause.value("role"),
+            clause.value("relation"),
+        ) else {
+            continue;
+        };
+        if roles.get(role).map(String::as_str) != Some("add") {
+            continue;
+        }
+        let target = match acts_on.get(id).and_then(|it| input_of.get(it)) {
+            Some(typed) => typed.clone(),
+            None => relation.to_string(),
+        };
+        let Some(members) = members.get(&target) else {
+            continue;
+        };
+        for member in members {
+            let quiet: Vec<String> = columns_of
+                .get(member)
+                .into_iter()
+                .flatten()
+                .filter(|name| !says.get(id).is_some_and(|it| it.contains(*name)))
+                .cloned()
+                .collect();
+            if quiet.is_empty() {
+                continue;
+            }
+            out.push((
+                rules.get(rule).cloned().unwrap_or_else(|| rule.to_string()),
+                relations
+                    .get(&target)
+                    .cloned()
+                    .unwrap_or_else(|| target.clone()),
+                relations
+                    .get(member)
+                    .cloned()
+                    .unwrap_or_else(|| member.clone()),
+                quiet,
+            ));
+        }
+    }
+    out.sort();
     out
 }

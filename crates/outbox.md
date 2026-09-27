@@ -63,7 +63,7 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-152 - `move` is declared over the `unit` family and is refused for one of its four members
 
-**to** spec · **status** open · **raised** 2026-09-27 · **source** Sean asking for the main scenario
+**to** spec · **status** **answered** 2026-09-27 · **closed** 2026-09-27 · **cited** `P-573` - Sean chose `M5`: the engine carries through columns a rule does not name, and the check is a report · **raised** 2026-09-27 · **source** Sean asking for the main scenario
 to move the ark once before deploying, which the engine refuses
 
 **Sean, 2026-09-27**: *right now I want to change the regression test to move the ark once before
@@ -129,7 +129,7 @@ would be asserting something the game does not mean.
 
 ### C-151 - `spec/logistics.md` says a kind declares one of three things, and a default makes that unable to catch anything
 
-**to** spec · **status** open · **raised** 2026-09-26 · **source** Sean asking whether the bin that
+**to** spec · **status** **answered** 2026-09-27 · **closed** 2026-09-27 · **cited** `P-568` - `spec/logistics.md` now distinguishes a store that declares a limit from a kind that declares neither · **raised** 2026-09-26 · **source** Sean asking whether the bin that
 held nothing could have been prevented by the specification, after this lane said it could not
 
 **This lane said *nothing is missing from the spec* and that was wrong.** The rule is there. What is
@@ -218,7 +218,7 @@ recorded here rather than filed as a gap.
 
 ### C-150 - `D-5` asks every rule to fire and `spec/scenarios.md` sends starvation to a scenario of its own
 
-**to** spec · **status** open · **raised** 2026-09-26 · **rewritten** 2026-09-26 after Sean
+**to** spec · **status** **answered** 2026-09-27 · **closed** 2026-09-27 · **cited** `P-569` - `D-5`'s clause gives way to `spec/scenarios.md`; a rule that does not fire is named with what it needs · **raised** 2026-09-26 · **rewritten** 2026-09-26 after Sean
 corrected the first version, which blamed the ruleset for something the scenario was doing
 
 **derived from** a mechanic that only appears in an unusual situation belongs in a scenario of its

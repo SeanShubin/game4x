@@ -110,6 +110,14 @@ the orbit above that.
 a scenario of its own. Those are not built until the main scenario satisfies its
 reader.*
 
+## Columns a rule leaves as it found them
+
+**`move`** acts on `unit`; `ark` carries `gathering` that no clause names.
+
+`spec/invariants.md`: *what it does not name it leaves as it found it.* These are
+carried through rather than refused - `P-573`, which chose a report over making the
+notation say so.
+
 ## The world it left
 
     {adjacency id:1 from:territory-1 to:territory-2}
