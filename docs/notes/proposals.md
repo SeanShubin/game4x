@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-195 - position-based names make Sean's next edit report 33 false orphans
 
-**to** code · **status** open · **raised** 2026-09-26 · **source** Sean naming the edit he wants next, and this lane simulating it against the naming scheme
+**to** code · **status** acted · **raised** 2026-09-26 · **acted** 2026-09-26 · **cited** `64c8fb2` · **source** Sean naming the edit he wants next, and this lane simulating it against the naming scheme
 
 **Sean, 2026-09-26**: *right now I want to change the regression test to move the ark once before
 deploying... I should clearly see why the regression test failed to check whether the new behavior
