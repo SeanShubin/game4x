@@ -69,6 +69,59 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-200 - `P-575` needs the engine to honour two new rows before any of its rules can be written
+
+**to** code · **status** open · **raised** 2026-09-27 · **source** promoting `P-575` and finding it has an order this lane did not see
+
+**Sean approved `N5`.** Designing stays made of the same rules as playing, and two notation pieces
+make that possible:
+
+```
+{constant part:P input:i value:6}   a value supplied to a part or a command's input, where
+                                    {argument} supplies a reference. It is the part-layer
+                                    twin of {literal clause:C column:N value:1}
+{minted clause:C column:N}          an `add` clause's column takes the next id unused by
+                                    that relation
+```
+
+**Names are this lane's and Sean let them stand.** One word from him changes either.
+
+## Why this reaches you before the rules exist
+
+**Neither row means anything until the engine honours it**, and four of the five rules need one or
+both. **Writing them first would be four intricate rules validated by nothing** - no test could
+pass, so no test could tell a correct rule from a wrong one.
+
+**So this lane is writing no rules yet, deliberately, and says so rather than producing them
+blind.** They follow the moment a test can fail for the right reason.
+
+## What each has to do, from the notation's own shape
+
+**`constant` is the missing half of a pair.** `schema.4x` says the clause and part layers are
+*deliberately the same shape* - a clause has `{binding}` and `{literal}`, a part has `{argument}`
+and nothing. **An argument denotes and the engine dereferences it**; a constant is copied into the
+input and dereferenced never.
+
+**`minted` is the one new idea.** `engine.rs` already says why it is needed: *`add` must name every
+column, because a row that does not fit the structure cannot be put into the world - including the
+`id` it will be known by.* **Today an add clause cannot name an id at all**, which is why no rule
+has ever added a territory, a place or a crossing.
+
+**Next unused rather than a counter**, so it is a fact about the world rather than state anybody
+keeps - and an id stays unique **by construction**, which is `P-559`'s distinction.
+
+## What this unblocks, in order
+
+```
+1  the engine honours `minted` and `constant`                      yours
+2  add-territory, add-crossing, set-resource, add-to-orbit          this lane's, with tests
+3  create planet <size> writes those commands                       yours
+```
+
+**`set-biome` is not in that list** and is carved out to `P-577`: a biome is a label on a territory
+and every other value-like thing in the schema is a counted relation in a place, so its shape is a
+decision rather than a row. **Sean is asked there.**
+
 ### S-199 - `P-576` put the friendly source in `spec/data/`, the suite is red, and the rest is yours
 
 **to** code · **status** open · **raised** 2026-09-27 · **source** promoting `P-576`, whose instruction crosses the column boundary as `P-563`'s did
@@ -9503,6 +9556,7 @@ work the release exists to order.
 | P-573, a rule carries through the columns it does not name                                                                   | `spec/invariants.md` -> The game is data                                                                                                                                                                 | 2026-09-27 |
 | P-574, a boundary is shared and a crossing has a direction, and a generated world states both                                | `spec/planet.md` -> Distance                                                                                                                                                                             | 2026-09-27 |
 | P-576, `H3` moved the rendering and left the source, so the friendly form moves to `spec/data/`                              | `spec/data/`, and `crates/game-model/data/` - the rest filed as `S-199`                                                                                                                                  | 2026-09-27 |
+| P-575, `N5` - a constant at the part layer, an id minted as the next unused, and five design rules                           | `S-200` carries the engine work that comes first; `P-577` carries the biome shape                                                                                                                        | 2026-09-27 |
 
 ## Forecast cleanups that were checked and not filed
 
