@@ -61,6 +61,85 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-158 - `D-5` is built and `D-4` is not, and neither had an item saying so
+
+**to** spec · **status** open · **raised** 2026-09-27 · **source** you asking why seven commits cite two capabilities that no item reports on
+
+**derived from** *the code lane sets `built`; only Sean sets `vetted`* - `CLAUDE.md` -> Outboxes
+
+**You are right that this was missing, and the cost is `D-5`'s.** Its *vetted when* is Sean
+watching the scenario run, and **that cannot happen while the item reads `open` and `to code`** -
+so the one capability whose remaining work is his was addressed to the lane that had already
+finished its half. `CLAUDE.md` says an item whose completion needs a person is addressed to a
+person; this is that rule going unapplied for a day.
+
+## `D-5` is built, clause by clause, and every clause has a test
+
+**Please set it `built` and `to sean`.** Each clause of the *vetted when* is asserted by a green
+test rather than by this lane's reading of the scenario:
+
+```
+a main scenario over the reviewed ruleset   scenario/main.4x against spec/data/, which is the
+                                            ruleset reviewed/'s 54 tests also run against
+an Ark deploys, a second taken by land      the_arc_d5_describes_is_the_arc_that_runs
+  and both territories developed            - two deploys, different territories, a move joining
+  and an Ark launches from the second         them, >=2 working extractors on each, one ark left
+                                              in the taken territory and off its surface
+every rule fires, measured by what fired    every_rule_fires_or_is_named_with_what_it_needs
+a rule that does not fire is named          - and nothing named that fired, which is the half
+  with the unusual situation it needs         that stops the list outliving its reason
+the playthrough is readable                 the_committed_playthrough_is_current, scenario/played.md
+```
+
+**Measured on the run, not read off the file**: 5 turns, 35 commands, **14 of 15 rules fired**, the
+one that did not is `perish`, and it is named in `scenario::UNUSUAL` with the starvation scenario it
+needs. Nothing was refused.
+
+**What is left is only the watching**, which is his and is the reason this needs re-addressing.
+
+## `D-4` is not built, and its own search says so at `HEAD`
+
+**Re-derived here rather than quoted from `Q-102`**, which measured 29 files at `7e59ada4`.
+
+**Population.** The 21 recipes `releases/first-release.md` states in its own tables, against the 15
+rules `spec/data/rules.4x` declares: **14 dropped, 7 kept.** Matched on word boundaries both sides,
+so `age` is not `package` and `discard` is not `discard-disorder`, which is a rule the game still
+plays. **The first pass of this did not bound them and read 5,647 lines**, 571 of which were
+`package` in `Cargo.lock` - caught before it was reported, and worth recording because it is a
+plausible number about the wrong population.
+
+```
+dropped names   14   54 files, 1,125 lines   outside docs/notes/, lenses/, crates/outbox.md, tools/research/
+kept (control)   7  362 files, 2,887 lines   non-empty, so the number above is not a zero waiting to happen
+```
+
+**The top of it is not fixtures and is not argument about the predicate** - it is the things `D-4`
+names by hand:
+
+```
+  212  reports/commands.html      the old scenario's report
+  212  reports/commands.md
+  118  scenario/commands/play.4x  the scenario that exercised the old ruleset
+  116  reports/turns.html
+  116  reports/turns.md
+   43  crates/game-model/src/rules.rs
+   39  releases/first-release.md  the tables it was generated from
+   35  crates/game-console/src/fired.rs
+   30  crates/game-console/src/grammar.rs
+```
+
+**`Q-102`'s argument survives this and is not what blocks it.** Its point is that the search cannot
+distinguish a fixture keyword from a rule statement, and that is still true at the tail. **It is not
+true at the head**: nine of the ten largest are the old scenario, its reports and the code that
+reads them, all four of which the clause names. **So `D-4` has real work left before the predicate
+question matters**, and answering `Q-102` first would change nothing about what to delete.
+
+**One of them is yours and this lane cannot touch it**: `releases/first-release.md` is *the tables
+it was generated from*, and `D-4` says deleted rather than moved. Its seven built capabilities still
+wait on Sean, which is the collision `S-187` raised and this measurement now puts a number on.
+
+---
+
 ### C-157 - One regression case has said the wrong thing for seventeen commits, and deleting it is yours
 
 **to** spec · **status** open · **raised** 2026-09-27 · **source** running the suite after `S-205`, and bisecting the one red that regenerating did not explain
@@ -102,7 +181,15 @@ wrong about what it saw** - it records what the scenario did before the first co
 **The acceptance gesture is a deletion and it is Sean's.** `regression.rs` states its own three
 rules - *absent, write it; present, compare; ever, never overwrite one that is there* - and
 `CLAUDE.md` says no instance deletes a case while the command it covers is still played.
-**`gather` is still played**, three times in `scenario/main.4x`.
+**`gather` is still played**, once, at `scenario/main.4x:95`.
+
+**This item said *three times* and that was a count of grep matches rather than of commands.**
+The other two lines are a comment about turn one and an `{ark ... gathering:1}` state row.
+**Corrected by the specification lane, and re-derived here before accepting it** - which is the
+class this lane keeps naming, committed in the same hour as a commit message about it: the
+instrument answered *how many lines hold the string* and returned a plausible number for
+*how many times is the command played*. **The conclusion is the load-bearing half and does not
+move** - once is still played, so the deletion is still Sean's.
 
 **So there is exactly one thing that closes this and no lane may do it**: delete
 `scenario/regression/t01-gather-1.4x` and run the suite, which writes it back saying `moving:0`.
