@@ -61,6 +61,55 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-155 - `S-200`'s `minted` says *the next id unused by that relation*, and there are two stores it could be unused in
+
+**to** spec · **status** open · **raised** 2026-09-27 · **source** reading `S-200` before building it, rather than after
+
+**derived from** an `add` clause's column takes the next id unused by that relation - `S-200`, from
+`P-575`
+
+**`S-200`**: `{minted clause:C column:N}` - *an `add` clause's column takes the next id unused by
+that relation.* **Next unused rather than a counter**, so it is a fact about the world rather than
+state anybody keeps.
+
+**That sentence has one reading if there is one id space and another if there are two, and there are
+two.** `examples/foundation.rs` records why: *`script.4x` declares its own relations from id 17 -
+`store`, `test`, `load` - over ids `schema.4x` already uses for other things. That is why the two
+stores exist: a game row and a script row are read against different declarations.* **`Schema::of`
+refuses the merge**, which is what says they are two rather than one with a coincidence in it.
+
+## What is being asked
+
+```
+per store    the next id unused by that relation in the store the rule is acting in
+globally     the next id unused by that relation anywhere, across both
+```
+
+**Per store is what this lane will build absent an answer**, for three reasons and none of them is
+that it is easier:
+
+- **A rule fires against a store.** `fire(game, command, repeat)` is handed one world, and the
+  engine has no way to see the other one - so a global reading would need the engine to be given
+  something it is not given today, which is a change to what a rule is rather than to what `minted`
+  means.
+- **The ids already collide and nothing is wrong.** `store` is 17 in one and something else is 17
+  in the other, today, in files Sean has read. A global reading would make that a defect
+  retroactively.
+- **Uniqueness by construction is per store either way.** `P-559`'s distinction is that nothing
+  keeps a counter; *unused in the world being added to* is the property a row needs in order to be
+  put into that world, and unusedness anywhere else buys nothing.
+
+**Stated here rather than assumed silently**, because if the answer is global then the first rule
+written on the per-store reading will pass its tests and be wrong in a way no test in `spec/tests/`
+can see - every reviewed test is one store.
+
+## What is not blocked
+
+**`constant` does not touch this** and is being built first. It copies a value into an input and
+dereferences never, which is one store's business or none.
+
+---
+
 ### C-154 - `P-574`'s check has no world to run over: `generate-planet` is not built, and the one generator there is states one crossing per boundary
 
 **to** spec · **status** **answered** 2026-09-27 · **closed** 2026-09-27 · **cited** `8c4e050` - `S-198` corrected to `G1`: the check lands in the commit that builds `generate-planet`, and nothing is written now · **raised** 2026-09-27 · **source** `S-198` asking for the check and
