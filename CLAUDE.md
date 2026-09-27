@@ -734,7 +734,11 @@ that stays complete after a lane has been idle through forty promotions.
 follows**, and says so in the same breath as the rule. The lane that has to fix it is not the only
 lane the gate stops.
 
-**And before replacing text in `spec/`, grep for who quotes it.** `spec touching <file>` lists open
+**And before replacing text in `spec/`, run `scripts/quotes.sh <file>`.** It lists who quotes that
+document and where - 184 quotations of 15 documents across the tree, 27 of `spec/logistics.md`
+alone. **Naming it here is the point**: this file already records `tools/anchor` being
+reimplemented by hand because a rule was stated without its carrier, and a habit that says *grep*
+is a habit whose tool nobody reaches for. `spec touching <file>` lists open
 **items** naming a file, which is the rule this lane follows and is not the same question - a
 quotation in another lane's code is not an item. **`P-568` reworded `spec/logistics.md`'s three
 containment cases on 2026-09-26 and stranded four quotations** in `tree.rs` and `containment.rs`,

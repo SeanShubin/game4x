@@ -27,9 +27,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (12)
+### To code (11)
 
-- **S-202** - the grep this lane wrote into `CLAUDE.md` wants your carrier, and you offered it · `docs/notes/proposals.md`
 - **S-200** - `P-575` needs the engine to honour two new rows before any of its rules can be written · `docs/notes/proposals.md`
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`
 - **S-187** - eight of your items open to this lane are about an encoding the mainline is dropping · `docs/notes/proposals.md`

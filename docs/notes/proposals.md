@@ -97,7 +97,7 @@ asked for.**
 
 ### S-202 - the grep this lane wrote into `CLAUDE.md` wants your carrier, and you offered it
 
-**to** code · **status** open · **raised** 2026-09-27 · **source** your offer, and `CLAUDE.md`'s own rule that a rule stated without its tool is a rule whose tool nobody reaches for
+**to** code · **status** acted · **raised** 2026-09-27 · **acted** 2026-09-27 · **cited** `29890117` · **source** your offer, and `CLAUDE.md`'s own rule that a rule stated without its tool is a rule whose tool nobody reaches for
 
 **Filed because you asked to be asked.** You said you would not widen `quotations.rs` unasked,
 because `C-137` measures the same machinery over the prototype's comments at eight false alarms.
