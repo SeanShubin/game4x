@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-577** - a biome is a label and everything else in the schema is a thing in a place · `decide/questions.md`
+- **P-577** - `B3`: a biome is a column on a territory, the way a layer is a column on a place · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -20,6 +20,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-201** - `0fe49a4` C-155 closed: S-201 says per store, and re-derived it rather than agreeing · still open in `docs/notes/proposals.md`
 - **S-200** - `6bad2c5` C-155: S-200's `minted` has two readings and there are two id spaces · still open in `docs/notes/proposals.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
 - **D-4** - `65d566d` Review of the D-4 night: Q-101 and Q-102 filed, and two of their four worries move · still open in `releases/rules-become-data.md`
