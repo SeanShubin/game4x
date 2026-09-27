@@ -94,6 +94,12 @@ fn every_command_has_an_expectation_and_it_is_current() {
             // **Absent: accepted.** His words - *absent expected data means I accept what it does
             // now, so the test writes it, and what I review is the diff in version control.*
             Err(_) => {
+                // **The turn's directory is made if it is not there**, because a case's name is
+                // now `NN/MM-rule.4x` and deleting a whole turn takes the directory with it.
+                if let Some(turn) = path.parent() {
+                    std::fs::create_dir_all(turn)
+                        .unwrap_or_else(|why| panic!("{}: {why}", turn.display()));
+                }
                 std::fs::write(&path, produced)
                     .unwrap_or_else(|why| panic!("{}: {why}", path.display()));
                 written.push(name.clone());
@@ -124,28 +130,48 @@ fn every_command_has_an_expectation_and_it_is_current() {
         "every case was either compared or written"
     );
 
-    // **One directory and no subdirectories, which is Sean's own constraint.** Sean, 2026-09-27:
-    // *if I am deleting multiple files rather than one, they need to be in a single directory.*
-    // **Accepting a turn's worth of behaviour is several deletions**, and a file two levels down is
-    // one he would have to go and find.
+    // **A directory per turn, one level deep, and nothing else.** Sean, 2026-09-27: *what about
+    // each turn being in a separate directory with a numeric prefix, and each file within a turns
+    // directory having a numeric prefix.*
     //
-    // **Checked both ways**, because a name and a directory entry are different populations: no
-    // case is named with a path in it, and nothing in the directory is a directory.
+    // # This asserted the opposite until today, and the constraint it held is his too
+    //
+    // **Sean, 2026-09-27, earlier the same day**: *if I am deleting multiple files rather than
+    // one, they need to be in a single directory.* **That reading has not gone away** - it has
+    // been traded. Accepting one turn's behaviour is now the contents of one directory, which is
+    // better for it; accepting one case in each of five turns is five directories, which is
+    // worse. **The gesture that made it worth trading is the one he made**: deleting the whole
+    // suite, which under this is five directories rather than thirty-five files.
+    //
+    // **Checked both ways, because a name and a directory entry are different populations.** Every
+    // case is named `NN/...` exactly one level down, and every entry at the top is a directory.
+    let mut depths = 0;
     for Case { name, .. } in &cases {
         assert!(
-            !name.contains('/') && !name.contains('\\'),
-            "`{name}` is a path rather than a name, so the cases would not be in one directory"
+            !name.contains('\\'),
+            "`{name}` is written with a backslash, and a case name is a path with `/`"
         );
+        assert_eq!(
+            name.matches('/').count(),
+            1,
+            "`{name}` is not exactly one level down, so it is not a turn's directory"
+        );
+        depths += 1;
     }
-    let nested: Vec<String> = std::fs::read_dir(&at)
+    assert_eq!(
+        depths,
+        cases.len(),
+        "every case was asked how deep it sits, and the count is what says so"
+    );
+    let loose: Vec<String> = std::fs::read_dir(&at)
         .unwrap_or_else(|why| panic!("{}: {why}", at.display()))
         .filter_map(|it| it.ok())
-        .filter(|it| it.path().is_dir())
+        .filter(|it| !it.path().is_dir())
         .filter_map(|it| it.file_name().to_str().map(str::to_string))
         .collect();
     assert!(
-        nested.is_empty(),
-        "`scenario/regression/` holds {nested:?}, and deleting several expectations has to be          several deletions in one directory"
+        loose.is_empty(),
+        "`scenario/regression/` holds {loose:?} outside any turn, and every case belongs to a turn"
     );
 
     // **A file is left behind when its command is gone, and that is asked of the command rather
@@ -165,21 +191,44 @@ fn every_command_has_an_expectation_and_it_is_current() {
     // command is still played is Sean's approval gesture - so **the message instructed the reader to
     // approve thirty-three behaviours it had not shown them.** That is worse than noise.
     //
-    // **The naming now makes his edit rename nothing**, and this is fixed anyway: a scheme that
-    // renames less is not a scheme that renames never, and the check has to be right when one does.
+    // **A scheme that renames less is not a scheme that renames never**, and the check has to be
+    // right when one does - which is what keeps it asking the command rather than the name now
+    // that a case's position in its turn is back in the filename and does renumber.
+    //
+    // **It walks the turn directories**, because the cases are one level down. A turn with no
+    // directory contributes nothing, and a directory with no cases is reported by the count below
+    // rather than passing quietly.
     let played: BTreeSet<String> = cases.iter().map(|it| it.command.clone()).collect();
     let mut gone: Vec<String> = Vec::new();
     let mut looked = 0;
-    for entry in std::fs::read_dir(&at).unwrap_or_else(|why| panic!("{}: {why}", at.display())) {
-        let path = entry.expect("a readable entry").path();
+    let mut found: Vec<std::path::PathBuf> = Vec::new();
+    for turn in std::fs::read_dir(&at).unwrap_or_else(|why| panic!("{}: {why}", at.display())) {
+        let turn = turn.expect("a readable entry").path();
+        if !turn.is_dir() {
+            continue;
+        }
+        for entry in
+            std::fs::read_dir(&turn).unwrap_or_else(|why| panic!("{}: {why}", turn.display()))
+        {
+            found.push(entry.expect("a readable entry").path());
+        }
+    }
+    for path in found {
         if path.extension().and_then(|it| it.to_str()) != Some("4x") {
             continue;
         }
+        // **Named with its turn**, so a message about a case says where to find it.
         let name = path
-            .file_name()
+            .parent()
+            .and_then(|it| it.file_name())
             .and_then(|it| it.to_str())
-            .unwrap_or_default()
-            .to_string();
+            .map(|turn| {
+                format!(
+                    "{turn}/{}",
+                    path.file_name().and_then(|it| it.to_str()).unwrap_or("?")
+                )
+            })
+            .unwrap_or_default();
         let text = std::fs::read_to_string(&path).unwrap_or_else(|why| panic!("{name}: {why}"));
 
         // **The command a case covers is the line under its `{when}`**, which is where every case

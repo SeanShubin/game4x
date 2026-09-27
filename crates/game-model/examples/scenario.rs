@@ -578,7 +578,7 @@ pub fn regression_cases() -> Vec<Case> {
     }
 
     let mut out = Vec::new();
-    let mut seen: BTreeMap<(usize, String), usize> = BTreeMap::new();
+    let mut seen: BTreeMap<usize, usize> = BTreeMap::new();
     for (at, (turn, effect)) in history.iter().enumerate() {
         let command = friendly_command(&game, &effect.command);
         let after_game = fire(&game, &effect.command, 1)
@@ -599,32 +599,42 @@ pub fn regression_cases() -> Vec<Case> {
         let before = render(&effect.took);
         let after = render(&effect.made);
 
-        // **Named by turn, rule and occurrence within that turn**, never by position in the run.
-        // `S-195`: position made Sean's next edit rename 33 of 34 files, because inserting one
-        // command renumbers everything after it.
+        // **A directory per turn, and a case named by its position in that turn.** So the listing
+        // is the play order, which is how the file is read.
         //
-        // **Measured over the three schemes rather than argued.** His edit inserts a `{move}` into
-        // turn one:
+        // # What this replaces, and why the cost it pays is the smaller one now
+        //
+        // **It was `t{turn}-{rule}-{k}`**, `k` counting repeats of one rule inside one turn - so
+        // `t01-move-1` was the first `move` of turn one and said nothing about when it ran.
+        // `S-195` chose that by measuring three schemes against Sean's next edit, inserting one
+        // `{move}` into turn one:
         //
         // ```text
-        // by position            renames 33   what was here
-        // by command+occurrence  renames  1   worst case 13, the count of `work`
-        // by turn+command+k      renames  0   worst case  4, the largest (turn, rule) group
+        // by position in the run   renames 33   the scheme before that
+        // by rule+occurrence       renames  1   worst case 13, the count of `work`
+        // by turn+rule+occurrence  renames  0   worst case  4, the largest (turn, rule) group
         // ```
         //
-        // **Zero because `t01-move-1` is a name nothing else held.** The cap is four because no
-        // turn runs one rule more than four times - `t04-work` and `t05-work` are the largest.
+        // **Zero, and it cost play order in the filename** - which the comment there said in as
+        // many words, and which is exactly what went wrong. Sean, 2026-09-27, reading the
+        // directory: *why does `t01-deploy-1.4x` show a deploy when no earlier test shows a move?*
+        // The move was `t01-move-1.4x`, the first command of the turn, sorting fourth of six.
         //
-        // **What it costs is play order in the filename**, which sorts alphabetically within a
-        // turn. `scenario/played.md` is where the order is, and it is the file he reads in order.
-        *seen
-            .entry((*turn, effect.command.relation.clone()))
-            .or_insert(0) += 1;
-        let name = format!(
-            "t{turn:02}-{}-{}",
-            effect.command.relation,
-            seen[&(*turn, effect.command.relation.clone())]
-        );
+        // **A position inside a turn renumbers only its own turn.** Against the same probe it
+        // renames 5, the rest of turn one, and its worst case is the largest turn rather than the
+        // whole run - 9 today. **So the cascade `S-195` measured is bounded rather than gone**,
+        // and it is paid on an edit rather than on every reading.
+        //
+        // **The occurrence counter is not needed and is gone**: `04-work` and `05-work` are
+        // already distinct, so four `work`s read as four adjacent numbers rather than as a
+        // counter.
+        *seen.entry(*turn).or_insert(0) += 1;
+        let at_turn = seen[turn];
+        let stem = format!("{at_turn:02}-{}", effect.command.relation);
+        let name = format!("{turn:02}/{stem}");
+        // **The test's own name carries the turn and holds no slash**, because it is an identifier
+        // rather than a path - `{test name:t01-03-deploy}`.
+        let test = format!("t{turn:02}-{stem}");
         let mut text = String::new();
         // **The turn and the command, and no position.** This read `command 4 of 34`, which put the
         // very thing `S-195` took out of the filename back into the body: inserting one command in
@@ -648,7 +658,7 @@ pub fn regression_cases() -> Vec<Case> {
              #\n\
              # `scenario/played.md` is where the whole world at each turn's end is.\n\n",
         );
-        text.push_str(&format!("{{test name:{name}}}\n\n"));
+        text.push_str(&format!("{{test name:{test}}}\n\n"));
         text.push_str("{given}\n");
         for line in &before {
             text.push_str(&format!("{line}\n"));
