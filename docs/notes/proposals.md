@@ -69,6 +69,54 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-196 - `P-573` landed `M5`: the engine carries columns through, and the report is yours to build
+
+**to** code · **status** open · **raised** 2026-09-27 · **source** promoting `P-573`, which answers `C-152` and owes you the half it deliberately left out
+
+**`spec/invariants.md` -> The game is data now says it**, beside *nothing in the state is special
+to a kind*:
+
+> **A rule carries through the columns it does not name.** A rule acting on a family acts on
+> members that may carry columns it never mentions, and what it does not name it leaves as it
+> found it.
+
+**So `C-152` is answered and `move` needs no clause.** `{move what:ark ...}` stops being refused,
+the ark keeps whatever it was gathering, and Sean's ark-move edit is unblocked.
+
+## Two of your three answers were closed by a file rather than by a choice
+
+**`M3` - an ark genuinely cannot move - is wrong**, and so is `M2`. `spec/units.md`: *a mobile unit
+contributes room for fuel to the place it is in, and moving spends a unit of energy from the place
+it leaves... **a mobile unit that moves in orbit gathers its own energy from the sun**.* **That
+sentence is about a unit that moves in orbit and gathers, which is an ark and nothing else** -
+`gathering` exists because an ark moves. Worth checking `spec/units.md` before offering an answer
+about a unit next time; this lane only found it because your item made the claim checkable.
+
+## What is yours, and it is the check you already scoped
+
+**Build `C-152`'s check as a report, not as an error.** Your words: *for every rule declared over a
+family, every member's columns are bound by some clause of that rule.*
+
+```
+M4  it refuses, and every rule names every column         rejected
+M5  it reports, and the notation stays silent             chosen
+```
+
+**Sean rejected `M4` for a reason worth carrying into how you build it**: a line that always says
+*carry through* is a line that gets pasted, and it reads the same whether it was considered or not.
+**So the report's value is that he reads it, which means it has to be short and it has to say what
+changed rather than what is.**
+
+**Today it would name one thing** - `move` acts on `unit`, `ark` carries `gathering`, no clause
+names it - and that one line is the whole of what `M4` would have bought.
+
+## What he accepted in choosing it
+
+**The report can be ignored where `M4` could not.** He took that bet knowingly, and his reason is
+the regression suite's: a difference he looks at becomes a test, and one he does not is a scenario
+change. **A report nobody reads is the failure mode** - which is an argument for it being small
+rather than for it being loud.
+
 ### S-195 - position-based names make Sean's next edit report 33 false orphans
 
 **to** code · **status** acted · **raised** 2026-09-26 · **acted** 2026-09-26 · **cited** `64c8fb2` · **source** Sean naming the edit he wants next, and this lane simulating it against the naming scheme
@@ -9300,6 +9348,7 @@ work the release exists to order.
 | P-569, `D-5` asks for every rule a typical game uses, and names one that does not fire                                       | `releases/rules-become-data.md` -> `D-5`                                                                                                                                                                 | 2026-09-26 |
 | P-571, the main scenario has generated detail beneath it, and none of it is vetted by hand                                   | `spec/scenarios.md`                                                                                                                                                                                      | 2026-09-26 |
 | P-572, a regression case is deleted by Sean and that deletion is an approval                                                 | `CLAUDE.md` -> Perspectives                                                                                                                                                                              | 2026-09-26 |
+| P-573, a rule carries through the columns it does not name                                                                   | `spec/invariants.md` -> The game is data                                                                                                                                                                 | 2026-09-27 |
 
 ## Forecast cleanups that were checked and not filed
 

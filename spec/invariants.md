@@ -157,6 +157,11 @@ specific rule.
   them names its kind
 - Nothing in the state is special to a kind. Adding a kind adds no field and no case, and whatever
   reads the state reads it the same way whatever kind it holds
+- **A rule carries through the columns it does not name.** A rule acting on a family acts on
+  members that may carry columns it never mentions, and what it does not name it leaves as it
+  found it. **So giving a kind a new column does not break a rule that has nothing to say about
+  it** - which is *adding a kind adds no field and no case* said about a column rather than a
+  kind.
 - A thin engine running a data driven game forces inadequacies in the engine and data structure
   to come to light sooner. The design pressure is the whole point. If the code explodes in
   complexity, or the data structure explodes in complexity, or the data itself explodes in
