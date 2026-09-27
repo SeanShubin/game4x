@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-573** - the ark cannot move, and the question is what a rule does with a column it does not name · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -19,6 +20,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-195** - `64c8fb2` S-195 acted: the suite is ready for his edit, and the naming alone was not the fix · still open in `docs/notes/proposals.md`
 - **C-151** - `26dd253` C-151 and C-150 turned into P-568 and P-569 · still open in `crates/outbox.md`
 - **C-150** - `26dd253` C-151 and C-150 turned into P-568 and P-569 · still open in `crates/outbox.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
