@@ -74,14 +74,31 @@ across or is written again is the code lane's to choose, and no capability here 
   something I can read rather than something I have to notice. This is the observation `R-6` was
   retired without making
 
+### D-6 - I can accept one type of thing at a time
+
+**to** code · **status** open · **raised** 2026-09-27 · **from** `P-580`
+
+- **In** - `docs/process.md`, *every type of thing that is data has a generated suite of its own,
+  and there are four: the commands a scenario ran, the transformations over the things, the
+  definitions of the things, and the words the engine implements*
+- **Vetted when** - the four suites are `regression/scenario/`, `regression/rules/`,
+  `regression/types/` and `regression/primitives/`, out of `scenario/` and beside `reviewed/`.
+  **I delete one of them, run, and the diff holds that suite's cases and no others** - and when a
+  failure names stale cases it prints the deletion for each grain, so I paste it rather than
+  compose it. **Every case in `rules/` is one of the fifteen rules and every rule has one**, and
+  the same both ways for the sixty-three words in `primitives/`, so a suite cannot be partly
+  built and look finished
+
 ## Out of scope
+
 
 - **The drawing.** `crates/` keeps the planet, the reports and the console. Sean, 2026-09-21:
   *all I really care about on the mainline is the rendering work*
 - **The console's own shape.** It operates on the new model and is not rewritten. Sean,
   2026-09-25: *I also expect the current game console is going to operate on the thin-engine
   design that gets into mainline*
-- **`releases/first-release.md`.** Its seven built capabilities still wait on you, and nothing
+- **`releases/first-release.md`.** Its four built capabilities still wait on you - it had seven until `P-562` retired three on 2026-09-26 - and nothing
+
   here changes what they assert
 
 ## Open questions

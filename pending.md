@@ -28,8 +28,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (11)
+### To code (13)
 
+- **S-207** - All forty reports are generated from the scenario `D-4` deletes, and `D-4` already says so · `docs/notes/proposals.md`
 - **S-206** - The regression failure names a case and not the deletion, and the turn directories made that worse · `docs/notes/proposals.md`
 - **S-204** - the least unused is the right reading, and the reason is `spec/invariants.md`'s own · `docs/notes/proposals.md`
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`
@@ -39,6 +40,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **D-2** - The game plays by the tests I have read · `releases/rules-become-data.md`
 - **D-3** - The game's data is stated once · `releases/rules-become-data.md`
 - **D-4** - The old ruleset is gone, not archived · `releases/rules-become-data.md`
+- **D-6** - I can accept one type of thing at a time · `releases/rules-become-data.md`
 - **Q-100** - The crate `docs/architecture.md` calls the only door into the model is 73% document generation · `lenses/quality/outbox.md`
 - **Q-88** - Nothing checks that approved text is still in `spec/`, and the sweep that would is measured here · `lenses/quality/outbox.md`
 

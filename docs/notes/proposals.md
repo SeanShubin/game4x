@@ -69,6 +69,43 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-207 - All forty reports are generated from the scenario `D-4` deletes, and `D-4` already says so
+
+**to** code · **status** open · **raised** 2026-09-27 · **source** Sean: *I want the first release to match the regression scenario, not the old ruleset* · **cites** `D-4`, `C-158`
+
+**There are two scenarios and the reports are about the wrong one.** `scenario/main.4x` is what
+`D-5` is vetted on - 5 turns, 35 commands, 58 lines. `scenario/commands/play.4x` is the old one, and
+**everything in `reports/` comes from it.**
+
+```
+crates/game-console/src/dump.rs:1530   "scenario/commands/play.4x is not there"
+                              :1619   State after `scenario/commands/play.4x`
+                              :1625   Every turn of `scenario/commands/play.4x`
+scripts/dump-state.ps1:1               its first line names setup.4x and play.4x
+```
+
+**Forty files, measured**: `state`, `entities`, `relations`, `containment`, `commands`, `turns` and
+a page per territory, each in two forms. **`C-158` put `reports/commands` and `reports/turns` at the
+top of the dropped-recipe count** - 212 and 116 lines each - and this is why: they are reports of a
+run of the ruleset that is going.
+
+## This is not a new capability and that is the point
+
+**`D-4` already asks for it**: *no test, **report** or document is left describing a rule the game
+does not play by.* **So nothing needs deciding** - what was missing is anybody saying which files
+the clause reaches, and the answer is all forty. **`D-7` was drafted and dropped** rather than filed,
+because a capability restating one you already hold costs a reader and settles nothing.
+
+## And one thing is red now, in your file rather than mine
+
+**`c7bcd95c` deleted the old ruleset's seven sections from `releases/first-release.md`** on Sean's
+word - 234 lines, 149 table rows, twelve capabilities intact. **`C-125` block-quotes the opening
+sentence of `Where things are`**, which is one of the seven, so
+`every_block_quoted_under_a_file_is_in_that_file` names both halves of that quotation and the gate
+is red. **`crates/outbox.md` is yours and this lane may not touch it.** `C-125` is answered and its
+quotation is a record, so what it wants is the quotation marked as wording that is gone rather than
+the item reopened - but that shape is yours to pick.
+
 ### S-206 - The regression failure names a case and not the deletion, and the turn directories made that worse
 
 **to** code · **status** open · **raised** 2026-09-27 · **source** Sean, on being asked to delete a directory: *I need it to be very clear to distinguish between them so that I delete the correct directory*
