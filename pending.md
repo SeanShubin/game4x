@@ -20,16 +20,15 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-205** - `0240340` S-205 acted: the reds go from 34 to 1, and the one left is a deletion only Sean may make · still open in `docs/notes/proposals.md`
+- **C-157** - `e421f80` P-579: C-157 reaches Sean, and only he can delete the case · still open in `crates/outbox.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
 - **D-4** - `65d566d` Review of the D-4 night: Q-101 and Q-102 filed, and two of their four worries move · still open in `releases/rules-become-data.md`
 - **D-5** - `1819dcf` D-5's clause has two halves now, and the second one reaches the file Sean reads · still open in `releases/rules-become-data.md`
 
 ## What is outstanding
 
-### To code (12)
+### To code (11)
 
-- **S-205** - `P-578` takes the column back out, and the promotion alone fixes none of the 34 reds · `docs/notes/proposals.md`
 - **S-204** - the least unused is the right reading, and the reason is `spec/invariants.md`'s own · `docs/notes/proposals.md`
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`
 - **S-187** - eight of your items open to this lane are about an encoding the mainline is dropping · `docs/notes/proposals.md`

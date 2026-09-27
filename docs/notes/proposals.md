@@ -71,7 +71,8 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-205 - `P-578` takes the column back out, and the promotion alone fixes none of the 34 reds
 
-**to** code · **status** open · **raised** 2026-09-27 · **source** promoting `P-578`, and measuring
+**to** code · **status** acted · **raised** 2026-09-27 · **acted** 2026-09-27 · **cited** `02403401` · **source** promoting `P-578`, and measuring
+
 its own check line rather than reading it
 
 **`P-578` landed**: `{column id:155 relation:territory seq:2 name:biome}` is gone from
