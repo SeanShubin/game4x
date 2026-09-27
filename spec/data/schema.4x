@@ -59,71 +59,71 @@
 
 ## The columns
 
-{column id:1 relation:1 seq:1 name:id}
-{column id:2 relation:1 seq:2 name:name}
-{column id:3 relation:2 seq:1 name:id}
-{column id:4 relation:2 seq:2 name:relation}
-{column id:5 relation:2 seq:3 name:seq}
-{column id:6 relation:2 seq:4 name:name}
-{column id:7 relation:3 seq:1 name:id}
-{column id:8 relation:3 seq:2 name:column}
-{column id:9 relation:3 seq:3 name:to}
-{column id:10 relation:4 seq:1 name:id}
-{column id:11 relation:4 seq:2 name:relation}
-{column id:12 relation:5 seq:1 name:id}
-{column id:13 relation:5 seq:2 name:name}
-{column id:14 relation:6 seq:1 name:id}
-{column id:15 relation:6 seq:2 name:name}
-{column id:16 relation:7 seq:1 name:id}
-{column id:17 relation:7 seq:2 name:rule}
-{column id:18 relation:7 seq:3 name:seq}
-{column id:19 relation:7 seq:4 name:name}
-{column id:20 relation:7 seq:5 name:of}
-{column id:21 relation:8 seq:1 name:id}
-{column id:22 relation:8 seq:2 name:rule}
-{column id:23 relation:8 seq:3 name:seq}
-{column id:24 relation:8 seq:4 name:role}
-{column id:25 relation:8 seq:5 name:relation}
-{column id:26 relation:9 seq:1 name:id}
-{column id:27 relation:9 seq:2 name:clause}
-{column id:28 relation:9 seq:3 name:column}
-{column id:29 relation:9 seq:4 name:input}
-{column id:36 relation:12 seq:1 name:id}
-{column id:37 relation:12 seq:2 name:word}
-{column id:38 relation:13 seq:1 name:id}
-{column id:41 relation:15 seq:1 name:id}
-{column id:42 relation:15 seq:2 name:from}
-{column id:43 relation:15 seq:3 name:to}
+{column id:1 relation:relation seq:1 name:id}
+{column id:2 relation:relation seq:2 name:name}
+{column id:3 relation:column seq:1 name:id}
+{column id:4 relation:column seq:2 name:relation}
+{column id:5 relation:column seq:3 name:seq}
+{column id:6 relation:column seq:4 name:name}
+{column id:7 relation:reference seq:1 name:id}
+{column id:8 relation:reference seq:2 name:column}
+{column id:9 relation:reference seq:3 name:to}
+{column id:10 relation:state seq:1 name:id}
+{column id:11 relation:state seq:2 name:relation}
+{column id:12 relation:role seq:1 name:id}
+{column id:13 relation:role seq:2 name:name}
+{column id:14 relation:rule seq:1 name:id}
+{column id:15 relation:rule seq:2 name:name}
+{column id:16 relation:input seq:1 name:id}
+{column id:17 relation:input seq:2 name:rule}
+{column id:18 relation:input seq:3 name:seq}
+{column id:19 relation:input seq:4 name:name}
+{column id:20 relation:input seq:5 name:of}
+{column id:21 relation:clause seq:1 name:id}
+{column id:22 relation:clause seq:2 name:rule}
+{column id:23 relation:clause seq:3 name:seq}
+{column id:24 relation:clause seq:4 name:role}
+{column id:25 relation:clause seq:5 name:relation}
+{column id:26 relation:binding seq:1 name:id}
+{column id:27 relation:binding seq:2 name:clause}
+{column id:28 relation:binding seq:3 name:column}
+{column id:29 relation:binding seq:4 name:input}
+{column id:36 relation:primitive seq:1 name:id}
+{column id:37 relation:primitive seq:2 name:word}
+{column id:38 relation:territory seq:1 name:id}
+{column id:41 relation:adjacency seq:1 name:id}
+{column id:42 relation:adjacency seq:2 name:from}
+{column id:43 relation:adjacency seq:3 name:to}
 
 
-{column id:47 relation:17 seq:1 name:id}
-{column id:48 relation:17 seq:2 name:clause}
-{column id:49 relation:17 seq:3 name:column}
-{column id:50 relation:17 seq:4 name:value}
+{column id:47 relation:literal seq:1 name:id}
+{column id:48 relation:literal seq:2 name:clause}
+{column id:49 relation:literal seq:3 name:column}
+{column id:50 relation:literal seq:4 name:value}
 
-{column id:51 relation:18 seq:1 name:where}
-{column id:52 relation:18 seq:2 name:what}
-{column id:53 relation:18 seq:3 name:density}
-{column id:54 relation:18 seq:4 name:quantity}
-{column id:55 relation:19 seq:1 name:where}
-{column id:56 relation:19 seq:2 name:what}
-{column id:101 relation:19 seq:3 name:working}
-{column id:57 relation:19 seq:4 name:quantity}
+{column id:51 relation:deposit seq:1 name:where}
+{column id:52 relation:deposit seq:2 name:what}
+{column id:53 relation:deposit seq:3 name:density}
+{column id:54 relation:deposit seq:4 name:quantity}
+{column id:55 relation:extractor seq:1 name:where}
+{column id:56 relation:extractor seq:2 name:what}
+{column id:101 relation:extractor seq:3 name:working}
+{column id:57 relation:extractor seq:4 name:quantity}
 
-{column id:60 relation:21 seq:1 name:id}
-{column id:61 relation:21 seq:2 name:clause}
-{column id:62 relation:21 seq:3 name:column}
-{column id:63 relation:21 seq:4 name:of}
-{column id:64 relation:21 seq:5 name:takes}
+{column id:60 relation:reading seq:1 name:id}
+{column id:61 relation:reading seq:2 name:clause}
+{column id:62 relation:reading seq:3 name:column}
+{column id:63 relation:reading seq:4 name:of}
+{column id:64 relation:reading seq:5 name:takes}
 
-{column id:65 relation:22 seq:1 name:column}
-{column id:66 relation:22 seq:2 name:relation}
+{column id:65 relation:attribute seq:1 name:column}
+{column id:66 relation:attribute seq:2 name:relation}
 
-{column id:67 relation:23 seq:1 name:clause}
-{column id:68 relation:23 seq:2 name:input}
-{column id:69 relation:24 seq:1 name:relation}
-{column id:70 relation:25 seq:1 name:kind}
-{column id:71 relation:25 seq:2 name:family}
+{column id:67 relation:relation-of seq:1 name:clause}
+{column id:68 relation:relation-of seq:2 name:input}
+{column id:69 relation:family seq:1 name:relation}
+{column id:70 relation:member seq:1 name:kind}
+{column id:71 relation:member seq:2 name:family}
 
 
 ## The families, and the kinds that belong to them
@@ -134,11 +134,11 @@
 # `spec/data/families.4x` writes it this way already, and `spec/data/for.4x` uses it for exactly
 # what it is for here: `{for block:build-extractor seq:3 kind:$resource}`.
 
-{column id:72 relation:26 seq:1 name:where}
-{column id:98 relation:26 seq:2 name:moving}
-{column id:73 relation:26 seq:3 name:quantity}
-{column id:74 relation:27 seq:1 name:where}
-{column id:75 relation:27 seq:2 name:quantity}
+{column id:72 relation:unit seq:1 name:where}
+{column id:98 relation:unit seq:2 name:moving}
+{column id:73 relation:unit seq:3 name:quantity}
+{column id:74 relation:resource seq:1 name:where}
+{column id:75 relation:resource seq:2 name:quantity}
 
 
 ## Every kind of thing, as a relation of its own
@@ -151,15 +151,15 @@
 # **This is `spec/data/carries.4x` said in the notation** - a kind and the traits it carries is a
 # relation and its columns.
 
-{column id:76 relation:28 seq:1 name:where}
-{column id:99 relation:28 seq:2 name:moving}
-{column id:77 relation:28 seq:3 name:quantity}
-{column id:78 relation:29 seq:1 name:where}
-{column id:79 relation:29 seq:2 name:quantity}
-{column id:80 relation:30 seq:1 name:where}
-{column id:81 relation:30 seq:2 name:quantity}
-{column id:82 relation:31 seq:1 name:where}
-{column id:83 relation:31 seq:2 name:quantity}
+{column id:76 relation:scout seq:1 name:where}
+{column id:99 relation:scout seq:2 name:moving}
+{column id:77 relation:scout seq:3 name:quantity}
+{column id:78 relation:labor seq:1 name:where}
+{column id:79 relation:labor seq:2 name:quantity}
+{column id:80 relation:metal seq:1 name:where}
+{column id:81 relation:metal seq:2 name:quantity}
+{column id:82 relation:food seq:1 name:where}
+{column id:83 relation:food seq:2 name:quantity}
 
 
 ## How many times a thing may still act
@@ -179,31 +179,31 @@
 # does with `working`, `moving`, `laboring` and `bearing`. Each is a column of the thing that has
 # it, so a readiness cannot outnumber the things holding it without anything saying so.
 
-{column id:102 relation:37 seq:1 name:id}
-{column id:103 relation:37 seq:2 name:clause}
-{column id:104 relation:37 seq:3 name:input}
-{column id:105 relation:37 seq:4 name:value}
-{column id:106 relation:38 seq:1 name:id}
-{column id:107 relation:38 seq:2 name:name}
-{column id:108 relation:39 seq:1 name:kind}
-{column id:109 relation:39 seq:2 name:trait}
-{column id:110 relation:40 seq:1 name:id}
-{column id:111 relation:40 seq:2 name:of}
-{column id:112 relation:40 seq:3 name:is}
-{column id:113 relation:40 seq:4 name:seq}
-{column id:114 relation:41 seq:1 name:id}
-{column id:115 relation:41 seq:2 name:part}
-{column id:116 relation:41 seq:3 name:input}
-{column id:117 relation:41 seq:4 name:value}
-{column id:118 relation:42 seq:1 name:where}
-{column id:119 relation:42 seq:2 name:what}
-{column id:120 relation:42 seq:3 name:quantity}
-{column id:121 relation:43 seq:1 name:of}
-{column id:122 relation:43 seq:2 name:for}
-{column id:123 relation:43 seq:3 name:what}
-{column id:124 relation:43 seq:4 name:per}
-{column id:125 relation:43 seq:5 name:quantity}
-{column id:126 relation:44 seq:1 name:kind}
+{column id:102 relation:assigns seq:1 name:id}
+{column id:103 relation:assigns seq:2 name:clause}
+{column id:104 relation:assigns seq:3 name:input}
+{column id:105 relation:assigns seq:4 name:value}
+{column id:106 relation:trait seq:1 name:id}
+{column id:107 relation:trait seq:2 name:name}
+{column id:108 relation:carries seq:1 name:kind}
+{column id:109 relation:carries seq:2 name:trait}
+{column id:110 relation:part seq:1 name:id}
+{column id:111 relation:part seq:2 name:of}
+{column id:112 relation:part seq:3 name:is}
+{column id:113 relation:part seq:4 name:seq}
+{column id:114 relation:argument seq:1 name:id}
+{column id:115 relation:argument seq:2 name:part}
+{column id:116 relation:argument seq:3 name:input}
+{column id:117 relation:argument seq:4 name:value}
+{column id:118 relation:bin seq:1 name:where}
+{column id:119 relation:bin seq:2 name:what}
+{column id:120 relation:bin seq:3 name:quantity}
+{column id:121 relation:capacity seq:1 name:of}
+{column id:122 relation:capacity seq:2 name:for}
+{column id:123 relation:capacity seq:3 name:what}
+{column id:124 relation:capacity seq:4 name:per}
+{column id:125 relation:capacity seq:5 name:quantity}
+{column id:126 relation:loose seq:1 name:kind}
 
 
 ## What a place has room for, and what each kind takes up
@@ -220,21 +220,21 @@
 # of its columns points at that - so the engine finds it rather than knowing the game calls it
 # `where`.
 
-{column id:87 relation:33 seq:1 name:id}
-{column id:88 relation:33 seq:2 name:name}
-{column id:89 relation:33 seq:3 name:per}
+{column id:87 relation:supply seq:1 name:id}
+{column id:88 relation:supply seq:2 name:name}
+{column id:89 relation:supply seq:3 name:per}
 
-{column id:90 relation:34 seq:1 name:kind}
-{column id:91 relation:34 seq:2 name:what}
-{column id:92 relation:34 seq:3 name:quantity}
+{column id:90 relation:provides seq:1 name:kind}
+{column id:91 relation:provides seq:2 name:what}
+{column id:92 relation:provides seq:3 name:quantity}
 
-{column id:93 relation:36 seq:1 name:kind}
-{column id:94 relation:36 seq:2 name:what}
-{column id:95 relation:36 seq:3 name:quantity}
+{column id:93 relation:consumes seq:1 name:kind}
+{column id:94 relation:consumes seq:2 name:what}
+{column id:95 relation:consumes seq:3 name:quantity}
 
-{column id:96 relation:35 seq:1 name:where}
-{column id:100 relation:35 seq:2 name:moving}
-{column id:97 relation:35 seq:3 name:quantity}
+{column id:96 relation:transport seq:1 name:where}
+{column id:100 relation:transport seq:2 name:moving}
+{column id:97 relation:transport seq:3 name:quantity}
 
 
 ## What points at what
@@ -242,71 +242,71 @@
 # **A reference is always to a relation's `id`.** The engine checks that such a row is there, so a
 # value pointing at nothing is refused when the data is read rather than when it is used.
 
-{reference id:1 column:4 to:1}
-{reference id:2 column:8 to:2}
-{reference id:3 column:9 to:1}
-{reference id:4 column:11 to:1}
-{reference id:5 column:17 to:6}
-{reference id:6 column:20 to:1}
-{reference id:7 column:22 to:6}
-{reference id:8 column:24 to:5}
-{reference id:9 column:25 to:1}
-{reference id:10 column:27 to:8}
-{reference id:11 column:28 to:2}
-{reference id:12 column:29 to:7}
-{reference id:16 column:42 to:13}
-{reference id:17 column:43 to:13}
+{reference id:1 column:4 to:relation}
+{reference id:2 column:8 to:column}
+{reference id:3 column:9 to:relation}
+{reference id:4 column:11 to:relation}
+{reference id:5 column:17 to:rule}
+{reference id:6 column:20 to:relation}
+{reference id:7 column:22 to:rule}
+{reference id:8 column:24 to:role}
+{reference id:9 column:25 to:relation}
+{reference id:10 column:27 to:clause}
+{reference id:11 column:28 to:column}
+{reference id:12 column:29 to:input}
+{reference id:16 column:42 to:territory}
+{reference id:17 column:43 to:territory}
 
 
-{reference id:20 column:48 to:8}
-{reference id:21 column:49 to:2}
+{reference id:20 column:48 to:clause}
+{reference id:21 column:49 to:column}
 
-{reference id:22 column:51 to:48}
-{reference id:23 column:52 to:27}
-{reference id:24 column:55 to:48}
-{reference id:25 column:56 to:27}
+{reference id:22 column:51 to:place}
+{reference id:23 column:52 to:resource}
+{reference id:24 column:55 to:place}
+{reference id:25 column:56 to:resource}
 
-{reference id:28 column:61 to:8}
-{reference id:29 column:62 to:2}
-{reference id:30 column:63 to:8}
-{reference id:31 column:64 to:2}
+{reference id:28 column:61 to:clause}
+{reference id:29 column:62 to:column}
+{reference id:30 column:63 to:clause}
+{reference id:31 column:64 to:column}
 
-{reference id:32 column:65 to:2}
-{reference id:33 column:66 to:1}
+{reference id:32 column:65 to:column}
+{reference id:33 column:66 to:relation}
 
-{reference id:34 column:67 to:8}
-{reference id:35 column:68 to:7}
-{reference id:36 column:69 to:1}
-{reference id:37 column:70 to:1}
-{reference id:38 column:71 to:1}
+{reference id:34 column:67 to:clause}
+{reference id:35 column:68 to:input}
+{reference id:36 column:69 to:relation}
+{reference id:37 column:70 to:relation}
+{reference id:38 column:71 to:relation}
 
-{reference id:41 column:76 to:48}
-{reference id:42 column:78 to:48}
-{reference id:43 column:80 to:48}
-{reference id:44 column:82 to:48}
+{reference id:41 column:76 to:place}
+{reference id:42 column:78 to:place}
+{reference id:43 column:80 to:place}
+{reference id:44 column:82 to:place}
 
-{reference id:45 column:103 to:8}
-{reference id:46 column:104 to:7}
+{reference id:45 column:103 to:clause}
+{reference id:46 column:104 to:input}
 
-{reference id:47 column:89 to:1}
-{reference id:48 column:90 to:1}
-{reference id:49 column:91 to:33}
-{reference id:50 column:93 to:1}
-{reference id:51 column:94 to:33}
-{reference id:52 column:96 to:48}
-{reference id:53 column:108 to:1}
-{reference id:54 column:109 to:38}
-{reference id:55 column:111 to:6}
-{reference id:56 column:112 to:6}
-{reference id:57 column:115 to:40}
-{reference id:58 column:116 to:7}
-{reference id:59 column:118 to:48}
-{reference id:60 column:119 to:27}
-{reference id:61 column:121 to:1}
-{reference id:62 column:122 to:1}
-{reference id:63 column:123 to:27}
-{reference id:64 column:124 to:1}
-{reference id:65 column:126 to:1}
+{reference id:47 column:89 to:relation}
+{reference id:48 column:90 to:relation}
+{reference id:49 column:91 to:supply}
+{reference id:50 column:93 to:relation}
+{reference id:51 column:94 to:supply}
+{reference id:52 column:96 to:place}
+{reference id:53 column:108 to:relation}
+{reference id:54 column:109 to:trait}
+{reference id:55 column:111 to:rule}
+{reference id:56 column:112 to:rule}
+{reference id:57 column:115 to:part}
+{reference id:58 column:116 to:input}
+{reference id:59 column:118 to:place}
+{reference id:60 column:119 to:resource}
+{reference id:61 column:121 to:relation}
+{reference id:62 column:122 to:relation}
+{reference id:63 column:123 to:resource}
+{reference id:64 column:124 to:relation}
+{reference id:65 column:126 to:relation}
 
 
 ## Which relations are the game's state
@@ -314,17 +314,17 @@
 # **This is what bounds the comparison.** `expected.4x` states the state after, and a diff has to
 # know which relations to look at - without this it would compare the rule and the command too.
 
-{state id:1 relation:13}
-{state id:3 relation:15}
-{state id:5 relation:18}
-{state id:6 relation:19}
-{state id:7 relation:28}
-{state id:8 relation:29}
-{state id:9 relation:30}
-{state id:10 relation:31}
-{state id:12 relation:35}
-{state id:13 relation:34}
-{state id:14 relation:36}
+{state id:1 relation:territory}
+{state id:3 relation:adjacency}
+{state id:5 relation:deposit}
+{state id:6 relation:extractor}
+{state id:7 relation:scout}
+{state id:8 relation:labor}
+{state id:9 relation:metal}
+{state id:10 relation:food}
+{state id:12 relation:transport}
+{state id:13 relation:provides}
+{state id:14 relation:consumes}
 
 
 ## Which relations are families, and who belongs
@@ -334,20 +334,20 @@
 # game says a deposit is not a unit - rather than because `move`'s add clause happens to leave a
 # column unbound, which is how it would have been excluded without this.
 
-{family relation:26}
-{family relation:27}
-{family relation:49}
+{family relation:unit}
+{family relation:resource}
+{family relation:stock}
 
-{member kind:28 family:26}
-{member kind:51 family:26}
-{member kind:35 family:26}
-{member kind:30 family:27}
-{member kind:31 family:27}
-{member kind:50 family:27}
-{member kind:30 family:49}
-{member kind:31 family:49}
-{member kind:29 family:49}
-{member kind:50 family:49}
+{member kind:scout family:unit}
+{member kind:ark family:unit}
+{member kind:transport family:unit}
+{member kind:metal family:resource}
+{member kind:food family:resource}
+{member kind:energy family:resource}
+{member kind:metal family:stock}
+{member kind:food family:stock}
+{member kind:labor family:stock}
+{member kind:energy family:stock}
 
 
 ## What a deposit's density is, and what a deposit holds
@@ -362,9 +362,9 @@
 # reason the column is marked: with density in the key it would be a legal state nothing could
 # name.
 
-{attribute column:53 relation:18}
-{attribute column:66 relation:22}
-{attribute column:68 relation:23}
+{attribute column:53 relation:deposit}
+{attribute column:66 relation:attribute}
+{attribute column:68 relation:relation-of}
 
 
 # **An extractor stands in a deposit, so there cannot be more of them than there are deposits.**
@@ -407,7 +407,7 @@
 # **This declares the supply and nothing else.** `per` says what it is measured in, so the check
 # does not have to work out which relation every provider and consumer has in common.
 
-{supply id:1 name:berth per:48}
+{supply id:1 name:berth per:place}
 
 
 ## The three roles a clause can have
@@ -450,10 +450,10 @@
 {trait id:1 name:moving}
 {trait id:2 name:working}
 
-{carries kind:26 trait:1}
-{carries kind:28 trait:1}
-{carries kind:35 trait:1}
-{carries kind:19 trait:2}
+{carries kind:unit trait:moving}
+{carries kind:scout trait:moving}
+{carries kind:transport trait:moving}
+{carries kind:extractor trait:working}
 
 
 ## What a composite is, and why the tree is the point
@@ -556,8 +556,8 @@
 # be visible in the test**, which is Sean's rule and decides it for now: *I need see what the
 # actual numbers are, not some hidden default.*
 
-{state id:15 relation:42}
-{state id:16 relation:43}
+{state id:15 relation:bin}
+{state id:16 relation:capacity}
 
 
 ## What may lie loose, and what may not
@@ -585,7 +585,7 @@
 # not sure our thin-engine needs that theme yet.* **There are no sources here**, so nothing has
 # anywhere to return to, and the theme is noted rather than built.
 
-{loose kind:49}
+{loose kind:stock}
 
 # **Labour is loose and nothing holds it, which together are the whole of *unspent labour is lost*.**
 # Sean, 2026-09-20: *unspent labor does not survive the turn* and *excess labor to be removed the
@@ -631,15 +631,15 @@
 {relation id:46 name:scope}
 {relation id:53 name:soft}
 
-{column id:127 relation:45 seq:1 name:rule}
-{column id:128 relation:46 seq:1 name:rule}
-{column id:129 relation:46 seq:2 name:input}
-{column id:149 relation:53 seq:1 name:clause}
+{column id:127 relation:repeats seq:1 name:rule}
+{column id:128 relation:scope seq:1 name:rule}
+{column id:129 relation:scope seq:2 name:input}
+{column id:149 relation:soft seq:1 name:clause}
 
-{reference id:66 column:127 to:6}
-{reference id:67 column:128 to:6}
-{reference id:68 column:129 to:7}
-{reference id:75 column:149 to:8}
+{reference id:66 column:127 to:rule}
+{reference id:67 column:128 to:rule}
+{reference id:68 column:129 to:input}
+{reference id:75 column:149 to:clause}
 
 
 ## A line that takes what room there is
@@ -725,23 +725,23 @@
 
 {relation id:47 name:citizen}
 
-{column id:130 relation:47 seq:1 name:where}
-{column id:131 relation:47 seq:2 name:hungry}
-{column id:133 relation:47 seq:3 name:bearing}
-{column id:137 relation:47 seq:4 name:laboring}
-{column id:132 relation:47 seq:5 name:quantity}
+{column id:130 relation:citizen seq:1 name:where}
+{column id:131 relation:citizen seq:2 name:hungry}
+{column id:133 relation:citizen seq:3 name:bearing}
+{column id:137 relation:citizen seq:4 name:laboring}
+{column id:132 relation:citizen seq:5 name:quantity}
 
-{reference id:69 column:130 to:48}
+{reference id:69 column:130 to:place}
 
-{state id:17 relation:47}
+{state id:17 relation:citizen}
 
 {trait id:3 name:hungry}
 {trait id:4 name:bearing}
 {trait id:5 name:laboring}
 
-{carries kind:47 trait:3}
-{carries kind:47 trait:4}
-{carries kind:47 trait:5}
+{carries kind:citizen trait:hungry}
+{carries kind:citizen trait:bearing}
+{carries kind:citizen trait:laboring}
 
 # **A place is a layer of a territory, and a thing stands in a place rather than in a territory.**
 # Sean, 2026-09-20: *I no longer think orbits should be separate territories with adjacencies like
@@ -777,12 +777,12 @@
 
 {relation id:50 name:energy}
 
-{column id:140 relation:50 seq:1 name:where}
-{column id:141 relation:50 seq:2 name:quantity}
+{column id:140 relation:energy seq:1 name:where}
+{column id:141 relation:energy seq:2 name:quantity}
 
-{reference id:71 column:140 to:48}
+{reference id:71 column:140 to:place}
 
-{state id:19 relation:50}
+{state id:19 relation:energy}
 
 # **An ark is a unit that can only be in orbit.** Sean, 2026-09-20: *ark can only be in orbit; can
 # spend one energy and one move to move from orbit to orbit; contains a storage container for 1
@@ -798,19 +798,19 @@
 
 {relation id:51 name:ark}
 
-{column id:142 relation:51 seq:1 name:where}
-{column id:143 relation:51 seq:2 name:moving}
-{column id:144 relation:51 seq:3 name:gathering}
-{column id:145 relation:51 seq:4 name:quantity}
+{column id:142 relation:ark seq:1 name:where}
+{column id:143 relation:ark seq:2 name:moving}
+{column id:144 relation:ark seq:3 name:gathering}
+{column id:145 relation:ark seq:4 name:quantity}
 
-{reference id:72 column:142 to:48}
+{reference id:72 column:142 to:place}
 
-{state id:20 relation:51}
+{state id:20 relation:ark}
 
 {trait id:6 name:gathering}
 
-{carries kind:51 trait:1}
-{carries kind:51 trait:6}
+{carries kind:ark trait:moving}
+{carries kind:ark trait:gathering}
 
 # **`{stands-in ...}` says which layer a kind may stand in, and it is how an orbit has capacity for
 # no extractors.** `spec/orbit.md`: *an orbit is not a territory: it has capacity for no extractors,
@@ -830,15 +830,15 @@
 
 {relation id:52 name:stands-in}
 
-{column id:146 relation:52 seq:1 name:kind}
-{column id:147 relation:52 seq:2 name:per}
-{column id:148 relation:52 seq:3 name:layer}
+{column id:146 relation:stands-in seq:1 name:kind}
+{column id:147 relation:stands-in seq:2 name:per}
+{column id:148 relation:stands-in seq:3 name:layer}
 
-{reference id:73 column:146 to:1}
-{reference id:74 column:147 to:1}
+{reference id:73 column:146 to:relation}
+{reference id:74 column:147 to:relation}
 
-{stands-in kind:51 per:48 layer:orbit}
-{stands-in kind:19 per:48 layer:surface}
+{stands-in kind:ark per:place layer:orbit}
+{stands-in kind:extractor per:place layer:surface}
 
 # **`energy` is what a star gives and a recipe spends, and *fuel* is what it is called in a tank.**
 # Sean, 2026-09-20: *fuel is the same thing as energy, when I say fuel I tend to mean energy that
@@ -851,18 +851,18 @@
 
 {relation id:49 name:stock}
 
-{column id:138 relation:49 seq:1 name:where}
-{column id:139 relation:49 seq:2 name:quantity}
+{column id:138 relation:stock seq:1 name:where}
+{column id:139 relation:stock seq:2 name:quantity}
 
 {relation id:48 name:place}
 
-{column id:134 relation:48 seq:1 name:id}
-{column id:135 relation:48 seq:2 name:of}
-{column id:136 relation:48 seq:3 name:layer}
+{column id:134 relation:place seq:1 name:id}
+{column id:135 relation:place seq:2 name:of}
+{column id:136 relation:place seq:3 name:layer}
 
-{reference id:70 column:135 to:13}
+{reference id:70 column:135 to:territory}
 
-{state id:18 relation:48}
+{state id:18 relation:place}
 
 
 ## A pioneer, and what it shares with an ark
@@ -891,21 +891,21 @@
 {relation id:54 name:pioneer}
 {relation id:55 name:founder}
 
-{column id:150 relation:54 seq:1 name:where}
-{column id:151 relation:54 seq:2 name:moving}
-{column id:152 relation:54 seq:3 name:quantity}
-{column id:153 relation:55 seq:1 name:where}
-{column id:154 relation:55 seq:2 name:quantity}
+{column id:150 relation:pioneer seq:1 name:where}
+{column id:151 relation:pioneer seq:2 name:moving}
+{column id:152 relation:pioneer seq:3 name:quantity}
+{column id:153 relation:founder seq:1 name:where}
+{column id:154 relation:founder seq:2 name:quantity}
 
-{reference id:76 column:150 to:48}
+{reference id:76 column:150 to:place}
 
-{state id:21 relation:54}
+{state id:21 relation:pioneer}
 
-{family relation:55}
-{member kind:54 family:26}
-{member kind:54 family:55}
-{member kind:51 family:55}
+{family relation:founder}
+{member kind:pioneer family:unit}
+{member kind:pioneer family:founder}
+{member kind:ark family:founder}
 
-{carries kind:54 trait:1}
+{carries kind:pioneer trait:moving}
 
-{stands-in kind:54 per:48 layer:surface}
+{stands-in kind:pioneer per:place layer:surface}

@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-576** - `H3` moved the rendering and left the source, so the rules you author are still not yours · `decide/proposals.md`
 - **P-575** - the reviewed ruleset can play a game and cannot make one, so the switch is not one pass · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
@@ -28,8 +27,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (11)
+### To code (12)
 
+- **S-199** - `P-576` put the friendly source in `spec/data/`, the suite is red, and the rest is yours · `docs/notes/proposals.md`
 - **S-198** - `P-574` landed: adjacency is directed, the check is yours, and the scenario is not covered by it · `docs/notes/proposals.md`
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`
 - **S-187** - eight of your items open to this lane are about an encoding the mainline is dropping · `docs/notes/proposals.md`

@@ -69,6 +69,57 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-199 - `P-576` put the friendly source in `spec/data/`, the suite is red, and the rest is yours
+
+**to** code · **status** open · **raised** 2026-09-27 · **source** promoting `P-576`, whose instruction crosses the column boundary as `P-563`'s did
+
+**`P-563` moved the wrong file and this lane wrote that instruction.** It named
+`crates/game-model/data/foundation/`, which is the converted form.
+`tests/directories.rs` line 1: *`data/friendly/` is the source and `data/foundation/` is what it
+converts to.*
+
+**Done in this lane's column**: `spec/data/rules.4x` and `spec/data/schema.4x` are now byte-identical
+to the friendly sources - names rather than numbers - and both were numeric before.
+
+## The suite is red and this promotion is why
+
+**`cargo build --workspace` is clean.** `foundation.rs` `include_str!`s
+`../../../spec/data/schema.4x` and `../../../spec/data/rules.4x`, which now carry names, so the
+engine cannot resolve them and `tests/first_test.rs` panics. **Compilation is unaffected because
+`include_str!` only embeds text.**
+
+## What is left, and all of it is yours
+
+```
+crates/game-model/data/friendly/rules.4x    delete - spec/data/ holds it now
+crates/game-model/data/friendly/schema.4x   delete
+the conversion                              generate the foundation form from spec/data/
+                                            into crates/game-model/data/foundation/
+foundation.rs                               include_str! the generated foundation files
+                                            rather than spec/data/
+tests/directories.rs                        convert from spec/data/ rather than data/friendly/
+```
+
+**`engine.4x` does not move.** `P-563` left it in your column because it names no game noun, and
+that is unchanged.
+
+## Why the direction is this way round and not the other
+
+**Sean authors the rules; the engine runs a rendering of them.** That is `spec/README.md` rule 3's
+shape for tests - *a test is stated in the friendly form, and the foundation form is a rendering of
+it* - applied to rules, which is what `P-563` meant and did not achieve.
+
+**So the generated foundation form is output in your column**, and `CLAUDE.md` says a generated file
+has no owner. **Whether it should be committed at all is left to you**: the binary `include_str!`s
+it, and changing that is yours rather than a question for Sean.
+
+## What this unblocks
+
+**`N1`.** He chose to write the four missing design rules - `CreatePlanet`, `SetResource`,
+`SetBiome`, `AddUnitToOrbit` have no counterpart in the reviewed fifteen, so the ruleset can play a
+game and cannot make one. **Those rules are written in the friendly source**, which is why this had
+to move first.
+
 ### S-198 - `P-574` landed: adjacency is directed, the check is yours, and the scenario is not covered by it
 
 **to** code · **status** open · **corrected** 2026-09-27, it asked for a check over a generator that does not exist · **raised** 2026-09-27 · **source** promoting `P-574`, which answers `C-153` and owes you the check that is part of stating it
@@ -9451,6 +9502,7 @@ work the release exists to order.
 | P-572, a regression case is deleted by Sean and that deletion is an approval                                                 | `CLAUDE.md` -> Perspectives                                                                                                                                                                              | 2026-09-26 |
 | P-573, a rule carries through the columns it does not name                                                                   | `spec/invariants.md` -> The game is data                                                                                                                                                                 | 2026-09-27 |
 | P-574, a boundary is shared and a crossing has a direction, and a generated world states both                                | `spec/planet.md` -> Distance                                                                                                                                                                             | 2026-09-27 |
+| P-576, `H3` moved the rendering and left the source, so the friendly form moves to `spec/data/`                              | `spec/data/`, and `crates/game-model/data/` - the rest filed as `S-199`                                                                                                                                  | 2026-09-27 |
 
 ## Forecast cleanups that were checked and not filed
 
