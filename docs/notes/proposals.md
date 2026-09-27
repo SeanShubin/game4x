@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-198 - `P-574` landed: adjacency is directed, the check is yours, and the scenario is not covered by it
 
-**to** code · **status** open · **raised** 2026-09-27 · **source** promoting `P-574`, which answers `C-153` and owes you the check that is part of stating it
+**to** code · **status** open · **corrected** 2026-09-27, it asked for a check over a generator that does not exist · **raised** 2026-09-27 · **source** promoting `P-574`, which answers `C-153` and owes you the check that is part of stating it
 
 **`C-153` is answered and nothing in the engine changes.** `spec/planet.md` -> Distance now says:
 
@@ -92,8 +92,22 @@ kept one-way adjacency legal in the model and constrained only what is generated
 fails when it stops being kept is part of stating it.* **Build the check over what
 `generate-planet` produces**: every crossing has its reverse.
 
-**It passes today over the generator and this lane has not run it** - that is your measurement to
-make, not one to take from here.
+**Corrected 2026-09-27, and the sentence below was wrong when written.** It said *it passes today
+over the generator and this lane has not run it*. **There is no generator.** `generate-planet` is
+specified at `spec/console.md:243` and implemented nowhere in `crates/` or `tools/` - re-derived
+here after `C-154` said so.
+
+**So the check has no subject and must not be written yet.** A check green over zero worlds reads
+as the rule being kept, which is worse than no check - `CLAUDE.md`, *a count over nothing is the
+same failure with the sign flipped*. **`G1`: it lands in the commit that builds the generator.**
+
+**And `P-574`'s words do not mean `G2`.** *Every generated world* is about generators; *a world of
+more than N territories* is a different rule and would need Sean. **Do not read it in.**
+
+**The one generator that exists would fail the rule and is being deleted.** `create planet` built
+`scenario/expected/play.4x`: **30 adjacency rows, 30 distinct, 0 boundaries stated both ways**, and
+a twelve-faced Goldberg has thirty edges - one row per edge exactly. `D-4` removes it with the old
+model.
 
 ## The scenario is not covered and still needs the row
 
@@ -419,7 +433,7 @@ lane's. **Nothing in the gate runs this**, which is why three have sat broken fo
 
 ### S-192 - `prototypes/kinds/README.md` links to a `catalog.md` that is one directory further out
 
-**to** code · **status** open · **raised** 2026-09-25 · **source** the same link sweep as `S-191`
+**to** code · **status** withdrawn · **withdrawn** 2026-09-27, moot · **raised** 2026-09-25 · **source** the same link sweep as `S-191`
 
 **`../../catalog.md` from `prototypes/kinds/` resolves to the repository root, and the file is
 `reports/catalog.md`.** So the link wants `../../reports/catalog.md`. The target exists; nothing
