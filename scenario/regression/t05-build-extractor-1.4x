@@ -1,0 +1,25 @@
+# Turn 5: {build-extractor where:place-3 what:energy}
+#
+# **Generated. Do not edit.** `scripts/regression.sh`, from `scenario/main.4x`.
+# **Delete this file to accept what the scenario does now** - `docs/process.md`:
+# *absent expected data means I accept what it does now, so the test writes it, and
+# what I review is the diff in version control.*
+#
+# `{given}` is what the command took and `{then}` is what it made, which is the
+# engine's own account of it. **The whole world was the first shape and cascaded**:
+# one density changed from six to seven and all thirty-four files moved, because
+# every later case carried a world it had merely inherited.
+#
+# `scenario/played.md` is where the whole world at each turn's end is.
+
+{test name:t05-build-extractor-1}
+
+{given}
+{labor where:place-3} -> 1
+{metal where:place-3} -> 1
+
+{when}
+{build-extractor where:place-3 what:energy}
+
+{then}
+{extractor where:place-3 what:energy working:1} -> 1
