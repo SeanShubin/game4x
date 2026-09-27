@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-576** - `H3` moved the rendering and left the source, so the rules you author are still not yours · `decide/proposals.md`
 - **P-575** - the reviewed ruleset can play a game and cannot make one, so the switch is not one pass · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
