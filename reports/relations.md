@@ -7,7 +7,7 @@ leaves; this is the same view over the rules it played by.
 **The relation is the word each row opens with, and a file holds as many as it likes** -
 `rules.4x` opens thirteen of these and `schema.4x` the rest.
 
-26 relations, 570 rows.
+27 relations, 584 rows.
 
 ## rule
 
@@ -353,7 +353,7 @@ From `spec/data/rules.4x`. 2 row(s), 1 column(s).
 
 ## relation
 
-From `spec/data/schema.4x`. 49 row(s), 2 column(s).
+From `spec/data/schema.4x`. 51 row(s), 2 column(s).
 
 | id  | name        |
 | --- | ----------- |
@@ -406,10 +406,12 @@ From `spec/data/schema.4x`. 49 row(s), 2 column(s).
 | 48  | place       |
 | 54  | pioneer     |
 | 55  | founder     |
+| 56  | biome       |
+| 57  | terrain     |
 
 ## column
 
-From `spec/data/schema.4x`. 139 row(s), 4 column(s).
+From `spec/data/schema.4x`. 142 row(s), 4 column(s).
 
 | id  | name      | relation    | seq |
 | --- | --------- | ----------- | --- |
@@ -445,7 +447,6 @@ From `spec/data/schema.4x`. 139 row(s), 4 column(s).
 | 36  | id        | primitive   | 1   |
 | 37  | word      | primitive   | 2   |
 | 38  | id        | territory   | 1   |
-| 155 | biome     | territory   | 2   |
 | 41  | id        | adjacency   | 1   |
 | 42  | from      | adjacency   | 2   |
 | 43  | to        | adjacency   | 3   |
@@ -552,10 +553,14 @@ From `spec/data/schema.4x`. 139 row(s), 4 column(s).
 | 152 | quantity  | pioneer     | 3   |
 | 153 | where     | founder     | 1   |
 | 154 | quantity  | founder     | 2   |
+| 155 | id        | biome       | 1   |
+| 156 | name      | biome       | 2   |
+| 157 | of        | terrain     | 1   |
+| 158 | is        | terrain     | 2   |
 
 ## reference
 
-From `spec/data/schema.4x`. 67 row(s), 3 column(s).
+From `spec/data/schema.4x`. 69 row(s), 3 column(s).
 
 | column | id  | to        |
 | ------ | --- | --------- |
@@ -626,10 +631,12 @@ From `spec/data/schema.4x`. 67 row(s), 3 column(s).
 | 147    | 74  | relation  |
 | 135    | 70  | territory |
 | 150    | 76  | place     |
+| 157    | 77  | territory |
+| 158    | 78  | biome     |
 
 ## state
 
-From `spec/data/schema.4x`. 18 row(s), 2 column(s).
+From `spec/data/schema.4x`. 19 row(s), 2 column(s).
 
 | id  | relation  |
 | --- | --------- |
@@ -651,6 +658,7 @@ From `spec/data/schema.4x`. 18 row(s), 2 column(s).
 | 20  | ark       |
 | 18  | place     |
 | 21  | pioneer   |
+| 22  | terrain   |
 
 ## family
 
@@ -760,4 +768,17 @@ From `spec/data/schema.4x`. 3 row(s), 3 column(s).
 | ark       | orbit   | place |
 | extractor | surface | place |
 | pioneer   | surface | place |
+
+## biome
+
+From `spec/data/schema.4x`. 6 row(s), 2 column(s).
+
+| id  | name      |
+| --- | --------- |
+| 1   | ocean     |
+| 2   | ice       |
+| 3   | desert    |
+| 4   | grassland |
+| 5   | jungle    |
+| 6   | mountain  |
 

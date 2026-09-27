@@ -178,6 +178,7 @@ fn check(files: &InMemory) -> Result<(), String> {
             "place",
             "provides",
             "scout",
+            "terrain",
             "territory",
             "transport",
         ];
@@ -340,7 +341,7 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
     Ok(())
 }
 
-const REFERENCES: usize = 67;
+const REFERENCES: usize = 69;
 
 /// **References no test world can violate**, because nothing points at them there.
 ///
@@ -349,10 +350,17 @@ const REFERENCES: usize = 67;
 /// day a test starts with food already in a territory this list goes empty, and that is the whole
 /// of what it is for.* **`upkeep` is that day** - a citizen eats food that is already there.
 ///
-/// **An empty list is not the same as no list.** Every reference in the data is now violated by
-/// some world, which is the strongest thing this can say; keeping the constant is what makes the
-/// next unreachable one arrive as a failure rather than as a silence.
-const UNREACHABLE: [&str; 0] = [];
+/// **An empty list is not the same as no list.** Every reference in the data was violated by some
+/// world, which is the strongest thing this can say; keeping the constant is what makes the next
+/// unreachable one arrive as a failure rather than as a silence.
+///
+/// **`P-578` is that next one, and it arrived as the failure this was kept for.** `terrain` joins
+/// a territory to a biome and **not one territory has been given one**, so no test world holds a
+/// `terrain` row and neither of its references has anything to be violated by. `S-205` says so of
+/// the promotion: the join's form is stated, no rule reads a biome, and writing those rows is
+/// `S-200`'s world-making rather than this. **So these two go when a world states a terrain**, and
+/// until then they are named rather than counted.
+const UNREACHABLE: [&str; 2] = ["terrain.of", "terrain.is"];
 
 fn every_reference_forbids_something_in(
     files: &InMemory,

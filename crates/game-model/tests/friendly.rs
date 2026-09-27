@@ -73,20 +73,34 @@ fn every_row_keeps_its_id() {
 /// `what:scout` is looked up among things and cannot be confused with a role of the same name.
 ///
 /// **`column` is the one relation that cannot satisfy it**, because `column.name` is not a name
-/// for the row - it is the token a row is keyed by, so fourteen columns are called `id`. Sean chose
+/// for the row - it is the token a row is keyed by, so many columns are called `id`. Sean chose
 /// to leave it that way rather than give `column` a second column: *binding and column are
 /// machinery.* **So a reference to a column is written as an id**, and this is what says so.
+///
+/// **The duplication is asserted and the number is not**, because the number moves whenever a
+/// relation with an `id` is added and nothing else about this test does. It moved for `P-578`,
+/// and the sentence above had already been left behind once - it said fourteen while the
+/// assertion said twenty. **What the check needs is that the name is not unique**, over a
+/// population that is not empty, which is `CLAUDE.md`'s count over nothing.
 #[test]
 fn a_column_is_referenced_by_id_because_its_name_is_a_token() {
     let game = game_rows();
     let names = Names::of(&game);
 
-    // A column's `name` is the token, and it is not unique: twenty columns are called `id`.
+    // A column's `name` is the token, and it is not unique: many columns are called `id`.
+    let columns = game.iter().filter(|row| row.relation == "column").count();
     let called_id = game
         .iter()
         .filter(|row| row.relation == "column" && row.value("name") == Some("id"))
         .count();
-    assert_eq!(called_id, 20, "twenty columns are called `id`");
+    assert!(
+        columns > 100,
+        "only {columns} columns, so a count among them proves nothing"
+    );
+    assert!(
+        called_id > 1,
+        "`id` names {called_id} of {columns} columns, so a column's name is unique after all"
+    );
 
     // So no column has a name, and a reference to one is its id.
     assert_eq!(names.name("column", "44"), "44");

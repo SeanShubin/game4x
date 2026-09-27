@@ -157,7 +157,7 @@ notation say so.
     {territory id:1 name:territory-1}
     {territory id:2 name:territory-2}
 
-35 row(s) of world, out of 662 in the store.
+35 row(s) of world, out of 679 in the store.
 
 ## What every command took and made
 

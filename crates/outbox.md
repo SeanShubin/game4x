@@ -61,9 +61,61 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-157 - One regression case has said the wrong thing for seventeen commits, and deleting it is yours
+
+**to** spec · **status** open · **raised** 2026-09-27 · **source** running the suite after `S-205`, and bisecting the one red that regenerating did not explain
+
+**derived from** *absent expected data means I accept what it does now* - `docs/process.md`, quoted
+in `crates/game-model/tests/regression.rs`'s own header
+
+**`every_command_has_an_expectation_and_it_is_current` fails on 1 of 35**, and it is not about a
+biome:
+
+```
+scenario/regression/t01-gather-1.4x line 24:
+  was  {ark where:place-2 moving:1 gathering:0} -> 1
+  now  {ark where:place-2 moving:0 gathering:0} -> 1
+```
+
+## Measured, in a detached worktree rather than read off the dates
+
+`cargo test -p game-model --test regression`, run at three commits over a checkout of each:
+
+```
+7282af71   green      the parent
+8c4e0501   this red   `The ark moves once before the rest happens, which P-574 made legal`
+e5c15a7b   this red   the commit before `P-577`, so the biome work is not in it
+HEAD       this red   identical diff, byte for byte, at all three
+```
+
+**So it predates both biome promotions and both are innocent of it.** Nothing has touched
+`scenario/regression/t01-gather-1.4x` or `scenario/main.4x` in the **17 commits** since, which is
+how long the gate has carried it.
+
+**The cause is the change itself and the change was asked for.** Sean, 2026-09-27: *go ahead and
+make the edit so that the ark moves once before the rest happens.* The ark now spends its move
+before `gather` runs, so `moving` is `0` where the case recorded `1`. **The case is stale, not
+wrong about what it saw** - it records what the scenario did before the first command existed.
+
+## Why this lane did not simply regenerate it
+
+**The acceptance gesture is a deletion and it is Sean's.** `regression.rs` states its own three
+rules - *absent, write it; present, compare; ever, never overwrite one that is there* - and
+`CLAUDE.md` says no instance deletes a case while the command it covers is still played.
+**`gather` is still played**, three times in `scenario/main.4x`.
+
+**So there is exactly one thing that closes this and no lane may do it**: delete
+`scenario/regression/t01-gather-1.4x` and run the suite, which writes it back saying `moving:0`.
+The diff in version control is the review, which is the whole of the pattern.
+
+**Filed to you rather than left in a reply** because nothing but a proposal reaches Sean, and this
+is the last red in the suite - every other test in the workspace is green as of this commit.
+
+---
+
 ### C-156 - `P-577` gives `territory` a mandatory column and 380 territory rows do not carry it, 126 of them in `reviewed/`
 
-**to** spec · **status** open · **raised** 2026-09-27 · **source** `S-203` saying *regenerate and both go green*, run rather than read
+**to** spec · **status** acted · **raised** 2026-09-27 · **acted** 2026-09-27 · **source** `S-203` saying *regenerate and both go green*, run rather than read
 
 **derived from** a row is exactly its relation's columns - `Schema::fits`, and *the game's data is a
 set of fully normalized relations* - `spec/invariants.md` -> The data is a normalized relational
@@ -160,6 +212,19 @@ Sean has already read once.
 
 **`S-200` and `S-202` do not touch this** and are being built. Nothing in the engine changes for a
 column no rule reads.
+
+## Closed 2026-09-27: `P-578` took the shape this item could not choose
+
+**Sean chose `C`** - a `biome` table and a `terrain` join - and it landed at `23f406b2`. **No
+territory row had to change**, so the 126 in `reviewed/` were never re-approved, the 126 in
+`spec/tests/` were never edited, and the migration this item said nobody had costed **is not
+owed at all**. `{territory id:1}` is a legal row again because a biome stopped being one of its
+columns.
+
+**`S-205` is the notice, and it is right that the promotion alone fixed none of the 34.** The
+engine reads `crates/game-model/data/foundation/schema.4x`, which still declared the column until
+it was regenerated. **Closed by the work in the commit that closes it** rather than by the
+promotion, which is why the count is quoted there rather than here.
 
 ---
 

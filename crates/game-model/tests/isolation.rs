@@ -205,8 +205,8 @@ fn no_relation_or_rule_the_data_names_appears_in_code_that_runs() {
     }
     assert_eq!(
         nouns.len(),
-        34,
-        "thirty-four nouns the game has - territory, place, adjacency, deposit, extractor, unit, founder, resource, stock, energy, ark, pioneer, scout, transport, labor, metal, food, bin, citizen, move, build-extractor, work, refresh, end-turn, build-bin, discard-disorder, upkeep, perish, breed, toil, gather, launch, deploy, build-pioneer; this found {nouns:?}"
+        36,
+        "thirty-six nouns the game has - territory, place, adjacency, deposit, extractor, unit, founder, resource, stock, energy, ark, pioneer, scout, transport, labor, metal, food, bin, citizen, biome, terrain, move, build-extractor, work, refresh, end-turn, build-bin, discard-disorder, upkeep, perish, breed, toil, gather, launch, deploy, build-pioneer; this found {nouns:?}"
     );
 
     let mut looked = 0;

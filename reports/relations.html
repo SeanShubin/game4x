@@ -435,9 +435,11 @@
 <tr><td>48</td><td>place</td></tr>
 <tr><td>54</td><td>pioneer</td></tr>
 <tr><td>55</td><td>founder</td></tr>
+<tr><td>56</td><td>biome</td></tr>
+<tr><td>57</td><td>terrain</td></tr>
 </tbody>
 </table>
-<p class="count">49 row(s)</p>
+<p class="count">51 row(s)</p>
 <h2 id="column-spec-data-schema-4x">column - spec/data/schema.4x</h2>
 <table>
 <thead>
@@ -476,7 +478,6 @@
 <tr><td>36</td><td>id</td><td>primitive</td><td>1</td></tr>
 <tr><td>37</td><td>word</td><td>primitive</td><td>2</td></tr>
 <tr><td>38</td><td>id</td><td>territory</td><td>1</td></tr>
-<tr><td>155</td><td>biome</td><td>territory</td><td>2</td></tr>
 <tr><td>41</td><td>id</td><td>adjacency</td><td>1</td></tr>
 <tr><td>42</td><td>from</td><td>adjacency</td><td>2</td></tr>
 <tr><td>43</td><td>to</td><td>adjacency</td><td>3</td></tr>
@@ -583,9 +584,13 @@
 <tr><td>152</td><td>quantity</td><td>pioneer</td><td>3</td></tr>
 <tr><td>153</td><td>where</td><td>founder</td><td>1</td></tr>
 <tr><td>154</td><td>quantity</td><td>founder</td><td>2</td></tr>
+<tr><td>155</td><td>id</td><td>biome</td><td>1</td></tr>
+<tr><td>156</td><td>name</td><td>biome</td><td>2</td></tr>
+<tr><td>157</td><td>of</td><td>terrain</td><td>1</td></tr>
+<tr><td>158</td><td>is</td><td>terrain</td><td>2</td></tr>
 </tbody>
 </table>
-<p class="count">139 row(s)</p>
+<p class="count">142 row(s)</p>
 <h2 id="reference-spec-data-schema-4x">reference - spec/data/schema.4x</h2>
 <table>
 <thead>
@@ -659,9 +664,11 @@
 <tr><td>147</td><td>74</td><td>relation</td></tr>
 <tr><td>135</td><td>70</td><td>territory</td></tr>
 <tr><td>150</td><td>76</td><td>place</td></tr>
+<tr><td>157</td><td>77</td><td>territory</td></tr>
+<tr><td>158</td><td>78</td><td>biome</td></tr>
 </tbody>
 </table>
-<p class="count">67 row(s)</p>
+<p class="count">69 row(s)</p>
 <h2 id="state-spec-data-schema-4x">state - spec/data/schema.4x</h2>
 <table>
 <thead>
@@ -686,9 +693,10 @@
 <tr><td>20</td><td>ark</td></tr>
 <tr><td>18</td><td>place</td></tr>
 <tr><td>21</td><td>pioneer</td></tr>
+<tr><td>22</td><td>terrain</td></tr>
 </tbody>
 </table>
-<p class="count">18 row(s)</p>
+<p class="count">19 row(s)</p>
 <h2 id="family-spec-data-schema-4x">family - spec/data/schema.4x</h2>
 <table>
 <thead>
@@ -816,5 +824,20 @@
 </tbody>
 </table>
 <p class="count">3 row(s)</p>
+<h2 id="biome-spec-data-schema-4x">biome - spec/data/schema.4x</h2>
+<table>
+<thead>
+<tr><th>id</th><th>name</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>ocean</td></tr>
+<tr><td>2</td><td>ice</td></tr>
+<tr><td>3</td><td>desert</td></tr>
+<tr><td>4</td><td>grassland</td></tr>
+<tr><td>5</td><td>jungle</td></tr>
+<tr><td>6</td><td>mountain</td></tr>
+</tbody>
+</table>
+<p class="count">6 row(s)</p>
 </body>
 </html>

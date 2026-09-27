@@ -91,7 +91,6 @@
 {column id:36 relation:12 seq:1 name:id}
 {column id:37 relation:12 seq:2 name:word}
 {column id:38 relation:13 seq:1 name:id}
-{column id:155 relation:13 seq:2 name:biome}
 {column id:41 relation:15 seq:1 name:id}
 {column id:42 relation:15 seq:2 name:from}
 {column id:43 relation:15 seq:3 name:to}
@@ -910,3 +909,38 @@
 {carries kind:54 trait:1}
 
 {stands-in kind:54 per:48 layer:surface}
+
+## A biome, and which territory has which
+
+# **A biome is a table and a territory's biome is a join**, which is `trait` and `carries` one
+# relation along: `{trait id:1 name:moving}` is the table and `{carries kind:scout trait:moving}`
+# says who has it. **A property of a biome goes in the table** - Sean, 2026-09-27: *the reason I
+# see for biomes as a relation is so that we can expand upon properties of a biome in one place.*
+#
+# **It starts with a name and nothing else**, because the only thing that reads a biome is the
+# realistic drawing. **A colour or a terrain profile is a column here when the drawing needs one**,
+# in one place, rather than something whatever draws it has to know.
+#
+# **`biome` is vocabulary and `terrain` is state**, which is why only the second carries a
+# `{state}` row - the six do not change while a game runs, and which territory has which is the
+# world. `trait` is not state either, for the same reason.
+
+{relation id:56 name:biome}
+{relation id:57 name:terrain}
+
+{column id:155 relation:56 seq:1 name:id}
+{column id:156 relation:56 seq:2 name:name}
+{column id:157 relation:57 seq:1 name:of}
+{column id:158 relation:57 seq:2 name:is}
+
+{biome id:1 name:ocean}
+{biome id:2 name:ice}
+{biome id:3 name:desert}
+{biome id:4 name:grassland}
+{biome id:5 name:jungle}
+{biome id:6 name:mountain}
+
+{reference id:77 column:157 to:13}
+{reference id:78 column:158 to:56}
+
+{state id:22 relation:57}
