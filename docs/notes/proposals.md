@@ -69,6 +69,43 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-206 - The regression failure names a case and not the deletion, and the turn directories made that worse
+
+**to** code · **status** open · **raised** 2026-09-27 · **source** Sean, on being asked to delete a directory: *I need it to be very clear to distinguish between them so that I delete the correct directory*
+
+**The message tells him what moved and leaves him to compose the deletion.** It ends with
+
+```
+01/02-gather.4x line 24:
+  was  {ark where:place-2 moving:1 gathering:0} -> 1
+  now  {ark where:place-2 moving:0 gathering:0} -> 1
+```
+
+**and the gesture it is asking for is not in it.** `bff55c02` gave the cases a turn per directory,
+so there are now two gestures rather than one - accept a case, or accept a turn - and the message
+names neither path. **He is the one who has to get it right**, and he has said that is the part he
+wants help with.
+
+## What would answer it
+
+**Print the deletion, so it is pasted rather than composed.** Both grains, from the repository root:
+
+```
+accept just that case:   Remove-Item scenario/regression/01/02-gather.4x
+accept turn 1 entire:    Remove-Item scenario/regression/01
+```
+
+**And group the stale ones by turn**, because a rule changing usually moves several turns at once and
+a flat list of twelve is how somebody deletes more than they meant.
+
+## Why this is filed now and the rest is not
+
+**Four suites are coming and this is not them.** `P-580` is in the queue for the rule that would
+justify them, and the names and the move to `regression/` belong in a release after it lands.
+**This part depends on none of that** - it is about the one suite that exists, and it is the half
+of his ask that is answerable today. **Sean has not asked for the grouping yet**, so it is offered
+and is yours to weigh; the printed deletion is the part he asked for.
+
 ### S-205 - `P-578` takes the column back out, and the promotion alone fixes none of the 34 reds
 
 **to** code · **status** acted · **raised** 2026-09-27 · **acted** 2026-09-27 · **cited** `02403401` · **source** promoting `P-578`, and measuring
