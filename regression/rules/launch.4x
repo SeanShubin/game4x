@@ -11,14 +11,16 @@
 {input id:20 rule:launch seq:1 name:where of:place}
 {clause id:40 rule:launch seq:1 role:require relation:place name:clause-40}
 {clause id:41 rule:launch seq:2 role:require relation:place name:clause-41}
-{clause id:42 rule:launch seq:3 role:remove relation:labor name:clause-42}
-{clause id:43 rule:launch seq:4 role:remove relation:metal name:clause-43}
-{clause id:44 rule:launch seq:5 role:remove relation:energy name:clause-44}
-{clause id:45 rule:launch seq:6 role:add relation:ark name:clause-45}
+{clause id:58 rule:launch seq:3 role:require relation:yard name:clause-58}
+{clause id:42 rule:launch seq:4 role:remove relation:labor name:clause-42}
+{clause id:43 rule:launch seq:5 role:remove relation:metal name:clause-43}
+{clause id:44 rule:launch seq:6 role:remove relation:energy name:clause-44}
+{clause id:45 rule:launch seq:7 role:add relation:ark name:clause-45}
 {binding id:53 clause:clause-40 column:134 input:where}
 {binding id:54 clause:clause-42 column:78 input:where}
 {binding id:55 clause:clause-43 column:80 input:where}
 {binding id:56 clause:clause-44 column:140 input:where}
+{binding id:65 clause:clause-58 column:159 input:where}
 {literal id:56 clause:clause-40 column:136 value:surface}
 {literal id:57 clause:clause-41 column:136 value:orbit}
 {literal id:58 clause:clause-42 column:79 value:1}
