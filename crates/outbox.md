@@ -2454,14 +2454,19 @@ be, because the two documents disagree about the thing it changes.**
 > declares none of its own. This holds of every place: an orbit has room for the fuel its units
 > carry and for nothing else, because that is what is in it
 
-`releases/first-release.md` -> *Where things are*, unchanged:
+`releases/first-release.md` -> *Where things are*, **as it read then and as it no longer reads**.
+`c7bcd95c` deleted that section with the other six on Sean's word, so the words below are a record
+of what this item was about and not a quotation of anything. **Shown rather than quoted**, which is
+what stops `every_block_quoted_under_a_file_is_in_that_file` reading a history as a claim:
 
-> Every thing but the game is in another thing, and this release has two sorts of thing that
-> give a place room.
+```text
+Every thing but the game is in another thing, and this release has two sorts of thing that
+give a place room.
 
 | Container     | Holds  | Up to           |
 | ------------- | ------ | --------------- |
 | a unit's tank | energy | the unit's fuel |
+```
 
 **The column is headed *Holds*.** Read that way the row says a tank holds energy, which the
 specification now denies. **Read as capacity the row survives** - a tank contributes room for
