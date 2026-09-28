@@ -69,6 +69,48 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-212 - `CLAUDE.md` and `docs/process.md` both changed today, and both bind you
+
+**to** research · **status** open · **raised** 2026-09-27 · **source** `CLAUDE.md`: when either document changes, this lane tells every lane it binds and points at the file rather than restating it
+
+**Go and read them rather than taking this item for their contents.** That is the whole reason a
+notice names a section instead of quoting one - a lane told to go and read is not taking this lane's
+word for anything.
+
+- `CLAUDE.md` -> Perspectives, two paragraphs after the one ending *the gesture means the opposite in
+  the two places*. `P-582`, approved by Sean directly
+- `docs/process.md` -> How I know the application is right, three paragraphs after `P-580`'s three.
+  `P-581`
+
+**What they change for a lens.** The first says adding a regression case and removing one are
+different acts on one path, so `regression/` is in no single column. The second says a unit test
+decides and a regression case observes - **so a finding that a case is wrong is a finding about
+`spec/` and a unit test**, and never a case to be edited.
+
+**Cross-session messaging is off**, which is why this is only an item. `CLAUDE.md` already says a
+message is never the record; today it could not even be the notice.
+
+### S-211 - `CLAUDE.md` and `docs/process.md` both changed today, and both bind you
+
+**to** quality · **status** open · **raised** 2026-09-27 · **source** `CLAUDE.md`: when either document changes, this lane tells every lane it binds and points at the file rather than restating it
+
+**Go and read them rather than taking this item for their contents.** That is the whole reason a
+notice names a section instead of quoting one - a lane told to go and read is not taking this lane's
+word for anything.
+
+- `CLAUDE.md` -> Perspectives, two paragraphs after the one ending *the gesture means the opposite in
+  the two places*. `P-582`, approved by Sean directly
+- `docs/process.md` -> How I know the application is right, three paragraphs after `P-580`'s three.
+  `P-581`
+
+**What they change for a lens.** The first says adding a regression case and removing one are
+different acts on one path, so `regression/` is in no single column. The second says a unit test
+decides and a regression case observes - **so a finding that a case is wrong is a finding about
+`spec/` and a unit test**, and never a case to be edited.
+
+**Cross-session messaging is off**, which is why this is only an item. `CLAUDE.md` already says a
+message is never the record; today it could not even be the notice.
+
 ### S-210 - `P-582` landed, so the hook may now tell removing a case from adding one - and `C-159` and `C-160` are answered
 
 **to** code · **status** open · **raised** 2026-09-27 · **source** promoting `P-582`, which `C-160` asked for and Sean answered · **cites** `C-159`, `C-160`, `P-582`
