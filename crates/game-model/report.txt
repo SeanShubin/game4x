@@ -33,6 +33,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 refused
   `build-bin` would leave a world where `place 1` holds 3 `bin` and has room for 2
@@ -70,6 +71,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {build-bin where:place-1 what:metal}
   took   {labor where:place-1} -> 1
@@ -103,6 +105,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -134,6 +137,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {end-turn}
   took   {citizen where:place-1 hungry:1} -> 1
@@ -170,6 +174,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -205,6 +210,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {toil where:place-1}
   took   {citizen where:place-1 laboring:1} -> 1
@@ -247,6 +253,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -282,6 +289,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {deploy where:place-2 what:ark}
   took   {ark where:place-2} -> 1
@@ -318,6 +326,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -352,6 +361,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {deploy where:place-2 what:ark}
   took   {ark where:place-2} -> 1
@@ -385,6 +395,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -422,6 +433,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {work where:place-1 what:food}
   took   {extractor where:place-1 what:food working:1} -> 1
@@ -460,6 +472,74 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
+
+as expected
+
+==============================================================================
+a-pioneer-is-built-from-labor-and-metal
+
+old state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+      - {consumes kind:pioneer what:berth} -> 1
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+      - {labor where:place-1} -> 1
+    - metal
+      - {metal where:place-1} -> 1
+    - pioneer
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+    - provides
+      - {provides kind:place what:berth} -> 6
+    - scout
+    - terrain
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+    - yard
+
+command  {build-pioneer where:place-1}
+  took   {labor where:place-1} -> 1
+  took   {metal where:place-1} -> 1
+  made   {pioneer where:place-1 moving:1} -> 1
+
+new state
+  - root
+    - adjacency
+    - ark
+    - bin
+    - capacity
+    - citizen
+    - consumes
+      - {consumes kind:pioneer what:berth} -> 1
+    - deposit
+    - energy
+    - extractor
+    - food
+    - labor
+    - metal
+    - pioneer
+      - {pioneer where:place-1 moving:1} -> 1
+    - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
+    - provides
+      - {provides kind:place what:berth} -> 6
+    - scout
+    - terrain
+    - territory
+      - {territory id:1 name:territory-1}
+    - transport
+    - yard
 
 as expected
 
@@ -495,6 +575,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {deploy where:place-1 what:pioneer}
   took   {pioneer where:place-1} -> 1
@@ -533,6 +614,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -570,6 +652,7 @@ old state
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
     - transport
+    - yard
 
 refused
   `move` removes {scout moving:1 quantity:1 where:2} and nothing matched
@@ -607,6 +690,7 @@ old state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
     - transport
+    - yard
 
 command  {move what:scout from:place-1 to:place-2}
   took   {scout where:place-1 moving:1} -> 1
@@ -639,6 +723,7 @@ new state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
     - transport
+    - yard
 
 as expected
 
@@ -676,6 +761,7 @@ old state
       - {territory id:2 name:territory-2}
     - transport
       - {transport where:place-2 moving:1} -> 3
+    - yard
 
 refused
   `move` would leave a world where `2` consumes berth enough for {provides kind:48 what:1 quantity:7} and is provided 6
@@ -717,6 +803,7 @@ old state
       - {territory id:2 name:territory-2}
     - transport
       - {transport where:place-2 moving:1} -> 2
+    - yard
 
 command  {move what:scout from:place-1 to:place-2}
   took   {scout where:place-1 moving:1} -> 1
@@ -753,6 +840,7 @@ new state
       - {territory id:2 name:territory-2}
     - transport
       - {transport where:place-2 moving:1} -> 2
+    - yard
 
 as expected
 
@@ -787,328 +875,10 @@ old state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
     - transport
+    - yard
 
 refused
   `move` removes {scout moving:1 quantity:1 where:2} and nothing matched
-
-as expected
-
-==============================================================================
-a-second-settlement-launches-the-ark-the-first-could-not
-
-old state
-  - root
-    - adjacency
-      - {adjacency id:1 from:territory-1 to:territory-2}
-    - ark
-      - {ark where:place-2 moving:1 gathering:1} -> 1
-    - bin
-    - capacity
-      - {capacity of:deposit for:extractor what:metal per:place} -> 1
-      - {capacity of:deposit for:extractor what:food per:place} -> 1
-      - {capacity of:deposit for:extractor what:energy per:place} -> 1
-    - citizen
-    - consumes
-      - {consumes kind:pioneer what:berth} -> 1
-    - deposit
-      - {deposit where:place-1 what:metal density:6} -> 1
-      - {deposit where:place-1 what:food density:6} -> 1
-      - {deposit where:place-3 what:metal density:6} -> 1
-      - {deposit where:place-3 what:food density:6} -> 1
-      - {deposit where:place-3 what:energy density:6} -> 1
-    - energy
-    - extractor
-    - food
-    - labor
-    - metal
-    - pioneer
-    - place
-      - {place id:1 of:territory-1 layer:surface name:place-1}
-      - {place id:2 of:territory-1 layer:orbit name:place-2}
-      - {place id:3 of:territory-2 layer:surface name:place-3}
-      - {place id:4 of:territory-2 layer:orbit name:place-4}
-    - provides
-      - {provides kind:place what:berth} -> 6
-    - scout
-    - terrain
-    - territory
-      - {territory id:1 name:territory-1}
-      - {territory id:2 name:territory-2}
-    - transport
-
-command  {deploy where:place-2 what:ark}
-  took   {ark where:place-2} -> 1
-  made   {extractor where:place-1 what:metal working:1} -> 1
-  made   {extractor where:place-1 what:food working:1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
-
-command  {toil where:place-1}
-  took   {citizen where:place-1 laboring:1} -> 1
-  took   {citizen where:place-1 laboring:1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-  made   {labor where:place-1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-  made   {labor where:place-1} -> 1
-
-command  {work where:place-1 what:food}
-  took   {extractor where:place-1 what:food working:1} -> 1
-  took   {labor where:place-1} -> 1
-  made   {extractor where:place-1 what:food working:0} -> 1
-  made   {food where:place-1} -> 6
-
-command  {end-turn}
-  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
-  took   {food where:place-1} -> 1
-  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
-  took   {food where:place-1} -> 1
-  took   {food where:place-1} -> 4
-  took   {labor where:place-1} -> 1
-  took   {extractor where:place-1 what:food working:0} -> 1
-  took   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 4
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
-  made   {extractor where:place-1 what:food working:1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 4
-
-command  {toil where:place-1}
-  took   {citizen where:place-1 laboring:1} -> 1
-  took   {citizen where:place-1 laboring:1} -> 1
-  took   {citizen where:place-1 laboring:1} -> 1
-  took   {citizen where:place-1 laboring:1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
-  made   {labor where:place-1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
-  made   {labor where:place-1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
-  made   {labor where:place-1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
-  made   {labor where:place-1} -> 1
-
-command  {work where:place-1 what:food}
-  took   {extractor where:place-1 what:food working:1} -> 1
-  took   {labor where:place-1} -> 1
-  made   {extractor where:place-1 what:food working:0} -> 1
-  made   {food where:place-1} -> 6
-
-command  {work where:place-1 what:metal}
-  took   {extractor where:place-1 what:metal working:1} -> 1
-  took   {labor where:place-1} -> 1
-  made   {extractor where:place-1 what:metal working:0} -> 1
-  made   {metal where:place-1} -> 6
-
-command  {build-pioneer where:place-1}
-  took   {labor where:place-1} -> 1
-  took   {metal where:place-1} -> 1
-  made   {pioneer where:place-1 moving:1} -> 1
-
-command  {move what:pioneer from:place-1 to:place-3}
-  took   {pioneer where:place-1 moving:1} -> 1
-  made   {pioneer where:place-3 moving:0} -> 1
-
-command  {end-turn}
-  took   {citizen where:place-1 hungry:1} -> 1
-  took   {food where:place-1} -> 1
-  took   {citizen where:place-1 hungry:1} -> 1
-  took   {food where:place-1} -> 1
-  took   {citizen where:place-1 hungry:1} -> 1
-  took   {food where:place-1} -> 1
-  took   {citizen where:place-1 hungry:1} -> 1
-  took   {food where:place-1} -> 1
-  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
-  took   {food where:place-1} -> 1
-  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
-  took   {food where:place-1} -> 1
-  took   {metal where:place-1} -> 5
-  took   {labor where:place-1} -> 1
-  took   {pioneer where:place-3 moving:0} -> 1
-  took   {extractor where:place-1 what:food working:0} -> 1
-  took   {extractor where:place-1 what:metal working:0} -> 1
-  took   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 2
-  took   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 4
-  took   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 2
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
-  made   {pioneer where:place-3 moving:1} -> 1
-  made   {extractor where:place-1 what:food working:1} -> 1
-  made   {extractor where:place-1 what:metal working:1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 2
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 4
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 2
-
-command  {deploy where:place-3 what:pioneer}
-  took   {pioneer where:place-3} -> 1
-  made   {extractor where:place-3 what:metal working:1} -> 1
-  made   {extractor where:place-3 what:food working:1} -> 1
-  made   {citizen where:place-3 hungry:0 bearing:1 laboring:1} -> 2
-
-command  {toil where:place-1}
-  took   {citizen where:place-1 laboring:1} -> 1
-  took   {citizen where:place-1 laboring:1} -> 1
-  took   {citizen where:place-1 laboring:1} -> 1
-  took   {citizen where:place-1 laboring:1} -> 1
-  took   {citizen where:place-1 laboring:1} -> 1
-  took   {citizen where:place-1 laboring:1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
-  made   {labor where:place-1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
-  made   {labor where:place-1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
-  made   {labor where:place-1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
-  made   {labor where:place-1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
-  made   {labor where:place-1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
-  made   {labor where:place-1} -> 1
-
-command  {work where:place-1 what:food}
-  took   {extractor where:place-1 what:food working:1} -> 1
-  took   {labor where:place-1} -> 1
-  made   {extractor where:place-1 what:food working:0} -> 1
-  made   {food where:place-1} -> 6
-
-command  {toil where:place-3}
-  took   {citizen where:place-3 laboring:1} -> 1
-  took   {citizen where:place-3 laboring:1} -> 1
-  made   {citizen where:place-3 hungry:0 bearing:1 laboring:0} -> 1
-  made   {labor where:place-3} -> 1
-  made   {citizen where:place-3 hungry:0 bearing:1 laboring:0} -> 1
-  made   {labor where:place-3} -> 1
-
-command  {work where:place-3 what:food}
-  took   {extractor where:place-3 what:food working:1} -> 1
-  took   {labor where:place-3} -> 1
-  made   {extractor where:place-3 what:food working:0} -> 1
-  made   {food where:place-3} -> 6
-
-command  {end-turn}
-  took   {citizen where:place-1 hungry:1} -> 1
-  took   {food where:place-1} -> 1
-  took   {citizen where:place-1 hungry:1} -> 1
-  took   {food where:place-1} -> 1
-  took   {citizen where:place-1 hungry:1} -> 1
-  took   {food where:place-1} -> 1
-  took   {citizen where:place-1 hungry:1} -> 1
-  took   {food where:place-1} -> 1
-  took   {citizen where:place-1 hungry:1} -> 1
-  took   {food where:place-1} -> 1
-  took   {citizen where:place-1 hungry:1} -> 1
-  took   {food where:place-1} -> 1
-  took   {citizen where:place-3 hungry:0 bearing:1} -> 1
-  took   {food where:place-3} -> 1
-  took   {citizen where:place-3 hungry:0 bearing:1} -> 1
-  took   {food where:place-3} -> 1
-  took   {food where:place-3} -> 4
-  took   {labor where:place-1} -> 5
-  took   {labor where:place-3} -> 1
-  took   {extractor where:place-1 what:food working:0} -> 1
-  took   {extractor where:place-3 what:food working:0} -> 1
-  took   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 6
-  took   {citizen where:place-3 hungry:0 bearing:1 laboring:1} -> 4
-  took   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 6
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-  made   {citizen where:place-3 hungry:0 bearing:1 laboring:1} -> 2
-  made   {citizen where:place-3 hungry:0 bearing:1 laboring:1} -> 2
-  made   {extractor where:place-1 what:food working:1} -> 1
-  made   {extractor where:place-3 what:food working:1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 6
-  made   {citizen where:place-3 hungry:1 bearing:1 laboring:1} -> 4
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 6
-
-command  {toil where:place-3}
-  took   {citizen where:place-3 laboring:1} -> 1
-  took   {citizen where:place-3 laboring:1} -> 1
-  took   {citizen where:place-3 laboring:1} -> 1
-  took   {citizen where:place-3 laboring:1} -> 1
-  made   {citizen where:place-3 hungry:1 bearing:1 laboring:0} -> 1
-  made   {labor where:place-3} -> 1
-  made   {citizen where:place-3 hungry:1 bearing:1 laboring:0} -> 1
-  made   {labor where:place-3} -> 1
-  made   {citizen where:place-3 hungry:1 bearing:1 laboring:0} -> 1
-  made   {labor where:place-3} -> 1
-  made   {citizen where:place-3 hungry:1 bearing:1 laboring:0} -> 1
-  made   {labor where:place-3} -> 1
-
-command  {work where:place-3 what:metal}
-  took   {extractor where:place-3 what:metal working:1} -> 1
-  took   {labor where:place-3} -> 1
-  made   {extractor where:place-3 what:metal working:0} -> 1
-  made   {metal where:place-3} -> 6
-
-command  {build-extractor where:place-3 what:energy}
-  took   {labor where:place-3} -> 1
-  took   {metal where:place-3} -> 1
-  made   {extractor where:place-3 what:energy working:1} -> 1
-
-command  {work where:place-3 what:energy}
-  took   {extractor where:place-3 what:energy working:1} -> 1
-  took   {labor where:place-3} -> 1
-  made   {extractor where:place-3 what:energy working:0} -> 1
-  made   {energy where:place-3} -> 6
-
-command  {launch where:place-3}
-  took   {labor where:place-3} -> 1
-  took   {metal where:place-3} -> 1
-  took   {energy where:place-3} -> 1
-  made   {ark where:place-4 moving:1 gathering:1} -> 1
-
-new state
-  - root
-    - adjacency
-      - {adjacency id:1 from:territory-1 to:territory-2}
-    - ark
-      - {ark where:place-4 moving:1 gathering:1} -> 1
-    - bin
-    - capacity
-      - {capacity of:deposit for:extractor what:metal per:place} -> 1
-      - {capacity of:deposit for:extractor what:food per:place} -> 1
-      - {capacity of:deposit for:extractor what:energy per:place} -> 1
-    - citizen
-      - {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 6
-      - {citizen where:place-3 hungry:1 bearing:1 laboring:0} -> 4
-    - consumes
-      - {consumes kind:pioneer what:berth} -> 1
-    - deposit
-      - {deposit where:place-1 what:metal density:6} -> 1
-      - {deposit where:place-1 what:food density:6} -> 1
-      - {deposit where:place-3 what:metal density:6} -> 1
-      - {deposit where:place-3 what:food density:6} -> 1
-      - {deposit where:place-3 what:energy density:6} -> 1
-    - energy
-      - {energy where:place-3} -> 5
-    - extractor
-      - {extractor where:place-1 what:metal working:1} -> 1
-      - {extractor where:place-1 what:food working:1} -> 1
-      - {extractor where:place-3 what:metal working:0} -> 1
-      - {extractor where:place-3 what:food working:1} -> 1
-      - {extractor where:place-3 what:energy working:0} -> 1
-    - food
-    - labor
-    - metal
-      - {metal where:place-3} -> 4
-    - pioneer
-    - place
-      - {place id:1 of:territory-1 layer:surface name:place-1}
-      - {place id:2 of:territory-1 layer:orbit name:place-2}
-      - {place id:3 of:territory-2 layer:surface name:place-3}
-      - {place id:4 of:territory-2 layer:orbit name:place-4}
-    - provides
-      - {provides kind:place what:berth} -> 6
-    - scout
-    - terrain
-    - territory
-      - {territory id:1 name:territory-1}
-      - {territory id:2 name:territory-2}
-    - transport
 
 as expected
 
@@ -1141,6 +911,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 refused
   `launch` needs {place layer:orbit of:1} and it is not
@@ -1191,6 +962,7 @@ old state
       - {territory id:1 name:territory-1}
     - transport
       - {transport where:place-1 moving:1} -> 1
+    - yard
 
 command  {work where:place-1 what:metal}
   took   {extractor where:place-1 what:metal working:1} -> 1
@@ -1238,6 +1010,7 @@ new state
       - {territory id:1 name:territory-1}
     - transport
       - {transport where:place-1 moving:1} -> 1
+    - yard
 
 as expected
 
@@ -1257,14 +1030,24 @@ old state
     - extractor
     - food
     - labor
+      - {labor where:place-1} -> 1
     - metal
+      - {metal where:place-1} -> 1
     - pioneer
     - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - terrain
     - territory
+      - {territory id:1 name:territory-1}
     - transport
+    - yard
+
+command  {build-yard where:place-1}
+  took   {labor where:place-1} -> 1
+  took   {metal where:place-1} -> 1
+  made   {yard where:place-1} -> 1
 
 new state
   - root
@@ -1282,14 +1065,17 @@ new state
     - metal
     - pioneer
     - place
+      - {place id:1 of:territory-1 layer:surface name:place-1}
     - provides
     - scout
     - terrain
     - territory
+      - {territory id:1 name:territory-1}
     - transport
+    - yard
+      - {yard where:place-1} -> 1
 
-cannot be read against the data as it stands
-  line 35: `yard` has no quantity, so `->` says nothing about it
+as expected
 
 ==============================================================================
 an-ark-cannot-launch-where-there-is-no-yard
@@ -1321,42 +1107,12 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
-command  {launch where:place-1}
-  took   {labor where:place-1} -> 1
-  took   {metal where:place-1} -> 1
-  took   {energy where:place-1} -> 1
-  made   {ark where:place-2 moving:1 gathering:1} -> 1
+refused
+  `launch` needs {yard where:1} and it is not
 
-new state
-  - root
-    - adjacency
-    - ark
-      - {ark where:place-2 moving:1 gathering:1} -> 1
-    - bin
-    - capacity
-    - citizen
-    - consumes
-    - deposit
-    - energy
-    - extractor
-    - food
-    - labor
-    - metal
-    - pioneer
-    - place
-      - {place id:1 of:territory-1 layer:surface name:place-1}
-      - {place id:2 of:territory-1 layer:orbit name:place-2}
-    - provides
-    - scout
-    - terrain
-    - territory
-      - {territory id:1 name:territory-1}
-    - transport
-
-not as expected
-  wanted   {yard where:place-1}
-  got      nothing was refused
+as expected
 
 ==============================================================================
 an-ark-deploys-and-becomes-a-settlement
@@ -1391,6 +1147,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {deploy where:place-2 what:ark}
   took   {ark where:place-2} -> 1
@@ -1430,6 +1187,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -1470,6 +1228,7 @@ old state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
     - transport
+    - yard
 
 command  {deploy where:place-2 what:ark}
   took   {ark where:place-2} -> 1
@@ -1513,6 +1272,7 @@ new state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
     - transport
+    - yard
 
 as expected
 
@@ -1544,6 +1304,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {gather where:place-1}
   took   {ark where:place-1 gathering:1} -> 1
@@ -1576,6 +1337,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -1608,6 +1370,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {end-turn}
   took   {energy where:place-1} -> 3
@@ -1639,6 +1402,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -1672,186 +1436,13 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
-command  {launch where:place-1}
-  took   {labor where:place-1} -> 1
-  took   {metal where:place-1} -> 1
-  took   {energy where:place-1} -> 1
-  made   {ark where:place-2 moving:1 gathering:1} -> 1
+refused
+  `launch` needs {yard where:1} and it is not
 
-new state
-  - root
-    - adjacency
-    - ark
-      - {ark where:place-2 moving:1 gathering:1} -> 1
-    - bin
-    - capacity
-    - citizen
-    - consumes
-    - deposit
-    - energy
-    - extractor
-    - food
-    - labor
-    - metal
-    - pioneer
-    - place
-      - {place id:1 of:territory-1 layer:surface name:place-1}
-      - {place id:2 of:territory-1 layer:orbit name:place-2}
-    - provides
-    - scout
-    - terrain
-    - territory
-      - {territory id:1 name:territory-1}
-    - transport
-
-as expected
-
-==============================================================================
-an-ark-lands-a-planet-is-developed-and-an-ark-leaves
-
-old state
-  - root
-    - adjacency
-    - ark
-      - {ark where:place-2 moving:1 gathering:1} -> 1
-    - bin
-    - capacity
-      - {capacity of:deposit for:extractor what:metal per:place} -> 1
-      - {capacity of:deposit for:extractor what:food per:place} -> 1
-      - {capacity of:deposit for:extractor what:energy per:place} -> 1
-    - citizen
-    - consumes
-    - deposit
-      - {deposit where:place-1 what:metal density:6} -> 1
-      - {deposit where:place-1 what:food density:6} -> 1
-      - {deposit where:place-1 what:energy density:6} -> 1
-    - energy
-    - extractor
-    - food
-    - labor
-    - metal
-    - pioneer
-    - place
-      - {place id:1 of:territory-1 layer:surface name:place-1}
-      - {place id:2 of:territory-1 layer:orbit name:place-2}
-    - provides
-    - scout
-    - terrain
-    - territory
-      - {territory id:1 name:territory-1}
-    - transport
-
-command  {deploy where:place-2 what:ark}
-  took   {ark where:place-2} -> 1
-  made   {extractor where:place-1 what:metal working:1} -> 1
-  made   {extractor where:place-1 what:food working:1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
-
-command  {toil where:place-1}
-  took   {citizen where:place-1 laboring:1} -> 1
-  took   {citizen where:place-1 laboring:1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-  made   {labor where:place-1} -> 1
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:0} -> 1
-  made   {labor where:place-1} -> 1
-
-command  {work where:place-1 what:food}
-  took   {extractor where:place-1 what:food working:1} -> 1
-  took   {labor where:place-1} -> 1
-  made   {extractor where:place-1 what:food working:0} -> 1
-  made   {food where:place-1} -> 6
-
-command  {end-turn}
-  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
-  took   {food where:place-1} -> 1
-  took   {citizen where:place-1 hungry:0 bearing:1} -> 1
-  took   {food where:place-1} -> 1
-  took   {food where:place-1} -> 4
-  took   {labor where:place-1} -> 1
-  took   {extractor where:place-1 what:food working:0} -> 1
-  took   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 4
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
-  made   {citizen where:place-1 hungry:0 bearing:1 laboring:1} -> 2
-  made   {extractor where:place-1 what:food working:1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:1} -> 4
-
-command  {toil where:place-1}
-  took   {citizen where:place-1 laboring:1} -> 1
-  took   {citizen where:place-1 laboring:1} -> 1
-  took   {citizen where:place-1 laboring:1} -> 1
-  took   {citizen where:place-1 laboring:1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
-  made   {labor where:place-1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
-  made   {labor where:place-1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
-  made   {labor where:place-1} -> 1
-  made   {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 1
-  made   {labor where:place-1} -> 1
-
-command  {work where:place-1 what:metal}
-  took   {extractor where:place-1 what:metal working:1} -> 1
-  took   {labor where:place-1} -> 1
-  made   {extractor where:place-1 what:metal working:0} -> 1
-  made   {metal where:place-1} -> 6
-
-command  {build-extractor where:place-1 what:energy}
-  took   {labor where:place-1} -> 1
-  took   {metal where:place-1} -> 1
-  made   {extractor where:place-1 what:energy working:1} -> 1
-
-command  {work where:place-1 what:energy}
-  took   {extractor where:place-1 what:energy working:1} -> 1
-  took   {labor where:place-1} -> 1
-  made   {extractor where:place-1 what:energy working:0} -> 1
-  made   {energy where:place-1} -> 6
-
-command  {launch where:place-1}
-  took   {labor where:place-1} -> 1
-  took   {metal where:place-1} -> 1
-  took   {energy where:place-1} -> 1
-  made   {ark where:place-2 moving:1 gathering:1} -> 1
-
-new state
-  - root
-    - adjacency
-    - ark
-      - {ark where:place-2 moving:1 gathering:1} -> 1
-    - bin
-    - capacity
-      - {capacity of:deposit for:extractor what:metal per:place} -> 1
-      - {capacity of:deposit for:extractor what:food per:place} -> 1
-      - {capacity of:deposit for:extractor what:energy per:place} -> 1
-    - citizen
-      - {citizen where:place-1 hungry:1 bearing:1 laboring:0} -> 4
-    - consumes
-    - deposit
-      - {deposit where:place-1 what:metal density:6} -> 1
-      - {deposit where:place-1 what:food density:6} -> 1
-      - {deposit where:place-1 what:energy density:6} -> 1
-    - energy
-      - {energy where:place-1} -> 5
-    - extractor
-      - {extractor where:place-1 what:metal working:0} -> 1
-      - {extractor where:place-1 what:food working:1} -> 1
-      - {extractor where:place-1 what:energy working:0} -> 1
-    - food
-    - labor
-    - metal
-      - {metal where:place-1} -> 4
-    - pioneer
-    - place
-      - {place id:1 of:territory-1 layer:surface name:place-1}
-      - {place id:2 of:territory-1 layer:orbit name:place-2}
-    - provides
-    - scout
-    - terrain
-    - territory
-      - {territory id:1 name:territory-1}
-    - transport
-
-as expected
+not as expected
+  refused  `launch` needs {yard where:place-1} and it is not
 
 ==============================================================================
 an-extractor-cannot-be-built-where-the-deposits-are-taken
@@ -1886,6 +1477,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 refused
   `build-extractor` would leave a world where `place 1` holds 2 `extractor` and has room for 1
@@ -1923,6 +1515,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 refused
   `build-extractor` would leave a world where `place 1` holds 1 `extractor` and has room for 0
@@ -1961,6 +1554,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 refused
   `work` removes {extractor quantity:1 what:31 where:1 working:1} and nothing matched
@@ -1998,6 +1592,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 refused
   `work` removes {labor quantity:1 where:1} and nothing matched
@@ -2036,6 +1631,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {build-extractor where:place-1 what:food}
   took   {labor where:place-1} -> 1
@@ -2070,6 +1666,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -2105,6 +1702,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {work where:place-1 what:food}
   took   {extractor where:place-1 what:food working:1} -> 1
@@ -2141,6 +1739,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -2172,6 +1771,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {breed}
   took   {citizen where:place-1 hungry:0 bearing:1} -> 1
@@ -2206,6 +1806,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -2237,6 +1838,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {end-turn}
   took   {citizen where:place-1 hungry:1} -> 1
@@ -2281,6 +1883,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -2318,6 +1921,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {discard-disorder}
   took   {metal where:place-1} -> 22
@@ -2354,6 +1958,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -2391,6 +1996,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {end-turn}
   took   {scout where:place-1 moving:0} -> 2
@@ -2427,6 +2033,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -2464,6 +2071,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {end-turn}
   took   {metal where:place-1} -> 22
@@ -2500,6 +2108,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -2543,6 +2152,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {work where:place-1 what:metal}
   took   {extractor where:place-1 what:metal working:1} -> 1
@@ -2586,6 +2196,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -2629,6 +2240,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {build-extractor where:place-1 what:metal}
   took   {labor where:place-1} -> 1
@@ -2672,6 +2284,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -2705,6 +2318,7 @@ old state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
     - transport
+    - yard
 
 refused
   `move` needs {place id:2 layer:surface} and it is not
@@ -2745,6 +2359,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 refused
   `work` removes {extractor quantity:1 what:31 where:1 working:1} and nothing matched
@@ -2781,6 +2396,7 @@ old state
     - transport
       - {transport where:place-1 moving:0} -> 1
       - {transport where:place-1 moving:1} -> 2
+    - yard
 
 command  {refresh what:unit trait:moving}
   took   {scout where:place-1 moving:0} -> 2
@@ -2813,6 +2429,7 @@ new state
       - {territory id:1 name:territory-1}
     - transport
       - {transport where:place-1 moving:1} -> 3
+    - yard
 
 as expected
 
@@ -2846,6 +2463,7 @@ old state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
     - transport
+    - yard
 
 command  {move what:scout from:place-1 to:place-2}
   took   {scout where:place-1 moving:1} -> 1
@@ -2879,6 +2497,7 @@ new state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
     - transport
+    - yard
 
 as expected
 
@@ -2915,6 +2534,7 @@ old state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
     - transport
+    - yard
 
 command  {upkeep}
   took   {citizen where:place-1 hungry:1} -> 1
@@ -2953,6 +2573,7 @@ new state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
     - transport
+    - yard
 
 as expected
 
@@ -2988,6 +2609,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {work where:place-1 what:food}
   took   {extractor where:place-1 what:food working:1} -> 1
@@ -3034,6 +2656,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -3065,6 +2688,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {refresh what:scout trait:moving}
   took   {scout where:place-1 moving:0} -> 3
@@ -3094,6 +2718,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -3129,6 +2754,7 @@ old state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
     - transport
+    - yard
 
 command  {end-turn}
   took   {citizen where:place-1 hungry:1} -> 1
@@ -3174,6 +2800,7 @@ new state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
     - transport
+    - yard
 
 as expected
 
@@ -3212,6 +2839,7 @@ old state
     - transport
       - {transport where:place-1 moving:1} -> 1
       - {transport where:place-2 moving:1} -> 2
+    - yard
 
 refused
   `move` would leave a world where `2` consumes berth enough for {provides kind:48 what:1 quantity:7} and is provided 6
@@ -3249,6 +2877,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {build-bin where:place-1 what:food}
   took   {labor where:place-1} -> 1
@@ -3282,6 +2911,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -3318,6 +2948,7 @@ old state
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
     - transport
+    - yard
 
 refused
   `move` needs {adjacency from:1 to:3} and it is not
@@ -3357,6 +2988,7 @@ old state
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
     - transport
+    - yard
 
 command  {move what:scout from:place-1 to:place-2}
   took   {scout where:place-1 moving:1} -> 1
@@ -3400,6 +3032,7 @@ new state
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
     - transport
+    - yard
 
 as expected
 
@@ -3436,6 +3069,7 @@ old state
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
     - transport
+    - yard
 
 command  {move what:scout from:place-1 to:place-2}
   took   {scout where:place-1 moving:1} -> 1
@@ -3471,6 +3105,7 @@ new state
       - {territory id:2 name:territory-2}
       - {territory id:3 name:territory-3}
     - transport
+    - yard
 
 as expected
 
@@ -3502,6 +3137,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 refused
   `gather` needs {ark gathering:1 where:1} and it is not
@@ -3536,6 +3172,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {end-turn}
   took   {citizen where:place-1 hungry:1} -> 1
@@ -3584,6 +3221,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -3618,6 +3256,7 @@ old state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
     - transport
+    - yard
 
 command  {toil where:place-1}
   took   {citizen where:place-1 laboring:1} -> 1
@@ -3655,6 +3294,7 @@ new state
       - {territory id:1 name:territory-1}
       - {territory id:2 name:territory-2}
     - transport
+    - yard
 
 as expected
 
@@ -3690,6 +3330,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {work where:place-1 what:food}
   took   {extractor where:place-1 what:food working:1} -> 1
@@ -3732,6 +3373,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -3767,6 +3409,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {build-extractor where:place-1 what:food}
   took   {labor where:place-1} -> 1
@@ -3804,6 +3447,7 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected
 
@@ -3835,6 +3479,7 @@ old state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 command  {upkeep}
   took   {citizen where:place-1 hungry:1} -> 1
@@ -3869,5 +3514,6 @@ new state
     - territory
       - {territory id:1 name:territory-1}
     - transport
+    - yard
 
 as expected

@@ -35,6 +35,7 @@
 //!
 //! `cargo run --example render`
 
+use std::collections::BTreeSet;
 use std::path::PathBuf;
 
 use friendly_notation as friendly;
@@ -56,13 +57,52 @@ pub fn files() -> Vec<(String, bool)> {
         ("script.4x".to_string(), false),
         ("setup.4x".to_string(), false),
     ];
-    let mut tests: Vec<String> =
-        std::fs::read_dir(mine().join("data").join("foundation").join("tests"))
-            .expect("data/foundation/tests")
+    // **Listed from the source, because the source is what every caller then reads.**
+    //
+    // **This listed `data/foundation/tests/` and resolved each name to `spec/tests/`**, so a test
+    // whose source was deleted and whose generated form survived took the whole program down:
+    // *`../../spec/tests/a-second-settlement-launches-the-ark-the-first-could-not.4x`: The system
+    // cannot find the file specified.* `51a13065` removed two sources under `P-584` and
+    // `scripts/review.ps1` stopped opening at all.
+    //
+    // **Asking the generated directory which sources exist is `S-214` one layer down** - there it
+    // was the page's list, here it is this one, and both answered *what has been rendered* where
+    // the question was *what is there to render*.
+    //
+    // **A record whose test is gone is not lost by this.**
+    // `every_record_of_a_reading_names_a_test_that_is_there` walks the records and is what reports
+    // one, and `CLAUDE.md` says the application shows it so that a rename is two things Sean can
+    // see rather than one nobody may touch.
+    // **In both spellings, because every caller reads both.** Listing either one alone panics on
+    // the other: from the generated side, a source Sean deleted is gone; from the source side, a
+    // test he has not read yet has no generated form. **Both are states the process allows** -
+    // `51a13065` made the first and `P-584`'s replacement test the second, within one commit of
+    // each other.
+    //
+    // **Nothing is lost by the intersection.** A record whose test is gone is
+    // `every_record_of_a_reading_names_a_test_that_is_there`'s, an unread test is
+    // `foundation.rs`'s to name, and a reading that never reaches the suite is
+    // `every_reading_reaches_the_suite_and_everything_the_suite_runs_was_read`'s. **This function
+    // converts and builds name tables**; which files ought to exist is three other checks'
+    // question and not one it can answer by falling over.
+    let named = |at: &str| -> BTreeSet<String> {
+        std::fs::read_dir(mine().join(at))
+            .unwrap_or_else(|why| panic!("{at}: {why}"))
             .filter_map(|it| it.ok())
             .filter_map(|it| it.file_name().to_str().map(str::to_string))
             .filter(|name| name.ends_with(".4x"))
-            .collect();
+            .collect()
+    };
+    let source = named("../../spec/tests");
+    let rendered = named("data/foundation/tests");
+    let mut tests: Vec<String> = source.intersection(&rendered).cloned().collect();
+    assert!(
+        tests.len() * 2 > source.len() + rendered.len() - tests.len(),
+        "{} test(s) are in both spellings against {} in one, which is too few to be the same \
+         set of tests",
+        tests.len(),
+        source.len() + rendered.len() - 2 * tests.len()
+    );
     tests.sort();
     all.extend(
         tests

@@ -192,10 +192,24 @@ fn a_test_sets_its_sections_apart() {
     // put the friendly side in `spec/tests/`, where it is the specification; the foundation side
     // stayed, being converted from it. **The sections have to be apart in both**, because a
     // reader reads one and the engine runs the other.
+    // **A test may be in one spelling and not the other, and that is reported elsewhere.**
+    // `reviewed/` can hold a record whose source Sean has deleted - `51a13065` - and
+    // `spec/tests/` can hold a source he has not read yet, which has no generated form until he
+    // does. **Both are states the process allows**, and both have a check of their own:
+    // `every_record_of_a_reading_names_a_test_that_is_there` and
+    // `every_reading_reaches_the_suite_and_everything_the_suite_runs_was_read`.
+    //
+    // **So a missing counterpart is skipped here rather than panicked on.** This asserted the
+    // three directories were one population and took the suite down when they stopped being -
+    // which said nothing this file is about, and hid what it is about behind a file-not-found.
+    let mut skipped = 0;
     for directory in ["data/foundation/tests", "../../spec/tests"] {
         for file in every_test() {
             let named = file.replace("data/foundation/tests", directory);
-            let text = std::fs::read_to_string(mine().join(&named)).expect(&named);
+            let Ok(text) = std::fs::read_to_string(mine().join(&named)) else {
+                skipped += 1;
+                continue;
+            };
             let lines: Vec<&str> = text.lines().collect();
             for (at, line) in lines.iter().enumerate() {
                 let opens = matches!(line.trim(), "{given}" | "{when}" | "{then}" | "{refused}");
@@ -221,11 +235,22 @@ fn a_test_sets_its_sections_apart() {
         }
     }
     // **Four a file and two directories**, so a test file that stated no sections at all would
-    // pass every assertion above and be caught here.
+    // pass every assertion above and be caught here. **Less what was skipped**, so the count
+    // still says every file present was read and a skip cannot hide an unchecked one.
     assert_eq!(
-        checked,
+        checked + skipped * 4,
         every_test().len() * 8,
-        "four marks in each test, in each of the two directories"
+        "four marks in each test, in each of the two directories; {skipped} file(s) were in one \
+         spelling and not the other"
+    );
+    // **And a skip is a state, not a condition to live in.** Every one is an orphaned record or
+    // an unread test, and both have a check that names them - so this only refuses the case where
+    // the two directories have stopped overlapping at all.
+    assert!(
+        skipped * 4 < every_test().len(),
+        "{skipped} of {} file(s) were in one spelling only, which is too many for the two \
+         directories to be about the same tests",
+        every_test().len()
     );
 }
 
