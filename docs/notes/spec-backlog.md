@@ -8,6 +8,30 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## 2026-09-28 - a unit test is small enough to hold in your head, and an arc is the scenario's
+
+**Sean**, on `a-second-settlement-launches-the-ark-the-first-could-not`: *looks more like a scenario
+test than a unit test. There is too much going on for me to track in my head. It is not
+superficially clear to me why the first settlement could not launch the ark. The unit test area is
+for independently testing all the parts small enough for a human to review. The reason the scenario
+test is broken down into so many parts is that a human can't validate the whole scenario in his
+head, but a human can go to individual steps of the scenario to validate them.*
+
+**Measured, over `spec/tests/`**: 44 of 56 tests fire one command, 8 fire two and 2 fire three.
+**The other two are nine and twenty-one** - `an-ark-lands-a-planet-is-developed-and-an-ark-leaves`
+and the one he was reading.
+
+**And his specific complaint has a specific cause worth keeping.** The first settlement cannot launch
+because `place-1` has no energy deposit and `launch` removes an energy. **The test's title rests on a
+row that is not there**, so a reader has to notice an absence among twelve present rows.
+
+**Nothing in `spec/README.md` or `docs/process.md` says how big a test may be.** Rule 3 says a test
+is the primary statement and says nothing about its size, and `P-581` says a regression case
+observes rather than decides - **neither says that an arc belongs to the scenario.**
+
+Filed as `P-584`.
+
+
 ## 2026-09-27 - a regression case is read, never authored, and behaviour changes through a unit test
 
 **Sean**, having settled the four suites and been asked nothing about this: *My intended workflow is
