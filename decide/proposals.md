@@ -28,8 +28,12 @@ without anything noticing*:
 > The scenario is broken into a case per command for exactly this reason: I cannot validate a whole
 > playthrough at once, and I can validate any step of one.
 >
-> **So a test's `when` is one command, or few.** Where a rule needs a world that took several
-> commands to build, those commands go in the `given` as state rather than as a story.
+> **That is a shape rather than a limit.** The vast majority of tests fire one command, a small
+> minority fire two, and three is rare. **More than three is imaginable and has one justification**:
+> a single thing being checked that needs something simple done repeatedly, because the outcome only
+> appears under that repetition. **Anything else with a long `when` is an arc** - and where a rule
+> needs a world that took several commands to build, those commands belong in the `given` as state
+> rather than as a story.
 >
 > **And a test never turns on an absent row.** What is missing cannot be read, so a test whose point
 > is that something *could not* happen names what was lacking rather than leaving me to notice which
