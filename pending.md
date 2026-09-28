@@ -21,6 +21,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-217** - `78fafb2` S-217: the application shows the orphan it was dying on, and two readers stop assuming one population · still open in `docs/notes/proposals.md`
 - **S-215** - `4b6ee57` S-215: a reading that does not reach the suite is named, and the gate is red until it does · still open in `docs/notes/proposals.md`
 - **S-214** - `32c46b0` S-214: the review application lists the source, so an unread test can be read · still open in `docs/notes/proposals.md`
 - **S-213** - `1c8f2bc` S-213: the Yard lands in the data - a relation, a rule, and launch's missing require · still open in `docs/notes/proposals.md`

@@ -1,0 +1,36 @@
+# A pioneer costs one labor and one metal, the same as an extractor, a bin and a yard, and stands
+# where it was built with its move unspent.
+#
+# **Written because removing the arc tests left one gap and this was it.** `build-pioneer` was fired
+# by exactly one test - `a-second-settlement-launches-the-ark-the-first-could-not`, twenty-one
+# commands - so what a pioneer costs was stated only inside a story. **Every other command keeps a
+# test.**
+#
+# **`moving:1` is the whole of what this adds over the three tests beside it.** Sean, 2026-09-20,
+# quoted in `spec/data/rules.4x`: *Generally i want things created with full capability* - so a
+# pioneer built this turn walks this turn, and `a-pioneer-settles-the-ground-it-is-standing-on`
+# takes it from there.
+#
+# **The two berth rows are structure rather than setup.** A pioneer takes a berth, so a place with
+# none declared has room for nothing and the rule would be refused for a reason this test is not
+# about.
+
+{test name:a-pioneer-is-built-from-labor-and-metal}
+
+{given}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{provides kind:place what:berth} -> 6
+{consumes kind:pioneer what:berth} -> 1
+{labor where:place-1} -> 1
+{metal where:place-1} -> 1
+
+{when}
+{build-pioneer where:place-1}
+
+{then}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{provides kind:place what:berth} -> 6
+{consumes kind:pioneer what:berth} -> 1
+{pioneer where:place-1 moving:1} -> 1
