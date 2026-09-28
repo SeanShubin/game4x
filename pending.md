@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-581** - A regression case is read and never authored, and behaviour changes through a unit test · `decide/proposals.md`
 - **P-582** - `regression/` is in no column, and adding a case and removing one are different acts on one path · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
@@ -22,6 +21,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-209** - `1376628` S-209: both doors run both binaries, and the check that would have caught it · still open in `docs/notes/proposals.md`
 - **C-159** - `a5b36df` tools/spec goes green, two dead links go, and C-159's correction lands · still open in `crates/outbox.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
 - **D-4** - `1e73500` C-159: S-207's forty is ninety-three, and the rest of D-4 is the console migration · still open in `releases/rules-become-data.md`
@@ -129,6 +129,7 @@ it exists to ask.
 - `spec/resources.md` -> The list - P-49, P-65, P-338, P-389
 - `CLAUDE.md` -> What done means - P-490, P-515, P-550
 - `docs/process.md` -> All lanes - P-247, P-248, P-324
+- `docs/process.md` -> How I know the application is right - P-317, P-580, P-581
 - `docs/process.md`, a new section - P-204, P-211, P-401
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Kinds, Traits - P-192, P-322, P-334
@@ -137,7 +138,6 @@ it exists to ask.
 - `spec/planet.md` -> Distance - P-24, P-349, P-574
 - `spec/units.md` -> What a unit is - P-66, P-486, P-524
 - `docs/process.md` - P-289, P-291
-- `docs/process.md` -> How I know the application is right - P-317, P-580
 - `docs/process.md` -> Quality instance - P-244, P-294
 - `docs/process.md` -> Specification Instance - P-292, P-329
 - `docs/process.md` -> Starting the instances - P-268, P-273

@@ -161,6 +161,21 @@ not read a diff of.
 nothing for a case to state about one - and the day a local command has a case is the day the game
 reads the interface.
 
+**A unit test decides and a regression case observes.** I change what the game does by telling a
+lane to write a unit test, which I read one at a time, and I add one when we find behaviour the
+specification does not state and a unit test could. **A regression case is never where a behaviour
+is decided** - not one of the four suites, and not the one that holds a case per rule.
+
+**So a case that confuses me is a question, not a defect I fix.** I say so to the specification and
+the code lanes, and one of two things comes back: it is confusing because it is wrong, or it is
+right and I understand it once it is explained. **Either way the correction lands in `spec/` and in
+a unit test**, and the case moves afterwards because what it observes moved.
+
+**I never modify a regression case.** I ask a lane to change it - which means changing whatever
+generates it, since a hand edit is overwritten - then I read the result, and I delete it if I
+approve. **Deleting is the only thing I do to one.** And I may ask a lane to add cases so that a
+new feature is covered, which is asking for coverage rather than for a behaviour.
+
 A test is there for what I cannot reliably repeat. **I can remember to do a thing the first time;
 what I cannot do is remember a mundane check every time after that**, and that is what a failing
 test is for. So a check earns its place by guarding the repetition, not the one-off.

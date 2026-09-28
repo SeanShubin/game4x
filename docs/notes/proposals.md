@@ -9937,6 +9937,7 @@ work the release exists to order.
 | P-577, `B3` - a biome is a column on a territory, the way a layer is a column on a place                                     | `spec/data/schema.4x`                                                                                                                                                                                    | 2026-09-27 |
 | P-578, `C`, for your reason rather than mine: a biome table properties can grow in                                           | `spec/data/schema.4x`                                                                                                                                                                                    | 2026-09-27 |
 | P-580, A generated suite per type of thing that is data, and the line is the transition                                      | `docs/process.md` -> How I know the application is right                                                                                                                                                 | 2026-09-27 |
+| P-581, A regression case is read and never authored, and behaviour changes through a unit test                               | `docs/process.md` -> How I know the application is right                                                                                                                                                 | 2026-09-28 |
 
 ## Forecast cleanups that were checked and not filed
 
