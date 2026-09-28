@@ -46,23 +46,36 @@ pub fn column_of_source() -> String {
     body.to_string()
 }
 
-/// Which column the hook puts a path in, or `None` where it assigns none.
+/// Which column the hook puts a path in when that path is arriving, or `None` for none.
+///
+/// **A path alone is the question for every directory but one.** `regression/` reads the act as
+/// well - `P-582` - so this is `column_of_act(path, "added")` and the other spelling is below.
+pub fn column_of(path: &str) -> Option<String> {
+    column_of_act(path, "added")
+}
+
+/// Which column the hook puts a path in, given what is happening to it.
 ///
 /// Runs the hook's own `sh` function, from the repository root, because it asks the tree
 /// which `tools/` directories belong to a lens.
-pub fn column_of(path: &str) -> Option<String> {
-    let script = format!("{}\ncolumn_of \"$1\"\n", column_of_source());
+///
+/// **`act` is `removed` or `added`**, and only `regression/` reads it: *adding a case and
+/// removing one are different acts on the same path, and the hook tells them apart* -
+/// `CLAUDE.md` -> Perspectives.
+pub fn column_of_act(path: &str, act: &str) -> Option<String> {
+    let script = format!("{}\ncolumn_of \"$1\" \"$2\"\n", column_of_source());
     let out = Command::new("sh")
         .arg("-c")
         .arg(&script)
         .arg("sh")
         .arg(path)
+        .arg(act)
         .current_dir(root())
         .output()
         .expect("sh should run the hook's own function");
     assert!(
         out.status.success(),
-        "`column_of {path}` failed: {}",
+        "`column_of {path} {act}` failed: {}",
         String::from_utf8_lossy(&out.stderr)
     );
     let said = String::from_utf8_lossy(&out.stdout).trim().to_string();

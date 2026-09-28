@@ -4,7 +4,7 @@
 //! cases, plus the one a hand run cannot do: asking whether every path in this tree resolves
 //! to a column at all.
 
-use hooks::{column_of, root, tracked};
+use hooks::{column_of, column_of_act, root, tracked};
 
 /// Each path the hook is meant to place, and where.
 ///
@@ -24,10 +24,11 @@ fn every_kind_of_path_lands_in_the_column_that_owns_it() {
         ("crates/game-model/src/game.rs", Some("code")),
         ("prototypes/kinds/src/lib.rs", Some("code")),
         ("scenario/commands/play.4x", Some("code")),
-        // **`D-6` moved the cases out of `scenario/` and the column did not move with
-        // them** - the pattern is named on its own line in the hook for that reason. `C-160`
-        // asks whether it should be `sean` like `reviewed/`; this says what it is today.
-        ("regression/rules/move.4x", Some("code")),
+        // **A case arriving is nobody's** - `P-582`. It is written by the test, and committing
+        // what the test wrote is publishing rather than approving, so it spans nothing and rides
+        // with whatever lands it. **Removing one is Sean's**, which is the act this spelling
+        // cannot ask about; `a_case_arriving_is_nobodys_and_removing_one_is_seans` does.
+        ("regression/rules/move.4x", None),
         ("reports/catalog.md", Some("code")),
         ("hooks/pre-commit", Some("code")),
         ("tools/outbox/src/lib.rs", Some("code")),
@@ -99,6 +100,22 @@ fn a_lens_owns_its_own_tools_directory() {
 fn every_tracked_path_is_owned_by_somebody() {
     const OWNED_BY_NOBODY: [&str; 1] = ["pending.md"];
 
+    /// Directories whose files have no column while they are arriving, with what makes that so.
+    ///
+    /// **`regression/` is the only one and `P-582` is why**: *adding a case and removing one are
+    /// different acts on the same path... the deletion is the approval, and it is his alone.* A
+    /// case arriving is written by the test, and committing what the test wrote is publishing
+    /// rather than approving.
+    ///
+    /// **The removal side is asserted below and that is what keeps this honest.** An entry
+    /// saying only *no column* would go on passing if the hook's `regression/` arm were deleted
+    /// outright - every file would be unowned and the exception would excuse it. Asking the
+    /// other direction means the entry can only be satisfied by the rule actually being there.
+    const NO_COLUMN_ARRIVING: [(&str, &str); 1] = [(
+        "regression/",
+        "a generated case: arriving it is nobody's, and removing it is Sean's approval",
+    )];
+
     /// Placed by nothing, with the reason each is allowed to be here.
     ///
     /// **A named exception fails when it is repaired**, so a gap cannot outlive itself - and
@@ -136,10 +153,44 @@ fn every_tracked_path_is_owned_by_somebody() {
         {
             continue;
         }
+        if NO_COLUMN_ARRIVING
+            .iter()
+            .any(|(prefix, _)| file.starts_with(prefix))
+        {
+            continue;
+        }
         if column_of(file).is_none() {
             unassigned.push(file.clone());
         }
     }
+
+    // **Each of these is checked in both directions**, so the entry is satisfied only by the rule
+    // being there rather than by the paths having no rule at all.
+    let mut both_ways = 0;
+    for (prefix, why) in NO_COLUMN_ARRIVING {
+        let under: Vec<&String> = files.iter().filter(|it| it.starts_with(prefix)).collect();
+        assert!(
+            !under.is_empty(),
+            "nothing under `{prefix}` is tracked any more, so delete its entry: {why}"
+        );
+        for file in under {
+            assert!(
+                column_of(file).is_none(),
+                "`{file}` has a column while arriving, so delete its entry: {why}"
+            );
+            assert_eq!(
+                column_of_act(file, "removed"),
+                Some("sean".to_string()),
+                "removing `{file}` is not Sean's, so the hook has stopped telling the two acts \
+                 apart and this entry is excusing a gap rather than describing a rule"
+            );
+            both_ways += 1;
+        }
+    }
+    assert!(
+        both_ways > 50,
+        "only {both_ways} file(s) were asked both ways, so this proved almost nothing"
+    );
 
     // **An exception that has been repaired is a lie in the other direction.**
     for (prefix, why) in NOT_PLACED {
@@ -164,4 +215,68 @@ fn every_tracked_path_is_owned_by_somebody() {
          Either give them a pattern in `hooks/pre-commit`, or name them above and say why.",
         unassigned.join("\n  ")
     );
+}
+
+/// **Adding a case and removing one are different acts on the same path** - `P-582`.
+///
+/// # Why a column cannot answer this on its own
+///
+/// **`CLAUDE.md` -> Perspectives**: *a commit that removes a file under `regression/` is Sean's; a
+/// commit that adds one is any lane's... the deletion is the approval, and it is his alone.*
+///
+/// **`reviewed/` needs no such split because nothing but the review application writes it.** Here
+/// both gestures are ordinary and only one of them is his - so the hook is given the act as well
+/// as the path, and this is the only directory that reads it.
+///
+/// **`C-160` is the item that found the gap**, by the column going missing when `D-6` moved the
+/// cases out of `scenario/`. This lane restored the old column rather than choosing; Sean chose.
+///
+/// # Both directions, and over every suite rather than one
+///
+/// **One case would pass while the pattern matched only that suite.** Four suites exist and each
+/// is asked both ways, with the count asserted, so a `case` arm narrowed to `regression/rules/*`
+/// fails here rather than leaving three directories unguarded.
+#[test]
+fn a_case_arriving_is_nobodys_and_removing_one_is_seans() {
+    let suites = [
+        "scenario/01/01-move",
+        "rules/move",
+        "types/place",
+        "primitives/add",
+    ];
+    let mut asked = 0;
+    for suite in suites {
+        let path = format!("regression/{suite}.4x");
+        assert_eq!(
+            column_of_act(&path, "removed"),
+            Some("sean".to_string()),
+            "removing `{path}` is Sean's approval and no lane may ride it into a commit"
+        );
+        assert_eq!(
+            column_of_act(&path, "added"),
+            None,
+            "`{path}` arriving is written by the test, so it belongs to no column and \
+             spans nothing"
+        );
+        asked += 2;
+    }
+    assert_eq!(
+        asked,
+        suites.len() * 2,
+        "every suite was asked both ways, and the count is what says so"
+    );
+
+    // **The act reaches only this directory**, which is what keeps it a distinction rather than a
+    // second ownership system. A path with an owner has the same owner either way.
+    for path in [
+        "crates/game-model/src/engine.rs",
+        "spec/logistics.md",
+        "reviewed/a.4x",
+    ] {
+        assert_eq!(
+            column_of_act(path, "removed"),
+            column_of_act(path, "added"),
+            "`{path}` answers differently depending on the act, and only `regression/` may"
+        );
+    }
 }
