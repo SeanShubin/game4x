@@ -87,7 +87,19 @@ column_of() {
         # record added or removed beside the code it judges. Until this line, that commit was
         # allowed - `e15ba69c` was one, and it was right under the rules of its day.
         reviewed/*|*/reviewed/*) echo "sean" ;;
-        crates/*|web/*|commands/*|prototypes/*|scenario/*|reports/*) echo "code" ;;
+        # **`regression/` was `scenario/regression/` until `D-6`**, so this line keeps the column
+        # the cases already had rather than giving them a new one. **The move must not decide an
+        # ownership question by accident**: under `scenario/*` they were the code lane's, and they
+        # are the code lane's here.
+        #
+        # **Whether they should be `sean` instead is a real question and is filed as `C-160`.**
+        # `CLAUDE.md` says deleting a case is his approval and that this *is the same line
+        # `reviewed/` draws* - and `reviewed/*` is `sean` two cases above, for the hazard of a
+        # record moving in the same commit as the code it judges. What stops this lane answering
+        # it is the other half: a case is also *written* by the test, and committing what the test
+        # wrote is publishing rather than approving, which any lane does. A column of `sean` would
+        # refuse that commit too.
+        crates/*|web/*|commands/*|prototypes/*|scenario/*|regression/*|reports/*) echo "code" ;;
                 hooks/*|scripts/*|.github/*|Cargo.toml|Cargo.lock) echo "code" ;;
         .gitignore|.gitattributes) echo "code" ;;
 

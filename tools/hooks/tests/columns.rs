@@ -12,7 +12,7 @@ use hooks::{column_of, root, tracked};
 /// would agree with any mapping at all.
 #[test]
 fn every_kind_of_path_lands_in_the_column_that_owns_it() {
-    let cases: [(&str, Option<&str>); 14] = [
+    let cases: [(&str, Option<&str>); 15] = [
         // The specification lane's column.
         ("spec/console.md", Some("spec")),
         ("releases/first-release.md", Some("spec")),
@@ -24,6 +24,10 @@ fn every_kind_of_path_lands_in_the_column_that_owns_it() {
         ("crates/game-model/src/game.rs", Some("code")),
         ("prototypes/kinds/src/lib.rs", Some("code")),
         ("scenario/commands/play.4x", Some("code")),
+        // **`D-6` moved the cases out of `scenario/` and the column did not move with
+        // them** - the pattern is named on its own line in the hook for that reason. `C-160`
+        // asks whether it should be `sean` like `reviewed/`; this says what it is today.
+        ("regression/rules/move.4x", Some("code")),
         ("reports/catalog.md", Some("code")),
         ("hooks/pre-commit", Some("code")),
         ("tools/outbox/src/lib.rs", Some("code")),
@@ -32,7 +36,7 @@ fn every_kind_of_path_lands_in_the_column_that_owns_it() {
         // Generated, owned by nobody, so a commit carrying it spans nothing.
         ("pending.md", None),
     ];
-    assert_eq!(cases.len(), 14, "the table lost a row");
+    assert_eq!(cases.len(), 15, "the table lost a row");
 
     for (path, want) in cases {
         assert_eq!(

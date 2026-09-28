@@ -61,6 +61,83 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-161 - `D-6` is built, and its *vetted when* says sixty-three words where the data says sixty
+
+**to** spec · **status** open · **raised** 2026-09-27 · **source** building the `primitives/` suite and deriving its count from the data rather than from the clause · **cites** `D-6`
+
+**derived from** *every word this engine implements* - `crates/game-model/data/friendly/engine.4x`, which is the file `{primitive}` rows live in
+
+**Please mark `D-6` built and address it to Sean**, with this one caveat on its own text.
+
+## What was built, against each clause
+
+```
+the four suites, out of scenario/ and beside reviewed/   regression/{scenario,rules,types,primitives}
+I delete one, run, and the diff holds that suite's        measured: deleted regression/types, ran,
+  cases and no others                                     51 files written and no other suite touched
+a failure prints the deletion for each grain              provoked in all four; case, turn, whole suite
+every case in rules/ is one of the fifteen rules          both directions as sets, with a floor
+  and every rule has one
+the same both ways for the words in primitives/           both directions as sets, with a floor
+```
+
+```
+regression/scenario/      35 cases
+regression/rules/         15
+regression/types/         51
+regression/primitives/    60
+```
+
+## The number
+
+**`D-6` says *the sixty-three words in `primitives/`*. `engine.4x` holds sixty `{primitive}`
+rows**, and has at every commit this could have been written against - measured at `94816b03`,
+which is the commit that wrote the clause, at `c4013533`, and at `HEAD`. **So it was wrong when
+written rather than stale**, and nothing else in the tree states sixty-three.
+
+**The suite derives its count from the data and asserts both directions**, so it is correct
+either way and the clause is what cannot go green as written. **The assumption this lane
+proceeded under**: the population is the `{primitive}` rows, because `engine.4x`'s own header is
+*every word this engine implements* and `D-6` says *the words the engine implements*. If
+sixty-three counts something else, name it and the suite follows.
+
+**A floor rather than the exact number in the check**, for the reason `hooks/pre-push` records
+from the deploy: the only hard-coded count in that step was the only thing that broke. What is
+asserted exactly is the two directions; the floor only stops two empty sets agreeing.
+
+### C-160 - `D-6` moved the cases out of `scenario/` and took their column with them
+
+**to** spec · **status** open · **raised** 2026-09-27 · **source** `every_tracked_path_is_owned_by_somebody` going red on 126 new files the moment the suites landed
+
+**derived from** *a generated regression case is deleted by Sean, and that deletion is an
+approval* - `CLAUDE.md` -> Perspectives
+
+**`hooks/pre-commit` puts a path in a column, and `regression/` was in none.** Under
+`scenario/regression/` the cases matched `scenario/*` and were the code lane's. **This lane
+restored that rather than choosing**, so the move decides nothing by accident - but the question
+it exposes is real and is yours.
+
+**`CLAUDE.md` says these cases and `reviewed/` draw the same line**: *deleting one is different -
+it is not overwritten, it is honoured, and it says I accept what it does now*, and *that is the
+same line `reviewed/` draws*. **`reviewed/*` is its own column, `sean`**, and the hook says why:
+*a column of its own is what refuses the commit shape the guarantee turns on - a record added or
+removed beside the code it judges.* **A deleted regression case is exactly that shape.**
+
+**What stops this lane answering it is the other half.** A case is also *written* by the test,
+and committing what the test wrote is publishing rather than approving - which any lane does, and
+which a column of `sean` would refuse. Today's commit added 126 cases beside the generator that
+writes them, and under `sean` it could not have been made.
+
+**So the two gestures need telling apart and the hook sees only paths.** Adding a file and
+removing one are different acts on the same path, and `column_of` is given a name. Whether that
+distinction belongs in the hook, or whether the answer is that `regression/` stays the code
+lane's because the generator is, is a rule rather than a mechanism - which makes it yours and
+possibly Sean's.
+
+**Nothing is blocked.** The column is what it was before the move and the gate is green.
+
+---
+
 ### C-159 - `S-207`'s forty is ninety-three, and the rest of `D-4` is not deletion
 
 **to** spec · **status** open · **raised** 2026-09-27 · **source** doing `D-4`'s first half, and listing `reports/` recursively before staging the deletion rather than after · **cites** `S-207`, `D-4`
