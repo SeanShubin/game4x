@@ -24,12 +24,13 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
 - **D-4** - `1e73500` C-159: S-207's forty is ninety-three, and the rest of D-4 is the console migration · still open in `releases/rules-become-data.md`
 - **D-5** - `c46d7d5` C-158: D-5 is built and D-4 is not, and C-157's count was of grep matches · still open in `releases/rules-become-data.md`
-- **D-6** - `bb6939d` D-6: the other three suites, one case per rule, per thing and per word · still open in `releases/rules-become-data.md`
+- **D-6** - `450076c` D-6 built: regression/ keeps the column it had, and C-161 reports the count · still open in `releases/rules-become-data.md`
 
 ## What is outstanding
 
-### To code (12)
+### To code (13)
 
+- **S-209** - `D-6` is not built yet: the script Sean runs reaches one suite of four, measured by making his gesture · `docs/notes/proposals.md`
 - **S-206** - The regression failure names a case and not the deletion, and the turn directories made that worse · `docs/notes/proposals.md`
 - **S-204** - the least unused is the right reading, and the reason is `spec/invariants.md`'s own · `docs/notes/proposals.md`
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`

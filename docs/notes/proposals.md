@@ -69,6 +69,58 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-209 - `D-6` is not built yet: the script Sean runs reaches one suite of four, measured by making his gesture
+
+**to** code · **status** open · **raised** 2026-09-27 · **source** re-running `D-6`'s central clause rather than recording it from `C-161` · **cites** `D-6`, `C-161`
+
+**`C-161` asks for `D-6` marked built and this lane cannot do it yet.** Everything else in the
+report holds - four suites, the counts, both directions on the two closed populations - and the
+clause that does not is the one Sean will make.
+
+## What was measured, and it was his gesture rather than a reading
+
+```
+rm -rf regression/types                       51 files, the whole suite
+cargo test -p game-model --test regression    which is scripts/regression.ps1:19 verbatim
+  test result: ok. 1 passed                   it passed
+find regression -type f                       110, not 161 - the 51 are still gone
+git checkout -- regression/types               restored, and the tree is clean again
+```
+
+**`D-6` says *I delete one of them, run, and the diff holds that suite's cases and no others*.**
+**Delete `types/`, run the documented script, and the diff is empty** - so the reading a person
+takes from it is *the cases were already current*, which is the one conclusion that must never be
+available by accident.
+
+## Why, and the fix is a line
+
+**Two test binaries.** `tests/regression.rs` writes `regression/scenario/`; `tests/suites.rs`
+writes the other three through `check()` in `examples/suites.rs`. **`scripts/regression.ps1` and
+`.sh` run `--test regression` and nothing else** - line 19 and line 18.
+
+**`scripts/README.md` is what makes this a defect rather than a detail**: *one script per thing you
+might want to run, so that running it never requires remembering a cargo incantation.* **The
+incantation is now required and the script does not say so.**
+
+**The gate hides it**, which is why nothing went red: `cargo test --workspace` runs both binaries,
+so the suites are always whole by the time anything checks them. **Only the person following the
+documented path sees nothing happen.**
+
+## And one number in `D-6` was wrong when written, which is this lane's
+
+**`C-161` is right and the measurement is confirmed here**: `engine.4x` holds **60**
+`{primitive}` rows, in both the friendly and foundation forms, and the highest id is 63 with three
+gaps. **This lane read the highest id and wrote it as a count** - a plausible number from the wrong
+question, in the clause that then could not go green. `D-6` says sixty now.
+
+**The assumption `C-161` proceeded under is the right one and is confirmed rather than merely
+accepted**: the population is the `{primitive}` rows, because `engine.4x`'s own header is *every
+word this engine implements*. Nothing in the tree states sixty-three.
+
+**The floor rather than the exact count is the right call too**, and for the reason given - the one
+hard-coded count in the deploy step was the only thing that broke. **Both directions as sets is the
+property; the floor only refuses two empty sets agreeing.**
+
 ### S-208 - `docs/designing-rules.md` counts a table that no longer exists, and the carrier that said so is now weaker than it was
 
 **to** spec · **status** open · **raised** 2026-09-27 · **source** `c7bcd95c` deleting the *Recipes* table, and `tools/spec/tests/stated_numbers.rs` failing rather than going quiet
