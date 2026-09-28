@@ -473,10 +473,11 @@ fn every_reference_forbids_something_in(
 ///
 /// **No crate.** `std::thread::scope` borrows the originals without moving them, which is the
 /// whole of what this needed, and the prototype stays a thing with no dependencies.
-fn swept<Job, Made>(jobs: Vec<Job>, made: Made) -> Vec<String>
+fn swept<Job, Made, Made2>(jobs: Vec<Job>, made: Made) -> Vec<Made2>
 where
     Job: Sync,
-    Made: Fn(&Job) -> Option<String> + Sync,
+    Made2: Send,
+    Made: Fn(&Job) -> Option<Made2> + Sync,
 {
     let threads = std::thread::available_parallelism()
         .map(|it| it.get())
@@ -488,13 +489,380 @@ where
         let mut running = Vec::new();
         for chunk in jobs.chunks(each) {
             running
-                .push(scope.spawn(move || chunk.iter().filter_map(made).collect::<Vec<String>>()));
+                .push(scope.spawn(move || chunk.iter().filter_map(made).collect::<Vec<Made2>>()));
         }
         for one in running {
             survived.extend(one.join().expect("a sweep thread"));
         }
     });
     survived
+}
+
+/// One mutation nothing noticed: where it was, what it said, and what it was.
+///
+/// **The aggregate could not be judged, which is why this exists.** `DELETABLE` said
+/// `12 rules.4x binding` - twelve of something, somewhere in a file of 251 rows, with no way to
+/// see which twelve or to ask why. Sean, 2026-09-28: *I don't have a clear enough understanding
+/// of the failures to judge which exceptions are legitimate... I find exception lists very
+/// suspicious.* **An exception nobody can check is worse than no check**, so the sweep names
+/// every row it finds and says what it can work out about it.
+struct Survived {
+    /// The file, as `originals` names it - `rules.4x` or `tests/<name>.4x`.
+    file: String,
+    /// Which line of that file, one-based.
+    line: usize,
+    /// The row itself, as the file writes it.
+    row: String,
+    /// The relation, or `relation.column` where a value was changed rather than a row deleted.
+    what: String,
+}
+
+/// What the explanations look things up in, read once.
+struct Whole {
+    /// Every row of every file, so a value can be asked whether anything else names it.
+    every: Vec<Row>,
+    /// The text of every Rust test file, by name.
+    rust: Vec<(String, String)>,
+    /// Which rule each clause belongs to, and each part.
+    rule_of_clause: BTreeMap<String, String>,
+    rule_of_part: BTreeMap<String, String>,
+    /// The rules some test's `when` names, expanded through `{part}`.
+    fired: BTreeSet<String>,
+    /// A relation's name to its id, because a reference names a relation by id.
+    relation_id: BTreeMap<String, String>,
+    /// For each relation id, the `(relation, column)` pairs that can hold a key of it.
+    refers_to: BTreeMap<String, Vec<(String, String)>>,
+}
+
+impl Whole {
+    fn of(files: &BTreeMap<String, String>) -> Self {
+        let mut every = Vec::new();
+        let mut rule_of_clause = BTreeMap::new();
+        let mut rule_of_part = BTreeMap::new();
+        let mut named: BTreeSet<String> = BTreeSet::new();
+        let mut parts: Vec<(String, String)> = Vec::new();
+        for (name, text) in files {
+            let mut inside = String::new();
+            for (_, row) in rows_of(text) {
+                if matches!(row.relation.as_str(), "given" | "when" | "then" | "refused") {
+                    inside = row.relation.clone();
+                    every.push(row);
+                    continue;
+                }
+                if name.starts_with("tests/") && inside == "when" {
+                    named.insert(row.relation.clone());
+                }
+                if row.relation == "clause"
+                    && let (Some(it), Some(rule)) = (row.value("name"), row.value("rule"))
+                {
+                    rule_of_clause.insert(it.to_string(), rule.to_string());
+                }
+                if row.relation == "part" {
+                    if let (Some(it), Some(of)) = (row.value("name"), row.value("of")) {
+                        rule_of_part.insert(it.to_string(), of.to_string());
+                    }
+                    if let (Some(of), Some(is)) = (row.value("of"), row.value("is")) {
+                        parts.push((of.to_string(), is.to_string()));
+                    }
+                }
+                every.push(row);
+            }
+        }
+        // **A rule a test fires through `{part}` is fired**, which is most of them: `end-turn`
+        // names one command and runs ten rules. Expanded to a fixed point, because a part may
+        // name a rule that has parts of its own.
+        let mut fired = named;
+        loop {
+            let before = fired.len();
+            for (of, is) in &parts {
+                if fired.contains(of) {
+                    fired.insert(is.clone());
+                }
+            }
+            if fired.len() == before {
+                break;
+            }
+        }
+        let mut rust = Vec::new();
+        for file in std::fs::read_dir(mine().join("tests")).expect("tests/") {
+            let path = file.expect("an entry").path();
+            if path.extension().and_then(|it| it.to_str()) != Some("rs") {
+                continue;
+            }
+            let name = path
+                .file_name()
+                .and_then(|it| it.to_str())
+                .unwrap_or_default()
+                .to_string();
+            rust.push((name, std::fs::read_to_string(&path).unwrap_or_default()));
+        }
+        // **Declared references, so `unused_key` asks rather than guesses.** A column belongs to
+        // a relation by id and a reference names its target by id, so both maps are needed to
+        // turn `{reference column:158 to:56}` into *terrain.is holds a biome*.
+        // **The game's store only, because `script.4x` declares relations over the same ids.**
+        // `{relation id:17 name:store}` is the script's and `{relation id:17 name:literal}` is the
+        // game's, so a map over both answered *nothing refers to that literal* using the readers
+        // of a `store`. **`examples/foundation.rs` says this in prose** - *`Schema::of` refuses
+        // the merge, which is what says they are two* - and this built the merge anyway.
+        let of_the_game = |name: &String| name != "script.4x" && name != "setup.4x";
+        let game_rows: Vec<Row> = files
+            .iter()
+            .filter(|(name, _)| of_the_game(name))
+            .flat_map(|(_, text)| rows_of(text).into_iter().map(|(_, row)| row))
+            .collect();
+        let mut relation_id: BTreeMap<String, String> = BTreeMap::new();
+        let mut name_of: BTreeMap<String, String> = BTreeMap::new();
+        for row in &game_rows {
+            if row.relation == "relation"
+                && let (Some(id), Some(name)) = (row.value("id"), row.value("name"))
+            {
+                relation_id.insert(name.to_string(), id.to_string());
+                name_of.insert(id.to_string(), name.to_string());
+            }
+        }
+        let mut column_of: BTreeMap<String, (String, String)> = BTreeMap::new();
+        for row in &game_rows {
+            if row.relation == "column"
+                && let (Some(id), Some(relation), Some(name)) =
+                    (row.value("id"), row.value("relation"), row.value("name"))
+            {
+                column_of.insert(id.to_string(), (relation.to_string(), name.to_string()));
+            }
+        }
+        let mut refers_to: BTreeMap<String, Vec<(String, String)>> = BTreeMap::new();
+        for row in &game_rows {
+            if row.relation == "reference"
+                && let (Some(column), Some(to)) = (row.value("column"), row.value("to"))
+                && let Some((owner, name)) = column_of.get(column)
+                && let Some(owner) = name_of.get(owner)
+            {
+                refers_to
+                    .entry(to.to_string())
+                    .or_default()
+                    .push((owner.clone(), name.clone()));
+            }
+        }
+        Whole {
+            every,
+            rust,
+            rule_of_clause,
+            rule_of_part,
+            fired,
+            relation_id,
+            refers_to,
+        }
+    }
+
+    /// Which Rust tests name this relation, or this `relation.column`.
+    ///
+    /// **The sweep runs the `.4x` tests and the reference checks, not the Rust suite** - which is
+    /// what the old list meant by *no test in `data/` reads it*. A row the Rust suite holds is
+    /// dead to this sweep and load-bearing in fact, and that is a rule rather than an exception.
+    ///
+    /// **It is a text search and says so**: a Rust test naming a relation is evidence to follow,
+    /// not proof that deleting the row would fail it. The report prints the test names so the
+    /// following is one grep rather than a guess.
+    fn rust_tests_naming(&self, what: &str) -> Vec<String> {
+        let (relation, column) = match what.split_once('.') {
+            Some((relation, column)) => (relation, Some(column)),
+            None => (what, None),
+        };
+        self.rust
+            .iter()
+            .filter(|(name, _)| name != "mutation.rs")
+            .filter(|(_, text)| {
+                text.contains(relation) && column.map(|it| text.contains(it)).unwrap_or(true)
+            })
+            .map(|(name, _)| name.clone())
+            .collect()
+    }
+
+    /// A row nothing refers to, asked of the columns that can refer to it.
+    ///
+    /// # Comparing ids across relations said `biome 1` was used, and `binding 59` was not
+    ///
+    /// **This matched any value equal to the row's id under any key of any other relation.**
+    /// Fifteen `{clause ...}` rows carry `seq:1`, so `{biome id:1 name:ocean}` read as referred
+    /// to - by a sequence number, in a different table, meaning nothing. And `{binding id:59}`
+    /// read as unreferred, which is true and empty: **nothing refers to a binding by design**, so
+    /// saying so is not a reason it is dead.
+    ///
+    /// **A reference is declared, so it can be asked rather than guessed.** `{reference column:C
+    /// to:T}` says column `C` holds a key of relation `T`; a row of `T` is unreferred when no row
+    /// carrying such a column names it. **A relation nothing references at all answers `None`** -
+    /// it is not a lookup table, and its rows want a different reason than this one.
+    fn unused_key(&self, row: &Row) -> Option<String> {
+        let id = row.value("id")?;
+        let mine = self.relation_id.get(&row.relation)?;
+        let readers = self.refers_to.get(mine)?;
+        let referred = readers.iter().any(|(relation, column)| {
+            self.every
+                .iter()
+                .filter(|other| other.relation == *relation)
+                .any(|other| other.value(column) == Some(id))
+        });
+        if referred {
+            return None;
+        }
+        // **Named by relation and not by the row**, so instances group. Spelling the value here
+        // made `nothing else names that literal 20` a group of one, fourteen times over, and the
+        // row is printed underneath anyway.
+        Some(format!("nothing refers to this `{}`", row.relation))
+    }
+
+    /// Which rule a row of `rules.4x` belongs to.
+    fn rule_of(&self, row: &Row) -> Option<String> {
+        match row.relation.as_str() {
+            "rule" => row.value("name").map(str::to_string),
+            "input" | "clause" | "repeats" | "scope" => row.value("rule").map(str::to_string),
+            "part" => row.value("of").map(str::to_string),
+            "argument" => row
+                .value("part")
+                .and_then(|it| self.rule_of_part.get(it).cloned()),
+            "binding" | "literal" | "reading" | "relation-of" | "soft" | "assigns" => row
+                .value("clause")
+                .and_then(|it| self.rule_of_clause.get(it).cloned()),
+            _ => None,
+        }
+    }
+}
+
+/// Why a row might survive having been deleted, worked out rather than written down.
+///
+/// # Every category is a test that has not been written
+///
+/// **Sean, 2026-09-28**: *I intend to enforce with zero exceptions once I understand what is
+/// going on, this is only a temporary weakening. I suspect we will need new kinds of tests to
+/// make every row matter - for example, even though biome has no effect on game mechanics right
+/// now, it does affect realistic rendering, so we could create a test that fails if a territory
+/// does not reveal a supported biome for rendering.*
+///
+/// **So these are not grounds for tolerating a row; they are the shape of what is missing.** A
+/// biome nothing names is not an acceptable dead row, it is a rendering test nobody has written -
+/// and once that test exists the row stops being dead and the category empties. **The target is
+/// every group empty and the assertion back**, and each name below is chosen to say which kind of
+/// test would close it rather than why the row is allowed to sit there.
+///
+/// **A row fitting none of them is the same thing with nothing suggested**, which is why it is
+/// printed first and counted: no `.4x` test reads it and nothing here can even say what would.
+fn why(one: &Survived, row: &Row, whole: &Whole) -> String {
+    if let Some(test) = one.file.strip_prefix("tests/") {
+        return format!(
+            "`{}` reaches its ending without it",
+            test.trim_end_matches(".4x")
+        );
+    }
+    if let Some(rule) = whole.rule_of(row)
+        && !whole.fired.contains(&rule)
+    {
+        return format!("no test's `when` fires `{rule}`");
+    }
+    if let Some(key) = whole.unused_key(row) {
+        return key;
+    }
+    // **A Rust test naming the relation is a lead and not an answer**, which is why it is appended
+    // to the unaccounted line rather than being a category of its own.
+    //
+    // **It was a category, and it swallowed 51 of the 80.** `rust_tests_naming` asks whether the
+    // relation's name appears anywhere in a test file, and `isolation.rs:154` is `"binding",` -
+    // one entry in a list of the words the engine may know. **True of the text and silent about
+    // the row**: it said nothing about whether `{binding id:9 clause:5 ...}` is load-bearing, and
+    // every `{binding ...}` in the file matched it equally.
+    //
+    // **So the first run reported zero not accounted for**, which read as *every dead row has a
+    // reason* and was *the catch-all caught everything*. That is the instrument answering a
+    // narrower question than the one asked, inside the report written to stop exactly that.
+    let named = whole.rust_tests_naming(&one.what);
+    let lead = if named.is_empty() {
+        String::new()
+    } else {
+        format!(" (the word `{}` appears in {})", one.what, named.join(", "))
+    };
+    format!("NOT ACCOUNTED FOR - no `.4x` test reads it and no rule here says why{lead}")
+}
+
+/// The report Sean reads in the build output.
+///
+/// **Grouped by the explanation rather than by the file**, because the question is which general
+/// rule each row falls under, and rows of one kind scattered over four files read as four
+/// problems. **The unaccounted ones come first and are counted**, since they are the only entries
+/// that are a finding rather than a fact.
+/// Whether an earlier run had already found rows of this kind, from the lists below.
+///
+/// **The lists stopped being assertions and did not stop being knowledge.** They carry a reason
+/// per entry - Sean's own words on why a refusal test states a readiness it never spends, what
+/// `stock`'s `quantity` is held by, which memberships nothing reads - and that reasoning is the
+/// start of the general rule rather than something to delete because the check around it changed.
+///
+/// **What they are for now is the delta.** A group marked as not recorded before is one this tree
+/// produced and no earlier run did, which is the first question to ask of any of them.
+fn recorded(file: &str, what: &str) -> bool {
+    let tail = format!(" {file} {what}");
+    DELETABLE
+        .iter()
+        .chain(NOT_LOAD_BEARING.iter())
+        .any(|entry| entry.ends_with(&tail))
+}
+
+fn report(title: &str, tried: usize, survived: &[Survived], files: &BTreeMap<String, String>) {
+    let whole = Whole::of(files);
+    let mut by_reason: BTreeMap<String, Vec<&Survived>> = BTreeMap::new();
+    for one in survived {
+        let parsed = read(&one.row).ok().and_then(|it| it.first().cloned());
+        let said = match &parsed {
+            Some(row) => why(one, row, &whole),
+            None => "the row could not be read back".to_string(),
+        };
+        by_reason.entry(said).or_default().push(one);
+    }
+    let unaccounted: usize = by_reason
+        .iter()
+        .filter(|(said, _)| said.starts_with("NOT ACCOUNTED"))
+        .map(|(_, rows)| rows.len())
+        .sum();
+    println!("\n{title}");
+    println!(
+        "{tried} mutations tried; {} of them nothing noticed, in {} group(s); {unaccounted} not \
+         accounted for.",
+        survived.len(),
+        by_reason.len()
+    );
+    let mut order: Vec<(&String, &Vec<&Survived>)> = by_reason.iter().collect();
+    order.sort_by_key(|(said, rows)| (!said.starts_with("NOT ACCOUNTED"), usize::MAX - rows.len()));
+    for (said, rows) in order {
+        let fresh = rows
+            .iter()
+            .filter(|one| !recorded(&one.file, &one.what))
+            .count();
+        let since = match fresh {
+            0 => "all recorded by an earlier run".to_string(),
+            n if n == rows.len() => "none recorded before".to_string(),
+            n => format!("{n} not recorded before"),
+        };
+        println!("\n  {} row(s) - {said}\n  ({since})", rows.len());
+        for one in rows {
+            let mark = if recorded(&one.file, &one.what) {
+                " "
+            } else {
+                "*"
+            };
+            println!("    {mark} {}:{}  {}", one.file, one.line, one.row);
+        }
+    }
+    // **What would close each group, so the report ends on the work rather than on the excuse.**
+    // Sean intends zero exceptions; every group above is a test that has not been written, and
+    // naming the kind is the difference between a list to tolerate and a list to finish.
+    println!(
+        "\n  To empty a group, write the test it names:\n\
+         \x20   `<test>` reaches its ending without it  -> that test states more world than it\n\
+         \x20       needs, or a second test should turn on the part it states and does not use\n\
+         \x20   no test's `when` fires `<rule>`          -> a `.4x` test that fires that rule\n\
+         \x20   nothing else names that <thing>          -> a test of whatever reads it - a biome\n\
+         \x20       affects the realistic drawing, so a drawing test is what makes it matter\n\
+         \x20   NOT ACCOUNTED FOR                        -> either a `.4x` test, or a decision\n\
+         \x20       that the Rust suite is where it lives - which this sweep cannot see, so\n\
+         \x20       saying so once is itself a rule. The bracketed word is a lead, not a reason.\n"
+    );
 }
 
 fn rows_of(text: &str) -> Vec<(usize, Row)> {
@@ -575,10 +943,14 @@ fn no_row_can_be_deleted_without_breaking_something() {
     let tried = jobs.len();
     let survived = swept(jobs, |(name, at, relation)| {
         let mut mutated = files.clone();
-        mutated.insert(name.clone(), without(files.get(name)?, *at));
-        check(&InMemory(mutated))
-            .is_ok()
-            .then(|| format!("{name} {relation}"))
+        let text = files.get(name)?;
+        mutated.insert(name.clone(), without(text, *at));
+        check(&InMemory(mutated)).is_ok().then(|| Survived {
+            file: name.clone(),
+            line: *at + 1,
+            row: text.lines().nth(*at).unwrap_or_default().trim().to_string(),
+            what: relation.clone(),
+        })
     });
 
     assert!(
@@ -586,18 +958,11 @@ fn no_row_can_be_deleted_without_breaking_something() {
         "only {tried} rows were deleted in turn, so a count proves nothing"
     );
 
-    let mut counted: BTreeMap<String, usize> = BTreeMap::new();
-    for one in survived {
-        *counted.entry(one).or_default() += 1;
-    }
-    let counted: Vec<String> = counted
-        .iter()
-        .map(|(what, how_many)| format!("{how_many} {what}"))
-        .collect();
-
-    assert_eq!(
-        counted, DELETABLE,
-        "the rows nothing reads are not the ones written down"
+    report(
+        "== Rows the `.4x` suite would not miss ==",
+        tried,
+        &survived,
+        &files,
     );
 }
 
@@ -816,7 +1181,12 @@ fn no_value_can_be_changed_without_breaking_something() {
             mutated.insert(name.clone(), changed(text, *at, &altered));
             check(&InMemory(mutated)).is_err()
         });
-        (!noticed).then(|| format!("{name} {}.{column}", row.relation))
+        (!noticed).then(|| Survived {
+            file: name.clone(),
+            line: *at + 1,
+            row: text.lines().nth(*at).unwrap_or_default().trim().to_string(),
+            what: format!("{}.{column}", row.relation),
+        })
     });
 
     assert!(
@@ -824,18 +1194,11 @@ fn no_value_can_be_changed_without_breaking_something() {
         "only {tried} values were changed, which is too few for this to be a check"
     );
 
-    let mut counted: BTreeMap<String, usize> = BTreeMap::new();
-    for one in survived {
-        *counted.entry(one).or_default() += 1;
-    }
-    let counted: Vec<String> = counted
-        .iter()
-        .map(|(what, how_many)| format!("{how_many} {what}"))
-        .collect();
-
-    assert_eq!(
-        counted, NOT_LOAD_BEARING,
-        "the values nothing reads are not the ones written down"
+    report(
+        "== Values the `.4x` suite would not miss ==",
+        tried,
+        &survived,
+        &files,
     );
 }
 
