@@ -28,15 +28,62 @@ const ALIASES: &[(&str, &str)] = &[
     (".github/", "CI"),
 ];
 
-/// Every directory, and every tracked file in the root.
+/// What git ignores, out of the directories given.
+///
+/// **A build directory is not a path a lane could believe is theirs**, which is the question this
+/// file exists to ask - so the answer is to stop asking it of paths nobody tracks, rather than to
+/// name each one. **An exception list grows and a predicate does not**: `target/claude` is this
+/// lane's, `tools/spec/target2` appeared beside it, and `target-spec/` was the third in a week.
+/// `.gitignore` already says all three in one glob, and this reads that rather than restating it.
+fn ignored(directories: &BTreeSet<String>) -> BTreeSet<String> {
+    if directories.is_empty() {
+        return BTreeSet::new();
+    }
+    let asked = Command::new("git")
+        .arg("check-ignore")
+        .args(directories.iter())
+        .current_dir(root())
+        .output()
+        .expect("git check-ignore");
+    // **Exit 1 means none of them is ignored**, which is an answer rather than a failure; only 128
+    // and above is git refusing the question.
+    assert!(
+        asked.status.code().is_some_and(|code| code < 2),
+        "git check-ignore failed: {}",
+        String::from_utf8_lossy(&asked.stderr)
+    );
+    String::from_utf8(asked.stdout)
+        .expect("utf-8")
+        .lines()
+        .map(|line| line.replace('\\', "/"))
+        .map(|line| line.trim_end_matches('/').to_string() + "/")
+        .collect()
+}
+
+/// Every directory git tracks the contents of, and every tracked file in the root.
 fn top_level() -> BTreeSet<String> {
-    let mut out = BTreeSet::new();
+    let mut directories = BTreeSet::new();
     for entry in std::fs::read_dir(root()).expect("the repository root") {
         let entry = entry.expect("entry");
         if entry.path().is_dir() {
-            out.insert(format!("{}/", entry.file_name().to_string_lossy()));
+            directories.insert(format!("{}/", entry.file_name().to_string_lossy()));
         }
     }
+    let skipped = ignored(&directories);
+    // **Both populations, because either being empty makes the filter prove nothing.** No
+    // directories and there is nothing to assign; none ignored and the filter is doing no work,
+    // which would pass in silence the day `.gitignore` stopped covering a build tree.
+    assert!(
+        !directories.is_empty(),
+        "no directories in the root, so nothing was filtered"
+    );
+    assert!(
+        skipped.contains("target/"),
+        "git ignores {skipped:?} in the root and `target/` is not among them, so this filter is \
+         not reading the rule it thinks it is"
+    );
+    let mut out: BTreeSet<String> = directories.difference(&skipped).cloned().collect();
+
     let listed = Command::new("git")
         .arg("ls-files")
         .current_dir(root())

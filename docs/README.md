@@ -89,14 +89,15 @@ Crate READMEs cover how a crate works internally and are linked from
 
 ## What goes where
 
-| Kind of content                                                | Home                                                                                 |
-| -------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| What the game **is**, normatively                              | `spec/<name>.md` - Sean's words only, see [CLAUDE.md](../CLAUDE.md)                  |
-| A record of analysis or a rejected path                        | `docs/notes/<name>.md` - derived, dated, not binding                                 |
-| How a failure happened, once it is understood                  | `docs/postmortems/<name>.md` - one failure per file, measured                        |
-| A movement the design expects but has not made                 | [vision.md](vision.md) - *Directions*. Informs a decision, binds nothing             |
-| Whether a rule I want to write is expressible at all           | [designing-rules.md](designing-rules.md) - the constraints, before I design into one |
-| A generated report I browse                                    | `reports/<name>.md` and `.html`, reached from `reports/index.html`                   |
+| Kind of content                                      | Home                                                                                                                                                                              |
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| What the game **is**, normatively                    | `spec/<name>.md` - Sean's words only, see [CLAUDE.md](../CLAUDE.md)                                                                                                               |
+| A record of analysis or a rejected path              | `docs/notes/<name>.md` - derived, dated, not binding                                                                                                                              |
+| How a failure happened, once it is understood        | `docs/postmortems/<name>.md` - one failure per file, measured                                                                                                                     |
+| A movement the design expects but has not made       | [vision.md](vision.md) - *Directions*. Informs a decision, binds nothing                                                                                                          |
+| Whether a rule I want to write is expressible at all | [designing-rules.md](designing-rules.md) - the constraints, before I design into one                                                                                              |
+| A generated report I browse                          | `reports/<name>.md` and `.html`, in `reports/`. **`D-4` deleted the old ruleset's, so `reports/foundation/` is what is there until they are regenerated from `scenario/main.4x`** |
+
 | The scenario's input, and what it should produce               | `scenario/commands/` and `scenario/expected/`                                        |
 | What the game is, and why                                      | [vision.md](vision.md)                                                               |
 | How the code is split up                                       | [architecture.md](architecture.md)                                                   |

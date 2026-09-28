@@ -46,8 +46,7 @@ to turn the world, wheel to zoom, `P` to fold it back into a globe, `Esc` to qui
 | [Decide](decide/README.md)                | **Everything waiting on Sean, and nothing else**: proposals to approve, questions to answer         |
 | [Notes](docs/notes/README.md)             | Derived records of analysis. Not binding                                                            |
 | [Postmortems](docs/postmortems/README.md) | How a failure happened, and what would have caught it                                               |
-| [State](reports/state.md)                 | The scenario's result as one table per relation, fully normalized. **Generated**                    |
-| [Entities](reports/entities.md)           | The same result as every thing with its components, which is what F3 shows. **Generated**           |
+| [Foundation forms](reports/foundation/)   | Every test I have reviewed, in the form the engine runs. **Generated**                              |
 | [Pending](pending.md)                     | What every outbox has open and who it waits on. **Generated**                                       |
 
 ## The short version

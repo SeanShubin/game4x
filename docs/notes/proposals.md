@@ -69,9 +69,50 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
-### S-207 - All forty reports are generated from the scenario `D-4` deletes, and `D-4` already says so
+### S-208 - `docs/designing-rules.md` counts a table that no longer exists, and the carrier that said so is now weaker than it was
 
-**to** code · **status** open · **raised** 2026-09-27 · **source** Sean: *I want the first release to match the regression scenario, not the old ruleset* · **cites** `D-4`, `C-158`
+**to** spec · **status** open · **raised** 2026-09-27 · **source** `c7bcd95c` deleting the *Recipes* table, and `tools/spec/tests/stated_numbers.rs` failing rather than going quiet
+
+**Every number in that document came from the table `D-4` deleted.** *73 role cells*, *13 are
+blank*, *thirteen `put` rows*, *60 cells carry a quantity*, *six write one less*, *six write at its
+maximum*, *four of the six are player recipes* - all of them derived from the *Recipes* table of
+`releases/first-release.md`. **And the recipes the argument names are gone with it**: `create
+labor`, `mine energy`, `bear` and `age` are not among the fifteen rules `spec/data/rules.4x`
+declares.
+
+**The check was working and that is how this was found.** `every_number_the_documents_state_is_the_number_that_is_there`
+panicked on *the release has a Recipes section* rather than passing over nothing, which is the
+property it was built for.
+
+## What was done today, and it is the weaker half
+
+**A superseded marker at the top of the document**, saying every number and recipe name below is of
+the old ruleset, that the formalism is not superseded, and that the counts have not been re-derived.
+**And the check's predicate changed to match**: it asserts the marker is there, that the two figures
+the marker is about are still stated, and that the release has no *Recipes* section again - so
+restoring the strong form is a failure rather than a decision somebody has to remember.
+
+**`assert!(stated.is_empty())` was written first and clippy refused it** - `const_is_empty`, *this
+expression always evaluates to true*. It was right: the length of a `[Stated; 0]` is a compile-time
+fact, so asserting it checks nothing. **That is this repository's own rule arriving from the
+compiler**, and the refusal is recorded in the file rather than worked around.
+
+## What is left, which is the strong half
+
+**Re-derive the `put` analysis against `spec/data/rules.4x`** - fifteen rules where the table stated
+twenty-one - and put the numbers back in `stated_numbers.rs` as they land. **The argument may not
+survive unchanged**: *six write one less, six write at its maximum, one writes neither* is a fact
+about the old table's shape, and whether the new data splits the same way is not known and is not
+assumed here.
+
+**It is this lane's own work and is addressed to itself on purpose.** `docs/` is this lane's to
+write and so is `tools/spec/`, so there is no other reader - but an item is how it stays visible in
+the index rather than in a session.
+
+### S-207 - The old ruleset's reports are generated from the scenario `D-4` deletes, and `D-4` already says so
+
+**to** code · **status** acted · **raised** 2026-09-27 · **acted** 2026-09-27 · **cited** `e40325c2` · **corrected** 2026-09-27 by `C-159`, which found the forty was a count of the wrong population · **source** Sean: *I want the first release to match the regression scenario, not the old ruleset* · **cites** `D-4`, `C-158`
+
 
 **There are two scenarios and the reports are about the wrong one.** `scenario/main.4x` is what
 `D-5` is vetted on - 5 turns, 35 commands, 58 lines. `scenario/commands/play.4x` is the old one, and
@@ -84,10 +125,17 @@ crates/game-console/src/dump.rs:1530   "scenario/commands/play.4x is not there"
 scripts/dump-state.ps1:1               its first line names setup.4x and play.4x
 ```
 
-**Forty files, measured**: `state`, `entities`, `relations`, `containment`, `commands`, `turns` and
-a page per territory, each in two forms. **`C-158` put `reports/commands` and `reports/turns` at the
-top of the dropped-recipe count** - 212 and 116 lines each - and this is why: they are reports of a
-run of the ruleset that is going.
+**Thirty-nine files, and this item said forty** - `C-159`, and the correction is the class this
+lane keeps naming rather than a slip. `reports/` held **ninety-three** files: thirty-nine of the old
+ruleset's, and `reports/foundation/`'s fifty-four, which are `R-12`'s and come from the scenario the
+game does play. **`ls | wc -l` counts `foundation` as one entry**, so the forty was a true count of
+the wrong population - and acting on it would have deleted `R-12`'s artifact with nothing going red,
+because no test reads that directory. **The conclusion below holds for the thirty-nine.** They are
+`state`, `entities`, `relations`, `containment`, `commands`, `turns` and a page per territory, each
+in two forms, plus the index and two stylesheets. **`C-158` put `reports/commands` and
+`reports/turns` at the top of the dropped-recipe count** - 212 and 116 lines each - and this is why:
+they are reports of a run of the ruleset that is going.
+
 
 ## This is not a new capability and that is the point
 

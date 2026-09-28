@@ -7,9 +7,19 @@ expressible.
 
 The recipes are a **coloured Petri net**, and the difference from a plain one is load-bearing.
 
+**Superseded in one respect, 2026-09-27: every number and every recipe name below is of the old
+ruleset.** The counts were derived from the *Recipes* table of `releases/first-release.md`, which
+`c7bcd95c` deleted on Sean's word under `D-4` - so *thirteen `put` rows*, *73 role cells* and the
+recipes they name are a record of a ruleset the game no longer plays. **The formalism is not
+superseded**: what a `put` row is, why identity costs the net nothing, and how to tell whether a
+formula is allowed hold over any ruleset. **What has not been done is re-deriving the counts against
+`spec/data/rules.4x`**, which declares fifteen rules where the table stated twenty-one, and that is
+`S-208`.
+
 **A place holds a count, a recipe is a transition, and a row is an arc carrying a constant weight.**
 That is not an analogy - it is the mapping `crates/game-console/src/petri.rs` builds and
 `reports/nogain.md` computes over.
+
 
 ## The net is a means, and this is the end it is a means to
 
