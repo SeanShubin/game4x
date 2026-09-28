@@ -27,6 +27,10 @@ use friendly::Names;
 use game_model::notation::{Row, read};
 use game_model::script::{Files, run_test};
 
+#[path = "render.rs"]
+#[allow(dead_code)]
+mod render;
+
 fn mine() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 }
@@ -69,16 +73,88 @@ impl Files for Directory {
 }
 
 /// Every test file, read rather than listed - one test per file, and nothing else in `tests/`.
+///
+/// # `spec/tests/` and not `data/foundation/tests/`, which is `S-214`
+///
+/// **This read the generated directory, and that directory is generated from `reviewed/`.** So a
+/// test reached the page only after it had been read, and **the one interface by which a test
+/// becomes part of `spec/` could never show a new one.** Sean ran the application an hour after
+/// two tests were written for him and saw neither.
+///
+/// **`spec/README.md` rule 3** is the sentence it was on the wrong side of: the two directories
+/// *hold the same tests only while I have read every one, and a test nobody has read is in the
+/// first and not the second.* **The source is the first.**
+///
+/// **It never fired before because the directory arrived whole**: `b629b5e7` moved all fifty-four
+/// at once and every one already had a foundation form. `ce755d39` is the first genuinely new
+/// test since, and it is what found this.
 pub fn every_test() -> Vec<String> {
-    let mut found: Vec<String> =
-        std::fs::read_dir(mine().join("data").join("foundation").join("tests"))
-            .expect("data/foundation/tests")
-            .filter_map(|it| it.ok())
-            .filter_map(|it| it.file_name().to_str().map(str::to_string))
-            .filter(|name| name.ends_with(".4x"))
-            .collect();
+    let mut found: Vec<String> = std::fs::read_dir(tests_at())
+        .expect("spec/tests")
+        .filter_map(|it| it.ok())
+        .filter_map(|it| it.file_name().to_str().map(str::to_string))
+        .filter(|name| name.ends_with(".4x"))
+        .collect();
     found.sort();
     found
+}
+
+/// What converting a test's source needs: the two name tables and the schema that folds it.
+///
+/// **Built once rather than per test**, because each is read from every file of the store.
+struct Converting {
+    game: Names,
+    script: Names,
+    schema: game_model::schema::Schema,
+}
+
+impl Converting {
+    fn ready() -> Self {
+        let (game, _) = render::table(true);
+        let (script, _) = render::table(false);
+        let at = render::mine().join(render::friendly_at("schema.4x"));
+        let said =
+            std::fs::read_to_string(&at).unwrap_or_else(|why| panic!("{}: {why}", at.display()));
+        let rows = read(&said).unwrap_or_else(|why| panic!("spec/data/schema.4x: {why}"));
+        let schema = game_model::schema::Schema::of(&rows).expect("a schema");
+        Converting {
+            game,
+            script,
+            schema,
+        }
+    }
+
+    /// One test's rows in the form the engine reads, converted from the source it is written in.
+    ///
+    /// **A test that has never been read has no foundation copy**, which is the whole of `S-214`:
+    /// four reads in `build` went to the generated directory and a new test has nothing there.
+    ///
+    /// **Folding is not converting, and this lane shipped the difference for a minute.** The
+    /// friendly form says `relation:territory` and the foundation form says `relation:13`, so
+    /// reading the source and folding its arrows gave rows the engine could parse and not match -
+    /// fifty-six tests, **every one of them red, none of them changed**. `Names::foundation` is
+    /// the step that was missing, and it is the same one `examples/render.rs` writes the
+    /// generated copies with, so nothing here is a second opinion about what conversion means.
+    ///
+    /// **Which name table reads a row is a fact about where the row sits** - a script file's
+    /// prologue is the script's and its sections are the game's, which `in_a_section` decides.
+    fn rows_of(&self, file: &str) -> Result<Vec<Row>, String> {
+        let at = tests_at().join(file);
+        let said =
+            std::fs::read_to_string(&at).unwrap_or_else(|why| panic!("{}: {why}", at.display()));
+        let parsed = friendly::fold(&said, &self.schema).map_err(|why| why.to_string())?;
+        let of_the_game = friendly::in_a_section(&parsed);
+        let mut out = Vec::new();
+        for (at, row) in parsed.iter().enumerate() {
+            let names = if of_the_game[at] {
+                &self.game
+            } else {
+                &self.script
+            };
+            out.push(names.foundation(row).map_err(|why| why.to_string())?);
+        }
+        Ok(out)
+    }
 }
 
 fn escaped(raw: &str) -> String {
@@ -312,6 +388,13 @@ pub fn asked() -> BTreeMap<String, Vec<String>> {
 /// What became of one test, in the words the page uses.
 enum Outcome {
     Passed,
+    /// The source cannot be folded against the data as it stands, so there is nothing to run.
+    ///
+    /// **A test arrives before the rule it is about**, which is the order `spec/README.md` asks
+    /// for: he reads it, then it constrains. **So the page has to show one it cannot run** -
+    /// panicking here took the whole application down and `S-214` is about exactly the test that
+    /// cannot be shown.
+    Unreadable(String),
     Refused(String),
     Differed {
         missing: Vec<String>,
@@ -360,16 +443,21 @@ the world it leaves. (old state, commands) -> (new state, effects).
     let (mut passed, mut red) = (0usize, 0usize);
     let (mut reviewed, mut unreviewed) = (0usize, 0usize);
 
+    let converting = Converting::ready();
     for file in every_test() {
         let stem = file.trim_end_matches(".4x").to_string();
-        let own = rows(&format!("data/foundation/tests/{file}"));
+        // **The source, folded, and read once rather than four times.** It was read from the
+        // generated directory at each of the four uses below - which is what `S-214` is, and
+        // re-reading a file to get the same rows was the shape that hid it.
+        let folded = converting.rows_of(&file);
+        let own = folded.clone().unwrap_or_default();
 
         let mut script = setup.clone();
         script.extend(own.clone());
 
         // **Names built per test**, because a territory is a test's own and a category is not.
         let mut whole = shared.clone();
-        whole.extend(own);
+        whole.extend(own.clone());
         let names = Names::of(&whole);
         let friendly = |written: &str| -> String {
             match read(written) {
@@ -382,7 +470,7 @@ the world it leaves. (old state, commands) -> (new state, effects).
         // what the run saw rather than what the file said.
         let mut world = shared.clone();
         let mut inside = false;
-        for row in rows(&format!("data/foundation/tests/{file}")) {
+        for row in own.clone() {
             if matches!(row.relation.as_str(), "given" | "when" | "then" | "refused") {
                 inside = row.relation == "given";
                 continue;
@@ -396,7 +484,7 @@ the world it leaves. (old state, commands) -> (new state, effects).
         // **The commands the `when` states**, which is the middle of the fold.
         let mut commands = Vec::new();
         let mut inside = false;
-        for row in rows(&format!("data/foundation/tests/{file}")) {
+        for row in own.clone() {
             if matches!(row.relation.as_str(), "given" | "when" | "then" | "refused") {
                 inside = row.relation == "when";
                 continue;
@@ -406,14 +494,20 @@ the world it leaves. (old state, commands) -> (new state, effects).
             }
         }
 
-        let outcome = match run_test(&script, &data) {
-            // **Said with names**, the same as every other row on this page. `Refused::told`
-            // takes the writer because the engine has none - `tests/isolation.rs`.
-            Err(why) => Outcome::Refused(why.told(&|row| names.row(row))),
-            Ok(report) if report.same() => Outcome::Passed,
-            Ok(report) => Outcome::Differed {
-                missing: report.missing.iter().map(|it| friendly(it)).collect(),
-                extra: report.extra.iter().map(|it| friendly(it)).collect(),
+        let outcome = match &folded {
+            // **Nothing to run, and the page says so rather than falling over.** The commonest
+            // reason is the honest one: the test names a thing the data does not have yet,
+            // because it was written to be read before the rule it is about exists.
+            Err(why) => Outcome::Unreadable(why.clone()),
+            Ok(_) => match run_test(&script, &data) {
+                // **Said with names**, the same as every other row on this page. `Refused::told`
+                // takes the writer because the engine has none - `tests/isolation.rs`.
+                Err(why) => Outcome::Refused(why.told(&|row| names.row(row))),
+                Ok(report) if report.same() => Outcome::Passed,
+                Ok(report) => Outcome::Differed {
+                    missing: report.missing.iter().map(|it| friendly(it)).collect(),
+                    extra: report.extra.iter().map(|it| friendly(it)).collect(),
+                },
             },
         };
 
@@ -512,6 +606,12 @@ new state
 as expected
 "
             .to_string(),
+            Outcome::Unreadable(said) => format!(
+                "
+cannot be read against the data as it stands
+  {said}
+"
+            ),
             Outcome::Refused(said) => format!(
                 "
 not as expected
@@ -564,6 +664,7 @@ not as expected
 
         let (badge, class, why) = match &outcome {
             Outcome::Passed => ("as expected", "ok", String::new()),
+            Outcome::Unreadable(said) => ("cannot be read yet", "red", escaped(said)),
             Outcome::Refused(said) => ("refused", "red", escaped(said)),
             Outcome::Differed { .. } => ("not as expected", "red", String::new()),
         };
@@ -690,9 +791,21 @@ not as expected
         // opened from disk would link at a server that is not there, and a relative link to a
         // `.4x` would be offered as a download rather than shown - which is the whole reason the
         // server declares `text/plain` and no `.txt` copy exists.
+        // **The foundation link only where there is a foundation form** - `S-214`. A test that
+        // has never been read has no generated copy, so the second link offered a 404 beside the
+        // one file the reader actually needs. **Asked of the disk rather than of the outcome**,
+        // because a test can be unread and still readable, and unreadable and still reviewed.
+        let has_foundation = render::mine()
+            .join(render::foundation_at(&format!("tests/{file}")))
+            .exists();
         let raw = if live {
+            let foundation = if has_foundation {
+                format!(" · <a href=\"/data/foundation/tests/{stem}.4x\">foundation</a>")
+            } else {
+                " · not read yet, so there is no foundation form".to_string()
+            };
             format!(
-                "<p class=\"raw\">on disk: <a href=\"/spec/tests/{stem}.4x\">spec/tests/{stem}.4x</a> · <a href=\"/data/foundation/tests/{stem}.4x\">foundation</a></p>\n"
+                "<p class=\"raw\">on disk: <a href=\"/spec/tests/{stem}.4x\">spec/tests/{stem}.4x</a>{foundation}</p>\n"
             )
         } else {
             // **A `.txt` twin, because a published `.4x` is a download.** Measured in the

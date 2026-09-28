@@ -122,6 +122,33 @@ fn every_test_is_browsable(known: &[String], browsable: &[String]) {
         "only {} tests were found, so this checked almost nothing",
         known.len()
     );
+
+    // **And the other direction, which is `S-214`.** The half above asks whether every test the
+    // page lists has an address that answers; it cannot see a test on disk that the page never
+    // listed. **Fifty-six files and fifty-four rows satisfied it**, and the two Sean was meant to
+    // read were absent in silence.
+    //
+    // **Its own comment said it was about the outcome rather than the input, and it was** - but
+    // the outcome it read was the one the page had already chosen. Asking both directions is the
+    // property; either alone passes over the gap the other is for.
+    let unlisted: Vec<&String> = browsable
+        .iter()
+        .filter(|at| at.starts_with("spec/tests/") && at.ends_with(".4x"))
+        .filter(|at| {
+            let name = at
+                .trim_start_matches("spec/tests/")
+                .trim_end_matches(".4x")
+                .to_string();
+            !known.contains(&name)
+        })
+        .collect();
+    assert!(
+        unlisted.is_empty(),
+        "{} test(s) are on disk and not on the page, so they can be read and not approved: {:?} - \
+         the list is what `r` writes a record from",
+        unlisted.len(),
+        unlisted
+    );
 }
 
 /// Read one request, answer it, and close.
