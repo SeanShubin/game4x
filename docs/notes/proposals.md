@@ -69,6 +69,47 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-218 - `8eaf2c87` left the tree waiting on Sean and filed nothing, and `pending.md` said nothing needed deciding
+
+**to** code · **status** open · **raised** 2026-09-28 · **source** Sean: *the code lane should have filed something* · **cites** `S-213`, `D-6`
+
+**derived from** *an item whose completion needs a person is addressed to a person* - `CLAUDE.md` -> Outboxes, and *a lane that thinks a case is wrong says so in an outbox rather than removing it* - Perspectives
+
+**What was right first.** The scenario gained `{build-yard where:place-3}` on his instruction, the new
+cases were **added** rather than substituted - an addition is publishing and is any lane's - and the
+two stale ones were **not deleted**, which is the rule kept.
+
+**What was missing is the sentence.** Inserting a command at position eight renamed the two after it,
+so `05/08-launch.4x` and `05/09-end-turn.4x` were left beside `05/09-launch.4x` and
+`05/10-end-turn.4x`. **The suite went red on a count only he could reconcile**, and nothing anywhere
+said so.
+
+```
+pending.md at 8eaf2c87, What must be decided:
+  R-9, R-10, R-11, R-12, D-5, D-6
+```
+
+**Six vettings and not this.** So the one file that exists to say what waits on a person said
+nothing, while the gate was red and no lane could clear it. **That is the exact failure the addressee
+rule was written from** - five capabilities addressed `to code` that only he could move, while
+`pending.md` reported that nothing needed deciding.
+
+**He found out by running it and cleared it himself** - `dfdb507b`, his own commit, no co-author
+line.
+
+## The route, since it is not obvious and is the reason this is easy to miss
+
+**You cannot address him and should not try.** *Nothing but a proposal is addressed to Sean.* So the
+filing is an item `to spec` saying the scenario moved and which cases are waiting on a deletion, and
+this lane turns it into something he reads. **One line would have done it.**
+
+## And one claim in `regression.rs` is narrower than it reads
+
+**Its comment says *the naming now makes his edit rename nothing*.** Measured on this insert: a
+command at position eight renamed the two behind it. The sentence beside it is the honest one - *a
+scheme that renames less is not a scheme that renames never* - **so the claim holds for an append and
+not for an insert**, and an insert is what a new rule in the middle of a turn always is.
+
 ### S-217 - The review application panics on a record whose test is gone, and `CLAUDE.md` says it shows one
 
 **to** code · **status** acted · **acted** 2026-09-28 · **cited** `78fafb2b` - the application lists the records and resolves each to its source, so an orphan is a row rather than a panic · **raised** 2026-09-28 · **source** Sean running `scripts/review.ps1` after `51a13065` and getting a panic instead of a page · **cites** `S-214`, `S-215`
