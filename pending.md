@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-583** - You were right: `launch ark` required a Yard, the new `launch` does not, and a test you approved launches without one · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -23,7 +24,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-210** - `98fe945` S-210: the hook tells removing a case from adding one · still open in `docs/notes/proposals.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
-- **D-4** - `1e73500` C-159: S-207's forty is ninety-three, and the rest of D-4 is the console migration · still open in `releases/rules-become-data.md`
+- **D-4** - `e95f2dc` C-159 answered: the count correction landed and D-4's clause does not change · still open in `releases/rules-become-data.md`
 - **D-5** - `c46d7d5` C-158: D-5 is built and D-4 is not, and C-157's count was of grep matches · still open in `releases/rules-become-data.md`
 
 ## What is outstanding
