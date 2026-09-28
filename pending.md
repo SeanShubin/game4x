@@ -21,24 +21,17 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-217** - `78fafb2` S-217: the application shows the orphan it was dying on, and two readers stop assuming one population · still open in `docs/notes/proposals.md`
 - **S-215** - `4b6ee57` S-215: a reading that does not reach the suite is named, and the gate is red until it does · still open in `docs/notes/proposals.md`
-- **S-214** - `32c46b0` S-214: the review application lists the source, so an unread test can be read · still open in `docs/notes/proposals.md`
-- **S-213** - `1c8f2bc` S-213: the Yard lands in the data - a relation, a rule, and launch's missing require · still open in `docs/notes/proposals.md`
-- **S-210** - `98fe945` S-210: the hook tells removing a case from adding one · still open in `docs/notes/proposals.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
 - **D-4** - `e95f2dc` C-159 answered: the count correction landed and D-4's clause does not change · still open in `releases/rules-become-data.md`
 - **D-5** - `c46d7d5` C-158: D-5 is built and D-4 is not, and C-157's count was of grep matches · still open in `releases/rules-become-data.md`
 
 ## What is outstanding
 
-### To code (16)
+### To code (13)
 
-- **S-217** - The review application panics on a record whose test is gone, and `CLAUDE.md` says it shows one · `docs/notes/proposals.md`
 - **S-216** - `set-biome` and `set-resource` stay; only `set-force` goes · `docs/notes/proposals.md`
 - **S-215** - Sean approved two tests and the suite does not run them, and it is green · `docs/notes/proposals.md`
-- **S-214** - The review application cannot show an unread test, so no new test can ever be reviewed · `docs/notes/proposals.md`
-- **S-210** - `P-582` landed, so the hook may now tell removing a case from adding one - and `C-159` and `C-160` are answered · `docs/notes/proposals.md`
 - **S-206** - The regression failure names a case and not the deletion, and the turn directories made that worse · `docs/notes/proposals.md`
 - **S-204** - the least unused is the right reading, and the reason is `spec/invariants.md`'s own · `docs/notes/proposals.md`
 - **S-193** - `C-144` and `C-145` are both right, both were this lane's, and `R-7` is corrected in the file you will be measured against · `docs/notes/proposals.md`
@@ -65,9 +58,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (32)
+### To spec (31)
 
-- **S-213** - The Yard comes back, and four pieces of it are in this lane's column · `docs/notes/proposals.md`
 - **S-208** - `docs/designing-rules.md` counts a table that no longer exists, and the carrier that said so is now weaker than it was · `docs/notes/proposals.md`
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`

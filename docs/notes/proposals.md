@@ -71,7 +71,7 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ### S-217 - The review application panics on a record whose test is gone, and `CLAUDE.md` says it shows one
 
-**to** code · **status** open · **raised** 2026-09-28 · **source** Sean running `scripts/review.ps1` after `51a13065` and getting a panic instead of a page · **cites** `S-214`, `S-215`
+**to** code · **status** acted · **acted** 2026-09-28 · **cited** `78fafb2b` - the application lists the records and resolves each to its source, so an orphan is a row rather than a panic · **raised** 2026-09-28 · **source** Sean running `scripts/review.ps1` after `51a13065` and getting a panic instead of a page · **cites** `S-214`, `S-215`
 
 **derived from** *the application shows a record whose test is gone, so that a rename - which leaves an orphaned record and an unread test - is two things he can see and act on rather than one thing nobody may touch* - `CLAUDE.md` -> Perspectives
 
@@ -170,7 +170,7 @@ being compared with.
 
 ### S-214 - The review application cannot show an unread test, so no new test can ever be reviewed
 
-**to** code · **status** open · **raised** 2026-09-27 · **source** Sean running `scripts/review.ps1` and seeing neither of the two tests written for him an hour earlier
+**to** code · **status** acted · **acted** 2026-09-28 · **cited** `32c46b08` - `report.rs` reads `spec/tests/`, so an unread test reaches the page · **raised** 2026-09-27 · **source** Sean running `scripts/review.ps1` and seeing neither of the two tests written for him an hour earlier
 
 **derived from** *the rendering is generated from `reviewed/` and never from `spec/tests/`* - `spec/README.md` rule 3
 
@@ -220,7 +220,7 @@ available and the approval is not, which is the half that matters.
 
 ### S-213 - The Yard comes back, and four pieces of it are in this lane's column
 
-**to** spec · **status** open · **raised** 2026-09-27 · **source** Sean answering `P-583`: it was a porting omission · **cites** `P-583`
+**to** spec · **status** acted · **acted** 2026-09-28 · **cited** `1c8f2bcb` - the yard relation, the `build-yard` rule and `launch`'s require are in `spec/data/` · **raised** 2026-09-27 · **source** Sean answering `P-583`: it was a porting omission · **cites** `P-583`
 
 **Two tests are written and unread**, which is the state a test is meant to be in until he opens the
 review application: `a-yard-is-built-from-labor-and-metal` and
@@ -303,7 +303,7 @@ message is never the record; today it could not even be the notice.
 
 ### S-210 - `P-582` landed, so the hook may now tell removing a case from adding one - and `C-159` and `C-160` are answered
 
-**to** code · **status** open · **raised** 2026-09-27 · **source** promoting `P-582`, which `C-160` asked for and Sean answered · **cites** `C-159`, `C-160`, `P-582`
+**to** code · **status** acted · **acted** 2026-09-28 · **cited** `98fe9456` - `hooks/pre-commit` gives `regression/*` the column `sean` on a removal and none on an addition · **raised** 2026-09-27 · **source** promoting `P-582`, which `C-160` asked for and Sean answered · **cites** `C-159`, `C-160`, `P-582`
 
 **`C-160` is answered and the answer is the one you could not choose.** Sean took the first of the
 three: **the hook learns the difference rather than `regression/` going into a single column.**
