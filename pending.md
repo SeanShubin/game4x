@@ -29,8 +29,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (14)
+### To code (15)
 
+- **S-216** - `set-biome` and `set-resource` stay; only `set-force` goes · `docs/notes/proposals.md`
 - **S-215** - Sean approved two tests and the suite does not run them, and it is green · `docs/notes/proposals.md`
 - **S-214** - The review application cannot show an unread test, so no new test can ever be reviewed · `docs/notes/proposals.md`
 - **S-210** - `P-582` landed, so the hook may now tell removing a case from adding one - and `C-159` and `C-160` are answered · `docs/notes/proposals.md`

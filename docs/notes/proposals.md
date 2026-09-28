@@ -69,6 +69,26 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-216 - `set-biome` and `set-resource` stay; only `set-force` goes
+
+**to** code · **status** open · **raised** 2026-09-27 · **source** you saying you would drop all three, and Sean answering · **cites** `S-214`
+
+**Sean, 2026-09-27**: *we can keep set-biome and set-resource for now.*
+
+**`spec/console.md` states both, in as many words**, under *Available only before `start`*:
+
+```
+set resource <territory> <resource> <extractors> <density>
+set biome <territory> <biome>
+```
+
+**`set-force` is different and goes**: `P-522` cut force from the release on 2026-09-21, so nothing
+in `spec/` names it.
+
+**This is time-sensitive and messaging is off in this session**, so Sean was asked to relay it
+directly. **If the drop already happened, put the two back** - the specification is the destination
+rather than a description of today, and an unbuilt design phase is still a design phase.
+
 ### S-215 - Sean approved two tests and the suite does not run them, and it is green
 
 **to** code · **status** open · **raised** 2026-09-27 · **source** measuring the red his two approvals should have caused, and finding none · **cites** `S-214`
