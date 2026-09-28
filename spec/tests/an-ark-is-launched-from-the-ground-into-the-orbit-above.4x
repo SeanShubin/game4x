@@ -13,6 +13,12 @@
 # The rule reads that place's territory and asks for the one place that has it and is an orbit -
 # **found by matching, so a territory with no orbit above it simply cannot launch.**
 #
+# **A yard is required and is not spent, so it is in the `given` and still in the `then`.** That is
+# the clause the migration dropped and `P-583` put back: `spec/structures.md` says *a Yard produces
+# Arks*, and producing is not consuming. **It is state rather than a story** - `spec/README.md` rule
+# 3 - so it is given rather than built here, and `a-yard-is-built-from-labor-and-metal` says what
+# building one costs.
+#
 # **The ark arrives able to move and to gather**, which is what everything made here does. Sean,
 # 2026-09-20: *Generally i want things created with full capability.* So it may turn to the sun on
 # the turn it was built.
@@ -26,6 +32,7 @@
 {labor where:place-1} -> 1
 {metal where:place-1} -> 1
 {energy where:place-1} -> 1
+{yard where:place-1} -> 1
 
 {when}
 {launch where:place-1}
@@ -34,4 +41,5 @@
 {territory id:1 name:territory-1}
 {place id:1 of:territory-1 layer:surface name:place-1}
 {place id:2 of:territory-1 layer:orbit name:place-2}
+{yard where:place-1} -> 1
 {ark where:place-2 moving:1 gathering:1} -> 1
