@@ -112,7 +112,7 @@ nobody judged by it can touch it** - which is why the review application is the 
 same reason a lens never edits what it reviews.
 
 **A generated regression case is deleted by Sean, and that deletion is an approval.** The cases
-under `scenario/regression/` have no owner and nobody edits them - they are generated in full,
+under `regression/` have no owner and nobody edits them - they are generated in full,
 and a hand edit is overwritten. **Deleting one is different**: it is not overwritten, it is
 honoured, and it says *I accept what it does now*. **So no instance deletes one while the
 command it covers is still played**, and a lane that thinks a case is wrong says so in an
