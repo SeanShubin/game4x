@@ -124,5 +124,6 @@
 {work where:place-3 what:metal}
 {build-extractor where:place-3 what:energy}
 {work where:place-3 what:energy}
+{build-yard where:place-3}
 {launch where:place-3}
 {end-turn}

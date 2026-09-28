@@ -334,8 +334,8 @@ fn every_rule_fires_or_is_named_with_what_it_needs() {
     // nothing fired every rule would be unaccounted and the first assertion would catch it; with
     // nothing named it would catch that too - but a run where `rules` itself was empty passes every
     // assertion above in silence.
-    assert_eq!(rules.len(), 15, "the ruleset is fifteen rules: {rules:?}");
-    assert_eq!(fired.len(), 14, "fourteen of them fire: {fired:?}");
+    assert_eq!(rules.len(), 16, "the ruleset is sixteen rules: {rules:?}");
+    assert_eq!(fired.len(), 15, "fifteen of them fire: {fired:?}");
     assert_eq!(named.len(), 1, "one is named as unusual: {named:?}");
     assert_eq!(
         fired.len() + named.len(),

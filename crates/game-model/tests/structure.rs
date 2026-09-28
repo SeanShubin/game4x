@@ -64,10 +64,10 @@ fn the_relations_that_describe_the_structure_are_declared_like_any_other() {
     assert_eq!(checked, 29, "twenty-nine relations describe the structure");
     assert_eq!(
         game.schema().names().len(),
-        51,
-        "fifty-one in all - those twenty-nine, and the game's twenty-two: nine kinds, four
+        52,
+        "fifty-two in all - those twenty-nine, and the game's twenty-three: nine kinds, four
          families, a territory, a place, an adjacency, a deposit, an extractor, a citizen,
-         an ark, a biome and a terrain"
+         an ark, a biome, a terrain and a yard"
     );
 }
 
@@ -878,9 +878,9 @@ fn the_tree_is_what_the_file_says_it_is() {
         .collect();
     assert_eq!(
         rules.len(),
-        15,
+        16,
         "move, build-extractor, work, refresh, end-turn, build-bin, discard-disorder,
-         upkeep, perish, breed, toil, gather, launch, deploy, build-pioneer"
+         upkeep, perish, breed, toil, gather, launch, deploy, build-pioneer, build-yard"
     );
     // **At least once, not exactly once.** `refresh` appears twice because `end-turn` names it
     // twice - two steps of one order - and asserting *once* said the tree was wrong when it was

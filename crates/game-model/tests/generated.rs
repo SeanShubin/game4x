@@ -278,6 +278,7 @@ fn the_relations_written_in_no_declared_order_are_the_rule_names() {
             "build-bin",
             "build-extractor",
             "build-pioneer",
+            "build-yard",
             "deploy",
             "discard-disorder",
             "end-turn",

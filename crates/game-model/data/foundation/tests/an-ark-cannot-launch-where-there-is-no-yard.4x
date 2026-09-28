@@ -1,0 +1,29 @@
+# An ark is launched from a yard, so a territory with everything else and no yard launches nothing.
+#
+# **`spec/structures.md`**: *A Yard produces Arks.* **This is the clause the migration dropped.**
+# The old ruleset's `launch ark` recipe carried `require 1 yard` beside its territory requirement;
+# the rule in `spec/data/rules.4x` requires two places and removes a labor, a metal and an energy,
+# and names no yard at all.
+#
+# **It is the sibling of `an-ark-cannot-launch-where-there-is-no-orbit`**, and the pair is the whole
+# of what launching needs that is not a resource: somewhere to build it, and somewhere for it to go.
+#
+# **The labor, metal and energy are all present on purpose.** A test that left one of them out would
+# pass whether or not the yard were required, because the rule would refuse it for the missing
+# resource - so the refusal named here is the only one it can be.
+
+{test name:an-ark-cannot-launch-where-there-is-no-yard}
+
+{given}
+{territory id:1}
+{place id:1 of:1 layer:surface}
+{place id:2 of:1 layer:orbit}
+{labor where:1 quantity:1}
+{metal where:1 quantity:1}
+{energy where:1 quantity:1}
+
+{when}
+{launch where:1}
+
+{refused}
+{yard where:1}

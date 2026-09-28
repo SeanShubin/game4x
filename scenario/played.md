@@ -6,7 +6,7 @@ and the act are `scenario/main.4x`, and this file is what happened when they met
 **`spec/scenarios.md`: it is vetted by hand.** So this is written to be read rather than
 to pass; `crates/game-model/tests/scenario.rs` is the part a gate holds.
 
-15 rules in the ruleset, 35 commands, 5 turns.
+16 rules in the ruleset, 36 commands, 5 turns.
 
 Every place is written the way `scenario/main.4x` writes it: `place-1` is the surface
 landed on, `place-2` the orbit above it, `place-3` the surface taken by land, `place-4`
@@ -75,12 +75,13 @@ the orbit above that.
     {work where:place-3 what:metal}
     {build-extractor where:place-3 what:energy}
     {work where:place-3 what:energy}
+    {build-yard where:place-3}
     {launch where:place-3}
     {end-turn}
 
   place-1: 1 bin, 6 citizen, 2 deposit, 2 extractor, 5 metal
   place-2: 1 deposit
-  place-3: 6 citizen, 3 deposit, 3 extractor
+  place-3: 6 citizen, 3 deposit, 3 extractor, 1 yard
   place-4: 1 ark
 
 ## What fired
@@ -89,6 +90,7 @@ the orbit above that.
     build-bin          1
     build-extractor    1
     build-pioneer      1
+    build-yard         1
     deploy             2
     discard-disorder   5
     end-turn           5
@@ -101,7 +103,7 @@ the orbit above that.
     upkeep             32
     work               13
 
-14 of 15 rules fired; 1 did not: ["perish"]
+15 of 16 rules fired; 1 did not: ["perish"]
 
 ### What a typical game does not use
 
@@ -156,8 +158,9 @@ notation say so.
     {provides kind:place what:berth} -> 6
     {territory id:1 name:territory-1}
     {territory id:2 name:territory-2}
+    {yard where:place-3} -> 1
 
-35 row(s) of world, out of 679 in the store.
+36 row(s) of world, out of 698 in the store.
 
 ## What every command took and made
 
@@ -616,6 +619,13 @@ notation say so.
     made  {extractor quantity:1 what:50 where:3 working:0}
     made  {energy quantity:6 where:3}
 
+### Turn 5: {build-yard where:place-3}
+
+    fired build-yard
+    took  {labor quantity:1 where:3}
+    took  {metal quantity:1 where:3}
+    made  {yard quantity:1 where:3}
+
 ### Turn 5: {launch where:place-3}
 
     fired launch
@@ -651,9 +661,8 @@ notation say so.
     took  {food quantity:1 where:3}
     took  {citizen hungry:1 quantity:1 where:3}
     took  {food quantity:1 where:3}
-    took  {metal quantity:4 where:3}
+    took  {metal quantity:3 where:3}
     took  {labor quantity:5 where:1}
-    took  {labor quantity:1 where:3}
     took  {energy quantity:5 where:3}
     took  {extractor quantity:1 what:31 where:1 working:0}
     took  {extractor quantity:1 what:31 where:3 working:0}

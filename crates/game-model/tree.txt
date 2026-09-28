@@ -30,3 +30,5 @@ launch  where:place
 deploy  where:place what:founder
 
 build-pioneer  where:place
+
+build-yard  where:place

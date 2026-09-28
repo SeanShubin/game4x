@@ -313,9 +313,10 @@ fn the_report_says_which_relations_it_compared() {
             "scout",
             "terrain",
             "territory",
-            "transport"
+            "transport",
+            "yard"
         ],
-        "nineteen of the game's relations are state - an allowance is a column of the thing now, so `working` is not one of them, and `terrain` is one since `P-578`"
+        "twenty of the game's relations are state - an allowance is a column of the thing now, so `working` is not one of them; `terrain` is one since `P-578` and `yard` since `P-583`"
     );
     assert_eq!(report.test, "the-scout-moves-to-an-adjacent-place");
 }
@@ -332,7 +333,7 @@ fn the_report_reads_as_a_report() {
             report_of("data/foundation/tests/the-scout-moves-to-an-adjacent-place.4x")
         ),
         "the-scout-moves-to-an-adjacent-place\n  \
-           compared  adjacency, ark, bin, capacity, citizen, consumes, deposit, energy, extractor, food, labor, metal, pioneer, place, provides, scout, terrain, territory, transport\n  \
+           compared  adjacency, ark, bin, capacity, citizen, consumes, deposit, energy, extractor, food, labor, metal, pioneer, place, provides, scout, terrain, territory, transport, yard\n  \
            result    as expected"
     );
 }

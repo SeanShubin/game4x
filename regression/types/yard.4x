@@ -1,0 +1,14 @@
+# The thing `yard`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:58 name:yard}
+{column id:159 relation:yard seq:1 name:where}
+{column id:160 relation:yard seq:2 name:quantity}
+{reference id:79 column:159 to:place}
+{state id:23 relation:yard}

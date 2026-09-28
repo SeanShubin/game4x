@@ -37,6 +37,7 @@ use std::collections::BTreeSet;
 use std::path::PathBuf;
 
 use friendly_notation::{Names, fold, in_a_section, states_a_world};
+use game_model::engine::Game;
 use game_model::notation::{Row, read, write};
 use game_model::schema::Schema;
 
@@ -70,6 +71,14 @@ fn tests_at() -> PathBuf {
 }
 
 /// Where the generated foundation form goes.
+/// Where the form the suite runs lives, which this program writes and nothing else does.
+fn suite_at() -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("data")
+        .join("foundation")
+        .join("tests")
+}
+
 fn reports_at() -> PathBuf {
     mine()
         .join("..")
@@ -229,7 +238,33 @@ fn main() {
     // `examples/report.rs` already builds its schema over `shared` plus the test's own rows;
     // this is that, and it was found by comparing against the committed foundation rather than
     // by reading either.
-    let whole = Schema::of(&shared_rows).expect("a schema over every shared row");
+    // **The engine's own schema and not `Schema::of`'s**, because a command's relation is
+    // declared by its rule rather than by `{column}` rows.
+    //
+    // **`Schema::write` falls back to alphabetical order for a relation it cannot find, and says
+    // nothing.** `Schema::of(&shared_rows)` does not know `move`, so `{move what:28 from:1 to:2}`
+    // came out `{move from:1 to:2 what:28}` - the same row, a different file. **Measured against
+    // the committed foundation**: 38 of the 54 differed, every one of them on a command line, and
+    // the rows were right in all 38.
+    //
+    // `Game::of` derives a command's columns from the rule's `{input}` rows, which is where the
+    // declared order actually lives - so this asks the thing that knows.
+    //
+    // **Converted here rather than read from `data/foundation/`**, so this program does not
+    // depend on `examples/render` having run first. A stale generated file would otherwise give
+    // a stale writing schema, silently.
+    let shared_foundation: Vec<Row> = shared_rows
+        .iter()
+        .map(|row| {
+            of_game
+                .foundation(row)
+                .unwrap_or_else(|why| panic!("`{}`: {why}", write(row)))
+        })
+        .collect();
+    let whole = Game::of(shared_foundation)
+        .expect("a game over every shared row")
+        .schema()
+        .clone();
 
     // **And the script's, which is a second schema rather than more of the first.** `script.4x`
     // declares its own relations from id 17 - `store`, `test`, `load` - over ids `schema.4x`
@@ -247,6 +282,12 @@ fn main() {
     let _ = std::fs::remove_dir_all(&out);
     std::fs::create_dir_all(&out).expect("reports/foundation");
 
+    // **Written fresh in `reports/` and in place in `data/foundation/tests/`**, because the
+    // first is a rendering and the second is what a record generates: a file there that no
+    // record produces is reported by `every_reading_reaches_the_suite_...` rather than deleted
+    // here, since a test the suite runs and nobody read is the thing that check exists to find.
+    std::fs::create_dir_all(suite_at()).expect("data/foundation/tests");
+    let mut moved: Vec<String> = Vec::new();
     let mut written = 0;
     let mut converted = 0;
     for name in &records {
@@ -257,6 +298,7 @@ fn main() {
         let sections = in_a_section(&friendly);
 
         let mut lines = Vec::new();
+        let mut to_write: Vec<Row> = Vec::new();
         for (at, row) in friendly.iter().enumerate() {
             let (names, writing) = if sections[at] {
                 (&of_game, &whole)
@@ -266,6 +308,7 @@ fn main() {
             let foundation = names
                 .foundation(row)
                 .unwrap_or_else(|why| panic!("reviewed/{name}: `{}`: {why}", write(row)));
+            to_write.push(foundation.clone());
             // **`Schema::write` rather than `notation::write`, and the difference is column
             // order.** A `Row` holds its values in a `BTreeMap`, so the notation writes them
             // alphabetically and the schema writes them the way the relation declares them.
@@ -288,6 +331,58 @@ fn main() {
         );
         std::fs::write(out.join(name), page).unwrap_or_else(|why| panic!("writing {name}: {why}"));
         written += 1;
+
+        // **And the copy the suite runs, which nothing wrote until now.**
+        //
+        // # A check with no generator behind it
+        //
+        // **`data/foundation/tests/` was hand-carried.** `render.rs` skips tests by name and this
+        // program wrote only the published rendering, so the directory had last been touched by
+        // `f633864a` - the crate move - and every reference to it in the tree is a *read*.
+        // `what_the_engine_runs_is_what_the_record_generates` compares the records against it and
+        // **there was nothing to run when it disagreed**, which is why `S-215` could name the gap
+        // and not close it.
+        //
+        // **The comments are carried across**, which is the whole difference from the page above:
+        // a test explains itself in its own words and the form the engine reads keeps them, the
+        // same way `render::converted` keeps them for the five shared files.
+        let mut carried = String::new();
+        let mut row_at = 0;
+        for line in text.lines() {
+            let bare = line.trim();
+            if bare.is_empty() || bare.starts_with('#') {
+                carried.push_str(line);
+            } else {
+                carried.push_str(&lines[row_at]);
+                row_at += 1;
+            }
+            carried.push('\n');
+        }
+        assert_eq!(
+            row_at,
+            lines.len(),
+            "reviewed/{name}: {row_at} of {} rows were placed, so a line was read as prose",
+            lines.len()
+        );
+        // **Compared as rows and not as bytes, which is what the file is for.**
+        //
+        // **A command's column order is its rule's `{input seq:}`** - `move` is `what, from, to`
+        // - and no `Schema` holds that, so `Schema::write` falls back to alphabetical for every
+        // command line. **Writing bytes would have reordered 60 lines across 38 approved
+        // renderings and changed not one row.** What this directory owes the records is that it
+        // *says the same thing*, which is precisely what
+        // `what_the_engine_runs_is_what_the_record_generates` asserts about it.
+        //
+        // **So a file whose rows already match is left alone**, and the cost is that a stale
+        // comment in one is never refreshed. That is the right way round: the rows are the
+        // specification and the prose is a reader's.
+        let to = suite_at().join(name);
+        let before = std::fs::read_to_string(&to).unwrap_or_default();
+        let same_rows = read(&before).map(|rows| rows == to_write).unwrap_or(false);
+        if !same_rows {
+            std::fs::write(&to, &carried).unwrap_or_else(|why| panic!("writing {name}: {why}"));
+            moved.push(name.clone());
+        }
     }
 
     // **A count over nothing, guarded on the other side too.** Records with no rows between them
@@ -299,6 +394,10 @@ fn main() {
     );
 
     println!("wrote {written} foundation files to reports/foundation, {converted} rows");
+    match moved.len() {
+        0 => println!("data/foundation/tests: all {written} current"),
+        n => println!("data/foundation/tests: {n} rewritten - read the diff: {moved:?}"),
+    }
 
     // **Named and counted, and not an error** - `every_read_test`'s contract, mirrored.
     if unread.is_empty() {

@@ -181,6 +181,7 @@ fn check(files: &InMemory) -> Result<(), String> {
             "terrain",
             "territory",
             "transport",
+            "yard",
         ];
         if report.compared != state && report.compared != ["the refusal"] {
             return Err(format!("compared {:?}", report.compared));

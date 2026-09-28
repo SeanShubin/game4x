@@ -13,10 +13,21 @@ use std::path::PathBuf;
 use game_model::engine::Game;
 use game_model::notation::read;
 
+/// **The foundation form of all three, because that is what `Game::of` reads.**
+///
+/// **Two of these named `spec/data/` and were right until `P-576`.** That promotion made
+/// `spec/data/` the *friendly* source - `{column id:1 relation:relation ...}` where the engine
+/// wants `relation:1` - so `Game::of` refused with *`column`.`relation` is `relation`, and no
+/// `relation` has that key*. **Nothing ran this between P-576 and the Yard landing**, because
+/// `tree.txt` only needs regenerating when a rule moves, and no rule had.
+///
+/// **The check that names this program is what found it**:
+/// `the_tree_is_what_the_file_says_it_is` went red on `build-yard` and said to run this, which
+/// is the shape a generated file and its check are supposed to have.
 const LOADED: [&str; 3] = [
-    "../../spec/data/schema.4x",
+    "data/foundation/schema.4x",
     "data/foundation/engine.4x",
-    "../../spec/data/rules.4x",
+    "data/foundation/rules.4x",
 ];
 
 fn main() {

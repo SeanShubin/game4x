@@ -240,7 +240,11 @@ fn every_command_has_an_expectation_and_it_is_current() {
     // rather than passing quietly.
     let played: BTreeSet<String> = cases.iter().map(|it| it.command.clone()).collect();
     let mut gone: Vec<String> = Vec::new();
+    let mut renamed: Vec<(String, String)> = Vec::new();
     let mut looked = 0;
+    // **The names this run produced**, so a file on disk that is not one of them can be told from
+    // one that is.
+    let produced: BTreeSet<String> = cases.iter().map(|it| it.name.clone()).collect();
     let mut found: Vec<std::path::PathBuf> = Vec::new();
     for turn in std::fs::read_dir(&at).unwrap_or_else(|why| panic!("{}: {why}", at.display())) {
         let turn = turn.expect("a readable entry").path();
@@ -287,7 +291,74 @@ fn every_command_has_an_expectation_and_it_is_current() {
         looked += 1;
         if !played.contains(&covers) {
             gone.push(format!("{name} covers {covers}"));
+        } else if !produced.contains(&name) {
+            // **A file that covers a played command and is not one of today's cases** is what a
+            // renumber leaves behind: inserting a command into a turn shifts every case after it,
+            // and the old names stay. **`S-195` predicted exactly this** and the naming was chosen
+            // to make it rare rather than impossible.
+            //
+            // **Whether it is worth reading is the thing to say**, because the two look identical
+            // on disk. The case that replaced it covers the same command, so either the content
+            // matches - a pure rename, nothing to read - or it does not, and the difference is a
+            // behaviour change he has not seen.
+            // **In the same turn, because a command repeats across turns.** Matching on the
+            // command alone said `05/09-end-turn.4x was renamed to 01/06-end-turn.4x` - true of
+            // the command and useless, since every turn ends with one. **A turn is what bounds
+            // the renumber**, so it bounds the search for what replaced a case too.
+            let turn = name.split('/').next().unwrap_or_default();
+            let candidates: Vec<&Case> = cases
+                .iter()
+                .filter(|it| it.command == covers && it.name.starts_with(&format!("{turn}/")))
+                .collect();
+            // **Compared without the line that must differ.** A case names itself after its own
+            // position, so a renumber changes `{test name:...}` by construction - and comparing
+            // the whole text called every pure rename a change, which is the opposite of the
+            // thing this message exists to tell him.
+            let without_its_name = |said: &str| -> String {
+                said.lines()
+                    .filter(|line| !line.trim_start().starts_with("{test name:"))
+                    .collect::<Vec<&str>>()
+                    .join("\n")
+            };
+            let said = match candidates[..] {
+                [only] if without_its_name(&only.text) == without_its_name(&text) => format!(
+                    "{name} was renamed to {}, and says the same thing - nothing to read",
+                    only.name
+                ),
+                [only] => format!(
+                    "{name} was renamed to {}, and what it says changed - read that diff",
+                    only.name
+                ),
+                [] => format!("{name} covers {covers} and no case of this run does"),
+                _ => format!(
+                    "{name} covers {covers}, which turn {turn} plays {} times - which case \
+                     replaced it is not decidable from the command alone",
+                    candidates.len()
+                ),
+            };
+            renamed.push((name.clone(), said));
         }
+    }
+
+    // **Named and printed rather than counted** - the assertion below said `38` against `36` and
+    // left a reader to find which two and what to do about them. **The gesture is his**, so what
+    // this owes him is the deletion and whether there is anything to read first.
+    if !renamed.is_empty() {
+        let mut out = String::new();
+        for (_, said) in &renamed {
+            out.push_str(&format!("    {said}\n"));
+        }
+        out.push_str("\n  delete the ones you are happy with:\n");
+        for (name, _) in &renamed {
+            out.push_str(&format!("    Remove-Item regression/scenario/{name}\n"));
+        }
+        panic!(
+            "{} case(s) on disk are not cases of this run, because a command was inserted and \
+             the turn renumbered.\n\
+             **Their commands are still played, so deleting one is your approval and no lane may \
+             do it.**\n{out}",
+            renamed.len()
+        );
     }
 
     assert!(

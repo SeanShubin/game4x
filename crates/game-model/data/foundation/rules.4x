@@ -583,15 +583,17 @@
 
 {clause id:40 rule:13 seq:1 role:1 relation:48}
 {clause id:41 rule:13 seq:2 role:1 relation:48}
-{clause id:42 rule:13 seq:3 role:2 relation:29}
-{clause id:43 rule:13 seq:4 role:2 relation:30}
-{clause id:44 rule:13 seq:5 role:2 relation:50}
-{clause id:45 rule:13 seq:6 role:3 relation:51}
+{clause id:58 rule:13 seq:3 role:1 relation:58}
+{clause id:42 rule:13 seq:4 role:2 relation:29}
+{clause id:43 rule:13 seq:5 role:2 relation:30}
+{clause id:44 rule:13 seq:6 role:2 relation:50}
+{clause id:45 rule:13 seq:7 role:3 relation:51}
 
 {binding id:53 clause:40 column:134 input:20}
 {binding id:54 clause:42 column:78 input:20}
 {binding id:55 clause:43 column:80 input:20}
 {binding id:56 clause:44 column:140 input:20}
+{binding id:65 clause:58 column:159 input:20}
 
 {literal id:56 clause:40 column:136 value:surface}
 {literal id:57 clause:41 column:136 value:orbit}
@@ -701,3 +703,31 @@
 {literal id:78 clause:53 column:81 value:1}
 {literal id:79 clause:54 column:151 value:1}
 {literal id:80 clause:54 column:152 value:1}
+# **`build-yard` is `build-extractor` with one input instead of two.** A labour to work it and a
+# metal to build it, and the yard stands where the command names. **There is no `what`**: an
+# extractor is built for a resource and a yard is built for arks, which is the only thing it makes.
+#
+# **One and one rather than the old one and fifteen.** Sean, 2026-09-20, on the rule above: *tuning
+# is going to be separate, for now I am making everything cheap* - so fifteen would be the only
+# number in this file that is not. **Stated in the test as the thing to reject** if the fifteen was
+# the point.
+#
+# **`launch` requires one and does not remove it**, which is the old recipe's shape: a yard is where
+# arks are made rather than a thing spent making one, so it makes as many as there are materials
+# for.
+
+{rule id:16 name:build-yard}
+
+{input id:24 rule:16 seq:1 name:where of:48}
+
+{clause id:55 rule:16 seq:1 role:2 relation:29}
+{clause id:56 rule:16 seq:2 role:2 relation:30}
+{clause id:57 rule:16 seq:3 role:3 relation:58}
+
+{binding id:62 clause:55 column:78 input:24}
+{binding id:63 clause:56 column:80 input:24}
+{binding id:64 clause:57 column:159 input:24}
+
+{literal id:81 clause:55 column:79 value:1}
+{literal id:82 clause:56 column:81 value:1}
+{literal id:83 clause:57 column:160 value:1}

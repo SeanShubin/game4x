@@ -23,6 +23,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-215** - `4b6ee57` S-215: a reading that does not reach the suite is named, and the gate is red until it does · still open in `docs/notes/proposals.md`
 - **S-214** - `32c46b0` S-214: the review application lists the source, so an unread test can be read · still open in `docs/notes/proposals.md`
+- **S-213** - `1c8f2bc` S-213: the Yard lands in the data - a relation, a rule, and launch's missing require · still open in `docs/notes/proposals.md`
 - **S-210** - `98fe945` S-210: the hook tells removing a case from adding one · still open in `docs/notes/proposals.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
 - **D-4** - `e95f2dc` C-159 answered: the count correction landed and D-4's clause does not change · still open in `releases/rules-become-data.md`
