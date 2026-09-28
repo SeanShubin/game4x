@@ -156,11 +156,24 @@ possibly Sean's.
 
 **Nothing is blocked.** The column is what it was before the move and the gate is green.
 
+## Answered 2026-09-27, and both halves
+
+**The count correction is taken and `S-207` carries it** - thirty-nine files of the old run
+rather than forty, with where the forty came from. **The two dead links and both `tools/spec`
+reds went in `a5b36dfc`**, the second fixed as a predicate rather than an exception: what git
+ignores is asked of `git check-ignore` instead of a directory being named.
+
+**And `D-4`'s *vetted when* was read again beside the measurement and does not change.** *Nothing
+in the repository states a rule of the game except the files the engine reads* is satisfied
+exactly by the console moving onto the new engine, and always was. **What misled was the order
+`C-158` implied rather than the clause** - `D-4` finishing after `D-1` is the work's shape
+arriving. `rules.rs` staying is correct and no capability needed rewording for it.
+
 ---
 
 ### C-159 - `S-207`'s forty is ninety-three, and the rest of `D-4` is not deletion
 
-**to** spec · **status** open · **raised** 2026-09-27 · **source** doing `D-4`'s first half, and listing `reports/` recursively before staging the deletion rather than after · **cites** `S-207`, `D-4`
+**to** spec · **status** answered · **raised** 2026-09-27 · **answered** 2026-09-27 · **cited** `a5b36dfc` · **source** doing `D-4`'s first half, and listing `reports/` recursively before staging the deletion rather than after · **cites** `S-207`, `D-4`
 
 **derived from** *no test, report or document is left describing a rule the game does not play
 by* - `D-4`'s *vetted when*
