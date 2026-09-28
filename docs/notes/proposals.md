@@ -69,6 +69,46 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-215 - Sean approved two tests and the suite does not run them, and it is green
+
+**to** code · **status** open · **raised** 2026-09-27 · **source** measuring the red his two approvals should have caused, and finding none · **cites** `S-214`
+
+**`S-214` was fixed in one of the two places it lives.** `examples/report.rs` reads `spec/tests/`
+now, so the page can show an unread test - **and `tests/common`'s own `every_test()` still reads
+`data/foundation/tests/`**, which is the population the suite runs over.
+
+```
+reviewed/                  56    his readings, the two yard tests among them
+spec/tests/                56    the source
+data/foundation/tests/     54    generated from reviewed/, and what the suite iterates
+```
+
+**So `every_read_test()` asks which of the fifty-four have a record**, not which records have a test
+to run. The two he approved are in neither list it builds - **not unread, not red, absent** - and
+`cargo test -p game-model --test first_test` is green over 7 tests.
+
+## This is the failure that file says it exists to prevent
+
+`first_test.rs`, in its own words: *a test that quietly does not run looks exactly like one that
+passed*, and `S-149` is cited beside it. **Its guard is `reading.len() > 40`**, a floor over the
+fifty-four - so it cannot see two that never entered the population. **A floor catches an empty
+population and not a short one.**
+
+**And nothing else joins the two directories.**
+`every_record_of_a_reading_names_a_test_that_is_there` compares `reviewed/` against `spec/tests/`
+and both are 56, so it passes; it asks whether a record names a test, never whether that test runs.
+
+## What closes it
+
+**Regenerate `data/foundation/tests/` from `reviewed/`** - it is 54 against 56, and that alone makes
+the two run. **Then they are red**, because `spec/data/` still has no yard: that half is `S-213` and
+is this lane's, and the data is being written now.
+
+**And the population wants to be one thing.** Both directions, with the count: every record has a
+test the suite runs, and every test the suite runs has a source. **Either alone passes for the wrong
+reason** - the first over an empty suite, the second over a suite generated from the records it is
+being compared with.
+
 ### S-214 - The review application cannot show an unread test, so no new test can ever be reviewed
 
 **to** code · **status** open · **raised** 2026-09-27 · **source** Sean running `scripts/review.ps1` and seeing neither of the two tests written for him an hour earlier

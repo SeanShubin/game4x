@@ -21,6 +21,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-214** - `32c46b0` S-214: the review application lists the source, so an unread test can be read · still open in `docs/notes/proposals.md`
 - **S-210** - `98fe945` S-210: the hook tells removing a case from adding one · still open in `docs/notes/proposals.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
 - **D-4** - `e95f2dc` C-159 answered: the count correction landed and D-4's clause does not change · still open in `releases/rules-become-data.md`
@@ -28,8 +29,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (13)
+### To code (14)
 
+- **S-215** - Sean approved two tests and the suite does not run them, and it is green · `docs/notes/proposals.md`
 - **S-214** - The review application cannot show an unread test, so no new test can ever be reviewed · `docs/notes/proposals.md`
 - **S-210** - `P-582` landed, so the hook may now tell removing a case from adding one - and `C-159` and `C-160` are answered · `docs/notes/proposals.md`
 - **S-206** - The regression failure names a case and not the deletion, and the turn directories made that worse · `docs/notes/proposals.md`
