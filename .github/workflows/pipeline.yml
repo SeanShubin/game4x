@@ -281,15 +281,24 @@ jobs:
           # thing in it that broke.** Its two neighbours derive what they compare against and
           # neither noticed.
           #
-          # **The exact count is asserted where the local gate can see it.**
-          # `crates/game-console/tests/browsable.rs` says nineteen files the engine reads, and it
-          # runs on every push - so a number here is a second statement of that fact, in the one
-          # place that takes an hour to tell you it disagrees. `test "$twins" -eq "$inputs"` is
-          # the property this step alone can check, and the floor is only there so that it cannot
-          # pass over an empty copy.
+          # **And the floor broke it a second time, for the same reason.** It said fifteen; `D-6`
+          # moved `scenario/regression/` out of `scenario/` to sit beside `reviewed/`, and the two
+          # directories this counts went from 46 `.4x` files to 11. **A floor is still a literal
+          # about a population**, so replacing a count with a smaller count bought one move's
+          # grace rather than a different kind of check.
+          #
+          # **The neighbours that derive what they compare against have still never broken**,
+          # which is the whole lesson: so the copy is compared against the source it was made
+          # from, and the only number left is a floor on the source being there at all.
+          #
+          # **The sentence about `browsable.rs` is gone with the file.** It said the exact count
+          # was asserted where the local gate could see it; `D-4` deleted that test with the
+          # reports it was about, so the claim had stopped being true as well.
+          source=$(find spec/data scenario -name '*.4x' | wc -l)
           inputs=$(find crates/game4x/dist/spec/data crates/game4x/dist/scenario -name '*.4x' | wc -l)
           twins=$(find crates/game4x/dist/spec/data crates/game4x/dist/scenario -name '*.4x.txt' | wc -l)
-          test "$inputs" -ge 15
+          test "$source" -ge 5
+          test "$inputs" -eq "$source"
           test "$twins" -eq "$inputs"
           test -f crates/game4x/dist/lenses/research/formulas.html
           test -f crates/game4x/dist/tools/research/formulas/data.json
