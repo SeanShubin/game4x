@@ -11,10 +11,12 @@
 {labor where:1 quantity:1}
 {metal where:1 quantity:1}
 {energy where:1 quantity:1}
+{yard where:1 quantity:1}
 {when}
 {launch where:1}
 {then}
 {territory id:1}
 {place id:1 of:1 layer:surface}
 {place id:2 of:1 layer:orbit}
+{yard where:1 quantity:1}
 {ark where:2 moving:1 gathering:1 quantity:1}

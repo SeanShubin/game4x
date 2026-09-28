@@ -342,7 +342,10 @@ fn every_reference_forbids_something(files: &InMemory) -> Result<(), String> {
     Ok(())
 }
 
-const REFERENCES: usize = 69;
+/// **Sixty-nine until `P-583`, and the Yard's `{reference}` on `yard.where` is the seventieth.**
+/// A number this file derives moves with the data, which is why the count is exact here and a
+/// floor elsewhere: the point of this one is that deleting a reference is caught.
+const REFERENCES: usize = 70;
 
 /// **References no test world can violate**, because nothing points at them there.
 ///

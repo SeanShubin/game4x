@@ -282,11 +282,33 @@ fn main() {
     let _ = std::fs::remove_dir_all(&out);
     std::fs::create_dir_all(&out).expect("reports/foundation");
 
-    // **Written fresh in `reports/` and in place in `data/foundation/tests/`**, because the
-    // first is a rendering and the second is what a record generates: a file there that no
-    // record produces is reported by `every_reading_reaches_the_suite_...` rather than deleted
-    // here, since a test the suite runs and nobody read is the thing that check exists to find.
+    // **Written in place rather than wiped, and a form whose record is gone is removed.**
+    //
+    // **`reports/` is wiped because it is a rendering; this is not, because writing every file
+    // every run would touch 55 timestamps to change two.** But *in place* was read as *only ever
+    // added to*, and the directory reached 57 against 55 records: Sean unreviewed the two arcs
+    // `51a13065` deleted, and their generated forms stayed.
+    //
+    // **Removing one is not removing a record.** The record is already gone - by his hand, in
+    // the review application - and this directory is generated in full from what is there, which
+    // `CLAUDE.md` says is the whole of what a generated file is. **A test the suite runs that
+    // nobody has read is exactly what should not survive a run of the generator.**
+    //
+    // **`every_reading_reaches_the_suite_...` keeps its teeth**, because the case it guards is a
+    // file arriving here by some other hand than this one.
     std::fs::create_dir_all(suite_at()).expect("data/foundation/tests");
+    let mut dropped: Vec<String> = Vec::new();
+    for entry in std::fs::read_dir(suite_at()).expect("data/foundation/tests") {
+        let path = entry.expect("an entry").path();
+        let Some(name) = path.file_name().and_then(|it| it.to_str()) else {
+            continue;
+        };
+        if name.ends_with(".4x") && !records.iter().any(|it| it == name) {
+            let name = name.to_string();
+            std::fs::remove_file(&path).unwrap_or_else(|why| panic!("{name}: {why}"));
+            dropped.push(name);
+        }
+    }
     let mut moved: Vec<String> = Vec::new();
     let mut written = 0;
     let mut converted = 0;
@@ -394,9 +416,15 @@ fn main() {
     );
 
     println!("wrote {written} foundation files to reports/foundation, {converted} rows");
-    match moved.len() {
-        0 => println!("data/foundation/tests: all {written} current"),
-        n => println!("data/foundation/tests: {n} rewritten - read the diff: {moved:?}"),
+    match (moved.len(), dropped.len()) {
+        (0, 0) => println!("data/foundation/tests: all {written} current"),
+        (n, 0) => println!("data/foundation/tests: {n} rewritten - read the diff: {moved:?}"),
+        (0, g) => {
+            println!("data/foundation/tests: {g} removed, their records are gone: {dropped:?}")
+        }
+        (n, g) => {
+            println!("data/foundation/tests: {n} rewritten {moved:?}, {g} removed {dropped:?}")
+        }
     }
 
     // **Named and counted, and not an error** - `every_read_test`'s contract, mirrored.
