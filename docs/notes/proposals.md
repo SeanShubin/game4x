@@ -69,6 +69,56 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-214 - The review application cannot show an unread test, so no new test can ever be reviewed
+
+**to** code · **status** open · **raised** 2026-09-27 · **source** Sean running `scripts/review.ps1` and seeing neither of the two tests written for him an hour earlier
+
+**derived from** *the rendering is generated from `reviewed/` and never from `spec/tests/`* - `spec/README.md` rule 3
+
+**The list the page shows is the rendering, and the rendering is only of what has been read.**
+
+```
+report.rs:72  every_test()  reads crates/game-model/data/foundation/tests/
+render.rs:29  that directory is generated from reviewed/ and not from spec/tests/
+review-web.rs:73  known = every_test(), which is what the page lists
+```
+
+```
+spec/tests/                            56    the source, two of them new
+reviewed/                              54    what he has read
+data/foundation/tests/                 54    generated from reviewed/, and what the page lists
+```
+
+**So a test reaches the page only after it has been reviewed**, and the one interface by which a new
+test becomes part of `spec/` cannot show one. `spec/README.md` says the two directories *hold the
+same tests only while I have read every one, and a test nobody has read is in the first and not the
+second* - **the page is looking at the wrong one of the two.**
+
+## Why this has never fired before, which is the part worth keeping
+
+**`b629b5e7` is the only other commit that ever added a file to `spec/tests/`**, and it added all
+fifty-four at once - the move itself, on 2026-09-21. **Every one of them already had a foundation
+form**, so the page has always had something to list. **`ce755d39` is the first genuinely new test
+since the directory existed**, and it is the one that found this.
+
+## The check that would have caught it, and why the one there does not
+
+**`every_test_is_browsable` asks one direction**: every test the page lists has an address that
+answers. **It does not ask whether every test on disk is listed** - so fifty-six files and
+fifty-four rows satisfy it, and a new test is absent in silence. Its own comment says it is *about
+the outcome rather than the input*, and it is; the outcome it reads is the one the page already
+chose.
+
+**Both directions is the property**, and the floor matters here too: a page listing nothing would
+pass the first half on its own.
+
+## He can read them now and cannot record the reading
+
+**`browsable()` does walk `spec/tests`**, so both files answer at
+`http://127.0.0.1:7878/spec/tests/<name>.4x` and are linked from `/data`. **What he cannot do is
+press `r`** - the key that writes the record is on a page the tests are not on. So the reading is
+available and the approval is not, which is the half that matters.
+
 ### S-213 - The Yard comes back, and four pieces of it are in this lane's column
 
 **to** spec · **status** open · **raised** 2026-09-27 · **source** Sean answering `P-583`: it was a porting omission · **cites** `P-583`

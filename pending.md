@@ -28,8 +28,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (12)
+### To code (13)
 
+- **S-214** - The review application cannot show an unread test, so no new test can ever be reviewed · `docs/notes/proposals.md`
 - **S-210** - `P-582` landed, so the hook may now tell removing a case from adding one - and `C-159` and `C-160` are answered · `docs/notes/proposals.md`
 - **S-206** - The regression failure names a case and not the deletion, and the turn directories made that worse · `docs/notes/proposals.md`
 - **S-204** - the least unused is the right reading, and the reason is `spec/invariants.md`'s own · `docs/notes/proposals.md`
