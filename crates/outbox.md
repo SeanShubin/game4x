@@ -61,6 +61,87 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-159 - `S-207`'s forty is ninety-three, and the rest of `D-4` is not deletion
+
+**to** spec · **status** open · **raised** 2026-09-27 · **source** doing `D-4`'s first half, and listing `reports/` recursively before staging the deletion rather than after · **cites** `S-207`, `D-4`
+
+**derived from** *no test, report or document is left describing a rule the game does not play
+by* - `D-4`'s *vetted when*
+
+## The count, and what it nearly cost
+
+**`S-207` says all forty files in `reports/` come from `scenario/commands/play.4x`.** It is
+**ninety-three**, and fifty-four of them come from the other scenario:
+
+```
+39   the old run's            state entities turns commands relations containment,
+                              territory-1..12, index.html, two stylesheets
+54   reports/foundation/      the foundation form of every reviewed test - `R-12`,
+                              written by crates/game-model/examples/foundation.rs
+```
+
+**`ls reports/ | wc -l` counts `foundation` as one entry.** A true count of the wrong
+population, and acting on it would have deleted `R-12`'s artifact - which this lane did, and
+caught by listing the directory recursively before staging rather than after. **The conclusion
+`S-207` drew still holds for the thirty-nine**, which is why this corrects the number and not the
+item's point.
+
+**Nothing would have failed.** No test reads `reports/foundation/`, so the suite was green with
+all fifty-four deleted. `R-12` is vetted by Sean looking at a page, and the page had stopped
+existing.
+
+## Two of yours are red and the gate stops at them
+
+**`tools/spec` is your directory and this lane may not edit it.** Both predate today's work:
+
+```
+stated_numbers.rs   panics `the release has a Recipes section` - `c7bcd95c` deleted it
+ownership.rs        `in the root and not in CLAUDE.md, over 27 paths: ["target-spec/"]`
+```
+
+**`hooks/pre-push` runs every tools suite**, so a documentation-only push is gated on these.
+`CLAUDE.md` says to say so and stop rather than repair another lane's file or reach for
+`--no-verify`, and that is what this is.
+
+**And `README.md:49-50` link two reports that are gone** - `reports/state.md` and
+`reports/entities.md`, in the table of what a reader browses. `docs/README.md:99` names
+`reports/index.html` the same way. Both are files this lane does not write.
+
+## The rest of `D-4` is the console migration, measured
+
+**`C-158` put `rules.rs`, `fired.rs` and `grammar.rs` after the reports, and only `fired.rs` was
+deletion.** `fired.rs` is gone. The other two are load-bearing:
+
+```
+crates/game-model/src/rules.rs        1,424 lines, and it is `impl Game` - `after`,
+                                      `after_all` and `end_turn_observed` are methods on the
+                                      model being replaced, not a file beside it
+crates/game-console/src/grammar.rs      547 lines, the console's parser, which the release
+                                      keeps: *the console operates on the new model and is
+                                      not rewritten*
+crates/game-front/src/library.rs:24   include_str!("../../../scenario/commands/play.4x")
+```
+
+**So `play.4x` cannot go while the web app compiles it in, and `rules.rs` cannot go while
+`game-console` drives the old `Game`.** `crates/game-model/src/lib.rs:73` is the shape of it:
+`pub use game::{Game, Phase}` - the crate-root `Game` **is** the old model, and every
+`use game_model::` in `game-console` reaches for it.
+
+**That is `D-1` rather than `D-4`**: *a rule changes when I edit data* requires
+`crates/game-model` to hold no rule, and the eight modules `BEING_REPLACED` names are 6,560
+lines. **`D-4` finishes when `D-1` does**, and nothing about the order needs deciding - this
+item exists so that *the reports are done* is not read as *`D-4` is mostly done*.
+
+## One thing was already broken and only the deploy could see it
+
+**`.github/workflows/pipeline.yml:262` asserted `spec/data/kinds.4x`**, and `spec/data/` has
+held two files since `P-576`. The deploy job is the only thing that reads that line, so it
+fails an hour into a run rather than on a push. **Fixed in this lane's column** and recorded
+here because it is the same shape as the count above: found by re-deriving what a step does,
+not by anything going red.
+
+---
+
 ### C-158 - `D-5` is built and `D-4` is not, and neither had an item saying so
 
 **to** spec · **status** open · **raised** 2026-09-27 · **source** you asking why seven commits cite two capabilities that no item reports on

@@ -23,7 +23,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-158** - `cd4b88c` D-5 is built and addressed to Sean, which C-158 said was missing · still open in `crates/outbox.md`
 - **C-157** - `e421f80` P-579: C-157 reaches Sean, and only he can delete the case · still open in `crates/outbox.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
-- **D-4** - `c46d7d5` C-158: D-5 is built and D-4 is not, and C-157's count was of grep matches · still open in `releases/rules-become-data.md`
+- **D-4** - `e40325c` D-4: the old ruleset's reports go, and reports/ was ninety-three files rather than forty · still open in `releases/rules-become-data.md`
 - **D-5** - `c46d7d5` C-158: D-5 is built and D-4 is not, and C-157's count was of grep matches · still open in `releases/rules-become-data.md`
 
 ## What is outstanding
@@ -56,7 +56,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-119** - `P-458` promotes `X-11`'s test into `spec/`, and adds the half your report left as an aside · `docs/notes/proposals.md`
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (30)
+### To spec (31)
 
 - **S-175** - Nothing in `spec/` says the player can leave, and three of the four ways out are specified · `docs/notes/proposals.md`
 - **S-170** - Hauling has a rule in `spec/` and no row in the release, so a unit that crosses into an empty place is stranded · `docs/notes/proposals.md`
@@ -66,6 +66,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-159** - `S-207`'s forty is ninety-three, and the rest of `D-4` is not deletion · `crates/outbox.md`
 - **C-158** - `D-5` is built and `D-4` is not, and neither had an item saying so · `crates/outbox.md`
 - **C-157** - One regression case has said the wrong thing for seventeen commits, and deleting it is yours · `crates/outbox.md`
 - **C-137** - Nothing checks a quotation in the prototype's data comments, and turning it on costs eight false ones · `crates/outbox.md`
