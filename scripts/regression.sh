@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Generate or check the per-command regression expectations in scenario/regression/.
+# Generate or check the per-command regression expectations in regression/scenario/.
 #
 #   scripts/regression.sh     writes any that are missing, fails on any that have moved
 #

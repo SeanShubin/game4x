@@ -510,12 +510,25 @@ pub struct Case {
     pub text: String,
 }
 
-/// Where the per-command regression expectations live.
+/// Where the generated suites live, one directory each.
 ///
 /// **A directory of their own**, because Sean, 2026-09-27: *organized in a way that allows me to
 /// browse them without clutter of other files.*
+///
+/// # `regression/` is beside `reviewed/` and out of `scenario/`, which is `D-6`
+///
+/// **The two directories are siblings in meaning**: `reviewed/` is the record of what Sean has
+/// read and `regression/` of what he has accepted. Under `scenario/` the suite read as an
+/// appendix to one scenario, and `docs/process.md` says there are four of these and only the
+/// first is about a scenario at all - *every type of thing that is data has a generated suite of
+/// its own*.
+pub fn suites_at() -> PathBuf {
+    root().join("regression")
+}
+
+/// The suite of one case per command of the main scenario.
 pub fn regression_at() -> PathBuf {
-    root().join("scenario").join("regression")
+    suites_at().join("scenario")
 }
 
 /// One generated test per command of the main scenario: the world before, the command, the world

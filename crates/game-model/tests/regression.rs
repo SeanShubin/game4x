@@ -39,7 +39,7 @@
 //! trade and it is worth saying: `scenario/played.md` is where the whole world at each turn's end
 //! lives, so nothing is unavailable - it is somewhere else.
 
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 
 #[path = "../examples/scenario.rs"]
 #[allow(dead_code)]
@@ -59,7 +59,10 @@ fn every_command_has_an_expectation_and_it_is_current() {
     std::fs::create_dir_all(&at).unwrap_or_else(|why| panic!("{}: {why}", at.display()));
 
     let (mut written, mut compared) = (Vec::new(), 0);
-    let mut stale: Vec<String> = Vec::new();
+    // **The name travels beside the diff**, because the message below prints the deletion for
+    // each grain and a deletion is composed from the path. Formatting it into one string first
+    // and parsing it back out is the shape `S-195` is about.
+    let mut stale: Vec<(String, String)> = Vec::new();
     for Case {
         name,
         text: produced,
@@ -78,7 +81,7 @@ fn every_command_has_an_expectation_and_it_is_current() {
                         .zip(produced.lines())
                         .enumerate()
                         .find(|(_, (was, now))| was != now);
-                    stale.push(match differs {
+                    let said = match differs {
                         Some((line, (was, now))) => format!(
                             "{name} line {}:\n      was  {was}\n      now  {now}",
                             line + 1
@@ -88,7 +91,8 @@ fn every_command_has_an_expectation_and_it_is_current() {
                             committed.lines().count(),
                             produced.lines().count()
                         ),
-                    });
+                    };
+                    stale.push((name.clone(), said));
                 }
             }
             // **Absent: accepted.** His words - *absent expected data means I accept what it does
@@ -114,14 +118,50 @@ fn every_command_has_an_expectation_and_it_is_current() {
         );
     }
 
-    assert!(
-        stale.is_empty(),
-        "{} of {} expectation(s) no longer say what the scenario does. **Delete the ones you are \
-         happy with and run again**, and read the diff:\n    {}",
-        stale.len(),
-        cases.len(),
-        stale.join("\n    ")
-    );
+    // **The gesture the message is asking for is printed rather than described** - `S-206`, and
+    // `D-6`: *when a failure names stale cases it prints the deletion for each grain, so I paste
+    // it rather than compose it.* Sean, 2026-09-27: *I need it to be very clear to distinguish
+    // between them so that I delete the correct directory.*
+    //
+    // **Three grains, because the suite has three.** One case, one turn, the whole suite. The
+    // turn grain is listed only for turns that actually hold a stale case, so pasting the whole
+    // block never accepts a turn nothing moved in.
+    //
+    // **Grouped by turn as well**, which `S-206` offered and nobody asked for: a rule changing
+    // moves several turns at once, and a flat list of twelve is how somebody deletes more than
+    // they meant.
+    if !stale.is_empty() {
+        let mut by_turn: BTreeMap<String, Vec<&str>> = BTreeMap::new();
+        for (name, said) in &stale {
+            let turn = name.split('/').next().unwrap_or_default().to_string();
+            by_turn.entry(turn).or_default().push(said);
+        }
+        let mut out = String::new();
+        for (turn, said) in &by_turn {
+            out.push_str(&format!("\n  turn {turn}\n"));
+            for one in said {
+                out.push_str(&format!("    {one}\n"));
+            }
+        }
+        out.push_str("\n  accept one case:\n");
+        for (name, _) in &stale {
+            out.push_str(&format!("    Remove-Item regression/scenario/{name}\n"));
+        }
+        out.push_str("\n  accept a whole turn:\n");
+        for turn in by_turn.keys() {
+            out.push_str(&format!(
+                "    Remove-Item -Recurse regression/scenario/{turn}\n"
+            ));
+        }
+        out.push_str("\n  accept the whole suite:\n    Remove-Item -Recurse regression/scenario\n");
+        panic!(
+            "{} of {} expectation(s) no longer say what the scenario does.\n\
+             **Delete what you are happy with, run again, and read the diff in version \
+             control.**\n{out}",
+            stale.len(),
+            cases.len()
+        );
+    }
 
     // **A count over nothing is the same failure with the sign flipped** - `CLAUDE.md`. On a fresh
     // checkout everything is written and nothing compared, which is correct and is not evidence.
@@ -171,7 +211,7 @@ fn every_command_has_an_expectation_and_it_is_current() {
         .collect();
     assert!(
         loose.is_empty(),
-        "`scenario/regression/` holds {loose:?} outside any turn, and every case belongs to a turn"
+        "`regression/scenario/` holds {loose:?} outside any turn, and every case belongs to a turn"
     );
 
     // **A file is left behind when its command is gone, and that is asked of the command rather
