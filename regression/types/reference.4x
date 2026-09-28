@@ -1,0 +1,15 @@
+# The thing `reference`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:3 name:reference}
+{column id:7 relation:reference seq:1 name:id}
+{column id:8 relation:reference seq:2 name:column}
+{column id:9 relation:reference seq:3 name:to}
+{reference id:2 column:8 to:column}
+{reference id:3 column:9 to:relation}

@@ -1,0 +1,14 @@
+# The thing `scope`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:46 name:scope}
+{column id:128 relation:scope seq:1 name:rule}
+{column id:129 relation:scope seq:2 name:input}
+{reference id:67 column:128 to:rule}
+{reference id:68 column:129 to:input}

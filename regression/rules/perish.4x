@@ -1,0 +1,16 @@
+# The rule `perish`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/rules.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{rule id:9 name:perish}
+{input id:16 rule:perish seq:1 name:where of:place}
+{scope rule:perish input:where}
+{repeats rule:perish}
+{clause id:24 rule:perish seq:1 role:remove relation:citizen name:clause-24}
+{binding id:37 clause:clause-24 column:130 input:where}
+{literal id:28 clause:clause-24 column:131 value:1}

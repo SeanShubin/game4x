@@ -1,0 +1,16 @@
+# The thing `part`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:40 name:part}
+{column id:110 relation:part seq:1 name:id}
+{column id:111 relation:part seq:2 name:of}
+{column id:112 relation:part seq:3 name:is}
+{column id:113 relation:part seq:4 name:seq}
+{reference id:55 column:111 to:rule}
+{reference id:56 column:112 to:rule}

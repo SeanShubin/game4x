@@ -1,0 +1,15 @@
+# The thing `supply`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:33 name:supply}
+{column id:87 relation:supply seq:1 name:id}
+{column id:88 relation:supply seq:2 name:name}
+{column id:89 relation:supply seq:3 name:per}
+{reference id:47 column:89 to:relation}
+{supply id:1 name:berth per:place}

@@ -1,0 +1,17 @@
+# The thing `input`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:7 name:input}
+{column id:16 relation:input seq:1 name:id}
+{column id:17 relation:input seq:2 name:rule}
+{column id:18 relation:input seq:3 name:seq}
+{column id:19 relation:input seq:4 name:name}
+{column id:20 relation:input seq:5 name:of}
+{reference id:5 column:17 to:rule}
+{reference id:6 column:20 to:relation}

@@ -1,0 +1,16 @@
+# The thing `argument`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:41 name:argument}
+{column id:114 relation:argument seq:1 name:id}
+{column id:115 relation:argument seq:2 name:part}
+{column id:116 relation:argument seq:3 name:input}
+{column id:117 relation:argument seq:4 name:value}
+{reference id:57 column:115 to:part}
+{reference id:58 column:116 to:input}

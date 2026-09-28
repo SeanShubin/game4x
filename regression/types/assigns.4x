@@ -1,0 +1,16 @@
+# The thing `assigns`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:37 name:assigns}
+{column id:102 relation:assigns seq:1 name:id}
+{column id:103 relation:assigns seq:2 name:clause}
+{column id:104 relation:assigns seq:3 name:input}
+{column id:105 relation:assigns seq:4 name:value}
+{reference id:45 column:103 to:clause}
+{reference id:46 column:104 to:input}

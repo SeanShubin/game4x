@@ -1,0 +1,20 @@
+# The thing `capacity`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:43 name:capacity}
+{column id:121 relation:capacity seq:1 name:of}
+{column id:122 relation:capacity seq:2 name:for}
+{column id:123 relation:capacity seq:3 name:what}
+{column id:124 relation:capacity seq:4 name:per}
+{column id:125 relation:capacity seq:5 name:quantity}
+{reference id:61 column:121 to:relation}
+{reference id:62 column:122 to:relation}
+{reference id:63 column:123 to:resource}
+{reference id:64 column:124 to:relation}
+{state id:16 relation:capacity}

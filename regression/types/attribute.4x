@@ -1,0 +1,15 @@
+# The thing `attribute`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:22 name:attribute}
+{column id:65 relation:attribute seq:1 name:column}
+{column id:66 relation:attribute seq:2 name:relation}
+{reference id:32 column:65 to:column}
+{reference id:33 column:66 to:relation}
+{attribute column:66 relation:attribute}

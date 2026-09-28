@@ -1,0 +1,12 @@
+# The thing `soft`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:53 name:soft}
+{column id:149 relation:soft seq:1 name:clause}
+{reference id:75 column:149 to:clause}

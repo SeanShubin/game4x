@@ -1,0 +1,10 @@
+# The word `require`, which the engine implements
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `crates/game-model/data/friendly/engine.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{primitive id:20 word:require}

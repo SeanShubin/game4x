@@ -1,0 +1,16 @@
+# The thing `transport`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:35 name:transport}
+{column id:96 relation:transport seq:1 name:where}
+{column id:100 relation:transport seq:2 name:moving}
+{column id:97 relation:transport seq:3 name:quantity}
+{reference id:52 column:96 to:place}
+{state id:12 relation:transport}
+{carries kind:transport trait:moving}

@@ -1,0 +1,17 @@
+# The thing `binding`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:9 name:binding}
+{column id:26 relation:binding seq:1 name:id}
+{column id:27 relation:binding seq:2 name:clause}
+{column id:28 relation:binding seq:3 name:column}
+{column id:29 relation:binding seq:4 name:input}
+{reference id:10 column:27 to:clause}
+{reference id:11 column:28 to:column}
+{reference id:12 column:29 to:input}

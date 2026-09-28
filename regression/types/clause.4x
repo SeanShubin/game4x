@@ -1,0 +1,18 @@
+# The thing `clause`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:8 name:clause}
+{column id:21 relation:clause seq:1 name:id}
+{column id:22 relation:clause seq:2 name:rule}
+{column id:23 relation:clause seq:3 name:seq}
+{column id:24 relation:clause seq:4 name:role}
+{column id:25 relation:clause seq:5 name:relation}
+{reference id:7 column:22 to:rule}
+{reference id:8 column:24 to:role}
+{reference id:9 column:25 to:relation}

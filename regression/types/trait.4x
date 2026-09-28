@@ -1,0 +1,18 @@
+# The thing `trait`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:38 name:trait}
+{column id:106 relation:trait seq:1 name:id}
+{column id:107 relation:trait seq:2 name:name}
+{trait id:1 name:moving}
+{trait id:2 name:working}
+{trait id:3 name:hungry}
+{trait id:4 name:bearing}
+{trait id:5 name:laboring}
+{trait id:6 name:gathering}

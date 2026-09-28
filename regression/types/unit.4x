@@ -1,0 +1,19 @@
+# The thing `unit`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:26 name:unit}
+{column id:72 relation:unit seq:1 name:where}
+{column id:98 relation:unit seq:2 name:moving}
+{column id:73 relation:unit seq:3 name:quantity}
+{family relation:unit}
+{member kind:scout family:unit}
+{member kind:ark family:unit}
+{member kind:transport family:unit}
+{carries kind:unit trait:moving}
+{member kind:pioneer family:unit}

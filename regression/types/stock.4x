@@ -1,0 +1,18 @@
+# The thing `stock`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{family relation:stock}
+{member kind:metal family:stock}
+{member kind:food family:stock}
+{member kind:labor family:stock}
+{member kind:energy family:stock}
+{loose kind:stock}
+{relation id:49 name:stock}
+{column id:138 relation:stock seq:1 name:where}
+{column id:139 relation:stock seq:2 name:quantity}

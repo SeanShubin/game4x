@@ -1,0 +1,16 @@
+# The thing `bin`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:42 name:bin}
+{column id:118 relation:bin seq:1 name:where}
+{column id:119 relation:bin seq:2 name:what}
+{column id:120 relation:bin seq:3 name:quantity}
+{reference id:59 column:118 to:place}
+{reference id:60 column:119 to:resource}
+{state id:15 relation:bin}

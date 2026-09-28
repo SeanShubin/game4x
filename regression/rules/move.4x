@@ -1,0 +1,31 @@
+# The rule `move`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/rules.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{rule id:1 name:move}
+{input id:1 rule:move seq:1 name:what of:unit}
+{input id:2 rule:move seq:2 name:from of:place}
+{input id:3 rule:move seq:3 name:to of:place}
+{clause id:29 rule:move seq:1 role:require relation:place name:clause-29}
+{clause id:30 rule:move seq:2 role:require relation:place name:clause-30}
+{clause id:2 rule:move seq:3 role:require relation:adjacency name:clause-2}
+{clause id:3 rule:move seq:4 role:remove relation:unit name:clause-3}
+{clause id:4 rule:move seq:5 role:add relation:unit name:clause-4}
+{relation-of clause:clause-3 input:what}
+{relation-of clause:clause-4 input:what}
+{binding id:42 clause:clause-29 column:134 input:from}
+{binding id:43 clause:clause-30 column:134 input:to}
+{reading id:3 clause:clause-2 column:42 of:clause-29 takes:135}
+{reading id:4 clause:clause-2 column:43 of:clause-30 takes:135}
+{reading id:10 clause:clause-30 column:136 of:clause-29 takes:136}
+{binding id:5 clause:clause-3 column:72 input:from}
+{binding id:7 clause:clause-4 column:72 input:to}
+{literal id:13 clause:clause-3 column:98 value:1}
+{literal id:2 clause:clause-3 column:73 value:1}
+{literal id:14 clause:clause-4 column:98 value:0}
+{literal id:1 clause:clause-4 column:73 value:1}

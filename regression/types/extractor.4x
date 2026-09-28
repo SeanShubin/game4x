@@ -1,0 +1,19 @@
+# The thing `extractor`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:19 name:extractor}
+{column id:55 relation:extractor seq:1 name:where}
+{column id:56 relation:extractor seq:2 name:what}
+{column id:101 relation:extractor seq:3 name:working}
+{column id:57 relation:extractor seq:4 name:quantity}
+{reference id:24 column:55 to:place}
+{reference id:25 column:56 to:resource}
+{state id:6 relation:extractor}
+{carries kind:extractor trait:working}
+{stands-in kind:extractor per:place layer:surface}

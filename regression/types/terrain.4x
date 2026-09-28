@@ -1,0 +1,15 @@
+# The thing `terrain`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:57 name:terrain}
+{column id:157 relation:terrain seq:1 name:of}
+{column id:158 relation:terrain seq:2 name:is}
+{reference id:77 column:157 to:territory}
+{reference id:78 column:158 to:biome}
+{state id:22 relation:terrain}

@@ -1,0 +1,29 @@
+# The rule `upkeep`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/rules.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{rule id:8 name:upkeep}
+{input id:15 rule:upkeep seq:1 name:where of:place}
+{scope rule:upkeep input:where}
+{repeats rule:upkeep}
+{clause id:28 rule:upkeep seq:1 role:require relation:citizen name:clause-28}
+{clause id:21 rule:upkeep seq:2 role:remove relation:citizen name:clause-21}
+{clause id:22 rule:upkeep seq:3 role:remove relation:food name:clause-22}
+{clause id:23 rule:upkeep seq:4 role:add relation:citizen name:clause-23}
+{binding id:41 clause:clause-28 column:130 input:where}
+{binding id:34 clause:clause-21 column:130 input:where}
+{binding id:35 clause:clause-22 column:82 input:where}
+{binding id:36 clause:clause-23 column:130 input:where}
+{literal id:36 clause:clause-28 column:131 value:1}
+{literal id:23 clause:clause-21 column:131 value:1}
+{literal id:24 clause:clause-21 column:132 value:1}
+{literal id:25 clause:clause-22 column:83 value:1}
+{literal id:26 clause:clause-23 column:131 value:0}
+{literal id:27 clause:clause-23 column:132 value:1}
+{reading id:2 clause:clause-23 column:133 of:clause-28 takes:133}
+{reading id:7 clause:clause-23 column:137 of:clause-28 takes:137}

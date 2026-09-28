@@ -1,0 +1,31 @@
+# The rule `launch`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/rules.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{rule id:13 name:launch}
+{input id:20 rule:launch seq:1 name:where of:place}
+{clause id:40 rule:launch seq:1 role:require relation:place name:clause-40}
+{clause id:41 rule:launch seq:2 role:require relation:place name:clause-41}
+{clause id:42 rule:launch seq:3 role:remove relation:labor name:clause-42}
+{clause id:43 rule:launch seq:4 role:remove relation:metal name:clause-43}
+{clause id:44 rule:launch seq:5 role:remove relation:energy name:clause-44}
+{clause id:45 rule:launch seq:6 role:add relation:ark name:clause-45}
+{binding id:53 clause:clause-40 column:134 input:where}
+{binding id:54 clause:clause-42 column:78 input:where}
+{binding id:55 clause:clause-43 column:80 input:where}
+{binding id:56 clause:clause-44 column:140 input:where}
+{literal id:56 clause:clause-40 column:136 value:surface}
+{literal id:57 clause:clause-41 column:136 value:orbit}
+{literal id:58 clause:clause-42 column:79 value:1}
+{literal id:59 clause:clause-43 column:81 value:1}
+{literal id:60 clause:clause-44 column:141 value:1}
+{literal id:61 clause:clause-45 column:143 value:1}
+{literal id:62 clause:clause-45 column:144 value:1}
+{literal id:63 clause:clause-45 column:145 value:1}
+{reading id:11 clause:clause-41 column:135 of:clause-40 takes:135}
+{reading id:12 clause:clause-45 column:142 of:clause-41 takes:134}

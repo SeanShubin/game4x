@@ -1,0 +1,14 @@
+# The thing `labor`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:29 name:labor}
+{column id:78 relation:labor seq:1 name:where}
+{column id:79 relation:labor seq:2 name:quantity}
+{reference id:42 column:78 to:place}
+{state id:8 relation:labor}

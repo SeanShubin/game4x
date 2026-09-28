@@ -1,0 +1,28 @@
+# The rule `toil`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/rules.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{rule id:11 name:toil}
+{input id:18 rule:toil seq:1 name:where of:place}
+{repeats rule:toil}
+{clause id:31 rule:toil seq:1 role:require relation:citizen name:clause-31}
+{clause id:32 rule:toil seq:2 role:remove relation:citizen name:clause-32}
+{clause id:33 rule:toil seq:3 role:add relation:citizen name:clause-33}
+{clause id:34 rule:toil seq:4 role:add relation:labor name:clause-34}
+{binding id:44 clause:clause-31 column:130 input:where}
+{binding id:45 clause:clause-32 column:130 input:where}
+{binding id:46 clause:clause-33 column:130 input:where}
+{binding id:47 clause:clause-34 column:78 input:where}
+{literal id:42 clause:clause-31 column:137 value:1}
+{literal id:43 clause:clause-32 column:137 value:1}
+{literal id:44 clause:clause-32 column:132 value:1}
+{literal id:45 clause:clause-33 column:137 value:0}
+{literal id:46 clause:clause-33 column:132 value:1}
+{literal id:47 clause:clause-34 column:79 value:1}
+{reading id:5 clause:clause-33 column:131 of:clause-31 takes:131}
+{reading id:6 clause:clause-33 column:133 of:clause-31 takes:133}

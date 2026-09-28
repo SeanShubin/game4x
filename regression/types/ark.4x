@@ -1,0 +1,19 @@
+# The thing `ark`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:51 name:ark}
+{column id:142 relation:ark seq:1 name:where}
+{column id:143 relation:ark seq:2 name:moving}
+{column id:144 relation:ark seq:3 name:gathering}
+{column id:145 relation:ark seq:4 name:quantity}
+{reference id:72 column:142 to:place}
+{state id:20 relation:ark}
+{carries kind:ark trait:moving}
+{carries kind:ark trait:gathering}
+{stands-in kind:ark per:place layer:orbit}

@@ -1,0 +1,20 @@
+# The thing `citizen`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:47 name:citizen}
+{column id:130 relation:citizen seq:1 name:where}
+{column id:131 relation:citizen seq:2 name:hungry}
+{column id:133 relation:citizen seq:3 name:bearing}
+{column id:137 relation:citizen seq:4 name:laboring}
+{column id:132 relation:citizen seq:5 name:quantity}
+{reference id:69 column:130 to:place}
+{state id:17 relation:citizen}
+{carries kind:citizen trait:hungry}
+{carries kind:citizen trait:bearing}
+{carries kind:citizen trait:laboring}

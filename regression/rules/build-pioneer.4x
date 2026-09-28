@@ -1,0 +1,21 @@
+# The rule `build-pioneer`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/rules.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{rule id:15 name:build-pioneer}
+{input id:23 rule:build-pioneer seq:1 name:where of:place}
+{clause id:52 rule:build-pioneer seq:1 role:remove relation:labor name:clause-52}
+{clause id:53 rule:build-pioneer seq:2 role:remove relation:metal name:clause-53}
+{clause id:54 rule:build-pioneer seq:3 role:add relation:pioneer name:clause-54}
+{binding id:59 clause:clause-52 column:78 input:where}
+{binding id:60 clause:clause-53 column:80 input:where}
+{binding id:61 clause:clause-54 column:150 input:where}
+{literal id:77 clause:clause-52 column:79 value:1}
+{literal id:78 clause:clause-53 column:81 value:1}
+{literal id:79 clause:clause-54 column:151 value:1}
+{literal id:80 clause:clause-54 column:152 value:1}

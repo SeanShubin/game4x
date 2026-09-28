@@ -1,0 +1,15 @@
+# The rule `refresh`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/rules.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{rule id:4 name:refresh}
+{input id:11 rule:refresh seq:1 name:what of:relation}
+{input id:12 rule:refresh seq:2 name:trait of:trait}
+{clause id:15 rule:refresh seq:1 role:put relation:unit name:clause-15}
+{relation-of clause:clause-15 input:what}
+{assigns id:1 clause:clause-15 input:trait value:1}

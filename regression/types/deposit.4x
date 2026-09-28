@@ -1,0 +1,18 @@
+# The thing `deposit`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:18 name:deposit}
+{column id:51 relation:deposit seq:1 name:where}
+{column id:52 relation:deposit seq:2 name:what}
+{column id:53 relation:deposit seq:3 name:density}
+{column id:54 relation:deposit seq:4 name:quantity}
+{reference id:22 column:51 to:place}
+{reference id:23 column:52 to:resource}
+{state id:5 relation:deposit}
+{attribute column:53 relation:deposit}

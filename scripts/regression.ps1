@@ -1,4 +1,4 @@
-# Generate or check the per-command regression expectations in scenario/regression/.
+# Generate or check the per-command regression expectations in regression/scenario/.
 #
 #   scripts\regression.ps1     writes any that are missing, fails on any that have moved
 #

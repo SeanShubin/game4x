@@ -24,6 +24,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
 - **D-4** - `1e73500` C-159: S-207's forty is ninety-three, and the rest of D-4 is the console migration · still open in `releases/rules-become-data.md`
 - **D-5** - `c46d7d5` C-158: D-5 is built and D-4 is not, and C-157's count was of grep matches · still open in `releases/rules-become-data.md`
+- **D-6** - `39c26dd` D-6, first part: the suite moves to regression/scenario/ and the failure prints the deletion · still open in `releases/rules-become-data.md`
 
 ## What is outstanding
 

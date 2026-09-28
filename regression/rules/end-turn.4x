@@ -1,0 +1,32 @@
+# The rule `end-turn`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/rules.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{rule id:5 name:end-turn}
+{part id:4 of:end-turn is:upkeep seq:1 name:part-4}
+{part id:6 of:end-turn is:perish seq:2 name:part-6}
+{part id:7 of:end-turn is:breed seq:3 name:part-7}
+{part id:3 of:end-turn is:discard-disorder seq:4 name:part-3}
+{part id:1 of:end-turn is:refresh seq:5 name:part-1}
+{part id:2 of:end-turn is:refresh seq:6 name:part-2}
+{part id:5 of:end-turn is:refresh seq:7 name:part-5}
+{part id:8 of:end-turn is:refresh seq:8 name:part-8}
+{part id:9 of:end-turn is:refresh seq:9 name:part-9}
+{part id:10 of:end-turn is:refresh seq:10 name:part-10}
+{argument id:1 part:part-1 input:what value:unit}
+{argument id:2 part:part-1 input:trait value:moving}
+{argument id:3 part:part-2 input:what value:extractor}
+{argument id:4 part:part-2 input:trait value:working}
+{argument id:5 part:part-5 input:what value:citizen}
+{argument id:6 part:part-5 input:trait value:hungry}
+{argument id:7 part:part-8 input:what value:citizen}
+{argument id:8 part:part-8 input:trait value:bearing}
+{argument id:9 part:part-9 input:what value:citizen}
+{argument id:10 part:part-9 input:trait value:laboring}
+{argument id:11 part:part-10 input:what value:ark}
+{argument id:12 part:part-10 input:trait value:gathering}

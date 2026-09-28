@@ -1,0 +1,19 @@
+# The thing `reading`
+#
+# **Generated. Do not edit.** `scripts/suites.sh`, from `spec/data/schema.4x`.
+# **Delete this file to accept what it says now** - `docs/process.md`: *absent expected
+# data means I accept what it does now, so the test writes it, and what I review is the
+# diff in version control.*
+#
+# **The lines below are that file's own**, so a diff here is a diff there.
+
+{relation id:21 name:reading}
+{column id:60 relation:reading seq:1 name:id}
+{column id:61 relation:reading seq:2 name:clause}
+{column id:62 relation:reading seq:3 name:column}
+{column id:63 relation:reading seq:4 name:of}
+{column id:64 relation:reading seq:5 name:takes}
+{reference id:28 column:61 to:clause}
+{reference id:29 column:62 to:column}
+{reference id:30 column:63 to:clause}
+{reference id:31 column:64 to:column}
