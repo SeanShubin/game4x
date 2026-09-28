@@ -10171,6 +10171,7 @@ work the release exists to order.
 | P-580, A generated suite per type of thing that is data, and the line is the transition                                      | `docs/process.md` -> How I know the application is right                                                                                                                                                 | 2026-09-27 |
 | P-581, A regression case is read and never authored, and behaviour changes through a unit test                               | `docs/process.md` -> How I know the application is right                                                                                                                                                 | 2026-09-28 |
 | P-582, The hook tells removing a case from adding one, which you chose                                                       | `CLAUDE.md` -> Perspectives                                                                                                                                                                              | 2026-09-28 |
+| P-584, A unit test is one part, and an arc belongs to the scenario                                                           | `spec/README.md` -> Rules for this directory, rule 3                                                                                                                                                     | 2026-09-28 |
 
 ## Forecast cleanups that were checked and not filed
 

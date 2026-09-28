@@ -59,6 +59,24 @@ Add a file when a topic firms up. Add its row here first.
    puts a file there. **So the two directories hold the same tests only while I have read every
    one**, and a test nobody has read is in the first and not the second - which is what makes
    generating from `reviewed/` mean something.
+
+   **A test states one part, and a part is small enough to hold in my head.** The point of the
+   directory is that every piece of the game is checked independently, so a test that needs a
+   narrative to follow has stopped being one - **and an arc of play belongs to the scenario instead.**
+   The scenario is broken into a case per command for exactly this reason: I cannot validate a whole
+   playthrough at once, and I can validate any step of one.
+
+   **That is a shape rather than a limit.** The vast majority of tests fire one command, a small
+   minority fire two, and three is rare. **More than three is imaginable and has one justification**:
+   a single thing being checked that needs something simple done repeatedly, because the outcome only
+   appears under that repetition. **Anything else with a long `when` is an arc** - and where a rule
+   needs a world that took several commands to build, those commands belong in the `given` as state
+   rather than as a story.
+
+   **And a test never turns on an absent row.** What is missing cannot be read, so a test whose point
+   is that something *could not* happen names what was lacking rather than leaving me to notice which
+   of twelve rows is not there.
+
 4. **A document says what the game is, or it says what the game will be, and it says which.**
    What is built and asserted by a test is the specification. **What is wanted and unbuilt is a
    future plan** - kept, linked and findable, and not mistaken for a rule anything obeys today.
