@@ -26,6 +26,72 @@ ones, for their reasoning.
 
 ## Answered, kept for the reasoning
 
+**Sean, 2026-09-27**: *it sounds like build yard happened to be one thing that should have been
+ported from the old ruleset that was not. If we need to we can make tests for it for me to
+review.* **So it was an omission rather than a decision**, and the route is the one he named: the
+tests are written for him to read in the review application, and the numbers are decided there.
+
+**Two tests are in `spec/tests/` and neither is read yet** -
+`a-yard-is-built-from-labor-and-metal` and `an-ark-cannot-launch-where-there-is-no-yard`. Each
+states what this lane chose and what to reject it for. `S-213` carries the rest.
+
+### P-583 - You were right: `launch ark` required a Yard, the new `launch` does not, and a test you approved launches without one
+
+**to** sean · **status** **answered** 2026-09-27, the Yard comes back · **raised** 2026-09-27 · **asks** a decision · **kind** measured · **cited** `c32211ea` · **from** the code lane reporting `build-yard` as the only player command with no rule
+
+**The requirement existed and was explicit.** The old ruleset's `launch ark` recipe, at `c7bcd95c^`:
+
+```
+| **launch ark** | player | require | 1  | territory |  | `$where`       |
+|                |        | consume | 3  | metal     |  |                |
+|                |        | consume | 12 | energy    |  |                |
+|                |        | consume | 2  | citizen   |  |                |
+|                |        | require | 1  | yard      |  |                |
+|                |        | produce | 1  | ark       |  | above `$where` |
+```
+
+**The new rule has no such clause and there is no `yard` in `spec/data/` at all** - no kind, no
+relation, no row. `launch` requires two places, removes a labor, a metal and an energy, and adds an
+ark.
+
+## The part that makes this a decision rather than a repair
+
+**A test you have read launches without one.** `reviewed/a-second-settlement-launches-the-ark-the-first-could-not.4x`
+fires `{launch where:place-3}` after `{toil}`, `{work metal}`, `{build-extractor energy}` and
+`{work energy}`. **No yard in its `given`, none built in its `when`, none in its `then`.** So the
+requirement was already gone when you approved it, and `spec/README.md` rule 3 says the test is the
+primary statement and the prose is the defect.
+
+**What is still stated, and all of it agrees with you rather than with the data**:
+
+```
+spec/structures.md:18     A Yard produces Arks
+releases/first-release.md:45    build a Yard there, and launch an ark from it
+releases/first-release.md:202   requires a Yard
+crates/game-console/       `build-yard` is a live command in the old model's grammar
+```
+
+## What was recorded, and what was not
+
+**That `build yard` had no engine counterpart was known** - `S-193` lists it among six, with `age`,
+`bear`, `renew`, `spoil` and `stow`. **That `launch` had stopped requiring one was not recorded
+anywhere.** The item was about which lane writes which half, so the count was of missing rules and
+not of requirements that had gone with them.
+
+## The two answers, and their costs are not alike
+
+- **The Yard comes back.** `spec/data/` gains a `yard` kind, a `build-yard` rule and a `require`
+  clause on `launch`. **And the reviewed test becomes wrong** - it launches without one, so it goes
+  back through the review application, which is one of your fifty-four
+- **The Yard goes.** `spec/structures.md` loses its Yard section, the two lines in the release go,
+  and the console's `build-yard` goes with the old model under `D-1`. **Nothing you have approved
+  changes**
+
+**This lane is not recommending either**, and that is deliberate rather than reticent: the first is
+what you said you understood the game to be, and the second is what every test you have read says it
+is. **No wording can be final until you say which.**
+
+
 ### P-579 - One regression case still says the ark kept its move, and only you can accept that it does not
 
 **to** sean · **status** **answered** 2026-09-27, by the deletion itself · **raised** 2026-09-27 · **asks** a decision · **kind** entailed · **from** `C-157` · **cited** `62e95dd3`

@@ -69,6 +69,47 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-213 - The Yard comes back, and four pieces of it are in this lane's column
+
+**to** spec · **status** open · **raised** 2026-09-27 · **source** Sean answering `P-583`: it was a porting omission · **cites** `P-583`
+
+**Two tests are written and unread**, which is the state a test is meant to be in until he opens the
+review application: `a-yard-is-built-from-labor-and-metal` and
+`an-ark-cannot-launch-where-there-is-no-yard`. **They constrain nothing yet** - the suite runs the
+copies in `reviewed/`, and neither has one.
+
+## What is still to do, and all of it is `spec/`
+
+```
+spec/data/schema.4x    a `yard` relation, its columns, and a `{state}` row - it is world state
+                       the way an extractor is. No `what` column: a yard makes one thing
+spec/data/rules.4x     a `build-yard` rule - remove labor, remove metal, add yard, which is
+                       `build-extractor` with one input instead of two
+spec/data/rules.4x     a `require yard` clause on `launch`, which is the clause that was dropped
+spec/tests/            the two launch tests gain a yard, and that is the part below
+```
+
+## The part that costs him a reading he has already given
+
+**`reviewed/a-second-settlement-launches-the-ark-the-first-could-not.4x` launches without a yard**,
+and so does the loop test beside it. **Adding the requirement makes both wrong**, so their sources
+change and his approved copies go stale - which the suite reports on every build, by design.
+
+**Nothing here may remove those records.** `CLAUDE.md`: a record is created and deleted only by the
+review application, acting as Sean. **So the order is his**: the sources change, the suite goes red
+against the copies, and it stays red until he re-reads them. **That is the mechanism working and not
+a regression**, and it is worth him knowing before it happens rather than after.
+
+## Two choices this lane made and flagged in the tests rather than here
+
+**The cost is one labor and one metal, where the old table charged one and fifteen.** The rule beside
+it quotes him - *for now I am making everything cheap* - so fifteen would be the only uncheap number
+in the new data. **Stated in the test as the thing to reject if the fifteen was the point.**
+
+**No capacity row, so a second yard in one place is legal today.** The old table gave a yard *a
+capacity of 1*. **Also stated in the test**, because `build-bin` says nothing about capacity either
+and the two beside it are what say what the cap does.
+
 ### S-212 - `CLAUDE.md` and `docs/process.md` both changed today, and both bind you
 
 **to** research · **status** open · **raised** 2026-09-27 · **source** `CLAUDE.md`: when either document changes, this lane tells every lane it binds and points at the file rather than restating it

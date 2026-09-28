@@ -1,0 +1,35 @@
+# A yard costs one labor and one metal, the same as an extractor and a bin, and stands where it was
+# built.
+#
+# **`spec/structures.md`**: *A Yard produces Arks.* **That requirement was in the old ruleset and
+# was not ported** - `launch ark` carried `require 1 yard` and the rule the data now holds does not.
+# Sean, 2026-09-27: *it sounds like build yard happened to be one thing that should have been ported
+# from the old ruleset that was not.*
+#
+# **The cost is not the old one and the difference is stated rather than hidden.** The old table
+# charged one labor and fifteen metal. **This lane chose one and one**, because the rule beside it
+# says why: Sean, 2026-09-20, quoted in `spec/data/rules.4x`, *tuning is going to be separate, for
+# now I am making everything cheap* - so fifteen would be the only number in the new data that is
+# not cheap. **If the fifteen was the point, this is the test to reject.**
+#
+# **`build-yard` says nothing about how many a place may hold**, the way `build-bin` says nothing
+# about capacity and `build-extractor` nothing about deposits: the world it would leave either fits
+# or it does not, and every rule already refuses one that does not. **The old table gave a yard a
+# capacity of 1 per place** and no capacity row is stated here, so today a second yard is legal.
+# That is the second thing to reject if it is wrong.
+
+{test name:a-yard-is-built-from-labor-and-metal}
+
+{given}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{labor where:place-1} -> 1
+{metal where:place-1} -> 1
+
+{when}
+{build-yard where:place-1}
+
+{then}
+{territory id:1 name:territory-1}
+{place id:1 of:territory-1 layer:surface name:place-1}
+{yard where:place-1} -> 1
