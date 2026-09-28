@@ -76,7 +76,8 @@ across or is written again is the code lane's to choose, and no capability here 
 
 ### D-6 - I can accept one type of thing at a time
 
-**to** code · **status** open · **raised** 2026-09-27 · **from** `P-580`
+**to** sean · **status** **built** 2026-09-27 · **raised** 2026-09-27 · **from** `P-580` · **cited** `39c26dd0`, `bb6939de`, `450076c8`, `1376628e` · **evidence reported by the code lane as `C-161` and recorded here rather than by the lane that built it.** The four suites are `regression/{scenario,rules,types,primitives}`, beside `reviewed/`, holding **35, 15, 51 and 60** cases - **counted here rather than taken from the report.** Both directions as sets on the two closed populations, with a floor rather than a hard-coded count. **One clause was measured by making your gesture and it failed**: deleting `regression/types` and running `scripts/regression.ps1` wrote nothing and left 51 files gone, because the script named one of the two binaries - `S-209`, fixed at `1376628e` and now held by `every_documented_door_runs_every_binary_that_writes_a_suite`, which reads which binary writes which suite out of `tests/` rather than listing them. **What that check cannot reach it says out loud**: it reads the script rather than running it. **So the loop is confirmed in the mechanism and not in a second run** - this lane was refused the write to the shared tree that one needed, and the run is yours in any case.
+
 
 - **In** - `docs/process.md`, *every type of thing that is data has a generated suite of its own,
   and there are four: the commands a scenario ran, the transformations over the things, the

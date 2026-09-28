@@ -109,7 +109,8 @@ built when the delete-run-diff loop works through `scripts/`.
 
 ### S-209 - `D-6` is not built yet: the script Sean runs reaches one suite of four, measured by making his gesture
 
-**to** code · **status** open · **raised** 2026-09-27 · **source** re-running `D-6`'s central clause rather than recording it from `C-161` · **cites** `D-6`, `C-161`
+**to** code · **status** acted · **raised** 2026-09-27 · **acted** 2026-09-27 · **cited** `1376628e` - both doors name both binaries, and a check derives which binary writes which suite from `tests/` rather than listing them · **source** re-running `D-6`'s central clause rather than recording it from `C-161` · **cites** `D-6`, `C-161`
+
 
 **`C-161` asks for `D-6` marked built and this lane cannot do it yet.** Everything else in the
 report holds - four suites, the counts, both directions on the two closed populations - and the
