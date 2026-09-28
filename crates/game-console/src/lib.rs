@@ -16,16 +16,10 @@
 //! because the type it produces has no way to say otherwise.
 
 pub mod binding;
-pub mod browse;
 pub mod containment;
-pub mod dump;
-pub mod fired;
 pub mod grammar;
-pub mod relations;
 pub mod report;
 pub mod state;
-pub mod style;
-pub mod tree;
 
 use command_language::{Failure, Grammar, parse_line};
 use game_model::{Game, Rejection};

@@ -82,7 +82,13 @@ fn every_tracked_text_file_is_checked_out_with_lf() {
         "only {} tracked files, so this would agree with anything",
         files.len()
     );
-    for named in ["reports/turns.md", "crates/game-console/tests/dump.rs"] {
+    // **The pair `Q-73` actually failed on is gone**, deleted with the old ruleset by `D-4`:
+    // `reports/turns.md` was the generated report and `crates/game-console/tests/dump.rs` the
+    // test that asked whether it contained `"\n# Turn 1\n"`. **What the pair is for survives**
+    // - a generated file and a test that reads one, so a `.gitattributes` narrowed to cover
+    // nothing cannot pass this. `scenario/played.md` and `the_committed_playthrough_is_current`
+    // are the same two jobs over the ruleset the game now plays by.
+    for named in ["scenario/played.md", "crates/game-model/tests/scenario.rs"] {
         assert!(
             files.iter().any(|file| file == named),
             "`{named}` is not tracked any more, and it is one of the files this is about"

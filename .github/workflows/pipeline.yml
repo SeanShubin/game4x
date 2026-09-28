@@ -257,9 +257,20 @@ jobs:
           # non-canonical generated copy so long as the page says it is one.
           find crates/game4x/dist/spec/data crates/game4x/dist/scenario -name '*.4x' \
             -exec sh -c 'cp "$1" "$1.txt"' _ {} \;
-          test -f crates/game4x/dist/reports/index.html
+          # **`reports/index.html` is gone with the old ruleset's reports** - `D-4`, and
+          # `S-207` measured the directory at forty because `ls` counts `foundation` as one
+          # entry. It is thirty-nine files of the old run and fifty-four of the engine's, and
+          # only the first thirty-nine went. **So this asserts what is left rather than what
+          # was**: the foundation forms `R-12` serves.
+          test -d crates/game4x/dist/reports/foundation
+          test "$(find crates/game4x/dist/reports/foundation -name '*.4x' | wc -l)" -ge 40
           test -f crates/game4x/dist/scenario/expected/play.4x
-          test -f crates/game4x/dist/spec/data/kinds.4x
+          # **`schema.4x` rather than `kinds.4x`, which stopped existing before today.**
+          # `spec/data/` is the engine's friendly source now and holds two files. This line
+          # named a third and **the deploy job is the only thing that reads it**, so it would
+          # have failed an hour into a run rather than on a push - found by re-deriving what
+          # the step copies, not by anything going red.
+          test -f crates/game4x/dist/spec/data/schema.4x
           # **Every twin, counted against every input**, so a copy that silently made none
           # fails here rather than on the site. Nineteen today: eleven in `spec/data` and eight
           # in `scenario`.

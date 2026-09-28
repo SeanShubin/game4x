@@ -225,14 +225,17 @@ fn only_a_generator_or_a_check_reads_a_report() {
     }
 
     readers.sort();
-    // **Eleven since `D-4`**, thirteen since `S-153`, and seven before that. The engine's own
-    // report reader arrived with the move into `crates/`; two left when `D-4` deleted
-    // `prototypes/kinds` and the `reports/catalog.md` it wrote. **Moved with the population
-    // rather than left**, because a floor set for one population is a literal about a different
-    // one the moment the population moves - and lowered deliberately, which is what this
-    // assertion's own message asks for.
+    // **Four since the rest of `D-4`**, eleven before it, thirteen since `S-153`, and seven
+    // before that. **Moved with the population rather than left**, because a floor set for one
+    // population is a literal about a different one the moment the population moves - and
+    // lowered deliberately, which is what this assertion's own message asks for.
+    //
+    // **Seven readers went when the old ruleset's reports did**: `game-console`'s `dump`,
+    // `browse`, `relations`, `tree` and `style`, its `dump-state` binary, and the tests over
+    // them. What is left reads `reports/foundation/`, which `R-12` writes out of the ruleset
+    // the game plays by - so the rule still has a population and it is the surviving one.
     assert!(
-        readers.len() >= 11,
+        readers.len() >= 4,
         "only {} file(s) name the reports directory, and there were seven - {readers:?}. \
          A predicate that finds nothing passes while checking nothing, and one that finds \
          most of them passes while missing the rest, which is `Q-56` exactly. If a reader \
@@ -443,8 +446,14 @@ fn only_game_model_and_a_fixture_write_the_games_state() {
     // **The fixtures are the population this rule deliberately allows**, and a count of zero
     // offences means nothing beside a count of zero exceptions - there would be nothing for
     // the predicate to have distinguished.
+    //
+    // **Measured at 8 today, and the floor was `> 8`**: the rest of `D-4` deleted seven of
+    // `game-console`'s test files with the reports they were about, and the fixtures inside
+    // them went too. **Lowered with the population rather than to the population** - a floor
+    // set at what is there today fails on the next honest deletion, which is what this one
+    // just did.
     assert!(
-        fixtures > 8,
+        fixtures > 5,
         "only {fixtures} writes were found inside test modules, and this rule's whole content          is that those are allowed and others are not - with none of them, a clean result          would not show the predicate had run"
     );
     assert!(
