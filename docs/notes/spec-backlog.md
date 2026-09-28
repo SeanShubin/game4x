@@ -8,6 +8,31 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## 2026-09-27 - a regression case is read, never authored, and behaviour changes through a unit test
+
+**Sean**, having settled the four suites and been asked nothing about this: *My intended workflow is
+to tell the spec lane to change behavior via unit tests (not regression tests), or add unit tests
+when we detect behavior that is not in the specification when it could be unit tested. My intended
+flow with regression tests is to look at them, complain to the spec and code lanes that they are
+confusing, figure out if they are confusing because they are incorrect or decide I agree once I
+understand, make appropriate corrections to spec and unit tests. I also may ask a lane to create or
+update regression tests to make sure new features are covered. I never intend to modify a regression
+test myself. I tell another lane to modify it, I check the result, and delete/regenerate if I
+approve, puzzle out the situation with other lanes if I do not understand or do not approve.*
+
+**Two things here are in no file.** `spec/README.md` rule 3 says a test read one at a time is the
+primary statement, and `docs/process.md` now says every type of thing that is data has a generated
+suite - **neither says which of the two decides anything.** And nothing says what a confusing
+regression case is *for*: the route he describes ends in `spec/` and a unit test, never in the case.
+
+**The third thing sharpens a rule that exists.** `CLAUDE.md` says a generated case is deleted by
+Sean and that the deletion is an approval. **What it does not say is that deleting is his only
+gesture on one** - a case he wants changed is changed by a lane, through whatever generates it,
+because a hand edit is overwritten.
+
+Filed as `P-581`.
+
+
 
 
 
