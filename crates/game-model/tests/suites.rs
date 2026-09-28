@@ -22,7 +22,7 @@
 //! **`types/` has no such clause and gets the same treatment anyway**, because the argument does
 //! not depend on the clause: a relation with no case is the same hole under another name.
 
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 
 #[path = "../examples/suites.rs"]
 #[allow(dead_code)]
@@ -139,5 +139,109 @@ fn no_two_suites_would_write_the_same_file() {
     assert!(
         total > 100,
         "only {total} case(s) across three suites, so this compared almost nothing"
+    );
+}
+
+/// **Every documented door regenerates every suite** - `S-209`.
+///
+/// # The failure this exists for, which a green suite could not see
+///
+/// **`scripts/regression.ps1` named `--test regression` and nothing else.** Deleting
+/// `regression/types/` and running it passed, wrote nothing, and left fifty-one files deleted -
+/// and **an empty diff reads as *the cases were already current***, which is the one conclusion
+/// that must never be available by accident.
+///
+/// **The workspace gate could not catch it**, because `cargo test --workspace` runs every binary:
+/// the suites were always whole by the time anything looked. Only a person following the path
+/// `scripts/README.md` promises saw nothing happen. Found by the specification lane making Sean's
+/// gesture rather than reading a report of it.
+///
+/// # What is asserted, and what it cannot reach
+///
+/// **That each script names each binary that writes under `regression/`.** The binaries are read
+/// from `tests/` by which suite each one writes, rather than listed here, so a fifth suite in a
+/// third binary fails this instead of being quietly uncovered.
+///
+/// **It reads the script rather than running it**, which is the limit: a script that names both
+/// binaries and is broken some other way passes. That is why the scripts carry the command on one
+/// line - `hooks/pre-push` records a continuation arriving as a literal backslash-n and a run of
+/// 0 of 638 tests - and why this asserts the line is whole.
+#[test]
+fn every_documented_door_runs_every_binary_that_writes_a_suite() {
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+
+    // **Which binary writes which suite, read rather than listed.** A test that writes a suite
+    // says so by naming the directory it writes into.
+    let mut writes: BTreeMap<String, String> = BTreeMap::new();
+    for entry in std::fs::read_dir(root.join("crates/game-model/tests")).expect("tests/") {
+        let path = entry.expect("an entry").path();
+        if path.extension().and_then(|it| it.to_str()) != Some("rs") {
+            continue;
+        }
+        let stem = path.file_stem().and_then(|it| it.to_str()).unwrap_or("");
+        let text = std::fs::read_to_string(&path).expect("a test file");
+        // **Built rather than written, so this line is not its own match.** Spelled out, the
+        // probe for `scenario` found itself here and every suite resolved to this file - which
+        // is `CLAUDE.md`'s *quoting a thing and doing it are the same bytes*, arriving in the
+        // check written to catch a different instance of the same week's lesson. The `check`
+        // probe needs no such care: `{suite}` is interpolated, so the string it looks for is
+        // never a literal in this file.
+        let scenario_probe = format!("regression{}()", "_at");
+        for suite in ["scenario", "rules", "types", "primitives"] {
+            let writes_it = text.contains(&format!("check(\"{suite}\""))
+                || (suite == "scenario" && text.contains(&scenario_probe));
+            if writes_it {
+                writes.insert(suite.to_string(), stem.to_string());
+            }
+        }
+    }
+    assert_eq!(
+        writes.len(),
+        4,
+        "four suites should each have a binary that writes them, and this found {writes:?}"
+    );
+
+    let binaries: BTreeSet<&String> = writes.values().collect();
+    assert!(
+        binaries.len() > 1,
+        "every suite is written by one binary, so a script naming it cannot miss one - \
+         this check would pass over a population it cannot fail on"
+    );
+
+    let doors = ["scripts/regression.sh", "scripts/regression.ps1"];
+    let mut asked = 0;
+    for door in doors {
+        let text =
+            std::fs::read_to_string(root.join(door)).unwrap_or_else(|why| panic!("{door}: {why}"));
+        let line = text
+            .lines()
+            .find(|it| it.trim_start().starts_with("cargo test"))
+            .unwrap_or_else(|| panic!("{door} runs no cargo test"));
+        // **A backslash-n that is two characters rather than a newline**, which is how
+        // `hooks/pre-push` ran 0 of 638 tests, and a continuation of either shell's kind.
+        let mangled = format!("{}n", char::from(92));
+        assert!(
+            !line.contains(&mangled) && !line.ends_with(char::from(92)) && !line.ends_with('`'),
+            "{door}'s cargo line is continued or carries a literal backslash-n, and a stray \
+             word reaching `cargo test` is the test-name filter:\n  {line}"
+        );
+        for binary in &binaries {
+            assert!(
+                line.contains(&format!("--test {binary}")),
+                "{door} does not run `--test {binary}`, which writes {:?} - so deleting that \
+                 suite and running this script would pass and write nothing",
+                writes
+                    .iter()
+                    .filter(|(_, it)| it == binary)
+                    .map(|(suite, _)| suite.clone())
+                    .collect::<Vec<String>>()
+            );
+            asked += 1;
+        }
+    }
+    assert_eq!(
+        asked,
+        doors.len() * binaries.len(),
+        "every door was asked about every binary, and the count is what says so"
     );
 }

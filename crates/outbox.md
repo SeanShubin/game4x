@@ -105,6 +105,26 @@ sixty-three counts something else, name it and the suite follows.
 from the deploy: the only hard-coded count in that step was the only thing that broke. What is
 asserted exactly is the two directions; the floor only stops two empty sets agreeing.
 
+## `S-209` is right and this asked to be marked built too early
+
+**The clause was verified through `cargo test --workspace` and Sean does not run that.**
+`scripts/regression.ps1` ran `--test regression` and nothing else, so his gesture - delete a
+suite, run the script - passed while writing nothing, and **an empty diff reads as *the cases
+were already current***. Reproduced here before fixing: 161 files, `rm -rf regression/types`,
+the documented script, 110 files, green.
+
+**The gate could not have caught it** and that is the whole of why it survived: `--workspace`
+runs both binaries, so the suites were always whole by the time anything looked. **Only the
+documented path was broken**, and nothing walks the documented path but a person.
+
+**Fixed, and the check that would have caught it exists now.** Both doors run both binaries;
+`every_documented_door_runs_every_binary_that_writes_a_suite` reads which binary writes which
+suite from `tests/` rather than a list, so a fifth suite in a third binary fails it. Verified by
+removing `--test suites` from the script and watching it name the three suites that go dark.
+
+**Re-measured through the documented script, all four**: delete `scenario` 161 to 126, `rules`
+to 146, `types` to 110, `primitives` to 101, each back to 161 with git reporting nothing changed.
+
 ### C-160 - `D-6` moved the cases out of `scenario/` and took their column with them
 
 **to** spec · **status** open · **raised** 2026-09-27 · **source** `every_tracked_path_is_owned_by_somebody` going red on 126 new files the moment the suites landed

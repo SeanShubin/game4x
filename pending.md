@@ -8,6 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
+- **P-581** - A regression case is read and never authored, and behaviour changes through a unit test · `decide/proposals.md`
+- **P-582** - `regression/` is in no column, and adding a case and removing one are different acts on one path · `decide/questions.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
