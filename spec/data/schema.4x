@@ -944,3 +944,26 @@
 {reference id:78 column:158 to:biome}
 
 {state id:22 relation:terrain}
+## A yard, and the arks it is where the making of
+
+# **`spec/structures.md`**: *A Yard produces Arks.* **The requirement was in the old ruleset and was
+# not ported** - its `launch ark` recipe carried `require 1 yard` and the rule here did not. Sean,
+# 2026-09-27: *it sounds like build yard happened to be one thing that should have been ported from
+# the old ruleset that was not.*
+#
+# **A yard has a place and a count and nothing else.** A bin carries `what` because it is built for
+# one resource; a yard makes one thing, so there is nothing for it to be built *for*. **It is state**,
+# the way an extractor is: it is in the world and the world changes.
+#
+# **Nothing here says how many a place may hold.** The old table gave a yard *a capacity of 1* and no
+# `{capacity}` row is stated, so a second is legal today - which is `build-bin` saying nothing about
+# capacity said again, and is stated in the test rather than assumed here.
+
+{relation id:58 name:yard}
+
+{column id:159 relation:yard seq:1 name:where}
+{column id:160 relation:yard seq:2 name:quantity}
+
+{reference id:79 column:159 to:place}
+
+{state id:23 relation:yard}

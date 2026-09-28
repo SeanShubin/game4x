@@ -583,15 +583,17 @@
 
 {clause id:40 rule:launch seq:1 role:require relation:place name:clause-40}
 {clause id:41 rule:launch seq:2 role:require relation:place name:clause-41}
-{clause id:42 rule:launch seq:3 role:remove relation:labor name:clause-42}
-{clause id:43 rule:launch seq:4 role:remove relation:metal name:clause-43}
-{clause id:44 rule:launch seq:5 role:remove relation:energy name:clause-44}
-{clause id:45 rule:launch seq:6 role:add relation:ark name:clause-45}
+{clause id:58 rule:launch seq:3 role:require relation:yard name:clause-58}
+{clause id:42 rule:launch seq:4 role:remove relation:labor name:clause-42}
+{clause id:43 rule:launch seq:5 role:remove relation:metal name:clause-43}
+{clause id:44 rule:launch seq:6 role:remove relation:energy name:clause-44}
+{clause id:45 rule:launch seq:7 role:add relation:ark name:clause-45}
 
 {binding id:53 clause:clause-40 column:134 input:where}
 {binding id:54 clause:clause-42 column:78 input:where}
 {binding id:55 clause:clause-43 column:80 input:where}
 {binding id:56 clause:clause-44 column:140 input:where}
+{binding id:65 clause:clause-58 column:159 input:where}
 
 {literal id:56 clause:clause-40 column:136 value:surface}
 {literal id:57 clause:clause-41 column:136 value:orbit}
@@ -701,3 +703,31 @@
 {literal id:78 clause:clause-53 column:81 value:1}
 {literal id:79 clause:clause-54 column:151 value:1}
 {literal id:80 clause:clause-54 column:152 value:1}
+# **`build-yard` is `build-extractor` with one input instead of two.** A labour to work it and a
+# metal to build it, and the yard stands where the command names. **There is no `what`**: an
+# extractor is built for a resource and a yard is built for arks, which is the only thing it makes.
+#
+# **One and one rather than the old one and fifteen.** Sean, 2026-09-20, on the rule above: *tuning
+# is going to be separate, for now I am making everything cheap* - so fifteen would be the only
+# number in this file that is not. **Stated in the test as the thing to reject** if the fifteen was
+# the point.
+#
+# **`launch` requires one and does not remove it**, which is the old recipe's shape: a yard is where
+# arks are made rather than a thing spent making one, so it makes as many as there are materials
+# for.
+
+{rule id:16 name:build-yard}
+
+{input id:24 rule:build-yard seq:1 name:where of:place}
+
+{clause id:55 rule:build-yard seq:1 role:remove relation:labor name:clause-55}
+{clause id:56 rule:build-yard seq:2 role:remove relation:metal name:clause-56}
+{clause id:57 rule:build-yard seq:3 role:add relation:yard name:clause-57}
+
+{binding id:62 clause:clause-55 column:78 input:where}
+{binding id:63 clause:clause-56 column:80 input:where}
+{binding id:64 clause:clause-57 column:159 input:where}
+
+{literal id:81 clause:clause-55 column:79 value:1}
+{literal id:82 clause:clause-56 column:81 value:1}
+{literal id:83 clause:clause-57 column:160 value:1}

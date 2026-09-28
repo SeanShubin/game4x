@@ -21,6 +21,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-215** - `4b6ee57` S-215: a reading that does not reach the suite is named, and the gate is red until it does · still open in `docs/notes/proposals.md`
 - **S-214** - `32c46b0` S-214: the review application lists the source, so an unread test can be read · still open in `docs/notes/proposals.md`
 - **S-210** - `98fe945` S-210: the hook tells removing a case from adding one · still open in `docs/notes/proposals.md`
 - **C-109** - `48bf49e` S-183 and S-184 closed; C-109 is now correctly open to this lane · still open in `crates/outbox.md`
