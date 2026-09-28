@@ -198,7 +198,18 @@ fn main() {
         let at = records_at().join(name);
         let text =
             std::fs::read_to_string(&at).unwrap_or_else(|why| panic!("reviewed/{name}: {why}"));
-        let these = fold(&text, &schema).unwrap_or_else(|why| panic!("reviewed/{name}: {why}"));
+        // **A record Sean has written and the data cannot yet read.** `spec/README.md` asks him
+        // to read a test before the rule it is about exists, so this is an ordinary state and not
+        // a corruption - and the message says which of the two files has to move, because *line
+        // 35: `yard` has no quantity* on its own sends a reader to the test he just approved.
+        let these = fold(&text, &schema).unwrap_or_else(|why| {
+            panic!(
+                "reviewed/{name}: {why}\n\
+                 This test has been read and `spec/data/` cannot express it yet, so its \
+                 foundation form cannot be generated and the suite cannot run it. The test is \
+                 not what is wrong - the data has not caught up with it."
+            )
+        });
         add(these, false);
     }
     let of_game = Names::of(&of_game);

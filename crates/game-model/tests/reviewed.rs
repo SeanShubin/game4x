@@ -248,3 +248,77 @@ fn the_comparison_tells_a_change_from_a_reformatting() {
         "the same row in another section is a change"
     );
 }
+
+/// **Every reading reaches the suite that runs it, and everything the suite runs was read.**
+///
+/// # The gate was green while two approved tests did not run
+///
+/// **`S-215`.** Sean read `a-yard-is-built-from-labor-and-metal` and
+/// `an-ark-cannot-launch-where-there-is-no-yard`, the application wrote both records, and
+/// `cargo test --test first_test` stayed green over seven tests. **The two were not unread and
+/// not red - they were absent.**
+///
+/// ```text
+/// reviewed/                56   his readings
+/// spec/tests/              56   the source
+/// data/foundation/tests/   54   what the suite iterates
+/// ```
+///
+/// **`every_read_test` asks which of the fifty-four have a record**, never which records have a
+/// test to run, so a record with no generated form is in neither list it builds.
+///
+/// **And the guard beside it could not see this.** `first_test.rs` asserts `reading.len() > 40`,
+/// which is a floor over the fifty-four: **a floor catches an empty population and not a short
+/// one.** The check above compares `reviewed/` with `spec/tests/` and both are 56, so it passes
+/// too - it asks whether a record names a test, never whether that test runs.
+///
+/// # Both directions, because either alone passes for the wrong reason
+///
+/// **A reading with no generated form is an approval that constrains nothing.** A generated form
+/// with no reading is the opposite and worse: the suite holding the engine to something nobody
+/// approved. **The first direction alone would pass over an empty suite; the second alone would
+/// pass over a suite generated from the very records it is compared with** - which is what
+/// `data/foundation/tests/` is, so that direction is nearly free and is asserted anyway, because
+/// what makes it free is a generator that could stop being run.
+#[test]
+fn every_reading_reaches_the_suite_and_everything_the_suite_runs_was_read() {
+    let records = stems(&report::records_at());
+    let running = stems(&report::foundation_tests_at());
+
+    assert!(
+        records.len() > 40,
+        "only {} records were found, so this is not about the reading",
+        records.len()
+    );
+    assert!(
+        running.len() > 40,
+        "only {} tests are generated, so this is not about the suite",
+        running.len()
+    );
+
+    let not_running: Vec<&String> = records.difference(&running).collect();
+    assert!(
+        not_running.is_empty(),
+        "{} test(s) have been read and the suite does not run them: {not_running:?}\n\
+         Run `cargo run -p game-model --example foundation` to generate their foundation form. \
+         An approval that constrains nothing is worse than no approval, because the record says \
+         it does.",
+        not_running.len()
+    );
+
+    let unread: Vec<&String> = running.difference(&records).collect();
+    assert!(
+        unread.is_empty(),
+        "{} test(s) the suite runs have no record of a reading: {unread:?} - the engine is held \
+         to something nobody approved",
+        unread.len()
+    );
+
+    // **The count, so the two sets being equal is equality of a population rather than of two
+    // empties** - and the floors above are what stop it being short rather than absent.
+    assert_eq!(
+        records.len(),
+        running.len(),
+        "the readings and the suite are different sizes and neither difference named it"
+    );
+}

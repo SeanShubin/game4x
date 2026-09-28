@@ -48,6 +48,15 @@ pub fn tests_at() -> PathBuf {
     mine().join("..").join("..").join("spec").join("tests")
 }
 
+/// Where the form the engine actually runs lives, generated from `reviewed/`.
+///
+/// **Named here with the other two** because the three together are the thing that has to line
+/// up: the source he writes, the record that he read it, and the copy the suite iterates.
+/// `S-215` is what happens when only two of the three are ever compared.
+pub fn foundation_tests_at() -> PathBuf {
+    mine().join("data").join("foundation").join("tests")
+}
+
 /// Where the record of what Sean has read lives.
 ///
 /// **No instance writes it** - `CLAUDE.md`. The review application does, acting as him, and that
