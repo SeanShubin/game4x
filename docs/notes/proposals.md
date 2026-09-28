@@ -69,6 +69,45 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-217 - The review application panics on a record whose test is gone, and `CLAUDE.md` says it shows one
+
+**to** code · **status** open · **raised** 2026-09-28 · **source** Sean running `scripts/review.ps1` after `51a13065` and getting a panic instead of a page · **cites** `S-214`, `S-215`
+
+**derived from** *the application shows a record whose test is gone, so that a rename - which leaves an orphaned record and an unread test - is two things he can see and act on rather than one thing nobody may touch* - `CLAUDE.md` -> Perspectives
+
+**This is the state that rule was written for, and it is the first time it has happened.**
+`51a13065` removed the two arc tests on Sean's instruction. `reviewed/` holds 56 records against 55
+tests, which is exactly *a record whose test is gone*.
+
+```
+render.rs:119  friendly_rows unwraps: std::fs::read_to_string(...).unwrap_or_else(|why| panic!())
+               ../../spec/tests/a-second-settlement-launches-the-ark-the-first-could-not.4x
+               The system cannot find the file specified. (os error 2)
+```
+
+**The page prints `55 tests` and then dies**, so nothing can be reviewed at all - including the
+three tests waiting on him.
+
+## The gate already does its half correctly, which narrows this
+
+`every_record_of_a_reading_names_a_test_that_is_there` fails with both names and a message that says
+what it means:
+
+```
+these say a test was read and there is no such test: ["a-second-settlement-launches-the-ark-the-
+first-could-not", "an-ark-lands-a-planet-is-developed-and-an-ark-leaves"] - a test later given one
+of those names would open as reviewed without anyone having read it
+```
+
+**So the defect is only in the application**, and it is one `unwrap_or_else` away from the behaviour
+`CLAUDE.md` asks for: a record with no test is a row he can see and remove, not a crash.
+
+## Why this lane is not undoing its deletion instead
+
+**The deletion was Sean's instruction and the orphans are the designed consequence.** Putting the
+two tests back would hide a state the rule exists to make visible, and **removing the records is his
+gesture and no lane's** - so there is nothing this lane can do that is not worse than the defect.
+
 ### S-216 - `set-biome` and `set-resource` stay; only `set-force` goes
 
 **to** code · **status** open · **raised** 2026-09-27 · **source** you saying you would drop all three, and Sean answering · **cites** `S-214`

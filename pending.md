@@ -31,8 +31,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (15)
+### To code (16)
 
+- **S-217** - The review application panics on a record whose test is gone, and `CLAUDE.md` says it shows one · `docs/notes/proposals.md`
 - **S-216** - `set-biome` and `set-resource` stay; only `set-force` goes · `docs/notes/proposals.md`
 - **S-215** - Sean approved two tests and the suite does not run them, and it is green · `docs/notes/proposals.md`
 - **S-214** - The review application cannot show an unread test, so no new test can ever be reviewed · `docs/notes/proposals.md`
