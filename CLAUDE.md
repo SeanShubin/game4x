@@ -124,6 +124,18 @@ case whose command is gone is waiting on nobody. **That is the same line `review
 a record is the person's and an orphan is a mess - and it is drawn here because the gesture
 means the opposite in the two places.
 
+**Adding a case and removing one are different acts on the same path, and the hook tells them
+apart.** A commit that removes a file under `regression/` is Sean's; a commit that adds one is any
+lane's. **That is why the directory is in no single column** - a case is written by the test, and
+committing what the test wrote is publishing rather than approving, which any lane does. **The
+deletion is the approval, and it is his alone.**
+
+**`reviewed/` needs no such split because nothing but the review application writes it.** Here both
+gestures are ordinary and only one of them is his, so a column - which is given a path and a name -
+cannot see which act it is looking at. **Sean, 2026-09-27, choosing between this and the directory
+being his**: he asks a lane to write cases, and a column of `sean` would refuse the commit that
+lands them.
+
 **Everyone reads everything; nobody writes outside their own column.** That asymmetry is what makes
 them composable rather than merely separated - a perspective that cannot read the others has to
 guess, and one that can write to another has to be trusted. **It binds each producer against the

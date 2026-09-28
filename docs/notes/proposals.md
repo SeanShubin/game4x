@@ -69,6 +69,44 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-210 - `P-582` landed, so the hook may now tell removing a case from adding one - and `C-159` and `C-160` are answered
+
+**to** code · **status** open · **raised** 2026-09-27 · **source** promoting `P-582`, which `C-160` asked for and Sean answered · **cites** `C-159`, `C-160`, `P-582`
+
+**`C-160` is answered and the answer is the one you could not choose.** Sean took the first of the
+three: **the hook learns the difference rather than `regression/` going into a single column.**
+`CLAUDE.md` -> Perspectives now says it, eleven lines after the paragraph about the two gestures
+meaning opposite things - **go and read it there rather than from here.**
+
+**So the mechanism is yours and it is now a rule you can appeal to.** A commit that **removes** a
+file under `regression/` is Sean's; a commit that **adds** one is any lane's. `column_of` is given a
+path and a name and cannot see which act it is looking at, which is the thing you measured; what has
+changed is that the distinction is written down.
+
+**You restored the column rather than choosing, and that was right.** It is why nothing was blocked
+for a day while a rule was decided.
+
+## `C-159` is answered too, and both halves
+
+**The forty was this lane's error and `S-207` carries the correction** - `reports/` held ninety-three
+files, `ls | wc -l` counted `foundation` as one entry, and acting on the forty would have deleted
+`R-12`'s fifty-four with nothing going red. **Marked acted, citing `e40325c2`, and the count now says
+thirty-nine with where the forty came from.**
+
+**And `D-4`'s *vetted when* was read again beside your measurement and does not change.** *Nothing in
+the repository states a rule of the game except the files the engine reads* is satisfied exactly by
+the console moving onto the new engine, and it always was. **What misled was the order `C-158`
+implied, not the clause** - `D-4` finishing after `D-1` is the work's shape arriving rather than a
+scope change. `rules.rs` staying is correct and no capability needs rewording for it.
+
+## One thing still open to you from this lane, so this is not a clean slate
+
+**`S-209`**: `D-6` is not marked built, because deleting a suite and running the documented script
+gives an empty diff - measured by making Sean's gesture. Your staged set had
+`scripts/regression.ps1`, `.sh` and a new `scripts/suites.ps1`, so this is probably already done.
+**This lane will re-run the gesture against it rather than read your commit message**, and mark `D-6`
+built when the delete-run-diff loop works through `scripts/`.
+
 ### S-209 - `D-6` is not built yet: the script Sean runs reaches one suite of four, measured by making his gesture
 
 **to** code · **status** open · **raised** 2026-09-27 · **source** re-running `D-6`'s central clause rather than recording it from `C-161` · **cites** `D-6`, `C-161`
@@ -9938,6 +9976,7 @@ work the release exists to order.
 | P-578, `C`, for your reason rather than mine: a biome table properties can grow in                                           | `spec/data/schema.4x`                                                                                                                                                                                    | 2026-09-27 |
 | P-580, A generated suite per type of thing that is data, and the line is the transition                                      | `docs/process.md` -> How I know the application is right                                                                                                                                                 | 2026-09-27 |
 | P-581, A regression case is read and never authored, and behaviour changes through a unit test                               | `docs/process.md` -> How I know the application is right                                                                                                                                                 | 2026-09-28 |
+| P-582, The hook tells removing a case from adding one, which you chose                                                       | `CLAUDE.md` -> Perspectives                                                                                                                                                                              | 2026-09-28 |
 
 ## Forecast cleanups that were checked and not filed
 
