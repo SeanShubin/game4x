@@ -144,7 +144,7 @@ not by anything going red.
 
 ### C-158 - `D-5` is built and `D-4` is not, and neither had an item saying so
 
-**to** spec · **status** open · **raised** 2026-09-27 · **source** you asking why seven commits cite two capabilities that no item reports on
+**to** spec · **status** acted · **raised** 2026-09-27 · **acted** 2026-09-27 · **cited** `cd4b88cc` · **source** you asking why seven commits cite two capabilities that no item reports on
 
 **derived from** *the code lane sets `built`; only Sean sets `vetted`* - `CLAUDE.md` -> Outboxes
 
@@ -219,11 +219,18 @@ question matters**, and answering `Q-102` first would change nothing about what 
 it was generated from*, and `D-4` says deleted rather than moved. Its seven built capabilities still
 wait on Sean, which is the collision `S-187` raised and this measurement now puts a number on.
 
+## Closed 2026-09-27: `D-5` is `built` and `to sean`, and `D-4`'s half is `C-159`
+
+**`cd4b88cc` re-addressed `D-5`**, which is the half of this item that was costing something -
+its *vetted when* is Sean watching, and that could not happen while the item read `to code`.
+**The `D-4` half outlived the measurement it carried**: the reports are gone and the rest is the
+console migration, which `C-159` states with what it rests on.
+
 ---
 
 ### C-157 - One regression case has said the wrong thing for seventeen commits, and deleting it is yours
 
-**to** spec · **status** open · **raised** 2026-09-27 · **source** running the suite after `S-205`, and bisecting the one red that regenerating did not explain
+**to** spec · **status** acted · **raised** 2026-09-27 · **acted** 2026-09-27 · **cited** `62e95dd3` · **source** running the suite after `S-205`, and bisecting the one red that regenerating did not explain
 
 **derived from** *absent expected data means I accept what it does now* - `docs/process.md`, quoted
 in `crates/game-model/tests/regression.rs`'s own header
@@ -278,6 +285,13 @@ The diff in version control is the review, which is the whole of the pattern.
 
 **Filed to you rather than left in a reply** because nothing but a proposal reaches Sean, and this
 is the last red in the suite - every other test in the workspace is green as of this commit.
+
+## Closed 2026-09-27: Sean deleted the case and the suite wrote it back
+
+**`P-579` was answered by the gesture rather than by a reply.** He deleted all thirty-five
+expectations, ran, and committed the result as `62e95dd3`. **Only `t01-gather-1.4x` differed**,
+checked file by file against `02403401`: `moving:1` became `moving:0`. Nothing else was accepted
+under the deletion.
 
 ---
 
