@@ -26,6 +26,48 @@ ones, for their reasoning.
 
 ## Answered, kept for the reasoning
 
+**Sean, 2026-09-29**: *I will authorize deleting stale regression tests as long as they still
+move an ark, deploy an ark, and launch an ark from a different territory. I can't do it
+mechanically over the remote.* **The condition was checked before anything was deleted** and all
+three hold in `scenario/main.4x`: `{move what:ark from:place-4 to:place-2}`,
+`{deploy where:place-2 what:ark}`, and `{launch where:place-3}` where `place-3` is territory-2's
+surface and the ark deployed into territory-1. `the_arc_d5_describes_is_the_arc_that_runs`
+asserts the same arc.
+
+**The code lane had the same authorization and had already acted** - `a415f343`, *accept the two
+rules cases, on Sean's approval given in conversation*. So this lane's deletion removed files that
+were already current and the suite wrote back identical ones: **zero diff**, which is the right
+outcome and is what an empty diff means under the pattern - nothing was accepted that had not
+already been.
+
+### P-590 - Two regression cases are stale because of your own two promotions, and only you may delete them
+
+**to** sean · **status** **answered** 2026-09-29, conditionally · **raised** 2026-09-29 · **asks** a decision · **cited** `a415f343` · **kind** measured · **from** `C-178`
+
+**`P-587` gave `breed` a fourth clause and `P-589` made `gather` require a planet**, so the two cases
+that record what those rules do no longer record it. **Both rules are still played**, so neither case
+is housekeeping and no lane may remove one.
+
+**The suite hands over the deletion rather than describing it:**
+
+```
+2 of 16 case(s) in `rules` no longer say what the data does.
+    Remove-Item regression/rules/breed.4x
+    Remove-Item regression/rules/gather.4x
+```
+
+**Then run `scripts\regression.ps1` and read the diff**, which is the whole of the review: `breed`
+should show the parent coming back spent, and `gather` should show a planet where a deposit was.
+
+## Why this is a question at all
+
+**There is a second answer and it is not silly.** If either diff shows something you did not intend,
+the case is right and the promotion was wrong - **that is the only thing a stale case can mean when
+the rule changed deliberately**, and it is why the deletion is yours rather than anyone's.
+
+**It is the last red in the workspace**: 347 passed, 1 failed.
+
+
 **Sean answered all three on 2026-09-28, differently, which is why one recommendation would have
 been wrong for two of them.** `R-10`: *I want the petri reports back, it gives me confidence that
 we would immediately detect an infinite resource glitch* - and the detection half turned out to be

@@ -52,29 +52,3 @@ impossibility is the thing the proxy is for - and will not act on that.
 **The rule into `spec/console.md`**, and the commands it disqualifies come out of the same section in
 the same commit, with the count asserted. **`create-planet` needs no promotion either way**;
 `spec/console.md` already names it.
-### P-590 - Two regression cases are stale because of your own two promotions, and only you may delete them
-
-**to** sean · **status** open · **raised** 2026-09-29 · **asks** a decision · **kind** measured · **from** `C-178`
-
-**`P-587` gave `breed` a fourth clause and `P-589` made `gather` require a planet**, so the two cases
-that record what those rules do no longer record it. **Both rules are still played**, so neither case
-is housekeeping and no lane may remove one.
-
-**The suite hands over the deletion rather than describing it:**
-
-```
-2 of 16 case(s) in `rules` no longer say what the data does.
-    Remove-Item regression/rules/breed.4x
-    Remove-Item regression/rules/gather.4x
-```
-
-**Then run `scripts\regression.ps1` and read the diff**, which is the whole of the review: `breed`
-should show the parent coming back spent, and `gather` should show a planet where a deposit was.
-
-## Why this is a question at all
-
-**There is a second answer and it is not silly.** If either diff shows something you did not intend,
-the case is right and the promotion was wrong - **that is the only thing a stale case can mean when
-the rule changed deliberately**, and it is why the deletion is yours rather than anyone's.
-
-**It is the last red in the workspace**: 347 passed, 1 failed.
