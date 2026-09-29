@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `decide/proposa
 
 ## What must be decided
 
-- **P-588** - A planet is a thing, the sun is a deposit on it, and the containment root comes back · `decide/proposals.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 - **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **R-11** - I can reach the engine's inputs from the reports · `releases/first-release.md`
@@ -22,7 +21,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-588** - `d366baa` P-588 rewritten: he remembered a container the specification never had · still open in `decide/proposals.md`
 - **R-9** - `bc8a64f` C-165: R-9 and R-11 built with the evidence, filed rather than said in a commit · still open in `releases/first-release.md`
 - **R-10** - `9adf7eb` C-168 records the commit that built R-10 · still open in `releases/first-release.md`
 - **R-11** - `bc8a64f` C-165: R-9 and R-11 built with the evidence, filed rather than said in a commit · still open in `releases/first-release.md`
@@ -31,8 +29,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (13)
+### To code (14)
 
+- **S-221** - `P-588` landed: a planet is a thing, and the sun is a deposit on it · `docs/notes/proposals.md`
 - **S-220** - `R-11`'s check lists three inputs and its clause says every one, and two are unreachable · `docs/notes/proposals.md`
 - **S-216** - `set-biome` and `set-resource` stay; only `set-force` goes · `docs/notes/proposals.md`
 - **S-206** - The regression failure names a case and not the deletion, and the turn directories made that worse · `docs/notes/proposals.md`

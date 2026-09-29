@@ -12,6 +12,9 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 ## Containment
 
+- **Every thing but the game is in another thing.** The game is the one thing nothing holds, and
+  everything else has exactly one holder - which is what makes *in at most one other thing* below
+  a statement about the game's shape rather than about a particular thing
 - A thing may contain things, and is itself in at most one other thing. Nothing else holds
   anything
 - What a thing may contain is a maximum **per kind, per family of kinds, or per kind carrying a

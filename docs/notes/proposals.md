@@ -69,6 +69,45 @@ every item that has closed, and the ledger. A proposal arrives here only when it
 
 ## Addressed to other perspectives
 
+### S-221 - `P-588` landed: a planet is a thing, and the sun is a deposit on it
+
+**to** code · **status** open · **raised** 2026-09-29 · **source** promoting `P-588` · **cites** `P-588`, `C-166`, `S-219`
+
+**Three bullets into `spec/`, and no rule or column changes.** `gather` requires a deposit at the
+ark's own place today; it would require one at the planet that place is under. **A `where` naming a
+different thing rather than a different clause** - go and read them rather than taking this item for
+their contents: `spec/planet.md` -> Shape, `spec/orbit.md` -> The orbital layer, and
+`spec/logistics.md` -> Containment, whose new first bullet is the containment root.
+
+## What is now stated and is not built
+
+```
+a `planet` relation           does not exist in spec/data/schema.4x
+a row for the planet          nothing to hang the sun on
+the sun's deposit             {deposit where:<the planet> what:energy density:n}
+gather's `where`              reaches a place today; the planet is above it
+```
+
+**Sean chose `planet` over `game`** - the notation's root - **because a second planet would have its
+own sun**, and that reason is in the bullet rather than only here.
+
+## And the defect that started this goes by construction
+
+**`scenario/main.4x` has two orbit places and one energy deposit**: `place-2` above territory-1 at
+density 3, and nothing above territory-2. **The same star gives three over one territory and nothing
+over the other**, so an ark in the second orbit cannot gather at all - which nobody decided and which
+the scenario never exercises, because it launches from territory-2 and gathers in territory-1.
+
+**Stated once on the planet, the two orbits cannot disagree.** That is the whole argument for the
+shape, arriving as a bug rather than as a principle.
+
+## One thing to settle while doing it, and it is `S-219`'s ledger
+
+**`reports/nogain.md`'s wells are the planet and time, with no star.** With the sun a deposit on the
+planet, a draw above ground is still charged to a well the report names - **so whether the star
+becomes a third well or the planet keeps standing for both is yours to pick and cheap either way.**
+`S-219`'s verdict is not at stake: a weighting that holds with one endless well holds with two.
+
 ### S-220 - `R-11`'s check lists three inputs and its clause says every one, and two are unreachable
 
 **to** code · **status** open · **raised** 2026-09-28 · **source** re-running `P-586`'s clause rather than recording `C-165` · **cites** `C-165`, `P-586`, `R-11`
@@ -10345,6 +10384,7 @@ work the release exists to order.
 | P-584, A unit test is one part, and an arc belongs to the scenario                                                           | `spec/README.md` -> Rules for this directory, rule 3                                                                                                                                                     | 2026-09-28 |
 | P-586, `R-11` reworded: the intent stands and the `.txt` twin comes out                                                      | `releases/first-release.md` -> R-11                                                                                                                                                                      | 2026-09-29 |
 | P-587, `bearing` becomes load-bearing: `breed` puts the parent back spent, the way `toil` does                               | `spec/data/rules.4x`                                                                                                                                                                                     | 2026-09-29 |
+| P-588, A planet is a thing, the sun is a deposit on it, and the containment root comes back                                  | `spec/planet.md` -> Shape, `spec/orbit.md` -> The orbital layer, and `spec/logistics.md` -> Containment                                                                                                  | 2026-09-29 |
 
 ## Forecast cleanups that were checked and not filed
 
