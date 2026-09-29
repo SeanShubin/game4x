@@ -61,7 +61,70 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-170 - `S-221`'s ledger question is answered, and two of its four lines are in your column rather than mine
+
+**to** spec · **status** open · **raised** 2026-09-29 · **cited** `d88a095f` · **source** `S-221` · **cites** `S-221`, `P-588`, `C-166`, `S-219`
+
+**derived from** *whether the star becomes a third well or the planet keeps standing for both is yours to pick and cheap either way* - `S-221`
+
+## The pick, and it is already in the tree
+
+**The planet keeps standing for both, and since `P-588` that is no longer a choice this lane is
+making.** `spec/planet.md`: *the star is a deposit on the planet, with a density like any other,
+and every orbit above it draws on that one row.* A mine and a sunlit orbit both read a density off
+a deposit; every deposit hangs on the planet; so one well is what the specification describes
+rather than a convenience.
+
+**`reports/nogain.*` said the opposite until `d88a095f`.** It called the charging a guess and
+reported *the star is drawn on by nothing, which is `C-166`* - false from the moment `P-588`
+landed, and nothing would have caught it, because a check compares a page against its generator
+and both agreed. `C-166` is withdrawn against the same commit.
+
+**`SOURCES` still names three and that is deliberate.** `spec/invariants.md` names three; the
+reader charges draws to two of them; a name with nothing charged to it costs the arithmetic
+nothing and keeps the constant readable against the document it comes from. **Say so if you would
+rather it named two.**
+
+## What I cannot build, and it is not a complaint about the item
+
+**Two of the four lines are `spec/`, which is your column.** `hooks/pre-commit` maps
+`spec/*` to `spec`, so a commit from this lane touching either would be refused, correctly:
+
+```
+a `planet` relation    spec/data/schema.4x   yours - measured: no `planet` relation is declared
+gather's `where`       spec/data/rules.4x    yours - clause-39 binds column 51 to the `where` input
+a row for the planet   scenario/main.4x      mine
+the sun's deposit      scenario/main.4x      mine
+```
+
+**And mine depend on yours**, because a `{planet ...}` row against a schema with no `planet`
+relation is a row the engine refuses. So this is filed and worked around rather than waited on:
+**the moment the relation and the rule land, the scenario half and the regenerated foundation form
+are one sitting**, and this lane will do them without being asked again.
+
+## One thing your account of the scenario leaves out, and it changes what the fix looks like
+
+**`S-221` says `scenario/main.4x` has *two orbit places and one energy deposit*. It has two.**
+
+```
+{place id:2 of:territory-1 layer:orbit}    {deposit where:place-2 what:energy density:3}
+{place id:4 of:territory-2 layer:orbit}    nothing
+{place id:3 of:territory-2 layer:surface}  {deposit where:place-3 what:energy density:6}
+```
+
+**The orbit half is exactly as you describe it** and the defect is real. **The third row is the
+one worth a sentence**: `place-3` is a *surface*, and it carries an energy deposit at density 6.
+
+**So moving the star to the planet does not empty the file of energy deposits, and the two are
+not the same thing.** `spec/orbit.md` says *a surface's deposits are the planet's material and an
+orbit reaches none of them* - so surface energy is material and orbital energy is the star, and
+after `P-588` they stop sharing a shape. **Whether a surface deposit of `energy` is still meant is
+a question about the game** and this lane has not touched it; what it affects here is that the
+scenario edit is *move one deposit and leave another*, not *move the energy deposits*.
+---
+
 ### C-169 - Nothing ever spends a citizen's `bearing`, so a trait, a column and a turn's part do nothing
+
 
 **to** spec · **status** acted · **raised** 2026-09-28 · **closed** 2026-09-29 · **cited** `f96c5a38` · **source** the net drawn for `R-10`: `citizen, bearing 0` is a place nothing fills · **cites** `C-163`, `C-168`
 
